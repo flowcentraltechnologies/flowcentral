@@ -56,6 +56,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityCRUDPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntryTablePage;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
@@ -70,6 +71,7 @@ import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
@@ -127,6 +129,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL,
         ASSIGNMENT_PAGE,
         ENTRY_TABLE_PAGE,
+        ENTITY_CRUD_PAGE,
         PROPERTYLIST_PAGE,
         CUSTOM_PAGE;
 
@@ -171,6 +174,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     protected AssignmentPage assignmentPage;
 
     protected EntryTablePage entryTablePage;
+
+    protected EntityCRUDPage entityCrudPage;
 
     protected EditPropertyList editPropertyList;
 
@@ -244,6 +249,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
         assignmentPage = null;
         entryTablePage = null;
+        entityCrudPage = null;
         editPropertyList = null;
         entitySaveAs = null;
         return success;
@@ -282,6 +288,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void entrySwitchOnChange() throws UnifyException {
         entryTablePage.switchOnChange();
+    }
+
+    public void crudSwitchOnChange() throws UnifyException {
+        entityCrudPage.switchOnChange();
     }
 
     public void saveAsSwitchOnChange() throws UnifyException {
@@ -399,8 +409,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final Object id = ((Entity) form.getFormBean()).getId();
         final String subTitle = ((Entity) form.getFormBean()).getDescription();
         saveCurrentForm();
-        assignmentPage = constructNewAssignmentPage(assignPageDef, entryTable, assnEditPolicy,
-                assgnFilter, fixedAssignment, id, subTitle);
+        assignmentPage = constructNewAssignmentPage(assignPageDef, entryTable, assnEditPolicy, assgnFilter,
+                fixedAssignment, id, subTitle);
         assignmentPage.loadAssignedList();
         viewMode = ViewMode.ASSIGNMENT_PAGE;
     }
@@ -419,12 +429,31 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final Object id = ((Entity) form.getFormBean()).getId();
         final String subTitle = ((Entity) form.getFormBean()).getDescription();
         saveCurrentForm();
-        entryTablePage = constructNewEntryPage(_appletDef.getEntity(), entryTable, entryTablePolicy,
-                assgnFilter, baseField, id, subTitle);
+        entryTablePage = constructNewEntryPage(_appletDef.getEntity(), entryTable, entryTablePolicy, assgnFilter,
+                baseField, id, subTitle);
         String caption = _appletDef.getLabel() != null ? _appletDef.getLabel().toUpperCase() : null;
         entryTablePage.setEntryCaption(caption);
         entryTablePage.loadEntryList();
         viewMode = ViewMode.ENTRY_TABLE_PAGE;
+    }
+
+    public void crudToChildItem(int childTabIndex) throws UnifyException {
+        currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
+        final AppletDef _appletDef = getAppletDef(currFormTabDef.getApplet());
+        final String baseRestriction = _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION);
+        final FilterDef baseFilter = baseRestriction != null ? _appletDef.getFilterDef(baseRestriction) : null;
+        final String tableName = _appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
+        final String createFormName = _appletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
+        final String maintainFormName = _appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
+        final String baseField = getAu().getChildFkFieldName(form.getFormDef().getEntityDef(),
+                currFormTabDef.getReference());
+        final Object baseId = ((Entity) form.getFormBean()).getId();
+        final String subTitle = ((Entity) form.getFormBean()).getDescription();
+        saveCurrentForm();
+        entityCrudPage = constructNewEntityCRUDPage(_appletDef.getEntity(), tableName, createFormName, maintainFormName,
+                currFormTabDef, baseFilter, baseField, baseId, subTitle);
+        entityCrudPage.loadCrudList();
+        viewMode = ViewMode.ENTITY_CRUD_PAGE;
     }
 
     public void newRelatedListItem(String relatedListName) throws UnifyException {
@@ -464,8 +493,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final Object id = ((Entity) form.getFormBean()).getId();
         final String subTitle = ((Entity) form.getFormBean()).getDescription();
         saveCurrentForm();
-        assignmentPage = constructNewAssignmentPage(assignPageDef, entryTable, assgnEditPolicy,
-                assgnFilter, fixedAssignment, id, subTitle);
+        assignmentPage = constructNewAssignmentPage(assignPageDef, entryTable, assgnEditPolicy, assgnFilter,
+                fixedAssignment, id, subTitle);
         assignmentPage.loadAssignedList();
         viewMode = ViewMode.ASSIGNMENT_PAGE;
     }
@@ -715,6 +744,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return entryTablePage;
     }
 
+    public EntityCRUDPage getEntityCrudPage() {
+        return entityCrudPage;
+    }
+
     public EditPropertyList getEditPropertyList() {
         return editPropertyList;
     }
@@ -832,26 +865,38 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     protected abstract AppletDef getAlternateFormAppletDef() throws UnifyException;
 
     protected AssignmentPage constructNewAssignmentPage(AssignmentPageDef assignPageDef, String entryTable,
-            String assnEditPolicy, FilterDef assgnFilter, boolean fixedAssignment,
-            Object id, String subTitle) throws UnifyException {
+            String assnEditPolicy, FilterDef assgnFilter, boolean fixedAssignment, Object id, String subTitle)
+            throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityClassDef entityClassDef = getEntityClassDef(assignPageDef.getEntity());
         breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         return new AssignmentPage(getCtx(), formEventHandlers.getAssnSwitchOnChangeHandlers(), this, assignPageDef,
-                entityClassDef, id, breadCrumbs, entryTable, assnEditPolicy, assgnFilter,
-                fixedAssignment);
+                entityClassDef, id, breadCrumbs, entryTable, assnEditPolicy, assgnFilter, fixedAssignment);
     }
 
-    private EntryTablePage constructNewEntryPage(String entity, String entryTable, String entryTablePolicy,
-            FilterDef entryFilter, String baseField, Object baseId, String subTitle)
-            throws UnifyException {
+    protected EntryTablePage constructNewEntryPage(String entity, String entryTable, String entryTablePolicy,
+            FilterDef entryFilter, String baseField, Object baseId, String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityClassDef entityClassDef = getEntityClassDef(entity);
         breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         return new EntryTablePage(getCtx(), formEventHandlers.getEntrySwitchOnChangeHandlers(), this, entityClassDef,
                 baseField, baseId, breadCrumbs, entryTable, entryTablePolicy, entryFilter);
+    }
+
+    protected EntityCRUDPage constructNewEntityCRUDPage(String entity, String tableName, String createFormName,
+            String maintainFormName, FormTabDef formTabDef, FilterDef baseFilter, String baseField, Object baseId,
+            String subTitle) throws UnifyException {
+        BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
+        EntityClassDef entityClassDef = getEntityClassDef(entity);
+        breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
+        breadCrumbs.setLastCrumbSubTitle(subTitle);
+        Restriction baseRestriction = baseFilter != null
+                ? baseFilter.getRestriction(entityClassDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow())
+                : null;
+        return new EntityCRUDPage(getCtx(), formEventHandlers, this, entityClassDef, baseField, baseId, breadCrumbs,
+                tableName, createFormName, maintainFormName, formTabDef, baseRestriction);
     }
 
     protected EditPropertyList constructNewEditPropertyList(PropertyRuleDef propertyRuleDef, Entity inst,

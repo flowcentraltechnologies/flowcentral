@@ -34,7 +34,9 @@ public enum ChildListEditActionType implements EnumConst {
     OPEN_ASSIGNMENT_PAGE(
             "/assignToChildItem"),
     OPEN_TABLEENTRY_PAGE(
-            "/entryToChildItem");
+            "/entryToChildItem"),
+    OPEN_ENTITYCRUD_PAGE(
+            "/crudToChildItem");
 
     private final String code;
 

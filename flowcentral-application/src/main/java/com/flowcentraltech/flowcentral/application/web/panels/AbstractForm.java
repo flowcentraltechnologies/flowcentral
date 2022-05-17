@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Convenient abstract base class for forms.
@@ -99,7 +100,7 @@ public abstract class AbstractForm {
         return ctx.getInst();
     }
 
-    public void setFormBean(Object formBean) {
+    public void setFormBean(Object formBean) throws UnifyException {
         ctx.setInst(formBean);
     }
 

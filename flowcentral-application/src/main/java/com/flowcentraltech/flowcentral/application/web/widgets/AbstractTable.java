@@ -66,6 +66,8 @@ public abstract class AbstractTable<T, U> {
 
     private boolean entryMode;
 
+    private boolean editMode;
+
     private boolean fixedAssignment;
     
     private TableTotalSummary tableTotalSummary;
@@ -161,6 +163,14 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isEntryMode() {
         return entryMode;
+    }
+
+    public boolean isEditMode() {
+        return editMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
     }
 
     public boolean isFixedAssignment() {

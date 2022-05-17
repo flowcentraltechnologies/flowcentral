@@ -39,6 +39,7 @@ public class StudioWorkflowAppletPanel extends StudioAppComponentAppletPanel {
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
 
         switch (viewMode) {
+            case ENTITY_CRUD_PAGE:
             case ENTRY_TABLE_PAGE:
             case ASSIGNMENT_PAGE:
             case PROPERTYLIST_PAGE:

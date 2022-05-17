@@ -131,6 +131,16 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     }
 
     @Action
+    public String crudToChildItem() throws UnifyException {
+        AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
+        AbstractEntityFormApplet applet = pageBean.getApplet();
+        int childTabIndex = getRequestTarget(int.class);
+        applet.crudToChildItem(childTabIndex);
+        getPageRequestContextUtil().setContentScrollReset();
+        return "refreshapplet";
+    }
+
+    @Action
     public String newRelatedItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
@@ -185,10 +195,13 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         EventHandler[] entrySwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
                 "appletPanel.entryTablePanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
                         "eventHandler");
+        EventHandler[] crudSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
+                "appletPanel.entityCrudPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
+                        "eventHandler");
         EventHandler[] saveAsSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
                 "appletPanel.entitySaveAsPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
                         "eventHandler");
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
-                entrySwitchOnChangeHandlers, saveAsSwitchOnChangeHandlers);
+                entrySwitchOnChangeHandlers, crudSwitchOnChangeHandlers, saveAsSwitchOnChangeHandlers);
     }
 }

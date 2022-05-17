@@ -96,6 +96,13 @@
 !ui-button:closeEntryBtn caption:$m{button.close}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
 
+// Entity CRUD Page
+!fc-entitycrudpagepanel:entityCrudPanel binding:entityCrudPage
+	moreActionButtons:$c{closeCrudBtn}
+	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{crudSwitchOnChangeAct}}
+!ui-button:closeCrudBtn caption:$m{button.close}
+	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
+
 // Edit Property List
 !fc-editpropertylistpanel:editPropertyListPanel binding:editPropertyList
 	moreActionButtons:$c{savePropListCloseBtn closePropListBtn}
@@ -122,6 +129,8 @@
 	refresh:$c{assignmentPanel.assignmentBodyPanel}
 !ui-postcommand:entrySwitchOnChangeAct command:entrySwitchOnChange components:$c{entryTablePanel}
 	refresh:$c{entryTablePanel.entryBodyPanel}
+!ui-postcommand:crudSwitchOnChangeAct command:crudSwitchOnChange components:$c{entityCrudPanel}
+	refresh:$c{entityCrudPanel.crudBodyPanel}
 !ui-postcommand:saveAsSwitchOnChangeAct command:saveAsSwitchOnChange components:$c{entitySaveAsPanel}
 	refresh:$c{entitySaveAsPanel.entityFormBodyPanel}
 !ui-postcommand:saveAct command:save components:$c{formPanel}

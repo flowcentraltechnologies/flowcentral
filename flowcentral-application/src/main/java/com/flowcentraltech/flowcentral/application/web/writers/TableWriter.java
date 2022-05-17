@@ -116,7 +116,12 @@ public class TableWriter extends AbstractControlWriter {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
+            final EventHandler actionHandler = tableWidget.getActionEventHandler();
             final TableDef tableDef = table.getTableDef();
+            final Control maintainCtrl = actionHandler != null
+                    ? (isContainerEditable && table.isEditMode() ? tableWidget.getEditCtrl()
+                            : tableWidget.getViewCtrl())
+                    : null;
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
@@ -139,6 +144,12 @@ public class TableWriter extends AbstractControlWriter {
                         if (isContainerEditable && tableWidget.isInputWidget(chWidget)) {
                             addPageAlias(tableWidgetId, chWidget);
                         }
+
+                        if (maintainCtrl != null) {
+                            maintainCtrl.setValueStore(valueStore);
+                            writer.writeBehavior(actionHandler, maintainCtrl.getId(), "action");
+                        }
+                        
                         index++;
                     }
                 }
@@ -227,13 +238,13 @@ public class TableWriter extends AbstractControlWriter {
                     if (caption != null && (sysHeaderUppercase || tableDef.isHeaderToUpperCase())) {
                         caption = caption.toUpperCase();
                     }
-                    
+
                     if (caption != null) {
                         writer.write(" title=\"").writeWithHtmlEscape(caption).write("\"");
                     }
-                     
+
                     writer.write(">");
-                    
+
                     if (caption != null) {
                         writer.writeWithHtmlEscape(caption);
                     } else {
@@ -256,6 +267,11 @@ public class TableWriter extends AbstractControlWriter {
 
             if (supportSelect && entryMode) {
                 writeHeaderMultiSelect(writer, tableWidget);
+            }
+
+            if (tableWidget.isActionColumn()) {
+                writer.write("<th>");
+                writer.write("</th>");
             }
 
             writer.write("</tr>");
@@ -285,11 +301,13 @@ public class TableWriter extends AbstractControlWriter {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
             final boolean entryMode = table.isEntryMode();
+            final boolean editMode = table.isEditMode();
             final boolean supportSelect = !table.isFixedAssignment();
             final int pageIndex = table.getDispStartIndex() + 1;
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean totalSummary = table.isTotalSummary();
+            final boolean isActionColumn = tableWidget.isActionColumn();
             table.clearSummaries();
 
             boolean isEvenRow = true;
@@ -318,6 +336,7 @@ public class TableWriter extends AbstractControlWriter {
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final Date now = table.getAu().getNow();
                 final SpecialParamProvider specialParamProvider = table.getAu().getSpecialParamProvider();
+                final Control maintainCtrl = editMode ? tableWidget.getEditCtrl() : tableWidget.getViewCtrl();
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     Long id = valueStore.retrieve(Long.class, "id");
@@ -384,6 +403,13 @@ public class TableWriter extends AbstractControlWriter {
                         writeRowMultiSelect(writer, tableWidget, id, i);
                     }
 
+                    if (isActionColumn) {
+                        writer.write("<td>");
+                        maintainCtrl.setValueStore(valueStore);
+                        writer.writeStructureAndContent(maintainCtrl);
+                        writer.write("</td>");
+                    }
+
                     writer.write("</tr>");
                 }
             }
@@ -423,7 +449,7 @@ public class TableWriter extends AbstractControlWriter {
 
                             writer.write("</td>");
                         }
-                        
+
                         index++;
                     }
                 }
