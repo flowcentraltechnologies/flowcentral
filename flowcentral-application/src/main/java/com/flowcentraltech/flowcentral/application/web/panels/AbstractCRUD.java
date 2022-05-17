@@ -47,6 +47,8 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 
     private final MiniForm maintainForm;
 
+    private FormMode mode;
+    
     private MiniForm form;
 
     public AbstractCRUD(AppletUtilities au, SweepingCommitPolicy scp,
@@ -56,6 +58,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         this.table = table;
         this.createForm = createForm;
         this.maintainForm = maintainForm;
+        this.setMode(FormMode.CREATE);
     }
 
     public AppletUtilities getAu() {
@@ -74,7 +77,12 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         return form.getCtx().getValidationErrors();
     }
 
-    public void switchMode(FormMode mode) {
+    public FormMode getMode() {
+        return mode;
+    }
+
+    public void setMode(FormMode mode) {
+        this.mode = mode;
         form = FormMode.CREATE.equals(mode) ? createForm : maintainForm;
     }
 }

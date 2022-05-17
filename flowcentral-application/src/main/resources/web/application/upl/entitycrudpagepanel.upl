@@ -33,16 +33,9 @@
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{saveBtn}
 	components:$f{moreActionButtons}
-
-!ui-button:saveBtn caption:$m{button.save}
-	eventHandler:$d{!ui-event event:onclick action:$c{saveEntryAct}}
 
 // Entity CRUD panel
 !ui-panel:crudBodyPanel style:$s{width:980px; margin: 8px auto;} components:$c{entityCrudPanel}
 !fc-entitycrudpanel:entityCrudPanel style:$s{width:100%;} binding:crud
-	
-// Actions
-!ui-postcommand:saveEntryAct command:saveEntry components:$c{entryTableEntryTbl}
 

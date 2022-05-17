@@ -17,4 +17,4 @@
 
 // Table
 !fc-entitytable:crudTable style:$s{width:100%;} actionColumn:true binding:table
-	actionHandler::$d{!ui-event event:onclick action:$c{crudAct}}
+	actionHandler:$d{!ui-event event:onclick action:$c{crudAct}}

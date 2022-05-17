@@ -363,9 +363,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
 
         if (isActionColumn()) {
-            editCtrl = (Control) addInternalChildWidget(
-                    "!ui-symbol symbol:$s{file} hint:$m{table.action.view} ignoreParentState:true");
             viewCtrl = (Control) addInternalChildWidget(
+                    "!ui-symbol symbol:$s{file} hint:$m{table.action.view} ignoreParentState:true");
+            editCtrl = (Control) addInternalChildWidget(
                     "!ui-symbol symbol:$s{file-edit} hint:$m{table.action.edit} ignoreParentState:true");
         }
 

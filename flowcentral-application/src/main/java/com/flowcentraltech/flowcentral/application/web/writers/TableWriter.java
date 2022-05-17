@@ -337,6 +337,7 @@ public class TableWriter extends AbstractControlWriter {
                 final Date now = table.getAu().getNow();
                 final SpecialParamProvider specialParamProvider = table.getAu().getSpecialParamProvider();
                 final Control maintainCtrl = editMode ? tableWidget.getEditCtrl() : tableWidget.getViewCtrl();
+                System.out.println("@Croop: maintainCtrl = " + maintainCtrl);
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     Long id = valueStore.retrieve(Long.class, "id");
