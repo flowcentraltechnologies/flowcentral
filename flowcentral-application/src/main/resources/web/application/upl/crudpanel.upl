@@ -14,14 +14,14 @@
 // the License.
 
 !fc-crudpanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{crudErrors crudTablePanel crudForm}
+	components:$c{crudErrors crudTablePanel crudFormPanel}
 
 // Validation errors
 !fc-formmessages:crudErrors binding:validationErrors
 
 // Table
-!ui-panel:crudTablePanel style:$s{width:100%;}
-	components:$f{crudTable}
+!ui-panel:crudTablePanel style:$s{width:100%;margin-bottom:20px;} components:$f{crudTable}
 
 // Main form
+!ui-panel:crudFormPanel style:$s{width:100%;} components:$c{crudForm}
 !fc-miniform:crudForm binding:form

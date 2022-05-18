@@ -36,5 +36,5 @@
 	components:$f{moreActionButtons}
 
 // Entity CRUD panel
-!ui-panel:crudBodyPanel style:$s{width:980px; margin: 8px auto;} components:$c{entityCrudPanel}
-!fc-entitycrudpanel:entityCrudPanel style:$s{width:100%;} binding:crud
+!ui-panel:crudBodyPanel style:$s{width:980px; margin: 8px auto;} components:$c{crudEntityCrudPanel}
+!fc-entitycrudpanel:crudEntityCrudPanel style:$s{width:100%;} binding:crud
