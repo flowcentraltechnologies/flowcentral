@@ -112,8 +112,6 @@ public class FormContext extends AbstractContext implements ErrorContext {
 
     private boolean saveAsMode;
 
-    private boolean crudMode;
-
     public FormContext(AppletContext appletContext) throws UnifyException {
         this(appletContext, null, null, null, null);
     }
@@ -210,8 +208,7 @@ public class FormContext extends AbstractContext implements ErrorContext {
 
     public List<EventHandler> getFormSwitchOnChangeHandlers() {
         return saveAsMode ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
-                : (crudMode ? formEventHandlers.getCrudSwitchOnChangeHandlers()
-                        : formEventHandlers.getFormSwitchOnChangeHandlers());
+                : formEventHandlers.getFormSwitchOnChangeHandlers();
     }
 
     public EntityFormEventHandlers getFormEventHandlers() {
@@ -233,14 +230,6 @@ public class FormContext extends AbstractContext implements ErrorContext {
 
     public void setSaveAsMode(boolean saveAsMode) {
         this.saveAsMode = saveAsMode;
-    }
-
-    public boolean isCrudMode() {
-        return crudMode;
-    }
-
-    public void setCrudMode(boolean crudMode) {
-        this.crudMode = crudMode;
     }
 
     public ValueStore getFormValueStore() {

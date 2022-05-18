@@ -364,9 +364,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
         if (isActionColumn()) {
             viewCtrl = (Control) addInternalChildWidget(
-                    "!ui-symbol symbol:$s{file} hint:$m{table.action.view} ignoreParentState:true");
+                    "!ui-symbol styleClass:$e{mact} symbol:$s{file} hint:$m{table.action.view} ignoreParentState:true");
             editCtrl = (Control) addInternalChildWidget(
-                    "!ui-symbol symbol:$s{file-edit} hint:$m{table.action.edit} ignoreParentState:true");
+                    "!ui-symbol styleClass:$e{mact} symbol:$s{file-edit} hint:$m{table.action.edit} ignoreParentState:true");
         }
 
         sortColumnCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sortColumnIndex");

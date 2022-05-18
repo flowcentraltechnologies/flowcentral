@@ -23,8 +23,8 @@
 	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle cellStyle:$s{padding-right:8px;}}
 	components:$c{titleBlock}
 !fc-formbreadcrumbs:titleBlock binding:breadCrumbs
-!ui-hidden:switchOnChangeHolder
-	eventHandler:$f{switchOnChangeEventHandler}
+!ui-hidden:crudActionHolder
+	eventHandler:$f{crudActionEventHandler}
 
 !ui-panel:headerCenterPanel style:$s{display:inline-block; width:100%;}
 	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle  cellStyle:$s{text-align:center;}}
@@ -38,4 +38,3 @@
 // Entity CRUD panel
 !ui-panel:crudBodyPanel style:$s{width:980px; margin: 8px auto;} components:$c{entityCrudPanel}
 !fc-entitycrudpanel:entityCrudPanel style:$s{width:100%;} binding:crud
-

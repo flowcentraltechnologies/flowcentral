@@ -29,6 +29,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Entity CRUD page object.
@@ -139,8 +140,11 @@ public class EntityCRUDPage {
         displayItemCounterClass = null;
     }
 
-    public void switchOnChange() throws UnifyException {
-
+    public void crudSelectItem(int index) throws UnifyException {
+        Entity inst = getCrud().getTable().getDisplayItem(index);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        System.out.println("@ inst = " + inst);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     }
 
     public EntityCRUD getCrud() throws UnifyException {
@@ -150,8 +154,6 @@ public class EntityCRUDPage {
             FormContext createFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(createFormName), formEventHandlers);
             FormContext maintainFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(maintainFormName),
                     formEventHandlers);
-            createFrmCtx.setCrudMode(true);
-            maintainFrmCtx.setCrudMode(true);
             MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx, formTabDef);
             MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx, formTabDef);
             crud = new EntityCRUD(ctx.getAu(), sweepingCommitPolicy, entityTable, createForm, maintainForm);
@@ -168,6 +170,7 @@ public class EntityCRUDPage {
         }
         
         entityTable.setSourceObject(restriction);
+        entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
     }
 
 }

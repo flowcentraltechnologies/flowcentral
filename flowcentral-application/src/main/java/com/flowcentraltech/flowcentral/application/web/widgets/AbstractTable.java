@@ -80,6 +80,8 @@ public abstract class AbstractTable<T, U> {
 
     private List<EventHandler> switchOnChangeHandlers;
 
+    private List<EventHandler> crudActionHandlers;
+
     public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, boolean entryMode) {
         this.au = au;
         this.tableDef = tableDef;
@@ -99,6 +101,14 @@ public abstract class AbstractTable<T, U> {
 
     public void setSwitchOnChangeHandlers(List<EventHandler> switchOnChangeHandlers) {
         this.switchOnChangeHandlers = switchOnChangeHandlers;
+    }
+
+    public List<EventHandler> getCrudActionHandlers() {
+        return crudActionHandlers;
+    }
+
+    public void setCrudActionHandlers(List<EventHandler> crudActionHandlers) {
+        this.crudActionHandlers = crudActionHandlers;
     }
 
     public List<?> getSelectedItems() throws UnifyException {

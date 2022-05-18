@@ -25,6 +25,3 @@
 
 // Main form
 !fc-miniform:crudForm binding:form
-	
-// Actions
-!ui-postcommand:crudAct command:selectItem

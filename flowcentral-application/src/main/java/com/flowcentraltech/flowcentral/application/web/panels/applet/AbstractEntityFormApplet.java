@@ -290,8 +290,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         entryTablePage.switchOnChange();
     }
 
-    public void crudSwitchOnChange() throws UnifyException {
-        entityCrudPage.switchOnChange();
+    public void crudSelectItem(int index) throws UnifyException {
+        entityCrudPage.crudSelectItem(index);
     }
 
     public void saveAsSwitchOnChange() throws UnifyException {

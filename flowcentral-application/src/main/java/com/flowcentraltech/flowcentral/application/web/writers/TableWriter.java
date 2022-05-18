@@ -116,12 +116,11 @@ public class TableWriter extends AbstractControlWriter {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
+            final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
             final EventHandler actionHandler = tableWidget.getActionEventHandler();
             final TableDef tableDef = table.getTableDef();
-            final Control maintainCtrl = actionHandler != null
-                    ? (isContainerEditable && table.isEditMode() ? tableWidget.getEditCtrl()
-                            : tableWidget.getViewCtrl())
-                    : null;
+            final Control maintainCtrl = isContainerEditable && table.isEditMode() ? tableWidget.getEditCtrl()
+                            : tableWidget.getViewCtrl();
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
@@ -144,13 +143,21 @@ public class TableWriter extends AbstractControlWriter {
                         if (isContainerEditable && tableWidget.isInputWidget(chWidget)) {
                             addPageAlias(tableWidgetId, chWidget);
                         }
-
-                        if (maintainCtrl != null) {
-                            maintainCtrl.setValueStore(valueStore);
-                            writer.writeBehavior(actionHandler, maintainCtrl.getId(), "action");
-                        }
                         
                         index++;
+                    }
+                }
+
+                if (maintainCtrl != null) {
+                    maintainCtrl.setValueStore(valueStore);
+                    if (actionHandler != null) {
+                        writer.writeBehavior(actionHandler, maintainCtrl.getId(), "action");
+                    }
+                    
+                    if (crudActionHandlers != null) {
+                        for (EventHandler eventHandler : crudActionHandlers) {
+                            writer.writeBehavior(eventHandler, maintainCtrl.getId(), "action");
+                        }
                     }
                 }
             }
@@ -270,7 +277,7 @@ public class TableWriter extends AbstractControlWriter {
             }
 
             if (tableWidget.isActionColumn()) {
-                writer.write("<th>");
+                writer.write("<th  class=\"mactionh\">");
                 writer.write("</th>");
             }
 
@@ -301,13 +308,13 @@ public class TableWriter extends AbstractControlWriter {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
             final boolean entryMode = table.isEntryMode();
-            final boolean editMode = table.isEditMode();
             final boolean supportSelect = !table.isFixedAssignment();
             final int pageIndex = table.getDispStartIndex() + 1;
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean totalSummary = table.isTotalSummary();
             final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean isContainerEditable = tableWidget.isContainerEditable();
             table.clearSummaries();
 
             boolean isEvenRow = true;
@@ -336,8 +343,8 @@ public class TableWriter extends AbstractControlWriter {
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final Date now = table.getAu().getNow();
                 final SpecialParamProvider specialParamProvider = table.getAu().getSpecialParamProvider();
-                final Control maintainCtrl = editMode ? tableWidget.getEditCtrl() : tableWidget.getViewCtrl();
-                System.out.println("@Croop: maintainCtrl = " + maintainCtrl);
+                final Control maintainCtrl = isContainerEditable && table.isEditMode() ? tableWidget.getEditCtrl()
+                                : tableWidget.getViewCtrl();
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     Long id = valueStore.retrieve(Long.class, "id");

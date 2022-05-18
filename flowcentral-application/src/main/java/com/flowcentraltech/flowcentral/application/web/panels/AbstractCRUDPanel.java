@@ -35,7 +35,6 @@ public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractPanel 
         T crud = getCrud();
         // TODO
     }
-
     
     @SuppressWarnings("unchecked")
     private T getCrud() throws UnifyException {
