@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
@@ -31,13 +32,41 @@ public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractPanel 
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-
         T crud = getCrud();
-        // TODO
+        
+        final boolean editable = isContainerEditable();
+        final boolean create = crud.isCreate();
+        setVisible("crudActionPanel", editable);
+        setVisible("crudAddBtn", editable && create);
+        setVisible("crudUpdateBtn", editable && !create);
+        setVisible("crudDeleteBtn", editable && !create);
+        setVisible("crudCancelBtn", editable && !create);
+    }
+    
+    @Action
+    public void addItem() throws UnifyException {
+        getCrud().save();
+    }
+    
+    @Action
+    public void updateItem() throws UnifyException {
+        getCrud().save();
+    }
+    
+    @Action
+    public void deleteItem() throws UnifyException {
+        
+    }
+    
+    @Action
+    public void cancelItem() throws UnifyException {
+        T crud = getCrud();
+        crud.enterCreate();
     }
     
     @SuppressWarnings("unchecked")
     private T getCrud() throws UnifyException {
         return (T) getValue(AbstractCRUD.class);
     }
+
 }

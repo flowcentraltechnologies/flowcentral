@@ -19,10 +19,13 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * CRUD object.
@@ -32,11 +35,6 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
  */
 public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 
-    public enum FormMode {
-        CREATE,
-        MAINTAIN
-    };
-    
     private final AppletUtilities au;
 
     private final SweepingCommitPolicy scp;
@@ -47,18 +45,23 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 
     private final MiniForm maintainForm;
 
-    private FormMode mode;
-    
-    private MiniForm form;
+    private final String baseField;
 
-    public AbstractCRUD(AppletUtilities au, SweepingCommitPolicy scp,
-            T table, MiniForm createForm, MiniForm maintainForm) {
+    private final Object baseId;
+
+    private int maintainIndex;
+
+    private boolean create;
+
+    public AbstractCRUD(AppletUtilities au, SweepingCommitPolicy scp, String baseField, Object baseId, T table,
+            MiniForm createForm, MiniForm maintainForm) {
         this.au = au;
         this.scp = scp;
+        this.baseField = baseField;
+        this.baseId = baseId;
         this.table = table;
         this.createForm = createForm;
         this.maintainForm = maintainForm;
-        this.setMode(FormMode.CREATE);
     }
 
     public AppletUtilities getAu() {
@@ -70,19 +73,78 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     }
 
     public MiniForm getForm() {
-        return form;
+        return create ? createForm : maintainForm;
+    }
+
+    public boolean isWithFormErrors() {
+        return getForm().getCtx().isWithFormErrors();
     }
 
     public List<FormMessage> getValidationErrors() {
-        return form.getCtx().getValidationErrors();
+        return getForm().getCtx().getValidationErrors();
     }
 
-    public FormMode getMode() {
-        return mode;
+    public boolean isCreate() {
+        return create;
     }
 
-    public void setMode(FormMode mode) {
-        this.mode = mode;
-        form = FormMode.CREATE.equals(mode) ? createForm : maintainForm;
+    public boolean isMaintain() {
+        return !create;
     }
+
+    public void enterCreate() throws UnifyException {
+        Object _inst = createObject();
+        FormContext formContext = getForm().getCtx();
+        formContext.setInst(_inst);
+        prepareCreate(formContext);
+        create = true;
+    }
+
+    public void enterMaintain(int index) throws UnifyException {
+        Object inst = table.getDisplayItem(index);
+        Object _inst = reload(inst);
+        final FormContext formContext = getForm().getCtx();
+        formContext.setInst(_inst);
+        prepareMaintain(formContext);
+        maintainIndex = index;
+        create = false;
+    }
+
+    public void save() throws UnifyException {
+        final EvaluationMode evaluationMode = create ? EvaluationMode.CREATE : EvaluationMode.UPDATE;
+        final FormContext formContext = getForm().getCtx();
+        evaluateFormContext(formContext, evaluationMode);
+        if (!isWithFormErrors()) {
+            if (create) {
+                create(formContext, scp);
+                enterCreate();
+            } else {
+                update(formContext, scp);
+                enterMaintain(maintainIndex);
+            }
+        }
+    }
+
+    protected String getBaseField() {
+        return baseField;
+    }
+
+    protected Object getBaseId() {
+        return baseId;
+    }
+
+    protected abstract void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode)
+            throws UnifyException;
+
+    protected abstract Object createObject() throws UnifyException;
+
+    protected abstract void prepareCreate(FormContext formContext) throws UnifyException;
+
+    protected abstract void create(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException;
+
+    protected abstract Object reload(Object inst) throws UnifyException;
+
+    protected abstract void prepareMaintain(FormContext formContext) throws UnifyException;
+
+    protected abstract void update(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException;
 }

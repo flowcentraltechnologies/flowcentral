@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
@@ -28,7 +29,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Entity CRUD page object.
@@ -39,6 +39,8 @@ import com.tcdng.unify.core.database.Entity;
 public class EntityCRUDPage {
 
     private final AppletContext ctx;
+
+    private final AppletDef formAppletDef;
 
     private final SweepingCommitPolicy sweepingCommitPolicy;
 
@@ -66,11 +68,12 @@ public class EntityCRUDPage {
 
     private EntityCRUD crud;
 
-    public EntityCRUDPage(AppletContext ctx, EntityFormEventHandlers formEventHandlers,
+    public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
             BreadCrumbs breadCrumbs, String tableName, String createFormName, String maintainFormName,
             Restriction baseRestriction) {
         this.ctx = ctx;
+        this.formAppletDef = formAppletDef;
         this.formEventHandlers = formEventHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.entityClassDef = entityClassDef;
@@ -137,15 +140,12 @@ public class EntityCRUDPage {
     }
 
     public void crudSelectItem(int index) throws UnifyException {
-        Entity inst = getCrud().getTable().getDisplayItem(index);
-        Entity _inst = getAu().getEnvironment().list(inst.getClass(), inst.getId());
-        getCrud().getForm().getCtx().setInst(_inst);
+        getCrud().enterMaintain(index);
     }
 
     public EntityCRUD getCrud() throws UnifyException {
         if (crud == null) {
             EntityTable entityTable = new EntityTable(ctx.getAu(), ctx.getAu().getTableDef(tableName));
-
             FormContext createFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(createFormName), formEventHandlers);
             FormContext maintainFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(maintainFormName),
                     formEventHandlers);
@@ -153,7 +153,8 @@ public class EntityCRUDPage {
                     createFrmCtx.getFormDef().getFormTabDef(0));
             MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
                     maintainFrmCtx.getFormDef().getFormTabDef(0));
-            crud = new EntityCRUD(ctx.getAu(), sweepingCommitPolicy, entityTable, createForm, maintainForm);
+            crud = new EntityCRUD(ctx.getAu(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
+                    entityTable, createForm, maintainForm);
         }
 
         return crud;

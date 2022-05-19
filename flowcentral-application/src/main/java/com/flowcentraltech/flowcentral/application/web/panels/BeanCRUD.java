@@ -16,10 +16,17 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
  * Bean CRUD
@@ -29,9 +36,54 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
  */
 public class BeanCRUD extends AbstractCRUD<BeanTable> {
 
-    public BeanCRUD(AppletUtilities au, SweepingCommitPolicy scp, BeanTable table,
-            MiniForm createForm, MiniForm maintainForm) {
-        super(au, scp, table, createForm, maintainForm);
+    private final Class<?> beanClass;
+
+    public BeanCRUD(AppletUtilities au, SweepingCommitPolicy scp, Class<?> beanClass, String baseField, Object baseId,
+            BeanTable table, MiniForm createForm, MiniForm maintainForm) {
+        super(au, scp, baseField, baseId, table, createForm, maintainForm);
+        this.beanClass = beanClass;
+    }
+
+    @Override
+    protected void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode) throws UnifyException {
+
+    }
+
+    @Override
+    protected Object createObject() throws UnifyException {
+        return ReflectUtils.newInstance(beanClass);
+    }
+
+    @Override
+    protected void prepareCreate(FormContext formContext) throws UnifyException {
+
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void create(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
+        List<Object> list = (List<Object>) getTable().getSourceObject();
+        if (list == null || list.isEmpty()) {
+            list = new ArrayList<>();
+        }
+
+        list.add(formContext.getInst());
+        getTable().setSourceObject(list);
+    }
+
+    @Override
+    protected void prepareMaintain(FormContext formContext) throws UnifyException {
+
+    }
+
+    @Override
+    protected void update(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
+
+    }
+
+    @Override
+    protected Object reload(Object inst) throws UnifyException {
+        return inst;
     }
 
 }

@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -32,12 +31,10 @@ import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormRelatedListDef;
-import com.flowcentraltech.flowcentral.application.data.FormStatePolicyDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
@@ -59,7 +56,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.Bread
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCRUDPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntryTablePage;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
-import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -75,7 +71,6 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -439,18 +434,20 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void crudToChildItem(int childTabIndex) throws UnifyException {
         currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
-        final AppletDef _appletDef = getAppletDef(currFormTabDef.getApplet());
-        final String baseRestriction = _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION);
-        final FilterDef baseFilter = baseRestriction != null ? _appletDef.getFilterDef(baseRestriction) : null;
-        final String tableName = _appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
-        final String createFormName = _appletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
-        final String maintainFormName = _appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
+        final AppletDef _formAppletDef = getAppletDef(currFormTabDef.getApplet());
+        final String baseRestriction = _formAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.BASE_RESTRICTION);
+        final FilterDef baseFilter = baseRestriction != null ? _formAppletDef.getFilterDef(baseRestriction) : null;
+        final String tableName = _formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
+        final String createFormName = _formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
+        final String maintainFormName = _formAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.MAINTAIN_FORM);
         final String baseField = getAu().getChildFkFieldName(form.getFormDef().getEntityDef(),
                 currFormTabDef.getReference());
         final Object baseId = ((Entity) form.getFormBean()).getId();
         final String subTitle = ((Entity) form.getFormBean()).getDescription();
         saveCurrentForm();
-        entityCrudPage = constructNewEntityCRUDPage(_appletDef.getEntity(), tableName, createFormName, maintainFormName,
+        entityCrudPage = constructNewEntityCRUDPage(_formAppletDef, tableName, createFormName, maintainFormName,
                 baseFilter, baseField, baseId, subTitle);
         entityCrudPage.loadCrudList();
         viewMode = ViewMode.ENTITY_CRUD_PAGE;
@@ -885,18 +882,18 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 baseField, baseId, breadCrumbs, entryTable, entryTablePolicy, entryFilter);
     }
 
-    protected EntityCRUDPage constructNewEntityCRUDPage(String entity, String tableName, String createFormName,
-            String maintainFormName, FilterDef baseFilter, String baseField, Object baseId,
+    protected EntityCRUDPage constructNewEntityCRUDPage(AppletDef formAppletDef, String tableName,
+            String createFormName, String maintainFormName, FilterDef baseFilter, String baseField, Object baseId,
             String subTitle) throws UnifyException {
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
-        EntityClassDef entityClassDef = getEntityClassDef(entity);
+        EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
         breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         Restriction baseRestriction = baseFilter != null
                 ? baseFilter.getRestriction(entityClassDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow())
                 : null;
-        return new EntityCRUDPage(getCtx(), formEventHandlers, this, entityClassDef, baseField, baseId, breadCrumbs,
-                tableName, createFormName, maintainFormName, baseRestriction);
+        return new EntityCRUDPage(getCtx(), formAppletDef, formEventHandlers, this, entityClassDef, baseField, baseId,
+                breadCrumbs, tableName, createFormName, maintainFormName, baseRestriction);
     }
 
     protected EditPropertyList constructNewEditPropertyList(PropertyRuleDef propertyRuleDef, Entity inst,
@@ -1010,52 +1007,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             form.setSubmitStyleClass("fc-greenbutton");
         }
 
-        final ValueStore formValueStore = form.getCtx().getFormValueStore();
-        if (isReference) {
-            form.getCtx().setFixedReference(childFkFieldName);
-        }
-
-        final Map<String, Object> variables = Collections.emptyMap();
-        if (formMode.isCreate()) {
-            // Apply create state policy
-            String onCreateStatePolicy = _currentFormAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.CREATE_FORM_STATE_POLICY);
-            if (!StringUtils.isBlank(onCreateStatePolicy)) {
-                FormStatePolicyDef onCreateFormStatePolicyDef = formDef
-                        .getOnCreateFormStatePolicyDef(onCreateStatePolicy);
-                if (onCreateFormStatePolicyDef.isSetValues()) {
-                    onCreateFormStatePolicyDef.getSetValuesDef().apply(au, formDef.getEntityDef(), au.getNow(),
-                            formValueStore, variables, null);
-                }
-            }
-
-            // Populate skeleton for auto-format fields
-            EntityDef _entityDef = formDef.getEntityDef();
-            if (_entityDef.isWithAutoFormatFields()) {
-                final SequenceCodeGenerator gen = au.getSequenceCodeGenerator();
-                for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
-                    if (entityFieldDef.isStringAutoFormat()) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
-                                gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
-                    }
-                }
-            }
-        }
-
-        if (formDef.isWithConsolidatedFormState()) {
-            ConsolidatedFormStatePolicy policy = ctx.getAu().getComponent(ConsolidatedFormStatePolicy.class,
-                    formDef.getConsolidatedFormState());
-            policy.onFormConstruct(formValueStore);
-        }
-
-        // Fire on form construct value generators
-        for (FormStatePolicyDef formStatePolicyDef : formDef.getOnFormConstructSetValuesFormStatePolicyDefList()) {
-            if (formStatePolicyDef.isSetValues()) {
-                formStatePolicyDef.getSetValuesDef().apply(au, formDef.getEntityDef(), au.getNow(), formValueStore,
-                        variables, null);
-            }
-        }
-
+        au.onFormConstruct(_currentFormAppletDef, form.getCtx(), childFkFieldName, formMode.isCreate());
         return form;
     }
 
@@ -1199,26 +1151,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     }
 
-    private void applyDelayedSetValues(HeaderWithTabsForm form) throws UnifyException {
-        final FormDef _formDef = form.getFormDef();
-        final ValueStore _formValueStore = form.getCtx().getFormValueStore();
-        final Date now = au.getNow();
-        // Execute delayed set values
-        final Map<String, Object> variables = Collections.emptyMap();
-        for (FormStatePolicyDef formStatePolicyDef : _formDef.getOnDelayedSetValuesFormStatePolicyDefList()) {
-            ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                    ? formStatePolicyDef.getOnCondition().getObjectFilter(_formDef.getEntityDef(),
-                            au.getSpecialParamProvider(), now)
-                    : null;
-            if (objectFilter == null || objectFilter.match(_formValueStore)) {
-                if (formStatePolicyDef.isSetValues()) {
-                    formStatePolicyDef.getSetValuesDef().apply(au, _formDef.getEntityDef(), now, _formValueStore,
-                            variables, null);
-                }
-            }
-        }
-    }
-
     @SuppressWarnings("unchecked")
     private void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {
         if (inst != null) {
@@ -1344,20 +1276,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     private EntityActionResult updateInst(FormReviewType reviewType) throws UnifyException {
-        Entity inst = (Entity) form.getFormBean();
         final AppletDef _currFormAppletDef = getFormAppletDef();
-        String updatePolicy = _currFormAppletDef != null
-                ? _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY)
-                : form.getCtx().getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-        EntityActionContext eCtx = new EntityActionContext(form.getFormDef().getEntityDef(), inst,
-                RecordActionType.UPDATE, this, updatePolicy);
-        eCtx.setAll(form.getCtx());
-
-        applyDelayedSetValues(form);
-
-        EntityActionResult entityActionResult = getAu().getEnvironment().updateLean(eCtx);
-        form.getCtx().addValidationErrors(eCtx.getFormMessages());
-        updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity(inst, false));
+        EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
+                this);
+        updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 
         // Review form
         reviewFormContext(form.getCtx(), EvaluationMode.UPDATE, reviewType);
@@ -1373,54 +1295,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     private EntityActionResult createInst() throws UnifyException {
-        final Entity inst = (Entity) form.getFormBean();
-        final FormDef _formDef = form.getFormDef();
-        final EntityDef _entityDef = _formDef.getEntityDef();
-        final AppletDef _currFormAppletDef = getFormAppletDef();
-        final FormContext formContext = form.getCtx();
-        String createPolicy = _currFormAppletDef != null
-                ? _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY)
-                : formContext.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
-        EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.CREATE, this,
-                createPolicy);
-        eCtx.setAll(formContext);
-
-        // Populate values for auto-format fields
-        final SequenceCodeGenerator gen = au.getSequenceCodeGenerator();
-        if (_entityDef.isWithAutoFormatFields()) {
-            ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
-            for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
-                if (entityFieldDef.isStringAutoFormat()) {
-                    String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
-                    if (skeleton.equals(DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName()))) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen.getNextSequenceCode(
-                                _entityDef.getLongName(), entityFieldDef.getAutoFormat(), valueStoreReader));
-                    }
-                }
-            }
-        }
-
-        // Apply delayed set values here since set values can depend on auto-format
-        // fields
-        applyDelayedSetValues(form);
-
-        EntityActionResult entityActionResult;
-        try {
-            entityActionResult = getAu().getEnvironment().create(eCtx);
-        } catch (UnifyException e) {
-            // Revert to skeleton values
-            if (_entityDef.isWithAutoFormatFields()) {
-                for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
-                    if (entityFieldDef.isStringAutoFormat()) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
-                                gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
-                    }
-                }
-            }
-            throw e;
-        }
-
-        return entityActionResult;
+        final AppletDef _appletDef = getFormAppletDef();
+        return au.createEntityInstByFormContext(_appletDef, form.getCtx(), this);
     }
 
     private void enterNextForm() throws UnifyException {

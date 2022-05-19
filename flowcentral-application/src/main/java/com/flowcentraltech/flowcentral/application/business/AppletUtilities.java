@@ -53,6 +53,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
@@ -939,4 +940,53 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     String getEntityDescription(EntityClassDef entityClassDef, Entity inst, String fieldName) throws UnifyException;
+    
+    /**
+     * Creates an entity by form context.
+     * 
+     * @param formAppletDef
+     *                    the form applet definition
+     * @param formContext
+     *                    the form context
+     * @param scp
+     *                    the sweeping commit policy
+     * @return the entity action result
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityActionResult createEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
+            SweepingCommitPolicy scp) throws UnifyException;
+    
+    /**
+     * Updates an entity by form context.
+     * 
+     * @param formAppletDef
+     *                      the form applet definition
+     * @param formContext
+     *                      the form context
+     * @param scp
+     *                      the sweeping commit policy
+     * @return the entity action result
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
+            SweepingCommitPolicy scp) throws UnifyException;
+    
+    /**
+     * Performs on form construction.
+     * 
+     * @param formAppletDef
+     *                      the form applet definition
+     * @param formContext
+     *                      the form context
+     * @param baseField
+     *                      the base field
+     * @param create
+     *                      the create mode
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void onFormConstruct(final AppletDef formAppletDef, final FormContext formContext, final String baseField,
+            final boolean create) throws UnifyException;
 }
