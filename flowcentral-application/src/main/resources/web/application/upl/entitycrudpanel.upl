@@ -16,4 +16,4 @@
 !fc-entitycrudpanel crudTable:$c{crudTable}
 
 // Table
-!fc-entitytable:crudTable style:$s{width:100%;} actionColumn:true binding:table
+!fc-entitytable:crudTable style:$s{width:100%;} binding:table

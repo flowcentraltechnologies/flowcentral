@@ -14,7 +14,7 @@
 // the License.
 
 !fc-crudpanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{crudErrors crudTablePanel crudFormPanel}
+	components:$c{crudTablePanel crudErrors crudFormPanel}
 
 // Validation errors
 !fc-formmessages:crudErrors binding:validationErrors

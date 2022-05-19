@@ -487,6 +487,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .odd:hover {background-color:#d5e7fb;}
 .fc-table .table .even {}
 .fc-table .table .even:hover {background-color:#d5e7fb;}
+.fc-table .table .pnt {cursor:pointer;}
 .fc-table .table .sort {cursor:pointer;}
 .fc-table .table .sorted {color:#0066cc;cursor:pointer;}
 .fc-table .table th {text-align:left; font-weight: bold; padding: 8px 6px;}
@@ -523,6 +524,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .table .odd:hover {background-color:#d5e7fb;}
 .fc-entitytreetable .table .even {}
 .fc-entitytreetable .table .even:hover {background-color:#d5e7fb;}
+.fc-entitytreetable .table .pnt {cursor:pointer;}
 .fc-entitytreetable .table th {text-align:left; font-weight: bold; padding: 4px 6px;font-size: 8pt;}
 .fc-entitytreetable .table th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
 .fc-entitytreetable .table .inner {padding: 0px; padding-left: 44px;}
