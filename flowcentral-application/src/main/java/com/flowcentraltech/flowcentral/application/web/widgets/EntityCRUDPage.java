@@ -169,6 +169,12 @@ public class EntityCRUDPage {
 
         entityTable.setSourceObject(restriction);
         entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
+        
+        if (ctx.isContextEditable()) {
+            getCrud().enterCreate();
+        } else {
+            getCrud().enterMaintain(0);
+        }        
     }
 
 }

@@ -34,13 +34,16 @@ public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractPanel 
         super.switchState();
         T crud = getCrud();
         
-        final boolean editable = isContainerEditable();
+        final boolean editable = isContainerEditable();        
+        final boolean displayItems = crud.isWithDisplayItems();        
         final boolean create = crud.isCreate();
+
+        setVisible("crudFormPanel", editable || displayItems);
         setVisible("crudActionPanel", editable);
-        setVisible("crudAddBtn", editable && create);
-        setVisible("crudUpdateBtn", editable && !create);
-        setVisible("crudDeleteBtn", editable && !create);
-        setVisible("crudCancelBtn", editable && !create);
+        setVisible("crudAddBtn", create);
+        setVisible("crudUpdateBtn", !create);
+        setVisible("crudDeleteBtn", !create);
+        setVisible("crudCancelBtn", !create);
     }
     
     @Action

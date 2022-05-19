@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
 
@@ -273,6 +274,10 @@ public abstract class AbstractTable<T, U> {
 
     public U getDisplayItem(int displayIndex) {
         return dispItemList.get(displayIndex);
+    }
+
+    public boolean isWithDisplayItems() {
+        return !DataUtils.isBlank(dispItemList);
     }
 
     public int getDispStartIndex() {

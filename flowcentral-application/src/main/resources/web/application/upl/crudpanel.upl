@@ -29,11 +29,11 @@
 // Action panel
 !ui-panel:crudActionPanel layout:$d{!ui-horizontal}
 	components:$c{crudAddBtn crudUpdateBtn crudDeleteBtn crudCancelBtn}
-!ui-button:crudAddBtn styleClass:$e{fc-bluebutton} caption:$m{button.add}
+!ui-button:crudAddBtn caption:$m{button.add}
 	eventHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
-!ui-button:crudUpdateBtn styleClass:$e{fc-bluebutton} caption:$m{button.update}
+!ui-button:crudUpdateBtn caption:$m{button.update}
 	eventHandler:$d{!ui-event event:onclick action:$c{crudUpdateAct}}
-!ui-button:crudDeleteBtn styleClass:$e{fc-redbutton} caption:$m{button.delete}
+!ui-button:crudDeleteBtn caption:$m{button.delete}
 	eventHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}}
 !ui-button:crudCancelBtn caption:$m{button.cancel}
 	eventHandler:$d{!ui-event event:onclick action:$c{crudCancelAct}}

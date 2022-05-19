@@ -80,6 +80,10 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         return getForm().getCtx().isWithFormErrors();
     }
 
+    public boolean isWithDisplayItems() {
+        return table.isWithDisplayItems();
+    }
+
     public List<FormMessage> getValidationErrors() {
         return getForm().getCtx().getValidationErrors();
     }
@@ -93,21 +97,24 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     }
 
     public void enterCreate() throws UnifyException {
+        create = true;
         Object _inst = createObject();
         FormContext formContext = getForm().getCtx();
+        formContext.clearValidationErrors();
         formContext.setInst(_inst);
         prepareCreate(formContext);
-        create = true;
     }
 
     public void enterMaintain(int index) throws UnifyException {
-        Object inst = table.getDisplayItem(index);
-        Object _inst = reload(inst);
-        final FormContext formContext = getForm().getCtx();
-        formContext.setInst(_inst);
-        prepareMaintain(formContext);
-        maintainIndex = index;
         create = false;
+        if (table.isWithDisplayItems()) {
+            Object inst = table.getDisplayItem(index);
+            Object _inst = reload(inst);
+            final FormContext formContext = getForm().getCtx();
+            formContext.setInst(_inst);
+            prepareMaintain(formContext);
+            maintainIndex = index;
+        }        
     }
 
     public void save() throws UnifyException {
