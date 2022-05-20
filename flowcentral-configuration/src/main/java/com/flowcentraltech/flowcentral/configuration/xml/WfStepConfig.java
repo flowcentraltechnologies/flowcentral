@@ -51,6 +51,8 @@ public class WfStepConfig extends BaseNameConfig {
 
     private String readOnlyCondition;
 
+    private String autoLoadCondition;
+
     private String policy;
 
     private String rule;
@@ -66,7 +68,7 @@ public class WfStepConfig extends BaseNameConfig {
     private boolean includeForwarder;
 
     private boolean forwarderPreffered;
-    
+
     private SetValuesConfig setValuesConfig;
 
     private WfRoutingsConfig wfRoutingsConfig;
@@ -152,6 +154,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setReadOnlyCondition(String readOnlyCondition) {
         this.readOnlyCondition = readOnlyCondition;
+    }
+
+    public String getAutoLoadCondition() {
+        return autoLoadCondition;
+    }
+
+    @XmlAttribute
+    public void setAutoLoadCondition(String autoLoadCondition) {
+        this.autoLoadCondition = autoLoadCondition;
     }
 
     public String getPolicy() {
@@ -265,11 +276,11 @@ public class WfStepConfig extends BaseNameConfig {
     @Override
     public String toString() {
         return "WfStepConfig [type=" + type + ", priority=" + priority + ", actionType=" + actionType + ", label="
-                + getLabel() + ", appletName=" + appletName + ", nextStepName=" + nextStepName + ", policy=" + policy + ", rule="
-                + rule + ", criticalMinutes=" + criticalMinutes + ", expiryMinutes=" + expiryMinutes + ", audit="
-                + audit + ", branchOnly=" + branchOnly + ", includeForwarder=" + includeForwarder + ", setValuesConfig="
-                + setValuesConfig + ", wfRoutingsConfig=" + wfRoutingsConfig + ", wfUserActionsConfig="
-                + wfUserActionsConfig + ", wfAlertsConfig=" + wfAlertsConfig + "]";
+                + getLabel() + ", appletName=" + appletName + ", nextStepName=" + nextStepName + ", policy=" + policy
+                + ", rule=" + rule + ", criticalMinutes=" + criticalMinutes + ", expiryMinutes=" + expiryMinutes
+                + ", audit=" + audit + ", branchOnly=" + branchOnly + ", includeForwarder=" + includeForwarder
+                + ", setValuesConfig=" + setValuesConfig + ", wfRoutingsConfig=" + wfRoutingsConfig
+                + ", wfUserActionsConfig=" + wfUserActionsConfig + ", wfAlertsConfig=" + wfAlertsConfig + "]";
     }
 
 }

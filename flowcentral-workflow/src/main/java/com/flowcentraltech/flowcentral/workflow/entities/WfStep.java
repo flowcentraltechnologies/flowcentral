@@ -70,6 +70,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column(name = "READONLY_CONDITION_NM", length = 64, nullable = true)
     private String readOnlyConditionName;
 
+    @Column(name = "AUTOLOAN_CONDITION_NM", length = 64, nullable = true)
+    private String autoLoadConditionName;
+
     @Column(name = "STEP_POLICY", length = 64, nullable = true)
     private String policy;
 
@@ -217,6 +220,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setReadOnlyConditionName(String readOnlyConditionName) {
         this.readOnlyConditionName = readOnlyConditionName;
+    }
+
+    public String getAutoLoadConditionName() {
+        return autoLoadConditionName;
+    }
+
+    public void setAutoLoadConditionName(String autoLoadConditionName) {
+        this.autoLoadConditionName = autoLoadConditionName;
     }
 
     public String getPolicy() {

@@ -22,7 +22,7 @@
 !ui-formpanel:formPanel
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
-	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmPolicy frmRule
+	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmAutoLoadingCondition frmPolicy frmRule
 		frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
@@ -48,6 +48,9 @@
 !ui-select:frmReadOnlyConditionName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.readonlycondition}
 	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
 	binding:readOnlyConditionName
+!ui-select:frmAutoLoadingCondition styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.autoloadingcondition}
+	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
+	binding:autoLoadingConditionName
 !ui-select:frmPolicy styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.policy}
 	list:$s{wfsteppolicylist} listParams:$l{type} blankOption:$s{}
 	binding:policy required:true

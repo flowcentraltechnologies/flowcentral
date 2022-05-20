@@ -25,4 +25,6 @@ public interface WorkflowModuleSysParamConstants {
 
     String WFTRANSITION_PROCESSING_BATCH_SIZE = "WF-0001";
 
+    String WF_AUTOLOADING_BATCH_SIZE = "WF-0002";
+
 }

@@ -113,6 +113,10 @@ import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.constant.LocaleType;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Or;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
@@ -138,6 +142,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider {
 
     private static final String WFTRANSITION_QUEUE_LOCK = "wf::transitionqueue-lock";
+
+    private static final String WFAUTOLOADING_LOCK = "wf::autoloading-lock";
 
     private static final String WORKFLOW_APPLICATION = "workflow";
 
@@ -235,8 +241,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                         WfStepDef.Builder wsdb = WfStepDef.newBuilder(appletDef, wfStep.getType(), wfStep.getPriority(),
                                 wfStep.getRecordActionType(), wfStep.getNextStepName(), wfStep.getAltNextStepName(),
-                                wfStep.getBinaryConditionName(), wfStep.getReadOnlyConditionName(), wfStep.getPolicy(),
-                                wfStep.getRule(), wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
+                                wfStep.getBinaryConditionName(), wfStep.getReadOnlyConditionName(),
+                                wfStep.getAutoLoadConditionName(), wfStep.getPolicy(), wfStep.getRule(),
+                                wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered());
@@ -686,16 +693,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return Collections.emptyList();
     }
 
-    @Periodic(PeriodicType.FAST)
+    @Periodic(PeriodicType.FASTER)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
+        logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
         if (grabClusterLock(WFTRANSITION_QUEUE_LOCK)) {
+            logDebug("Lock acquired for transition queue processing...");
             try {
                 int batchSize = systemModuleService.getSysParameterValue(int.class,
 
                         WorkflowModuleSysParamConstants.WFTRANSITION_PROCESSING_BATCH_SIZE);
                 pendingList = environment()
                         .findAll(new WfTransitionQueueQuery().unprocessed().orderById().setLimit(batchSize));
+                logDebug("Fetched [{0}] transition queue items...", pendingList.size());
                 if (!DataUtils.isBlank(pendingList)) {
                     List<Long> pendingIdList = new ArrayList<Long>();
                     for (WfTransitionQueue wfTransitionQueue : pendingList) {
@@ -706,11 +716,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             new Update().add("processingDt", getNow()));
                 }
             } finally {
+                logDebug("Releasing transition queue processing lock...");
                 releaseClusterLock(WFTRANSITION_QUEUE_LOCK);
             }
         }
 
         if (!DataUtils.isBlank(pendingList)) {
+            logDebug("Performing workflow transition for [{0}] items...", pendingList.size());
             for (WfTransitionQueue wfTransitionQueue : pendingList) {
                 if (performWfTransition(wfTransitionQueue)) {
                     environment().deleteById(wfTransitionQueue);
@@ -718,6 +730,47 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfTransitionQueue.setProcessingDt(null);
                     environment().updateByIdVersion(wfTransitionQueue);
                 }
+            }
+            logDebug("Workflow transition completed.");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Periodic(PeriodicType.FAST)
+    public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
+        logDebug("Processing workflow auto-loading...");
+        if (grabClusterLock(WFAUTOLOADING_LOCK)) {
+            logDebug("Lock acquired for workflow auto loading...");
+            try {
+                Date now = getNow();
+                int batchSize = systemModuleService.getSysParameterValue(int.class,
+                        WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
+                List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().supportsAutoload()
+                        .addSelect("applicationName", "workflowName", "autoLoadConditionName"));
+                for (WfStep wfStep : autoLoadStepList) {
+                    String workflowName = ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
+                            wfStep.getWorkflowName());
+                    logDebug("Performing workflow auto loading for [{0}]...", workflowName);
+                    WfDef wfDef = getWfDef(workflowName);
+                    EntityClassDef entityClassDef = appService.getEntityClassDef(wfDef.getEntity());
+                    Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName())
+                            .getRestriction(entityClassDef.getEntityDef(), appletUtil.getSpecialParamProvider(), now);
+                    List<? extends WorkEntity> entityList = environment().listAll(Query
+                            .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
+                            .addRestriction(restriction)
+                            .addRestriction(
+                                    new Or().add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
+                            .addOrder("id").setLimit(batchSize));
+                    logDebug("Loading [{0}] items for workflow [{1}]...", entityList.size(), workflowName);
+                    for (WorkEntity inst : entityList) {
+                        submitToWorkflowByName(workflowName, inst);
+                    }
+
+                    logDebug("Workflow auto loading completed for [{0}].", workflowName);
+                }
+            } finally {
+                logDebug("Releasing workflow auto-loading lock...");
+                releaseClusterLock(WFAUTOLOADING_LOCK);
             }
         }
     }

@@ -61,6 +61,8 @@ public class WfStepDef {
 
     private String readOnlyConditionName;
 
+    private String autoLoadingConditionName;
+
     private String policy;
 
     private String rule;
@@ -97,10 +99,11 @@ public class WfStepDef {
 
     private WfStepDef(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
             RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
-            String readOnlyConditionName, String policy, String rule, String name, String description, String label,
-            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
-            boolean forwarderPreferred, WfSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions,
-            List<WfRoutingDef> routingList, List<WfAlertDef> alertList, Set<String> roleSet) {
+            String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
+            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
+            boolean includeForwarder, boolean forwarderPreferred, WfSetValuesDef wfSetValuesDef,
+            Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList, List<WfAlertDef> alertList,
+            Set<String> roleSet) {
         this.appletDef = appletDef;
         this.type = type;
         this.priority = priority;
@@ -109,6 +112,7 @@ public class WfStepDef {
         this.altNextStepName = altNextStepName;
         this.binaryConditionName = binaryConditionName;
         this.readOnlyConditionName = readOnlyConditionName;
+        this.autoLoadingConditionName = autoLoadingConditionName;
         this.policy = policy;
         this.rule = rule;
         this.name = name;
@@ -188,6 +192,14 @@ public class WfStepDef {
 
     public boolean isWithReadOnlyCondition() {
         return !StringUtils.isBlank(readOnlyConditionName);
+    }
+
+    public String getAutoLoadingConditionName() {
+        return autoLoadingConditionName;
+    }
+
+    public boolean isWithAutoLoadingCondition() {
+        return !StringUtils.isBlank(autoLoadingConditionName);
     }
 
     public Map<String, WfUserActionDef> getUserActions() {
@@ -308,27 +320,14 @@ public class WfStepDef {
         return !roleSet.isEmpty();
     }
 
-    @Override
-    public String toString() {
-        return "WfStepDef [appletDef=" + appletDef + ", type=" + type + ", priority=" + priority + ", recordActionType="
-                + recordActionType + ", nextStepName=" + nextStepName + ", altNextStepName=" + altNextStepName
-                + ", binaryConditionName=" + binaryConditionName + ", readOnlyConditionName=" + readOnlyConditionName
-                + ", policy=" + policy + ", rule=" + rule + ", name=" + name + ", description=" + description
-                + ", label=" + label + ", criticalMinutes=" + criticalMinutes + ", expiryMinutes=" + expiryMinutes
-                + ", audit=" + audit + ", branchOnly=" + branchOnly + ", includeForwarder=" + includeForwarder
-                + ", forwarderPreferred=" + forwarderPreferred + ", wfSetValuesDef=" + wfSetValuesDef + ", userActions="
-                + userActions + ", routingList=" + routingList + ", alertList=" + alertList + ", formActionDefList="
-                + formActionDefList + ", roleSet=" + roleSet + "]";
-    }
-
     public static Builder newBuilder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
             RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
-            String readOnlyConditionName, String policy, String rule, String name, String description, String label,
-            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
-            boolean forwarderPreferred) {
+            String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
+            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
+            boolean includeForwarder, boolean forwarderPreferred) {
         return new Builder(appletDef, type, priority, recordActionType, nextStepName, altNextStepName,
-                binaryConditionName, readOnlyConditionName, policy, rule, name, description, label, criticalMinutes,
-                expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred);
+                binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name, description,
+                label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred);
     }
 
     public static class Builder {
@@ -348,6 +347,8 @@ public class WfStepDef {
         private String binaryConditionName;
 
         private String readOnlyConditionName;
+
+        private String autoLoadingConditionName;
 
         private String policy;
 
@@ -383,9 +384,10 @@ public class WfStepDef {
 
         public Builder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
                 RecordActionType recordActionType, String nextStepName, String altNextStepName,
-                String binaryConditionName, String readOnlyConditionName, String policy, String rule, String name,
-                String description, String label, int criticalMinutes, int expiryMinutes, boolean audit,
-                boolean branchOnly, boolean includeForwarder, boolean forwarderPreferred) {
+                String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
+                String policy, String rule, String name, String description, String label, int criticalMinutes,
+                int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
+                boolean forwarderPreferred) {
             this.appletDef = appletDef;
             this.type = type;
             this.priority = priority;
@@ -396,6 +398,7 @@ public class WfStepDef {
             this.altNextStepName = altNextStepName;
             this.binaryConditionName = binaryConditionName;
             this.readOnlyConditionName = readOnlyConditionName;
+            this.autoLoadingConditionName = autoLoadingConditionName;
             this.policy = policy;
             this.name = name;
             this.description = description;
@@ -481,10 +484,11 @@ public class WfStepDef {
 
         public WfStepDef build() {
             return new WfStepDef(appletDef, type, priority, recordActionType, nextStepName, altNextStepName,
-                    binaryConditionName, readOnlyConditionName, policy, rule, name, description, label, criticalMinutes,
-                    expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, wfSetValuesDef,
-                    DataUtils.unmodifiableMap(userActionList), DataUtils.unmodifiableValuesList(routingList),
-                    DataUtils.unmodifiableValuesList(alertList), DataUtils.unmodifiableSet(roleSet));
+                    binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name,
+                    description, label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder,
+                    forwarderPreferred, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),
+                    DataUtils.unmodifiableValuesList(routingList), DataUtils.unmodifiableValuesList(alertList),
+                    DataUtils.unmodifiableSet(roleSet));
         }
     }
 

@@ -51,6 +51,7 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         WorkflowStepType type = workflowEditor.getEditStep() != null ? workflowEditor.getEditStep().getType() : null;
         boolean isPolicy = type != null ? type.isPolicy() : false;
         boolean isUserAct =  type != null ? type.isUserInteractive() : false;
+        boolean isStart =  type != null ? type.isStart() : false;
         setVisible("frmPolicy", isPolicy);
         setVisible("frmRule", isPolicy);
         setVisible("frmBinaryConditionName", WorkflowStepType.BINARY_ROUTING.equals(type));
@@ -62,6 +63,7 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         setVisible("frmBranchOnly", isUserAct);
         setVisible("frmIncludeForwarder", isUserAct);
         setVisible("frmReadOnlyConditionName", isUserAct);
+        setVisible("frmAutoLoadingCondition", isStart);
     }
 
     @Action
