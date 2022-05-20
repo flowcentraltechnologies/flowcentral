@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
-import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -647,35 +646,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public EntityActionResult deleteInst() throws UnifyException {
-        Entity inst = (Entity) form.getFormBean();
-        final EntityDef _entityDef = form.getFormDef().getEntityDef();
-        final AppletDef _currFormAppletDef = getFormAppletDef();
-        boolean pseudoDelete = _currFormAppletDef.getPropValue(boolean.class,
-                AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO, false);
-        EntityActionResult entityActionResult = null;
-        String deletePolicy = _currFormAppletDef != null
-                ? _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY)
-                : form.getCtx().getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY);
-        if (pseudoDelete) {
-            String pseudoDeleteSetValuesName = _currFormAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO_SETVALUES);
-            if (!StringUtils.isBlank(pseudoDeleteSetValuesName)) {
-                AppletSetValuesDef appletSetValuesDef = _currFormAppletDef.getSetValues(pseudoDeleteSetValuesName);
-                appletSetValuesDef.getSetValuesDef().apply(au, _entityDef, getAu().getNow(), inst,
-                        Collections.emptyMap(), null);
-            }
-
-            EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.UPDATE, this,
-                    deletePolicy);
-            eCtx.setAll(form.getCtx());
-            entityActionResult = getAu().getEnvironment().updateLean(eCtx);
-        } else {
-            EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.DELETE, this,
-                    deletePolicy);
-            eCtx.setAll(form.getCtx());
-
-            entityActionResult = getAu().getEnvironment().delete(eCtx);
-        }
+        final AppletDef formAppletDef = getFormAppletDef();
+        EntityActionResult entityActionResult = au.deleteEntityInstByFormContext(formAppletDef, form.getCtx(), this);
 
         if (viewMode == ViewMode.MAINTAIN_FORM_SCROLL) {
             List<Entity> itemList = entitySearch.getEntityTable().getDispItemList();

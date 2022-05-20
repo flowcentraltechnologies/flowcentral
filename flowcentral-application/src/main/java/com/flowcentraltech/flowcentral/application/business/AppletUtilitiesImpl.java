@@ -24,6 +24,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -1195,6 +1196,41 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         return entityActionResult;
     }
 
+    @Override
+    public EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
+            SweepingCommitPolicy scp) throws UnifyException {
+        Entity inst = (Entity) formContext.getInst();
+        final EntityDef _entityDef = formContext.getFormDef().getEntityDef();
+        boolean pseudoDelete = formAppletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO, false);
+        EntityActionResult entityActionResult = null;
+        String deletePolicy = formAppletDef != null
+                ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY)
+                : formContext.getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY);
+        if (pseudoDelete) {
+            String pseudoDeleteSetValuesName = formAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO_SETVALUES);
+            if (!StringUtils.isBlank(pseudoDeleteSetValuesName)) {
+                AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(pseudoDeleteSetValuesName);
+                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst, Collections.emptyMap(),
+                        null);
+            }
+
+            EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.UPDATE, scp,
+                    deletePolicy);
+            eCtx.setAll(formContext);
+            entityActionResult = getEnvironment().updateLean(eCtx);
+        } else {
+            EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.DELETE, scp,
+                    deletePolicy);
+            eCtx.setAll(formContext);
+
+            entityActionResult = getEnvironment().delete(eCtx);
+        }
+
+        return entityActionResult;
+    }
+    
     @Override
     public void onFormConstruct(AppletDef formAppletDef, FormContext formContext, String baseField,
             boolean create) throws UnifyException {

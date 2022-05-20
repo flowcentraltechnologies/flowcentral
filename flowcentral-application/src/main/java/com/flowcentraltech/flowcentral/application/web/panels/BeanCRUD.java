@@ -81,6 +81,13 @@ public class BeanCRUD extends AbstractCRUD<BeanTable> {
 
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void delete(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
+        List<Object> list = (List<Object>) getTable().getSourceObject();
+        list.remove(formContext.getInst());
+    }
+
     @Override
     protected Object reload(Object inst) throws UnifyException {
         return inst;

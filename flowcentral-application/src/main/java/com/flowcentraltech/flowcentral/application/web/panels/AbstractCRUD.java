@@ -88,6 +88,11 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         return getForm().getCtx().getValidationErrors();
     }
 
+    public void evaluateTabStates() throws UnifyException {
+        createForm.getCtx().evaluateTabStates();
+        maintainForm.getCtx().evaluateTabStates();
+    }
+    
     public boolean isCreate() {
         return create;
     }
@@ -110,7 +115,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         if (table.isWithDisplayItems()) {
             Object inst = table.getDisplayItem(index);
             Object _inst = reload(inst);
-            final FormContext formContext = getForm().getCtx();
+            FormContext formContext = getForm().getCtx();
             formContext.setInst(_inst);
             prepareMaintain(formContext);
             maintainIndex = index;
@@ -118,18 +123,27 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     }
 
     public void save() throws UnifyException {
-        final EvaluationMode evaluationMode = create ? EvaluationMode.CREATE : EvaluationMode.UPDATE;
-        final FormContext formContext = getForm().getCtx();
+        EvaluationMode evaluationMode = create ? EvaluationMode.CREATE : EvaluationMode.UPDATE;
+        FormContext formContext = getForm().getCtx();
         evaluateFormContext(formContext, evaluationMode);
         if (!isWithFormErrors()) {
             if (create) {
                 create(formContext, scp);
+                table.reset();
                 enterCreate();
             } else {
                 update(formContext, scp);
+                table.reset();
                 enterMaintain(maintainIndex);
             }
         }
+    }
+
+    public void delete() throws UnifyException {
+        FormContext formContext = getForm().getCtx();
+        delete(formContext, scp);
+        table.reset();
+        enterMaintain(0);
     }
 
     protected String getBaseField() {
@@ -154,4 +168,6 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     protected abstract void prepareMaintain(FormContext formContext) throws UnifyException;
 
     protected abstract void update(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException;
+
+    protected abstract void delete(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException;
 }

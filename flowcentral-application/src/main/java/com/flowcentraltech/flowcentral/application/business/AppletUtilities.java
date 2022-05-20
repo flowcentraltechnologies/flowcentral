@@ -974,6 +974,22 @@ public interface AppletUtilities extends UnifyComponent {
             SweepingCommitPolicy scp) throws UnifyException;
     
     /**
+     * Deletes an entity by form context.
+     * 
+     * @param formAppletDef
+     *                      the form applet definition
+     * @param formContext
+     *                      the form context
+     * @param scp
+     *                      the sweeping commit policy
+     * @return the entity action result
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
+            SweepingCommitPolicy scp) throws UnifyException;
+    
+    /**
      * Performs on form construction.
      * 
      * @param formAppletDef

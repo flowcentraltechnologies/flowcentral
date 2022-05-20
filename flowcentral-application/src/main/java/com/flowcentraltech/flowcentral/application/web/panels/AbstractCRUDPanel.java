@@ -33,6 +33,7 @@ public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractPanel 
     public void switchState() throws UnifyException {
         super.switchState();
         T crud = getCrud();
+        crud.evaluateTabStates();
         
         final boolean editable = isContainerEditable();        
         final boolean displayItems = crud.isWithDisplayItems();        
@@ -58,7 +59,7 @@ public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractPanel 
     
     @Action
     public void deleteItem() throws UnifyException {
-        
+        getCrud().delete();
     }
     
     @Action

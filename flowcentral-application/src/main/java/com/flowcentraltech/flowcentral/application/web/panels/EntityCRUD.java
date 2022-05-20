@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
@@ -59,7 +60,9 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     @Override
     protected Object createObject() throws UnifyException {
-        return ReflectUtils.newInstance(entityClassDef.getEntityClass());
+        Object entity = ReflectUtils.newInstance(entityClassDef.getEntityClass());
+        DataUtils.setBeanProperty(entity, getBaseField(), getBaseId());
+        return entity;
     }
 
     @Override
@@ -85,6 +88,11 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
     @Override
     protected void update(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
         getAu().updateEntityInstByFormContext(formAppletDef, formContext, scp);
+    }
+
+    @Override
+    protected void delete(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
+        getAu().deleteEntityInstByFormContext(formAppletDef, formContext, scp);
     }
 
 }
