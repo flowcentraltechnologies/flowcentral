@@ -19,6 +19,8 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNotNull;
 import com.tcdng.unify.core.criterion.NotEquals;
 
 /**
@@ -45,5 +47,10 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     public WfStepQuery receivableFrom() {
         return (WfStepQuery) addRestriction(new And().add(new NotEquals("type", WorkflowStepType.END))
                 .add(new NotEquals("type", WorkflowStepType.ERROR)));
+    }
+
+    public WfStepQuery supportsAutoload() {
+        return (WfStepQuery) addRestriction(
+                new And().add(new Equals("type", WorkflowStepType.START)).add(new IsNotNull("autoLoadConditionName")));
     }
 }
