@@ -232,6 +232,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         switch (viewMode) {
+            case ENTITY_CRUD_PAGE:
+                switchContent("entityCrudPanel");
+                setEditable("entityCrudPanel", isContextEditable);
+                break;
             case ENTRY_TABLE_PAGE:
                 switchContent("entryTablePanel");
                 setEditable("entryTablePanel", isContextEditable);
@@ -452,6 +456,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         getEntityFormApplet().entrySwitchOnChange();
     }
 
+    @Action
+    public void crudSelectItem() throws UnifyException {
+        int index = getRequestTarget(int.class);
+        getEntityFormApplet().crudSelectItem(index);
+    }
+    
     @Action
     public void saveAsSwitchOnChange() throws UnifyException {
         getEntityFormApplet().saveAsSwitchOnChange();

@@ -125,6 +125,11 @@ public class FormContext extends AbstractContext implements ErrorContext {
         this(appletContext, formDef, formEventHandlers, formDef.getEntityDef(), inst);
     }
 
+    public FormContext(AppletContext appletContext, FormDef formDef, EntityFormEventHandlers formEventHandlers)
+            throws UnifyException {
+        this(appletContext, formDef, formEventHandlers, formDef.getEntityDef(), null);
+    }
+
     private FormContext(AppletContext appletContext, FormDef formDef, EntityFormEventHandlers formEventHandlers,
             EntityDef entityDef, Object inst) throws UnifyException {
         this.appletContext = appletContext;
@@ -140,7 +145,7 @@ public class FormContext extends AbstractContext implements ErrorContext {
 
             this.formTabs = Collections.unmodifiableMap(formTabs);
             this.formWidgetStateList = new ArrayList<FormWidgetState>();
-            this.appletContext.extractReference(entityDef, inst);
+            setInst(inst);
         } else {
             this.formTabs = Collections.emptyMap();
             this.formWidgetStateList = Collections.emptyList();
@@ -210,7 +215,8 @@ public class FormContext extends AbstractContext implements ErrorContext {
         return formEventHandlers;
     }
 
-    public void setInst(Object inst) {
+    public void setInst(Object inst) throws UnifyException {
+        appletContext.extractReference(entityDef, inst);
         this.inst = inst;
     }
 
@@ -246,7 +252,7 @@ public class FormContext extends AbstractContext implements ErrorContext {
 
     public void addValidationErrors(List<FormMessage> messages) {
         if (messages != null) {
-            for(FormMessage message: messages) {
+            for (FormMessage message : messages) {
                 addValidationError(message);
             }
         }
@@ -466,7 +472,7 @@ public class FormContext extends AbstractContext implements ErrorContext {
                     }
                 }
             }
-            
+
             if (states.isWithValueList()) {
                 states.applyValues(formValueStore);
             }
@@ -601,14 +607,13 @@ public class FormContext extends AbstractContext implements ErrorContext {
     @Override
     public String toString() {
         return "FormContext [appletContext=" + appletContext + ", entityDef=" + entityDef + ", formDef=" + formDef
-                + ", formEventHandlers=" + formEventHandlers + ", formValueStore="
-                + formValueStore + ", oldInst=" + oldInst + ", inst=" + inst + ", formTabs=" + formTabs
-                + ", invalidFields=" + invalidFields + ", reviewErrors=" + reviewErrors + ", reviewErrorsByTab="
-                + reviewErrorsByTab + ", validationErrors=" + validationErrors + ", formWidgetStateList="
-                + formWidgetStateList + ", visibleAnnotations=" + visibleAnnotations + ", fixedReference="
-                + fixedReference + ", focusMemoryId=" + focusMemoryId + ", focusWidgetId=" + focusWidgetId
-                + ", tabMemoryId=" + tabMemoryId + ", tabWidgetId=" + tabWidgetId + ", tabWidgetIds="
-                + Arrays.toString(tabWidgetIds) + ", tabIndexCounter=" + tabIndexCounter + ", formFocused="
-                + formFocused + ", saveAsMode=" + saveAsMode + "]";
+                + ", formEventHandlers=" + formEventHandlers + ", formValueStore=" + formValueStore + ", oldInst="
+                + oldInst + ", inst=" + inst + ", formTabs=" + formTabs + ", invalidFields=" + invalidFields
+                + ", reviewErrors=" + reviewErrors + ", reviewErrorsByTab=" + reviewErrorsByTab + ", validationErrors="
+                + validationErrors + ", formWidgetStateList=" + formWidgetStateList + ", visibleAnnotations="
+                + visibleAnnotations + ", fixedReference=" + fixedReference + ", focusMemoryId=" + focusMemoryId
+                + ", focusWidgetId=" + focusWidgetId + ", tabMemoryId=" + tabMemoryId + ", tabWidgetId=" + tabWidgetId
+                + ", tabWidgetIds=" + Arrays.toString(tabWidgetIds) + ", tabIndexCounter=" + tabIndexCounter
+                + ", formFocused=" + formFocused + ", saveAsMode=" + saveAsMode + "]";
     }
 }

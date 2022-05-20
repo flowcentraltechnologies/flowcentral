@@ -1,0 +1,40 @@
+// UPL template for entity CRUD page panel
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-entitycrudpagepanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{headerBar crudBodyPanel}
+
+// Header Bar
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{42% none 42%}}
+	components:$c{headerLeftPanel headerCenterPanel headerRightPanel}
+	
+!ui-panel:headerLeftPanel style:$s{float:left; width:100%;}
+	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$c{titleBlock}
+!fc-formbreadcrumbs:titleBlock binding:breadCrumbs
+!ui-hidden:crudActionHolder
+	eventHandler:$f{crudActionEventHandler}
+
+!ui-panel:headerCenterPanel style:$s{display:inline-block; width:100%;}
+	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle  cellStyle:$s{text-align:center;}}
+	components:$c{displayCounterLabel}
+!ui-label:displayCounterLabel styleClass:$e{fc-dispcounter}
+	styleClassBinding:displayItemCounterClass binding:displayItemCounter
+
+!ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$f{moreActionButtons}
+
+// Entity CRUD panel
+!ui-panel:crudBodyPanel style:$s{width:980px; margin: 8px auto;} components:$c{crudEntityCrudPanel}
+!fc-entitycrudpanel:crudEntityCrudPanel style:$s{width:100%;} binding:crud

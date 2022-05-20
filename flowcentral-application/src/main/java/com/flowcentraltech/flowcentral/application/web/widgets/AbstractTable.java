@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
 
@@ -66,6 +67,8 @@ public abstract class AbstractTable<T, U> {
 
     private boolean entryMode;
 
+    private boolean editMode;
+
     private boolean fixedAssignment;
     
     private TableTotalSummary tableTotalSummary;
@@ -77,6 +80,8 @@ public abstract class AbstractTable<T, U> {
     private TableSelect<?> tableSelect;
 
     private List<EventHandler> switchOnChangeHandlers;
+
+    private List<EventHandler> crudActionHandlers;
 
     public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, boolean entryMode) {
         this.au = au;
@@ -97,6 +102,14 @@ public abstract class AbstractTable<T, U> {
 
     public void setSwitchOnChangeHandlers(List<EventHandler> switchOnChangeHandlers) {
         this.switchOnChangeHandlers = switchOnChangeHandlers;
+    }
+
+    public List<EventHandler> getCrudActionHandlers() {
+        return crudActionHandlers;
+    }
+
+    public void setCrudActionHandlers(List<EventHandler> crudActionHandlers) {
+        this.crudActionHandlers = crudActionHandlers;
     }
 
     public List<?> getSelectedItems() throws UnifyException {
@@ -161,6 +174,14 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isEntryMode() {
         return entryMode;
+    }
+
+    public boolean isEditMode() {
+        return editMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        this.editMode = editMode;
     }
 
     public boolean isFixedAssignment() {
@@ -253,6 +274,10 @@ public abstract class AbstractTable<T, U> {
 
     public U getDisplayItem(int displayIndex) {
         return dispItemList.get(displayIndex);
+    }
+
+    public boolean isWithDisplayItems() {
+        return !DataUtils.isBlank(dispItemList);
     }
 
     public int getDispStartIndex() {

@@ -48,6 +48,7 @@ public class ReviewWizardWorkItemsAppletPanel extends AbstractEntityFormAppletPa
         final boolean isLastStep = stepIndex >= (applet.getWfWizardStepCount() - 1);
 
         switch (viewMode) {
+            case ENTITY_CRUD_PAGE:
             case ENTRY_TABLE_PAGE:
             case ASSIGNMENT_PAGE:
             case PROPERTYLIST_PAGE:

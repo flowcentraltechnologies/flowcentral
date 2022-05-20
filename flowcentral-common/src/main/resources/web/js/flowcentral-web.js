@@ -578,6 +578,13 @@ fux.rigTable = function(rgp) {
 		return;
 	}
 
+	if (rgp.pRowId) {
+		var rows = _name(rgp.pRowId);
+		for(var i = 0; i < rows.length; i++) {
+			rows[i].dispIdx = i;
+		}
+	}
+	
 	if (rgp.pMultiSel) {
 		tblToRig.uSelAllId = rgp.pSelAllId;
 		tblToRig.uSelCtrlId = rgp.pSelCtrlId;

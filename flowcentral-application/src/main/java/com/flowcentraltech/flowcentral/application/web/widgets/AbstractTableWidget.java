@@ -56,7 +56,9 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
  */
 @UplAttributes({ @UplAttribute(name = "contentDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class),
-        @UplAttribute(name = "multiSelect", type = boolean.class), @UplAttribute(name = "crud", type = boolean.class) })
+        @UplAttribute(name = "multiSelect", type = boolean.class),
+        @UplAttribute(name = "actionColumn", type = boolean.class),
+        @UplAttribute(name = "actionHandler", type = EventHandler.class)})
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
@@ -69,6 +71,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private Control selectCtrl;
 
     private Control sortColumnCtrl;
+
+    private Control editCtrl;
+
+    private Control viewCtrl;
 
     private Integer[] selected;
 
@@ -167,8 +173,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getUplAttribute(boolean.class, "multiSelect");
     }
 
-    public boolean isCrud() throws UnifyException {
-        return getUplAttribute(boolean.class, "crud");
+    public boolean isActionColumn() throws UnifyException {
+        return getUplAttribute(boolean.class, "actionColumn");
     }
 
     public String getSelectAllId() throws UnifyException {
@@ -183,6 +189,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getPrefixedId("row_");
     }
 
+    public EventHandler getActionEventHandler() throws UnifyException {
+        return getUplAttribute(EventHandler.class, "actionHandler");
+    }
+    
     public T getTable() throws UnifyException {
         T table = getValue(tableClass);
         if (table != oldTable) {
@@ -297,6 +307,14 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return sortColumnCtrl;
     }
 
+    public Control getEditCtrl() {
+        return editCtrl;
+    }
+
+    public Control getViewCtrl() {
+        return viewCtrl;
+    }
+
     public Integer[] getSelected() {
         return selected;
     }
@@ -342,6 +360,13 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     protected void doOnPageConstruct() throws UnifyException {
         if (isMultiSelect()) {
             selectCtrl = (Control) addInternalChildWidget("!ui-hidden binding:selected");
+        }
+
+        if (isActionColumn()) {
+            viewCtrl = (Control) addInternalChildWidget(
+                    "!ui-symbol styleClass:$e{mact} symbol:$s{file} hint:$m{table.action.view} ignoreParentState:true");
+            editCtrl = (Control) addInternalChildWidget(
+                    "!ui-symbol styleClass:$e{mact} symbol:$s{file-edit} hint:$m{table.action.edit} ignoreParentState:true");
         }
 
         sortColumnCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sortColumnIndex");

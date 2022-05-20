@@ -185,7 +185,7 @@ public class MiniFormWriter extends AbstractControlWriter {
             writer.writeStructureAndContent(formWidget.getWidget());
             if (ctx.isWithFieldError(formWidget.getFieldName())) {
                 writer.write("<span class=\"errmsg\">")
-                        .write(this.resolveSessionMessage(ctx.getFieldError(formWidget.getFieldName())))
+                        .write(resolveSessionMessage(ctx.getFieldError(formWidget.getFieldName())))
                         .write("</span>");
             }
 

@@ -127,7 +127,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             ValueStore formValueStore = miniForm.getCtx().getFormValueStore();
             if (formWidgets != null) {
                 for (FormWidget formWidget : formWidgets.values()) {
-                    formWidget.getWidget().setValueStore(formValueStore);
+                   formWidget.getWidget().setValueStore(formValueStore);
                 }
             }
 
@@ -418,7 +418,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                 editable = formTab.isEditable() && formSectionDef.isEditable();
                 disabled = formTab.isDisabled() || formSectionDef.isDisabled();
             }
-        }
+       }
 
         public class RowRegulator {
             private int[] findexes;

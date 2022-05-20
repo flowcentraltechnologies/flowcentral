@@ -1,0 +1,48 @@
+// UPL template for abstract CRUD panel
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-crudpanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{crudTablePanel crudErrors crudFormPanel crudActionPanel}
+
+// Validation errors
+!fc-formmessages:crudErrors binding:validationErrors
+
+// Table
+!ui-panel:crudTablePanel style:$s{width:100%;margin-bottom:20px;} components:$f{crudTable}
+
+// Main form
+!ui-panel:crudFormPanel style:$s{width:100%;} components:$c{crudForm}
+!fc-miniform:crudForm binding:form
+
+// Action panel
+!ui-panel:crudActionPanel layout:$d{!ui-horizontal}
+	components:$c{crudAddBtn crudUpdateBtn crudDeleteBtn crudCancelBtn}
+!ui-button:crudAddBtn caption:$m{button.add}
+	eventHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
+!ui-button:crudUpdateBtn caption:$m{button.update}
+	eventHandler:$d{!ui-event event:onclick action:$c{crudUpdateAct}}
+!ui-button:crudDeleteBtn caption:$m{button.delete}
+	eventHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}}
+!ui-button:crudCancelBtn caption:$m{button.cancel}
+	eventHandler:$d{!ui-event event:onclick action:$c{crudCancelAct}}
+
+// Actions
+!ui-postcommand:crudAddAct command:addItem components:$c{crudFormPanel}
+	refresh:$c{crudTablePanel crudFormPanel}
+!ui-postcommand:crudUpdateAct command:updateItem components:$c{crudFormPanel}
+	refresh:$c{crudTablePanel crudFormPanel}
+!ui-postcommand:crudDeleteAct command:deleteItem
+!ui-postcommand:crudCancelAct command:cancelItem
+	
