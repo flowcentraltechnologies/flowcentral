@@ -143,7 +143,11 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         FormContext formContext = getForm().getCtx();
         delete(formContext, scp);
         table.reset();
-        enterMaintain(0);
+        if (table.isWithDisplayItems()) {
+            enterMaintain(0);
+        } else {
+            enterCreate();
+        }
     }
 
     protected String getBaseField() {
