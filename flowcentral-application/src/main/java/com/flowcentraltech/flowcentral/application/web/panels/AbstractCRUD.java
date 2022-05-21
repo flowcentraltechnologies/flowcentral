@@ -96,8 +96,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     }
 
     public void evaluateTabStates() throws UnifyException {
-        createForm.getCtx().evaluateTabStates();
-        maintainForm.getCtx().evaluateTabStates();
+        getForm().getCtx().evaluateTabStates();
     }
     
     public boolean isCreate() {
