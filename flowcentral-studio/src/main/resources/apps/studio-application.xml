@@ -49,7 +49,7 @@
 		<widgetType name="formactionpolicylist"
 			description="$m{studio.widgettype.formactionpolicylist}"
 			dataType="string" inputType="string"
-			editor="!ui-select blankOption:$s{} list:formactionpolicylist listParams:$s{entityName}"
+			editor="!ui-select blankOption:$s{} list:formactionpolicylist listParams:$l{appFormId}"
 			renderer="!ui-label" />
 		<widgetType name="entitymatcherlist"
 			description="$m{studio.widgettype.entitymatcherlist}"

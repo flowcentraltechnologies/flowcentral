@@ -88,6 +88,7 @@ public class FormActionDef {
         this.showOnCreate = showOnCreate;
         this.showOnMaintain = showOnMaintain;
         this.validateForm = validateForm;
+        this.onCondition = onCondition;
         this.privilege = PrivilegeNameUtils.getFormActionPrivilegeName(name);
     }
 

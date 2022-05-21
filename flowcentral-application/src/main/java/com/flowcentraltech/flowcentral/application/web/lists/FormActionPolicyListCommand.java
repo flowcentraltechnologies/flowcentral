@@ -15,11 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.application.web.lists;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPolicy;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.list.StringParam;
+import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.list.LongParam;
 
 /**
  * Form action policy list command.
@@ -28,16 +30,23 @@ import com.tcdng.unify.core.list.StringParam;
  * @since 1.0
  */
 @Component("formactionpolicylist")
-public class FormActionPolicyListCommand extends AbstractEntityTypeListCommand<EntityActionPolicy, StringParam> {
+public class FormActionPolicyListCommand extends AbstractEntityTypeListCommand<EntityActionPolicy, LongParam> {
+
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
 
     public FormActionPolicyListCommand() {
-        super(EntityActionPolicy.class, StringParam.class);
+        super(EntityActionPolicy.class, LongParam.class);
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
     }
 
     @Override
-    protected String getEntityName(StringParam param) throws UnifyException {
+    protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {
-            return param.getValue();
+            return applicationModuleService.findAppFormEntityLongName(param.getValue());
         }
 
         return null;
