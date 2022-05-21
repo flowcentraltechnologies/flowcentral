@@ -49,12 +49,14 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 
     private final Object baseId;
 
+    private final String addCaption;
+    
     private int maintainIndex;
 
     private boolean create;
 
     public AbstractCRUD(AppletUtilities au, SweepingCommitPolicy scp, String baseField, Object baseId, T table,
-            MiniForm createForm, MiniForm maintainForm) {
+            MiniForm createForm, MiniForm maintainForm, String addCaption) {
         this.au = au;
         this.scp = scp;
         this.baseField = baseField;
@@ -62,6 +64,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         this.table = table;
         this.createForm = createForm;
         this.maintainForm = maintainForm;
+        this.addCaption = addCaption;
     }
 
     public AppletUtilities getAu() {
@@ -74,6 +77,10 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 
     public MiniForm getForm() {
         return create ? createForm : maintainForm;
+    }
+
+    public String getAddCaption() throws UnifyException {
+        return au.resolveSessionMessage(addCaption);
     }
 
     public boolean isWithFormErrors() {
@@ -108,6 +115,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         formContext.clearValidationErrors();
         formContext.setInst(_inst);
         prepareCreate(formContext);
+        table.setHighlightedRow(-1);
     }
 
     public void enterMaintain(int index) throws UnifyException {
@@ -119,6 +127,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
             formContext.setInst(_inst);
             prepareMaintain(formContext);
             maintainIndex = index;
+            table.setHighlightedRow(maintainIndex);
         }        
     }
 

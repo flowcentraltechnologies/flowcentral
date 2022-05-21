@@ -29,7 +29,7 @@
 // Action panel
 !ui-panel:crudActionPanel layout:$d{!ui-horizontal}
 	components:$c{crudAddBtn crudUpdateBtn crudDeleteBtn crudCancelBtn}
-!ui-button:crudAddBtn caption:$m{button.add}
+!ui-button:crudAddBtn caption:$m{button.add} captionBinding:addCaption
 	eventHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
 !ui-button:crudUpdateBtn caption:$m{button.update}
 	eventHandler:$d{!ui-event event:onclick action:$c{crudUpdateAct}}

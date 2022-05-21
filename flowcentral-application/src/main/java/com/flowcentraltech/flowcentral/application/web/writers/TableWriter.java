@@ -325,7 +325,6 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isContainerEditable = tableWidget.isContainerEditable();
             table.clearSummaries();
 
-            boolean isEvenRow = true;
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             if (len == 0) {
@@ -357,16 +356,17 @@ public class TableWriter extends AbstractControlWriter {
                         : tableWidget.getViewCtrl();
                 final String even = isRowAction ? "even pnt" : "even";
                 final String odd = isRowAction ? "odd pnt" : "odd";
+                final int highlightRow = table.getHighlightedRow();
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     Long id = valueStore.retrieve(Long.class, "id");
                     writer.write("<tr");
-                    if (isEvenRow) {
+                    if (i == highlightRow) {
+                        writeTagStyleClass(writer, "high");
+                    } else if (i % 2 == 0) {
                         writeTagStyleClass(writer, even);
-                        isEvenRow = false;
                     } else {
                         writeTagStyleClass(writer, odd);
-                        isEvenRow = true;
                     }
 
                     writeTagName(writer, tableWidget.getRowId());

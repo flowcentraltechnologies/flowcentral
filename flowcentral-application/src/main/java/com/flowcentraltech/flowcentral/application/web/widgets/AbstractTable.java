@@ -63,6 +63,8 @@ public abstract class AbstractTable<T, U> {
 
     private int totalItemCount;
 
+    private int highlightedRow;
+    
     private boolean basicSearchMode;
 
     private boolean entryMode;
@@ -90,6 +92,7 @@ public abstract class AbstractTable<T, U> {
         this.basicSearchMode = tableDef.isBasicSearch();
         this.entryMode = entryMode;
         this.selected = Collections.emptySet();
+        this.highlightedRow = -1;
     }
 
     public void setTableSelect(TableSelect<?> tableSelect) {
@@ -146,6 +149,14 @@ public abstract class AbstractTable<T, U> {
 
     public List<DefaultReportColumn> getDefaultReportColumnList() {
         return tableDef.getDefaultReportColumnList();
+    }
+
+    public int getHighlightedRow() {
+        return highlightedRow;
+    }
+
+    public void setHighlightedRow(int highlightedRow) {
+        this.highlightedRow = highlightedRow;
     }
 
     public void setSelected(Set<Integer> selected) {
