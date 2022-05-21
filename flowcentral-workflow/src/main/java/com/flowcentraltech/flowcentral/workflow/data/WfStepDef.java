@@ -132,7 +132,7 @@ public class WfStepDef {
                 this.formActionDefList.add(new FormActionDef(UIActionType.BUTTON, wfUserActionDef.getHighlightType(),
                         wfUserActionDef.getName(), wfUserActionDef.getDescription(), wfUserActionDef.getLabel(),
                         wfUserActionDef.getSymbol(), wfUserActionDef.getStyleClass(), wfUserActionDef.getOrderIndex(),
-                        wfUserActionDef.isValidatePage()));
+                        wfUserActionDef.isValidatePage(), null));
             }
         }
 

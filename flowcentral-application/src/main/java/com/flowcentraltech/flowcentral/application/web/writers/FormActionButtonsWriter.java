@@ -15,13 +15,16 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormActionButtons;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -30,6 +33,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -63,26 +67,39 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
 
         writer.write("<div class=\"fabrow\">");
 
-        Entity inst = (Entity) ((AbstractForm) formActionButtons.getValueStore().getValueObject()).getCtx().getInst();
-        UserToken userToken = getUserToken();
+        final FormContext formContext = ((AbstractForm) formActionButtons.getValueStore().getValueObject()).getCtx();
+        final Entity inst = (Entity) formContext.getInst();
+        final ValueStore formValueStore = formContext.getFormValueStore();
+        final Date now = formContext.getAu().getNow();
+        final SpecialParamProvider specialParamProvider = formContext.getAu().getSpecialParamProvider();
+        final UserToken userToken = getUserToken();
         final FormMode formMode = formActionButtons.getValue(FormMode.class, "formMode");
         final Set<String> showActionSet = (Set<String>) formActionButtons.getWriteWork()
                 .get(FormActionButtons.WORK_SHOWACTIONSET);
         Control actionCtrl = formActionButtons.getActionCtrl();
         for (ValueStore valueStore : formActionButtons.getValueList()) {
             FormActionDef formActionDef = (FormActionDef) valueStore.getValueObject();
-            if (formActionDef.isButtonType()
-                    && (formMode.isListing() || (formActionDef.isShowOnCreate() && formMode.isCreate())
-                            || (formActionDef.isShowOnMaintain() && formMode.isMaintain()))
-                    && (!formActionDef.isWithPolicy()
-                            || ((EntityActionPolicy) getComponent(formActionDef.getPolicy())).checkAppliesTo(inst))
-                    && (!formActionDef.isWithPrivilege() || applicationPrivilegeManager
-                            .isRoleWithPrivilege(userToken.getRoleCode(), formActionDef.getPrivilege()))) {
-                showActionSet.add(formActionDef.getName());
-                writer.write("<div class=\"fabcell\">");
-                actionCtrl.setValueStore(valueStore);
-                writer.writeStructureAndContent(actionCtrl);
-                writer.write("</div>");
+            if (formActionDef.isButtonType()) {
+                if (formActionDef.isWithCondition()) {
+                    ObjectFilter filter = formActionDef.getOnCondition().getObjectFilter(formContext.getEntityDef(),
+                            specialParamProvider, now);
+                    if (!filter.match(formValueStore)) {
+                        continue;
+                    }
+                }
+
+                if ((formMode.isListing() || (formActionDef.isShowOnCreate() && formMode.isCreate())
+                        || (formActionDef.isShowOnMaintain() && formMode.isMaintain()))
+                        && (!formActionDef.isWithPolicy()
+                                || ((EntityActionPolicy) getComponent(formActionDef.getPolicy())).checkAppliesTo(inst))
+                        && (!formActionDef.isWithPrivilege() || applicationPrivilegeManager
+                                .isRoleWithPrivilege(userToken.getRoleCode(), formActionDef.getPrivilege()))) {
+                    showActionSet.add(formActionDef.getName());
+                    writer.write("<div class=\"fabcell\">");
+                    actionCtrl.setValueStore(valueStore);
+                    writer.writeStructureAndContent(actionCtrl);
+                    writer.write("</div>");
+                }
             }
         }
 

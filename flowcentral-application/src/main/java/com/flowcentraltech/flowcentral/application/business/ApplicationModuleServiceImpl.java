@@ -893,7 +893,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 resolveApplicationMessage(appFormAction.getLabel()), appFormAction.getSymbol(),
                                 appFormAction.getStyleClass(), appFormAction.getPolicy(), appFormAction.getOrderIndex(),
                                 appFormAction.isShowOnCreate(), appFormAction.isShowOnMaintain(),
-                                appFormAction.isValidateForm());
+                                appFormAction.isValidateForm(),
+                                InputWidgetUtils.getFilterDef(appFormAction.getOnCondition()));
                     }
 
                     for (AppFormRelatedList appFormRelatedList : appForm.getRelatedList()) {
@@ -3658,6 +3659,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormAction.setShowOnMaintain(formActionConfig.isShowOnMaintain());
                     appFormAction.setValidateForm(formActionConfig.isValidateForm());
                     appFormAction.setOrderIndex(formActionConfig.getOrderIndex());
+                    appFormAction.setOnCondition(InputWidgetUtils.newAppFilter(formActionConfig.getOnCondition()));
                     appFormAction.setConfigType(ConfigType.MUTABLE_INSTALL);
                     actionList.add(appFormAction);
                 } else {
@@ -3673,6 +3675,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppFormAction.setShowOnMaintain(formActionConfig.isShowOnMaintain());
                         oldAppFormAction.setValidateForm(formActionConfig.isValidateForm());
                         oldAppFormAction.setOrderIndex(formActionConfig.getOrderIndex());
+                        oldAppFormAction
+                                .setOnCondition(InputWidgetUtils.newAppFilter(formActionConfig.getOnCondition()));
                     }
 
                     actionList.add(oldAppFormAction);

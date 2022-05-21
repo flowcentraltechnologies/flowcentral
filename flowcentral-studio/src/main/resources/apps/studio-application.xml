@@ -46,6 +46,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studiolistinggeneratorlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="formactionpolicylist"
+			description="$m{studio.widgettype.formactionpolicylist}"
+			dataType="string" inputType="string"
+			editor="!ui-select blankOption:$s{} list:formactionpolicylist listParams:$l{appFormId}"
+			renderer="!ui-label" />
 		<widgetType name="entitymatcherlist"
 			description="$m{studio.widgettype.entitymatcherlist}"
 			dataType="string" inputType="string"
@@ -3034,7 +3039,7 @@
 						column="1" required="true" />
 					<field name="highlightType" inputWidget="application.enumlist"
 						column="1" />
-					<field name="policy" inputWidget="application.text"
+					<field name="policy" inputWidget="studio.formactionpolicylist"
 						column="1" required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						required="true" column="1" />
@@ -3046,6 +3051,9 @@
 						column="1" />
 				</section>
 			</tab>
+			<tab name="onCondition"
+				label="$m{studio.appformaction.form.oncondition}"
+				reference="app_formaction" contentType="filter_condition" />
 		</form>
 		<form name="appFormRelatedListForm"
 			description="$m{studio.appformrelatedlist.form}"

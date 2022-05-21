@@ -70,6 +70,14 @@ public enum EvaluationMode {
 
         return NOP;
     }
+
+    public static EvaluationMode getRequiredMode(boolean required) {
+        if (required) {
+            return REQUIRED;
+        }
+
+        return NOP;
+    }
     
     public boolean submit() {
         return this.equals(CREATE_SUBMIT) || this.equals(UPDATE_SUBMIT);
