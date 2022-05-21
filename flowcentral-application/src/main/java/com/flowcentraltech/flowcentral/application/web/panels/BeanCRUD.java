@@ -40,7 +40,7 @@ public class BeanCRUD extends AbstractCRUD<BeanTable> {
 
     public BeanCRUD(AppletUtilities au, SweepingCommitPolicy scp, Class<?> beanClass, String baseField, Object baseId,
             BeanTable table, MiniForm createForm, MiniForm maintainForm) {
-        super(au, scp, baseField, baseId, table, createForm, maintainForm);
+        super(au, scp, baseField, baseId, table, createForm, maintainForm, "$m{button.add}");
         this.beanClass = beanClass;
     }
 
