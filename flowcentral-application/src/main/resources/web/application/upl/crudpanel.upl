@@ -14,13 +14,15 @@
 // the License.
 
 !fc-crudpanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{crudTablePanel crudErrors crudFormPanel crudActionPanel}
-
-// Validation errors
-!fc-formmessages:crudErrors binding:validationErrors
+	components:$c{crudTablePanel errorPanel crudFormPanel crudActionPanel}
 
 // Table
-!ui-panel:crudTablePanel style:$s{width:100%;margin-bottom:20px;} components:$f{crudTable}
+!ui-panel:crudTablePanel style:$s{width:100%;margin-bottom:20px;}
+	components:$f{crudTable}
+
+// Validation errors
+!ui-panel:errorPanel style:$s{width:100%;} components:$c{crudErrors}
+!fc-formmessages:crudErrors binding:validationErrors
 
 // Main form
 !ui-panel:crudFormPanel style:$s{width:100%;} components:$c{crudForm}
@@ -40,9 +42,9 @@
 
 // Actions
 !ui-postcommand:crudAddAct command:addItem components:$c{crudFormPanel}
-	refresh:$c{crudTablePanel crudFormPanel}
+	refresh:$c{crudTablePanel errorPanel crudFormPanel}
 !ui-postcommand:crudUpdateAct command:updateItem components:$c{crudFormPanel}
-	refresh:$c{crudTablePanel crudFormPanel}
+	refresh:$c{crudTablePanel errorPanel crudFormPanel}
 !ui-postcommand:crudDeleteAct command:deleteItem
 !ui-postcommand:crudCancelAct command:cancelItem
 	

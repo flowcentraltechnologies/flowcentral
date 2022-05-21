@@ -95,7 +95,8 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
             Map<String, Object> fieldsInScope = new HashMap<String, Object>();
             // Pull fields in scope and check required fields and lengths
             for (FormWidgetState formWidgetState : ctx.getFormWidgetStateList()) {
-                if (formWidgetState.isVisible() /*&& /*formWidgetState.isEditable()*/ && !formWidgetState.isDisabled()) {
+                if (formWidgetState.isVisible()
+                        /* && /*formWidgetState.isEditable() */ && !formWidgetState.isDisabled()) {
                     String fieldName = formWidgetState.getFieldName();
                     Object val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
                     fieldsInScope.put(fieldName, val);
@@ -211,30 +212,33 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                     }
                 }
 
-                // Check form validations
-                if (formDef.isWithConsolidatedFormValidation()) {
-                    ConsolidatedFormValidationPolicy policy = au.getComponent(ConsolidatedFormValidationPolicy.class,
-                            formDef.getConsolidatedFormValidation());
-                    for (TargetFormMessage message : policy.validate(evaluationMode, instValueStore)) {
-                        addValidationMessage(ctx, message);
-                    }
-                }
-
-                if (formDef.isWithFormValidationPolicy()) {
-                    final Date now = au.getNow();
-                    for (FormValidationPolicyDef policyDef : formDef.getFormValidationPolicies()) {
-                        if (policyDef.isErrorMatcher()) {
-                            EntityMatcher matcher = au.getComponent(EntityMatcher.class, policyDef.getErrorMatcher());
-                            if (matcher.match(entityDef, evaluationMode, instValueStore)) {
-                                addValidationMessage(ctx, policyDef);
-                                continue;
-                            }
+                if (!ctx.isWithFormErrors()) {
+                    // Check form validations
+                    if (formDef.isWithConsolidatedFormValidation()) {
+                        ConsolidatedFormValidationPolicy policy = au.getComponent(
+                                ConsolidatedFormValidationPolicy.class, formDef.getConsolidatedFormValidation());
+                        for (TargetFormMessage message : policy.validate(evaluationMode, instValueStore)) {
+                            addValidationMessage(ctx, message);
                         }
+                    }
 
-                        if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                                .getObjectFilter(entityDef, ctx.getAppletContext().getSpecialParamProvider(), now)
-                                .match(inst)) {
-                            addValidationMessage(ctx, policyDef);
+                    if (formDef.isWithFormValidationPolicy()) {
+                        final Date now = au.getNow();
+                        for (FormValidationPolicyDef policyDef : formDef.getFormValidationPolicies()) {
+                            if (policyDef.isErrorMatcher()) {
+                                EntityMatcher matcher = au.getComponent(EntityMatcher.class,
+                                        policyDef.getErrorMatcher());
+                                if (matcher.match(entityDef, evaluationMode, instValueStore)) {
+                                    addValidationMessage(ctx, policyDef);
+                                    continue;
+                                }
+                            }
+
+                            if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
+                                    .getObjectFilter(entityDef, ctx.getAppletContext().getSpecialParamProvider(), now)
+                                    .match(inst)) {
+                                addValidationMessage(ctx, policyDef);
+                            }
                         }
                     }
                 }
