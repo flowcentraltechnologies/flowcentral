@@ -509,7 +509,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
         public Builder addFormAction(UIActionType type, HighlightType highlightType, String name, String description,
                 String label, String symbol, String styleClass, String policy, int orderIndex, boolean showOnCreate,
-                boolean showOnMaintain, boolean validateForm) {
+                boolean showOnMaintain, boolean validateForm,
+                FilterDef onCondition) {
             if (actionNames.contains(name)) {
                 throw new RuntimeException(
                         "Action with name [" + name + "] already exists on this form[" + longName + "].");
@@ -520,7 +521,7 @@ public class FormDef extends BaseApplicationEntityDef {
             }
 
             formActionList.add(new FormActionDef(type, highlightType, name, description, label, symbol, styleClass,
-                    policy, orderIndex, showOnCreate, showOnMaintain, validateForm));
+                    policy, orderIndex, showOnCreate, showOnMaintain, validateForm, onCondition));
             return this;
         }
 

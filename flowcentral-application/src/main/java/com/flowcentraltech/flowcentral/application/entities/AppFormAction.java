@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
+import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -65,6 +66,9 @@ public class AppFormAction extends BaseConfigNamedEntity {
 
     @Column
     private boolean validateForm;
+    
+    @Child(category = "formaction")
+    private AppFilter onCondition;
 
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
@@ -174,6 +178,14 @@ public class AppFormAction extends BaseConfigNamedEntity {
 
     public void setHighlightTypeDesc(String highlightTypeDesc) {
         this.highlightTypeDesc = highlightTypeDesc;
+    }
+
+    public AppFilter getOnCondition() {
+        return onCondition;
+    }
+
+    public void setOnCondition(AppFilter onCondition) {
+        this.onCondition = onCondition;
     }
 
 }

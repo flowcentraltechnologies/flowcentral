@@ -46,6 +46,8 @@ public class FormActionDef {
 
     private String privilege;
 
+    private FilterDef onCondition;
+    
     private int orderIndex;
 
     private boolean showOnCreate;
@@ -55,7 +57,7 @@ public class FormActionDef {
     private boolean validateForm;
 
     public FormActionDef(UIActionType type, HighlightType highlightType, String name, String description, String label,
-            String symbol, String styleClass, int orderIndex, boolean validateForm) {
+            String symbol, String styleClass, int orderIndex, boolean validateForm, FilterDef onCondition) {
         this.type = type;
         this.highlightType = highlightType;
         this.name = name;
@@ -67,11 +69,13 @@ public class FormActionDef {
         this.validateForm = validateForm;
         this.showOnCreate = true;
         this.showOnMaintain = true;
+        this.onCondition = onCondition;
     }
 
     public FormActionDef(UIActionType type, HighlightType highlightType, String name, String description, String label,
             String symbol, String styleClass, String policy, int orderIndex, boolean showOnCreate,
-            boolean showOnMaintain, boolean validateForm) {
+            boolean showOnMaintain, boolean validateForm,
+            FilterDef onCondition) {
         this.type = type;
         this.highlightType = highlightType;
         this.name = name;
@@ -153,6 +157,14 @@ public class FormActionDef {
 
     public boolean isWithPolicy() {
         return policy != null;
+    }
+
+    public FilterDef getOnCondition() {
+        return onCondition;
+    }
+
+    public boolean isWithCondition() {
+        return onCondition != null;
     }
 
     @Override

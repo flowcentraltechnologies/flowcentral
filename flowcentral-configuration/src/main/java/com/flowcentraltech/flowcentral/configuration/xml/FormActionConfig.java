@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.configuration.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
@@ -31,6 +32,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.UIActionTypeXml
  * @since 1.0
  */
 public class FormActionConfig extends BaseNameConfig {
+    
+    private FilterConfig onCondition;
 
     private UIActionType type;
     
@@ -49,6 +52,15 @@ public class FormActionConfig extends BaseNameConfig {
     private boolean showOnMaintain;
 
     private boolean validateForm;
+
+    public FilterConfig getOnCondition() {
+        return onCondition;
+    }
+
+    @XmlElement(required = false)
+    public void setOnCondition(FilterConfig onCondition) {
+        this.onCondition = onCondition;
+    }
 
     public UIActionType getType() {
         return type;
