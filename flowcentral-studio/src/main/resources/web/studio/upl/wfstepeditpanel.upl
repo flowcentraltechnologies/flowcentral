@@ -50,7 +50,7 @@
 	binding:readOnlyConditionName
 !ui-select:frmAutoLoadingCondition styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.autoloadingcondition}
 	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
-	binding:autoLoadingConditionName
+	binding:autoLoadConditionName
 !ui-select:frmPolicy styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.policy}
 	list:$s{wfsteppolicylist} listParams:$l{type} blankOption:$s{}
 	binding:policy required:true
