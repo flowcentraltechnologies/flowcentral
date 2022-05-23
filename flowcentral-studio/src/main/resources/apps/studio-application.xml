@@ -691,12 +691,15 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="false" />
 			<property name="createForm" value="appFormActionForm" />
+			<property name="createForm.new.policy" value="studiooncreateformaction-policy" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="appFormActionForm" />
 			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.update.policy" value="studioonupdateformaction-policy" />
 			<property name="maintainForm.delete" value="true" />
+			<property name="maintainForm.delete.policy" value="studioondeleteformaction-policy" />
 		</applet>
 		<applet name="manageAppFormRelatedList"
 			description="$m{studio.appformrelatedlist.manage}"
