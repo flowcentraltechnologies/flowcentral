@@ -71,6 +71,11 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
+    public int resolveActionIndex(ValueStore valueStore) throws UnifyException {
+        return 0;
+    }
+
+    @Override
     public PageLoadDetails getOnLoadDetails(Class<? extends Entity> entityClass, String baseFieldName, Object baseId)
             throws UnifyException {
         return null;

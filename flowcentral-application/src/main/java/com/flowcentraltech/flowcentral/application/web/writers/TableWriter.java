@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -35,6 +36,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.AbstractMultiControl.ChildWidgetInfo;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -117,11 +119,11 @@ public class TableWriter extends AbstractControlWriter {
         if (table != null) {
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
-            final EventHandler actionHandler = tableWidget.getActionEventHandler();
+            final Control[] actionCtrl = tableWidget.getActionCtrl();
+            final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
             final TableDef tableDef = table.getTableDef();
-            final Control maintainCtrl = isContainerEditable && table.isEditMode() ? tableWidget.getEditCtrl()
-                    : tableWidget.getViewCtrl();
-            final boolean isRowAction = !DataUtils.isBlank(crudActionHandlers) && !tableWidget.isActionColumn();
+            final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
@@ -149,17 +151,11 @@ public class TableWriter extends AbstractControlWriter {
                     }
                 }
 
-                if (tableWidget.isActionColumn()) {
-                    maintainCtrl.setValueStore(valueStore);
-                    if (actionHandler != null) {
-                        writer.writeBehavior(actionHandler, maintainCtrl.getId(), "action");
-                    }
-
-                    if (crudActionHandlers != null) {
-                        for (EventHandler eventHandler : crudActionHandlers) {
-                            writer.writeBehavior(eventHandler, maintainCtrl.getId(), "action");
-                        }
-                    }
+                if (isActionColumn) {
+                    int _index = table.resolveActionIndex(valueStore);
+                    Control _actionCtrl = actionCtrl[_index];
+                    _actionCtrl.setValueStore(valueStore);
+                    writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
                 }
             }
 
@@ -322,7 +318,6 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean totalSummary = table.isTotalSummary();
             final boolean isActionColumn = tableWidget.isActionColumn();
-            final boolean isContainerEditable = tableWidget.isContainerEditable();
             table.clearSummaries();
 
             List<ValueStore> valueList = tableWidget.getValueList();
@@ -347,22 +342,25 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</span></td>");
                 writer.write("</tr>");
             } else {
+                final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final Date now = table.getAu().getNow();
                 final SpecialParamProvider specialParamProvider = table.getAu().getSpecialParamProvider();
-                final Control maintainCtrl = isContainerEditable && table.isEditMode() ? tableWidget.getEditCtrl()
-                        : tableWidget.getViewCtrl();
                 final String even = isRowAction ? "even pnt" : "even";
                 final String odd = isRowAction ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
+                final EntryTableMessage entryMessage = table.getEntryMessage();
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     Long id = valueStore.retrieve(Long.class, "id");
                     writer.write("<tr");
                     if (i == highlightRow) {
-                        writeTagStyleClass(writer, "high");
+                        writeTagStyleClass(writer, MessageType.INFO.styleClass());
+                    } else if (entryMessage != null && entryMessage.isMessagePresent()
+                            && entryMessage.isRowReferred(i)) {
+                        writeTagStyleClass(writer, entryMessage.getMessageType().styleClass());
                     } else if (i % 2 == 0) {
                         writeTagStyleClass(writer, even);
                     } else {
@@ -425,8 +423,10 @@ public class TableWriter extends AbstractControlWriter {
 
                     if (isActionColumn) {
                         writer.write("<td>");
-                        maintainCtrl.setValueStore(valueStore);
-                        writer.writeStructureAndContent(maintainCtrl);
+                        int _index = table.resolveActionIndex(valueStore);
+                        Control _actionCtrl = actionCtrl[_index];
+                        _actionCtrl.setValueStore(valueStore);
+                        writer.writeStructureAndContent(_actionCtrl);
                         writer.write("</td>");
                     }
 
