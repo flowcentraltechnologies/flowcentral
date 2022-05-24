@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
@@ -26,6 +27,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Component("fc-inlinecrudpanel")
 @UplBinding("web/application/upl/inlinecrudpanel.upl")
 public class InlineCRUDPanel extends AbstractStandalonePanel {
 
