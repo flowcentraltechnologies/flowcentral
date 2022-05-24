@@ -1,0 +1,30 @@
+// UPL template for inline CRUD panel
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-inlinecrudpanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{entryTablePanel}
+
+// Table
+!ui-panel:entryTablePanel style:$s{width:100%} components:$c{entryTable}
+!fc-beantable:entryTable style:$s{width:100%;} binding:table
+	actionSymbol:$s{plus} actionHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
+	actionSymbol:$s{trash} actionHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}}
+
+// Actions
+!ui-postcommand:crudAddAct command:addItem components:$c{entryTablePanel}
+	refresh:$c{entryTablePanel}
+!ui-postcommand:crudDeleteAct command:deleteItem components:$c{entryTablePanel}
+	refresh:$c{entryTablePanel} confirm:$m{inlinecrudpanel.confirm.delete}
+	

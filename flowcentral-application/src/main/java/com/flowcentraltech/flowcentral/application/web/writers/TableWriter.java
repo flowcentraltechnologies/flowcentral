@@ -152,7 +152,7 @@ public class TableWriter extends AbstractControlWriter {
                 }
 
                 if (isActionColumn) {
-                    int _index = table.resolveActionIndex(valueStore);
+                    int _index = table.resolveActionIndex(valueStore, i, len);
                     Control _actionCtrl = actionCtrl[_index];
                     _actionCtrl.setValueStore(valueStore);
                     writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
@@ -423,7 +423,7 @@ public class TableWriter extends AbstractControlWriter {
 
                     if (isActionColumn) {
                         writer.write("<td>");
-                        int _index = table.resolveActionIndex(valueStore);
+                        int _index = table.resolveActionIndex(valueStore, i, len);
                         Control _actionCtrl = actionCtrl[_index];
                         _actionCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_actionCtrl);

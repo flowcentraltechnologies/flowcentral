@@ -398,8 +398,8 @@ public abstract class AbstractTable<T, U> {
         return numberOfPages == 0 || pageIndex >= numberOfPages - 1;
     }
 
-    public int resolveActionIndex(ValueStore valueStore) throws UnifyException {
-        return entryPolicy != null ? entryPolicy.resolveActionIndex(valueStore) : 0;
+    public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
+        return entryPolicy != null ? entryPolicy.resolveActionIndex(valueStore, index, size) : 0;
     }
     
     protected EntryTablePolicy getEntryPolicy() {

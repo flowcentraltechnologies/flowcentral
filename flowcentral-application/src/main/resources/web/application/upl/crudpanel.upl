@@ -45,6 +45,6 @@
 	refresh:$c{crudTablePanel errorPanel crudFormPanel}
 !ui-postcommand:crudUpdateAct command:updateItem components:$c{crudFormPanel}
 	refresh:$c{crudTablePanel errorPanel crudFormPanel}
-!ui-postcommand:crudDeleteAct command:deleteItem
+!ui-postcommand:crudDeleteAct command:deleteItem confirm:$m{crudpanel.confirm.delete}
 !ui-postcommand:crudCancelAct command:cancelItem
 	

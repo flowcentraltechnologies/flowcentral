@@ -726,6 +726,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-entrytablepagepanel {}
 
+/* Inline CRUD panel */
+.fc-nlinecrudpanel {}
+
 /* Record order panel */
 .fc-recordorderpanel {}
 	

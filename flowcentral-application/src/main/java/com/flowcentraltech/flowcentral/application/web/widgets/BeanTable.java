@@ -38,8 +38,6 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
 
     private ValueStore valueStore;
 
-    private List<?> oldSourceObject;
-
     public BeanTable(AppletUtilities au, TableDef tableDef) {
         this(au, tableDef, false);
     }
@@ -107,11 +105,12 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     private ValueStore getValueStore(List<?> sourceObject) throws UnifyException {
+        List<?> oldSourceObject = valueStore != null ? (List<?>) valueStore.getValueObject() : null;
         if (sourceObject != oldSourceObject) {
             synchronized (this) {
+                oldSourceObject = valueStore != null ? (List<?>) valueStore.getValueObject() : null;
                 if (sourceObject != oldSourceObject) {
                     valueStore = new BeanValueListStore(sourceObject);
-                    oldSourceObject = sourceObject;
                 }
             }
         }
