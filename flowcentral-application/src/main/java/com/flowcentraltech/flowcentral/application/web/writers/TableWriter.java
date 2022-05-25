@@ -43,6 +43,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.PushType;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
 /**
@@ -124,6 +125,8 @@ public class TableWriter extends AbstractControlWriter {
             final TableDef tableDef = table.getTableDef();
             final boolean isActionColumn = tableWidget.isActionColumn();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
+            final StandalonePanel summaryPanel = tableWidget.getSummaryPanel();
+            
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
@@ -156,6 +159,12 @@ public class TableWriter extends AbstractControlWriter {
                     Control _actionCtrl = actionCtrl[_index];
                     _actionCtrl.setValueStore(valueStore);
                     writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
+                }
+                
+                if (summaryPanel != null) {
+                    summaryPanel.setValueStore(valueStore);
+                    writer.writeBehavior(summaryPanel);
+                    addPageAlias(tableWidget.getId(), summaryPanel);
                 }
             }
 
@@ -352,8 +361,11 @@ public class TableWriter extends AbstractControlWriter {
                 final String odd = isRowAction ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
                 final EntryTableMessage entryMessage = table.getEntryMessage();
+                final StandalonePanel summaryPanel = tableWidget.getSummaryPanel();
+
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
+                    // Normal row
                     Long id = valueStore.retrieve(Long.class, "id");
                     writer.write("<tr");
                     if (i == highlightRow) {
@@ -431,6 +443,28 @@ public class TableWriter extends AbstractControlWriter {
                     }
 
                     writer.write("</tr>");
+
+                    // Summary
+                    if (summaryPanel != null) {
+                        writer.write("<tr>");
+                        if (supportSelect && !entryMode) {
+                            writer.write("<td class=\"mseld\"></td>");
+                        }
+
+                        if (isSerialNo) {
+                            writer.write("<td class=\"mseriald\"></td>");
+                        }
+
+                        writer.write("<td>");
+                        summaryPanel.setValueStore(valueStore);
+                        writer.writeStructureAndContent(summaryPanel);
+                        writer.write("</td>");
+
+                        if (supportSelect && entryMode) {
+                            writer.write("<td class=\"mseld\"></td>");
+                        }
+                        writer.write("</tr>");
+                    }
                 }
             }
 

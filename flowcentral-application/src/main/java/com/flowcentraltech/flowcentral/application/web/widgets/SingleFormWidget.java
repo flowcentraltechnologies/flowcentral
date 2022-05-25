@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.SingleFormPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 
 /**
@@ -30,18 +31,17 @@ import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 @Component("fc-singleform")
 public class SingleFormWidget extends AbstractMultiControl {
 
-    private SingleForm oldSingleForm;
-
     private SingleFormPanel singleFormPanel;
 
     public SingleForm getSingleForm() throws UnifyException {
         SingleForm singleForm = getValue(SingleForm.class);
-        if (singleForm != oldSingleForm) {
+        ValueStore newValueStore = singleForm != null ? singleForm.getBeanValueStore() : null;
+        ValueStore oldValueStore = singleFormPanel != null ? singleFormPanel.getValueStore() : null;
+        if (newValueStore != oldValueStore) {
             removeAllExternalChildWidgets();
             singleFormPanel = (SingleFormPanel) addExternalChildStandalonePanel(singleForm.getPanelName(),
                     getId() + "_sg");
-            singleFormPanel.setValueStore(singleForm.getBeanValueStore());
-            oldSingleForm = singleForm;
+            singleFormPanel.setValueStore(newValueStore);
         }
 
         return singleForm;

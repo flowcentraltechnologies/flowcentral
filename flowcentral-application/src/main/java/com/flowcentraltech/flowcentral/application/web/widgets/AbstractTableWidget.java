@@ -39,6 +39,7 @@ import com.tcdng.unify.core.data.MapValuesStore;
 import com.tcdng.unify.core.data.UniqueHistory;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.DataTransferBlock;
 import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
@@ -58,7 +59,8 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelect", type = boolean.class),
         @UplAttribute(name = "actionSymbol", type = String[].class),
-        @UplAttribute(name = "actionHandler", type = EventHandler[].class) })
+        @UplAttribute(name = "actionHandler", type = EventHandler[].class),
+        @UplAttribute(name = "summary", type = String.class)})
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
@@ -74,6 +76,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control[] actionCtrl;
 
+    private StandalonePanel summaryPanel;
+    
     private Integer[] selected;
 
     private Sort sort;
@@ -191,6 +195,14 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return actionCtrl;
     }
 
+    public boolean isSummary() {
+        return summaryPanel != null;
+    }
+
+    public StandalonePanel getSummaryPanel() {
+        return summaryPanel;
+    }
+    
     public EventHandler[] getActionEventHandler() throws UnifyException {
         return getUplAttribute(EventHandler[].class, "actionHandler");
     }
@@ -240,6 +252,14 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
                         standalonePanel.resolvePageActions(handlers);
                     }
+                }
+                
+                // Summary panel
+                summaryPanel = null;
+                String summary = getUplAttribute(String.class, "summary");
+                if (!StringUtils.isBlank(summary)) {
+                    summaryPanel = (StandalonePanel) addExternalChildStandalonePanel(summary,
+                            getId() + "_sm");
                 }
             }
 
