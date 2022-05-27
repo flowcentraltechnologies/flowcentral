@@ -21,6 +21,7 @@
 !fc-beantable:entryTable style:$s{width:100%;} binding:table
 	actionSymbol:$s{plus} actionHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
 	actionSymbol:$s{trash} actionHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}}
+	summary:$f{summary}
 
 // Actions
 !ui-postcommand:crudAddAct command:addItem components:$c{entryTablePanel}

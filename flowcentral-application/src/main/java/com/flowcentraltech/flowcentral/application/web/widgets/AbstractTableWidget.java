@@ -46,6 +46,7 @@ import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Page;
+import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 
@@ -112,14 +113,22 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (transferBlock != null) {
             DataTransferBlock childBlock = transferBlock.getChildBlock();
             ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childBlock.getId());
-            Control control = (Control) childWidgetInfo.getWidget();
-            if (control == selectCtrl) {
-                selectCtrl.populate(childBlock);
-            } else if (control == sortColumnCtrl) {
-                sortColumnCtrl.populate(childBlock);
+            if (childWidgetInfo.isPanel()) {
+                Panel panel = (Panel) childWidgetInfo.getWidget();
+                if (summaryPanel == panel) {
+                    summaryPanel.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                    summaryPanel.populate(childBlock);
+                }
             } else {
-                control.setValueStore(getValueList().get(childBlock.getItemIndex()));
-                control.populate(childBlock);
+                Control control = (Control) childWidgetInfo.getWidget();
+                if (control == selectCtrl) {
+                    selectCtrl.populate(childBlock);
+                } else if (control == sortColumnCtrl) {
+                    sortColumnCtrl.populate(childBlock);
+                } else {
+                    control.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                    control.populate(childBlock);
+                }
             }
         }
     }
@@ -258,8 +267,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 summaryPanel = null;
                 String summary = getUplAttribute(String.class, "summary");
                 if (!StringUtils.isBlank(summary)) {
-                    summaryPanel = (StandalonePanel) addExternalChildStandalonePanel(summary,
-                            getId() + "_sm");
+                    summaryPanel = (StandalonePanel) addExternalChildStandalonePanel(summary, getId() + "_sm");
                 }
             }
 

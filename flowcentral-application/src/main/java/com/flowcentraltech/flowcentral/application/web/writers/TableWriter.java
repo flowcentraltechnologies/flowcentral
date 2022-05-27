@@ -126,14 +126,14 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isActionColumn = tableWidget.isActionColumn();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
             final StandalonePanel summaryPanel = tableWidget.getSummaryPanel();
-            
+
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore valueStore = valueList.get(i);
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
-                    if (widgetInfo.isExternal()) {
+                    if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                         TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
                         Widget chWidget = widgetInfo.getWidget();
                         chWidget.setValueStore(valueStore);
@@ -160,11 +160,17 @@ public class TableWriter extends AbstractControlWriter {
                     _actionCtrl.setValueStore(valueStore);
                     writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
                 }
-                
+
                 if (summaryPanel != null) {
                     summaryPanel.setValueStore(valueStore);
-                    writer.writeBehavior(summaryPanel);
-                    addPageAlias(tableWidget.getId(), summaryPanel);
+                    try {
+                        valueStore.setDataPrefix(summaryPanel.getId());
+                        writer.writeBehavior(summaryPanel);
+                        addPageAlias(tableWidget.getId(), summaryPanel);
+                        summaryPanel.addPageAliases();
+                    } finally {
+                        valueStore.setDataPrefix(null);
+                    }
                 }
             }
 
@@ -235,7 +241,7 @@ public class TableWriter extends AbstractControlWriter {
             String columnHeaderId = tableWidget.getColumnHeaderId();
             int index = 0;
             for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
-                if (widgetInfo.isExternal()) {
+                if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                     TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
                     writer.write("<th");
                     if (sysHeaderCenterAlign || tableDef.isHeaderCenterAlign()) {
@@ -344,6 +350,10 @@ public class TableWriter extends AbstractControlWriter {
                     skip++;
                 }
 
+                if (tableWidget.isSummary()) {
+                    skip++;
+                }
+
                 writer.write("<td colspan=\"");
                 writer.write(tableWidget.getChildWidgetInfos().size() - skip);
                 writer.write("\"><span class=\"mnorec\" style=\"display:block;text-align:center;\">");
@@ -362,7 +372,6 @@ public class TableWriter extends AbstractControlWriter {
                 final int highlightRow = table.getHighlightedRow();
                 final EntryTableMessage entryMessage = table.getEntryMessage();
                 final StandalonePanel summaryPanel = tableWidget.getSummaryPanel();
-
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     // Normal row
@@ -408,7 +417,7 @@ public class TableWriter extends AbstractControlWriter {
 
                     int index = 0;
                     for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
-                        if (widgetInfo.isExternal()) {
+                        if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                             TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
                             Widget chWidget = widgetInfo.getWidget();
                             chWidget.setEditable(tabelColumnDef.isEditable());
@@ -447,17 +456,31 @@ public class TableWriter extends AbstractControlWriter {
                     // Summary
                     if (summaryPanel != null) {
                         writer.write("<tr>");
+                        int skip = 0;
                         if (supportSelect && !entryMode) {
                             writer.write("<td class=\"mseld\"></td>");
+                            skip++;
                         }
 
                         if (isSerialNo) {
                             writer.write("<td class=\"mseriald\"></td>");
+                            skip++;
                         }
 
-                        writer.write("<td>");
+                        if (tableWidget.isSummary()) {
+                            skip++;
+                        }
+
+                        writer.write("<td colspan=\"");
+                        writer.write(tableWidget.getChildWidgetInfos().size() - skip);
+                        writer.write("\">");
                         summaryPanel.setValueStore(valueStore);
-                        writer.writeStructureAndContent(summaryPanel);
+                        try {
+                            valueStore.setDataPrefix(summaryPanel.getId());
+                            writer.writeStructureAndContent(summaryPanel);
+                        } finally {
+                            valueStore.setDataPrefix(null);
+                        }
                         writer.write("</td>");
 
                         if (supportSelect && entryMode) {
@@ -484,7 +507,7 @@ public class TableWriter extends AbstractControlWriter {
 
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
-                    if (widgetInfo.isExternal()) {
+                    if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                         TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
                         Widget chWidget = table.getSummaryWidget(tabelColumnDef.getFieldName());
                         if (chWidget != null) {
