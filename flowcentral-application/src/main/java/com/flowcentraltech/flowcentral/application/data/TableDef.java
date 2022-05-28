@@ -69,6 +69,12 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private boolean totalSummary;
 
+    private boolean headerless;
+
+    private boolean multiSelect;
+
+    private boolean nonConforming;
+
     private Map<String, TableFilterDef> filterDefMap;
 
     private List<TableFilterDef> rowColorFilterList;
@@ -78,8 +84,8 @@ public class TableDef extends BaseApplicationEntityDef {
     private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, Map<String, TableFilterDef> filterDefMap,
             String label, int sortHistory, int itemsPerPage, boolean serialNo, boolean sortable,
             boolean headerToUpperCase, boolean headerCenterAlign, boolean basicSearch, boolean totalSummary,
-            boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description, Long id,
-            long version) {
+            boolean headerless, boolean multiSelect, boolean nonConforming, boolean limitSelectToColumns,
+            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
         this.columnDefList = columnDefList;
@@ -92,6 +98,9 @@ public class TableDef extends BaseApplicationEntityDef {
         this.headerCenterAlign = headerCenterAlign;
         this.basicSearch = basicSearch;
         this.totalSummary = totalSummary;
+        this.headerless = headerless;
+        this.multiSelect = multiSelect;
+        this.nonConforming = nonConforming;
         this.limitSelectToColumns = limitSelectToColumns;
         this.summaryFields = new HashSet<String>();
         List<TableFilterDef> rowColorFilterList = new ArrayList<TableFilterDef>();
@@ -113,7 +122,7 @@ public class TableDef extends BaseApplicationEntityDef {
             if (this.limitSelectToColumns) {
                 this.select.add(tableColumnDef.getFieldName());
             }
-            
+
             if (tableColumnDef.isSummary()) {
                 this.summaryFields.add(tableColumnDef.getFieldName());
             }
@@ -143,7 +152,7 @@ public class TableDef extends BaseApplicationEntityDef {
     public boolean isWithSummaryFields() {
         return !summaryFields.isEmpty();
     }
-    
+
     public boolean isRowColorFilters() {
         return !rowColorFilterList.isEmpty();
     }
@@ -237,6 +246,18 @@ public class TableDef extends BaseApplicationEntityDef {
         return totalSummary;
     }
 
+    public boolean isHeaderless() {
+        return headerless;
+    }
+
+    public boolean isMultiSelect() {
+        return multiSelect;
+    }
+
+    public boolean isNonConforming() {
+        return nonConforming;
+    }
+
     public boolean isLimitSelectToColumns() {
         return limitSelectToColumns;
     }
@@ -297,6 +318,12 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private boolean totalSummary;
 
+        private boolean headerless;
+
+        private boolean multiSelect;
+
+        private boolean nonConforming;
+
         private boolean limitSelectToColumns;
 
         private String longName;
@@ -348,6 +375,21 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder totalSummary(boolean totalSummary) {
             this.totalSummary = totalSummary;
+            return this;
+        }
+
+        public Builder headerless(boolean headerless) {
+            this.headerless = headerless;
+            return this;
+        }
+
+        public Builder multiSelect(boolean multiSelect) {
+            this.multiSelect = multiSelect;
+            return this;
+        }
+
+        public Builder nonConforming(boolean nonConforming) {
+            this.nonConforming = nonConforming;
             return this;
         }
 
@@ -444,8 +486,8 @@ public class TableDef extends BaseApplicationEntityDef {
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             return new TableDef(entityDef, DataUtils.unmodifiableList(_columnDefList),
                     DataUtils.unmodifiableMap(filterDefMap), label, sortHistory, itemsPerPage, serialNo, sortable,
-                    headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, limitSelectToColumns, nameParts,
-                    description, id, version);
+                    headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect,
+                    nonConforming, limitSelectToColumns, nameParts, description, id, version);
         }
 
         private class TempColumnDef {

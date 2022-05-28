@@ -2685,8 +2685,14 @@
 						column="1" />
 					<field name="headerToUpperCase"
 						inputWidget="application.checkbox" column="1" />
+					<field name="headerToUpperCase"
+						inputWidget="application.checkbox" column="1" />
 					<field name="headerCenterAlign"
 						inputWidget="application.checkbox" column="1" />
+					<field name="multiSelect" inputWidget="application.checkbox"
+						column="2" />
+					<field name="nonConforming" inputWidget="application.checkbox"
+						column="2" />
 					<field name="basicSearch" inputWidget="application.checkbox"
 						column="2" />
 					<field name="totalSummary" inputWidget="application.checkbox"

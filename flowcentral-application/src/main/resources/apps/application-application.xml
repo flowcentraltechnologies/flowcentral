@@ -942,6 +942,12 @@
 				label="$m{application.apptable.basicsearch}" type="boolean" />
 			<field name="totalSummary"
 				label="$m{application.apptable.totalsummary}" type="boolean" />
+			<field name="headerless"
+				label="$m{application.apptable.headerless}" type="boolean" />
+			<field name="multiSelect"
+				label="$m{application.apptable.multiselect}" type="boolean" />
+			<field name="nonConforming"
+				label="$m{application.apptable.nonconforming}" type="boolean" />
 			<field name="limitSelectToColumns"
 				label="$m{application.apptable.limitselecttocolumns}" type="boolean" />
 			<field name="itemsPerPage"
