@@ -16,7 +16,9 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Inline CRUD table policy.
@@ -26,4 +28,5 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy
  */
 public interface InlineCRUDTablePolicy extends EntryTablePolicy {
 
+    void onCreate(AppletUtilities au, InlineCRUDEntry entry) throws UnifyException;
 }

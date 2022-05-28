@@ -284,6 +284,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
         return entityTable.getDispStartIndex() + 1;
     }
 
+    public void setDisplayStart(int dispStartIndex) {
+
+    }
+    
     public int getTotalItemCount() {
         return entityTable.getTotalItemCount();
     }

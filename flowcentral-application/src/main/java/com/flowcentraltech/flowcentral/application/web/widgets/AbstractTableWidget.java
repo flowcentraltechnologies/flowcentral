@@ -46,7 +46,6 @@ import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Page;
-import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 
@@ -61,7 +60,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "multiSelect", type = boolean.class),
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
-        @UplAttribute(name = "summary", type = String.class)})
+        @UplAttribute(name = "summary", type = String.class) })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
@@ -77,8 +76,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control[] actionCtrl;
 
-    private StandalonePanel summaryPanel;
-    
+    private List<StandalonePanel> summaryPanelList;
+
     private Integer[] selected;
 
     private Sort sort;
@@ -114,11 +113,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             DataTransferBlock childBlock = transferBlock.getChildBlock();
             ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childBlock.getId());
             if (childWidgetInfo.isPanel()) {
-                Panel panel = (Panel) childWidgetInfo.getWidget();
-                if (summaryPanel == panel) {
-                    summaryPanel.setValueStore(getValueList().get(childBlock.getItemIndex()));
-                    summaryPanel.populate(childBlock);
-                }
+                StandalonePanel summaryPanel = (StandalonePanel) childWidgetInfo.getWidget();
+                summaryPanel.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                summaryPanel.populate(childBlock);
             } else {
                 Control control = (Control) childWidgetInfo.getWidget();
                 if (control == selectCtrl) {
@@ -205,13 +202,13 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public boolean isSummary() {
-        return summaryPanel != null;
-    }
-
-    public StandalonePanel getSummaryPanel() {
-        return summaryPanel;
+        return summaryPanelList != null && !summaryPanelList.isEmpty();
     }
     
+    public StandalonePanel getSummaryPanel(int index) {
+        return isSummary() ? summaryPanelList.get(index) : null;
+    }
+
     public EventHandler[] getActionEventHandler() throws UnifyException {
         return getUplAttribute(EventHandler[].class, "actionHandler");
     }
@@ -261,14 +258,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
                         standalonePanel.resolvePageActions(handlers);
                     }
+
                 }
-                
-                // Summary panel
-                summaryPanel = null;
-                String summary = getUplAttribute(String.class, "summary");
-                if (!StringUtils.isBlank(summary)) {
-                    summaryPanel = (StandalonePanel) addExternalChildStandalonePanel(summary, getId() + "_sm");
-                }
+
+                summaryPanelList = null;
             }
 
             if (table != null) {
@@ -376,6 +369,30 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
 
         return Collections.emptyList();
+    }
+
+    @Override
+    public List<ValueStore> getValueList() throws UnifyException {
+        List<ValueStore> valueList = super.getValueList();
+        if (valueList == null) {
+            summaryPanelList = null;
+        } else {
+            String summary = getUplAttribute(String.class, "summary");
+            if (!StringUtils.isBlank(summary)) {
+                if (summaryPanelList == null) {
+                    summaryPanelList = new ArrayList<StandalonePanel>();
+                }
+
+                int extra = valueList.size() - summaryPanelList.size();
+                for (int i = 0; i < extra; i++) {
+                    StandalonePanel summaryPanel = (StandalonePanel) addExternalChildStandalonePanel(summary,
+                            getId() + "_" + summaryPanelList.size() + "sm");
+                    summaryPanelList.add(summaryPanel);
+                }
+            }
+        }
+
+        return valueList;
     }
 
     @Override

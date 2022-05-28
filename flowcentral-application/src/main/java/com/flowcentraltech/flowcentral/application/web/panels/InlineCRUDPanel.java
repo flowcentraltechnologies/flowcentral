@@ -30,12 +30,6 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 @Component("fc-inlinecrudpanel")
 @UplBinding("web/application/upl/inlinecrudpanel.upl")
 public class InlineCRUDPanel extends AbstractStandalonePanel {
-
-    @Override
-    public void switchState() throws UnifyException {
-        super.switchState();
-
-    }
     
     @Action
     public void addItem() throws UnifyException {

@@ -125,7 +125,6 @@ public class TableWriter extends AbstractControlWriter {
             final TableDef tableDef = table.getTableDef();
             final boolean isActionColumn = tableWidget.isActionColumn();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
-            final StandalonePanel summaryPanel = tableWidget.getSummaryPanel();
 
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
@@ -161,6 +160,7 @@ public class TableWriter extends AbstractControlWriter {
                     writer.writeBehavior(actionHandler[_index], _actionCtrl.getId(), null);
                 }
 
+                StandalonePanel summaryPanel = tableWidget.getSummaryPanel(i);
                 if (summaryPanel != null) {
                     summaryPanel.setValueStore(valueStore);
                     try {
@@ -371,9 +371,9 @@ public class TableWriter extends AbstractControlWriter {
                 final String odd = isRowAction ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
                 final EntryTableMessage entryMessage = table.getEntryMessage();
-                final StandalonePanel summaryPanel = tableWidget.getSummaryPanel();
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
+
                     // Normal row
                     Long id = valueStore.retrieve(Long.class, "id");
                     writer.write("<tr");
@@ -454,6 +454,7 @@ public class TableWriter extends AbstractControlWriter {
                     writer.write("</tr>");
 
                     // Summary
+                    StandalonePanel summaryPanel = tableWidget.getSummaryPanel(i);
                     if (summaryPanel != null) {
                         writer.write("<tr>");
                         int skip = 0;

@@ -76,7 +76,7 @@ public abstract class AbstractTable<T, U> {
     private boolean editMode;
 
     private boolean fixedAssignment;
-
+    
     private EntryTableMessage entryMessage;
     
     private EntryTablePolicy entryPolicy;
@@ -402,7 +402,7 @@ public abstract class AbstractTable<T, U> {
         return entryPolicy != null ? entryPolicy.resolveActionIndex(valueStore, index, size) : 0;
     }
     
-    protected EntryTablePolicy getEntryPolicy() {
+    public EntryTablePolicy getEntryPolicy() {
         return entryPolicy;
     }
 

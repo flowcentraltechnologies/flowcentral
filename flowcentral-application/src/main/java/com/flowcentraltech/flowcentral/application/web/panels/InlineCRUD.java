@@ -34,9 +34,9 @@ import com.tcdng.unify.core.util.ReflectUtils;
 public class InlineCRUD<T extends InlineCRUDEntry> {
 
     private BeanTable table;
-    
+
     private Class<T> entryClass;
-    
+
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
         this.table = new BeanTable(au, tableDef, true);
         this.entryClass = entryClass;
@@ -48,7 +48,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
     @SuppressWarnings("unchecked")
     public void addEntry() throws UnifyException {
-        T entry =  createInst(); // TODO On load set default values
+        T entry = createInst(); // TODO On load set default values
         ((List<T>) table.getSourceObject()).add(entry);
     }
 
@@ -58,19 +58,18 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         _entries.remove(index);
         table.fireOnChange();
     }
-    
-    public void loadEntries(InlineCRUDTablePolicy tablePolicy, List<T> entries)
-            throws UnifyException {
+
+    public void loadEntries(InlineCRUDTablePolicy tablePolicy, List<T> entries) throws UnifyException {
         if (tablePolicy == null) {
             throw new IllegalArgumentException("Inline CRUD table policy is required.");
         }
-        
+
         List<T> _entries = new ArrayList<T>(entries);
         table.setPolicy(tablePolicy);
         table.setSourceObject(_entries);
         addEntry();
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<T> unload() throws UnifyException {
         List<T> entries = (List<T>) table.getSourceObject();
@@ -78,9 +77,15 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         _entries.remove(_entries.size() - 1);
         return _entries;
     }
-    
+
     private T createInst() throws UnifyException {
-        return ReflectUtils.newInstance(entryClass);
+        T entry = ReflectUtils.newInstance(entryClass);
+        InlineCRUDTablePolicy policy = (InlineCRUDTablePolicy) table.getEntryPolicy();
+        if (policy != null) {
+            policy.onCreate(table.getAu(), entry);
+        }
+
+        return entry;
     }
 
 }
