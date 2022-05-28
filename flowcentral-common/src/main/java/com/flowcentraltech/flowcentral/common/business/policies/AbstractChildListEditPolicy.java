@@ -18,11 +18,8 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -31,14 +28,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractChildListEditPolicy extends AbstractUnifyComponent implements ChildListEditPolicy {
-
-    @Configurable
-    private EnvironmentService environmentService;
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
+public abstract class AbstractChildListEditPolicy extends AbstractEntryTablePolicy implements ChildListEditPolicy {
 
     @Override
     public final FormMessages validateEntries(Class<? extends Entity> entityClass, String baseFieldName, Object baseId,
@@ -46,20 +36,6 @@ public abstract class AbstractChildListEditPolicy extends AbstractUnifyComponent
         FormMessages messages = new FormMessages();
         validateEntries(messages, entityClass, baseFieldName, baseId, instList);
         return messages;
-    }
-
-    @Override
-    protected void onInitialize() throws UnifyException {
-
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-
-    }
-
-    protected EnvironmentService environment() {
-        return environmentService;
     }
 
     protected abstract void validateEntries(FormMessages messages, Class<? extends Entity> entityClass,

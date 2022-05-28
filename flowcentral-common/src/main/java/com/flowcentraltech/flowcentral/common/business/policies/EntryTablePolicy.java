@@ -34,7 +34,7 @@ public interface EntryTablePolicy extends UnifyComponent {
      * Handles on entry table data load.
      * 
      * @param valueStore
-     *                   the data value store object
+     *                   the list data value store object
      * @param selected
      *                   selected item index
      * @throws UnifyException
@@ -46,11 +46,26 @@ public interface EntryTablePolicy extends UnifyComponent {
      * Handles on entry table data change.
      * 
      * @param valueStore
-     *                   the data value store object
+     *                   the list data value store object
      * @param selected
      *                   selected item index
      * @throws UnifyException
      *                        if an error occurs
      */
     void onEntryTableChange(ValueStore valueStore, Set<Integer> selected) throws UnifyException;
+    
+    /**
+     * Resolves the table action index for the supplied value store.
+     * 
+     * @param valueStore
+     *                   the value store
+     * @param index
+     *                   the value store index
+     * @param size
+     *                   the number of records in entry table
+     * @return the action index
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException;
 }

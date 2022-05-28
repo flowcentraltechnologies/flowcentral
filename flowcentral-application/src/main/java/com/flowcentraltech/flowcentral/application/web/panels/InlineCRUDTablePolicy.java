@@ -14,25 +14,19 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.chart.web.widgets;
+package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.UplAttribute;
-import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
- * Chart widget.
+ * Inline CRUD table policy.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-chart")
-@UplAttributes({ @UplAttribute(name = "sparkLine", type = boolean.class, defaultVal = "false") })
-public class ChartWidget extends AbstractControl {
+public interface InlineCRUDTablePolicy extends EntryTablePolicy {
 
-    public boolean isSparkLine() throws UnifyException {
-        return getUplAttribute(boolean.class, "sparkLine");
-    }
+    void onCreate(AppletUtilities au, InlineCRUDEntry entry) throws UnifyException;
 }

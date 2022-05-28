@@ -39,6 +39,7 @@ import com.tcdng.unify.core.data.MapValuesStore;
 import com.tcdng.unify.core.data.UniqueHistory;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.DataTransferBlock;
 import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
@@ -57,8 +58,9 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 @UplAttributes({ @UplAttribute(name = "contentDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelect", type = boolean.class),
-        @UplAttribute(name = "actionColumn", type = boolean.class),
-        @UplAttribute(name = "actionHandler", type = EventHandler.class)})
+        @UplAttribute(name = "actionSymbol", type = String[].class),
+        @UplAttribute(name = "actionHandler", type = EventHandler[].class),
+        @UplAttribute(name = "summary", type = String.class) })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
@@ -72,9 +74,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control sortColumnCtrl;
 
-    private Control editCtrl;
+    private Control[] actionCtrl;
 
-    private Control viewCtrl;
+    private List<StandalonePanel> summaryPanelList;
 
     private Integer[] selected;
 
@@ -110,14 +112,20 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (transferBlock != null) {
             DataTransferBlock childBlock = transferBlock.getChildBlock();
             ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childBlock.getId());
-            Control control = (Control) childWidgetInfo.getWidget();
-            if (control == selectCtrl) {
-                selectCtrl.populate(childBlock);
-            } else if (control == sortColumnCtrl) {
-                sortColumnCtrl.populate(childBlock);
+            if (childWidgetInfo.isPanel()) {
+                StandalonePanel summaryPanel = (StandalonePanel) childWidgetInfo.getWidget();
+                summaryPanel.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                summaryPanel.populate(childBlock);
             } else {
-                control.setValueStore(getValueList().get(childBlock.getItemIndex()));
-                control.populate(childBlock);
+                Control control = (Control) childWidgetInfo.getWidget();
+                if (control == selectCtrl) {
+                    selectCtrl.populate(childBlock);
+                } else if (control == sortColumnCtrl) {
+                    sortColumnCtrl.populate(childBlock);
+                } else {
+                    control.setValueStore(getValueList().get(childBlock.getItemIndex()));
+                    control.populate(childBlock);
+                }
             }
         }
     }
@@ -174,7 +182,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public boolean isActionColumn() throws UnifyException {
-        return getUplAttribute(boolean.class, "actionColumn");
+        return actionCtrl != null;
     }
 
     public String getSelectAllId() throws UnifyException {
@@ -189,10 +197,22 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getPrefixedId("row_");
     }
 
-    public EventHandler getActionEventHandler() throws UnifyException {
-        return getUplAttribute(EventHandler.class, "actionHandler");
+    public Control[] getActionCtrl() {
+        return actionCtrl;
+    }
+
+    public boolean isSummary() {
+        return summaryPanelList != null && !summaryPanelList.isEmpty();
     }
     
+    public StandalonePanel getSummaryPanel(int index) {
+        return isSummary() ? summaryPanelList.get(index) : null;
+    }
+
+    public EventHandler[] getActionEventHandler() throws UnifyException {
+        return getUplAttribute(EventHandler[].class, "actionHandler");
+    }
+
     public T getTable() throws UnifyException {
         T table = getValue(tableClass);
         if (table != oldTable) {
@@ -238,7 +258,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
                         standalonePanel.resolvePageActions(handlers);
                     }
+
                 }
+
+                summaryPanelList = null;
             }
 
             if (table != null) {
@@ -307,14 +330,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return sortColumnCtrl;
     }
 
-    public Control getEditCtrl() {
-        return editCtrl;
-    }
-
-    public Control getViewCtrl() {
-        return viewCtrl;
-    }
-
     public Integer[] getSelected() {
         return selected;
     }
@@ -357,16 +372,50 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     @Override
+    public List<ValueStore> getValueList() throws UnifyException {
+        List<ValueStore> valueList = super.getValueList();
+        if (valueList == null) {
+            summaryPanelList = null;
+        } else {
+            String summary = getUplAttribute(String.class, "summary");
+            if (!StringUtils.isBlank(summary)) {
+                if (summaryPanelList == null) {
+                    summaryPanelList = new ArrayList<StandalonePanel>();
+                }
+
+                int extra = valueList.size() - summaryPanelList.size();
+                for (int i = 0; i < extra; i++) {
+                    StandalonePanel summaryPanel = (StandalonePanel) addExternalChildStandalonePanel(summary,
+                            getId() + "_" + summaryPanelList.size() + "sm");
+                    summaryPanelList.add(summaryPanel);
+                }
+            }
+        }
+
+        return valueList;
+    }
+
+    @Override
     protected void doOnPageConstruct() throws UnifyException {
         if (isMultiSelect()) {
             selectCtrl = (Control) addInternalChildWidget("!ui-hidden binding:selected");
         }
 
-        if (isActionColumn()) {
-            viewCtrl = (Control) addInternalChildWidget(
-                    "!ui-symbol styleClass:$e{mact} symbol:$s{file} hint:$m{table.action.view} ignoreParentState:true");
-            editCtrl = (Control) addInternalChildWidget(
-                    "!ui-symbol styleClass:$e{mact} symbol:$s{file-edit} hint:$m{table.action.edit} ignoreParentState:true");
+        String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
+        if (actionSymbol != null && actionSymbol.length > 0) {
+            EventHandler[] actionHandler = getActionEventHandler();
+            if (actionHandler == null || actionHandler.length != actionSymbol.length) {
+                throwOperationErrorException(new IllegalArgumentException(
+                        "Number of action handlers must match number of action symbols. Widget [" + getLongName()
+                                + "]."));
+            }
+
+            actionCtrl = new Control[actionSymbol.length];
+            for (int i = 0; i < actionSymbol.length; i++) {
+                String symbol = actionSymbol[i];
+                actionCtrl[i] = (Control) addInternalChildWidget(
+                        "!ui-symbol styleClass:$e{mact} symbol:$s{" + symbol + "} ignoreParentState:true");
+            }
         }
 
         sortColumnCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sortColumnIndex");

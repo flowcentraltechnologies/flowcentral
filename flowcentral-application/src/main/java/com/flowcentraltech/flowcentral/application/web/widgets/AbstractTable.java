@@ -25,7 +25,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
 import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
+import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.data.ValueStore;
@@ -40,6 +42,8 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * @since 1.0
  */
 public abstract class AbstractTable<T, U> {
+
+    protected final AppletUtilities au;
 
     private TableDef tableDef;
 
@@ -73,9 +77,11 @@ public abstract class AbstractTable<T, U> {
 
     private boolean fixedAssignment;
     
+    private EntryTableMessage entryMessage;
+    
+    private EntryTablePolicy entryPolicy;
+    
     private TableTotalSummary tableTotalSummary;
-
-    protected final AppletUtilities au;
 
     private Set<Integer> selected;
 
@@ -141,6 +147,10 @@ public abstract class AbstractTable<T, U> {
 
     public List<TableColumnDef> getColumnDefList() {
         return tableDef.getColumnDefList();
+    }
+
+    public void setPolicy(EntryTablePolicy policy) {
+        this.entryPolicy = policy;
     }
 
     public int getItemsPerPage() {
@@ -209,6 +219,10 @@ public abstract class AbstractTable<T, U> {
 
     public void setTableTotalSummary(TableTotalSummary tableTotalSummary) {
         this.tableTotalSummary = tableTotalSummary;
+    }
+
+    public EntryTableMessage getEntryMessage() {
+        return entryMessage;
     }
 
     public void clearSummaries() throws UnifyException {
@@ -382,6 +396,18 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isAtLastPage() {
         return numberOfPages == 0 || pageIndex >= numberOfPages - 1;
+    }
+
+    public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
+        return entryPolicy != null ? entryPolicy.resolveActionIndex(valueStore, index, size) : 0;
+    }
+    
+    public EntryTablePolicy getEntryPolicy() {
+        return entryPolicy;
+    }
+
+    protected boolean isWithEntryPolicy() {
+        return entryPolicy != null;
     }
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;

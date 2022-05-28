@@ -170,9 +170,10 @@ public class FormActionDef {
 
     @Override
     public String toString() {
-        return "FormActionDef [type=" + type + ", name=" + name + ", description=" + description + ", label=" + label
-                + ", symbol=" + symbol + ", styleClass=" + styleClass + ", policy=" + policy + ", privilege="
-                + privilege + ", orderIndex=" + orderIndex + ", showOnCreate=" + showOnCreate + ", showOnMaintain="
-                + showOnMaintain + ", validateForm=" + validateForm + "]";
+        return "FormActionDef [type=" + type + ", highlightType=" + highlightType + ", name=" + name + ", description="
+                + description + ", label=" + label + ", symbol=" + symbol + ", styleClass=" + styleClass + ", policy="
+                + policy + ", privilege=" + privilege + ", onCondition=" + onCondition + ", orderIndex=" + orderIndex
+                + ", showOnCreate=" + showOnCreate + ", showOnMaintain=" + showOnMaintain + ", validateForm="
+                + validateForm + "]";
     }
 }

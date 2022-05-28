@@ -21,7 +21,6 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
-import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Order.Part;
@@ -37,11 +36,7 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class BeanTable extends AbstractTable<List<?>, Object> {
 
-    private ChildListEditPolicy policy;
-
     private ValueStore valueStore;
-
-    private List<?> oldSourceObject;
 
     public BeanTable(AppletUtilities au, TableDef tableDef) {
         this(au, tableDef, false);
@@ -51,21 +46,17 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
         super(au, tableDef, null, entryMode);
     }
 
-    public void setPolicy(ChildListEditPolicy policy) {
-        this.policy = policy;
-    }
-
     @Override
     protected void onLoadSourceObject(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
-        if (policy != null) {
-            policy.onEntryTableLoad(getValueStore(sourceObject), selected);
+        if (isWithEntryPolicy()) {
+            getEntryPolicy().onEntryTableLoad(getValueStore(sourceObject), selected);
         }
     }
 
     @Override
     protected void onFireOnChange(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
-        if (policy != null) {
-            policy.onEntryTableChange(getValueStore(sourceObject), selected);
+        if (isWithEntryPolicy()) {
+            getEntryPolicy().onEntryTableChange(getValueStore(sourceObject), selected);
         }
     }
 
@@ -114,11 +105,12 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     private ValueStore getValueStore(List<?> sourceObject) throws UnifyException {
+        List<?> oldSourceObject = valueStore != null ? (List<?>) valueStore.getValueObject() : null;
         if (sourceObject != oldSourceObject) {
             synchronized (this) {
+                oldSourceObject = valueStore != null ? (List<?>) valueStore.getValueObject() : null;
                 if (sourceObject != oldSourceObject) {
                     valueStore = new BeanValueListStore(sourceObject);
-                    oldSourceObject = sourceObject;
                 }
             }
         }
