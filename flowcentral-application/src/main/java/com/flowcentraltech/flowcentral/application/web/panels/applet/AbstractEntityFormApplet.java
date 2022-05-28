@@ -648,20 +648,20 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public EntityActionResult deleteInst() throws UnifyException {
         final AppletDef formAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.deleteEntityInstByFormContext(formAppletDef, form.getCtx(), this);
-
-        if (viewMode == ViewMode.MAINTAIN_FORM_SCROLL) {
-            List<Entity> itemList = entitySearch.getEntityTable().getDispItemList();
-            itemList.remove(mIndex);
-            int size = itemList.size();
-            if (mIndex > 0 && mIndex >= size) {
-                mIndex--;
-            }
-
-            if (size > 0) {
-                loadScrollInst();
-                return entityActionResult;
-            }
-        }
+//
+//        if (viewMode == ViewMode.MAINTAIN_FORM_SCROLL) {
+//            List<Entity> itemList = entitySearch.getEntityTable().getDispItemList();
+//            itemList.remove(mIndex);
+//            int size = itemList.size();
+//            if (mIndex > 0 && mIndex >= size) {
+//                mIndex--;
+//            }
+//
+//            if (size > 0) {
+//                loadScrollInst();
+//                return entityActionResult;
+//            }
+//        }
 
         final boolean closePage = !navBackToPrevious();
         entityActionResult.setClosePage(closePage);

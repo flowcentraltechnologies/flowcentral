@@ -147,19 +147,19 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
 
     public void applyUserAction(String actionName) throws UnifyException {
         wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName);
-        if (viewMode == ViewMode.MAINTAIN_FORM_SCROLL) {
-            List<Entity> itemList = entitySearch.getEntityTable().getDispItemList();
-            itemList.remove(mIndex);
-            int size = itemList.size();
-            if (mIndex > 0 && mIndex >= size) {
-                mIndex--;
-            }
-
-            if (size > 0) {
-                maintainInst(mIndex);
-                return;
-            }
-        }
+//        if (viewMode == ViewMode.MAINTAIN_FORM_SCROLL) {
+//            List<Entity> itemList = entitySearch.getEntityTable().getDispItemList();
+//            itemList.remove(mIndex);
+//            int size = itemList.size();
+//            if (mIndex > 0 && mIndex >= size) {
+//                mIndex--;
+//            }
+//
+//            if (size > 0) {
+//                maintainInst(mIndex);
+//                return;
+//            }
+//        }
 
         navBackToSearch();
     }
