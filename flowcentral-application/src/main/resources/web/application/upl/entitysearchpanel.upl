@@ -125,7 +125,7 @@
 
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
-!fc-entitytable:searchResultTbl binding:entityTable multiSelect:true valueMarker:$f{searchResultMarker}
+!fc-entitytable:searchResultTbl binding:entityTable multiSelect:false valueMarker:$f{searchResultMarker}
 
 // Footer action panel
 !ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}

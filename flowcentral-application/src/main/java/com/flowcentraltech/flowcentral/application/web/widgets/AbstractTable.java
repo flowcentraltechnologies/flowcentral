@@ -220,7 +220,7 @@ public abstract class AbstractTable<T, U> {
     public void setTableTotalSummary(TableTotalSummary tableTotalSummary) {
         this.tableTotalSummary = tableTotalSummary;
     }
-
+    
     public EntryTableMessage getEntryMessage() {
         return entryMessage;
     }
