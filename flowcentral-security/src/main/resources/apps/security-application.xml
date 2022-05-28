@@ -81,6 +81,8 @@
             <property name="createForm.onCreate.state.policy" value="onCreateFormStatePolicy"/>
 			<property name="createForm.new.policy"
 				value="user-newactionpolicy" />
+            <property name="createForm.submit.caption" value="Submit for Approval"/>
+            <property name="createForm.submit.buttonhighlight" value="true"/>
 			<property name="createForm.submit" value="true" />
 			<property name="createForm.submit.validate" value="true" />
 			<property name="createForm.submit.workflow.channel"
