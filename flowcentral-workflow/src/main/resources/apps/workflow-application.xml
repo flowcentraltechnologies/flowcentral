@@ -493,7 +493,7 @@
 	<!-- Tables -->
 	<tables>
 		<table name="workflowTable" description="$m{workflow.workflow.table}"
-			label="$m{workflow.workflow.table.label}" entity="workflow" itemsPerPage="20">
+			label="$m{workflow.workflow.table.label}" entity="workflow" itemsPerPage="20"  serialNo="true">
 			<column field="applicationDesc" renderWidget="application.text"
 				label="$m{workflow.workflow.application}" widthRatio="2" />
 			<column field="name" renderWidget="application.text"
@@ -508,7 +508,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="wfStepTable" description="$m{workflow.step.table}"
-			label="$m{workflow.step.table.label}" entity="wfStep" itemsPerPage="20">
+			label="$m{workflow.step.table.label}" entity="wfStep" itemsPerPage="20"  serialNo="true">
 			<column field="workflowDesc" renderWidget="application.text"
 				label="$m{workflow.step.workflow}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -522,7 +522,7 @@
 		</table>
 		<table name="wfStepRoleTable" description="$m{workflow.steprole.table}"
 			label="$m{workflow.steprole.table.label}" entity="wfStepRole"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.steprole.step}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"
@@ -535,7 +535,7 @@
 				label="$m{workflow.steprole.assignedon}" widthRatio="1" />
 		</table>
 		<table name="wfItemTable" description="$m{workflow.wfitem.table}"
-			label="$m{workflow.wfitem.table.label}" entity="wfItem" itemsPerPage="20">
+			label="$m{workflow.wfitem.table.label}" entity="wfItem" itemsPerPage="20"  serialNo="true">
 			<column field="applicationName" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="workflowName" renderWidget="application.text"
@@ -556,7 +556,7 @@
 		<table name="wfItemReviewTable"
 			description="$m{workflow.wfitem.review.table}"
 			label="$m{workflow.wfitem.review.table.label}" entity="wfItem"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="wfItemDesc" renderWidget="application.text"
 				widthRatio="2" linkAct="decisionAct" />
 			<column field="wfStepName" renderWidget="application.text"
@@ -573,7 +573,7 @@
 		<table name="wfWizardItemReviewTable"
 			description="$m{workflow.wfwizarditem.review.table}"
 			label="$m{workflow.wfwizarditem.review.table.label}" entity="wfWizardItem"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="wizard" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="title" renderWidget="application.text"
@@ -590,7 +590,7 @@
 		<table name="workflowChannelTable"
 			description="$m{workflow.workflowchannel.table}"
 			label="$m{workflow.workflowchannel.table.label}" entity="workflowChannel"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="applicationDesc" renderWidget="application.text"
 				label="$m{workflow.workflowchannel.application}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"

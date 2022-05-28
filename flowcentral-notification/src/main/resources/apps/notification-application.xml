@@ -201,7 +201,7 @@
 		<table name="notifOutboxTable"
 			description="$m{notification.notificationoutbox.table}"
 			label="$m{notification.notificationoutbox.table.label}" entity="notifOutbox"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{notification.notificationoutbox.type}" widthRatio="2" />
 			<column field="subject" renderWidget="application.text"
@@ -220,7 +220,7 @@
 		<table name="notifRecipientTable"
 			description="$m{notification.notificationrecipient.table}"
 			label="$m{notification.notificationrecipient.table.label}"
-			entity="notifRecipient" itemsPerPage="20">
+			entity="notifRecipient" itemsPerPage="20"  serialNo="true">
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{notification.notificationrecipient.type}" widthRatio="1" />
 			<column field="recipientName" renderWidget="application.text"
@@ -231,7 +231,7 @@
 		<table name="notifChannelTable"
 			description="$m{notification.notificationchannel.table}"
 			label="$m{notification.notificationchannel.table.label}"
-			entity="notifChannel" itemsPerPage="20">
+			entity="notifChannel" itemsPerPage="20"  serialNo="true">
 			<column field="notificationTypeDesc"
 				renderWidget="application.text"
 				label="$m{notification.notificationchannel.type}" widthRatio="1" />

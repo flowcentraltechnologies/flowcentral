@@ -325,7 +325,7 @@
 	<!-- Tables -->
 	<tables>
 		<table name="branchTable" description="$m{organization.branch.table}"
-			label="$m{organization.branch.table.label}" entity="branch" itemsPerPage="20">
+			label="$m{organization.branch.table.label}" entity="branch" itemsPerPage="20"  serialNo="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -344,7 +344,7 @@
 		<table name="departmentTable"
 			description="$m{organization.department.table}"
 			label="$m{organization.department.table.label}" entity="department"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -357,7 +357,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="roleTable" description="$m{organization.role.table}"
-			label="$m{organization.role.table.label}" entity="role" itemsPerPage="20">
+			label="$m{organization.role.table.label}" entity="role" itemsPerPage="20"  serialNo="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -378,7 +378,7 @@
 		<table name="rolePrivilegeTable"
 			description="$m{organization.roleprivilege.table}"
 			label="$m{organization.roleprivilege.table.label}" entity="rolePrivilege"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="applicationDesc" renderWidget="application.text"
 				label="$m{organization.roleprivilege.application}" widthRatio="1" />
 			<column field="privilegeCatDesc" renderWidget="application.text"
@@ -391,7 +391,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="zoneTable" description="$m{organization.zone.table}"
-			label="$m{organization.zone.table.label}" entity="zone" itemsPerPage="20">
+			label="$m{organization.zone.table.label}" entity="zone" itemsPerPage="20"  serialNo="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"

@@ -1444,7 +1444,7 @@
 	<!-- Tables -->
 	<tables>
 		<table name="suggestionTable" description="$m{application.appsuggestion.table}"
-			label="$m{application.appsuggestion.table.label}" entity="appSuggestion" itemsPerPage="20">
+			label="$m{application.appsuggestion.table.label}" entity="appSuggestion" itemsPerPage="20"  serialNo="true">
 			<column field="applicationDesc" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="suggestionTypeDesc" renderWidget="application.text"

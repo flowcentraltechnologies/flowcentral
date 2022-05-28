@@ -98,8 +98,46 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write(errMsg);
                 writer.write("</span></div>");
             }
+            
+            
+            if (tableDef.isHeaderless()) {
+                // Column widths
+                writer.write("<colgroup>");
+                final boolean entryMode = table.isEntryMode();
+                final boolean supportSelect = !table.isFixedAssignment();
+                if (supportSelect && multiSelect && !entryMode) {
+                    writer.write("<col class=\"cselh\">");
+                }
 
-            writeHeaderRow(writer, tableWidget);
+                if (tableDef.isSerialNo()) {
+                    writer.write("<col class=\"cserialh\">");
+                }
+                
+                int index = 0;
+                for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
+                    if (widgetInfo.isExternal() && widgetInfo.isControl()) {
+                        TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                        writer.write("<col ");
+                        writeTagStyle(writer, tabelColumnDef.getHeaderStyle());                   
+                        writer.write(">");
+                        index++;
+                    }
+                }
+                
+                if (supportSelect && multiSelect && entryMode) {
+                    writer.write("<col class=\"cselh\">");
+                }
+
+                if (tableWidget.isActionColumn()) {
+                    writer.write("<col class=\"cactionh\">");
+                }
+                
+                writer.write("</colgroup>");
+            } else {
+                // Header
+                writeHeaderRow(writer, tableWidget);
+            }
+
             writeBodyRows(writer, tableWidget);
             writer.write("</table></div>");
             if (sortable) {

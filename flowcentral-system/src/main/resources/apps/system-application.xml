@@ -387,7 +387,7 @@
 	<!-- Tables -->
 	<tables>
 		<table name="moduleTable" description="$m{system.module.table}"
-			label="$m{system.module.table.label}" entity="module" itemsPerPage="20">
+			label="$m{system.module.table.label}" entity="module" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -402,7 +402,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="moduleAppTable" description="$m{system.moduleapp.table}"
-			label="$m{system.moduleapp.table.label}" entity="moduleApp" itemsPerPage="20">
+			label="$m{system.moduleapp.table.label}" entity="moduleApp" itemsPerPage="20"  serialNo="true">
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -423,7 +423,7 @@
 		<table name="sysParamTable"
 			description="$m{system.systemparameter.table}"
 			label="$m{system.systemparameter.table.label}" entity="sysParam"
-			itemsPerPage="20" sortHistory="2">
+			itemsPerPage="20"  serialNo="true" sortHistory="2">
 			<column field="moduleLabel" renderWidget="application.text"
 				label="$m{system.systemparameter.module}" widthRatio="1" />
 			<column field="code" renderWidget="application.text"
@@ -446,7 +446,7 @@
 		<table name="scheduledTaskTable"
 			description="$m{system.scheduledtask.table}"
 			label="$m{system.scheduledtask.table.label}" entity="scheduledTask"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="taskName" renderWidget="application.text"
@@ -464,7 +464,7 @@
 		<table name="scheduledTaskHistTable"
 			description="$m{system.scheduledtaskhist.table}"
 			label="$m{system.scheduledtaskhist.table.label}" entity="scheduledTaskHist"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="scheduledTaskDesc" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="taskName" renderWidget="application.text"
@@ -478,7 +478,7 @@
 		</table>
 		<table name="credentialTable" description="$m{system.credential.table}"
 			label="$m{system.credential.table.label}" entity="credential"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -490,7 +490,7 @@
 		</table>
 		<table name="downloadLogTable" description="$m{system.downloadlog.table}"
 			label="$m{system.downloadlog.table.label}" entity="downloadLog"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="resourceName" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="remoteAddress" renderWidget="application.text"
@@ -504,7 +504,7 @@
 		</table>
 		<table name="environmentVariableTable" description="$m{system.environmentvariable.table}"
 			label="$m{system.environmentvariable.table.label}" entity="environmentVariable"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"

@@ -496,6 +496,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table th {text-align:left; font-weight: bold; padding: 8px 6px;}
 .fc-table .table th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
 .fc-table .table td {height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
+.fc-table .table .cselh {width: 32px;}
+.fc-table .table .cserialh {width: 48px;}
+.fc-table .table .cactionh {width: 32px;}
 .fc-table .table .mselh {width: 32px;}
 .fc-table .table .mselh span {width:16px; height:16px;}
 .fc-table .table .mselh input {display:none;}
