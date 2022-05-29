@@ -53,6 +53,6 @@ public abstract class BaseResponse {
     }
     
     public boolean error() {
-        return errorCode != null && errorMsg != null;
+        return errorCode != null || errorMsg != null;
     }
 }

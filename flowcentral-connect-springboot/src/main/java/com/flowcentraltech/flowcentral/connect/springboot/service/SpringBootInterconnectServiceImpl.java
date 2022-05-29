@@ -150,6 +150,8 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         LOGGER.log(Level.INFO, "Processing datasource request [{0}]...", interconnect.prettyJSON(req));
         final EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
         PlatformInfo platform = getPlatform(entityInfo);
+        String errorCode = null;
+        String errorMsg = null;
 
         Object[] result = null;
         if (entityInfo.isWithHandler()) {
@@ -181,11 +183,22 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         break;
                     case DELETE: {
                         Object reqBean = interconnect.getBeanFromJsonPayload(req);
-                        if (req.version() && entityInfo.isWithVersionNo()) {
-                            PropertyUtils.setProperty(reqBean, entityInfo.getVersionNoFieldName(), req.getVersionNo());
+                        if (reqBean == null) {
+                            CriteriaQuery<?> cq = createQuery(entityInfo.getImplClass(), em, req);
+                            TypedQuery<?> query = em.createQuery(cq);
+                            List<?> results = query.getResultList();
+                            reqBean = results != null && results.size() == 1 ? results.get(0) : null;
                         }
+                        
+                        if (reqBean == null) {
+                            errorMsg = "Could not find entity to delete.";
+                        } else {
+                            if (req.version() && entityInfo.isWithVersionNo()) {
+                                PropertyUtils.setProperty(reqBean, entityInfo.getVersionNoFieldName(), req.getVersionNo());
+                            }
 
-                        em.remove(reqBean);
+                            em.remove(reqBean);
+                        }
                     }
                         break;
                     case DELETE_ALL: {
@@ -277,6 +290,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 em.close();
             } catch (Exception e) {
                 LOGGER.log(Level.SEVERE, "Datasource request processing failure.", e);
+                errorMsg = e.getMessage();
                 if (tx != null) {
                     tx.rollback();
                 }
@@ -287,7 +301,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             }
         }
 
-        return interconnect.createDataSourceResponse(result, req);
+        return interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
     }
 
     private <T> CriteriaQuery<T> createQuery(Class<T> entityClass, EntityManager em, DataSourceRequest req)
