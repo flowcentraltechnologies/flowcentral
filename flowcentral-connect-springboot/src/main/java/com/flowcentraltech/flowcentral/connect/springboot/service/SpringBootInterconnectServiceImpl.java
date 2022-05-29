@@ -181,7 +181,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         break;
                     case DELETE: {
                         Object reqBean = interconnect.getBeanFromJsonPayload(req);
-                        if (req.version()) {
+                        if (req.version() && entityInfo.isWithVersionNo()) {
                             PropertyUtils.setProperty(reqBean, entityInfo.getVersionNoFieldName(), req.getVersionNo());
                         }
 
