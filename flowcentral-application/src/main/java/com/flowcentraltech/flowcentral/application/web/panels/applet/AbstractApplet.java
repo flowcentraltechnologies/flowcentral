@@ -64,7 +64,7 @@ public abstract class AbstractApplet {
     public AbstractApplet(AppletUtilities au, String appletName) throws UnifyException {
         this.appletName = ApplicationNameUtils.removeVestigialNamePart(appletName);
         this.au = au;
-        this.ctx = new AppletContext(au);
+        this.ctx = new AppletContext(this, au);
     }
 
     public String getAppletName() {

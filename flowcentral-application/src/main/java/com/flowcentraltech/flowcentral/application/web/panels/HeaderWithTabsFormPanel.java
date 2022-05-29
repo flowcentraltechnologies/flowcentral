@@ -15,10 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Header with tabs form panel.
@@ -33,11 +36,22 @@ public class HeaderWithTabsFormPanel extends AbstractFormPanel {
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
+        final HeaderWithTabsForm headerWithTabsForm = getValue(HeaderWithTabsForm.class);
+        final FormContext formContext = headerWithTabsForm.getCtx();
+        boolean evaluate = true;
+        
+        // Do a form update on reload on switch. Usually triggered by select popups.
+        if (Boolean.TRUE.equals(removeRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
+            formContext.getAu().updateHeaderWithTabsForm(headerWithTabsForm, (Entity) headerWithTabsForm.getFormBean());
+            evaluate = false;
+        }
 
-        HeaderWithTabsForm headerWithTabsForm = getValue(HeaderWithTabsForm.class);
-        MiniFormWidget widget = getWidgetByShortName(MiniFormWidget.class, "headerMiniForm");
-        headerWithTabsForm.getCtx().setTriggerEvaluator(widget);
-        headerWithTabsForm.getCtx().evaluateTabStates();
+        if (evaluate) {
+            MiniFormWidget widget = getWidgetByShortName(MiniFormWidget.class, "headerMiniForm");
+            formContext.setTriggerEvaluator(widget);
+            formContext.evaluateTabStates();
+        }
+
         setWidgetVisible("formAnnotation", headerWithTabsForm.isWithVisibleAnnotations());
         setVisible("formTabSheetPanel", headerWithTabsForm.isTabSheetInStateForDisplay());
         setVisible("relatedListPanel", headerWithTabsForm.isRelatedListTabSheetInStateForDisplay());

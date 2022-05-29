@@ -987,7 +987,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             throws UnifyException {
         form.getCtx().resetTabIndex();
         form.setUpdateType(updateType);
-        au.updateHeaderWithTabsForm(this, form, inst);
+        au.updateHeaderWithTabsForm(form, inst);
     }
 
     protected void saveCurrentForm() throws UnifyException {

@@ -422,7 +422,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public ListingForm constructListingForm(AbstractEntityFormApplet applet, String rootTitle, String beanTitle,
             FormDef formDef, Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
         final ListingForm form = new ListingForm(formContext, breadCrumbs);
         form.setBeanTitle(beanTitle);
@@ -434,7 +434,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,
             String beanTitle, FormDef formDef, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final SweepingCommitPolicy sweepingCommitPolicy = applet;
         final FormContext formContext = new FormContext(appletContext, formDef, formEventHandlers, inst);
         final HeaderWithTabsForm form = new HeaderWithTabsForm(formContext, breadCrumbs);
@@ -683,7 +683,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public EntitySingleForm constructEntitySingleForm(AbstractEntitySingleFormApplet applet, String rootTitle,
             String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
-        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(this);
+        final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
         final String panelName = applet.getRootAppletDef().getPropValue(String.class,
                 AppletPropertyConstants.SINGLE_FORM_PANEL);
@@ -697,11 +697,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public void updateHeaderWithTabsForm(AbstractEntityFormApplet applet, HeaderWithTabsForm form, Entity inst)
-            throws UnifyException {
+    public void updateHeaderWithTabsForm(HeaderWithTabsForm form, Entity inst) throws UnifyException {
         final FormDef formDef = form.getFormDef();
         final EntityDef entityDef = formDef.getEntityDef();
         final FormContext formContext = form.getCtx();
+        final AbstractEntityFormApplet applet = (AbstractEntityFormApplet) formContext.getAppletContext().getApplet();
         boolean isCreateMode = form.getFormMode().isCreate();
         if (!isCreateMode) {
             String beanTitle = getEntityDescription(getEntityClassDef(entityDef.getLongName()), inst, null);
@@ -1179,8 +1179,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef,
-            FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
+    public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
+            SweepingCommitPolicy scp) throws UnifyException {
         Entity inst = (Entity) formContext.getInst();
         String updatePolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY)
@@ -1230,10 +1230,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         return entityActionResult;
     }
-    
+
     @Override
-    public void onFormConstruct(AppletDef formAppletDef, FormContext formContext, String baseField,
-            boolean create) throws UnifyException {
+    public void onFormConstruct(AppletDef formAppletDef, FormContext formContext, String baseField, boolean create)
+            throws UnifyException {
         final ValueStore formValueStore = formContext.getFormValueStore();
         final FormDef formDef = formContext.getFormDef();
         formContext.setFixedReference(baseField);
@@ -1280,7 +1280,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             }
         }
     }
-    
+
     private void applyDelayedSetValues(final FormContext formContext) throws UnifyException {
         final FormDef _formDef = formContext.getFormDef();
         final ValueStore _formValueStore = formContext.getFormValueStore();
