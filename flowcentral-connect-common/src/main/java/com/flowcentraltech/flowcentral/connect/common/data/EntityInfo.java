@@ -113,6 +113,10 @@ public class EntityInfo {
         return versionNoFieldName;
     }
 
+    public boolean isWithVersionNo() {
+        return versionNoFieldName != null;
+    }
+    
     public String getHandler() {
         return handler;
     }

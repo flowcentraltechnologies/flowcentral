@@ -801,6 +801,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     tdb.headerCenterAlign(appTable.isHeaderCenterAlign());
                     tdb.basicSearch(appTable.isBasicSearch());
                     tdb.totalSummary(appTable.isTotalSummary());
+                    tdb.headerless(appTable.isHeaderless());
+                    tdb.multiSelect(appTable.isMultiSelect());
+                    tdb.nonConforming(appTable.isNonConforming());
                     tdb.limitSelectToColumns(appTable.isLimitSelectToColumns());
                     return tdb.build();
                 }
@@ -2815,6 +2818,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setHeaderCenterAlign(appTableConfig.isHeaderCenterAlign());
                     appTable.setBasicSearch(appTableConfig.isBasicSearch());
                     appTable.setTotalSummary(appTableConfig.isTotalSummary());
+                    appTable.setHeaderless(appTableConfig.isHeaderless());
+                    appTable.setMultiSelect(appTableConfig.isMultiSelect());
+                    appTable.setNonConforming(appTableConfig.isNonConforming());
                     appTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
                     appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(appTable, applicationName, appTableConfig);
@@ -2834,6 +2840,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppTable.setHeaderCenterAlign(appTableConfig.isHeaderCenterAlign());
                         oldAppTable.setBasicSearch(appTableConfig.isBasicSearch());
                         oldAppTable.setTotalSummary(appTableConfig.isTotalSummary());
+                        oldAppTable.setHeaderless(appTableConfig.isHeaderless());
+                        oldAppTable.setMultiSelect(appTableConfig.isMultiSelect());
+                        oldAppTable.setNonConforming(appTableConfig.isNonConforming());
                         oldAppTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
                     }
 

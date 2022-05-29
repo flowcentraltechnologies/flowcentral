@@ -577,17 +577,17 @@ public interface AppletUtilities extends UnifyComponent {
      * Constructs a listing form.
      * 
      * @param applet
-     *                                   the applet
+     *                    the applet
      * @param rootTitle
-     *                                   the root applet title
+     *                    the root applet title
      * @param beanTitle
-     *                                   the bean title
+     *                    the bean title
      * @param formDef
-     *                                   the form definition
+     *                    the form definition
      * @param inst
-     *                                   the entity instance
+     *                    the entity instance
      * @param breadCrumbs
-     *                                   optional bread crumbs
+     *                    optional bread crumbs
      * @return constructed form
      * @throws UnifyException
      *                        if an error occurs
@@ -599,21 +599,21 @@ public interface AppletUtilities extends UnifyComponent {
      * Constructs a header with tabs form.
      * 
      * @param applet
-     *                                   the applet
+     *                          the applet
      * @param rootTitle
-     *                                   the root applet title
+     *                          the root applet title
      * @param beanTitle
-     *                                   the bean title
+     *                          the bean title
      * @param formDef
-     *                                   the form definition
+     *                          the form definition
      * @param inst
-     *                                   the entity instance
+     *                          the entity instance
      * @param formMode
-     *                                   the form mode
+     *                          the form mode
      * @param breadCrumbs
-     *                                   optional bread crumbs
+     *                          optional bread crumbs
      * @param formEventHandlers
-     *                                   optional form switch on change handler
+     *                          optional form switch on change handler
      * @return constructed form
      * @throws UnifyException
      *                        if an error occurs
@@ -665,17 +665,14 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Updates a header with tabs form.
      * 
-     * @param applet
-     *               the applet
      * @param form
-     *               the form to update
+     *             the form to update
      * @param inst
-     *               the entity instance
+     *             the entity instance
      * @throws UnifyException
      *                        if an error occurs
      */
-    void updateHeaderWithTabsForm(AbstractEntityFormApplet applet, HeaderWithTabsForm form, Entity inst)
-            throws UnifyException;
+    void updateHeaderWithTabsForm(HeaderWithTabsForm form, Entity inst) throws UnifyException;
 
     /**
      * Updates an entity single form.
@@ -940,23 +937,23 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     String getEntityDescription(EntityClassDef entityClassDef, Entity inst, String fieldName) throws UnifyException;
-    
+
     /**
      * Creates an entity by form context.
      * 
      * @param formAppletDef
-     *                    the form applet definition
+     *                      the form applet definition
      * @param formContext
-     *                    the form context
+     *                      the form context
      * @param scp
-     *                    the sweeping commit policy
+     *                      the sweeping commit policy
      * @return the entity action result
      * @throws UnifyException
      *                        if an error occurs
      */
     EntityActionResult createEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
-    
+
     /**
      * Updates an entity by form context.
      * 
@@ -972,7 +969,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
-    
+
     /**
      * Deletes an entity by form context.
      * 
@@ -988,7 +985,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     EntityActionResult deleteEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
-    
+
     /**
      * Performs on form construction.
      * 

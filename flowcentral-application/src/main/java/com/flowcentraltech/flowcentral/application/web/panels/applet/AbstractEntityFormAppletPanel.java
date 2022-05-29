@@ -657,25 +657,29 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void maintain() throws UnifyException {
         String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        String valMarker = po[0];
-        int mIndex = Integer.parseInt(po[1]);
-        if (valMarker != null) {
-            switch (valMarker) {
-                case EntitySearchValueMarkerConstants.CHILD_LIST:
-                    getEntityFormApplet().maintainChildInst(mIndex);
-                    return;
-                case EntitySearchValueMarkerConstants.RELATED_LIST:
-                    getEntityFormApplet().maintainRelatedInst(mIndex);
-                    return;
-                case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                    getEntityFormApplet().maintainHeadlessInst(mIndex);
-                    return;
-                default:
+        if (po.length > 0) { // Solves the exception on double click.
+            String valMarker = po[0];
+            int mIndex = Integer.parseInt(po[1]);
+            if (valMarker != null) {
+                switch (valMarker) {
+                    case EntitySearchValueMarkerConstants.CHILD_LIST:
+                        getEntityFormApplet().maintainChildInst(mIndex);
+                        return;
+                    case EntitySearchValueMarkerConstants.RELATED_LIST:
+                        getEntityFormApplet().maintainRelatedInst(mIndex);
+                        return;
+                    case EntitySearchValueMarkerConstants.HEADLESS_LIST:
+                        getEntityFormApplet().maintainHeadlessInst(mIndex);
+                        return;
+                    default:
+                }
             }
-        }
 
-        getEntityFormApplet().maintainInst(mIndex);
-        getRequestContextUtil().setContentScrollReset();
+            getEntityFormApplet().maintainInst(mIndex);
+            getRequestContextUtil().setContentScrollReset();
+        } else {
+            setCommandResultMapping(ResultMappingConstants.NONE);
+        }
     }
 
     @Action

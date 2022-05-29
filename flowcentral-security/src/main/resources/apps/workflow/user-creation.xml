@@ -26,11 +26,11 @@
 				<userAction name="approveUserCreate"
 					description="$m{security.workflow.usercreation.useraction.approve}"
 					label="$m{security.workflow.usercreation.useraction.approve.label}"
-					nextStep="prepareCreateUser" />
+					nextStep="prepareCreateUser" highlight="GREEN"/>
 				<userAction name="declineUserCreate"
 					description="$m{security.workflow.usercreation.useraction.decline}"
 					label="$m{security.workflow.usercreation.useraction.decline.label}"
-					nextStep="deleteUser" />
+					nextStep="deleteUser" highlight="RED"/>
 			</userActions>
 		</step>
 		<step type="enrichment" name="prepareCreateUser"

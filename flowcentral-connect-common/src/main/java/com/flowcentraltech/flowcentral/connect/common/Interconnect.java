@@ -498,9 +498,10 @@ public class Interconnect {
         return null;
     }
 
-    public JsonDataSourceResponse createDataSourceResponse(Object[] result, DataSourceRequest req) throws Exception {
+    public JsonDataSourceResponse createDataSourceResponse(Object[] result, DataSourceRequest req, String errorCode,
+            String errorMsg) throws Exception {
         checkInitialized();
-        JsonDataSourceResponse resp = new JsonDataSourceResponse();
+        JsonDataSourceResponse resp = new JsonDataSourceResponse(errorCode, errorMsg);
         String[] payload = toJsonResultStringValues(result, req.getOperation(), req.getEntity());
         resp.setPayload(payload);
         return resp;

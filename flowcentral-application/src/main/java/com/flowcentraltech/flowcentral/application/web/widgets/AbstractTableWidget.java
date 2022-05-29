@@ -223,6 +223,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
             TableDef tableDef = table != null ? table.getTableDef() : null;
             if (oldTableDef != tableDef) {
+                if (selectCtrl == null && tableDef.isMultiSelect()) {
+                    selectCtrl = createHiddenControl();
+                }
+                
                 clearRenderers();
                 removeAllExternalChildWidgets();
                 if (table != null) {
@@ -398,7 +402,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         if (isMultiSelect()) {
-            selectCtrl = (Control) addInternalChildWidget("!ui-hidden binding:selected");
+            selectCtrl = createHiddenControl();
         }
 
         String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
@@ -420,7 +424,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
         sortColumnCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sortColumnIndex");
     }
-
+    
     @Override
     protected ValueStore newValue(U object, int index) throws UnifyException {
         return createValueStore(object, index);
@@ -443,6 +447,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     protected Class<U> getItemClass() {
         return itemClass;
+    }
+
+    private Control createHiddenControl() throws UnifyException {
+        return (Control) addInternalChildWidget("!ui-hidden binding:selected");
     }
 
     private void clearRenderers() {

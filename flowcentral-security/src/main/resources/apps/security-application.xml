@@ -81,6 +81,8 @@
             <property name="createForm.onCreate.state.policy" value="onCreateFormStatePolicy"/>
 			<property name="createForm.new.policy"
 				value="user-newactionpolicy" />
+            <property name="createForm.submit.caption" value="Submit for Approval"/>
+            <property name="createForm.submit.buttonhighlight" value="true"/>
 			<property name="createForm.submit" value="true" />
 			<property name="createForm.submit.validate" value="true" />
 			<property name="createForm.submit.workflow.channel"
@@ -398,7 +400,7 @@
 		<table name="userGroupTable"
 			description="$m{security.usergroup.table}"
 			label="$m{security.usergroup.table.label}" entity="userGroup"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -415,7 +417,7 @@
 		<table name="userGroupRoleTable"
 			description="$m{security.usergrouprole.table}"
 			label="$m{security.usergrouprole.table.label}" entity="userGroupRole"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="departmentDesc" renderWidget="application.text"
 				label="$m{security.usergrouprole.department}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"
@@ -432,7 +434,7 @@
 		<table name="userGroupMemberTable"
 			description="$m{security.usergroupmember.table}"
 			label="$m{security.usergroupmember.table.label}"
-			entity="userGroupMember" itemsPerPage="20">
+			entity="userGroupMember" itemsPerPage="20"  serialNo="true">
 			<column field="userFullName" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="userEmail" renderWidget="application.text"
@@ -445,7 +447,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="userTable" description="$m{security.user.table}"
-			label="$m{security.user.table.label}" entity="user" itemsPerPage="20">
+			label="$m{security.user.table.label}" entity="user" itemsPerPage="20"  serialNo="true">
 			<column field="loginId" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="fullName" renderWidget="application.text"
@@ -469,7 +471,7 @@
 		<table name="userRoleTable"
 			description="$m{security.userrole.table}"
 			label="$m{security.userrole.table.label}" entity="userRole"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="departmentDesc" renderWidget="application.text"
 				label="$m{security.userrole.department}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"

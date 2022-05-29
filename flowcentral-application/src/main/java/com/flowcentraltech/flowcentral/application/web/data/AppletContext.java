@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
@@ -41,6 +42,8 @@ public class AppletContext extends AbstractContext {
 
     private final AppletUtilities au;
     
+    private final AbstractApplet applet;
+    
     private Map<EntityChildCategoryType, String> entityReferences;
 
     private boolean readOnly;
@@ -49,12 +52,17 @@ public class AppletContext extends AbstractContext {
     
     private boolean review;
     
-    public AppletContext(AppletUtilities au) {
+    public AppletContext(AbstractApplet applet, AppletUtilities au) {
+        this.applet = applet;
         this.au = au;
         this.entityReferences = new EnumMap<EntityChildCategoryType, String>(EntityChildCategoryType.class);
         for (EntityChildCategoryType type : EntityChildCategoryType.values()) {
             this.entityReferences.put(type, null);
         }
+    }
+
+    public AbstractApplet getApplet() {
+        return applet;
     }
 
     public AppletUtilities getAu() {

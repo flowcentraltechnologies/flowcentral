@@ -499,6 +499,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appTableConfig.setHeaderCenterAlign(appTable.isHeaderCenterAlign());
                 appTableConfig.setBasicSearch(appTable.isBasicSearch());
                 appTableConfig.setTotalSummary(appTable.isTotalSummary());
+                appTableConfig.setHeaderless(appTable.isHeaderless());
+                appTableConfig.setMultiSelect(appTable.isMultiSelect());
+                appTableConfig.setNonConforming(appTable.isNonConforming());
                 appTableConfig.setLimitSelectToColumns(appTable.isLimitSelectToColumns());
 
                 // Columns

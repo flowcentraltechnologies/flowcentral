@@ -57,7 +57,7 @@
 	</entities>
 	<tables>
 		<table name="productTable" description="Product" label="Product"
-			entity="product" itemsPerPage="20">
+			entity="product" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="name" widthRatio="1" />
 			<column field="description" renderWidget="text" widthRatio="3" />
 			<column field="costPrice" renderWidget="amount" widthRatio="1" />

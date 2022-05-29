@@ -61,6 +61,15 @@ public class AppTable extends BaseApplicationEntity {
     private boolean totalSummary;
 
     @Column
+    private boolean headerless;
+
+    @Column
+    private boolean multiSelect;
+
+    @Column
+    private boolean nonConforming;
+
+    @Column
     private boolean limitSelectToColumns;
 
     @ChildList
@@ -150,6 +159,30 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setTotalSummary(boolean totalSummary) {
         this.totalSummary = totalSummary;
+    }
+
+    public boolean isHeaderless() {
+        return headerless;
+    }
+
+    public void setHeaderless(boolean headerless) {
+        this.headerless = headerless;
+    }
+
+    public boolean isMultiSelect() {
+        return multiSelect;
+    }
+
+    public void setMultiSelect(boolean multiSelect) {
+        this.multiSelect = multiSelect;
+    }
+
+    public boolean isNonConforming() {
+        return nonConforming;
+    }
+
+    public void setNonConforming(boolean nonConforming) {
+        this.nonConforming = nonConforming;
     }
 
     public boolean isLimitSelectToColumns() {

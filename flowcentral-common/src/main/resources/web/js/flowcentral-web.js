@@ -165,6 +165,7 @@ fux.rigEntitySearch = function(rgp) {
 		evp.altered = false;
 		evp.manual = false;
 		evp.withlabels=!rgp.pText;
+		ux.addHdl(sel, "focusout", fux.entityFocusOut, evp);
 		ux.addHdl(sel, "keydown", fux.entityListSwitch, evp);
 		ux.addHdl(sel, "input", fux.entityListInput, evp);
 	}
@@ -247,6 +248,13 @@ fux.entityListSwitch = function(uEv) {
 		ux.setFocus(evp.uRltId);
 		return;
 	}
+	
+	fux.entityFocusOut(uEv);
+}
+
+fux.entityFocusOut = function(uEv) {
+	const evp = uEv.evp;
+	const sel = _id(evp.uId);
 	
 	if (evp.altered && (uEv.uKeyCode == UNIFY_KEY_TAB)) {
 		ux.fireEvent(sel, "change", true);

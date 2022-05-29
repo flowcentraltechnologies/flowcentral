@@ -912,7 +912,7 @@
 		<table name="switchApplicationTable"
 			description="$m{studio.application.switch.table}"
 			label="$m{studio.application.switch.table.label}"
-			entity="application.application" itemsPerPage="20">
+			entity="application.application" itemsPerPage="20"  serialNo="true">
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.module}" />
 			<column field="name" renderWidget="application.name"
@@ -923,7 +923,7 @@
 		<table name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
 			label="$m{studio.appentityfield.table.label}"
-			entity="application.appEntityField" itemsPerPage="20">
+			entity="application.appEntityField" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
@@ -948,7 +948,7 @@
 		<table name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"
 			label="$m{studio.appentityattachment.table.label}"
-			entity="application.appEntityAttachment" itemsPerPage="20">
+			entity="application.appEntityAttachment" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -959,7 +959,7 @@
 		<table name="appEntityExpressionTable"
 			description="$m{studio.appentityexpression.table}"
 			label="$m{studio.appentityexpression.table.label}"
-			entity="application.appEntityExpression" itemsPerPage="20">
+			entity="application.appEntityExpression" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -968,7 +968,7 @@
 		<table name="appEntityUniqueConstraintTable"
 			description="$m{studio.appentityuniqueconstraint.table}"
 			label="$m{studio.appentityuniqueconstraint.table.label}"
-			entity="application.appEntityUniqueConstraint" itemsPerPage="20">
+			entity="application.appEntityUniqueConstraint" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -979,7 +979,7 @@
 		<table name="appEntityIndexTable"
 			description="$m{studio.appentityindex.table}"
 			label="$m{studio.appentityindex.table.label}"
-			entity="application.appEntityIndex" itemsPerPage="20">
+			entity="application.appEntityIndex" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -990,7 +990,7 @@
 		<table name="appEntityUploadTable"
 			description="$m{studio.appentityupload.table}"
 			label="$m{studio.appentityupload.table.label}"
-			entity="application.appEntityUpload" itemsPerPage="20">
+			entity="application.appEntityUpload" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1219,7 +1219,7 @@
 		<table name="wfStepTable"
 			description="$m{studio.workflow.step.table}"
 			label="$m{studio.workflow.step.table.label}" entity="workflow.wfStep"
-			itemsPerPage="20">
+			itemsPerPage="20"  serialNo="true">
 			<column field="workflowDesc" renderWidget="application.text"
 				label="$m{workflow.step.workflow}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -1234,7 +1234,7 @@
 		<table name="wfStepRoutingTable"
 			description="$m{studio.workflow.steprouting.table}"
 			label="$m{studio.workflow.steprouting.table.label}"
-			entity="workflow.wfStepRouting" itemsPerPage="20">
+			entity="workflow.wfStepRouting" itemsPerPage="20"  serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.steprouting.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -1247,7 +1247,7 @@
 		<table name="wfStepUserActionTable"
 			description="$m{studio.workflow.stepuseraction.table}"
 			label="$m{studio.workflow.stepuseraction.table.label}"
-			entity="workflow.wfStepUserAction" itemsPerPage="20">
+			entity="workflow.wfStepUserAction" itemsPerPage="20"  serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.stepuseraction.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -1270,7 +1270,7 @@
 		<table name="wfStepAlertTable"
 			description="$m{studio.workflow.stepalert.table}"
 			label="$m{studio.workflow.stepalert.table.label}"
-			entity="workflow.wfStepAlert" itemsPerPage="20">
+			entity="workflow.wfStepAlert" itemsPerPage="20"  serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.stepalert.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -2679,14 +2679,20 @@
 				</section>
 				<section name="tableFlags" columns="type_1_2">
 					<field name="label" inputWidget="application.text" column="0" />
-					<field name="sortable" inputWidget="application.checkbox"
-						column="1" />
-					<field name="serialNo" inputWidget="application.checkbox"
-						column="1" />
+					<field name="headerless"
+						inputWidget="application.checkbox" column="1" />
 					<field name="headerToUpperCase"
 						inputWidget="application.checkbox" column="1" />
 					<field name="headerCenterAlign"
 						inputWidget="application.checkbox" column="1" />
+					<field name="sortable" inputWidget="application.checkbox"
+						column="1" />
+					<field name="serialNo" inputWidget="application.checkbox"
+						column="1" />
+					<field name="multiSelect" inputWidget="application.checkbox"
+						column="2" />
+					<field name="nonConforming" inputWidget="application.checkbox"
+						column="2" />
 					<field name="basicSearch" inputWidget="application.checkbox"
 						column="2" />
 					<field name="totalSummary" inputWidget="application.checkbox"
@@ -2708,6 +2714,19 @@
 				reference="actionList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch"
+				name="onCreatePolicy"
+				description="$m{studio.appentity.form.formstatepolicy.oncreate}">
+				<onCondition>
+					<restriction type="is_null" field="id" />
+				</onCondition>
+				<setValues>
+					<setValue type="immediate" field="serialNo"
+						value="true" />
+					<setValue type="immediate" field="sortable"
+						value="true" />
+				</setValues>
+			</formStatePolicy>
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">

@@ -387,7 +387,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     @Override
     public int deleteByIdVersion(Entity record) throws UnifyException {
         long versionNo = ((BaseEntity) record).getVersionNo();
-        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.UPDATE,
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.DELETE,
                 utilities.encodeDelegateObjectId(record.getId()), versionNo);
         return singleValueResultOperation(int.class, record.getClass(), req);
     }

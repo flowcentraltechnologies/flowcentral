@@ -46,6 +46,12 @@ public class AppTableConfig extends BaseNameConfig {
 
     private boolean totalSummary;
 
+    private boolean headerless;
+
+    private boolean multiSelect;
+
+    private boolean nonConforming;
+
     private boolean limitSelectToColumns;
 
     private List<TableActionConfig> actionList;
@@ -141,6 +147,33 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute
     public void setTotalSummary(boolean totalSummary) {
         this.totalSummary = totalSummary;
+    }
+
+    public boolean isHeaderless() {
+        return headerless;
+    }
+
+    @XmlAttribute
+    public void setHeaderless(boolean headerless) {
+        this.headerless = headerless;
+    }
+
+    public boolean isMultiSelect() {
+        return multiSelect;
+    }
+
+    @XmlAttribute
+    public void setMultiSelect(boolean multiSelect) {
+        this.multiSelect = multiSelect;
+    }
+
+    public boolean isNonConforming() {
+        return nonConforming;
+    }
+
+    @XmlAttribute
+    public void setNonConforming(boolean nonConforming) {
+        this.nonConforming = nonConforming;
     }
 
     public boolean isLimitSelectToColumns() {

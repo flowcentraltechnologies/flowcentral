@@ -66,15 +66,17 @@ public class TableWriter extends AbstractControlWriter {
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         AbstractTableWidget<?, ?, ?> tableWidget = (AbstractTableWidget<?, ?, ?>) widget;
-        if (tableWidget.isMultiSelect()) {
-            writeHiddenPush(writer, tableWidget.getSelectCtrl(), PushType.CHECKBOX);
-        }
 
         AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
         if (table != null) {
-            final boolean classicMode = systemModuleService.getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
             TableDef tableDef = table.getTableDef();
+            final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
+            if (multiSelect) {
+                writeHiddenPush(writer, tableWidget.getSelectCtrl(), PushType.CHECKBOX);
+            }
+            
+            final boolean classicMode = !tableDef.isNonConforming() && systemModuleService
+                    .getSysParameterValue(boolean.class, ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
             boolean sortable = tableDef.isSortable() && table.getNumberOfPages() > 0;
             writer.write("<div");
             writeTagStyleClassWithLeadingExtraStyleClasses(writer, tableWidget, "fc-table");
@@ -96,8 +98,46 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write(errMsg);
                 writer.write("</span></div>");
             }
+            
+            
+            if (tableDef.isHeaderless()) {
+                // Column widths
+                writer.write("<colgroup>");
+                final boolean entryMode = table.isEntryMode();
+                final boolean supportSelect = !table.isFixedAssignment();
+                if (supportSelect && multiSelect && !entryMode) {
+                    writer.write("<col class=\"cselh\">");
+                }
 
-            writeHeaderRow(writer, tableWidget);
+                if (tableDef.isSerialNo()) {
+                    writer.write("<col class=\"cserialh\">");
+                }
+                
+                int index = 0;
+                for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
+                    if (widgetInfo.isExternal() && widgetInfo.isControl()) {
+                        TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                        writer.write("<col ");
+                        writeTagStyle(writer, tabelColumnDef.getHeaderStyle());                   
+                        writer.write(">");
+                        index++;
+                    }
+                }
+                
+                if (supportSelect && multiSelect && entryMode) {
+                    writer.write("<col class=\"cselh\">");
+                }
+
+                if (tableWidget.isActionColumn()) {
+                    writer.write("<col class=\"cactionh\">");
+                }
+                
+                writer.write("</colgroup>");
+            } else {
+                // Header
+                writeHeaderRow(writer, tableWidget);
+            }
+
             writeBodyRows(writer, tableWidget);
             writer.write("</table></div>");
             if (sortable) {
@@ -118,11 +158,12 @@ public class TableWriter extends AbstractControlWriter {
         // External control behavior
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
+            final TableDef tableDef = table.getTableDef();
+            final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
             final Control[] actionCtrl = tableWidget.getActionCtrl();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
-            final TableDef tableDef = table.getTableDef();
             final boolean isActionColumn = tableWidget.isActionColumn();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
 
@@ -191,7 +232,7 @@ public class TableWriter extends AbstractControlWriter {
             writer.writeParam("pContId", tableWidget.getContainerId());
             writer.writeParam("pRowId", tableWidget.getRowId());
             writer.writeCommandURLParam("pCmdURL");
-            if (supportSelect && tableWidget.isMultiSelect()) {
+            if (supportSelect && multiSelect) {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
                 writer.writeParam("pMultiSel", true);
@@ -223,7 +264,8 @@ public class TableWriter extends AbstractControlWriter {
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
-            if (supportSelect && !entryMode) {
+            final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
+            if (supportSelect && multiSelect && !entryMode) {
                 writeHeaderMultiSelect(writer, tableWidget);
             }
 
@@ -291,7 +333,7 @@ public class TableWriter extends AbstractControlWriter {
                 }
             }
 
-            if (supportSelect && entryMode) {
+            if (supportSelect && multiSelect && entryMode) {
                 writeHeaderMultiSelect(writer, tableWidget);
             }
 
@@ -306,21 +348,19 @@ public class TableWriter extends AbstractControlWriter {
 
     private void writeHeaderMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget)
             throws UnifyException {
-        if (tableWidget.isMultiSelect()) {
-            writer.write("<th class=\"mselh\">");
-            writer.write("<span");
-            writeTagId(writer, "fac_" + tableWidget.getSelectAllId());
-            if (tableWidget.isContainerDisabled()) {
-                writeTagStyleClass(writer, "g_cbd");
-            } else {
-                writeTagStyleClass(writer, "g_cbb");
-            }
-            writer.write("/>");
-            writer.write("<input type=\"checkbox\"");
-            writeTagId(writer, tableWidget.getSelectAllId());
-            writer.write("/>");
-            writer.write("</th>");
+        writer.write("<th class=\"mselh\">");
+        writer.write("<span");
+        writeTagId(writer, "fac_" + tableWidget.getSelectAllId());
+        if (tableWidget.isContainerDisabled()) {
+            writeTagStyleClass(writer, "g_cbd");
+        } else {
+            writeTagStyleClass(writer, "g_cbb");
         }
+        writer.write("/>");
+        writer.write("<input type=\"checkbox\"");
+        writeTagId(writer, tableWidget.getSelectAllId());
+        writer.write("/>");
+        writer.write("</th>");
     }
 
     private void writeBodyRows(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
@@ -333,6 +373,7 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean totalSummary = table.isTotalSummary();
             final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             table.clearSummaries();
 
             List<ValueStore> valueList = tableWidget.getValueList();
@@ -340,7 +381,7 @@ public class TableWriter extends AbstractControlWriter {
             if (len == 0) {
                 writer.write("<tr class=\"even\">");
                 int skip = 0;
-                if (!entryMode && tableWidget.isMultiSelect()) {
+                if (!entryMode && multiSelect) {
                     writer.write("<td class=\"mseld\"><span></span></td>");
                     skip++;
                 }
@@ -405,7 +446,7 @@ public class TableWriter extends AbstractControlWriter {
 
                     writer.write(">");
 
-                    if (supportSelect && !entryMode) {
+                    if (supportSelect && multiSelect && !entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
                     }
 
@@ -438,7 +479,7 @@ public class TableWriter extends AbstractControlWriter {
                         }
                     }
 
-                    if (supportSelect && entryMode) {
+                    if (supportSelect && multiSelect && entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
                     }
 
@@ -498,7 +539,7 @@ public class TableWriter extends AbstractControlWriter {
                 ValueStore totalSummaryValueStore = table.getTableTotalSummary().getTotalSummaryValueStore();
 
                 writer.write("<tr class=\"total\">");
-                if (!entryMode && tableWidget.isMultiSelect()) {
+                if (!entryMode && multiSelect) {
                     writer.write("<td class=\"mseld\"><span></span></td>");
                 }
 
@@ -532,7 +573,7 @@ public class TableWriter extends AbstractControlWriter {
                     }
                 }
 
-                if (entryMode && tableWidget.isMultiSelect()) {
+                if (entryMode && multiSelect) {
                     writer.write("<td class=\"mseld\"><span></span></td>");
                 }
 
@@ -543,38 +584,36 @@ public class TableWriter extends AbstractControlWriter {
 
     public void writeRowMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, Long id, int index)
             throws UnifyException {
-        if (tableWidget.isMultiSelect()) {
-            final Control selectCtrl = tableWidget.getSelectCtrl();
-            final boolean selected = tableWidget.getTable().isSelected(index);
-            writer.write("<td class=\"mseld\">");
-            String namingIndexId = selectCtrl.getNamingIndexedId(index);
-            writer.write("<span ");
-            writeTagId(writer, "fac_" + namingIndexId);
-            if (tableWidget.isContainerDisabled()) {
-                if (selected) {
-                    writeTagStyleClass(writer, "g_cbc");
-                } else {
-                    writeTagStyleClass(writer, "g_cbd");
-                }
-            } else {
-                if (selected) {
-                    writeTagStyleClass(writer, "g_cba");
-                } else {
-                    writeTagStyleClass(writer, "g_cbb");
-                }
-            }
-
-            writer.write("/>");
-            writer.write("<input type=\"checkbox\"");
-            writeTagId(writer, namingIndexId);
-            writeTagName(writer, selectCtrl.getId());
-            writeTagValue(writer, index);
+        final Control selectCtrl = tableWidget.getSelectCtrl();
+        final boolean selected = tableWidget.getTable().isSelected(index);
+        writer.write("<td class=\"mseld\">");
+        String namingIndexId = selectCtrl.getNamingIndexedId(index);
+        writer.write("<span ");
+        writeTagId(writer, "fac_" + namingIndexId);
+        if (tableWidget.isContainerDisabled()) {
             if (selected) {
-                writer.write(" checked=\"checked\"");
+                writeTagStyleClass(writer, "g_cbc");
+            } else {
+                writeTagStyleClass(writer, "g_cbd");
             }
-            writer.write("/>");
-            writer.write("</span>");
-            writer.write("</td>");
+        } else {
+            if (selected) {
+                writeTagStyleClass(writer, "g_cba");
+            } else {
+                writeTagStyleClass(writer, "g_cbb");
+            }
         }
+
+        writer.write("/>");
+        writer.write("<input type=\"checkbox\"");
+        writeTagId(writer, namingIndexId);
+        writeTagName(writer, selectCtrl.getId());
+        writeTagValue(writer, index);
+        if (selected) {
+            writer.write(" checked=\"checked\"");
+        }
+        writer.write("/>");
+        writer.write("</span>");
+        writer.write("</td>");
     }
 }
