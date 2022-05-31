@@ -223,7 +223,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
             TableDef tableDef = table != null ? table.getTableDef() : null;
             if (oldTableDef != tableDef) {
-                if (selectCtrl == null && tableDef.isMultiSelect()) {
+                if (selectCtrl == null && tableDef != null && tableDef.isMultiSelect()) {
                     selectCtrl = createHiddenControl();
                 }
                 
