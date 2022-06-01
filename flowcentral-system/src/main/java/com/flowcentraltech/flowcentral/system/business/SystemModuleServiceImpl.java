@@ -137,10 +137,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     private final FactoryMap<String, LicenseDef> licenseDefFactoryMap;
 
     private final List<String> featureList = Collections.unmodifiableList(Arrays.asList(
-            LicenseFeatureCodeConstants.APPLICATION_WORKSPACES,
-            LicenseFeatureCodeConstants.APPLICATION_COLLABORATION,
-            LicenseFeatureCodeConstants.APPLICATION_AUDIT,
-            LicenseFeatureCodeConstants.APPLICATION_ARCHIVING));
+            LicenseFeatureCodeConstants.APPLICATION_WORKSPACES, LicenseFeatureCodeConstants.APPLICATION_COLLABORATION,
+            LicenseFeatureCodeConstants.APPLICATION_AUDIT, LicenseFeatureCodeConstants.APPLICATION_ARCHIVING));
 
     public SystemModuleServiceImpl() {
         this.authDefFactoryMap = new FactoryMap<String, CredentialDef>(true)
@@ -423,10 +421,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Taskable(name = SystemLoadLicenseTaskConstants.LOADLICENSE_TASK_NAME, description = "Load License Task",
-            parameters = {
-                    @Parameter(name = SystemLoadLicenseTaskConstants.LOADLICENSE_UPLOAD_FILE,
-                            description = "$m{system.loadlicense.form.selectfile}", type = byte[].class,
-                            mandatory = true) },
+            parameters = { @Parameter(name = SystemLoadLicenseTaskConstants.LOADLICENSE_UPLOAD_FILE,
+                    description = "$m{system.loadlicense.form.selectfile}", type = byte[].class, mandatory = true) },
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
     public int executeLoadLicenseTask(TaskMonitor taskMonitor, byte[] licenseFile) throws UnifyException {
         logDebug(taskMonitor, "Loading license file...");
@@ -615,15 +611,15 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private LicenseDef getLicenseDef(Attachment attachment) throws UnifyException {
-        try {
-            Set<String> licensed = new HashSet<String>();
-            Date now = getNow();
-            Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
-            Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
-            TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
-                    new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
-            String license = cryptograph.decrypt(new String(attachment.getData()));
-            BufferedReader reader = new BufferedReader(new StringReader(license));
+        Set<String> licensed = new HashSet<String>();
+        Date now = getNow();
+        Feature deploymentID = environment().find(new FeatureQuery().code("deploymentID"));
+        Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
+        TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
+                new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
+        String license = cryptograph.decrypt(new String(attachment.getData()));
+        
+        try (BufferedReader reader = new BufferedReader(new StringReader(license));) {
             String type = reader.readLine();
             LicenseDef.Builder ldb = LicenseDef.newBuilder(attachment.getId(), type, attachment.getVersionNo());
 
@@ -691,7 +687,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             logDebug("Installing module extension definition [{0}]...", moduleDescription);
             moduleId = environment().value(Long.class, "id", new ModuleQuery().name(moduleName));
         }
-        
 
         ModuleApp moduleApp = new ModuleApp();
         moduleApp.setModuleId(moduleId);

@@ -82,7 +82,6 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.FilterUtils;
-import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -130,7 +129,7 @@ public final class InputWidgetUtils {
     public static boolean isEnumerationWidget(String widgetName) {
         return ENUMERATION_WIDGETS.contains(widgetName);
     }
-    
+
     public static String getDefaultEntityFieldWidget(EntityFieldDataType type) {
         return defaultFormInputWidgets.get(type);
     }
@@ -393,8 +392,7 @@ public final class InputWidgetUtils {
             SetValuesDef.Builder svdb = SetValuesDef.newBuilder();
             svdb.name(name).description(description).valueGenerator(valueGenerator);
             if (appSetValues != null) {
-                BufferedReader reader = new BufferedReader(new StringReader(appSetValues.getDefinition()));
-                try {
+                try (BufferedReader reader = new BufferedReader(new StringReader(appSetValues.getDefinition()))) {
                     String line = null;
                     while ((line = reader.readLine()) != null) {
                         String[] p = line.split("]");
@@ -405,8 +403,6 @@ public final class InputWidgetUtils {
                     }
                 } catch (IOException e) {
                     throw new UnifyOperationException(e);
-                } finally {
-                    IOUtils.close(reader);
                 }
             }
 
@@ -425,9 +421,8 @@ public final class InputWidgetUtils {
     }
 
     public static String getSetValuesDefinition(SetValuesConfig setValuesConfig) throws UnifyException {
-        StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             if (!DataUtils.isBlank(setValuesConfig.getSetValueList())) {
                 for (SetValueConfig setValueConfig : setValuesConfig.getSetValueList()) {
                     bw.write(setValueConfig.getFieldName());
@@ -445,18 +440,19 @@ public final class InputWidgetUtils {
                     bw.newLine();
                 }
             }
+
+            bw.flush();
+            result = sw.toString();
         } catch (IOException e) {
             throw new UnifyOperationException(e);
-        } finally {
-            IOUtils.close(bw);
         }
-        return sw.toString();
+
+        return result;
     }
 
     public static String getSetValuesDefinition(SetValuesDef setValuesDef) throws UnifyException {
-        StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             if (!DataUtils.isBlank(setValuesDef.getSetValueList())) {
                 for (SetValueDef setValueDef : setValuesDef.getSetValueList()) {
                     bw.write(setValueDef.getFieldName());
@@ -474,12 +470,14 @@ public final class InputWidgetUtils {
                     bw.newLine();
                 }
             }
+
+            bw.flush();
+            result = sw.toString();
         } catch (IOException e) {
             throw new UnifyOperationException(e);
-        } finally {
-            IOUtils.close(bw);
         }
-        return sw.toString();
+
+        return result;
     }
 
     public static FieldSequenceDef getFieldSequenceDef(AppFieldSequence appFieldSequence) throws UnifyException {
@@ -491,8 +489,7 @@ public final class InputWidgetUtils {
         if (appFieldSequence != null) {
             FieldSequenceDef.Builder svdb = FieldSequenceDef.newBuilder();
             svdb.name(name).description(description);
-            BufferedReader reader = new BufferedReader(new StringReader(appFieldSequence.getDefinition()));
-            try {
+            try (BufferedReader reader = new BufferedReader(new StringReader(appFieldSequence.getDefinition()))) {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
                     String[] p = line.split("]");
@@ -502,8 +499,6 @@ public final class InputWidgetUtils {
                 }
             } catch (IOException e) {
                 throw new UnifyOperationException(e);
-            } finally {
-                IOUtils.close(reader);
             }
 
             return svdb.build();
@@ -536,9 +531,8 @@ public final class InputWidgetUtils {
     }
 
     public static String getFieldSequenceDefinition(FieldSequenceConfig fieldSequenceConfig) throws UnifyException {
-        StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (FieldSequenceEntryConfig entry : fieldSequenceConfig.getEntryList()) {
                 bw.write(entry.getFieldName());
                 bw.write(']');
@@ -549,18 +543,19 @@ public final class InputWidgetUtils {
 
                 bw.newLine();
             }
+
+            bw.flush();
+            result = sw.toString();
         } catch (IOException e) {
             throw new UnifyOperationException(e);
-        } finally {
-            IOUtils.close(bw);
         }
-        return sw.toString();
+
+        return result;
     }
 
     public static String getFieldSequenceDefinition(FieldSequenceDef fieldSequenceDef) throws UnifyException {
-        StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
                 bw.write(fieldSequenceEntryDef.getFieldName());
                 bw.write(']');
@@ -571,12 +566,14 @@ public final class InputWidgetUtils {
 
                 bw.newLine();
             }
+
+            bw.flush();
+            result = sw.toString();
         } catch (IOException e) {
             throw new UnifyOperationException(e);
-        } finally {
-            IOUtils.close(bw);
         }
-        return sw.toString();
+
+        return result;
     }
 
     public static String getOrderDefinition(Order order) throws UnifyException {
@@ -595,8 +592,7 @@ public final class InputWidgetUtils {
     public static Order getOrder(String definition) throws UnifyException {
         if (!StringUtils.isBlank(definition)) {
             Order order = new Order();
-            BufferedReader reader = new BufferedReader(new StringReader(definition));
-            try {
+            try (BufferedReader reader = new BufferedReader(new StringReader(definition));) {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
                     String[] p = line.split("]");
@@ -606,8 +602,6 @@ public final class InputWidgetUtils {
                 }
             } catch (IOException e) {
                 throw new UnifyOperationException(e);
-            } finally {
-                IOUtils.close(reader);
             }
 
             return order;
@@ -684,7 +678,7 @@ public final class InputWidgetUtils {
                 }
 
             }
-            
+
             filterConfig.setRestrictionList(restrictionList);
         }
     }
@@ -746,8 +740,7 @@ public final class InputWidgetUtils {
 
     private static void addFilterDefinition(FilterDef.Builder fdb, String filterDefinition) throws UnifyException {
         if (filterDefinition != null) {
-            BufferedReader reader = new BufferedReader(new StringReader(filterDefinition));
-            try {
+            try (BufferedReader reader = new BufferedReader(new StringReader(filterDefinition));) {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
                     String[] p = line.split("]");
@@ -760,8 +753,6 @@ public final class InputWidgetUtils {
                 }
             } catch (IOException e) {
                 throw new UnifyOperationException(e);
-            } finally {
-                IOUtils.close(reader);
             }
         }
     }
@@ -819,9 +810,8 @@ public final class InputWidgetUtils {
     }
 
     public static String getFilterDefinition(FilterDef filterDef) throws UnifyException {
-        StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
             for (FilterRestrictionDef filterRestrictionDef : filterDef.getFilterRestrictionDefList()) {
                 bw.write(filterRestrictionDef.getType().code());
                 bw.write(']');
@@ -841,18 +831,19 @@ public final class InputWidgetUtils {
                 }
                 bw.newLine();
             }
+
+            bw.flush();
+            result = sw.toString();
         } catch (IOException e) {
             throw new UnifyOperationException(e);
-        } finally {
-            IOUtils.close(bw);
         }
-        return sw.toString();
+
+        return result;
     }
 
     public static String getUpdateDefinition(Update update) throws UnifyException {
-        StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
             for (Map.Entry<String, Object> entry : update.entrySet()) {
                 bw.write(entry.getKey());
                 bw.write(']');
@@ -862,12 +853,14 @@ public final class InputWidgetUtils {
                 }
                 bw.newLine();
             }
+
+            bw.flush();
+            result = sw.toString();
         } catch (IOException e) {
             throw new UnifyOperationException(e);
-        } finally {
-            IOUtils.close(bw);
         }
-        return sw.toString();
+
+        return result;
     }
 
     public static AppFilter newAppFilter(FilterConfig filterConfig) throws UnifyException {
@@ -879,19 +872,13 @@ public final class InputWidgetUtils {
     }
 
     public static String getFilterDefinition(FilterConfig filterConfig) throws UnifyException {
-        StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
-            InputWidgetUtils.writeFilterConfigRestrictions(bw, filterConfig.getRestrictionList(), 0);
-        } finally {
-            IOUtils.close(bw);
-        }
-        return sw.toString();
+        return InputWidgetUtils.writeFilterConfigRestrictions(filterConfig.getRestrictionList(), 0);
     }
 
-    private static void writeFilterConfigRestrictions(BufferedWriter bw,
-            List<FilterRestrictionConfig> restrictionConfigList, int depth) throws UnifyException {
-        try {
+    private static String writeFilterConfigRestrictions(List<FilterRestrictionConfig> restrictionConfigList, int depth)
+            throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
             for (FilterRestrictionConfig filterRestrictionConfig : restrictionConfigList) {
                 bw.write(filterRestrictionConfig.getType().code());
                 bw.write(']');
@@ -912,13 +899,19 @@ public final class InputWidgetUtils {
                 bw.newLine();
 
                 if (!DataUtils.isBlank(filterRestrictionConfig.getRestrictionList())) {
-                    InputWidgetUtils.writeFilterConfigRestrictions(bw, filterRestrictionConfig.getRestrictionList(),
-                            depth + 1);
+                    String _result = InputWidgetUtils
+                            .writeFilterConfigRestrictions(filterRestrictionConfig.getRestrictionList(), depth + 1);
+                    bw.write(_result);
                 }
             }
+
+            bw.flush();
+            result = sw.toString();
         } catch (IOException e) {
             throw new UnifyOperationException(e);
         }
+
+        return result;
     }
 
     @SuppressWarnings("unchecked")
