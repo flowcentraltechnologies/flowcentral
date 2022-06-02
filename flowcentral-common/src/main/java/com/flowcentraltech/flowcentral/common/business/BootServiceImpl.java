@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
 import com.flowcentraltech.flowcentral.configuration.data.FlowCentralInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
@@ -59,6 +60,7 @@ public class BootServiceImpl extends AbstractBootService<ModuleInstall> {
 
     @Override
     protected void onStartup() throws UnifyException {
+        WidgetWriterUtils.registerJSAliases();
         for (UnifyComponentConfig config : getComponentConfigs(PostBootSetup.class)) {
             PostBootSetup postBootSetup = (PostBootSetup) getComponent(config.getName());
             postBootSetup.performPostBootSetup();

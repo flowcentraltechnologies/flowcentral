@@ -195,8 +195,7 @@ public final class CommonInputUtils {
         Map<String, String> valMap = Collections.emptyMap();
         if (paramValues != null) {
             valMap = new HashMap<String, String>();
-            BufferedReader reader = new BufferedReader(new StringReader(paramValues.getDefinition()));
-            try {
+            try(BufferedReader reader = new BufferedReader(new StringReader(paramValues.getDefinition()))) {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
                     String[] p = line.split("]");
@@ -206,8 +205,6 @@ public final class CommonInputUtils {
                 }
             } catch (IOException e) {
                 throw new UnifyOperationException(e);
-            } finally {
-                IOUtils.close(reader);
             }
         }
 
@@ -220,8 +217,7 @@ public final class CommonInputUtils {
 
     public static String getParamValuesDefinition(ParamValuesDef paramValuesDef) throws UnifyException {
         StringWriter sw = new StringWriter();
-        BufferedWriter bw = new BufferedWriter(sw);
-        try {
+         try(BufferedWriter bw = new BufferedWriter(sw)) {
             for (ParamValueDef paramValueDef : paramValuesDef.getParamValueList()) {
                 bw.write(paramValueDef.getParamConfig().getParamName());
                 bw.write(']');
@@ -234,8 +230,6 @@ public final class CommonInputUtils {
             }
         } catch (IOException e) {
             throw new UnifyOperationException(e);
-        } finally {
-            IOUtils.close(bw);
         }
         return sw.toString();
     }

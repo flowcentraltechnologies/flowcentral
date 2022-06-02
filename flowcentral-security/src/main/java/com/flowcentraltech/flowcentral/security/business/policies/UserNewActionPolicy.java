@@ -40,7 +40,7 @@ import com.tcdng.unify.core.security.PasswordGenerator;
 @Component(name = "user-newactionpolicy", description = "$m{security.entityactionpolicy.newuser}")
 public class UserNewActionPolicy extends AbstractEntityActionPolicy {
 
-    private static final String USER_PASSWORD = "USER_PASSWORD";
+//    private static final String USER_PASSWORD = "USER_PASSWORD";
 
     @Configurable
     private SystemModuleService systemModuleService;
@@ -72,7 +72,7 @@ public class UserNewActionPolicy extends AbstractEntityActionPolicy {
 
         String password = passwordGenerator.generatePassword(user.getLoginId(), passwordLength);
         user.setPassword(passwordCryptograph.encrypt(password));
-        ctx.setAttribute(USER_PASSWORD, password);
+//        ctx.setAttribute(USER_PASSWORD, password);
     }
 
     @Override
