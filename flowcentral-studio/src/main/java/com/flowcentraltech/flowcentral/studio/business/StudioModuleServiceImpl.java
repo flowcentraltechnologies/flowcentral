@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyCons
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleNameConstants;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils.StudioAppletNameParts;
+import com.flowcentraltech.flowcentral.studio.web.util.StudioWidgetWriterUtils;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
@@ -225,6 +226,12 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         if (StudioModuleNameConstants.STUDIO_MODULE_NAME.equals(moduleInstall.getModuleConfig().getName())) {
 
         }
+    }
+
+    @Override
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        StudioWidgetWriterUtils.registerJSAliases();
     }
 
 }
