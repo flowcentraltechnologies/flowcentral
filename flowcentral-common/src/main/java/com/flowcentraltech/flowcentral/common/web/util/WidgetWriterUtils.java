@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
+import com.tcdng.unify.web.ui.util.WriterUtils;
 
 /**
  * Widget writer utility methods.
@@ -64,6 +65,25 @@ public final class WidgetWriterUtils {
 
     }
 
+    public static void registerJSAliases() {
+        WriterUtils.registerJSAlias("fux.rigMenu","fux01");  
+        WriterUtils.registerJSAlias("fux.rigMenuSearch","fux02");  
+        WriterUtils.registerJSAlias("fux.rigMenuSectionResult","fux03");  
+        WriterUtils.registerJSAlias("fux.rigEntitySearchResult","fux04");  
+        WriterUtils.registerJSAlias("fux.esOnShow","fux05");  
+        WriterUtils.registerJSAlias("fux.rigEntitySelect","fux06");  
+        WriterUtils.registerJSAlias("fux.rigEntitySearch","fux07");     
+        WriterUtils.registerJSAlias("fux.rigEntityTreeTable","fux08");  
+        WriterUtils.registerJSAlias("fux.rigFieldSequence","fux09");  
+        WriterUtils.registerJSAlias("fux.rigFilter","fux0a");  
+        WriterUtils.registerJSAlias("fux.rigMiniForm","fux0b");  
+        WriterUtils.registerJSAlias("fux.rigSearch","fux0c");  
+        WriterUtils.registerJSAlias("fux.rigSetValues","fux0d");  
+        WriterUtils.registerJSAlias("fux.rigTable","fux0e");  
+        WriterUtils.registerJSAlias("fux.rigTabSheet","fux0f");  
+        WriterUtils.registerJSAlias("fux.rigChart","fux10");
+   }
+    
     public static String getTabClass(int index, int tabIndex) {
         if (index == tabIndex) {
             return "tactive";

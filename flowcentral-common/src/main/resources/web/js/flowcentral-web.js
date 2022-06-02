@@ -773,6 +773,23 @@ fux.init = function() {
 	ux.registerExtension("fux", fux);
 	ux.registerPageReset("clearFuxChart", fux.clearCharts);
 	ux.setHintTimeout(FC_USER_HINT_TIMEOUT);
+	// Perform
+	ux.setfn(fux.rigMenu,"fux01");  
+	ux.setfn(fux.rigMenuSearch,"fux02");  
+	ux.setfn(fux.rigMenuSectionResult,"fux03");  
+	ux.setfn(fux.rigEntitySearchResult,"fux04");  
+	ux.setfn(fux.esOnShow,"fux05");  
+	ux.setfn(fux.rigEntitySelect,"fux06");  
+	ux.setfn(fux.rigEntitySearch,"fux07");     
+	ux.setfn(fux.rigEntityTreeTable,"fux08");  
+	ux.setfn(fux.rigFieldSequence,"fux09");  
+	ux.setfn(fux.rigFilter,"fux0a");  
+	ux.setfn(fux.rigMiniForm,"fux0b");  
+	ux.setfn(fux.rigSearch,"fux0c");  
+	ux.setfn(fux.rigSetValues,"fux0d");  
+	ux.setfn(fux.rigTable,"fux0e");  
+	ux.setfn(fux.rigTabSheet,"fux0f");  
+	ux.setfn(fux.rigChart,"fux10");
 }
 
 fux.init();
