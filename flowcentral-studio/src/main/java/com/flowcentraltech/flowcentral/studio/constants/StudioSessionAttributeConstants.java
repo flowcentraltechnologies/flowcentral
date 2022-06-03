@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.studio.constants;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+
 /**
  * Studio session attribute constants.
  * 
@@ -24,7 +26,7 @@ package com.flowcentraltech.flowcentral.studio.constants;
  */
 public interface StudioSessionAttributeConstants {
 
-    String CURRENT_APPLICATION_ID = "fc.CURRENT_APPLICATION_ID";
+    String CURRENT_APPLICATION_ID = FlowCentralSessionAttributeConstants.CURRENT_APPLICATION_ID;
 
     String CURRENT_APPLICATION_NAME = "fc.CURRENT_APPLICATION_NAME";
 

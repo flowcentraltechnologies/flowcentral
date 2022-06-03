@@ -65,6 +65,12 @@ public class FormFieldDef {
     }
 
     public FormFieldDef(FormFieldDef srcFormFieldDef, int column) {
+        this(srcFormFieldDef, column, srcFormFieldDef.required, srcFormFieldDef.visible, srcFormFieldDef.editable,
+                srcFormFieldDef.disabled);
+    }
+
+    public FormFieldDef(FormFieldDef srcFormFieldDef, int column, boolean required, boolean visible, boolean editable,
+            boolean disabled) {
         this.column = column;
         this.entityFieldDef = srcFormFieldDef.entityFieldDef;
         this.widgetTypeDef = srcFormFieldDef.widgetTypeDef;
@@ -73,10 +79,10 @@ public class FormFieldDef {
         this.renderer = srcFormFieldDef.renderer;
         this.switchOnChange = srcFormFieldDef.switchOnChange;
         this.saveAs = srcFormFieldDef.saveAs;
-        this.required = srcFormFieldDef.required;
-        this.visible = srcFormFieldDef.visible;
-        this.editable = srcFormFieldDef.editable;
-        this.disabled = srcFormFieldDef.disabled;
+        this.required = required;
+        this.visible = visible;
+        this.editable = editable;
+        this.disabled = disabled;
     }
 
     public String getFieldName() {
@@ -94,7 +100,7 @@ public class FormFieldDef {
     public boolean isWithInputRefDef() {
         return inputRefDef != null;
     }
-    
+
     public String getFieldLabel() {
         return fieldLabel;
     }

@@ -57,7 +57,7 @@
 .fc-tableeditor .design {height:100%;}
 .fc-tableeditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 400px; width: 100%; box-sizing: border-box; overflow-x: auto;}
 .fc-tableeditor .drag {position:fixed;zIndex:400;opacity:0.7;}
-.fc-tableeditor .slot {display:inline-block;height:300px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
+.fc-tableeditor .slot {display:inline-block;height:320px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
 .fc-tableeditor .slothdr {border-bottom: solid 1px #909090;background-color:#505965;
 	 font-weight:bold; color:#ffffff; font-size:7pt;}
 .fc-tableeditor .slotcap {display:inline-block; width: 86px; cursor:grab;}
