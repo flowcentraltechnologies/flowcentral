@@ -154,8 +154,9 @@ public final class ApplicationEntityUtils {
                 Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_NAMED_ENTITY,
                         EntityBaseType.BASE_CONFIG_NAMED_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
                         EntityBaseType.BASE_APPLICATION_ENTITY)));
-        map.put(EntityBaseType.BASE_CONFIG_ENTITY, Collections
-                .unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_CONFIG_ENTITY)));
+        map.put(EntityBaseType.BASE_CONFIG_ENTITY,
+                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
+                        EntityBaseType.BASE_CONFIG_ENTITY)));
         map.put(EntityBaseType.BASE_CONFIG_NAMED_ENTITY,
                 Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_NAMED_ENTITY,
                         EntityBaseType.BASE_CONFIG_NAMED_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY)));
@@ -230,10 +231,12 @@ public final class ApplicationEntityUtils {
                         "application.applicationRef", null, null, null,
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.application}"),
                         "application.entitylist", null, null, configType));
-                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY, "applicationName",
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY,
+                        "applicationName",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.applicationname}"),
                         null, "applicationId", "name", null, null, null, null, null, configType));
-                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY, "applicationDesc",
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY,
+                        "applicationDesc",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.applicationdesc}"),
                         null, "applicationId", "description", null, null, null, null, null, configType));
                 break;
@@ -281,11 +284,13 @@ public final class ApplicationEntityUtils {
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM_REF, "configType",
                         msgResolver.resolveApplicationMessage("$m{baseconfigentity.field.label.configtype}"),
                         "configtypelist", null, null, null, null, "application.enumlist", null, null, configType));
-                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY, "configTypeDesc",
-                        msgResolver.resolveApplicationMessage("$m{baseconfigentity.field.label.configtypedesc}"), null,
-                        "configType", "description", null, null, null, null, null, configType));
+                list.add(
+                        ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY, "configTypeDesc",
+                                msgResolver
+                                        .resolveApplicationMessage("$m{baseconfigentity.field.label.configtypedesc}"),
+                                null, "configType", "description", null, null, null, null, null, configType));
                 break;
-            case BASE_WORK_ENTITY: 
+            case BASE_WORK_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "workBranchCode",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.workbranchcode}"), null,
                         null, null, null, null, null, null, null, configType));
@@ -294,8 +299,8 @@ public final class ApplicationEntityUtils {
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.workdepartmentcode}"),
                         null, null, null, null, null, null, null, null, configType));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.BOOLEAN, "inWorkflow",
-                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.inworkflow}"),
-                        null, null, null, null, null, "application.checkbox", null, null, configType));
+                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.inworkflow}"), null, null,
+                        null, null, null, "application.checkbox", null, null, configType));
                 break;
             default:
                 break;

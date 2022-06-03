@@ -24,7 +24,7 @@ import com.tcdng.unify.core.criterion.CompoundRestriction;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseConfigEntityQuery<T extends BaseConfigEntity> extends BaseEntityQuery<T> {
+public abstract class BaseConfigEntityQuery<T extends BaseConfigEntity> extends BaseAuditEntityQuery<T> {
 
     public BaseConfigEntityQuery(Class<T> entityClass) {
         super(entityClass);
