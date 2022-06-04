@@ -1006,6 +1006,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         errorCode, errorMessage);
                 wfItem.setWfItemEventId(wfItemEventId);
                 environment().updateByIdVersion(wfItem);
+                commitTransactions();
+                return doWfTransition(transitionItem);
             } catch (Exception e1) {
                 logError(e1);
                 return false;
