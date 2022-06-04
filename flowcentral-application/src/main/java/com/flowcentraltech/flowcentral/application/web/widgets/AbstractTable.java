@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.tcdng.unify.core.UnifyException;
@@ -76,6 +77,8 @@ public abstract class AbstractTable<T, U> {
     private boolean editMode;
 
     private boolean fixedAssignment;
+    
+    private TableStateOverride tableStateOverride;
     
     private EntryTableMessage entryMessage;
     
@@ -397,6 +400,19 @@ public abstract class AbstractTable<T, U> {
     public boolean isAtLastPage() {
         return numberOfPages == 0 || pageIndex >= numberOfPages - 1;
     }
+    
+    public TableStateOverride getTableStateOverride(ValueStore valueStore) throws UnifyException {
+        if (tableStateOverride == null) {
+            tableStateOverride = new TableStateOverride();
+        }
+
+        tableStateOverride.reset();
+        if (entryPolicy != null) {
+            entryPolicy.applyTableStateOverride(valueStore, tableStateOverride);;
+        }
+
+        return tableStateOverride;
+    }
 
     public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
         return entryPolicy != null ? entryPolicy.resolveActionIndex(valueStore, index, size) : 0;
@@ -405,7 +421,7 @@ public abstract class AbstractTable<T, U> {
     public EntryTablePolicy getEntryPolicy() {
         return entryPolicy;
     }
-
+    
     protected boolean isWithEntryPolicy() {
         return entryPolicy != null;
     }

@@ -55,6 +55,18 @@ public interface EntryTablePolicy extends UnifyComponent {
     void onEntryTableChange(ValueStore valueStore, Set<Integer> selected) throws UnifyException;
     
     /**
+     * Apply table state overrides.
+     * 
+     * @param valueStore
+     *                           the value store for the current row item
+     * @param tableStateOverride
+     *                           the table state override
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void applyTableStateOverride(ValueStore valueStore, TableStateOverride tableStateOverride) throws UnifyException;
+    
+    /**
      * Resolves the table action index for the supplied value store.
      * 
      * @param valueStore

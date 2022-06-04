@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -74,7 +75,7 @@ public class TableWriter extends AbstractControlWriter {
             if (multiSelect) {
                 writeHiddenPush(writer, tableWidget.getSelectCtrl(), PushType.CHECKBOX);
             }
-            
+
             final boolean classicMode = !tableDef.isNonConforming() && systemModuleService
                     .getSysParameterValue(boolean.class, ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
             boolean sortable = tableDef.isSortable() && table.getNumberOfPages() > 0;
@@ -98,8 +99,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write(errMsg);
                 writer.write("</span></div>");
             }
-            
-            
+
             if (tableDef.isHeaderless()) {
                 // Column widths
                 writer.write("<colgroup>");
@@ -112,18 +112,18 @@ public class TableWriter extends AbstractControlWriter {
                 if (tableDef.isSerialNo()) {
                     writer.write("<col class=\"cserialh\">");
                 }
-                
+
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                         TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
                         writer.write("<col ");
-                        writeTagStyle(writer, tabelColumnDef.getHeaderStyle());                   
+                        writeTagStyle(writer, tabelColumnDef.getHeaderStyle());
                         writer.write(">");
                         index++;
                     }
                 }
-                
+
                 if (supportSelect && multiSelect && entryMode) {
                     writer.write("<col class=\"cselh\">");
                 }
@@ -131,7 +131,7 @@ public class TableWriter extends AbstractControlWriter {
                 if (tableWidget.isActionColumn()) {
                     writer.write("<col class=\"cactionh\">");
                 }
-                
+
                 writer.write("</colgroup>");
             } else {
                 // Header
@@ -412,8 +412,12 @@ public class TableWriter extends AbstractControlWriter {
                 final String odd = isRowAction ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
                 final EntryTableMessage entryMessage = table.getEntryMessage();
+                TableStateOverride tableStateOverride = null;
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
+                    if (entryMode) {
+                        tableStateOverride = table.getTableStateOverride(valueStore);
+                    }
 
                     // Normal row
                     Long id = valueStore.retrieve(Long.class, "id");
@@ -460,9 +464,19 @@ public class TableWriter extends AbstractControlWriter {
                     for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                         if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                             TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                            String fieldName = tabelColumnDef.getFieldName();
+
                             Widget chWidget = widgetInfo.getWidget();
-                            chWidget.setEditable(tabelColumnDef.isEditable());
-                            chWidget.setDisabled(tabelColumnDef.isDisabled());
+                            if (entryMode) {
+                                chWidget.setEditable(
+                                        tableStateOverride.isColumnEditable(fieldName, tabelColumnDef.isEditable()));
+                                chWidget.setDisabled(
+                                        tableStateOverride.isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
+                            } else {
+                                chWidget.setEditable(tabelColumnDef.isEditable());
+                                chWidget.setDisabled(tabelColumnDef.isDisabled());
+                            }
+
                             chWidget.setValueStore(valueStore);
                             writer.write("<td");
                             writeTagStyle(writer, chWidget.getColumnStyle());
@@ -471,8 +485,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write("</td>");
 
                             if (totalSummary) {
-                                table.addTotalSummary(tabelColumnDef.getFieldName(),
-                                        valueStore.retrieve(tabelColumnDef.getFieldName()));
+                                table.addTotalSummary(fieldName, valueStore.retrieve(fieldName));
                             }
 
                             index++;
