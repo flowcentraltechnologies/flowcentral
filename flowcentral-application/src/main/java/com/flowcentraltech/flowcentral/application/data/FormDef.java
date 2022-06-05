@@ -257,7 +257,12 @@ public class FormDef extends BaseApplicationEntityDef {
                 List<FormFieldDef> formFieldDefList = new ArrayList<FormFieldDef>();
                 for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
                     if (formFieldDef.isSaveAs()) {
-                        formFieldDefList.add(new FormFieldDef(formFieldDef, 0));
+                        if ("applicationId".equals(formFieldDef.getFieldName())) {
+                            formFieldDefList.add(new FormFieldDef(formFieldDef, 0, formFieldDef.isRequired(),
+                                    formFieldDef.isVisible(), true, false));
+                        } else {
+                            formFieldDefList.add(new FormFieldDef(formFieldDef, 0));
+                        }
                     }
                 }
 

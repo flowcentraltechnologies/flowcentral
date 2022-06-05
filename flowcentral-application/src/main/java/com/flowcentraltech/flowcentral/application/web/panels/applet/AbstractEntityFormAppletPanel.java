@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
+import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -44,6 +45,7 @@ import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -461,7 +463,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         int index = getRequestTarget(int.class);
         getEntityFormApplet().crudSelectItem(index);
     }
-    
+
     @Action
     public void saveAsSwitchOnChange() throws UnifyException {
         getEntityFormApplet().saveAsSwitchOnChange();
@@ -483,11 +485,29 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         AbstractEntityFormApplet applet = getEntityFormApplet();
         EntitySaveAs entitySaveAs = applet.getEntitySaveAs();
         FormContext ctx = evaluateCurrentFormContext(entitySaveAs.getInputForm().getCtx(), EvaluationMode.CREATE);
+        Object inst = entitySaveAs.getInputForm().getFormBean();
+        Long saveApplicatIonId = null;
+        if (inst instanceof BaseApplicationEntity) {
+            BaseApplicationEntity entity = (BaseApplicationEntity) inst;
+            saveApplicatIonId = entity.getApplicationId();
+            if (!applet.getAu().isApplicationDevelopable(saveApplicatIonId)) {
+                ctx.addValidationError("applicationId",
+                        getApplicationMessage("application.validation.application.nondevelopable"));
+            }
+        }
+
         if (!ctx.isWithFormErrors()) {
             String saveAsPolicy = applet.getRootAppletProp(String.class,
                     AppletPropertyConstants.MAINTAIN_FORM_SAVEAS_POLICY);
             EntityActionResult entityActionResult = applet.saveEntityAs(saveAsPolicy);
             entityActionResult.setSuccessHint("$m{entityformapplet.saveas.success.hint}");
+
+            Long sessionApplicationId = (Long) getSessionAttribute(
+                    FlowCentralSessionAttributeConstants.CURRENT_APPLICATION_ID);
+            if (!DataUtils.equals(saveApplicatIonId, sessionApplicationId)) {
+                entityActionResult.setHidePopupOnly(true);
+            }
+
             handleEntityActionResult(entityActionResult, null);
             return;
         }
@@ -742,6 +762,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             final String fullActionPath = "/application/refreshContent";
             showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
                     "$m{entityformapplet.formreview.failure}", fullActionPath);
+        } else if (entityActionResult.isHidePopupOnly()) {
+            setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
         } else if (entityActionResult.isWithResultPath()) {
             commandPost(entityActionResult.getResultPath());
         } else if (entityActionResult.isWithTaskResult()) {

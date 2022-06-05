@@ -229,6 +229,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public boolean isApplicationDevelopable(Long applicationId) throws UnifyException {
+        return applicationModuleService.isApplicationDevelopable(applicationId);
+    }
+
+    @Override
     public String getSessionUserLoginId() throws UnifyException {
         return getSessionContext().getUserToken().getUserLoginId();
     }

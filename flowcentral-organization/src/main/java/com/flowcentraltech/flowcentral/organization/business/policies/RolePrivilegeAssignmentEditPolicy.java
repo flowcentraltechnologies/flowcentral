@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractChildListEditPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
@@ -67,6 +68,12 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
 
     @Override
     public void onEntryTableChange(ValueStore valueStore, Set<Integer> selected) throws UnifyException {
+        
+    }
+
+    @Override
+    public void applyTableStateOverride(ValueStore valueStore, TableStateOverride tableStateOverride)
+            throws UnifyException {
         
     }
 

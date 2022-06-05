@@ -2118,6 +2118,12 @@ fuxstudio.init = function() {
 	ux.registerExtension("fuxstudio", fuxstudio);
 	ux.addDirectHdl(document, "keydown",
 			fuxstudio.wfdesign._cKeyDown, {});
+	// Perform
+	ux.setfn(fuxstudio.rigFormEditor, "fuxstudio01");  
+	ux.setfn(fuxstudio.rigStudioMenu, "fuxstudio02");  
+	ux.setfn(fuxstudio.rigTableColumnEditorPanel, "fuxstudio03");  
+	ux.setfn(fuxstudio.rigTableEditor, "fuxstudio04");  
+	ux.setfn(fuxstudio.rigWorkflowEditor, "fuxstudio05"); 
 }
 
 fuxstudio.init();

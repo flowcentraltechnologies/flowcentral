@@ -62,14 +62,14 @@ public class EntitySaveAs {
     }
 
     public void loadEntitySaveAs(FormContext ctx) throws UnifyException {
-        FormContext _ctx = new FormContext(ctx.getAppletContext(), ctx.getFormDef(), ctx.getFormEventHandlers(),
-                inst);
+        FormContext _ctx = new FormContext(ctx.getAppletContext(), ctx.getFormDef(), ctx.getFormEventHandlers(), inst);
         _ctx.setSaveAsMode(true);
         _ctx.revertTabStates();
         FormTabDef saveAsFormTabDef = ctx.getFormDef().getSaveAsFormTabDef();
         for (FormSectionDef formSectionDef : saveAsFormTabDef.getFormSectionDefList()) {
             for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
-                if (formFieldDef.isEditable() && !formFieldDef.isDisabled()) {
+                if (formFieldDef.isEditable() && !formFieldDef.isDisabled()
+                        && !"applicationId".equals(formFieldDef.getFieldName())) {
                     DataUtils.setBeanProperty(inst, formFieldDef.getFieldName(), null);
                 }
             }

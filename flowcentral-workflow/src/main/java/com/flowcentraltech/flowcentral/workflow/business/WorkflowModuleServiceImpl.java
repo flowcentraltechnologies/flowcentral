@@ -863,6 +863,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         transitionItem.setVariable(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
         transitionItem.setVariable(ProcessVariable.HELD_BY.variableKey(), wfItem.getHeldBy());
 
+        setSavePoint();
         wfItem.setHeldBy(null);
         try {
             logDebug("Transitioning item [{0}] in step [{1}] of type [{2}]...", wfItem.getWfItemDesc(),
@@ -994,7 +995,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         } catch (Exception e) {
             logError(e);
             try {
-                clearRollbackTransactions();
+                rollbackToSavePoint();
+                logDebug("An error has occured. Routing item [{0}] to error step...", wfItem.getWfItemDesc());
                 String errorCode = null;
                 if (e instanceof UnifyException) {
                     errorCode = ((UnifyException) e).getErrorCode();
@@ -1005,7 +1007,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 Long wfItemEventId = createWfItemEvent(errWfStepDef, wfItem.getWfItemHistId(), currWfStepDef.getName(),
                         errorCode, errorMessage);
                 wfItem.setWfItemEventId(wfItemEventId);
+                wfItem.setWfStepName(errWfStepDef.getName());
+                wfItem.setPrevWfStepName(currWfStepDef.getName());
+                wfItem.setForwardTo(null);
                 environment().updateByIdVersion(wfItem);
+                commitTransactions();
             } catch (Exception e1) {
                 logError(e1);
                 return false;

@@ -33,13 +33,13 @@ public abstract class BaseAuditEntity extends BaseEntity {
     @Column(type = ColumnType.TIMESTAMP_UTC)
     private Date createDt;
 
-    @Column(length = 64)
+    @Column(length = 64, defaultVal = "SYSTEM")
     private String createdBy;
 
     @Column(type = ColumnType.TIMESTAMP_UTC)
     private Date updateDt;
 
-    @Column(length = 64)
+    @Column(length = 64, defaultVal = "SYSTEM")
     private String updatedBy;
 
     public final Date getCreateDt() {

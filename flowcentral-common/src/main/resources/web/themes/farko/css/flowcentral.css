@@ -297,8 +297,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Form */
 .fc-form {}
-.fc-form .fsection {}
-.fc-form .fsection span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
+.fc-form .fcaption {}
+.fc-form .fcaption span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
 	background-color:#6e819d; color: #ffffff; /*border-radius: 4px;*/}
 .fc-form .ftable {display:table;width:100%;table-layout:fixed;}
 .fc-form .fgap {display:block;width:100%;height:16px;}
@@ -456,7 +456,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Single form */
 .fc-singleform {}
-.fc-singleform .sfbody {margin-top:-4px; border: 1px solid #c8c8c8; padding:4px;}
+.fc-singleform .sfbody {margin-top:-4px;}
 
 /* Tab sheet */
 .fc-tabsheet {}
@@ -665,7 +665,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-listingformpanel {}
 
 .fc-entitysingleformpanel {}
-.fc-entitysingleformpanel .formbase {padding:0px 16px;}
+.fc-entitysingleformpanel .formbase {padding:0px 0px;}
 
 /* Entity filter panel */
 .fc-entityfilterpanel {}

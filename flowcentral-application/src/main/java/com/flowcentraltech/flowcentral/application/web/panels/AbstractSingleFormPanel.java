@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
@@ -27,19 +26,18 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractSingleFormPanel<T extends Entity, U extends AbstractSingleFormBean<T>>
-        extends AbstractStandalonePanel implements SingleFormPanel {
+public abstract class AbstractSingleFormPanel<T extends AbstractSingleFormBean> extends AbstractStandalonePanel
+        implements SingleFormPanel {
 
     @Override
     public void addPageAliases() throws UnifyException {
         super.addPageAliases();
-        getRequestContextUtil().addPageAlias(getId(), DataUtils.toArray(String.class, getAllWidgetIds())); // TODO Move
-                                                                                                           // to super
-                                                                                                           // class
+        // TODO Move to super class
+        getRequestContextUtil().addPageAlias(getId(), DataUtils.toArray(String.class, getAllWidgetIds()));
     }
 
     @SuppressWarnings("unchecked")
-    protected final U getFormBean() throws UnifyException {
-        return (U) getValueStore().getValueObject();
+    protected final T getFormBean() throws UnifyException {
+        return (T) getValueStore().getValueObject();
     }
 }

@@ -119,6 +119,17 @@ public interface AppletUtilities extends UnifyComponent {
     SequenceCodeGenerator getSequenceCodeGenerator() throws UnifyException;
 
     /**
+     * Checks if application is developable.
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @return true if application is developable
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isApplicationDevelopable(Long applicationId) throws UnifyException;
+
+    /**
      * Gets a session user ID.
      * 
      * @return the session user ID

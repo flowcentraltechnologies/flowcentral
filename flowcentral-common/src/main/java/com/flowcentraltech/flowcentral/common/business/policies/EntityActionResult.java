@@ -43,6 +43,8 @@ public class EntityActionResult {
 
     private boolean closePage;
 
+    private boolean hidePopupOnly;
+
     public EntityActionResult(EntityActionContext ctx, TaskSetup resultTaskSetup, String resultTaskCaption) {
         this.resultTaskSetup = resultTaskSetup;
         this.resultTaskCaption = resultTaskCaption;
@@ -94,6 +96,14 @@ public class EntityActionResult {
         this.refreshMenu = refreshMenu;
     }
 
+    public boolean isHidePopupOnly() {
+        return hidePopupOnly;
+    }
+
+    public void setHidePopupOnly(boolean hidePopupOnly) {
+        this.hidePopupOnly = hidePopupOnly;
+    }
+
     public boolean isClosePage() {
         return closePage;
     }
@@ -116,5 +126,12 @@ public class EntityActionResult {
 
     public void setSuccessHint(String successHint) {
         this.successHint = successHint;
+    }
+
+    @Override
+    public String toString() {
+        return "EntityActionResult [resultTaskSetup=" + resultTaskSetup + ", resultTaskCaption=" + resultTaskCaption
+                + ", resultPath=" + resultPath + ", successHint=" + successHint + ", result=" + result
+                + ", refreshMenu=" + refreshMenu + ", closeView=" + closeView + ", closePage=" + closePage + "]";
     }
 }

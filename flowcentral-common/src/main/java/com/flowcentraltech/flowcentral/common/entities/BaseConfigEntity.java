@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * @since 1.0
  */
 @Policy("baseconfig-entitypolicy")
-public abstract class BaseConfigEntity extends BaseEntity implements ConfigEntity {
+public abstract class BaseConfigEntity extends BaseAuditEntity implements ConfigEntity {
 
     @ForeignKey
     private ConfigType configType;

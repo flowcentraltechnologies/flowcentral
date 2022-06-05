@@ -58,4 +58,6 @@ public interface FlowCentralSessionAttributeConstants {
 
     /** Locked resource options */
     String LOCKED_RESOURCEOPTIONS = "fc.lockedresourceoptions";
+
+    String CURRENT_APPLICATION_ID = "fc.CURRENT_APPLICATION_ID";
 }
