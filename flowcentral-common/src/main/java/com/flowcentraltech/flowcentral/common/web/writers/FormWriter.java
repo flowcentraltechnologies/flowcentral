@@ -52,6 +52,11 @@ public class FormWriter extends AbstractContainerWriter {
             groupId = form.getDataGroupId();
         }
 
+        String caption = form.getCaption();
+        if (!StringUtils.isBlank(caption)) {
+            writer.write("<div class=\"fcaption\"><span>").writeWithHtmlEscape(caption).write("</span></div>");
+        }
+
         boolean isFormDisabled = form.isDisabled();
         boolean isFormEditable = form.isEditable();
         for (FormSection formSection : form.getSections()) {
