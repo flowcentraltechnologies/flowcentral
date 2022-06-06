@@ -22,10 +22,13 @@
 	actionSymbol:$s{plus} actionHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
 	actionSymbol:$s{trash} actionHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}}
 	summary:$f{summary}
+	switchOnChangeHandler:$d{!ui-event event:onchange action:$c{crudSwitchAct}}
 
 // Actions
 !ui-postcommand:crudAddAct command:addItem components:$c{entryTablePanel}
 	refresh:$c{entryTablePanel}
 !ui-postcommand:crudDeleteAct command:deleteItem components:$c{entryTablePanel}
 	refresh:$c{entryTablePanel} confirm:$m{inlinecrudpanel.confirm.delete}
+!ui-postcommand:crudSwitchAct command:onRowChange components:$c{entryTablePanel}
+	refresh:$c{entryTablePanel}
 	

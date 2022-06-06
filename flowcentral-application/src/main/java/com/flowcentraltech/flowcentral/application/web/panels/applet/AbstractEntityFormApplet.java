@@ -276,12 +276,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         updateForm(HeaderWithTabsForm.UpdateType.SWITCH_ON_CHANGE, form, (Entity) form.getFormBean());
     }
 
-    public void assignSwitchOnChange() throws UnifyException {
-        assignmentPage.switchOnChange();
+    public void assignSwitchOnChange(int index) throws UnifyException {
+        assignmentPage.switchOnChange(index);
     }
 
-    public void entrySwitchOnChange() throws UnifyException {
-        entryTablePage.switchOnChange();
+    public void entrySwitchOnChange(int index) throws UnifyException {
+        entryTablePage.switchOnChange(index);
     }
 
     public void crudSelectItem(int index) throws UnifyException {

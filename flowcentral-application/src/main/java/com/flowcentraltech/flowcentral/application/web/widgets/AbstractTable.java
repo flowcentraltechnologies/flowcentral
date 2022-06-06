@@ -275,9 +275,13 @@ public abstract class AbstractTable<T, U> {
         reset();
     }
 
-    public void fireOnChange() throws UnifyException {
+    public void fireOnTableChange() throws UnifyException {
         // TODO Recompute 'selected'
-        onFireOnChange(sourceObject, selected);
+        onFireOnTableChange(sourceObject, selected);
+    }
+
+    public void fireOnRowChange(int rowIndex) throws UnifyException {
+        onFireOnRowChange(sourceObject, rowIndex);
     }
 
     public void setDefaultOrder(Order defaultOrder) {
@@ -401,19 +405,19 @@ public abstract class AbstractTable<T, U> {
         return numberOfPages == 0 || pageIndex >= numberOfPages - 1;
     }
     
-    public TableStateOverride getTableStateOverride(ValueStore valueStore) throws UnifyException {
+    public TableStateOverride getTableStateOverride(ValueStore rowValueStore) throws UnifyException {
         if (tableStateOverride == null) {
             tableStateOverride = new TableStateOverride();
         }
 
         tableStateOverride.reset();
         if (entryPolicy != null) {
-            entryPolicy.applyTableStateOverride(valueStore, tableStateOverride);;
+            entryPolicy.applyTableStateOverride(rowValueStore, tableStateOverride);;
         }
 
         return tableStateOverride;
     }
-
+    
     public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
         return entryPolicy != null ? entryPolicy.resolveActionIndex(valueStore, index, size) : 0;
     }
@@ -428,7 +432,9 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract void onFireOnChange(T sourceObject, Set<Integer> selected) throws UnifyException;
+    protected abstract void onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
+
+    protected abstract void onFireOnRowChange(T sourceObject, int rowIndex) throws UnifyException;
 
     protected abstract int getSourceObjectSize(T sourceObject) throws UnifyException;
 

@@ -42,6 +42,12 @@ public class InlineCRUDPanel extends AbstractStandalonePanel {
         getCrud().deleteEntry(index);
     }
     
+    @Action
+    public void onRowChange() throws UnifyException {
+        int index = getRequestTarget(int.class);
+        getCrud().fireOnRowChange(index);
+    }
+    
     private InlineCRUD<?> getCrud() throws UnifyException {
         return getValue(InlineCRUD.class);
     }

@@ -54,9 +54,16 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected void onFireOnChange(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
+    protected void onFireOnTableChange(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
         if (isWithEntryPolicy()) {
             getEntryPolicy().onEntryTableChange(getValueStore(sourceObject), selected);
+        }
+    }
+
+    @Override
+    protected void onFireOnRowChange(List<?> sourceObject, int rowIndex) throws UnifyException {
+        if (isWithEntryPolicy()) {
+            getEntryPolicy().onEntryRowChange(getValueStore(sourceObject), rowIndex);
         }
     }
 

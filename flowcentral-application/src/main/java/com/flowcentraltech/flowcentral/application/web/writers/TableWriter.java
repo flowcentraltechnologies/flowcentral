@@ -161,6 +161,7 @@ public class TableWriter extends AbstractControlWriter {
             final TableDef tableDef = table.getTableDef();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
+            final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
             final Control[] actionCtrl = tableWidget.getActionCtrl();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
@@ -178,11 +179,17 @@ public class TableWriter extends AbstractControlWriter {
                         Widget chWidget = widgetInfo.getWidget();
                         chWidget.setValueStore(valueStore);
                         writer.writeBehavior(chWidget);
-                        if (switchOnChangeHandlers != null && tabelColumnDef.isSwitchOnChange()) {
+                        if (tabelColumnDef.isSwitchOnChange()) {
                             final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId()
                                     : chWidget.getId();
-                            for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                writer.writeBehavior(eventHandler, cId, tabelColumnDef.getFieldName());
+                            if (switchOnChangeHandlers != null) {
+                                for (EventHandler eventHandler : switchOnChangeHandlers) {
+                                    writer.writeBehavior(eventHandler, cId, tabelColumnDef.getFieldName());
+                                }
+                            }
+                            
+                            if (switchOnChangeHandler != null) {
+                                writer.writeBehavior(switchOnChangeHandler, cId, null);
                             }
                         }
 
@@ -482,6 +489,9 @@ public class TableWriter extends AbstractControlWriter {
                             writeTagStyle(writer, chWidget.getColumnStyle());
                             writer.write(">");
                             writer.writeStructureAndContent(chWidget);
+                            if (entryMode) {
+                                writeTargetHidden(writer, chWidget.getId(), i);
+                            }
                             writer.write("</td>");
 
                             if (totalSummary) {

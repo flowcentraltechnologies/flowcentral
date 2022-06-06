@@ -164,8 +164,8 @@ public class EntryTablePage {
         displayItemCounterClass = null;
     }
 
-    public void switchOnChange() throws UnifyException {
-        getEntryBeanTable().fireOnChange();
+    public void switchOnChange(int index) throws UnifyException {
+        getEntryBeanTable().fireOnRowChange(index);
     }
 
     public BeanTable getEntryBeanTable() throws UnifyException {
