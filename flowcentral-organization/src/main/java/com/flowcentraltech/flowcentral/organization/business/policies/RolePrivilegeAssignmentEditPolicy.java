@@ -67,11 +67,6 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
-    public void onEntryTableChange(ValueStore tableValueStore, Set<Integer> selected) throws UnifyException {
-        
-    }
-
-    @Override
     public void onEntryRowChange(ValueStore tableValueStore, int rowIndex) throws UnifyException {
         
     }
