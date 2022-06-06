@@ -59,7 +59,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         table.fireOnChange();
     }
 
-    public void loadEntries(InlineCRUDTablePolicy tablePolicy, List<T> entries) throws UnifyException {
+    public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries) throws UnifyException {
         if (tablePolicy == null) {
             throw new IllegalArgumentException("Inline CRUD table policy is required.");
         }
@@ -78,9 +78,10 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         return _entries;
     }
 
+    @SuppressWarnings("unchecked")
     private T createInst() throws UnifyException {
         T entry = ReflectUtils.newInstance(entryClass);
-        InlineCRUDTablePolicy policy = (InlineCRUDTablePolicy) table.getEntryPolicy();
+        InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
             policy.onCreate(table.getAu(), entry);
         }

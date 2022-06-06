@@ -1804,6 +1804,8 @@
 						column="1" visible="false" />
 				</section>
 			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />			
 			<formValidationPolicy name="refValidationPolicy"
 				description="$m{studio.appentityfield.form.formvalidationpolicy.ref}"
 				message="$m{studio.appentityfield.form.formvalidationpolicy.ref.message}">
