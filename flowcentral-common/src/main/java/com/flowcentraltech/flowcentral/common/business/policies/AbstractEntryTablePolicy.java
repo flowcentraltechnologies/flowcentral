@@ -40,7 +40,7 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     }
 
     @Override
-    public final void onEntryTableChange(ValueStore tableValueStore, Set<Integer> selected) throws UnifyException {
+    public void onEntryTableChange(ValueStore tableValueStore, Set<Integer> selected) throws UnifyException {
         final int len = tableValueStore.size();
         for (int i = 0; i < len; i++) {
             onEntryRowChange(tableValueStore, i);
