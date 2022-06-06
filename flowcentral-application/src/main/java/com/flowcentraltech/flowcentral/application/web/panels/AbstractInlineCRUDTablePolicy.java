@@ -26,7 +26,8 @@ import com.tcdng.unify.core.data.ValueStore;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractInlineCRUDTablePolicy extends AbstractEntryTablePolicy implements InlineCRUDTablePolicy {
+public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> extends AbstractEntryTablePolicy
+        implements InlineCRUDTablePolicy<T> {
 
     @Override
     public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {

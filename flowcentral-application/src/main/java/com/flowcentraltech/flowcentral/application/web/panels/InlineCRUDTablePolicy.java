@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface InlineCRUDTablePolicy extends EntryTablePolicy {
+public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryTablePolicy {
 
-    void onCreate(AppletUtilities au, InlineCRUDEntry entry) throws UnifyException;
+    void onCreate(AppletUtilities au, T entry) throws UnifyException;
 }

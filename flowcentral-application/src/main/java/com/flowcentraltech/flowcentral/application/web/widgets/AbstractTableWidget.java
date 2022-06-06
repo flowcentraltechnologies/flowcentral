@@ -60,6 +60,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "multiSelect", type = boolean.class),
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
+        @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
         @UplAttribute(name = "summary", type = String.class) })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
@@ -213,6 +214,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getUplAttribute(EventHandler[].class, "actionHandler");
     }
 
+    public EventHandler getSwitchOnChangeHandler() throws UnifyException {
+        return getUplAttribute(EventHandler.class, "switchOnChangeHandler");       
+    }
+    
     public T getTable() throws UnifyException {
         T table = getValue(tableClass);
         if (table != oldTable) {

@@ -33,39 +33,51 @@ public interface EntryTablePolicy extends UnifyComponent {
     /**
      * Handles on entry table data load.
      * 
-     * @param valueStore
-     *                   the list data value store object
+     * @param tableValueStore
+     *                        the list data value store object
      * @param selected
-     *                   selected item index
+     *                        selected item index
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onEntryTableLoad(ValueStore valueStore, Set<Integer> selected) throws UnifyException;
+    void onEntryTableLoad(ValueStore tableValueStore, Set<Integer> selected) throws UnifyException;
 
     /**
      * Handles on entry table data change.
      * 
-     * @param valueStore
-     *                   the list data value store object
+     * @param tableValueStore
+     *                        the list data value store object
      * @param selected
-     *                   selected item index
+     *                        selected item index
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onEntryTableChange(ValueStore valueStore, Set<Integer> selected) throws UnifyException;
-    
+    void onEntryTableChange(ValueStore tableValueStore, Set<Integer> selected) throws UnifyException;
+
+    /**
+     * Handles on entry table data change.
+     * 
+     * @param tableValueStore
+     *                        the list data store object
+     * @param rowIndex
+     *                        the row index
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void onEntryRowChange(ValueStore tableValueStore, int rowIndex) throws UnifyException;
+
     /**
      * Apply table state overrides.
      * 
-     * @param valueStore
+     * @param rowValueStore
      *                           the value store for the current row item
      * @param tableStateOverride
      *                           the table state override
      * @throws UnifyException
      *                        if an error occurs
      */
-    void applyTableStateOverride(ValueStore valueStore, TableStateOverride tableStateOverride) throws UnifyException;
-    
+    void applyTableStateOverride(ValueStore rowValueStore, TableStateOverride tableStateOverride) throws UnifyException;
+
     /**
      * Resolves the table action index for the supplied value store.
      * 

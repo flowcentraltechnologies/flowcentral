@@ -46,20 +46,22 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         return table;
     }
 
-    @SuppressWarnings("unchecked")
     public void addEntry() throws UnifyException {
-        T entry = createInst(); // TODO On load set default values
-        ((List<T>) table.getSourceObject()).add(entry);
+        addEntry(true);
     }
 
     @SuppressWarnings("unchecked")
     public void deleteEntry(int index) throws UnifyException {
         List<T> _entries = (List<T>) table.getSourceObject();
         _entries.remove(index);
-        table.fireOnChange();
+        table.fireOnTableChange();
     }
 
-    public void loadEntries(InlineCRUDTablePolicy tablePolicy, List<T> entries) throws UnifyException {
+    public void fireOnRowChange(int rowIndex) throws UnifyException {
+        table.fireOnRowChange(rowIndex);
+    }
+
+    public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries) throws UnifyException {
         if (tablePolicy == null) {
             throw new IllegalArgumentException("Inline CRUD table policy is required.");
         }
@@ -67,8 +69,9 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         List<T> _entries = new ArrayList<T>(entries);
         table.setPolicy(tablePolicy);
         table.setSourceObject(_entries);
-        addEntry();
+        addEntry(false);
     }
+
 
     @SuppressWarnings("unchecked")
     public List<T> unload() throws UnifyException {
@@ -77,10 +80,20 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         _entries.remove(_entries.size() - 1);
         return _entries;
     }
+    
+    @SuppressWarnings("unchecked")
+    private void addEntry(boolean fireTableChange) throws UnifyException {
+        T entry = createInst(); // TODO On load set default values
+        ((List<T>) table.getSourceObject()).add(entry);
+        if (fireTableChange) {
+            table.fireOnTableChange();
+        }
+    }
 
+    @SuppressWarnings("unchecked")
     private T createInst() throws UnifyException {
         T entry = ReflectUtils.newInstance(entryClass);
-        InlineCRUDTablePolicy policy = (InlineCRUDTablePolicy) table.getEntryPolicy();
+        InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
             policy.onCreate(table.getAu(), entry);
         }
