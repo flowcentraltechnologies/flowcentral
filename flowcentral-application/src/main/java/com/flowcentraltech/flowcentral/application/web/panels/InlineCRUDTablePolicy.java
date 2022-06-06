@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Inline CRUD table policy.
@@ -28,5 +29,5 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryTablePolicy {
 
-    void onCreate(AppletUtilities au, T entry) throws UnifyException;
+    void onCreate(AppletUtilities au, T entry, ValueStoreReader defaultsValueStoreReader) throws UnifyException;
 }

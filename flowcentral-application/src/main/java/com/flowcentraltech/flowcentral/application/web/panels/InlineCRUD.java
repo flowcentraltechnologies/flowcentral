@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
@@ -36,6 +37,8 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     private BeanTable table;
 
     private Class<T> entryClass;
+
+    private ValueStoreReader defaultsValueStoreReader;
 
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
         this.table = new BeanTable(au, tableDef, true);
@@ -61,7 +64,8 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         table.fireOnRowChange(rowIndex);
     }
 
-    public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries) throws UnifyException {
+    public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries,
+            ValueStoreReader defaultsValueStoreReader) throws UnifyException {
         if (tablePolicy == null) {
             throw new IllegalArgumentException("Inline CRUD table policy is required.");
         }
@@ -69,9 +73,9 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         List<T> _entries = new ArrayList<T>(entries);
         table.setPolicy(tablePolicy);
         table.setSourceObject(_entries);
+        this.defaultsValueStoreReader = defaultsValueStoreReader;
         addEntry(false);
     }
-
 
     @SuppressWarnings("unchecked")
     public List<T> unload() throws UnifyException {
@@ -80,7 +84,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         _entries.remove(_entries.size() - 1);
         return _entries;
     }
-    
+
     @SuppressWarnings("unchecked")
     private void addEntry(boolean fireTableChange) throws UnifyException {
         T entry = createInst(); // TODO On load set default values
@@ -95,7 +99,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         T entry = ReflectUtils.newInstance(entryClass);
         InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
-            policy.onCreate(table.getAu(), entry);
+            policy.onCreate(table.getAu(), entry, defaultsValueStoreReader);
         }
 
         return entry;
