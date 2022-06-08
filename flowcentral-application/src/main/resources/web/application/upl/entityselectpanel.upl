@@ -27,7 +27,7 @@
 	components:$c{filterLabel filterInput}
 
 !ui-label:filterLabel styleClass:$e{search} binding:label	
-!ui-text:filterInput caption:$m{entityselectpanel.filter} binding:filter focus:true
+!ui-alphanumeric:filterInput caption:$m{entityselectpanel.filter} binding:filter focus:true
     eventHandler:$d{!ui-event event:oninput action:$c{filterAct}}
 
 // Search result panel
