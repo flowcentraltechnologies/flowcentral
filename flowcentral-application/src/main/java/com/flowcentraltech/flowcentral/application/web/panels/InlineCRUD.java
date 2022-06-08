@@ -77,6 +77,11 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         addEntry(false);
     }
 
+    public void clearEntries() throws UnifyException {
+        table.setSourceObject(new ArrayList<T>());
+        addEntry(false);
+    }
+    
     @SuppressWarnings("unchecked")
     public List<T> unload() throws UnifyException {
         List<T> entries = (List<T>) table.getSourceObject();
