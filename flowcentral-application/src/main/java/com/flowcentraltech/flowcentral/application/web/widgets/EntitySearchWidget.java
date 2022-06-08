@@ -58,6 +58,7 @@ import com.tcdng.unify.web.ui.widget.data.RefreshSection;
         @UplAttribute(name = "queryLabel", type = String.class, defaultVal = "$m{search.filter}"),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "search"),
+        @UplAttribute(name = "valueStoreMemory", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "direct", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "caseInsensitive", type = boolean.class, defaultVal = "true") })
 public class EntitySearchWidget extends AbstractEntityListWidget {
@@ -70,6 +71,8 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
     @Action
     public final void search() throws UnifyException {
         String input = getRequestTarget(String.class);
+        int triggerDataIndex = getRequestTriggerDataIndex();
+        recallValueStore(triggerDataIndex);
         List<? extends Listable> result = doSearch(input, getUplAttribute(int.class, "limit"));
         setRequestAttribute(UnifyWebRequestAttributeConstants.REFRESH_SECTION,
                 new RefreshSection(this, getResultPanelId())); // Always create new because widget Id may have changed.

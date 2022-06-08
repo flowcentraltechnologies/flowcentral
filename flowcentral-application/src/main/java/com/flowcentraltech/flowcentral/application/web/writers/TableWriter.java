@@ -479,11 +479,15 @@ public class TableWriter extends AbstractControlWriter {
                                         tableStateOverride.isColumnEditable(fieldName, tabelColumnDef.isEditable()));
                                 chWidget.setDisabled(
                                         tableStateOverride.isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
+                                if (i == 0) {
+                                    chWidget.initValueStoreMemory(len);
+                                }
                             } else {
                                 chWidget.setEditable(tabelColumnDef.isEditable());
                                 chWidget.setDisabled(tabelColumnDef.isDisabled());
                             }
 
+                            
                             chWidget.setValueStore(valueStore);
                             writer.write("<td");
                             writeTagStyle(writer, chWidget.getColumnStyle());
