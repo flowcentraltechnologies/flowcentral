@@ -85,8 +85,8 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
         EntityActionResult result = super.doExecutePostAction(ctx);
         final String applicationName = (String) getSessionAttribute(
                 StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-        final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         final AppEntity appEntity = (AppEntity) ctx.getInst();
+        final Long applicationId = appEntity.getApplicationId(); //(Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
         final String nameDesc = appEntity.getDescription();
 

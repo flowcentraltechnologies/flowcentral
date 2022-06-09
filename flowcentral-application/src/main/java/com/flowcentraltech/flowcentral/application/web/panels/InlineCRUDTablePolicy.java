@@ -29,5 +29,6 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryTablePolicy {
 
-    void onCreate(AppletUtilities au, T entry, ValueStoreReader defaultsValueStoreReader) throws UnifyException;
+    void onCreate(AppletUtilities au, T entry, int entryIndex, ValueStoreReader defaultsValueStoreReader)
+            throws UnifyException;
 }
