@@ -81,7 +81,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         table.setSourceObject(new ArrayList<T>());
         addEntry(false);
     }
-    
+
     @SuppressWarnings("unchecked")
     public List<T> unload() throws UnifyException {
         List<T> entries = (List<T>) table.getSourceObject();
@@ -92,22 +92,21 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
     @SuppressWarnings("unchecked")
     private void addEntry(boolean fireTableChange) throws UnifyException {
-        T entry = createInst(); // TODO On load set default values
-        ((List<T>) table.getSourceObject()).add(entry);
+        createAndAddInst((List<T>) table.getSourceObject());
         if (fireTableChange) {
             table.fireOnTableChange();
         }
     }
 
     @SuppressWarnings("unchecked")
-    private T createInst() throws UnifyException {
-        T entry = ReflectUtils.newInstance(entryClass);
+    private void createAndAddInst(List<T> items) throws UnifyException {
+        T item = ReflectUtils.newInstance(entryClass);
         InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
-            policy.onCreate(table.getAu(), entry, table.getItemCount(), defaultsValueStoreReader);
+            policy.onAddItem(table.getAu(), items, item, table.getItemCount(), defaultsValueStoreReader);
         }
 
-        return entry;
+        items.add(item);
     }
 
 }
