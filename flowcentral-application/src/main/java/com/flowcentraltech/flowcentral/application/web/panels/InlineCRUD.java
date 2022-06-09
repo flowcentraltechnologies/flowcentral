@@ -104,7 +104,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         T entry = ReflectUtils.newInstance(entryClass);
         InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
-            policy.onCreate(table.getAu(), entry, defaultsValueStoreReader);
+            policy.onCreate(table.getAu(), entry, table.getItemCount(), defaultsValueStoreReader);
         }
 
         return entry;

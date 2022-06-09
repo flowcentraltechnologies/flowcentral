@@ -46,6 +46,11 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
         super(au, tableDef, null, entryMode);
     }
 
+    public int getItemCount() throws UnifyException {
+        List<?> sourceObject = getSourceObject();
+        return sourceObject != null ? sourceObject.size() : 0;
+    }
+    
     @Override
     protected void onLoadSourceObject(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
         if (isWithEntryPolicy()) {
