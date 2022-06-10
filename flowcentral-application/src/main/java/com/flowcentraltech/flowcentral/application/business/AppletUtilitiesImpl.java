@@ -427,6 +427,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public ListingForm constructListingForm(AbstractEntityFormApplet applet, String rootTitle, String beanTitle,
             FormDef formDef, Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
+        logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
+                formDef.getLongName());
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
         final ListingForm form = new ListingForm(formContext, breadCrumbs);
@@ -439,6 +441,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,
             String beanTitle, FormDef formDef, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
+        logDebug("Constructing header with tabs form for bean [{0}] using form definition [{1}]...", beanTitle,
+                formDef.getLongName());
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final SweepingCommitPolicy sweepingCommitPolicy = applet;
         final FormContext formContext = new FormContext(appletContext, formDef, formEventHandlers, inst);
@@ -462,6 +466,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 switch (formTabDef.getContentType()) {
                     case MINIFORM:
                     case MINIFORM_CHANGELOG: {
+                        logDebug("Constructing mini form for tab [{0}]...", formTabDef.getName());
                         tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "!fc-miniform",
                                 RendererType.SIMPLE_WIDGET);
                         tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
@@ -470,6 +475,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case PROPERTY_LIST: {
+                        logDebug("Constructing property list tab [{0}] using applet [{1}]...", formTabDef.getName(),
+                                formTabDef.getApplet());
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
                         String childFkFieldName = getChildFkFieldName(entityDef, formTabDef.getReference());
                         PropertySearch _propertySearch = constructPropertySearch(formContext, sweepingCommitPolicy,
@@ -485,6 +492,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case CHILD: {
+                        logDebug("Constructing child tab [{0}] using applet [{1}]...", formTabDef.getName(),
+                                formTabDef.getApplet());
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
                         EntityChild _entityChild = constructEntityChild(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef);
@@ -502,6 +511,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case CHILD_LIST: {
+                        logDebug("Constructing child list tab [{0}] using applet [{1}]...", formTabDef.getName(),
+                                formTabDef.getApplet());
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
                         final boolean newButtonVisible = !hideAddActionButton(form, applet.getFormAppletDef(),
                                 formTabDef.getApplet());
@@ -537,6 +548,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case FILTER_CONDITION: {
+                        logDebug("Constructing filter condition tab [{0}] using reference [{1}]...",
+                                formTabDef.getName(), formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
@@ -555,6 +568,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case PARAM_VALUES: {
+                        logDebug("Constructing parameter values tab [{0}] using reference [{1}]...",
+                                formTabDef.getName(), formTabDef.getReference());
                         ParamConfigListProvider pclProvider = (ParamConfigListProvider) getComponent(
                                 formTabDef.getReference());
                         EntityParamValues _entityParamValues = constructEntityParamValues(formContext,
@@ -571,6 +586,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case FIELD_SEQUENCE: {
+                        logDebug("Constructing field sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
@@ -588,6 +605,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case SET_VALUES: {
+                        logDebug("Constructing set values tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
@@ -653,6 +672,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public HeadlessTabsForm constructHeadlessTabsForm(AppletContext appletContext,
             SweepingCommitPolicy sweepingCommitPolicy, String rootTitle, AppletDef appletDef) throws UnifyException {
+        logDebug("Constructing headerless tabs form for [{0}] using applet definition [{1}]...", rootTitle,
+                appletDef.getLongName());
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
         List<TabSheetItem> tabSheetItemList = new ArrayList<TabSheetItem>();
         final List<String> appletList = appletDef.getPropDef(AppletPropertyConstants.HEADLESS_TABS_APPLETS)
@@ -692,6 +713,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
         final String panelName = applet.getRootAppletDef().getPropValue(String.class,
                 AppletPropertyConstants.SINGLE_FORM_PANEL);
+        logDebug("Constructing entity single form for [{0}] using panel [{1}]...", rootTitle, panelName);
         final SingleFormBean bean = createSingleFormBeanForPanel(panelName);
         bean.init(this);
 
@@ -707,6 +729,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final EntityDef entityDef = formDef.getEntityDef();
         final FormContext formContext = form.getCtx();
         final AbstractEntityFormApplet applet = (AbstractEntityFormApplet) formContext.getAppletContext().getApplet();
+        logDebug("Updating header with tabs form for [{0}] using form definition [{1}]...", inst.getId(),
+                formDef.getLongName());
         boolean isCreateMode = form.getFormMode().isCreate();
         if (!isCreateMode) {
             String beanTitle = getEntityDescription(getEntityClassDef(entityDef.getLongName()), inst, null);
@@ -741,6 +765,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case PROPERTY_LIST: {
+                        logDebug("Updating property list tab [{0}] using applet [{1}]...", formTabDef.getName(),
+                                formTabDef.getApplet());
                         String childFkFieldName = getChildFkFieldName(entityDef, formTabDef.getReference());
                         PropertySearch _propertySearch = (PropertySearch) tabSheetItem.getValObject();
                         _propertySearch.applyEntityToSearch(inst, childFkFieldName);
@@ -749,6 +775,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case CHILD: {
+                        logDebug("Updating child tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
                         EntityChild _entityChild = (EntityChild) tabSheetItem.getValObject();
                         _entityChild.load(formContext, childRestriction);
@@ -757,6 +785,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case CHILD_LIST: {
+                        logDebug("Updating child list tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         final boolean newButtonVisible = !hideAddActionButton(form, applet.getFormAppletDef(),
                                 formTabDef.getApplet());
                         EntitySearch _entitySearch = (EntitySearch) tabSheetItem.getValObject();
@@ -776,6 +806,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case FILTER_CONDITION: {
+                        logDebug("Updating filter condition tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
@@ -790,6 +822,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case PARAM_VALUES: {
+                        logDebug("Updating parameter values tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         ParamConfigListProvider pclProvider = getComponent(ParamConfigListProvider.class,
                                 formTabDef.getReference());
                         EntityParamValues _entityParamValues = (EntityParamValues) tabSheetItem.getValObject();
@@ -801,6 +835,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case FIELD_SEQUENCE: {
+                        logDebug("Updating field sequence tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
@@ -813,6 +849,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     }
                         break;
                     case SET_VALUES: {
+                        logDebug("Updating set values tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
                         EntityChildCategoryType categoryType = EntityChildCategoryType
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
@@ -927,6 +965,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     public EntitySearch constructEntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode)
             throws UnifyException {
+        logDebug("Constructing entity search for [{0}] using applet definition [{1}]...", rootTitle,
+                _appletDef.getLongName());
         TableDef _tableDef = getTableDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE));
         if (!_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_NEW, false)) {
             entitySearchMode = entitySearchMode & ~EntitySearch.SHOW_NEW_BUTTON;
@@ -967,6 +1007,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public EntitySelect constructEntitySelect(RefDef refDef, ValueStore valueStore, String filter, int limit)
             throws UnifyException {
+        logDebug("Constructing entity select using reference definition [{0}]...", refDef.getLongName());
         TableDef tableDef = applicationModuleService.getTableDef(refDef.getSearchTable());
         EntitySelect entitySelect = new EntitySelect(this, tableDef, refDef.getSearchField(), valueStore,
                 refDef.getSelectHandler(), limit);
@@ -997,6 +1038,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public EntityChild constructEntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             String rootTitle, AppletDef _appletDef) throws UnifyException {
+        logDebug("Constructing entity child for [{0}] using applet definition [{1}]...", rootTitle,
+                _appletDef.getLongName());
         FormDef childFormDef = getFormDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM));
         EntityChild _entityChild = new EntityChild(ctx, sweepingCommitPolicy, tabName, childFormDef);
         _entityChild.setEntitySubTitle(rootTitle);
@@ -1006,24 +1049,32 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityFilterMode) throws UnifyException {
+        logDebug("Constructing entity filter for [{0}] using entity definition [{1}]...", tabName,
+                ownerEntityDef.getLongName());
         return new EntityFilter(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFilterMode);
     }
 
     @Override
     public EntityFieldSequence constructEntityFieldSequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityFieldSequenceMode) throws UnifyException {
+        logDebug("Constructing entity field sequence for [{0}] using entity definition [{1}]...", tabName,
+                ownerEntityDef.getLongName());
         return new EntityFieldSequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFieldSequenceMode);
     }
 
     @Override
     public EntitySetValues constructEntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entitySetValuesMode) throws UnifyException {
+        logDebug("Constructing entity set values for [{0}] using entity definition [{1}]...", tabName,
+                ownerEntityDef.getLongName());
         return new EntitySetValues(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySetValuesMode);
     }
 
     @Override
     public EntityParamValues constructEntityParamValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityParamValuesMode) throws UnifyException {
+        logDebug("Constructing entity parameter values for [{0}] using entity definition [{1}]...", tabName,
+                ownerEntityDef.getLongName());
         return new EntityParamValues(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityParamValuesMode);
     }
 
@@ -1242,6 +1293,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final ValueStore formValueStore = formContext.getFormValueStore();
         final FormDef formDef = formContext.getFormDef();
         formContext.setFixedReference(baseField);
+        logDebug("Executing on-form-construct [{0}] using applet [{1}] and base field [{2}]...", formDef.getLongName(),
+                formAppletDef.getLongName(), baseField);
 
         final Map<String, Object> variables = Collections.emptyMap();
         final Entity inst = (Entity) formContext.getInst();
@@ -1250,6 +1303,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             String onCreateStatePolicy = formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.CREATE_FORM_STATE_POLICY);
             if (!StringUtils.isBlank(onCreateStatePolicy)) {
+                logDebug("Applying on-create state policy [{0}] on form [{1}]...", onCreateStatePolicy, inst.getId());
                 FormStatePolicyDef onCreateFormStatePolicyDef = formDef
                         .getOnCreateFormStatePolicyDef(onCreateStatePolicy);
                 if (onCreateFormStatePolicyDef.isSetValues()) {
@@ -1261,6 +1315,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             // Populate skeleton for auto-format fields
             EntityDef _entityDef = formDef.getEntityDef();
             if (_entityDef.isWithAutoFormatFields()) {
+                logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
                 final SequenceCodeGenerator gen = getSequenceCodeGenerator();
                 for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                     if (entityFieldDef.isStringAutoFormat()) {
@@ -1274,10 +1329,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         if (formDef.isWithConsolidatedFormState()) {
             ConsolidatedFormStatePolicy policy = getComponent(ConsolidatedFormStatePolicy.class,
                     formDef.getConsolidatedFormState());
+            logDebug("Applying consolidated form state policy [{0}] on form [{1}]...", policy.getName(), inst.getId());
             policy.onFormConstruct(formValueStore);
         }
 
         // Fire on form construct value generators
+        logDebug("Populating on-form-construct set values for form [{0}]...", inst.getId());
         for (FormStatePolicyDef formStatePolicyDef : formDef.getOnFormConstructSetValuesFormStatePolicyDefList()) {
             if (formStatePolicyDef.isSetValues()) {
                 formStatePolicyDef.getSetValuesDef().apply(this, formDef.getEntityDef(), getNow(), formValueStore,
@@ -1290,6 +1347,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final FormDef _formDef = formContext.getFormDef();
         final ValueStore _formValueStore = formContext.getFormValueStore();
         final Date now = getNow();
+        logDebug("Applying delayed set values on [{0}] using form definition [{1}] ...", _formValueStore.retrieve("id"),
+                _formDef.getLongName());
         // Execute delayed set values
         final Map<String, Object> variables = Collections.emptyMap();
         for (FormStatePolicyDef formStatePolicyDef : _formDef.getOnDelayedSetValuesFormStatePolicyDefList()) {
