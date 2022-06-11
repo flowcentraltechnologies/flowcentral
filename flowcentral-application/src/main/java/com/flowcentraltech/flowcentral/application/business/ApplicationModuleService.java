@@ -241,6 +241,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppApplet findAppApplet(Long appletId) throws UnifyException;
 
     /**
+     * Gets application name.
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @return the application name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getApplicationName(Long applicationId) throws UnifyException;
+    
+    /**
      * Gets an application applet entity.
      * 
      * @param appAppletId

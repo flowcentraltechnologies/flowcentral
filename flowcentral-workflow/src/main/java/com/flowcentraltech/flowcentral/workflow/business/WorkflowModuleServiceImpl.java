@@ -693,13 +693,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return Collections.emptyList();
     }
 
-    @Periodic(PeriodicType.FASTER)
+    @Periodic(PeriodicType.FAST)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
         if (grabClusterLock(WFTRANSITION_QUEUE_LOCK)) {
-            logDebug("Lock acquired for transition queue processing...");
             try {
+                logDebug("Lock acquired for transition queue processing...");
                 int batchSize = systemModuleService.getSysParameterValue(int.class,
 
                         WorkflowModuleSysParamConstants.WFTRANSITION_PROCESSING_BATCH_SIZE);
@@ -736,12 +736,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @SuppressWarnings("unchecked")
-    @Periodic(PeriodicType.FAST)
+    @Periodic(PeriodicType.NORMAL)
     public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing workflow auto-loading...");
         if (grabClusterLock(WFAUTOLOADING_LOCK)) {
-            logDebug("Lock acquired for workflow auto loading...");
             try {
+                logDebug("Lock acquired for workflow auto loading...");
                 Date now = getNow();
                 int batchSize = systemModuleService.getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
@@ -949,11 +949,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 case USER_ACTION:
                 case ERROR:
                     // Workflow item has settled in current step
-                    // Assign to human agent if user actions are associated with current step
-                    String forwardTo = wfItem.getForwardTo() != null ? wfItem.getForwardTo()
-                            : (currWfStepDef.isForwarderPreferred() ? wfItem.getForwardedBy() : null);
-                    transitionItem.setForwardTo(forwardTo);
-//                  wfItem.setHeldBy(getNextWorkflowItemAssignee(transitionItem)); //TODO
                     wfItem.setForwardTo(null);
                     environment().updateByIdVersion(wfItem);
                     break;
@@ -1183,8 +1178,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         final private WfEntityInst wfEntityInst;
 
-        private String forwardTo;
-
         private Map<String, Object> variables;
 
         private boolean updated;
@@ -1212,14 +1205,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         public WorkEntity getWfEntityInst() {
             return wfEntityInst.getWfEntityInst();
-        }
-
-        public String getForwardTo() {
-            return forwardTo;
-        }
-
-        public void setForwardTo(String forwardTo) {
-            this.forwardTo = forwardTo;
         }
 
         public Map<String, Object> getVariables() {
