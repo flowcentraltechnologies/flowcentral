@@ -381,6 +381,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                                     "nextAttemptDt", "sentDt", "notificationMessage",
                                                     "notificationRecipientList")
                                             .setLimit(localMaxBatchSize));
+                            logDebug("Sending [{0}] notifications via channel [{1}]...", notificationList.size(),
+                                    notificationChannelDef.getDescription());
                             if (!DataUtils.isBlank(notificationList)) {
                                 NotificationMessagingChannel channel = getNotificationMessagingChannel(
                                         notificationType);
