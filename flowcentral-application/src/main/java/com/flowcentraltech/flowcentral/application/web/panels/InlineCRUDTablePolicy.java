@@ -31,6 +31,22 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryTablePolicy {
 
-    void onAddItem(AppletUtilities au, List<T> itemList, T item, int entryIndex,
-            ValueStoreReader defaultsValueStoreReader) throws UnifyException;
+    /**
+     * Executed on item addition.
+     * 
+     * @param parentReader
+     *                     optional parent value store reader
+     * @param au
+     *                     the applet utilities object
+     * @param itemList
+     *                     the target items list
+     * @param item
+     *                     the item to add
+     * @param entryIndex
+     *                     the item entry index
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void onAddItem(ValueStoreReader parentReader, AppletUtilities au, List<T> itemList, T item, int entryIndex)
+            throws UnifyException;
 }

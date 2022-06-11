@@ -29,6 +29,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -37,7 +38,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@EntityReferences({"organization.rolePrivilege"})
+@EntityReferences({ "organization.rolePrivilege" })
 @Component("roleprivilge-assignmenteditpolicy")
 public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPolicy {
 
@@ -58,27 +59,30 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     @Override
     public void postEntryUpdate(Class<? extends Entity> entityClass, String baseFieldName, Object baseId,
             List<?> instList) throws UnifyException {
-        
+
     }
 
     @Override
-    public void onEntryTableLoad(ValueStore tableValueStore, Set<Integer> selected) throws UnifyException {
-        
-    }
-
-    @Override
-    public void onEntryRowChange(ValueStore tableValueStore, int rowIndex) throws UnifyException {
-        
-    }
-
-    @Override
-    public void applyTableStateOverride(ValueStore rowValueStore, TableStateOverride tableStateOverride)
+    public void onEntryTableLoad(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
             throws UnifyException {
-        
+
     }
 
     @Override
-    public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
+    public void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, int rowIndex)
+            throws UnifyException {
+
+    }
+
+    @Override
+    public void applyTableStateOverride(ValueStoreReader parentReader, ValueStore rowValueStore,
+            TableStateOverride tableStateOverride) throws UnifyException {
+
+    }
+
+    @Override
+    public int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
+            throws UnifyException {
         return 0;
     }
 
@@ -91,7 +95,7 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     @Override
     protected void validateEntries(FormMessages messages, Class<? extends Entity> entityClass, String baseFieldName,
             Object baseId, List<?> instList) throws UnifyException {
-        
+
     }
 
 }

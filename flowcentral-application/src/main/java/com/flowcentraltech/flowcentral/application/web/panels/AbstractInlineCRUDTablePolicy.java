@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntryTablePolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for inline CRUD table policies
@@ -30,7 +31,8 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
         implements InlineCRUDTablePolicy<T> {
 
     @Override
-    public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
+    public int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
+            throws UnifyException {
         return (index + 1) >= size ? 0 : 1;
     }
 

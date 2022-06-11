@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
@@ -69,7 +70,7 @@ public abstract class AbstractTable<T, U> {
     private int totalItemCount;
 
     private int highlightedRow;
-    
+
     private boolean basicSearchMode;
 
     private boolean entryMode;
@@ -77,13 +78,15 @@ public abstract class AbstractTable<T, U> {
     private boolean editMode;
 
     private boolean fixedAssignment;
-    
+
+    private ValueStoreReader parentReader;
+
     private TableStateOverride tableStateOverride;
-    
+
     private EntryTableMessage entryMessage;
-    
+
     private EntryTablePolicy entryPolicy;
-    
+
     private TableTotalSummary tableTotalSummary;
 
     private Set<Integer> selected;
@@ -208,6 +211,14 @@ public abstract class AbstractTable<T, U> {
         this.editMode = editMode;
     }
 
+    public ValueStoreReader getParentReader() {
+        return parentReader;
+    }
+
+    public void setParentReader(ValueStoreReader parentReader) {
+        this.parentReader = parentReader;
+    }
+
     public boolean isFixedAssignment() {
         return fixedAssignment;
     }
@@ -223,7 +234,7 @@ public abstract class AbstractTable<T, U> {
     public void setTableTotalSummary(TableTotalSummary tableTotalSummary) {
         this.tableTotalSummary = tableTotalSummary;
     }
-    
+
     public EntryTableMessage getEntryMessage() {
         return entryMessage;
     }
@@ -257,18 +268,18 @@ public abstract class AbstractTable<T, U> {
     }
 
     public String getTotalLabel() throws UnifyException {
-        return  au.resolveSessionMessage("$m{tablewidget.total}");
+        return au.resolveSessionMessage("$m{tablewidget.total}");
     }
-    
+
     public Widget getSummaryWidget(String fieldName) {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
             return summary.getRenderer();
         }
-        
+
         return null;
     }
-    
+
     public void setSourceObject(T sourceObject) throws UnifyException {
         this.sourceObject = sourceObject;
         onLoadSourceObject(sourceObject, selected);
@@ -404,7 +415,7 @@ public abstract class AbstractTable<T, U> {
     public boolean isAtLastPage() {
         return numberOfPages == 0 || pageIndex >= numberOfPages - 1;
     }
-    
+
     public TableStateOverride getTableStateOverride(ValueStore rowValueStore) throws UnifyException {
         if (tableStateOverride == null) {
             tableStateOverride = new TableStateOverride();
@@ -412,20 +423,22 @@ public abstract class AbstractTable<T, U> {
 
         tableStateOverride.reset();
         if (entryPolicy != null) {
-            entryPolicy.applyTableStateOverride(rowValueStore, tableStateOverride);;
+            entryPolicy.applyTableStateOverride(parentReader, rowValueStore, tableStateOverride);
+            ;
         }
 
         return tableStateOverride;
     }
-    
+
     public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
-        return entryPolicy != null ? entryPolicy.resolveActionIndex(valueStore, index, size) : 0;
+        return entryPolicy != null ? entryPolicy.resolveActionIndex(parentReader, valueStore, index, size)
+                : 0;
     }
-    
+
     public EntryTablePolicy getEntryPolicy() {
         return entryPolicy;
     }
-    
+
     protected boolean isWithEntryPolicy() {
         return entryPolicy != null;
     }
@@ -442,7 +455,7 @@ public abstract class AbstractTable<T, U> {
             throws UnifyException;
 
     protected abstract void orderOnReset() throws UnifyException;
-    
+
     private void calcPageDimensions() throws UnifyException {
         pageIndex = 0;
         totalItemCount = getSourceObjectSize(sourceObject);

@@ -50,18 +50,18 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
         List<?> sourceObject = getSourceObject();
         return sourceObject != null ? sourceObject.size() : 0;
     }
-    
+
     @Override
     protected void onLoadSourceObject(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
         if (isWithEntryPolicy()) {
-            getEntryPolicy().onEntryTableLoad(getValueStore(sourceObject), selected);
+            getEntryPolicy().onEntryTableLoad(getParentReader(), getValueStore(sourceObject), selected);
         }
     }
 
     @Override
     protected void onFireOnTableChange(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
         if (isWithEntryPolicy()) {
-            getEntryPolicy().onEntryTableChange(getValueStore(sourceObject), selected);
+            getEntryPolicy().onEntryTableChange(getParentReader(), getValueStore(sourceObject), selected);
         }
     }
 
@@ -70,7 +70,7 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
         if (isWithEntryPolicy()) {
             ValueStore tableValueStore = getValueStore(sourceObject);
             tableValueStore.setDataIndex(rowIndex);
-            getEntryPolicy().onEntryRowChange(tableValueStore, rowIndex);
+            getEntryPolicy().onEntryRowChange(getParentReader(), tableValueStore, rowIndex);
         }
     }
 

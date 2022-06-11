@@ -23,6 +23,7 @@ import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for entry table policies.
@@ -40,10 +41,11 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     }
 
     @Override
-    public void onEntryTableChange(ValueStore tableValueStore, Set<Integer> selected) throws UnifyException {
+    public void onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore,
+            Set<Integer> selected) throws UnifyException {
         final int len = tableValueStore.size();
         for (int i = 0; i < len; i++) {
-            onEntryRowChange(tableValueStore, i);
+            onEntryRowChange(parentReader, tableValueStore, i);
         }
     }
 
