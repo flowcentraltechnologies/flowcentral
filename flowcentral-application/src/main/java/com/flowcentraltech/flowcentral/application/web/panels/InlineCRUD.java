@@ -38,8 +38,6 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
     private Class<T> entryClass;
 
-    private ValueStoreReader defaultsValueStoreReader;
-
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
         this.table = new BeanTable(au, tableDef, true);
         this.entryClass = entryClass;
@@ -65,7 +63,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     }
 
     public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries,
-            ValueStoreReader defaultsValueStoreReader) throws UnifyException {
+            ValueStoreReader parentReader) throws UnifyException {
         if (tablePolicy == null) {
             throw new IllegalArgumentException("Inline CRUD table policy is required.");
         }
@@ -73,7 +71,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         List<T> _entries = new ArrayList<T>(entries);
         table.setPolicy(tablePolicy);
         table.setSourceObject(_entries);
-        this.defaultsValueStoreReader = defaultsValueStoreReader;
+        table.setParentReader(parentReader);
         addEntry(false);
     }
 
@@ -103,7 +101,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         T item = ReflectUtils.newInstance(entryClass);
         InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
-            policy.onAddItem(table.getAu(), items, item, table.getItemCount(), defaultsValueStoreReader);
+            policy.onAddItem(table.getParentReader(), table.getAu(), items, item, table.getItemCount());
         }
 
         items.add(item);
