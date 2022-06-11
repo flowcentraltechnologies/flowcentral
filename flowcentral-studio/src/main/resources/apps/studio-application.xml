@@ -1790,6 +1790,8 @@
 						column="1" visible="false" />
 					<field name="defaultVal" inputWidget="application.text"
 						column="1" visible="false" />
+				</section>
+				<section name="optionDetails" columns="type_1_2">
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="auditable" inputWidget="application.checkbox"
@@ -1797,11 +1799,11 @@
 					<field name="reportable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="maintainLink" inputWidget="application.checkbox"
-						column="1" visible="false" />
+						column="2" visible="false" />
 					<field name="descriptive" inputWidget="application.checkbox"
-						column="1" visible="false" />
+						column="2" visible="false" />
 					<field name="basicSearch" inputWidget="application.checkbox"
-						column="1" visible="false" />
+						column="2" visible="false" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

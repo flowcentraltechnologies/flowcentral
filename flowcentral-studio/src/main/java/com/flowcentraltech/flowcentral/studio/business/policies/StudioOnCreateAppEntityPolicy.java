@@ -34,7 +34,6 @@ import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
 import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -57,11 +56,11 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
     @Configurable
     private MessageResolver messageResolver;
 
-    public void setReportModuleService(ReportModuleService reportModuleService) {
+    public final void setReportModuleService(ReportModuleService reportModuleService) {
         this.reportModuleService = reportModuleService;
     }
 
-    public void setMessageResolver(MessageResolver messageResolver) {
+    public final void setMessageResolver(MessageResolver messageResolver) {
         this.messageResolver = messageResolver;
     }
 
@@ -83,10 +82,11 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = super.doExecutePostAction(ctx);
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+//        final String applicationName = (String) getSessionAttribute(
+//                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         final AppEntity appEntity = (AppEntity) ctx.getInst();
         final Long applicationId = appEntity.getApplicationId(); //(Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        final String applicationName = getAms().getApplicationName(applicationId);
         final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
         final String nameDesc = appEntity.getDescription();
 

@@ -1,0 +1,26 @@
+/*
+ * Copyright (c) 2019, 2021, FlowCentral Technologies.
+ * All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE TERMS.
+ */
+/****** OVERRIDES (SLIM) **********/
+input[type = "text"],input[type = "password"] {height:28px;border-color: #b0b0b0;}
+select:not([multiple]){height:28px;}
+
+/** Button */ 
+.ui-button {min-height:28px;}
+.ui-button-alert {min-height:28px;}
+
+/** Debit/credit field*/
+.ui-debitcredit .tpbutton {height:28px;padding:4px 4px;}
+
+/** File upload */
+.ui-fileupload .fsbutton {height: 28px;}
+
+/* Text Area */
+.ui-text-popup .tpbutton {height:28px}
+.ui-text-popup .tplbutton {height:28px;}
+
+/****** OVERRIDE END (SLIM) **********/
+			

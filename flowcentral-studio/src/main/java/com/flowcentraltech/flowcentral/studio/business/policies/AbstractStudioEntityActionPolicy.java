@@ -47,11 +47,11 @@ public abstract class AbstractStudioEntityActionPolicy extends AbstractEntityAct
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
