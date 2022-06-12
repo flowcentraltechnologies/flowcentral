@@ -16,8 +16,6 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import java.util.Collection;
-
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;

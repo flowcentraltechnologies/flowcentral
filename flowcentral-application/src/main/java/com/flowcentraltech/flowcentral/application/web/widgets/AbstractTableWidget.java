@@ -42,6 +42,7 @@ import com.tcdng.unify.core.upl.UplElementReferences;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.DataTransferBlock;
+import com.tcdng.unify.web.ui.util.DataTransferUtils;
 import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -130,7 +131,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             }
         }
     }
-
+    
     @Action
     public void sortColumn() throws UnifyException {
         if (oldTable != null) {
@@ -162,6 +163,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             oldTable.setOrder(order);
             oldTable.firstPage();
         }
+    }
+
+    public String resolveChildWidgetName(String transferId) throws UnifyException {
+        String childId = DataTransferUtils.stripTransferDataIndexPart(transferId);
+        ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childId);
+        return childWidgetInfo.getName();
     }
 
     public List<String> getContentDependentList() throws UnifyException {

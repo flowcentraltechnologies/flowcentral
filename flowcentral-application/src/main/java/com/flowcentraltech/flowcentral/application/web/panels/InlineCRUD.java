@@ -58,8 +58,8 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         table.fireOnTableChange();
     }
 
-    public void fireOnRowChange(int rowIndex) throws UnifyException {
-        table.fireOnRowChange(rowIndex);
+    public void fireOnRowChange(int rowIndex, String trigger) throws UnifyException {
+        table.fireOnRowChange(rowIndex, trigger);
     }
 
     public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries,

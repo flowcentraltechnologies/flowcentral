@@ -157,9 +157,9 @@ public class AssignmentPage {
         this.assignedIdList = assignedIdList;
     }
 
-    public void switchOnChange(int index) throws UnifyException {
+    public void switchOnChange(int index, String trigger) throws UnifyException {
         if (isEntryTableMode()) {
-            getEntryBeanTable().fireOnRowChange(index);
+            getEntryBeanTable().fireOnRowChange(index, trigger);
         }
     }
 

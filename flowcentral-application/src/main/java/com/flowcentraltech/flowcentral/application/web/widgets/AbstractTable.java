@@ -291,8 +291,8 @@ public abstract class AbstractTable<T, U> {
         onFireOnTableChange(sourceObject, selected);
     }
 
-    public void fireOnRowChange(int rowIndex) throws UnifyException {
-        onFireOnRowChange(sourceObject, rowIndex);
+    public void fireOnRowChange(int rowIndex, String trigger) throws UnifyException {
+        onFireOnRowChange(sourceObject, rowIndex, trigger);
     }
 
     public void setDefaultOrder(Order defaultOrder) {
@@ -431,8 +431,7 @@ public abstract class AbstractTable<T, U> {
     }
 
     public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {
-        return entryPolicy != null ? entryPolicy.resolveActionIndex(parentReader, valueStore, index, size)
-                : 0;
+        return entryPolicy != null ? entryPolicy.resolveActionIndex(parentReader, valueStore, index, size) : 0;
     }
 
     public EntryTablePolicy getEntryPolicy() {
@@ -447,7 +446,7 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract void onFireOnRowChange(T sourceObject, int rowIndex) throws UnifyException;
+    protected abstract void onFireOnRowChange(T sourceObject, int rowIndex, String trigger) throws UnifyException;
 
     protected abstract int getSourceObjectSize(T sourceObject) throws UnifyException;
 

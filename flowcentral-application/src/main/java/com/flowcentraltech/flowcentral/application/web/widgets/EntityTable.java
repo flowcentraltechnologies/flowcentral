@@ -79,17 +79,17 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
 
     @Override
     protected void onFireOnTableChange(Restriction sourceObject, Set<Integer> selected) throws UnifyException {
-        
+
     }
 
     @Override
-    protected void onFireOnRowChange(Restriction sourceObject, int rowIndex) throws UnifyException {
-        
+    protected void onFireOnRowChange(Restriction sourceObject, int rowIndex, String trigger) throws UnifyException {
+
     }
 
     @Override
     protected void orderOnReset() throws UnifyException {
-        
+
     }
 
     @SuppressWarnings("unchecked")

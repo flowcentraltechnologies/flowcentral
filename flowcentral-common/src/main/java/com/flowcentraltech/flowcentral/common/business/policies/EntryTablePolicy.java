@@ -70,10 +70,12 @@ public interface EntryTablePolicy extends UnifyComponent {
      *                        the list data store object
      * @param rowIndex
      *                        the row index
+     * @param trigger
+     *                        the trigger column name
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, int rowIndex)
+    void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, int rowIndex, String trigger)
             throws UnifyException;
 
     /**
