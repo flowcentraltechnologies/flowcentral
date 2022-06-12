@@ -519,10 +519,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             logDebug("Attempting to grab scheduled task lock [{0}] ...", taskLock);
 
             if (!isWithClusterLock(taskLock) && grabClusterLock(taskLock)) {
-                logDebug("Grabbed scheduled task lock [{0}] ...", taskLock);
-
                 boolean lockHeldForTask = false;
                 try {
+                    logDebug("Grabbed scheduled task lock [{0}] ...", taskLock);
                     logDebug("Setting up scheduled task [{0}] ...", scheduledTaskDef.getDescription());
                     Map<String, Object> taskParameters = new HashMap<String, Object>();
                     taskParameters.put(SystemSchedTaskConstants.SCHEDULEDTASK_ID, scheduledTaskId);

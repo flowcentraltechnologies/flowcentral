@@ -127,6 +127,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         applet.ensureFormStruct();
 
         final AppletDef formAppletDef = applet.getFormAppletDef();
+        logDebug("Switching form applet panel [{0}]...", formAppletDef != null ? formAppletDef.getLongName() : null);
         final AppletContext appCtx = applet.getCtx();
         final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null
                 && collaborationProvider.isLicensedForCollaboration();
@@ -407,7 +408,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             default:
                 break;
         }
-    }
+        
+        logDebug("Switching completed for form applet panel [{0}].", formAppletDef != null ? formAppletDef.getLongName() : null);
+   }
 
     @Action
     public void newInst() throws UnifyException {
@@ -450,13 +453,13 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void assignSwitchOnChange() throws UnifyException {
-        int index =  getRequestTarget(int.class);
+        int index = getRequestTarget(int.class);
         getEntityFormApplet().assignSwitchOnChange(index);
     }
 
     @Action
     public void entrySwitchOnChange() throws UnifyException {
-        int index =  getRequestTarget(int.class);
+        int index = getRequestTarget(int.class);
         getEntityFormApplet().entrySwitchOnChange(index);
     }
 

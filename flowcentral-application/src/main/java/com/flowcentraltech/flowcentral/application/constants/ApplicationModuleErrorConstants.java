@@ -54,4 +54,9 @@ public interface ApplicationModuleErrorConstants {
      */
     String UNABLE_LOAD_DATA_WITH_EXISTING_UNIQUE_RECORD = "APPLICATION_0007";
 
+    /**
+     * Invalid list-only field [{0}]. List-only field key must always be a reference data type.
+     */
+    String INVALID_LIST_ONLY_FIELD = "APPLICATION_0008";
+
 }
