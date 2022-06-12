@@ -521,8 +521,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
-                    logDebug("Dynamic entity information successfully built. [{0}] entities resolved for generation."
-                            + _dynamicEntityInfos.size());
+                    logDebug("Dynamic entity information successfully built. [{0}] entities resolved for generation.",
+                            _dynamicEntityInfos.size());
 
                     // Compile and load class if necessary
                     if (!_dynamicEntityInfos.isEmpty()) {
@@ -616,6 +616,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appEntity.getEntityClass(), appEntity.getTableName(), appEntity.getLabel(),
                             appEntity.getDelegate(), appEntity.getAuditable(), appEntity.getReportable(), longName,
                             appEntity.getDescription(), appEntity.getId(), appEntity.getVersionNo());
+
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
                         WidgetTypeDef inputWidgetTypeDef = null;
                         if (!StringUtils.isBlank(appEntityField.getInputWidget())) {
@@ -665,6 +666,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
                                     appEntityField.isBasicSearch(), appEntityField.isDescriptive());
                         }
+
                     }
 
                     for (AppEntityAttachment appEntityAttachment : appEntity.getAttachmentList()) {
@@ -2527,6 +2529,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         listOnlyFieldDef.setResolvedTypeFieldDef(_resolvedTypeFieldDef);
                         break;
                     }
+                } else {
+                    throw new UnifyException(ApplicationModuleErrorConstants.INVALID_LIST_ONLY_FIELD,
+                            _entityDef.getLongName(), _listOnlyFieldDef.getFieldName());
                 }
             }
 
