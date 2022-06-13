@@ -66,7 +66,6 @@ public class TableWriter extends AbstractControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        logDebug("Writing table structure [{0}]...", widget.getLongName());
         AbstractTableWidget<?, ?, ?> tableWidget = (AbstractTableWidget<?, ?, ?>) widget;
 
         AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
@@ -147,12 +146,10 @@ public class TableWriter extends AbstractControlWriter {
 
             writer.write("</div>");
         }
-        logDebug("Table structure [{0}] successfully written.", widget.getLongName());
     }
 
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        logDebug("Writing table behavior [{0}]...", widget.getLongName());
         super.doWriteBehavior(writer, widget);
         AbstractTableWidget<?, ?, ?> tableWidget = (AbstractTableWidget<?, ?, ?>) widget;
         final String tableWidgetId = tableWidget.getId();
@@ -265,7 +262,6 @@ public class TableWriter extends AbstractControlWriter {
             }
             writer.endFunction();
         }
-        logDebug("Table behavior [{0}] successfully written.", widget.getLongName());
     }
 
     private void writeHeaderRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
@@ -485,6 +481,7 @@ public class TableWriter extends AbstractControlWriter {
                                         tableStateOverride.isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
                                 if (i == 0) {
                                     chWidget.initValueStoreMemory(len);
+                                    widgetInfo.setName(fieldName);
                                 }
                             } else {
                                 chWidget.setEditable(tabelColumnDef.isEditable());

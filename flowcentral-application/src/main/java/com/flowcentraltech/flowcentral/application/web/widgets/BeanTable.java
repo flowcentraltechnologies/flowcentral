@@ -66,11 +66,11 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected void onFireOnRowChange(List<?> sourceObject, int rowIndex) throws UnifyException {
+    protected void onFireOnRowChange(List<?> sourceObject, int rowIndex, String trigger) throws UnifyException {
         if (isWithEntryPolicy()) {
             ValueStore tableValueStore = getValueStore(sourceObject);
             tableValueStore.setDataIndex(rowIndex);
-            getEntryPolicy().onEntryRowChange(getParentReader(), tableValueStore, rowIndex);
+            getEntryPolicy().onEntryRowChange(getParentReader(), tableValueStore, rowIndex, trigger);
         }
     }
 

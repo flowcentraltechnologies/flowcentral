@@ -69,8 +69,8 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
-    public void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, int rowIndex)
-            throws UnifyException {
+    public void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, int rowIndex,
+            String trigger) throws UnifyException {
 
     }
 

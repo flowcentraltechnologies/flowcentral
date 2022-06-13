@@ -45,7 +45,7 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
             Set<Integer> selected) throws UnifyException {
         final int len = tableValueStore.size();
         for (int i = 0; i < len; i++) {
-            onEntryRowChange(parentReader, tableValueStore, i);
+            onEntryRowChange(parentReader, tableValueStore, i, null);
         }
     }
 

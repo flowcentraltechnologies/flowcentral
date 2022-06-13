@@ -351,7 +351,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected ApplicationDef create(String name, Object... arg1) throws Exception {
-                    logDebug("Creating application definition for [{0}]...", name);
                     Application application = environment().list(new ApplicationQuery().name(name));
                     return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
                             application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
@@ -371,7 +370,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected AppletDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating applet definition for [{0}]...", longName);
                     String _actLongName = ApplicationNameUtils.removeVestigialNamePart(longName);
                     AppApplet appApplet = getApplicationEntity(AppApplet.class, _actLongName);
                     final boolean descriptiveButtons = systemModuleService.getSysParameterValue(boolean.class,
@@ -420,7 +418,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected WidgetTypeDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating widget type definition for [{0}]...", longName);
                     AppWidgetType appWidgetType = getApplicationEntity(AppWidgetType.class, longName);
                     return new WidgetTypeDef(appWidgetType.getDataType(), appWidgetType.getInputType(), longName,
                             appWidgetType.getDescription(), appWidgetType.getId(), appWidgetType.getVersionNo(),
@@ -439,7 +436,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected SuggestionTypeDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating suggestion type definition for [{0}]...", longName);
                     AppSuggestionType appSuggestionType = getApplicationEntity(AppSuggestionType.class, longName);
                     return new SuggestionTypeDef(appSuggestionType.getParent(), longName,
                             appSuggestionType.getDescription(), appSuggestionType.getId(),
@@ -462,7 +458,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @SuppressWarnings("unchecked")
                 @Override
                 protected EntityClassDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating entity class definition for [{0}]...", longName);
                     final EntityDef entityDef = getEntityDef(longName);
                     if ("application.propertyItem".equals(longName)) {
                         return new EntityClassDef(entityDef, PropertyListItem.class);
@@ -590,7 +585,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @SuppressWarnings("unchecked")
                 @Override
                 protected EntityDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating entity definition for [{0}]...", longName);
                     final WidgetTypeDef textWidgetTypeDef = widgetDefFactoryMap.get("application.text");
                     if ("application.propertyItem".equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
@@ -716,7 +710,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected EntityDef create(String entityClass, Object... arg1) throws Exception {
-                    logDebug("Associating entity definition for class [{0}]...", entityClass);
                     AppEntity appEntity = environment().find(new AppEntityQuery().entityClass(entityClass));
                     return getEntityDef(ApplicationNameUtils
                             .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName()));
@@ -734,7 +727,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected RefDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating reference definition for [{0}]...", longName);
                     AppRef appRef = getApplicationEntity(AppRef.class, longName);
                     FilterDef filterDef = InputWidgetUtils.getFilterDef(appRef.getFilter());
                     List<StringToken> listFormat = !StringUtils.isBlank(appRef.getListFormat())
@@ -766,7 +758,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected TableDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating table definition for [{0}]...", longName);
                     if ("application.propertyItemTable".equals(longName)) {
                         TableDef.Builder tdb = TableDef.newBuilder(getEntityDef("application.propertyItem"),
                                 getApplicationMessage("application.propertyitem.table.label"), false, false,
@@ -839,7 +830,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @SuppressWarnings("unchecked")
                 @Override
                 protected FormDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating form definition for [{0}]...", longName);
                     AppForm appForm = getApplicationEntity(AppForm.class, longName);
                     final boolean useFormColorScheme = systemModuleService.getSysParameterValue(boolean.class,
                             ApplicationModuleSysParamConstants.USE_APPLICATION_FORM_COLOR_SCHEME);
@@ -982,7 +972,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected AssignmentPageDef create(String longName, Object... arg1) throws Exception {
-                    logDebug("Creating assignment page definition for [{0}]...", longName);
                     AppAssignmentPage appAssignmentPage = getApplicationEntity(AppAssignmentPage.class, longName);
                     return new AssignmentPageDef(longName, appAssignmentPage.getDescription(),
                             appAssignmentPage.getId(), appAssignmentPage.getVersionNo(), appAssignmentPage.getLabel(),
@@ -1008,7 +997,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected PropertyListDef create(String longName, Object... params) throws Exception {
-                    logDebug("Creating property list definition for [{0}]...", longName);
                     AppPropertyList appPropertyList = getApplicationEntity(AppPropertyList.class, longName);
                     PropertyListDef.Builder pldb = PropertyListDef.newBuilder(longName,
                             appPropertyList.getDescription(), appPropertyList.getId(), appPropertyList.getVersionNo());
@@ -1046,7 +1034,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected PropertyRuleDef create(String longName, Object... params) throws Exception {
-                    logDebug("Creating property rule definition for [{0}]...", longName);
                     AppPropertyRule appPropertyRule = getApplicationEntity(AppPropertyRule.class, longName);
                     PropertyListDef defaultList = null;
                     if (!StringUtils.isBlank(appPropertyRule.getDefaultList())) {
