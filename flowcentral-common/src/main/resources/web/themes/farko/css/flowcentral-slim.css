@@ -28,5 +28,7 @@ select:not([multiple]){height:28px;}
 /* Form */
 .fc-form .fcon {min-height: 44px;}
 
+/* Table */
+.fc-table .table th {padding: 4px 6px;}
 /****** OVERRIDE END (SLIM) **********/
 			

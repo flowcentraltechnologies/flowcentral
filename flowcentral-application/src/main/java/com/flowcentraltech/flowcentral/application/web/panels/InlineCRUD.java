@@ -70,8 +70,8 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
         List<T> _entries = new ArrayList<T>(entries);
         table.setPolicy(tablePolicy);
-        table.setSourceObject(_entries);
         table.setParentReader(parentReader);
+        table.setSourceObject(_entries);
         addEntry(false);
     }
 
