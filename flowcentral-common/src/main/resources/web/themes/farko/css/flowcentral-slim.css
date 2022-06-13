@@ -22,5 +22,11 @@ select:not([multiple]){height:28px;}
 .ui-text-popup .tpbutton {height:28px}
 .ui-text-popup .tplbutton {height:28px;}
 
+/* Mini form */
+.fc-miniform .mfcon {min-height: 44px;}
+
+/* Form */
+.fc-form .fcon {min-height: 44px;}
+
 /****** OVERRIDE END (SLIM) **********/
 			
