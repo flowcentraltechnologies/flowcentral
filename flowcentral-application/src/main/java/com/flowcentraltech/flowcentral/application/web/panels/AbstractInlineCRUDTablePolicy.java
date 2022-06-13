@@ -16,8 +16,10 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntryTablePolicy;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -30,10 +32,21 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> extends AbstractEntryTablePolicy
         implements InlineCRUDTablePolicy<T> {
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
+    }
+
     @Override
     public int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
             throws UnifyException {
         return (index + 1) >= size ? 0 : 1;
+    }
+
+    protected AppletUtilities au() {
+        return appletUtilities;
     }
 
 }
