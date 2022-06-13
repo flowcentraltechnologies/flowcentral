@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -36,8 +35,6 @@ public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryT
      * 
      * @param parentReader
      *                     optional parent value store reader
-     * @param au
-     *                     the applet utilities object
      * @param itemList
      *                     the target items list
      * @param item
@@ -47,6 +44,6 @@ public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryT
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onAddItem(ValueStoreReader parentReader, AppletUtilities au, List<T> itemList, T item, int entryIndex)
+    void onAddItem(ValueStoreReader parentReader, List<T> itemList, T item, int entryIndex)
             throws UnifyException;
 }
