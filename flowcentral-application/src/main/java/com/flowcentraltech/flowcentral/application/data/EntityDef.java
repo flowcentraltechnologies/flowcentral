@@ -53,7 +53,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 public class EntityDef extends BaseApplicationEntityDef {
-    
+
     private EntityBaseType baseType;
 
     private ConfigType type;
@@ -105,7 +105,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     private EntityFieldDef fosterParentTypeDef;
 
     private EntityFieldDef categoryColumnDef;
-    
+
     private Set<String> auditFieldNames;
 
     private String blobFieldName;
@@ -362,7 +362,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     public boolean isWithAutoFormatFields() {
         return !getAutoFormatFieldDefList().isEmpty();
     }
-    
+
     public List<EntityFieldDef> getSuggestionFieldDefList() {
         if (suggestionFieldDefList == null) {
             synchronized (this) {
@@ -599,20 +599,20 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public Set<String> getAuditFieldNames() {
         if (auditFieldNames == null) {
-            synchronized(EntityDef.class) {
+            synchronized (EntityDef.class) {
                 if (auditFieldNames == null) {
                     auditFieldNames = new HashSet<String>();
-                    for (EntityFieldDef entityFieldDef: fieldDefList) {
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
                         if (entityFieldDef.isAuditable()) {
                             auditFieldNames.add(entityFieldDef.getFieldName());
                         }
                     }
-                    
+
                     auditFieldNames = Collections.unmodifiableSet(auditFieldNames);
-                }                
+                }
             }
         }
-        
+
         return auditFieldNames;
     }
 
@@ -785,30 +785,30 @@ public class EntityDef extends BaseApplicationEntityDef {
                 EntityFieldDataType dataType, EntityFieldType type, String fieldName, String fieldLabel)
                 throws UnifyException {
             return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, null, dataType, type, null, fieldName, fieldLabel,
-                    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                    false, false, false, false, false, false);
+                    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                    null, false, false, false, false, false, false);
         }
 
         public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
                 WidgetTypeDef lingualWidgetTypeDef, EntityFieldDataType dataType, EntityFieldType type,
-                TextCase textCase, String fieldName, String fieldLabel, String columnName, String category,String suggestionType,
-                String inputLabel, String inputListKey, String lingualListKey, String autoFormat, String defaultVal,
-                String references, String key, String property, Integer rows, Integer columns, Integer minLen,
-                Integer maxLen, Integer precision, Integer scale, boolean nullable, boolean auditable,
+                TextCase textCase, String fieldName, String fieldLabel, String columnName, String category,
+                String suggestionType, String inputLabel, String inputListKey, String lingualListKey, String autoFormat,
+                String defaultVal, String references, String key, String property, Integer rows, Integer columns,
+                Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean nullable, boolean auditable,
                 boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive)
                 throws UnifyException {
             return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, null, dataType, type,
-                    textCase, fieldName, fieldLabel, columnName, category, suggestionType, inputLabel, inputListKey, lingualListKey,
-                    autoFormat, defaultVal, references, key, property, rows, columns, minLen, maxLen, precision, scale,
-                    nullable, auditable, reportable, maintainLink, basicSearch, descriptive);
+                    textCase, fieldName, fieldLabel, columnName, category, suggestionType, inputLabel, inputListKey,
+                    lingualListKey, autoFormat, defaultVal, references, key, property, rows, columns, minLen, maxLen,
+                    precision, scale, nullable, auditable, reportable, maintainLink, basicSearch, descriptive);
         }
 
         public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
                 WidgetTypeDef lingualWidgetTypeDef, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
-                TextCase textCase, String fieldName, String fieldLabel, String columnName, String category, String suggestionType,
-                String inputLabel, String inputListKey, String lingualListKey, String autoFormat, String defaultVal,
-                String references, String key, String property, Integer rows, Integer columns, Integer minLen,
-                Integer maxLen, Integer precision, Integer scale, boolean nullable, boolean auditable,
+                TextCase textCase, String fieldName, String fieldLabel, String columnName, String category,
+                String suggestionType, String inputLabel, String inputListKey, String lingualListKey, String autoFormat,
+                String defaultVal, String references, String key, String property, Integer rows, Integer columns,
+                Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean nullable, boolean auditable,
                 boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive)
                 throws UnifyException {
             if (fieldDefMap.containsKey(fieldName)) {
@@ -817,12 +817,22 @@ public class EntityDef extends BaseApplicationEntityDef {
 
             fieldDefMap.put(fieldName,
                     new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, refDef, dataType,
-                            type, textCase, longName, fieldName, fieldLabel, columnName, references, category, suggestionType,
-                            inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
-                            DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
+                            type, textCase, longName, fieldName, fieldLabel, columnName, references, category,
+                            suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key,
+                            property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
                             DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
                             DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), nullable,
                             auditable, reportable, maintainLink, basicSearch, descriptive));
+            return this;
+        }
+
+        public Builder addFieldDef(EntityFieldDef entityFieldDef) throws UnifyException {
+            if (fieldDefMap.containsKey(entityFieldDef.getFieldName())) {
+                throw new RuntimeException(
+                        "Field with name [" + entityFieldDef.getFieldName() + "] already exists in this definition.");
+            }
+
+            fieldDefMap.put(entityFieldDef.getFieldName(), entityFieldDef);
             return this;
         }
 
