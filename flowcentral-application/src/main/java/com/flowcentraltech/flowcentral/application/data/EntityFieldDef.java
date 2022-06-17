@@ -446,6 +446,88 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return EntityFieldDataType.BLOB.equals(dataType);
     }
 
+    public static EntityFieldDef createForString(AppletUtilities au, String fieldName, String fieldLabel,
+            Integer minLen, Integer maxLen, boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForString(au, fieldName, fieldLabel).minLen(minLen).maxLen(maxLen)
+                .nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForAmount(AppletUtilities au, String fieldName, String fieldLabel,
+            Integer precision, Integer scale, boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForString(au, fieldName, fieldLabel).precision(precision).scale(scale)
+                .nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForDate(AppletUtilities au, String fieldName, String fieldLabel,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForDate(au, fieldName, fieldLabel).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForDateTime(AppletUtilities au, String fieldName, String fieldLabel,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForDateTime(au, fieldName, fieldLabel).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForDateTimeUTC(AppletUtilities au, String fieldName, String fieldLabel,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForDateTimeUTC(au, fieldName, fieldLabel).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForEnum(AppletUtilities au, String fieldName, String fieldLabel, String list,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForEnum(au, fieldName, fieldLabel, list).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForEnumRef(AppletUtilities au, String fieldName, String fieldLabel, String list,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForEnumRef(au, fieldName, fieldLabel, list).nullable(nullable).build();
+    }
+
+    public static Builder newBuilderForString(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.STRING, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.text");
+    }
+
+    public static Builder newBuilderForAmount(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.DECIMAL, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.amount");
+    }
+
+    public static Builder newBuilderForDate(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.DATE, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.date");
+    }
+
+    public static Builder newBuilderForDateTime(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef
+                .newBuilder(au, EntityFieldDataType.TIMESTAMP, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.datetime");
+    }
+
+    public static Builder newBuilderForDateTimeUTC(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef
+                .newBuilder(au, EntityFieldDataType.TIMESTAMP_UTC, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.datetime");
+    }
+
+    public static Builder newBuilderForEnum(AppletUtilities au, String fieldName, String fieldLabel, String list)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.ENUM, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .inputWidget("application.enumlist").references(list);
+    }
+
+    public static Builder newBuilderForEnumRef(AppletUtilities au, String fieldName, String fieldLabel, String list)
+            throws UnifyException {
+        return EntityFieldDef
+                .newBuilder(au, EntityFieldDataType.ENUM_REF, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .inputWidget("application.enumlist").references(list);
+    }
+
     public static Builder newBuilder(AppletUtilities au, EntityFieldDataType dataType, EntityFieldType type,
             String fieldName, String fieldLabel) {
         return new Builder(au, dataType, type, fieldName, fieldLabel);
@@ -674,24 +756,24 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             this.basicSearch = basicSearch;
             return this;
         }
-        
+
         public EntityFieldDef build() throws UnifyException {
             if (textWidgetTypeDef == null) {
                 throw new RuntimeException("Text widget is required.");
             }
-            
+
             if (inputWidgetTypeDef == null) {
                 throw new RuntimeException("Input widget is required.");
             }
-            
+
             if (StringUtils.isBlank(fieldName)) {
                 throw new RuntimeException("Field name is blank.");
             }
-            
+
             if (StringUtils.isBlank(fieldLabel)) {
                 throw new RuntimeException("Field label is blank.");
             }
-            
+
             return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, ligualWidgetTypeDef, refDef, dataType,
                     type, textCase, entityLongName, fieldName, fieldLabel, columnName, references, category,
                     suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
