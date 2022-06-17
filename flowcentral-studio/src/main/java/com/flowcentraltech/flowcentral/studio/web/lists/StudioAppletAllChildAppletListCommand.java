@@ -48,9 +48,9 @@ public class StudioAppletAllChildAppletListCommand extends AbstractApplicationLi
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            String entity = applicationService().getAppAppletEntity(longParam.getValue());
+            String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                EntityDef entityDef = applicationService().getEntityDef(entity);
+                EntityDef entityDef = application().getEntityDef(entity);
                 List<EntityFieldDef> childListFieldList = entityDef.getChildListFieldDefList();
                 if (!childListFieldList.isEmpty()) {
                     List<String> entityNames = new ArrayList<String>();
@@ -59,7 +59,7 @@ public class StudioAppletAllChildAppletListCommand extends AbstractApplicationLi
                     }
 
                     return ApplicationNameUtils.getListableList(
-                            applicationService().findAppApplets(new AppAppletQuery().entityIn(entityNames)));
+                            application().findAppApplets(new AppAppletQuery().entityIn(entityNames)));
                 }
             }
         }

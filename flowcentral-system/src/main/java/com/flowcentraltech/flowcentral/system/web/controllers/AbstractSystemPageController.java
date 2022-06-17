@@ -40,11 +40,11 @@ public abstract class AbstractSystemPageController<T extends AbstractPageBean> e
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
-    protected SystemModuleService getSystemModuleService() {
+    protected SystemModuleService system() {
         return systemModuleService;
     }
 

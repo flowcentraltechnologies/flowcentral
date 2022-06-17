@@ -52,14 +52,14 @@ public class StudioEntityFieldInputRefListCommand extends AbstractApplicationLis
             EntityFieldDataType type = DataUtils.convert(EntityFieldDataType.class, params.getDataType());
             if (type.isForeignKey() && !type.isEnumDataType()) {
                 ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getEntity());
-                AppEntityField appEntityField = applicationService().findAppEntityField(
+                AppEntityField appEntityField = application().findAppEntityField(
                         (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
                                 .appEntityName(np.getEntityName()).name(params.getName()));
-                RefDef _refDef = applicationService().getRefDef(appEntityField.getReferences());
+                RefDef _refDef = application().getRefDef(appEntityField.getReferences());
                 AppRefQuery query = new AppRefQuery();
                 query.entity(_refDef.getEntity());
                 query.addSelect("applicationName", "name", "description");
-                return ApplicationNameUtils.getListableList(applicationService().findAppRefs(query));
+                return ApplicationNameUtils.getListableList(application().findAppRefs(query));
             }
         }
 

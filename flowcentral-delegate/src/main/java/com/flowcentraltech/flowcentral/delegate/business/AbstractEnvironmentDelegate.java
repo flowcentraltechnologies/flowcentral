@@ -457,7 +457,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
         return null;
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

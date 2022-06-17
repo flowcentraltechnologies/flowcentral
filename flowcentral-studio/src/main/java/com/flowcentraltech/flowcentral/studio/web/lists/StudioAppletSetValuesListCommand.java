@@ -46,7 +46,7 @@ public class StudioAppletSetValuesListCommand extends AbstractApplicationListCom
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            List<AppAppletSetValues> setValuesList = applicationService().findAppAppletSetValues(longParam.getValue());
+            List<AppAppletSetValues> setValuesList = application().findAppAppletSetValues(longParam.getValue());
             if (!DataUtils.isBlank(setValuesList)) {
                 List<ListData> list = new ArrayList<ListData>();
                 for (AppAppletSetValues setValues : setValuesList) {

@@ -182,7 +182,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         ApplicationPageBean pageBean = getPageBean();
         pageBean.setUserPhotoGenerator(userPhotoGenerator);
 
-        final boolean enableMultipleTabs = getSystemModuleService().getSysParameterValue(boolean.class,
+        final boolean enableMultipleTabs = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_MULTIPLE_TABS);
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
     }

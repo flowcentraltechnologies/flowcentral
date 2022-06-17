@@ -47,7 +47,7 @@ public class StudioTabReferenceListCommand extends AbstractApplicationListComman
         if (params.isPresent()) {
             final TabContentType type = params.getType();
             if (TabContentType.CHILD.equals(type) || TabContentType.CHILD_LIST.equals(type)) {
-                EntityDef entityDef = applicationService().getEntityDef(params.getEntity());
+                EntityDef entityDef = application().getEntityDef(params.getEntity());
                 List<EntityFieldDef> list = new ArrayList<EntityFieldDef>();
                 if (TabContentType.CHILD.equals(type)) {
                     for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {

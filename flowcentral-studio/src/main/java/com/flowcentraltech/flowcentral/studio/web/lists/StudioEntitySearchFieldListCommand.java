@@ -43,7 +43,7 @@ public class StudioEntitySearchFieldListCommand extends AbstractApplicationListC
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam stringParams) throws UnifyException {
         if (stringParams.isPresent()) {
-            EntityDef entityDef = applicationService().getEntityDef(stringParams.getValue());
+            EntityDef entityDef = application().getEntityDef(stringParams.getValue());
             return entityDef.getFilterStringFieldDefList();
         }
 

@@ -46,10 +46,10 @@ public class StudioTabAppletListCommand extends AbstractApplicationListCommand<A
     @Override
     public List<? extends Listable> execute(Locale locale, AppletParams params) throws UnifyException {
         if (params.isPresent()) {
-            EntityDef entityDef = applicationService().getEntityDef(params.getEntity());
+            EntityDef entityDef = application().getEntityDef(params.getEntity());
             String childEntity = entityDef.getFieldDef(params.getReference()).getRefDef().getEntity();
             List<ListData> list = new ArrayList<ListData>();
-            for (AppApplet appApplet : applicationService().findManageEntityListApplets(childEntity)) {
+            for (AppApplet appApplet : application().findManageEntityListApplets(childEntity)) {
                 list.add(new ListData(ApplicationNameUtils.getApplicationEntityLongName(appApplet.getApplicationName(),
                         appApplet.getName()), appApplet.getDescription()));
             }

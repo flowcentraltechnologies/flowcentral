@@ -37,7 +37,7 @@ public class EntityTableNameSetValueGenerator extends AbstractFieldSetValueGener
 
     @Override
     public Object generate(EntityDef entityDef, ValueStore valueStore, String rule) throws UnifyException {
-        ApplicationDef applicationDef = applicationService().getApplicationDef(entityDef.getApplicationName());
+        ApplicationDef applicationDef = application().getApplicationDef(entityDef.getApplicationName());
         return ApplicationCodeGenUtils.generateCustomEntityTableName(applicationDef.getModuleShortCode(),
                 valueStore.retrieve(String.class, "name"));
     }

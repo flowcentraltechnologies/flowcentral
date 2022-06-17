@@ -44,7 +44,7 @@ public class AppWorkAppEntityListCommand extends AbstractApplicationListCommand<
     public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
         if (params.isPresent()) {
             return ApplicationNameUtils.getListableList(
-                    applicationService().findAppEntities((AppEntityQuery) new AppEntityQuery().isWorkEntity()
+                    application().findAppEntities((AppEntityQuery) new AppEntityQuery().isWorkEntity()
                             .applicationId(params.getValue()).addSelect("applicationName", "name", "description")));
         }
 

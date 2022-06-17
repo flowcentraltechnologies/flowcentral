@@ -35,11 +35,11 @@ public abstract class AbstractSystemListCommand<T extends ListParam> extends Abs
         super(paramType);
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
-    protected SystemModuleService getSystemModuleService() {
+    protected SystemModuleService system() {
         return systemModuleService;
     }
 

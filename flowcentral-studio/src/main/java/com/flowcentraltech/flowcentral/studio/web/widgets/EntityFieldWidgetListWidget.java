@@ -45,7 +45,7 @@ public class EntityFieldWidgetListWidget extends EntityListWidget {
         EntityFieldDataType type = getValue(EntityFieldDataType.class, getUplAttribute(String.class, "typeField"));
         if (EntityFieldDataType.LIST_ONLY.equals(type)) {
             AppEntityField appEntityField = (AppEntityField) getValueStore().getValueObject();
-            type = getApplicationService().resolveListOnlyEntityDataType(appEntityField);
+            type = application().resolveListOnlyEntityDataType(appEntityField);
         }
 
         StudioQueryUtils.addWidgetTypeCriteria(query, type);

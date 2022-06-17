@@ -40,7 +40,7 @@ public class CredentialListCommand extends AbstractSystemListCommand<ZeroParams>
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return getSystemModuleService().findCredentials(
+        return system().findCredentials(
                 (CredentialQuery) new CredentialQuery().addSelect("name", "description").ignoreEmptyCriteria(true));
     }
 

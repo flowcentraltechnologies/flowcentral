@@ -63,7 +63,7 @@ public abstract class AbstractFieldSetValueGenerator extends AbstractUnifyCompon
 
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

@@ -55,11 +55,11 @@ public abstract class AbstractStudioEntityActionPolicy extends AbstractEntityAct
         this.systemModuleService = systemModuleService;
     }
 
-    protected ApplicationModuleService getAms() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 
-    protected SystemModuleService getSystemModuleService() {
+    protected SystemModuleService system() {
         return systemModuleService;
     }
 

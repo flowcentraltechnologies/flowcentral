@@ -42,7 +42,7 @@ public class StudioAppletCreateFormStatePolicyListCommand extends AbstractApplic
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam stringParam) throws UnifyException {
         if (stringParam.isPresent()) {
-            return applicationService().getFormDef(stringParam.getValue()).getOnCreateFormStatePolicyDefList();
+            return application().getFormDef(stringParam.getValue()).getOnCreateFormStatePolicyDefList();
         }
 
         return Collections.emptyList();

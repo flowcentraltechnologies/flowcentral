@@ -53,7 +53,7 @@ public abstract class AbstractEntityMatcher extends AbstractUnifyComponent imple
 
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

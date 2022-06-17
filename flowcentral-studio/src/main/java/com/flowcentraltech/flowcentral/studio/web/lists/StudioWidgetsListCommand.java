@@ -46,7 +46,7 @@ public class StudioWidgetsListCommand extends AbstractApplicationListCommand<Zer
         final String applicationName = (String) getSessionAttribute(
                 StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         if (!StringUtils.isBlank(applicationName)) {
-            return applicationService().getRelatedWidgetTypes(applicationName);
+            return application().getRelatedWidgetTypes(applicationName);
         }
 
         return Collections.emptyList();

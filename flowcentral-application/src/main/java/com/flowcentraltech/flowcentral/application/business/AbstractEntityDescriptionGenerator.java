@@ -66,7 +66,7 @@ public abstract class AbstractEntityDescriptionGenerator extends AbstractFieldSe
         }
 
         if (_refLongName != null && _instId != null) {
-            return applicationService().getEntityDescriptionByRef(_refLongName, _instId);
+            return application().getEntityDescriptionByRef(_refLongName, _instId);
         }
 
         return null;

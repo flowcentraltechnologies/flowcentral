@@ -46,10 +46,10 @@ public class StudioAppletLoadConfigListCommand extends AbstractApplicationListCo
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            String entity = applicationService().getAppAppletEntity(longParam.getValue());
+            String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
                 ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entity);
-                return applicationService().findAppEntityUploads(
+                return application().findAppEntityUploads(
                         (AppEntityUploadQuery) new AppEntityUploadQuery().applicationName(np.getApplicationName())
                                 .entityName(np.getEntityName()).addSelect("id", "name", "description"));
             }

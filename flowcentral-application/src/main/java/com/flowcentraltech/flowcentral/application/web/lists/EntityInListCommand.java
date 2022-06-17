@@ -49,10 +49,10 @@ public class EntityInListCommand extends AbstractApplicationListCommand<AssignPa
     public List<? extends Listable> execute(Locale locale, AssignParams params) throws UnifyException {
         if (params.isAssignedIdList() && params.isWithRule()) {
             EntityAssignRuleNameParts parts = ApplicationNameUtils.getEntityAssignRuleNameParts(params.getRule());
-            EntityDef _rootEntityDef = applicationService().getEntityDef(parts.getEntityLongName());
+            EntityDef _rootEntityDef = application().getEntityDef(parts.getEntityLongName());
             RefDef _assignRefDef = _rootEntityDef.getFieldDef(parts.getAssignFieldName()).getRefDef();
 
-            EntityClassDef _assignEntityClassDef = applicationService().getEntityClassDef(_assignRefDef.getEntity());
+            EntityClassDef _assignEntityClassDef = application().getEntityClassDef(_assignRefDef.getEntity());
             Query<?> query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());
             query.addAmongst("id", params.getAssignedIdList(Long.class));
             if (parts.isWithDescField()) {

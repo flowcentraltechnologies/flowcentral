@@ -52,14 +52,14 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
     public List<? extends Listable> execute(Locale locale, AssignParams params) throws UnifyException {
         if (params.isWithRule()) {
             EntityAssignRuleNameParts parts = ApplicationNameUtils.getEntityAssignRuleNameParts(params.getRule());
-            EntityDef _rootEntityDef = applicationService().getEntityDef(parts.getEntityLongName());
+            EntityDef _rootEntityDef = application().getEntityDef(parts.getEntityLongName());
             RefDef _assignRefDef = _rootEntityDef.getFieldDef(parts.getAssignFieldName()).getRefDef();
 
-            EntityClassDef _assignEntityClassDef = applicationService().getEntityClassDef(_assignRefDef.getEntity());
+            EntityClassDef _assignEntityClassDef = application().getEntityClassDef(_assignRefDef.getEntity());
             Query<?> query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());
             if (_assignRefDef.isWithFilterGenerator()) {
                 RefDef _baseRefDef = _rootEntityDef.getFieldDef(parts.getBaseFieldName()).getRefDef();
-                EntityClassDef _baseEntityClassDef = applicationService().getEntityClassDef(_baseRefDef.getEntity());
+                EntityClassDef _baseEntityClassDef = application().getEntityClassDef(_baseRefDef.getEntity());
                 Entity baseInst = environment().listLean(
                         (Class<? extends Entity>) _baseEntityClassDef.getEntityClass(), params.getAssignBaseId());
                 Restriction br = ((EntityBasedFilterGenerator) getComponent(_assignRefDef.getFilterGenerator()))
@@ -67,7 +67,7 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
                 query.addRestriction(br);
             } else if (_assignRefDef.isWithFilter()) {
                 Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(), null,
-                        applicationService().getNow());
+                        application().getNow());
                 query.addRestriction(br);
             }
 

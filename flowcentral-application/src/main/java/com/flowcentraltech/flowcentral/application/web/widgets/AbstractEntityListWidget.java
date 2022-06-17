@@ -230,15 +230,15 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
         return null;
     }
 
-    protected ApplicationModuleService getApplicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 
-    protected EnvironmentService getEntityService() {
+    protected EnvironmentService environment() {
         return environmentService;
     }
 
-    protected SpecialParamProvider getSpecialParamProvider() {
+    protected SpecialParamProvider specialParamProvider() {
         return specialParamProvider;
     }
 

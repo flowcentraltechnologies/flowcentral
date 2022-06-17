@@ -54,7 +54,7 @@ public abstract class AbstractApplicationEntityActionPolicy extends AbstractEnti
         unregisterPrivilege(applicationId, privilegeCategoryCode, privilegeCode);
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

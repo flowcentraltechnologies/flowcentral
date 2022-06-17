@@ -53,7 +53,7 @@ public abstract class AbstractStudioAppEntityFieldPolicy extends AbstractStudioE
     }
 
     protected Long getReportableDefinitionId(AppEntityField appEntityField) throws UnifyException {
-        String entity = getAms().getAppEntity(appEntityField.getAppEntityId());
+        String entity = application().getAppEntity(appEntityField.getAppEntityId());
         return reportModuleService.getReportableDefinitionId(entity);
     }
 

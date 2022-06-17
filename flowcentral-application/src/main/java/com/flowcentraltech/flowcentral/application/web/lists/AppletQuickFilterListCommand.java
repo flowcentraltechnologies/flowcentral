@@ -42,7 +42,7 @@ public class AppletQuickFilterListCommand extends AbstractApplicationListCommand
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParams) throws UnifyException {
         if (longParams.isPresent()) {
-            return applicationService().findAppAppletFilters(
+            return application().findAppAppletFilters(
                     (AppAppletFilterQuery) new AppAppletFilterQuery().appAppletId(longParams.getValue())
                             .byOwner(getUserToken().getUserLoginId()).quickFilter(true).orderById());
         }

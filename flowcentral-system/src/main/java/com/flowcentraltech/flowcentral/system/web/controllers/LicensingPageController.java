@@ -72,7 +72,7 @@ public class LicensingPageController extends AbstractSystemPageController<Licens
     @Action
     public String generateLicenseRequest() throws UnifyException {
         LicensingPageBean pageBean = getPageBean();
-        Date requestDt = getSystemModuleService().getNow();
+        Date requestDt = system().getNow();
         byte[] license = licenseProvider.generateLicenseRequest(pageBean.getFormClientTitle(),
                 pageBean.getFormAccountNo(), requestDt);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -109,7 +109,7 @@ public class LicensingPageController extends AbstractSystemPageController<Licens
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
         LicensingPageBean pageBean = getPageBean();
-        pageBean.setLicenseDef(getSystemModuleService().getInstanceLicensing());
+        pageBean.setLicenseDef(system().getInstanceLicensing());
         boolean isEnterprise = "Enterprise".equalsIgnoreCase(getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
         setPageWidgetVisible("licenceRequestBtn", isEnterprise);

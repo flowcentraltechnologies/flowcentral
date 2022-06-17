@@ -92,23 +92,23 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private String tabMemoryId;
 
-    public void setCollaborationProvider(CollaborationProvider collaborationProvider) {
+    public final void setCollaborationProvider(CollaborationProvider collaborationProvider) {
         this.collaborationProvider = collaborationProvider;
     }
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
     }
 
-    public void setFormContextEvaluator(FormContextEvaluator formContextEvaluator) {
+    public final void setFormContextEvaluator(FormContextEvaluator formContextEvaluator) {
         this.formContextEvaluator = formContextEvaluator;
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
+    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
         this.fileAttachmentProvider = fileAttachmentProvider;
     }
 

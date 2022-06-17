@@ -44,7 +44,7 @@ public class StudioEntityKeyListCommand extends AbstractApplicationListCommand<L
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
         if (params.isPresent()) {
-            return applicationService()
+            return application()
                     .findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                             .appEntityId(params.getValue()).dataTypeIn(EntityFieldDataType.ENUM_REF,
                                     EntityFieldDataType.REF, EntityFieldDataType.REF_UNLINKABLE)

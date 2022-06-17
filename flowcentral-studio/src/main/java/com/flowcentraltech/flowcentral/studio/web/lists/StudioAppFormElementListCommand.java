@@ -45,7 +45,7 @@ public class StudioAppFormElementListCommand extends AbstractApplicationListComm
     @Override
     public List<? extends Listable> execute(Locale locale, FormElementParams formElementParams) throws UnifyException {
         if (formElementParams.isPresent()) {
-            List<AppFormElement> appEntityFieldList = applicationService()
+            List<AppFormElement> appEntityFieldList = application()
                     .findAppFormElementsByStatePolicy(formElementParams.getParentId(), formElementParams.getType());
             if (!DataUtils.isBlank(appEntityFieldList)) {
                 List<ListData> list = new ArrayList<ListData>();

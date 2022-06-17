@@ -36,7 +36,7 @@ public abstract class AbstractApplicationConsolidatedFormStatePolicy extends Abs
         this.applicationModuleService = applicationModuleService;
     }
 
-    protected final ApplicationModuleService applicationService() {
+    protected final ApplicationModuleService application() {
         return applicationModuleService;
     }
 

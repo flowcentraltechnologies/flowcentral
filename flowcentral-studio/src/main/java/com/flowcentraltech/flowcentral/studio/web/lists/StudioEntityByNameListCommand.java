@@ -51,7 +51,7 @@ public class StudioEntityByNameListCommand extends AbstractApplicationListComman
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
-            List<AppEntity> appEntityList = applicationService()
+            List<AppEntity> appEntityList = application()
                     .findAppEntities((AppEntityQuery) new AppEntityQuery().applicationId(applicationId)
                             .addSelect("name", "description").addOrder("description"));
             if (!DataUtils.isBlank(appEntityList)) {

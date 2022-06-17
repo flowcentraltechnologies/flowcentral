@@ -46,7 +46,7 @@ public class StudioFormAppletFilterListCommand extends AbstractApplicationListCo
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
-            List<AppAppletFilter> filterList = applicationService().findAppAppletFilters(param.getValue());
+            List<AppAppletFilter> filterList = application().findAppAppletFilters(param.getValue());
             if (!DataUtils.isBlank(filterList)) {
                 List<ListData> list = new ArrayList<ListData>();
                 for (AppAppletFilter filter : filterList) {

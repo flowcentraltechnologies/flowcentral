@@ -99,7 +99,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
 
     @SuppressWarnings("unchecked")
     protected final List<? extends Listable> getResultByRef(String input, int limit) throws UnifyException {
-        final ApplicationModuleService applicationModuleService = getApplicationService();
+        final ApplicationModuleService applicationModuleService = application();
         RefDef[] refDefs = getRefDefs();
         if (refDefs != null) {
             List<Listable> fullResult = new ArrayList<Listable>();
@@ -107,7 +107,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
             for (int i = 0; i < refDefs.length; i++) {
                 RefDef refDef = refDefs[i];
                 final boolean listFormat = refDef.isWithListFormat();
-                EntityClassDef entityClassDef = getApplicationService().getEntityClassDef(refDef.getEntity());
+                EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
                 String searchField = getSearchField(entityClassDef, refDef);
                 Restriction br = null;
                 if (refDef.isWithFilterGenerator()) {
@@ -116,7 +116,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 } else {
                     br = refDef.isWithFilter()
                             ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                                    getSpecialParamProvider(), getApplicationService().getNow())
+                                    specialParamProvider(), application().getNow())
                             : null;
                 }
 
@@ -138,7 +138,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 }
 
                 query.addOrder(searchField);
-                List<? extends Listable> result = getEntityService().listAll(query);
+                List<? extends Listable> result = environment().listAll(query);
                 if (encode || listFormat) {
                     ValueStore listValueStore = new BeanValueListStore(result);
                     final int len = result.size();

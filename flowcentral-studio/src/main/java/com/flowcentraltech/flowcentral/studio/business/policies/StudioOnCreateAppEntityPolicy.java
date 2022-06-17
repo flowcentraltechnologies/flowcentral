@@ -69,7 +69,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
         super.doExecutePreAction(ctx);
         AppEntity appEntity = (AppEntity) ctx.getInst();
         if (DataUtils.isBlank(appEntity.getFieldList())) {
-            appEntity.setFieldList(getAms().getEntityBaseTypeFieldList(appEntity.getBaseType(), ConfigType.CUSTOM));
+            appEntity.setFieldList(application().getEntityBaseTypeFieldList(appEntity.getBaseType(), ConfigType.CUSTOM));
         } else {
             for (AppEntityField appEntityField : appEntity.getFieldList()) {
                 if (appEntityField.getType().isStatic()) {
@@ -86,7 +86,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
 //                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         final AppEntity appEntity = (AppEntity) ctx.getInst();
         final Long applicationId = appEntity.getApplicationId(); //(Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
-        final String applicationName = getAms().getApplicationName(applicationId);
+        final String applicationName = application().getApplicationName(applicationId);
         final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
         final String nameDesc = appEntity.getDescription();
 
@@ -100,7 +100,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
             appRef.setSearchField("description");
         }
 
-        getAms().createAppRef(appRef);
+        application().createAppRef(appRef);
 
         // Create reportable if necessary
         if (appEntity.getReportable()) {
@@ -123,7 +123,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
                     privilegeCode, description);
 
             UserToken userToken = getUserToken();
-            if (!userToken.isReservedUser() && getSystemModuleService().getSysParameterValue(boolean.class,
+            if (!userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
                 assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
             }

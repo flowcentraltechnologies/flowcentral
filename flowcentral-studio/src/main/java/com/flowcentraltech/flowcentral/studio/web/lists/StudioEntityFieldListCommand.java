@@ -43,7 +43,7 @@ public class StudioEntityFieldListCommand extends AbstractApplicationListCommand
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam params) throws UnifyException {
         if (params.isPresent()) {
-            return applicationService()
+            return application()
                     .findAppEntityFields(new AppEntityFieldQuery().appEntityId(params.getValue()).isEntityField());
         }
 

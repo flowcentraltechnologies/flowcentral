@@ -244,9 +244,9 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     private void loadUIOptions() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
-        pageBean.setLoginTitle(getSystemModuleService().getSysParameterValue(String.class,
+        pageBean.setLoginTitle(system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE));
-        pageBean.setLoginSubtitle(getSystemModuleService().getSysParameterValue(String.class,
+        pageBean.setLoginSubtitle(system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE));
     }
 

@@ -52,16 +52,16 @@ public class StudioEntityFieldWidgetListCommand extends AbstractApplicationListC
             EntityFieldDataType type = DataUtils.convert(EntityFieldDataType.class, params.getDataType());
             if (EntityFieldDataType.LIST_ONLY.equals(type)) {
                 ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(params.getEntity());
-                AppEntityField appEntityField = applicationService().findAppEntityField(
+                AppEntityField appEntityField = application().findAppEntityField(
                         (AppEntityFieldQuery) new AppEntityFieldQuery().applicationName(np.getApplicationName())
                                 .appEntityName(np.getEntityName()).name(params.getName()));
-                type = applicationService().resolveListOnlyEntityDataType(appEntityField);
+                type = application().resolveListOnlyEntityDataType(appEntityField);
             }
 
             AppWidgetTypeQuery query = new AppWidgetTypeQuery();
             StudioQueryUtils.addWidgetTypeCriteria(query, type);
             query.addSelect("applicationName", "name", "description");
-            return ApplicationNameUtils.getListableList(applicationService().findAppWidgetTypes(query));
+            return ApplicationNameUtils.getListableList(application().findAppWidgetTypes(query));
         }
 
         return Collections.emptyList();

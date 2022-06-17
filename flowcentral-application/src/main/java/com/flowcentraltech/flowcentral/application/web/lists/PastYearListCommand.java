@@ -43,7 +43,7 @@ public class PastYearListCommand extends AbstractApplicationListCommand<IntegerP
     @Override
     public List<? extends Listable> execute(Locale locale, IntegerParam param) throws UnifyException {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(applicationService().getNow());
+        cal.setTime(application().getNow());
         final int currentYear = cal.get(Calendar.YEAR);
         int start = currentYear;
         if (param.isPresent()) {

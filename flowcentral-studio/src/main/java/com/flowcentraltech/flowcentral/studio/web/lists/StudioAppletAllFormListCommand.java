@@ -45,10 +45,10 @@ public class StudioAppletAllFormListCommand extends AbstractApplicationListComma
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            String entity = applicationService().getAppAppletEntity(longParam.getValue());
+            String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
                 return ApplicationNameUtils.getListableList(
-                        applicationService().findAppForms(new AppFormQuery().entity(entity)));
+                        application().findAppForms(new AppFormQuery().entity(entity)));
             }
         }
 
