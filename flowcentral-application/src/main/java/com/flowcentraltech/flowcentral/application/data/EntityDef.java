@@ -716,6 +716,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return new Builder(baseType, ConfigType.STATIC);
     }
 
+    public static Builder newBuilder() {
+        return new Builder(null, ConfigType.STATIC);
+    }
+
     public static Builder newBuilder(ConfigType type, String originClassName, String label, String delegate,
             boolean auditable, boolean reportable, String longName, String description, Long id, long version) {
         return new Builder(null, type, originClassName, null, label, delegate, auditable, reportable, longName,
