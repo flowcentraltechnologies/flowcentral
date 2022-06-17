@@ -117,16 +117,8 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                             AppTableColumn appTableColumn = new AppTableColumn();
                             appTableColumn.setField(entityFieldDef.getFieldName());
                             appTableColumn.setLabel(null);
-                            if (entityFieldDef.isWithInputWidget()) {
-                                appTableColumn.setRenderWidget(entityFieldDef.getInputWidgetTypeDef().getLongName());
-                            } else {
-                                String widget = InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType());
-                                if (widget != null) {
-                                    appTableColumn.setRenderWidget(widget);
-                                } else {
-                                    appTableColumn.setRenderWidget("application.text");
-                                }
-                            }
+                            String widget = InputWidgetUtils.resolveEntityFieldWidget(entityFieldDef);
+                            appTableColumn.setRenderWidget(widget);
 
                             if (entityFieldDef.isMaintainLink()) {
                                 appTableColumn.setLinkAct("maintainAct");

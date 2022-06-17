@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.util.StringUtils;
@@ -171,6 +173,16 @@ public class TableColumnDef {
 
     public static Builder newBuilder() {
         return new Builder();
+    }
+
+    public static Builder newBuilder(AppletUtilities au, EntityFieldDef entityFieldDef) throws UnifyException {
+        String renderWidget = InputWidgetUtils.resolveEntityFieldWidget(entityFieldDef);
+        String renderer = InputWidgetUtils.constructRenderer(au.getWidgetTypeDef(renderWidget), entityFieldDef);
+        String editor = !entityFieldDef.isListOnly()
+                ? InputWidgetUtils.constructEditor(au.getWidgetTypeDef(renderWidget), entityFieldDef)
+                : null;
+        return new Builder().label(entityFieldDef.getFieldLabel()).fieldName(entityFieldDef.getFieldLabel())
+                .renderer(renderer).editor(editor);
     }
 
     public static class Builder {
