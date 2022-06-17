@@ -712,6 +712,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return entityExpressionDef;
     }
 
+    public static Builder newBuilder(EntityBaseType baseType) {
+        return new Builder(baseType, ConfigType.STATIC);
+    }
+
     public static Builder newBuilder(ConfigType type, String originClassName, String label, String delegate,
             boolean auditable, boolean reportable, String longName, String description, Long id, long version) {
         return new Builder(null, type, originClassName, null, label, delegate, auditable, reportable, longName,
@@ -763,6 +767,12 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         private long version;
 
+        public Builder(EntityBaseType baseType, ConfigType type) {
+            this.baseType = baseType;
+            this.type = type;
+            this.fieldDefMap = new LinkedHashMap<String, EntityFieldDef>();
+        }
+
         public Builder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName, String label,
                 String delegate, boolean auditable, boolean reportable, String longName, String description, Long id,
                 long version) {
@@ -779,6 +789,46 @@ public class EntityDef extends BaseApplicationEntityDef {
             this.description = description;
             this.id = id;
             this.version = version;
+        }
+
+        public Builder className(String className) {
+            this.originClassName = className;
+            return this;
+        }
+
+        public Builder tableName(String tableName) {
+            this.tableName = tableName;
+            return this;
+        }
+
+        public Builder label(String label) {
+            this.label = label;
+            return this;
+        }
+
+        public Builder delegate(String delegate) {
+            this.delegate = delegate;
+            return this;
+        }
+
+        public Builder longName(String longName) {
+            this.longName = longName;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder auditable(boolean auditable) {
+            this.auditable = auditable;
+            return this;
+        }
+
+        public Builder reportable(boolean reportable) {
+            this.reportable = reportable;
+            return this;
         }
 
         public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
