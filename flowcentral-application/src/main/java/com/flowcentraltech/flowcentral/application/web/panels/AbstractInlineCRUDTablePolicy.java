@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntryTablePolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -35,8 +36,15 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
     @Configurable
     private AppletUtilities appletUtilities;
 
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
+
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
     }
 
     @Override
@@ -47,6 +55,10 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
 
     protected AppletUtilities au() {
         return appletUtilities;
+    }
+
+    protected ApplicationModuleService application() {
+        return applicationModuleService;
     }
 
 }
