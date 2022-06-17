@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -36,6 +37,14 @@ public class TableColumnDef {
 
     private String cellEditor;
 
+    private String renderer;
+
+    private String editor;
+
+    private String linkAct;
+
+    private int widthRatio;
+
     private OrderType order;
 
     private int width;
@@ -51,15 +60,36 @@ public class TableColumnDef {
     private boolean summary;
 
     public TableColumnDef(String label, String fieldName, String headerStyle, String cellRenderer, String cellEditor,
-            OrderType order, int width, boolean switchOnChange, boolean disabled, boolean editable, boolean sortable,
-            boolean summary) {
+            String renderer, String editor, String linkAct, OrderType order, int widthRatio, int width,
+            boolean switchOnChange, boolean disabled, boolean editable, boolean sortable, boolean summary) {
         this.label = label;
         this.fieldName = fieldName;
         this.headerStyle = headerStyle;
         this.cellRenderer = cellRenderer;
         this.cellEditor = cellEditor;
+        this.renderer = renderer;
+        this.editor = editor;
+        this.linkAct = linkAct;
         this.order = order;
+        this.widthRatio = widthRatio;
         this.width = width;
+        this.switchOnChange = switchOnChange;
+        this.disabled = disabled;
+        this.editable = editable;
+        this.sortable = sortable;
+        this.summary = summary;
+    }
+
+    private TableColumnDef(String label, String fieldName, String renderer, String editor, String linkAct,
+            OrderType order, int widthRatio, boolean switchOnChange, boolean disabled, boolean editable,
+            boolean sortable, boolean summary) {
+        this.label = label;
+        this.fieldName = fieldName;
+        this.renderer = renderer;
+        this.editor = editor;
+        this.linkAct = linkAct;
+        this.order = order;
+        this.widthRatio = widthRatio;
         this.switchOnChange = switchOnChange;
         this.disabled = disabled;
         this.editable = editable;
@@ -89,6 +119,22 @@ public class TableColumnDef {
 
     public OrderType getOrder() {
         return order;
+    }
+
+    public String getRenderer() {
+        return renderer;
+    }
+
+    public String getEditor() {
+        return editor;
+    }
+
+    public String getLinkAct() {
+        return linkAct;
+    }
+
+    public int getWidthRatio() {
+        return widthRatio;
     }
 
     public int getWidth() {
@@ -123,11 +169,104 @@ public class TableColumnDef {
         return summary;
     }
 
-    @Override
-    public String toString() {
-        return "TableColumnDef [label=" + label + ", fieldName=" + fieldName + ", headerStyle=" + headerStyle
-                + ", cellRenderer=" + cellRenderer + ", cellEditor=" + cellEditor + ", order=" + order + ", width="
-                + width + ", switchOnChange=" + switchOnChange + ", disabled=" + disabled + ", editable=" + editable
-                + ", sortable=" + sortable + ", summary=" + summary + "]";
+    public static Builder newBuilder() {
+        return new Builder();
     }
+
+    public static class Builder {
+
+        private String label;
+
+        private String fieldName;
+
+        private String renderer;
+
+        private String editor;
+
+        private String linkAct;
+
+        private OrderType order;
+
+        private int widthRatio;
+
+        private boolean switchOnChange;
+
+        private boolean disabled;
+
+        private boolean editable;
+
+        private boolean sortable;
+
+        private boolean summary;
+
+        public Builder() {
+            this.widthRatio = 1;
+        }
+
+        public Builder label(String label) {
+            this.label = label;
+            return this;
+        }
+
+        public Builder fieldName(String fieldName) {
+            this.fieldName = fieldName;
+            return this;
+        }
+
+        public Builder renderer(String renderer) {
+            this.renderer = renderer;
+            return this;
+        }
+
+        public Builder editor(String editor) {
+            this.editor = editor;
+            return this;
+        }
+
+        public Builder linkAct(String linkAct) {
+            this.linkAct = linkAct;
+            return this;
+        }
+
+        public Builder widthRatio(int widthRatio) {
+            this.widthRatio = widthRatio > 0 ? widthRatio : 1;
+            return this;
+        }
+
+        public Builder switchOnChange(boolean switchOnChange) {
+            this.switchOnChange = switchOnChange;
+            return this;
+        }
+
+        public Builder disabled(boolean disabled) {
+            this.disabled = disabled;
+            return this;
+        }
+
+        public Builder editable(boolean editable) {
+            this.editable = editable;
+            return this;
+        }
+
+        public Builder sortable(boolean sortable) {
+            this.sortable = sortable;
+            return this;
+        }
+
+        public Builder summary(boolean summary) {
+            this.summary = summary;
+            return this;
+        }
+
+        public Builder order(OrderType order) {
+            this.order = order;
+            return this;
+        }
+
+        public TableColumnDef build() throws UnifyException {
+            return new TableColumnDef(label, fieldName, renderer, editor, linkAct, order, widthRatio, switchOnChange,
+                    disabled, editable, sortable, summary);
+        }
+    }
+
 }
