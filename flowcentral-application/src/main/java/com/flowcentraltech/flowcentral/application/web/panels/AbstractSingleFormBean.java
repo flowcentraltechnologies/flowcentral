@@ -32,6 +32,8 @@ public abstract class AbstractSingleFormBean implements SingleFormBean {
 
     private AppletUtilities au;
 
+    private ValueStore beanValueStore;
+
     @Override
     public final void init(AppletUtilities au) throws UnifyException {
         this.au = au;
@@ -53,27 +55,39 @@ public abstract class AbstractSingleFormBean implements SingleFormBean {
     }
 
     protected void copyFrom(ValueStore entityValueStore) throws UnifyException {
-        new BeanValueStore(this).copy(entityValueStore);
+        getValueStore().copy(entityValueStore);
     }
 
     protected void copyFromWithExclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        new BeanValueStore(this).copyWithExclusions(entityValueStore, fieldNames);
+        getValueStore().copyWithExclusions(entityValueStore, fieldNames);
     }
 
     protected void copyFromWithInclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        new BeanValueStore(this).copyWithInclusions(entityValueStore, fieldNames);
+        getValueStore().copyWithInclusions(entityValueStore, fieldNames);
     }
 
     protected void copyTo(ValueStore entityValueStore) throws UnifyException {
-        entityValueStore.copy(new BeanValueStore(this));
+        entityValueStore.copy(getValueStore());
     }
 
     protected void copyToWithExclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        entityValueStore.copyWithExclusions(new BeanValueStore(this), fieldNames);
+        entityValueStore.copyWithExclusions(getValueStore(), fieldNames);
     }
 
     protected void copyToWithInclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        entityValueStore.copyWithInclusions(new BeanValueStore(this), fieldNames);
+        entityValueStore.copyWithInclusions(getValueStore(), fieldNames);
+    }
+
+    protected ValueStore getValueStore() {
+        if (beanValueStore == null) {
+            synchronized (this) {
+                if (beanValueStore == null) {
+                    beanValueStore = new BeanValueStore(this);
+                }
+            }
+        }
+
+        return beanValueStore;
     }
 
     protected abstract void doInit() throws UnifyException;

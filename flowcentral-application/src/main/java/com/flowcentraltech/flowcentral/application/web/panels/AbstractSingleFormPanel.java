@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  * @since 1.0
  */
 public abstract class AbstractSingleFormPanel<T extends AbstractSingleFormBean> extends AbstractStandalonePanel
-        implements SingleFormPanel {
+        implements SingleFormPanel<T> {
 
     @Override
     public void addPageAliases() throws UnifyException {
