@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 
 /**
@@ -24,6 +25,15 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SingleFormPanel extends StandalonePanel {
+public interface SingleFormPanel<T extends SingleFormBean> extends StandalonePanel {
 
+    /**
+     * Initialize bean with panel properties.
+     * 
+     * @param bean
+     *             the bean to initialize
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void initializeBean(T bean) throws UnifyException;
 }

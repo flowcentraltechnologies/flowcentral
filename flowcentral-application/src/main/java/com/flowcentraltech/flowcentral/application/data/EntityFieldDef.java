@@ -454,7 +454,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     public static EntityFieldDef createForAmount(AppletUtilities au, String fieldName, String fieldLabel,
             Integer precision, Integer scale, boolean nullable) throws UnifyException {
-        return EntityFieldDef.newBuilderForString(au, fieldName, fieldLabel).precision(precision).scale(scale)
+        return EntityFieldDef.newBuilderForAmount(au, fieldName, fieldLabel).precision(precision).scale(scale)
                 .nullable(nullable).build();
     }
 
@@ -758,10 +758,6 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         }
 
         public EntityFieldDef build() throws UnifyException {
-            if (textWidgetTypeDef == null) {
-                throw new RuntimeException("Text widget is required.");
-            }
-
             if (inputWidgetTypeDef == null) {
                 throw new RuntimeException("Input widget is required.");
             }

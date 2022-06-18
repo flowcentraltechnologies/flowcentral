@@ -534,4 +534,9 @@ public class TableDef extends BaseApplicationEntityDef {
         }
     }
 
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
+
 }

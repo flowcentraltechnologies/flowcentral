@@ -181,7 +181,7 @@ public class TableColumnDef {
         String editor = !entityFieldDef.isListOnly()
                 ? InputWidgetUtils.constructEditor(au.getWidgetTypeDef(renderWidget), entityFieldDef)
                 : null;
-        return new Builder().label(entityFieldDef.getFieldLabel()).fieldName(entityFieldDef.getFieldLabel())
+        return new Builder().label(entityFieldDef.getFieldLabel()).fieldName(entityFieldDef.getFieldName())
                 .renderer(renderer).editor(editor);
     }
 
@@ -279,6 +279,11 @@ public class TableColumnDef {
             return new TableColumnDef(label, fieldName, renderer, editor, linkAct, order, widthRatio, switchOnChange,
                     disabled, editable, sortable, summary);
         }
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

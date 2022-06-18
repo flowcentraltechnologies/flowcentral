@@ -131,7 +131,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             }
         }
     }
-    
+
     @Action
     public void sortColumn() throws UnifyException {
         if (oldTable != null) {
@@ -212,7 +212,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public boolean isSummary() {
         return summaryPanelList != null && !summaryPanelList.isEmpty();
     }
-    
+
     public StandalonePanel getSummaryPanel(int index) {
         return isSummary() ? summaryPanelList.get(index) : null;
     }
@@ -222,9 +222,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public EventHandler getSwitchOnChangeHandler() throws UnifyException {
-        return getUplAttribute(EventHandler.class, "switchOnChangeHandler");       
+        return getUplAttribute(EventHandler.class, "switchOnChangeHandler");
     }
-    
+
     public T getTable() throws UnifyException {
         T table = getValue(tableClass);
         if (table != oldTable) {
@@ -238,7 +238,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 if (selectCtrl == null && tableDef != null && tableDef.isMultiSelect()) {
                     selectCtrl = createHiddenControl();
                 }
-                
+
                 clearRenderers();
                 removeAllExternalChildWidgets();
                 if (table != null) {
@@ -253,11 +253,11 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
                     final boolean entryMode = table.isEntryMode();
                     for (TableColumnDef tableColumnDef : tableDef.getColumnDefList()) {
-                        final boolean cellEditor = tableColumnDef.isWithCellEditor();
-                        final String columnWidgetUpl = entryMode && cellEditor ? tableColumnDef.getCellEditor()
+                        final boolean useCellEditor = tableColumnDef.isWithCellEditor() && tableColumnDef.isEditable();
+                        final String columnWidgetUpl = entryMode && useCellEditor ? tableColumnDef.getCellEditor()
                                 : tableColumnDef.getCellRenderer();
                         Widget widget = addExternalChildWidget(columnWidgetUpl);
-                        if (cellEditor) {
+                        if (useCellEditor) {
                             if (inputs == null) {
                                 inputs = new HashSet<Widget>();
                             }
@@ -436,7 +436,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
         sortColumnCtrl = (Control) addInternalChildWidget("!ui-hidden binding:sortColumnIndex");
     }
-    
+
     @Override
     protected ValueStore newValue(U object, int index) throws UnifyException {
         return createValueStore(object, index);
