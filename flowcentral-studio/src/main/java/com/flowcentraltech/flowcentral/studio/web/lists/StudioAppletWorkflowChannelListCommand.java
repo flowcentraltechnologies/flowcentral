@@ -54,7 +54,7 @@ public class StudioAppletWorkflowChannelListCommand extends AbstractApplicationL
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            String entity = applicationService().getAppAppletEntity(longParam.getValue());
+            String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
                 return ApplicationNameUtils
                         .getListableList(workflowModuleService.findWorkflowChannels((WfChannelQuery) new WfChannelQuery()

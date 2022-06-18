@@ -47,7 +47,7 @@ public class StudioAppFormStateTabListCommand extends AbstractApplicationListCom
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam param) throws UnifyException {
         if (param.isPresent()) {
-            List<AppFormElement> appEntityFieldList = applicationService()
+            List<AppFormElement> appEntityFieldList = application()
                     .findAppFormElementsByFormId(param.getValue(), FormElementType.TAB);
             if (!DataUtils.isBlank(appEntityFieldList)) {
                 List<ListData> list = new ArrayList<ListData>();

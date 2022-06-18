@@ -44,7 +44,7 @@ public class StudioEntityAppletListCommand extends AbstractApplicationListComman
     public List<? extends Listable> execute(Locale locale, StudioEntityFormParams params) throws UnifyException {
         if (params.isPresent()) {
             return ApplicationNameUtils
-                    .getListableList(applicationService().findAppApplets((AppAppletQuery) new AppAppletQuery()
+                    .getListableList(application().findAppApplets((AppAppletQuery) new AppAppletQuery()
                             .entity(params.getEntity()).addSelect("applicationName", "name", "description")));
         }
 

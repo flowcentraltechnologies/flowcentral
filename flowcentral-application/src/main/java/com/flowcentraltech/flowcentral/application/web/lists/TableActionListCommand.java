@@ -42,7 +42,7 @@ public class TableActionListCommand extends AbstractApplicationListCommand<LongP
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParams) throws UnifyException {
         if (longParams.isPresent()) {
-            return applicationService()
+            return application()
                     .findTableActions(new AppTableActionQuery().appTableId(longParams.getValue()));
         }
 

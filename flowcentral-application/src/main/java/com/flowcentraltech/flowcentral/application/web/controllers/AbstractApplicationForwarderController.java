@@ -49,7 +49,7 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
@@ -74,7 +74,7 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
         return forwardToPath(applicationPath);
     }
 
-    protected SystemModuleService getSystemModuleService() {
+    protected SystemModuleService system() {
         return systemModuleService;
     }
 

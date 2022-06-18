@@ -43,7 +43,7 @@ public class StudioFormAnnotationListCommand extends AbstractApplicationListComm
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParams) throws UnifyException {
         if (longParams.isPresent()) {
-            return applicationService()
+            return application()
                     .findAppFormAnnotations((AppFormAnnotationQuery) new AppFormAnnotationQuery()
                             .appFormId(longParams.getValue()).addSelect("name", "description"));
         }

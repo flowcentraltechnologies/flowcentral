@@ -44,7 +44,7 @@ public class StudioFormRelatedAppletListCommand extends AbstractApplicationListC
     public List<? extends Listable> execute(Locale locale, LongParam longParams) throws UnifyException {
         if (longParams.isPresent()) {
             return ApplicationNameUtils
-                    .getListableList(applicationService().findFormRelatedAppApplets(longParams.getValue()));
+                    .getListableList(application().findFormRelatedAppApplets(longParams.getValue()));
         }
 
         return Collections.emptyList();

@@ -63,7 +63,7 @@ public abstract class AbstractEntitySetValuesGenerator extends AbstractUnifyComp
 
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

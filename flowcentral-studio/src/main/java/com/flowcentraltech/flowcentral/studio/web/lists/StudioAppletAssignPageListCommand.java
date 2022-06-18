@@ -45,9 +45,9 @@ public class StudioAppletAssignPageListCommand extends AbstractApplicationListCo
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            String entity = applicationService().getAppAppletEntity(longParam.getValue());
+            String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return ApplicationNameUtils.getListableList(applicationService()
+                return ApplicationNameUtils.getListableList(application()
                         .findAppAssignmentPages(new AppAssignmentPageQuery().entity(entity)));
             }
         }

@@ -117,7 +117,7 @@ public abstract class AbstractFormListingGenerator extends AbstractUnifyComponen
         return environmentService;
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

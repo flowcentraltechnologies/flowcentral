@@ -113,7 +113,10 @@ import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.font.FontSymbolManager;
+import com.tcdng.unify.web.ui.PageRequestContextUtil;
+import com.tcdng.unify.web.ui.widget.Panel;
 
 /**
  * Applet utilities implementation.
@@ -153,6 +156,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Configurable
     private CollaborationProvider collaborationProvider;
 
+    @Configurable
+    private PageRequestContextUtil pageRequestContextUtil;
+    
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
     public AppletUtilitiesImpl() {
@@ -206,6 +212,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     public final void setFontSymbolManager(FontSymbolManager fontSymbolManager) {
         this.fontSymbolManager = fontSymbolManager;
+    }
+
+    public final void setPageRequestContextUtil(PageRequestContextUtil pageRequestContextUtil) {
+        this.pageRequestContextUtil = pageRequestContextUtil;
     }
 
     @Override
@@ -383,6 +393,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             String description, OwnershipType ownershipType, FilterDef filterDef) throws UnifyException {
         applicationModuleService.saveAppletQuickFilterDef(sweepingCommitPolicy, appAppletId, name, description,
                 ownershipType, filterDef);
+    }
+
+    @Override
+    public void setShowPopupCommandResult(Panel panel) throws UnifyException {
+        pageRequestContextUtil.setRequestPopupPanel(panel);
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);       
     }
 
     @Override

@@ -130,6 +130,19 @@ public final class InputWidgetUtils {
         return ENUMERATION_WIDGETS.contains(widgetName);
     }
 
+    public static String resolveEntityFieldWidget(final EntityFieldDef entityFieldDef) throws UnifyException {
+        if (entityFieldDef.isWithInputWidget()) {
+            return entityFieldDef.getInputWidgetTypeDef().getLongName();
+        } else {
+            String widget = InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType());
+            if (widget != null) {
+                return widget;
+            }
+        }
+        
+        return "application.text";
+    }
+
     public static String getDefaultEntityFieldWidget(EntityFieldDataType type) {
         return defaultFormInputWidgets.get(type);
     }

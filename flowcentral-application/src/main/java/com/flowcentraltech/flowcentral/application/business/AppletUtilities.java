@@ -66,6 +66,7 @@ import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.upl.UplComponent;
+import com.tcdng.unify.web.ui.widget.Panel;
 
 /**
  * Applet utilities component.
@@ -478,6 +479,16 @@ public interface AppletUtilities extends UnifyComponent {
     void saveAppletQuickFilterDef(SweepingCommitPolicy sweepingCommitPolicy, Long appAppletId, String name,
             String description, OwnershipType ownershipType, FilterDef filterDef) throws UnifyException;
 
+    /**
+     * Sets up show popup command result in current request.
+     * 
+     * @param panel
+     *              the popup panel
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setShowPopupCommandResult(Panel panel) throws UnifyException;
+    
     /**
      * Retrieves application field sequence definition for an entity instance.
      * 

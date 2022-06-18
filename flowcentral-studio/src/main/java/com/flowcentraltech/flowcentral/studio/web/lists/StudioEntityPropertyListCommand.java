@@ -51,17 +51,17 @@ public class StudioEntityPropertyListCommand extends AbstractApplicationListComm
     @Override
     public List<? extends Listable> execute(Locale locale, PropertyListParams params) throws UnifyException {
         if (params.isPresent()) {
-            AppEntityField keyField = applicationService().findAppEntityField(
+            AppEntityField keyField = application().findAppEntityField(
                     new AppEntityFieldQuery().appEntityId(params.getAppEntityId()).name(params.getKey()));
             if (keyField != null) {
                 if (EntityFieldDataType.ENUM_REF.equals(keyField.getDataType())) {
                     return enumFields;
                 } else if (EntityFieldDataType.REF.equals(keyField.getDataType())
                         || EntityFieldDataType.REF_UNLINKABLE.equals(keyField.getDataType())) {
-                    RefDef refDef = applicationService().getRefDef(keyField.getReferences());
+                    RefDef refDef = application().getRefDef(keyField.getReferences());
                     ApplicationEntityNameParts np = ApplicationNameUtils
                             .getApplicationEntityNameParts(refDef.getEntity());
-                    return applicationService()
+                    return application()
                             .findAppEntityFields((AppEntityFieldQuery) new AppEntityFieldQuery()
                                     .applicationName(np.getApplicationName()).appEntityName(np.getEntityName())
                                     .dataTypeNotIn(EntityFieldDataType.CHILD, EntityFieldDataType.CHILD_LIST,

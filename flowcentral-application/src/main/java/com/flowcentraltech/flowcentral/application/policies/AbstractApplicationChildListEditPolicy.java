@@ -35,7 +35,7 @@ public abstract class AbstractApplicationChildListEditPolicy extends AbstractChi
         this.applicationModuleService = applicationModuleService;
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

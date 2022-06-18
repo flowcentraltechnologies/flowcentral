@@ -51,7 +51,7 @@ public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy
                     .addEquals("appEntityId", appEntityId));
 
             // Add new base fields
-            List<AppEntityField> newBaseFieldList = getAms().getEntityBaseTypeFieldList(appEntity.getBaseType(),
+            List<AppEntityField> newBaseFieldList = application().getEntityBaseTypeFieldList(appEntity.getBaseType(),
                     ConfigType.CUSTOM);
             for (AppEntityField appEntityField : newBaseFieldList) {
                 appEntityField.setAppEntityId(appEntityId);

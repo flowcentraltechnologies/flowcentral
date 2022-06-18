@@ -67,7 +67,7 @@ public abstract class AbstractApplicationConsolidatedFormValidationPolicy extend
         return environmentService;
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

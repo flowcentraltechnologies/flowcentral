@@ -46,7 +46,7 @@ public class StudioFormListCommand extends AbstractApplicationListCommand<ZeroPa
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         if (QueryUtils.isValidLongCriteria(applicationId)) {
-            return applicationService().findAppForms((AppFormQuery) new AppFormQuery()
+            return application().findAppForms((AppFormQuery) new AppFormQuery()
                     .applicationId(applicationId).addSelect("id", "name", "description"));
         }
 

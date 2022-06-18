@@ -55,7 +55,7 @@ public class StudioWorkEntityByNameListCommand extends AbstractApplicationListCo
             query.applicationId(applicationId);
             query.isWorkEntity();
             query.addSelect("name", "description");
-            List<AppEntity> appEntityList = applicationService().findAppEntities(query);
+            List<AppEntity> appEntityList = application().findAppEntities(query);
             if (!DataUtils.isBlank(appEntityList)) {
                 final String applicationName = (String) getSessionAttribute(
                         StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);

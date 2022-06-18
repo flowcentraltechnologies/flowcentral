@@ -69,14 +69,14 @@ public abstract class AbstractApplicationConsolidatedFormReviewPolicy extends Ab
         return environmentService;
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 
     @SuppressWarnings("unchecked")
     protected void validateChildExists(TargetFormMessages messages, String fkFieldName, Long parentId,
             String entityLongName, String errMsgKey, String... targets) throws UnifyException {
-        EntityClassDef entityClassDef = applicationService().getEntityClassDef(entityLongName);
+        EntityClassDef entityClassDef = application().getEntityClassDef(entityLongName);
         int count = environment().countAll(
                 Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals(fkFieldName, parentId));
         if (count == 0) {

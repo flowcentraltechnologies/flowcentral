@@ -48,7 +48,7 @@ public class StudioEntityTableListCommand extends AbstractApplicationListCommand
             String entity = stringParam.getValue();
             if (!StringUtils.isBlank(entity)) {
                 return ApplicationNameUtils.getListableList(
-                        applicationService().findAppTables(new AppTableQuery().entity(entity)));
+                        application().findAppTables(new AppTableQuery().entity(entity)));
             }
         }
 

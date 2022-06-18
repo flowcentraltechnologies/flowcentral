@@ -54,7 +54,7 @@ public class StudioAppletWorkflowListCommand extends AbstractApplicationListComm
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            String entity = applicationService().getAppAppletEntity(longParam.getValue());
+            String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
                 return ApplicationNameUtils
                         .getListableList(workflowModuleService.findWorkflows((WorkflowQuery) new WorkflowQuery()

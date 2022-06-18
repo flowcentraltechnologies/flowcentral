@@ -120,8 +120,8 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                             getValue(String.class, getUplAttribute(String.class, "appName")),
                             getValue(String.class, getUplAttribute(String.class, "entityName")));
                     Set<String> childEntityList = EntityFieldDataType.REF_FILEUPLOAD.equals(type)
-                            ? getApplicationService().findBlobEntities(entityName)
-                            : getApplicationService().findChildAppEntities(entityName);
+                            ? application().findBlobEntities(entityName)
+                            : application().findChildAppEntities(entityName);
                     if (!childEntityList.isEmpty()) {
                         getWriteWork().set("ref.childentitylist", childEntityList);
                         return getResultByRef(input, limit);

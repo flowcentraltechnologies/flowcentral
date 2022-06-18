@@ -53,7 +53,7 @@ public abstract class AbstractEntitySelectHandler extends AbstractUnifyComponent
 
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

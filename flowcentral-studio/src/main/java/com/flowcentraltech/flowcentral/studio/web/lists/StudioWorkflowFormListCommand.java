@@ -56,7 +56,7 @@ public class StudioWorkflowFormListCommand extends AbstractApplicationListComman
         if (longParam.isPresent()) {
             Workflow workflow = workflowModuleService.findLeanWorkflowById(longParam.getValue());
             return ApplicationNameUtils.getListableList(
-                    applicationService().findAppForms(new AppFormQuery().entity(workflow.getEntity())));
+                    application().findAppForms(new AppFormQuery().entity(workflow.getEntity())));
         }
 
         return Collections.emptyList();

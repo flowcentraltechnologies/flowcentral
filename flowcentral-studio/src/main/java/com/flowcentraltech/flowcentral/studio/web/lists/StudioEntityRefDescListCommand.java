@@ -44,7 +44,7 @@ public class StudioEntityRefDescListCommand extends AbstractApplicationListComma
     public List<? extends Listable> execute(Locale locale, RefDescriptionParams params) throws UnifyException {
         if (params.isPresent()) {
             List<Listable> resultList = new ArrayList<Listable>();
-            for (String fieldName : applicationService().findForeignEntityStringFields(params.getEntity(),
+            for (String fieldName : application().findForeignEntityStringFields(params.getEntity(),
                     params.getRefField())) {
                 resultList.add(new ListData(fieldName, fieldName));
             }

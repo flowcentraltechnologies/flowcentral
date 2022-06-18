@@ -15,10 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.TextCase;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -46,7 +49,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     private TextCase textCase;
 
     private String entityLongName;
-    
+
     private String fieldName;
 
     private String fieldLabel;
@@ -72,7 +75,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     private String autoFormat;
 
     private String defaultVal;
-    
+
     private int rows;
 
     private int columns;
@@ -96,10 +99,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     private boolean maintainLink;
 
     private boolean basicSearch;
-    
-    public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef, RefDef refDef, String entityLongName, String fieldName, String references,
-            String inputListKey) {
-        this.textWidgetTypeDef =  textWidgetTypeDef;
+
+    public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef, RefDef refDef,
+            String entityLongName, String fieldName, String references, String inputListKey) {
+        this.textWidgetTypeDef = textWidgetTypeDef;
         this.inputWidgetTypeDef = inputWidgetTypeDef;
         this.refDef = refDef;
         this.entityLongName = entityLongName;
@@ -108,13 +111,14 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.inputListKey = inputListKey;
     }
 
-    public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef, WidgetTypeDef ligualWidgetTypeDef, RefDef refDef,
-            EntityFieldDataType dataType, EntityFieldType type, TextCase textCase, String entityLongName, String fieldName, String fieldLabel,
-            String columnName, String references, String category, String suggestionType, String inputLabel, String inputListKey,
-            String lingualListKey, String autoFormat, String defaultVal, String key, String property, int rows, int columns, int minLen, int maxLen,
-            int precision, int scale, boolean nullable, boolean auditable, boolean reportable, boolean maintainLink, boolean basicSearch,
-            boolean descriptive) {
-        this.textWidgetTypeDef =  textWidgetTypeDef;
+    public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
+            WidgetTypeDef ligualWidgetTypeDef, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
+            TextCase textCase, String entityLongName, String fieldName, String fieldLabel, String columnName,
+            String references, String category, String suggestionType, String inputLabel, String inputListKey,
+            String lingualListKey, String autoFormat, String defaultVal, String key, String property, int rows,
+            int columns, int minLen, int maxLen, int precision, int scale, boolean nullable, boolean auditable,
+            boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive) {
+        this.textWidgetTypeDef = textWidgetTypeDef;
         this.inputWidgetTypeDef = inputWidgetTypeDef;
         this.ligualWidgetTypeDef = ligualWidgetTypeDef;
         this.refDef = refDef;
@@ -223,7 +227,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     public boolean isWithSuggestionType() {
         return !StringUtils.isBlank(suggestionType);
     }
-    
+
     public EntityFieldDef getResolvedTypeFieldDef() {
         return resolvedTypeFieldDef;
     }
@@ -265,11 +269,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     public boolean isStringAutoFormat() {
         return EntityFieldDataType.STRING.equals(dataType) || !StringUtils.isBlank(autoFormat);
     }
-    
+
     public String getDefaultVal() {
         return defaultVal;
     }
-    
+
     public boolean isWithDefaultVal() {
         return !StringUtils.isBlank(defaultVal);
     }
@@ -401,7 +405,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     public boolean isString() {
         return dataType.isString();
     }
-    
+
     public boolean isBase() {
         return type.isBase();
     }
@@ -442,16 +446,339 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return EntityFieldDataType.BLOB.equals(dataType);
     }
 
-    @Override
-    public String toString() {
-        return "EntityFieldDef [inputWidgetTypeDef=" + inputWidgetTypeDef + ", ligualWidgetTypeDef="
-                + ligualWidgetTypeDef + ", refDef=" + refDef + ", dataType=" + dataType + ", type=" + type
-                + ", fieldName=" + fieldName + ", fieldLabel=" + fieldLabel + ", columnName=" + columnName
-                + ", references=" + references + ", key=" + key + ", property=" + property + ", category=" + category
-                + ", inputLabel=" + inputLabel + ", inputListKey=" + inputListKey + ", lingualListKey=" + lingualListKey
-                + ", minLen=" + minLen + ", maxLen=" + maxLen + ", precision=" + precision + ", scale=" + scale
-                + ", nullable=" + nullable + ", auditable=" + auditable + ", reportable=" + reportable
-                + ", descriptive=" + descriptive + ", maintainLink=" + maintainLink + "]";
+    public static EntityFieldDef createForString(AppletUtilities au, String fieldName, String fieldLabel,
+            Integer minLen, Integer maxLen, boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForString(au, fieldName, fieldLabel).minLen(minLen).maxLen(maxLen)
+                .nullable(nullable).build();
     }
 
+    public static EntityFieldDef createForAmount(AppletUtilities au, String fieldName, String fieldLabel,
+            Integer precision, Integer scale, boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForString(au, fieldName, fieldLabel).precision(precision).scale(scale)
+                .nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForDate(AppletUtilities au, String fieldName, String fieldLabel,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForDate(au, fieldName, fieldLabel).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForDateTime(AppletUtilities au, String fieldName, String fieldLabel,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForDateTime(au, fieldName, fieldLabel).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForDateTimeUTC(AppletUtilities au, String fieldName, String fieldLabel,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForDateTimeUTC(au, fieldName, fieldLabel).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForEnum(AppletUtilities au, String fieldName, String fieldLabel, String list,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForEnum(au, fieldName, fieldLabel, list).nullable(nullable).build();
+    }
+
+    public static EntityFieldDef createForEnumRef(AppletUtilities au, String fieldName, String fieldLabel, String list,
+            boolean nullable) throws UnifyException {
+        return EntityFieldDef.newBuilderForEnumRef(au, fieldName, fieldLabel, list).nullable(nullable).build();
+    }
+
+    public static Builder newBuilderForString(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.STRING, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.text");
+    }
+
+    public static Builder newBuilderForAmount(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.DECIMAL, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.amount");
+    }
+
+    public static Builder newBuilderForDate(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.DATE, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.date");
+    }
+
+    public static Builder newBuilderForDateTime(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef
+                .newBuilder(au, EntityFieldDataType.TIMESTAMP, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.datetime");
+    }
+
+    public static Builder newBuilderForDateTimeUTC(AppletUtilities au, String fieldName, String fieldLabel)
+            throws UnifyException {
+        return EntityFieldDef
+                .newBuilder(au, EntityFieldDataType.TIMESTAMP_UTC, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .textWidget("application.text").inputWidget("application.datetime");
+    }
+
+    public static Builder newBuilderForEnum(AppletUtilities au, String fieldName, String fieldLabel, String list)
+            throws UnifyException {
+        return EntityFieldDef.newBuilder(au, EntityFieldDataType.ENUM, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .inputWidget("application.enumlist").references(list);
+    }
+
+    public static Builder newBuilderForEnumRef(AppletUtilities au, String fieldName, String fieldLabel, String list)
+            throws UnifyException {
+        return EntityFieldDef
+                .newBuilder(au, EntityFieldDataType.ENUM_REF, EntityFieldType.STATIC, fieldName, fieldLabel)
+                .inputWidget("application.enumlist").references(list);
+    }
+
+    public static Builder newBuilder(AppletUtilities au, EntityFieldDataType dataType, EntityFieldType type,
+            String fieldName, String fieldLabel) {
+        return new Builder(au, dataType, type, fieldName, fieldLabel);
+    }
+
+    public static class Builder {
+
+        private AppletUtilities au;
+
+        private WidgetTypeDef textWidgetTypeDef;
+
+        private WidgetTypeDef inputWidgetTypeDef;
+
+        private WidgetTypeDef ligualWidgetTypeDef;
+
+        private RefDef refDef;
+
+        private EntityFieldDataType dataType;
+
+        private EntityFieldType type;
+
+        private TextCase textCase;
+
+        private String entityLongName;
+
+        private String fieldName;
+
+        private String fieldLabel;
+
+        private String columnName;
+
+        private String references;
+
+        private String key;
+
+        private String property;
+
+        private String category;
+
+        private String suggestionType;
+
+        private String inputLabel;
+
+        private String inputListKey;
+
+        private String lingualListKey;
+
+        private String autoFormat;
+
+        private String defaultVal;
+
+        private int rows;
+
+        private int columns;
+
+        private int minLen;
+
+        private int maxLen;
+
+        private int precision;
+
+        private int scale;
+
+        private boolean nullable;
+
+        private boolean auditable;
+
+        private boolean reportable;
+
+        private boolean descriptive;
+
+        private boolean maintainLink;
+
+        private boolean basicSearch;
+
+        public Builder(AppletUtilities au, EntityFieldDataType dataType, EntityFieldType type, String fieldName,
+                String fieldLabel) {
+            this.au = au;
+            this.dataType = dataType;
+            this.type = type;
+            this.fieldName = fieldName;
+            this.fieldLabel = fieldLabel;
+        }
+
+        public Builder textWidget(String widgetName) throws UnifyException {
+            this.textWidgetTypeDef = au.getWidgetTypeDef(widgetName);
+            return this;
+        }
+
+        public Builder inputWidget(String widgetName) throws UnifyException {
+            this.inputWidgetTypeDef = au.getWidgetTypeDef(widgetName);
+            return this;
+        }
+
+        public Builder lingualWidget(String widgetName) throws UnifyException {
+            this.ligualWidgetTypeDef = au.getWidgetTypeDef(widgetName);
+            return this;
+        }
+
+        public Builder refDef(String refName) throws UnifyException {
+            this.refDef = au.getRefDef(refName);
+            return this;
+        }
+
+        public Builder textCase(TextCase textCase) throws UnifyException {
+            this.textCase = textCase;
+            return this;
+        }
+
+        public Builder entityLongName(String entityLongName) throws UnifyException {
+            this.entityLongName = entityLongName;
+            return this;
+        }
+
+        public Builder columnName(String columnName) throws UnifyException {
+            this.columnName = columnName;
+            return this;
+        }
+
+        public Builder references(String references) throws UnifyException {
+            this.references = references;
+            return this;
+        }
+
+        public Builder key(String key) throws UnifyException {
+            this.key = key;
+            return this;
+        }
+
+        public Builder property(String property) throws UnifyException {
+            this.property = property;
+            return this;
+        }
+
+        public Builder category(String category) throws UnifyException {
+            this.category = category;
+            return this;
+        }
+
+        public Builder suggestionType(String suggestionType) throws UnifyException {
+            this.suggestionType = suggestionType;
+            return this;
+        }
+
+        public Builder inputLabel(String inputLabel) throws UnifyException {
+            this.inputLabel = inputLabel;
+            return this;
+        }
+
+        public Builder inputListKey(String inputListKey) throws UnifyException {
+            this.inputListKey = inputListKey;
+            return this;
+        }
+
+        public Builder lingualListKey(String lingualListKey) throws UnifyException {
+            this.lingualListKey = lingualListKey;
+            return this;
+        }
+
+        public Builder autoFormat(String autoFormat) throws UnifyException {
+            this.autoFormat = autoFormat;
+            return this;
+        }
+
+        public Builder defaultVal(String defaultVal) throws UnifyException {
+            this.defaultVal = defaultVal;
+            return this;
+        }
+
+        public Builder rows(Integer rows) throws UnifyException {
+            this.rows = DataUtils.convert(int.class, rows);
+            return this;
+        }
+
+        public Builder columns(Integer columns) throws UnifyException {
+            this.columns = DataUtils.convert(int.class, columns);
+            return this;
+        }
+
+        public Builder minLen(Integer minLen) throws UnifyException {
+            this.minLen = DataUtils.convert(int.class, minLen);
+            return this;
+        }
+
+        public Builder maxLen(Integer maxLen) throws UnifyException {
+            this.maxLen = DataUtils.convert(int.class, maxLen);
+            return this;
+        }
+
+        public Builder precision(Integer precision) throws UnifyException {
+            this.precision = DataUtils.convert(int.class, precision);
+            return this;
+        }
+
+        public Builder scale(Integer scale) throws UnifyException {
+            this.scale = DataUtils.convert(int.class, scale);
+            return this;
+        }
+
+        public Builder nullable(boolean nullable) throws UnifyException {
+            this.nullable = nullable;
+            return this;
+        }
+
+        public Builder auditable(boolean auditable) throws UnifyException {
+            this.auditable = auditable;
+            return this;
+        }
+
+        public Builder reportable(boolean reportable) throws UnifyException {
+            this.reportable = reportable;
+            return this;
+        }
+
+        public Builder descriptive(boolean descriptive) throws UnifyException {
+            this.descriptive = descriptive;
+            return this;
+        }
+
+        public Builder maintainLink(boolean maintainLink) throws UnifyException {
+            this.maintainLink = maintainLink;
+            return this;
+        }
+
+        public Builder basicSearch(boolean basicSearch) throws UnifyException {
+            this.basicSearch = basicSearch;
+            return this;
+        }
+
+        public EntityFieldDef build() throws UnifyException {
+            if (textWidgetTypeDef == null) {
+                throw new RuntimeException("Text widget is required.");
+            }
+
+            if (inputWidgetTypeDef == null) {
+                throw new RuntimeException("Input widget is required.");
+            }
+
+            if (StringUtils.isBlank(fieldName)) {
+                throw new RuntimeException("Field name is blank.");
+            }
+
+            if (StringUtils.isBlank(fieldLabel)) {
+                throw new RuntimeException("Field label is blank.");
+            }
+
+            return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, ligualWidgetTypeDef, refDef, dataType,
+                    type, textCase, entityLongName, fieldName, fieldLabel, columnName, references, category,
+                    suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
+                    rows, columns, minLen, maxLen, precision, scale, nullable, auditable, reportable, maintainLink,
+                    basicSearch, descriptive);
+        }
+    }
 }

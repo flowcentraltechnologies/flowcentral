@@ -54,9 +54,9 @@ public class StudioWfRecipientContactRuleListCommand extends AbstractApplication
         if (params.isPresent()) {
             switch (params.getRecipientPolicy()) {
                 case "entity-wfrecipientpolicy":
-                    String entity = applicationService().getAppAppletEntity(params.getPropertyOwnerId());
+                    String entity = application().getAppAppletEntity(params.getPropertyOwnerId());
                     if (!StringUtils.isBlank(entity)) {
-                        EntityDef entityDef = applicationService().getEntityDef(entity);
+                        EntityDef entityDef = application().getEntityDef(entity);
                         return entityDef.getStringFieldDefList();
                     }
                     break;

@@ -49,7 +49,7 @@ public abstract class AbstractApplicationWfProcessPolicy extends AbstractWfProce
         this.applicationModuleService = applicationModuleService;
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
     

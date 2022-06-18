@@ -59,17 +59,17 @@ public class EntityListWidget extends AbstractEntityListWidget {
             EntityClassDef entityClassDef = null;
             Restriction br = null;
             if (isDirect()) {
-                entityClassDef = getApplicationService().getEntityClassDef(getRef(0));
+                entityClassDef = application().getEntityClassDef(getRef(0));
             } else {
                 refDef = getRefDef(0);
-                entityClassDef = getApplicationService().getEntityClassDef(refDef.getEntity());
+                entityClassDef = application().getEntityClassDef(refDef.getEntity());
                 if (refDef.isWithFilterGenerator()) {
                     br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
                             .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
                 } else {
                     br = refDef.isWithFilter()
                             ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                                    getSpecialParamProvider(), getApplicationService().getNow())
+                                    specialParamProvider(), application().getNow())
                             : null;
                 }
             }
@@ -93,7 +93,7 @@ public class EntityListWidget extends AbstractEntityListWidget {
                 query.addOrder(searchField);
             }
 
-            List<? extends Listable> listableList = getEntityService().listAll(query);
+            List<? extends Listable> listableList = environment().listAll(query);
             ValueStore listValueStore = null;
 
             final String listKey = getListkey();

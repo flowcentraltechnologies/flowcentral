@@ -47,7 +47,7 @@ public abstract class AbstractApplicationListCommand<T extends ListParam> extend
         this.applicationModuleService = applicationModuleService;
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

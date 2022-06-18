@@ -84,11 +84,11 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
 
         if (type.isCreate() || type.isEntityList()) {
             final String entity = appApplet.getEntity();
-            EntityDef entityDef = getAms().getEntityDef(entity);
+            EntityDef entityDef = application().getEntityDef(entity);
 
             String tableName = null;
             if (type.isEntityList()) {
-                List<String> existingTables = getAms().findEntityAppTables(entity);
+                List<String> existingTables = application().findEntityAppTables(entity);
                 if (!DataUtils.isBlank(existingTables)) {
                     // Choose the first existing table
                     tableName = existingTables.get(0);
@@ -117,16 +117,8 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                             AppTableColumn appTableColumn = new AppTableColumn();
                             appTableColumn.setField(entityFieldDef.getFieldName());
                             appTableColumn.setLabel(null);
-                            if (entityFieldDef.isWithInputWidget()) {
-                                appTableColumn.setRenderWidget(entityFieldDef.getInputWidgetTypeDef().getLongName());
-                            } else {
-                                String widget = InputWidgetUtils.getDefaultEntityFieldWidget(entityFieldDef.getDataType());
-                                if (widget != null) {
-                                    appTableColumn.setRenderWidget(widget);
-                                } else {
-                                    appTableColumn.setRenderWidget("application.text");
-                                }
-                            }
+                            String widget = InputWidgetUtils.resolveEntityFieldWidget(entityFieldDef);
+                            appTableColumn.setRenderWidget(widget);
 
                             if (entityFieldDef.isMaintainLink()) {
                                 appTableColumn.setLinkAct("maintainAct");
@@ -142,7 +134,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                         }
                     }
                     appTable.setColumnList(columnList);
-                    getAms().createAppTable(appTable);
+                    application().createAppTable(appTable);
                 }
             }
 
@@ -160,7 +152,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                 appAssignmentPage.setLabel(assignmentPageDesc);
                 EntityFieldDef entityFieldDef = entityDef.getFieldDef(appApplet.getAssignField());
                 RefDef refDef = entityFieldDef.getRefDef();
-                EntityDef refEntityDef = getAms().getEntityDef(refDef.getEntity());
+                EntityDef refEntityDef = application().getEntityDef(refDef.getEntity());
                 appAssignmentPage
                         .setAssignCaption(resolveApplicationMessage("Assigned " + refEntityDef.getLabel()));
                 appAssignmentPage.setAssignList("entityinlist");
@@ -172,7 +164,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                 appAssignmentPage.setAssignField(appApplet.getAssignField());
                 appAssignmentPage.setRuleDescField(appApplet.getAssignDescField());
                 appAssignmentPage.setConfigType(ConfigType.CUSTOM);
-                getAms().createAppAssignmentPage(appAssignmentPage);
+                application().createAppAssignmentPage(appAssignmentPage);
                 
                 // Add applet properties
                 appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE, tableName));
@@ -183,7 +175,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                     // TODO
                 } else {
                     String formName = null;
-                    List<String> existingForms = getAms().findEntityAppForms(entity);
+                    List<String> existingForms = application().findEntityAppForms(entity);
                     if (!DataUtils.isBlank(existingForms)) {
                         // Choose first existing form
                         formName = existingForms.get(0);
@@ -271,7 +263,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                                 appFormElement.setEditable(true);
                                 appFormElement.setDisabled(false);
                                 appFormElement.setTabReference(entityFieldDef.getFieldName());
-                                List<AppApplet> appletList = getAms()
+                                List<AppApplet> appletList = application()
                                         .findManageEntityListApplets(entityFieldDef.getRefDef().getEntity());
                                 if (!DataUtils.isBlank(appletList)) {
                                     AppApplet _childAppApplet = appletList.get(0);
@@ -297,7 +289,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                         }
 
                         appForm.setElementList(elementList);
-                        getAms().createAppForm(appForm);
+                        application().createAppForm(appForm);
                     }
                     
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.CREATE_FORM, formName));

@@ -58,7 +58,7 @@ public abstract class AbstractEntityBasedFilterGenerator extends AbstractUnifyCo
 
     }
 
-    protected ApplicationModuleService applicationService() {
+    protected ApplicationModuleService application() {
         return applicationModuleService;
     }
 

@@ -58,9 +58,9 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
     @Action
     public String saveUIOptions() throws UnifyException {
         UIOptionsPageBean pageBean = getPageBean();
-        getSystemModuleService().setSysParameterValue(SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE,
+        system().setSysParameterValue(SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE,
                 pageBean.getLoginPageTitle());
-        getSystemModuleService().setSysParameterValue(SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE,
+        system().setSysParameterValue(SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE,
                 pageBean.getLoginPageSubtitle());
         saveFileResource(FileAttachmentType.IMAGE, SystemFileResourceConstants.LOGIN_HEADER_IMAGE_RESOURCE,
                 pageBean.getLoginHeaderImage());
@@ -91,9 +91,9 @@ public class UIOptionsController extends AbstractSystemPageController<UIOptionsP
 
     private void loadUIOptions() throws UnifyException {
         UIOptionsPageBean pageBean = getPageBean();
-        pageBean.setLoginPageTitle(getSystemModuleService().getSysParameterValue(String.class,
+        pageBean.setLoginPageTitle(system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE));
-        pageBean.setLoginPageSubtitle(getSystemModuleService().getSysParameterValue(String.class,
+        pageBean.setLoginPageSubtitle(system().getSysParameterValue(String.class,
                 SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE));
         pageBean.setLoginHeaderImage(loadFileResource(SystemFileResourceConstants.LOGIN_HEADER_IMAGE_RESOURCE));
         pageBean.setLoginBackImage(loadFileResource(SystemFileResourceConstants.LOGIN_BACK_IMAGE_RESOURCE));
