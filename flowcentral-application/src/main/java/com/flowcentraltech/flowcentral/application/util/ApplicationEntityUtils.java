@@ -24,7 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityInstNameParts;
+import com.flowcentraltech.flowcentral.application.data.RefDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -44,6 +48,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.message.MessageResolver;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -173,6 +178,41 @@ public final class ApplicationEntityUtils {
         return resultList;
     }
 
+    public static EntityFieldDef createEntityFieldDef(AppletUtilities au, String entityLongName, AppEntityField appEntityField) throws UnifyException {
+        final WidgetTypeDef textWidgetTypeDef = au.getWidgetTypeDef("application.text");
+       WidgetTypeDef inputWidgetTypeDef = null;
+        if (!StringUtils.isBlank(appEntityField.getInputWidget())) {
+            inputWidgetTypeDef = au.getWidgetTypeDef(appEntityField.getInputWidget());
+        }
+
+        WidgetTypeDef lingualWidgetTypeDef = null;
+        EntityFieldDataType type = appEntityField.getDataType();
+        if (!StringUtils.isBlank(appEntityField.getLingualWidget())) {
+            lingualWidgetTypeDef = au.getWidgetTypeDef(appEntityField.getLingualWidget());
+        } else {
+            if (EntityFieldDataType.STRING.equals(type)) {
+                lingualWidgetTypeDef = au.getWidgetTypeDef("application.lingualstringtypelist");
+            } else if (type.isDate() || type.isTimestamp()) {
+                lingualWidgetTypeDef = au.getWidgetTypeDef("application.lingualdatetypelist");
+            }
+        }
+
+        String references = appEntityField.getReferences();
+        RefDef refDef = null;
+        if (type.isEntityRef() || (!appEntityField.getDataType().isEnumDataType()
+                && !StringUtils.isBlank(references))) {
+            refDef = au.getRefDef(references);
+        }
+        
+        return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, refDef,  appEntityField.getDataType(),
+                appEntityField.getType(), appEntityField.getTextCase(), entityLongName, appEntityField.getName(), appEntityField.getLabel(), appEntityField.getColumnName(), references, appEntityField.getCategory(),
+                appEntityField.getSuggestionType(), appEntityField.getInputLabel(), appEntityField.getInputListKey(), appEntityField.getLingualListKey(), appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), appEntityField.getKey(),
+                appEntityField.getProperty(), DataUtils.convert(int.class, appEntityField.getRows()), DataUtils.convert(int.class, appEntityField.getColumns()),
+                DataUtils.convert(int.class, appEntityField.getMinLen()), DataUtils.convert(int.class, appEntityField.getMaxLen()),
+                DataUtils.convert(int.class, appEntityField.getPrecision()), DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isNullable(),
+                appEntityField.isAuditable(), appEntityField.isReportable(), appEntityField.isMaintainLink(), appEntityField.isBasicSearch(), appEntityField.isDescriptive());
+    }
+    
     public static void addChangeLogFormElements(List<AppFormElement> elementList) {
         // Section
         AppFormElement appFormElement = new AppFormElement();

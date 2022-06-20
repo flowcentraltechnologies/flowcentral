@@ -1417,6 +1417,9 @@
 			description="$m{application.appsuggestiontype}"
 			label="$m{application.appsuggestiontype.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppSuggestionType">
+			<field name="parent"
+				label="$m{application.appsuggestiontype.parent}" type="string" nullable="true"
+				 inputWidget="application.text"/>
 		</entity>
 		<entity name="appSuggestion"
 			description="$m{application.appsuggestion}"
