@@ -402,6 +402,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public void setShowPopupCommandResult(String panelName) throws UnifyException {
+        pageRequestContextUtil.setRequestPopupName(panelName);
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);       
+    }
+
+    @Override
     public FieldSequenceDef retrieveFieldSequenceDef(String category, String ownerEntityName, Long ownerInstId)
             throws UnifyException {
         return applicationModuleService.retrieveFieldSequenceDef(category, ownerEntityName, ownerInstId);
