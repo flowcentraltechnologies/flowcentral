@@ -58,6 +58,10 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
         appletUtilities.commandShowPopup(panelName);
     }
 
+    protected void commandShowPopup(Panel panel) throws UnifyException {
+        appletUtilities.commandShowPopup(panel);
+    }
+
     protected void commandHidePopup() throws UnifyException {
         appletUtilities.commandHidePopup();
     }
