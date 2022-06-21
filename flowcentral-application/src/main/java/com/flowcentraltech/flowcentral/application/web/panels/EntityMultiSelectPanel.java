@@ -22,7 +22,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
@@ -62,7 +61,7 @@ public class EntityMultiSelectPanel extends AbstractPanel {
     @Action
     public void close() throws UnifyException {
         removeSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYSELECT);
-        setCommandResultMapping(ResultMappingConstants.HIDE_POPUP);
+        commandHidePopup();
     }
 
     private EntitySelect getEntitySelect() throws UnifyException {

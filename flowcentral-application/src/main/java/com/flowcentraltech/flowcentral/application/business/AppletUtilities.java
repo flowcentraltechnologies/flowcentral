@@ -488,6 +488,16 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     void setShowPopupCommandResult(Panel panel) throws UnifyException;
+
+    /**
+     * Sets up show popup command result in current request.
+     * 
+     * @param panelName
+     *              the popup panel long name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setShowPopupCommandResult(String panelName) throws UnifyException;
     
     /**
      * Retrieves application field sequence definition for an entity instance.
