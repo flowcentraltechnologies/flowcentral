@@ -51,6 +51,21 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         addEntry(true);
     }
 
+    public void insertEntries(List<T> entries, int index) throws UnifyException {
+        insertEntries(entries, index, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public void insertEntries(List<T> entries, int index, boolean replace) throws UnifyException {
+        List<T> _entries = (List<T>) table.getSourceObject();
+        if (replace && index < (_entries.size() - 1)) {
+            _entries.remove(index);
+        }
+        
+        _entries.addAll(index, entries);
+        table.fireOnTableChange();
+    }
+
     @SuppressWarnings("unchecked")
     public void deleteEntry(int index) throws UnifyException {
         List<T> _entries = (List<T>) table.getSourceObject();
