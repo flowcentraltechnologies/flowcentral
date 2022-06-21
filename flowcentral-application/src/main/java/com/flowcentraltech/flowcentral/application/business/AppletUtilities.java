@@ -518,6 +518,16 @@ public interface AppletUtilities extends UnifyComponent {
     void commandRefreshPanels(String... panelLongName) throws UnifyException;
 
     /**
+     * Refresh panels on command request response
+     * 
+     * @param panels
+     *                      the panels
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void commandRefreshPanels(Panel... panels) throws UnifyException;
+
+    /**
      * Refresh panels and hide popup on command request response
      * 
      * @param panelLongName

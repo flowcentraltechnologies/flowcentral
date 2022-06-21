@@ -419,6 +419,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public void commandRefreshPanels(Panel... panels) throws UnifyException {
+        pageRequestContextUtil.setResponseRefreshPanels(panels);
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_PANELS);
+    }
+
+    @Override
     public void commandRefreshPanelsAndHidePopup(String... panelLongName) throws UnifyException {
         pageRequestContextUtil.setResponseRefreshPanels(panelLongName);
         pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);

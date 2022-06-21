@@ -70,6 +70,10 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
         appletUtilities.commandRefreshPanels(panelLongName);
     }
 
+    protected void commandRefreshPanels(Panel... panels) throws UnifyException {
+        appletUtilities.commandRefreshPanels(panels);
+    }
+
     protected void commandRefreshPanelsAndHidePopup(String... panelLongName) throws UnifyException {
         appletUtilities.commandRefreshPanelsAndHidePopup(panelLongName);
     }
