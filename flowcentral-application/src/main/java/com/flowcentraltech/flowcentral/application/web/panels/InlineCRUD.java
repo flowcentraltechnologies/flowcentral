@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -103,6 +104,12 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         return _entries;
     }
 
+    @SuppressWarnings("unchecked")
+    public List<T> entries() throws UnifyException {
+        List<T> entries = (List<T>) table.getSourceObject();
+        return Collections.unmodifiableList(entries);
+    }
+    
     @SuppressWarnings("unchecked")
     private void addEntry(boolean fireTableChange) throws UnifyException {
         createAndAddInst((List<T>) table.getSourceObject());
