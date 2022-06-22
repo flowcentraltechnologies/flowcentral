@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.tcdng.unify.core.UnifyException;
 
@@ -29,9 +30,9 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class CreateEntityApplet extends AbstractEntityFormApplet {
 
-    public CreateEntityApplet(AppletUtilities au, String pathVariable, EntityFormEventHandlers formEventHandlers)
-            throws UnifyException {
-        super(au, pathVariable, formEventHandlers);
+    public CreateEntityApplet(AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
+            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
         currFormAppletDef = getRootAppletDef();
         form = constructNewForm(FormMode.CREATE, null, false);
         viewMode = ViewMode.NEW_PRIMARY_FORM;

@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -45,7 +46,7 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
             Set<Integer> selected) throws UnifyException {
         final int len = tableValueStore.size();
         for (int i = 0; i < len; i++) {
-            onEntryRowChange(parentReader, tableValueStore, i, null);
+            onEntryRowChange(parentReader, tableValueStore, new RowChangeInfo(i));
         }
     }
 

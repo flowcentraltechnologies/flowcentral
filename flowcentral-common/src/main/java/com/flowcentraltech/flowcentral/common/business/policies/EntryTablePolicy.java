@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -68,14 +69,12 @@ public interface EntryTablePolicy extends UnifyComponent {
      *                        optional parent value store reader
      * @param tableValueStore
      *                        the list data store object
-     * @param rowIndex
-     *                        the row index
-     * @param trigger
-     *                        the trigger column name
+     * @param rowChangeInfo
+     *                        the row change information
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, int rowIndex, String trigger)
+    void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, RowChangeInfo rowChangeInfo)
             throws UnifyException;
 
     /**

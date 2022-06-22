@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.data.ValueStore;
@@ -97,6 +98,8 @@ public abstract class AbstractTable<T, U> {
 
     private List<EventHandler> crudActionHandlers;
 
+    private RowChangeInfo lastRowChangeInfo;
+    
     public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, boolean entryMode) {
         this.au = au;
         this.tableDef = tableDef;
@@ -291,8 +294,9 @@ public abstract class AbstractTable<T, U> {
         onFireOnTableChange(sourceObject, selected);
     }
 
-    public void fireOnRowChange(int rowIndex, String trigger) throws UnifyException {
-        onFireOnRowChange(sourceObject, rowIndex, trigger);
+    public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
+        lastRowChangeInfo = rowChangeInfo;
+        onFireOnRowChange(sourceObject, rowChangeInfo);
     }
 
     public void setDefaultOrder(Order defaultOrder) {
@@ -353,6 +357,12 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isWithRefreshPanels() {
         return refreshPanelIds != null;
+    }
+
+    public RowChangeInfo getLastRowChangeInfo() {
+        RowChangeInfo _lastRowChangeInfo = lastRowChangeInfo;
+        lastRowChangeInfo = null;
+        return _lastRowChangeInfo;
     }
 
     public void reset() throws UnifyException {
@@ -446,7 +456,7 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract void onFireOnRowChange(T sourceObject, int rowIndex, String trigger) throws UnifyException;
+    protected abstract void onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException;
 
     protected abstract int getSourceObjectSize(T sourceObject) throws UnifyException;
 

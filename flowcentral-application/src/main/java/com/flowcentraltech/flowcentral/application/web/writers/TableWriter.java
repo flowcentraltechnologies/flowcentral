@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidg
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -167,15 +168,21 @@ public class TableWriter extends AbstractControlWriter {
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
             final boolean isActionColumn = tableWidget.isActionColumn();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
+            final RowChangeInfo lastRowChangeInfo = tableWidget.isFocusManagement() ? table.getLastRowChangeInfo()
+                    : null;
+            String focusWidgetId = null;
 
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore valueStore = valueList.get(i);
+                boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
+                        && lastRowChangeInfo.matchRowIndex(i);
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                         TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                        String fieldName = tabelColumnDef.getFieldName();
                         Widget chWidget = widgetInfo.getWidget();
                         chWidget.setValueStore(valueStore);
                         writer.writeBehavior(chWidget);
@@ -184,12 +191,17 @@ public class TableWriter extends AbstractControlWriter {
                                     : chWidget.getId();
                             if (switchOnChangeHandlers != null) {
                                 for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                    writer.writeBehavior(eventHandler, cId, tabelColumnDef.getFieldName());
+                                    writer.writeBehavior(eventHandler, cId, fieldName);
                                 }
                             }
-                            
+
                             if (switchOnChangeHandler != null) {
                                 writer.writeBehavior(switchOnChangeHandler, cId, null);
+                            }
+
+                            if (matchRowFocus && lastRowChangeInfo.matchTrigger(fieldName)) {
+                                focusWidgetId = cId;
+                                matchRowFocus = false;
                             }
                         }
 
@@ -239,6 +251,10 @@ public class TableWriter extends AbstractControlWriter {
             writer.writeParam("pContId", tableWidget.getContainerId());
             writer.writeParam("pRowId", tableWidget.getRowId());
             writer.writeCommandURLParam("pCmdURL");
+            if (focusWidgetId != null) {
+                writer.writeParam("pFocusId", focusWidgetId);
+            }
+
             if (supportSelect && multiSelect) {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
@@ -488,7 +504,6 @@ public class TableWriter extends AbstractControlWriter {
                                 chWidget.setDisabled(tabelColumnDef.isDisabled());
                             }
 
-                            
                             chWidget.setValueStore(valueStore);
                             writer.write("<td");
                             writeTagStyle(writer, chWidget.getColumnStyle());

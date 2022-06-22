@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -47,9 +48,9 @@ public class InlineCRUDPanel extends AbstractStandalonePanel {
     public void onRowChange() throws UnifyException {
         int index = getRequestTarget(int.class);
         String focusWidgetId = getRequestContextUtil().getTriggerWidgetId();
-        BeanTableWidget entryTable = getWidgetByShortName(BeanTableWidget.class, "entryTable");
-        String trigger = entryTable.resolveChildWidgetName(focusWidgetId);
-        getCrud().fireOnRowChange(index, trigger);
+        BeanTableWidget entryTableWidget = getWidgetByShortName(BeanTableWidget.class, "entryTable");
+        String trigger = entryTableWidget.resolveChildWidgetName(focusWidgetId);
+        getCrud().fireOnRowChange(new RowChangeInfo(trigger, index));
     }
     
     private InlineCRUD<?> getCrud() throws UnifyException {

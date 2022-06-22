@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
@@ -45,8 +46,9 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
     final private String applicationName;
 
     public StudioAppComponentApplet(StudioModuleService sms, AppletUtilities au, String pathVariable,
-            String applicationName, EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariable, formEventHandlers, true);
+            String applicationName, AppletWidgetReferences appletWidgetReferences,
+            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+        super(au, pathVariable, appletWidgetReferences, formEventHandlers, true);
         this.sms = sms;
         this.applicationName = applicationName;
 

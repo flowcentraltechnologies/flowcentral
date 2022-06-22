@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -61,6 +62,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
@@ -201,18 +203,23 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected int mIndex;
 
+    private AppletWidgetReferences appletWidgetReferences;
+
     private boolean fileAttachmentsDisabled;
 
     private final boolean collaboration;
 
-    public AbstractEntityFormApplet(AppletUtilities au, String pathVariable, EntityFormEventHandlers formEventHandlers)
+    public AbstractEntityFormApplet(AppletUtilities au, String pathVariable,
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        this(au, pathVariable, formEventHandlers, false);
+        this(au, pathVariable, appletWidgetReferences, formEventHandlers, false);
     }
 
-    public AbstractEntityFormApplet(AppletUtilities au, String pathVariable, EntityFormEventHandlers formEventHandlers,
+    public AbstractEntityFormApplet(AppletUtilities au, String pathVariable,
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers,
             boolean collaboration) throws UnifyException {
         super(au, pathVariable);
+        this.appletWidgetReferences = appletWidgetReferences;
         this.formEventHandlers = formEventHandlers;
         this.formFileAttachments = new EntityFileAttachments();
         this.collaboration = collaboration;
@@ -277,13 +284,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public void assignSwitchOnChange(int index) throws UnifyException {
-        String trigger = null; // TODO
-        assignmentPage.switchOnChange(index, trigger);
+        String focusWidgetId = getAu().getTriggerWidgetId();
+        String trigger = appletWidgetReferences.getAssignmentEntryTableWidget().resolveChildWidgetName(focusWidgetId);
+        assignmentPage.switchOnChange(new RowChangeInfo(trigger, index));
     }
 
     public void entrySwitchOnChange(int index) throws UnifyException {
-        String trigger = null; // TODO
-        entryTablePage.switchOnChange(index, trigger);
+        String focusWidgetId = getAu().getTriggerWidgetId();
+        String trigger = appletWidgetReferences.getEntryEntryTableWidget().resolveChildWidgetName(focusWidgetId);
+        entryTablePage.switchOnChange(new RowChangeInfo(trigger, index));
     }
 
     public void crudSelectItem(int index) throws UnifyException {

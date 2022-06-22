@@ -45,9 +45,10 @@ public class HeadlessTabsFormAppletController
 
         HeadlessTabsFormAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
+            AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             HeadlessTabsFormApplet applet = new HeadlessTabsFormApplet(getAu(), getPathVariable(),
-                    formEventHandlers);
+                    appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

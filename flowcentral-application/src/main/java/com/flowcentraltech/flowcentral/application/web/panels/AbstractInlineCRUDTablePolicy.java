@@ -23,6 +23,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.web.ui.widget.Panel;
 
 /**
  * Convenient abstract base class for inline CRUD table policies
@@ -51,6 +52,34 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
     public int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
             throws UnifyException {
         return (index + 1) >= size ? 0 : 1;
+    }
+
+    protected void commandShowPopup(String panelName) throws UnifyException {
+        appletUtilities.commandShowPopup(panelName);
+    }
+
+    protected void commandShowPopup(Panel panel) throws UnifyException {
+        appletUtilities.commandShowPopup(panel);
+    }
+
+    protected void commandHidePopup() throws UnifyException {
+        appletUtilities.commandHidePopup();
+    }
+
+    protected void commandRefreshPanels(String... panelLongName) throws UnifyException {
+        appletUtilities.commandRefreshPanels(panelLongName);
+    }
+
+    protected void commandRefreshPanels(Panel... panels) throws UnifyException {
+        appletUtilities.commandRefreshPanels(panels);
+    }
+
+    protected void commandRefreshPanelsAndHidePopup(String... panelLongName) throws UnifyException {
+        appletUtilities.commandRefreshPanelsAndHidePopup(panelLongName);
+    }
+
+    protected void commandRefreshPanelsAndHidePopup(Panel... panels) throws UnifyException {
+        appletUtilities.commandRefreshPanelsAndHidePopup(panels);
     }
 
     protected AppletUtilities au() {

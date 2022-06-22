@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -157,9 +158,9 @@ public class AssignmentPage {
         this.assignedIdList = assignedIdList;
     }
 
-    public void switchOnChange(int index, String trigger) throws UnifyException {
+    public void switchOnChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         if (isEntryTableMode()) {
-            getEntryBeanTable().fireOnRowChange(index, trigger);
+            getEntryBeanTable().fireOnRowChange(rowChangeInfo);
         }
     }
 

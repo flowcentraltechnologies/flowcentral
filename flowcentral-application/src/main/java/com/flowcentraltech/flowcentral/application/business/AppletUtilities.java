@@ -77,6 +77,15 @@ import com.tcdng.unify.web.ui.widget.Panel;
 public interface AppletUtilities extends UnifyComponent {
 
     /**
+     * Gets the current request trigger ID
+     * 
+     * @return the current trigger ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getTriggerWidgetId() throws UnifyException;
+    
+    /**
      * Checks if widget type is entity search widget.
      * 
      * @param widgetLongName
@@ -487,7 +496,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void setShowPopupCommandResult(Panel panel) throws UnifyException;
+    void commandShowPopup(Panel panel) throws UnifyException;
 
     /**
      * Sets up show popup command result in current request.
@@ -497,7 +506,55 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void setShowPopupCommandResult(String panelName) throws UnifyException;
+    void commandShowPopup(String panelName) throws UnifyException;
+
+    /**
+     * Hide popup on command request response
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void commandHidePopup() throws UnifyException;
+
+    /**
+     * Refresh panels on command request response
+     * 
+     * @param panelLongName
+     *                      the panel long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void commandRefreshPanels(String... panelLongName) throws UnifyException;
+
+    /**
+     * Refresh panels on command request response
+     * 
+     * @param panels
+     *                      the panels
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void commandRefreshPanels(Panel... panels) throws UnifyException;
+
+    /**
+     * Refresh panels and hide popup on command request response
+     * 
+     * @param panelLongName
+     *                      the panel long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void commandRefreshPanelsAndHidePopup(String... panelLongName) throws UnifyException;
+
+    /**
+     * Refresh panels and hide popup on command request response
+     * 
+     * @param panelLongName
+     *                      the panels to refresh
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void commandRefreshPanelsAndHidePopup(Panel... panels) throws UnifyException;
     
     /**
      * Retrieves application field sequence definition for an entity instance.

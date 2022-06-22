@@ -219,6 +219,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public String getTriggerWidgetId() throws UnifyException {
+        return pageRequestContextUtil.getTriggerWidgetId();
+    }
+
+    @Override
     public boolean isEntitySearchWidget(String widgetLongName) throws UnifyException {
         return applicationModuleService.isEntitySearchWidget(widgetLongName);
     }
@@ -396,15 +401,44 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public void setShowPopupCommandResult(Panel panel) throws UnifyException {
+    public void commandShowPopup(Panel panel) throws UnifyException {
         pageRequestContextUtil.setRequestPopupPanel(panel);
         pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);       
     }
 
     @Override
-    public void setShowPopupCommandResult(String panelName) throws UnifyException {
+    public void commandShowPopup(String panelName) throws UnifyException {
         pageRequestContextUtil.setRequestPopupName(panelName);
         pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);       
+    }
+
+    @Override
+    public void commandHidePopup() throws UnifyException {
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.HIDE_POPUP);
+    }
+
+    @Override
+    public void commandRefreshPanels(String... panelLongName) throws UnifyException {
+        pageRequestContextUtil.setResponseRefreshPanels(panelLongName);
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_PANELS);
+    }
+
+    @Override
+    public void commandRefreshPanels(Panel... panels) throws UnifyException {
+        pageRequestContextUtil.setResponseRefreshPanels(panels);
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_PANELS);
+    }
+
+    @Override
+    public void commandRefreshPanelsAndHidePopup(String... panelLongName) throws UnifyException {
+        pageRequestContextUtil.setResponseRefreshPanels(panelLongName);
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
+    }
+
+    @Override
+    public void commandRefreshPanelsAndHidePopup(Panel... panels) throws UnifyException {
+        pageRequestContextUtil.setResponseRefreshPanels(panels);
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
     }
 
     @Override
