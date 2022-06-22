@@ -62,7 +62,8 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
-        @UplAttribute(name = "summary", type = String.class) })
+        @UplAttribute(name = "summary", type = String.class),
+        @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal="true")})
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
@@ -189,6 +190,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getUplAttribute(boolean.class, "multiSelect");
     }
 
+    public boolean isFocusManagement() throws UnifyException {
+        return getUplAttribute(boolean.class, "focusManagement");
+    }
+    
     public boolean isActionColumn() throws UnifyException {
         return actionCtrl != null;
     }

@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
@@ -278,12 +279,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void assignSwitchOnChange(int index) throws UnifyException {
         String trigger = null; // TODO
-        assignmentPage.switchOnChange(index, trigger);
+        assignmentPage.switchOnChange(new RowChangeInfo(trigger, index));
     }
 
     public void entrySwitchOnChange(int index) throws UnifyException {
         String trigger = null; // TODO
-        entryTablePage.switchOnChange(index, trigger);
+        entryTablePage.switchOnChange(new RowChangeInfo(trigger, index));
     }
 
     public void crudSelectItem(int index) throws UnifyException {

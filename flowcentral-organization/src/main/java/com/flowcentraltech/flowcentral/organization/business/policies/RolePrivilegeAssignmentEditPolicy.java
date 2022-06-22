@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.AbstractChildLis
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -69,8 +70,8 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
-    public void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, int rowIndex,
-            String trigger) throws UnifyException {
+    public void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, RowChangeInfo rowChangeInfo)
+            throws UnifyException {
 
     }
 

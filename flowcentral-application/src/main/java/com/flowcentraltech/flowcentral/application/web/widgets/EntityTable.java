@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureC
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -83,7 +84,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     }
 
     @Override
-    protected void onFireOnRowChange(Restriction sourceObject, int rowIndex, String trigger) throws UnifyException {
+    protected void onFireOnRowChange(Restriction sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException {
 
     }
 

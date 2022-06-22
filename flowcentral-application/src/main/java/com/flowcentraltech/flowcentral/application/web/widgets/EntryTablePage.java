@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
@@ -164,8 +165,8 @@ public class EntryTablePage {
         displayItemCounterClass = null;
     }
 
-    public void switchOnChange(int index, String trigger) throws UnifyException {
-        getEntryBeanTable().fireOnRowChange(index, trigger);
+    public void switchOnChange(RowChangeInfo rowChangeInfo) throws UnifyException {
+        getEntryBeanTable().fireOnRowChange(rowChangeInfo);
     }
 
     public BeanTable getEntryBeanTable() throws UnifyException {

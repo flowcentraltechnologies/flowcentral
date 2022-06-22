@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Order.Part;
@@ -66,11 +67,11 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected void onFireOnRowChange(List<?> sourceObject, int rowIndex, String trigger) throws UnifyException {
+    protected void onFireOnRowChange(List<?> sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException {
         if (isWithEntryPolicy()) {
             ValueStore tableValueStore = getValueStore(sourceObject);
-            tableValueStore.setDataIndex(rowIndex);
-            getEntryPolicy().onEntryRowChange(getParentReader(), tableValueStore, rowIndex, trigger);
+            tableValueStore.setDataIndex(rowChangeInfo.getRowIndex());
+            getEntryPolicy().onEntryRowChange(getParentReader(), tableValueStore, rowChangeInfo);
         }
     }
 

@@ -642,6 +642,10 @@ fux.rigTable = function(rgp) {
 	if (rgp.pConDepList) {
 		ux.setDisabledById(rgp.pConDepList, true);
 	}
+	
+	if (rgp.pFocusId) {
+		ux.setFocus({wdgid: rgp.pFocusId});
+	}
 }
 
 fux.tableHeaderClick = function(uEv) {
