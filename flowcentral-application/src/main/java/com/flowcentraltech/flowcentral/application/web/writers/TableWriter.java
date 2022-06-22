@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +46,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.PushType;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.WriteWork;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 
@@ -75,6 +77,13 @@ public class TableWriter extends AbstractControlWriter {
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             if (multiSelect) {
                 writeHiddenPush(writer, tableWidget.getSelectCtrl(), PushType.CHECKBOX);
+            }
+
+            if (tableWidget.isFocusManagement()) {
+                WriteWork work = tableWidget.getWriteWork();
+                work.set("focusWidgetId", tableWidget.getTabMemoryId());
+                tableWidget.setTabMemoryId(null);
+                writer.writeStructureAndContent(tableWidget.getTabMemCtrl());
             }
 
             final boolean classicMode = !tableDef.isNonConforming() && systemModuleService
@@ -160,6 +169,7 @@ public class TableWriter extends AbstractControlWriter {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
             final TableDef tableDef = table.getTableDef();
+            final boolean entryMode = table.isEntryMode();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
@@ -167,11 +177,15 @@ public class TableWriter extends AbstractControlWriter {
             final Control[] actionCtrl = tableWidget.getActionCtrl();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
             final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
-            final RowChangeInfo lastRowChangeInfo = tableWidget.isFocusManagement() ? table.getLastRowChangeInfo()
-                    : null;
-            String focusWidgetId = null;
-
+            final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
+            
+            List<String> tabWidgetIds = focusManagement ? new ArrayList<String>() : null;
+            WriteWork work = tableWidget.getWriteWork();
+            String focusWidgetId = focusManagement ? (String) work.get("focusWidgetId") : null;
+            TableStateOverride[] tableStateOverride = (TableStateOverride[]) work.get("overrides");
+            
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
@@ -184,24 +198,41 @@ public class TableWriter extends AbstractControlWriter {
                         TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
                         String fieldName = tabelColumnDef.getFieldName();
                         Widget chWidget = widgetInfo.getWidget();
+                        if (entryMode) {
+                            chWidget.setEditable(
+                                    tableStateOverride[i].isColumnEditable(fieldName, tabelColumnDef.isEditable()));
+                            chWidget.setDisabled(
+                                    tableStateOverride[i].isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
+                        } else {
+                            chWidget.setEditable(tabelColumnDef.isEditable());
+                            chWidget.setDisabled(tabelColumnDef.isDisabled());
+                        }
+
                         chWidget.setValueStore(valueStore);
                         writer.writeBehavior(chWidget);
-                        if (tabelColumnDef.isSwitchOnChange()) {
+                        
+                        if (isContainerEditable && chWidget.isEditable() && !chWidget.isDisabled()) {
                             final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId()
                                     : chWidget.getId();
-                            if (switchOnChangeHandlers != null) {
-                                for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                    writer.writeBehavior(eventHandler, cId, fieldName);
+                            if (focusManagement) {
+                                tabWidgetIds.add(cId);
+                            }
+                            
+                            if (tabelColumnDef.isSwitchOnChange()) {
+                                if (switchOnChangeHandlers != null) {
+                                    for (EventHandler eventHandler : switchOnChangeHandlers) {
+                                        writer.writeBehavior(eventHandler, cId, fieldName);
+                                    }
                                 }
-                            }
 
-                            if (switchOnChangeHandler != null) {
-                                writer.writeBehavior(switchOnChangeHandler, cId, null);
-                            }
+                                if (switchOnChangeHandler != null) {
+                                    writer.writeBehavior(switchOnChangeHandler, cId, null);
+                                }
 
-                            if (matchRowFocus && lastRowChangeInfo.matchTrigger(fieldName)) {
-                                focusWidgetId = cId;
-                                matchRowFocus = false;
+                                if (matchRowFocus && lastRowChangeInfo.matchTrigger(fieldName)) {
+                                    focusWidgetId = cId;
+                                    matchRowFocus = false;
+                                }
                             }
                         }
 
@@ -255,6 +286,11 @@ public class TableWriter extends AbstractControlWriter {
                 writer.writeParam("pFocusId", focusWidgetId);
             }
 
+            if (focusManagement) {
+                writer.writeParam("pTabMemId", tableWidget.getTabMemCtrl().getId());
+                writer.writeParam("pTabWidId", tabWidgetIds.toArray(new String[tabWidgetIds.size()]));
+            }
+            
             if (supportSelect && multiSelect) {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
@@ -435,11 +471,14 @@ public class TableWriter extends AbstractControlWriter {
                 final String odd = isRowAction ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
                 final EntryTableMessage entryMessage = table.getEntryMessage();
-                TableStateOverride tableStateOverride = null;
+                TableStateOverride[] tableStateOverride = entryMode ? new TableStateOverride[len] : null;
+                WriteWork work = tableWidget.getWriteWork();
+                work.set("overrides", tableStateOverride);
+
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     if (entryMode) {
-                        tableStateOverride = table.getTableStateOverride(valueStore);
+                        tableStateOverride[i] = table.getTableStateOverride(valueStore);
                     }
 
                     // Normal row
@@ -492,9 +531,9 @@ public class TableWriter extends AbstractControlWriter {
                             Widget chWidget = widgetInfo.getWidget();
                             if (entryMode) {
                                 chWidget.setEditable(
-                                        tableStateOverride.isColumnEditable(fieldName, tabelColumnDef.isEditable()));
+                                        tableStateOverride[i].isColumnEditable(fieldName, tabelColumnDef.isEditable()));
                                 chWidget.setDisabled(
-                                        tableStateOverride.isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
+                                        tableStateOverride[i].isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
                                 if (i == 0) {
                                     chWidget.initValueStoreMemory(len);
                                     widgetInfo.setName(fieldName);
