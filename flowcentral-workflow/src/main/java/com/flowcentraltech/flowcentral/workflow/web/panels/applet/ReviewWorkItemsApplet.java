@@ -15,12 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -58,11 +57,11 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
     private WorkEntity currEntityInst;
 
     private boolean userActionRight;
-    
+
     public ReviewWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable, String userLoginId,
-            EntityFormEventHandlers formEventHandlers)
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(au, pathVariable, formEventHandlers);
+        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
         this.wms = wms;
         AppletDef _appletDef = getRootAppletDef();
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
@@ -74,7 +73,8 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
         final String appletName = _appletDef.getPropValue(String.class, WfAppletPropertyConstants.WORKFLOW_STEP_APPLET);
         AndBuilder ab = (AndBuilder) new AndBuilder().equals("applicationName", originApplicationName)
                 .equals("workflowName", workflowName).equals("wfStepName", wfStepName);
-        // Participants should see all items in workflow irrespective of who holds. TODO Use system parameter to determine behaviour
+        // Participants should see all items in workflow irrespective of who holds. TODO
+        // Use system parameter to determine behaviour
 //        if (!DefaultApplicationConstants.SYSTEM_LOGINID.equals(userLoginId)) {
 //            ab.addCompound(new Or().add(new Equals("heldBy", userLoginId)).add(new IsNull("heldBy")));
 //        }
@@ -137,11 +137,11 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
                 currWfItem.setHeldBy(currentUser);
                 au.getEnvironment().updateByIdVersion(currWfItem);
             }
-            
+
             userActionRight = currentUser != null && currentUser.equals(currWfItem.getHeldBy());
             return currEntityInst;
         }
-        
+
         return super.getEntitySearchItem(entitySearch, index);
     }
 
@@ -172,7 +172,7 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         return instAppletDef;
     }
-    
+
     private void setDisplayModeMessage(AbstractForm form) throws UnifyException {
         if (userActionRight) {
             form.setWarning(null);

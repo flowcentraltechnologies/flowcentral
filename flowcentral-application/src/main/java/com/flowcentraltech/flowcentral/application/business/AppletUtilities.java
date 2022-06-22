@@ -77,6 +77,15 @@ import com.tcdng.unify.web.ui.widget.Panel;
 public interface AppletUtilities extends UnifyComponent {
 
     /**
+     * Gets the current request trigger ID
+     * 
+     * @return the current trigger ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getTriggerWidgetId() throws UnifyException;
+    
+    /**
      * Checks if widget type is entity search widget.
      * 
      * @param widgetLongName

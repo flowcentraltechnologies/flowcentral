@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppComponentApplet;
@@ -56,11 +57,12 @@ public class StudioAppComponentAppletController
 
         StudioAppComponentAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
+            AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             StudioAppComponentApplet applet = new StudioAppComponentApplet(studioModuleService, getAu(),
                     getPathVariable(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
-                    formEventHandlers);
+                    appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
         }
     }

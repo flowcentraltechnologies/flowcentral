@@ -176,7 +176,8 @@ public class TableWriter extends AbstractControlWriter {
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore valueStore = valueList.get(i);
-                final boolean matchRowFocus = lastRowChangeInfo != null && lastRowChangeInfo.matchRowIndex(i);
+                boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
+                        && lastRowChangeInfo.matchRowIndex(i);
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
@@ -198,7 +199,10 @@ public class TableWriter extends AbstractControlWriter {
                                 writer.writeBehavior(switchOnChangeHandler, cId, null);
                             }
 
-                            focusWidgetId = matchRowFocus && lastRowChangeInfo.matchTrigger(fieldName) ? cId : null;
+                            if (matchRowFocus && lastRowChangeInfo.matchTrigger(fieldName)) {
+                                focusWidgetId = cId;
+                                matchRowFocus = false;
+                            }
                         }
 
                         if (isContainerEditable && tableWidget.isInputWidget(chWidget)) {
@@ -250,7 +254,7 @@ public class TableWriter extends AbstractControlWriter {
             if (focusWidgetId != null) {
                 writer.writeParam("pFocusId", focusWidgetId);
             }
-            
+
             if (supportSelect && multiSelect) {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());

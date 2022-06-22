@@ -643,6 +643,7 @@ fux.rigTable = function(rgp) {
 		ux.setDisabledById(rgp.pConDepList, true);
 	}
 	
+	console.log("@prime rgp.pFocusId = " + rgp.pFocusId)
 	if (rgp.pFocusId) {
 		ux.setFocus({wdgid: rgp.pFocusId});
 	}

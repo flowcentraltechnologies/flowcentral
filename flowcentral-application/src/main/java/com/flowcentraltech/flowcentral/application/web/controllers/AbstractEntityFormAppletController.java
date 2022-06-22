@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityTreeSelect;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -186,6 +187,14 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
     }
 
+    protected AppletWidgetReferences getAppletWidgetReferences() throws UnifyException {
+        BeanTableWidget assignmentEntryTableWidget = getPageWidgetByShortName(BeanTableWidget.class,
+                "appletPanel.assignmentPanel.assignmentEntryTbl");
+        BeanTableWidget entryEntryTableWidget = getPageWidgetByShortName(BeanTableWidget.class,
+                "appletPanel.entryTablePanel.entryTableEntryTbl");
+        return new AppletWidgetReferences(assignmentEntryTableWidget, entryEntryTableWidget);
+    }
+
     protected EntityFormEventHandlers getEntityFormEventHandlers() throws UnifyException {
         EventHandler[] formSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
                 "appletPanel.formPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class, "eventHandler");
@@ -201,7 +210,6 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                 "appletPanel.entitySaveAsPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
                         "eventHandler");
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
-                entrySwitchOnChangeHandlers, crudActionHandlers,
-                saveAsSwitchOnChangeHandlers);
+                entrySwitchOnChangeHandlers, crudActionHandlers, saveAsSwitchOnChangeHandlers);
     }
 }

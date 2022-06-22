@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.workflow.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.ReviewWizardWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
@@ -65,9 +66,10 @@ public class ReviewWizardWorkItemsAppletController
 
         ReviewWizardWorkItemsAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
+            AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             ReviewWizardWorkItemsApplet applet = new ReviewWizardWorkItemsApplet(getAu(), workflowModuleService,
-                    getPathVariable(), getUserToken().getUserLoginId(), formEventHandlers);
+                    getPathVariable(), getUserToken().getUserLoginId(), appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
         }
     }

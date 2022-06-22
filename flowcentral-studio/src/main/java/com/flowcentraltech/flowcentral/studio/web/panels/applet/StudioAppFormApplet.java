@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.FormEditorPage;
@@ -37,9 +38,9 @@ public class StudioAppFormApplet extends StudioAppComponentApplet {
     private FormEditorPage formEditorPage;
 
     public StudioAppFormApplet(StudioModuleService sms, AppletUtilities au, String pathVariable, String applicationName,
-            EntityFormEventHandlers formEventHandlers)
+            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
-        super(sms, au, pathVariable, applicationName, formEventHandlers);
+        super(sms, au, pathVariable, applicationName, appletWidgetReferences, formEventHandlers);
     }
 
     public FormEditorPage getFormEditorPage() {

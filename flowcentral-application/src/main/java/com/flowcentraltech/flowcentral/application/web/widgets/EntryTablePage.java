@@ -71,6 +71,8 @@ public class EntryTablePage {
 
     private String displayItemCounterClass;
 
+    private BeanTableWidget entryBeanTableWidget;
+
     private BeanTable entryBeanTable;
 
     private String entryCaption;

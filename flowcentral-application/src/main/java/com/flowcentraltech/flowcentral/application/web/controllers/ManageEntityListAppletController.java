@@ -55,9 +55,10 @@ public class ManageEntityListAppletController
 
         ManageEntityListAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
+            AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
             ManageEntityListApplet applet = new ManageEntityListApplet(getAu(), getPathVariable(),
-                    formEventHandlers);
+                    appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

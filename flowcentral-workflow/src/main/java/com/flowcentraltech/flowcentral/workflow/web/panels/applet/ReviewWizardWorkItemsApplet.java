@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
@@ -71,9 +72,9 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     private int wfWizardStepIndex;
 
     public ReviewWizardWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable,
-            String userLoginId, EntityFormEventHandlers formEventHandlers)
-            throws UnifyException {
-        super(au, pathVariable, formEventHandlers);
+            String userLoginId, AppletWidgetReferences appletWidgetReferences,
+            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
         AppletDef _appletDef = getRootAppletDef();
         this.entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
                 getRootAppletDef().getDescription(), _appletDef, null,

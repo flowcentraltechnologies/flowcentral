@@ -48,8 +48,8 @@ public class InlineCRUDPanel extends AbstractStandalonePanel {
     public void onRowChange() throws UnifyException {
         int index = getRequestTarget(int.class);
         String focusWidgetId = getRequestContextUtil().getTriggerWidgetId();
-        BeanTableWidget entryTable = getWidgetByShortName(BeanTableWidget.class, "entryTable");
-        String trigger = entryTable.resolveChildWidgetName(focusWidgetId);
+        BeanTableWidget entryTableWidget = getWidgetByShortName(BeanTableWidget.class, "entryTable");
+        String trigger = entryTableWidget.resolveChildWidgetName(focusWidgetId);
         getCrud().fireOnRowChange(new RowChangeInfo(trigger, index));
     }
     

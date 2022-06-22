@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Row change information.
  * 
@@ -51,5 +53,10 @@ public class RowChangeInfo {
     
     public boolean matchTrigger(String trigger) {
         return trigger != null && trigger.equals(this.trigger);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 }

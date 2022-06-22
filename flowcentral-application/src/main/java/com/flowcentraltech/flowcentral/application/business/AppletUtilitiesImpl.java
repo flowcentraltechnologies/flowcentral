@@ -219,6 +219,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public String getTriggerWidgetId() throws UnifyException {
+        return pageRequestContextUtil.getTriggerWidgetId();
+    }
+
+    @Override
     public boolean isEntitySearchWidget(String widgetLongName) throws UnifyException {
         return applicationModuleService.isEntitySearchWidget(widgetLongName);
     }
