@@ -50,7 +50,7 @@ public abstract class AbstractSingleFormBean implements SingleFormBean {
         saveToEntity(new BeanValueStore(inst));
     }
 
-    protected AppletUtilities getAu() {
+    protected AppletUtilities au() {
         return au;
     }
 
