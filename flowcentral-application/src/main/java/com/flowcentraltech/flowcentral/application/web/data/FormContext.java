@@ -299,6 +299,10 @@ public class FormContext extends AbstractContext {
         return formValidationErrors.getValidationErrors();
     }
 
+    public FormValidationErrors getFormValidationErrors() {
+        return formValidationErrors;
+    }
+
     public void addReviewError(FormReviewPolicyDef policyDef) {
         addReviewError(policyDef.getTarget(), policyDef.getMessageType(), policyDef.getMessage());
     }

@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.MessageType;
 
 /**
@@ -45,6 +46,6 @@ public class FormMessage {
 
     @Override
     public String toString() {
-        return "FormMessage [type=" + type + ", message=" + message + "]";
+        return StringUtils.toXmlString(this);
     }
 }

@@ -120,5 +120,10 @@ public class FormValidationErrors {
     public List<FormMessage> getValidationErrors() {
         return validationErrors;
     }
+
+    @Override
+    public String toString() {
+        return "FormValidationErrors [invalidFields=" + invalidFields + ", validationErrors=" + validationErrors + "]";
+    }
     
 }
