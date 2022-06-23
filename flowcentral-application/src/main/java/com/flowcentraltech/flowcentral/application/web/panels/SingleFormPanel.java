@@ -16,6 +16,9 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 
@@ -36,4 +39,13 @@ public interface SingleFormPanel<T extends SingleFormBean> extends StandalonePan
      *                        if an error occurs
      */
     void initializeBean(T bean) throws UnifyException;
+    
+    /**
+     * Validates form panel.
+     * 
+     * @return the validation errors
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<FormValidationErrors> validate() throws UnifyException;
 }

@@ -243,6 +243,10 @@ public class FormContext extends AbstractContext {
         return entityDef.getName();
     }
 
+    public void mergeValidationErrors(List<FormValidationErrors> formValidationErrors) {
+        this.formValidationErrors.merge(formValidationErrors);
+    }
+    
     public void addValidationError(String message) {
         formValidationErrors.addValidationError(message);
     }

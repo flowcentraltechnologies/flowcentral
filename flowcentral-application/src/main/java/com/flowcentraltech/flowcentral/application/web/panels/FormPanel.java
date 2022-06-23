@@ -13,31 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.web.widgets.SingleFormWidget;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.ui.widget.Panel;
 
 /**
- * Entity single form panel.
+ * Form panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-entitysingleformpanel")
-@UplBinding("web/application/upl/entitysingleformpanel.upl")
-public class EntitySingleFormPanel extends AbstractFormPanel {
+public interface FormPanel extends Panel {
 
-    @Override
-    public List<FormValidationErrors> validate() throws UnifyException {
-        SingleFormWidget singleFormWidget = getWidgetByShortName(SingleFormWidget.class, "singleForm");
-        SingleFormPanel<?> singleFormPanel = singleFormWidget.getSingleFormPanel();
-        return singleFormPanel.validate();
-    }
-
+    /**
+     * Validate applet panel.
+     * 
+     * @return the form validation errors
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    List<FormValidationErrors> validate() throws UnifyException;
 }

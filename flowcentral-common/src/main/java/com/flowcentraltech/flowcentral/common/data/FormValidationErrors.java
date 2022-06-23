@@ -36,7 +36,7 @@ public class FormValidationErrors {
     private Map<String, String> invalidFields;
 
     private List<FormMessage> validationErrors;
-
+    
     public void addValidationError(String message) {
         addValidationError(new FormMessage(MessageType.ERROR, message));
     }
@@ -55,6 +55,28 @@ public class FormValidationErrors {
         }
 
         invalidFields.put(fieldName, message);
+    }
+
+    public void merge(List<FormValidationErrors> errors) {
+        if (errors != null) {
+            for (FormValidationErrors error: errors) {
+                merge(error);
+            }
+        }
+    }
+
+    public void merge(FormValidationErrors errors) {
+        if (errors.invalidFields != null) {
+            if (invalidFields == null) {
+                invalidFields = new HashMap<String, String>();
+            }
+
+            invalidFields.putAll(errors.invalidFields);
+        }
+        
+        if (errors.validationErrors != null) {
+            validationErrors.addAll(errors.validationErrors);
+        }
     }
 
     public void clearValidationErrors() {
