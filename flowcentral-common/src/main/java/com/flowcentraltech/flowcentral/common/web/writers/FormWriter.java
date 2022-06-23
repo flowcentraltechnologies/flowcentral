@@ -124,7 +124,7 @@ public class FormWriter extends AbstractContainerWriter {
 
     private void writeSectionStructureAndContent(ResponseWriter writer, Form form, FormSection formSection,
             ValueStore valueStore, String groupId) throws UnifyException {
-        FormValidationErrors errors = null; // TODO
+        FormValidationErrors errors = form.getFormValidationErrors();
         writer.write("<div class=\"ftable\">");
         writer.write("<div class=\"frow\">");
         final int columns = form.getColumns();

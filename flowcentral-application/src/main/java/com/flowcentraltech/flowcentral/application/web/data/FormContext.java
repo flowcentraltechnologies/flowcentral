@@ -243,6 +243,10 @@ public class FormContext extends AbstractContext {
         return entityDef.getName();
     }
 
+    public void mergeValidationErrors(List<FormValidationErrors> formValidationErrors) {
+        this.formValidationErrors.merge(formValidationErrors);
+    }
+    
     public void addValidationError(String message) {
         formValidationErrors.addValidationError(message);
     }
@@ -293,6 +297,10 @@ public class FormContext extends AbstractContext {
 
     public List<FormMessage> getValidationErrors() {
         return formValidationErrors.getValidationErrors();
+    }
+
+    public FormValidationErrors getFormValidationErrors() {
+        return formValidationErrors;
     }
 
     public void addReviewError(FormReviewPolicyDef policyDef) {

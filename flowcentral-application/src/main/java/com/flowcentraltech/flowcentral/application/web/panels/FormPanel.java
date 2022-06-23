@@ -14,38 +14,28 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.common.data;
+package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.ui.constant.MessageType;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.Panel;
 
 /**
- * Message type.
+ * Form panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormMessage {
-    
-    private MessageType type;
-    
-    private String message;
+public interface FormPanel extends Panel {
 
-    public FormMessage(MessageType type, String message) {
-        this.type = type;
-        this.message = message;
-    }
-
-    public MessageType getType() {
-        return type;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    @Override
-    public String toString() {
-        return StringUtils.toXmlString(this);
-    }
+    /**
+     * Validate applet panel.
+     * 
+     * @return the form validation errors
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    List<FormValidationErrors> validate() throws UnifyException;
 }

@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -23,9 +25,11 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
+import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -384,13 +388,15 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     private FormContext evaluateCurrentFormContext(FormContext ctx, EvaluationMode evaluationMode)
             throws UnifyException {
-        // TODO Evaluate errors
-        // AbstractEntitySingleFormApplet applet = getEntityFormApplet();
-        final boolean isWithFieldErrors = ctx.isWithFieldErrors();
-        // End
-
-        if (isWithFieldErrors) {
-            hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
+        ctx.clearReviewErrors();
+        ctx.clearValidationErrors();
+        if (evaluationMode.evaluation()) {
+            FormPanel formPanel = getWidgetByShortName(FormPanel.class, "formPanel");
+            List<FormValidationErrors> formValidationErrors = formPanel.validate();
+            ctx.mergeValidationErrors(formValidationErrors);
+            if (ctx.isWithFormErrors()) {
+                hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
+            }
         }
 
         return ctx;

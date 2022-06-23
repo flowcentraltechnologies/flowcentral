@@ -15,6 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
@@ -27,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  * @since 1.0
  */
 @UplBinding("web/application/upl/formpanel.upl")
-public abstract class AbstractFormPanel extends AbstractPanel {
+public abstract class AbstractFormPanel extends AbstractPanel implements FormPanel {
 
     @Override
     public void switchState() throws UnifyException {
@@ -35,6 +39,11 @@ public abstract class AbstractFormPanel extends AbstractPanel {
 
         AbstractForm form = getValue(AbstractForm.class);
         setWidgetVisible("formErrors", form.isWithValidationErrors());
+    }
+
+    @Override
+    public List<FormValidationErrors> validate() throws UnifyException {
+        return Collections.emptyList();
     }
 
     public EventHandler[] getSwitchOnChangeEventHandler() throws UnifyException {
