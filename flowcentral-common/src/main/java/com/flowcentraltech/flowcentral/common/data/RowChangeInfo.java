@@ -39,6 +39,12 @@ public class RowChangeInfo {
         this.rowIndex = rowIndex;
     }
 
+    public String swapTrigger(String trigger) {
+        String _trigger = this.trigger;
+        this.trigger = trigger;
+        return _trigger;
+    }
+    
     public String getTrigger() {
         return trigger;
     }
