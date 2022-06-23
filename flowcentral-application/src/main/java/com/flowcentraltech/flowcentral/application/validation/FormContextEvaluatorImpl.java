@@ -32,7 +32,6 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormReviewPolicyDef;
 import com.flowcentraltech.flowcentral.application.data.FormValidationPolicyDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
-import com.flowcentraltech.flowcentral.application.util.ValidationUtils;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormWidgetState;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -40,6 +39,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedForm
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormValidationPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
+import com.flowcentraltech.flowcentral.common.util.ValidationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -95,8 +95,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
             Map<String, Object> fieldsInScope = new HashMap<String, Object>();
             // Pull fields in scope and check required fields and lengths
             for (FormWidgetState formWidgetState : ctx.getFormWidgetStateList()) {
-                if (formWidgetState.isVisible()
-                        /* && /*formWidgetState.isEditable() */ && !formWidgetState.isDisabled()) {
+                if (formWidgetState.isVisible() && !formWidgetState.isDisabled()) {
                     String fieldName = formWidgetState.getFieldName();
                     Object val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
                     fieldsInScope.put(fieldName, val);

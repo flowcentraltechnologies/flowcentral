@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.util;
+package com.flowcentraltech.flowcentral.common.util;
 
 /**
  * Validation utilities.

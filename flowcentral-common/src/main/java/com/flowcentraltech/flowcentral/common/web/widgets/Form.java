@@ -19,12 +19,15 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
+import com.tcdng.unify.core.constant.TriState;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.widget.AbstractContainer;
+import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.Section;
 import com.tcdng.unify.web.ui.widget.Widget;
 
@@ -43,8 +46,11 @@ public class Form extends AbstractContainer {
 
     private String dataGroupId;
 
+    private FormValidationErrors formValidationErrors;
+
     public Form() {
         super(false);
+        this.formValidationErrors = new FormValidationErrors();
     }
 
     @SuppressWarnings("unchecked")
@@ -58,15 +64,15 @@ public class Form extends AbstractContainer {
         for (int i = 0; i < sections.length; i++) {
             Section section = sections[i];
             List<Widget>[] formWidgetLists = new List[columns];
-            for(int j = 0; j < columns; j++) {
+            for (int j = 0; j < columns; j++) {
                 formWidgetLists[j] = new ArrayList<Widget>();
             }
-            
+
             int j = 0;
             for (String longName : section.getReferences()) {
                 Widget widget = getWidgetByLongName(longName);
                 formWidgetLists[j].add(widget);
-                
+
                 j++;
                 if (j >= columns) {
                     j = 0;
@@ -137,7 +143,7 @@ public class Form extends AbstractContainer {
     public int getColumns() throws UnifyException {
         return getUplAttribute(int.class, "columns");
     }
-    
+
     public FormSection[] getSections() throws UnifyException {
         return formSections;
     }
@@ -181,6 +187,35 @@ public class Form extends AbstractContainer {
         return formSections[index].isDisabled();
     }
 
+    public FormValidationErrors getFormValidationErrors() {
+        return formValidationErrors;
+    }
+
+    public boolean validate() throws UnifyException {
+        formValidationErrors.clearValidationErrors();
+
+        final int columns = getColumns();
+        for (FormSection formSection : getSections()) {
+            if (formSection.isVisible()) {
+                for (int i = 0; i < columns; i++) {
+                    for (Widget widget : formSection.getWidgetList(i)) {
+                        Object val = widget.getValue();
+                        if (widget instanceof Control) {
+                            TriState required = ((Control) widget).getRequired();
+                            if (TriState.TRUE.equals(required)
+                                    && com.flowcentraltech.flowcentral.common.util.ValidationUtils.isBlank(val)) {
+                                formValidationErrors.addValidationError(widget.getBinding(), getApplicationMessage(
+                                        "form.validation.formfield.required", widget.getCaption()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return !formValidationErrors.isWithFormErrors();
+    }
+    
     public void reset() throws UnifyException {
         setEditable(true);
 
@@ -217,7 +252,7 @@ public class Form extends AbstractContainer {
         private List<ValueStore> valueStoreList;
 
         private List<Widget>[] formWidgetLists;
-        
+
         private boolean visible;
 
         private boolean editable;

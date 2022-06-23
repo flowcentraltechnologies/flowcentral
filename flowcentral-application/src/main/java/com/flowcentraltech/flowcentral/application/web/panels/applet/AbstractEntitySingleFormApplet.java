@@ -160,7 +160,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public EntityActionResult updateInst() throws UnifyException {
-        form.saveSingleFormBean();
+        form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
         String updatePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
         EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst,
@@ -347,6 +347,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     private EntityActionResult saveNewInst(ActionMode actionMode) throws UnifyException {
+        form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
         final EntityDef _entityDef = getEntityDef();
         String createPolicy = getRootAppletProp(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
@@ -423,7 +424,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     private EntityActionResult submitInst(ActionMode actionMode) throws UnifyException {
-        form.saveSingleFormBean();
+        form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
         EntityActionResult entityActionResult = viewMode.isMaintainForm()
                 ? getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getFormDef().getEntityDef(),

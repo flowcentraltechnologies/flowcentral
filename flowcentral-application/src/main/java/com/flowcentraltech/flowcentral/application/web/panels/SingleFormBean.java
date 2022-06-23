@@ -48,12 +48,12 @@ public interface SingleFormBean {
     void load(Entity inst) throws UnifyException;
 
     /**
-     * Save single form bean to supplied entity instance properties.
+     * Unloads single form bean to supplied entity instance properties.
      * 
      * @param inst
      *             the entity instance
      * @throws UnifyException
      *                        if an error occurs
      */
-    void save(Entity inst) throws UnifyException;
+    void unload(Entity inst) throws UnifyException;
 }
