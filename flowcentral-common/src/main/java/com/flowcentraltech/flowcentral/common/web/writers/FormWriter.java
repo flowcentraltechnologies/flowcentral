@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.common.web.writers;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.data.ErrorContext;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils.ColumnRenderInfo;
 import com.flowcentraltech.flowcentral.common.web.widgets.Form;
@@ -124,7 +124,7 @@ public class FormWriter extends AbstractContainerWriter {
 
     private void writeSectionStructureAndContent(ResponseWriter writer, Form form, FormSection formSection,
             ValueStore valueStore, String groupId) throws UnifyException {
-        ErrorContext eCtx = null; // TODO
+        FormValidationErrors errors = null; // TODO
         writer.write("<div class=\"ftable\">");
         writer.write("<div class=\"frow\">");
         final int columns = form.getColumns();
@@ -132,7 +132,7 @@ public class FormWriter extends AbstractContainerWriter {
         for (int i = 0; i < columns; i++) {
             writer.write("<div class=\"fcol\" ").write(columnInfos.get(i).getColumnStyle()).write(">");
             for (Widget widget : formSection.getWidgetList(i)) {
-                writeFieldCell(writer, eCtx, widget);
+                writeFieldCell(writer, errors, widget);
             }
             writer.write("</div>");
         }
@@ -140,7 +140,7 @@ public class FormWriter extends AbstractContainerWriter {
         writer.write("</div>");
     }
 
-    private void writeFieldCell(ResponseWriter writer, ErrorContext eCtx, Widget widget) throws UnifyException {
+    private void writeFieldCell(ResponseWriter writer, FormValidationErrors errors, Widget widget) throws UnifyException {
         if (widget.isVisible()) {
             writer.write("<div class=\"ffield\">");
             writer.write("<div class=\"ffieldrow\">");
@@ -166,9 +166,9 @@ public class FormWriter extends AbstractContainerWriter {
             writer.write("<div class=\"fcon\">");
             writer.write("<div class=\"fcontent\">");
             writer.writeStructureAndContent(widget);
-            if (eCtx != null && eCtx.isWithFieldError(widget.getBinding())) {
+            if (errors != null && errors.isWithFieldError(widget.getBinding())) {
                 writer.write("<span class=\"errmsg\">")
-                        .write(resolveSessionMessage(eCtx.getFieldError(widget.getBinding()))).write("</span>");
+                        .write(resolveSessionMessage(errors.getFieldError(widget.getBinding()))).write("</span>");
             }
 
             writer.write("</div>");

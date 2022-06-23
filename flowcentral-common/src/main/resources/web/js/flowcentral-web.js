@@ -639,13 +639,44 @@ fux.rigTable = function(rgp) {
 		}
 	}
 	
+	const tabWidgetIds = rgp.pTabWidId;
+	if (tabWidgetIds && tabWidgetIds.length) {
+		const tabMemId = rgp.pTabMemId;
+		for (var i = 0; i < tabWidgetIds.length;) {
+			var evp = ux.newEvPrm(rgp);
+			evp.uTabMemId = tabMemId;
+			evp.uTabId = tabWidgetIds[i];
+			i++;
+			evp.uNextTabId = i < tabWidgetIds.length ? tabWidgetIds[i] : "";			
+			ux.addHdl(_id(evp.uTabId), "focus", fux.tableFocusTabMem, evp);
+			ux.addHdl(_id(evp.uTabId), "keydown", fux.tableTaboutTabMem, evp);
+		}
+	}
+	
 	if (rgp.pConDepList) {
 		ux.setDisabledById(rgp.pConDepList, true);
 	}
 	
-	console.log("@prime rgp.pFocusId = " + rgp.pFocusId)
 	if (rgp.pFocusId) {
 		ux.setFocus({wdgid: rgp.pFocusId});
+	}
+}
+
+fux.tableFocusTabMem = function(uEv) {
+	const evp = uEv.evp;
+	const tabMem = _id(evp.uTabMemId);
+	if (tabMem) {
+		tabMem.value = evp.uTabId;
+	}
+}
+
+fux.tableTaboutTabMem = function(uEv) {
+	if (uEv.uKeyCode == UNIFY_KEY_TAB) {
+		const evp = uEv.evp;
+		const tabMem = _id(evp.uTabMemId);
+		if (tabMem) {
+			tabMem.value = evp.uNextTabId;
+		}
 	}
 }
 

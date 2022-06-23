@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.application.web.data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -40,9 +39,9 @@ import com.flowcentraltech.flowcentral.application.web.widgets.FormTriggerEvalua
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
-import com.flowcentraltech.flowcentral.common.data.ErrorContext;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormState;
 import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
@@ -62,7 +61,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FormContext extends AbstractContext implements ErrorContext {
+public class FormContext extends AbstractContext {
 
     private AppletContext appletContext;
 
@@ -82,16 +81,14 @@ public class FormContext extends AbstractContext implements ErrorContext {
 
     private Map<String, FormTab> formTabs;
 
-    private Map<String, String> invalidFields;
-
     private List<TargetFormMessage> reviewErrors;
 
     private Map<String, List<FormMessage>> reviewErrorsByTab;
 
-    private List<FormMessage> validationErrors;
-
     private List<FormWidgetState> formWidgetStateList;
 
+    private FormValidationErrors formValidationErrors;
+    
     private Set<String> visibleAnnotations;
 
     private String fixedReference;
@@ -152,6 +149,7 @@ public class FormContext extends AbstractContext implements ErrorContext {
         }
 
         this.visibleAnnotations = new HashSet<String>();
+        this.formValidationErrors = new FormValidationErrors();
     }
 
     public AppletContext getAppletContext() {
@@ -245,9 +243,8 @@ public class FormContext extends AbstractContext implements ErrorContext {
         return entityDef.getName();
     }
 
-    @Override
     public void addValidationError(String message) {
-        addValidationError(new FormMessage(MessageType.ERROR, message));
+        formValidationErrors.addValidationError(message);
     }
 
     public void addValidationErrors(List<FormMessage> messages) {
@@ -258,28 +255,44 @@ public class FormContext extends AbstractContext implements ErrorContext {
         }
     }
 
-    @Override
     public void addValidationError(FormMessage message) {
-        if (validationErrors == null) {
-            validationErrors = new ArrayList<FormMessage>();
-        }
-
-        validationErrors.add(message);
+        formValidationErrors.addValidationError(message);
     }
 
-    @Override
     public void addValidationError(String fieldName, String message) {
-        if (invalidFields == null) {
-            invalidFields = new HashMap<String, String>();
-        }
-
-        invalidFields.put(fieldName, message);
+        formValidationErrors.addValidationError(fieldName, message);
     }
 
-    @Override
     public void clearValidationErrors() {
-        invalidFields = null;
-        validationErrors = null;
+        formValidationErrors.clearValidationErrors();
+    }
+
+    public boolean isWithFormErrors() {
+        return formValidationErrors.isWithFormErrors();
+    }
+
+    public boolean isWithFieldErrors() {
+        return formValidationErrors.isWithFieldErrors();
+    }
+
+    public boolean isWithFieldError(String fieldName) {
+        return formValidationErrors.isWithFieldError(fieldName);
+    }
+
+    public boolean isWithFieldError(Collection<String> fieldNames) {
+        return formValidationErrors.isWithFieldError(fieldNames);
+    }
+
+    public String getFieldError(String fieldName) {
+        return formValidationErrors.getFieldError(fieldName);
+    }
+
+    public boolean isWithValidationErrors() {
+        return formValidationErrors.isWithValidationErrors();
+    }
+
+    public List<FormMessage> getValidationErrors() {
+        return formValidationErrors.getValidationErrors();
     }
 
     public void addReviewError(FormReviewPolicyDef policyDef) {
@@ -410,49 +423,6 @@ public class FormContext extends AbstractContext implements ErrorContext {
         }
 
         return messageList;
-    }
-
-    @Override
-    public boolean isWithFormErrors() {
-        return !DataUtils.isBlank(invalidFields) || !DataUtils.isBlank(validationErrors);
-    }
-
-    @Override
-    public boolean isWithFieldErrors() {
-        return !DataUtils.isBlank(invalidFields);
-    }
-
-    @Override
-    public boolean isWithFieldError(String fieldName) {
-        return invalidFields != null && invalidFields.containsKey(fieldName);
-    }
-
-    @Override
-    public boolean isWithFieldError(Collection<String> fieldNames) {
-        if (invalidFields != null) {
-            for (String fieldName : fieldNames) {
-                if (invalidFields.containsKey(fieldName)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    @Override
-    public String getFieldError(String fieldName) {
-        return invalidFields.get(fieldName);
-    }
-
-    @Override
-    public boolean isWithValidationErrors() {
-        return !DataUtils.isBlank(validationErrors);
-    }
-
-    @Override
-    public List<FormMessage> getValidationErrors() {
-        return validationErrors;
     }
 
     public void evaluateTabStates() throws UnifyException {
@@ -604,16 +574,4 @@ public class FormContext extends AbstractContext implements ErrorContext {
         }
     }
 
-    @Override
-    public String toString() {
-        return "FormContext [appletContext=" + appletContext + ", entityDef=" + entityDef + ", formDef=" + formDef
-                + ", formEventHandlers=" + formEventHandlers + ", formValueStore=" + formValueStore + ", oldInst="
-                + oldInst + ", inst=" + inst + ", formTabs=" + formTabs + ", invalidFields=" + invalidFields
-                + ", reviewErrors=" + reviewErrors + ", reviewErrorsByTab=" + reviewErrorsByTab + ", validationErrors="
-                + validationErrors + ", formWidgetStateList=" + formWidgetStateList + ", visibleAnnotations="
-                + visibleAnnotations + ", fixedReference=" + fixedReference + ", focusMemoryId=" + focusMemoryId
-                + ", focusWidgetId=" + focusWidgetId + ", tabMemoryId=" + tabMemoryId + ", tabWidgetId=" + tabWidgetId
-                + ", tabWidgetIds=" + Arrays.toString(tabWidgetIds) + ", tabIndexCounter=" + tabIndexCounter
-                + ", formFocused=" + formFocused + ", saveAsMode=" + saveAsMode + "]";
-    }
 }

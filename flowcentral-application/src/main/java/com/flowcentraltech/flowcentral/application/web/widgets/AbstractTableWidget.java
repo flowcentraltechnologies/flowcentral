@@ -77,11 +77,15 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control sortColumnCtrl;
 
+    private Control tabMemCtrl;
+
     private Control[] actionCtrl;
 
     private List<StandalonePanel> summaryPanelList;
 
     private Integer[] selected;
+
+    private String tabMemoryId;
 
     private Sort sort;
 
@@ -108,6 +112,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (selectCtrl != null) {
             addPageAlias(selectCtrl);
         }
+        
+        if (tabMemCtrl != null) {
+            addPageAlias(tabMemCtrl);
+        }
     }
 
     @Override
@@ -123,6 +131,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 Control control = (Control) childWidgetInfo.getWidget();
                 if (control == selectCtrl) {
                     selectCtrl.populate(childBlock);
+                } else if (control == tabMemCtrl) {
+                    tabMemCtrl.populate(childBlock);
                 } else if (control == sortColumnCtrl) {
                     sortColumnCtrl.populate(childBlock);
                 } else {
@@ -241,7 +251,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             TableDef tableDef = table != null ? table.getTableDef() : null;
             if (oldTableDef != tableDef) {
                 if (selectCtrl == null && tableDef != null && tableDef.isMultiSelect()) {
-                    selectCtrl = createHiddenControl();
+                    selectCtrl = createInternalHiddenControl("selected");
                 }
 
                 clearRenderers();
@@ -347,6 +357,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return selectCtrl;
     }
 
+    public Control getTabMemCtrl() {
+        return tabMemCtrl;
+    }
+
     public Control getSortColumnCtrl() {
         return sortColumnCtrl;
     }
@@ -360,6 +374,14 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         Set<Integer> set = selected == null || selected.length == 0 ? Collections.emptySet()
                 : new HashSet<Integer>(Arrays.asList(selected));
         getTable().setSelected(set);
+    }
+
+    public String getTabMemoryId() {
+        return tabMemoryId;
+    }
+
+    public void setTabMemoryId(String tabMemoryId) {
+        this.tabMemoryId = tabMemoryId;
     }
 
     public OrderType getSortType() {
@@ -419,9 +441,13 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         if (isMultiSelect()) {
-            selectCtrl = createHiddenControl();
+            selectCtrl = createInternalHiddenControl("selected");
         }
 
+        if (isFocusManagement()) {
+            tabMemCtrl = createInternalHiddenControl("tabMemoryId");
+        }
+        
         String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
         if (actionSymbol != null && actionSymbol.length > 0) {
             EventHandler[] actionHandler = getActionEventHandler();
@@ -464,10 +490,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     protected Class<U> getItemClass() {
         return itemClass;
-    }
-
-    private Control createHiddenControl() throws UnifyException {
-        return (Control) addInternalChildWidget("!ui-hidden binding:selected");
     }
 
     private void clearRenderers() {

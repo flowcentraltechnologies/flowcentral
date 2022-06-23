@@ -62,7 +62,7 @@ public class EntitySingleForm extends AbstractForm {
         singleForm.getBean().load((Entity) getFormBean()); 
     }
     
-    public void saveSingleFormBean() throws UnifyException {
-        singleForm.getBean().save((Entity) getFormBean());
+    public void unloadSingleFormBean() throws UnifyException {
+        singleForm.getBean().unload((Entity) getFormBean());
     }
 }

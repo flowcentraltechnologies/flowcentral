@@ -46,7 +46,7 @@ public abstract class AbstractSingleFormBean implements SingleFormBean {
     }
 
     @Override
-    public final void save(Entity inst) throws UnifyException {
+    public final void unload(Entity inst) throws UnifyException {
         saveToEntity(new BeanValueStore(inst));
     }
 

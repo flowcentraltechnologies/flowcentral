@@ -42,7 +42,7 @@ public class SingleFormWriter extends AbstractControlWriter {
         writer.write(">");
         writer.write("<div>");
         writer.write("<div class=\"sfbody\">");
-        SingleFormPanel panel = singleFormWidget.getSingleFormPanel();
+        SingleFormPanel<?> panel = singleFormWidget.getSingleFormPanel();
         writer.writeStructureAndContent(panel);
         writer.write("</div>");
         writer.write("</div>");
@@ -55,7 +55,7 @@ public class SingleFormWriter extends AbstractControlWriter {
     protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
         super.doWriteBehavior(writer, widget);
         SingleFormWidget singleFormWidget = (SingleFormWidget) widget;
-        SingleFormPanel singleFormPanel = singleFormWidget.getSingleFormPanel();
+        SingleFormPanel<?> singleFormPanel = singleFormWidget.getSingleFormPanel();
         writer.writeBehavior(singleFormPanel);
         addPageAlias(singleFormWidget.getId(), singleFormPanel);
     }
