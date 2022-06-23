@@ -38,12 +38,9 @@ public interface InlineCRUDTablePolicy<T extends InlineCRUDEntry> extends EntryT
      * @param itemList
      *                     the target items list
      * @param item
-     *                     the item to add
-     * @param entryIndex
-     *                     the item entry index
+     *                     the item to added
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onAddItem(ValueStoreReader parentReader, List<T> itemList, T item, int entryIndex)
-            throws UnifyException;
+    void onAddItem(ValueStoreReader parentReader, List<T> itemList, T item) throws UnifyException;
 }

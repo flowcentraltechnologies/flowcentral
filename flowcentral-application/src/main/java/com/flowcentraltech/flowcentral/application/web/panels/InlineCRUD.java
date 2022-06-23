@@ -122,12 +122,12 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     @SuppressWarnings("unchecked")
     private void createAndAddInst(List<T> items) throws UnifyException {
         T item = ReflectUtils.newInstance(entryClass);
+        items.add(item);
+        
         InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
-            policy.onAddItem(table.getParentReader(), items, item, table.getItemCount());
+            policy.onAddItem(table.getParentReader(), items, item);
         }
-
-        items.add(item);
     }
 
 }
