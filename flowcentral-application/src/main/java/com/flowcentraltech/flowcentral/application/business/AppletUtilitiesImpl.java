@@ -425,8 +425,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public void commandRefreshPanels(Panel... panels) throws UnifyException {
-        pageRequestContextUtil.setResponseRefreshPanels(panels);
-        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_PANELS);
+        if (pageRequestContextUtil.setResponseRefreshPanels(panels)) {
+            pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.REFRESH_PANELS);
+        }
     }
 
     @Override
