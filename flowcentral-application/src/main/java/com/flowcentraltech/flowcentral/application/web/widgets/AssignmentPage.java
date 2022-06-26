@@ -166,7 +166,7 @@ public class AssignmentPage {
 
     public BeanTable getEntryBeanTable() throws UnifyException {
         if (isEntryTableMode() && entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.getAu(), ctx.getAu().getTableDef(entryTable), true);
+            entryBeanTable = new BeanTable(ctx.getAu(), ctx.getAu().getTableDef(entryTable), BeanTable.ENTRY_ENABLED);
             if (!StringUtils.isBlank(assnEditPolicy)) {
                 ChildListEditPolicy policy = ctx.getAu().getComponent(ChildListEditPolicy.class, assnEditPolicy);
                 entryBeanTable.setPolicy(policy);

@@ -71,8 +71,6 @@ public class EntryTablePage {
 
     private String displayItemCounterClass;
 
-    private BeanTableWidget entryBeanTableWidget;
-
     private BeanTable entryBeanTable;
 
     private String entryCaption;
@@ -173,7 +171,7 @@ public class EntryTablePage {
 
     public BeanTable getEntryBeanTable() throws UnifyException {
         if (entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.getAu(), ctx.getAu().getTableDef(entryTable), true);
+            entryBeanTable = new BeanTable(ctx.getAu(), ctx.getAu().getTableDef(entryTable), BeanTable.ENTRY_ENABLED);
             if (!StringUtils.isBlank(entryEditPolicy)) {
                 ChildListEditPolicy policy = ctx.getAu().getComponent(ChildListEditPolicy.class, entryEditPolicy);
                 entryBeanTable.setPolicy(policy);

@@ -180,12 +180,12 @@ public class TableWriter extends AbstractControlWriter {
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
             final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
-            
+
             List<String> tabWidgetIds = focusManagement ? new ArrayList<String>() : null;
             WriteWork work = tableWidget.getWriteWork();
             String focusWidgetId = focusManagement ? (String) work.get("focusWidgetId") : null;
             TableStateOverride[] tableStateOverride = (TableStateOverride[]) work.get("overrides");
-            
+
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
@@ -210,14 +210,14 @@ public class TableWriter extends AbstractControlWriter {
 
                         chWidget.setValueStore(valueStore);
                         writer.writeBehavior(chWidget);
-                        
+
                         if (isContainerEditable && chWidget.isEditable() && !chWidget.isDisabled()) {
                             final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId()
                                     : chWidget.getId();
                             if (focusManagement) {
                                 tabWidgetIds.add(cId);
                             }
-                            
+
                             if (tabelColumnDef.isSwitchOnChange()) {
                                 if (switchOnChangeHandlers != null) {
                                     for (EventHandler eventHandler : switchOnChangeHandlers) {
@@ -290,7 +290,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.writeParam("pTabMemId", tableWidget.getTabMemCtrl().getId());
                 writer.writeParam("pTabWidId", tabWidgetIds.toArray(new String[tabWidgetIds.size()]));
             }
-            
+
             if (supportSelect && multiSelect) {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
@@ -462,6 +462,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</tr>");
             } else {
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
+                final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
@@ -476,6 +477,7 @@ public class TableWriter extends AbstractControlWriter {
                 work.set("overrides", tableStateOverride);
 
                 for (int i = 0; i < len; i++) {
+                    boolean _totalSummary = entrySummaryIgnoreLast ? totalSummary && (i < (len - 1)) : totalSummary;
                     ValueStore valueStore = valueList.get(i);
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
@@ -553,7 +555,7 @@ public class TableWriter extends AbstractControlWriter {
                             }
                             writer.write("</td>");
 
-                            if (totalSummary) {
+                            if (_totalSummary) {
                                 table.addTotalSummary(fieldName, valueStore.retrieve(fieldName));
                             }
 
