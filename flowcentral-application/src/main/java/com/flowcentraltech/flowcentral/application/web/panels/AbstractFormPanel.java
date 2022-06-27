@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -42,7 +43,7 @@ public abstract class AbstractFormPanel extends AbstractPanel implements FormPan
     }
 
     @Override
-    public List<FormValidationErrors> validate() throws UnifyException {
+    public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
         return Collections.emptyList();
     }
 

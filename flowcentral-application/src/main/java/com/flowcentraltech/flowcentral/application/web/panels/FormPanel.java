@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.Panel;
@@ -33,9 +34,10 @@ public interface FormPanel extends Panel {
     /**
      * Validate applet panel.
      * 
+     * @param evaluationMode the evaluation mode
      * @return the form validation errors
      * @throws UnifyException
      *                        if an error occurs.
      */
-    List<FormValidationErrors> validate() throws UnifyException;
+    List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException;
 }

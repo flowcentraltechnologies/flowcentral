@@ -392,7 +392,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         ctx.clearValidationErrors();
         if (evaluationMode.evaluation()) {
             FormPanel formPanel = getWidgetByShortName(FormPanel.class, "formPanel");
-            List<FormValidationErrors> formValidationErrors = formPanel.validate();
+            List<FormValidationErrors> formValidationErrors = formPanel.validate(evaluationMode);
             ctx.mergeValidationErrors(formValidationErrors);
             if (ctx.isWithFormErrors()) {
                 hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
