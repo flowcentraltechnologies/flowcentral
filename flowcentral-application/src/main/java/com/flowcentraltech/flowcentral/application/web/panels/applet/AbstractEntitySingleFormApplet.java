@@ -167,7 +167,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                 RecordActionType.UPDATE, null, updatePolicy);
         eCtx.setAll(form.getCtx());
 
-        EntityActionResult entityActionResult = getAu().getEnvironment().updateLean(eCtx);
+        EntityActionResult entityActionResult = getAu().getEnvironment().updateByIdVersion(eCtx);
         updateForm(EntitySingleForm.UpdateType.UPDATE_INST, form, reloadEntity(inst));
         return entityActionResult;
     }
