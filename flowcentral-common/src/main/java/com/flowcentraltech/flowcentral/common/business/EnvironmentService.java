@@ -392,6 +392,18 @@ public interface EnvironmentService extends BusinessService {
     int updateByIdVersion(Entity inst) throws UnifyException;
 
     /**
+     * Updates a record in database using by ID and version and applies a policy if
+     * supplied.
+     * 
+     * @param ctx
+     *            the entity action context
+     * @return the entity action result
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityActionResult updateByIdVersion(EntityActionContext ctx) throws UnifyException;
+
+    /**
      * Updates a record in database using lean rule.
      * 
      * @param inst

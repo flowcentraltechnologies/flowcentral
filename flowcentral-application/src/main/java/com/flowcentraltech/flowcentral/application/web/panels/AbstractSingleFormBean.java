@@ -16,6 +16,11 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -29,6 +34,10 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 public abstract class AbstractSingleFormBean implements SingleFormBean {
+
+    private final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(
+            new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
+                    "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode")));
 
     private AppletUtilities au;
 
@@ -58,24 +67,8 @@ public abstract class AbstractSingleFormBean implements SingleFormBean {
         getValueStore().copy(entityValueStore);
     }
 
-    protected void copyFromWithExclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        getValueStore().copyWithExclusions(entityValueStore, fieldNames);
-    }
-
-    protected void copyFromWithInclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        getValueStore().copyWithInclusions(entityValueStore, fieldNames);
-    }
-
     protected void copyTo(ValueStore entityValueStore) throws UnifyException {
-        entityValueStore.copy(getValueStore());
-    }
-
-    protected void copyToWithExclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        entityValueStore.copyWithExclusions(getValueStore(), fieldNames);
-    }
-
-    protected void copyToWithInclusions(ValueStore entityValueStore, String... fieldNames) throws UnifyException {
-        entityValueStore.copyWithInclusions(getValueStore(), fieldNames);
+        entityValueStore.copyWithExclusions(getValueStore(), RESERVED_BASE_FIELDS);
     }
 
     protected ValueStore getValueStore() {
