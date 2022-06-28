@@ -41,7 +41,9 @@ public enum FormColumnsType implements EnumConst {
     TYPE_3(
             "3", 3),
     TYPE_4(
-            "4", 4);
+            "4", 4),
+    TYPE_5(
+            "5", 5);
 
     private final String code;
 
