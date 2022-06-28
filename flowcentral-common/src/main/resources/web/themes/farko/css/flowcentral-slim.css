@@ -5,7 +5,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License")
  */
 /****** OVERRIDES (SLIM) **********/
-input[type = "text"],input[type = "password"] {height:28px;border-color: #929292;}
+input[type = "text"],input[type = "password"] {height:28px;border-color: #b0b0b0;}
 select:not([multiple]){height:28px;}
 
 /** Button */ 
