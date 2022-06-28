@@ -25,7 +25,6 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.configuration.constants.ChannelDirectionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
-import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
@@ -34,6 +33,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.NameUtils;
 
 /**
@@ -56,46 +56,47 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
     protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         Workflow workflow = (Workflow) ctx.getInst();
-        List<WfStep> stepList = new ArrayList<WfStep>();
+        if (DataUtils.isBlank(workflow.getStepList())) {
+            List<WfStep> stepList = new ArrayList<WfStep>();
 
-        // Add start step
-        WfStep wfStep = new WfStep();
-        wfStep.setType(WorkflowStepType.START);
-        wfStep.setPriority(WorkflowStepPriority.NORMAL);
-        wfStep.setName("start");
-        wfStep.setDescription("Start");
-        wfStep.setLabel("Start");
-        wfStep.setNextStepName("end");
-        stepList.add(wfStep);
+            // Add start step
+            WfStep wfStep = new WfStep();
+            wfStep.setType(WorkflowStepType.START);
+            wfStep.setPriority(WorkflowStepPriority.NORMAL);
+            wfStep.setName("start");
+            wfStep.setDescription("Start");
+            wfStep.setLabel("Start");
+            wfStep.setNextStepName("end");
+            stepList.add(wfStep);
 
-        // Add end step
-        wfStep = new WfStep();
-        wfStep.setType(WorkflowStepType.END);
-        wfStep.setPriority(WorkflowStepPriority.NORMAL);
-        wfStep.setName("end");
-        wfStep.setDescription("End");
-        wfStep.setLabel("End");
-        stepList.add(wfStep);
+            // Add end step
+            wfStep = new WfStep();
+            wfStep.setType(WorkflowStepType.END);
+            wfStep.setPriority(WorkflowStepPriority.NORMAL);
+            wfStep.setName("end");
+            wfStep.setDescription("End");
+            wfStep.setLabel("End");
+            stepList.add(wfStep);
 
-        // Add error step
-        wfStep = new WfStep();
-        wfStep.setType(WorkflowStepType.ERROR);
-        wfStep.setPriority(WorkflowStepPriority.NORMAL);
-        wfStep.setName("error");
-        wfStep.setDescription("Error");
-        wfStep.setLabel("Error");
-        stepList.add(wfStep);
+            // Add error step
+            wfStep = new WfStep();
+            wfStep.setType(WorkflowStepType.ERROR);
+            wfStep.setPriority(WorkflowStepPriority.NORMAL);
+            wfStep.setName("error");
+            wfStep.setDescription("Error");
+            wfStep.setLabel("Error");
+            stepList.add(wfStep);
 
-        workflow.setStepList(stepList);
+            workflow.setStepList(stepList);
+        }
     }
 
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = super.doExecutePostAction(ctx);
-        final String applicationName = (String) getSessionAttribute(
-                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
-        final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         Workflow workflow = (Workflow) ctx.getInst();
+        final Long applicationId = workflow.getApplicationId();
+        final String applicationName = application().getApplicationName(applicationId);
         WfChannel wfChannel = new WfChannel();
         wfChannel.setApplicationId(applicationId);
         wfChannel.setName(workflow.getName());

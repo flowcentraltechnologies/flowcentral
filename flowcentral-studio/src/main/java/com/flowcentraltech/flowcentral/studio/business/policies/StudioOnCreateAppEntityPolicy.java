@@ -82,10 +82,8 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
     @Override
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = super.doExecutePostAction(ctx);
-//        final String applicationName = (String) getSessionAttribute(
-//                StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         final AppEntity appEntity = (AppEntity) ctx.getInst();
-        final Long applicationId = appEntity.getApplicationId(); //(Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        final Long applicationId = appEntity.getApplicationId();
         final String applicationName = application().getApplicationName(applicationId);
         final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
         final String nameDesc = appEntity.getDescription();
