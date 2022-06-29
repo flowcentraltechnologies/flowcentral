@@ -36,6 +36,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
@@ -113,6 +114,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
+            setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
         }
 
         if (form != null) {
@@ -240,6 +242,18 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     @Action
     public void navBackToSearch() throws UnifyException {
         getEntityFormApplet().navBackToSearch();
+    }
+
+    @Action
+    public void performFormAction() throws UnifyException {
+//        String actionName = getRequestTarget(String.class);
+//        AbstractEntitySingleFormApplet applet = getEntityFormApplet();
+//        FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
+//        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()));
+//        if (!ctx.isWithFormErrors()) {
+//            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy());
+//            handleEntityActionResult(entityActionResult);
+//        }
     }
 
     @Action

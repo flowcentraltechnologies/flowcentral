@@ -148,7 +148,7 @@ public abstract class AbstractForm {
             return formActionDefList;
         }
 
-        return ctx.getFormDef().getFormActionDefList();
+        return ctx.getFormActionDefList();
     }
 
     public void setFormActionDefList(List<FormActionDef> formActionDefList) {

@@ -14,14 +14,15 @@
 // the License.
 
 !fc-entitysingleformappletpanel components:$c{formPanel}
+	frmActionsHandler:$d{!ui-event event:onclick action:$c{formActionAct}}
 	
 // Form
 !fc-entitysingleformpanel:formPanel binding:form
 	moreCenterComponents:$c{displayCounterLabel}
 	moreActionButtons:$f{moreActionButtons}
-	moreActionButtons:$c{saveBtn saveNextBtn saveCloseBtn}
+	moreActionButtons:$c{frmActionBtns saveBtn saveNextBtn saveCloseBtn}
 	moreActionButtons:$c{updateBtn updateCloseBtn submitNextBtn submitCloseBtn deleteBtn cancelBtn prevBtn nextBtn}
-	altActionButtons:$c{saveBtn saveNextBtn saveCloseBtn}
+	altActionButtons:$c{frmActionBtns saveBtn saveNextBtn saveCloseBtn}
 	altActionButtons:$c{updateBtn updateCloseBtn submitNextBtn submitCloseBtn deleteBtn cancelBtn}
 !ui-label:displayCounterLabel styleClass:$e{fc-dispcounter}
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
@@ -49,6 +50,8 @@
     eventHandler:$d{!ui-event event:onclick action:$c{prevAct}}
 !ui-button:nextBtn symbol:$s{angle-right} hint:$m{maintain.next.item}
     eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
+!fc-formactionbuttons:frmActionBtns binding:formActionDefList
+    eventHandler:$f{frmActionsHandler}
 
 // Listing Form
 !fc-listingformpanel:listingPanel binding:listingForm
@@ -72,6 +75,7 @@
 !ui-postcommand:deleteAct command:delete confirm:$m{entityformappletpanel.confirm.delete}
 !ui-postcommand:prevAct command:previous
 !ui-postcommand:nextAct command:next
+!ui-postcommand:formActionAct command:performFormAction components:$c{formPanel}
 !ui-postcommand:maintainAct command:maintain debounce:true
 !ui-postcommand:listingAct command:listing debounce:true
 
