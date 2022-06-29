@@ -18,7 +18,7 @@
 
 // Table
 !ui-panel:entryTablePanel style:$s{width:100%} components:$c{entryTable}
-!fc-beantable:entryTable style:$s{width:100%;} binding:table
+!fc-beantable:entryTable style:$s{width:100%;} binding:table alternatingRows:$f{alternatingRows}
 	actionSymbol:$s{plus} actionHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
 	actionSymbol:$s{trash} actionHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}}
 	summary:$f{summary}

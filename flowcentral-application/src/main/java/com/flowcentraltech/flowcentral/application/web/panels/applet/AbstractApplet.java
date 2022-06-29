@@ -119,6 +119,20 @@ public abstract class AbstractApplet {
         }
     }
 
+    protected void setFormProperties(AppletDef _appletDef, AbstractForm form) throws UnifyException {
+        String submitCaption = _appletDef.getPropValue(String.class,
+                AppletPropertyConstants.CREATE_FORM_SUBMIT_CAPTION);
+        String submitNextCaption = _appletDef.getPropValue(String.class,
+                AppletPropertyConstants.CREATE_FORM_SUBMIT_NEXT_CAPTION);
+        boolean submitButtonHighlight = _appletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.CREATE_FORM_SUBMIT_BUTTON_HIGHLIGHT);
+        form.setSubmitCaption(submitCaption);
+        form.setSubmitNextCaption(submitNextCaption);
+        if (submitButtonHighlight) {
+            form.setSubmitStyleClass("fc-greenbutton");
+        }
+    }
+
     protected FormDef getPreferredForm(PreferredFormType type, AppletDef appletDef, Entity inst, String formProperty)
             throws UnifyException {
         if (appletDef.isWithPreferredFormFilters()) {

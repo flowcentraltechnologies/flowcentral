@@ -67,6 +67,7 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamCons
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
+import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.constants.WfWizardAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
@@ -222,19 +223,23 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     for (WfStep wfStep : workflow.getStepList()) {
                         AppletDef appletDef = null;
                         if (wfStep.getType().isUserInteractive()) {
+                            AppletDef _stepAppletDef = appService.getAppletDef(wfStep.getAppletName());
+                            AppletType _reviewAppletType = _stepAppletDef.getType().isSingleForm()
+                                    ? AppletType.REVIEW_SINGLEFORMWORKITEMS
+                                    : AppletType.REVIEW_WORKITEMS;
                             final String appletName = WorkflowNameUtils.getWfAppletName(longName, wfStep.getName());
                             final String label = getApplicationMessage("workflow.applet.label", workflow.getLabel(),
                                     wfStep.getLabel());
                             final String assignDescField = null;
-                            AppletDef.Builder adb = AppletDef.newBuilder(AppletType.REVIEW_WORKITEMS, null, label,
-                                    "tasks", assignDescField, 0, true, descriptiveButtons, appletName, label);
+                            AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
+                                    assignDescField, 0, true, descriptiveButtons, appletName, label);
                             adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfItemReviewTable");
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW, longName);
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP, wfStep.getName());
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP_APPLET, wfStep.getAppletName());
 
-                            adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.REVIEW_WORKITEMS,
-                                    appletName));
+                            adb.openPath(
+                                    ApplicationPageUtils.constructAppletOpenPagePath(_reviewAppletType, appletName));
                             adb.originApplicationName(nameParts.getApplicationName());
                             appletDef = adb.build();
                         }
@@ -546,16 +551,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @SuppressWarnings("unchecked")
     @Override
-    public WorkEntity getWfItemWorkEntity(Long wfItemId) throws UnifyException {
+    public WorkEntity getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-        return environment().listLean((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
+        if (wfReviewMode.lean()) {
+            return environment().listLean((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
+                wfItem.getWorkRecId());
+        }
+        
+        return environment().list((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
                 wfItem.getWorkRecId());
     }
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
-            final String userAction) throws UnifyException {
+            final String userAction, WfReviewMode wfReviewMode) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -569,7 +579,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setForwardedBy(getUserToken().getUserLoginId());
             wfItem.setForwardTo(forwardTo);
             environment().updateByIdVersion(wfItem);
-            environment().updateLeanByIdVersion(wfEntityInst);
+            if (wfReviewMode.lean()) {
+                environment().updateLeanByIdVersion(wfEntityInst);
+            } else {
+                environment().updateByIdVersion(wfEntityInst);
+            }
 
             pushToWfTransitionQueue(wfDef, wfItemId);
             return true;

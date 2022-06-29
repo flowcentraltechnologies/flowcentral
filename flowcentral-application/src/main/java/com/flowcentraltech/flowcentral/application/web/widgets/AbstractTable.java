@@ -46,6 +46,10 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 public abstract class AbstractTable<T, U> {
 
+    public static final int ENTRY_ENABLED = 0x00000001;
+    
+    public static final int ENTRY_SUMMARY_IGNORE_LAST = 0x00000002;
+
     protected final AppletUtilities au;
 
     private TableDef tableDef;
@@ -72,9 +76,9 @@ public abstract class AbstractTable<T, U> {
 
     private int highlightedRow;
 
-    private boolean basicSearchMode;
+    private int entryMode;
 
-    private boolean entryMode;
+    private boolean basicSearchMode;
 
     private boolean editMode;
 
@@ -100,7 +104,7 @@ public abstract class AbstractTable<T, U> {
 
     private RowChangeInfo lastRowChangeInfo;
     
-    public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, boolean entryMode) {
+    public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, int entryMode) {
         this.au = au;
         this.tableDef = tableDef;
         this.defaultOrder = defaultOrder;
@@ -203,7 +207,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean isEntryMode() {
-        return entryMode;
+        return (entryMode & ENTRY_ENABLED) > 0;
+    }
+
+    public boolean isEntrySummaryIgnoreLast() {
+        return (entryMode & ENTRY_SUMMARY_IGNORE_LAST) > 0;
     }
 
     public boolean isEditMode() {

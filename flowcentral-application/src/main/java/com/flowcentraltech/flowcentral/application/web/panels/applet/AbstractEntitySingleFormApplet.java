@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -102,8 +103,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     };
 
     protected EntitySearch entitySearch;
-
+    
     protected EntitySingleForm form;
+
+    protected AppletDef singleFormAppletDef;
 
     protected ViewMode viewMode;
 
@@ -111,6 +114,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     public AbstractEntitySingleFormApplet(AppletUtilities au, String pathVariable) throws UnifyException {
         super(au, pathVariable);
+    }
+
+    public AppletDef getSingleFormAppletDef() throws UnifyException {
+        return singleFormAppletDef != null ? singleFormAppletDef : getRootAppletDef();
     }
 
     public boolean navBackToPrevious() throws UnifyException {
@@ -146,7 +153,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
-        Entity _inst = entitySearch.getEntityTable().getDispItemList().get(mIndex);
+        Entity _inst = getEntitySearchItem(entitySearch, mIndex);
         // Reload
         _inst = reloadEntity(_inst);
         if (form == null) {
@@ -167,7 +174,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                 RecordActionType.UPDATE, null, updatePolicy);
         eCtx.setAll(form.getCtx());
 
-        EntityActionResult entityActionResult = getAu().getEnvironment().updateLean(eCtx);
+        EntityActionResult entityActionResult = getAu().getEnvironment().updateByIdVersion(eCtx);
         updateForm(EntitySingleForm.UpdateType.UPDATE_INST, form, reloadEntity(inst));
         return entityActionResult;
     }
@@ -308,9 +315,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         }
 
         form.loadSingleFormBean();
+        setFormProperties(getRootAppletDef(), form);
         return form;
     }
-
+    
     protected void updateForm(EntitySingleForm.UpdateType updateType, EntitySingleForm form, Entity inst)
             throws UnifyException {
         form.getCtx().resetTabIndex();
@@ -321,6 +329,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     protected List<BreadCrumb> getBaseFormBreadCrumbs() {
         return Collections.emptyList();
+    }
+
+    protected Entity getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
+        return entitySearch.getEntityTable().getDispItemList().get(index);
     }
 
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
@@ -427,13 +439,13 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
         EntityActionResult entityActionResult = viewMode.isMaintainForm()
-                ? getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getFormDef().getEntityDef(),
+                ? getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
                         getRootAppletProp(
                                 String.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst,
                         getRootAppletProp(String.class,
                                 AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY))
-                : getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getFormDef().getEntityDef(),
+                : getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
                         getRootAppletProp(String.class,
                                 AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst, getRootAppletProp(String.class,

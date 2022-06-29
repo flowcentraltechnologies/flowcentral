@@ -73,6 +73,7 @@ public class TableWriter extends AbstractControlWriter {
 
         AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
         if (table != null) {
+            final boolean isContainerEditable = tableWidget.isContainerEditable();
             TableDef tableDef = table.getTableDef();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             if (multiSelect) {
@@ -138,7 +139,7 @@ public class TableWriter extends AbstractControlWriter {
                     writer.write("<col class=\"cselh\">");
                 }
 
-                if (tableWidget.isActionColumn()) {
+                if (isContainerEditable && tableWidget.isActionColumn()) {
                     writer.write("<col class=\"cactionh\">");
                 }
 
@@ -168,6 +169,7 @@ public class TableWriter extends AbstractControlWriter {
         // External control behavior
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
+            final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
@@ -176,19 +178,24 @@ public class TableWriter extends AbstractControlWriter {
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
             final Control[] actionCtrl = tableWidget.getActionCtrl();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
-            final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
             final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
-            
+
             List<String> tabWidgetIds = focusManagement ? new ArrayList<String>() : null;
             WriteWork work = tableWidget.getWriteWork();
             String focusWidgetId = focusManagement ? (String) work.get("focusWidgetId") : null;
             TableStateOverride[] tableStateOverride = (TableStateOverride[]) work.get("overrides");
-            
+
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
+                final int last = (len - 1);
+                if (i == last && entrySummaryIgnoreLast && !isContainerEditable) {
+                    break;
+                }
+
                 ValueStore valueStore = valueList.get(i);
                 boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
                         && lastRowChangeInfo.matchRowIndex(i);
@@ -210,14 +217,14 @@ public class TableWriter extends AbstractControlWriter {
 
                         chWidget.setValueStore(valueStore);
                         writer.writeBehavior(chWidget);
-                        
+
                         if (isContainerEditable && chWidget.isEditable() && !chWidget.isDisabled()) {
                             final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId()
                                     : chWidget.getId();
                             if (focusManagement) {
                                 tabWidgetIds.add(cId);
                             }
-                            
+
                             if (tabelColumnDef.isSwitchOnChange()) {
                                 if (switchOnChangeHandlers != null) {
                                     for (EventHandler eventHandler : switchOnChangeHandlers) {
@@ -290,7 +297,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.writeParam("pTabMemId", tableWidget.getTabMemCtrl().getId());
                 writer.writeParam("pTabWidId", tabWidgetIds.toArray(new String[tabWidgetIds.size()]));
             }
-            
+
             if (supportSelect && multiSelect) {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
@@ -320,6 +327,7 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("<tr>");
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
+            final boolean isContainerEditable = tableWidget.isContainerEditable();
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
@@ -396,7 +404,7 @@ public class TableWriter extends AbstractControlWriter {
                 writeHeaderMultiSelect(writer, tableWidget);
             }
 
-            if (tableWidget.isActionColumn()) {
+            if (isContainerEditable && tableWidget.isActionColumn()) {
                 writer.write("<th  class=\"mactionh\">");
                 writer.write("</th>");
             }
@@ -425,13 +433,14 @@ public class TableWriter extends AbstractControlWriter {
     private void writeBodyRows(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
+            final boolean isContainerEditable = tableWidget.isContainerEditable();
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
             final int pageIndex = table.getDispStartIndex() + 1;
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean totalSummary = table.isTotalSummary();
-            final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             table.clearSummaries();
 
@@ -462,6 +471,8 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</tr>");
             } else {
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
+                final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
+                final boolean alternatingRows = tableWidget.isAlternatingRows();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
@@ -476,6 +487,12 @@ public class TableWriter extends AbstractControlWriter {
                 work.set("overrides", tableStateOverride);
 
                 for (int i = 0; i < len; i++) {
+                    final int last = (len - 1);
+                    if (i == last && entrySummaryIgnoreLast && !isContainerEditable) {
+                        break;
+                    }
+
+                    boolean _totalSummary = entrySummaryIgnoreLast ? totalSummary && (i < last) : totalSummary;
                     ValueStore valueStore = valueList.get(i);
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
@@ -489,10 +506,14 @@ public class TableWriter extends AbstractControlWriter {
                     } else if (entryMessage != null && entryMessage.isMessagePresent()
                             && entryMessage.isRowReferred(i)) {
                         writeTagStyleClass(writer, entryMessage.getMessageType().styleClass());
-                    } else if (i % 2 == 0) {
-                        writeTagStyleClass(writer, even);
-                    } else {
-                        writeTagStyleClass(writer, odd);
+                    } else if (alternatingRows) {
+                        if (i % 2 == 0) {
+                            writeTagStyleClass(writer, even);
+                        } else {
+                            writeTagStyleClass(writer, odd);
+                        }
+                    } else if (isRowAction) {
+                        writeTagStyleClass(writer, "pnt");
                     }
 
                     writeTagName(writer, tableWidget.getRowId());
@@ -553,7 +574,7 @@ public class TableWriter extends AbstractControlWriter {
                             }
                             writer.write("</td>");
 
-                            if (totalSummary) {
+                            if (_totalSummary) {
                                 table.addTotalSummary(fieldName, valueStore.retrieve(fieldName));
                             }
 

@@ -47,7 +47,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     private boolean limitSelectToColumns;
 
     public EntityTable(AppletUtilities au, TableDef tableDef) {
-        super(au, tableDef, DEFAULT_TABLE_ORDER, false);
+        super(au, tableDef, DEFAULT_TABLE_ORDER, 0);
         this.limitSelectToColumns = true;
         this.saveGlobalTableQuickFilterPrivilege = PrivilegeNameUtils
                 .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER);

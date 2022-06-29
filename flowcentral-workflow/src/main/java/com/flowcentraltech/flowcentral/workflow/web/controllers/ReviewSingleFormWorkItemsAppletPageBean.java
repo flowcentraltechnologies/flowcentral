@@ -13,31 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.workflow.web.controllers;
 
-package com.flowcentraltech.flowcentral.application.web.panels;
-
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
-import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntitySingleFormAppletPageBean;
+import com.flowcentraltech.flowcentral.workflow.web.panels.applet.ReviewSingleFormWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.ui.widget.Panel;
 
 /**
- * Form panel.
+ * Review single form work items applet page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FormPanel extends Panel {
+public class ReviewSingleFormWorkItemsAppletPageBean
+        extends AbstractEntitySingleFormAppletPageBean<ReviewSingleFormWorkItemsApplet> {
 
-    /**
-     * Validate applet panel.
-     * 
-     * @param evaluationMode the evaluation mode
-     * @return the form validation errors
-     * @throws UnifyException
-     *                        if an error occurs.
-     */
-    List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException;
+    public ReviewSingleFormWorkItemsApplet getApplet() {
+        return super.getApplet();
+    }
+
+    @Override
+    public void setApplet(ReviewSingleFormWorkItemsApplet applet) throws UnifyException {
+        super.setApplet(applet);
+    }
 }

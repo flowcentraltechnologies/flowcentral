@@ -322,6 +322,28 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
+    public EntityActionResult updateByIdVersion(EntityActionContext ctx) throws UnifyException {
+        executeEntityPreActionPolicy(ctx);
+        Entity inst = ctx.getInst();
+        if (entityAuditInfoProvider != null) {
+            EntityAuditInfo entityAuditInfo = entityAuditInfoProvider.getEntityAuditInfo(ctx.getEntityDef());
+            if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
+                Entity _oldInst = findLean(inst.getClass(), inst.getId());
+                Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
+                        entityAuditInfo.getInclusions());
+                ctx.setAudit(audit);
+            }
+        }
+
+        ctx.setResult(db(inst.getClass()).updateByIdVersion(inst));
+        if (suggestionProvider != null) {
+            suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+        }
+
+        return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
+    }
+
+    @Override
     public EntityActionResult updateLean(EntityActionContext ctx) throws UnifyException {
         executeEntityPreActionPolicy(ctx);
         Entity inst = ctx.getInst();

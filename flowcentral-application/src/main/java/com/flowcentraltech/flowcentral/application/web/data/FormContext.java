@@ -29,6 +29,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormReviewPolicyDef;
@@ -174,6 +175,10 @@ public class FormContext extends AbstractContext {
 
     public FormDef getFormDef() {
         return formDef;
+    }
+
+    public List<FormActionDef> getFormActionDefList() {
+        return formDef != null ? formDef.getFormActionDefList() : null;
     }
 
     public int nextTabIndex() {

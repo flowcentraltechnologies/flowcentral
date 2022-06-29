@@ -36,14 +36,14 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 public class BeanTable extends AbstractTable<List<?>, Object> {
-
+    
     private ValueStore valueStore;
 
     public BeanTable(AppletUtilities au, TableDef tableDef) {
-        this(au, tableDef, false);
+        this(au, tableDef, 0);
     }
 
-    public BeanTable(AppletUtilities au, TableDef tableDef, boolean entryMode) {
+    public BeanTable(AppletUtilities au, TableDef tableDef, int entryMode) {
         super(au, tableDef, null, entryMode);
     }
 

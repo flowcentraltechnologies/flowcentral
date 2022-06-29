@@ -36,7 +36,7 @@ public final class WidgetWriterUtils {
     private static final Map<FormColumnsType, List<ColumnRenderInfo>> columnsInfo;
 
     private static final List<FormColumnsType> columnTypes = Collections.unmodifiableList(Arrays
-            .asList(FormColumnsType.TYPE_1, FormColumnsType.TYPE_2, FormColumnsType.TYPE_3, FormColumnsType.TYPE_4));
+            .asList(FormColumnsType.TYPE_1, FormColumnsType.TYPE_2, FormColumnsType.TYPE_3, FormColumnsType.TYPE_4, FormColumnsType.TYPE_5));
 
     static {
         Map<FormColumnsType, List<ColumnRenderInfo>> map = new EnumMap<FormColumnsType, List<ColumnRenderInfo>>(
@@ -58,6 +58,11 @@ public final class WidgetWriterUtils {
                 Collections.unmodifiableList(Arrays.asList(new ColumnRenderInfo("style=\"width:25%;\""),
                         new ColumnRenderInfo("style=\"width:25%;\""), new ColumnRenderInfo("style=\"width:25%;\""),
                         new ColumnRenderInfo("style=\"width:25%;\""))));
+        map.put(FormColumnsType.TYPE_5,
+                Collections.unmodifiableList(Arrays.asList(new ColumnRenderInfo("style=\"width:20%;\""),
+                        new ColumnRenderInfo("style=\"width:20%;\""), new ColumnRenderInfo("style=\"width:20%;\""),
+                        new ColumnRenderInfo("style=\"width:20%;\""),
+                        new ColumnRenderInfo("style=\"width:20%;\""))));
         columnsInfo = Collections.unmodifiableMap(map);
     }
 

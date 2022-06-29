@@ -105,6 +105,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                         case PATH_WINDOW:
                         case PATH_PAGE:
                         case REVIEW_WORKITEMS:
+                        case REVIEW_SINGLEFORMWORKITEMS:
                         case REVIEW_WIZARDWORKITEMS:
                         case FACADE:
                             break;

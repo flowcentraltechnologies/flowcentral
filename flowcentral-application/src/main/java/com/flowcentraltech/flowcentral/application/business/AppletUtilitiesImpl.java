@@ -768,7 +768,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
-        final String panelName = applet.getRootAppletDef().getPropValue(String.class,
+        final String panelName = applet.getSingleFormAppletDef().getPropValue(String.class,
                 AppletPropertyConstants.SINGLE_FORM_PANEL);
         logDebug("Constructing entity single form for [{0}] using panel [{1}]...", rootTitle, panelName);
         final SingleFormBean bean = createSingleFormBeanForPanel(panelName);

@@ -41,7 +41,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     private Class<T> entryClass;
 
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
-        this.table = new BeanTable(au, tableDef, true);
+        this.table = new BeanTable(au, tableDef, BeanTable.ENTRY_ENABLED | BeanTable.ENTRY_SUMMARY_IGNORE_LAST);
         this.entryClass = entryClass;
     }
 
