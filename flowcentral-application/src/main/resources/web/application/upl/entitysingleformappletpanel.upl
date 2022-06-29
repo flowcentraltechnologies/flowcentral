@@ -55,13 +55,17 @@
 
 // Listing Form
 !fc-listingformpanel:listingPanel binding:listingForm
+	moreActionButtons:$c{listFrmActionBtns}
 	moreActionButtons:$c{listCancelBtn listPrevBtn listNextBtn}
+	altActionButtons:$c{listFrmActionBtns listCancelBtn}
 !ui-button:listPrevBtn symbol:$s{angle-left} hint:$m{maintain.previous.item}
     eventHandler:$d{!ui-event event:onclick action:$c{prevAct}}
 !ui-button:listNextBtn symbol:$s{angle-right} hint:$m{maintain.next.item}
     eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 !ui-button:listCancelBtn caption:$m{button.close}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
+!fc-formactionbuttons:listFrmActionBtns binding:formActionDefList
+    eventHandler:$f{frmActionsHandler}
 
 // Actions
 !ui-postcommand:navBackAct command:navBackToPrevious

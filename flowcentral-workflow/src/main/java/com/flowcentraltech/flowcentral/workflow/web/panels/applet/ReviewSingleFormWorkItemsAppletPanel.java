@@ -71,9 +71,7 @@ public class ReviewSingleFormWorkItemsAppletPanel extends AbstractEntitySingleFo
         final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE);
         if (!ctx.isWithFormErrors()) {
             final String actionName = getRequestTarget(String.class);
-            if (ctx.getFormDef().isInputForm()) {
-                applet.updateInst();
-            }
+            applet.updateInst();
             applet.applyUserAction(actionName);
             hintUser("$m{reviewsingleformworkitemsapplet.apply.success.hint}");
         }

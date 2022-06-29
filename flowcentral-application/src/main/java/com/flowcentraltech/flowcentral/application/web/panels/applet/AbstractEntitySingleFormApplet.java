@@ -315,9 +315,10 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         }
 
         form.loadSingleFormBean();
+        setFormProperties(getRootAppletDef(), form);
         return form;
     }
-
+    
     protected void updateForm(EntitySingleForm.UpdateType updateType, EntitySingleForm form, Entity inst)
             throws UnifyException {
         form.getCtx().resetTabIndex();

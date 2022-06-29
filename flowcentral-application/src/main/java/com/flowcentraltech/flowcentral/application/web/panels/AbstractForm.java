@@ -78,6 +78,12 @@ public abstract class AbstractForm {
     private String displayItemCounterClass;
     
     private String warning;
+
+    private String submitCaption;
+
+    private String submitNextCaption;
+    
+    private String submitStyleClass;
     
     private int attachmentCount;
 
@@ -183,11 +189,35 @@ public abstract class AbstractForm {
         this.displayItemCounterClass = displayItemCounterClass;
     }
 
-    public final String getWarning() {
+    public String getSubmitCaption() {
+        return submitCaption;
+    }
+
+    public void setSubmitCaption(String submitCaption) {
+        this.submitCaption = submitCaption;
+    }
+
+    public String getSubmitNextCaption() {
+        return submitNextCaption;
+    }
+
+    public void setSubmitNextCaption(String submitNextCaption) {
+        this.submitNextCaption = submitNextCaption;
+    }
+
+    public String getSubmitStyleClass() {
+        return submitStyleClass;
+    }
+
+    public void setSubmitStyleClass(String submitStyleClass) {
+        this.submitStyleClass = submitStyleClass;
+    }
+
+    public String getWarning() {
         return warning;
     }
 
-    public final void setWarning(String warning) {
+    public void setWarning(String warning) {
         this.warning = warning;
     }
 
