@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -94,6 +95,10 @@ public abstract class AbstractForm {
 
     public FormDef getFormDef() {
         return ctx.getFormDef();
+    }
+
+    public EntityDef getEntityDef() {
+        return ctx.getEntityDef();
     }
 
     public Object getFormBean() {

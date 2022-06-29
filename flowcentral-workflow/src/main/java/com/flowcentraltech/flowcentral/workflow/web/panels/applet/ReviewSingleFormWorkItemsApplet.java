@@ -17,15 +17,12 @@ package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
-import com.flowcentraltech.flowcentral.application.data.FormDef;
-import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
-import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
-import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -39,16 +36,14 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Review work items applet object.
+ * Review single form work items applet object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
+public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApplet {
 
     private final WorkflowModuleService wms;
-
-    private final AppletDef instAppletDef;
 
     private final WfStepDef wfStepDef;
 
@@ -58,13 +53,12 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
 
     private boolean userActionRight;
 
-    public ReviewWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable, String userLoginId,
-            AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
+    public ReviewSingleFormWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable, String userLoginId)
             throws UnifyException {
-        super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        super(au, pathVariable);
         this.wms = wms;
         AppletDef _appletDef = getRootAppletDef();
-        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
+        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), null, null,
                 getRootAppletDef().getDescription(), _appletDef, null,
                 EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON));
         final String originApplicationName = _appletDef.getOriginApplicationName();
@@ -75,7 +69,7 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
                 .equals("workflowName", workflowName).equals("wfStepName", wfStepName);
         entitySearch.setBaseRestriction(ab.build(), au.getSpecialParamProvider());
         entitySearch.getEntityTable().setLimitSelectToColumns(false);
-        instAppletDef = au.getAppletDef(appletName);
+        singleFormAppletDef = au.getAppletDef(appletName);
         wfStepDef = wms.getWfDef(workflowName).getWfStepDef(wfStepName);
         setAltSubCaption(wfStepDef.getLabel());
         navBackToSearch();
@@ -86,38 +80,25 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
         this.mIndex = mIndex;
         getEntitySearchItem(entitySearch, mIndex);
 
-        final AppletDef _currentFormAppletDef = getFormAppletDef();
-        FormDef formDef = getPreferredForm(PreferredFormType.ALL, _currentFormAppletDef, currEntityInst,
-                FormMode.MAINTAIN.formProperty());
-        if (formDef.isInputForm()) {
-            if (form == null) {
-                form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
-                currEntityInst = (WorkEntity) form.getFormBean();
-                form.setFormTitle(getRootAppletDef().getLabel());
-                form.setFormActionDefList(wfStepDef.getFormActionDefList());
-            } else {
-                updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
-            }
-
-            // Check if enter read-only mode
-            if (wfStepDef.isWithReadOnlyCondition()) {
-                WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
-                boolean readOnly = wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())
-                        .getObjectFilter(wfDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow())
-                        .match(new BeanValueStore(currEntityInst));
-                getCtx().setReadOnly(readOnly);
-            }
-
-            setDisplayModeMessage(form);
-            viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
-        } else { // Listing
-            listingForm = constructListingForm(formDef, currEntityInst);
-            listingForm.setFormTitle(getRootAppletDef().getLabel());
-            listingForm.setFormActionDefList(wfStepDef.getFormActionDefList());
-            setDisplayModeMessage(listingForm);
-            viewMode = ViewMode.LISTING_FORM;
+        if (form == null) {
+            form = constructForm(currEntityInst, FormMode.MAINTAIN);
+            form.setFormTitle(getRootAppletDef().getLabel());
+            form.setFormActionDefList(wfStepDef.getFormActionDefList());
+        } else {
+            updateForm(EntitySingleForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
         }
 
+        // Check if enter read-only mode
+        if (wfStepDef.isWithReadOnlyCondition()) {
+            WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
+            boolean readOnly = wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())
+                    .getObjectFilter(wfDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow())
+                    .match(new BeanValueStore(currEntityInst));
+            getCtx().setReadOnly(readOnly);
+        }
+
+        setDisplayModeMessage(form);
+        viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
         return;
     }
 
@@ -146,11 +127,6 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
 
     public boolean isUserActionRight() {
         return userActionRight;
-    }
-
-    @Override
-    protected AppletDef getAlternateFormAppletDef() throws UnifyException {
-        return instAppletDef;
     }
 
     private void setDisplayModeMessage(AbstractForm form) throws UnifyException {
