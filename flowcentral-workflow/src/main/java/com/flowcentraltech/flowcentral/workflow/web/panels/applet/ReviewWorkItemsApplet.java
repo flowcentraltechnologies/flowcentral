@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEnt
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
+import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
@@ -125,7 +126,7 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
     protected Entity getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         if (isNoForm()) {
             currWfItem = (WfItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
-            currEntityInst = wms.getWfItemWorkEntity(currWfItem.getId());
+            currEntityInst = wms.getWfItemWorkEntity(currWfItem.getId(), WfReviewMode.NORMAL);
             final String currentUser = au.getSessionUserLoginId();
             if (StringUtils.isBlank(currWfItem.getHeldBy())) { // Current user should hold current item if it is unheld
                 currWfItem.setHeldBy(currentUser);
@@ -140,7 +141,7 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
     }
 
     public void applyUserAction(String actionName) throws UnifyException {
-        wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName);
+        wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, WfReviewMode.NORMAL);
         navBackToSearch();
     }
 

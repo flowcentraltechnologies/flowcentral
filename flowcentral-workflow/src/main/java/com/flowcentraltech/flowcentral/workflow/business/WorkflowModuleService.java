@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.ApplicationWorkItemUtilities;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
@@ -109,7 +110,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * Finds workflow by ID.
      * 
      * @param workflowId
-     *                the workflow ID
+     *                   the workflow ID
      * @return the workflow
      * @throws UnifyException
      *                        if workflow with ID is not found. If an error occurs
@@ -131,10 +132,11 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * Finds workflow channel by ID.
      * 
      * @param wfChannelId
-     *                the workflow channel ID
+     *                    the workflow channel ID
      * @return the workflow channel
      * @throws UnifyException
-     *                        if workflow channel with ID is not found. If an error occurs
+     *                        if workflow channel with ID is not found. If an error
+     *                        occurs
      */
     WfChannel findWfChannel(Long wfChannelId) throws UnifyException;
 
@@ -153,10 +155,11 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * Finds workflow wizard by ID.
      * 
      * @param wfWizardId
-     *                the workflow wizard ID
+     *                   the workflow wizard ID
      * @return the workflow wizard
      * @throws UnifyException
-     *                        if workflow wizard with ID is not found. If an error occurs
+     *                        if workflow wizard with ID is not found. If an error
+     *                        occurs
      */
     WfWizard findWfWizard(Long wfWizardId) throws UnifyException;
 
@@ -203,7 +206,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     List<WorkflowFilter> findWorkflowFilters(WorkflowFilterQuery query) throws UnifyException;
-    
+
     /**
      * Finds workflow step by ID.
      * 
@@ -241,12 +244,14 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * Gets the work entity instance for a workflow item
      * 
      * @param wfItemId
-     *                 the workflow item ID
+     *                     the workflow item ID
+     * @param wfReviewMode
+     *                     the review mode
      * @return the workflow item work entity instance
      * @throws UnifyException
      *                        if an error occurs
      */
-    WorkEntity getWfItemWorkEntity(Long wfItemId) throws UnifyException;
+    WorkEntity getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
 
     /**
      * Applies user action on workflow item.
@@ -259,13 +264,15 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                     the workflow step name
      * @param userAction
      *                     the user action to apply
+     * @param wfReviewMode
+     *                     the review mode
      * @return true if successfully applied otherwise false when workflow item is
      *         not in step
      * @throws UnifyException
      *                        if an error occurs
      */
-    boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction)
-            throws UnifyException;
+    boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
+            WfReviewMode wfReviewMode) throws UnifyException;
 
     /**
      * Gets application workflow wizard definition.
@@ -289,7 +296,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     void graduateWfWizardItem(String wfWizardName, Long workEntityId) throws UnifyException;
-    
+
     /**
      * Creates a workflow channel.
      * 
@@ -311,7 +318,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     List<WfChannel> findWorkflowChannels(WfChannelQuery query) throws UnifyException;
-    
+
     /**
      * Gets application workflow channel.
      * 

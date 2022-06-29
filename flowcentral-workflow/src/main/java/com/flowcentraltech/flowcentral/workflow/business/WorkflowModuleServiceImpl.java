@@ -67,6 +67,7 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamCons
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
+import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.constants.WfWizardAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleErrorConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
@@ -550,16 +551,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @SuppressWarnings("unchecked")
     @Override
-    public WorkEntity getWfItemWorkEntity(Long wfItemId) throws UnifyException {
+    public WorkEntity getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-        return environment().listLean((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
+        if (wfReviewMode.lean()) {
+            return environment().listLean((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
+                wfItem.getWorkRecId());
+        }
+        
+        return environment().list((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
                 wfItem.getWorkRecId());
     }
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
-            final String userAction) throws UnifyException {
+            final String userAction, WfReviewMode wfReviewMode) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -573,7 +579,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setForwardedBy(getUserToken().getUserLoginId());
             wfItem.setForwardTo(forwardTo);
             environment().updateByIdVersion(wfItem);
-            environment().updateLeanByIdVersion(wfEntityInst);
+            if (wfReviewMode.lean()) {
+                environment().updateLeanByIdVersion(wfEntityInst);
+            } else {
+                environment().updateByIdVersion(wfEntityInst);
+            }
 
             pushToWfTransitionQueue(wfDef, wfItemId);
             return true;
