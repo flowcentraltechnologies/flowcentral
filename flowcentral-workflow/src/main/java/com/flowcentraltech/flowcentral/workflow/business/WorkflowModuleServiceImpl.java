@@ -222,19 +222,23 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     for (WfStep wfStep : workflow.getStepList()) {
                         AppletDef appletDef = null;
                         if (wfStep.getType().isUserInteractive()) {
+                            AppletDef _stepAppletDef = appService.getAppletDef(wfStep.getAppletName());
+                            AppletType _reviewAppletType = _stepAppletDef.getType().isSingleForm()
+                                    ? AppletType.REVIEW_SINGLEFORMWORKITEMS
+                                    : AppletType.REVIEW_WORKITEMS;
                             final String appletName = WorkflowNameUtils.getWfAppletName(longName, wfStep.getName());
                             final String label = getApplicationMessage("workflow.applet.label", workflow.getLabel(),
                                     wfStep.getLabel());
                             final String assignDescField = null;
-                            AppletDef.Builder adb = AppletDef.newBuilder(AppletType.REVIEW_WORKITEMS, null, label,
-                                    "tasks", assignDescField, 0, true, descriptiveButtons, appletName, label);
+                            AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
+                                    assignDescField, 0, true, descriptiveButtons, appletName, label);
                             adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfItemReviewTable");
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW, longName);
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP, wfStep.getName());
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP_APPLET, wfStep.getAppletName());
 
-                            adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.REVIEW_WORKITEMS,
-                                    appletName));
+                            adb.openPath(
+                                    ApplicationPageUtils.constructAppletOpenPagePath(_reviewAppletType, appletName));
                             adb.originApplicationName(nameParts.getApplicationName());
                             appletDef = adb.build();
                         }

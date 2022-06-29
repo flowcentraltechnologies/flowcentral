@@ -86,6 +86,10 @@ public enum AppletType implements EnumConst {
             "RWK",
             "/reviewworkitemsapplet",
             false),
+    REVIEW_SINGLEFORMWORKITEMS(
+            "RWS",
+            "/reviewsingleformworkitemsapplet",
+            false),
     REVIEW_WIZARDWORKITEMS(
             "RWZ",
             "/reviewwizardworkitemsapplet",
@@ -138,7 +142,7 @@ public enum AppletType implements EnumConst {
     }
 
     public boolean workflow() {
-        return REVIEW_WIZARDWORKITEMS.equals(this) || REVIEW_WORKITEMS.equals(this);
+        return REVIEW_WIZARDWORKITEMS.equals(this) || REVIEW_WORKITEMS.equals(this) || REVIEW_SINGLEFORMWORKITEMS.equals(this);
     }
 
     public boolean isOpenWindow() {
