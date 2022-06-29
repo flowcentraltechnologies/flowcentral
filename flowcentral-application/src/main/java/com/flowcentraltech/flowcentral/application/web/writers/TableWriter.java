@@ -472,6 +472,7 @@ public class TableWriter extends AbstractControlWriter {
             } else {
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
+                final boolean alternatingRows = tableWidget.isAlternatingRows();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
@@ -505,10 +506,14 @@ public class TableWriter extends AbstractControlWriter {
                     } else if (entryMessage != null && entryMessage.isMessagePresent()
                             && entryMessage.isRowReferred(i)) {
                         writeTagStyleClass(writer, entryMessage.getMessageType().styleClass());
-                    } else if (i % 2 == 0) {
-                        writeTagStyleClass(writer, even);
-                    } else {
-                        writeTagStyleClass(writer, odd);
+                    } else if (alternatingRows) {
+                        if (i % 2 == 0) {
+                            writeTagStyleClass(writer, even);
+                        } else {
+                            writeTagStyleClass(writer, odd);
+                        }
+                    } else if (isRowAction) {
+                        writeTagStyleClass(writer, "pnt");
                     }
 
                     writeTagName(writer, tableWidget.getRowId());
