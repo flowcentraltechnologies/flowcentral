@@ -73,6 +73,7 @@ public class TableWriter extends AbstractControlWriter {
 
         AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
         if (table != null) {
+            final boolean isContainerEditable = tableWidget.isContainerEditable();
             TableDef tableDef = table.getTableDef();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             if (multiSelect) {
@@ -138,7 +139,7 @@ public class TableWriter extends AbstractControlWriter {
                     writer.write("<col class=\"cselh\">");
                 }
 
-                if (tableWidget.isActionColumn()) {
+                if (isContainerEditable && tableWidget.isActionColumn()) {
                     writer.write("<col class=\"cactionh\">");
                 }
 
@@ -168,6 +169,7 @@ public class TableWriter extends AbstractControlWriter {
         // External control behavior
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
+            final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
@@ -176,7 +178,7 @@ public class TableWriter extends AbstractControlWriter {
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
             final Control[] actionCtrl = tableWidget.getActionCtrl();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
-            final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
             final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
@@ -189,6 +191,11 @@ public class TableWriter extends AbstractControlWriter {
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
             for (int i = 0; i < len; i++) {
+                final int last = (len - 1);
+                if (i == last && entrySummaryIgnoreLast && !isContainerEditable) {
+                    break;
+                }
+
                 ValueStore valueStore = valueList.get(i);
                 boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
                         && lastRowChangeInfo.matchRowIndex(i);
@@ -320,6 +327,7 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("<tr>");
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
+            final boolean isContainerEditable = tableWidget.isContainerEditable();
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
@@ -396,7 +404,7 @@ public class TableWriter extends AbstractControlWriter {
                 writeHeaderMultiSelect(writer, tableWidget);
             }
 
-            if (tableWidget.isActionColumn()) {
+            if (isContainerEditable && tableWidget.isActionColumn()) {
                 writer.write("<th  class=\"mactionh\">");
                 writer.write("</th>");
             }
@@ -425,13 +433,14 @@ public class TableWriter extends AbstractControlWriter {
     private void writeBodyRows(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
+            final boolean isContainerEditable = tableWidget.isContainerEditable();
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
             final int pageIndex = table.getDispStartIndex() + 1;
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean totalSummary = table.isTotalSummary();
-            final boolean isActionColumn = tableWidget.isActionColumn();
+            final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             table.clearSummaries();
 
@@ -477,7 +486,12 @@ public class TableWriter extends AbstractControlWriter {
                 work.set("overrides", tableStateOverride);
 
                 for (int i = 0; i < len; i++) {
-                    boolean _totalSummary = entrySummaryIgnoreLast ? totalSummary && (i < (len - 1)) : totalSummary;
+                    final int last = (len - 1);
+                    if (i == last && entrySummaryIgnoreLast && !isContainerEditable) {
+                        break;
+                    }
+
+                    boolean _totalSummary = entrySummaryIgnoreLast ? totalSummary && (i < last) : totalSummary;
                     ValueStore valueStore = valueList.get(i);
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
