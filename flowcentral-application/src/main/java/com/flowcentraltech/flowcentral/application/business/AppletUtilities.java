@@ -64,6 +64,7 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
@@ -127,6 +128,23 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     SequenceCodeGenerator getSequenceCodeGenerator() throws UnifyException;
+    
+    /**
+     * Gets the next sequence code for the supplied sequence definition and current
+     * date.
+     * 
+     * @param ownerId
+     *                          the sequence owner Id
+     * @param sequenceDefintion
+     *                          the sequence definition
+     * @param valueStoreReader
+     *                          the value store reader (optional)
+     * @return the next sequence code
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getNextSequenceCode(String ownerId, String sequenceDefintion, ValueStoreReader valueStoreReader)
+            throws UnifyException;
 
     /**
      * Checks if application is developable.
@@ -1042,6 +1060,30 @@ public interface AppletUtilities extends UnifyComponent {
      */
     EntityActionResult createEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
+    
+    /**
+     * Populates entity auto format fields.
+     * 
+     * @param entityDef
+     *                  the entity definition
+     * @param inst
+     *                  the entity instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void populateAutoFormatFields(EntityDef entityDef, Entity inst) throws UnifyException;
+
+    /**
+     * Reverts entity auto format fields.
+     * 
+     * @param entityDef
+     *                  the entity definition
+     * @param inst
+     *                  the entity instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void revertAutoFormatFields(EntityDef entityDef, Entity inst) throws UnifyException;
 
     /**
      * Updates an entity by form context.

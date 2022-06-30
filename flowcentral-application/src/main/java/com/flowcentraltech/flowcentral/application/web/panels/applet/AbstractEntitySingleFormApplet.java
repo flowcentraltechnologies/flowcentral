@@ -25,21 +25,17 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
-import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -368,33 +364,14 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         eCtx.setAll(form.getCtx());
 
         // Populate values for auto-format fields
-        final SequenceCodeGenerator gen = au.getSequenceCodeGenerator();
-        if (_entityDef.isWithAutoFormatFields()) {
-            ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
-            for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
-                if (entityFieldDef.isStringAutoFormat()) {
-                    String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
-                    if (skeleton.equals(DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName()))) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen.getNextSequenceCode(
-                                _entityDef.getLongName(), entityFieldDef.getAutoFormat(), valueStoreReader));
-                    }
-                }
-            }
-        }
+        au.populateAutoFormatFields(_entityDef, inst);
 
         EntityActionResult entityActionResult;
         try {
             entityActionResult = getAu().getEnvironment().create(eCtx);
         } catch (UnifyException e) {
             // Revert to skeleton values
-            if (_entityDef.isWithAutoFormatFields()) {
-                for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
-                    if (entityFieldDef.isStringAutoFormat()) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
-                                gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
-                    }
-                }
-            }
+            au.revertAutoFormatFields(_entityDef, inst);
             throw e;
         }
 
