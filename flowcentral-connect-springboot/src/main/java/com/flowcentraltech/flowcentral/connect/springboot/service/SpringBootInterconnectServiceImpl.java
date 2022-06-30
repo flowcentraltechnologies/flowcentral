@@ -70,7 +70,7 @@ import com.tcdng.unify.convert.util.ConverterUtils;
  * @since 1.0
  */
 @Service
-@Transactional(propagation = Propagation.NOT_SUPPORTED)
+@Transactional(propagation = Propagation.SUPPORTS)
 public class SpringBootInterconnectServiceImpl implements SpringBootInterconnectService, EntityInstFinder {
 
     private final Logger LOGGER = Logger.getLogger(SpringBootInterconnectServiceImpl.class.getName());
