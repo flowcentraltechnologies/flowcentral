@@ -558,14 +558,14 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
 .fc-entitytreetable .classic .mselh {width: 32px;background-color: #e3e7ea;}
 
-.fc-dispcounter {display:inline-block; background-color:#9ca4af; color:#404040; font-weight:bold; font-size:7pt;
-	padding:4px; margin-top:4px;}
-.fc-dispcountergreen {display:inline-block; background-color:#5ca44f; color:#404040; font-weight:bold; font-size:7pt;
-	padding:4px; margin-top:4px;}
+.fc-dispcounter {display:inline-block; background-color:#a6aeb9; color:#404040; font-weight:bold; font-size:7pt;
+	padding:4px 8px; margin-top:4px;}
+.fc-dispcountergreen {display:inline-block; background-color:#90d883; color:#404040; font-weight:bold; font-size:7pt;
+	padding:4px 8px; margin-top:4px;}
 .fc-dispcounterorange {display:inline-block; background-color:#ffbf00; color:#404040; font-weight:bold; font-size:7pt;
-	padding:4px; margin-top:4px;}
+	padding:4px 8px; margin-top:4px;}
 .fc-dispcounterfrozen {display:inline-block; background-color:#a5c5d9; color:#404040; font-weight:bold; font-size:7pt;
-	padding:4px; margin-top:4px;}
+	padding:4px 8px; margin-top:4px;}
 
 
 /*** MENUS ***/

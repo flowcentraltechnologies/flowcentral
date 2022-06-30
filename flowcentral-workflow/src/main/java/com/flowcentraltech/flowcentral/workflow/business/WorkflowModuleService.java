@@ -309,6 +309,17 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     Long createWorkflowChannel(WfChannel wfChannel) throws UnifyException;
 
     /**
+     * Updates a workflow channel.
+     * 
+     * @param wfChannel
+     *                  the workflow channel to update.
+     * @return the ID of the updated workflow channel
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int updateWorkflowChannel(WfChannel wfChannel) throws UnifyException;
+
+    /**
      * Finds workflow channels by criteria.
      * 
      * @param query

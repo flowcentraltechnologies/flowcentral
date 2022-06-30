@@ -216,7 +216,7 @@ public enum StudioAppComponentType implements EnumConst {
             "project-diagram",
             "/studioworkflowapplet",
             "studiooncreateworkflow-policy",
-            null,
+            "studioonupdateworkflow-policy",
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,

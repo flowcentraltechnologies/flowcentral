@@ -244,6 +244,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public String getNextSequenceCode(String ownerId, String sequenceDefintion, ValueStoreReader valueStoreReader)
+            throws UnifyException {
+        return sequenceCodeGenerator.getNextSequenceCode(ownerId, sequenceDefintion, valueStoreReader);
+    }
+
+    @Override
     public boolean isApplicationDevelopable(Long applicationId) throws UnifyException {
         return applicationModuleService.isApplicationDevelopable(applicationId);
     }
@@ -1254,7 +1260,27 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         eCtx.setAll(formContext);
 
         // Populate values for auto-format fields
-        final SequenceCodeGenerator gen = getSequenceCodeGenerator();
+        populateAutoFormatFields(_entityDef, inst);
+
+        // Apply delayed set values here since set values can depend on auto-format
+        // fields
+        applyDelayedSetValues(formContext);
+
+        EntityActionResult entityActionResult;
+        try {
+            entityActionResult = getEnvironment().create(eCtx);
+        } catch (UnifyException e) {
+            // Revert to skeleton values
+            revertAutoFormatFields(_entityDef, inst);
+            throw e;
+        }
+
+        return entityActionResult;
+    }
+
+    @Override
+    public void populateAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
+        SequenceCodeGenerator gen = getSequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
             ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
@@ -1267,30 +1293,21 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 }
             }
         }
-
-        // Apply delayed set values here since set values can depend on auto-format
-        // fields
-        applyDelayedSetValues(formContext);
-
-        EntityActionResult entityActionResult;
-        try {
-            entityActionResult = getEnvironment().create(eCtx);
-        } catch (UnifyException e) {
-            // Revert to skeleton values
-            if (_entityDef.isWithAutoFormatFields()) {
-                for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
-                    if (entityFieldDef.isStringAutoFormat()) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
-                                gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
-                    }
-                }
-            }
-            throw e;
-        }
-
-        return entityActionResult;
     }
 
+    @Override
+    public void revertAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
+        SequenceCodeGenerator gen = getSequenceCodeGenerator();
+        if (_entityDef.isWithAutoFormatFields()) {
+            for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
+                if (entityFieldDef.isStringAutoFormat()) {
+                    DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),
+                            gen.getCodeSkeleton(entityFieldDef.getAutoFormat()));
+                }
+            }
+        }
+    }
+    
     @Override
     public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {

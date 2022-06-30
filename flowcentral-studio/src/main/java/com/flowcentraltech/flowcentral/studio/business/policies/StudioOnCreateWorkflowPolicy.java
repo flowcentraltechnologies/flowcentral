@@ -97,6 +97,7 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
         Workflow workflow = (Workflow) ctx.getInst();
         final Long applicationId = workflow.getApplicationId();
         final String applicationName = application().getApplicationName(applicationId);
+        
         WfChannel wfChannel = new WfChannel();
         wfChannel.setApplicationId(applicationId);
         wfChannel.setName(workflow.getName());
