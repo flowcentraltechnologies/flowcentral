@@ -617,8 +617,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<WfChannel> findWorkflowChannels(WfChannelQuery query) throws UnifyException {
-        // TODO Auto-generated method stub
         return environment().listAll(query);
+    }
+
+    @Override
+    public int updateWorkflowChannel(WfChannel wfChannel) throws UnifyException {
+        return environment().updateByIdVersion(wfChannel);
     }
 
     @Override

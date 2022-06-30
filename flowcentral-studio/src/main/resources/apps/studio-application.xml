@@ -3404,7 +3404,7 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity"
 						inputWidget="studio.workentitybynamelist" column="1"
-						required="true" />
+						required="true" saveAs="true" />
 					<field name="descFormat" inputWidget="application.text"
 						column="1" />
 				</section>
@@ -3458,7 +3458,7 @@
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field" target="entity" disabled="true" />
+					<setState type="field" target="name" disabled="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
