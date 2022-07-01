@@ -318,6 +318,8 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.CREATE);
         setCreateAuditInformation(record);
         req.setPayload(utilities.encodeDelegateEntity(record));
+        System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+        System.out.println(record);
         return singleValueResultOperation(Long.class, record.getClass(), req);
     }
 
@@ -441,8 +443,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public Date getNow() throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        return application().getNow();
     }
 
     @Override
