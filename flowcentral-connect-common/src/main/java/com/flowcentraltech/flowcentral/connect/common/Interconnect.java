@@ -605,7 +605,7 @@ public class Interconnect {
         if (refType.object()) {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
                 EntityInfo parentEntityInfo = getEntityInfo(entityFieldInfo.getReferences());
-                Object id = map.get(entityFieldInfo.getName());
+                Object id = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
                 id = ConverterUtils.convert(entityFieldInfo.getJavaClass(), id);
                 if (id != null) {
                     Object parentBean = entityInstFinder.findById(parentEntityInfo, id);
@@ -614,7 +614,7 @@ public class Interconnect {
             }
         } else {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
-                Object val = map.get(entityFieldInfo.getName());
+                Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
                 val = ConverterUtils.convert(entityFieldInfo.getJavaClass(), val);
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), val);
             }
@@ -622,7 +622,7 @@ public class Interconnect {
 
         // Fields
         for (EntityFieldInfo entityFieldInfo : entityInfo.getFieldList()) {
-            Object val = map.get(entityFieldInfo.getName());
+            Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
             val = entityFieldInfo.isEnum() ? ConverterUtils.convert(entityFieldInfo.getEnumImplClass(), val)
                     : ConverterUtils.convert(entityFieldInfo.getJavaClass(), val);
             PropertyUtils.setProperty(bean, entityFieldInfo.getName(), val);
@@ -630,7 +630,7 @@ public class Interconnect {
 
         // Child
         for (EntityFieldInfo entityFieldInfo : entityInfo.getChildFieldList()) {
-            Object val = map.get(entityFieldInfo.getName());
+            Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
             if (val != null) {
                 Object chbean = null;
                 if (val instanceof String) {
@@ -645,7 +645,7 @@ public class Interconnect {
 
         // Child list
         for (EntityFieldInfo entityFieldInfo : entityInfo.getChildListFieldList()) {
-            Object val = map.get(entityFieldInfo.getName());
+            Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
             if (val != null) {
                 Object[] chs = ConverterUtils.convert(Object[].class, val);
                 List<Object> list = new ArrayList<>();
@@ -764,7 +764,13 @@ public class Interconnect {
             }
         }
 
-        return map;
+        Map<String, Object> result = new HashMap<>();
+        for (Map.Entry<String, Object> entry: map.entrySet()) {
+            String fieldName = entityInfo.getFieldNameFromLocal(entry.getKey());
+            result.put(fieldName, entry.getValue());
+        }
+        
+        return result;
     }
 
     private Object getBeanProperty(Object bean, String name) {
