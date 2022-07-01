@@ -68,13 +68,8 @@ public class Interconnect {
 
     private static final Logger LOGGER = Logger.getLogger(Interconnect.class.getName());
 
-    private final Gson gson = new GsonBuilder()
-            .disableHtmlEscaping()
-            .serializeNulls()
-            .setDateFormat(DateFormat.LONG)
-            .setPrettyPrinting()
-            .setVersion(1.0)
-            .create();
+    private final Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().setDateFormat(DateFormat.LONG)
+            .setPrettyPrinting().setVersion(1.0).create();
 
     protected enum RefType {
         PRIMITIVE,
@@ -103,7 +98,7 @@ public class Interconnect {
         this.refType = refType;
         this.entities = Collections.emptyMap();
     }
-    
+
     public String prettyJSON(Object src) {
         return gson.toJson(src, src.getClass());
     }
@@ -544,7 +539,7 @@ public class Interconnect {
         return null;
     }
 
-    public List<OrderDef> getOrderDef(String order) throws Exception {
+    public List<OrderDef> getOrderDef(EntityInfo entityInfo, String order) throws Exception {
         checkInitialized();
         if (order != null) {
             List<OrderDef> orderDefList = new ArrayList<OrderDef>();
@@ -555,7 +550,7 @@ public class Interconnect {
                     String[] p = line.split("]");
                     String fieldName = p[0];
                     boolean ascending = "ASCENDING".equals(p[1]);
-                    orderDefList.add(new OrderDef(fieldName, ascending));
+                    orderDefList.add(new OrderDef(entityInfo.getLocalFieldName(fieldName), ascending));
                 }
             } finally {
                 if (reader != null) {

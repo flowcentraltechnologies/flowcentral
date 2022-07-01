@@ -316,7 +316,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             cq.where(restrictions);
         }
 
-        List<OrderDef> orderDefList = interconnect.getOrderDef(req.getOrder());
+        List<OrderDef> orderDefList = interconnect.getOrderDef(entityInfo, req.getOrder());
         if (!orderDefList.isEmpty()) {
             List<Order> orderList = new ArrayList<Order>();
             for (OrderDef orderDef : orderDefList) {

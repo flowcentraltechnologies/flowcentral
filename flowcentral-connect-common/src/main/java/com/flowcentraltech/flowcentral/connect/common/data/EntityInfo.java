@@ -57,6 +57,8 @@ public class EntityInfo {
 
     private List<EntityFieldInfo> childListFieldList;
 
+    private Map<String, String> fieldToLocal;
+    
     public EntityInfo(String entityManagerFactory, String name, String description, String idFieldName,
             String versionNoFieldName, String handler, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
@@ -91,6 +93,14 @@ public class EntityInfo {
         this.listOnlyFieldList = Collections.unmodifiableList(this.listOnlyFieldList);
         this.childFieldList = Collections.unmodifiableList(this.childFieldList);
         this.childListFieldList = Collections.unmodifiableList(this.childListFieldList);
+        this.fieldToLocal = new HashMap<String, String>();
+        if (idFieldName != null) {
+            this.fieldToLocal.put("id", idFieldName);
+        }
+        
+        if (versionNoFieldName != null) {
+            this.fieldToLocal.put("versionNo", versionNoFieldName);
+        }        
     }
     
     public String getEntityManagerFactory() {
@@ -153,6 +163,11 @@ public class EntityInfo {
         return childListFieldList;
     }
 
+    public String getLocalFieldName(String fieldName) {
+        String local = fieldToLocal.get(fieldName);
+        return local != null ? local: fieldName;
+    }
+    
     public EntityFieldInfo getEntityFieldInfo(String fieldName) throws Exception {
         EntityFieldInfo entityFieldInfo = fieldsByName.get(fieldName);
         if (entityFieldInfo == null) {
