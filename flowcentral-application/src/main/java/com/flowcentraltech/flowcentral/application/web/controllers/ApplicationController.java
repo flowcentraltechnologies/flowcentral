@@ -33,6 +33,7 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -190,6 +191,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     @Override
     protected void onIndexPage() throws UnifyException {
         super.onIndexPage();
+        ApplicationPageBean pageBean = getPageBean();
 
         final boolean isWorkspaceEnabled = wkspPrivilegeManager != null && licenseProvider != null
                 && licenseProvider.isLicensed(LicenseFeatureCodeConstants.APPLICATION_WORKSPACES);
@@ -200,6 +202,20 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
             getPageBean().setWorkspaceCode(workspaceCode);
             setSessionWorkspace();
         }
+
+        String headerTitle = system().getSysParameterValue(String.class,
+                ApplicationModuleSysParamConstants.APPLICATION_HEADER_TITLE);
+        if (StringUtils.isBlank(headerTitle)) {
+            headerTitle = getContainerSetting(String.class, "flowcentral.application.headertitle", null);
+        }
+        pageBean.setHeaderTitle(headerTitle);
+        setPageWidgetVisible("topTitle", !StringUtils.isBlank(headerTitle));
+    }
+
+    @Override
+    protected void onOpenPage() throws UnifyException {
+        super.onOpenPage();
+        
     }
 
     private void setSessionWorkspace() throws UnifyException {

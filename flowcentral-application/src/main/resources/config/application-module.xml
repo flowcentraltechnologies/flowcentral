@@ -56,5 +56,8 @@
 		<sysParameter code="APP-000F" defaultVal="true"
 			description="$m{application.sysparam.tableclassicmode}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0010"
+			description="$m{application.sysparam.applicationheadertitle}"
+			editor="!ui-text" type="string" editable="true" />
 	</sysParameters>
 </module>
