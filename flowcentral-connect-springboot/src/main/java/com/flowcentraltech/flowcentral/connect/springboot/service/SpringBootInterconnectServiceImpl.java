@@ -316,7 +316,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             cq.where(restrictions);
         }
 
-        List<OrderDef> orderDefList = interconnect.getOrderDef(req.getOrder());
+        List<OrderDef> orderDefList = interconnect.getOrderDef(entityInfo, req.getOrder());
         if (!orderDefList.isEmpty()) {
             List<Order> orderList = new ArrayList<Order>();
             for (OrderDef orderDef : orderDefList) {
@@ -484,34 +484,35 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             paramB = ConverterUtils.convert(_entityFieldInfo.getEnumImplClass(), paramB);
         }
 
+        final String fieldName = entityInfo.getLocalFieldName(fo.getFieldName());
         switch (type) {
             case AMONGST:
-                return index.getRoot().get(fo.getFieldName()).in((Collection<?>) paramA);
+                return index.getRoot().get(fieldName).in((Collection<?>) paramA);
             case AND:
                 break;
             case BEGINS_WITH:
-                return cb.like(index.getRoot().get(fo.getFieldName()), paramA + "%");
+                return cb.like(index.getRoot().get(fieldName), paramA + "%");
             case BEGINS_WITH_FIELD:
                 break;
             case BEGINS_WITH_PARAM:
                 break;
             case BETWEEN:
                 if (_entityFieldInfo.isDate() || _entityFieldInfo.isTimestamp()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()), (Date) paramA, (Date) paramB);
+                    return cb.between(index.getRoot().get(fieldName), (Date) paramA, (Date) paramB);
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()),
+                    return cb.between(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Long.class, paramA), ConverterUtils.convert(Long.class, paramB));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()),
+                    return cb.between(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Double.class, paramA), ConverterUtils.convert(Double.class, paramB));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()), (BigDecimal) paramA, (BigDecimal) paramB);
+                    return cb.between(index.getRoot().get(fieldName), (BigDecimal) paramA, (BigDecimal) paramB);
                 }
                 break;
             case BETWEEN_FIELD:
@@ -519,38 +520,38 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             case BETWEEN_PARAM:
                 break;
             case ENDS_WITH:
-                return cb.like(index.getRoot().get(fo.getFieldName()), "%" + paramA);
+                return cb.like(index.getRoot().get(fieldName), "%" + paramA);
             case ENDS_WITH_FIELD:
                 break;
             case ENDS_WITH_PARAM:
                 break;
             case EQUALS:
-                return cb.equal(index.getRoot().get(fo.getFieldName()), paramA);
+                return cb.equal(index.getRoot().get(fieldName), paramA);
             case EQUALS_COLLECTION:
                 break;
             case EQUALS_FIELD:
                 break;
             case EQUALS_LINGUAL:
-                return cb.equal(index.getRoot().get(fo.getFieldName()), paramA);
+                return cb.equal(index.getRoot().get(fieldName), paramA);
             case EQUALS_PARAM:
                 break;
             case GREATER_OR_EQUAL:
                 if (_entityFieldInfo.isDate() || _entityFieldInfo.isTimestamp()) {
-                    return cb.greaterThanOrEqualTo(index.getRoot().get(fo.getFieldName()), (Date) paramA);
+                    return cb.greaterThanOrEqualTo(index.getRoot().get(fieldName), (Date) paramA);
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.greaterThanOrEqualTo(index.getRoot().get(fo.getFieldName()),
+                    return cb.greaterThanOrEqualTo(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Long.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.greaterThanOrEqualTo(index.getRoot().get(fo.getFieldName()),
+                    return cb.greaterThanOrEqualTo(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Double.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
-                    return cb.greaterThanOrEqualTo(index.getRoot().get(fo.getFieldName()), (BigDecimal) paramA);
+                    return cb.greaterThanOrEqualTo(index.getRoot().get(fieldName), (BigDecimal) paramA);
                 }
 
                 break;
@@ -564,21 +565,21 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 break;
             case GREATER_THAN:
                 if (_entityFieldInfo.isDate() || _entityFieldInfo.isTimestamp()) {
-                    return cb.greaterThan(index.getRoot().get(fo.getFieldName()), (Date) paramA);
+                    return cb.greaterThan(index.getRoot().get(fieldName), (Date) paramA);
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.greaterThan(index.getRoot().get(fo.getFieldName()),
+                    return cb.greaterThan(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Long.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.greaterThan(index.getRoot().get(fo.getFieldName()),
+                    return cb.greaterThan(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Double.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
-                    return cb.greaterThan(index.getRoot().get(fo.getFieldName()), (BigDecimal) paramA);
+                    return cb.greaterThan(index.getRoot().get(fieldName), (BigDecimal) paramA);
                 }
 
                 break;
@@ -592,52 +593,52 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 break;
             case IBEGINS_WITH:
                 paramA = ((String) paramA).toLowerCase();
-                return cb.like(cb.lower(index.getRoot().get(fo.getFieldName())), paramA + "%");
+                return cb.like(cb.lower(index.getRoot().get(fieldName)), paramA + "%");
             case IBEGINS_WITH_FIELD:
                 break;
             case IBEGINS_WITH_PARAM:
                 break;
             case IENDS_WITH:
                 paramA = ((String) paramA).toLowerCase();
-                return cb.like(cb.lower(index.getRoot().get(fo.getFieldName())), "%" + paramA);
+                return cb.like(cb.lower(index.getRoot().get(fieldName)), "%" + paramA);
             case IENDS_WITH_FIELD:
                 break;
             case IENDS_WITH_PARAM:
                 break;
             case IEQUALS:
                 paramA = ((String) paramA).toLowerCase();
-                return cb.equal(cb.lower(index.getRoot().get(fo.getFieldName())), paramA);
+                return cb.equal(cb.lower(index.getRoot().get(fieldName)), paramA);
             case ILIKE:
                 paramA = ((String) paramA).toLowerCase();
-                return cb.like(cb.lower(index.getRoot().get(fo.getFieldName())), "%" + paramA + "%");
+                return cb.like(cb.lower(index.getRoot().get(fieldName)), "%" + paramA + "%");
             case ILIKE_FIELD:
                 break;
             case ILIKE_PARAM:
                 break;
             case INOT_EQUALS:
                 paramA = ((String) paramA).toLowerCase();
-                return cb.equal(cb.lower(index.getRoot().get(fo.getFieldName())), paramA).not();
+                return cb.equal(cb.lower(index.getRoot().get(fieldName)), paramA).not();
             case IS_NOT_NULL:
-                return cb.isNotNull(index.getRoot().get(fo.getFieldName()));
+                return cb.isNotNull(index.getRoot().get(fieldName));
             case IS_NULL:
-                return cb.isNull(index.getRoot().get(fo.getFieldName()));
+                return cb.isNull(index.getRoot().get(fieldName));
             case LESS_OR_EQUAL:
                 if (_entityFieldInfo.isDate() || _entityFieldInfo.isTimestamp()) {
-                    return cb.lessThanOrEqualTo(index.getRoot().get(fo.getFieldName()), (Date) paramA);
+                    return cb.lessThanOrEqualTo(index.getRoot().get(fieldName), (Date) paramA);
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.lessThanOrEqualTo(index.getRoot().get(fo.getFieldName()),
+                    return cb.lessThanOrEqualTo(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Long.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.lessThanOrEqualTo(index.getRoot().get(fo.getFieldName()),
+                    return cb.lessThanOrEqualTo(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Double.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
-                    return cb.lessThanOrEqualTo(index.getRoot().get(fo.getFieldName()), (BigDecimal) paramA);
+                    return cb.lessThanOrEqualTo(index.getRoot().get(fieldName), (BigDecimal) paramA);
                 }
 
                 break;
@@ -651,21 +652,21 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 break;
             case LESS_THAN:
                 if (_entityFieldInfo.isDate() || _entityFieldInfo.isTimestamp()) {
-                    return cb.lessThan(index.getRoot().get(fo.getFieldName()), (Date) paramA);
+                    return cb.lessThan(index.getRoot().get(fieldName), (Date) paramA);
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.lessThan(index.getRoot().get(fo.getFieldName()),
+                    return cb.lessThan(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Long.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.lessThan(index.getRoot().get(fo.getFieldName()),
+                    return cb.lessThan(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Double.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
-                    return cb.lessThan(index.getRoot().get(fo.getFieldName()), (BigDecimal) paramA);
+                    return cb.lessThan(index.getRoot().get(fieldName), (BigDecimal) paramA);
                 }
 
                 break;
@@ -678,38 +679,38 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             case LESS_THAN_PARAM:
                 break;
             case LIKE:
-                return cb.like(index.getRoot().get(fo.getFieldName()), "%" + paramA + "%");
+                return cb.like(index.getRoot().get(fieldName), "%" + paramA + "%");
             case LIKE_FIELD:
                 break;
             case LIKE_PARAM:
                 break;
             case NOT_AMONGST:
-                return index.getRoot().get(fo.getFieldName()).in((Collection<?>) paramA).not();
+                return index.getRoot().get(fieldName).in((Collection<?>) paramA).not();
             case NOT_BEGIN_WITH:
-                return cb.like(index.getRoot().get(fo.getFieldName()), paramA + "%").not();
+                return cb.like(index.getRoot().get(fieldName), paramA + "%").not();
             case NOT_BEGIN_WITH_FIELD:
                 break;
             case NOT_BEGIN_WITH_PARAM:
                 break;
             case NOT_BETWEEN:
                 if (_entityFieldInfo.isDate() || _entityFieldInfo.isTimestamp()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()), (Date) paramA, (Date) paramB).not();
+                    return cb.between(index.getRoot().get(fieldName), (Date) paramA, (Date) paramB).not();
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()),
+                    return cb.between(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Long.class, paramA), ConverterUtils.convert(Long.class, paramB))
                             .not();
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()),
+                    return cb.between(index.getRoot().get(fieldName),
                             ConverterUtils.convert(Double.class, paramA), ConverterUtils.convert(Double.class, paramB))
                             .not();
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
-                    return cb.between(index.getRoot().get(fo.getFieldName()), (BigDecimal) paramA, (BigDecimal) paramB)
+                    return cb.between(index.getRoot().get(fieldName), (BigDecimal) paramA, (BigDecimal) paramB)
                             .not();
                 }
                 break;
@@ -718,13 +719,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             case NOT_BETWEEN_PARAM:
                 break;
             case NOT_END_WITH:
-                return cb.like(index.getRoot().get(fo.getFieldName()), "%" + paramA).not();
+                return cb.like(index.getRoot().get(fieldName), "%" + paramA).not();
             case NOT_END_WITH_FIELD:
                 break;
             case NOT_END_WITH_PARAM:
                 break;
             case NOT_EQUALS:
-                return cb.equal(index.getRoot().get(fo.getFieldName()), paramA).not();
+                return cb.equal(index.getRoot().get(fieldName), paramA).not();
             case NOT_EQUALS_COLLECTION:
                 break;
             case NOT_EQUALS_FIELD:
@@ -734,7 +735,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             case NOT_EQUALS_PARAM:
                 break;
             case NOT_LIKE:
-                return cb.like(index.getRoot().get(fo.getFieldName()), "%" + paramA + "%").not();
+                return cb.like(index.getRoot().get(fieldName), "%" + paramA + "%").not();
             case NOT_LIKE_FIELD:
                 break;
             case NOT_LIKE_PARAM:

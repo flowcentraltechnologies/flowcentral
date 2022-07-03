@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
@@ -50,6 +51,13 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     public int getItemCount() throws UnifyException {
         List<?> sourceObject = getSourceObject();
         return sourceObject != null ? sourceObject.size() : 0;
+    }
+
+    @Override
+    protected void validate(List<?> sourceObject, FormValidationErrors errors) throws UnifyException {
+        if (isWithEntryPolicy()) {
+            getEntryPolicy().validateEntries(getParentReader(), getValueStore(sourceObject), errors);
+        }
     }
 
     @Override

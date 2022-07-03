@@ -441,8 +441,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public Date getNow() throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        return application().getNow();
     }
 
     @Override
@@ -485,28 +484,37 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
         if (entity instanceof BaseAuditEntity) {
             UserToken userToken = getUserToken();
             String userLoginId = userToken != null ? userToken.getUserLoginId() : null;
-            ((BaseAuditEntity) entity).setCreatedBy(userLoginId);
-            ((BaseAuditEntity) entity).setUpdatedBy(userLoginId);
+            BaseAuditEntity baseAuditEntity = (BaseAuditEntity) entity;
+            Date now = getNow();
+            baseAuditEntity.setCreateDt(now);
+            baseAuditEntity.setCreatedBy(userLoginId);
+            baseAuditEntity.setUpdateDt(now);
+            baseAuditEntity.setUpdatedBy(userLoginId);
         }
     }
-    
+
     private void setUpdateAuditInformation(Entity entity) throws UnifyException {
         if (entity instanceof BaseAuditEntity) {
             UserToken userToken = getUserToken();
             String userLoginId = userToken != null ? userToken.getUserLoginId() : null;
-            ((BaseAuditEntity) entity).setUpdatedBy(userLoginId);
+            BaseAuditEntity baseAuditEntity = (BaseAuditEntity) entity;
+            Date now = getNow();
+            baseAuditEntity.setUpdateDt(now);
+            baseAuditEntity.setUpdatedBy(userLoginId);
         }
     }
-    
+
     private void setUpdateAuditInformation(Class<? extends Entity> entityClass, Object id, Update update)
             throws UnifyException {
         if (BaseAuditEntity.class.isAssignableFrom(entityClass)) {
             UserToken userToken = getUserToken();
             String userLoginId = userToken != null ? userToken.getUserLoginId() : null;
+            Date now = getNow();
+            update.add("updateDt", now);
             update.add("updatedBy", userLoginId);
         }
     }
-    
+
     private <T extends Entity, U> U singleValueResultOperation(Class<U> resultClass, Class<T> entityClass,
             DataSourceRequest req) throws UnifyException {
         req.setEntity(utilities.resolveLongName(entityClass));
@@ -545,7 +553,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
             Object[] payload = ((PseudoDataSourceResponse) resp).getPayload();
             if (payload != null && payload.length == 1) {
                 return (T) payload[0];
-            }            
+            }
         }
 
         return null;
@@ -573,7 +581,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
                     resultList.add((T) payload[i]);
                 }
                 return resultList;
-            }            
+            }
         }
 
         return Collections.emptyList();

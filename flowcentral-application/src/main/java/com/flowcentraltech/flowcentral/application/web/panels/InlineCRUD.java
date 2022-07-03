@@ -23,6 +23,8 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -40,9 +42,12 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
     private Class<T> entryClass;
 
+    private FormValidationErrors errors;
+    
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
         this.table = new BeanTable(au, tableDef, BeanTable.ENTRY_ENABLED | BeanTable.ENTRY_SUMMARY_IGNORE_LAST);
         this.entryClass = entryClass;
+        this.errors = new FormValidationErrors();
     }
 
     public BeanTable getTable() {
@@ -53,6 +58,16 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         addEntry(true);
     }
 
+    public FormValidationErrors validate() throws UnifyException {
+        errors.clearValidationErrors();
+        table.validate(errors);
+        return errors;
+    }
+
+    public List<FormMessage> getValidationErrors() {
+        return errors != null ? errors.getValidationErrors() : null;
+    }
+    
     public void insertEntries(List<T> entries, int index) throws UnifyException {
         insertEntries(entries, index, false);
     }

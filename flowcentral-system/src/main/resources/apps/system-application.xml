@@ -588,7 +588,7 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" editable="false" />
 					<field name="value" inputWidget="sysparamvalue" column="1"
-						editable="false" required="true" />
+						editable="false" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

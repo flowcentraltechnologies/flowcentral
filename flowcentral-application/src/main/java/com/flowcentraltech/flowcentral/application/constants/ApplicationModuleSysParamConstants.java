@@ -53,4 +53,6 @@ public interface ApplicationModuleSysParamConstants {
 
     String ALL_TABLE_IN_CLASSIC_MODE = "APP-000F";
 
+    String APPLICATION_HEADER_TITLE = "APP-0010";
+
 }

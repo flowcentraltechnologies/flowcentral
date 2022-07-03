@@ -562,7 +562,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	padding:4px 8px; margin-top:4px;}
 .fc-dispcountergreen {display:inline-block; background-color:#90d883; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
-.fc-dispcounterorange {display:inline-block; background-color:#ffbf00; color:#404040; font-weight:bold; font-size:7pt;
+.fc-dispcounterorange {display:inline-block; background-color:#ffdc1d; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
 .fc-dispcounterfrozen {display:inline-block; background-color:#a5c5d9; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
@@ -594,8 +594,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
     
 /*** PAGES ***/
 /* Application */
-.fc-topbanner {width: 100%; background-color: #000000;}
+.fc-topbanner {float:left; width:100%; background-color: #000000;}
+.fc-topbannerimgbody {float:left;}
 .fc-topbannerimg {margin-left:2px; margin-top:2px; height: 36px; text-align: left;}
+.fc-topheadertitle {float:left;padding:9px 20px;text-align: left;color: #909090;font-size:20px;font-weight:bold;}
 .fc-topuserimg {float: right; width: 28px; height: 28px;padding:2px;border:solid 1px #A0A0A0;margin-right:4px;margin-top:2px;cursor:pointer;}
 
 .fc-topalert {float:right; width: 28px; height: 32px;padding-left:4px;padding-top:8px;}

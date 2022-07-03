@@ -57,6 +57,10 @@ public class EntityInfo {
 
     private List<EntityFieldInfo> childListFieldList;
 
+    private Map<String, String> fieldToLocal;
+    
+    private Map<String, String> fieldFromLocal;
+    
     public EntityInfo(String entityManagerFactory, String name, String description, String idFieldName,
             String versionNoFieldName, String handler, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
@@ -91,6 +95,17 @@ public class EntityInfo {
         this.listOnlyFieldList = Collections.unmodifiableList(this.listOnlyFieldList);
         this.childFieldList = Collections.unmodifiableList(this.childFieldList);
         this.childListFieldList = Collections.unmodifiableList(this.childListFieldList);
+        this.fieldToLocal = new HashMap<String, String>();
+        this.fieldFromLocal = new HashMap<String, String>();
+        if (idFieldName != null) {
+            this.fieldToLocal.put("id", idFieldName);
+            this.fieldFromLocal.put(idFieldName, "id");
+        }
+        
+        if (versionNoFieldName != null) {
+            this.fieldToLocal.put("versionNo", versionNoFieldName);
+            this.fieldFromLocal.put(versionNoFieldName, "versionNo");
+        }        
     }
     
     public String getEntityManagerFactory() {
@@ -153,8 +168,19 @@ public class EntityInfo {
         return childListFieldList;
     }
 
+    public String getLocalFieldName(String fieldName) {
+        String local = fieldToLocal.get(fieldName);
+        return local != null ? local: fieldName;
+    }
+
+    public String getFieldNameFromLocal(String fieldName) {
+        String local = fieldFromLocal.get(fieldName);
+        return local != null ? local: fieldName;
+    }
+    
     public EntityFieldInfo getEntityFieldInfo(String fieldName) throws Exception {
-        EntityFieldInfo entityFieldInfo = fieldsByName.get(fieldName);
+        String local = getLocalFieldName(fieldName);
+        EntityFieldInfo entityFieldInfo = fieldsByName.get(local);
         if (entityFieldInfo == null) {
             throw new RuntimeException("Information for field [" + fieldName + "] not found.");
         }

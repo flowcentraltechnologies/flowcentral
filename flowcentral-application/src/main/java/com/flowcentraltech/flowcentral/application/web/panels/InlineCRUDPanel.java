@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -32,18 +33,22 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 @Component("fc-inlinecrudpanel")
 @UplBinding("web/application/upl/inlinecrudpanel.upl")
 public class InlineCRUDPanel extends AbstractStandalonePanel {
-    
+
+    public FormValidationErrors validate() throws UnifyException {
+        return getCrud().validate();
+    }
+
     @Action
     public void addItem() throws UnifyException {
         getCrud().addEntry();
     }
-    
+
     @Action
     public void deleteItem() throws UnifyException {
         int index = getRequestTarget(int.class);
         getCrud().deleteEntry(index);
     }
-    
+
     @Action
     public void onRowChange() throws UnifyException {
         int index = getRequestTarget(int.class);
@@ -52,7 +57,7 @@ public class InlineCRUDPanel extends AbstractStandalonePanel {
         String trigger = entryTableWidget.resolveChildWidgetName(focusWidgetId);
         getCrud().fireOnRowChange(new RowChangeInfo(trigger, index));
     }
-    
+
     private InlineCRUD<?> getCrud() throws UnifyException {
         return getValue(InlineCRUD.class);
     }

@@ -415,18 +415,31 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     private EntityActionResult submitInst(ActionMode actionMode) throws UnifyException {
         form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
-        EntityActionResult entityActionResult = viewMode.isMaintainForm()
-                ? getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
+        final EntityDef _entityDef = getEntityDef();
+        EntityActionResult entityActionResult = null;;
+        try {
+            if (viewMode.isMaintainForm()) {
+                entityActionResult = getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
                         getRootAppletProp(
                                 String.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst,
                         getRootAppletProp(String.class,
-                                AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY))
-                : getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
+                                AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY));
+            } else {
+                au.populateAutoFormatFields(_entityDef, inst);
+                entityActionResult = getAu().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
                         getRootAppletProp(String.class,
                                 AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst, getRootAppletProp(String.class,
                                 AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY));
+            }
+        } catch (UnifyException e) {
+            if (!viewMode.isMaintainForm()) {
+                au.revertAutoFormatFields(_entityDef, inst);
+            }
+            throw e;
+        }
+        
         if (actionMode.isWithNext()) {
             if (viewMode == ViewMode.NEW_FORM || viewMode == ViewMode.NEW_PRIMARY_FORM) {
                 form = constructNewForm(FormMode.CREATE);
