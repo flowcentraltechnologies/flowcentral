@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureC
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
@@ -75,7 +76,8 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     }
 
     @Override
-    protected void validate(Restriction sourceObject, FormValidationErrors errors) throws UnifyException {
+    protected void validate(EvaluationMode evaluationMode, Restriction sourceObject, FormValidationErrors errors)
+            throws UnifyException {
 
     }
 

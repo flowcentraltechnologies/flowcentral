@@ -103,13 +103,17 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private boolean basicSearchOnly;
 
     private boolean newButtonVisible;
-    
+
     public EntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, TableDef tableDef,
-            Long appAppletId, String editAction, int mode) {
+            Long appAppletId, String editAction, Long appAppletFilterId, int mode) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName);
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 FilterConditionListType.IMMEDIATE_FIELD);
-        // TODO Get columns from settings
+        this.appAppletFilterId = appAppletFilterId;
+        if (appAppletFilterId != null) {
+            localApplyQuickFilter();
+        }
+
         this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), 4);
         this.entityTable = new EntityTable(ctx.getAu(), tableDef);
         this.appAppletId = appAppletId;
@@ -155,7 +159,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             searchEntries.clear();
         }
     }
-    
+
     public EntityTable getEntityTable() {
         return entityTable;
     }
@@ -287,7 +291,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public void setDisplayStart(int dispStartIndex) {
 
     }
-    
+
     public int getTotalItemCount() {
         return entityTable.getTotalItemCount();
     }
@@ -335,14 +339,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public void applyQuickFilter() throws UnifyException {
-        FilterDef quickFilterDef = appAppletFilterId != null
-                ? getAppletCtx().getAu().retrieveFilterDef("applet", "application.appAppletFilter", appAppletFilterId)
-                : null;
-        entityFilter = quickFilterDef != null
-                ? new Filter(null, null, entityFilter.getEntityDef(), quickFilterDef,
-                        FilterConditionListType.IMMEDIATE_FIELD)
-                : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
-                        FilterConditionListType.IMMEDIATE_FIELD);
+        localApplyQuickFilter();
         applyFilterToSearch();
         hideFilterEditor();
     }
@@ -375,6 +372,17 @@ public class EntitySearch extends AbstractPanelFormBinding {
         Restriction restriction = entityFilter.getRestriction(getAppletCtx().getAu().getNow());
         applyRestrictionToSearch(entityDef, restriction);
         entityFilterTranslation = getAppletCtx().getAu().translate(restriction, entityDef);
+    }
+
+    private void localApplyQuickFilter() throws UnifyException {
+        FilterDef quickFilterDef = appAppletFilterId != null
+                ? getAppletCtx().getAu().retrieveFilterDef("applet", "application.appAppletFilter", appAppletFilterId)
+                : null;
+        entityFilter = quickFilterDef != null
+                ? new Filter(null, null, entityFilter.getEntityDef(), quickFilterDef,
+                        FilterConditionListType.IMMEDIATE_FIELD)
+                : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
+                        FilterConditionListType.IMMEDIATE_FIELD);
     }
 
     private void applyRestrictionToSearch(EntityDef entityDef, Restriction restriction) throws UnifyException {

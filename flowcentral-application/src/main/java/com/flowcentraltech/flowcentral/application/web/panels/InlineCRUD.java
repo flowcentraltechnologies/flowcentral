@@ -23,6 +23,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -58,9 +59,9 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         addEntry(true);
     }
 
-    public FormValidationErrors validate() throws UnifyException {
+    public FormValidationErrors validate(EvaluationMode evaluationMode) throws UnifyException {
         errors.clearValidationErrors();
-        table.validate(errors);
+        table.validate(evaluationMode, errors);
         return errors;
     }
 

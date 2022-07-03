@@ -40,6 +40,10 @@ public class FormValidationErrors {
     public void addValidationError(String message) {
         addValidationError(new FormMessage(MessageType.ERROR, message));
     }
+    
+    public void addLocalValidationError(String message) {
+        addValidationError(new FormMessage(MessageType.ERROR, message, true));
+    }
 
     public void addValidationError(FormMessage message) {
         if (validationErrors == null) {
@@ -75,7 +79,15 @@ public class FormValidationErrors {
         }
         
         if (errors.validationErrors != null) {
-            validationErrors.addAll(errors.validationErrors);
+            if (validationErrors == null) {
+                validationErrors = new ArrayList<FormMessage>();
+            }
+
+            for(FormMessage formMessage: errors.validationErrors) {
+                if (!formMessage.isLocal()) {
+                    validationErrors.add(formMessage);
+                }
+            }
         }
     }
 

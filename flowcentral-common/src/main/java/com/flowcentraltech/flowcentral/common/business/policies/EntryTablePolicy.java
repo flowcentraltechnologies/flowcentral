@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyComponent;
@@ -36,6 +37,9 @@ public interface EntryTablePolicy extends UnifyComponent {
     /**
      * Validate entries,
      * 
+     * @param evaluationMode
+     *                        the evaluation mode.
+     * 
      * @param parentReader
      *                        optional parent value store reader
      * @param tableValueStore
@@ -45,8 +49,8 @@ public interface EntryTablePolicy extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void validateEntries(ValueStoreReader parentReader, ValueStore tableValueStore, FormValidationErrors errors)
-            throws UnifyException;
+    void validateEntries(EvaluationMode evaluationMode, ValueStoreReader parentReader, ValueStore tableValueStore,
+            FormValidationErrors errors) throws UnifyException;
 
     /**
      * Handles on entry table data load.
