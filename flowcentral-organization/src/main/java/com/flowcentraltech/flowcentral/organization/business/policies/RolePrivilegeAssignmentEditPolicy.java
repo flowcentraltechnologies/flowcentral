@@ -22,6 +22,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
@@ -65,8 +66,8 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
-    public void validateEntries(ValueStoreReader parentReader, ValueStore tableValueStore, FormValidationErrors errors)
-            throws UnifyException {
+    public void validateEntries(EvaluationMode evaluationMode, ValueStoreReader parentReader,
+            ValueStore tableValueStore, FormValidationErrors errors) throws UnifyException {
 
     }
 

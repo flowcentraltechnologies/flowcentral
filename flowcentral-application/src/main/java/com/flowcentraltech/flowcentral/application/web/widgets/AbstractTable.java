@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
@@ -48,7 +49,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
 public abstract class AbstractTable<T, U> {
 
     public static final int ENTRY_ENABLED = 0x00000001;
-    
+
     public static final int ENTRY_SUMMARY_IGNORE_LAST = 0x00000002;
 
     protected final AppletUtilities au;
@@ -104,7 +105,7 @@ public abstract class AbstractTable<T, U> {
     private List<EventHandler> crudActionHandlers;
 
     private RowChangeInfo lastRowChangeInfo;
-    
+
     public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, int entryMode) {
         this.au = au;
         this.tableDef = tableDef;
@@ -301,9 +302,9 @@ public abstract class AbstractTable<T, U> {
     public void fireOnTableChange() throws UnifyException {
         onFireOnTableChange(sourceObject, selected);
     }
-    
-    public void validate(FormValidationErrors errors) throws UnifyException {
-        validate(sourceObject, errors);
+
+    public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
+        validate(evaluationMode, sourceObject, errors);
     }
 
     public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
@@ -463,8 +464,9 @@ public abstract class AbstractTable<T, U> {
     protected boolean isWithEntryPolicy() {
         return entryPolicy != null;
     }
-    
-    protected abstract void validate(T sourceObject, FormValidationErrors errors) throws UnifyException;
+
+    protected abstract void validate(EvaluationMode evaluationMode, T sourceObject, FormValidationErrors errors)
+            throws UnifyException;
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 

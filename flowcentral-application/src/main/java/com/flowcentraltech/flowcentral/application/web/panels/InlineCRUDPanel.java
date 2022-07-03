@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
@@ -34,8 +35,8 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 @UplBinding("web/application/upl/inlinecrudpanel.upl")
 public class InlineCRUDPanel extends AbstractStandalonePanel {
 
-    public FormValidationErrors validate() throws UnifyException {
-        return getCrud().validate();
+    public FormValidationErrors validate(EvaluationMode evaluationMode) throws UnifyException {
+        return getCrud().validate(evaluationMode);
     }
 
     @Action
