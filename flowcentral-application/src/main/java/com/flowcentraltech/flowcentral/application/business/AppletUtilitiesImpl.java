@@ -1054,7 +1054,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         String defaultQuickFilter = _appletDef.getPropValue(String.class,
                 AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER_DEFAULT);
 
-        Long appAppletFilterId = !StringUtils.isBlank(defaultQuickFilter) ? environmentService.value(Long.class, "name",
+        Long appAppletFilterId = !StringUtils.isBlank(defaultQuickFilter) ? environmentService.value(Long.class, "id",
                 new AppAppletFilterQuery().appAppletId(_appletDef.getId()).name(defaultQuickFilter)) : null;
 
         EntitySearch _entitySearch = new EntitySearch(ctx, sweepingCommitPolicy, tabName, _tableDef, _appletDef.getId(),
