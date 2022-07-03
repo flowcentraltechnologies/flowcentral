@@ -40,11 +40,12 @@ public interface EntryTablePolicy extends UnifyComponent {
      *                        optional parent value store reader
      * @param tableValueStore
      *                        the list data value store object
-     * @return errors
+     * @param errors
+     *                        errors
      * @throws UnifyException
      *                        if an error occurs
      */
-    FormValidationErrors validateEntries(ValueStoreReader parentReader, ValueStore tableValueStore)
+    void validateEntries(ValueStoreReader parentReader, ValueStore tableValueStore, FormValidationErrors errors)
             throws UnifyException;
 
     /**

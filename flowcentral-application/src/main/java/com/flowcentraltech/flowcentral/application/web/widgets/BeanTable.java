@@ -54,12 +54,10 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected FormValidationErrors validate(List<?> sourceObject) throws UnifyException {
+    protected void validate(List<?> sourceObject, FormValidationErrors errors) throws UnifyException {
         if (isWithEntryPolicy()) {
-            return getEntryPolicy().validateEntries(getParentReader(), getValueStore(sourceObject));
+            getEntryPolicy().validateEntries(getParentReader(), getValueStore(sourceObject), errors);
         }
-        
-        return null;
     }
 
     @Override

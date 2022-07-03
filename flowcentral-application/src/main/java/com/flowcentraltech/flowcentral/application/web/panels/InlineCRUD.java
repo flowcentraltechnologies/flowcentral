@@ -47,6 +47,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
         this.table = new BeanTable(au, tableDef, BeanTable.ENTRY_ENABLED | BeanTable.ENTRY_SUMMARY_IGNORE_LAST);
         this.entryClass = entryClass;
+        this.errors = new FormValidationErrors();
     }
 
     public BeanTable getTable() {
@@ -58,7 +59,8 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     }
 
     public FormValidationErrors validate() throws UnifyException {
-        errors = table.validate();
+        errors.clearValidationErrors();
+        table.validate(errors);
         return errors;
     }
 

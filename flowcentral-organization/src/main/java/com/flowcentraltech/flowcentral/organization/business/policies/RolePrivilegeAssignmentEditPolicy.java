@@ -65,9 +65,9 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
-    public FormValidationErrors validateEntries(ValueStoreReader parentReader, ValueStore tableValueStore)
+    public void validateEntries(ValueStoreReader parentReader, ValueStore tableValueStore, FormValidationErrors errors)
             throws UnifyException {
-        return null;
+
     }
 
     @Override

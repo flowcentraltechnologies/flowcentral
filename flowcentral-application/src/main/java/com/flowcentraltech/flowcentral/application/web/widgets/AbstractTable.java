@@ -302,8 +302,8 @@ public abstract class AbstractTable<T, U> {
         onFireOnTableChange(sourceObject, selected);
     }
     
-    public FormValidationErrors validate() throws UnifyException {
-        return validate();
+    public void validate(FormValidationErrors errors) throws UnifyException {
+        validate(sourceObject, errors);
     }
 
     public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
@@ -464,7 +464,7 @@ public abstract class AbstractTable<T, U> {
         return entryPolicy != null;
     }
     
-    protected abstract FormValidationErrors validate(T sourceObject) throws UnifyException;
+    protected abstract void validate(T sourceObject, FormValidationErrors errors) throws UnifyException;
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 

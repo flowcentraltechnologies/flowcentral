@@ -75,8 +75,8 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     }
 
     @Override
-    protected FormValidationErrors validate(Restriction sourceObject) throws UnifyException {
-        return null;
+    protected void validate(Restriction sourceObject, FormValidationErrors errors) throws UnifyException {
+
     }
 
     @Override
