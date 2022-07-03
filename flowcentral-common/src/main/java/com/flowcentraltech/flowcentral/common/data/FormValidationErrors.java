@@ -75,6 +75,10 @@ public class FormValidationErrors {
         }
         
         if (errors.validationErrors != null) {
+            if (validationErrors == null) {
+                validationErrors = new ArrayList<FormMessage>();
+            }
+
             validationErrors.addAll(errors.validationErrors);
         }
     }
