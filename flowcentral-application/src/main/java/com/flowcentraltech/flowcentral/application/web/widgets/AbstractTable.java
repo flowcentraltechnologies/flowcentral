@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
@@ -298,8 +299,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public void fireOnTableChange() throws UnifyException {
-        // TODO Recompute 'selected'
         onFireOnTableChange(sourceObject, selected);
+    }
+    
+    public FormValidationErrors validate() throws UnifyException {
+        return validate();
     }
 
     public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
@@ -459,6 +463,8 @@ public abstract class AbstractTable<T, U> {
     protected boolean isWithEntryPolicy() {
         return entryPolicy != null;
     }
+    
+    protected abstract FormValidationErrors validate(T sourceObject) throws UnifyException;
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 

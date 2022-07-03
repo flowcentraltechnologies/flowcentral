@@ -192,7 +192,7 @@ public class Form extends AbstractContainer {
         return formValidationErrors;
     }
 
-    public boolean validate() throws UnifyException {
+    public FormValidationErrors validate() throws UnifyException {
         formValidationErrors.clearValidationErrors();
 
         final int columns = getColumns();
@@ -214,7 +214,7 @@ public class Form extends AbstractContainer {
             }
         }
 
-        return !formValidationErrors.isWithFormErrors();
+        return formValidationErrors;
     }
     
     public void reset() throws UnifyException {

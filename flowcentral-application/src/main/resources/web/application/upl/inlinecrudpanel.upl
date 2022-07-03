@@ -17,7 +17,8 @@
 	components:$c{entryTablePanel}
 
 // Table
-!ui-panel:entryTablePanel style:$s{width:100%} components:$c{entryTable}
+!ui-panel:entryTablePanel style:$s{width:100%} components:$c{entryErrors entryTable}
+!fc-formmessages:entryErrors binding:validationErrors
 !fc-beantable:entryTable style:$s{width:100%;} binding:table alternatingRows:$f{alternatingRows}
 	actionSymbol:$s{plus} actionHandler:$d{!ui-event event:onclick action:$c{crudAddAct}}
 	actionSymbol:$s{trash} actionHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}}

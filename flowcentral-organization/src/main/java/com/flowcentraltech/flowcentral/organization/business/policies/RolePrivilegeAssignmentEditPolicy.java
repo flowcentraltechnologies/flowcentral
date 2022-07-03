@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
@@ -61,6 +62,12 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     public void postEntryUpdate(Class<? extends Entity> entityClass, String baseFieldName, Object baseId,
             List<?> instList) throws UnifyException {
 
+    }
+
+    @Override
+    public FormValidationErrors validateEntries(ValueStoreReader parentReader, ValueStore tableValueStore)
+            throws UnifyException {
+        return null;
     }
 
     @Override
