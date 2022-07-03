@@ -43,7 +43,9 @@ public interface AppletPropertyConstants {
     String SEARCH_TABLE_REPORT = "searchTable.report";
 
     String SEARCH_TABLE_QUICKFILTER = "searchTable.quickFilter";
-
+    
+    String SEARCH_TABLE_QUICKFILTER_DEFAULT = "searchTable.quickFilter.default";
+    
     String SEARCH_TABLE_ACTIONFOOTER = "searchTable.actionFooter";
 
     String SEARCH_TABLE_BASICSEARCHONLY = "searchTable.basicSearchOnly";

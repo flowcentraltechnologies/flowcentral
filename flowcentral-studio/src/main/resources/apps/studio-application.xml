@@ -331,6 +331,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletfilterlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletquickfilterlist"
+			description="$m{studio.widgettype.propertyappletquickfilterlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletquickfilterlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyappletsetvalueslist"
 			description="$m{studio.widgettype.propertyappletsetvalueslist}"
 			dataType="string" inputType="string"
@@ -373,6 +378,8 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="false" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.quickFilter.default"
+				value="customFieldFilter" />
 			<property name="createForm" value="appEntityFieldForm" />
 			<property name="createForm.new.policy"
 				value="studiooncreateappentityfield-policy" />
@@ -3889,6 +3896,9 @@
 				<property name="searchTable.quickFilter"
 					description="$m{studio.appappletprop.manageentity.searchtable.quickfilter}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.quickFilter.default"
+					description="$m{studio.appappletprop.manageentity.searchtable.quickfilterdef}"
+					inputWidget="studio.propertyappletquickfilterlist" />
 				<property name="searchTable.actionFooter"
 					description="$m{studio.appappletprop.manageentity.searchtable.actionfooter}"
 					inputWidget="application.checkbox" />
@@ -4053,6 +4063,9 @@
 				<property name="searchTable.quickFilter"
 					description="$m{studio.appappletprop.manageentitysingleform.searchtable.quickfilter}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.quickFilter.default"
+					description="$m{studio.appappletprop.manageentitysingleform.searchtable.quickfilterdef}"
+					inputWidget="studio.propertyappletquickfilterlist" />
 				<property name="searchTable.actionFooter"
 					description="$m{studio.appappletprop.manageentitysingleform.searchtable.actionfooter}"
 					inputWidget="application.checkbox" />

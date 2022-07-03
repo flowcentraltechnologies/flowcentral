@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -158,7 +159,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Configurable
     private PageRequestContextUtil pageRequestContextUtil;
-    
+
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
     public AppletUtilitiesImpl() {
@@ -409,13 +410,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public void commandShowPopup(Panel panel) throws UnifyException {
         pageRequestContextUtil.setRequestPopupPanel(panel);
-        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);       
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);
     }
 
     @Override
     public void commandShowPopup(String panelName) throws UnifyException {
         pageRequestContextUtil.setRequestPopupName(panelName);
-        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);       
+        pageRequestContextUtil.setCommandResultMapping(ResultMappingConstants.SHOW_POPUP);
     }
 
     @Override
@@ -1049,8 +1050,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         final boolean basicSearchOnly = _appletDef.getPropValue(boolean.class,
                 AppletPropertyConstants.SEARCH_TABLE_BASICSEARCHONLY, false);
+
+        String defaultQuickFilter = _appletDef.getPropValue(String.class,
+                AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER_DEFAULT);
+
+        Long appAppletFilterId = !StringUtils.isBlank(defaultQuickFilter) ? environmentService.value(Long.class, "name",
+                new AppAppletFilterQuery().appAppletId(_appletDef.getId()).name(defaultQuickFilter)) : null;
+
         EntitySearch _entitySearch = new EntitySearch(ctx, sweepingCommitPolicy, tabName, _tableDef, _appletDef.getId(),
-                editAction, entitySearchMode);
+                editAction, appAppletFilterId, entitySearchMode);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         if (_appletDef.isDescriptiveButtons()) {
@@ -1307,7 +1315,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             }
         }
     }
-    
+
     @Override
     public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
