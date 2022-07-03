@@ -30,10 +30,18 @@ public class FormMessage {
     private MessageType type;
     
     private String message;
+    
+    private boolean local;
 
     public FormMessage(MessageType type, String message) {
         this.type = type;
         this.message = message;
+    }
+
+    public FormMessage(MessageType type, String message, boolean local) {
+        this.type = type;
+        this.message = message;
+        this.local = local;
     }
 
     public MessageType getType() {
@@ -42,6 +50,10 @@ public class FormMessage {
 
     public String getMessage() {
         return message;
+    }
+
+    public boolean isLocal() {
+        return local;
     }
 
     @Override
