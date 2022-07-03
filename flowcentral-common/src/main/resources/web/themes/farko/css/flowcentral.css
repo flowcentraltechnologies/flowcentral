@@ -53,7 +53,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /** Debit/credit field*/
 .ui-debitcredit {padding-left:0px !important;}
 .ui-debitcredit .tread {padding-left: 4px;  border-right:none;}
-.ui-debitcredit .tread:disabled {background: #f4f4f4;}
+.ui-debitcredit .tread:disabled {background: #f4f4f4;color:#000000;}
 .ui-debitcredit .tpbutton {width:28px;height:32px; background-color: #ffffff !important;font-size: 16px; color: #525e6d;/*border-radius: 0px 4px 4px 0px;*/border-color: #b0b0b0;}
 .ui-debitcredit .tpbutton:disabled {background: #f4f4f4 !important;}
 
@@ -80,7 +80,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Text */
 .ui-text {padding-left:4px;}
-.ui-text:disabled {background: #f4f4f4;}
+.ui-text:disabled {background: #f4f4f4;color:#000000;}
 
 /* List Read-only Text */
 .ui-listreadonlytext {padding-left: 0px;}
@@ -90,9 +90,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-textarea {padding: 4px;/*border-radius: 4px;*/border-color: #b0b0b0;}
 
 .ui-text-popup .tread {padding-left: 4px;  border-right:none;}
-.ui-text-popup .tread:disabled {background: #f4f4f4;}
+.ui-text-popup .tread:disabled {background: #f4f4f4;color:#000000;}
 .ui-text-popup .trread {padding-left: 4px;  border-right:none;}
-.ui-text-popup .trread:disabled {background: #f4f4f4;}
+.ui-text-popup .trread:disabled {background: #f4f4f4;color:#000000;}
 .ui-text-popup .tcread {border-right:none;}
 .ui-text-popup .tpbutton {height:32px; background-color: #ffffff !important;font-size: 16px; color: #525e6d;/*border-radius: 0px 4px 4px 0px;*/border-color: #b0b0b0;}
 .ui-text-popup .tpbutton:disabled {background: #f4f4f4 !important;}
