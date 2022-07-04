@@ -113,7 +113,7 @@ public class EntitySelect {
 
     public void select(int index) throws UnifyException {
         if (formValueStore != null && selectHandlerName != null) {
-            EntitySelectHandler handler = getEntityTable().getAu().getComponent(EntitySelectHandler.class,
+            EntitySelectHandler handler = getEntityTable().au().getComponent(EntitySelectHandler.class,
                     selectHandlerName);
             Object sel = entityTable.getDisplayItem(index);
             handler.applySelection(formValueStore, new BeanValueStore(sel));
@@ -122,7 +122,7 @@ public class EntitySelect {
 
     public void applySelect() throws UnifyException {
         if (formValueStore != null && selectHandlerName != null) {
-            EntitySelectHandler handler = entityTable.getAu().getComponent(EntitySelectHandler.class,
+            EntitySelectHandler handler = entityTable.au().getComponent(EntitySelectHandler.class,
                     selectHandlerName);
             List<?> sel = entityTable.getSelectedItems();
             handler.applySelection(formValueStore, new BeanValueListStore(sel));
@@ -131,9 +131,9 @@ public class EntitySelect {
 
     public void ensureTableStruct() throws UnifyException {
         TableDef _eTableDef = entityTable.getTableDef();
-        TableDef _nTableDef = entityTable.getAu().getTableDef(_eTableDef.getLongName());
+        TableDef _nTableDef = entityTable.au().getTableDef(_eTableDef.getLongName());
         if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
-            entityTable = new EntityTable(entityTable.getAu(), _nTableDef);
+            entityTable = new EntityTable(entityTable.au(), _nTableDef);
             applyFilterToSearch();
         }
     }

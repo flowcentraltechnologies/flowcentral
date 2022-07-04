@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
+import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -472,12 +473,14 @@ public class TableWriter extends AbstractControlWriter {
             } else {
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
+                final int detailsIndex = table.getDetailsIndex();
+                final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
                 final boolean alternatingRows = tableWidget.isAlternatingRows();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
                         && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
-                final Date now = table.getAu().getNow();
-                final SpecialParamProvider specialParamProvider = table.getAu().getSpecialParamProvider();
+                final Date now = table.au().getNow();
+                final SpecialParamProvider specialParamProvider = table.au().getSpecialParamProvider();
                 final String even = isRowAction ? "even pnt" : "even";
                 final String odd = isRowAction ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
@@ -596,6 +599,45 @@ public class TableWriter extends AbstractControlWriter {
                     }
 
                     writer.write("</tr>");
+
+                    // Details
+                    if (details && detailsIndex == i) {
+                        DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
+                        if (detailsPanel != null) {
+                            writer.write("<tr>");
+                            int skip = 0;
+                            if (supportSelect && !entryMode) {
+                                writer.write("<td class=\"mseld\"></td>");
+                                skip++;
+                            }
+
+                            if (isSerialNo) {
+                                writer.write("<td class=\"mseriald\"></td>");
+                                skip++;
+                            }
+
+                            if (tableWidget.isSummary()) {
+                                skip++;
+                            }
+
+                            writer.write("<td colspan=\"");
+                            writer.write(tableWidget.getChildWidgetInfos().size() - skip);
+                            writer.write("\">");
+                            detailsPanel.loadDetails(valueStore);
+                            try {
+                                valueStore.setDataPrefix(detailsPanel.getId());
+                                writer.writeStructureAndContent(detailsPanel);
+                            } finally {
+                                valueStore.setDataPrefix(null);
+                            }
+                            writer.write("</td>");
+
+                            if (supportSelect && entryMode) {
+                                writer.write("<td class=\"mseld\"></td>");
+                            }
+                            writer.write("</tr>");
+                        }
+                    }
 
                     // Summary
                     StandalonePanel summaryPanel = tableWidget.getSummaryPanel(i);
