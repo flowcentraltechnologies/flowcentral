@@ -42,7 +42,7 @@ public class LinkActTypeListCommand extends AbstractListCommand<ZeroParams> {
     public LinkActTypeListCommand() {
         super(ZeroParams.class);
     }
-
+//application.details.action
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         if (list == null) {
@@ -52,7 +52,8 @@ public class LinkActTypeListCommand extends AbstractListCommand<ZeroParams> {
                             new ListData("maintainAct", getApplicationMessage("application.maintain.action")),
                             new ListData("listingAct", getApplicationMessage("application.listing.action")),
                             new ListData("decisionAct", getApplicationMessage("application.decision.action")),
-                            new ListData("selectAct", getApplicationMessage("application.select.action"))));
+                            new ListData("selectAct", getApplicationMessage("application.select.action")),
+                            new ListData("detailsAct", getApplicationMessage("application.details.action"))));
                 }
             }
         }

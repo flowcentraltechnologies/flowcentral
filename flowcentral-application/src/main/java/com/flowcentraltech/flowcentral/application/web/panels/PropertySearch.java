@@ -93,7 +93,7 @@ public class PropertySearch extends AbstractPanelFormBinding {
     }
 
     public void applyEntityToSearch(Entity inst, String childFkFieldName) throws UnifyException {
-        List<PropertyListItem> propertyItemList = beanTable.getAu().getPropertyListItems(inst, childFkFieldName,
+        List<PropertyListItem> propertyItemList = beanTable.au().getPropertyListItems(inst, childFkFieldName,
                 propertyRuleDef);
         beanTable.setSourceObject(propertyItemList);
     }

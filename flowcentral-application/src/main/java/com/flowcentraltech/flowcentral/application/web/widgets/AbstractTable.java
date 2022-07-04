@@ -106,6 +106,8 @@ public abstract class AbstractTable<T, U> {
 
     private RowChangeInfo lastRowChangeInfo;
 
+    private int detailsIndex;
+    
     public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, int entryMode) {
         this.au = au;
         this.tableDef = tableDef;
@@ -114,6 +116,7 @@ public abstract class AbstractTable<T, U> {
         this.entryMode = entryMode;
         this.selected = Collections.emptySet();
         this.highlightedRow = -1;
+        this.detailsIndex = -1;
     }
 
     public void setTableSelect(TableSelect<?> tableSelect) {
@@ -144,7 +147,7 @@ public abstract class AbstractTable<T, U> {
         return Collections.emptyList();
     }
 
-    public final AppletUtilities getAu() {
+    public final AppletUtilities au() {
         return au;
     }
 
@@ -218,6 +221,14 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isEditMode() {
         return editMode;
+    }
+
+    public int getDetailsIndex() {
+        return detailsIndex;
+    }
+
+    public void setDetailsIndex(int detailsIndex) {
+        this.detailsIndex = detailsIndex;
     }
 
     public void setEditMode(boolean editMode) {

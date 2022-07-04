@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
@@ -63,6 +64,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
         @UplAttribute(name = "summary", type = String.class),
+        @UplAttribute(name = "details", type = String.class),
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal="true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal="true")})
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
@@ -84,6 +86,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private List<StandalonePanel> summaryPanelList;
 
+    private DetailsPanel detailsPanel;
+    
     private Integer[] selected;
 
     private String tabMemoryId;
@@ -208,6 +212,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public boolean isFocusManagement() throws UnifyException {
         return getUplAttribute(boolean.class, "focusManagement");
     }
+
+    public boolean isDetails() throws UnifyException {
+        return !StringUtils.isBlank(getUplAttribute(String.class, "details"));
+    }
     
     public boolean isActionColumn() throws UnifyException {
         return actionCtrl != null;
@@ -235,6 +243,18 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public StandalonePanel getSummaryPanel(int index) {
         return isSummary() ? summaryPanelList.get(index) : null;
+    }
+
+    public DetailsPanel getDetailsPanel() throws UnifyException {
+        if (detailsPanel == null) {
+            String details = getUplAttribute(String.class, "details");
+            if (!StringUtils.isBlank(details)) {
+                detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details,
+                        getId() + "_dtl");
+            }
+        }
+        
+        return detailsPanel;
     }
 
     public EventHandler[] getActionEventHandler() throws UnifyException {
