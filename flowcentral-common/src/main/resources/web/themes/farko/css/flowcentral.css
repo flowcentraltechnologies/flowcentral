@@ -483,7 +483,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table {}
 .fc-table .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-table .table tr {vertical-align: middle;}
-.fc-table .table .odd {background-color:#f8f8f8;}
+.fc-table .table .odd {background-color:#f4f4f4;}
 .fc-table .table .odd:hover {background-color:#d5e7fb;}
 .fc-table .table .even {}
 .fc-table .table .even:hover {background-color:#d5e7fb;}
@@ -526,7 +526,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-entitytreetable {}
 .fc-entitytreetable .table {table-layout:fixed; width:100%; border-collapse:collapse;}
-.fc-entitytreetable .table .odd {background-color:#f8f8f8;}
+.fc-entitytreetable .table .odd {background-color:#f4f4f4;}
 .fc-entitytreetable .table .odd:hover {background-color:#d5e7fb;}
 .fc-entitytreetable .table .even {}
 .fc-entitytreetable .table .even:hover {background-color:#d5e7fb;}

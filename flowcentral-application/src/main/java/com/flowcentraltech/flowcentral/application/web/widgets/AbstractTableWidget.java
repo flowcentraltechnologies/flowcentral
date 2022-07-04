@@ -214,7 +214,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public boolean isDetails() throws UnifyException {
-        return getUplAttribute(boolean.class, "details");
+        return !StringUtils.isBlank(getUplAttribute(String.class, "details"));
     }
     
     public boolean isActionColumn() throws UnifyException {

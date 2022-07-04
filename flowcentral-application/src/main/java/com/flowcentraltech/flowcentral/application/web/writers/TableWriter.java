@@ -605,12 +605,7 @@ public class TableWriter extends AbstractControlWriter {
                         DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
                         if (detailsPanel != null) {
                             writer.write("<tr>");
-                            int skip = 0;
-                            if (supportSelect && !entryMode) {
-                                writer.write("<td class=\"mseld\"></td>");
-                                skip++;
-                            }
-
+                            int skip = 1;
                             if (isSerialNo) {
                                 writer.write("<td class=\"mseriald\"></td>");
                                 skip++;
