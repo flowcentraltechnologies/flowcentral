@@ -33,5 +33,5 @@ public interface SystemModuleNameConstants {
     
     String CENTRAL_SECTOR_NAME = "central";
     
-    String CENTRAL_SECTOR_SHORTCODE = "CE";
+    String CENTRAL_SECTOR_SHORTCODE = "CEN";
 }

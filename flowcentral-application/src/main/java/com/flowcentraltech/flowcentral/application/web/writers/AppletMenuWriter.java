@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.system.constants.SystemColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -160,7 +161,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
     private static final Set<String> STANDARD_EXCLUSION = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("manageLicensing")));
-    
+
     @Override
     protected void doWriteSectionStructureAndContent(ResponseWriter writer, Widget widget, String sectionId)
             throws UnifyException {
@@ -172,16 +173,18 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                     FlowCentralSessionAttributeConstants.WORKSPACE_CODE);
             final String studioApplicationName = systemModuleService.getSysParameterValue(String.class,
                     ApplicationModuleSysParamConstants.STUDIO_APPLICATION_NAME);
+            final boolean indicateSectors = systemModuleService.getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.SECTION_INDICATION_ON_MENU);
             final boolean studioMenuEnabled = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.STUDIO_MENU_ENABLED);
             final boolean sectionWithItemsOnly = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_MENU_SECTIONS_ITEMS_ONLY);
-            final StringBuilder msb = new StringBuilder();
-            final StringBuilder misb = new StringBuilder();
             final boolean isWorkspaceLicensed = licenseProvider != null
                     && licenseProvider.isLicensed(LicenseFeatureCodeConstants.APPLICATION_WORKSPACES);
             final boolean enterprise = collaborationProvider != null;
-            
+
+            final StringBuilder msb = new StringBuilder();
+            final StringBuilder misb = new StringBuilder();
             msb.append('[');
             misb.append('[');
             final String submenuStyle = appletMenuWidget.isCollapsedInitial() ? "none" : "block";
@@ -203,7 +206,21 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
                     final Long applicationId = applicationMenuDef.getId();
                     writer.write("<div id=\"menu_").write(applicationId).write("\" class=\"menu\">");
-                    writer.write("<span>");
+                    if (indicateSectors) {
+                        writer.write("<span class=\"ind\" style=\"background-color:");
+                        String color = applicationMenuDef.isWithSectionColor() ? applicationMenuDef.getSectionColor()
+                                : SystemColorType.GRAY.code();
+                        writer.write(color);
+                        writer.write(";\">");
+                        if (applicationMenuDef.isWithSectionShortCode()) {
+                            writer.writeWithHtmlEscape(applicationMenuDef.getSectionShortCode());
+                        } else {
+                            writer.writeHtmlFixedSpace();
+                        }
+                        writer.write("</span>");
+                    }
+
+                    writer.write("<span class=\"lab\">");
                     writer.writeWithHtmlEscape(applicationMenuDef.getLabel());
                     writer.write("</span></div>");
                     writer.write("<div id=\"submenu_").write(applicationId)
@@ -221,7 +238,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                         if (!enterprise && STANDARD_EXCLUSION.contains(appletDef.getName())) {
                             continue;
                         }
-                        
+
                         final String appletPrivilegeCode = appletDef.getPrivilege();
                         if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
                                 && (!isWorkspaceLicensed || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode,
