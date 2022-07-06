@@ -520,7 +520,22 @@
 				key="moduleId" property="description" />
 			<field name="moduleLabel"
 				label="$m{application.application.modulelabel}" type="list_only"
-				key="moduleId" property="label" />
+				key="moduleId" property="label" />				
+			<field name="sectorName"
+				label="$m{application.application.sectorname}" type="list_only"
+				key="moduleId" property="sectorName" />
+			<field name="sectorDesc"
+				label="$m{application.application.sectordesc}" type="list_only"
+				key="moduleId" property="sectorDesc" />
+			<field name="sectorColor"
+				label="$m{application.application.sectorcolor}" type="list_only"
+				key="moduleId" property="sectorColor" />
+			<field name="sectorShortCode"
+				label="$m{application.application.sectorshortcode}" type="list_only"
+				key="moduleId" property="sectorShortCode" />
+			<field name="sectorStatus"
+				label="$m{application.application.sectorstatus}" type="list_only"
+				key="moduleId" property="sectorStatus" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.application.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"

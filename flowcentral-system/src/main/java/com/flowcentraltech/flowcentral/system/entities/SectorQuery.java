@@ -13,25 +13,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.system.constants;
+package com.flowcentraltech.flowcentral.system.entities;
+
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
- * System module name constants.
+ * Sector query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SystemModuleNameConstants {
+public class SectorQuery extends BaseAuditEntityQuery<Sector> {
 
-    String SYSTEM_MODULE_SERVICE = "system-moduleservice";
+    public SectorQuery() {
+        super(Sector.class);
+    }
 
-    String SYSTEM_MODULE_NAME = "system";
-
-    String SCHEDULEDTASK_PARAMCONFIGPROVIDER = "scheduledtask-paramconfigprovider";
-
-    String ENVIRONMENT_SERVICE = "environment-service";
-    
-    String CENTRAL_SECTOR_NAME = "central";
-    
-    String CENTRAL_SECTOR_SHORTCODE = "CE";
+    public SectorQuery name(String name) {
+        return (SectorQuery) addEquals("name", name);
+    }
 }

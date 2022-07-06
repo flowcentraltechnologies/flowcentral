@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.SectorStatus;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.tcdng.unify.core.annotation.Column;
@@ -59,6 +60,21 @@ public class Application extends BaseConfigNamedEntity {
 
     @ListOnly(key = "moduleId", property = "shortCode")
     private String moduleShortCode;
+
+    @ListOnly(key = "moduleId", property = "sectorName")
+    private String sectorName;
+
+    @ListOnly(key = "moduleId", property = "sectorDesc")
+    private String sectorDesc;
+
+    @ListOnly(key = "moduleId", property = "sectorColor")
+    private String sectorColor;
+
+    @ListOnly(key = "moduleId", property = "sectorShortCode")
+    private String sectorShortCode;
+
+    @ListOnly(key = "moduleId", property = "sectorStatus")
+    private SectorStatus sectorStatus;
 
     public Long getModuleId() {
         return moduleId;
@@ -130,6 +146,46 @@ public class Application extends BaseConfigNamedEntity {
 
     public void setModuleShortCode(String moduleShortCode) {
         this.moduleShortCode = moduleShortCode;
+    }
+
+    public String getSectorName() {
+        return sectorName;
+    }
+
+    public void setSectorName(String sectorName) {
+        this.sectorName = sectorName;
+    }
+
+    public String getSectorDesc() {
+        return sectorDesc;
+    }
+
+    public void setSectorDesc(String sectorDesc) {
+        this.sectorDesc = sectorDesc;
+    }
+
+    public String getSectorColor() {
+        return sectorColor;
+    }
+
+    public void setSectorColor(String sectorColor) {
+        this.sectorColor = sectorColor;
+    }
+
+    public String getSectorShortCode() {
+        return sectorShortCode;
+    }
+
+    public void setSectorShortCode(String sectorShortCode) {
+        this.sectorShortCode = sectorShortCode;
+    }
+
+    public SectorStatus getSectorStatus() {
+        return sectorStatus;
+    }
+
+    public void setSectorStatus(SectorStatus sectorStatus) {
+        this.sectorStatus = sectorStatus;
     }
 
 }
