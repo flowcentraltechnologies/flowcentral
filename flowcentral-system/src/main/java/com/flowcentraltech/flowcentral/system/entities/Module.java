@@ -15,8 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.system.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.SectorStatus;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -30,6 +33,9 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
         @UniqueConstraint({ "shortCode" }) })
 public class Module extends BaseStatusEntity {
 
+    @ForeignKey(type = Sector.class, nullable = true)
+    private Long sectorId;
+
     @Column(name = "MODULE_NM", length = 32)
     private String name;
 
@@ -41,6 +47,24 @@ public class Module extends BaseStatusEntity {
 
     @Column(name = "SHORT_CD", length = 16)
     private String shortCode;
+
+    @ListOnly(key = "sectorId", property = "name")
+    private String sectorName;
+
+    @ListOnly(key = "sectorId", property = "description")
+    private String sectorDesc;
+
+    @ListOnly(key = "sectorId", property = "color")
+    private String sectorColor;
+
+    @ListOnly(key = "sectorId", property = "shortCode")
+    private String sectorShortCode;
+
+    @ListOnly(key = "sectorId", property = "status")
+    private SectorStatus sectorStatus;
+
+    @ListOnly(key = "sectorId", property = "statusDesc")
+    private String sectorStatusDesc;
 
     @Override
     public String getDescription() {
@@ -73,6 +97,62 @@ public class Module extends BaseStatusEntity {
 
     public void setShortCode(String shortCode) {
         this.shortCode = shortCode;
+    }
+
+    public Long getSectorId() {
+        return sectorId;
+    }
+
+    public void setSectorId(Long sectorId) {
+        this.sectorId = sectorId;
+    }
+
+    public String getSectorName() {
+        return sectorName;
+    }
+
+    public void setSectorName(String sectorName) {
+        this.sectorName = sectorName;
+    }
+
+    public String getSectorDesc() {
+        return sectorDesc;
+    }
+
+    public void setSectorDesc(String sectorDesc) {
+        this.sectorDesc = sectorDesc;
+    }
+
+    public String getSectorColor() {
+        return sectorColor;
+    }
+
+    public void setSectorColor(String sectorColor) {
+        this.sectorColor = sectorColor;
+    }
+
+    public String getSectorShortCode() {
+        return sectorShortCode;
+    }
+
+    public void setSectorShortCode(String sectorShortCode) {
+        this.sectorShortCode = sectorShortCode;
+    }
+
+    public SectorStatus getSectorStatus() {
+        return sectorStatus;
+    }
+
+    public void setSectorStatus(SectorStatus sectorStatus) {
+        this.sectorStatus = sectorStatus;
+    }
+
+    public String getSectorStatusDesc() {
+        return sectorStatusDesc;
+    }
+
+    public void setSectorStatusDesc(String sectorStatusDesc) {
+        this.sectorStatusDesc = sectorStatusDesc;
     }
 
 }

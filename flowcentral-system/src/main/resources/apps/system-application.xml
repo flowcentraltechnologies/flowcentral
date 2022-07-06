@@ -29,15 +29,55 @@
 			inputType="string"
 			editor="!ui-dropdownchecklist list:monthinyearlist columns:3 selectAllOption:$m{system.scheduledtask.selectallmonths}"
 			renderer="!ui-label" />
+		<widgetType name="colorlist"
+			description="$m{system.widgettype.colorlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:systemcolorlist blankOption:$m{blank.none} colors:true"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
+		<applet name="manageSector"
+			description="$m{system.sector.manage}"
+			label="$m{system.sector.manage.label}" icon="vector-square"
+			type="manage_entitylist" entity="sector" menuAccess="true">
+			<property name="searchTable" value="sectorTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="createForm" value="sectorForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="sectorForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+			<property name="maintainForm.update.condition"
+				value="sectorEditable" />
+			<property name="maintainForm.delete.condition"
+				value="sectorEditable" />
+			<filter name="sectorEditable"
+				description="$m{system.sector.filter.editable}">
+				<restriction type="not_equals" field="name" paramA="central" />
+			</filter>
+		</applet>
 		<applet name="manageModule" description="$m{system.module.manage}"
 			label="$m{system.module.manage.label}" icon="cubes" type="manage_entitylist"
 			entity="module" menuAccess="true">
 			<property name="searchTable" value="moduleTable" />
 			<property name="searchTable.report" value="true" />
 			<property name="maintainForm" value="moduleForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+			<property name="maintainForm.update.condition"
+				value="moduleEditable" />
+			<property name="maintainForm.delete.condition"
+				value="moduleEditable" />
+			<filter name="moduleEditable"
+				description="$m{system.module.filter.editable}">
+				<restriction type="not_amongst" field="shortCode"
+					paramA="SYS|SEC|ORG|APP|RPT|CHT|NOT|DSH|WRK|INT|STU|WKS|CLB|CDN" />
+			</filter>
 		</applet>
 		<applet name="manageModuleApp"
 			description="$m{system.moduleapp.manage}"
@@ -166,6 +206,9 @@
 	</applets>
 	<!-- References -->
 	<references>
+		<reference name="sectorRef"
+			description="$m{system.sector.reference}" entity="sector"
+			searchField="description" />
 		<reference name="moduleRef"
 			description="$m{system.module.reference}" entity="module"
 			searchField="description" />
@@ -187,10 +230,37 @@
 	</references>
 	<!-- Entities -->
 	<entities>
+		<entity name="sector" description="$m{system.sector}"
+			label="$m{system.sector.label}"
+			type="com.flowcentraltech.flowcentral.system.entities.Sector" auditable="true"
+			reportable="true">
+			<field name="status" label="$m{system.sector.status}"
+				type="enum_ref" references="sectorstatuslist"
+				inputWidget="application.enumlist" />
+			<field name="name" label="$m{system.sector.name}" type="string"
+				inputWidget="application.name"  maxLen="32" />
+			<field name="description" label="$m{system.sector.description}"
+				type="string" inputWidget="application.text"  maxLen="64" />
+			<field name="shortCode" label="$m{system.sector.shortcode}"
+				type="string" inputWidget="application.name"  minLen="2" maxLen="2" />
+			<field name="color" label="$m{system.sector.color}"
+				type="string" inputWidget="system.colorlist"  maxLen="16" />
+			<field name="statusDesc"
+				label="$m{system.sector.statusdesc}" type="list_only"
+				inputWidget="application.text" key="status" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{system.sector.uc.name}" fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{system.sector.uc.description}" fieldList="description" />
+			<uniqueConstraint name="shortCodeUc"
+				description="$m{system.sector.uc.shortcode}" fieldList="shortCode" />
+		</entity>
 		<entity name="module" description="$m{system.module.module}"
 			label="$m{system.module.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Module" auditable="true"
 			reportable="true">
+			<field name="sectorId" label="$m{system.module.sector}" type="ref"
+				references="sectorRef" inputWidget="application.entitylist" />
 			<field name="name" label="$m{system.module.name}" type="string"
 				inputWidget="application.name"  maxLen="32" />
 			<field name="description" label="$m{system.module.description}"
@@ -199,6 +269,24 @@
 				inputWidget="application.text" maxLen="64"  />
 			<field name="shortCode" label="$m{system.module.shortcode}"
 				type="string" inputWidget="application.name"  maxLen="16" />
+			<field name="sectorName"
+				label="$m{system.module.sectorname}" type="list_only"
+				inputWidget="application.text" key="sectorId" property="name" />
+			<field name="sectorDesc"
+				label="$m{system.module.sectordesc}" type="list_only"
+				inputWidget="application.text" key="sectorId" property="description" />
+			<field name="sectorColor"
+				label="$m{system.module.sectorcolor}" type="list_only"
+				inputWidget="application.text" key="sectorId" property="color" />
+			<field name="sectorShortCode"
+				label="$m{system.module.sectorshortcode}" type="list_only"
+				inputWidget="application.text" key="sectorId" property="shortCode" />
+			<field name="sectorStatus"
+				label="$m{system.module.sectorstatus}" type="list_only"
+				inputWidget="application.text" key="sectorId" property="status" />
+			<field name="sectorStatusDesc"
+				label="$m{system.module.sectorstatusdesc}" type="list_only"
+				inputWidget="application.text" key="sectorId" property="statusDesc" />
 			<uniqueConstraint name="nameUc"
 				description="$m{system.module.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
@@ -386,16 +474,33 @@
 	</entities>
 	<!-- Tables -->
 	<tables>
+		<table name="sectorTable" description="$m{system.sector.table}"
+			label="$m{system.sector.table.label}" entity="sector" itemsPerPage="20"  serialNo="true">
+			<column field="name" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="2" linkAct="maintainAct" />
+			<column field="shortCode" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{system.sector.status}" widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
 		<table name="moduleTable" description="$m{system.module.table}"
 			label="$m{system.module.table.label}" entity="module" itemsPerPage="20"  serialNo="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="2" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="shortCode" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="sectorDesc" renderWidget="application.text"
+				label="$m{system.module.sector}" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -519,16 +624,36 @@
 	</tables>
 	<!-- Forms -->
 	<forms>
+		<form name="sectorForm" description="$m{system.sector.form}"
+			entity="sector">
+			<tab name="basicDetails"
+				label="$m{system.sector.form.basicdetails}" contentType="miniform">
+				<section name="basicDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="shortCode" inputWidget="application.namewithupper"
+						column="0" required="true" />
+					<field name="status" column="1" required="true" />
+					<field name="color" inputWidget="colorlist" column="1" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
 		<form name="moduleForm" description="$m{system.module.form}"
 			entity="module">
 			<tab name="basicDetails" label="$m{system.module.form.basicdetails}"
 				contentType="miniform">
 				<section name="details1" columns="type_2">
 					<field name="name" inputWidget="application.name" column="0"
-						required="true" />
+						required="true" editable="false" />
 					<field name="description" inputWidget="application.text"
-						column="0" required="true" />
+						column="0" required="true" editable="false" />
 					<field name="shortCode" inputWidget="application.name"
+						column="0" required="true" editable="false" />
+					<field name="sectorId" inputWidget="application.entitylist"
 						column="1" required="true" />
 					<field name="label" inputWidget="application.text" column="1"
 						required="true" />

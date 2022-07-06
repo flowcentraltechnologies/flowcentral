@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.common.business.SystemParameterProvider;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
+import com.flowcentraltech.flowcentral.common.constants.SectorStatus;
 import com.flowcentraltech.flowcentral.common.constants.SystemSchedTaskConstants;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.ParamValueDef;
@@ -50,6 +51,7 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SysParamConfig;
+import com.flowcentraltech.flowcentral.system.constants.SystemColorType;
 import com.flowcentraltech.flowcentral.system.constants.SystemLoadLicenseTaskConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleErrorConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
@@ -68,6 +70,8 @@ import com.flowcentraltech.flowcentral.system.entities.ModuleQuery;
 import com.flowcentraltech.flowcentral.system.entities.ScheduledTask;
 import com.flowcentraltech.flowcentral.system.entities.ScheduledTaskHist;
 import com.flowcentraltech.flowcentral.system.entities.ScheduledTaskQuery;
+import com.flowcentraltech.flowcentral.system.entities.Sector;
+import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
@@ -617,7 +621,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         TwoWayStringCryptograph cryptograph = (TwoWayStringCryptograph) getComponent("twoway-stringcryptograph",
                 new Setting("encryptionKey", deploymentID.getValue() + "." + deploymentInitDate.getValue()));
         String license = cryptograph.decrypt(new String(attachment.getData()));
-        
+
         try (BufferedReader reader = new BufferedReader(new StringReader(license));) {
             String type = reader.readLine();
             LicenseDef.Builder ldb = LicenseDef.newBuilder(attachment.getId(), type, attachment.getVersionNo());
@@ -665,17 +669,34 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         String moduleDescription = resolveApplicationMessage(moduleConfig.getDescription());
         final String moduleName = moduleConfig.getName();
         Long moduleId = null;
-        if (moduleConfig.isPrincipal()) {
+        if (!moduleConfig.isPrincipal()) {
+            logDebug("Installing module extension definition [{0}]...", moduleDescription);
+            List<Long> moduleIdList = environment().valueList(Long.class, "id", new ModuleQuery().name(moduleName));
+            if (moduleIdList.size() == 1) {
+                moduleId = moduleIdList.get(0);
+            } else {
+                logDebug("No principal module definition found for [{0}]. One will be created.", moduleDescription);
+            }
+        }
+
+        if (moduleId == null && moduleConfig.isPrincipal()) {
             logDebug("Installing module principal definition [{0}]...", moduleDescription);
             Module existModule = environment().find(new ModuleQuery().name(moduleName));
             if (existModule == null) {
                 Module module = new Module();
+                Long sectorId = getCentralSectorId();
+                module.setSectorId(sectorId);
                 module.setName(moduleName);
                 module.setDescription(moduleDescription);
                 module.setLabel(resolveApplicationMessage(moduleConfig.getLabel()));
                 module.setShortCode(moduleConfig.getShortCode());
                 moduleId = (Long) environment().create(module);
             } else {
+                if (existModule.getSectorId() == null) {
+                    Long sectorId = getCentralSectorId();
+                    existModule.setSectorId(sectorId);
+                }
+
                 existModule.setDescription(moduleDescription);
                 existModule.setLabel(resolveApplicationMessage(moduleConfig.getLabel()));
                 existModule.setShortCode(moduleConfig.getShortCode());
@@ -683,8 +704,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 moduleId = existModule.getId();
             }
         } else {
-            logDebug("Installing module extension definition [{0}]...", moduleDescription);
-            moduleId = environment().value(Long.class, "id", new ModuleQuery().name(moduleName));
         }
 
         ModuleApp moduleApp = new ModuleApp();
@@ -743,6 +762,26 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
         }
+    }
+
+    private Long getCentralSectorId() throws UnifyException {
+        Long sectorId = null;
+        List<Long> sectorIdList = environment().valueList(Long.class, "id",
+                new SectorQuery().name(SystemModuleNameConstants.CENTRAL_SECTOR_NAME));
+        if (sectorIdList.isEmpty()) {
+            Sector sector = new Sector();
+            sector.setName(SystemModuleNameConstants.CENTRAL_SECTOR_NAME);
+            String description = getApplicationMessage("system.sector.central.description");
+            sector.setDescription(description);
+            sector.setShortCode(SystemModuleNameConstants.CENTRAL_SECTOR_SHORTCODE);
+            sector.setColor(SystemColorType.GRAY.code());
+            sector.setStatus(SectorStatus.OPEN);
+            sectorId = (Long) environment().create(sector);
+        } else {
+            sectorId = sectorIdList.get(0);
+        }
+
+        return sectorId;
     }
 
 }
