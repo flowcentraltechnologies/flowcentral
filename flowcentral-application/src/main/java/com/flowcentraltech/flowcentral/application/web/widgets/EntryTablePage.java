@@ -57,6 +57,8 @@ public class EntryTablePage {
 
     private final Object baseId;
 
+    private final SectorIcon sectorIcon;
+
     private final BreadCrumbs breadCrumbs;
 
     private final List<EventHandler> entrySwitchOnChangeHandlers;
@@ -79,13 +81,15 @@ public class EntryTablePage {
 
     public EntryTablePage(AppletContext ctx, List<EventHandler> entrySwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
-            BreadCrumbs breadCrumbs, String entryTable, String entryEditPolicy, FilterDef entryFilter) {
+            SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String entryTable, String entryEditPolicy,
+            FilterDef entryFilter) {
         this.ctx = ctx;
         this.entrySwitchOnChangeHandlers = entrySwitchOnChangeHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.entityClassDef = entityClassDef;
         this.baseField = baseField;
         this.baseId = baseId;
+        this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.entryTable = entryTable;
         this.entryEditPolicy = entryEditPolicy;
@@ -100,12 +104,16 @@ public class EntryTablePage {
         return breadCrumbs.getLastBreadCrumb().getSubTitle();
     }
 
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
+    }
+
     public BreadCrumbs getBreadCrumbs() {
         return breadCrumbs;
     }
 
     public AppletUtilities getAu() {
-        return ctx.getAu();
+        return ctx.au();
     }
 
     public AppletContext getCtx() {
@@ -165,15 +173,19 @@ public class EntryTablePage {
         displayItemCounterClass = null;
     }
 
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
+    }
+
     public void switchOnChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         getEntryBeanTable().fireOnRowChange(rowChangeInfo);
     }
 
     public BeanTable getEntryBeanTable() throws UnifyException {
         if (entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.getAu(), ctx.getAu().getTableDef(entryTable), BeanTable.ENTRY_ENABLED);
+            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), BeanTable.ENTRY_ENABLED);
             if (!StringUtils.isBlank(entryEditPolicy)) {
-                ChildListEditPolicy policy = ctx.getAu().getComponent(ChildListEditPolicy.class, entryEditPolicy);
+                ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
                 entryBeanTable.setPolicy(policy);
             }
         }
@@ -183,17 +195,17 @@ public class EntryTablePage {
 
     @SuppressWarnings("unchecked")
     public void loadEntryList() throws UnifyException {
-        final Date now = ctx.getAu().getNow();
+        final Date now = ctx.au().getNow();
         // Entry list
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                 .addEquals(baseField, baseId);
         if (entryFilter != null) {
             Restriction br = entryFilter.getRestriction(entityClassDef.getEntityDef(),
-                    ctx.getAu().getSpecialParamProvider(), now);
+                    ctx.au().getSpecialParamProvider(), now);
             query.addRestriction(br);
         }
 
-        List<Entity> resultList = (List<Entity>) ctx.getEnvironment().listAll(query);
+        List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
 
         final BeanTable _beanTable = getEntryBeanTable();
         _beanTable.setSwitchOnChangeHandlers(entrySwitchOnChangeHandlers);
@@ -201,7 +213,7 @@ public class EntryTablePage {
         _beanTable.setFixedAssignment(true);
 
         if (entryEditPolicy != null) {
-            PageLoadDetails pageLoadDetails = ctx.getAu().getComponent(ChildListEditPolicy.class, entryEditPolicy)
+            PageLoadDetails pageLoadDetails = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy)
                     .getOnLoadDetails((Class<? extends Entity>) entityClassDef.getEntityClass(), baseField, baseId);
             entryCaption = pageLoadDetails != null && pageLoadDetails.getCaption() != null
                     ? pageLoadDetails.getCaption()
@@ -212,7 +224,7 @@ public class EntryTablePage {
     @SuppressWarnings("unchecked")
     public void commitEntryList(boolean reload) throws UnifyException {
         List<? extends Entity> entryList = (List<? extends Entity>) getEntryBeanTable().getSourceObject();
-        ctx.getEnvironment().updateEntryList(sweepingCommitPolicy, entryEditPolicy,
+        ctx.environment().updateEntryList(sweepingCommitPolicy, entryEditPolicy,
                 (Class<? extends Entity>) entityClassDef.getEntityClass(), baseField, baseId, entryList);
         if (reload) {
             loadEntryList();
@@ -220,7 +232,7 @@ public class EntryTablePage {
 
         validationErrors = null;
         if (entryEditPolicy != null) {
-            FormMessages messages = ctx.getAu().getComponent(ChildListEditPolicy.class, entryEditPolicy)
+            FormMessages messages = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy)
                     .validateEntries((Class<? extends Entity>) entityClassDef.getEntityClass(), baseField, baseId,
                             entryList);
             validationErrors = messages != null ? messages.getMessages() : null;

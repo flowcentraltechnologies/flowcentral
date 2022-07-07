@@ -242,7 +242,7 @@
 			<field name="description" label="$m{system.sector.description}"
 				type="string" inputWidget="application.text"  maxLen="64" />
 			<field name="shortCode" label="$m{system.sector.shortcode}"
-				type="string" inputWidget="application.name"  minLen="2" maxLen="2" />
+				type="string" inputWidget="application.name"  minLen="3" maxLen="3" />
 			<field name="color" label="$m{system.sector.color}"
 				type="string" inputWidget="system.colorlist"  maxLen="16" />
 			<field name="statusDesc"

@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.SingleForm;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
@@ -41,8 +42,9 @@ public class EntitySingleForm extends AbstractForm {
 
     private UpdateType updateType;
 
-    public EntitySingleForm(FormContext ctx, BreadCrumbs breadCrumbs, String panelName, SingleFormBean bean) {
-        super(ctx, breadCrumbs);
+    public EntitySingleForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String panelName,
+            SingleFormBean bean) {
+        super(ctx, sectorIcon, breadCrumbs);
         singleForm = new SingleForm(ctx, panelName, bean);
     }
 
@@ -57,11 +59,11 @@ public class EntitySingleForm extends AbstractForm {
     public void setUpdateType(UpdateType updateType) {
         this.updateType = updateType;
     }
-    
+
     public void loadSingleFormBean() throws UnifyException {
-        singleForm.getBean().load((Entity) getFormBean()); 
+        singleForm.getBean().load((Entity) getFormBean());
     }
-    
+
     public void unloadSingleFormBean() throws UnifyException {
         singleForm.getBean().unload((Entity) getFormBean());
     }

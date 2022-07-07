@@ -56,6 +56,8 @@ public class EntityCRUDPage {
 
     private final String maintainFormName;
 
+    private final SectorIcon sectorIcon;
+
     private final BreadCrumbs breadCrumbs;
 
     private final EntityFormEventHandlers formEventHandlers;
@@ -70,8 +72,8 @@ public class EntityCRUDPage {
 
     public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
-            BreadCrumbs breadCrumbs, String tableName, String createFormName, String maintainFormName,
-            Restriction baseRestriction) {
+            SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String tableName, String createFormName,
+            String maintainFormName, Restriction baseRestriction) {
         this.ctx = ctx;
         this.formAppletDef = formAppletDef;
         this.formEventHandlers = formEventHandlers;
@@ -79,6 +81,7 @@ public class EntityCRUDPage {
         this.entityClassDef = entityClassDef;
         this.baseField = baseField;
         this.baseId = baseId;
+        this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.tableName = tableName;
         this.createFormName = createFormName;
@@ -94,12 +97,16 @@ public class EntityCRUDPage {
         return breadCrumbs.getLastBreadCrumb().getSubTitle();
     }
 
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
+    }
+
     public BreadCrumbs getBreadCrumbs() {
         return breadCrumbs;
     }
 
     public AppletUtilities getAu() {
-        return ctx.getAu();
+        return ctx.au();
     }
 
     public AppletContext getCtx() {
@@ -139,21 +146,25 @@ public class EntityCRUDPage {
         displayItemCounterClass = null;
     }
 
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
+    }
+
     public void crudSelectItem(int index) throws UnifyException {
         getCrud().enterMaintain(index);
     }
 
     public EntityCRUD getCrud() throws UnifyException {
         if (crud == null) {
-            EntityTable entityTable = new EntityTable(ctx.getAu(), ctx.getAu().getTableDef(tableName));
-            FormContext createFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(createFormName), formEventHandlers);
-            FormContext maintainFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(maintainFormName),
+            EntityTable entityTable = new EntityTable(ctx.au(), ctx.au().getTableDef(tableName));
+            FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
+            FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName),
                     formEventHandlers);
             MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
                     createFrmCtx.getFormDef().getFormTabDef(0));
             MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
                     maintainFrmCtx.getFormDef().getFormTabDef(0));
-            crud = new EntityCRUD(ctx.getAu(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
+            crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
                     entityTable, createForm, maintainForm);
         }
 
@@ -169,12 +180,12 @@ public class EntityCRUDPage {
 
         entityTable.setSourceObject(restriction);
         entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
-        
+
         if (ctx.isContextEditable()) {
             getCrud().enterCreate();
         } else {
             getCrud().enterMaintain(0);
-        }        
+        }
     }
 
 }

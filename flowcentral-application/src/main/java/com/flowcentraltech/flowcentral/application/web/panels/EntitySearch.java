@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.Filter;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
@@ -56,6 +57,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private final Long appAppletId;
 
+    private final SectorIcon sectorIcon;
+    
     private FilterDef baseFilterDef;
 
     private Filter entityFilter;
@@ -104,9 +107,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private boolean newButtonVisible;
 
-    public EntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, TableDef tableDef,
+    public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy, String tabName, TableDef tableDef,
             Long appAppletId, String editAction, Long appAppletFilterId, int mode) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName);
+        this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 FilterConditionListType.IMMEDIATE_FIELD);
         this.appAppletFilterId = appAppletFilterId;
@@ -122,12 +126,12 @@ public class EntitySearch extends AbstractPanelFormBinding {
         this.newButtonVisible = true;
     }
 
-    public AppletUtilities getAu() {
-        return getAppletCtx().getAu();
+    public AppletUtilities au() {
+        return getAppletCtx().au();
     }
 
-    public EnvironmentService getEnvironment() {
-        return getAppletCtx().getEnvironment();
+    public EnvironmentService environment() {
+        return getAppletCtx().environment();
     }
 
     public void setBasicSearchMode(boolean basicSearchMode) throws UnifyException {
@@ -146,6 +150,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
         }
     }
 
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
+    }
+
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
+    }
+    
     public Filter getEntityFilter() {
         return entityFilter;
     }
@@ -311,7 +323,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             And and = new And();
             if (baseFilterDef != null) {
                 and.add(baseFilterDef.getRestriction(entityFilter.getEntityDef(), specialParamProvider,
-                        getAppletCtx().getAu().getNow()));
+                        getAppletCtx().au().getNow()));
             }
 
             if (restriction != null) {
@@ -319,9 +331,9 @@ public class EntitySearch extends AbstractPanelFormBinding {
             }
 
             baseRestriction = and;
-            baseFilterTranslation = getAppletCtx().getAu().resolveSessionMessage(
+            baseFilterTranslation = getAppletCtx().au().resolveSessionMessage(
                     "$m{entitysearch.basefilter.translation}",
-                    getAppletCtx().getAu().translate(baseRestriction, entityFilter.getEntityDef()));
+                    getAppletCtx().au().translate(baseRestriction, entityFilter.getEntityDef()));
             return;
         }
 
@@ -345,7 +357,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public void saveQuickFilter(String name, String description, OwnershipType ownershipType) throws UnifyException {
-        getAppletCtx().getAu().saveAppletQuickFilterDef(getSweepingCommitPolicy(), appAppletId, name, description,
+        getAppletCtx().au().saveAppletQuickFilterDef(getSweepingCommitPolicy(), appAppletId, name, description,
                 ownershipType, entityFilter.getFilterDef());
     }
 
@@ -353,9 +365,9 @@ public class EntitySearch extends AbstractPanelFormBinding {
         searchEntries.normalize();
         if (entityTable != null) {
             TableDef _eTableDef = entityTable.getTableDef();
-            TableDef _nTableDef = getAppletCtx().getAu().getTableDef(_eTableDef.getLongName());
+            TableDef _nTableDef = getAppletCtx().au().getTableDef(_eTableDef.getLongName());
             if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
-                entityTable = new EntityTable(getAppletCtx().getAu(), _nTableDef);
+                entityTable = new EntityTable(getAppletCtx().au(), _nTableDef);
                 applyFilterToSearch();
             }
         }
@@ -369,14 +381,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void applyFilterToSearch() throws UnifyException {
         EntityDef entityDef = entityFilter.getEntityDef();
-        Restriction restriction = entityFilter.getRestriction(getAppletCtx().getAu().getNow());
+        Restriction restriction = entityFilter.getRestriction(getAppletCtx().au().getNow());
         applyRestrictionToSearch(entityDef, restriction);
-        entityFilterTranslation = getAppletCtx().getAu().translate(restriction, entityDef);
+        entityFilterTranslation = getAppletCtx().au().translate(restriction, entityDef);
     }
 
     private void localApplyQuickFilter() throws UnifyException {
         FilterDef quickFilterDef = appAppletFilterId != null
-                ? getAppletCtx().getAu().retrieveFilterDef("applet", "application.appAppletFilter", appAppletFilterId)
+                ? getAppletCtx().au().retrieveFilterDef("applet", "application.appAppletFilter", appAppletFilterId)
                 : null;
         entityFilter = quickFilterDef != null
                 ? new Filter(null, null, entityFilter.getEntityDef(), quickFilterDef,

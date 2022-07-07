@@ -66,14 +66,14 @@ public class EntityFieldSequence extends AbstractPanelFormBinding {
     }
 
     public void load(EntityDef entityDef) throws UnifyException {
-        FieldSequenceDef fieldSequenceDef = getAppletCtx().getAu().retrieveFieldSequenceDef(category,
+        FieldSequenceDef fieldSequenceDef = getAppletCtx().au().retrieveFieldSequenceDef(category,
                 ownerEntityDef.getLongName(), ownerInstId);
         fieldSequence = new FieldSequence(entityDef, fieldSequenceDef, Editable.fromBoolean(isApplyButtonVisible()));
     }
 
     public void save() throws UnifyException {
         if (fieldSequence != null) {
-            getAppletCtx().getAu().saveFieldSequenceDef(getSweepingCommitPolicy(), category,
+            getAppletCtx().au().saveFieldSequenceDef(getSweepingCommitPolicy(), category,
                     ownerEntityDef.getLongName(), ownerInstId, fieldSequence.getFieldSequenceDef());
         }
     }

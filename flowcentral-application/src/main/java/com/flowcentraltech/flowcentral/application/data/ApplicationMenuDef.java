@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.data.BaseNamedDef;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application menu definition.
@@ -33,13 +34,19 @@ public class ApplicationMenuDef extends BaseNamedDef {
 
     private String privilege;
 
+    private String sectionShortCode;
+
+    private String sectionColor;
+
     private List<AppletDef> appletDefList;
 
     public ApplicationMenuDef(String label, String name, String description, Long id, long version,
-            List<AppletDef> appletDefList) {
+            String sectionShortCode, String sectionColor, List<AppletDef> appletDefList) {
         super(name, description, id, version);
         this.label = label;
         this.privilege = PrivilegeNameUtils.getApplicationPrivilegeName(name);
+        this.sectionShortCode = sectionShortCode;
+        this.sectionColor = sectionColor;
         this.appletDefList = DataUtils.unmodifiableList(appletDefList);
     }
 
@@ -55,9 +62,19 @@ public class ApplicationMenuDef extends BaseNamedDef {
         return privilege;
     }
 
-    @Override
-    public String toString() {
-        return "ApplicationMenuDef [label=" + label + ", privilege=" + privilege + "]";
+    public String getSectionShortCode() {
+        return sectionShortCode;
     }
 
+    public String getSectionColor() {
+        return sectionColor;
+    }
+
+    public boolean isWithSectionShortCode() {
+        return !StringUtils.isBlank(sectionShortCode);
+    }
+
+    public boolean isWithSectionColor() {
+        return !StringUtils.isBlank(sectionColor);
+    }
 }

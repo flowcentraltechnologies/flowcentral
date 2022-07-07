@@ -36,6 +36,8 @@ public class EditPropertyListPanel extends AbstractPanel {
     public void switchState() throws UnifyException {
         super.switchState();
         EditPropertyList editPropertyList = getValue(EditPropertyList.class);
+        setVisible("sectorIcon", editPropertyList.isWithSectorIcon());
+        
         editPropertyList.clearDisplayItem();
         AppletContext appCtx = editPropertyList.getCtx();
         if (appCtx.isInWorkflow() && !appCtx.isReview()) {

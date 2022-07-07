@@ -36,6 +36,8 @@ public class EntityCRUDPagePanel extends AbstractPanel {
     public void switchState() throws UnifyException {
         super.switchState();
         EntityCRUDPage entryTablePage = getValue(EntityCRUDPage.class);
+        setVisible("sectorIcon", entryTablePage.isWithSectorIcon());
+        
         entryTablePage.clearDisplayItem();
         AppletContext appCtx = entryTablePage.getCtx();
         if (appCtx.isInWorkflow() && !appCtx.isReview()) {

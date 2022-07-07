@@ -64,7 +64,7 @@ public class StudioAppComponentApplet extends AbstractEntityFormApplet {
                     au.getSessionAttribute(Long.class, StudioSessionAttributeConstants.CURRENT_APPLICATION_ID));
             viewMode = ViewMode.NEW_PRIMARY_FORM;
         } else {
-            Entity _inst = au.getEnvironment().listLean(type.componentType(), instId);
+            Entity _inst = au.environment().listLean(type.componentType(), instId);
             form = constructForm(_inst, FormMode.ENTITY_MAINTAIN, null, false);
             viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
         }

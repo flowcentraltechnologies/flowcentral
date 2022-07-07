@@ -97,7 +97,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
     }
 
     public void commitDesign() throws UnifyException {
-        AppTable appTable = getAu().getEnvironment().find(AppTable.class, baseId);
+        AppTable appTable = getAu().environment().find(AppTable.class, baseId);
         List<AppTableColumn> columnList = Collections.emptyList();
         if (tableEditor.getDesign() != null && tableEditor.getDesign().getColumns() != null) {
             columnList = new ArrayList<AppTableColumn>();
@@ -119,12 +119,12 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
         }
 
         appTable.setColumnList(columnList);
-        getAu().getEnvironment().updateByIdVersion(appTable);
+        getAu().environment().updateByIdVersion(appTable);
     }
 
     public void newEditor() throws UnifyException {
         TableEditor.Builder teb = TableEditor.newBuilder(entityDef);
-        for (AppTableColumn appTableColumn : getAu().getEnvironment()
+        for (AppTableColumn appTableColumn : getAu().environment()
                 .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
             teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
                     appTableColumn.getLinkAct(), appTableColumn.getOrder(), appTableColumn.getWidthRatio(),

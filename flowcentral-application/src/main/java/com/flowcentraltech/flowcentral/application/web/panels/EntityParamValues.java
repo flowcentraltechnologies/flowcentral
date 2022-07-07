@@ -69,14 +69,14 @@ public class EntityParamValues extends AbstractPanelFormBinding {
     }
 
     public void load(List<ParamConfig> paramConfigList) throws UnifyException {
-        ParamValuesDef paramValuesDef = getAppletCtx().getAu().retrieveParamValuesDef(category, ownerEntityDef.getLongName(), ownerInstId,
+        ParamValuesDef paramValuesDef = getAppletCtx().au().retrieveParamValuesDef(category, ownerEntityDef.getLongName(), ownerInstId,
                 paramConfigList);
         paramValueEntries = new ParamValueEntries(paramValuesDef);
     }
 
     public void save() throws UnifyException {
         if (paramValueEntries != null) {
-            getAppletCtx().getAu().saveParamValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId,
+            getAppletCtx().au().saveParamValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId,
                     paramValueEntries.getParamValuesDef());
         }
     }

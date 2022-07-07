@@ -355,7 +355,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
                             application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
                             application.getModuleName(), application.getModuleDesc(), application.getModuleLabel(),
-                            application.getModuleShortCode());
+                            application.getModuleShortCode(), application.getSectorShortCode(), application.getSectorColor());
                 }
 
             };
@@ -1587,7 +1587,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
         List<Application> applicationList = environment()
-                .findAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
+                .listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
         if (!DataUtils.isBlank(applicationList)) {
             List<ApplicationMenuDef> resultList = new ArrayList<ApplicationMenuDef>();
             final String importApplicationName = systemModuleService.getSysParameterValue(String.class,
@@ -1599,7 +1599,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 DataUtils.sortAscending(appletDefList, AppletDef.class, "label");
                 DataUtils.sortAscending(appletDefList, AppletDef.class, "displayIndex");
                 resultList.add(new ApplicationMenuDef(application.getLabel(), application.getName(),
-                        application.getDescription(), application.getId(), application.getVersionNo(), appletDefList));
+                        application.getDescription(), application.getId(), application.getVersionNo(),
+                        application.getSectorShortCode(), application.getSectorColor(), appletDefList));
             }
 
             return resultList;

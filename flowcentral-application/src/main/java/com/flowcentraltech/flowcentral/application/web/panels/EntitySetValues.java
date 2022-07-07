@@ -66,13 +66,13 @@ public class EntitySetValues extends AbstractPanelFormBinding {
     }
 
     public void load(EntityDef entityDef) throws UnifyException {
-        SetValuesDef setValuesDef = getAppletCtx().getAu().retrieveSetValuesDef(category, ownerEntityDef.getLongName(), ownerInstId);
+        SetValuesDef setValuesDef = getAppletCtx().au().retrieveSetValuesDef(category, ownerEntityDef.getLongName(), ownerInstId);
         setValueEntries = new SetValueEntries(entityDef, setValuesDef, Editable.fromBoolean(isApplyButtonVisible()));
     }
 
     public void save() throws UnifyException {
         if (setValueEntries != null) {
-            getAppletCtx().getAu().saveSetValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId,
+            getAppletCtx().au().saveSetValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId,
                     setValueEntries.getSetValuesDef());
         }
     }

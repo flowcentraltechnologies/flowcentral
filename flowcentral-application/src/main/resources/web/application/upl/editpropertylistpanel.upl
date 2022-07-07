@@ -19,9 +19,9 @@
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{42% none 42%}}
 	components:$c{headerLeftPanel headerCenterPanel headerRightPanel}
 	
-!ui-panel:headerLeftPanel style:$s{float:left; width:100%;}
-	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{titleBlock}
+!ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$c{sectorIcon titleBlock}
+!fc-sectoricon:sectorIcon binding:sectorIcon
 !fc-formbreadcrumbs:titleBlock binding:breadCrumbs
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}

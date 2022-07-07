@@ -13,25 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.system.constants;
+
+package com.flowcentraltech.flowcentral.application.web.widgets;
 
 /**
- * System module name constants.
+ * Sector icon.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SystemModuleNameConstants {
-
-    String SYSTEM_MODULE_SERVICE = "system-moduleservice";
-
-    String SYSTEM_MODULE_NAME = "system";
-
-    String SCHEDULEDTASK_PARAMCONFIGPROVIDER = "scheduledtask-paramconfigprovider";
-
-    String ENVIRONMENT_SERVICE = "environment-service";
+public class SectorIcon {
     
-    String CENTRAL_SECTOR_NAME = "central";
-    
-    String CENTRAL_SECTOR_SHORTCODE = "CEN";
+    private String shortCode;
+
+    private String color;
+
+    public SectorIcon(String shortCode, String color) {
+        this.shortCode = shortCode;
+        this.color = color;
+    }
+
+    public String getShortCode() {
+        return shortCode;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
 }

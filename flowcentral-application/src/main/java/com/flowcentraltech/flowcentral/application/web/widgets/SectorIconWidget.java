@@ -13,25 +13,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.system.constants;
+
+package com.flowcentraltech.flowcentral.application.web.widgets;
+
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
- * System module name constants.
+ * Sector icon widget.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SystemModuleNameConstants {
+@Component("fc-sectoricon")
+public class SectorIconWidget extends AbstractControl {
 
-    String SYSTEM_MODULE_SERVICE = "system-moduleservice";
-
-    String SYSTEM_MODULE_NAME = "system";
-
-    String SCHEDULEDTASK_PARAMCONFIGPROVIDER = "scheduledtask-paramconfigprovider";
-
-    String ENVIRONMENT_SERVICE = "environment-service";
-    
-    String CENTRAL_SECTOR_NAME = "central";
-    
-    String CENTRAL_SECTOR_SHORTCODE = "CEN";
+    public SectorIcon icon() throws UnifyException {
+        return getValue(SectorIcon.class);
+    }
 }

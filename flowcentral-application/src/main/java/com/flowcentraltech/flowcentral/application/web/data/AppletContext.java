@@ -65,12 +65,12 @@ public class AppletContext extends AbstractContext {
         return applet;
     }
 
-    public AppletUtilities getAu() {
+    public AppletUtilities au() {
         return au;
     }
 
-    public EnvironmentService getEnvironment() {
-        return au.getEnvironment();
+    public EnvironmentService environment() {
+        return au.environment();
     }
 
     public SpecialParamProvider getSpecialParamProvider() throws UnifyException {

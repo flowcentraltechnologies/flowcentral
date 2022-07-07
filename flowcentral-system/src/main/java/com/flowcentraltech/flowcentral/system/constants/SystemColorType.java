@@ -58,7 +58,7 @@ public enum SystemColorType implements EnumConst {
 
     @Override
     public String defaultCode() {
-        return RED.code;
+        return GRAY.code;
     }
 
     public static SystemColorType fromCode(String code) {

@@ -158,7 +158,7 @@ public class FormContext extends AbstractContext {
     }
 
     public AppletUtilities getAu() {
-        return appletContext.getAu();
+        return appletContext.au();
     }
 
     public void setTriggerEvaluator(FormTriggerEvaluator triggerEvaluator) {
@@ -166,7 +166,7 @@ public class FormContext extends AbstractContext {
     }
 
     public EnvironmentService getEnvironment() {
-        return appletContext.getAu().getEnvironment();
+        return appletContext.au().environment();
     }
 
     public EntityDef getEntityDef() {
@@ -441,7 +441,7 @@ public class FormContext extends AbstractContext {
     public void evaluateTabStates() throws UnifyException {
         revertTabStates();
         ValueStore formValueStore = getFormValueStore();
-        final Date now = appletContext.getAu().getNow();
+        final Date now = appletContext.au().getNow();
         if (formDef.isWithConsolidatedFormState()) {
             ConsolidatedFormStatePolicy policy = getAu().getComponent(ConsolidatedFormStatePolicy.class,
                     formDef.getConsolidatedFormState());

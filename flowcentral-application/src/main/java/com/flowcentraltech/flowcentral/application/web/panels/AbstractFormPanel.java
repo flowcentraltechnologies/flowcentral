@@ -39,6 +39,7 @@ public abstract class AbstractFormPanel extends AbstractPanel implements FormPan
         super.switchState();
 
         AbstractForm form = getValue(AbstractForm.class);
+        setVisible("sectorIcon", form.isWithSectorIcon());        
         setWidgetVisible("formErrors", form.isWithValidationErrors());
     }
 

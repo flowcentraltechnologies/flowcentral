@@ -77,7 +77,7 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     @Override
     protected Object reload(Object inst) throws UnifyException {
-        return getAu().getEnvironment().listLean(((Entity) inst).getClass(), ((Entity) inst).getId());
+        return getAu().environment().listLean(((Entity) inst).getClass(), ((Entity) inst).getId());
     }
 
     @Override

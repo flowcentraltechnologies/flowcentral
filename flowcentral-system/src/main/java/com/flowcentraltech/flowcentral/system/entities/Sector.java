@@ -43,7 +43,7 @@ public class Sector extends BaseAuditEntity {
     @Column(name = "SECTOR_DESC", length = 64)
     private String description;
 
-    @Column(name = "SHORT_CD", length = 2)
+    @Column(name = "SHORT_CD", length = 3)
     private String shortCode;
     
     @Column(length = 16)

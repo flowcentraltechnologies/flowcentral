@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
@@ -77,6 +78,17 @@ import com.tcdng.unify.web.ui.widget.Panel;
  */
 public interface AppletUtilities extends UnifyComponent {
 
+    /**
+     * Gets page sector icon by application.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return the sector icon if page section indication is enabled
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SectorIcon getPageSectorIconByApplication(String applicationName) throws UnifyException;
+    
     /**
      * Gets the current request trigger ID
      * 
@@ -298,7 +310,7 @@ public interface AppletUtilities extends UnifyComponent {
      * 
      * @return the entity service.
      */
-    EnvironmentService getEnvironment();
+    EnvironmentService environment();
 
     /**
      * Gets a application applet definition.

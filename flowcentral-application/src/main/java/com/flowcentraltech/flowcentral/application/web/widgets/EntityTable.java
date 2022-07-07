@@ -106,11 +106,11 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     protected int getSourceObjectSize(Restriction restriction) throws UnifyException {
         final EntityClassDef entityClassDef = au.getEntityClassDef(getTableDef().getEntityDef().getLongName());
         if (restriction != null) {
-            return au.getEnvironment().countAll(
+            return au.environment().countAll(
                     Query.ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), restriction));
         }
 
-        return au.getEnvironment().countAll(
+        return au.environment().countAll(
                 Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).ignoreEmptyCriteria(true));
     }
 
@@ -128,7 +128,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
                 query.setSelect(tableDef.getSelect());
             }
 
-            return (List<Entity>) au.getEnvironment().listAll(query);
+            return (List<Entity>) au.environment().listAll(query);
         }
 
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
@@ -138,6 +138,6 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
             query.setSelect(tableDef.getSelect());
         }
 
-        return (List<Entity>) au.getEnvironment().listAll(query);
+        return (List<Entity>) au.environment().listAll(query);
     }
 }

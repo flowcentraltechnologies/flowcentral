@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormListing;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 
 /**
  * Listing form
@@ -30,8 +31,8 @@ public class ListingForm extends AbstractForm {
 
     private FormListing formListing;
 
-    public ListingForm(FormContext ctx, BreadCrumbs breadCrumbs) {
-        super(ctx, breadCrumbs);
+    public ListingForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
+        super(ctx, sectorIcon, breadCrumbs);
         formListing = new FormListing(ctx);
     }
 

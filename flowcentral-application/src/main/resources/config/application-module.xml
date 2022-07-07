@@ -59,5 +59,14 @@
 		<sysParameter code="APP-0010"
 			description="$m{application.sysparam.applicationheadertitle}"
 			editor="!ui-text" type="string" editable="true" />
+		<sysParameter code="APP-0011" defaultVal="false"
+			description="$m{application.sysparam.sectionindicationonmenu}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0012" defaultVal="false"
+			description="$m{application.sysparam.sectionindicationontabs}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0013" defaultVal="false"
+			description="$m{application.sysparam.sectionindicationonpage}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

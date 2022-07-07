@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.MapValues;
@@ -45,6 +46,8 @@ public class EditPropertyList {
 
     private final Entity inst;
 
+    private final SectorIcon sectorIcon;
+
     private final BreadCrumbs breadCrumbs;
 
     private String childFkFieldName;
@@ -56,11 +59,12 @@ public class EditPropertyList {
     private String displayItemCounterClass;
 
     public EditPropertyList(AppletContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
-            PropertyRuleDef propertyRuleDef, Entity inst, BreadCrumbs breadCrumbs, String childFkFieldName) {
+            PropertyRuleDef propertyRuleDef, Entity inst, SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String childFkFieldName) {
         this.ctx = ctx;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.propertyRuleDef = propertyRuleDef;
         this.inst = inst;
+        this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.childFkFieldName = childFkFieldName;
     }
@@ -73,12 +77,16 @@ public class EditPropertyList {
         return breadCrumbs.getLastBreadCrumb().getSubTitle();
     }
 
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
+    }
+
     public BreadCrumbs getBreadCrumbs() {
         return breadCrumbs;
     }
 
     public AppletUtilities getAu() {
-        return ctx.getAu();
+        return ctx.au();
     }
 
     public AppletContext getCtx() {
@@ -122,6 +130,10 @@ public class EditPropertyList {
         displayItemCounterClass = null;
     }
 
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
+    }
+    
     public void loadPropertyList(FormContext ctx) throws UnifyException {
         MapValues propValues = ctx.getAu().getPropertyListValues(inst, childFkFieldName, propertyRuleDef);
         inputForm = new MiniForm(MiniFormScope.PROPERTY_LIST,
@@ -130,7 +142,7 @@ public class EditPropertyList {
     }
 
     public void commitPropertyList() throws UnifyException {
-        ctx.getAu().savePropertyListValues(sweepingCommitPolicy, inst, childFkFieldName, propertyRuleDef,
+        ctx.au().savePropertyListValues(sweepingCommitPolicy, inst, childFkFieldName, propertyRuleDef,
                 (MapValues) inputForm.getFormBean());
     }
 }

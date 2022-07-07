@@ -38,6 +38,8 @@ public class EntryTablePagePanel extends AbstractPanel {
     public void switchState() throws UnifyException {
         super.switchState();
         EntryTablePage entryTablePage = getValue(EntryTablePage.class);
+        setVisible("sectorIcon", entryTablePage.isWithSectorIcon());
+        
         entryTablePage.clearDisplayItem();
         AppletContext appCtx = entryTablePage.getCtx();
         if (appCtx.isInWorkflow() && !appCtx.isReview()) {

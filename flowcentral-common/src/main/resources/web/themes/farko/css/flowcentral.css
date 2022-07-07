@@ -268,9 +268,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytextsearch .tread {background: transparent;}
 .fc-entitytextsearch .tpbutton {background-color: transparent !important;}
 
-/** Suggestion Text Search */
-.fc-suggestiontextsearch {}
-
 /** Entity Field Reference Search */
 .fc-entityfieldrefsearch {}
 
@@ -443,6 +440,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sflabel .mfreq {width:9px; padding-right:4px;}
 .fc-search .sfcontent {}
 
+/** Sector Icon */
+.fc-sectoricon {display:inline-block;width:28px;height:28px;padding-top:10px;border-radius:4px;box-sizing: border-box;
+	font-size:7px;font-weight:bold;color:#ffffff; vertical-align:middle;text-align:center;}
+
 /* Set values */
 .fc-setvalues {padding:4px;}
 .fc-setvalues .line {padding-bottom: 2px;}
@@ -457,6 +458,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Single form */
 .fc-singleform {}
 .fc-singleform .sfbody {margin-top:-4px;}
+
+/** Suggestion Text Search */
+.fc-suggestiontextsearch {}
 
 /* Tab sheet */
 .fc-tabsheet {}
@@ -567,15 +571,15 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-dispcounterfrozen {display:inline-block; background-color:#a5c5d9; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
 
-
 /*** MENUS ***/
 .fc-appletmenu {height: 100%; max-height: calc(100vh - 40px) !important; background-color: #24303f; color:#ffffff;font-size: 11px;}
 .fc-appletmenu .mheader {min-width:200px !important; height: 24px;}
 .fc-appletmenu .mheader span {display: block;padding:4px 12px; font-weight:bold;color:#d9d9d9;font-size: 10px;}
 .fc-appletmenu .mheader .icon {display:inline-block;padding:4px 2px;width:16px;font-size:12px;cursor:pointer;}
 .fc-appletmenu .mbody {height: calc(100vh - 62px) !important;max-height: calc(100vh - 62px) !important;overflow-y:scroll;}
-.fc-appletmenu .menu {background-color: #3c4e63;margin-bottom: 2px;}
-.fc-appletmenu .menu span {display: block;padding:8px 12px; font-weight:bold;cursor:pointer;}
+.fc-appletmenu .menu {background-color:#3c4e63;padding:6px 12px;margin-bottom:2px;font-weight:bold;cursor:pointer;}
+.fc-appletmenu .menu .ind {display:inline-block;width:32px;border-radius:4px;font-size:7px;padding-top:2px;padding-bottom:2px;margin-right:6px;text-align:center;}
+.fc-appletmenu .menu .lab {display:inline-block;padding: 2px 0px;}
 .fc-appletmenu .submenu {}
 .fc-appletmenu .submenu ul {}
 .fc-appletmenu .submenu li {padding:8px 20px;cursor:pointer;}

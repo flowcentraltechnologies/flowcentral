@@ -21,7 +21,8 @@
 	components:$c{headerLeftPanel headerRightPanel}
 	
 !ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{titleBlock newBtn editBtn viewBtn quickFilterBlock}
+	components:$c{sectorIcon titleBlock newBtn editBtn viewBtn quickFilterBlock}
+!fc-sectoricon:sectorIcon binding:sectorIcon
 !ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
 !ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
 !ui-label:subTitle styleClass:$s{hdsubtitle} binding:entityTitle
