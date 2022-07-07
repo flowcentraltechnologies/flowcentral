@@ -441,7 +441,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sfcontent {}
 
 /** Sector Icon */
-.fc-sectoricon {display:inline-block;width:32px;border-radius:4px;font-size:7px;;text-align:center;}
+.fc-sectoricon {display:inline-block;width:28px;height:28px;padding-top:10px;border-radius:4px;box-sizing: border-box;
+	font-size:7px;font-weight:bold;color:#ffffff; vertical-align:middle;text-align:center;}
 
 /* Set values */
 .fc-setvalues {padding:4px;}

@@ -106,7 +106,7 @@ public class EntityCRUDPage {
     }
 
     public AppletUtilities getAu() {
-        return ctx.getAu();
+        return ctx.au();
     }
 
     public AppletContext getCtx() {
@@ -156,15 +156,15 @@ public class EntityCRUDPage {
 
     public EntityCRUD getCrud() throws UnifyException {
         if (crud == null) {
-            EntityTable entityTable = new EntityTable(ctx.getAu(), ctx.getAu().getTableDef(tableName));
-            FormContext createFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(createFormName), formEventHandlers);
-            FormContext maintainFrmCtx = new FormContext(ctx, ctx.getAu().getFormDef(maintainFormName),
+            EntityTable entityTable = new EntityTable(ctx.au(), ctx.au().getTableDef(tableName));
+            FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
+            FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName),
                     formEventHandlers);
             MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
                     createFrmCtx.getFormDef().getFormTabDef(0));
             MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
                     maintainFrmCtx.getFormDef().getFormTabDef(0));
-            crud = new EntityCRUD(ctx.getAu(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
+            crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
                     entityTable, createForm, maintainForm);
         }
 

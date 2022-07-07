@@ -71,6 +71,8 @@ public class EntitySearchPanel extends AbstractPanel {
         super.switchState();
 
         EntitySearch entitySearch = getEntitySearch();
+        setVisible("sectorIcon", entitySearch.isWithSectorIcon());
+
         entitySearch.ensureTableStruct();
         if (Boolean.TRUE.equals(getRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
             entitySearch.applyFilterToSearch();
@@ -247,7 +249,7 @@ public class EntitySearchPanel extends AbstractPanel {
             EntityTableWidget tableWidget = getWidgetByShortName(EntityTableWidget.class, "searchResultTbl");
             EntityListActionContext eCtx = new EntityListActionContext(tableWidget.getSelectedItems(),
                     entitySearch.getAppTableActionPolicy());
-            EntityListActionResult entityActionResult = entitySearch.getEnvironment()
+            EntityListActionResult entityActionResult = entitySearch.environment()
                     .performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
             entitySearch.applyFilterToSearch();

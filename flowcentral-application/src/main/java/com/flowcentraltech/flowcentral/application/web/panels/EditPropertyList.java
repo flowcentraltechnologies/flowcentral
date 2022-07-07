@@ -86,7 +86,7 @@ public class EditPropertyList {
     }
 
     public AppletUtilities getAu() {
-        return ctx.getAu();
+        return ctx.au();
     }
 
     public AppletContext getCtx() {
@@ -142,7 +142,7 @@ public class EditPropertyList {
     }
 
     public void commitPropertyList() throws UnifyException {
-        ctx.getAu().savePropertyListValues(sweepingCommitPolicy, inst, childFkFieldName, propertyRuleDef,
+        ctx.au().savePropertyListValues(sweepingCommitPolicy, inst, childFkFieldName, propertyRuleDef,
                 (MapValues) inputForm.getFormBean());
     }
 }

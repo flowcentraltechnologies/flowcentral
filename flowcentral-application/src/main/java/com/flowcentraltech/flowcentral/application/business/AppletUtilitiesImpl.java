@@ -1079,8 +1079,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         Long appAppletFilterId = !StringUtils.isBlank(defaultQuickFilter) ? environmentService.value(Long.class, "id",
                 new AppAppletFilterQuery().appAppletId(_appletDef.getId()).name(defaultQuickFilter)) : null;
 
-        EntitySearch _entitySearch = new EntitySearch(ctx, sweepingCommitPolicy, tabName, _tableDef, _appletDef.getId(),
-                editAction, appAppletFilterId, entitySearchMode);
+        SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
+        EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
+                _appletDef.getId(), editAction, appAppletFilterId, entitySearchMode);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         if (_appletDef.isDescriptiveButtons()) {
