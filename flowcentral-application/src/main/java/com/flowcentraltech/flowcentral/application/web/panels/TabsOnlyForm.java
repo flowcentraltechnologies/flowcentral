@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 
 /**
@@ -29,8 +30,8 @@ public class TabsOnlyForm extends AbstractForm {
 
     private TabSheet tabSheet;
 
-    public TabsOnlyForm(FormContext ctx, BreadCrumbs breadCrumbs) {
-        super(ctx, breadCrumbs);
+    public TabsOnlyForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
+        super(ctx, sectorIcon, breadCrumbs);
     }
 
     public void setTabSheet(TabSheet tabSheet) {

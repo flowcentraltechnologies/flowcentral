@@ -63,10 +63,10 @@ public class ReviewWizardUpdateActionPolicy extends AbstractEntityActionPolicy {
         int wfWizardStepIndex = ctx.getAttribute(int.class, WfWizardAppletPropertyConstants.WIZARD_STEP_INDEX);
         if (wfWizardStepIndex == 0) {
             Entity entityInst = (Entity) ctx.getInst();
-            WfWizardItem wfWizardItem = appletUtil.getEnvironment().find(new WfWizardItemQuery()
+            WfWizardItem wfWizardItem = appletUtil.environment().find(new WfWizardItemQuery()
                     .wizard(wfWizardDef.getLongName()).primaryEntityId((Long) entityInst.getId()));
             wfWizardItem.setTitle(entityInst.getDescription());
-            appletUtil.getEnvironment().updateByIdVersion(wfWizardItem);
+            appletUtil.environment().updateByIdVersion(wfWizardItem);
         }
 
         return null;

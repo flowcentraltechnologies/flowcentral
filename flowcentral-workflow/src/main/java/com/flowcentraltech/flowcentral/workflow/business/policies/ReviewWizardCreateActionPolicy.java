@@ -75,14 +75,14 @@ public class ReviewWizardCreateActionPolicy extends AbstractEntityActionPolicy {
             wfWizardItem.setTitle(entityInst.getDescription());
             wfWizardItem.setOwnerId(getUserToken().getUserLoginId());
             wfWizardItem.setPercentCompleted(percentCompleted);
-            appletUtil.getEnvironment().create(wfWizardItem);
+            appletUtil.environment().create(wfWizardItem);
         } else {
             Long priEntityInstId = ctx.getAttribute(Long.class,
                     WfWizardAppletPropertyConstants.WIZARD_PRIMARY_ENTITY_INST_ID);
-            WfWizardItem wfWizardItem = appletUtil.getEnvironment()
+            WfWizardItem wfWizardItem = appletUtil.environment()
                     .find(new WfWizardItemQuery().wizard(wfWizardDef.getLongName()).primaryEntityId(priEntityInstId));
             wfWizardItem.setPercentCompleted(percentCompleted);
-            appletUtil.getEnvironment().updateByIdVersion(wfWizardItem);
+            appletUtil.environment().updateByIdVersion(wfWizardItem);
         }
 
         return null;

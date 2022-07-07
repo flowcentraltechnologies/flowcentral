@@ -14,29 +14,31 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.panels;
-
-import com.flowcentraltech.flowcentral.application.web.data.FormContext;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
-import com.flowcentraltech.flowcentral.application.web.widgets.FormListing;
-import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
+package com.flowcentraltech.flowcentral.application.web.widgets;
 
 /**
- * Listing form
+ * Sector icon.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ListingForm extends AbstractForm {
+public class SectorIcon {
+    
+    private String shortCode;
 
-    private FormListing formListing;
+    private String color;
 
-    public ListingForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
-        super(ctx, sectorIcon, breadCrumbs);
-        formListing = new FormListing(ctx);
+    public SectorIcon(String shortCode, String color) {
+        this.shortCode = shortCode;
+        this.color = color;
     }
 
-    public FormListing getFormListing() {
-        return formListing;
+    public String getShortCode() {
+        return shortCode;
     }
+
+    public String getColor() {
+        return color;
+    }
+
 }

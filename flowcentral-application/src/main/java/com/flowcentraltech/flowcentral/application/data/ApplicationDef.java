@@ -44,8 +44,13 @@ public class ApplicationDef {
 
     private String moduleShortCode;
 
+    private String sectorShortCode;
+
+    private String sectorColor;
+
     public ApplicationDef(String name, String description, Long id, long version, boolean developable,
-            boolean menuAccess, String moduleName, String moduleDesc, String moduleLabel, String moduleShortCode) {
+            boolean menuAccess, String moduleName, String moduleDesc, String moduleLabel, String moduleShortCode,
+            String sectorShortCode, String sectorColor) {
         this.name = name;
         this.description = description;
         this.id = id;
@@ -56,6 +61,8 @@ public class ApplicationDef {
         this.moduleDesc = moduleDesc;
         this.moduleLabel = moduleLabel;
         this.moduleShortCode = moduleShortCode;
+        this.sectorShortCode = sectorShortCode;
+        this.sectorColor = sectorColor;
     }
 
     public String getName() {
@@ -96,5 +103,13 @@ public class ApplicationDef {
 
     public String getModuleShortCode() {
         return moduleShortCode;
+    }
+
+    public String getSectorShortCode() {
+        return sectorShortCode;
+    }
+
+    public String getSectorColor() {
+        return sectorColor;
     }
 }

@@ -23,8 +23,10 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -70,6 +72,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEnt
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
@@ -127,8 +130,6 @@ import com.tcdng.unify.web.ui.widget.Panel;
  */
 @Component(ApplicationModuleNameConstants.APPLET_UTILITIES)
 public class AppletUtilitiesImpl extends AbstractUnifyComponent implements AppletUtilities {
-//
-//    private static final Order ORDER_BY_ID = new Order().add("id");
 
     @Configurable
     private RestrictionTranslator restrictionTranslator;
@@ -225,6 +226,18 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public SectorIcon getPageSectorIconByApplication(String applicationName) throws UnifyException {
+        boolean indicatePageSectors = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_PAGE);
+        if (indicatePageSectors) {
+            ApplicationDef applicationDef = applicationModuleService.getApplicationDef(applicationName);
+            return new SectorIcon(applicationDef.getSectorShortCode(), applicationDef.getSectorColor());
+        }
+
+        return null;
+    }
+
+    @Override
     public boolean isEntitySearchWidget(String widgetLongName) throws UnifyException {
         return applicationModuleService.isEntitySearchWidget(widgetLongName);
     }
@@ -305,7 +318,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public EnvironmentService getEnvironment() {
+    public EnvironmentService environment() {
         return environmentService;
     }
 
@@ -495,7 +508,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 formDef.getLongName());
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, formDef, null, inst);
-        final ListingForm form = new ListingForm(formContext, breadCrumbs);
+        final SectorIcon sectorIcon = applet != null
+                ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
+                : null;
+        final ListingForm form = new ListingForm(formContext, sectorIcon, breadCrumbs);
         form.setBeanTitle(beanTitle);
         form.setFormMode(FormMode.LISTING);
         return form;
@@ -510,7 +526,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final SweepingCommitPolicy sweepingCommitPolicy = applet;
         final FormContext formContext = new FormContext(appletContext, formDef, formEventHandlers, inst);
-        final HeaderWithTabsForm form = new HeaderWithTabsForm(formContext, breadCrumbs);
+        final SectorIcon sectorIcon = applet != null
+                ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
+                : null;
+        final HeaderWithTabsForm form = new HeaderWithTabsForm(formContext, sectorIcon, breadCrumbs);
         form.setBeanTitle(beanTitle);
         form.setFormMode(formMode);
         if (applet != null && applet.isCollaboration() && applet.isNoForm()) {
@@ -775,13 +794,16 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
+        final SectorIcon sectorIcon = applet != null
+                ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
+                : null;
         final String panelName = applet.getSingleFormAppletDef().getPropValue(String.class,
                 AppletPropertyConstants.SINGLE_FORM_PANEL);
         logDebug("Constructing entity single form for [{0}] using panel [{1}]...", rootTitle, panelName);
         final SingleFormBean bean = createSingleFormBeanForPanel(panelName);
         bean.init(this);
 
-        final EntitySingleForm form = new EntitySingleForm(formContext, breadCrumbs, panelName, bean);
+        final EntitySingleForm form = new EntitySingleForm(formContext, sectorIcon, breadCrumbs, panelName, bean);
         form.setBeanTitle(beanTitle);
         form.setFormMode(formMode);
         return form;
@@ -1276,7 +1298,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         EntityActionResult entityActionResult;
         try {
-            entityActionResult = getEnvironment().create(eCtx);
+            entityActionResult = environment().create(eCtx);
         } catch (UnifyException e) {
             // Revert to skeleton values
             revertAutoFormatFields(_entityDef, inst);
@@ -1329,7 +1351,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         applyDelayedSetValues(formContext);
 
-        EntityActionResult entityActionResult = getEnvironment().updateLean(eCtx);
+        EntityActionResult entityActionResult = environment().updateLean(eCtx);
         formContext.addValidationErrors(eCtx.getFormMessages());
         return entityActionResult;
     }
@@ -1357,13 +1379,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.UPDATE, scp,
                     deletePolicy);
             eCtx.setAll(formContext);
-            entityActionResult = getEnvironment().updateLean(eCtx);
+            entityActionResult = environment().updateLean(eCtx);
         } else {
             EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.DELETE, scp,
                     deletePolicy);
             eCtx.setAll(formContext);
 
-            entityActionResult = getEnvironment().delete(eCtx);
+            entityActionResult = environment().delete(eCtx);
         }
 
         return entityActionResult;

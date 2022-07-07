@@ -421,7 +421,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void navBackToPrevious() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        boolean strictUpdate = applet.getAu().getSysParameterValue(boolean.class,
+        boolean strictUpdate = applet.au().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.STRICT_FORM_REVIEW_MODE);
         if (strictUpdate) {
             FormContext ctx = applet.reviewOnClose();
@@ -495,7 +495,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (inst instanceof BaseApplicationEntity) {
             BaseApplicationEntity entity = (BaseApplicationEntity) inst;
             saveApplicatIonId = entity.getApplicationId();
-            if (!applet.getAu().isApplicationDevelopable(saveApplicatIonId)) {
+            if (!applet.au().isApplicationDevelopable(saveApplicatIonId)) {
                 ctx.addValidationError("applicationId",
                         getApplicationMessage("application.validation.application.nondevelopable"));
             }

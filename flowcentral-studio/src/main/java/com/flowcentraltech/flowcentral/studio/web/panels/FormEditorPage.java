@@ -105,7 +105,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
     }
 
     public void commitDesign() throws UnifyException {
-        AppForm appForm = getAu().getEnvironment().find(AppForm.class, baseId);
+        AppForm appForm = getAu().environment().find(AppForm.class, baseId);
         List<AppFormElement> elementList = Collections.emptyList();
         if (formEditor.getDesign() != null && formEditor.getDesign().getTabs() != null) {
             elementList = new ArrayList<AppFormElement>();
@@ -159,12 +159,12 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
         }
 
         appForm.setElementList(elementList);
-        getAu().getEnvironment().updateByIdVersion(appForm);
+        getAu().environment().updateByIdVersion(appForm);
     }
 
     public void newEditor() throws UnifyException {
         FormEditor.Builder feb = FormEditor.newBuilder(formDef);
-        for (AppFormElement appFormElement : getAu().getEnvironment()
+        for (AppFormElement appFormElement : getAu().environment()
                 .findAll(Query.of(AppFormElement.class).addEquals("appFormId", baseId).addOrder("id"))) {
             switch (appFormElement.getType()) {
                 case FIELD:

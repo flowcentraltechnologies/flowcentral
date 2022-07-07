@@ -81,6 +81,6 @@ public class EntitySaveAs {
     public EntityActionResult commitEntitySaveAs(String saveAsPolicy) throws UnifyException {
         EntityActionContext ctx = new EntityActionContext(inputForm.getCtx().getFormDef().getEntityDef(),
                 (Entity) inputForm.getCtx().getInst(), RecordActionType.CREATE, scp, saveAsPolicy);
-        return au.getEnvironment().create(ctx);
+        return au.environment().create(ctx);
     }
 }

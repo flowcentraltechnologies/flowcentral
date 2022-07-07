@@ -88,7 +88,7 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
 
         this.entitySearch.setBaseRestriction(ab.build(), au.getSpecialParamProvider());
         this.wfWizardDef = wms.getWfWizardDef(wfWizardName);
-        this.priEntityDef = getAu().getEntityDef(wfWizardDef.getEntity());
+        this.priEntityDef = au().getEntityDef(wfWizardDef.getEntity());
         this.wms = wms;
         this.breadCrumbStack = new Stack<BreadCrumb>();
         navBackToSearch();
@@ -105,8 +105,8 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         WfWizardItem currWfWizardItem = (WfWizardItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
-        final EntityClassDef _entityClassDef = getAu().getEntityClassDef(priEntityDef.getLongName());
-        priEntityInst = (WorkEntity) getAu().getEnvironment().listLean(
+        final EntityClassDef _entityClassDef = au().getEntityClassDef(priEntityDef.getLongName());
+        priEntityInst = (WorkEntity) au().environment().listLean(
                 (Class<? extends Entity>) _entityClassDef.getEntityClass(), currWfWizardItem.getPrimaryEntityId());
         loadWizardStep(0);
         return;
@@ -114,9 +114,9 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
 
     @Override
     public EntityActionResult submitInst() throws UnifyException {
-        WorkEntity inst = getAu().getEnvironment().find(priEntityInst.getClass(), priEntityInst.getId());
+        WorkEntity inst = au().environment().find(priEntityInst.getClass(), priEntityInst.getId());
         FormContext ctx = form.getCtx();
-        EntityActionResult entityActionResult = getAu().getWorkItemUtilities().submitToWorkflowChannel(
+        EntityActionResult entityActionResult = au().getWorkItemUtilities().submitToWorkflowChannel(
                 form.getFormDef().getEntityDef(),
                 ctx.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
                 (WorkEntity) inst, ctx.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY));
@@ -179,7 +179,7 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     @SuppressWarnings("unchecked")
     private void loadWizardStep(int index) throws UnifyException {
         WfWizardStepDef _wfWizardStepDef = wfWizardDef.getWfWizardStepDef(index);
-        wfWizardStepFormDef = getAu().getFormDef(_wfWizardStepDef.getForm());
+        wfWizardStepFormDef = au().getFormDef(_wfWizardStepDef.getForm());
         EntityDef _entityDef = priEntityDef;
         FormMode formMode = FormMode.MAINTAIN;
         viewMode = ViewMode.MAINTAIN_FORM;
@@ -187,20 +187,20 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
             currEntityInst = priEntityInst;
         } else {
             _entityDef = wfWizardStepFormDef.getEntityDef();
-            Restriction childRestriction = getAu().getChildRestriction(priEntityDef, _wfWizardStepDef.getReference(),
+            Restriction childRestriction = au().getChildRestriction(priEntityDef, _wfWizardStepDef.getReference(),
                     priEntityInst);
-            final EntityClassDef _entityClassDef = getAu().getEntityClassDef(_entityDef.getLongName());
-            currEntityInst = getAu().getEnvironment().listLean(Query
+            final EntityClassDef _entityClassDef = au().getEntityClassDef(_entityDef.getLongName());
+            currEntityInst = au().environment().listLean(Query
                     .of((Class<? extends Entity>) _entityClassDef.getEntityClass()).addRestriction(childRestriction));
         }
 
         if (currEntityInst == null) {
-            final EntityClassDef _entityClassDef = getAu().getEntityClassDef(_entityDef.getLongName());
+            final EntityClassDef _entityClassDef = au().getEntityClassDef(_entityDef.getLongName());
             currEntityInst = (Entity) ReflectUtils.newInstance(_entityClassDef.getEntityClass());
             if (index == 0) {
                 priEntityInst = (WorkEntity) currEntityInst;
             } else {
-                getAu().populateNewChildReferenceFields(priEntityDef, _wfWizardStepDef.getReference(), priEntityInst,
+                au().populateNewChildReferenceFields(priEntityDef, _wfWizardStepDef.getReference(), priEntityInst,
                         currEntityInst);
             }
 

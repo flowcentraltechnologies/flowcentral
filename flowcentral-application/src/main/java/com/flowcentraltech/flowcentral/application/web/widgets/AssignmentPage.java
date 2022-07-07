@@ -60,6 +60,8 @@ public class AssignmentPage {
 
     private final Object baseId;
 
+    private final SectorIcon sectorIcon;
+
     private final BreadCrumbs breadCrumbs;
 
     private final List<EventHandler> assnSwitchOnChangeHandlers;
@@ -82,7 +84,7 @@ public class AssignmentPage {
 
     public AssignmentPage(AppletContext ctx, List<EventHandler> assnSwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, AssignmentPageDef assignmentPageDef,
-            EntityClassDef entityClassDef, Object baseId, BreadCrumbs breadCrumbs, String entryTable,
+            EntityClassDef entityClassDef, Object baseId, SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String entryTable,
             String assnEditPolicy, FilterDef assgnFilter, boolean fixedAssignment) {
         this.ctx = ctx;
         this.assnSwitchOnChangeHandlers = assnSwitchOnChangeHandlers;
@@ -90,6 +92,7 @@ public class AssignmentPage {
         this.assignmentPageDef = assignmentPageDef;
         this.entityClassDef = entityClassDef;
         this.baseId = baseId;
+        this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.entryTable = entryTable;
         this.assnEditPolicy = assnEditPolicy;
@@ -103,6 +106,10 @@ public class AssignmentPage {
 
     public String getSubTitle() {
         return breadCrumbs.getLastBreadCrumb().getSubTitle();
+    }
+
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
     }
 
     public BreadCrumbs getBreadCrumbs() {
@@ -156,6 +163,10 @@ public class AssignmentPage {
 
     public void setAssignedIdList(List<Long> assignedIdList) {
         this.assignedIdList = assignedIdList;
+    }
+
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
     }
 
     public void switchOnChange(RowChangeInfo rowChangeInfo) throws UnifyException {
@@ -215,7 +226,7 @@ public class AssignmentPage {
                     RefDef _baseRefDef = entityClassDef.getEntityDef().getFieldDef(assignmentPageDef.getBaseField())
                             .getRefDef();
                     EntityClassDef _baseEntityClassDef = ctx.getAu().getEntityClassDef(_baseRefDef.getEntity());
-                    Entity baseInst = ctx.getAu().getEnvironment()
+                    Entity baseInst = ctx.getAu().environment()
                             .listLean((Class<? extends Entity>) _baseEntityClassDef.getEntityClass(), baseId);
                     Restriction br = ctx.getAu()
                             .getComponent(EntityBasedFilterGenerator.class, _assignRefDef.getFilterGenerator())

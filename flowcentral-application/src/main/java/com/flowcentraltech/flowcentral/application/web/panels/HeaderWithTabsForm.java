@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 
 /**
@@ -45,8 +46,8 @@ public class HeaderWithTabsForm extends AbstractForm {
 
     private UpdateType updateType;
     
-    public HeaderWithTabsForm(FormContext ctx, BreadCrumbs breadCrumbs) {
-        super(ctx, breadCrumbs);
+    public HeaderWithTabsForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
+        super(ctx, sectorIcon, breadCrumbs);
         headerForm = new MiniForm(MiniFormScope.MAIN_FORM, ctx, ctx.getFormDef().getFormTabDef(0));
     }
 

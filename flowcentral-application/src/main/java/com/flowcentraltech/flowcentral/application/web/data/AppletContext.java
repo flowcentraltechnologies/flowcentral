@@ -70,7 +70,7 @@ public class AppletContext extends AbstractContext {
     }
 
     public EnvironmentService getEnvironment() {
-        return au.getEnvironment();
+        return au.environment();
     }
 
     public SpecialParamProvider getSpecialParamProvider() throws UnifyException {

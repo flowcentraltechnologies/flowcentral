@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.tcdng.unify.core.UnifyException;
 
@@ -67,8 +68,10 @@ public abstract class AbstractForm {
 
     private FormContext ctx;
 
-    private BreadCrumbs breadCrumbs;
+    private SectorIcon sectorIcon;
 
+    private BreadCrumbs breadCrumbs;
+    
     private FormMode formMode;
 
     private List<FormActionDef> formActionDefList;
@@ -87,8 +90,9 @@ public abstract class AbstractForm {
     
     private int attachmentCount;
 
-    public AbstractForm(FormContext ctx, BreadCrumbs breadCrumbs) {
+    public AbstractForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
         this.ctx = ctx;
+        this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         if (this.breadCrumbs != null) {
             this.breadCrumbs.setLastCrumbTitle(ctx.getEntityDef().getDescription());
@@ -113,6 +117,10 @@ public abstract class AbstractForm {
 
     public void setFormBean(Object formBean) throws UnifyException {
         ctx.setInst(formBean);
+    }
+
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
     }
 
     public String getFormTitle() {
@@ -248,5 +256,9 @@ public abstract class AbstractForm {
 
     public List<FormMessage> getValidationErrors() {
         return ctx.getValidationErrors();
+    }
+
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
     }
 }

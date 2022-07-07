@@ -37,6 +37,8 @@ public class AssignmentPagePanel extends AbstractPanel {
     public void switchState() throws UnifyException {
         super.switchState();
         AssignmentPage assignmentPage = getValue(AssignmentPage.class);
+        setVisible("sectorIcon", assignmentPage.isWithSectorIcon());
+        
         assignmentPage.clearDisplayItem();
         AppletContext appCtx = assignmentPage.getCtx();
         if (appCtx.isInWorkflow() && !appCtx.isReview()) {

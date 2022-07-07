@@ -166,7 +166,7 @@ public class FormContext extends AbstractContext {
     }
 
     public EnvironmentService getEnvironment() {
-        return appletContext.getAu().getEnvironment();
+        return appletContext.getAu().environment();
     }
 
     public EntityDef getEntityDef() {

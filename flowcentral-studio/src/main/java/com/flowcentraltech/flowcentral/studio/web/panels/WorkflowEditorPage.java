@@ -67,15 +67,15 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
     }
 
     public void commitDesign() throws UnifyException {
-        Workflow workflow = getAu().getEnvironment().find(Workflow.class, workflowId);
+        Workflow workflow = getAu().environment().find(Workflow.class, workflowId);
         workflow.setStepList(new ArrayList<WfStep>(workflowEditor.getWorkflowSteps().values()));
-        getAu().getEnvironment().updateByIdVersion(workflow);
+        getAu().environment().updateByIdVersion(workflow);
     }
 
     public void newEditor() throws UnifyException {
         WorkflowEditor.Builder web = WorkflowEditor.newBuilder(getAu(), entityDef, workflowId);
         boolean isOldDesign = false;
-        for (WfStep step : getAu().getEnvironment()
+        for (WfStep step : getAu().environment()
                 .listAllWithChildren(Query.of(WfStep.class).addEquals("workflowId", workflowId).addOrder("id"))) {
             web.addStep(step);
             isOldDesign |= step.getDesignX() != 0;

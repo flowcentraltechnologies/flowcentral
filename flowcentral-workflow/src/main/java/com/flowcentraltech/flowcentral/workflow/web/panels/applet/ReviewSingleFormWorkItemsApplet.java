@@ -111,7 +111,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
             final String currentUser = au.getSessionUserLoginId();
             if (StringUtils.isBlank(currWfItem.getHeldBy())) { // Current user should hold current item if it is unheld
                 currWfItem.setHeldBy(currentUser);
-                au.getEnvironment().updateByIdVersion(currWfItem);
+                au.environment().updateByIdVersion(currWfItem);
             }
 
             userActionRight = currentUser != null && currentUser.equals(currWfItem.getHeldBy());
@@ -134,7 +134,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
         if (userActionRight) {
             form.setWarning(null);
         } else {
-            form.setWarning(getAu().resolveSessionMessage("$m{entityformapplet.form.inworkflow.heldby}",
+            form.setWarning(au().resolveSessionMessage("$m{entityformapplet.form.inworkflow.heldby}",
                     currWfItem.getHeldBy()));
         }
     }

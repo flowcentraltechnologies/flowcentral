@@ -174,7 +174,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             final String studioApplicationName = systemModuleService.getSysParameterValue(String.class,
                     ApplicationModuleSysParamConstants.STUDIO_APPLICATION_NAME);
             final boolean indicateSectors = systemModuleService.getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.SECTION_INDICATION_ON_MENU);
+                    ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
             final boolean studioMenuEnabled = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.STUDIO_MENU_ENABLED);
             final boolean sectionWithItemsOnly = systemModuleService.getSysParameterValue(boolean.class,

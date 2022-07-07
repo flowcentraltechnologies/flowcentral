@@ -268,9 +268,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytextsearch .tread {background: transparent;}
 .fc-entitytextsearch .tpbutton {background-color: transparent !important;}
 
-/** Suggestion Text Search */
-.fc-suggestiontextsearch {}
-
 /** Entity Field Reference Search */
 .fc-entityfieldrefsearch {}
 
@@ -443,6 +440,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sflabel .mfreq {width:9px; padding-right:4px;}
 .fc-search .sfcontent {}
 
+/** Sector Icon */
+.fc-sectoricon {display:inline-block;width:32px;border-radius:4px;font-size:7px;;text-align:center;}
+
 /* Set values */
 .fc-setvalues {padding:4px;}
 .fc-setvalues .line {padding-bottom: 2px;}
@@ -457,6 +457,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Single form */
 .fc-singleform {}
 .fc-singleform .sfbody {margin-top:-4px;}
+
+/** Suggestion Text Search */
+.fc-suggestiontextsearch {}
 
 /* Tab sheet */
 .fc-tabsheet {}
@@ -566,7 +569,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	padding:4px 8px; margin-top:4px;}
 .fc-dispcounterfrozen {display:inline-block; background-color:#a5c5d9; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
-
 
 /*** MENUS ***/
 .fc-appletmenu {height: 100%; max-height: calc(100vh - 40px) !important; background-color: #24303f; color:#ffffff;font-size: 11px;}

@@ -60,7 +60,7 @@ public class ReviewWizardSubmitActionPolicy extends AbstractEntityActionPolicy {
         WfWizardDef wfWizardDef = ctx.getAttribute(WfWizardDef.class,
                 WfWizardAppletPropertyConstants.WIZARD_DEFINITION);
         Entity entityInst = (Entity) ctx.getInst();
-        appletUtil.getEnvironment().deleteAll(
+        appletUtil.environment().deleteAll(
                 new WfWizardItemQuery().wizard(wfWizardDef.getLongName()).primaryEntityId((Long) entityInst.getId()));
 
         return null;

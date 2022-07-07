@@ -56,6 +56,8 @@ public class EntityCRUDPage {
 
     private final String maintainFormName;
 
+    private final SectorIcon sectorIcon;
+
     private final BreadCrumbs breadCrumbs;
 
     private final EntityFormEventHandlers formEventHandlers;
@@ -70,8 +72,8 @@ public class EntityCRUDPage {
 
     public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
-            BreadCrumbs breadCrumbs, String tableName, String createFormName, String maintainFormName,
-            Restriction baseRestriction) {
+            SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String tableName, String createFormName,
+            String maintainFormName, Restriction baseRestriction) {
         this.ctx = ctx;
         this.formAppletDef = formAppletDef;
         this.formEventHandlers = formEventHandlers;
@@ -79,6 +81,7 @@ public class EntityCRUDPage {
         this.entityClassDef = entityClassDef;
         this.baseField = baseField;
         this.baseId = baseId;
+        this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.tableName = tableName;
         this.createFormName = createFormName;
@@ -92,6 +95,10 @@ public class EntityCRUDPage {
 
     public String getSubTitle() {
         return breadCrumbs.getLastBreadCrumb().getSubTitle();
+    }
+
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
     }
 
     public BreadCrumbs getBreadCrumbs() {
@@ -139,6 +146,10 @@ public class EntityCRUDPage {
         displayItemCounterClass = null;
     }
 
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
+    }
+
     public void crudSelectItem(int index) throws UnifyException {
         getCrud().enterMaintain(index);
     }
@@ -169,12 +180,12 @@ public class EntityCRUDPage {
 
         entityTable.setSourceObject(restriction);
         entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
-        
+
         if (ctx.isContextEditable()) {
             getCrud().enterCreate();
         } else {
             getCrud().enterMaintain(0);
-        }        
+        }
     }
 
 }

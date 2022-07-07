@@ -21,7 +21,8 @@
 	
 !ui-panel:headerLeftPanel style:$s{width:100%;}
 	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{titleBlock}
+	components:$c{sectorIcon titleBlock}
+!fc-sectoricon:sectorIcon binding:sectorIcon
 !fc-formbreadcrumbs:titleBlock binding:breadCrumbs
 !ui-hidden:switchOnChangeHolder
 	eventHandler:$f{switchOnChangeEventHandler}

@@ -55,10 +55,10 @@ public interface ApplicationModuleSysParamConstants {
 
     String APPLICATION_HEADER_TITLE = "APP-0010";
 
-    String SECTION_INDICATION_ON_MENU = "APP-0011";
+    String SECTOR_INDICATION_ON_MENU = "APP-0011";
 
-    String SECTION_INDICATION_ON_TABS = "APP-0012";
+    String SECTOR_INDICATION_ON_TABS = "APP-0012";
 
-    String SECTION_INDICATION_ON_PAGE = "APP-0013";
+    String SECTOR_INDICATION_ON_PAGE = "APP-0013";
 
 }

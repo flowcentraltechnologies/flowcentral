@@ -355,7 +355,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
                             application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
                             application.getModuleName(), application.getModuleDesc(), application.getModuleLabel(),
-                            application.getModuleShortCode());
+                            application.getModuleShortCode(), application.getSectorShortCode(), application.getSectorColor());
                 }
 
             };

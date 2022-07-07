@@ -57,6 +57,8 @@ public class EntryTablePage {
 
     private final Object baseId;
 
+    private final SectorIcon sectorIcon;
+
     private final BreadCrumbs breadCrumbs;
 
     private final List<EventHandler> entrySwitchOnChangeHandlers;
@@ -79,13 +81,15 @@ public class EntryTablePage {
 
     public EntryTablePage(AppletContext ctx, List<EventHandler> entrySwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
-            BreadCrumbs breadCrumbs, String entryTable, String entryEditPolicy, FilterDef entryFilter) {
+            SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String entryTable, String entryEditPolicy,
+            FilterDef entryFilter) {
         this.ctx = ctx;
         this.entrySwitchOnChangeHandlers = entrySwitchOnChangeHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.entityClassDef = entityClassDef;
         this.baseField = baseField;
         this.baseId = baseId;
+        this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.entryTable = entryTable;
         this.entryEditPolicy = entryEditPolicy;
@@ -98,6 +102,10 @@ public class EntryTablePage {
 
     public String getSubTitle() {
         return breadCrumbs.getLastBreadCrumb().getSubTitle();
+    }
+
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
     }
 
     public BreadCrumbs getBreadCrumbs() {
@@ -163,6 +171,10 @@ public class EntryTablePage {
     public void clearDisplayItem() {
         displayItemCounter = null;
         displayItemCounterClass = null;
+    }
+
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
     }
 
     public void switchOnChange(RowChangeInfo rowChangeInfo) throws UnifyException {
