@@ -182,7 +182,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (enableAttachment) {
                     applet.setFileAttachmentsDisabled(!applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
                             formEntityDef.getAttachPrivilege()));
-                }
+                }               
             } else {
                 enableUpdate = isContextEditable
                         && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getEditPrivilege())
@@ -732,6 +732,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         getEntityFormApplet().listingInst(mIndex);
         getRequestContextUtil().setContentScrollReset();
+    }
+
+    protected SystemModuleService system() {
+        return systemModuleService;
     }
 
     private void handleEntityActionResult(EntityActionResult entityActionResult) throws UnifyException {

@@ -16,16 +16,19 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
+import com.flowcentraltech.flowcentral.workflow.constants.WfStepConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.LongParam;
 
@@ -52,8 +55,16 @@ public class StudioWorkflowFilterListCommand extends AbstractApplicationListComm
     @Override
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
-            return workflowModuleService.findWorkflowFilters((WorkflowFilterQuery) new WorkflowFilterQuery()
-                    .workflowId(longParam.getValue()).addSelect("name", "description"));
+            List<ListData> list = new ArrayList<ListData>();
+            list.add(new ListData(WfStepConstants.RESERVED_READONLY_FILTERNAME,
+                    resolveSessionMessage("$m{studio.workflow.filter.always}")));
+            for (Listable filter : workflowModuleService
+                    .findWorkflowFilters((WorkflowFilterQuery) new WorkflowFilterQuery()
+                            .workflowId(longParam.getValue()).addSelect("name", "description"))) {
+                list.add(new ListData(filter.getListKey(), filter.getListDescription()));
+            }
+
+            return list;
         }
 
         return Collections.emptyList();

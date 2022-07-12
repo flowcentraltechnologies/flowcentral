@@ -13,20 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.flowcentraltech.flowcentral.workflow.constants;
 
 /**
- * Workflow module system parameter constants.
+ * Workflow step constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WorkflowModuleSysParamConstants {
+public interface WfStepConstants {
 
-    String WFTRANSITION_PROCESSING_BATCH_SIZE = "WF-0001";
-
-    String WF_AUTOLOADING_BATCH_SIZE = "WF-0002";
-
-    String WF_ENABLE_UPDATES_ON_REVIEW= "WF-0003";
-
+    String RESERVED_READONLY_FILTERNAME = "__always";
 }
