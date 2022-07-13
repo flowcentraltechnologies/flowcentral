@@ -545,7 +545,7 @@
 			<column field="wfStepName" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="stepDt" renderWidget="application.datetime"
-				widthRatio="2" />
+				widthRatio="2" order="DESC" />
 			<column field="forwardedBy" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="heldBy" renderWidget="application.text"
@@ -562,7 +562,7 @@
 			<column field="wfStepName" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="stepDt" renderWidget="application.datetime"
-				widthRatio="2" />
+				widthRatio="2" order="DESC"/>
 			<column field="forwardedBy" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="heldBy" renderWidget="application.text"

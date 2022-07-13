@@ -1,4 +1,4 @@
-// UPL template for review work items applet panel
+// UPL template for comments panel
 // Copyright 2021-2022 FlowCentral Technologies Limited.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -13,13 +13,10 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-reviewworkitemsappletpanel components:$c{entitySearchPanel}
-	frmActionsHandler:$d{!ui-event event:onclick action:$c{userActionAct}}
+!fc-commentspanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{commentsForm}
 
-// Search list
-!fc-entitysearchpanel:entitySearchPanel binding:entitySearch
-	searchResultMarker:$j{com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants.DEFAULT_LIST}
+!fc-form:commentsForm columns:2 caption:$m{commentspanel.comments}
+	section:$d{!ui-section components:$c{newComment}}
+!ui-textarea:newComment caption:$m{commentspanel.comment} maxLen:512 rows:6
+	binding:newComment
 
-// Actions
-!ui-postcommand:decisionAct command:maintain debounce:true
-!ui-postcommand:userActionAct command:performUserAction components:$c{formPanel commentsPanel}

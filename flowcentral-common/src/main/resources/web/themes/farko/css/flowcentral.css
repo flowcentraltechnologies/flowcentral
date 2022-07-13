@@ -645,15 +645,18 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-assignmentpagepanel {}
 .fc-assignmentpagepanel .ui-assignmentbox .abmselect {height: 472px;}
 
+/** Comments panel */
+.fc-commentspanel {}
+
+/* Child panel */
+.fc-childpanel {}
+.fc-childpanel .fc-miniform {}
+
 /** Edit property list panel */
 .fc-editpropertylistpanel {}
 
 .fc-editpropertylistpanel .mflgap1 {width:24%;}
 .fc-editpropertylistpanel .mfagap1 {width:16%;}
-
-/* Child panel */
-.fc-childpanel {}
-.fc-childpanel .fc-miniform {}
 
 /* Form panel */
 .fc-tabsonlyformpanel {}

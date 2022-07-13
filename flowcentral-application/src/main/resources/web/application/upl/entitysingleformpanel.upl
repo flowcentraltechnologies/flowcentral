@@ -16,10 +16,13 @@
 !fc-entitysingleformpanel mainForm:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{singleForm altActionPanel}
+	components:$c{singleForm commentsPanel altActionPanel}
  
 // Single form
 !fc-singleform:singleForm binding:singleForm
+
+// Comments panel
+!fc-commentspanel:commentsPanel binding:comments
 
 // Alt buttons
 !ui-panel:altActionPanel styleClass:$e{fc-altactionbar} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}

@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
@@ -149,7 +150,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
-        Entity _inst = getEntitySearchItem(entitySearch, mIndex);
+        Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         // Reload
         _inst = reloadEntity(_inst);
         if (form == null) {
@@ -327,8 +328,9 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         return Collections.emptyList();
     }
 
-    protected Entity getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
-        return entitySearch.getEntityTable().getDispItemList().get(index);
+    protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
+        Entity entity = entitySearch.getEntityTable().getDispItemList().get(index);
+        return new EntityItem(entity);
     }
 
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {

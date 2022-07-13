@@ -82,7 +82,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         final boolean isInWorkflow = inst instanceof WorkEntity && ((WorkEntity) inst).isInWorkflow();
         appCtx.setInWorkflow(isInWorkflow);
 
-        final boolean isContextEditable = appCtx.isContextEditable();
+        final boolean isContextEditable = appCtx.isContextEditable(); 
         boolean enableUpdate = false;
         boolean enableDelete = false;
         boolean enableCreate = false;
@@ -114,6 +114,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
+            setVisible("formPanel.commentsPanel", appCtx.isReview());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
         }
 

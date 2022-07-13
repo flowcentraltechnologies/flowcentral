@@ -123,7 +123,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void switchState() throws UnifyException {
         super.switchState();
 
-        final AbstractEntityFormApplet applet = getEntityFormApplet();
+        final AbstractEntityFormApplet applet = getEntityFormApplet(); 
         applet.ensureFormStruct();
 
         final AppletDef formAppletDef = applet.getFormAppletDef();
@@ -204,6 +204,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
+            setVisible("formPanel.commentsPanel", appCtx.isReview());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
             form.getCtx().setFocusMemoryId(focusMemoryId);
             form.getCtx().setTabMemoryId(tabMemoryId);
@@ -264,6 +265,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 switchContent("listingPanel");
                 setDisabled("listPrevBtn", !applet.isPrevNav());
                 setDisabled("listNextBtn", !applet.isNextNav());
+                setVisible("listingPanel.commentsPanel", appCtx.isReview());
                 form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 break;
             case MAINTAIN_FORM_SCROLL:

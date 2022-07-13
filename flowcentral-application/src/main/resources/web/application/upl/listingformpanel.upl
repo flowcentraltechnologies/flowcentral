@@ -16,10 +16,13 @@
 !fc-listingformpanel mainForm:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{listingForm altActionPanel}
+	components:$c{listingForm commentsPanel altActionPanel}
  
 // Header
 !fc-formlisting:listingForm binding:formListing
+
+// Comments panel
+!fc-commentspanel:commentsPanel binding:comments
 
 // Alt buttons
 !ui-panel:altActionPanel styleClass:$e{fc-altactionbar} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}

@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.Comments;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -29,11 +31,11 @@ import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConsta
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
+import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -54,8 +56,8 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
 
     private boolean userActionRight;
 
-    public ReviewSingleFormWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable, String userLoginId)
-            throws UnifyException {
+    public ReviewSingleFormWorkItemsApplet(AppletUtilities au, WorkflowModuleService wms, String pathVariable,
+            String userLoginId) throws UnifyException {
         super(au, pathVariable);
         this.wms = wms;
         AppletDef _appletDef = getRootAppletDef();
@@ -79,8 +81,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     @Override
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
-        getEntitySearchItem(entitySearch, mIndex);
-
+        EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
         if (form == null) {
             form = constructForm(currEntityInst, FormMode.MAINTAIN);
             form.setFormTitle(getRootAppletDef().getLabel());
@@ -88,6 +89,8 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
         } else {
             updateForm(EntitySingleForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
         }
+
+        form.setComments(entityItem.getComments());
 
         // Check if enter read-only mode
         if (wfStepDef.isWithReadOnlyCondition()) {
@@ -104,10 +107,11 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     }
 
     @Override
-    protected Entity getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
+    protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         if (isNoForm()) {
             currWfItem = (WfItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
-            currEntityInst = wms.getWfItemWorkEntity(currWfItem.getId(), WfReviewMode.SINGLEFORM);
+            WorkEntityItem _workEntityItem = wms.getWfItemWorkEntity(currWfItem.getId(), WfReviewMode.SINGLEFORM);
+            currEntityInst = _workEntityItem.getWorkEntity();
             final String currentUser = au.getSessionUserLoginId();
             if (StringUtils.isBlank(currWfItem.getHeldBy())) { // Current user should hold current item if it is unheld
                 currWfItem.setHeldBy(currentUser);
@@ -115,14 +119,17 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
             }
 
             userActionRight = currentUser != null && currentUser.equals(currWfItem.getHeldBy());
-            return currEntityInst;
+            return _workEntityItem;
         }
 
         return super.getEntitySearchItem(entitySearch, index);
     }
 
     public void applyUserAction(String actionName) throws UnifyException {
-        wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, WfReviewMode.SINGLEFORM);
+        Comments comments = form.getComments();
+        String comment = comments != null ? comments.getNewComment() : null;
+        wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
+                WfReviewMode.SINGLEFORM);
         navBackToSearch();
     }
 
@@ -134,8 +141,8 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
         if (userActionRight) {
             form.setWarning(null);
         } else {
-            form.setWarning(au().resolveSessionMessage("$m{entityformapplet.form.inworkflow.heldby}",
-                    currWfItem.getHeldBy()));
+            form.setWarning(
+                    au().resolveSessionMessage("$m{entityformapplet.form.inworkflow.heldby}", currWfItem.getHeldBy()));
         }
     }
 }
