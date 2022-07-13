@@ -32,7 +32,7 @@
 !fc-tabsheet:relatedListTabSheet binding:relatedListTabSheet
 
 // Comments panel
-!fc-commentspanel:commentsPanel binding:comments
+!fc-commentspanel:commentsPanel ignoreParentState:true binding:comments
 
 // Alt buttons
 !ui-panel:altActionPanel styleClass:$e{fc-altactionbar} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
