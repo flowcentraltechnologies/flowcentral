@@ -234,6 +234,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
                                     assignDescField, 0, true, descriptiveButtons, appletName, label);
                             adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfItemReviewTable");
+                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true");
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW, longName);
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP, wfStep.getName());
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP_APPLET, wfStep.getAppletName());

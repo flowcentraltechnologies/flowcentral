@@ -227,11 +227,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public SectorIcon getPageSectorIconByApplication(String applicationName) throws UnifyException {
-        boolean indicatePageSectors = systemModuleService.getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_PAGE);
-        if (indicatePageSectors) {
-            ApplicationDef applicationDef = applicationModuleService.getApplicationDef(applicationName);
-            return new SectorIcon(applicationDef.getSectorShortCode(), applicationDef.getSectorColor());
+        if (!applicationName.startsWith(ApplicationNameUtils.RESERVED_FC_PREFIX)) {
+            boolean indicatePageSectors = systemModuleService.getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_PAGE);
+            if (indicatePageSectors) {
+                ApplicationDef applicationDef = applicationModuleService.getApplicationDef(applicationName);
+                return new SectorIcon(applicationDef.getSectorShortCode(), applicationDef.getSectorColor());
+            }
         }
 
         return null;

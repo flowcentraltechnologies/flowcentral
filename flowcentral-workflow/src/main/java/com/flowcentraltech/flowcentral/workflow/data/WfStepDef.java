@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
+import com.flowcentraltech.flowcentral.workflow.constants.WfStepConstants;
 import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -192,6 +193,11 @@ public class WfStepDef {
 
     public boolean isWithReadOnlyCondition() {
         return !StringUtils.isBlank(readOnlyConditionName);
+    }
+
+    public boolean isReadOnlyAlways() {
+        return readOnlyConditionName != null
+                && WfStepConstants.RESERVED_READONLY_FILTERNAME.equals(readOnlyConditionName);
     }
 
     public String getAutoLoadingConditionName() {

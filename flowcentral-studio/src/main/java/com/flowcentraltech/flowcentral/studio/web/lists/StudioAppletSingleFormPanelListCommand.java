@@ -30,6 +30,7 @@ import com.tcdng.unify.core.list.LongParam;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@SuppressWarnings("rawtypes")
 @Component("studiosingleformpanellist")
 public class StudioAppletSingleFormPanelListCommand extends AbstractEntityTypeListCommand<SingleFormPanel, LongParam> {
 

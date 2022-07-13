@@ -92,7 +92,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
         // Check if enter read-only mode
         if (wfStepDef.isWithReadOnlyCondition()) {
             WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
-            boolean readOnly = wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())
+            boolean readOnly = wfStepDef.isReadOnlyAlways() || wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())
                     .getObjectFilter(wfDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow())
                     .match(new BeanValueStore(currEntityInst));
             getCtx().setReadOnly(readOnly);

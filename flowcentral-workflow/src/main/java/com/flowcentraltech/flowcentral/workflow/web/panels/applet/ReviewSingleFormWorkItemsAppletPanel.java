@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormAppletPanel;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleSysParamConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -45,13 +46,14 @@ public class ReviewSingleFormWorkItemsAppletPanel extends AbstractEntitySingleFo
 
         ReviewSingleFormWorkItemsApplet applet = getReviewWorkItemsApplet();
         boolean userActionRight = applet.isUserActionRight();
-        boolean editable = !applet.getCtx().isReadOnly();
+        boolean editable = applet.getCtx().isContextEditable();
+        boolean update = userActionRight && editable && system().getSysParameterValue(boolean.class,
+                WorkflowModuleSysParamConstants.WF_ENABLE_UPDATES_ON_REVIEW);
         setVisible("frmActionBtns", userActionRight);
-        setVisible("updateBtn", userActionRight && editable);
-        setVisible("updateCloseBtn", userActionRight && editable);
+        setVisible("updateBtn", update);
+        setVisible("updateCloseBtn", update);
         setVisible("listFrmActionBtns", userActionRight);
-        // TODO if userActionRight == false show held by someone else notification
-        
+
         final ReviewSingleFormWorkItemsApplet.ViewMode viewMode = applet.getMode();
         switch (viewMode) {
             case MAINTAIN_FORM_SCROLL:
