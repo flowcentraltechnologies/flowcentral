@@ -206,8 +206,7 @@ public class Form extends AbstractContainer {
                             TriState required = ((Control) widget).getRequired();
                             if (TriState.TRUE.equals(required)
                                     && com.flowcentraltech.flowcentral.common.util.ValidationUtils.isBlank(val)) {
-                                formValidationErrors.addValidationError(widget.getBinding(), getApplicationMessage(
-                                        "form.validation.formfield.required", widget.getCaption()));
+                                addFieldRequiredError(widget.getBinding(), widget.getCaption());
                             }
                         }
                     }
@@ -217,7 +216,15 @@ public class Form extends AbstractContainer {
 
         return formValidationErrors;
     }
-    
+
+    public void addFieldRequiredError(String fieldName, String caption) throws UnifyException {
+        addValidationError(fieldName, getApplicationMessage("form.validation.formfield.required", caption));
+    }
+
+    public void addValidationError(String fieldName, String message) throws UnifyException {
+        formValidationErrors.addValidationError(fieldName, message);
+    }
+
     public void reset() throws UnifyException {
         setEditable(true);
 

@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.util.StringUtils;
@@ -126,15 +127,24 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     }
 
     public void applyUserAction(String actionName) throws UnifyException {
-        Comments comments = form.getComments();
-        String comment = comments != null ? comments.getNewComment() : null;
+        String comment = getNewComment();
         wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
                 WfReviewMode.SINGLEFORM);
         navBackToSearch();
     }
+    
+    public boolean isNewCommentRequired(String actionName) throws UnifyException {
+        RequirementType commentRequirementType = wfStepDef.getUserActionDef(actionName).getCommentRequirement();
+        return RequirementType.MANDATORY.equals(commentRequirementType);
+    }
 
     public boolean isUserActionRight() {
         return userActionRight;
+    }
+
+    private String getNewComment() throws UnifyException {
+        Comments comments = form.getComments();
+        return comments != null ? comments.getNewComment() : null;
     }
 
     private void setDisplayModeMessage(AbstractForm form) throws UnifyException {

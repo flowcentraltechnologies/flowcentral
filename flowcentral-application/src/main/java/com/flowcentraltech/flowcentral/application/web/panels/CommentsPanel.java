@@ -16,8 +16,18 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.data.Comments;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.flowcentraltech.flowcentral.common.web.widgets.Form;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
@@ -28,6 +38,23 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-commentspanel")
 @UplBinding("web/application/upl/commentspanel.upl")
-public class CommentsPanel extends AbstractPanel {
+public class CommentsPanel extends AbstractPanel implements FormPanel {
+
+    @Override
+    public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
+        Comments comments = getValue(Comments.class);
+        if (comments != null) {
+            Form commentsForm = getWidgetByShortName(Form.class, "commentsForm");
+            commentsForm.validate(evaluationMode);
+            if (StringUtils.isBlank(comments.getNewComment())) {
+                commentsForm.addFieldRequiredError("newComment",
+                        resolveSessionMessage("$m{commentspanel.comment.add}"));
+            }
+            
+            return Arrays.asList(commentsForm.getFormValidationErrors());
+        }
+        
+        return Collections.emptyList();
+    }
 
 }

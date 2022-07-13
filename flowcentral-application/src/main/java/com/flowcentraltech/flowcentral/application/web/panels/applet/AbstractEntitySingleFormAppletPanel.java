@@ -16,8 +16,6 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -29,7 +27,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
-import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -82,7 +79,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         final boolean isInWorkflow = inst instanceof WorkEntity && ((WorkEntity) inst).isInWorkflow();
         appCtx.setInWorkflow(isInWorkflow);
 
-        final boolean isContextEditable = appCtx.isContextEditable(); 
+        final boolean isContextEditable = appCtx.isContextEditable();
         boolean enableUpdate = false;
         boolean enableDelete = false;
         boolean enableCreate = false;
@@ -95,14 +92,12 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
             enableUpdate = isContextEditable
-                    && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE,
-                            false)
+                    && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
                     && applet.formBeanMatchAppletPropertyCondition(
                             AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
             enableDelete = !isInWorkflow && isContextEditable
-                    && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE,
-                            false)
+                    && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE, false)
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
                     && applet.formBeanMatchAppletPropertyCondition(
                             AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
@@ -133,8 +128,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
-                setVisible("submitCloseBtn", enableUpdateSubmit && _appletDef.getPropValue(boolean.class,
-                        AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false));
+                setVisible("submitCloseBtn", enableUpdateSubmit
+                        && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false));
                 setVisible("submitNextBtn", enableUpdateSubmit && _appletDef.getPropValue(boolean.class,
                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setVisible("prevBtn", true);
@@ -173,8 +168,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
-                setVisible("submitCloseBtn", enableUpdateSubmit && _appletDef.getPropValue(boolean.class,
-                        AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false));
+                setVisible("submitCloseBtn", enableUpdateSubmit
+                        && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false));
                 setVisible("submitNextBtn", enableUpdateSubmit && _appletDef.getPropValue(boolean.class,
                         AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setVisible("prevBtn", false);
@@ -192,8 +187,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("cancelBtn", true);
                 final boolean allowSaveAndNext = true;
                 if (enableCreate) {
-                    setVisible("saveBtn", _appletDef.getPropValue(boolean.class,
-                            AppletPropertyConstants.CREATE_FORM_SAVE, false));
+                    setVisible("saveBtn",
+                            _appletDef.getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SAVE, false));
                     setVisible("saveNextBtn", allowSaveAndNext && _appletDef.getPropValue(boolean.class,
                             AppletPropertyConstants.CREATE_FORM_SAVE_NEXT, false));
                     setVisible("saveCloseBtn", _appletDef.getPropValue(boolean.class,
@@ -402,17 +397,22 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
     }
 
     protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {
-        return evaluateCurrentFormContext(getEntityFormApplet().getForm().getCtx(), evaluationMode);
+        return evaluateCurrentFormContext(evaluationMode, false);
     }
 
-    private FormContext evaluateCurrentFormContext(FormContext ctx, EvaluationMode evaluationMode)
+    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode, boolean commentRequired)
             throws UnifyException {
+        FormContext ctx = getEntityFormApplet().getForm().getCtx();
         ctx.clearReviewErrors();
         ctx.clearValidationErrors();
         if (evaluationMode.evaluation()) {
             FormPanel formPanel = getWidgetByShortName(FormPanel.class, "formPanel");
-            List<FormValidationErrors> formValidationErrors = formPanel.validate(evaluationMode);
-            ctx.mergeValidationErrors(formValidationErrors);
+            ctx.mergeValidationErrors(formPanel.validate(evaluationMode));
+            if (commentRequired && ctx.getAppletContext().isReview()) {
+                FormPanel commentsformPanel = getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
+                ctx.mergeValidationErrors(commentsformPanel.validate(evaluationMode));
+            }
+
             if (ctx.isWithFormErrors()) {
                 hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
             }

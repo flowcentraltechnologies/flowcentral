@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.util.StringUtils;
@@ -147,11 +148,15 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
     }
 
     public void applyUserAction(String actionName) throws UnifyException {
-        Comments comments = viewMode == ViewMode.LISTING_FORM ? listingForm.getComments() : form.getComments();
-        String comment = comments != null ? comments.getNewComment() : null;
+        String comment = getNewComment();
         wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
                 WfReviewMode.NORMAL);
         navBackToSearch();
+    }
+    
+    public boolean isNewCommentRequired(String actionName) throws UnifyException {
+        RequirementType commentRequirementType = wfStepDef.getUserActionDef(actionName).getCommentRequirement();
+        return RequirementType.MANDATORY.equals(commentRequirementType);
     }
 
     public boolean isUserActionRight() {
@@ -161,6 +166,11 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
     @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         return instAppletDef;
+    }
+
+    private String getNewComment() throws UnifyException {
+        Comments comments = viewMode == ViewMode.LISTING_FORM ? listingForm.getComments() : form.getComments();
+        return comments != null ? comments.getNewComment() : null;
     }
 
     private void setDisplayModeMessage(AbstractForm form) throws UnifyException {
