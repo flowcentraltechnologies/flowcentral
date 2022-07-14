@@ -104,7 +104,8 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
             form.setComments(entityItem.getComments());
 
             // Check if enter read-only mode
-            if (wfStepDef.isWithReadOnlyCondition()) {
+            getCtx().setReadOnly(!userActionRight);
+            if (userActionRight && wfStepDef.isWithReadOnlyCondition()) {
                 WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
                 boolean readOnly = wfStepDef.isReadOnlyAlways()
                         || wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())

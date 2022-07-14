@@ -94,7 +94,8 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
         form.setComments(entityItem.getComments());
 
         // Check if enter read-only mode
-        if (wfStepDef.isWithReadOnlyCondition()) {
+        getCtx().setReadOnly(!userActionRight);
+        if (userActionRight && wfStepDef.isWithReadOnlyCondition()) {
             WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
             boolean readOnly = wfStepDef.isReadOnlyAlways() || wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())
                     .getObjectFilter(wfDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow())
@@ -132,7 +133,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
                 WfReviewMode.SINGLEFORM);
         navBackToSearch();
     }
-    
+
     public boolean isNewCommentRequired(String actionName) throws UnifyException {
         RequirementType commentRequirementType = wfStepDef.getUserActionDef(actionName).getCommentRequirement();
         return RequirementType.MANDATORY.equals(commentRequirementType);

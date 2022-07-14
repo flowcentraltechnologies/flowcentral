@@ -346,8 +346,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public ShowPopupInfo newChildShowPopup(int childTabIndex) throws UnifyException {
         FormTabDef _currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
-        List<FilterDef> filterList = currFormAppletDef.getChildListFilterDefs(_currFormTabDef.getApplet());
-        if (!filterList.isEmpty()) {
+        List<FilterDef> filterList = currFormAppletDef != null
+                ? currFormAppletDef.getChildListFilterDefs(_currFormTabDef.getApplet())
+                : null;
+        if (!DataUtils.isBlank(filterList)) {
             EntityDef entityDef = form.getFormDef().getEntityDef();
             ValueStore formValueStore = form.getCtx().getFormValueStore();
             SpecialParamProvider specialParamProvider = form.getCtx().getAppletContext().getSpecialParamProvider();
