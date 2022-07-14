@@ -266,7 +266,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 switchContent("listingPanel");
                 setDisabled("listPrevBtn", !applet.isPrevNav());
                 setDisabled("listNextBtn", !applet.isNextNav());
-                setVisible("listingPanel.commentsPanel", isRootForm && appCtx.isReview());
+                setVisible("listingPanel.commentsPanel", appCtx.isReview());
                 form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 break;
             case MAINTAIN_FORM_SCROLL:

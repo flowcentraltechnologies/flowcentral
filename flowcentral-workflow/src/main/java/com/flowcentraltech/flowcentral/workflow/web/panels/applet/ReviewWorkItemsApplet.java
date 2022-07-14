@@ -128,6 +128,15 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
         return;
     }
 
+    public boolean navBackToPrevious() throws UnifyException {
+        boolean success = super.navBackToPrevious();
+        if (isRootForm()) {
+            currEntityInst = (WorkEntity) form.getFormBean();
+        }
+
+        return success;
+    }
+
     @Override
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         if (isNoForm()) {
