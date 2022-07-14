@@ -355,7 +355,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
                             application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
                             application.getModuleName(), application.getModuleDesc(), application.getModuleLabel(),
-                            application.getModuleShortCode(), application.getSectorShortCode(), application.getSectorColor());
+                            application.getModuleShortCode(), application.getSectorShortCode(),
+                            application.getSectorColor());
                 }
 
             };
@@ -1586,8 +1587,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
-        List<Application> applicationList = environment()
-                .listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
+        final boolean indicateMenuSectors = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
+        List<Application> applicationList = indicateMenuSectors
+                ? environment().listAll(
+                        new ApplicationQuery().isMenuAccess().addOrder("sectorShortCode", "displayIndex", "label"))
+                : environment().listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
         if (!DataUtils.isBlank(applicationList)) {
             List<ApplicationMenuDef> resultList = new ArrayList<ApplicationMenuDef>();
             final String importApplicationName = systemModuleService.getSysParameterValue(String.class,
