@@ -16,7 +16,7 @@
 !fc-headerwithtabsformpanel mainForm:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{headerMiniForm altActionPanel formTabSheetPanel relatedListPanel}
+	components:$c{headerMiniForm commentsPanel altActionPanel formTabSheetPanel relatedListPanel}
  
 // Header
 !fc-miniform:headerMiniForm binding:headerForm
@@ -30,6 +30,9 @@
 	components:$c{relatedListTitle relatedListTabSheet}
 !ui-label:relatedListTitle styleClass:$s{reltitle} caption:$s{Related Lists}
 !fc-tabsheet:relatedListTabSheet binding:relatedListTabSheet
+
+// Comments panel
+!fc-commentspanel:commentsPanel ignoreParentState:true binding:comments
 
 // Alt buttons
 !ui-panel:altActionPanel styleClass:$e{fc-altactionbar} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}

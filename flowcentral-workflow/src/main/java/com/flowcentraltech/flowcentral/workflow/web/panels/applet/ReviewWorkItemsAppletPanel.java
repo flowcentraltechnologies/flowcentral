@@ -53,7 +53,7 @@ public class ReviewWorkItemsAppletPanel extends AbstractEntityFormAppletPanel {
         setVisible("updateBtn", update);
         setVisible("updateCloseBtn", update);
         setVisible("listFrmActionBtns", userActionRight);
-        
+
         final ReviewWorkItemsApplet.ViewMode viewMode = applet.getMode();
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
@@ -85,10 +85,11 @@ public class ReviewWorkItemsAppletPanel extends AbstractEntityFormAppletPanel {
 
     @Action
     public void performUserAction() throws UnifyException {
+        final String actionName = getRequestTarget(String.class);
         final ReviewWorkItemsApplet applet = getReviewWorkItemsApplet();
-        final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE);
+        final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
+                applet.isNewCommentRequired(actionName));
         if (!ctx.isWithFormErrors()) {
-            final String actionName = getRequestTarget(String.class);
             if (ctx.getFormDef().isInputForm()) {
                 applet.updateInst();
             }

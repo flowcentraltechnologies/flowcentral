@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleEr
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -80,10 +81,12 @@ import com.flowcentraltech.flowcentral.workflow.data.WfSetValuesDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
+import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemEvent;
+import com.flowcentraltech.flowcentral.workflow.entities.WfItemEventQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemHist;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
@@ -114,6 +117,7 @@ import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.constant.LocaleType;
+import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNull;
 import com.tcdng.unify.core.criterion.Or;
@@ -552,26 +556,44 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @SuppressWarnings("unchecked")
     @Override
-    public WorkEntity getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException {
+    public WorkEntityItem getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+        WorkEntity workEntity = null;
         if (wfReviewMode.lean()) {
-            return environment().listLean((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
-                wfItem.getWorkRecId());
+            workEntity = environment().listLean(
+                    (Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(), wfItem.getWorkRecId());
+        } else {
+            workEntity = environment().list((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
+                    wfItem.getWorkRecId());
         }
-        
-        return environment().list((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
-                wfItem.getWorkRecId());
+
+        Comments.Builder cmb = Comments.newBuilder();//
+        List<WfItemEvent> events = environment().findAll(new WfItemEventQuery().wfItemHistId(wfItem.getWfItemHistId())
+                .commentsOnly().addSelect("comment", "actor", "wfAction", "actionDt")
+                .addOrder(OrderType.DESCENDING, "actionDt"));
+        for (WfItemEvent wfItemEvent : events) {
+            cmb.addOldComment(wfItemEvent.getComment(), wfItemEvent.getActor(), wfItemEvent.getWfAction(),
+                    wfItemEvent.getActionDt());
+        }
+
+        return new WorkEntityItem(workEntity, cmb.build());
     }
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
-            final String userAction, WfReviewMode wfReviewMode) throws UnifyException {
+            final String userAction, final String comment, WfReviewMode wfReviewMode) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             WfStepDef prevWfStepDef = wfDef.getWfStepDef(stepName);
             WfUserActionDef userActionDef = prevWfStepDef.getUserActionDef(userAction);
+            // Update current event
+            environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
+                    new Update().add("actor", getUserToken().getUserLoginId()).add("actionDt", getNow())
+                            .add("comment", comment).add("wfAction", userActionDef.getLabel()));
+            
+            // Prepare event for next step
             final Long wfItemEventId = createWfItemEvent(wfDef.getWfStepDef(userActionDef.getNextStepName()),
                     wfItem.getWfItemHistId(), stepName, null, null);
 
@@ -1058,55 +1080,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         return null;
     }
-
-//    private String getNextWorkflowItemAssignee(final TransitionItem transitionItem) throws UnifyException {
-//        final WfItem wfItem = transitionItem.getWfItem();
-//        final WfDef wfDef = transitionItem.getWfDef();
-//        final WfStepDef currWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
-//
-//        String assignee = transitionItem.getForwardTo();
-//        transitionItem.setForwardTo(null);
-//        if (currWfStepDef.isWithParticipatingRoles()) {
-//            String branchCode = null;
-//            if (currWfStepDef.isBranchOnly()) {
-//                branchCode = wfItem.getBranchCode();
-//            }
-//
-//            // Get users participating in step
-//            List<String> participatingUsers = rolePartUserProvider.getParticipatingUsersByRole(branchCode,
-//                    currWfStepDef.getRoleSet());
-//
-//            if (assignee == null || !participatingUsers.contains(assignee)) {
-//                // Get current user workloads
-//                List<GroupAggregation> workloadList = environment().aggregateGroupMany(
-//                        new Aggregate().add(AggregateType.COUNT, "heldBy"),
-//                        new WfItemQuery().wfStepName(currWfStepDef.getName()).addGroupBy("heldBy"));
-//
-//                // Evaluate potential assignees for assignee with lowest load
-//                int lowestLoad = Integer.MAX_VALUE;
-//                for (GroupAggregation workload : workloadList) {
-//                    String userLoginId = (String) workload.getGroupingList().get(0).getValue();
-//                    if (participatingUsers.remove(userLoginId)) {
-//                        int load = (Integer) workload.getAggregationList().get(0).getValue();
-//                        if (load < lowestLoad) {
-//                            lowestLoad = load;
-//                            assignee = userLoginId;
-//                        }
-//
-//                        if (participatingUsers.isEmpty()) {
-//                            break;
-//                        }
-//                    }
-//                }
-//
-//                if (assignee == null && !participatingUsers.isEmpty()) {
-//                    assignee = participatingUsers.get(0);
-//                }
-//            }
-//        }
-//
-//        return assignee;
-//    }
 
     private void sendPassThroughAlerts(final WfStepDef wfStepDef, final TransitionItem transitionItem,
             final String prevStepName) throws UnifyException {

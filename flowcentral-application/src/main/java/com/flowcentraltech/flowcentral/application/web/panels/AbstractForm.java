@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
@@ -71,6 +72,8 @@ public abstract class AbstractForm {
     private SectorIcon sectorIcon;
 
     private BreadCrumbs breadCrumbs;
+    
+    private Comments comments;
     
     private FormMode formMode;
 
@@ -155,6 +158,14 @@ public abstract class AbstractForm {
 
     public BreadCrumbs getBreadCrumbs() {
         return breadCrumbs;
+    }
+
+    public Comments getComments() {
+        return comments;
+    }
+
+    public void setComments(Comments comments) {
+        this.comments = comments;
     }
 
     public List<FormActionDef> getFormActionDefList() {

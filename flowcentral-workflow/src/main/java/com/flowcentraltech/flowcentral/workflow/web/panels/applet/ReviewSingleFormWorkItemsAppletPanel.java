@@ -69,10 +69,11 @@ public class ReviewSingleFormWorkItemsAppletPanel extends AbstractEntitySingleFo
 
     @Action
     public void performUserAction() throws UnifyException {
+        final String actionName = getRequestTarget(String.class);
         final ReviewSingleFormWorkItemsApplet applet = getReviewWorkItemsApplet();
-        final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE);
+        final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
+                applet.isNewCommentRequired(actionName));
         if (!ctx.isWithFormErrors()) {
-            final String actionName = getRequestTarget(String.class);
             applet.updateInst();
             applet.applyUserAction(actionName);
             hintUser("$m{reviewsingleformworkitemsapplet.apply.success.hint}");

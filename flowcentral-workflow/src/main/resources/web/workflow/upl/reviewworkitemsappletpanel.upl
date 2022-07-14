@@ -22,4 +22,4 @@
 
 // Actions
 !ui-postcommand:decisionAct command:maintain debounce:true
-!ui-postcommand:userActionAct command:performUserAction components:$c{formPanel}
+!ui-postcommand:userActionAct command:performUserAction components:$c{formPanel listingPanel}

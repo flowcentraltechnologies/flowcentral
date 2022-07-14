@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.EditPropertyList;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySaveAs;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants;
+import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntryTablePage;
@@ -182,7 +183,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (enableAttachment) {
                     applet.setFileAttachmentsDisabled(!applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
                             formEntityDef.getAttachPrivilege()));
-                }               
+                }
             } else {
                 enableUpdate = isContextEditable
                         && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getEditPrivilege())
@@ -204,6 +205,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
+            setVisible("formPanel.commentsPanel", isRootForm && appCtx.isReview());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
             form.getCtx().setFocusMemoryId(focusMemoryId);
             form.getCtx().setTabMemoryId(tabMemoryId);
@@ -264,6 +266,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 switchContent("listingPanel");
                 setDisabled("listPrevBtn", !applet.isPrevNav());
                 setDisabled("listNextBtn", !applet.isNextNav());
+                setVisible("listingPanel.commentsPanel", appCtx.isReview());
                 form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 break;
             case MAINTAIN_FORM_SCROLL:
@@ -408,9 +411,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             default:
                 break;
         }
-        
-        logDebug("Switching completed for form applet panel [{0}].", formAppletDef != null ? formAppletDef.getLongName() : null);
-   }
+
+        logDebug("Switching completed for form applet panel [{0}].",
+                formAppletDef != null ? formAppletDef.getLongName() : null);
+    }
 
     @Action
     public void newInst() throws UnifyException {
@@ -798,10 +802,27 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         return getValue(AbstractEntityFormApplet.class);
     }
 
-    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {
+    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode)
+            throws UnifyException {
+        return evaluateCurrentFormContext(evaluationMode, false);
+    }
+    
+    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode, boolean commentRequired)
+            throws UnifyException {
         FormContext ctx = getEntityFormApplet().getResolvedForm().getCtx();
         if (ctx.getFormDef().isInputForm()) {
             evaluateCurrentFormContext(ctx, evaluationMode);
+        }
+
+        if (evaluationMode.evaluation()) {
+            if (commentRequired && ctx.getAppletContext().isReview()) {
+                AbstractEntityFormApplet applet = getEntityFormApplet();
+                final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
+                FormPanel commentsformPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
+                        ? getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel")
+                        : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
+                ctx.mergeValidationErrors(commentsformPanel.validate(evaluationMode));
+            }
         }
 
         return ctx;

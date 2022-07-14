@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
+import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
@@ -251,7 +252,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @throws UnifyException
      *                        if an error occurs
      */
-    WorkEntity getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
+    WorkEntityItem getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
 
     /**
      * Applies user action on workflow item.
@@ -264,6 +265,8 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                     the workflow step name
      * @param userAction
      *                     the user action to apply
+     * @param comment
+     *                     optional comment
      * @param wfReviewMode
      *                     the review mode
      * @return true if successfully applied otherwise false when workflow item is
@@ -271,7 +274,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @throws UnifyException
      *                        if an error occurs
      */
-    boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction,
+    boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction, String comment,
             WfReviewMode wfReviewMode) throws UnifyException;
 
     /**

@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormRelatedListDef;
@@ -345,8 +346,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public ShowPopupInfo newChildShowPopup(int childTabIndex) throws UnifyException {
         FormTabDef _currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
-        List<FilterDef> filterList = currFormAppletDef.getChildListFilterDefs(_currFormTabDef.getApplet());
-        if (!filterList.isEmpty()) {
+        List<FilterDef> filterList = currFormAppletDef != null
+                ? currFormAppletDef.getChildListFilterDefs(_currFormTabDef.getApplet())
+                : null;
+        if (!DataUtils.isBlank(filterList)) {
             EntityDef entityDef = form.getFormDef().getEntityDef();
             ValueStore formValueStore = form.getCtx().getFormValueStore();
             SpecialParamProvider specialParamProvider = form.getCtx().getAppletContext().getSpecialParamProvider();
@@ -541,7 +544,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
-        Entity _inst = getEntitySearchItem(entitySearch, mIndex);
+        Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         _inst = reloadEntity(_inst, true);
         if (form == null) {
             form = constructForm(_inst, FormMode.MAINTAIN, null, false);
@@ -555,7 +558,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void listingInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
-        Entity _inst = getEntitySearchItem(entitySearch, mIndex);
+        Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         _inst = reloadEntity(_inst, true);
         listingForm = constructListingForm(_inst);
         viewMode = ViewMode.LISTING_FORM;
@@ -564,7 +567,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void maintainChildInst(int mIndex) throws UnifyException {
         EntitySearch _entitySearch = (EntitySearch) form.getTabSheet().getCurrentItem().getValObject();
-        Entity _inst = getEntitySearchItem(_entitySearch, mIndex);
+        Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
         maintainChildInst(_inst, _entitySearch.getChildTabIndex());
     }
 
@@ -584,7 +587,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void maintainRelatedInst(int mIndex) throws UnifyException {
         EntitySearch _entitySearch = (EntitySearch) form.getRelatedListTabSheet().getCurrentItem().getValObject();
-        Entity _inst = getEntitySearchItem(_entitySearch, mIndex);
+        Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
         _inst = reloadEntity(_inst, true);
         FormRelatedListDef _formRelatedListDef = form.getFormDef()
                 .getFormRelatedListDef(_entitySearch.getRelatedList());
@@ -602,7 +605,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public void maintainHeadlessInst(int mIndex) throws UnifyException {
         TabSheetItem tabSheetItem = headlessForm.getHeadlessTabSheet().getCurrentItem();
         EntitySearch _entitySearch = (EntitySearch) tabSheetItem.getValObject();
-        Entity _inst = getEntitySearchItem(_entitySearch, mIndex);
+        Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
         _inst = reloadEntity(_inst, true);
         final AppletDef hdlAppletDef = getAppletDef(tabSheetItem.getAppletName());
         saveCurrentForm();
@@ -1018,8 +1021,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return Collections.emptyList();
     }
 
-    protected Entity getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
-        return entitySearch.getEntityTable().getDispItemList().get(index);
+    protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
+        Entity entity = entitySearch.getEntityTable().getDispItemList().get(index);
+        return new EntityItem(entity);
     }
 
     public static class ShowPopupInfo {
