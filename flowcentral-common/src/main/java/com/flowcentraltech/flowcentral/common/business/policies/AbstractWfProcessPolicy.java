@@ -16,8 +16,10 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for workflow process policies.
@@ -35,6 +37,22 @@ public abstract class AbstractWfProcessPolicy extends AbstractUnifyComponent imp
     @Override
     protected void onTerminate() throws UnifyException {
 
+    }
+
+    /**
+     * Sets the process error document.
+     * 
+     * @param wfItemReader
+     *                     the workflow item reader
+     * @param errorDoc
+     *                     the error document
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected void setErrorDoc(ValueStoreReader wfItemReader, Object errorDoc) throws UnifyException {
+        if (errorDoc != null) {
+            wfItemReader.setTempValue(ProcessErrorConstants.ERROR_DOC, errorDoc);
+        }
     }
 
 }
