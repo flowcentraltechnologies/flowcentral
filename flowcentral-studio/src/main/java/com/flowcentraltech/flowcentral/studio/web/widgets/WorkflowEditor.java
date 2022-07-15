@@ -307,6 +307,7 @@ public class WorkflowEditor {
                 break;
             case USER_ACTION:
                 editStep.setUserActionList(new ArrayList<WfStepUserAction>());
+                editStep.setComments(true);
                 break;
             case START:
             case ERROR:

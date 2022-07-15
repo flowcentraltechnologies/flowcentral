@@ -52,6 +52,8 @@ public class AppletContext extends AbstractContext {
     
     private boolean review;
     
+    private boolean comments;
+    
     public AppletContext(AbstractApplet applet, AppletUtilities au) {
         this.applet = applet;
         this.au = au;
@@ -112,6 +114,14 @@ public class AppletContext extends AbstractContext {
 
     public void setReview(boolean review) {
         this.review = review;
+    }
+
+    public boolean isComments() {
+        return comments;
+    }
+
+    public void setComments(boolean comments) {
+        this.comments = comments;
     }
 
     public boolean isInWorkflow() {

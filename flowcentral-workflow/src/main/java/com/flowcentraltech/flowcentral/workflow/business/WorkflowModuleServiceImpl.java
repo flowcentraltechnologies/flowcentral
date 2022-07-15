@@ -256,7 +256,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
-                                wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered());
+                                wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
+                                wfStep.isComments());
 
                         if (wfStep.getSetValues() != null) {
                             wsdb.addWfSetValuesDef(new WfSetValuesDef(
@@ -567,17 +568,23 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workEntity = environment().list((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
                     wfItem.getWorkRecId());
         }
+        
+        Comments comments = null;
+        WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+        if (wfStepDef.isComments()) {
+            Comments.Builder cmb = Comments.newBuilder();//
+            List<WfItemEvent> events = environment().findAll(new WfItemEventQuery().wfItemHistId(wfItem.getWfItemHistId())
+                    .commentsOnly().addSelect("comment", "actor", "wfAction", "actionDt")
+                    .addOrder(OrderType.DESCENDING, "actionDt"));
+            for (WfItemEvent wfItemEvent : events) {
+                cmb.addOldComment(wfItemEvent.getComment(), wfItemEvent.getActor(), wfItemEvent.getWfAction(),
+                        wfItemEvent.getActionDt());
+            }
 
-        Comments.Builder cmb = Comments.newBuilder();//
-        List<WfItemEvent> events = environment().findAll(new WfItemEventQuery().wfItemHistId(wfItem.getWfItemHistId())
-                .commentsOnly().addSelect("comment", "actor", "wfAction", "actionDt")
-                .addOrder(OrderType.DESCENDING, "actionDt"));
-        for (WfItemEvent wfItemEvent : events) {
-            cmb.addOldComment(wfItemEvent.getComment(), wfItemEvent.getActor(), wfItemEvent.getWfAction(),
-                    wfItemEvent.getActionDt());
+            comments = cmb.build();
         }
-
-        return new WorkEntityItem(workEntity, cmb.build());
+        
+        return new WorkEntityItem(workEntity, comments);
     }
 
     @Override

@@ -150,6 +150,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfStepConfig.setBranchOnly(wfStep.isBranchOnly());
                         wfStepConfig.setIncludeForwarder(wfStep.isIncludeForwarder());
                         wfStepConfig.setForwarderPreffered(wfStep.isForwarderPreffered());
+                        wfStepConfig.setComments(wfStep.isComments());
                         wfStepConfig.setNextStepName(wfStep.getNextStepName());
                         wfStepConfig.setAltNextStepName(wfStep.getAltNextStepName());
                         wfStepConfig.setBinaryCondition(wfStep.getBinaryConditionName());

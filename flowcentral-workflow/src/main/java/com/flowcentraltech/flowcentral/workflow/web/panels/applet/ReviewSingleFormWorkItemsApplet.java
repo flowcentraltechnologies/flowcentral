@@ -83,6 +83,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
+        getCtx().setComments(wfStepDef.isComments());
         if (form == null) {
             form = constructForm(currEntityInst, FormMode.MAINTAIN);
             form.setFormTitle(getRootAppletDef().getLabel());
