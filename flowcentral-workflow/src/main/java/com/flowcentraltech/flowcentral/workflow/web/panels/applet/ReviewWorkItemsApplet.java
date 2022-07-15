@@ -128,6 +128,7 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
         return;
     }
 
+    @Override
     public boolean navBackToPrevious() throws UnifyException {
         boolean success = super.navBackToPrevious();
         if (isRootForm()) {
