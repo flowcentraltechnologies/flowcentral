@@ -222,10 +222,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-commentlisting .codd:hover {background-color:#d5e7fb;}
 .fc-commentlisting .ceven {display:table-row;background-color:#f4f4f4;}
 .fc-commentlisting .ceven:hover {background-color: #d5e7fb;}
-.fc-commentlisting .cserialno {display:table-cell;width:32px;padding-left:2px;}
-.fc-commentlisting .cbody {display:table-cell;padding-bottom:6px;}
+.fc-commentlisting .cuserimage {display:table-cell;width:36px;padding-left:2px;vertical-align:top;}
+.fc-commentlisting .cuserimage .image {width:32px;padding-top:6px;}
+.fc-commentlisting .cbody {display:table-cell;padding:6px 0px;}
 .fc-commentlisting .ccontent {display:table-cell;text-align:left;word-wrap:break-word;font-size:12px;padding:6px 0px 6px 2px;}
-.fc-commentlisting .clabel {display:table-cell;text-align:right;word-wrap:break-word;color:#404040;font-size:10px;font-weight:bold;padding-right:2px;}
+.fc-commentlisting .clabel {display:table-cell;text-align:left;word-wrap:break-word;color:#404040;font-size:10px;font-weight:bold;padding-right:2px;}
 
 /** Dashboard slate*/
 .fc-dashboardslate {width:100%;}

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
@@ -77,9 +78,6 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     private UserLoginActivityProvider userLoginActivityProvider;
 
     @Configurable
-    private LoginUserPhotoGenerator userPhotoGenerator;
-
-    @Configurable
     private LicenseProvider licenseProvider;
 
     public ApplicationController() {
@@ -92,10 +90,6 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     public void setUserLoginActivityProvider(UserLoginActivityProvider userLoginActivityProvider) {
         this.userLoginActivityProvider = userLoginActivityProvider;
-    }
-
-    public void setUserPhotoGenerator(LoginUserPhotoGenerator userPhotoGenerator) {
-        this.userPhotoGenerator = userPhotoGenerator;
     }
 
     public void setLicenseProvider(LicenseProvider licenseProvider) {
@@ -181,6 +175,8 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     protected void onInitPage() throws UnifyException {
         super.onInitPage();
         ApplicationPageBean pageBean = getPageBean();
+        LoginUserPhotoGenerator userPhotoGenerator = (LoginUserPhotoGenerator) getComponent(
+                ApplicationModuleNameConstants.LOGIN_USER_PHOTO_GENERATOR);
         pageBean.setUserPhotoGenerator(userPhotoGenerator);
 
         final boolean enableMultipleTabs = system().getSysParameterValue(boolean.class,

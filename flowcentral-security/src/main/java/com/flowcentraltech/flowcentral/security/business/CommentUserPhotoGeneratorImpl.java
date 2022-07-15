@@ -16,23 +16,31 @@
 
 package com.flowcentraltech.flowcentral.security.business;
 
+import com.flowcentraltech.flowcentral.application.business.CommentUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
-import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
+import com.flowcentraltech.flowcentral.application.data.Comment;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 
 /**
- * Logged in user photo generator implementation.
+ * Comment user photo generator implementation.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(ApplicationModuleNameConstants.LOGIN_USER_PHOTO_GENERATOR)
-public class LoginUserPhotoGeneratorImpl extends AbstractUserPhotoGenerator implements LoginUserPhotoGenerator {
+@Component(ApplicationModuleNameConstants.COMMENT_USER_PHOTO_GENERATOR)
+public class CommentUserPhotoGeneratorImpl extends AbstractUserPhotoGenerator implements CommentUserPhotoGenerator {
+
+    private Comment comment;
+
+    @Override
+    public void setComment(Comment comment) throws UnifyException {
+        this.comment = comment;
+    }
 
     @Override
     protected String getUserLoginId() throws UnifyException {
-        return getUserToken().getUserLoginId();
+        return comment != null ? comment.getCommentBy() : null;
     }
 
 }

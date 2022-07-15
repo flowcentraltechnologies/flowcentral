@@ -13,19 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.security.constants;
+
+package com.flowcentraltech.flowcentral.application.business;
+
+import com.flowcentraltech.flowcentral.application.data.Comment;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.resource.ImageGenerator;
 
 /**
- * Security module name constants.
+ * Comment user photo generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SecurityModuleNameConstants {
+public interface CommentUserPhotoGenerator extends ImageGenerator {
 
-    String SECURITY_MODULE_NAME = "security";
-
-    String SECURITY_MODULE_SERVICE = "security-moduleservice";
-
-    String SECURITY_REQUEST_USER_PHOTO_GENERATOR = "security-requestuserphotogenerator";
+    /**
+     * Sets the generator current comment.
+     * 
+     * @param comment
+     *                the comment to set
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setComment(Comment comment) throws UnifyException;
 }
