@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -29,7 +30,9 @@ import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
+import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -47,7 +50,7 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
-    
+
     public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
     }
@@ -85,6 +88,8 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
             wfStep.setName("error");
             wfStep.setDescription("Error");
             wfStep.setLabel("Error");
+            WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(null);
+            wfStep.setUserActionList(Arrays.asList(recoverUserAction));
             stepList.add(wfStep);
 
             workflow.setStepList(stepList);
@@ -97,7 +102,7 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
         Workflow workflow = (Workflow) ctx.getInst();
         final Long applicationId = workflow.getApplicationId();
         final String applicationName = application().getApplicationName(applicationId);
-        
+
         WfChannel wfChannel = new WfChannel();
         wfChannel.setApplicationId(applicationId);
         wfChannel.setName(workflow.getName());
@@ -105,10 +110,11 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
         wfChannel.setDescription(description);
         wfChannel.setLabel(description);
         wfChannel.setEntity(workflow.getEntity());
-        wfChannel.setDestination(ApplicationNameUtils.getApplicationEntityLongName(applicationName, workflow.getName()));
+        wfChannel
+                .setDestination(ApplicationNameUtils.getApplicationEntityLongName(applicationName, workflow.getName()));
         wfChannel.setDirection(ChannelDirectionType.INWARD);
         wfChannel.setStatus(WfChannelStatus.OPEN);
-        
+
         workflowModuleService.createWorkflowChannel(wfChannel);
         return result;
     }

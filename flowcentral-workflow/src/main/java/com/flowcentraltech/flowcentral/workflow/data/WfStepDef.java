@@ -310,7 +310,11 @@ public class WfStepDef {
     }
 
     public boolean isUserInteractive() {
-        return type.isUserInteractive();
+        return type.isInteractive();
+    }
+
+    public boolean isUserAction() {
+        return type.isUserAction();
     }
 
     public boolean isStart() {
@@ -438,7 +442,7 @@ public class WfStepDef {
                 throw new RuntimeException("User action with name [" + name + "] already exists in this step.");
             }
 
-            if (!WorkflowStepType.USER_ACTION.equals(type)) {
+            if (!type.isInteractive()) {
                 throw new RuntimeException("Can not add user action policy to step type [" + type + "].");
             }
 

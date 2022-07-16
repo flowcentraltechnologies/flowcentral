@@ -227,7 +227,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     for (WfStep wfStep : workflow.getStepList()) {
                         AppletDef appletDef = null;
-                        if (wfStep.getType().isUserInteractive()) {
+                        if (wfStep.getType().isInteractive()) {
+                            final boolean useraction = wfStep.getType().isUserAction();
                             AppletDef _stepAppletDef = appService.getAppletDef(wfStep.getAppletName());
                             AppletType _reviewAppletType = _stepAppletDef.getType().isSingleForm()
                                     ? AppletType.REVIEW_SINGLEFORMWORKITEMS
@@ -238,8 +239,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String assignDescField = null;
                             AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
                                     assignDescField, 0, true, descriptiveButtons, appletName, label);
-                            adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfItemReviewTable");
-                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true");
+                            final String table = useraction ? "workflow.wfItemReviewTable" : "workflow.wfItemRecoveryTable";
+                            final String update = useraction ? "true" : "false";
+                            adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, table);
+                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, update);
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW, longName);
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP, wfStep.getName());
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP_APPLET, wfStep.getAppletName());
