@@ -386,6 +386,10 @@
 				type="string" maxLen="32"  nullable="true" />
 			<field name="errorMsg" label="$m{workflow.wfitemevent.errormsg}"
 				type="string" nullable="true" />
+			<field name="errorTrace" label="$m{workflow.wfitemevent.errortrace}"
+				type="string" nullable="true" />
+			<field name="errorDoc" label="$m{workflow.wfitemevent.errordoc}"
+				type="string" nullable="true" />
 			<field name="applicationName"
 				label="$m{workflow.wfitemevent.applicationname}" type="list_only"
 				key="wfItemHistId" property="applicationName" />
@@ -443,10 +447,16 @@
 				type="list_only" key="wfItemEventId" property="priority" />
 			<field name="priorityDesc" label="$m{workflow.wfitem.priority}"
 				type="list_only" key="wfItemEventId" property="priorityDesc" />
+			<field name="prevWfStepName" label="$m{workflow.wfitem.prevwfstepname}"
+				type="list_only" key="wfItemEventId" property="prevWfStepName" />
 			<field name="errorCode" label="$m{workflow.wfitem.errorcode}"
 				type="list_only" key="wfItemEventId" property="errorCode" />
 			<field name="errorMsg" label="$m{workflow.wfitem.errormsg}"
 				type="list_only" key="wfItemEventId" property="errorMsg" />
+			<field name="errorTrace" label="$m{workflow.wfitem.errortrace}"
+				type="list_only" key="wfItemEventId" property="errorTrace" />
+			<field name="errorDoc" label="$m{workflow.wfitem.errordoc}"
+				type="list_only" key="wfItemEventId" property="errorDoc" />
 		</entity>
 		<entity name="wfWizardItem" description="$m{workflow.wfwizarditem}"
 			label="$m{workflow.wfwizarditem.label}"

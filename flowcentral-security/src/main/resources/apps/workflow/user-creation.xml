@@ -63,7 +63,11 @@
 			label="$m{security.workflow.usercreation.step.end.label}" />
 		<step type="error" name="error"
 			description="$m{security.workflow.usercreation.step.error}"
-			label="$m{security.workflow.usercreation.step.error.label}">
+			label="$m{security.workflow.usercreation.step.error.label}"
+			applet="security.manageUser">
+			<setValues>
+				<setValue field="workflowStatus" value="ERR" />
+			</setValues>
 			<userActions>
 				<userAction name="recover"
 					description="$m{security.workflow.usercreation.useraction.recover}"

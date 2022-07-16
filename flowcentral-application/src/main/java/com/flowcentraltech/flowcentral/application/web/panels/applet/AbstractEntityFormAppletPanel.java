@@ -206,6 +206,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
             setVisible("formPanel.commentsPanel", isRootForm && appCtx.isReview() && appCtx.isComments());
+            setVisible("formPanel.errorsPanel", isRootForm && appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
             form.getCtx().setFocusMemoryId(focusMemoryId);
             form.getCtx().setTabMemoryId(tabMemoryId);
@@ -267,6 +268,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setDisabled("listPrevBtn", !applet.isPrevNav());
                 setDisabled("listNextBtn", !applet.isNextNav());
                 setVisible("listingPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
+                setVisible("listingPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
                 form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 break;
             case MAINTAIN_FORM_SCROLL:

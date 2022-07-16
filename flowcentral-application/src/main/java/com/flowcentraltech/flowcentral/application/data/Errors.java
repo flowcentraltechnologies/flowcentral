@@ -14,30 +14,38 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.workflow.data;
-
-import com.flowcentraltech.flowcentral.application.data.Comments;
-import com.flowcentraltech.flowcentral.application.data.EntityItem;
-import com.flowcentraltech.flowcentral.application.data.Errors;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+package com.flowcentraltech.flowcentral.application.data;
 
 /**
- * Work entity item
+ * Errors.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WorkEntityItem extends EntityItem {
+public class Errors {
 
-    public WorkEntityItem(WorkEntity entity, Comments comments, Errors errors) {
-        super(entity, comments, errors);
+    private String message;
+
+    private String trace;
+
+    private String document;
+
+    public Errors(String message, String trace, String document) {
+        this.message = message;
+        this.trace = trace;
+        this.document = document;
     }
 
-    public WorkEntityItem(WorkEntity entity) {
-        super(entity);
+    public String getMessage() {
+        return message;
     }
 
-    public WorkEntity getWorkEntity() {
-        return (WorkEntity) getEntity();
+    public String getTrace() {
+        return trace;
     }
+
+    public String getDocument() {
+        return document;
+    }
+
 }

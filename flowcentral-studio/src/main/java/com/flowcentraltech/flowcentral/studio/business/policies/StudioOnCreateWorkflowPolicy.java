@@ -87,7 +87,7 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
             wfStep.setPriority(WorkflowStepPriority.NORMAL);
             wfStep.setName("error");
             wfStep.setDescription("Error");
-            wfStep.setLabel("Error");
+            wfStep.setLabel(workflow.getLabel() + " Error");
             WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(null);
             wfStep.setUserActionList(Arrays.asList(recoverUserAction));
             stepList.add(wfStep);

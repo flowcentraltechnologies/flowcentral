@@ -36,6 +36,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -227,7 +228,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     for (WfStep wfStep : workflow.getStepList()) {
                         AppletDef appletDef = null;
-                        if (wfStep.getType().isInteractive()) {
+                        if (wfStep.getType().isInteractive() && !StringUtils.isBlank(wfStep.getAppletName())) {
                             final boolean useraction = wfStep.getType().isUserAction();
                             AppletDef _stepAppletDef = appService.getAppletDef(wfStep.getAppletName());
                             AppletType _reviewAppletType = _stepAppletDef.getType().isSingleForm()
@@ -243,6 +244,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String update = useraction ? "true" : "false";
                             adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, table);
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, update);
+                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "false");
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW, longName);
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP, wfStep.getName());
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP_APPLET, wfStep.getAppletName());
@@ -588,7 +590,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             comments = cmb.build();
         }
 
-        return new WorkEntityItem(workEntity, comments);
+        Errors errors = null;
+        if (wfStepDef.isError()) {
+            errors = new Errors(wfItem.getErrorMsg(), wfItem.getErrorTrace(), wfItem.getErrorDoc());
+        }
+        
+        return new WorkEntityItem(workEntity, comments, errors);
     }
 
     @Override

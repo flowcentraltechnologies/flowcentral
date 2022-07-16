@@ -52,6 +52,8 @@ public class AppletContext extends AbstractContext {
     
     private boolean review;
     
+    private boolean recovery;
+    
     private boolean comments;
     
     public AppletContext(AbstractApplet applet, AppletUtilities au) {
@@ -114,6 +116,14 @@ public class AppletContext extends AbstractContext {
 
     public void setReview(boolean review) {
         this.review = review;
+    }
+
+    public boolean isRecovery() {
+        return recovery;
+    }
+
+    public void setRecovery(boolean recovery) {
+        this.recovery = recovery;
     }
 
     public boolean isComments() {

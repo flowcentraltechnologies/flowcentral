@@ -30,9 +30,12 @@ public class EntityItem {
     
     private Comments comments;
 
-    public EntityItem(Entity entity, Comments comments) {
+    private Errors errors;
+    
+    public EntityItem(Entity entity, Comments comments, Errors errors) {
         this.entity = entity;
         this.comments = comments;
+        this.errors = errors;
     }
 
     public EntityItem(Entity entity) {
@@ -45,5 +48,9 @@ public class EntityItem {
 
     public Comments getComments() {
         return comments;
+    }
+
+    public Errors getErrors() {
+        return errors;
     }
 }
