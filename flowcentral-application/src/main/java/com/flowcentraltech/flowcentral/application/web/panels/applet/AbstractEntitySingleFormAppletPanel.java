@@ -112,6 +112,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             setVisible("formPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
             setVisible("formPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
+            setEditable("formPanel.errorsPanel", false);
         }
 
         if (form != null) {

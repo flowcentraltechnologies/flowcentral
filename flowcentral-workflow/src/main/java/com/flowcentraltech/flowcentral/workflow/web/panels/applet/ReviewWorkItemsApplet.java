@@ -124,6 +124,8 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
             listingForm.setFormTitle(getRootAppletDef().getLabel());
             listingForm.setFormActionDefList(wfStepDef.getFormActionDefList());
             listingForm.setComments(entityItem.getComments());
+            listingForm.setErrors(entityItem.getErrors());
+            getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
             setDisplayModeMessage(listingForm);
             viewMode = ViewMode.LISTING_FORM;
         }
