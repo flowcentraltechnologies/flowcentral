@@ -41,6 +41,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.Editable;
 import com.tcdng.unify.core.data.ListData;
@@ -256,7 +257,8 @@ public class WorkflowEditor {
                             }
                         }
                             break;
-                        case USER_ACTION: {
+                        case USER_ACTION:
+                        case ERROR: {
                             for (WfStepUserAction stepUserAction : wfStep.getUserActionList()) {
                                 DesignWfStepRouting routingChange = routingChangeMap.get(stepUserAction.getName());
                                 if (routingChange != null) {
@@ -264,8 +266,6 @@ public class WorkflowEditor {
                                 }
                             }
                         }
-                            break;
-                        case ERROR:
                             break;
                         case END:
                             break;
@@ -307,6 +307,7 @@ public class WorkflowEditor {
                 break;
             case USER_ACTION:
                 editStep.setUserActionList(new ArrayList<WfStepUserAction>());
+                editStep.setComments(true);
                 break;
             case START:
             case ERROR:
@@ -507,6 +508,11 @@ public class WorkflowEditor {
         }
 
         public Builder addStep(WfStep step) throws UnifyException {
+            if (step.getType().isError() && DataUtils.isBlank(step.getUserActionList())) {
+                WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(step.getId());
+                step.setUserActionList(Arrays.asList(recoverUserAction));
+            }
+            
             workflowSteps.put(step.getName(), step);
             stepList.add(DesignWfStep.from(au, step, routingLabels));
             return this;
@@ -903,12 +909,11 @@ public class WorkflowEditor {
                 routings.add(new DesignWfStepRouting("default", routingLabels.get("default"), step.getNextStepName()));
                 break;
             case USER_ACTION:
+            case ERROR:
                 for (WfStepUserAction stepUserAction : step.getUserActionList()) {
                     routings.add(new DesignWfStepRouting(stepUserAction.getName(), stepUserAction.getLabel(),
                             stepUserAction.getNextStepName()));
                 }
-                break;
-            case ERROR:
                 break;
             case END:
                 break;

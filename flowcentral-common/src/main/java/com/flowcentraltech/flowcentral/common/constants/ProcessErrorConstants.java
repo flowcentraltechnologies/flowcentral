@@ -13,19 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.security.constants;
+
+package com.flowcentraltech.flowcentral.common.constants;
 
 /**
- * Security module name constants.
+ * Process error constants
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SecurityModuleNameConstants {
+public interface ProcessErrorConstants {
 
-    String SECURITY_MODULE_NAME = "security";
-
-    String SECURITY_MODULE_SERVICE = "security-moduleservice";
-
-    String SECURITY_REQUEST_USER_PHOTO_GENERATOR = "security-requestuserphotogenerator";
+    String ERROR_DOC = "process-errordoc";
 }

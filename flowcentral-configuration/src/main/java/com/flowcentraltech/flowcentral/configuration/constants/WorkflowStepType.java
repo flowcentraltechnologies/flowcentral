@@ -219,7 +219,11 @@ public enum WorkflowStepType implements EnumConst {
         return SET_VALUES.equals(this);
     }
 
-    public boolean isUserInteractive() {
+    public boolean isInteractive() {
+        return USER_ACTION.equals(this) || ERROR.equals(this);
+    }
+
+    public boolean isUserAction() {
         return USER_ACTION.equals(this);
     }
 

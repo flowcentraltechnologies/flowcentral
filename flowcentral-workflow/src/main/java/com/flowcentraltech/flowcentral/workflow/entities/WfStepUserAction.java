@@ -53,7 +53,7 @@ public class WfStepUserAction extends BaseNamedEntity {
     @Column(length = 64, nullable = true)
     private String styleClass;
 
-    @Column(name = "NEXT_STEP_NM", length = 64)
+    @Column(name = "NEXT_STEP_NM", length = 64, nullable = true)
     private String nextStepName;
 
     @Column

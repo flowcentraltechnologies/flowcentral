@@ -13,19 +13,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.security.constants;
+
+package com.flowcentraltech.flowcentral.application.data;
 
 /**
- * Security module name constants.
+ * Errors.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SecurityModuleNameConstants {
+public class Errors {
 
-    String SECURITY_MODULE_NAME = "security";
+    private String message;
 
-    String SECURITY_MODULE_SERVICE = "security-moduleservice";
+    private String trace;
 
-    String SECURITY_REQUEST_USER_PHOTO_GENERATOR = "security-requestuserphotogenerator";
+    private String document;
+
+    public Errors(String message, String trace, String document) {
+        this.message = message;
+        this.trace = trace;
+        this.document = document;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getTrace() {
+        return trace;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
 }

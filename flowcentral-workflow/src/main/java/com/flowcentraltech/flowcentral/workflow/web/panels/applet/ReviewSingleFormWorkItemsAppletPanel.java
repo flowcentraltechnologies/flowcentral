@@ -52,6 +52,7 @@ public class ReviewSingleFormWorkItemsAppletPanel extends AbstractEntitySingleFo
         setVisible("frmActionBtns", userActionRight);
         setVisible("updateBtn", update);
         setVisible("updateCloseBtn", update);
+        setVisible("deleteBtn", false);
         setVisible("listFrmActionBtns", userActionRight);
 
         final ReviewSingleFormWorkItemsApplet.ViewMode viewMode = applet.getMode();

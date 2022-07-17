@@ -69,6 +69,8 @@ public class WfStepConfig extends BaseNameConfig {
 
     private boolean forwarderPreffered;
 
+    private boolean comments;
+
     private SetValuesConfig setValuesConfig;
 
     private WfRoutingsConfig wfRoutingsConfig;
@@ -235,6 +237,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setForwarderPreffered(boolean forwarderPreffered) {
         this.forwarderPreffered = forwarderPreffered;
+    }
+
+    public boolean isComments() {
+        return comments;
+    }
+
+    @XmlAttribute
+    public void setComments(boolean comments) {
+        this.comments = comments;
     }
 
     public SetValuesConfig getSetValuesConfig() {

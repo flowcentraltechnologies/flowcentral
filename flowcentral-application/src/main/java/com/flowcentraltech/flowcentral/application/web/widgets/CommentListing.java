@@ -32,14 +32,19 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
  * @since 1.0
  */
 @Component("fc-commentlisting")
-@UplAttributes({ @UplAttribute(name = "timestampFormatter", type = Formatter.class,
-        defaultVal = "$d{!datetimeformat style:long}") })
+@UplAttributes({ @UplAttribute(name = "userImageSrc", type = String.class, defaultVal = "$t{/images/user_comment.png}"),
+        @UplAttribute(name = "timestampFormatter", type = Formatter.class,
+                defaultVal = "$d{!datetimeformat style:long}") })
 public class CommentListing extends AbstractControl {
 
     public Formatter<?> getTimestampFormatter() throws UnifyException {
-        return this.getUplAttribute(Formatter.class, "timestampFormatter");
+        return getUplAttribute(Formatter.class, "timestampFormatter");
     }
-
+    
+    public String getUserImageSrc() throws UnifyException {
+        return getUplAttribute(String.class, "userImageSrc");
+    }
+    
     @SuppressWarnings("unchecked")
     public List<Comment> getComments() throws UnifyException {
         return (List<Comment>) getValue(List.class);

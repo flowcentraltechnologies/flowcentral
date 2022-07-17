@@ -92,6 +92,8 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
         final AppletDef _currentFormAppletDef = getFormAppletDef();
         FormDef formDef = getPreferredForm(PreferredFormType.ALL, _currentFormAppletDef, currEntityInst,
                 FormMode.MAINTAIN.formProperty());
+        getCtx().setRecovery(wfStepDef.isError());
+        getCtx().setComments(wfStepDef.isComments());
         if (formDef.isInputForm()) {
             if (form == null) {
                 form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
@@ -102,9 +104,10 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
                 updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
             }
             form.setComments(entityItem.getComments());
+            form.setErrors(entityItem.getErrors());
 
             // Check if enter read-only mode
-            getCtx().setReadOnly(!userActionRight);
+            getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
             if (userActionRight && wfStepDef.isWithReadOnlyCondition()) {
                 WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
                 boolean readOnly = wfStepDef.isReadOnlyAlways()

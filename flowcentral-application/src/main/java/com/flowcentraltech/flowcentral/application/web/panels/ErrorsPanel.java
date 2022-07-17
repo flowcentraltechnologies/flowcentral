@@ -14,25 +14,31 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.security.business;
+package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
-import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
+import java.util.Collections;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
- * Logged in user photo generator implementation.
+ * Errors panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(ApplicationModuleNameConstants.LOGIN_USER_PHOTO_GENERATOR)
-public class LoginUserPhotoGeneratorImpl extends AbstractUserPhotoGenerator implements LoginUserPhotoGenerator {
+@Component("fc-errorspanel")
+@UplBinding("web/application/upl/errorspanel.upl")
+public class ErrorsPanel extends AbstractPanel implements FormPanel {
 
     @Override
-    protected String getUserLoginId() throws UnifyException {
-        return getUserToken().getUserLoginId();
+    public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
+        return Collections.emptyList();
     }
 
 }

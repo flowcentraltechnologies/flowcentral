@@ -40,4 +40,8 @@ public interface ApplicationModuleNameConstants {
     String PROPERTYLIST_OWNERID_PROPERTY = "propertyOwnerId";
     
     String ENTITYEXPRESSION_SETVALUE_GENERATOR = "entityexpression-setvaluegenerator";
+
+    String LOGIN_USER_PHOTO_GENERATOR = "login-userphotogenerator";
+
+    String COMMENT_USER_PHOTO_GENERATOR = "comment-userphotogenerator";
 }

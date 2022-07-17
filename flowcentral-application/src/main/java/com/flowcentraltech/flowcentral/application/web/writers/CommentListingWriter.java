@@ -15,8 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.Date;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.CommentUserPhotoGenerator;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.Comment;
 import com.flowcentraltech.flowcentral.application.web.widgets.CommentListing;
 import com.tcdng.unify.core.UnifyException;
@@ -48,6 +51,9 @@ public class CommentListingWriter extends AbstractWidgetWriter {
         List<Comment> comments = commentListing.getComments();
         if (!DataUtils.isBlank(comments)) {
             Formatter<?> formatter = commentListing.getTimestampFormatter();
+            final String id = commentListing.getId();
+            final String src = commentListing.getUserImageSrc();
+            final long time = new Date().getTime();
             final int len = comments.size();
             for (int i = 0; i < len; i++) {
                 writer.write("<div class=\"");
@@ -57,15 +63,30 @@ public class CommentListingWriter extends AbstractWidgetWriter {
                     writer.write("ceven");
                 }
                 writer.write("\">");
-                writer.write("<div class=\"cserialno\">").write(i + 1).write(".</div>");
+                Comment comment = comments.get(i);
+
+                writer.write("<div class=\"cuserimage\">");
+                writer.write("<img class=\"image\" src=\"");
+                CommentUserPhotoGenerator photoGenerator = (CommentUserPhotoGenerator) getComponent(
+                        ApplicationModuleNameConstants.COMMENT_USER_PHOTO_GENERATOR);
+                photoGenerator.setComment(comment);
+                if (photoGenerator.isReady()) {
+                    String imageName = "Img_" + id + '_' + i + '_' + time;
+                    setSessionAttribute(imageName, photoGenerator);
+                    writer.writeScopeImageContextURL(imageName);
+                    writer.writeURLParameter("clearOnRead", "true");
+                } else {
+                    writer.writeFileImageContextURL(src);
+                }
+                writer.write("\">");
+                writer.write("</div>");
 
                 writer.write("<div class=\"cbody\">");
                 writer.write("<div style=\"display:table;width:100%;\">");
-                Comment comment = comments.get(i);
-                writeCommentPart(writer, "ccontent", comment.getMessage());
                 writeCommentPart(writer, "clabel",
                         getSessionMessage("commentlisting.user.action", comment.getCommentBy(), comment.getAction()));
                 writeCommentPart(writer, "clabel", DataUtils.convert(String.class, comment.getTimestamp(), formatter));
+                writeCommentPart(writer, "ccontent", comment.getMessage());
                 writer.write("</div>");
                 writer.write("</div>");
                 writer.write("</div>");

@@ -83,6 +83,8 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
+        getCtx().setRecovery(wfStepDef.isError());
+        getCtx().setComments(wfStepDef.isComments());
         if (form == null) {
             form = constructForm(currEntityInst, FormMode.MAINTAIN);
             form.setFormTitle(getRootAppletDef().getLabel());
@@ -92,9 +94,10 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
         }
 
         form.setComments(entityItem.getComments());
+        form.setErrors(entityItem.getErrors());
 
         // Check if enter read-only mode
-        getCtx().setReadOnly(!userActionRight);
+        getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
         if (userActionRight && wfStepDef.isWithReadOnlyCondition()) {
             WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
             boolean readOnly = wfStepDef.isReadOnlyAlways() || wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())

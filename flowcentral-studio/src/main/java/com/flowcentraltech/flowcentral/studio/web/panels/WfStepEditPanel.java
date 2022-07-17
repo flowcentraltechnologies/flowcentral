@@ -50,13 +50,14 @@ public class WfStepEditPanel extends AbstractDialogPanel {
         WorkflowEditor workflowEditor = getValue(WorkflowEditor.class);
         WorkflowStepType type = workflowEditor.getEditStep() != null ? workflowEditor.getEditStep().getType() : null;
         boolean isPolicy = type != null ? type.isPolicy() : false;
-        boolean isUserAct =  type != null ? type.isUserInteractive() : false;
+        boolean isUserAct =  type != null ? type.isUserAction() : false;
+        boolean isUserInteractive =  type != null ? type.isInteractive() : false;
         boolean isStart =  type != null ? type.isStart() : false;
         setVisible("frmPolicy", isPolicy);
         setVisible("frmRule", isPolicy);
         setVisible("frmBinaryConditionName", WorkflowStepType.BINARY_ROUTING.equals(type));
         setVisible("frmActionType", WorkflowStepType.RECORD_ACTION.equals(type));
-        setVisible("frmAppletName", isUserAct);
+        setVisible("frmAppletName", isUserInteractive);
         setVisible("frmCriticalMinutes", isUserAct);
         setVisible("frmExpiryMinutes", isUserAct);
         setVisible("frmAudit", isUserAct);

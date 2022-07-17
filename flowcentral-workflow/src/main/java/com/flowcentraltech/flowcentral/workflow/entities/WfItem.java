@@ -100,6 +100,12 @@ public class WfItem extends BaseEntity {
     @ListOnly(key = "wfItemEventId", property = "errorMsg")
     private String errorMsg;
 
+    @ListOnly(key = "wfItemEventId", property = "errorTrace")
+    private String errorTrace;
+
+    @ListOnly(key = "wfItemEventId", property = "errorDoc")
+    private String errorDoc;
+
     @ListOnly(key = "wfItemEventId", property = "priority")
     private WorkflowStepPriority priority;
 
@@ -285,6 +291,22 @@ public class WfItem extends BaseEntity {
 
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
+    }
+
+    public String getErrorTrace() {
+        return errorTrace;
+    }
+
+    public void setErrorTrace(String errorTrace) {
+        this.errorTrace = errorTrace;
+    }
+
+    public String getErrorDoc() {
+        return errorDoc;
+    }
+
+    public void setErrorDoc(String errorDoc) {
+        this.errorDoc = errorDoc;
     }
 
     public WorkflowStepPriority getPriority() {

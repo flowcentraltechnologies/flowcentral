@@ -109,7 +109,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
-            setVisible("formPanel.commentsPanel", appCtx.isReview());
+            setVisible("formPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
+            setVisible("formPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
         }
 

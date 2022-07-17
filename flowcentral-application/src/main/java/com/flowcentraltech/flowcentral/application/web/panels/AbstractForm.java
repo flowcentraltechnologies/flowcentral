@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -74,6 +75,8 @@ public abstract class AbstractForm {
     private BreadCrumbs breadCrumbs;
     
     private Comments comments;
+    
+    private Errors errors;
     
     private FormMode formMode;
 
@@ -166,6 +169,14 @@ public abstract class AbstractForm {
 
     public void setComments(Comments comments) {
         this.comments = comments;
+    }
+
+    public Errors getErrors() {
+        return errors;
+    }
+
+    public void setErrors(Errors errors) {
+        this.errors = errors;
     }
 
     public List<FormActionDef> getFormActionDefList() {

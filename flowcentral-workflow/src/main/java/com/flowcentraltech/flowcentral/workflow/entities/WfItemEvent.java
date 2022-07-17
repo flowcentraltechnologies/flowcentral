@@ -74,6 +74,12 @@ public class WfItemEvent extends BaseEntity {
     @Column(name = "ERROR_MSG", length = 512, nullable = true)
     private String errorMsg;
 
+    @Column(type = ColumnType.CLOB, name = "ERROR_TRACE", nullable = true)
+    private String errorTrace;
+
+    @Column(type = ColumnType.CLOB, name = "ERROR_DOC", nullable = true)
+    private String errorDoc;
+
     @ListOnly(key = "wfItemHistId", property = "applicationName")
     private String applicationName;
 
@@ -197,6 +203,22 @@ public class WfItemEvent extends BaseEntity {
 
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
+    }
+
+    public String getErrorTrace() {
+        return errorTrace;
+    }
+
+    public void setErrorTrace(String errorTrace) {
+        this.errorTrace = errorTrace;
+    }
+
+    public String getErrorDoc() {
+        return errorDoc;
+    }
+
+    public void setErrorDoc(String errorDoc) {
+        this.errorDoc = errorDoc;
     }
 
     public String getApplicationName() {

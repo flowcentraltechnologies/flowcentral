@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.data;
 
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
+import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 
 /**
@@ -28,8 +29,8 @@ import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
  */
 public class WorkEntityItem extends EntityItem {
 
-    public WorkEntityItem(WorkEntity entity, Comments comments) {
-        super(entity, comments);
+    public WorkEntityItem(WorkEntity entity, Comments comments, Errors errors) {
+        super(entity, comments, errors);
     }
 
     public WorkEntityItem(WorkEntity entity) {

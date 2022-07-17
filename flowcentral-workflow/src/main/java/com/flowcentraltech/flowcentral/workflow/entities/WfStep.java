@@ -103,6 +103,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column
     private boolean forwarderPreffered;
 
+    @Column
+    private boolean comments;
+
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
@@ -308,6 +311,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setForwarderPreffered(boolean forwarderPreffered) {
         this.forwarderPreffered = forwarderPreffered;
+    }
+
+    public boolean isComments() {
+        return comments;
+    }
+
+    public void setComments(boolean comments) {
+        this.comments = comments;
     }
 
     public String getTypeDesc() {

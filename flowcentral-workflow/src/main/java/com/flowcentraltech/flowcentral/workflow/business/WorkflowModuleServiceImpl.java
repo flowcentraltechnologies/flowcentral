@@ -36,6 +36,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -53,6 +54,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfBinaryPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
+import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -226,7 +228,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     for (WfStep wfStep : workflow.getStepList()) {
                         AppletDef appletDef = null;
-                        if (wfStep.getType().isUserInteractive()) {
+                        if (wfStep.getType().isInteractive() && !StringUtils.isBlank(wfStep.getAppletName())) {
+                            final boolean useraction = wfStep.getType().isUserAction();
                             AppletDef _stepAppletDef = appService.getAppletDef(wfStep.getAppletName());
                             AppletType _reviewAppletType = _stepAppletDef.getType().isSingleForm()
                                     ? AppletType.REVIEW_SINGLEFORMWORKITEMS
@@ -237,8 +240,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String assignDescField = null;
                             AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
                                     assignDescField, 0, true, descriptiveButtons, appletName, label);
-                            adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfItemReviewTable");
-                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, "true");
+                            final String table = useraction ? "workflow.wfItemReviewTable" : "workflow.wfItemRecoveryTable";
+                            final String update = useraction ? "true" : "false";
+                            adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, table);
+                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, update);
+                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "false");
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW, longName);
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP, wfStep.getName());
                             adb.addPropDef(WfAppletPropertyConstants.WORKFLOW_STEP_APPLET, wfStep.getAppletName());
@@ -256,7 +262,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
-                                wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered());
+                                wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
+                                wfStep.isComments());
 
                         if (wfStep.getSetValues() != null) {
                             wsdb.addWfSetValuesDef(new WfSetValuesDef(
@@ -568,16 +575,27 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfItem.getWorkRecId());
         }
 
-        Comments.Builder cmb = Comments.newBuilder();//
-        List<WfItemEvent> events = environment().findAll(new WfItemEventQuery().wfItemHistId(wfItem.getWfItemHistId())
-                .commentsOnly().addSelect("comment", "actor", "wfAction", "actionDt")
-                .addOrder(OrderType.DESCENDING, "actionDt"));
-        for (WfItemEvent wfItemEvent : events) {
-            cmb.addOldComment(wfItemEvent.getComment(), wfItemEvent.getActor(), wfItemEvent.getWfAction(),
-                    wfItemEvent.getActionDt());
+        Comments comments = null;
+        WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+        if (wfStepDef.isComments()) {
+            Comments.Builder cmb = Comments.newBuilder();//
+            List<WfItemEvent> events = environment().findAll(new WfItemEventQuery()
+                    .wfItemHistId(wfItem.getWfItemHistId()).commentsOnly()
+                    .addSelect("comment", "actor", "wfAction", "actionDt").addOrder(OrderType.DESCENDING, "actionDt"));
+            for (WfItemEvent wfItemEvent : events) {
+                cmb.addOldComment(wfItemEvent.getComment(), wfItemEvent.getActor(), wfItemEvent.getWfAction(),
+                        wfItemEvent.getActionDt());
+            }
+
+            comments = cmb.build();
         }
 
-        return new WorkEntityItem(workEntity, cmb.build());
+        Errors errors = null;
+        if (wfStepDef.isError()) {
+            errors = new Errors(wfItem.getErrorMsg(), wfItem.getErrorTrace(), wfItem.getErrorDoc());
+        }
+        
+        return new WorkEntityItem(workEntity, comments, errors);
     }
 
     @Override
@@ -592,10 +610,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
                     new Update().add("actor", getUserToken().getUserLoginId()).add("actionDt", getNow())
                             .add("comment", comment).add("wfAction", userActionDef.getLabel()));
-            
+
             // Prepare event for next step
             final Long wfItemEventId = createWfItemEvent(wfDef.getWfStepDef(userActionDef.getNextStepName()),
-                    wfItem.getWfItemHistId(), stepName, null, null);
+                    wfItem.getWfItemHistId(), stepName, null, null, null, null);
 
             final String forwardTo = userActionDef.isForwarderPreferred() ? wfItem.getForwardedBy() : null;
             wfItem.setWfItemEventId(wfItemEventId);
@@ -1020,7 +1038,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 Long wfItemEventId = createWfItemEvent(nextWfStep, wfItem.getWfItemHistId(), currWfStepDef.getName(),
-                        null, null);
+                        null, null, null, null);
                 wfItem.setWfItemEventId(wfItemEventId);
                 wfItem.setWfStepName(nextWfStep.getName());
                 wfItem.setPrevWfStepName(currWfStepDef.getName());
@@ -1039,9 +1057,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 String errorMessage = getExceptionMessage(LocaleType.APPLICATION, e);
+                String errorTrace = getPrintableStackTrace(e);
+                String errorDoc = wfItemReader.isTempValue(ProcessErrorConstants.ERROR_DOC)
+                        ? wfItemReader.getTempValue(String.class, ProcessErrorConstants.ERROR_DOC)
+                        : null;
                 WfStepDef errWfStepDef = wfDef.getErrorStepDef();
                 Long wfItemEventId = createWfItemEvent(errWfStepDef, wfItem.getWfItemHistId(), currWfStepDef.getName(),
-                        errorCode, errorMessage);
+                        errorCode, errorMessage, errorTrace, errorDoc);
                 wfItem.setWfItemEventId(wfItemEventId);
                 wfItem.setWfStepName(errWfStepDef.getName());
                 wfItem.setPrevWfStepName(currWfStepDef.getName());
@@ -1135,11 +1157,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private Long createWfItemEvent(final WfStepDef wfStepDef, final Long wfItemHistId) throws UnifyException {
-        return createWfItemEvent(wfStepDef, wfItemHistId, null, null, null);
+        return createWfItemEvent(wfStepDef, wfItemHistId, null, null, null, null, null);
     }
 
     private Long createWfItemEvent(final WfStepDef wfStepDef, final Long wfItemHistId, final String prevWfStepName,
-            final String errorCode, final String errorMsg) throws UnifyException {
+            final String errorCode, final String errorMsg, final String errorTrace, final String errorDoc)
+            throws UnifyException {
         final Date now = getNow();
         WfItemEvent wfItemEvent = new WfItemEvent();
         wfItemEvent.setWfItemHistId(wfItemHistId);
@@ -1148,6 +1171,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         wfItemEvent.setStepDt(now);
         wfItemEvent.setErrorCode(errorCode);
         wfItemEvent.setErrorMsg(errorMsg);
+        wfItemEvent.setErrorTrace(errorTrace);
+        wfItemEvent.setErrorDoc(errorDoc);
         wfItemEvent.setPrevWfStepName(prevWfStepName);
         if (wfStepDef.getCriticalMinutes() > 0) {
             wfItemEvent.setCriticalDt(CalendarUtils.getDateWithFrequencyOffset(now, FrequencyUnit.MINUTE,
