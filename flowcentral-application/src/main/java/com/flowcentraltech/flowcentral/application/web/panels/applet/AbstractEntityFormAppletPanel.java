@@ -816,6 +816,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         FormContext ctx = getEntityFormApplet().getResolvedForm().getCtx();
         if (ctx.getFormDef().isInputForm()) {
             evaluateCurrentFormContext(ctx, evaluationMode);
+        } else {
+            ctx.clearReviewErrors();
+            ctx.clearValidationErrors();
         }
 
         if (evaluationMode.evaluation()) {
@@ -827,7 +830,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                         : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
                 ctx.mergeValidationErrors(commentsformPanel.validate(evaluationMode));
             }
-        }
+            
+            if (ctx.isWithFormErrors()) {
+                hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
+            }
+       }
 
         return ctx;
     }
