@@ -604,7 +604,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         final String editAction = formTabDef.getEditAction() == null ? "/assignToChildItem"
                                 : formTabDef.getEditAction();
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL);
+                                formTabDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                             _entitySearch.setBaseFilter(_appletDef.getFilterDef(
@@ -727,7 +727,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 final String editAction = formRelatedListDef.getEditAction() == null ? "/assignToRelatedItem"
                         : formRelatedListDef.getEditAction();
                 EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
-                        formRelatedListDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL);
+                        formRelatedListDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
                 if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                     _entitySearch.setBaseFilter(
                             _appletDef.getFilterDef(
