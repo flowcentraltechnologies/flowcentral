@@ -89,7 +89,7 @@ public class EntitySearchPanel extends AbstractPanel {
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
         if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
-            setVisible("searchEntriesPanel", true);
+            setVisible("searchEntriesPanel", entitySearch.isShowSearch());
             setVisible("searchFilterPanel", false);
             setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
             setVisible("footerActionPanel", entitySearch.isShowActionFooter());
@@ -97,7 +97,7 @@ public class EntitySearchPanel extends AbstractPanel {
             setVisible("searchEntriesHeader", entitySearch.isWithBaseFilter());
         } else {
             setVisible("searchEntriesPanel", false);
-            setVisible("searchFilterPanel", true);
+            setVisible("searchFilterPanel", entitySearch.isShowSearch());
             setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
             setVisible("footerActionPanel", entitySearch.isShowActionFooter());
             setVisible("searchFilterBody", entitySearch.isFilterEditorVisible());
