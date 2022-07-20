@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
+import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
+
 /**
  * Base query object for base work entity sub-classes.
  * 
@@ -49,5 +51,9 @@ public abstract class BaseWorkEntityQuery<T extends BaseWorkEntity> extends Base
 
     public final BaseWorkEntityQuery<T> inWorkflow(boolean inWorkflow) {
         return (BaseWorkEntityQuery<T>) addEquals("inWorkflow", inWorkflow);
+    }
+
+    public final BaseWorkEntityQuery<T> processingStatus(ProcessingStatus processingStatus) {
+        return (BaseWorkEntityQuery<T>) addEquals("processingStatus", processingStatus);
     }
 }

@@ -17,8 +17,11 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Policy;
 
 /**
@@ -30,6 +33,9 @@ import com.tcdng.unify.core.annotation.Policy;
 @Policy("basework-entitypolicy")
 public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEntity {
 
+    @ForeignKey(name = "PROCESSING_STATUS", nullable = true)
+    private ProcessingStatus processingStatus;
+    
     @Column(name = "WORK_BRANCH_CD", length = 32, nullable = true)
     private String workBranchCode;
 
@@ -39,12 +45,25 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
     @Column
     private boolean inWorkflow;
 
+    @ListOnly(key = "processingStatus" , property = "description")
+    private String processingStatusDesc;
+    
     @ChildList(category = "work")
     private List<FileAttachment> attachmentList;
 
     @Override
     public String getWorkflowItemDesc() {
         return getDescription();
+    }
+
+    @Override
+    public final ProcessingStatus getProcessingStatus() {
+        return processingStatus;
+    }
+
+    @Override
+    public final void setProcessingStatus(ProcessingStatus processingStatus) {
+        this.processingStatus = processingStatus;
     }
 
     @Override
@@ -75,6 +94,14 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
     @Override
     public final void setInWorkflow(boolean inWorkflow) {
         this.inWorkflow = inWorkflow;
+    }
+
+    public final String getProcessingStatusDesc() {
+        return processingStatusDesc;
+    }
+
+    public final void setProcessingStatusDesc(String processingStatusDesc) {
+        this.processingStatusDesc = processingStatusDesc;
     }
 
     public final List<FileAttachment> getAttachmentList() {

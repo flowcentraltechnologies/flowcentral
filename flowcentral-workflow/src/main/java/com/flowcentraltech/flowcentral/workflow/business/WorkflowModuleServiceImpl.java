@@ -60,6 +60,7 @@ import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
+import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
@@ -240,7 +241,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String assignDescField = null;
                             AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
                                     assignDescField, 0, true, descriptiveButtons, appletName, label);
-                            final String table = useraction ? "workflow.wfItemReviewTable" : "workflow.wfItemRecoveryTable";
+                            final String table = useraction ? "workflow.wfItemReviewTable"
+                                    : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
                             adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, table);
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE, update);
@@ -594,7 +596,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (wfStepDef.isError()) {
             errors = new Errors(wfItem.getErrorMsg(), wfItem.getErrorTrace(), wfItem.getErrorDoc());
         }
-        
+
         return new WorkEntityItem(workEntity, comments, errors);
     }
 
@@ -612,14 +614,17 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             .add("comment", comment).add("wfAction", userActionDef.getLabel()));
 
             // Prepare event for next step
-            final Long wfItemEventId = createWfItemEvent(wfDef.getWfStepDef(userActionDef.getNextStepName()),
-                    wfItem.getWfItemHistId(), stepName, null, null, null, null);
+            WfStepDef nextWfStepDef = wfDef.getWfStepDef(userActionDef.getNextStepName());
+            final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(), stepName, null, null,
+                    null, null);
 
             final String forwardTo = userActionDef.isForwarderPreferred() ? wfItem.getForwardedBy() : null;
             wfItem.setWfItemEventId(wfItemEventId);
             wfItem.setForwardedBy(getUserToken().getUserLoginId());
             wfItem.setForwardTo(forwardTo);
             environment().updateByIdVersion(wfItem);
+
+            wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
             if (wfReviewMode.lean()) {
                 environment().updateLeanByIdVersion(wfEntityInst);
             } else {
@@ -856,48 +861,55 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfDef.getName(), wfDef.getApplicationName());
         }
 
-        Long workRecId = (Long) inst.getId();
-        if (workRecId == null) {
-            inst.setInWorkflow(true);
-            workRecId = (Long) environment().create(inst);
-        } else {
-            if (environment().value(boolean.class, "inWorkflow",
-                    Query.of(inst.getClass()).addEquals("id", workRecId))) {
-                throw new UnifyException(WorkflowModuleErrorConstants.INST_ALREADY_IN_WORKFLOW, workRecId,
-                        inst.getClass(), wfDef.getName(), wfDef.getApplicationName());
-            } else {
+        ProcessingStatus _processingStatus = inst.getProcessingStatus();
+        try {
+            final WfStepDef startStepDef = wfDef.getStartStepDef();
+            inst.setProcessingStatus(startStepDef.getProcessingStatus());
+            Long workRecId = (Long) inst.getId();
+            if (workRecId == null) {
                 inst.setInWorkflow(true);
-                environment().findChildren(inst);
-                environment().updateByIdVersion(inst);
+                workRecId = (Long) environment().create(inst);
+            } else {
+                if (environment().value(boolean.class, "inWorkflow",
+                        Query.of(inst.getClass()).addEquals("id", workRecId))) {
+                    throw new UnifyException(WorkflowModuleErrorConstants.INST_ALREADY_IN_WORKFLOW, workRecId,
+                            inst.getClass(), wfDef.getName(), wfDef.getApplicationName());
+                } else {
+                    inst.setInWorkflow(true);
+                    environment().findChildren(inst);
+                    environment().updateByIdVersion(inst);
+                }
             }
+
+             final String userLoginId = getUserToken() == null ? DefaultApplicationConstants.SYSTEM_LOGINID
+                    : getUserToken().getUserLoginId();
+            final String itemDesc = wfDef.isWithDescFormat()
+                    ? StringUtils.buildParameterizedString(wfDef.getDescFormat(), new BeanValueStore(inst))
+                    : inst.getWorkflowItemDesc();
+
+            WfItemHist wfItemHist = new WfItemHist();
+            wfItemHist.setApplicationName(wfDef.getApplicationName());
+            wfItemHist.setWorkflowName(wfDef.getLongName());
+            wfItemHist.setEntity(wfDef.getEntity());
+            wfItemHist.setOriginWorkRecId(workRecId);
+            wfItemHist.setItemDesc(itemDesc);
+            wfItemHist.setBranchCode(inst.getWorkBranchCode());
+            wfItemHist.setDepartmentCode(inst.getWorkDepartmentCode());
+            wfItemHist.setInitiatedBy(userLoginId);
+            Long wfItemHistId = (Long) environment().create(wfItemHist);
+            Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
+
+            WfItem wfItem = new WfItem();
+            wfItem.setWfItemEventId(wfItemEventId);
+            wfItem.setForwardedBy(userLoginId);
+            wfItem.setWorkRecId(workRecId);
+            Long wfItemId = (Long) environment().create(wfItem);
+
+            pushToWfTransitionQueue(wfDef, wfItemId);
+        } catch (UnifyException e) {
+            inst.setProcessingStatus(_processingStatus);
+            throw e;
         }
-
-        final WfStepDef startStepDef = wfDef.getStartStepDef();
-        final String userLoginId = getUserToken() == null ? DefaultApplicationConstants.SYSTEM_LOGINID
-                : getUserToken().getUserLoginId();
-        final String itemDesc = wfDef.isWithDescFormat()
-                ? StringUtils.buildParameterizedString(wfDef.getDescFormat(), new BeanValueStore(inst))
-                : inst.getWorkflowItemDesc();
-
-        WfItemHist wfItemHist = new WfItemHist();
-        wfItemHist.setApplicationName(wfDef.getApplicationName());
-        wfItemHist.setWorkflowName(wfDef.getLongName());
-        wfItemHist.setEntity(wfDef.getEntity());
-        wfItemHist.setOriginWorkRecId(workRecId);
-        wfItemHist.setItemDesc(itemDesc);
-        wfItemHist.setBranchCode(inst.getWorkBranchCode());
-        wfItemHist.setDepartmentCode(inst.getWorkDepartmentCode());
-        wfItemHist.setInitiatedBy(userLoginId);
-        Long wfItemHistId = (Long) environment().create(wfItemHist);
-        Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
-
-        WfItem wfItem = new WfItem();
-        wfItem.setWfItemEventId(wfItemEventId);
-        wfItem.setForwardedBy(userLoginId);
-        wfItem.setWorkRecId(workRecId);
-        Long wfItemId = (Long) environment().create(wfItem);
-
-        pushToWfTransitionQueue(wfDef, wfItemId);
     }
 
     private void pushToWfTransitionQueue(WfDef wfDef, Long wfItemId) throws UnifyException {
@@ -906,12 +918,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         environment().create(wfTransitionQueue);
     }
 
+    @SuppressWarnings("unchecked")
     private boolean doWfTransition(final TransitionItem transitionItem) throws UnifyException {
         final WfItem wfItem = transitionItem.getWfItem();
         final WfDef wfDef = transitionItem.getWfDef();
         final EntityClassDef entityClassDef = wfDef.getEntityClassDef();
         final EntityDef entityDef = entityClassDef.getEntityDef();
         final WfStepDef currWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+        final WorkEntity wfEntityInst = transitionItem.getWfEntityInst();
         final ValueStoreReader wfItemReader = transitionItem.getValueStoreReader();
         final ValueStoreWriter wfItemWriter = transitionItem.getValueStoreWriter();
         final String prevStepName = wfItem.getPrevWfStepName();
@@ -927,7 +941,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         try {
             logDebug("Transitioning item [{0}] in step [{1}] of type [{2}]...", wfItem.getWfItemDesc(),
                     currWfStepDef.getLabel(), currWfStepDef.getType());
-            final WorkEntity wfEntityInst = transitionItem.getWfEntityInst();
             WfStepDef nextWfStep = currWfStepDef.isWithNextStepName()
                     ? wfDef.getWfStepDef(currWfStepDef.getNextStepName())
                     : null;
@@ -1014,6 +1027,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 case END:
                     environment().delete(WfItem.class, wfItemId);
                     wfEntityInst.setInWorkflow(false);
+                    wfEntityInst.setProcessingStatus(null);
                     transitionItem.setUpdated();
                     break;
                 default:
@@ -1026,6 +1040,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             if (type.sendUserActionAlert()) {
                 sendUserActionAlerts(currWfStepDef, transitionItem, prevStepName);
+            }
+
+            if (transitionItem.isUpdated() && type.isFlowing() && nextWfStep != null
+                    && !nextWfStep.getProcessingStatus().equals(type.processingStatus())) {
+                wfEntityInst.setProcessingStatus(nextWfStep.getProcessingStatus());
             }
 
             if (transitionItem.isUpdated() && !transitionItem.isDeleted()) {
@@ -1043,6 +1062,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 wfItem.setWfStepName(nextWfStep.getName());
                 wfItem.setPrevWfStepName(currWfStepDef.getName());
                 environment().updateByIdVersion(wfItem);
+
+                if (!transitionItem.isUpdated() && !nextWfStep.getProcessingStatus().equals(type.processingStatus())) {
+                    environment().updateAll(
+                            Query.of((Class<? extends WorkEntity>) entityClassDef.getEntityClass()).addEquals("id",
+                                    wfEntityInst.getId()),
+                            new Update().add("processingStatus", nextWfStep.getProcessingStatus()));
+                }
+
                 commitTransactions();
                 return doWfTransition(transitionItem);
             }
@@ -1069,6 +1096,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 wfItem.setPrevWfStepName(currWfStepDef.getName());
                 wfItem.setForwardTo(null);
                 environment().updateByIdVersion(wfItem);
+
+                environment().updateAll(
+                        Query.of((Class<? extends WorkEntity>) entityClassDef.getEntityClass()).addEquals("id",
+                                wfEntityInst.getId()),
+                        new Update().add("processingStatus", errWfStepDef.getProcessingStatus()));
+
                 commitTransactions();
             } catch (Exception e1) {
                 logError(e1);

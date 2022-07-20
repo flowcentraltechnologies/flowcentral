@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
@@ -152,6 +153,10 @@ public class WfStepDef {
 
     public WorkflowStepType getType() {
         return type;
+    }
+
+    public ProcessingStatus getProcessingStatus() {
+        return type.processingStatus();
     }
 
     public WorkflowStepPriority getPriority() {
