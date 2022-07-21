@@ -829,6 +829,23 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
+		<applet name="manageWorkflowSetValues"
+			description="$m{studio.workflowsetvalues.manage}"
+			label="$m{studio.workflowsetvalues.manage.label}"
+			type="manage_entitylist" entity="workflow.workflowSetValues"
+			menuAccess="false">
+			<property name="searchTable" value="workflowSetValuesTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="workflowSetValuesForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="workflowSetValuesForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageWfStep"
 			description="$m{studio.workflow.step.manage}"
 			label="$m{studio.workflow.step.manage.label}"
@@ -1214,6 +1231,19 @@
 			description="$m{studio.workflowfilter.table}"
 			label="$m{studio.workflowfilter.table.label}"
 			entity="workflow.workflowFilter">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="workflowSetValuesTable"
+			description="$m{studio.workflowsetvalues.table}"
+			label="$m{studio.workflowsetvalues.table.label}"
+			entity="workflow.workflowSetValues">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -3422,6 +3452,9 @@
 			<tab name="filters" label="$m{studio.workflow.form.filters}"
 				contentType="child_list" applet="manageWorkflowFilter"
 				reference="filterList" />
+			<tab name="setValues" label="$m{studio.workflow.form.setvalues}"
+				contentType="child_list" applet="manageWorkflowSetValues"
+				reference="setValuesList" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
@@ -3485,6 +3518,30 @@
 			<tab name="condition"
 				label="$m{studio.workflowfilter.form.condition}"
 				reference="workflow" contentType="filter_condition" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="workflowSetValuesForm"
+			description="$m{studio.workflowsetvalues.form}"
+			entity="workflow.workflowSetValues">
+			<tab name="basicDetails"
+				label="$m{studio.workflowsetvalues.form.basicdetails}"
+				contentType="miniform">
+				<section name="setValuesDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="type" inputWidget="application.enumlist"
+						column="1" required="false" />
+				</section>
+			</tab>
+			<tab name="condition"
+				label="$m{studio.workflowsetvalues.form.condition}"
+				reference="workflow" contentType="filter_condition" />
+			<tab name="setValues"
+				label="$m{studio.workflowsetvalues.form.setvalues}"
+				reference="workflow" contentType="set_values" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>

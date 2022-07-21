@@ -89,7 +89,7 @@ public class WfStepDef {
     
     private boolean comments;
 
-    private WfSetValuesDef wfSetValuesDef;
+    private WfStepSetValuesDef wfSetValuesDef;
 
     private Map<String, WfUserActionDef> userActions;
 
@@ -105,7 +105,7 @@ public class WfStepDef {
             RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
             String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
             String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean includeForwarder, boolean forwarderPreferred, boolean comments, WfSetValuesDef wfSetValuesDef,
+            boolean includeForwarder, boolean forwarderPreferred, boolean comments, WfStepSetValuesDef wfSetValuesDef,
             Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList, List<WfAlertDef> alertList,
             Set<String> roleSet) {
         this.appletDef = appletDef;
@@ -294,7 +294,7 @@ public class WfStepDef {
         return routingList;
     }
 
-    public WfSetValuesDef getWfSetValuesDef() {
+    public WfStepSetValuesDef getWfSetValuesDef() {
         return wfSetValuesDef;
     }
 
@@ -396,7 +396,7 @@ public class WfStepDef {
         
         private boolean comments;
 
-        private WfSetValuesDef wfSetValuesDef;
+        private WfStepSetValuesDef wfSetValuesDef;
 
         private Map<String, WfUserActionDef> userActionList;
 
@@ -473,7 +473,7 @@ public class WfStepDef {
             return this;
         }
 
-        public Builder addWfSetValuesDef(WfSetValuesDef wfSetValuesDef) {
+        public Builder addWfSetValuesDef(WfStepSetValuesDef wfSetValuesDef) {
             if (!type.supportSetValues()) {
                 throw new RuntimeException("Can not add set values to step type [" + type + "].");
             }

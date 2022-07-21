@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
+import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
@@ -36,10 +37,12 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfStepConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfUserActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
@@ -64,6 +67,8 @@ import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -189,7 +194,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             if (!DataUtils.isBlank(applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList())) {
                 WfWizard wfWizard = new WfWizard();
                 wfWizard.setApplicationId(applicationId);
-                for (AppWorkflowWizardConfig appWorkflowWizardConfig : applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList()) {
+                for (AppWorkflowWizardConfig appWorkflowWizardConfig : applicationConfig.getWorkflowWizardsConfig()
+                        .getWorkflowWizardList()) {
                     WorkflowWizardInstall workflowWizardInstall = getConfigurationLoader()
                             .loadWorkflowWizardInstallation(appWorkflowWizardConfig.getConfigFile());
                     WfWizardConfig wfWizardConfig = workflowWizardInstall.getWfWizardConfig();
@@ -297,12 +303,49 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             }
         }
         workflow.setFilterList(filterList);
-        
+
+        // Workflow set values
+        List<WorkflowSetValues> setValuesList = null;
+        if (!DataUtils.isBlank(wfConfig.getSetValuesList())) {
+            setValuesList = new ArrayList<WorkflowSetValues>();
+            Map<String, WorkflowSetValues> map = workflow.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new WorkflowSetValuesQuery().workflowId(workflow.getId()));
+            for (WfSetValuesConfig wfSetValuesConfig : wfConfig.getSetValuesList()) {
+                WorkflowSetValues oldWorkflowSetValues = map.get(wfSetValuesConfig.getName());
+                if (oldWorkflowSetValues == null) {
+                    WorkflowSetValues workflowSetValues = new WorkflowSetValues();
+                    workflowSetValues.setType(wfSetValuesConfig.getType());
+                    workflowSetValues.setName(wfSetValuesConfig.getName());
+                    workflowSetValues.setDescription(resolveApplicationMessage(wfSetValuesConfig.getDescription()));
+                    workflowSetValues.setOnCondition(InputWidgetUtils.newAppFilter(wfSetValuesConfig.getOnCondition()));
+                    workflowSetValues.setSetValues(newAppSetValues(wfSetValuesConfig.getSetValues()));
+                    workflowSetValues.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    setValuesList.add(workflowSetValues);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldWorkflowSetValues)) {
+                        oldWorkflowSetValues.setType(wfSetValuesConfig.getType());
+                        oldWorkflowSetValues
+                                .setDescription(resolveApplicationMessage(wfSetValuesConfig.getDescription()));
+                        oldWorkflowSetValues
+                                .setOnCondition(InputWidgetUtils.newAppFilter(wfSetValuesConfig.getOnCondition()));
+                        oldWorkflowSetValues.setSetValues(newAppSetValues(wfSetValuesConfig.getSetValues()));
+                    } else {
+                        environment().findChildren(oldWorkflowSetValues);
+                    }
+
+                    setValuesList.add(oldWorkflowSetValues);
+                }
+            }
+        }
+
+        workflow.setSetValuesList(setValuesList);
+
         // Steps
         List<WfStep> oldStepList = workflow.isIdBlank() ? Collections.emptyList()
                 : environment().findAll(new WfStepQuery().workflowId(workflow.getId()).orderById());
         boolean noChange = ConfigUtils.isChanged(oldStepList);
-        
+
         if (noChange) {
             List<WfStep> stepList = null;
             if (wfConfig.getStepsConfig() != null && !DataUtils.isBlank(wfConfig.getStepsConfig().getStepList())) {
@@ -351,13 +394,20 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
         }
     }
 
+    private AppSetValues newAppSetValues(SetValuesConfig setValuesConfig) throws UnifyException {
+        if (setValuesConfig != null) {
+            return new AppSetValues(InputWidgetUtils.getSetValuesDefinition(setValuesConfig));
+        }
+
+        return null;
+    }
+
     private void populateChildList(WfStepConfig stepConfig, String applicationName, WfStep wfStep)
             throws UnifyException {
         // Set values
         if (stepConfig.getSetValuesConfig() != null) {
             WfStepSetValues wfStepSetValues = new WfStepSetValues();
-            wfStepSetValues.setSetValues(
-                    InputWidgetUtils.newAppSetValues(stepConfig.getSetValuesConfig()));
+            wfStepSetValues.setSetValues(InputWidgetUtils.newAppSetValues(stepConfig.getSetValuesConfig()));
             wfStep.setSetValues(wfStepSetValues);
         }
 

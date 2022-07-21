@@ -348,7 +348,7 @@ public final class ApplicationEntityUtils {
                         "processingStatusDesc",
                         msgResolver
                                 .resolveApplicationMessage("$m{baseworkentity.field.label.processingstatusdesc}"),
-                        null, "processingstatuslist", "description", null, null, null, null, null, configType));
+                        null, "processingStatus", "description", null, null, null, null, null, configType));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "workBranchCode",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.workbranchcode}"), null,
                         null, null, null, null, null, null, null, configType));

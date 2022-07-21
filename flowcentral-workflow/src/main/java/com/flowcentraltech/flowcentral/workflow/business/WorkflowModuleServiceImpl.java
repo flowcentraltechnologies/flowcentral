@@ -37,6 +37,8 @@ import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.Errors;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
@@ -60,7 +62,6 @@ import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
-import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
@@ -82,6 +83,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfRoutingDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfSetValuesDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfStepSetValuesDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
@@ -108,6 +110,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfWizardAppletNameParts;
@@ -225,6 +228,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 appAppletFilter.getDescription(), null, null, null, appAppletFilter.getFilter()));
                     }
 
+                    for (WorkflowSetValues workflowSetValues : workflow.getSetValuesList()) {
+                        FilterDef onCondition = InputWidgetUtils.getFilterDef(workflowSetValues.getName(),
+                                workflowSetValues.getDescription(), null, null, null,
+                                workflowSetValues.getOnCondition());
+                        SetValuesDef setValues = InputWidgetUtils.getSetValuesDef(workflowSetValues.getName(),
+                                workflowSetValues.getDescription(), null, workflowSetValues.getSetValues());
+                        WfSetValuesDef wfSetValuesDef = new WfSetValuesDef(workflowSetValues.getType(),
+                                workflowSetValues.getName(), workflowSetValues.getDescription(), onCondition,
+                                setValues);
+                        wdb.addWfSetValuesDef(wfSetValuesDef);
+                    }
+
                     final boolean descriptiveButtons = systemModuleService.getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     for (WfStep wfStep : workflow.getStepList()) {
@@ -268,7 +283,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.isComments());
 
                         if (wfStep.getSetValues() != null) {
-                            wsdb.addWfSetValuesDef(new WfSetValuesDef(
+                            wsdb.addWfSetValuesDef(new WfStepSetValuesDef(
                                     InputWidgetUtils.getSetValuesDef(null, wfStep.getSetValues().getSetValues())));
                         }
 
@@ -861,10 +876,25 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfDef.getName(), wfDef.getApplicationName());
         }
 
-        ProcessingStatus _processingStatus = inst.getProcessingStatus();
+        ValueStore instValueStore = new BeanValueStore(inst);
+        instValueStore.save("processingStatus");
         try {
             final WfStepDef startStepDef = wfDef.getStartStepDef();
+            // Set values on entry
+            if (wfDef.isWithOnEntrySetValuesList()) {
+                Date now = getNow();
+                instValueStore.save(wfDef.getOnEntrySetValuesFields());
+                for (WfSetValuesDef wfSetValuesDef: wfDef.getOnEntrySetValuesList()) {
+                    if (wfSetValuesDef.getOnCondition()
+                            .getObjectFilter(wfDef.getEntityDef(), appletUtil.getSpecialParamProvider(), now)
+                            .match(inst)) {
+                        wfSetValuesDef.getSetValues().apply(appletUtil, wfDef.getEntityDef(), now, inst,
+                                Collections.emptyMap(), null);
+                    }
+                }
+            }
             inst.setProcessingStatus(startStepDef.getProcessingStatus());
+            
             Long workRecId = (Long) inst.getId();
             if (workRecId == null) {
                 inst.setInWorkflow(true);
@@ -881,7 +911,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-             final String userLoginId = getUserToken() == null ? DefaultApplicationConstants.SYSTEM_LOGINID
+            final String userLoginId = getUserToken() == null ? DefaultApplicationConstants.SYSTEM_LOGINID
                     : getUserToken().getUserLoginId();
             final String itemDesc = wfDef.isWithDescFormat()
                     ? StringUtils.buildParameterizedString(wfDef.getDescFormat(), new BeanValueStore(inst))
@@ -907,7 +937,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             pushToWfTransitionQueue(wfDef, wfItemId);
         } catch (UnifyException e) {
-            inst.setProcessingStatus(_processingStatus);
+            instValueStore.restore();
             throw e;
         }
     }
@@ -946,7 +976,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     : null;
             transitionItem.clearUpdated();
             // Common set values
-            WfSetValuesDef wfSetValuesDef = currWfStepDef.getWfSetValuesDef();
+            WfStepSetValuesDef wfSetValuesDef = currWfStepDef.getWfSetValuesDef();
             if (wfSetValuesDef != null && wfSetValuesDef.isSetValues()) {
                 wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
                         transitionItem.getVariables(), null);
