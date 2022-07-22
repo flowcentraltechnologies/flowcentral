@@ -1318,8 +1318,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 case NEW_CHILDLIST_FORM: {
                     String childFkFieldName = au().getChildFkFieldName(currParentEntityDef,
                             currFormTabDef.getReference());
-//                  FormDef formDef = getFormDef(getAppletDef(currFormTabDef.getApplet()),
-//                  AppletPropertyConstants.MAINTAIN_FORM);
                     Entity inst = loadEntity(entityInstId);
                     form = constructForm(inst, FormMode.MAINTAIN, childFkFieldName, true);
                     viewMode = ViewMode.MAINTAIN_CHILDLIST_FORM;
@@ -1328,16 +1326,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 case NEW_RELATEDLIST_FORM: {
                     String childFkFieldName = au().getChildFkFieldName(currParentEntityDef.getLongName(),
                             form.getFormDef().getEntityDef().getLongName());
-//                  FormDef formDef = getFormDef(getAppletDef(currFormRelatedListDef),
-//                  AppletPropertyConstants.MAINTAIN_FORM);
                     Entity inst = loadEntity(entityInstId);
                     form = constructForm(inst, FormMode.MAINTAIN, childFkFieldName, false);
                     viewMode = ViewMode.MAINTAIN_RELATEDLIST_FORM;
                 }
                     break;
                 case NEW_HEADLESSLIST_FORM: {
-//                  FormDef formDef = getFormDef(getAppletDef(headlessForm.getCurrentAppletName()),
-//                  AppletPropertyConstants.MAINTAIN_FORM);
                     Entity inst = loadEntity(entityInstId);
                     form = constructForm(inst, FormMode.MAINTAIN, null, false);
                     viewMode = ViewMode.MAINTAIN_HEADLESSLIST_FORM;
