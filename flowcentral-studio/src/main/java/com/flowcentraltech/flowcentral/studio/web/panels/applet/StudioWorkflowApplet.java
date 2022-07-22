@@ -51,7 +51,7 @@ public class StudioWorkflowApplet extends StudioAppComponentApplet {
         Workflow workflow = (Workflow) form.getFormBean();
         Long workflowId = workflow.getId();
         String subTitle = workflow.getDescription();
-        saveCurrentForm();
+        saveCurrentForm(currFormTabDef);
         workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, subTitle);
         workflowEditorPage.newEditor();
         viewMode = ViewMode.CUSTOM_PAGE;

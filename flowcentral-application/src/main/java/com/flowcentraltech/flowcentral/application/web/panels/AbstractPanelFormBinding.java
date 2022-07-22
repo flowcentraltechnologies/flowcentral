@@ -63,4 +63,8 @@ public abstract class AbstractPanelFormBinding {
     public List<FormMessage> getMessages() throws UnifyException {
         return ctx.getReviewMessages(tabName);
     }
+    
+    protected boolean isTabEditable() {
+        return ctx.isTabEditable(tabName);
+    }
 }

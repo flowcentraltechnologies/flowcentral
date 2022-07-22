@@ -51,7 +51,7 @@ public class StudioAppTableApplet extends StudioAppComponentApplet {
         AppTable appTable = (AppTable) form.getFormBean();
         Object id = appTable.getId();
         String subTitle = appTable.getDescription();
-        saveCurrentForm();
+        saveCurrentForm(currFormTabDef);
         tableEditorPage = constructNewTableEditorPage(appTable.getEntity(), id, subTitle);
         tableEditorPage.newEditor();
         viewMode = ViewMode.CUSTOM_PAGE;

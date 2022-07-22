@@ -99,10 +99,10 @@ public class EntityFilter extends AbstractPanelFormBinding {
     }
 
     public boolean isClearButtonVisible() {
-        return getAppletCtx().isContextEditable() && (mode & SHOW_CLEAR_BUTTON) > 0;
+        return getAppletCtx().isContextEditable() && isTabEditable() && (mode & SHOW_CLEAR_BUTTON) > 0;
     }
 
     public boolean isApplyButtonVisible() {
-        return getAppletCtx().isContextEditable() && (mode & SHOW_APPLY_BUTTON) > 0;
+        return getAppletCtx().isContextEditable() && isTabEditable() && (mode & SHOW_APPLY_BUTTON) > 0;
     }
 }

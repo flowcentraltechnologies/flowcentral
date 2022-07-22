@@ -100,11 +100,11 @@ public class EntityChild extends AbstractPanelFormBinding {
     }
 
     public boolean isEditButtonVisible() {
-        return getAppletCtx().isContextEditable();
+        return getAppletCtx().isContextEditable() && isTabEditable();
     }
 
     public boolean isViewButtonVisible() {
-        return !getAppletCtx().isContextEditable();
+        return !getAppletCtx().isContextEditable() || !isTabEditable() ;
     }
 
     public void reload() throws UnifyException {

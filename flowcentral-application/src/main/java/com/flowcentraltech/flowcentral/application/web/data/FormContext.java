@@ -502,6 +502,11 @@ public class FormContext extends AbstractContext {
         return formTabs.get(name);
     }
 
+    public boolean isTabEditable(String name) {
+        FormTab tab = formTabs.get(name);
+        return tab == null || (tab.isEditable() && !tab.isDisabled());
+    }
+    
     public List<FormAnnotationDef> getFormAnnotationDef() {
         if (!visibleAnnotations.isEmpty()) {
             List<FormAnnotationDef> list = new ArrayList<FormAnnotationDef>();
@@ -584,6 +589,12 @@ public class FormContext extends AbstractContext {
             visible = formTabDef.isVisible();
             editable = formTabDef.isEditable() | saveAsMode;
             disabled = formTabDef.isDisabled();
+        }
+
+        @Override
+        public String toString() {
+            return "FormTab [formTabDef=" + formTabDef + ", visible=" + visible + ", editable=" + editable
+                    + ", disabled=" + disabled + "]";
         }
     }
 
