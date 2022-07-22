@@ -52,7 +52,7 @@ public class StudioAppFormApplet extends StudioAppComponentApplet {
         AppForm appForm = (AppForm) form.getFormBean();
         Object id = appForm.getId();
         String subTitle = appForm.getDescription();
-        saveCurrentForm();
+        saveCurrentForm(currFormTabDef);
         formEditorPage = constructNewFormEditorPage(
                 ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), id,
                 subTitle);

@@ -46,6 +46,8 @@ public class AppletContext extends AbstractContext {
     
     private Map<EntityChildCategoryType, String> entityReferences;
 
+    private int tabReadOnlyCounter;
+    
     private boolean readOnly;
     
     private boolean inWorkflow;
@@ -102,6 +104,16 @@ public class AppletContext extends AbstractContext {
         return ref != null ? ref : type.readEntity();
     }
     
+    public void incTabReadOnlyCounter() {
+        tabReadOnlyCounter++;
+    }
+    
+    public void decTabReadOnlyCounter() {
+        if (tabReadOnlyCounter > 0 ) {
+            tabReadOnlyCounter--;
+        }
+    }
+    
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
@@ -143,6 +155,6 @@ public class AppletContext extends AbstractContext {
     }
 
     public boolean isContextEditable() {
-        return !readOnly && (review || !inWorkflow);
+        return !readOnly && (review || !inWorkflow) && tabReadOnlyCounter == 0;
     }
 }
