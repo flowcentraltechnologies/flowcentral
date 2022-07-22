@@ -62,8 +62,8 @@ public final class ApplicationEntityUtils {
     private static final Set<String> nonReportables = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "applicationId", "originWorkRecId")));
 
-    private static final Set<String> nullables = Collections.unmodifiableSet(
-            new HashSet<String>(Arrays.asList("originWorkRecId", "workBranchCode", "workDepartmentCode")));
+    private static final Set<String> nullables = Collections.unmodifiableSet(new HashSet<String>(
+            Arrays.asList("originWorkRecId", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     private static final Set<String> maintainLinks = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("name", "description")));
@@ -178,9 +178,10 @@ public final class ApplicationEntityUtils {
         return resultList;
     }
 
-    public static EntityFieldDef createEntityFieldDef(AppletUtilities au, String entityLongName, AppEntityField appEntityField) throws UnifyException {
+    public static EntityFieldDef createEntityFieldDef(AppletUtilities au, String entityLongName,
+            AppEntityField appEntityField) throws UnifyException {
         final WidgetTypeDef textWidgetTypeDef = au.getWidgetTypeDef("application.text");
-       WidgetTypeDef inputWidgetTypeDef = null;
+        WidgetTypeDef inputWidgetTypeDef = null;
         if (!StringUtils.isBlank(appEntityField.getInputWidget())) {
             inputWidgetTypeDef = au.getWidgetTypeDef(appEntityField.getInputWidget());
         }
@@ -199,20 +200,27 @@ public final class ApplicationEntityUtils {
 
         String references = appEntityField.getReferences();
         RefDef refDef = null;
-        if (type.isEntityRef() || (!appEntityField.getDataType().isEnumDataType()
-                && !StringUtils.isBlank(references))) {
+        if (type.isEntityRef()
+                || (!appEntityField.getDataType().isEnumDataType() && !StringUtils.isBlank(references))) {
             refDef = au.getRefDef(references);
         }
-        
-        return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, refDef,  appEntityField.getDataType(),
-                appEntityField.getType(), appEntityField.getTextCase(), entityLongName, appEntityField.getName(), appEntityField.getLabel(), appEntityField.getColumnName(), references, appEntityField.getCategory(),
-                appEntityField.getSuggestionType(), appEntityField.getInputLabel(), appEntityField.getInputListKey(), appEntityField.getLingualListKey(), appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), appEntityField.getKey(),
-                appEntityField.getProperty(), DataUtils.convert(int.class, appEntityField.getRows()), DataUtils.convert(int.class, appEntityField.getColumns()),
-                DataUtils.convert(int.class, appEntityField.getMinLen()), DataUtils.convert(int.class, appEntityField.getMaxLen()),
-                DataUtils.convert(int.class, appEntityField.getPrecision()), DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isNullable(),
-                appEntityField.isAuditable(), appEntityField.isReportable(), appEntityField.isMaintainLink(), appEntityField.isBasicSearch(), appEntityField.isDescriptive());
+
+        return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, refDef,
+                appEntityField.getDataType(), appEntityField.getType(), appEntityField.getTextCase(), entityLongName,
+                appEntityField.getName(), appEntityField.getLabel(), appEntityField.getColumnName(), references,
+                appEntityField.getCategory(), appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
+                appEntityField.getInputListKey(), appEntityField.getLingualListKey(), appEntityField.getAutoFormat(),
+                appEntityField.getDefaultVal(), appEntityField.getKey(), appEntityField.getProperty(),
+                DataUtils.convert(int.class, appEntityField.getRows()),
+                DataUtils.convert(int.class, appEntityField.getColumns()),
+                DataUtils.convert(int.class, appEntityField.getMinLen()),
+                DataUtils.convert(int.class, appEntityField.getMaxLen()),
+                DataUtils.convert(int.class, appEntityField.getPrecision()),
+                DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isNullable(),
+                appEntityField.isAuditable(), appEntityField.isReportable(), appEntityField.isMaintainLink(),
+                appEntityField.isBasicSearch(), appEntityField.isDescriptive());
     }
-    
+
     public static void addChangeLogFormElements(List<AppFormElement> elementList) {
         // Section
         AppFormElement appFormElement = new AppFormElement();
@@ -331,6 +339,16 @@ public final class ApplicationEntityUtils {
                                 null, "configType", "description", null, null, null, null, null, configType));
                 break;
             case BASE_WORK_ENTITY:
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM_REF,
+                        "processingStatus",
+                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.processingstatus}"),
+                        "processingstatuslist", null, null, null, null, "application.enumlist", null, null,
+                        configType));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LIST_ONLY,
+                        "processingStatusDesc",
+                        msgResolver
+                                .resolveApplicationMessage("$m{baseworkentity.field.label.processingstatusdesc}"),
+                        null, "processingStatus", "description", null, null, null, null, null, configType));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "workBranchCode",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.workbranchcode}"), null,
                         null, null, null, null, null, null, null, configType));

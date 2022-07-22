@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.WfChannelsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfStepConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfStepsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfUserActionConfig;
@@ -51,6 +52,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfWizard;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardStep;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -122,7 +124,26 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                     }
 
                     workflowConfig.setFilterList(filterList);
-                    ;
+                 }
+
+                // Set values
+                if (!DataUtils.isBlank(workflow.getSetValuesList())) {
+                    List<WfSetValuesConfig> setValuesList = new ArrayList<WfSetValuesConfig>();
+                    for (WorkflowSetValues workflowSetValues : workflow.getSetValuesList()) {
+                        WfSetValuesConfig wfSetValuesConfig = new WfSetValuesConfig();
+                        wfSetValuesConfig.setName(workflowSetValues.getName());
+                        descKey = getDescriptionKey(workflowDescKey, "workflowsetvalues", workflowSetValues.getDescription());
+                        ctx.addMessage(StaticMessageCategoryType.WORKFLOW, descKey, workflowSetValues.getDescription());
+                        wfSetValuesConfig.setDescription("$m{" + descKey + "}");
+                        wfSetValuesConfig.setType(workflowSetValues.getType());
+                        wfSetValuesConfig
+                                .setOnCondition(InputWidgetUtils.getFilterConfig(workflowSetValues.getOnCondition()));
+                        wfSetValuesConfig.setSetValues(InputWidgetUtils.getSetValuesConfig(
+                                null, workflowSetValues.getSetValues()));
+                        setValuesList.add(wfSetValuesConfig);
+                    }
+
+                    workflowConfig.setSetValuesList(setValuesList);
                 }
 
                 // Steps

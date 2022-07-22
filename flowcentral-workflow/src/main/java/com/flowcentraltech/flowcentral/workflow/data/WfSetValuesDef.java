@@ -16,7 +16,9 @@
 
 package com.flowcentraltech.flowcentral.workflow.data;
 
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
+import com.flowcentraltech.flowcentral.configuration.constants.WorkflowSetValuesType;
 
 /**
  * Workflow set values definition.
@@ -26,17 +28,54 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
  */
 public class WfSetValuesDef {
 
+    private WorkflowSetValuesType type;
+
+    private String name;
+
+    private String description;
+
+    private FilterDef onCondition;
+
     private SetValuesDef setValues;
 
-    public WfSetValuesDef(SetValuesDef setValues) {
+    public WfSetValuesDef(WorkflowSetValuesType type, String name, String description, FilterDef onCondition,
+            SetValuesDef setValues) {
+        this.type = type;
+        this.name = name;
+        this.description = description;
+        this.onCondition = onCondition;
         this.setValues = setValues;
+    }
+
+    public WorkflowSetValuesType getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public FilterDef getOnCondition() {
+        return onCondition;
     }
 
     public SetValuesDef getSetValues() {
         return setValues;
     }
 
-    public boolean isSetValues() {
+    public boolean isOnEntry() {
+       return WorkflowSetValuesType.ON_ENTRY.equals(type); 
+    }
+    
+    public boolean isWithOnCondition() {
+        return onCondition != null;
+    }
+
+    public boolean isWithSetValues() {
         return setValues != null;
     }
 }

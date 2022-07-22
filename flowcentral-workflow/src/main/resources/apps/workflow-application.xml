@@ -94,6 +94,9 @@
 		<reference name="workflowFilterRef"
 			description="$m{workflow.workflowfilter.reference}"
 			entity="workflowFilter" searchField="description" />
+		<reference name="workflowSetValuesRef"
+			description="$m{workflow.workflowsetvalues.reference}"
+			entity="workflowSetValues" searchField="description" />
 		<reference name="wfStepRef"
 			description="$m{workflow.step.reference}" entity="wfStep"
 			searchField="description" />
@@ -135,6 +138,8 @@
 				nullable="true" />
 			<field name="filterList" label="$m{workflow.workflow.filters}"
 				type="child_list" references="workflowFilterRef" />
+			<field name="setValuesList" label="$m{workflow.workflow.setvalues}"
+				type="child_list" references="workflowSetValuesRef" />
 			<field name="stepList" label="$m{workflow.workflow.steps}"
 				type="child_list" references="wfStepRef" />
 		</entity>
@@ -152,6 +157,32 @@
 				fieldList="workflowId,name" />
 			<uniqueConstraint name="descUc"
 				description="$m{workflow.workflowfilter.uc.description}"
+				fieldList="workflowId,description" />
+		</entity>
+		<entity name="workflowSetValues"
+			description="$m{workflow.workflowsetvalues}"
+			label="$m{workflow.workflowsetvalues.label}"
+			type="com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues">
+			<field name="workflowId"
+				label="$m{workflow.workflowsetvalues.workflowid}" type="ref"
+				references="workflowRef" inputWidget="application.entitylist" />
+			<field name="type"
+				label="$m{workflow.workflowsetvalues.type}" type="enum_ref"
+				references="wfsetvaluestypelist"
+				inputWidget="application.enumlist" />
+			<field name="onCondition" label="$m{workflow.workflowsetvalues.oncondition}"
+				type="child" category="workflow" references="application.appFilterRef" />
+			<field name="setValues"
+				label="$m{workflow.workflowsetvalues.setvalue}" type="child"
+				category="workflow" references="application.appSetValuesRef" />
+			<field name="typeDesc"
+				label="$m{workflow.workflowsetvalues.typedesc}" type="list_only"
+				key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{workflow.workflowsetvalues.uc.name}"
+				fieldList="workflowId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{workflow.workflowsetvalues.uc.description}"
 				fieldList="workflowId,description" />
 		</entity>
 		<entity name="wfStep" description="$m{workflow.step}"

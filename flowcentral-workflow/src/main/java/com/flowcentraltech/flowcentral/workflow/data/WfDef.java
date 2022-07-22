@@ -19,8 +19,10 @@ package com.flowcentraltech.flowcentral.workflow.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
@@ -54,10 +56,17 @@ public class WfDef extends BaseApplicationEntityDef {
 
     private Map<String, FilterDef> filterDefMap;
 
+    private Map<String, WfSetValuesDef> setValuesDefMap;
+
+    private List<WfSetValuesDef> onEntrySetValuesList;
+
     private List<StringToken> descFormat;
 
+    private Set<String> onEntrySetValuesFields;
+    
     private WfDef(EntityClassDef entityClassDef, WfStepDef startStepDef, WfStepDef errorStepDef,
-            Map<String, WfStepDef> steps, Map<String, FilterDef> filterDefMap, List<StringToken> descFormat,
+            Map<String, WfStepDef> steps, Map<String, FilterDef> filterDefMap,
+            Map<String, WfSetValuesDef> setValuesDefMap, List<StringToken> descFormat,
             ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.entityClassDef = entityClassDef;
@@ -65,6 +74,7 @@ public class WfDef extends BaseApplicationEntityDef {
         this.errorStepDef = errorStepDef;
         this.steps = steps;
         this.filterDefMap = filterDefMap;
+        this.setValuesDefMap = setValuesDefMap;
         this.descFormat = descFormat;
     }
 
@@ -98,6 +108,48 @@ public class WfDef extends BaseApplicationEntityDef {
         }
 
         return false;
+    }
+
+    public boolean isWithOnEntrySetValuesList() {
+        return !DataUtils.isBlank(getOnEntrySetValuesList());
+    }
+    
+    public List<WfSetValuesDef> getOnEntrySetValuesList() {
+        if (onEntrySetValuesList == null) {
+            synchronized (this) {
+                if (onEntrySetValuesList == null) {
+                    onEntrySetValuesList = new ArrayList<WfSetValuesDef>();
+                    for (WfSetValuesDef wfSetValuesDef : setValuesDefMap.values()) {
+                        if (wfSetValuesDef.isOnEntry()) {
+                            onEntrySetValuesList.add(wfSetValuesDef);
+                        }
+                    }
+
+                    onEntrySetValuesList = DataUtils.unmodifiableList(onEntrySetValuesList);
+                }
+            }
+        }
+
+        return onEntrySetValuesList;
+    }
+
+    public Set<String> getOnEntrySetValuesFields() {
+        if (onEntrySetValuesFields != null) {
+            synchronized (this) {
+                if (onEntrySetValuesFields != null) {
+                    onEntrySetValuesFields = new HashSet<String>();
+                    for (WfSetValuesDef wfSetValuesDef: getOnEntrySetValuesList()) {
+                        if (wfSetValuesDef.getSetValues() != null) {
+                            onEntrySetValuesFields.addAll(wfSetValuesDef.getSetValues().getFields());
+                        }
+                    }
+
+                    onEntrySetValuesFields = DataUtils.unmodifiableSet(onEntrySetValuesFields);
+                }
+            }            
+        }
+
+        return onEntrySetValuesFields;
     }
 
     public String getEntity() {
@@ -161,6 +213,8 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private Map<String, FilterDef> filterDefMap;
 
+        private Map<String, WfSetValuesDef> setValuesDefMap;
+
         private WfStepDef startStepDef;
 
         private WfStepDef errorStepDef;
@@ -185,6 +239,7 @@ public class WfDef extends BaseApplicationEntityDef {
             this.version = version;
             this.steps = new HashMap<String, WfStepDef>();
             this.filterDefMap = new HashMap<String, FilterDef>();
+            this.setValuesDefMap = new HashMap<String, WfSetValuesDef>();
         }
 
         public Builder addWfStepDef(WfStepDef stepDef) {
@@ -227,6 +282,16 @@ public class WfDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addWfSetValuesDef(WfSetValuesDef wfSetValuesDef) {
+            if (setValuesDefMap.containsKey(wfSetValuesDef.getName())) {
+                throw new RuntimeException(
+                        "Set values with name [" + wfSetValuesDef.getName() + "] already exists in this definition.");
+            }
+
+            setValuesDefMap.put(wfSetValuesDef.getName(), wfSetValuesDef);
+            return this;
+        }
+
         public WfDef build() throws UnifyException {
             if (startStepDef == null) {
                 throw new RuntimeException("Workflow has no start step.");
@@ -237,7 +302,8 @@ public class WfDef extends BaseApplicationEntityDef {
             }
 
             return new WfDef(entityClassDef, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps), filterDefMap,
-                    descFormat, ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
+                    setValuesDefMap, descFormat, ApplicationNameUtils.getApplicationEntityNameParts(longName),
+                    description, id, version);
         }
     }
 }

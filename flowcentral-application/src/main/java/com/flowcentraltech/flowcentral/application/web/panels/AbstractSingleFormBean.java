@@ -37,7 +37,7 @@ public abstract class AbstractSingleFormBean implements SingleFormBean {
 
     private final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(
             new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
-                    "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode")));
+                    "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     private AppletUtilities au;
 

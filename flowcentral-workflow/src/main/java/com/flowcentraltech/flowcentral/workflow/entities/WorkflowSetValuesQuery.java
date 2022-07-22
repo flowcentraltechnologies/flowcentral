@@ -13,35 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.workflow.entities;
 
-package com.flowcentraltech.flowcentral.common.entities;
-
-import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
-import com.tcdng.unify.core.database.Entity;
+import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 
 /**
- * Work entity definition.
+ * Workflow set values query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WorkEntity extends Entity {
+public class WorkflowSetValuesQuery extends BaseConfigNamedEntityQuery<WorkflowSetValues> {
 
-    ProcessingStatus getProcessingStatus();
-    
-    void setProcessingStatus(ProcessingStatus processingStatus);
-    
-    String getWorkBranchCode();
+    public WorkflowSetValuesQuery() {
+        super(WorkflowSetValues.class);
+    }
 
-    void setWorkBranchCode(String branchCode);
-    
-    String getWorkDepartmentCode();
+    public WorkflowSetValuesQuery workflowId(Long workflowId) {
+        return (WorkflowSetValuesQuery) addEquals("workflowId", workflowId);
+    }
 
-    void setWorkDepartmentCode(String departmentCode);
-
-    String getWorkflowItemDesc();
-
-    boolean isInWorkflow();
-
-    void setInWorkflow(boolean inWorkflow);
 }

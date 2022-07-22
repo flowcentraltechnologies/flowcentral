@@ -34,6 +34,7 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum WorkflowStepType implements EnumConst {
 
     START(
+            ProcessingStatus.NORMAL,
             "STR",
             "play",
             WorkflowStepColor.GREEN,
@@ -42,6 +43,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             0),
     ENRICHMENT(
+            ProcessingStatus.NORMAL,
             "ENR",
             "outdent",
             WorkflowStepColor.CYAN,
@@ -50,6 +52,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             1),
     PROCEDURE(
+            ProcessingStatus.NORMAL,
             "PRC",
             "stream",
             WorkflowStepColor.CYAN,
@@ -58,6 +61,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             2),
     RECORD_ACTION(
+            ProcessingStatus.NORMAL,
             "REC",
             "database",
             WorkflowStepColor.NAVY,
@@ -66,6 +70,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             3),
     BINARY_ROUTING(
+            ProcessingStatus.NORMAL,
             "BRT",
             "directions",
             WorkflowStepColor.BLUE,
@@ -74,6 +79,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             4),
     POLICY_ROUTING(
+            ProcessingStatus.NORMAL,
             "PRT",
             "directions",
             WorkflowStepColor.BLUE,
@@ -82,6 +88,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             5),
     MULTI_ROUTING(
+            ProcessingStatus.NORMAL,
             "MRT",
             "directions",
             WorkflowStepColor.BLUE,
@@ -90,6 +97,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             6),
     USER_ACTION(
+            ProcessingStatus.NORMAL,
             "USR",
             "user-check",
             WorkflowStepColor.ORANGE,
@@ -98,6 +106,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             7),
     SET_VALUES(
+            ProcessingStatus.NORMAL,
             "SET",
             "equals",
             WorkflowStepColor.PURPLE,
@@ -106,6 +115,7 @@ public enum WorkflowStepType implements EnumConst {
             false,
             8),
     ERROR(
+            ProcessingStatus.ERROR,
             "ERR",
             "exclamation-circle",
             WorkflowStepColor.RED,
@@ -114,6 +124,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             9),
     END(
+            ProcessingStatus.NORMAL,
             "END",
             "flag",
             WorkflowStepColor.BLACK,
@@ -122,6 +133,8 @@ public enum WorkflowStepType implements EnumConst {
             false,
             10);
 
+    private final ProcessingStatus processingStatus;
+    
     private final String code;
 
     private final String icon;
@@ -138,8 +151,9 @@ public enum WorkflowStepType implements EnumConst {
 
     private static final List<WorkflowStepType> list = Arrays.asList(values());
 
-    private WorkflowStepType(String code, String icon, WorkflowStepColor color, boolean supportSetValues,
-            boolean sendPassThrough, boolean sendUserActionAlert, int index) {
+    private WorkflowStepType(ProcessingStatus processingStatus, String code, String icon, WorkflowStepColor color,
+            boolean supportSetValues, boolean sendPassThrough, boolean sendUserActionAlert, int index) {
+        this.processingStatus = processingStatus;
         this.code = code;
         this.icon = icon;
         this.color = color;
@@ -156,6 +170,10 @@ public enum WorkflowStepType implements EnumConst {
 
     public String icon() {
         return icon;
+    }
+
+    public ProcessingStatus processingStatus() {
+        return processingStatus;
     }
 
     public WorkflowStepColor color() {

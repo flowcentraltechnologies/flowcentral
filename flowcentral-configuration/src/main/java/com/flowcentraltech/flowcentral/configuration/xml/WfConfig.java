@@ -39,6 +39,8 @@ public class WfConfig extends BaseNameConfig {
 
     private List<FilterConfig> filterList;
 
+    private List<WfSetValuesConfig> setValuesList;
+
     public WfStepsConfig getStepsConfig() {
         return stepsConfig;
     }
@@ -73,6 +75,15 @@ public class WfConfig extends BaseNameConfig {
     @XmlElement(name = "filter", required = true)
     public void setFilterList(List<FilterConfig> filterList) {
         this.filterList = filterList;
+    }
+
+    public List<WfSetValuesConfig> getSetValuesList() {
+        return setValuesList;
+    }
+
+    @XmlElement(name = "setValues")
+    public void setSetValuesList(List<WfSetValuesConfig> setValuesList) {
+        this.setValuesList = setValuesList;
     }
 
 }

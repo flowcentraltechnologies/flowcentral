@@ -17,9 +17,12 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntitySetValuesGenerator;
@@ -48,13 +51,15 @@ import com.tcdng.unify.core.util.StringUtils.StringToken;
  */
 public class SetValuesDef {
 
-    private List<SetValueDef> setValueList;
-
+    private final List<SetValueDef> setValueList;
+    
     private final String valueGenerator;
 
     private final String name;
 
     private final String description;
+
+    private Set<String> fields;
 
     private SetValuesDef(List<SetValueDef> setValueList, String valueGenerator, String name, String description) {
         this.setValueList = setValueList;
@@ -73,6 +78,24 @@ public class SetValuesDef {
 
     public String getDescription() {
         return description;
+    }
+
+    public Set<String> getFields() {
+        if (fields == null) {
+            synchronized(this) {
+                if (fields == null) {
+                    fields = new HashSet<String>();
+                    if (setValueList != null) {
+                        for (SetValueDef setValueDef: setValueList) {
+                            fields.add(setValueDef.getFieldName());
+                        }
+                    }
+                    
+                    fields = Collections.unmodifiableSet(fields);
+                }
+            }
+        }
+        return fields;
     }
 
     public List<SetValueDef> getSetValueList() {

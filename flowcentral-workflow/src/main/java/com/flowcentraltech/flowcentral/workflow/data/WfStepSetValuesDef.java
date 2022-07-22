@@ -14,34 +14,29 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.common.entities;
+package com.flowcentraltech.flowcentral.workflow.data;
 
-import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
-import com.tcdng.unify.core.database.Entity;
+import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 
 /**
- * Work entity definition.
+ * Workflow step set values definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WorkEntity extends Entity {
+public class WfStepSetValuesDef {
 
-    ProcessingStatus getProcessingStatus();
-    
-    void setProcessingStatus(ProcessingStatus processingStatus);
-    
-    String getWorkBranchCode();
+    private SetValuesDef setValues;
 
-    void setWorkBranchCode(String branchCode);
-    
-    String getWorkDepartmentCode();
+    public WfStepSetValuesDef(SetValuesDef setValues) {
+        this.setValues = setValues;
+    }
 
-    void setWorkDepartmentCode(String departmentCode);
+    public SetValuesDef getSetValues() {
+        return setValues;
+    }
 
-    String getWorkflowItemDesc();
-
-    boolean isInWorkflow();
-
-    void setInWorkflow(boolean inWorkflow);
+    public boolean isSetValues() {
+        return setValues != null;
+    }
 }

@@ -62,11 +62,11 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
     private static final int MAX_DEFAULT_TABLE_COLUMNS = 8;
 
     private final Set<String> skipTableColumn = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("id",
-            "versionNo", "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode")));
+            "versionNo", "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     private final Set<String> skipFormField = Collections.unmodifiableSet(
             new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
-                    "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode")));
+                    "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     @Override
     protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {

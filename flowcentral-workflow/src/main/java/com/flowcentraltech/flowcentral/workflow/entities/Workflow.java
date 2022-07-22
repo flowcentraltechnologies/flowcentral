@@ -43,6 +43,9 @@ public class Workflow extends BaseApplicationEntity {
     
     @ChildList
     private List<WorkflowFilter> filterList;
+    
+    @ChildList
+    private List<WorkflowSetValues> setValuesList;
 
     @ChildList
     private List<WfStep> stepList;
@@ -77,6 +80,14 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setFilterList(List<WorkflowFilter> filterList) {
         this.filterList = filterList;
+    }
+
+    public List<WorkflowSetValues> getSetValuesList() {
+        return setValuesList;
+    }
+
+    public void setSetValuesList(List<WorkflowSetValues> setValuesList) {
+        this.setValuesList = setValuesList;
     }
 
     public List<WfStep> getStepList() {
