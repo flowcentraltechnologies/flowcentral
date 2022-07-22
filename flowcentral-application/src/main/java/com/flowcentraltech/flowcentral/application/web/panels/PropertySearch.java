@@ -99,12 +99,12 @@ public class PropertySearch extends AbstractPanelFormBinding {
     }
 
     public boolean isEditButtonVisible() {
-        return getAppletCtx().isContextEditable() && (mode & SHOW_EDIT_BUTTON) > 0
+        return getAppletCtx().isContextEditable() && isTabEditable() && (mode & SHOW_EDIT_BUTTON) > 0
                 && !DataUtils.isBlank(beanTable.getSourceObject());
     }
 
     public boolean isViewButtonVisible() {
-        return !getAppletCtx().isContextEditable() && (mode & SHOW_EDIT_BUTTON) > 0
+        return (!getAppletCtx().isContextEditable() || !isTabEditable()) && (mode & SHOW_EDIT_BUTTON) > 0
                 && !DataUtils.isBlank(beanTable.getSourceObject());
     }
 }

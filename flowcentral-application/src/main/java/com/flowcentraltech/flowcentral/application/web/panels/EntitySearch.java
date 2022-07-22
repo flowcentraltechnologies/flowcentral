@@ -59,7 +59,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private final Long appAppletId;
 
     private final SectorIcon sectorIcon;
-    
+
     private FilterDef baseFilterDef;
 
     private Filter entityFilter;
@@ -108,8 +108,9 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private boolean newButtonVisible;
 
-    public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy, String tabName, TableDef tableDef,
-            Long appAppletId, String editAction, Long appAppletFilterId, int mode) throws UnifyException {
+    public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, TableDef tableDef, Long appAppletId, String editAction, Long appAppletFilterId, int mode)
+            throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName);
         this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
@@ -158,7 +159,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public boolean isWithSectorIcon() {
         return sectorIcon != null;
     }
-    
+
     public Filter getEntityFilter() {
         return entityFilter;
     }
@@ -332,8 +333,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             }
 
             baseRestriction = and;
-            baseFilterTranslation = getAppletCtx().au().resolveSessionMessage(
-                    "$m{entitysearch.basefilter.translation}",
+            baseFilterTranslation = getAppletCtx().au().resolveSessionMessage("$m{entitysearch.basefilter.translation}",
                     getAppletCtx().au().translate(baseRestriction, entityFilter.getEntityDef()));
             return;
         }
@@ -448,15 +448,16 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public boolean isNewButtonVisible() {
-        return newButtonVisible && getAppletCtx().isContextEditable() && (mode & SHOW_NEW_BUTTON) > 0;
+        return newButtonVisible && getAppletCtx().isContextEditable() && isTabEditable()
+                && (mode & SHOW_NEW_BUTTON) > 0;
     }
 
     public boolean isEditButtonVisible() {
-        return getAppletCtx().isContextEditable() && (mode & SHOW_EDIT_BUTTON) > 0;
+        return getAppletCtx().isContextEditable() && isTabEditable() && (mode & SHOW_EDIT_BUTTON) > 0;
     }
 
     public boolean isViewButtonVisible() {
-        return !getAppletCtx().isContextEditable() && (mode & SHOW_EDIT_BUTTON) > 0;
+        return (!getAppletCtx().isContextEditable() || !isTabEditable()) && (mode & SHOW_EDIT_BUTTON) > 0;
     }
 
     public boolean isEditFilterEnabled() {
