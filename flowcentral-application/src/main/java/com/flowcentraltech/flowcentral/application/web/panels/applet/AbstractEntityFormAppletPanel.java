@@ -45,6 +45,7 @@ import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManag
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -776,9 +777,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
 
             // Show message box
-            final String fullActionPath = "/application/refreshContent";
-            showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
-                    "$m{entityformapplet.formreview.failure}", fullActionPath);
+            ReviewResult reviewResult = entityActionResult.getReviewResult();
+            if (reviewResult != null && reviewResult.isWithSkippableMessages()) {
+                ctx.setOriginalEntityActionResult(entityActionResult);
+                final String fullActionPath = "/application/refreshContent";
+                String message = getReviewMessage(reviewResult);
+                showMessageBox(MessageIcon.WARNING, MessageMode.YES_NO, "$m{entityformapplet.formreview}", message,
+                        fullActionPath);
+            } else {
+                final String fullActionPath = "/application/refreshContent";
+                showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
+                        "$m{entityformapplet.formreview.failure}", fullActionPath);
+            }
         } else if (entityActionResult.isHidePopupOnly()) {
             setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
         } else if (entityActionResult.isWithResultPath()) {
@@ -797,6 +807,23 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+    private String getReviewMessage(ReviewResult reviewResult) throws UnifyException {
+        StringBuilder sb = new StringBuilder();
+        boolean appendSym = false;
+        for (String msg : reviewResult.getSkippableMessages()) {
+            if (appendSym) {
+                sb.append(' ');
+            } else {
+                appendSym = true;
+            }
+
+            sb.append(resolveSessionMessage(msg));
+        }
+
+        String msg = sb.toString();
+        return resolveSessionMessage("$m{entityformapplet.formreview.skippable}", msg);
+    }
+
     private void fireEntityActionResultTask(EntityActionResult entityActionResult) throws UnifyException {
         // TODO Set success and failure path
         launchTaskWithMonitorBox(entityActionResult.getResultTaskSetup(), entityActionResult.getResultTaskCaption());
@@ -806,11 +833,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         return getValue(AbstractEntityFormApplet.class);
     }
 
-    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode)
-            throws UnifyException {
+    protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode) throws UnifyException {
         return evaluateCurrentFormContext(evaluationMode, false);
     }
-    
+
     protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode, boolean commentRequired)
             throws UnifyException {
         FormContext ctx = getEntityFormApplet().getResolvedForm().getCtx();
@@ -830,11 +856,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                         : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
                 ctx.mergeValidationErrors(commentsformPanel.validate(evaluationMode));
             }
-            
+
             if (ctx.isWithFormErrors()) {
                 hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
             }
-       }
+        }
 
         return ctx;
     }

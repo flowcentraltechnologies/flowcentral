@@ -514,8 +514,7 @@ public class FormDef extends BaseApplicationEntityDef {
 
         public Builder addFormAction(UIActionType type, HighlightType highlightType, String name, String description,
                 String label, String symbol, String styleClass, String policy, int orderIndex, boolean showOnCreate,
-                boolean showOnMaintain, boolean validateForm,
-                FilterDef onCondition) {
+                boolean showOnMaintain, boolean validateForm, FilterDef onCondition) {
             if (actionNames.contains(name)) {
                 throw new RuntimeException(
                         "Action with name [" + name + "] already exists on this form[" + longName + "].");
@@ -720,7 +719,7 @@ public class FormDef extends BaseApplicationEntityDef {
 
         public Builder addFormReviewPolicy(List<FormReviewType> reviewTypeList, FilterDef errorCondition, String name,
                 String description, MessageType messageType, String message, String errorMatcher,
-                List<String> targetList) {
+                List<String> targetList, boolean skippable) {
             if (formReviewPolicyDefList == null) {
                 formReviewPolicyDefList = new LinkedHashMap<String, FormReviewPolicyDef>();
             }
@@ -731,7 +730,7 @@ public class FormDef extends BaseApplicationEntityDef {
             }
 
             formReviewPolicyDefList.put(name, new FormReviewPolicyDef(reviewTypeList, errorCondition, name, description,
-                    messageType, message, errorMatcher, targetList));
+                    messageType, message, errorMatcher, targetList, skippable));
             return this;
         }
 

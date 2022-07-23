@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormWidg
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormReviewPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormValidationPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.util.ValidationUtils;
@@ -246,8 +247,9 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
     }
 
     @Override
-    public void reviewFormContext(FormContext ctx, EvaluationMode evaluationMode, FormReviewType reviewType)
+    public ReviewResult reviewFormContext(FormContext ctx, EvaluationMode evaluationMode, FormReviewType reviewType)
             throws UnifyException {
+        ReviewResult.Builder rrb = ReviewResult.newBuilder();        
         ctx.clearReviewErrors();
         if (ctx.isWithReviewPolicies(reviewType)) {
             final FormDef formDef = ctx.getFormDef();
@@ -260,7 +262,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                 ConsolidatedFormReviewPolicy policy = au.getComponent(ConsolidatedFormReviewPolicy.class,
                         formDef.getConsolidatedFormReview());
                 for (TargetFormMessage message : policy.review(instValueStore, reviewType)) {
-                    ctx.addReviewError(message);
+                    ctx.addReviewError(rrb, message);
                 }
             }
 
@@ -268,7 +270,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                 if (policyDef.isErrorMatcher()) {
                     EntityMatcher matcher = au.getComponent(EntityMatcher.class, policyDef.getErrorMatcher());
                     if (matcher.match(entityDef, evaluationMode, instValueStore)) {
-                        ctx.addReviewError(policyDef);
+                        ctx.addReviewError(rrb, policyDef);
                         continue;
                     }
                 }
@@ -276,10 +278,12 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                 if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
                         .getObjectFilter(entityDef, ctx.getAppletContext().getSpecialParamProvider(), now)
                         .match(inst)) {
-                    ctx.addReviewError(policyDef);
+                    ctx.addReviewError(rrb, policyDef);
                 }
             }
         }
+        
+        return rrb.build();
     }
 
     @Override
