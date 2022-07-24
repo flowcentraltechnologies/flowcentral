@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
@@ -63,6 +64,7 @@ import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.MessageIcon;
 import com.tcdng.unify.web.ui.widget.data.MessageMode;
+import com.tcdng.unify.web.ui.widget.data.MessageResult;
 
 /**
  * Convenient abstract base panel for entity form applet panels.
@@ -743,6 +745,17 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         getRequestContextUtil().setContentScrollReset();
     }
 
+    @Action
+    public void reviewConfirm() throws UnifyException {
+        MessageResult messageResult = getMessageResult();
+        if (MessageResult.YES.equals(messageResult)) {
+            EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
+            setCommandResultMapping(entityActionResult);
+        } else {
+            setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+        }
+    }
+
     protected SystemModuleService system() {
         return systemModuleService;
     }
@@ -778,18 +791,28 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
             // Show message box
             ReviewResult reviewResult = entityActionResult.getReviewResult();
-            if (reviewResult != null && reviewResult.isWithSkippableMessages()) {
-                ctx.setOriginalEntityActionResult(entityActionResult);
-                final String fullActionPath = "/application/refreshContent";
-                String message = getReviewMessage(reviewResult);
+            if (reviewResult != null && reviewResult.isSkippableOnly()) {
+                getEntityFormApplet().getCtx().setOriginalEntityActionResult(entityActionResult);
+                final String message = getReviewSkippableMessage(reviewResult);
+                final String commandPath = getCommandFullPath("reviewConfirm");
                 showMessageBox(MessageIcon.WARNING, MessageMode.YES_NO, "$m{entityformapplet.formreview}", message,
-                        fullActionPath);
+                        commandPath);
             } else {
-                final String fullActionPath = "/application/refreshContent";
                 showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
-                        "$m{entityformapplet.formreview.failure}", fullActionPath);
+                        "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
             }
-        } else if (entityActionResult.isHidePopupOnly()) {
+        } else {
+            setCommandResultMapping(entityActionResult);
+        }
+
+        String successHint = entityActionResult.getSuccessHint();
+        if (ctx != null && !StringUtils.isBlank(successHint)) {
+            formHintSuccess(successHint, ctx.getEntityName());
+        }
+    }
+
+    private void setCommandResultMapping(EntityActionResult entityActionResult) throws UnifyException {
+        if (entityActionResult.isHidePopupOnly()) {
             setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
         } else if (entityActionResult.isWithResultPath()) {
             commandPost(entityActionResult.getResultPath());
@@ -800,14 +823,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         } else if (entityActionResult.isClosePage()) {
             setCommandResultMapping(ResultMappingConstants.CLOSE);
         }
-
-        String successHint = entityActionResult.getSuccessHint();
-        if (ctx != null && !StringUtils.isBlank(successHint)) {
-            formHintSuccess(successHint, ctx.getEntityName());
-        }
     }
 
-    private String getReviewMessage(ReviewResult reviewResult) throws UnifyException {
+    private String getReviewSkippableMessage(ReviewResult reviewResult) throws UnifyException {
         StringBuilder sb = new StringBuilder();
         boolean appendSym = false;
         for (String msg : reviewResult.getSkippableMessages()) {

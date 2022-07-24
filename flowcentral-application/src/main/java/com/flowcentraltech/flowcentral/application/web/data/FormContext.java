@@ -39,7 +39,6 @@ import com.flowcentraltech.flowcentral.application.data.SetStateDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormTriggerEvaluator;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
-import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
@@ -91,8 +90,6 @@ public class FormContext extends AbstractContext {
     private List<FormWidgetState> formWidgetStateList;
 
     private FormValidationErrors formValidationErrors;
-
-    private EntityActionResult originalEntityActionResult;
     
     private Set<String> visibleAnnotations;
 
@@ -335,11 +332,13 @@ public class FormContext extends AbstractContext {
         reviewErrors.add(message);
         if (message.isSkippable()) {
             rrb.addSkippable(message.getFormMessage().getMessage());
+        } else {
+            rrb.addRequired(message.getFormMessage().getMessage());
         }
     }
 
     public void clearReviewErrors() {
-        originalEntityActionResult = null;
+        appletContext.setOriginalEntityActionResult(null);
         reviewErrors = null;
         reviewErrorsByTab = null;
     }
@@ -410,14 +409,6 @@ public class FormContext extends AbstractContext {
 
     public boolean isReadOnly() throws UnifyException {
         return appletContext.isReadOnly();
-    }
-
-    public EntityActionResult getOriginalEntityActionResult() {
-        return originalEntityActionResult;
-    }
-
-    public void setOriginalEntityActionResult(EntityActionResult originalEntityActionResult) {
-        this.originalEntityActionResult = originalEntityActionResult;
     }
 
     public List<FormReviewPolicyDef> getReviewPolicies(FormReviewType type) {

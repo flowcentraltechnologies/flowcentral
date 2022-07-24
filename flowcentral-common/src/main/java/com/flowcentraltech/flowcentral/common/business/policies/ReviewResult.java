@@ -30,38 +30,58 @@ import com.tcdng.unify.core.util.DataUtils;
 public class ReviewResult {
 
     private List<String> skippableMessages;
-    
-    private ReviewResult(List<String> skippableMessages) {
+
+    private List<String> requiredMessages;
+
+    private ReviewResult(List<String> skippableMessages, List<String> requiredMessages) {
         this.skippableMessages = skippableMessages;
+        this.requiredMessages = requiredMessages;
     }
 
     public List<String> getSkippableMessages() {
         return skippableMessages;
     }
 
+    public List<String> getRequiredMessages() {
+        return requiredMessages;
+    }
+
     public boolean isWithSkippableMessages() {
         return !skippableMessages.isEmpty();
     }
-    
+
+    public boolean isSkippableOnly() {
+        return !skippableMessages.isEmpty() && requiredMessages.isEmpty();
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
-    
+
     public static class Builder {
-        
+
         private List<String> skippableMessages;
-        
+
+        private List<String> requiredMessages;
+
         public Builder() {
             this.skippableMessages = new ArrayList<String>();
+            this.requiredMessages = new ArrayList<String>();
         }
-        
+
         public Builder addSkippable(String message) {
             skippableMessages.add(message);
             return this;
         }
-        
+
+        public Builder addRequired(String message) {
+            requiredMessages.add(message);
+            return this;
+        }
+
         public ReviewResult build() {
-            return new ReviewResult(DataUtils.unmodifiableList(skippableMessages));
+            return new ReviewResult(DataUtils.unmodifiableList(skippableMessages),
+                    DataUtils.unmodifiableList(requiredMessages));
         }
     }
 }

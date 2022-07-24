@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
 import com.tcdng.unify.core.UnifyException;
@@ -45,6 +46,8 @@ public class AppletContext extends AbstractContext {
     private final AbstractApplet applet;
     
     private Map<EntityChildCategoryType, String> entityReferences;
+
+    private EntityActionResult originalEntityActionResult;
 
     private int tabReadOnlyCounter;
     
@@ -112,6 +115,14 @@ public class AppletContext extends AbstractContext {
         if (tabReadOnlyCounter > 0 ) {
             tabReadOnlyCounter--;
         }
+    }
+
+    public EntityActionResult getOriginalEntityActionResult() {
+        return originalEntityActionResult;
+    }
+
+    public void setOriginalEntityActionResult(EntityActionResult originalEntityActionResult) {
+        this.originalEntityActionResult = originalEntityActionResult;
     }
     
     public void setReadOnly(boolean readOnly) {
