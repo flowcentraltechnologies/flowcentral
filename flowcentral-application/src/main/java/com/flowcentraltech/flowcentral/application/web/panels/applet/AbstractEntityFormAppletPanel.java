@@ -750,7 +750,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         MessageResult messageResult = getMessageResult();
         if (MessageResult.YES.equals(messageResult)) {
             EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
-            setCommandResultMapping(entityActionResult);
+            setCommandResultMapping(entityActionResult, true);
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
@@ -802,7 +802,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                         "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
             }
         } else {
-            setCommandResultMapping(entityActionResult);
+            setCommandResultMapping(entityActionResult, false);
         }
 
         String successHint = entityActionResult.getSuccessHint();
@@ -811,7 +811,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
-    private void setCommandResultMapping(EntityActionResult entityActionResult) throws UnifyException {
+    private void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
+            throws UnifyException {
         if (entityActionResult.isHidePopupOnly()) {
             setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
         } else if (entityActionResult.isWithResultPath()) {
@@ -820,6 +821,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             fireEntityActionResultTask(entityActionResult);
         } else if (entityActionResult.isCloseView()) {
             getEntityFormApplet().navBackToPrevious();
+            if (refereshPanel) {
+                getEntityFormApplet().au().commandRefreshPanelsAndHidePopup(this);
+            }
         } else if (entityActionResult.isClosePage()) {
             setCommandResultMapping(ResultMappingConstants.CLOSE);
         }
