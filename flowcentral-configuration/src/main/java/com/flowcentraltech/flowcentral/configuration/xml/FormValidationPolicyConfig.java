@@ -31,6 +31,8 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
     private String target;
 
     private String errorMatcher;
+    
+    private boolean skippable;
 
     private FilterConfig errorCondition;
 
@@ -59,6 +61,15 @@ public class FormValidationPolicyConfig extends BaseNameConfig {
     @XmlAttribute
     public void setErrorMatcher(String errorMatcher) {
         this.errorMatcher = errorMatcher;
+    }
+
+    public boolean isSkippable() {
+        return skippable;
+    }
+
+    @XmlAttribute
+    public void setSkippable(boolean skippable) {
+        this.skippable = skippable;
     }
 
     public FilterConfig getErrorCondition() {

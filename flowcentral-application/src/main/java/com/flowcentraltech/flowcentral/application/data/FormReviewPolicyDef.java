@@ -36,10 +36,14 @@ public class FormReviewPolicyDef extends FormValidationPolicyDef {
 
     private MessageType messageType;
 
+    private boolean skippable;
+
     public FormReviewPolicyDef(List<FormReviewType> reviewTypeList, FilterDef errorCondition, String name,
-            String description, MessageType messageType, String message, String errorMatcher, List<String> targetList) {
+            String description, MessageType messageType, String message, String errorMatcher, List<String> targetList,
+            boolean skippable) {
         super(errorCondition, name, description, message, errorMatcher, targetList);
         this.messageType = messageType;
+        this.skippable = skippable;
         if (!DataUtils.isBlank(reviewTypeList)) {
             this.reviewTypes = Collections.unmodifiableSet(new HashSet<FormReviewType>(reviewTypeList));
         } else {
@@ -55,13 +59,8 @@ public class FormReviewPolicyDef extends FormValidationPolicyDef {
         return reviewTypes.contains(type);
     }
 
-    @Override
-    public String toString() {
-        return "FormReviewPolicyDef [reviewTypes=" + reviewTypes + ", messageType=" + messageType + ", getName()="
-                + getName() + ", getDescription()=" + getDescription() + ", getMessage()=" + getMessage()
-                + ", getErrorMatcher()=" + getErrorMatcher() + ", getErrorCondition()=" + getErrorCondition()
-                + ", isErrorMatcher()=" + isErrorMatcher() + ", isErrorCondition()=" + isErrorCondition()
-                + ", getTarget()=" + getTarget() + ", isWithTarget()=" + isWithTarget() + ", getClass()=" + getClass()
-                + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+    public boolean isSkippable() {
+        return skippable;
     }
+
 }

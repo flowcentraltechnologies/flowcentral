@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.application.data.SetStateDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormTriggerEvaluator;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
@@ -251,7 +252,7 @@ public class FormContext extends AbstractContext {
     public void mergeValidationErrors(List<FormValidationErrors> formValidationErrors) {
         this.formValidationErrors.merge(formValidationErrors);
     }
-    
+
     public void addValidationError(String message) {
         formValidationErrors.addValidationError(message);
     }
@@ -308,27 +309,36 @@ public class FormContext extends AbstractContext {
         return formValidationErrors;
     }
 
-    public void addReviewError(FormReviewPolicyDef policyDef) {
-        addReviewError(policyDef.getTarget(), policyDef.getMessageType(), policyDef.getMessage());
+    public void addReviewError(ReviewResult.Builder rrb, FormReviewPolicyDef policyDef) {
+        addReviewError(rrb, policyDef.getTarget(), policyDef.getMessageType(), policyDef.getMessage(),
+                policyDef.isSkippable());
     }
 
-    public void addReviewError(List<String> target, MessageType messageType, String message) {
-        addReviewError(new HashSet<String>(target), messageType, message);
+    public void addReviewError(ReviewResult.Builder rrb, List<String> target, MessageType messageType, String message,
+            boolean skippable) {
+        addReviewError(rrb, new HashSet<String>(target), messageType, message, skippable);
     }
 
-    public void addReviewError(Set<String> target, MessageType messageType, String message) {
-        addReviewError(new TargetFormMessage(target, new FormMessage(messageType, message)));
+    public void addReviewError(ReviewResult.Builder rrb, Set<String> target, MessageType messageType, String message,
+            boolean skippable) {
+        addReviewError(rrb, new TargetFormMessage(target, new FormMessage(messageType, message), skippable));
     }
 
-    public void addReviewError(TargetFormMessage message) {
+    public void addReviewError(ReviewResult.Builder rrb, TargetFormMessage message) {
         if (reviewErrors == null) {
             reviewErrors = new ArrayList<TargetFormMessage>();
         }
 
         reviewErrors.add(message);
+        if (message.isSkippable()) {
+            rrb.addSkippable(message.getFormMessage().getMessage());
+        } else {
+            rrb.addRequired(message.getFormMessage().getMessage());
+        }
     }
 
     public void clearReviewErrors() {
+        appletContext.setOriginalEntityActionResult(null);
         reviewErrors = null;
         reviewErrorsByTab = null;
     }
@@ -506,7 +516,7 @@ public class FormContext extends AbstractContext {
         FormTab tab = formTabs.get(name);
         return tab == null || (tab.isEditable() && !tab.isDisabled());
     }
-    
+
     public List<FormAnnotationDef> getFormAnnotationDef() {
         if (!visibleAnnotations.isEmpty()) {
             List<FormAnnotationDef> list = new ArrayList<FormAnnotationDef>();

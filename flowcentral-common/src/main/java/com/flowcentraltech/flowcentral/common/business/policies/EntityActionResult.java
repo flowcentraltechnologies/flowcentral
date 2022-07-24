@@ -37,6 +37,8 @@ public class EntityActionResult {
 
     private Object result;
 
+    private ReviewResult reviewResult;
+    
     private boolean refreshMenu;
 
     private boolean closeView;
@@ -78,6 +80,18 @@ public class EntityActionResult {
 
     public Object getResult() {
         return result;
+    }
+
+    public ReviewResult getReviewResult() {
+        return reviewResult;
+    }
+
+    public void setReviewResult(ReviewResult reviewResult) {
+        this.reviewResult = reviewResult;
+    }
+
+    public boolean isWithReviewResult() {
+        return reviewResult != null;
     }
 
     public boolean isWithTaskResult() {

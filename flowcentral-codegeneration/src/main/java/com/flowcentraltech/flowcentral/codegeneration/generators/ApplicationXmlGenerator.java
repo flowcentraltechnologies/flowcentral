@@ -854,6 +854,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formReviewPolicyConfig.setMessageType(appFormReviewPolicy.getMessageType());
                         formReviewPolicyConfig.setEvents(appFormReviewPolicy.getFormEvents());
                         formReviewPolicyConfig.setTarget(appFormReviewPolicy.getTarget());
+                        formReviewPolicyConfig.setSkippable(appFormReviewPolicy.isSkippable());
                         formReviewPolicyConfig.setErrorMatcher(appFormReviewPolicy.getErrorMatcher());
                         formReviewPolicyConfig.setErrorCondition(
                                 InputWidgetUtils.getFilterConfig(appFormReviewPolicy.getErrorCondition()));

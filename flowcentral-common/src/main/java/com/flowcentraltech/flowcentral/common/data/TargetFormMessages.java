@@ -37,19 +37,35 @@ public class TargetFormMessages {
     }
 
     public void addMessage(String message, String... targets) {
-        messageList.add(new TargetFormMessage(new FormMessage(MessageType.INFO, message), targets));
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.INFO, message), false, targets));
     }
 
     public void addInfo(String message, String... targets) {
-        messageList.add(new TargetFormMessage(new FormMessage(MessageType.INFO, message), targets));
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.INFO, message), false, targets));
     }
 
     public void addWarning(String message, String... targets) {
-        messageList.add(new TargetFormMessage(new FormMessage(MessageType.WARNING, message), targets));
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.WARNING, message), false, targets));
     }
 
     public void addError(String message, String... targets) {
-        messageList.add(new TargetFormMessage(new FormMessage(MessageType.ERROR, message), targets));
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.ERROR, message), false, targets));
+    }
+
+    public void addSkippableMessage(String message, String... targets) {
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.INFO, message), true, targets));
+    }
+
+    public void addSkippableInfo(String message, String... targets) {
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.INFO, message), true, targets));
+    }
+
+    public void addSkippableWarning(String message, String... targets) {
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.WARNING, message), true, targets));
+    }
+
+    public void addSkippableError(String message, String... targets) {
+        messageList.add(new TargetFormMessage(new FormMessage(MessageType.ERROR, message), true, targets));
     }
 
     public List<TargetFormMessage> getMessages() {

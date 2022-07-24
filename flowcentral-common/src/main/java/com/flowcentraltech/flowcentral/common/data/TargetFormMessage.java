@@ -32,14 +32,18 @@ public class TargetFormMessage {
 
     private FormMessage formMessage;
 
-    public TargetFormMessage(Set<String> targets, FormMessage formMessage) {
+    private boolean skippable;
+    
+    public TargetFormMessage(Set<String> targets, FormMessage formMessage, boolean skippable) {
         this.targets = targets;
         this.formMessage = formMessage;
+        this.skippable = skippable;
     }
 
-    public TargetFormMessage(FormMessage formMessage, String... targets) {
+    public TargetFormMessage(FormMessage formMessage, boolean skippable, String... targets) {
         this.targets = new HashSet<String>(Arrays.asList(targets));
         this.formMessage = formMessage;
+        this.skippable = skippable;
     }
 
     public Set<String> getTargets() {
@@ -52,6 +56,10 @@ public class TargetFormMessage {
 
     public boolean isTarget(String target) {
         return targets.contains(target);
+    }
+
+    public boolean isSkippable() {
+        return skippable;
     }
 
     public FormMessage getFormMessage() {

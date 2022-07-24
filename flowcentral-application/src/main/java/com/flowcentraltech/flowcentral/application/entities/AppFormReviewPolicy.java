@@ -50,6 +50,9 @@ public class AppFormReviewPolicy extends BaseConfigNamedEntity {
     @Column(name = "POLICY_TARGET", length = 256, nullable = true)
     private String target;
 
+    @Column
+    private boolean skippable;
+    
     @Child(category = "formreviewpolicy")
     private AppFilter errorCondition;
 
@@ -105,6 +108,14 @@ public class AppFormReviewPolicy extends BaseConfigNamedEntity {
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public boolean isSkippable() {
+        return skippable;
+    }
+
+    public void setSkippable(boolean skippable) {
+        this.skippable = skippable;
     }
 
     public AppFilter getErrorCondition() {

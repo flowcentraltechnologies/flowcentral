@@ -1382,6 +1382,9 @@
 			<field name="message"
 				label="$m{application.appformreviewpolicy.message}"
 				type="string" />
+			<field name="skippable"
+				label="$m{application.appformreviewpolicy.skippable}"
+				type="boolean" />
 			<field name="formEvents"
 				label="$m{application.appformreviewpolicy.event}" type="string" />
 			<field name="target"

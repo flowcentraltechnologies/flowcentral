@@ -953,7 +953,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 appFormReviewPolicy.getName(), appFormReviewPolicy.getDescription(),
                                 appFormReviewPolicy.getMessageType(), appFormReviewPolicy.getMessage(),
                                 appFormReviewPolicy.getErrorMatcher(),
-                                DataUtils.convert(List.class, String.class, appFormReviewPolicy.getTarget(), null));
+                                DataUtils.convert(List.class, String.class, appFormReviewPolicy.getTarget(), null),
+                                appFormReviewPolicy.isSkippable());
                     }
 
                     return fdb.build();
@@ -3995,6 +3996,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormReviewPolicy.setMessageType(formReviewPolicyConfig.getMessageType());
                     appFormReviewPolicy.setFormEvents(formReviewPolicyConfig.getEvents());
                     appFormReviewPolicy.setTarget(formReviewPolicyConfig.getTarget());
+                    appFormReviewPolicy.setSkippable(formReviewPolicyConfig.isSkippable());
                     appFormReviewPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
                     formReviewList.add(appFormReviewPolicy);
                 } else {
@@ -4009,6 +4011,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppFormReviewPolicy.setMessageType(formReviewPolicyConfig.getMessageType());
                         oldAppFormReviewPolicy.setFormEvents(formReviewPolicyConfig.getEvents());
                         oldAppFormReviewPolicy.setTarget(formReviewPolicyConfig.getTarget());
+                        oldAppFormReviewPolicy.setSkippable(formReviewPolicyConfig.isSkippable());
                     } else {
                         environment().findChildren(oldAppFormReviewPolicy);
                     }

@@ -3298,6 +3298,8 @@
 						column="1" />
 					<field name="errorMatcher"
 						inputWidget="studio.entitymatcherlist" column="1" />
+					<field name="skippable"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 				<section name="messageDetails" columns="type_2">
 					<field name="messageType" inputWidget="application.enumlist"
