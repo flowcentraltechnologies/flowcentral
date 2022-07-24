@@ -110,10 +110,4 @@ public class FormStatePolicyDef implements Listable {
         
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "FormStatePolicyDef [onCondition=" + onCondition + ", setStatesDef=" + setStatesDef + ", setValuesDef="
-                + setValuesDef + ", triggers=" + triggers + ", name=" + name + ", description=" + description + "]";
-    }
 }
