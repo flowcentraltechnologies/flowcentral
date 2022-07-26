@@ -42,4 +42,8 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
         return (BaseApplicationEntityQuery<T>) addEquals("applicationName", applicationName);
     }
 
+    public BaseApplicationEntityQuery<T> applicationNameNot(String applicationName) {
+        return (BaseApplicationEntityQuery<T>) addNotEquals("applicationName", applicationName);
+    }
+
 }

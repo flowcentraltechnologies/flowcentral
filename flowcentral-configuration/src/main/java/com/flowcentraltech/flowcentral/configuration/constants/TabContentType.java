@@ -47,7 +47,9 @@ public enum TabContentType implements EnumConst {
     PROPERTY_LIST(
             "PRL"),
     SET_VALUES(
-            "STV");
+            "STV"),
+    WIDGET_RULES(
+            "WGR");
 
     private final String code;
 

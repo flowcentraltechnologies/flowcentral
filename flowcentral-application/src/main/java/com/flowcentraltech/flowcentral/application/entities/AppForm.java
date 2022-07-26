@@ -70,6 +70,9 @@ public class AppForm extends BaseApplicationEntity {
     private List<AppFormStatePolicy> fieldStateList;
 
     @ChildList
+    private List<AppFormWidgetRulesPolicy> widgetRulesList;
+    
+    @ChildList
     private List<AppFormFieldValidationPolicy> fieldValidationList;
 
     @ChildList
@@ -172,6 +175,14 @@ public class AppForm extends BaseApplicationEntity {
 
     public void setFieldStateList(List<AppFormStatePolicy> fieldStateList) {
         this.fieldStateList = fieldStateList;
+    }
+
+    public List<AppFormWidgetRulesPolicy> getWidgetRulesList() {
+        return widgetRulesList;
+    }
+
+    public void setWidgetRulesList(List<AppFormWidgetRulesPolicy> widgetRulesList) {
+        this.widgetRulesList = widgetRulesList;
     }
 
     public List<AppFormFieldValidationPolicy> getFieldValidationList() {

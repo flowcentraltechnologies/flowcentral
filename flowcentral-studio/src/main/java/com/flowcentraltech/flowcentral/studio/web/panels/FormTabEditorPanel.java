@@ -71,6 +71,8 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
                     break;
                 case SET_VALUES:
                     break;
+                case WIDGET_RULES:
+                    break;
                 default:
                     break;
             }

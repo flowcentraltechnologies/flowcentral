@@ -85,8 +85,9 @@ public final class WidgetWriterUtils {
         WriterUtils.registerJSAlias("fux.rigSearch","fux0c");  
         WriterUtils.registerJSAlias("fux.rigSetValues","fux0d");  
         WriterUtils.registerJSAlias("fux.rigTable","fux0e");  
-        WriterUtils.registerJSAlias("fux.rigTabSheet","fux0f");  
+        WriterUtils.registerJSAlias("fux.rigTabSheet","fux0f"); 
         WriterUtils.registerJSAlias("fux.rigChart","fux10");
+        WriterUtils.registerJSAlias("fux.rigWidgetRules","fux11");
    }
     
     public static String getTabClass(int index, int tabIndex) {

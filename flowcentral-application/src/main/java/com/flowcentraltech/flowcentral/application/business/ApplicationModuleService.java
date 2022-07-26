@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
@@ -1041,6 +1042,41 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     void saveFieldSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, FieldSequenceDef fieldSequenceDef) throws UnifyException;
+    
+    /**
+     * Retrieves application widget rules definition for an entity instance.
+     * 
+     * @param category
+     *                        the widget rules category
+     * @param ownerEntityName
+     *                        the entity type long name
+     * @param ownerInstId
+     *                        the entity instance ID
+     * @return the widget rules definition if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    WidgetRulesDef retrieveWidgetRulesDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException;
+
+    /**
+     * Saves application widget rules definition for an entity instance.
+     * 
+     * @param sweepingCommitPolicy
+     *                             sweeping commit policy
+     * @param category
+     *                             the set values category
+     * @param ownerEntityName
+     *                             the entity type long name
+     * @param ownerInstId
+     *                             the entity instance ID
+     * @param widgetRulesDef
+     *                             the widget rules definition to save
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveWidgetRulesDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, WidgetRulesDef widgetRulesDef) throws UnifyException;
 
     /**
      * Retrieves application set values definition for an entity instance.

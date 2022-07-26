@@ -149,11 +149,4 @@ public class FormFieldDef {
         return disabled;
     }
 
-    @Override
-    public String toString() {
-        return "FormFieldDef [fieldName=" + getFieldName() + ", fieldLabel=" + fieldLabel + ", renderer=" + renderer
-                + ", column=" + column + ", minLen=" + getMinLen() + ", maxLen=" + getMaxLen() + ", switchOnChange="
-                + switchOnChange + ", saveAs=" + saveAs + ", required=" + required + ", visible=" + visible
-                + ", editable=" + editable + ", disabled=" + disabled + "]";
-    }
 }

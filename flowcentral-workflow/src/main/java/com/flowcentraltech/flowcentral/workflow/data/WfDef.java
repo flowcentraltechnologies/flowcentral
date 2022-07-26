@@ -134,9 +134,9 @@ public class WfDef extends BaseApplicationEntityDef {
     }
 
     public Set<String> getOnEntrySetValuesFields() {
-        if (onEntrySetValuesFields != null) {
+        if (onEntrySetValuesFields == null) {
             synchronized (this) {
-                if (onEntrySetValuesFields != null) {
+                if (onEntrySetValuesFields == null) {
                     onEntrySetValuesFields = new HashSet<String>();
                     for (WfSetValuesDef wfSetValuesDef: getOnEntrySetValuesList()) {
                         if (wfSetValuesDef.getSetValues() != null) {

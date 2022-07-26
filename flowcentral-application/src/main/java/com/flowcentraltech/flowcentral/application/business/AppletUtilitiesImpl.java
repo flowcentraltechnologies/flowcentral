@@ -45,6 +45,7 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -62,6 +63,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
@@ -478,6 +480,19 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public WidgetRulesDef retrieveWidgetRulesDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException {
+        return applicationModuleService.retrieveWidgetRulesDef(category, ownerEntityName, ownerInstId);
+    }
+
+    @Override
+    public void saveWidgetRulesDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, WidgetRulesDef widgetRulesDef) throws UnifyException {
+        applicationModuleService.saveWidgetRulesDef(sweepingCommitPolicy, category, ownerEntityName, ownerInstId,
+                widgetRulesDef);
+    }
+
+    @Override
     public SetValuesDef retrieveSetValuesDef(String category, String ownerEntityName, Long ownerInstId)
             throws UnifyException {
         return applicationModuleService.retrieveSetValuesDef(category, ownerEntityName, ownerInstId);
@@ -704,6 +719,25 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 RendererType.STANDALONE_PANEL);
                         tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
                                 _entitySetValues, tabIndex,
+                                !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
+                    }
+                        break;
+                    case WIDGET_RULES: {
+                        logDebug("Constructing widget rules tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
+                        EntityChildCategoryType categoryType = EntityChildCategoryType
+                                .fromName(formTabDef.getReference());
+                        EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
+                        EntityWidgetRules _entityWidgetRules = constructEntityWidgetRules(formContext,
+                                sweepingCommitPolicy, formTabDef.getName(), formDef.getEntityDef(),
+                                EntityWidgetRules.ENABLE_ALL);
+                        _entityWidgetRules.setCategory(categoryType.category());
+                        _entityWidgetRules.setOwnerInstId((Long) inst.getId());
+                        _entityWidgetRules.load(_entityDef);
+                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-entitywidgetrulespanel",
+                                RendererType.STANDALONE_PANEL);
+                        tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
+                                _entityWidgetRules, tabIndex,
                                 !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
                     }
                         break;
@@ -950,6 +984,20 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
                     }
                         break;
+                    case WIDGET_RULES: {
+                        logDebug("Updating widget rules tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
+                        EntityChildCategoryType categoryType = EntityChildCategoryType
+                                .fromName(formTabDef.getReference());
+                        EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
+                        EntityWidgetRules _entityWidgetRules = (EntityWidgetRules) tabSheetItem.getValObject();
+                        _entityWidgetRules.setCategory(categoryType.category());
+                        _entityWidgetRules.setOwnerInstId((Long) inst.getId());
+                        _entityWidgetRules.load(_entityDef);
+                        tabSheetItem.setVisible(
+                                !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
+                    }
+                        break;
                     default:
                         break;
 
@@ -1156,6 +1204,14 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         logDebug("Constructing entity field sequence for [{0}] using entity definition [{1}]...", tabName,
                 ownerEntityDef.getLongName());
         return new EntityFieldSequence(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityFieldSequenceMode);
+    }
+
+    @Override
+    public EntityWidgetRules constructEntityWidgetRules(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int mode) throws UnifyException {
+        logDebug("Constructing entity widget rules for [{0}] using entity definition [{1}]...", tabName,
+                ownerEntityDef.getLongName());
+        return new EntityWidgetRules(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, mode);
     }
 
     @Override

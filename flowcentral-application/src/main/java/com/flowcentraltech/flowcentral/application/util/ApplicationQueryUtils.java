@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.studio.util;
+package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.Arrays;
 
@@ -29,14 +29,14 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 
 /**
- * Studio query utilities.
+ * Application query utilities.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public final class StudioQueryUtils {
+public final class ApplicationQueryUtils {
 
-    private StudioQueryUtils() {
+    private ApplicationQueryUtils() {
 
     }
 

@@ -25,9 +25,9 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationQueryUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
-import com.flowcentraltech.flowcentral.studio.util.StudioQueryUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
@@ -59,7 +59,7 @@ public class StudioEntityFieldWidgetListCommand extends AbstractApplicationListC
             }
 
             AppWidgetTypeQuery query = new AppWidgetTypeQuery();
-            StudioQueryUtils.addWidgetTypeCriteria(query, type);
+            ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
             query.addSelect("applicationName", "name", "description");
             return ApplicationNameUtils.getListableList(application().findAppWidgetTypes(query));
         }

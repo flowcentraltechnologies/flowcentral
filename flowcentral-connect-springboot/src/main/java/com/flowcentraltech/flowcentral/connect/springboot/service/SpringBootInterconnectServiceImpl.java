@@ -84,6 +84,8 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     private Map<String, PlatformInfo> platforms;
 
     private PlatformInfo defaultPlatform;
+    
+    private boolean logging;
 
     @Autowired
     public SpringBootInterconnectServiceImpl(SpringBootInterconnect interconnect, Environment env,
@@ -97,10 +99,11 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     @PostConstruct
     public void init() throws Exception {
         String interconectConfigFile = env.getProperty("flowcentral.interconnect.configfile");
-        LOGGER.log(Level.INFO, "Initializing spring boot interconnect [{0}]...", interconectConfigFile);
+        logging = env.getProperty("flowcentral.interconnect.logging.enabled", boolean.class, false);
+        logInfo("Initializing spring boot interconnect [{0}]...", interconectConfigFile);
         interconnect.init(interconectConfigFile, this);
     }
-
+    
     @Override
     public String getRedirect() {
         return interconnect.getRedirect();
@@ -109,7 +112,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findById(EntityInfo entityInfo, Object id) throws Exception {
-        LOGGER.log(Level.INFO, "Finding entity [{0}] by ID [{1}]...", new Object[] {entityInfo.getName(), id});
+        logInfo("Finding entity [{0}] by ID [{1}]...", new Object[] {entityInfo.getName(), id});
         PlatformInfo platform = getPlatform(entityInfo);
         T result = null;
         EntityManager em = null;
@@ -122,7 +125,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             tx.commit();
             em.close();
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Datasource request processing failure.", e);
+            logSevere("Datasource request processing failure.", e);
             if (tx != null) {
                 tx.rollback();
             }
@@ -147,7 +150,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
     @Override
     public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) throws Exception {
-        LOGGER.log(Level.INFO, "Processing datasource request [{0}]...", interconnect.prettyJSON(req));
+        logInfo("Processing datasource request [{0}]...", interconnect.prettyJSON(req));
         final EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
         PlatformInfo platform = getPlatform(entityInfo);
         String errorCode = null;
@@ -289,7 +292,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 tx.commit();
                 em.close();
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Datasource request processing failure.", e);
+                logSevere("Datasource request processing failure.", e);
                 errorMsg = e.getMessage();
                 if (tx != null) {
                     tx.rollback();
@@ -771,6 +774,18 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         public Index set(int i) {
             this.i = i;
             return this;
+        }
+    }
+
+    private void logInfo(String message, Object... params) {
+        if (logging) {
+            LOGGER.log(Level.INFO, message, params);
+        }
+    }
+
+    private void logSevere(String message, Exception e) {
+        if (logging) {
+            LOGGER.log(Level.SEVERE, message, e);
         }
     }
 

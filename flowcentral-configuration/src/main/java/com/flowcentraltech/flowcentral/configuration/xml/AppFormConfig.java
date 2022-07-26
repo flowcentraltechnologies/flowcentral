@@ -42,6 +42,8 @@ public class AppFormConfig extends BaseNameConfig {
 
     private List<FormStatePolicyConfig> formStatePolicyList;
 
+    private List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList;
+
     private List<FieldValidationPolicyConfig> fieldValidationPolicyList;
 
     private List<FormValidationPolicyConfig> formValidationPolicyList;
@@ -107,6 +109,15 @@ public class AppFormConfig extends BaseNameConfig {
     @XmlElement(name = "formStatePolicy")
     public void setFormStatePolicyList(List<FormStatePolicyConfig> formStatePolicyList) {
         this.formStatePolicyList = formStatePolicyList;
+    }
+
+    public List<FormWidgetRulesPolicyConfig> getWidgetRulesPolicyList() {
+        return widgetRulesPolicyList;
+    }
+
+    @XmlElement(name = "formWidgetRulesPolicy")
+    public void setWidgetRulesPolicyList(List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList) {
+        this.widgetRulesPolicyList = widgetRulesPolicyList;
     }
 
     public List<FieldValidationPolicyConfig> getFieldValidationPolicyList() {

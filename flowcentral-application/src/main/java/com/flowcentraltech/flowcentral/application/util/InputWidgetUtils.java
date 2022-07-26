@@ -39,12 +39,15 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
 import com.flowcentraltech.flowcentral.application.data.SetValueDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.data.DateRange;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
@@ -64,6 +67,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UnifyOperationException;
 import com.tcdng.unify.core.constant.OrderType;
@@ -574,6 +579,102 @@ public final class InputWidgetUtils {
                 bw.write(']');
                 if (fieldSequenceEntryDef.isWithFormatter()) {
                     bw.write(fieldSequenceEntryDef.getFormatter());
+                    bw.write(']');
+                }
+
+                bw.newLine();
+            }
+
+            bw.flush();
+            result = sw.toString();
+        } catch (IOException e) {
+            throw new UnifyOperationException(e);
+        }
+
+        return result;
+    }
+
+    public static WidgetRulesDef getWidgetRulesDef(AppWidgetRules appWidgetRules) throws UnifyException {
+        return InputWidgetUtils.getWidgetRulesDef(null, null, appWidgetRules);
+    }
+
+    public static WidgetRulesDef getWidgetRulesDef(String name, String description,
+            AppWidgetRules appWidgetRules) throws UnifyException {
+        if (appWidgetRules != null) {
+            WidgetRulesDef.Builder svdb = WidgetRulesDef.newBuilder();
+            svdb.name(name).description(description);
+            try (BufferedReader reader = new BufferedReader(new StringReader(appWidgetRules.getDefinition()))) {
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    String[] p = line.split("]");
+                    String fieldName = p[0];
+                    String widget = p.length > 1 ? p[1] : null;
+                    svdb.addWidgetRuleEntryDef(fieldName, widget);
+                }
+            } catch (IOException e) {
+                throw new UnifyOperationException(e);
+            }
+
+            return svdb.build();
+        }
+
+        return null;
+    }
+
+    public static WidgetRulesConfig getWidgetRulesConfig(AppWidgetRules appWidgetRules) throws UnifyException {
+        WidgetRulesDef widgetRulesDef = InputWidgetUtils.getWidgetRulesDef(appWidgetRules);
+        return InputWidgetUtils.getWidgetRulesConfig(widgetRulesDef);
+    }
+
+    public static WidgetRulesConfig getWidgetRulesConfig(WidgetRulesDef widgetRulesDef) throws UnifyException {
+        List<WidgetRuleEntryConfig> entryList = new ArrayList<WidgetRuleEntryConfig>();
+        for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
+            entryList.add(new WidgetRuleEntryConfig(widgetRuleEntryDef.getFieldName(),
+                    widgetRuleEntryDef.getWidget()));
+        }
+
+        return new WidgetRulesConfig(entryList);
+    }
+
+    public static AppWidgetRules newAppWidgetRules(WidgetRulesConfig widgetRulesConfig) throws UnifyException {
+        if (widgetRulesConfig != null) {
+            return new AppWidgetRules(InputWidgetUtils.getWidgetRulesDefinition(widgetRulesConfig));
+        }
+
+        return null;
+    }
+
+    public static String getWidgetRulesDefinition(WidgetRulesConfig widgetRulesConfig) throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+            for (WidgetRuleEntryConfig entry : widgetRulesConfig.getEntryList()) {
+                bw.write(entry.getFieldName());
+                bw.write(']');
+                if (entry.getWidget() != null) {
+                    bw.write(entry.getWidget());
+                    bw.write(']');
+                }
+
+                bw.newLine();
+            }
+
+            bw.flush();
+            result = sw.toString();
+        } catch (IOException e) {
+            throw new UnifyOperationException(e);
+        }
+
+        return result;
+    }
+
+    public static String getWidgetRulesDefinition(WidgetRulesDef widgetRulesDef) throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw)) {
+            for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
+                bw.write(widgetRuleEntryDef.getFieldName());
+                bw.write(']');
+                if (widgetRuleEntryDef.isWithWidget()) {
+                    bw.write(widgetRuleEntryDef.getWidget());
                     bw.write(']');
                 }
 
