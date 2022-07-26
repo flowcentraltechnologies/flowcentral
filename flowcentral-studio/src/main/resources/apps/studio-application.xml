@@ -2950,6 +2950,10 @@
 				label="$m{studio.appform.form.relatedlists}"
 				contentType="child_list" applet="manageAppFormRelatedList"
 				reference="relatedList" visible="false" />
+			<tab name="widgetRulesPolicies"
+				label="$m{studio.appform.form.widgetrulespolicies}"
+				contentType="child_list" applet="manageAppFormWidgetRulesPolicy"
+				reference="widgetRulesList" visible="false" />
 			<tab name="fieldValidationPolicies"
 				label="$m{studio.appform.form.fieldvalidationpolicies}"
 				contentType="child_list" applet="manageAppFormFieldValidationPolicy"
@@ -3011,7 +3015,7 @@
 						target="consolidatedValidation,consolidatedReview,consolidatedState"
 						visible="true" />
 					<setState type="tab"
-						target="design,annotations,actions,relatedLists,fieldValidationPolicies,fieldStatePolicies,formValidationPolicies,formReviewPolicies"
+						target="design,annotations,actions,relatedLists,widgetRulesPolicies,fieldValidationPolicies,fieldStatePolicies,formValidationPolicies,formReviewPolicies"
 						visible="true" />
 				</setStates>
 			</formStatePolicy>

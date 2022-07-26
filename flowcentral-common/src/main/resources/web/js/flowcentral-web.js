@@ -851,8 +851,9 @@ fux.init = function() {
 	ux.setfn(fux.rigSearch,"fux0c");  
 	ux.setfn(fux.rigSetValues,"fux0d");  
 	ux.setfn(fux.rigTable,"fux0e");  
-	ux.setfn(fux.rigTabSheet,"fux0f");  
+	ux.setfn(fux.rigTabSheet,"fux0f"); 
 	ux.setfn(fux.rigChart,"fux10");
+	ux.setfn(fux.rigWidgetRules,"fux11");
 }
 
 fux.init();

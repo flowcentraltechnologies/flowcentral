@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.web.widgets.FieldSequenceEntry;
+import com.flowcentraltech.flowcentral.application.web.widgets.WidgetRuleEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.WidgetRulesWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -57,9 +57,9 @@ public class WidgetRulesWriter extends AbstractControlWriter {
             final String usesLabel = resolveSessionMessage("$m{widgetrules.renderedwith}");
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
-                FieldSequenceEntry fso = (FieldSequenceEntry) lineValueStore.getValueObject();
+                WidgetRuleEntry fso = (WidgetRuleEntry) lineValueStore.getValueObject();
                 writer.write("<div class=\"line\">");
-                final String columnLabel = resolveSessionMessage("$m{fieldsequence.column}", i + 1);
+                final String columnLabel = resolveSessionMessage("$m{widgetrules.field}");
                 writeRuleItem(writer, lineValueStore, fieldSelectCtrl, columnLabel);
                 if (!StringUtils.isBlank(fso.getFieldName())) {
                     writeRuleItem(writer, lineValueStore, widgetCtrl, usesLabel);
@@ -86,7 +86,7 @@ public class WidgetRulesWriter extends AbstractControlWriter {
             final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
-                FieldSequenceEntry fso = (FieldSequenceEntry) lineValueStore.getValueObject();
+                WidgetRuleEntry fso = (WidgetRuleEntry) lineValueStore.getValueObject();
                 writeBehavior(writer, widgetRulesWidget, lineValueStore, fieldSelectCtrl);
                 csb.add(fieldSelectCtrl.getId());
 

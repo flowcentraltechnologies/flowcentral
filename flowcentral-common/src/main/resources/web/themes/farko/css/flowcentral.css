@@ -608,6 +608,19 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /*** Progress Bar ***/
 .fc-progressbar {background-color: #f44336;}
 .fc-progressbar .prog {height:8px; background-color: #4CAF50;}
+
+/* Widget Rules */
+.fc-widgetrules {padding:4px;}
+.fc-widgetrules .line {padding-bottom: 2px;}
+.fc-widgetrules .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
+	font-weight:bold; vertical-align: middle;}
+.fc-widgetrules .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}
+.fc-widgetrules .item {display:inline-block; margin-right:6px;}
+.fc-widgetrules .atab {display:inline-block;vertical-align: middle;height:24px;width:140px;}
+.fc-widgetrules .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
+								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
+.fc-widgetrules .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
+.fc-widgetrules .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
     
 /*** PAGES ***/
 /* Application */
