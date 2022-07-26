@@ -90,11 +90,4 @@ public class FormSectionDef {
         return disabled;
     }
 
-    @Override
-    public String toString() {
-        return "FormSectionDef [formFieldDefList=" + formFieldDefList + ", name=" + name + ", label=" + label
-                + ", columns=" + columns + ", visible=" + visible + ", editable=" + editable + ", disabled=" + disabled
-                + "]";
-    }
-
 }

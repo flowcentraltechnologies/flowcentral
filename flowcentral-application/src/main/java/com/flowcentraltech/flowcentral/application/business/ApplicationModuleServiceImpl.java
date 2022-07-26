@@ -66,6 +66,7 @@ import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
@@ -846,6 +847,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appForm.getConsolidatedValidation(), appForm.getConsolidatedReview(),
                             appForm.getConsolidatedState(), appForm.getListingGenerator(), longName,
                             appForm.getDescription(), appForm.getId(), appForm.getVersionNo());
+                    Map<String, FieldRenderInfo> fieldRenderInfos = new HashMap<String, FieldRenderInfo>();
                     int tabIndex = -1;
                     int sectionIndex = -1;
                     for (AppFormElement appFormElement : appForm.getElementList()) {
@@ -878,6 +880,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                             : entityFieldDef.isWithAutoFormat() ? WidgetColor.NAVY_GRAY : color;
                                 }
 
+                                fieldRenderInfos.put(fieldName,
+                                        new FieldRenderInfo(appFormElement.getInputReference(), color));
                                 String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
                                         entityFieldDef, appFormElement.getInputReference(), color);
                                 RefDef inputRefDef = !StringUtils.isBlank(appFormElement.getInputReference())
@@ -938,9 +942,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
-                        fdb.addFormWidgetRulesPolicy(appFormWidgetRulesPolicy.getName(), appFormWidgetRulesPolicy.getDescription(),
+                        WidgetRulesDef widgetRulesDef = InputWidgetUtils
+                                .getWidgetRulesDef(appFormWidgetRulesPolicy.getWidgetRules());
+                        Map<String, String> ruleEditors = new HashMap<String, String>();
+                        for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
+                            if (widgetRuleEntryDef.isPresent()) {
+                                final String fieldName = widgetRuleEntryDef.getFieldName();
+                                FieldRenderInfo fieldRenderInfo = fieldRenderInfos.get(fieldName);
+                                WidgetTypeDef widgetTypeDef = getWidgetTypeDef(widgetRuleEntryDef.getWidget());
+                                EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                                String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
+                                        entityFieldDef, fieldRenderInfo.getReference(), fieldRenderInfo.getColor());
+                                ruleEditors.put(fieldName, renderer);
+                            }
+                        }
+
+                        fdb.addFormWidgetRulesPolicy(appFormWidgetRulesPolicy.getName(),
+                                appFormWidgetRulesPolicy.getDescription(),
                                 InputWidgetUtils.getFilterDef(appFormWidgetRulesPolicy.getOnCondition()),
-                                InputWidgetUtils.getWidgetRulesDef(appFormWidgetRulesPolicy.getWidgetRules()));
+                                widgetRulesDef, ruleEditors);
                     }
 
                     for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : appForm.getFieldValidationList()) {
@@ -4345,5 +4365,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return _dynamicEntityInfo;
+    }
+
+    private class FieldRenderInfo {
+
+        private final String reference;
+
+        private final WidgetColor color;
+
+        public FieldRenderInfo(String reference, WidgetColor color) {
+            this.reference = reference;
+            this.color = color;
+        }
+
+        public String getReference() {
+            return reference;
+        }
+
+        public WidgetColor getColor() {
+            return color;
+        }
     }
 }

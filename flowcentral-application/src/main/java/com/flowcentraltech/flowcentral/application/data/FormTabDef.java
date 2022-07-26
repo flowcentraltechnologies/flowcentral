@@ -193,12 +193,4 @@ public class FormTabDef {
         return disabled;
     }
 
-    @Override
-    public String toString() {
-        return "FormTabDef [contentType=" + contentType + ", name=" + name + ", label=" + label + ", applet=" + applet
-                + ", reference=" + reference + ", editAction=" + editAction + ", formSectionDefList="
-                + formSectionDefList + ", fieldNameList=" + fieldNameList + ", visible=" + visible + ", editable="
-                + editable + ", disabled=" + disabled + "]";
-    }
-
 }
