@@ -44,4 +44,8 @@ public class WidgetRuleEntryDef {
     public boolean isWithWidget() {
         return widget != null;
     }
+
+    public boolean isPresent() {
+        return fieldName != null && widget != null;
+    }
 }

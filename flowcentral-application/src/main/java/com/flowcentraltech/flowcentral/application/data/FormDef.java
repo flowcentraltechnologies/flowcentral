@@ -642,7 +642,7 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormWidgetRulesPolicy(String name, String description, FilterDef onCondition,
-                WidgetRulesDef widgetRulesDef) {
+                WidgetRulesDef widgetRulesDef, Map<String, String> ruleEditors) {
             if (formWidgetRulesPolicyDefList == null) {
                 formWidgetRulesPolicyDefList = new LinkedHashMap<String, FormWidgetRulesPolicyDef>();
             }
@@ -653,7 +653,7 @@ public class FormDef extends BaseApplicationEntityDef {
             }
 
             formWidgetRulesPolicyDefList.put(name,
-                    new FormWidgetRulesPolicyDef(name, description, onCondition, widgetRulesDef));
+                    new FormWidgetRulesPolicyDef(name, description, onCondition, widgetRulesDef, ruleEditors));
             return this;
         }
 

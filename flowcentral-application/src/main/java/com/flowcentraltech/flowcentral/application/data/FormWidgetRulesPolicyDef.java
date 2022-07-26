@@ -15,7 +15,16 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import java.util.Date;
+import java.util.Map;
+
+import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.filter.ObjectFilter;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Form widget rules policy definition.
@@ -29,16 +38,19 @@ public class FormWidgetRulesPolicyDef implements Listable {
 
     private WidgetRulesDef widgetRulesDef;
 
+    private Map<String, String> ruleEditors;
+
     private String name;
 
     private String description;
 
     public FormWidgetRulesPolicyDef(String name, String description, FilterDef onCondition,
-            WidgetRulesDef widgetRulesDef) {
+            WidgetRulesDef widgetRulesDef, Map<String, String> ruleEditors) {
         this.name = name;
         this.description = description;
         this.onCondition = onCondition;
         this.widgetRulesDef = widgetRulesDef;
+        this.ruleEditors = DataUtils.unmodifiableMap(ruleEditors);
     }
 
     @Override
@@ -49,6 +61,19 @@ public class FormWidgetRulesPolicyDef implements Listable {
     @Override
     public String getListKey() {
         return name;
+    }
+
+    public boolean match(FormDef formDef, Object inst, SpecialParamProvider specialParamProvider, Date now)
+            throws UnifyException {
+        return match(formDef, new BeanValueStore(inst), specialParamProvider, now);
+    }
+
+    public boolean match(FormDef formDef, ValueStore instValueStore, SpecialParamProvider specialParamProvider,
+            Date now) throws UnifyException {
+        ObjectFilter objectFilter = onCondition != null
+                ? onCondition.getObjectFilter(formDef.getEntityDef(), specialParamProvider, now)
+                : null;
+        return objectFilter == null || objectFilter.match(instValueStore);
     }
 
     public String getName() {
@@ -73,5 +98,17 @@ public class FormWidgetRulesPolicyDef implements Listable {
 
     public boolean isWidgetRules() {
         return widgetRulesDef != null;
+    }
+
+    public boolean isWithRuleEditor(String fieldName) {
+        return ruleEditors.containsKey(fieldName);
+    }
+
+    public String getRuleEditor(String fieldName) {
+        return ruleEditors.get(fieldName);
+    }
+
+    public Map<String, String> getRuleEditors() {
+        return ruleEditors;
     }
 }

@@ -113,7 +113,7 @@ public class MiniFormWriter extends AbstractControlWriter {
             final int columns = formSection.getColumns();
             for (int col = 0; col < columns; col++) {
                 for (FormWidget formWidget : formSection.getFormWidgetList(col)) {
-                    Widget chWidget = formWidget.getWidget();
+                    Widget chWidget = formWidget.getResolvedWidget();
                     if (chWidget.isVisible()) {
                         final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId() : chWidget.getId();
                         writer.writeBehavior(chWidget);
@@ -158,7 +158,7 @@ public class MiniFormWriter extends AbstractControlWriter {
     }
 
     private void writeFieldCell(ResponseWriter writer, FormContext ctx, FormWidget formWidget) throws UnifyException {
-        if (formWidget != null && formWidget.getWidget().isVisible()) {
+        if (formWidget != null && formWidget.getResolvedWidget().isVisible()) {
             writer.write("<div class=\"mffield\">");
             writer.write("<div class=\"mffieldrow\">");
 
@@ -167,7 +167,7 @@ public class MiniFormWriter extends AbstractControlWriter {
             writer.write("<span>");
             if (formWidget.isRequired()) {
                 writer.write("<img class=\"mfreq\"src=\"");
-                if (StringUtils.isBlank(formWidget.getWidget().getValue(String.class))) {
+                if (StringUtils.isBlank(formWidget.getResolvedWidget().getValue(String.class))) {
                     writer.writeFileImageContextURL("$t{images/red_asterix.png}");
                 } else {
                     writer.writeFileImageContextURL("$t{images/gray_asterix.png}");
@@ -182,7 +182,7 @@ public class MiniFormWriter extends AbstractControlWriter {
             writer.write("<div class=\"mfmid\">");
             writer.write("<div class=\"mfcon\">");
             writer.write("<div class=\"mfcontent\">");
-            writer.writeStructureAndContent(formWidget.getWidget());
+            writer.writeStructureAndContent(formWidget.getResolvedWidget());
             if (ctx.isWithFieldError(formWidget.getFieldName())) {
                 writer.write("<span class=\"errmsg\">")
                         .write(resolveSessionMessage(ctx.getFieldError(formWidget.getFieldName())))

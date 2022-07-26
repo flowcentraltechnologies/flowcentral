@@ -21,9 +21,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
@@ -31,9 +33,11 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormSectionDef;
 import com.flowcentraltech.flowcentral.application.data.FormStatePolicyDef;
+import com.flowcentraltech.flowcentral.application.data.FormWidgetRulesPolicyDef;
 import com.flowcentraltech.flowcentral.application.data.SetStateDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormTab;
+import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
 import com.flowcentraltech.flowcentral.common.data.TargetFormState;
@@ -87,6 +91,28 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                 boolean isStrictRows = isStrictRows();
                 formSections = new LinkedHashMap<String, FormSection>();
                 formWidgets = new HashMap<String, FormWidget>();
+                FormDef formDef = miniForm.getCtx().getFormDef();
+                Map<String, Map<String, Widget>> altWidgetsByFields = Collections.emptyMap();
+                if (formDef.isWithFormWidgetRulesPolicy()) {
+                    altWidgetsByFields = new HashMap<String, Map<String, Widget>>();
+                    for (FormWidgetRulesPolicyDef formWidgetRulesPolicyDef : formDef
+                            .getFormWidgetRulesPolicyDefList()) {
+                        String ruleName = formWidgetRulesPolicyDef.getName();
+                        for (Map.Entry<String, String> ruleEditor : formWidgetRulesPolicyDef.getRuleEditors()
+                                .entrySet()) {
+                            String fieldName = ruleEditor.getKey();
+                            Map<String, Widget> altWidgets = altWidgetsByFields.get(fieldName);
+                            if (altWidgets == null) {
+                                altWidgets = new LinkedHashMap<String, Widget>();
+                                altWidgetsByFields.put(fieldName, altWidgets);
+                            }
+
+                            Widget widget = addExternalChildWidget(ruleEditor.getValue());
+                            altWidgets.put(ruleName, widget);
+                        }
+                    }
+                }
+
                 for (FormSectionDef formSectionDef : miniForm.getFormTabDef().getFormSectionDefList()) {
                     int columns = formSectionDef.getColumns().columns();
                     List<FormWidget>[] formWidgetLists = new List[columns];
@@ -95,8 +121,9 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                     }
 
                     for (FormFieldDef formFieldDef : formSectionDef.getFormFieldDefList()) {
+                        Map<String, Widget> altWidgets = altWidgetsByFields.get(formFieldDef.getFieldName());
                         FormWidget formWidget = new FormWidget(formSectionDef.getName(), formFieldDef,
-                                addExternalChildWidget(formFieldDef.getRenderer()));
+                                addExternalChildWidget(formFieldDef.getRenderer()), altWidgets);
                         formWidgets.put(formWidget.getFieldName(), formWidget);
                         formWidgetLists[formFieldDef.getColumn()].add(formWidget);
                     }
@@ -127,7 +154,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             ValueStore formValueStore = miniForm.getCtx().getFormValueStore();
             if (formWidgets != null) {
                 for (FormWidget formWidget : formWidgets.values()) {
-                   formWidget.getWidget().setValueStore(formValueStore);
+                    formWidget.setValueStore(formValueStore);
                 }
             }
 
@@ -170,12 +197,23 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             formSection.revertState();
         }
 
+        Set<String> activatedAltRules = Collections.emptySet();
         List<FormStateRule> fieldRules = new ArrayList<FormStateRule>();
         String trigger = getTrigger();
         if (form.getScope().isMainForm()) {
-            FormDef formDef = ctx.getFormDef();
+            final SpecialParamProvider specialParamProvider = au.getSpecialParamProvider();
+            final FormDef formDef = ctx.getFormDef();
             boolean setValuesExecuted = false;
-            
+
+            if (formDef.isWithFormWidgetRulesPolicy()) {
+                activatedAltRules = new HashSet<String>();
+                for (FormWidgetRulesPolicyDef formWidgetRulesPolicyDef : formDef.getFormWidgetRulesPolicyDefList()) {
+                    if (formWidgetRulesPolicyDef.match(formDef, formValueStore, specialParamProvider, now)) {
+                        activatedAltRules.add(formWidgetRulesPolicyDef.getName());
+                    }
+                }
+            }
+
             if (formDef.isWithConsolidatedFormState()) {
                 ConsolidatedFormStatePolicy policy = ctx.getAu().getComponent(ConsolidatedFormStatePolicy.class,
                         formDef.getConsolidatedFormState());
@@ -192,12 +230,12 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                         fieldRules.add(state);
                     }
                 }
-                
+
                 if (states.isWithValueList()) {
                     states.applyValues(formValueStore);
                     setValuesExecuted = true;
                 }
-                
+
                 policy.onFormSwitch(formValueStore, trigger);
             }
 
@@ -206,7 +244,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                 if (formStatePolicyDef.isTriggered(trigger)) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
                             ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
-                                    au.getSpecialParamProvider(), now)
+                                    specialParamProvider, now)
                             : null;
                     if (objectFilter == null || objectFilter.match(formValueStore)) {
                         for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
@@ -238,10 +276,10 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
 
         // Apply widget rules
         for (FormWidget formWidget : formWidgets.values()) {
-            formWidget.revertState();
+            formWidget.revertState(activatedAltRules);
         }
-        
-        for (FormStateRule rule: fieldRules) {
+
+        for (FormStateRule rule : fieldRules) {
             for (String target : rule.getTarget()) {
                 FormWidget formWidget = formWidgets.get(target);
                 if (formWidget != null) {
@@ -269,11 +307,11 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
         for (FormWidget formWidget : formWidgets.values()) {
             if (isResolveFocus) {
                 if (isFacade) {
-                    if (focusWidgetId.equals(formWidget.widget.getFacadeId())) {
+                    if (focusWidgetId.equals(formWidget._widget.getFacadeId())) {
                         trigger = formWidget.getFieldName();
                     }
                 } else {
-                    if (focusWidgetId.equals(formWidget.widget.getId())) {
+                    if (focusWidgetId.equals(formWidget._widget.getId())) {
                         trigger = formWidget.getFieldName();
                     }
                 }
@@ -284,7 +322,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
 
         return trigger;
     }
-    
+
     private void allocateTabIndex(FormContext ctx) throws UnifyException {
         ctx.setFormFocused(false);
         if (ctx.isWithTabWidgetId()) { // Tab memory
@@ -303,11 +341,11 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                         List<FormWidget> list = formSection.formWidgetList[j];
                         if (i < list.size()) {
                             FormWidget formWidget = list.get(i);
-                            formWidget.widget.setTabIndex(ctx.nextTabIndex());
+                            formWidget._widget.setTabIndex(ctx.nextTabIndex());
                             if (formWidget.isFocusable() && formWidget.isEditable() && !formWidget.isDisabled()) {
-                                final String fId = formWidget.widget.isUseFacadeFocus()
-                                        ? formWidget.widget.getFacadeId()
-                                        : formWidget.widget.getId();
+                                final String fId = formWidget._widget.isUseFacadeFocus()
+                                        ? formWidget._widget.getFacadeId()
+                                        : formWidget._widget.getId();
                                 tabWidgetIdList.add(fId);
                                 if (!ctx.isFormFocused()) {
                                     getRequestContextUtil().setFocusOnWidgetId(fId);
@@ -402,7 +440,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             if (!rule.getEditable().isConforming()) {
                 editable = rule.getEditable().isTrue();
             }
-  
+
             if (!rule.getDisabled().isConforming()) {
                 disabled = rule.getDisabled().isTrue();
             }
@@ -418,7 +456,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                 editable = formTab.isEditable() && formSectionDef.isEditable();
                 disabled = formTab.isDisabled() || formSectionDef.isDisabled();
             }
-       }
+        }
 
         public class RowRegulator {
             private int[] findexes;
@@ -454,7 +492,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                     while (row < rows) {
                         FormWidget formWidget = formWidgetList[col].get(row);
                         row++;
-                        if (formWidget.getWidget().isVisible()) {
+                        if (formWidget._widget.isVisible()) {
                             rowWidgets[col] = formWidget;
                             result = true;
                             break;
@@ -475,14 +513,21 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
 
         private final Widget widget;
 
+        private final Map<String, Widget> altWidgets;
+
+        private Widget _widget;
+
         private String sectionName;
 
         private boolean required;
 
-        private FormWidget(String sectionName, FormFieldDef formFieldDef, Widget widget) {
+        private FormWidget(String sectionName, FormFieldDef formFieldDef, Widget widget,
+                Map<String, Widget> altWidgets) {
             this.sectionName = sectionName;
             this.formFieldDef = formFieldDef;
             this.widget = widget;
+            this._widget = widget;
+            this.altWidgets = DataUtils.unmodifiableMap(altWidgets);
         }
 
         @Override
@@ -514,8 +559,8 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             return formFieldDef.getMaxLen();
         }
 
-        public Widget getWidget() {
-            return widget;
+        public Widget getResolvedWidget() {
+            return _widget;
         }
 
         @Override
@@ -524,38 +569,47 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
         }
 
         public boolean isFocusable() {
-            return widget instanceof TextField || widget instanceof TextArea
-                    || widget instanceof CheckBox /* && !(widget instanceof AbstractPopupTextField) */;
+            return _widget instanceof TextField || _widget instanceof TextArea
+                    || _widget instanceof CheckBox /* && !(widget instanceof AbstractPopupTextField) */;
         }
 
         @Override
         public boolean isVisible() throws UnifyException {
-            return widget.isVisible();
+            return _widget.isVisible();
         }
 
         @Override
         public boolean isEditable() throws UnifyException {
-            return widget.isEditable();
+            return _widget.isEditable();
         }
 
         @Override
         public boolean isDisabled() throws UnifyException {
-            return widget.isDisabled();
+            return _widget.isDisabled();
+        }
+
+        public void setValueStore(ValueStore formValueStore) throws UnifyException {
+            widget.setValueStore(formValueStore);
+            if (!altWidgets.isEmpty()) {
+                for (Widget __widget : altWidgets.values()) {
+                    __widget.setValueStore(formValueStore);
+                }
+            }
         }
 
         public void applyStatePolicy(FormStateRule rule) throws UnifyException {
             FormSection formSection = formSections.get(sectionName);
             if (!rule.getVisible().isConforming()) {
-                widget.setVisible(rule.getVisible().isTrue());
+                _widget.setVisible(rule.getVisible().isTrue());
             }
 
             if (!rule.getEditable().isConforming()) {
-                widget.setEditable(isContainerEditable() && formSection.isEditable() && rule.getEditable().isTrue()
+                _widget.setEditable(isContainerEditable() && formSection.isEditable() && rule.getEditable().isTrue()
                         && !formFieldDef.isListOnly());
             }
 
             if (!rule.getDisabled().isConforming()) {
-                widget.setDisabled(formSection.isDisabled() || rule.getDisabled().isTrue());
+                _widget.setDisabled(formSection.isDisabled() || rule.getDisabled().isTrue());
             }
 
             if (!rule.getRequired().isConforming()) {
@@ -563,11 +617,21 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             }
         }
 
-        public void revertState() throws UnifyException {
+        public void revertState(Set<String> activatedAltRules) throws UnifyException {
             FormSection formSection = formSections.get(sectionName);
-            widget.setVisible(formFieldDef.isVisible());
-            widget.setEditable(isContainerEditable() && formSection.isEditable() && formFieldDef.isEditable());
-            widget.setDisabled(formSection.isDisabled() || formFieldDef.isDisabled()
+            _widget = widget;
+            if (!activatedAltRules.isEmpty() && !altWidgets.isEmpty()) {
+                for (Map.Entry<String, Widget> _entry: altWidgets.entrySet()) {
+                    if (activatedAltRules.contains(_entry.getKey())) {
+                        _widget = _entry.getValue();
+                        break;
+                    }
+                }
+            }
+            
+            _widget.setVisible(formFieldDef.isVisible());
+            _widget.setEditable(isContainerEditable() && formSection.isEditable() && formFieldDef.isEditable());
+            _widget.setDisabled(formSection.isDisabled() || formFieldDef.isDisabled()
                     || formFieldDef.getFieldName().equals(oldMiniForm.getCtx().getFixedReference()));
             required = formFieldDef.isRequired();
         }

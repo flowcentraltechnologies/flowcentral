@@ -54,6 +54,10 @@ public class MiniForm {
         return scope.isMainForm();
     }
 
+    public boolean isMainForm() {
+        return scope.isMainForm();
+    }
+
     public Object getFormBean() {
         return ctx.getInst();
     }
