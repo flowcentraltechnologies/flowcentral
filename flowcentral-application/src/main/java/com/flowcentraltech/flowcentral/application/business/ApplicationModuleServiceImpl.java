@@ -114,6 +114,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormStatePolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormStatePolicyQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicyQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicyQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyList;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyListItem;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyListQuery;
@@ -138,6 +140,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableColumnQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.entities.Application;
@@ -211,6 +214,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.FormSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormStatePolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormTabConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormValidationPolicyConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormWidgetRulesPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.PropertyListConfig;
@@ -225,6 +229,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.SuggestionTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
@@ -928,6 +933,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 InputWidgetUtils.getSetValuesDef(appFormStatePolicy.getValueGenerator(),
                                         appFormStatePolicy.getSetValues()),
                                 DataUtils.convert(List.class, String.class, appFormStatePolicy.getTrigger(), null));
+                    }
+
+                    for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
+                        fdb.addFormWidgetRulesPolicy(appFormWidgetRulesPolicy.getName(), appFormWidgetRulesPolicy.getDescription(),
+                                InputWidgetUtils.getFilterDef(appFormWidgetRulesPolicy.getOnCondition()),
+                                InputWidgetUtils.getWidgetRulesDef(appFormWidgetRulesPolicy.getWidgetRules()));
                     }
 
                     for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : appForm.getFieldValidationList()) {
@@ -3280,6 +3291,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return null;
     }
 
+    private AppWidgetRules newAppWidgetRules(WidgetRulesConfig widgetRulesConfig) throws UnifyException {
+        if (widgetRulesConfig != null) {
+            return new AppWidgetRules(InputWidgetUtils.getWidgetRulesDefinition(widgetRulesConfig));
+        }
+
+        return null;
+    }
+
     private void populateChildList(AppEntity appEntity, EntityBaseTypeFieldSet entityBaseTypeFieldSet,
             String applicationName, AppEntityConfig appEntityConfig) throws UnifyException {
         List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
@@ -3894,6 +3913,45 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         appForm.setFieldStateList(fieldStateList);
+
+        // Form widget rule policies
+        List<AppFormWidgetRulesPolicy> widgetRulesList = null;
+        if (!DataUtils.isBlank(appFormConfig.getWidgetRulesPolicyList())) {
+            widgetRulesList = new ArrayList<AppFormWidgetRulesPolicy>();
+            Map<String, AppFormWidgetRulesPolicy> map = appForm.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppFormWidgetRulesPolicyQuery().appFormId(appForm.getId()));
+            for (FormWidgetRulesPolicyConfig formWidgetRulesPolicyConfig : appFormConfig.getWidgetRulesPolicyList()) {
+                AppFormWidgetRulesPolicy oldAppFormWidgetRulesPolicy = map.get(formWidgetRulesPolicyConfig.getName());
+                if (oldAppFormWidgetRulesPolicy == null) {
+                    AppFormWidgetRulesPolicy appFormWidgetRulesPolicy = new AppFormWidgetRulesPolicy();
+                    appFormWidgetRulesPolicy.setName(formWidgetRulesPolicyConfig.getName());
+                    appFormWidgetRulesPolicy
+                            .setDescription(resolveApplicationMessage(formWidgetRulesPolicyConfig.getDescription()));
+                    appFormWidgetRulesPolicy.setOnCondition(
+                            InputWidgetUtils.newAppFilter(formWidgetRulesPolicyConfig.getOnCondition()));
+                    appFormWidgetRulesPolicy
+                            .setWidgetRules(newAppWidgetRules(formWidgetRulesPolicyConfig.getWidgetRules()));
+                    appFormWidgetRulesPolicy.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    widgetRulesList.add(appFormWidgetRulesPolicy);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldAppFormWidgetRulesPolicy)) {
+                        oldAppFormWidgetRulesPolicy.setDescription(
+                                resolveApplicationMessage(formWidgetRulesPolicyConfig.getDescription()));
+                        oldAppFormWidgetRulesPolicy.setOnCondition(
+                                InputWidgetUtils.newAppFilter(formWidgetRulesPolicyConfig.getOnCondition()));
+                        oldAppFormWidgetRulesPolicy
+                                .setWidgetRules(newAppWidgetRules(formWidgetRulesPolicyConfig.getWidgetRules()));
+                    } else {
+                        environment().findChildren(oldAppFormWidgetRulesPolicy);
+                    }
+
+                    widgetRulesList.add(oldAppFormWidgetRulesPolicy);
+                }
+            }
+        }
+
+        appForm.setWidgetRulesList(widgetRulesList);
 
         // Form field validation policies
         List<AppFormFieldValidationPolicy> fieldValidationList = null;

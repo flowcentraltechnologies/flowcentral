@@ -43,6 +43,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormReviewPolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormSetState;
 import com.flowcentraltech.flowcentral.application.entities.AppFormStatePolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicy;
+import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyList;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyListItem;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyRule;
@@ -91,6 +92,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.FormSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormStatePolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormTabConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormValidationPolicyConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormWidgetRulesPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ModuleAppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.PropertyListConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.PropertyListPropConfig;
@@ -794,6 +796,27 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                     }
 
                     appFormConfig.setFormStatePolicyList(formStatePolicyConfigList);
+                }
+
+                // Form widget rule policies
+                if (!DataUtils.isBlank(appForm.getFieldStateList())) {
+                    List<FormWidgetRulesPolicyConfig> widgetRulesPolicyList = new ArrayList<FormWidgetRulesPolicyConfig>();
+                    for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : appForm.getWidgetRulesList()) {
+                        FormWidgetRulesPolicyConfig formStatePolicyConfig = new FormWidgetRulesPolicyConfig();
+                        formStatePolicyConfig.setName(appFormWidgetRulesPolicy.getName());
+                        descKey = getDescriptionKey(formDescKey, "widgetrulespolicy",
+                                appFormWidgetRulesPolicy.getDescription());
+                        ctx.addMessage(StaticMessageCategoryType.FORM, descKey,
+                                appFormWidgetRulesPolicy.getDescription());
+                        formStatePolicyConfig.setDescription("$m{" + descKey + "}");
+                        formStatePolicyConfig.setOnCondition(
+                                InputWidgetUtils.getFilterConfig(appFormWidgetRulesPolicy.getOnCondition()));
+                        formStatePolicyConfig.setWidgetRules(
+                                InputWidgetUtils.getWidgetRulesConfig(appFormWidgetRulesPolicy.getWidgetRules()));
+                        widgetRulesPolicyList.add(formStatePolicyConfig);
+                    }
+
+                    appFormConfig.setWidgetRulesPolicyList(widgetRulesPolicyList);
                 }
 
                 // Form field validation policies

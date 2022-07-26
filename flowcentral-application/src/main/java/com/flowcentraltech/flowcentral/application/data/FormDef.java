@@ -77,6 +77,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private List<FormStatePolicyDef> onFormConstructSetValuesFormStatePolicyDefList;
 
+    private List<FormWidgetRulesPolicyDef> formWidgetRulesPolicyDefList;
+
     private Map<String, FormStatePolicyDef> onCreateFormStatePolicyDefMap;
 
     private Map<String, FormAnnotationDef> formAnnotationDefMap;
@@ -100,6 +102,7 @@ public class FormDef extends BaseApplicationEntityDef {
             Map<String, FormAnnotationDef> formAnnotationDefMap, List<FormActionDef> formActionDefList,
             List<FormTabDef> formTabDefList, List<FormRelatedListDef> formRelatedListDefList,
             List<FormStatePolicyDef> formStatePolicyDefList,
+            List<FormWidgetRulesPolicyDef> formWidgetRulesPolicyDefList,
             List<FieldValidationPolicyDef> fieldValidationPolicyDefList,
             List<FormValidationPolicyDef> formValidationPolicyDefList,
             List<FormReviewPolicyDef> formReviewPolicyDefList, ApplicationEntityNameParts nameParts, String description,
@@ -117,6 +120,7 @@ public class FormDef extends BaseApplicationEntityDef {
         this.formRelatedListDefList = formRelatedListDefList;
         this.fieldValidationPolicyDefList = fieldValidationPolicyDefList;
         this.formValidationPolicyDefList = formValidationPolicyDefList;
+        this.formWidgetRulesPolicyDefList = formWidgetRulesPolicyDefList;
 
         // Form review policies
         this.formReviewPolicyDefs = new HashMap<FormReviewType, List<FormReviewPolicyDef>>();
@@ -306,6 +310,14 @@ public class FormDef extends BaseApplicationEntityDef {
         return formStatePolicyDefList;
     }
 
+    public List<FormWidgetRulesPolicyDef> getFormWidgetRulesPolicyDefList() {
+        return formWidgetRulesPolicyDefList;
+    }
+
+    public boolean isWithFormWidgetRulesPolicy() {
+        return !formWidgetRulesPolicyDefList.isEmpty();
+    }
+
     public List<FormReviewPolicyDef> getFormReviewPolicies(FormReviewType type) {
         return formReviewPolicyDefs.get(type);
     }
@@ -443,6 +455,8 @@ public class FormDef extends BaseApplicationEntityDef {
         private Map<String, FormRelatedListDef> formRelatedListDefList;
 
         private Map<String, FormStatePolicyDef> fieldStatePolicyDefList;
+
+        private Map<String, FormWidgetRulesPolicyDef> formWidgetRulesPolicyDefList;
 
         private Map<String, FieldValidationPolicyDef> fieldValidationPolicyDefList;
 
@@ -627,6 +641,22 @@ public class FormDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addFormWidgetRulesPolicy(String name, String description, FilterDef onCondition,
+                WidgetRulesDef widgetRulesDef) {
+            if (formWidgetRulesPolicyDefList == null) {
+                formWidgetRulesPolicyDefList = new LinkedHashMap<String, FormWidgetRulesPolicyDef>();
+            }
+
+            if (formWidgetRulesPolicyDefList.containsKey(name)) {
+                throw new RuntimeException(
+                        "Widget rules policy with name [" + name + "] already exists on this form[" + longName + "].");
+            }
+
+            formWidgetRulesPolicyDefList.put(name,
+                    new FormWidgetRulesPolicyDef(name, description, onCondition, widgetRulesDef));
+            return this;
+        }
+
         public Builder addFormStatePolicy(String name, String description, FormStatePolicyType type,
                 FilterDef onCondition, SetStatesDef setStatesDef, SetValuesDef setValuesDef, List<String> triggerList) {
             if (fieldStatePolicyDefList == null) {
@@ -763,6 +793,7 @@ public class FormDef extends BaseApplicationEntityDef {
                     DataUtils.unmodifiableList(formActionList), DataUtils.unmodifiableList(formTabDefList),
                     DataUtils.unmodifiableValuesList(formRelatedListDefList),
                     DataUtils.unmodifiableValuesList(fieldStatePolicyDefList),
+                    DataUtils.unmodifiableValuesList(formWidgetRulesPolicyDefList),
                     DataUtils.unmodifiableValuesList(fieldValidationPolicyDefList),
                     DataUtils.unmodifiableValuesList(formValidationPolicyDefList),
                     DataUtils.unmodifiableValuesList(formReviewPolicyDefList), nameParts, description, id, version);
