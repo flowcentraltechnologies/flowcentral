@@ -17,9 +17,9 @@
 package com.flowcentraltech.flowcentral.studio.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
+import com.flowcentraltech.flowcentral.application.util.ApplicationQueryUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListWidget;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
-import com.flowcentraltech.flowcentral.studio.util.StudioQueryUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -48,7 +48,7 @@ public class EntityFieldWidgetListWidget extends EntityListWidget {
             type = application().resolveListOnlyEntityDataType(appEntityField);
         }
 
-        StudioQueryUtils.addWidgetTypeCriteria(query, type);
+        ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
     }
 
 }

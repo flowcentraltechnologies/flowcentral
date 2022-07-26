@@ -1,0 +1,41 @@
+// UPL template for entity widget rules panel
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-entitywidgetrulespanel layout:$d{!ui-vertical style:$s{width:100%;} cellStyle:$s{padding:0px;}}
+	components:$c{formMessages headerBar widgetRulesPanel}
+
+// Messages
+!fc-formmessages:formMessages binding:messages
+
+// Header Bar
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
+	components:$c{headerRightPanel}
+	
+!ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$c{clearBtn applyBtn}
+!ui-button:clearBtn caption:$m{button.clear}
+    eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
+!ui-button:applyBtn styleClass:$e{fc-bluebutton} caption:$m{button.apply}
+    eventHandler:$d{!ui-event event:onclick action:$c{applyAct}}
+	
+// Widget rules panel
+!ui-panel:widgetRulesPanel styleClass:$s{widgetrulesall} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{widgetRules}	
+!fc-widgetrules:widgetRules binding:widgetRules
+
+// Actions
+!ui-postcommand:clearAct command:clear
+!ui-postcommand:applyAct command:apply components:$c{widgetRules}
+

@@ -749,13 +749,18 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entityfileattachmentspanel {}
 .fc-entityfileattachmentspanel .abody{width:560px; height:220px; padding:1px; overflow-y:scroll;}
 
+/* Entity widget rules panel */
+.fc-entitywidgetrulespanel {}
+.fc-entitywidgetrulespanel .fc-widgetrules {}
+.fc-entitywidgetrulespanel .widgetrulesall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
+
 .fc-entrytablepagepanel {}
 .fc-entrytablepagepanel .caption {font-size: 8pt; font-weight:bold; margin-bottom:2px; padding: 2px 4px; color:#454545;}
 
 .fc-entrytablepagepanel {}
 
 /* Inline CRUD panel */
-.fc-nlinecrudpanel {}
+.fc-inlinecrudpanel {}
 
 /* Record order panel */
 .fc-recordorderpanel {}
@@ -797,4 +802,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	
 /* locked resource panel */
 .fc-collaborationlockedresourcepanel {width: 420px;}
+
+
 			

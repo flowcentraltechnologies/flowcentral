@@ -804,6 +804,33 @@ fux.rigEntityTreeTable = function(rgp) {
 
 }
 
+/** Widget Rules */
+fux.rigWidgetRules = function(rgp) {
+	var id = rgp.pId;
+
+	// Handle on change
+	var chgId = rgp.pOnChgId;
+	if (chgId && chgId.length) {
+		const delId = rgp.pDelId;
+
+		const evpNorm = ux.newEvPrm(rgp);
+		evpNorm.uCmd = id + "->normalize";
+		evpNorm.uRef = [ id ];
+		evpNorm.uPanels = [ rgp.pContId ];
+
+		const evpDel = ux.newEvPrm(rgp);
+		evpDel.uCmd = id + "->delete";
+		evpDel.uRef = [ id ];
+		evpDel.uPanels = [ rgp.pContId ];
+
+		for (var i = 0; i < chgId.length; i++) {
+			var idx = "d" + i;
+			ux.addHdl(_id(chgId[i]), "change", ux.post, evpNorm);
+			ux.addHdl(_id(delId + idx), "click", ux.post, evpDel);
+		}
+	}
+}
+
 /** Initialization */
 fux.init = function() {
 	ux.registerExtension("fux", fux);
