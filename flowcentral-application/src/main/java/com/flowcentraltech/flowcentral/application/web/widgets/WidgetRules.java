@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
-import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.Editable;
 import com.tcdng.unify.core.util.StringUtils;
@@ -52,21 +52,20 @@ public class WidgetRules {
         this.viewEntryList = Collections.unmodifiableList(entryList);
     }
 
-    public WidgetRules(EntityDef entityDef, FieldSequenceDef fieldSequenceDef) throws UnifyException {
-        this(entityDef, fieldSequenceDef, Editable.TRUE);
+    public WidgetRules(EntityDef entityDef, WidgetRulesDef widgetRulesDef) throws UnifyException {
+        this(entityDef, widgetRulesDef, Editable.TRUE);
     }
 
-    public WidgetRules(EntityDef entityDef, FieldSequenceDef fieldSequenceDef, Editable editable)
-            throws UnifyException {
+    public WidgetRules(EntityDef entityDef, WidgetRulesDef widgetRulesDef, Editable editable) throws UnifyException {
         this.entityDef = entityDef;
         this.entryList = new ArrayList<WidgetRuleEntry>();
         this.viewEntryList = Collections.unmodifiableList(entryList);
-        loadEntryList(fieldSequenceDef, editable);
+        loadEntryList(widgetRulesDef, editable);
     }
 
-    public int addFieldSequenceEntry(String fieldName, String param, Editable editable) throws UnifyException {
+    public int addWidgetRuleEntry(String fieldName, String widget, Editable editable) throws UnifyException {
         WidgetRuleEntry svo = new WidgetRuleEntry(entityDef, editable.isTrue());
-        setFieldAndInputParams(svo, fieldName, param);
+        setFieldAndInputWidgets(svo, fieldName, widget);
         entryList.add(svo);
         return entryList.size() - 1;
     }
@@ -130,27 +129,27 @@ public class WidgetRules {
         }
     }
 
-    public FieldSequenceDef getFieldSequenceDef() throws UnifyException {
+    public WidgetRulesDef getWidgetRulesDef() throws UnifyException {
         int lim = entryList.size() - 1;
         if (lim > 0) {
-            FieldSequenceDef.Builder fsb = FieldSequenceDef.newBuilder();
+            WidgetRulesDef.Builder wrb = WidgetRulesDef.newBuilder();
             for (int i = 0; i < lim; i++) {
                 WidgetRuleEntry fso = entryList.get(i);
                 if (!StringUtils.isBlank(fso.getFieldName())) {
-                    fsb.addFieldSequenceEntryDef(fso.getFieldName(), fso.getWidget());
+                    wrb.addWidgetRuleEntryDef(fso.getFieldName(), fso.getWidget());
                 }
             }
-            return fsb.build();
+            return wrb.build();
         }
 
         return null;
     }
 
-    private void loadEntryList(FieldSequenceDef fieldSequenceDef, Editable editable) throws UnifyException {
-        if (fieldSequenceDef != null) {
-            for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
+    private void loadEntryList(WidgetRulesDef widgetRulesDef, Editable editable) throws UnifyException {
+        if (widgetRulesDef != null) {
+            for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
                 WidgetRuleEntry fso = new WidgetRuleEntry(entityDef, editable.isTrue());
-                setFieldAndInputParams(fso, fieldSequenceEntryDef.getFieldName(), fieldSequenceEntryDef.getFormatter());
+                setFieldAndInputWidgets(fso, widgetRuleEntryDef.getFieldName(), widgetRuleEntryDef.getWidget());
                 entryList.add(fso);
             }
         }
@@ -158,7 +157,7 @@ public class WidgetRules {
         entryList.add(new WidgetRuleEntry(entityDef, editable.isTrue()));
     }
 
-    private void setFieldAndInputParams(WidgetRuleEntry fso, String fieldName, String widget) throws UnifyException {
+    private void setFieldAndInputWidgets(WidgetRuleEntry fso, String fieldName, String widget) throws UnifyException {
         fso.setFieldName(fieldName);
         fso.setWidget(widget);
         fso.normalize();

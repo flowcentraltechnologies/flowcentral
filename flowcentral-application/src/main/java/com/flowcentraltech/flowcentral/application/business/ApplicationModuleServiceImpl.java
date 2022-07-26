@@ -66,6 +66,7 @@ import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
@@ -141,6 +142,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetRulesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.entities.Application;
@@ -2045,6 +2047,34 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFieldSequence.setCategory(category);
             appFieldSequence.setDefinition(InputWidgetUtils.getFieldSequenceDefinition(fieldSequenceDef));
             environment().create(appFieldSequence);
+        }
+
+        if (sweepingCommitPolicy != null) {
+            sweepingCommitPolicy.bumpAllParentVersions(db(), RecordActionType.UPDATE);
+        }
+    }
+
+    @Override
+    public WidgetRulesDef retrieveWidgetRulesDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException {
+        final EntityDef entityDef = getEntityDef(ownerEntityName);
+        return InputWidgetUtils.getWidgetRulesDef(environment().find(new AppWidgetRulesQuery().category(category)
+                .entity(entityDef.getTableName()).entityInstId(ownerInstId)));
+    }
+
+    @Override
+    public void saveWidgetRulesDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, WidgetRulesDef widgetRulesDef) throws UnifyException {
+        final EntityDef entityDef = getEntityDef(ownerEntityName);
+        environment().deleteAll(new AppWidgetRulesQuery().category(category).entity(entityDef.getTableName())
+                .entityInstId(ownerInstId));
+        if (widgetRulesDef != null && !widgetRulesDef.isBlank()) {
+            AppWidgetRules appWidgetRules = new AppWidgetRules();
+            appWidgetRules.setEntityInstId(ownerInstId);
+            appWidgetRules.setEntity(entityDef.getTableName());
+            appWidgetRules.setCategory(category);
+            appWidgetRules.setDefinition(InputWidgetUtils.getWidgetRulesDefinition(widgetRulesDef));
+            environment().create(appWidgetRules);
         }
 
         if (sweepingCommitPolicy != null) {

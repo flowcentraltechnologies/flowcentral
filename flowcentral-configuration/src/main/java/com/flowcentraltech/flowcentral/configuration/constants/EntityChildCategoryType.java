@@ -63,8 +63,8 @@ public enum EntityChildCategoryType implements EnumConst {
             "formstatepolicy",
             FilterConditionListType.IMMEDIATE_FIELD,
             null),
-    APP_FORMWIDGETRULES(
-            "FORMWIDGETRULES",
+    APP_FORMWIDGETRULESPOLICY(
+            "FORMWIDGETRULESPOLICY",
             "application.appForm",
             "entity",
             "formwidgetrulespolicy",

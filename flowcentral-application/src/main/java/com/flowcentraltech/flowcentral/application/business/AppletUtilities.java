@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -43,6 +44,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
@@ -88,7 +90,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     SectorIcon getPageSectorIconByApplication(String applicationName) throws UnifyException;
-    
+
     /**
      * Gets the current request trigger ID
      * 
@@ -97,7 +99,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     String getTriggerWidgetId() throws UnifyException;
-    
+
     /**
      * Checks if widget type is entity search widget.
      * 
@@ -140,7 +142,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     SequenceCodeGenerator getSequenceCodeGenerator() throws UnifyException;
-    
+
     /**
      * Gets the next sequence code for the supplied sequence definition and current
      * date.
@@ -532,7 +534,7 @@ public interface AppletUtilities extends UnifyComponent {
      * Sets up show popup command result in current request.
      * 
      * @param panelName
-     *              the popup panel long name
+     *                  the popup panel long name
      * @throws UnifyException
      *                        if an error occurs
      */
@@ -560,7 +562,7 @@ public interface AppletUtilities extends UnifyComponent {
      * Refresh panels on command request response
      * 
      * @param panels
-     *                      the panels
+     *               the panels
      * @throws UnifyException
      *                        if an error occurs
      */
@@ -585,7 +587,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     void commandRefreshPanelsAndHidePopup(Panel... panels) throws UnifyException;
-    
+
     /**
      * Retrieves application field sequence definition for an entity instance.
      * 
@@ -620,6 +622,41 @@ public interface AppletUtilities extends UnifyComponent {
      */
     void saveFieldSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, FieldSequenceDef fieldSequenceDef) throws UnifyException;
+
+    /**
+     * Retrieves application widget rules definition for an entity instance.
+     * 
+     * @param category
+     *                        the widget rules category
+     * @param ownerEntityName
+     *                        the entity type long name
+     * @param ownerInstId
+     *                        the entity instance ID
+     * @return the widget rules definition if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    WidgetRulesDef retrieveWidgetRulesDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException;
+
+    /**
+     * Saves application widget rules definition for an entity instance.
+     * 
+     * @param sweepingCommitPolicy
+     *                             sweeping commit policy
+     * @param category
+     *                             the set values category
+     * @param ownerEntityName
+     *                             the entity type long name
+     * @param ownerInstId
+     *                             the entity instance ID
+     * @param widgetRulesDef
+     *                             the widget rules definition to save
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveWidgetRulesDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, WidgetRulesDef widgetRulesDef) throws UnifyException;
 
     /**
      * Retrieves application set values definition for an entity instance.
@@ -931,6 +968,26 @@ public interface AppletUtilities extends UnifyComponent {
             String tabName, EntityDef ownerEntityDef, int entityFieldSequenceMode) throws UnifyException;
 
     /**
+     * Constructs entity widget rules.
+     * 
+     * @param ctx
+     *                             the form context
+     * @param sweepingCommitPolicy
+     *                             the sweepingCommitPolicy (optional)
+     * @param tabName
+     *                             the tab name (optional)
+     * @param ownerEntityDef
+     *                             the owner entity definition
+     * @param mode
+     *                             the entity widget rules mode
+     * @return the entity widget rules
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityWidgetRules constructEntityWidgetRules(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int mode) throws UnifyException;
+
+    /**
      * Constructs entity set values.
      * 
      * @param ctx
@@ -1072,7 +1129,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     EntityActionResult createEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
-    
+
     /**
      * Populates entity auto format fields.
      * 

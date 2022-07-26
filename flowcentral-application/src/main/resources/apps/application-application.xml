@@ -445,6 +445,9 @@
 		<reference name="appSetValuesRef"
 			description="$m{application.appsetvalues.reference}"
 			entity="appSetValues" searchField="description" />
+		<reference name="appWidgetRulesRef"
+			description="$m{application.appwidgetrules.reference}"
+			entity="appWidgetRules" searchField="description" />
 		<reference name="appTableRef"
 			description="$m{application.apptable.reference}" entity="appTable"
 			searchField="description" />
@@ -475,6 +478,9 @@
 		<reference name="appFormStatePolicyRef"
 			description="$m{application.appformstatepolicy.reference}"
 			entity="appFormStatePolicy" searchField="description" />
+		<reference name="appFormWidgetRulesPolicyRef"
+			description="$m{application.appformwidgetrulespolicy.reference}"
+			entity="appFormWidgetRulesPolicy" searchField="description" />
 		<reference name="appFormSetStateRef"
 			description="$m{application.appformsetstate.reference}"
 			entity="appFormSetState" searchField="target" />
@@ -938,6 +944,22 @@
 			<field name="definition"
 				label="$m{application.appsetvalues.definition}" type="string" />
 		</entity>
+		<entity name="appWidgetRules"
+			description="$m{application.appwidgetrules}"
+			label="$m{application.appwidgetrules.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppWidgetRules">
+			<field name="entityInstId"
+				label="$m{application.appwidgetrules.entityinstid}"
+				type="foster_parent_id" />
+			<field name="entity"
+				label="$m{application.appwidgetrules.entity}"
+				type="foster_parent_type" />
+			<field name="category"
+				label="$m{application.appwidgetrules.category}"
+				type="category_column" />
+			<field name="definition"
+				label="$m{application.appwidgetrules.definition}" type="string" />
+		</entity>
 		<entity name="appTable" description="$m{application.apptable}"
 			label="$m{application.apptable.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppTable">
@@ -1091,6 +1113,9 @@
 			<field name="fieldStateList"
 				label="$m{application.appform.fieldstatepolicies}" type="child_list"
 				references="appFormStatePolicyRef" />
+			<field name="widgetRulesList"
+				label="$m{application.appform.widgetrulespolicies}" type="child_list"
+				references="appFormWidgetRulesPolicyRef" />
 			<field name="fieldValidationList"
 				label="$m{application.appform.fieldvalidations}" type="child_list"
 				references="appFormFieldValidationPolicyRef" />
@@ -1295,6 +1320,20 @@
 			<field name="typeDesc"
 				label="$m{application.appformstatepolicy.typedesc}" type="list_only"
 				key="type" property="description" />
+		</entity>
+		<entity name="appFormWidgetRulesPolicy"
+			description="$m{application.appformwidgetrulespolicy}"
+			label="$m{application.appformwidgetrulespolicy.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicy">
+			<field name="appFormId"
+				label="$m{application.appformwidgetrulespolicy.appformid}" type="ref"
+				references="appFormRef" inputWidget="application.entitylist" />
+			<field name="onCondition"
+				label="$m{application.appformwidgetrulespolicy.oncondition}" type="child"
+				category="formwidgetrulespolicy" references="appFilterRef" />
+			<field name="widgetRules"
+				label="$m{application.appformwidgetrulespolicy.widgetrule}" type="child"
+				category="formwidgetrulespolicy" references="appWidgetRulesRef" />
 		</entity>
 		<entity name="appFormSetState"
 			description="$m{application.appformsetstate}"

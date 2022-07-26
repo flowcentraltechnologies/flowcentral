@@ -740,6 +740,22 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
+		<applet name="manageAppFormWidgetRulesPolicy"
+			description="$m{studio.appformwidgetrulespolicy.manage}"
+			label="$m{studio.appformwidgetrulespolicy.manage.label}"
+			type="manage_entitylist" entity="application.appFormWidgetRulesPolicy"
+			menuAccess="false">
+			<property name="searchTable" value="appFormWidgetRulesPolicyTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appFormWidgetRulesPolicyForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appFormWidgetRulesPolicyForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageAppFormSetState"
 			description="$m{studio.appformsetstate.manage}"
 			label="$m{studio.appformsetstate.manage.label}"
@@ -1170,6 +1186,15 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" />
+		</table>
+		<table name="appFormWidgetRulesPolicyTable"
+			description="$m{studio.appformwidgetrulespolicy.table}"
+			label="$m{studio.appformwidgetrulespolicy.table.label}"
+			entity="application.appFormWidgetRulesPolicy">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
 		</table>
 		<table name="appFormSetStateTable"
 			description="$m{studio.appformsetstate.table}"
@@ -3177,6 +3202,29 @@
 			<tab name="setValues"
 				label="$m{studio.appformstatepolicy.form.setvalues}"
 				reference="app_formstatepolicy" contentType="set_values" />
+		</form>
+		<form name="appFormWidgetRulesPolicyForm"
+			description="$m{studio.appformwidgetrulespolicy.form}"
+			entity="application.appFormWidgetRulesPolicy">
+			<tab name="basicDetails"
+				label="$m{studio.appformwidgetrulespolicy.form.basicdetails}"
+				contentType="miniform">
+				<section name="fieldStatePolicyDetails" columns="type_2">
+					<field name="appFormId" inputWidget="studio.formlist"
+						disabled="true" column="0" required="true"
+						label="$m{application.appformwidgetrulespolicy.appform}" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="onCondition"
+				label="$m{studio.appformwidgetrulespolicy.form.oncondition}"
+				reference="app_formwidgetrulespolicy" contentType="filter_condition" />
+			<tab name="widgetRules"
+				label="$m{studio.appformwidgetrulespolicy.form.widgetrules}"
+				reference="app_formwidgetrulespolicy" contentType="widget_rules" />
 		</form>
 		<form name="appFormSetStateForm"
 			description="$m{studio.appformsetstate.form}"
