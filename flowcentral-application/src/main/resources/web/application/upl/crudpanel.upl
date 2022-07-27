@@ -14,10 +14,10 @@
 // the License.
 
 !fc-crudpanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{errorPanel crudFormPanel crudActionPanel crudTablePanel}
+	components:$c{errorPanel crudTablePanel crudFormPanel crudActionPanel}
 
 // Table
-!ui-panel:crudTablePanel style:$s{width:100%;}
+!ui-panel:crudTablePanel style:$s{width:100%;margin-bottom:12px;}
 	components:$f{crudTable}
 
 // Validation errors
