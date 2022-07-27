@@ -73,14 +73,28 @@ public abstract class AbstractApplicationConsolidatedFormReviewPolicy extends Ab
         return applicationModuleService;
     }
 
-    @SuppressWarnings("unchecked")
     protected void validateChildExists(TargetFormMessages messages, String fkFieldName, Long parentId,
             String entityLongName, String errMsgKey, String... targets) throws UnifyException {
+        validateChildExists(messages, fkFieldName, parentId, entityLongName, false, errMsgKey, targets);
+    }
+
+    protected void validateChildExistsSkippable(TargetFormMessages messages, String fkFieldName, Long parentId,
+            String entityLongName, String errMsgKey, String... targets) throws UnifyException {
+        validateChildExists(messages, fkFieldName, parentId, entityLongName, true, errMsgKey, targets);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void validateChildExists(TargetFormMessages messages, String fkFieldName, Long parentId,
+            String entityLongName, boolean skippable, String errMsgKey, String... targets) throws UnifyException {
         EntityClassDef entityClassDef = application().getEntityClassDef(entityLongName);
         int count = environment().countAll(
                 Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals(fkFieldName, parentId));
         if (count == 0) {
-            messages.addError(errMsgKey, targets);
+            if (skippable) {
+                messages.addSkippableError(errMsgKey, targets);
+            } else {
+                messages.addError(errMsgKey, targets);
+            }
         }
     }
 
