@@ -193,8 +193,8 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
 
         Listable result = environmentService.listLean(query);
         if (result != null && refDef != null) {
-            String formatDesc = refDef.isWithListFormat()
-                    ? StringUtils.buildParameterizedString(refDef.getListFormat(), new BeanValueStore(result))
+            String formatDesc = refDef.isWithListFormat() ? specialParamProvider
+                    .getStringGenerator(new BeanValueStore(result), getValueStore(), refDef.getListFormat()).generate()
                     : applicationModuleService.getEntityDescription(entityClassDef, (Entity) result,
                             refDef.getSearchField());
             String key = decodedKey.isLongNameRef()

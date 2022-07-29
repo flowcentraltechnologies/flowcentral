@@ -25,11 +25,11 @@ import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.core.util.StringUtils.StringToken;
 import com.tcdng.unify.web.ui.widget.Widget;
 
 /**

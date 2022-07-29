@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemParameterProvider;
+import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
@@ -93,7 +94,11 @@ import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.ParamGeneratorManager;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
+import com.tcdng.unify.core.data.StringToken;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -134,6 +139,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
+    @Configurable(CommonModuleNameConstants.PARAMGENERATORMANAGER)
+    private ParamGeneratorManager paramGeneratorManager;
+    
     private final FactoryMap<Long, ScheduledTaskDef> scheduledTaskDefs;
 
     private final FactoryMap<String, CredentialDef> authDefFactoryMap;
@@ -223,24 +231,28 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             };
     }
 
-    public void setConfigurationLoader(ConfigurationLoader configurationLoader) {
+    public final void setConfigurationLoader(ConfigurationLoader configurationLoader) {
         this.configurationLoader = configurationLoader;
     }
 
-    public void setDataSourceManager(DynamicSqlDataSourceManager dataSourceManager) {
+    public final void setDataSourceManager(DynamicSqlDataSourceManager dataSourceManager) {
         this.dataSourceManager = dataSourceManager;
     }
 
-    public void setTaskManager(TaskManager taskManager) {
+    public final void setTaskManager(TaskManager taskManager) {
         this.taskManager = taskManager;
     }
 
-    public void setTaskStatusLogger(TaskStatusLogger taskStatusLogger) {
+    public final void setTaskStatusLogger(TaskStatusLogger taskStatusLogger) {
         this.taskStatusLogger = taskStatusLogger;
     }
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
+    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
         this.fileAttachmentProvider = fileAttachmentProvider;
+    }
+
+    public final void setParamGeneratorManager(ParamGeneratorManager paramGeneratorManager) {
+        this.paramGeneratorManager = paramGeneratorManager;
     }
 
     @Override
@@ -309,6 +321,12 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     public List<? extends Listable> getContactSystemParameters() throws UnifyException {
         return environment()
                 .listAll(new SystemParameterQuery().type(SysParamType.CONTACT).addSelect("code", "description"));
+    }
+
+    @Override
+    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+            List<StringToken> tokenList) throws UnifyException {
+        return paramGeneratorManager.getParameterizedStringGenerator(paramValueStore, generatorValueStore, tokenList);
     }
 
     @Override

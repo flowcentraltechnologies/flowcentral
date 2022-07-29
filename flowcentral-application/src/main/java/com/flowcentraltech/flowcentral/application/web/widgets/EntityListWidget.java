@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.Formatter;
@@ -67,10 +67,8 @@ public class EntityListWidget extends AbstractEntityListWidget {
                     br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
                             .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
                 } else {
-                    br = refDef.isWithFilter()
-                            ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                                    specialParamProvider(), application().getNow())
-                            : null;
+                    br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                            specialParamProvider(), application().getNow()) : null;
                 }
             }
 
@@ -94,15 +92,16 @@ public class EntityListWidget extends AbstractEntityListWidget {
             }
 
             List<? extends Listable> listableList = environment().listAll(query);
-            ValueStore listValueStore = null;
 
             final String listKey = getListkey();
             final int len = listableList.size();
             final boolean isListFormat = refDef != null && refDef.isWithListFormat();
+            ParameterizedStringGenerator generator = null;
             if (isListFormat) {
-                listValueStore = new BeanValueListStore(listableList);
+                generator = specialParamProvider().getStringGenerator(new BeanValueListStore(listableList),
+                        getValueStore(), refDef.getListFormat());
             }
-            
+
             boolean isListKey = !StringUtils.isBlank(listKey);
             boolean isLongName = isListKey && "longName".equals(listKey);
             Formatter<Object> formatter = getFormatter();
@@ -131,8 +130,7 @@ public class EntityListWidget extends AbstractEntityListWidget {
                 keyArr[i] = key;
 
                 if (isListFormat) {
-                    lblArr[i] = StringUtils.buildParameterizedString(refDef.getListFormat(),
-                            listValueStore, i);
+                    lblArr[i] = generator.setDataIndex(i).generate();
                 } else {
                     if (formatter != null) {
                         lblArr[i] = formatter.format(listable.getListDescription());

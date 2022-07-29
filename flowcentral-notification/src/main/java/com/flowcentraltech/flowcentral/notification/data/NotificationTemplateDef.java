@@ -22,8 +22,8 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.NotificationMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.core.util.StringUtils.StringToken;
 
 /**
  * Notification template definition.

@@ -35,7 +35,7 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.StringUtils;
@@ -114,10 +114,8 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                     br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
                             .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
                 } else {
-                    br = refDef.isWithFilter()
-                            ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                                    specialParamProvider(), application().getNow())
-                            : null;
+                    br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                            specialParamProvider(), application().getNow()) : null;
                 }
 
                 Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
@@ -140,23 +138,27 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 query.addOrder(searchField);
                 List<? extends Listable> result = environment().listAll(query);
                 if (encode || listFormat) {
-                    ValueStore listValueStore = new BeanValueListStore(result);
+                    ParameterizedStringGenerator generator = null;
+                    if (listFormat) {
+                        generator = specialParamProvider().getStringGenerator(new BeanValueListStore(result),
+                                getValueStore(), refDef.getListFormat());
+                    }
                     final int len = result.size();
                     for (int j = 0; j < len; j++) {
-                        String formatDesc = listFormat ? StringUtils.buildParameterizedString(refDef.getListFormat(), listValueStore,
-                                j): applicationModuleService.getEntityDescription(entityClassDef, (Entity) result.get(j),
-                                        refDef.getSearchField());;
+                        String formatDesc = listFormat ? generator.setDataIndex(j).generate()
+                                : applicationModuleService.getEntityDescription(entityClassDef, (Entity) result.get(j),
+                                        refDef.getSearchField());
                         // TODO Concatenate reference prefix to description
                         String key = encode
                                 ? RefEncodingUtils.encodeRefValue(i, refDef.getLongName(), result.get(j).getListKey())
                                 : result.get(j).getListKey();
-                                fullResult.add(new ListData(key, formatDesc));
+                        fullResult.add(new ListData(key, formatDesc));
                     }
                 } else {
                     fullResult.addAll(result);
                 }
             }
-            
+
             return fullResult;
         }
 

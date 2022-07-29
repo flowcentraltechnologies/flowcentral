@@ -38,7 +38,7 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
@@ -184,11 +184,16 @@ public class EntityTextSearchWidget extends AbstractPopupTextField {
 
             List<Listable> result = new ArrayList<Listable>();
             List<? extends Entity> entityList = environmentService.listAll(query);
-            ValueStore listValueStore = listFormat ? new BeanValueListStore(entityList): null;
+            ParameterizedStringGenerator generator = null;
+            if (listFormat) {
+                generator = specialParamProvider.getStringGenerator(new BeanValueListStore(entityList),
+                        getValueStore(), refDef.getListFormat());
+            }
+
             final int len = entityList.size();
             for (int j = 0; j < len; j++) {
                 String desc = listFormat
-                        ? StringUtils.buildParameterizedString(refDef.getListFormat(), listValueStore, j)
+                        ? generator.setDataIndex(j).generate()
                         : DataUtils.getBeanProperty(String.class, entityList.get(j), searchField);
                 result.add(new ListData(desc, desc));
             }
