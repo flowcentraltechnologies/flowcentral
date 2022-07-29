@@ -36,7 +36,7 @@ public class SysParamParamGenerator extends AbstractParamGenerator {
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
