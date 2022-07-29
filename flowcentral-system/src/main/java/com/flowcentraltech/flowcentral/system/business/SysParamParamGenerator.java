@@ -41,7 +41,8 @@ public class SysParamParamGenerator extends AbstractParamGenerator {
     }
 
     @Override
-    public Object generate(ValueStoreReader reader, StringToken token) throws UnifyException {
+    public Object generate(ValueStoreReader itemReader, ValueStoreReader parentReader, StringToken token)
+            throws UnifyException {
         return systemModuleService.getSysParameterValue(String.class, token.getGenKey());
     }
 
