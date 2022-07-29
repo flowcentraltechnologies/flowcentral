@@ -16,8 +16,13 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
+import java.util.List;
+
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StringToken;
+import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Special parameter provider.
@@ -26,6 +31,22 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface SpecialParamProvider extends UnifyComponent {
+    
+    /**
+     * Gets a generator instance.
+     * 
+     * @param paramValueStore
+     *                            the parameter value store
+     * @param generatorValueStore
+     *                            the generator value store
+     * @param tokenList
+     *                            the token list
+     * @return the generator instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+            List<StringToken> tokenList) throws UnifyException;
 
     /**
      * Resolves a special parameter.

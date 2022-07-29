@@ -47,6 +47,9 @@ import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StringToken;
+import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Application module service master tests.
@@ -194,6 +197,12 @@ public class ApplicationModuleServiceMasterTest extends AbstractFlowCentralTest 
 
             @Override
             public void terminate() throws UnifyException {
+            }
+
+            @Override
+            public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore,
+                    ValueStore generatorValueStore, List<StringToken> tokenList) throws UnifyException {
+                return null;
             }
 
             @Override

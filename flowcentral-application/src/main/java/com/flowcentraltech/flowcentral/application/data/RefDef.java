@@ -19,8 +19,8 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.core.util.StringUtils.StringToken;
 
 /**
  * Reference definition
@@ -116,11 +116,4 @@ public class RefDef extends BaseApplicationEntityDef {
         return filter != null || filterGenerator != null;
     }
 
-    @Override
-    public String toString() {
-        return "RefDef [entity=" + entity + ", searchField=" + searchField + ", searchTable=" + searchTable
-                + ", filterGenerator=" + filterGenerator + ", filterGeneratorRule=" + filterGeneratorRule + ", filter="
-                + filter + ", getLongName()=" + getLongName() + ", getName()=" + getName() + ", getDescription()="
-                + getDescription() + "]";
-    }
 }

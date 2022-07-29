@@ -25,4 +25,7 @@ public interface CommonModuleNameConstants {
 
     String APPLICATION_BOOTSERVICE = "common-bootservice";
 
+    String PARAMGENERATORMANAGER = "common-paramgeneratormanager";
+
+    String SYSPARAMGENERATOR = "common-sysparamgenerator";
 }

@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -65,6 +66,9 @@ public class EntitySelectWidget extends AbstractPopupTextField {
     @Configurable
     private EnvironmentService environmentService;
 
+    @Configurable
+    private SpecialParamProvider specialParamProvider;
+
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
@@ -73,8 +77,12 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         this.environmentService = environmentService;
     }
 
-    public void setAppletUtilities(AppletUtilities appletUtilities) {
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
+    }
+
+    public final void setSpecialParamProvider(SpecialParamProvider specialParamProvider) {
+        this.specialParamProvider = specialParamProvider;
     }
 
     @Action
@@ -175,7 +183,8 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         Listable result = environmentService.listLean(query);
         if (result != null) {
             String formatDesc = refDef.isWithListFormat()
-                    ? StringUtils.buildParameterizedString(refDef.getListFormat(), new BeanValueStore(result))
+                    ? specialParamProvider.getStringGenerator(new BeanValueStore(result),
+                            getValueStore(), refDef.getListFormat()).generate()
                     : applicationModuleService.getEntityDescription(entityClassDef, (Entity) result,
                             refDef.getSearchField());
             return new ListData(result.getListKey(), formatDesc);

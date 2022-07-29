@@ -116,8 +116,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormStatePolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormStatePolicyQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormValidationPolicyQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicyQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicy;
+import com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicyQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyList;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyListItem;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyListQuery;
@@ -257,6 +257,7 @@ import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -273,7 +274,6 @@ import com.tcdng.unify.core.util.ArgumentTypeInfo;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.core.util.StringUtils.StringToken;
 
 /**
  * Default implementation of application module service.
