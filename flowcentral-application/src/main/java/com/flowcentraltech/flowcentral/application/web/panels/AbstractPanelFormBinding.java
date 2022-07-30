@@ -67,4 +67,8 @@ public abstract class AbstractPanelFormBinding {
     protected boolean isTabEditable() {
         return ctx.isTabEditable(tabName);
     }
+    
+    protected boolean isTabDisabled() {
+        return ctx.isTabDisabled(tabName);
+    }
 }
