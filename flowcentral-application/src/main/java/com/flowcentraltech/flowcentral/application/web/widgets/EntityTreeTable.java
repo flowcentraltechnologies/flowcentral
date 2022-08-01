@@ -49,7 +49,7 @@ public class EntityTreeTable {
     private String title;
 
     private String tableClass;
-    
+
     private boolean centerAlignHeaders;
 
     private boolean multiSelect;
@@ -214,8 +214,8 @@ public class EntityTreeTable {
             return this;
         }
 
-        public Builder addLevel(String label, String lineFormat, TableDef tableDef, String... fieldNames)
-                throws UnifyException {
+        public Builder addLevel(String label, String lineFormat, boolean multiSelect, TableDef tableDef,
+                String... fieldNames) throws UnifyException {
             List<TableColumnDef> columnDefList = new ArrayList<TableColumnDef>();
             for (String fieldName : fieldNames) {
                 TableColumnDef tableColumnDef = tableDef.getColumnDef(fieldName);
@@ -226,7 +226,8 @@ public class EntityTreeTable {
                     ? StringUtils.breakdownParameterizedString(lineFormat)
                     : Collections.emptyList();
 
-            levels.add(new EntityTreeLevel(label, tableDef, DataUtils.unmodifiableList(columnDefList), _lineFormat));
+            levels.add(new EntityTreeLevel(label, multiSelect, tableDef, DataUtils.unmodifiableList(columnDefList),
+                    _lineFormat));
             return this;
         }
 
@@ -290,10 +291,12 @@ public class EntityTreeTable {
 
         private List<StringToken> lineFormat;
 
+        private boolean multiSelect;
+
         private int totalWidth;
 
-        private EntityTreeLevel(String label, TableDef tableDef, List<TableColumnDef> columnDefList,
-                List<StringToken> lineFormat) {
+        private EntityTreeLevel(String label, boolean multiSelect, TableDef tableDef,
+                List<TableColumnDef> columnDefList, List<StringToken> lineFormat) {
             this.label = label;
             this.tableDef = tableDef;
             this.columnDefList = new ArrayList<TableColumnInfo>();
@@ -306,10 +309,15 @@ public class EntityTreeTable {
 
             this.columnDefList = Collections.unmodifiableList(this.columnDefList);
             this.lineFormat = lineFormat;
+            this.multiSelect = multiSelect;
         }
 
         public String getLabel() {
             return label;
+        }
+
+        public boolean isMultiSelect() {
+            return multiSelect;
         }
 
         public int getTotalWidth() {
