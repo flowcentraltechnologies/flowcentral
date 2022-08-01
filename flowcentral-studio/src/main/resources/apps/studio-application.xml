@@ -17,13 +17,13 @@
 			editor="!ui-select list:studiotablerowcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
 		<widgetType name="yesnolist"
-			description="$m{studio.widgettype.yesnolist}"
-			dataType="string" inputType="string"
+			description="$m{studio.widgettype.yesnolist}" dataType="string"
+			inputType="string"
 			editor="!ui-select list:yesnolist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="passfaillist"
-			description="$m{studio.widgettype.passfaillist}"
-			dataType="string" inputType="string"
+			description="$m{studio.widgettype.passfaillist}" dataType="string"
+			inputType="string"
 			editor="!ui-select list:passfaillist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="consformvalidationpolicylist"
@@ -77,9 +77,8 @@
 			editor="!fc-entityfieldrefsearch caseInsensitive:true typeField:$s{dataType} entityName:$s{appEntityName} appName:$s{applicationName}"
 			renderer="!ui-label" />
 		<widgetType name="entityreflist"
-			description="$m{studio.widgettype.entityreflist}"
-			dataType="string" inputType="string"
-			editor="!fc-entityrefsearch caseInsensitive:true"
+			description="$m{studio.widgettype.entityreflist}" dataType="string"
+			inputType="string" editor="!fc-entityrefsearch caseInsensitive:true"
 			renderer="!ui-label" />
 		<widgetType name="entitykeylist"
 			description="$m{studio.widgettype.entitykeylist}" dataType="string"
@@ -282,10 +281,10 @@
 			editor="!ui-select list:studioappletallformlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletchildlistappletlist"
-			description="$m{studio.widgettype.appletchildlistappletlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.appletchildlistappletlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletallchildappletlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
-			renderer="!ui-label" />			
+			renderer="!ui-label" />
 		<widgetType name="propertyappletcreateformstatepolicylist"
 			description="$m{studio.widgettype.propertyappletcreateformstatepolicylist}"
 			dataType="string" inputType="string"
@@ -698,15 +697,18 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="false" />
 			<property name="createForm" value="appFormActionForm" />
-			<property name="createForm.new.policy" value="studiooncreateformaction-policy" />
+			<property name="createForm.new.policy"
+				value="studiooncreateformaction-policy" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="appFormActionForm" />
 			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.update.policy" value="studioonupdateformaction-policy" />
+			<property name="maintainForm.update.policy"
+				value="studioonupdateformaction-policy" />
 			<property name="maintainForm.delete" value="true" />
-			<property name="maintainForm.delete.policy" value="studioondeleteformaction-policy" />
+			<property name="maintainForm.delete.policy"
+				value="studioondeleteformaction-policy" />
 		</applet>
 		<applet name="manageAppFormRelatedList"
 			description="$m{studio.appformrelatedlist.manage}"
@@ -743,16 +745,19 @@
 		<applet name="manageAppFormWidgetRulesPolicy"
 			description="$m{studio.appformwidgetrulespolicy.manage}"
 			label="$m{studio.appformwidgetrulespolicy.manage.label}"
-			type="manage_entitylist" entity="application.appFormWidgetRulesPolicy"
-			menuAccess="false">
-			<property name="searchTable" value="appFormWidgetRulesPolicyTable" />
+			type="manage_entitylist"
+			entity="application.appFormWidgetRulesPolicy" menuAccess="false">
+			<property name="searchTable"
+				value="appFormWidgetRulesPolicyTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="false" />
-			<property name="createForm" value="appFormWidgetRulesPolicyForm" />
+			<property name="createForm"
+				value="appFormWidgetRulesPolicyForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="appFormWidgetRulesPolicyForm" />
+			<property name="maintainForm"
+				value="appFormWidgetRulesPolicyForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -952,7 +957,7 @@
 		<table name="switchApplicationTable"
 			description="$m{studio.application.switch.table}"
 			label="$m{studio.application.switch.table.label}"
-			entity="application.application" itemsPerPage="20"  serialNo="true">
+			entity="application.application" itemsPerPage="20" serialNo="true">
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.module}" />
 			<column field="name" renderWidget="application.name"
@@ -963,7 +968,7 @@
 		<table name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
 			label="$m{studio.appentityfield.table.label}"
-			entity="application.appEntityField" itemsPerPage="20"  serialNo="true">
+			entity="application.appEntityField" itemsPerPage="20" serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="label" renderWidget="application.text"
@@ -988,7 +993,8 @@
 		<table name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"
 			label="$m{studio.appentityattachment.table.label}"
-			entity="application.appEntityAttachment" itemsPerPage="20"  serialNo="true">
+			entity="application.appEntityAttachment" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -999,7 +1005,8 @@
 		<table name="appEntityExpressionTable"
 			description="$m{studio.appentityexpression.table}"
 			label="$m{studio.appentityexpression.table.label}"
-			entity="application.appEntityExpression" itemsPerPage="20"  serialNo="true">
+			entity="application.appEntityExpression" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1008,7 +1015,8 @@
 		<table name="appEntityUniqueConstraintTable"
 			description="$m{studio.appentityuniqueconstraint.table}"
 			label="$m{studio.appentityuniqueconstraint.table.label}"
-			entity="application.appEntityUniqueConstraint" itemsPerPage="20"  serialNo="true">
+			entity="application.appEntityUniqueConstraint" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1019,7 +1027,7 @@
 		<table name="appEntityIndexTable"
 			description="$m{studio.appentityindex.table}"
 			label="$m{studio.appentityindex.table.label}"
-			entity="application.appEntityIndex" itemsPerPage="20"  serialNo="true">
+			entity="application.appEntityIndex" itemsPerPage="20" serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1030,7 +1038,8 @@
 		<table name="appEntityUploadTable"
 			description="$m{studio.appentityupload.table}"
 			label="$m{studio.appentityupload.table.label}"
-			entity="application.appEntityUpload" itemsPerPage="20"  serialNo="true">
+			entity="application.appEntityUpload" itemsPerPage="20"
+			serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -1103,8 +1112,7 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
-			<column field="rowColor"
-				renderWidget="application.text"
+			<column field="rowColor" renderWidget="application.text"
 				label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -1160,8 +1168,10 @@
 				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{application.appformaction.type}" widthRatio="1" />
-			<column field="highlightTypeDesc" renderWidget="application.text"
-				label="$m{application.appformaction.highlighttypedesc}" widthRatio="1" />
+			<column field="highlightTypeDesc"
+				renderWidget="application.text"
+				label="$m{application.appformaction.highlighttypedesc}"
+				widthRatio="1" />
 		</table>
 		<table name="appFormRelatedListTable"
 			description="$m{studio.appformrelatedlist.table}"
@@ -1281,7 +1291,7 @@
 		<table name="wfStepTable"
 			description="$m{studio.workflow.step.table}"
 			label="$m{studio.workflow.step.table.label}" entity="workflow.wfStep"
-			itemsPerPage="20"  serialNo="true">
+			itemsPerPage="20" serialNo="true">
 			<column field="workflowDesc" renderWidget="application.text"
 				label="$m{workflow.step.workflow}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -1296,7 +1306,7 @@
 		<table name="wfStepRoutingTable"
 			description="$m{studio.workflow.steprouting.table}"
 			label="$m{studio.workflow.steprouting.table.label}"
-			entity="workflow.wfStepRouting" itemsPerPage="20"  serialNo="true">
+			entity="workflow.wfStepRouting" itemsPerPage="20" serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.steprouting.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -1309,7 +1319,7 @@
 		<table name="wfStepUserActionTable"
 			description="$m{studio.workflow.stepuseraction.table}"
 			label="$m{studio.workflow.stepuseraction.table.label}"
-			entity="workflow.wfStepUserAction" itemsPerPage="20"  serialNo="true">
+			entity="workflow.wfStepUserAction" itemsPerPage="20" serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.stepuseraction.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -1326,13 +1336,12 @@
 				widthRatio="1" />
 			<column field="highlightTypeDesc"
 				renderWidget="application.text"
-				label="$m{workflow.stepuseraction.highlighttype}"
-				widthRatio="1" />
+				label="$m{workflow.stepuseraction.highlighttype}" widthRatio="1" />
 		</table>
 		<table name="wfStepAlertTable"
 			description="$m{studio.workflow.stepalert.table}"
 			label="$m{studio.workflow.stepalert.table.label}"
-			entity="workflow.wfStepAlert" itemsPerPage="20"  serialNo="true">
+			entity="workflow.wfStepAlert" itemsPerPage="20" serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.stepalert.step}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -1609,7 +1618,7 @@
 					<field name="preferredChildListApplet" switchOnChange="true"
 						inputWidget="studio.appletchildlistappletlist" column="1" />
 					<field name="childListActionType"
-						inputWidget="application.enumlist" column="1" visible = "false"/>
+						inputWidget="application.enumlist" column="1" visible="false" />
 					<field name="quickFilter" inputWidget="application.checkbox"
 						column="1" />
 				</section>
@@ -1619,10 +1628,12 @@
 				reference="app_applet" contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
-			<formStatePolicy type="on_switch" name="childListActionPolicy"
+			<formStatePolicy type="on_switch"
+				name="childListActionPolicy"
 				description="$m{studio.appapplet.form.formstatepolicy.childlistaction}">
 				<onCondition>
-					<restriction type="is_not_null" field="preferredChildListApplet"/>
+					<restriction type="is_not_null"
+						field="preferredChildListApplet" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="childListActionType"
@@ -1671,13 +1682,14 @@
 				<section name="entityDetails" columns="type_2">
 					<field name="applicationId"
 						inputWidget="application.entitysearch" column="0"
-						label="$m{studio.application}" disabled="true" required="true" saveAs="true" />
+						label="$m{studio.application}" disabled="true" required="true"
+						saveAs="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" switchOnChange="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
 					<field name="label" inputWidget="application.text" column="0"
-						required="true"/>
+						required="true" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="baseType" inputWidget="application.enumlist"
@@ -1837,7 +1849,7 @@
 					<field name="inputWidget" inputWidget="entityfieldwidgetlist"
 						column="1" switchOnChange="true" />
 					<field name="suggestionType" inputWidget="suggestiontypelist"
-						column="1" visible="false" required="true"/>
+						column="1" visible="false" required="true" />
 					<field name="inputListKey" inputWidget="application.text"
 						column="1" visible="false" />
 					<field name="minLen" inputWidget="application.integer"
@@ -1869,7 +1881,7 @@
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />			
+				contentType="miniform_changelog" />
 			<formValidationPolicy name="refValidationPolicy"
 				description="$m{studio.appentityfield.form.formvalidationpolicy.ref}"
 				message="$m{studio.appentityfield.form.formvalidationpolicy.ref.message}">
@@ -2302,7 +2314,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="name,description,entity,searchField,searchTable,selectHandler" disabled="true" />
+						target="name,description,entity,searchField,searchTable,selectHandler"
+						disabled="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -2745,8 +2758,8 @@
 				</section>
 				<section name="tableFlags" columns="type_1_2">
 					<field name="label" inputWidget="application.text" column="0" />
-					<field name="headerless"
-						inputWidget="application.checkbox" column="1" />
+					<field name="headerless" inputWidget="application.checkbox"
+						column="1" />
 					<field name="headerToUpperCase"
 						inputWidget="application.checkbox" column="1" />
 					<field name="headerCenterAlign"
@@ -2757,25 +2770,23 @@
 						column="1" />
 					<field name="multiSelect" inputWidget="application.checkbox"
 						column="2" />
-					<field name="nonConforming" inputWidget="application.checkbox"
-						column="2" />
+					<field name="nonConforming"
+						inputWidget="application.checkbox" column="2" />
 					<field name="basicSearch" inputWidget="application.checkbox"
 						column="2" />
 					<field name="totalSummary" inputWidget="application.checkbox"
 						column="2" />
-					<field name="limitSelectToColumns" inputWidget="application.checkbox"
-						column="2" />
+					<field name="limitSelectToColumns"
+						inputWidget="application.checkbox" column="2" />
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.apptable.form.design}"
 				contentType="child_list" applet="manageAppTableColumn"
 				reference="columnList" editAction="/designChildItem" />
-			<tab name="filters"
-				label="$m{studio.apptable.form.filters}"
+			<tab name="filters" label="$m{studio.apptable.form.filters}"
 				contentType="child_list" applet="manageAppTableFilter"
 				reference="filterList" />
-			<tab name="actions"
-				label="$m{studio.apptable.form.actions}"
+			<tab name="actions" label="$m{studio.apptable.form.actions}"
 				contentType="child_list" applet="manageAppTableAction"
 				reference="actionList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -2787,10 +2798,8 @@
 					<restriction type="is_null" field="id" />
 				</onCondition>
 				<setValues>
-					<setValue type="immediate" field="serialNo"
-						value="true" />
-					<setValue type="immediate" field="sortable"
-						value="true" />
+					<setValue type="immediate" field="serialNo" value="true" />
+					<setValue type="immediate" field="sortable" value="true" />
 				</setValues>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -2861,8 +2870,9 @@
 						column="0" required="true" saveAs="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="policy" inputWidget="studio.tableentitylistactionpolicylist"
-						column="1" required="true" />
+					<field name="policy"
+						inputWidget="studio.tableentitylistactionpolicylist" column="1"
+						required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						column="1" />
 				</section>
@@ -2879,8 +2889,8 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="rowColor"
-						inputWidget="studio.tablerowcolorlist" column="1"/>
+					<field name="rowColor" inputWidget="studio.tablerowcolorlist"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
@@ -2921,6 +2931,8 @@
 						column="1" required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
+					<field name="titleFormat" inputWidget="application.text"
+						column="1" />
 					<field name="consolidatedValidation"
 						inputWidget="studio.consformvalidationpolicylist" column="1"
 						visible="false" />
@@ -3129,10 +3141,11 @@
 						required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" />
-					<field name="highlightType" inputWidget="application.enumlist"
-						column="1" />
-					<field name="policy" inputWidget="studio.formactionpolicylist"
-						column="1" required="true" />
+					<field name="highlightType"
+						inputWidget="application.enumlist" column="1" />
+					<field name="policy"
+						inputWidget="studio.formactionpolicylist" column="1"
+						required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						required="true" column="1" />
 					<field name="showOnCreate" inputWidget="application.checkbox"
@@ -3167,8 +3180,8 @@
 						inputWidget="studio.formrelatedappletlist" switchOnChange="true"
 						column="1" required="true" />
 					<field name="filter"
-						inputWidget="studio.formappletfilterlist"
-						column="1" required="true" />
+						inputWidget="studio.formappletfilterlist" column="1"
+						required="true" />
 					<field name="editAction"
 						inputWidget="studio.rellisteditactionlist" column="1" />
 				</section>
@@ -3350,8 +3363,8 @@
 						column="1" />
 					<field name="errorMatcher"
 						inputWidget="studio.entitymatcherlist" column="1" />
-					<field name="skippable"
-						inputWidget="application.checkbox" column="1" />
+					<field name="skippable" inputWidget="application.checkbox"
+						column="1" />
 				</section>
 				<section name="messageDetails" columns="type_2">
 					<field name="messageType" inputWidget="application.enumlist"
@@ -3364,7 +3377,8 @@
 				label="$m{studio.appformreviewpolicy.form.errorcondition}"
 				reference="app_formreviewpolicy" contentType="filter_condition" />
 		</form>
-		<form name="appWidgetTypeForm" description="$m{studio.appwidgettype.form}"
+		<form name="appWidgetTypeForm"
+			description="$m{studio.appwidgettype.form}"
 			entity="application.appWidgetType">
 			<action type="button" name="lockResource" symbol="lock"
 				styleClass="fc-bluebutton"
@@ -3380,7 +3394,8 @@
 				description="$m{studio.common.form.annotation.static}"
 				message="$m{studio.common.form.annotation.static.message}" />
 			<tab name="basicDetails"
-				label="$m{studio.appwidgettype.form.basicdetails}" contentType="miniform">
+				label="$m{studio.appwidgettype.form.basicdetails}"
+				contentType="miniform">
 				<section name="basicDetails" columns="type_2">
 					<field name="applicationId"
 						inputWidget="application.entitysearch" column="0"
@@ -3396,20 +3411,18 @@
 						column="1" required="true" />
 					<field name="inputType" inputWidget="application.enumlist"
 						column="1" required="true" />
-					<field name="stretch"
-						inputWidget="application.checkbox" column="1" />
-					<field name="listOption"
-						inputWidget="application.checkbox" column="1" />
-					<field name="enumOption"
-						inputWidget="application.checkbox" column="1" />
+					<field name="stretch" inputWidget="application.checkbox"
+						column="1" />
+					<field name="listOption" inputWidget="application.checkbox"
+						column="1" />
+					<field name="enumOption" inputWidget="application.checkbox"
+						column="1" />
 				</section>
 				<section name="editorDetails" columns="type_1">
-					<field name="editor"
-						inputWidget="application.textarea" column="0"
-						required="true" />
-					<field name="renderer"
-						inputWidget="application.textarea" column="0"
-						required="true" />
+					<field name="editor" inputWidget="application.textarea"
+						column="0" required="true" />
+					<field name="renderer" inputWidget="application.textarea"
+						column="0" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -3443,7 +3456,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="name,description,dataType,inputType,editor,renderer,stretch,listOption,enumOption" disabled="true" />
+						target="name,description,dataType,inputType,editor,renderer,stretch,listOption,enumOption"
+						disabled="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -3457,8 +3471,7 @@
 					</restriction>
 				</onCondition>
 				<setStates>
-					<setState type="field"
-						target="name" disabled="true" />
+					<setState type="field" target="name" disabled="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3741,7 +3754,7 @@
 					<field name="commentRequirement"
 						inputWidget="application.enumlist" column="1" required="true" />
 					<field name="highlightType"
-						inputWidget="application.enumlist" column="1"/>
+						inputWidget="application.enumlist" column="1" />
 					<field name="nextStepName"
 						inputWidget="studio.wfsteproutetolist" column="1" required="true" />
 					<field name="orderIndex" inputWidget="application.integer"

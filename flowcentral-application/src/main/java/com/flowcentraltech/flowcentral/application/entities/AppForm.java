@@ -51,6 +51,9 @@ public class AppForm extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String listingGenerator;
 
+    @Column(length = 128, nullable = true)
+    private String titleFormat;
+
     @ListOnly(name = "form_type_desc", key = "type", property="description")
     private String typeDesc;
     
@@ -111,6 +114,14 @@ public class AppForm extends BaseApplicationEntity {
 
     public void setListingGenerator(String listingGenerator) {
         this.listingGenerator = listingGenerator;
+    }
+
+    public String getTitleFormat() {
+        return titleFormat;
+    }
+
+    public void setTitleFormat(String titleFormat) {
+        this.titleFormat = titleFormat;
     }
 
     public String getConsolidatedValidation() {

@@ -1092,6 +1092,9 @@
 				type="string" nullable="true"/>
 			<field name="listingGenerator" label="$m{application.appform.listinggenerator}"
 				type="string" nullable="true"/>
+			<field name="titleFormat"
+				label="$m{application.appform.titleformat}" type="string"
+				nullable="true" />
 			<field name="annotation"
 				label="$m{application.appform.annotation}" type="string"
 				nullable="true" />

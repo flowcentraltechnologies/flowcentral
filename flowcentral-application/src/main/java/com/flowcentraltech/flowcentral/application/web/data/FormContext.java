@@ -93,6 +93,8 @@ public class FormContext extends AbstractContext {
     
     private Set<String> visibleAnnotations;
 
+    private String altFormTitle;
+
     private String fixedReference;
 
     private String focusMemoryId;
@@ -222,6 +224,8 @@ public class FormContext extends AbstractContext {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
+        altFormTitle = formDef.isWithTitleFormat() ? appletContext.specialParamProvider()
+                .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate() : null;
     }
 
     public Object getInst() {
@@ -247,6 +251,14 @@ public class FormContext extends AbstractContext {
 
     public String getEntityName() {
         return entityDef.getName();
+    }
+
+    public String getAltFormTitle() {
+        return altFormTitle;
+    }
+
+    public boolean isWithAltFormTitle() {
+        return !StringUtils.isBlank(altFormTitle);
     }
 
     public void mergeValidationErrors(List<FormValidationErrors> formValidationErrors) {
@@ -475,7 +487,7 @@ public class FormContext extends AbstractContext {
             if (formStatePolicyDef.isTriggered("")) {
                 ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
                         ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef,
-                                appletContext.getSpecialParamProvider(), now)
+                                appletContext.specialParamProvider(), now)
                         : null;
                 if (objectFilter == null || objectFilter.match(formValueStore)) {
                     for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {

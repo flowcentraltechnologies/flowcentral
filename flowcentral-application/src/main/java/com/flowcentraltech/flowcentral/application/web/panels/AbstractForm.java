@@ -39,30 +39,35 @@ import com.tcdng.unify.core.UnifyException;
 public abstract class AbstractForm {
 
     public enum FormMode {
-        CREATE(AppletPropertyConstants.CREATE_FORM),
-        MAINTAIN(AppletPropertyConstants.MAINTAIN_FORM),
-        ENTITY_CREATE(AppletPropertyConstants.ENTITY_FORM),
-        ENTITY_MAINTAIN(AppletPropertyConstants.ENTITY_FORM),
-        LISTING(AppletPropertyConstants.LISTING_FORM);
-        
+        CREATE(
+                AppletPropertyConstants.CREATE_FORM),
+        MAINTAIN(
+                AppletPropertyConstants.MAINTAIN_FORM),
+        ENTITY_CREATE(
+                AppletPropertyConstants.ENTITY_FORM),
+        ENTITY_MAINTAIN(
+                AppletPropertyConstants.ENTITY_FORM),
+        LISTING(
+                AppletPropertyConstants.LISTING_FORM);
+
         private final String formProperty;
-        
+
         private FormMode(String formProperty) {
             this.formProperty = formProperty;
         }
-        
+
         public String formProperty() {
             return formProperty;
         }
-        
+
         public boolean isCreate() {
-            return CREATE.equals(this) ||  ENTITY_CREATE.equals(this);
+            return CREATE.equals(this) || ENTITY_CREATE.equals(this);
         }
-        
+
         public boolean isMaintain() {
-            return MAINTAIN.equals(this) ||  ENTITY_MAINTAIN.equals(this);
+            return MAINTAIN.equals(this) || ENTITY_MAINTAIN.equals(this);
         }
-        
+
         public boolean isListing() {
             return LISTING.equals(this);
         }
@@ -73,11 +78,11 @@ public abstract class AbstractForm {
     private SectorIcon sectorIcon;
 
     private BreadCrumbs breadCrumbs;
-    
+
     private Comments comments;
-    
+
     private Errors errors;
-    
+
     private FormMode formMode;
 
     private List<FormActionDef> formActionDefList;
@@ -85,15 +90,15 @@ public abstract class AbstractForm {
     private String displayItemCounter;
 
     private String displayItemCounterClass;
-    
+
     private String warning;
 
     private String submitCaption;
 
     private String submitNextCaption;
-    
+
     private String submitStyleClass;
-    
+
     private int attachmentCount;
 
     public AbstractForm(FormContext ctx, SectorIcon sectorIcon, BreadCrumbs breadCrumbs) {
@@ -101,7 +106,8 @@ public abstract class AbstractForm {
         this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         if (this.breadCrumbs != null) {
-            this.breadCrumbs.setLastCrumbTitle(ctx.getEntityDef().getDescription());
+            this.breadCrumbs.setLastCrumbTitle(
+                    ctx.isWithAltFormTitle() ? ctx.getAltFormTitle() : ctx.getEntityDef().getDescription());
         }
     }
 
@@ -130,7 +136,8 @@ public abstract class AbstractForm {
     }
 
     public String getFormTitle() {
-        return breadCrumbs == null ? null : breadCrumbs.getLastBreadCrumb().getTitle();
+        return ctx.isWithAltFormTitle() ? ctx.getAltFormTitle()
+                : (breadCrumbs != null ? breadCrumbs.getLastBreadCrumb().getTitle() : null);
     }
 
     public void setFormTitle(String formTitle) {
@@ -140,7 +147,7 @@ public abstract class AbstractForm {
     }
 
     public String getBeanTitle() {
-        return breadCrumbs == null ? null : breadCrumbs.getLastBreadCrumb().getSubTitle();
+        return breadCrumbs != null ? breadCrumbs.getLastBreadCrumb().getSubTitle() : null;
     }
 
     public void setBeanTitle(String beanTitle) {
@@ -210,7 +217,7 @@ public abstract class AbstractForm {
     public boolean isWithDisplayItemCounter() {
         return displayItemCounter != null;
     }
-    
+
     public String getDisplayItemCounterClass() {
         return displayItemCounterClass;
     }
@@ -255,7 +262,7 @@ public abstract class AbstractForm {
         displayItemCounterClass = null;
         displayItemCounter = null;
     }
-    
+
     public int getAttachmentCount() {
         return attachmentCount;
     }

@@ -902,6 +902,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
+                    List<StringToken> titleFormat = !StringUtils.isBlank(appForm.getTitleFormat())
+                                    ? StringUtils.breakdownParameterizedString(appForm.getTitleFormat())
+                                    : null;
+                    fdb.titleFormat(titleFormat);
+
                     for (AppFormAnnotation appFormAnnotation : appForm.getAnnotationList()) {
                         fdb.addFormAnnotation(appFormAnnotation.getType(), appFormAnnotation.getName(),
                                 appFormAnnotation.getDescription(), appFormAnnotation.getMessage(),
@@ -2975,6 +2980,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                     appForm.setConsolidatedState(appFormConfig.getConsolidatedState());
                     appForm.setListingGenerator(appFormConfig.getListingGenerator());
+                    appForm.setTitleFormat(appFormConfig.getTitleFormat());
                     appForm.setName(appFormConfig.getName());
                     appForm.setDescription(description);
                     appForm.setConfigType(ConfigType.MUTABLE_INSTALL);
@@ -2990,6 +2996,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppForm.setConsolidatedValidation(appFormConfig.getConsolidatedValidation());
                         oldAppForm.setConsolidatedState(appFormConfig.getConsolidatedState());
                         oldAppForm.setListingGenerator(appFormConfig.getListingGenerator());
+                        oldAppForm.setTitleFormat(appFormConfig.getTitleFormat());
                         oldAppForm.setDescription(description);
                     }
 

@@ -235,7 +235,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                             }
 
                             if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                                    .getObjectFilter(entityDef, ctx.getAppletContext().getSpecialParamProvider(), now)
+                                    .getObjectFilter(entityDef, ctx.getAppletContext().specialParamProvider(), now)
                                     .match(inst)) {
                                 addValidationMessage(ctx, policyDef);
                             }
@@ -276,7 +276,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                 }
 
                 if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                        .getObjectFilter(entityDef, ctx.getAppletContext().getSpecialParamProvider(), now)
+                        .getObjectFilter(entityDef, ctx.getAppletContext().specialParamProvider(), now)
                         .match(inst)) {
                     ctx.addReviewError(rrb, policyDef);
                 }
