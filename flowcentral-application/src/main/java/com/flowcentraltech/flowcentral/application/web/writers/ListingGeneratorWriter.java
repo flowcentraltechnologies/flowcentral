@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.util.Arrays;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.ListingRowColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.util.StringUtils;
@@ -36,6 +37,8 @@ public class ListingGeneratorWriter {
 
     private List<ListingColumn> tableColumnList;
 
+    private ListingRowColorType rowColor;
+    
     private int sectionColumns;
 
     private int sectionColumnWidth;
@@ -50,6 +53,22 @@ public class ListingGeneratorWriter {
         this.writer = writer;
     }
 
+    public ListingRowColorType getRowColor() {
+        return rowColor;
+    }
+
+    public void setRowColor(ListingRowColorType rowColor) {
+        this.rowColor = rowColor;
+    }
+
+    public boolean isWithRowColor() {
+        return rowColor != null;
+    }
+    
+    public void clearRowColor() {
+        rowColor = null;
+    }
+    
     public void sectionHeader(String header) throws UnifyException {
         writer.write("<div class=\"flsection\"><span>").writeResolvedSessionMessage(header).write("</span></div>");
     }
@@ -123,7 +142,14 @@ public class ListingGeneratorWriter {
                     "Length of supplied cells does not match current section number of columns.");
         }
 
-        writer.write("<div class=\"flrow\">");
+        writer.write("<div class=\"flrow\"");
+        if (isWithRowColor()) {
+            writer.write(" style=\"background-color:");
+            writer.write(rowColor.backgroundColor());
+            writer.write(";\"");
+        }
+        writer.write(">");
+        
         for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             ListingColumn column = tableColumnList.get(cellIndex);
             ListingCell cell = cells[cellIndex];
