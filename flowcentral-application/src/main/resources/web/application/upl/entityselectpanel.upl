@@ -28,6 +28,7 @@
 
 !ui-label:filterLabel styleClass:$e{search} binding:label	
 !ui-alphanumeric:filterInput caption:$m{entityselectpanel.filter} binding:filter focus:true
+	spaceBinding:$s{space} specialBinding:$s{special}
     eventHandler:$d{!ui-event event:oninput action:$c{filterAct}}
 
 // Search result panel
