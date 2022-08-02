@@ -42,7 +42,7 @@
 
 // Actions
 !ui-postcommand:filterAct command:search components:$c{filterInput}
-	 refresh:$c{searchResultPanel}
+	 refresh:$c{searchResultPanel} debounce:false
 !ui-postcommand:closeAct command:close
 !ui-postcommand:selectAct command:select debounce:true
 
