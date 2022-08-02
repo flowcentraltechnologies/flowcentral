@@ -42,25 +42,25 @@ import com.tcdng.unify.core.util.DataUtils;
 public class AppletContext extends AbstractContext {
 
     private final AppletUtilities au;
-    
+
     private final AbstractApplet applet;
-    
+
     private Map<EntityChildCategoryType, String> entityReferences;
 
     private EntityActionResult originalEntityActionResult;
 
     private int tabReadOnlyCounter;
-    
+
     private boolean readOnly;
-    
+
     private boolean inWorkflow;
-    
+
     private boolean review;
-    
+
     private boolean recovery;
-    
+
     private boolean comments;
-    
+
     public AppletContext(AbstractApplet applet, AppletUtilities au) {
         this.applet = applet;
         this.au = au;
@@ -70,7 +70,7 @@ public class AppletContext extends AbstractContext {
         }
     }
 
-    public AbstractApplet getApplet() {
+    public AbstractApplet applet() {
         return applet;
     }
 
@@ -82,7 +82,7 @@ public class AppletContext extends AbstractContext {
         return au.environment();
     }
 
-    public SpecialParamProvider getSpecialParamProvider() throws UnifyException {
+    public SpecialParamProvider specialParamProvider() throws UnifyException {
         return au.getSpecialParamProvider();
     }
 
@@ -106,13 +106,13 @@ public class AppletContext extends AbstractContext {
         String ref = entityReferences.get(type);
         return ref != null ? ref : type.readEntity();
     }
-    
+
     public void incTabReadOnlyCounter() {
         tabReadOnlyCounter++;
     }
-    
+
     public void decTabReadOnlyCounter() {
-        if (tabReadOnlyCounter > 0 ) {
+        if (tabReadOnlyCounter > 0) {
             tabReadOnlyCounter--;
         }
     }
@@ -124,15 +124,15 @@ public class AppletContext extends AbstractContext {
     public void setOriginalEntityActionResult(EntityActionResult originalEntityActionResult) {
         this.originalEntityActionResult = originalEntityActionResult;
     }
-    
+
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
-    
+
     public boolean isReadOnly() {
         return readOnly;
     }
-    
+
     public boolean isReview() {
         return review;
     }

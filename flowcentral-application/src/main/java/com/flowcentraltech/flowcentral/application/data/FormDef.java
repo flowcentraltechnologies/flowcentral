@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.MessageType;
@@ -87,6 +88,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private Map<String, FormRelatedListDef> formRelatedListDefMap;
 
+    private List<StringToken> titleFormat;
+
     private String consolidatedFormValidation;
 
     private String consolidatedFormReview;
@@ -99,9 +102,9 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private FormDef(FormType type, EntityDef entityDef, String consolidatedFormValidation,
             String consolidatedFormReview, String consolidatedFormState, String listingGenerator,
-            Map<String, FormAnnotationDef> formAnnotationDefMap, List<FormActionDef> formActionDefList,
-            List<FormTabDef> formTabDefList, List<FormRelatedListDef> formRelatedListDefList,
-            List<FormStatePolicyDef> formStatePolicyDefList,
+            List<StringToken> titleFormat, Map<String, FormAnnotationDef> formAnnotationDefMap,
+            List<FormActionDef> formActionDefList, List<FormTabDef> formTabDefList,
+            List<FormRelatedListDef> formRelatedListDefList, List<FormStatePolicyDef> formStatePolicyDefList,
             List<FormWidgetRulesPolicyDef> formWidgetRulesPolicyDefList,
             List<FieldValidationPolicyDef> fieldValidationPolicyDefList,
             List<FormValidationPolicyDef> formValidationPolicyDefList,
@@ -114,6 +117,7 @@ public class FormDef extends BaseApplicationEntityDef {
         this.consolidatedFormReview = consolidatedFormReview;
         this.consolidatedFormState = consolidatedFormState;
         this.listingGenerator = listingGenerator;
+        this.titleFormat = titleFormat;
         this.formAnnotationDefMap = formAnnotationDefMap;
         this.formActionDefList = formActionDefList;
         this.formTabDefList = formTabDefList;
@@ -223,6 +227,14 @@ public class FormDef extends BaseApplicationEntityDef {
 
     public EntityDef getEntityDef() {
         return entityDef;
+    }
+
+    public List<StringToken> getTitleFormat() {
+        return titleFormat;
+    }
+
+    public boolean isWithTitleFormat() {
+        return titleFormat != null;
     }
 
     public boolean isWithConsolidatedFormValidation() {
@@ -464,6 +476,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
         private Map<String, FormReviewPolicyDef> formReviewPolicyDefList;
 
+        private List<StringToken> titleFormat;
+
         private Set<String> actionNames;
 
         private Set<String> tabLabels;
@@ -495,6 +509,11 @@ public class FormDef extends BaseApplicationEntityDef {
             fieldNames = new HashSet<String>();
             actionNames = new HashSet<String>();
             tabLabels = new HashSet<String>();
+        }
+
+        public Builder titleFormat(List<StringToken> titleFormat) {
+            this.titleFormat = titleFormat;
+            return this;
         }
 
         public Builder addFormAnnotation(FormAnnotationType type, String name, String description, String message,
@@ -789,8 +808,9 @@ public class FormDef extends BaseApplicationEntityDef {
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             return new FormDef(type, entityDef, consolidatedFormValidation, consolidatedFormReview,
-                    consolidatedFormState, listingGenerator, DataUtils.unmodifiableMap(formAnnotationDefMap),
-                    DataUtils.unmodifiableList(formActionList), DataUtils.unmodifiableList(formTabDefList),
+                    consolidatedFormState, listingGenerator, titleFormat,
+                    DataUtils.unmodifiableMap(formAnnotationDefMap), DataUtils.unmodifiableList(formActionList),
+                    DataUtils.unmodifiableList(formTabDefList),
                     DataUtils.unmodifiableValuesList(formRelatedListDefList),
                     DataUtils.unmodifiableValuesList(fieldStatePolicyDefList),
                     DataUtils.unmodifiableValuesList(formWidgetRulesPolicyDefList),

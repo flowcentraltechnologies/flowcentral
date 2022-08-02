@@ -113,9 +113,8 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
                 writer.writeParam("pMultiSel", true);
-                writer.writeParam("pMultiSelDepList", new String[] {} /*
-                        DataUtils.toArray(String.class, tableWidget.getMultiSelDependentList())*/);
-                writer.writeParam("pLvlChain", table.getItemLevelChain());
+                writer.writeParam("pMultiSelDepList", new String[] {});
+                /*writer.writeParam("pLvlChain", table.getItemLevelChain());*/
             }
             writer.endFunction();
         }
@@ -308,32 +307,35 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
             }
 
             String namingIndexId = selectCtrl.getNamingIndexedId(index);
-            writer.write("<span ");
-            writeTagId(writer, "fac_" + namingIndexId);
-            if (tableWidget.isContainerDisabled()) {
-                if (selected) {
-                    writeTagStyleClass(writer, "g_cbc");
+            EntityTreeLevel treeLevel = table.getLevel(depth);
+            if (treeLevel.isMultiSelect()) {
+                writer.write("<span ");
+                writeTagId(writer, "fac_" + namingIndexId);
+                if (tableWidget.isContainerDisabled()) {
+                    if (selected) {
+                        writeTagStyleClass(writer, "g_cbc");
+                    } else {
+                        writeTagStyleClass(writer, "g_cbd");
+                    }
                 } else {
-                    writeTagStyleClass(writer, "g_cbd");
+                    if (selected) {
+                        writeTagStyleClass(writer, "g_cba");
+                    } else {
+                        writeTagStyleClass(writer, "g_cbb");
+                    }
                 }
-            } else {
+                writer.write("/>");
+                writer.write("<input type=\"checkbox\"");
+                writeTagId(writer, namingIndexId);
+                writeTagName(writer, selectCtrl.getId());
+                writeTagValue(writer, index);
                 if (selected) {
-                    writeTagStyleClass(writer, "g_cba");
-                } else {
-                    writeTagStyleClass(writer, "g_cbb");
+                    writer.write(" checked=\"checked\"");
                 }
+                writer.write("/>");
+                writer.write("</span>");
             }
 
-            writer.write("/>");
-            writer.write("<input type=\"checkbox\"");
-            writeTagId(writer, namingIndexId);
-            writeTagName(writer, selectCtrl.getId());
-            writeTagValue(writer, index);
-            if (selected) {
-                writer.write(" checked=\"checked\"");
-            }
-            writer.write("/>");
-            writer.write("</span>");
             writer.write("</td>");
         } else if (depth > 0) {
             writer.write("<td class=\"mpre\" colspan=\"");

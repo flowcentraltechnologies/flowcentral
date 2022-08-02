@@ -850,7 +850,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final FormDef formDef = form.getFormDef();
         final EntityDef entityDef = formDef.getEntityDef();
         final FormContext formContext = form.getCtx();
-        final AbstractEntityFormApplet applet = (AbstractEntityFormApplet) formContext.getAppletContext().getApplet();
+        final AbstractEntityFormApplet applet = (AbstractEntityFormApplet) formContext.getAppletContext().applet();
         logDebug("Updating header with tabs form for [{0}] using form definition [{1}]...", inst.getId(),
                 formDef.getLongName());
         boolean isCreateMode = form.getFormMode().isCreate();
@@ -1246,7 +1246,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         if (!filterList.isEmpty()) {
             EntityDef entityDef = form.getFormDef().getEntityDef();
             ValueStore formValueStore = form.getCtx().getFormValueStore();
-            SpecialParamProvider specialParamProvider = form.getCtx().getAppletContext().getSpecialParamProvider();
+            SpecialParamProvider specialParamProvider = form.getCtx().getAppletContext().specialParamProvider();
             Date now = getNow();
             for (FilterDef filterDef : filterList) {
                 if (filterDef.isHideAddWidgetChildListAction()) {

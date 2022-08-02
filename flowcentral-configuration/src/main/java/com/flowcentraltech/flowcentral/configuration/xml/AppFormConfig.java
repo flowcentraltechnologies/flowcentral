@@ -54,6 +54,8 @@ public class AppFormConfig extends BaseNameConfig {
     
     private String entity;
 
+    private String titleFormat;
+
     private String listingGenerator;
 
     private String consolidatedValidation;
@@ -164,6 +166,15 @@ public class AppFormConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getTitleFormat() {
+        return titleFormat;
+    }
+
+    @XmlAttribute
+    public void setTitleFormat(String titleFormat) {
+        this.titleFormat = titleFormat;
     }
 
     public String getListingGenerator() {

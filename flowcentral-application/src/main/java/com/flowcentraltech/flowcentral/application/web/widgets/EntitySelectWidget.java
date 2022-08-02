@@ -54,7 +54,9 @@ import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
         @UplAttribute(name = "ref", type = String.class, mandatory = true),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "search"),
-        @UplAttribute(name = "listKey", type = String.class) })
+        @UplAttribute(name = "listKey", type = String.class),
+        @UplAttribute(name = "space", type = boolean.class, defaultVal = "false"),
+        @UplAttribute(name = "special", type = boolean.class, defaultVal = "false") })
 public class EntitySelectWidget extends AbstractPopupTextField {
 
     @Configurable
@@ -104,6 +106,8 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         String title = resolveSessionMessage("$m{entityselect.select.entity}",
                 entitySelect.getEntityTable().getEntityDef().getLabel());
         entitySelect.setTitle(title);
+        entitySelect.setSpace(isSpace());
+        entitySelect.setSpecial(isSpecial());
         setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYSELECT, entitySelect);
         setCommandResultMapping(ApplicationResultMappingConstants.SHOW_ENTITY_SELECT);
     }
@@ -126,6 +130,14 @@ public class EntitySelectWidget extends AbstractPopupTextField {
     @Override
     public boolean isBindEventsToFacade() throws UnifyException {
         return false;
+    }
+
+    public boolean isSpace() throws UnifyException {
+        return getUplAttribute(boolean.class, "space");
+    }
+
+    public boolean isSpecial() throws UnifyException {
+        return getUplAttribute(boolean.class, "special");
     }
 
     public String getRef() throws UnifyException {

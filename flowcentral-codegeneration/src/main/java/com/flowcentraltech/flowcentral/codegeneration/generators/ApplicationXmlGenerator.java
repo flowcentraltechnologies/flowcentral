@@ -594,6 +594,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appFormConfig.setConsolidatedValidation(appForm.getConsolidatedValidation());
                 appFormConfig.setConsolidatedState(appForm.getConsolidatedState());
                 appFormConfig.setListingGenerator(appForm.getListingGenerator());
+                appFormConfig.setTitleFormat(appForm.getTitleFormat());
 
                 // Annotations
                 if (!DataUtils.isBlank(appForm.getAnnotationList())) {

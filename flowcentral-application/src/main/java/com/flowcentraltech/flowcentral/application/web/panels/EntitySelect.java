@@ -56,6 +56,10 @@ public class EntitySelect {
     private Restriction baseRestriction;
 
     private boolean enableFilter;
+
+    private boolean space;
+
+    private boolean special;
     
     public EntitySelect(AppletUtilities au, TableDef tableDef, String searchFieldName, ValueStore formValueStore,
             String selectHandlerName, int limit) {
@@ -89,6 +93,22 @@ public class EntitySelect {
 
     public void setFilter(String filter) {
         this.filter = filter;
+    }
+
+    public boolean isSpace() {
+        return space;
+    }
+
+    public void setSpace(boolean space) {
+        this.space = space;
+    }
+
+    public boolean isSpecial() {
+        return special;
+    }
+
+    public void setSpecial(boolean special) {
+        this.special = special;
     }
 
     public EntityTable getEntityTable() {

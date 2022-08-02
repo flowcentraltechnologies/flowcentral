@@ -353,7 +353,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (!DataUtils.isBlank(filterList)) {
             EntityDef entityDef = form.getFormDef().getEntityDef();
             ValueStore formValueStore = form.getCtx().getFormValueStore();
-            SpecialParamProvider specialParamProvider = form.getCtx().getAppletContext().getSpecialParamProvider();
+            SpecialParamProvider specialParamProvider = form.getCtx().getAppletContext().specialParamProvider();
             Date now = au.getNow();
             for (FilterDef filterDef : filterList) {
                 if (filterDef.isShowPopupChildListAction()) {
