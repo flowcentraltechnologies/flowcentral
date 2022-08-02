@@ -228,7 +228,7 @@ fux.esOnShow = function(rgp) {
 fux.entityListSelect = function(uEv) {
 	const evp = uEv.evp;
 	const fac = _id(evp.uFacId);
-	fac.value = evp.uLabel.innerHTML;
+	fac.value = ux.unescape(evp.uLabel.innerHTML);
 
 	const sel = _id(evp.uId);
 	sel.value = evp.uKey;
