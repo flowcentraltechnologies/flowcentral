@@ -56,6 +56,15 @@ public class EntitySelectPanel extends AbstractPanel {
     }
 
     @Action
+    public void clear() throws UnifyException {
+        EntitySelect entitySelect = getEntitySelect();
+        entitySelect.setFilter(null);
+        entitySelect.setFilterA(null);
+        entitySelect.setFilterB(null);
+        entitySelect.applyFilterToSearch();
+    }
+
+    @Action
     public void select() throws UnifyException {
         int selectIndex = getRequestTarget(int.class);
         EntitySelect entitySelect = (EntitySelect) removeSessionAttribute(
