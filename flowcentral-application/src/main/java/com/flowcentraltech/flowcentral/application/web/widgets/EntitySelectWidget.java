@@ -54,7 +54,8 @@ import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
         @UplAttribute(name = "ref", type = String.class, mandatory = true),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "search"),
-        @UplAttribute(name = "listKey", type = String.class),
+        @UplAttribute(name = "listKey", type = String.class), @UplAttribute(name = "fieldA", type = String.class),
+        @UplAttribute(name = "fieldB", type = String.class),
         @UplAttribute(name = "space", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "special", type = boolean.class, defaultVal = "false") })
 public class EntitySelectWidget extends AbstractPopupTextField {
@@ -93,11 +94,19 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         RefDef refDef = getRefDef();
         TableDef tableDef = applicationModuleService.getTableDef(refDef.getSearchTable());
         int limit = getUplAttribute(int.class, "limit");
-        EntitySelect entitySelect = new EntitySelect(appletUtilities, tableDef, refDef.getSearchField(),
+        String fieldA = getUplAttribute(String.class, "fieldA");
+        String fieldB = getUplAttribute(String.class, "fieldB");
+        EntitySelect entitySelect = new EntitySelect(appletUtilities, tableDef, refDef.getSearchField(), fieldA, fieldB,
                 getValueStore(), refDef.getSelectHandler(), limit);
         entitySelect.setEnableFilter(true);
         String label = tableDef.getEntityDef().getFieldDef(refDef.getSearchField()).getFieldLabel() + ":";
+        String labelA = !StringUtils.isBlank(fieldA) ? tableDef.getEntityDef().getFieldDef(fieldA).getFieldLabel() + ":"
+                : null;
+        String labelB = !StringUtils.isBlank(fieldB) ? tableDef.getEntityDef().getFieldDef(fieldB).getFieldLabel() + ":"
+                : null;
         entitySelect.setLabel(label);
+        entitySelect.setLabelA(labelA);
+        entitySelect.setLabelB(labelB);
         if (input != null && !input.trim().isEmpty()) {
             entitySelect.setFilter(input);
         }
@@ -194,9 +203,8 @@ public class EntitySelectWidget extends AbstractPopupTextField {
 
         Listable result = environmentService.listLean(query);
         if (result != null) {
-            String formatDesc = refDef.isWithListFormat()
-                    ? specialParamProvider.getStringGenerator(new BeanValueStore(result),
-                            getValueStore(), refDef.getListFormat()).generate()
+            String formatDesc = refDef.isWithListFormat() ? specialParamProvider
+                    .getStringGenerator(new BeanValueStore(result), getValueStore(), refDef.getListFormat()).generate()
                     : applicationModuleService.getEntityDescription(entityClassDef, (Entity) result,
                             refDef.getSearchField());
             return new ListData(result.getListKey(), formatDesc);

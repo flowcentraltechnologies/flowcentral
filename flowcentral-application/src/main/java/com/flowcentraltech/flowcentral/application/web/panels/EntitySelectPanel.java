@@ -40,6 +40,12 @@ public class EntitySelectPanel extends AbstractPanel {
         EntitySelect entitySelect = getEntitySelect();
         if (entitySelect != null) {
             setVisible("searchFilterPanel", entitySelect.isEnableFilter());
+            
+            setVisible("filterLabelA", entitySelect.isWithFilterA());
+            setVisible("filterInputA", entitySelect.isWithFilterA());
+            
+            setVisible("filterLabelB", entitySelect.isWithFilterB());
+            setVisible("filterInputB", entitySelect.isWithFilterB());
         }
     }
 

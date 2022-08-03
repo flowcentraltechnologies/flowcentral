@@ -619,7 +619,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         final String editAction = formTabDef.getEditAction() == null ? "/assignToChildItem"
                                 : formTabDef.getEditAction();
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
+                                formTabDef.getName(), rootTitle, _appletDef, editAction,
+                                EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                             _entitySearch.setBaseFilter(_appletDef.getFilterDef(
@@ -761,7 +762,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 final String editAction = formRelatedListDef.getEditAction() == null ? "/assignToRelatedItem"
                         : formRelatedListDef.getEditAction();
                 EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
-                        formRelatedListDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
+                        formRelatedListDef.getName(), rootTitle, _appletDef, editAction,
+                        EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
                 if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                     _entitySearch.setBaseFilter(
                             _appletDef.getFilterDef(
@@ -1149,15 +1151,23 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public EntitySelect constructEntitySelect(RefDef refDef, ValueStore valueStore, String filter, int limit)
-            throws UnifyException {
+    public EntitySelect constructEntitySelect(RefDef refDef, ValueStore valueStore, String fieldNameA,
+            String fieldNameB, String filter, int limit) throws UnifyException {
         logDebug("Constructing entity select using reference definition [{0}]...", refDef.getLongName());
         TableDef tableDef = applicationModuleService.getTableDef(refDef.getSearchTable());
-        EntitySelect entitySelect = new EntitySelect(this, tableDef, refDef.getSearchField(), valueStore,
-                refDef.getSelectHandler(), limit);
+        EntitySelect entitySelect = new EntitySelect(this, tableDef, refDef.getSearchField(), fieldNameA, fieldNameB,
+                valueStore, refDef.getSelectHandler(), limit);
         entitySelect.setEnableFilter(true);
         String label = tableDef.getEntityDef().getFieldDef(refDef.getSearchField()).getFieldLabel() + ":";
+        String labelA = !StringUtils.isBlank(fieldNameA)
+                ? tableDef.getEntityDef().getFieldDef(fieldNameA).getFieldLabel() + ":"
+                : null;
+        String labelB = !StringUtils.isBlank(fieldNameB)
+                ? tableDef.getEntityDef().getFieldDef(fieldNameB).getFieldLabel() + ":"
+                : null;
         entitySelect.setLabel(label);
+        entitySelect.setLabelA(labelA);
+        entitySelect.setLabelB(labelB);
         if (!StringUtils.isBlank(filter)) {
             entitySelect.setFilter(filter);
         }

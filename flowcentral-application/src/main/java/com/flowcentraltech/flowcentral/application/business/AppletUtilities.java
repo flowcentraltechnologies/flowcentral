@@ -897,6 +897,10 @@ public interface AppletUtilities extends UnifyComponent {
      *                   the reference definition
      * @param valueStore
      *                   the value store
+     * @param fieldNameA
+     *                   optional field name A
+     * @param fieldNameB
+     *                   optional field name B
      * @param filter
      *                   the initial filter (optional)
      * @param limit
@@ -905,8 +909,8 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntitySelect constructEntitySelect(RefDef refDef, ValueStore valueStore, String filter, int limit)
-            throws UnifyException;
+    EntitySelect constructEntitySelect(RefDef refDef, ValueStore valueStore, String fieldNameA, String fieldNameB,
+            String filter, int limit) throws UnifyException;
 
     /**
      * Constructs entity child.
@@ -1203,7 +1207,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     void onFormConstruct(final AppletDef formAppletDef, final FormContext formContext, final String baseField,
             final boolean create) throws UnifyException;
-    
+
     /**
      * Clears unsatisfactory references.
      * 
