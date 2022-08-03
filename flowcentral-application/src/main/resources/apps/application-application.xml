@@ -297,6 +297,11 @@
 			inputType="date"
 			editor="!ui-date type:past formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
+		<widgetType name="datepasttoday" listOption="true"
+			description="$m{application.widgettype.datepasttoday}" dataType="date"
+			inputType="date"
+			editor="!ui-date type:past_today formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
+			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
 		<widgetType name="datetext"
 			description="$m{application.widgettype.datetext}" dataType="date"
 			inputType="date"
