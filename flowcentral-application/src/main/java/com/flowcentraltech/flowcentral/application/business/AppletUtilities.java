@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
@@ -1202,4 +1203,21 @@ public interface AppletUtilities extends UnifyComponent {
      */
     void onFormConstruct(final AppletDef formAppletDef, final FormContext formContext, final String baseField,
             final boolean create) throws UnifyException;
+    
+    /**
+     * Clears unsatisfactory references.
+     * 
+     * @param formTabDef
+     *                   the form tab definition
+     * @param entityDef
+     *                   the entity definition
+     * @param reader
+     *                   the instance reader
+     * @param inst
+     *                   the entity instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void clearUnsatisfactoryRefs(FormTabDef formTabDef, EntityDef entityDef, ValueStoreReader reader, Entity inst)
+            throws UnifyException;
 }

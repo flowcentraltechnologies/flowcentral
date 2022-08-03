@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
@@ -62,7 +63,7 @@ public class EntityCRUDPage {
     private final String maintainFormName;
 
     private final String childListName;
-    
+
     private final SectorIcon sectorIcon;
 
     private final BreadCrumbs breadCrumbs;
@@ -165,18 +166,35 @@ public class EntityCRUDPage {
         getCrud().enterMaintain(index);
     }
 
+    public void switchOnChange() throws UnifyException {
+        MiniForm form = getCrud().getForm();
+        form.getCtx().resetTabIndex();
+
+        Entity inst = (Entity) form.getFormBean();
+        FormTabDef formTabDef = form.getFormTabDef();
+        // Clear unsatisfactory foreign key fields
+        if (formTabDef.isWithCondRefDefFormFields()) {
+            ctx.au().clearUnsatisfactoryRefs(formTabDef, entityClassDef.getEntityDef(),
+                    form.getCtx().getFormValueStore().getReader(), inst);
+        }
+
+        // Populate entity list-only fields
+        ctx.au().populateListOnlyFields(entityClassDef.getEntityDef(), inst);
+    }
+
     public EntityCRUD getCrud() throws UnifyException {
         if (crud == null) {
             EntityTable entityTable = new EntityTable(ctx.au(), ctx.au().getTableDef(tableName));
             FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
+            createFrmCtx.setCrudMode();
             createFrmCtx.setParentEntityDef(parentEntityDef);
             createFrmCtx.setParentInst(parentInst);
 
-            FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName),
-                    formEventHandlers);
+            FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);
+            maintainFrmCtx.setCrudMode();
             maintainFrmCtx.setParentEntityDef(parentEntityDef);
             maintainFrmCtx.setParentInst(parentInst);
-            
+
             MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
                     createFrmCtx.getFormDef().getFormTabDef(0));
             MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,

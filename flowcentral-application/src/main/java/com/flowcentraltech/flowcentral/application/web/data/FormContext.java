@@ -66,6 +66,12 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  */
 public class FormContext extends AbstractContext {
 
+    public enum Mode {
+        NORMAL,
+        SAVE_AS,
+        CRUD
+    }
+
     private AppletContext appletContext;
 
     private EntityDef parentEntityDef;
@@ -95,7 +101,7 @@ public class FormContext extends AbstractContext {
     private List<FormWidgetState> formWidgetStateList;
 
     private FormValidationErrors formValidationErrors;
-    
+
     private Set<String> visibleAnnotations;
 
     private String altFormTitle;
@@ -116,7 +122,7 @@ public class FormContext extends AbstractContext {
 
     private boolean formFocused;
 
-    private boolean saveAsMode;
+    private Mode mode;
 
     public FormContext(AppletContext appletContext) throws UnifyException {
         this(appletContext, null, null, null, null);
@@ -159,6 +165,7 @@ public class FormContext extends AbstractContext {
 
         this.visibleAnnotations = new HashSet<String>();
         this.formValidationErrors = new FormValidationErrors();
+        this.mode = Mode.NORMAL;
     }
 
     public AppletContext getAppletContext() {
@@ -234,8 +241,9 @@ public class FormContext extends AbstractContext {
     }
 
     public List<EventHandler> getFormSwitchOnChangeHandlers() {
-        return saveAsMode ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
-                : formEventHandlers.getFormSwitchOnChangeHandlers();
+        return isCrudMode() ? formEventHandlers.getCrudSwitchOnChangeHandlers()
+                : (isSaveAsMode() ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
+                        : formEventHandlers.getFormSwitchOnChangeHandlers());
     }
 
     public EntityFormEventHandlers getFormEventHandlers() {
@@ -245,20 +253,38 @@ public class FormContext extends AbstractContext {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef.isWithTitleFormat() ? appletContext.specialParamProvider()
-                .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate() : null;
+        altFormTitle = formDef.isWithTitleFormat()
+                ? appletContext.specialParamProvider()
+                        .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate()
+                : null;
     }
 
     public Object getInst() {
         return inst;
     }
 
-    public boolean isSaveAsMode() {
-        return saveAsMode;
+    public boolean isNormalMode() {
+        return Mode.NORMAL.equals(mode);
     }
 
-    public void setSaveAsMode(boolean saveAsMode) {
-        this.saveAsMode = saveAsMode;
+    public boolean isSaveAsMode() {
+        return Mode.SAVE_AS.equals(mode);
+    }
+
+    public boolean isCrudMode() {
+        return Mode.CRUD.equals(mode);
+    }
+
+    public void setNormalMode() {
+        this.mode = Mode.NORMAL;
+    }
+
+    public void setSaveAsMode() {
+        this.mode = Mode.SAVE_AS;
+    }
+
+    public void setCrudMode() {
+        this.mode = Mode.CRUD;
     }
 
     public ValueStore getFormValueStore() {
@@ -635,7 +661,7 @@ public class FormContext extends AbstractContext {
 
         public void revertState() {
             visible = formTabDef.isVisible();
-            editable = formTabDef.isEditable() | saveAsMode;
+            editable = formTabDef.isEditable() | isSaveAsMode();
             disabled = formTabDef.isDisabled();
         }
     }

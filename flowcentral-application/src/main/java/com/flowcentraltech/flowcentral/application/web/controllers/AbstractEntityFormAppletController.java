@@ -206,10 +206,14 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                         "eventHandler");
         EventHandler[] crudActionHandlers = getPageWidgetByShortName(Widget.class,
                 "appletPanel.entityCrudPanel.crudActionHolder").getUplAttribute(EventHandler[].class, "eventHandler");
+        EventHandler[] crudSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
+                "appletPanel.entityCrudPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
+                        "eventHandler");
         EventHandler[] saveAsSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
                 "appletPanel.entitySaveAsPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
                         "eventHandler");
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
-                entrySwitchOnChangeHandlers, crudActionHandlers, saveAsSwitchOnChangeHandlers);
+                entrySwitchOnChangeHandlers, crudActionHandlers, crudSwitchOnChangeHandlers,
+                saveAsSwitchOnChangeHandlers);
     }
 }

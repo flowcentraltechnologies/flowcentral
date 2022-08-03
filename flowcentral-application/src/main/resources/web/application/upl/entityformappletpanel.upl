@@ -100,6 +100,7 @@
 !fc-entitycrudpagepanel:entityCrudPanel binding:entityCrudPage
 	moreActionButtons:$c{closeCrudBtn}
 	crudActionEventHandler:$d{!ui-event event:onclick action:$c{crudAct}}
+	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{crudSwitchOnChangeAct}}
 !ui-button:closeCrudBtn caption:$m{button.close}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
 
@@ -125,6 +126,8 @@
 !ui-postcommand:navBackAct command:navBackToPrevious
 !ui-postcommand:switchOnChangeAct command:formSwitchOnChange components:$c{formPanel}
 	refresh:$c{formPanel.formBodyPanel}
+!ui-postcommand:crudSwitchOnChangeAct command:crudSwitchOnChange components:$c{entityCrudPanel}
+	refresh:$c{entityCrudPanel.crudEntityCrudPanel.crudFormPanel}
 !ui-postcommand:assnSwitchOnChangeAct command:assignSwitchOnChange components:$c{assignmentPanel}
 	refresh:$c{assignmentPanel.assignmentBodyPanel}
 !ui-postcommand:entrySwitchOnChangeAct command:entrySwitchOnChange components:$c{entryTablePanel}

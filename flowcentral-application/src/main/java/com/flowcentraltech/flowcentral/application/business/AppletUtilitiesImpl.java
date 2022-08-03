@@ -1262,7 +1262,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @SuppressWarnings("unchecked")
-    private void clearUnsatisfactoryRefs(FormTabDef _formTabDef, EntityDef entityDef, ValueStoreReader _reader,
+    @Override
+    public void clearUnsatisfactoryRefs(FormTabDef _formTabDef, EntityDef entityDef, ValueStoreReader _reader,
             Entity inst) throws UnifyException {
         int depth = 4;
         boolean change = true;

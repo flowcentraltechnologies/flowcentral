@@ -38,11 +38,13 @@ public class EntityFormEventHandlers {
 
     private List<EventHandler> crudActionHandlers;
 
+    private List<EventHandler> crudSwitchOnChangeHandlers;
+
     private List<EventHandler> saveAsSwitchOnChangeHandlers;
 
     public EntityFormEventHandlers(EventHandler[] formSwitchOnChangeHandlers, EventHandler[] assnSwitchOnChangeHandlers,
-            EventHandler[] entrySwitchOnChangeHandlers, 
-            EventHandler[] crudActionHandlers, EventHandler[] saveAsSwitchOnChangeHandlers) {
+            EventHandler[] entrySwitchOnChangeHandlers, EventHandler[] crudActionHandlers,
+            EventHandler[] crudSwitchOnChangeHandlers, EventHandler[] saveAsSwitchOnChangeHandlers) {
         this.formSwitchOnChangeHandlers = formSwitchOnChangeHandlers != null
                 ? Collections.unmodifiableList(Arrays.asList(formSwitchOnChangeHandlers))
                 : Collections.emptyList();
@@ -54,6 +56,9 @@ public class EntityFormEventHandlers {
                 : Collections.emptyList();
         this.crudActionHandlers = crudActionHandlers != null
                 ? Collections.unmodifiableList(Arrays.asList(crudActionHandlers))
+                : Collections.emptyList();
+        this.crudSwitchOnChangeHandlers = crudSwitchOnChangeHandlers != null
+                ? Collections.unmodifiableList(Arrays.asList(crudSwitchOnChangeHandlers))
                 : Collections.emptyList();
         this.saveAsSwitchOnChangeHandlers = saveAsSwitchOnChangeHandlers != null
                 ? Collections.unmodifiableList(Arrays.asList(saveAsSwitchOnChangeHandlers))
@@ -74,6 +79,10 @@ public class EntityFormEventHandlers {
 
     public List<EventHandler> getCrudActionHandlers() {
         return crudActionHandlers;
+    }
+
+    public List<EventHandler> getCrudSwitchOnChangeHandlers() {
+        return crudSwitchOnChangeHandlers;
     }
 
     public List<EventHandler> getSaveAsSwitchOnChangeHandlers() {

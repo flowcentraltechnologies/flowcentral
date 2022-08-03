@@ -25,6 +25,8 @@
 !fc-formbreadcrumbs:titleBlock binding:breadCrumbs
 !ui-hidden:crudActionHolder
 	eventHandler:$f{crudActionEventHandler}
+!ui-hidden:switchOnChangeHolder
+	eventHandler:$f{switchOnChangeEventHandler}
 
 !ui-panel:headerCenterPanel style:$s{display:inline-block; width:100%;}
 	layout:$d{!ui-horizontal style:$s{width:100%;} cellType:middle  cellStyle:$s{text-align:center;}}
