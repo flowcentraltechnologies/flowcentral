@@ -23,7 +23,7 @@
      eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 	
 // Search filter panel
-!ui-panel:searchFilterPanel styleClass:$s{filall} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{96px none}}
+!ui-panel:searchFilterPanel styleClass:$s{filall} layout:$d{!ui-horizontal}
 	components:$c{filterLabel filterInput filterLabelA filterInputA filterLabelB filterInputB clearBtn}
 
 !ui-label:filterLabel styleClass:$e{search} binding:label	
@@ -54,7 +54,7 @@
     eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 
 // Actions
-!ui-postcommand:filterAct command:search components:$c{filterInput}
+!ui-postcommand:filterAct command:search components:$c{filterInput filterInputA filterInputB}
 	 refresh:$c{searchResultPanel} debounce:false
 !ui-postcommand:clearAct command:clear
 !ui-postcommand:closeAct command:close
