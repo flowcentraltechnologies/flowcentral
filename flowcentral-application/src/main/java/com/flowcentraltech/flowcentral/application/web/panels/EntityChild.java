@@ -115,7 +115,7 @@ public class EntityChild extends AbstractPanelFormBinding {
     
     @SuppressWarnings("unchecked")
     public void load(FormContext ctx, Restriction restriction) throws UnifyException {
-        final EntityClassDef entityClassDef = ctx.getAu().getEntityClassDef(childFormDef.getEntityDef().getLongName());
+        final EntityClassDef entityClassDef = ctx.au().getEntityClassDef(childFormDef.getEntityDef().getLongName());
         mCtx = ctx;
         mRestriction = restriction;
         childInst = ctx.getEnvironment()

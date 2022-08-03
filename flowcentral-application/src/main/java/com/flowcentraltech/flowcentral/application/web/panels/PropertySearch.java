@@ -51,7 +51,7 @@ public class PropertySearch extends AbstractPanelFormBinding {
     public PropertySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             PropertyRuleDef propertyRuleDef, int mode) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName);
-        this.beanTable = new BeanTable(ctx.getAu(), ctx.getAu().getTableDef("application.propertyItemTable"));
+        this.beanTable = new BeanTable(ctx.au(), ctx.au().getTableDef("application.propertyItemTable"));
         this.propertyRuleDef = propertyRuleDef;
         this.mode = mode;
     }

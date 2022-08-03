@@ -29,6 +29,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Entity CRUD page object.
@@ -44,6 +45,10 @@ public class EntityCRUDPage {
 
     private final SweepingCommitPolicy sweepingCommitPolicy;
 
+    private final EntityDef parentEntityDef;
+
+    private final Entity parentInst;
+
     private final EntityClassDef entityClassDef;
 
     private final String baseField;
@@ -56,6 +61,8 @@ public class EntityCRUDPage {
 
     private final String maintainFormName;
 
+    private final String childListName;
+    
     private final SectorIcon sectorIcon;
 
     private final BreadCrumbs breadCrumbs;
@@ -71,16 +78,20 @@ public class EntityCRUDPage {
     private EntityCRUD crud;
 
     public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
-            SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
-            SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String tableName, String createFormName,
-            String maintainFormName, Restriction baseRestriction) {
+            SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst,
+            EntityClassDef entityClassDef, String baseField, Object baseId, String childListName, SectorIcon sectorIcon,
+            BreadCrumbs breadCrumbs, String tableName, String createFormName, String maintainFormName,
+            Restriction baseRestriction) {
         this.ctx = ctx;
         this.formAppletDef = formAppletDef;
         this.formEventHandlers = formEventHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
+        this.parentEntityDef = parentEntityDef;
+        this.parentInst = parentInst;
         this.entityClassDef = entityClassDef;
         this.baseField = baseField;
         this.baseId = baseId;
+        this.childListName = childListName;
         this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.tableName = tableName;
@@ -158,14 +169,20 @@ public class EntityCRUDPage {
         if (crud == null) {
             EntityTable entityTable = new EntityTable(ctx.au(), ctx.au().getTableDef(tableName));
             FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
+            createFrmCtx.setParentEntityDef(parentEntityDef);
+            createFrmCtx.setParentInst(parentInst);
+
             FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName),
                     formEventHandlers);
+            maintainFrmCtx.setParentEntityDef(parentEntityDef);
+            maintainFrmCtx.setParentInst(parentInst);
+            
             MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
                     createFrmCtx.getFormDef().getFormTabDef(0));
             MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
                     maintainFrmCtx.getFormDef().getFormTabDef(0));
             crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
-                    entityTable, createForm, maintainForm);
+                    entityTable, createForm, maintainForm, childListName);
         }
 
         return crud;

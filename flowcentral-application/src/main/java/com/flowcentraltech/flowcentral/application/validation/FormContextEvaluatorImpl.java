@@ -91,7 +91,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
             final FormDef formDef = ctx.getFormDef();
             final EntityDef entityDef = formDef.getEntityDef();
             final Object inst = ctx.getInst();
-            final AppletUtilities au = ctx.getAu();
+            final AppletUtilities au = ctx.au();
             final ValueStore instValueStore = ctx.getFormValueStore();
             Map<String, Object> fieldsInScope = new HashMap<String, Object>();
             // Pull fields in scope and check required fields and lengths
@@ -254,7 +254,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
         if (ctx.isWithReviewPolicies(reviewType)) {
             final FormDef formDef = ctx.getFormDef();
             final EntityDef entityDef = formDef.getEntityDef();
-            final AppletUtilities au = ctx.getAu();
+            final AppletUtilities au = ctx.au();
             final Date now = au.getNow();
             final Object inst = ctx.getInst();
             final ValueStore instValueStore = ctx.getFormValueStore();

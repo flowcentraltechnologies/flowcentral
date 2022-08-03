@@ -98,6 +98,10 @@ public class TabSheetWidget extends AbstractValueListMultiControl<ValueStore, Ta
         return null;
     }
 
+    public void setAppAppletFilterId(Long id) {
+        
+    }
+    
     @Override
     protected void doOnPageConstruct() throws UnifyException {
 

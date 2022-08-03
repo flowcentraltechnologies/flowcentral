@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -66,6 +67,10 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 public class FormContext extends AbstractContext {
 
     private AppletContext appletContext;
+
+    private EntityDef parentEntityDef;
+
+    private Entity parentInst;
 
     private EntityDef entityDef;
 
@@ -160,7 +165,7 @@ public class FormContext extends AbstractContext {
         return appletContext;
     }
 
-    public AppletUtilities getAu() {
+    public AppletUtilities au() {
         return appletContext.au();
     }
 
@@ -170,6 +175,22 @@ public class FormContext extends AbstractContext {
 
     public EnvironmentService getEnvironment() {
         return appletContext.au().environment();
+    }
+
+    public EntityDef getParentEntityDef() {
+        return parentEntityDef;
+    }
+
+    public void setParentEntityDef(EntityDef parentEntityDef) {
+        this.parentEntityDef = parentEntityDef;
+    }
+
+    public Entity getParentInst() {
+        return parentInst;
+    }
+
+    public void setParentInst(Entity parentInst) {
+        this.parentInst = parentInst;
     }
 
     public EntityDef getEntityDef() {
@@ -465,7 +486,7 @@ public class FormContext extends AbstractContext {
         ValueStore formValueStore = getFormValueStore();
         final Date now = appletContext.au().getNow();
         if (formDef.isWithConsolidatedFormState()) {
-            ConsolidatedFormStatePolicy policy = getAu().getComponent(ConsolidatedFormStatePolicy.class,
+            ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
                     formDef.getConsolidatedFormState());
             String trigger = triggerEvaluator != null ? triggerEvaluator.evaluateTrigger() : null;
             TargetFormTabStates states = policy.evaluateTabStates(formValueStore.getReader(), trigger);

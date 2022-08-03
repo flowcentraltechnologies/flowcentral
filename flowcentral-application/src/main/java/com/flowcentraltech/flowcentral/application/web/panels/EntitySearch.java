@@ -121,7 +121,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
         }
 
         this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), 4);
-        this.entityTable = new EntityTable(ctx.getAu(), tableDef);
+        this.entityTable = new EntityTable(ctx.au(), tableDef);
         this.appAppletId = appAppletId;
         this.editAction = editAction;
         this.mode = mode;

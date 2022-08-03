@@ -42,7 +42,7 @@ public class HeaderWithTabsFormPanel extends AbstractFormPanel {
         
         // Do a form update on reload on switch. Usually triggered by select popups.
         if (Boolean.TRUE.equals(removeRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
-            formContext.getAu().updateHeaderWithTabsForm(headerWithTabsForm, (Entity) headerWithTabsForm.getFormBean());
+            formContext.au().updateHeaderWithTabsForm(headerWithTabsForm, (Entity) headerWithTabsForm.getFormBean());
             evaluate = false;
         }
 

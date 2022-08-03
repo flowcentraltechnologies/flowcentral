@@ -215,7 +215,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             }
 
             if (formDef.isWithConsolidatedFormState()) {
-                ConsolidatedFormStatePolicy policy = ctx.getAu().getComponent(ConsolidatedFormStatePolicy.class,
+                ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
                         formDef.getConsolidatedFormState());
                 TargetFormWidgetStates states = policy.evaluateWidgetStates(formValueStore.getReader(), trigger);
                 for (TargetFormState state : states.getTargetStateList()) {
@@ -270,7 +270,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             }
 
             if (setValuesExecuted) {
-                ctx.getAu().populateListOnlyFields(formDef.getEntityDef(), (Entity) formValueStore.getValueObject());
+                ctx.au().populateListOnlyFields(formDef.getEntityDef(), (Entity) formValueStore.getValueObject());
             }
         }
 
