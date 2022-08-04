@@ -171,7 +171,9 @@ fux.rigEntitySearch = function(rgp) {
 	}
 
 	const fac = _id(rgp.pFacId);
-	fac.value = rgp.pDesc != undefined? rgp.pDesc:"";
+	if (fac) {
+		fac.value = rgp.pDesc != undefined? rgp.pDesc:"";
+	}
 }
 
 fux.rigEntitySearchResult = function(rgp) {
@@ -351,7 +353,9 @@ fux.rigEntitySelect = function(rgp) {
 	}
 
 	const fac = _id(rgp.pFacId);
-	fac.value = rgp.pDesc != undefined? rgp.pDesc:"";
+	if (fac) {
+		fac.value = rgp.pDesc != undefined? rgp.pDesc:"";
+	}
 }
 
 fux.entitySelectText = function(uEv) {

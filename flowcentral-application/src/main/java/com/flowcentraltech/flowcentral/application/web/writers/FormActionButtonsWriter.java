@@ -70,8 +70,8 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
         final FormContext formContext = ((AbstractForm) formActionButtons.getValueStore().getValueObject()).getCtx();
         final Entity inst = (Entity) formContext.getInst();
         final ValueStore formValueStore = formContext.getFormValueStore();
-        final Date now = formContext.getAu().getNow();
-        final SpecialParamProvider specialParamProvider = formContext.getAu().getSpecialParamProvider();
+        final Date now = formContext.au().getNow();
+        final SpecialParamProvider specialParamProvider = formContext.au().getSpecialParamProvider();
         final UserToken userToken = getUserToken();
         final FormMode formMode = formActionButtons.getValue(FormMode.class, "formMode");
         final Set<String> showActionSet = (Set<String>) formActionButtons.getWriteWork()

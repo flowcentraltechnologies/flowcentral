@@ -23,13 +23,26 @@
      eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 	
 // Search filter panel
-!ui-panel:searchFilterPanel styleClass:$s{filall} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{96px none}}
-	components:$c{filterLabel filterInput}
+!ui-panel:searchFilterPanel styleClass:$s{filall} layout:$d{!ui-horizontal}
+	components:$c{filterLabel filterInput filterLabelA filterInputA filterLabelB filterInputB clearBtn}
 
 !ui-label:filterLabel styleClass:$e{search} binding:label	
 !ui-alphanumeric:filterInput caption:$m{entityselectpanel.filter} binding:filter focus:true
 	spaceBinding:$s{space} specialBinding:$s{special}
     eventHandler:$d{!ui-event event:oninput action:$c{filterAct}}
+
+!ui-label:filterLabelA styleClass:$e{search} binding:labelA	
+!ui-alphanumeric:filterInputA caption:$m{entityselectpanel.filter} binding:filterA
+	spaceBinding:$s{space} specialBinding:$s{special}
+    eventHandler:$d{!ui-event event:oninput action:$c{filterAct}}
+
+!ui-label:filterLabelB styleClass:$e{search} binding:labelB	
+!ui-alphanumeric:filterInputB caption:$m{entityselectpanel.filter} binding:filterB
+	spaceBinding:$s{space} specialBinding:$s{special}
+    eventHandler:$d{!ui-event event:oninput action:$c{filterAct}}
+
+!ui-button:clearBtn caption:$m{button.clear}
+    eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
 
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
@@ -41,8 +54,9 @@
     eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 
 // Actions
-!ui-postcommand:filterAct command:search components:$c{filterInput}
+!ui-postcommand:filterAct command:search components:$c{filterInput filterInputA filterInputB}
 	 refresh:$c{searchResultPanel} debounce:false
+!ui-postcommand:clearAct command:clear
 !ui-postcommand:closeAct command:close
 !ui-postcommand:selectAct command:select debounce:true
 

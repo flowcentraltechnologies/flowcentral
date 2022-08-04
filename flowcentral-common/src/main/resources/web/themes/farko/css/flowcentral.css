@@ -725,8 +725,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearchpanel .pgbtn {font-size: 16px; color: #202020; cursor: pointer; padding: 2px 4px;}
 .fc-entitysearchpanel .pgbtn:disabled {color: #c0c0c0;}
 .fc-entitysearchpanel .fc-filter {}
-.fc-entitysearchpanel .filall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
-.fc-entitysearchpanel .filbody {border: 1px solid #b8b8b8;}
+.fc-entitysearchpanel .filall {border-top:1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
+.fc-entitysearchpanel .filbody {border:1px solid #b8b8b8;}
 .fc-entitysearchpanel .filbtn {font-size: 16px; color: #0366d6; cursor: pointer; padding: 2px 4px;}
 .fc-entitysearchpanel .filbtn:disabled {color: #a0a0a0;}
 .fc-entitysearchpanel .filbasetxt {display:block; color:#808080;font-style: italic;font-size: 7pt;}
@@ -740,21 +740,21 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearchpanel .footersel {width:200px}
 
 /* Entity select panel */
-.fc-entityselectpanel {width:640px; background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-entityselectpanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}
 .fc-entityselectpanel .filall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
-.fc-entityselectpanel .entityview {height:280px;overflow-y:scroll;}
+.fc-entityselectpanel .entityview {height:320px;overflow-y:scroll;}
 .fc-entityselectpanel .footer {display: inline-block;padding-left:4px;padding-bottom:8px;padding-top:8px;box-sizing: border-box;}
 .fc-entityselectpanel .search {display: inline-block;padding-right: 6px; width:100%; font-size: 11px;font-weight: bold;color: #262c33;}
 
 /* Entity multi-select panel */
-.fc-entitymultiselectpanel {width:640px; background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-entitymultiselectpanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}
 .fc-entitymultiselectpanel .filall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
 .fc-entitymultiselectpanel .entityview {height:360px;overflow-y:scroll;}
 .fc-entitymultiselectpanel .footer {display: inline-block;padding-left:4px;padding-bottom:8px;padding-top:8px;box-sizing: border-box;}
 .fc-entitymultiselectpanel .search {display: inline-block;padding-right: 6px; width:100%; font-size: 11px;font-weight: bold;color: #262c33;}
 
 /* Entity tree select panel */
-.fc-entitytreemultiselectpanel {width:640px; background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-entitytreemultiselectpanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}
 .fc-entitytreemultiselectpanel .entityview {height:360px;overflow-y:scroll;}
 .fc-entitytreemultiselectpanel .footer {display: inline-block;padding-left:4px;padding-bottom:8px;padding-top:8px;box-sizing: border-box;}
 

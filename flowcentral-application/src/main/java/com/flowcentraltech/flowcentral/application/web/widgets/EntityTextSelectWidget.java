@@ -55,7 +55,9 @@ import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
         @UplAttribute(name = "special", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "acceptPlus", type = boolean.class),
         @UplAttribute(name = "acceptMinus", type = boolean.class),
-        @UplAttribute(name = "text", type = TextType.class, defaultVal = "text")})
+        @UplAttribute(name = "fieldA", type = String.class),
+        @UplAttribute(name = "fieldB", type = String.class),
+        @UplAttribute(name = "text", type = TextType.class, defaultVal = "text") })
 public class EntityTextSelectWidget extends AbstractPopupTextField {
 
     @Configurable
@@ -85,7 +87,10 @@ public class EntityTextSelectWidget extends AbstractPopupTextField {
         int limit = getUplAttribute(int.class, "limit");
         String defaultFilter = getDefaultFilter();
         String filter = !StringUtils.isBlank(defaultFilter) ? defaultFilter : getRequestTarget(String.class);
-        EntitySelect entitySelect = appletUtilities.constructEntitySelect(refDef, getValueStore(), filter, limit);
+        String fieldA = getUplAttribute(String.class, "fieldA");
+        String fieldB = getUplAttribute(String.class, "fieldB");
+        EntitySelect entitySelect = appletUtilities.constructEntitySelect(refDef, getValueStore(), fieldA, fieldB,
+                filter, limit);
         entitySelect.setEnableFilter(true);
         entitySelect.applyFilterToSearch();
         String title = resolveSessionMessage("$m{entityselect.select.entity}",
@@ -146,7 +151,7 @@ public class EntityTextSelectWidget extends AbstractPopupTextField {
         return !StringUtils.isBlank(selectOnlyBinding) ? getValue(boolean.class, selectOnlyBinding)
                 : getUplAttribute(boolean.class, "selectOnly");
     }
-    
+
     public TextType type() throws UnifyException {
         return getUplAttribute(TextType.class, "text");
     }

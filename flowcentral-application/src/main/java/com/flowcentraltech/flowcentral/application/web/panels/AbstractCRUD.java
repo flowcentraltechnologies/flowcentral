@@ -19,6 +19,8 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
@@ -67,7 +69,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         this.addCaption = addCaption;
     }
 
-    public AppletUtilities getAu() {
+    public AppletUtilities au() {
         return au;
     }
 
@@ -166,6 +168,18 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         return baseId;
     }
 
+    protected FormTabDef getCreateFormTabDef() {
+        return createForm.getFormTabDef();
+    }
+
+    protected FormDef getCreateFormDef() {
+        return createForm.getCtx().getFormDef();
+    }
+
+    protected FormDef getMaintainFormDef() {
+        return maintainForm.getCtx().getFormDef();
+    }
+    
     protected abstract void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode)
             throws UnifyException;
 

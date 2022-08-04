@@ -463,6 +463,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     @Action
+    public void crudSwitchOnChange() throws UnifyException {
+        getEntityFormApplet().crudSwitchOnChange();
+    }
+
+    @Action
     public void assignSwitchOnChange() throws UnifyException {
         int index = getRequestTarget(int.class);
         getEntityFormApplet().assignSwitchOnChange(index);

@@ -41,11 +41,23 @@ public class EntitySelect {
 
     private final String fieldName;
 
+    private final String fieldNameA;
+
+    private final String fieldNameB;
+
     private String title;
 
     private String label;
 
+    private String labelA;
+
+    private String labelB;
+
     private String filter;
+
+    private String filterA;
+
+    private String filterB;
 
     private EntityTable entityTable;
 
@@ -60,13 +72,15 @@ public class EntitySelect {
     private boolean space;
 
     private boolean special;
-    
-    public EntitySelect(AppletUtilities au, TableDef tableDef, String searchFieldName, ValueStore formValueStore,
-            String selectHandlerName, int limit) {
+
+    public EntitySelect(AppletUtilities au, TableDef tableDef, String searchFieldName, String fieldNameA,
+            String fieldNameB, ValueStore formValueStore, String selectHandlerName, int limit) {
         this.entityTable = new EntityTable(au, tableDef);
         this.entityTable.setOrder(new Order().add(searchFieldName));
         this.entityTable.setLimit(limit);
         this.fieldName = searchFieldName;
+        this.fieldNameA = fieldNameA;
+        this.fieldNameB = fieldNameB;
         this.formValueStore = formValueStore;
         this.selectHandlerName = selectHandlerName;
     }
@@ -87,12 +101,52 @@ public class EntitySelect {
         this.label = label;
     }
 
+    public String getLabelA() {
+        return labelA;
+    }
+
+    public void setLabelA(String labelA) {
+        this.labelA = labelA;
+    }
+
+    public String getLabelB() {
+        return labelB;
+    }
+
+    public void setLabelB(String labelB) {
+        this.labelB = labelB;
+    }
+
     public String getFilter() {
         return filter;
     }
 
     public void setFilter(String filter) {
         this.filter = filter;
+    }
+
+    public String getFilterA() {
+        return filterA;
+    }
+
+    public void setFilterA(String filterA) {
+        this.filterA = filterA;
+    }
+
+    public String getFilterB() {
+        return filterB;
+    }
+
+    public void setFilterB(String filterB) {
+        this.filterB = filterB;
+    }
+
+    public boolean isWithFilterA() {
+        return !StringUtils.isBlank(fieldNameA);
+    }
+
+    public boolean isWithFilterB() {
+        return !StringUtils.isBlank(fieldNameB);
     }
 
     public boolean isSpace() {
@@ -142,8 +196,7 @@ public class EntitySelect {
 
     public void applySelect() throws UnifyException {
         if (formValueStore != null && selectHandlerName != null) {
-            EntitySelectHandler handler = entityTable.au().getComponent(EntitySelectHandler.class,
-                    selectHandlerName);
+            EntitySelectHandler handler = entityTable.au().getComponent(EntitySelectHandler.class, selectHandlerName);
             List<?> sel = entityTable.getSelectedItems();
             handler.applySelection(formValueStore, new BeanValueListStore(sel));
         }
@@ -159,7 +212,20 @@ public class EntitySelect {
     }
 
     public void applyFilterToSearch() throws UnifyException {
-        Restriction restriction = !StringUtils.isBlank(filter) ? new ILike(fieldName, filter) : null;
+        And and = new And();
+        if (!StringUtils.isBlank(filter)) {
+            and.add(new ILike(fieldName, filter));
+        }
+
+        if (!StringUtils.isBlank(filterA)) {
+            and.add(new ILike(fieldNameA, filterA));
+        }
+
+        if (!StringUtils.isBlank(filterB)) {
+            and.add(new ILike(fieldNameB, filterB));
+        }
+
+        Restriction restriction = and.isEmpty() ? null : and;
         if (baseRestriction != null) {
             if (restriction == null) {
                 restriction = baseRestriction;
@@ -167,7 +233,7 @@ public class EntitySelect {
                 restriction = new And().add(baseRestriction).add(restriction);
             }
         }
-        
+
         entityTable.setSourceObject(restriction);
     }
 

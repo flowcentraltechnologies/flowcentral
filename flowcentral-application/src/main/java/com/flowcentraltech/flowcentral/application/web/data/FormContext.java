@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -65,7 +66,17 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  */
 public class FormContext extends AbstractContext {
 
+    public enum Mode {
+        NORMAL,
+        SAVE_AS,
+        CRUD
+    }
+
     private AppletContext appletContext;
+
+    private EntityDef parentEntityDef;
+
+    private Entity parentInst;
 
     private EntityDef entityDef;
 
@@ -90,7 +101,7 @@ public class FormContext extends AbstractContext {
     private List<FormWidgetState> formWidgetStateList;
 
     private FormValidationErrors formValidationErrors;
-    
+
     private Set<String> visibleAnnotations;
 
     private String altFormTitle;
@@ -111,7 +122,7 @@ public class FormContext extends AbstractContext {
 
     private boolean formFocused;
 
-    private boolean saveAsMode;
+    private Mode mode;
 
     public FormContext(AppletContext appletContext) throws UnifyException {
         this(appletContext, null, null, null, null);
@@ -154,13 +165,14 @@ public class FormContext extends AbstractContext {
 
         this.visibleAnnotations = new HashSet<String>();
         this.formValidationErrors = new FormValidationErrors();
+        this.mode = Mode.NORMAL;
     }
 
     public AppletContext getAppletContext() {
         return appletContext;
     }
 
-    public AppletUtilities getAu() {
+    public AppletUtilities au() {
         return appletContext.au();
     }
 
@@ -170,6 +182,22 @@ public class FormContext extends AbstractContext {
 
     public EnvironmentService getEnvironment() {
         return appletContext.au().environment();
+    }
+
+    public EntityDef getParentEntityDef() {
+        return parentEntityDef;
+    }
+
+    public void setParentEntityDef(EntityDef parentEntityDef) {
+        this.parentEntityDef = parentEntityDef;
+    }
+
+    public Entity getParentInst() {
+        return parentInst;
+    }
+
+    public void setParentInst(Entity parentInst) {
+        this.parentInst = parentInst;
     }
 
     public EntityDef getEntityDef() {
@@ -213,8 +241,9 @@ public class FormContext extends AbstractContext {
     }
 
     public List<EventHandler> getFormSwitchOnChangeHandlers() {
-        return saveAsMode ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
-                : formEventHandlers.getFormSwitchOnChangeHandlers();
+        return isCrudMode() ? formEventHandlers.getCrudSwitchOnChangeHandlers()
+                : (isSaveAsMode() ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
+                        : formEventHandlers.getFormSwitchOnChangeHandlers());
     }
 
     public EntityFormEventHandlers getFormEventHandlers() {
@@ -224,20 +253,38 @@ public class FormContext extends AbstractContext {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef.isWithTitleFormat() ? appletContext.specialParamProvider()
-                .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate() : null;
+        altFormTitle = formDef.isWithTitleFormat()
+                ? appletContext.specialParamProvider()
+                        .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate()
+                : null;
     }
 
     public Object getInst() {
         return inst;
     }
 
-    public boolean isSaveAsMode() {
-        return saveAsMode;
+    public boolean isNormalMode() {
+        return Mode.NORMAL.equals(mode);
     }
 
-    public void setSaveAsMode(boolean saveAsMode) {
-        this.saveAsMode = saveAsMode;
+    public boolean isSaveAsMode() {
+        return Mode.SAVE_AS.equals(mode);
+    }
+
+    public boolean isCrudMode() {
+        return Mode.CRUD.equals(mode);
+    }
+
+    public void setNormalMode() {
+        this.mode = Mode.NORMAL;
+    }
+
+    public void setSaveAsMode() {
+        this.mode = Mode.SAVE_AS;
+    }
+
+    public void setCrudMode() {
+        this.mode = Mode.CRUD;
     }
 
     public ValueStore getFormValueStore() {
@@ -465,7 +512,7 @@ public class FormContext extends AbstractContext {
         ValueStore formValueStore = getFormValueStore();
         final Date now = appletContext.au().getNow();
         if (formDef.isWithConsolidatedFormState()) {
-            ConsolidatedFormStatePolicy policy = getAu().getComponent(ConsolidatedFormStatePolicy.class,
+            ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
                     formDef.getConsolidatedFormState());
             String trigger = triggerEvaluator != null ? triggerEvaluator.evaluateTrigger() : null;
             TargetFormTabStates states = policy.evaluateTabStates(formValueStore.getReader(), trigger);
@@ -614,7 +661,7 @@ public class FormContext extends AbstractContext {
 
         public void revertState() {
             visible = formTabDef.isVisible();
-            editable = formTabDef.isEditable() | saveAsMode;
+            editable = formTabDef.isEditable() | isSaveAsMode();
             disabled = formTabDef.isDisabled();
         }
     }

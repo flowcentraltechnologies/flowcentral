@@ -20,13 +20,16 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
+import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -43,17 +46,20 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     private final AppletDef formAppletDef;
 
+    private final String childListName;
+    
     public EntityCRUD(AppletUtilities au, SweepingCommitPolicy scp, AppletDef formAppletDef,
             EntityClassDef entityClassDef, String baseField, Object baseId, EntityTable table, MiniForm createForm,
-            MiniForm maintainForm) {
+            MiniForm maintainForm, String childListName) {
         super(au, scp, baseField, baseId, table, createForm, maintainForm, "$m{button.save}");
         this.entityClassDef = entityClassDef;
         this.formAppletDef = formAppletDef;
+        this.childListName = childListName;
     }
 
     @Override
     protected void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode) throws UnifyException {
-        FormContextEvaluator formContextEvaluator = getAu().getComponent(FormContextEvaluator.class,
+        FormContextEvaluator formContextEvaluator = au().getComponent(FormContextEvaluator.class,
                 ApplicationModuleNameConstants.FORMCONTEXT_EVALUATOR);
         formContextEvaluator.evaluateFormContext(formContext, evaluationMode);
     }
@@ -67,32 +73,46 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     @Override
     protected void prepareCreate(FormContext formContext) throws UnifyException {
-        getAu().onFormConstruct(formAppletDef, formContext, getBaseField(), true);
+        au().populateNewChildReferenceFields(formContext.getParentEntityDef(), childListName,
+                formContext.getParentInst(), (Entity) formContext.getInst());
+        au().onFormConstruct(formAppletDef, formContext, getBaseField(), true);
     }
 
     @Override
     protected void create(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
-        getAu().createEntityInstByFormContext(formAppletDef, formContext, scp);
+        au().createEntityInstByFormContext(formAppletDef, formContext, scp);
     }
 
     @Override
     protected Object reload(Object inst) throws UnifyException {
-        return getAu().environment().listLean(((Entity) inst).getClass(), ((Entity) inst).getId());
+        return au().environment().listLean(((Entity) inst).getClass(), ((Entity) inst).getId());
     }
 
     @Override
     protected void prepareMaintain(FormContext formContext) throws UnifyException {
-        getAu().onFormConstruct(formAppletDef, formContext, getBaseField(), false);
+        FormDef formDef = getMaintainFormDef();
+        if (formDef.isWithConsolidatedFormState()) {
+            Entity inst = (Entity) formContext.getInst();
+            ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
+                    formDef.getConsolidatedFormState());
+            boolean autoUpdated = policy.performAutoUpdates(new BeanValueStore(inst));
+            if (autoUpdated) {
+                inst = au().environment().listLean(inst.getClass(), inst.getId());
+                formContext.setInst(inst);
+            }
+        }
+        
+        au().onFormConstruct(formAppletDef, formContext, getBaseField(), false);
     }
 
     @Override
     protected void update(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
-        getAu().updateEntityInstByFormContext(formAppletDef, formContext, scp);
+        au().updateEntityInstByFormContext(formAppletDef, formContext, scp);
     }
 
     @Override
     protected void delete(FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
-        getAu().deleteEntityInstByFormContext(formAppletDef, formContext, scp);
+        au().deleteEntityInstByFormContext(formAppletDef, formContext, scp);
     }
 
 }
