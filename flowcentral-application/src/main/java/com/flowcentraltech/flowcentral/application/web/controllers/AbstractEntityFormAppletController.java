@@ -57,9 +57,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String newChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.newChildItem(childTabIndex);
-        getPageRequestContextUtil().setContentScrollReset();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            applet.newChildItem(childTabIndex);
+            getPageRequestContextUtil().setContentScrollReset();
+        }
+        
         return "refreshapplet";
     }
 
@@ -67,38 +70,41 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String newChildListItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        ShowPopupInfo showPopupInfo = applet.newChildShowPopup(childTabIndex);
-        if (showPopupInfo != null) {
-            ValueStore formValueStore = applet.getForm().getCtx().getFormValueStore();
-            switch (showPopupInfo.getType()) {
-                case SHOW_MULTISELECT: {
-                    RefDef refDef = getAu().getRefDef(showPopupInfo.getReference());
-                    EntitySelect entitySelect = applet.au().constructEntitySelect(refDef, formValueStore, null, null,
-                            null, 0);
-                    entitySelect.setEnableFilter(false);
-                    entitySelect.applyFilterToSearch();
-                    String title = resolveSessionMessage("$m{entitymultiselectpanel.select.entity}",
-                            entitySelect.getEntityTable().getEntityDef().getLabel());
-                    entitySelect.setTitle(title);
-                    setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYSELECT, entitySelect);
-                    return ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT;
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            ShowPopupInfo showPopupInfo = applet.newChildShowPopup(childTabIndex);
+            if (showPopupInfo != null) {
+                ValueStore formValueStore = applet.getForm().getCtx().getFormValueStore();
+                switch (showPopupInfo.getType()) {
+                    case SHOW_MULTISELECT: {
+                        RefDef refDef = getAu().getRefDef(showPopupInfo.getReference());
+                        EntitySelect entitySelect = applet.au().constructEntitySelect(refDef, formValueStore, null, null,
+                                null, 0);
+                        entitySelect.setEnableFilter(false);
+                        entitySelect.applyFilterToSearch();
+                        String title = resolveSessionMessage("$m{entitymultiselectpanel.select.entity}",
+                                entitySelect.getEntityTable().getEntityDef().getLabel());
+                        entitySelect.setTitle(title);
+                        setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYSELECT, entitySelect);
+                        return ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT;
+                    }
+                    case SHOW_TREEMULTISELECT: {
+                        EntityTreeSelectGenerator generator = getAu().getComponent(EntityTreeSelectGenerator.class,
+                                showPopupInfo.getReference());
+                        EntityTreeSelect entityTreeSelect = generator.generate(getAu(), formValueStore);
+                        entityTreeSelect.setTitle(entityTreeSelect.getEntityTreeTable().getTitle());
+                        setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYTREESELECT, entityTreeSelect);
+                        return ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT;
+                    }
+                    default:
+                        break;
                 }
-                case SHOW_TREEMULTISELECT: {
-                    EntityTreeSelectGenerator generator = getAu().getComponent(EntityTreeSelectGenerator.class,
-                            showPopupInfo.getReference());
-                    EntityTreeSelect entityTreeSelect = generator.generate(getAu(), formValueStore);
-                    entityTreeSelect.setTitle(entityTreeSelect.getEntityTreeTable().getTitle());
-                    setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYTREESELECT, entityTreeSelect);
-                    return ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT;
-                }
-                default:
-                    break;
             }
-        }
 
-        applet.newChildListItem(childTabIndex);
-        getPageRequestContextUtil().setContentScrollReset();
+            applet.newChildListItem(childTabIndex);
+            getPageRequestContextUtil().setContentScrollReset();
+        }
+        
         return "refreshapplet";
     }
 
@@ -106,9 +112,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String editChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.editChildItem(childTabIndex);
-        getPageRequestContextUtil().setContentScrollReset();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            applet.editChildItem(childTabIndex);
+            getPageRequestContextUtil().setContentScrollReset();
+        }
+        
         return "refreshapplet";
     }
 
@@ -116,9 +125,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String assignToChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.assignToChildItem(childTabIndex);
-        getPageRequestContextUtil().setContentScrollReset();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            applet.assignToChildItem(childTabIndex);
+            getPageRequestContextUtil().setContentScrollReset();
+        }
+        
         return "refreshapplet";
     }
 
@@ -126,9 +138,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String entryToChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.entryToChildItem(childTabIndex);
-        getPageRequestContextUtil().setContentScrollReset();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            applet.entryToChildItem(childTabIndex);
+            getPageRequestContextUtil().setContentScrollReset();
+        }
+
         return "refreshapplet";
     }
 
@@ -136,9 +151,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String crudToChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        int childTabIndex = getRequestTarget(int.class);
-        applet.crudToChildItem(childTabIndex);
-        getPageRequestContextUtil().setContentScrollReset();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            applet.crudToChildItem(childTabIndex);
+            getPageRequestContextUtil().setContentScrollReset();
+        }
+
         return "refreshapplet";
     }
 
@@ -216,5 +234,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
                 entrySwitchOnChangeHandlers, crudActionHandlers, crudSwitchOnChangeHandlers,
                 saveAsSwitchOnChangeHandlers);
+    }
+    
+    private boolean saveFormState(AbstractEntityFormApplet applet) throws UnifyException {
+        // TODO
+        return true;
     }
 }
