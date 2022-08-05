@@ -45,6 +45,15 @@ public class InputArrayEntries {
         return entryList;
     }
 
+    public List<InputArrayValue> getValues() {
+        List<InputArrayValue> list = new ArrayList<InputArrayValue>();
+        for (InputArrayEntry entry : entryList) {
+            list.add(new InputArrayValue(entry.getKey(), entry.getValueInput().getValue(), entry.isSelected()));
+        }
+
+        return list;
+    }
+    
     public static Builder newBuilder(WidgetTypeDef widgetTypeDef) {
         return new Builder(widgetTypeDef, new EntryAttributes());
     }
@@ -61,26 +70,26 @@ public class InputArrayEntries {
 
         private List<InputArrayEntry> entryList;
 
-        private Set<String> names;
+        private Set<Object> keys;
 
         public Builder(WidgetTypeDef widgetTypeDef, EntryAttributes attributes) {
             this.widgetTypeDef = widgetTypeDef;
             this.attributes = attributes;
             this.entryList = new ArrayList<InputArrayEntry>();
-            this.names = new HashSet<String>();
+            this.keys = new HashSet<Object>();
         }
 
         @SuppressWarnings("unchecked")
-        public Builder addEntry(String name, String label, Object val, boolean selected, boolean editable)
+        public Builder addEntry(Object key, String label, Object val, boolean selected, boolean editable)
                 throws UnifyException {
-            if (names.contains(name)) {
-                throw new IllegalArgumentException("Entry with name [" + name + "] already exists.");
+            if (keys.contains(key)) {
+                throw new IllegalArgumentException("Entry with key [" + key + "] already exists.");
             }
 
             AbstractInput<Object> paramInput = (AbstractInput<Object>) InputWidgetUtils.newInput(widgetTypeDef,
                     attributes);
             paramInput.setValue(val);
-            InputArrayEntry entry = new InputArrayEntry(name, label, paramInput, editable, selected);
+            InputArrayEntry entry = new InputArrayEntry(key, label, paramInput, editable, selected);
             entryList.add(entry);
             return this;
         }

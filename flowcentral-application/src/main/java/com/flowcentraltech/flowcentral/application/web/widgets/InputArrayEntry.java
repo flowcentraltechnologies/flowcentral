@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.common.input.AbstractInput;
  */
 public class InputArrayEntry {
 
-    private String name;
+    private Object key;
 
     private String label;
 
@@ -35,8 +35,8 @@ public class InputArrayEntry {
 
     private boolean selected;
 
-    public InputArrayEntry(String name, String label, AbstractInput<?> valueInput, boolean editable, boolean selected) {
-        this.name = name;
+    public InputArrayEntry(Object key, String label, AbstractInput<?> valueInput, boolean editable, boolean selected) {
+        this.key = key;
         this.label = label;
         this.valueInput = valueInput;
         this.editable = editable;
@@ -47,8 +47,8 @@ public class InputArrayEntry {
         return valueInput;
     }
 
-    public String getName() {
-        return name;
+    public Object getKey() {
+        return key;
     }
 
     public String getLabel() {

@@ -24,20 +24,20 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
  */
 public class InputArrayValue {
 
-    private String name;
+    private Object key;
     
     private Object value;
     
     private boolean selected;
 
-    public InputArrayValue(String name, Object value, boolean selected) {
-        this.name = name;
+    public InputArrayValue(Object key, Object value, boolean selected) {
+        this.key = key;
         this.value = value;
         this.selected = selected;
     }
 
-    public String getName() {
-        return name;
+    public Object getKey() {
+        return key;
     }
 
     public Object getValue() {
@@ -46,5 +46,10 @@ public class InputArrayValue {
 
     public boolean isSelected() {
         return selected;
+    }
+
+    @Override
+    public String toString() {
+        return "InputArrayValue [key=" + key + ", value=" + value + ", selected=" + selected + "]";
     }
 }
