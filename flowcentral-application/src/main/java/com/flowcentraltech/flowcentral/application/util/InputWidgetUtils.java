@@ -144,7 +144,7 @@ public final class InputWidgetUtils {
                 return widget;
             }
         }
-        
+
         return "application.text";
     }
 
@@ -183,16 +183,17 @@ public final class InputWidgetUtils {
         return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor, renderer);
     }
 
-    public static AbstractInput<?> newInput(WidgetTypeDef widgetTypeDef)
+    public static AbstractInput<?> newInput(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa)
             throws UnifyException {
         Class<? extends AbstractInput<?>> inputClass = CommonInputUtils.getInputClass(widgetTypeDef.getInputType());
-        String editor = InputWidgetUtils.constructEditor(widgetTypeDef);
-        String renderer = InputWidgetUtils.constructRenderer(widgetTypeDef);
+        String editor = InputWidgetUtils.constructEditor(widgetTypeDef, efa);
+        String renderer = InputWidgetUtils.constructRenderer(widgetTypeDef, efa);
         return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor, renderer);
     }
 
-    public static String constructEditor(WidgetTypeDef widgetTypeDef) {
+    public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) {
         String editor = widgetTypeDef.getEditor();
+        InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
             esb.append(" style:$s{width:100%;}");
@@ -202,8 +203,9 @@ public final class InputWidgetUtils {
         return editor;
     }
 
-    public static String constructRenderer(WidgetTypeDef widgetTypeDef) {
+    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) {
         String renderer = widgetTypeDef.getRenderer();
+        InputWidgetUtils.resolveEditor(renderer, widgetTypeDef, efa, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(renderer);
             esb.append(" style:$s{width:100%;}");
@@ -260,6 +262,12 @@ public final class InputWidgetUtils {
                 ? entityFieldDef.getResolvedTypeFieldDef()
                 : entityFieldDef;
         String editor = renderer ? widgetTypeDef.getRenderer() : widgetTypeDef.getEditor();
+        InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference);
+        return editor;
+    }
+
+    private static void resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
+            EntityFieldDef entityFieldDef, String reference) {
         switch (widgetTypeDef.getLongName()) {
             case "application.textarea":
             case "application.textareamedium":
@@ -289,8 +297,9 @@ public final class InputWidgetUtils {
             case "application.mobileset":
             case "application.website":
             case "application.domain": {
-                String textCase = entityFieldDef.getTextCase() != null
-                        ? entityFieldDef.getTextCase().toString().toLowerCase()
+                String textCase = entityFieldDef != null
+                        ? (entityFieldDef.getTextCase() != null ? entityFieldDef.getTextCase().toString().toLowerCase()
+                                : "")
                         : "";
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), textCase);
             }
@@ -315,8 +324,9 @@ public final class InputWidgetUtils {
                 break;
             case "application.fullname":
             case "application.fullnamewithspecial": {
-                String textCase = entityFieldDef.getTextCase() != null
-                        ? entityFieldDef.getTextCase().toString().toLowerCase()
+                String textCase = entityFieldDef != null
+                        ? (entityFieldDef.getTextCase() != null ? entityFieldDef.getTextCase().toString().toLowerCase()
+                                : TextCase.CAMEL.toString().toLowerCase())
                         : TextCase.CAMEL.toString().toLowerCase();
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen(), textCase);
             }
@@ -345,33 +355,38 @@ public final class InputWidgetUtils {
             case "application.enumlist":
             case "application.enumreadonlytext":
             case "application.enumlistlabel":
-                editor = String.format(editor, entityFieldDef.getReferences());
+                String _references = entityFieldDef != null ? entityFieldDef.getReferences() : efa.getReferences();
+                editor = String.format(editor, _references);
                 break;
             case "application.entitylist":
             case "application.entitysearch":
             case "application.entityselect":
             case "application.caseentitysearch":
-                if (StringUtils.isBlank(reference)) {
-                    reference = entityFieldDef.isEntityRef() ? entityFieldDef.getRefDef().getLongName()
-                            : entityFieldDef.getReferences();
-                }
+                if (entityFieldDef != null) {
+                    if (StringUtils.isBlank(reference)) {
+                        reference = entityFieldDef.isEntityRef() ? entityFieldDef.getRefDef().getLongName()
+                                : entityFieldDef.getReferences();
+                    }
 
-                editor = String.format(editor, reference,
-                        StringUtils.toNonNullString(entityFieldDef.getInputListKey(), ""));
+                    editor = String.format(editor, reference,
+                            StringUtils.toNonNullString(entityFieldDef.getInputListKey(), ""));
+                }
                 break;
             case "application.workappentitylist":
             case "application.workappentitysearch":
-                editor = String.format(editor, StringUtils.toNonNullString(entityFieldDef.getInputListKey(), ""));
+                if (entityFieldDef != null) {
+                    editor = String.format(editor, StringUtils.toNonNullString(entityFieldDef.getInputListKey(), ""));
+                }
                 break;
             case "application.fileupload":
-                editor = String.format(editor, entityFieldDef.getRefDef().getLongName(),
-                        entityFieldDef.getEntityLongName(), entityFieldDef.getFieldName());
+                if (entityFieldDef != null) {
+                    editor = String.format(editor, entityFieldDef.getRefDef().getLongName(),
+                            entityFieldDef.getEntityLongName(), entityFieldDef.getFieldName());
+                }
                 break;
             default:
                 break;
         }
-
-        return editor;
     }
 
     public static String getFilterConditionTypeSelectDescriptior(EntityFieldDef entityFieldDef,
@@ -629,8 +644,8 @@ public final class InputWidgetUtils {
         return InputWidgetUtils.getWidgetRulesDef(null, null, appWidgetRules);
     }
 
-    public static WidgetRulesDef getWidgetRulesDef(String name, String description,
-            AppWidgetRules appWidgetRules) throws UnifyException {
+    public static WidgetRulesDef getWidgetRulesDef(String name, String description, AppWidgetRules appWidgetRules)
+            throws UnifyException {
         if (appWidgetRules != null) {
             WidgetRulesDef.Builder svdb = WidgetRulesDef.newBuilder();
             svdb.name(name).description(description);
@@ -660,8 +675,7 @@ public final class InputWidgetUtils {
     public static WidgetRulesConfig getWidgetRulesConfig(WidgetRulesDef widgetRulesDef) throws UnifyException {
         List<WidgetRuleEntryConfig> entryList = new ArrayList<WidgetRuleEntryConfig>();
         for (WidgetRuleEntryDef widgetRuleEntryDef : widgetRulesDef.getWidgetRuleEntryList()) {
-            entryList.add(new WidgetRuleEntryConfig(widgetRuleEntryDef.getFieldName(),
-                    widgetRuleEntryDef.getWidget()));
+            entryList.add(new WidgetRuleEntryConfig(widgetRuleEntryDef.getFieldName(), widgetRuleEntryDef.getWidget()));
         }
 
         return new WidgetRulesConfig(entryList);

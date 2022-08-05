@@ -46,19 +46,26 @@ public class InputArrayEntries {
     }
 
     public static Builder newBuilder(WidgetTypeDef widgetTypeDef) {
-        return new Builder(widgetTypeDef);
+        return new Builder(widgetTypeDef, new EntryAttributes());
+    }
+
+    public static Builder newBuilder(WidgetTypeDef widgetTypeDef, EntryAttributes attributes) {
+        return new Builder(widgetTypeDef, attributes);
     }
 
     public static class Builder {
 
         private WidgetTypeDef widgetTypeDef;
 
+        private EntryAttributes attributes;
+        
         private List<InputArrayEntry> entryList;
 
         private Set<String> names;
 
-        public Builder(WidgetTypeDef widgetTypeDef) {
+        public Builder(WidgetTypeDef widgetTypeDef, EntryAttributes attributes) {
             this.widgetTypeDef = widgetTypeDef;
+            this.attributes = attributes;
             this.entryList = new ArrayList<InputArrayEntry>();
             this.names = new HashSet<String>();
         }
@@ -69,7 +76,7 @@ public class InputArrayEntries {
                 throw new IllegalArgumentException("Entry with name [" + name + "] already exists.");
             }
 
-            AbstractInput<?> paramInput = InputWidgetUtils.newInput(widgetTypeDef);
+            AbstractInput<?> paramInput = InputWidgetUtils.newInput(widgetTypeDef, attributes);
             InputArrayEntry entry = new InputArrayEntry(name, label, paramInput, editable, selected);
             entryList.add(entry);
             return this;

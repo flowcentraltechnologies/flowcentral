@@ -212,6 +212,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return columnName;
     }
 
+    @Override
     public String getReferences() {
         return references;
     }
