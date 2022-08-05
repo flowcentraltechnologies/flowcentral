@@ -27,8 +27,8 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public abstract class AbstractArrayInput<T> extends AbstractInput<T> {
 
-    public AbstractArrayInput(Class<T> type, String editor) {
-        super(type, editor);
+    public AbstractArrayInput(Class<T> type, String editor, String renderer) {
+        super(type, editor, renderer);
     }
 
     public String getStringValue() throws UnifyException {

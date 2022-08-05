@@ -392,6 +392,14 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formmessages .error{padding:8px 4px; background-color: #feefef;
 	border: 1px solid #ffcccc; color: #b02020;}
 
+/* Input array */
+.fc-inputarray {display:table;}
+.fc-inputarray .line {display:table-row;}
+.fc-inputarray .section  {display:table-cell;vertical-align: top;}
+.fc-inputarray .iapre {display:table-cell;width:96px;vertical-align:top;}
+.fc-inputarray .iamid {display:table-cell;}
+.fc-inputarray .iapost {display:table-cell;width:42px;vertical-align:top;}
+
 /* Mini form */
 .fc-miniform {}
 .fc-miniform .mfsection {}

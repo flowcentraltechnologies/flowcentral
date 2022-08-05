@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class BooleanArrayInput extends AbstractArrayInput<Boolean[]> {
 
-    public BooleanArrayInput(String editor) {
-        super(Boolean[].class, editor);
+    public BooleanArrayInput(String editor, String renderer) {
+        super(Boolean[].class, editor, renderer);
     }
 
     public void setValue(Boolean[] val) {

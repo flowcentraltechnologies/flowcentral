@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class FloatArrayInput extends AbstractArrayInput<Float[]> {
 
-    public FloatArrayInput(String editor) {
-        super(Float[].class, editor);
+    public FloatArrayInput(String editor, String renderer) {
+        super(Float[].class, editor, renderer);
     }
 
     public void setValue(Float[] val) {

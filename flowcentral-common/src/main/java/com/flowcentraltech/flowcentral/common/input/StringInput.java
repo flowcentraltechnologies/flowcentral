@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class StringInput extends AbstractInput<String> {
 
-    public StringInput(String editor) {
-        super(String.class, editor);
+    public StringInput(String editor, String renderer) {
+        super(String.class, editor, renderer);
     }
 
     public void setValue(String value) {

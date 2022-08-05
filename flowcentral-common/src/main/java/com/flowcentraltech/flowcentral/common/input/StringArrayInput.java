@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class StringArrayInput extends AbstractArrayInput<String[]> {
 
-    public StringArrayInput(String editor) {
-        super(String[].class, editor);
+    public StringArrayInput(String editor, String renderer) {
+        super(String[].class, editor, renderer);
     }
 
     public void setValue(String[] val) {

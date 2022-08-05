@@ -128,14 +128,16 @@ public class SetValueEntry {
         if (currentIn == null) {
             switch (type) {
                 case PROCESS_VARIABLE:
-                    return new StringInput(
-                            "!ui-select blankOption:$s{} list:processvariablelist");
+                    return new StringInput("!ui-select blankOption:$s{} list:processvariablelist",
+                            "!ui-listlabel list:processvariablelist");
                 case GENERATOR:
                     return new StringInput(
-                            "!ui-select blankOption:$s{} list:fieldsetvaluegenlist listParams:$s{entityDef}");
+                            "!ui-select blankOption:$s{} list:fieldsetvaluegenlist listParams:$s{entityDef}",
+                            "!ui-label");
                 case IMMEDIATE_FIELD:
                     return new StringInput(
-                            "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef}");
+                            "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef}",
+                            "!ui-label");
                 case IMMEDIATE:
                 case IMMEDIATE_LINGUAL:
                 default:
@@ -146,14 +148,16 @@ public class SetValueEntry {
         if (fieldChange || typeChange) {
             switch (type) {
                 case PROCESS_VARIABLE:
-                    return new StringInput(
-                            "!ui-select blankOption:$s{} list:processvariablelist");
+                    return new StringInput("!ui-select blankOption:$s{} list:processvariablelist",
+                            "!ui-listlabel list:processvariablelist");
                 case GENERATOR:
                     return new StringInput(
-                            "!ui-select blankOption:$s{} list:fieldsetvaluegenlist listParams:$s{entityDef}");
+                            "!ui-select blankOption:$s{} list:fieldsetvaluegenlist listParams:$s{entityDef}",
+                            "!ui-label");
                 case IMMEDIATE_FIELD:
                     return new StringInput(
-                            "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef}");
+                            "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$s{entityDef}",
+                            "!ui-label");
                 case IMMEDIATE:
                 case IMMEDIATE_LINGUAL:
                 default:

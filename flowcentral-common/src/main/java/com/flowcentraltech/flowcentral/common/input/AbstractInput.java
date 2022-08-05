@@ -32,9 +32,12 @@ public abstract class AbstractInput<T> {
 
     private String editor;
 
-    public AbstractInput(Class<T> type, String editor) {
+    private String renderer;
+
+    public AbstractInput(Class<T> type, String editor, String renderer) {
         this.type = type;
         this.editor = editor;
+        this.renderer = renderer;
     }
 
     public String getStringValue() throws UnifyException {
@@ -51,6 +54,10 @@ public abstract class AbstractInput<T> {
 
     public String getEditor() {
         return editor;
+    }
+
+    public String getRenderer() {
+        return renderer;
     }
 
     public T getValue() {

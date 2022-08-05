@@ -101,7 +101,7 @@ public final class InputWidgetUtils {
     private static final Set<String> ENUMERATION_WIDGETS = Collections.unmodifiableSet(new HashSet<String>(
             Arrays.asList("application.enumlist", "application.enumlistlabel", "application.enumreadonlytext")));
 
-    private static final Class<?>[] NEW_INPUT_PARAMS = new Class<?>[] { String.class };
+    private static final Class<?>[] NEW_INPUT_PARAMS = new Class<?>[] { String.class, String.class };
 
     private static final Map<EntityFieldDataType, String> defaultFormInputWidgets;
 
@@ -179,7 +179,38 @@ public final class InputWidgetUtils {
         Class<? extends AbstractInput<?>> inputClass = lingual ? StringInput.class
                 : CommonInputUtils.getInputClass(widgetTypeDef.getInputType());
         String editor = InputWidgetUtils.constructEditor(widgetTypeDef, _entityFieldDef);
-        return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor);
+        String renderer = InputWidgetUtils.constructRenderer(widgetTypeDef, _entityFieldDef);
+        return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor, renderer);
+    }
+
+    public static AbstractInput<?> newInput(WidgetTypeDef widgetTypeDef)
+            throws UnifyException {
+        Class<? extends AbstractInput<?>> inputClass = CommonInputUtils.getInputClass(widgetTypeDef.getInputType());
+        String editor = InputWidgetUtils.constructEditor(widgetTypeDef);
+        String renderer = InputWidgetUtils.constructRenderer(widgetTypeDef);
+        return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor, renderer);
+    }
+
+    public static String constructEditor(WidgetTypeDef widgetTypeDef) {
+        String editor = widgetTypeDef.getEditor();
+        if (widgetTypeDef.isStretch()) {
+            StringBuilder esb = new StringBuilder(editor);
+            esb.append(" style:$s{width:100%;}");
+            return esb.toString();
+        }
+
+        return editor;
+    }
+
+    public static String constructRenderer(WidgetTypeDef widgetTypeDef) {
+        String renderer = widgetTypeDef.getRenderer();
+        if (widgetTypeDef.isStretch()) {
+            StringBuilder esb = new StringBuilder(renderer);
+            esb.append(" style:$s{width:100%;}");
+            return esb.toString();
+        }
+
+        return renderer;
     }
 
     public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) {

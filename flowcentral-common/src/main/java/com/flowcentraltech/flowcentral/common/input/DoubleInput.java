@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class DoubleInput extends AbstractInput<Double> {
 
-    public DoubleInput(String editor) {
-        super(Double.class, editor);
+    public DoubleInput(String editor, String renderer) {
+        super(Double.class, editor, renderer);
     }
 
     public void setValue(Double value) {

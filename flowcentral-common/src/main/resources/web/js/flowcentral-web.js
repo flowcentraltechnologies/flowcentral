@@ -528,6 +528,11 @@ fux.miniFormTabout = function(uEv) {
 	}
 }
 
+/** Input array */
+fux.rigInputArray = function(rgp) {
+
+}
+
 /** Set values */
 fux.rigSetValues = function(rgp) {
 	var id = rgp.pId;

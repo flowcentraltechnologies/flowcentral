@@ -26,8 +26,8 @@ import java.math.BigDecimal;
  */
 public class BigDecimalInput extends AbstractInput<BigDecimal> {
 
-    public BigDecimalInput(String editor) {
-        super(BigDecimal.class, editor);
+    public BigDecimalInput(String editor, String renderer) {
+        super(BigDecimal.class, editor, renderer);
     }
 
     public void setValue(BigDecimal value) {

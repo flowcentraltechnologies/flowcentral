@@ -26,8 +26,8 @@ import java.util.Date;
  */
 public class DateInput extends AbstractInput<Date> {
 
-    public DateInput(String editor) {
-        super(Date.class, editor);
+    public DateInput(String editor, String renderer) {
+        super(Date.class, editor, renderer);
     }
 
     public void setValue(Date value) {

@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class ShortArrayInput extends AbstractArrayInput<Short[]> {
 
-    public ShortArrayInput(String editor) {
-        super(Short[].class, editor);
+    public ShortArrayInput(String editor, String renderer) {
+        super(Short[].class, editor, renderer);
     }
 
     public void setValue(Short[] val) {

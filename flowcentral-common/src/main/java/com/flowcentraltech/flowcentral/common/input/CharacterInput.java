@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class CharacterInput extends AbstractInput<Character> {
 
-    public CharacterInput(String editor) {
-        super(Character.class, editor);
+    public CharacterInput(String editor, String renderer) {
+        super(Character.class, editor, renderer);
     }
 
     public void setValue(Character input) {

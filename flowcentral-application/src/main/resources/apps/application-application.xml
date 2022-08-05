@@ -19,22 +19,22 @@
 			description="$m{application.widgettype.onetotenlist}" dataType="integer"
 			inputType="integer"
 			editor="!ui-select list:onetotenlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:onetotenlist" />
 		<widgetType name="zerotoninelist" listOption="true"
 			description="$m{application.widgettype.zerotoninelist}" dataType="integer"
 			inputType="integer"
 			editor="!ui-select list:zerotoninelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:zerotoninelist" />
 		<widgetType name="onetotwelvelist" listOption="true"
 			description="$m{application.widgettype.onetotwelvelist}" dataType="integer"
 			inputType="integer"
 			editor="!ui-select list:onetotwelvelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:onetotwelvelist" />
 		<widgetType name="zerotoelevenlist" listOption="true"
 			description="$m{application.widgettype.zerotoelevenlist}" dataType="integer"
 			inputType="integer"
 			editor="!ui-select list:zerotoelevenlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:zerotoelevenlist" />
 		<widgetType name="pastyearlist" listOption="true"
 			description="$m{application.widgettype.pastyearlist}" dataType="integer"
 			inputType="integer"
@@ -217,17 +217,17 @@
 			description="$m{application.widgettype.booleanlist}"
 			dataType="boolean" inputType="boolean"
 			editor="!ui-select list:booleanlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:booleanlist" />
 		<widgetType name="lingualdatetypelist"
 			description="$m{application.widgettype.lingualdatetypelist}"
 			dataType="boolean" inputType="boolean"
 			editor="!ui-select list:lingualdatetypelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:lingualdatetypelist" />
 		<widgetType name="lingualstringtypelist"
 			description="$m{application.widgettype.lingualstringtypelist}"
 			dataType="String" inputType="String"
 			editor="!ui-select list:lingualstringtypelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:lingualstringtypelist" />
 		<widgetType name="enumlist"
 			description="$m{application.widgettype.enumeration}"
 			dataType="string" inputType="string"
@@ -334,22 +334,22 @@
 			description="$m{application.widgettype.languagetag}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:$s{javalocalelist} blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:javalocalelist" />
 		<widgetType name="timezone"
 			description="$m{application.widgettype.timezone}" dataType="string"
 			inputType="string"
 			editor="!ui-select list:$s{javatimezonelist} blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:javatimezonelist" />
 		<widgetType name="formvalidatorlist"
 			description="$m{application.widgettype.formvalidatorlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:formvalidatorlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:formvalidatorlist" />
 		<widgetType name="reffiltergeneratorlist"
 			description="$m{application.widgettype.reffiltergeneratorlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:reffiltergeneratorlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:reffiltergeneratorlist" />
 		<widgetType name="progressbar"
 			description="$m{application.widgettype.progressbar}"
 			dataType="integer" inputType="integer" editor="!fc-progressbar"
@@ -360,8 +360,8 @@
 		<widgetType name="fileattachmenttypelist"
 			description="$m{application.widgettype.fileattachmenttypelist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:fileattachmenttypelistblankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none}"
+			renderer="!ui-listlabel list:fileattachmenttypelist" />
 		<widgetType name="fileupload"
 			description="$m{application.widgettype.fileupload}" dataType="string"
 			inputType="string"

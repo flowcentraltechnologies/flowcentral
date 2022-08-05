@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class LongInput extends AbstractInput<Long> {
 
-    public LongInput(String editor) {
-        super(Long.class, editor);
+    public LongInput(String editor, String renderer) {
+        super(Long.class, editor, renderer);
     }
 
     public void setValue(Long value) {

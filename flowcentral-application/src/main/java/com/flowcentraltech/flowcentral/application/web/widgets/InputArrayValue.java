@@ -14,26 +14,37 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.common.input;
+package com.flowcentraltech.flowcentral.application.web.widgets;
 
 /**
- * Character array input.
+ * Input array value;
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class CharacterArrayInput extends AbstractArrayInput<Character[]> {
+public class InputArrayValue {
 
-    public CharacterArrayInput(String editor, String renderer) {
-        super(Character[].class, editor, renderer);
+    private String name;
+    
+    private Object value;
+    
+    private boolean selected;
+
+    public InputArrayValue(String name, Object value, boolean selected) {
+        this.name = name;
+        this.value = value;
+        this.selected = selected;
     }
 
-    public void setValue(Character[] val) {
-        value = val;
+    public String getName() {
+        return name;
     }
 
-    public Character[] getValue() {
+    public Object getValue() {
         return value;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
 }
