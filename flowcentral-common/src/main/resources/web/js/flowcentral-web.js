@@ -863,6 +863,7 @@ fux.init = function() {
 	ux.setfn(fux.rigTabSheet,"fux0f"); 
 	ux.setfn(fux.rigChart,"fux10");
 	ux.setfn(fux.rigWidgetRules,"fux11");
+	ux.setfn(fux.rigInputArray,"fux12");  
 }
 
 fux.init();

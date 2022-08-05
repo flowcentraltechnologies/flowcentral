@@ -106,8 +106,13 @@ public class InputArrayWriter extends AbstractControlWriter {
 
     private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control valueCtrl,
             Control selectCtrl) throws UnifyException {
-        writer.write("<div style=\"display:table;\">");
-        writer.write("<div style=\"display:table-row;\">");
+        writer.write("<div class=\"iatable\">");
+        writer.write("<div class=\"iarow\">");
+
+        writer.write("<div class=\"iapost\">");
+        selectCtrl.setValueStore(lineValueStore);
+        writer.writeStructureAndContent(selectCtrl);
+        writer.write("</div>");
 
         writer.write("<div class=\"iapre\">");
         writer.write("<span>");
@@ -119,11 +124,6 @@ public class InputArrayWriter extends AbstractControlWriter {
         writer.write("<div class=\"iamid\">");
         valueCtrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(valueCtrl);
-        writer.write("</div>");
-
-        writer.write("<div class=\"iapost\">");
-        selectCtrl.setValueStore(lineValueStore);
-        writer.writeStructureAndContent(selectCtrl);
         writer.write("</div>");
 
         writer.write("</div>");

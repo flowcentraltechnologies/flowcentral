@@ -192,8 +192,7 @@ public final class InputWidgetUtils {
     }
 
     public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) {
-        String editor = widgetTypeDef.getEditor();
-        InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, null, null);
+        String editor = InputWidgetUtils.resolveEditor(widgetTypeDef.getEditor(), widgetTypeDef, efa, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
             esb.append(" style:$s{width:100%;}");
@@ -204,8 +203,7 @@ public final class InputWidgetUtils {
     }
 
     public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) {
-        String renderer = widgetTypeDef.getRenderer();
-        InputWidgetUtils.resolveEditor(renderer, widgetTypeDef, efa, null, null);
+        String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(renderer);
             esb.append(" style:$s{width:100%;}");
@@ -262,11 +260,11 @@ public final class InputWidgetUtils {
                 ? entityFieldDef.getResolvedTypeFieldDef()
                 : entityFieldDef;
         String editor = renderer ? widgetTypeDef.getRenderer() : widgetTypeDef.getEditor();
-        InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference);
+        editor = InputWidgetUtils.resolveEditor(editor, widgetTypeDef, efa, entityFieldDef, reference);
         return editor;
     }
 
-    private static void resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
+    private static String resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
             EntityFieldDef entityFieldDef, String reference) {
         switch (widgetTypeDef.getLongName()) {
             case "application.textarea":
@@ -387,6 +385,8 @@ public final class InputWidgetUtils {
             default:
                 break;
         }
+
+        return editor;
     }
 
     public static String getFilterConditionTypeSelectDescriptior(EntityFieldDef entityFieldDef,

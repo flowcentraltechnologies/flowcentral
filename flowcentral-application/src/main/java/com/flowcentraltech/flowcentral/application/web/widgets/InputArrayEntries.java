@@ -58,7 +58,7 @@ public class InputArrayEntries {
         private WidgetTypeDef widgetTypeDef;
 
         private EntryAttributes attributes;
-        
+
         private List<InputArrayEntry> entryList;
 
         private Set<String> names;
@@ -70,13 +70,16 @@ public class InputArrayEntries {
             this.names = new HashSet<String>();
         }
 
+        @SuppressWarnings("unchecked")
         public Builder addEntry(String name, String label, Object val, boolean selected, boolean editable)
                 throws UnifyException {
             if (names.contains(name)) {
                 throw new IllegalArgumentException("Entry with name [" + name + "] already exists.");
             }
 
-            AbstractInput<?> paramInput = InputWidgetUtils.newInput(widgetTypeDef, attributes);
+            AbstractInput<Object> paramInput = (AbstractInput<Object>) InputWidgetUtils.newInput(widgetTypeDef,
+                    attributes);
+            paramInput.setValue(val);
             InputArrayEntry entry = new InputArrayEntry(name, label, paramInput, editable, selected);
             entryList.add(entry);
             return this;

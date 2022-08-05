@@ -396,7 +396,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-inputarray {display:table;}
 .fc-inputarray .line {display:table-row;}
 .fc-inputarray .section  {display:table-cell;vertical-align: top;}
+.fc-inputarray .iatable {display:table;width:100%;}
+.fc-inputarray .iarow {display:table-row;}
 .fc-inputarray .iapre {display:table-cell;width:96px;vertical-align:top;}
+.fc-inputarray .iapre span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
 .fc-inputarray .iamid {display:table-cell;}
 .fc-inputarray .iapost {display:table-cell;width:42px;vertical-align:top;}
 
