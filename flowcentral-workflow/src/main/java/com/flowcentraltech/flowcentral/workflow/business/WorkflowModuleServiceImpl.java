@@ -902,8 +902,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (emails != null) {
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
                     wfDef.getEntityDef().getEmailProducerConsumer());
-            List<InputValue> emailList = emails.getValues();
-            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst).getReader(), emailList);
+            Map<Object, InputValue> map = emails.getValueMap();
+            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst).getWriter(), map);
         }       
     }
 

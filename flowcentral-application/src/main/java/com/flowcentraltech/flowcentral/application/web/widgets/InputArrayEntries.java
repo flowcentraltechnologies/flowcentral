@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.InputValue;
@@ -77,7 +79,7 @@ public class InputArrayEntries {
         return validationFailedKeys.isEmpty();
     }
 
-    public List<InputValue> getValues() {
+    public List<InputValue> getValueList() {
         List<InputValue> list = new ArrayList<InputValue>();
         for (InputArrayEntry entry : entryList) {
             list.add(new InputValue(entry.getKey(), entry.getValueInput().getValue(), entry.getLabel(),
@@ -85,6 +87,16 @@ public class InputArrayEntries {
         }
 
         return list;
+    }
+
+    public Map<Object, InputValue> getValueMap() {
+        Map<Object, InputValue> map = new HashMap<Object, InputValue>();
+        for (InputArrayEntry entry : entryList) {
+            map.put(entry.getKey(), new InputValue(entry.getKey(), entry.getValueInput().getValue(), entry.getLabel(),
+                    entry.isEditable(), entry.isSelected()));
+        }
+
+        return map;
     }
 
     public static Builder newBuilder(WidgetTypeDef widgetTypeDef) {
@@ -127,10 +139,10 @@ public class InputArrayEntries {
         }
 
         public Builder addEntries(List<InputValue> inputValueList) throws UnifyException {
-            for (InputValue inputValue: inputValueList) {
+            for (InputValue inputValue : inputValueList) {
                 addEntry(inputValue);
             }
-            
+
             return this;
         }
 
@@ -138,9 +150,9 @@ public class InputArrayEntries {
             return addEntry(inputValue.getKey(), inputValue.getValue(), inputValue.getLabel(), inputValue.isEditable(),
                     inputValue.isSelected());
         }
-        
+
         @SuppressWarnings("unchecked")
-        public Builder addEntry(Object key, Object val, String label, boolean selected, boolean editable)
+        public Builder addEntry(Object key, Object val, String label, boolean editable, boolean selected)
                 throws UnifyException {
             if (keys.contains(key)) {
                 throw new IllegalArgumentException("Entry with key [" + key + "] already exists.");

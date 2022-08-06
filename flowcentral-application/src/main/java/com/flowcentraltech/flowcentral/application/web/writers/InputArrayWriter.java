@@ -41,15 +41,19 @@ public class InputArrayWriter extends AbstractControlWriter {
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
-        InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;
-        final String caption = inputArrayWidget.getCaption();
-        if (!StringUtils.isBlank(caption)) {
-            writer.write("<div class=\"iacaption\"><span>").writeWithHtmlEscape(caption).write("</span></div>");
-        }
-        
-        writer.write("<div");
+        InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;        
+        writer.write("<table");
         writeTagAttributes(writer, inputArrayWidget);
         writer.write(">");
+        
+        final int columns = inputArrayWidget.getColumns() <= 0 ? 1 : inputArrayWidget.getColumns();
+        final String caption = inputArrayWidget.getCaption();
+        if (!StringUtils.isBlank(caption)) {
+            writer.write("<tr class=\"iacaption\"><td colspan=\"");
+            writer.write(columns).write("\"><span>");
+            writer.writeWithHtmlEscape(caption);
+            writer.write("</span></tr>");
+        }
         
         List<ValueStore> valueStoreList = inputArrayWidget.getValueList();
         if (valueStoreList != null) {
@@ -57,33 +61,32 @@ public class InputArrayWriter extends AbstractControlWriter {
             DynamicField viewCtrl = inputArrayWidget.getViewCtrl();
             Control selectCtrl = inputArrayWidget.getSelectCtrl();
             final int len = valueStoreList.size();
-            final int columns = inputArrayWidget.getColumns() <= 0 ? 1 : inputArrayWidget.getColumns();
             final String sectionStyle = "width:" + 100 / columns + "%;";
             for (int i = 0; i < len;) {
-                writer.write("<div class=\"line\">");
+                writer.write("<tr class=\"line\">");
                 int j = 0;
                 for (; j < columns && i < len; j++, i++) {
                     ValueStore lineValueStore = valueStoreList.get(i);
                     boolean editable = lineValueStore.retrieve(boolean.class, "editable");
                     Control valueCtrl = editable ? editCtrl : viewCtrl;
-                    writer.write("<div class=\"section\" style=\"");
+                    writer.write("<td class=\"section\" style=\"");
                     writer.write(sectionStyle);
                     writer.write("\">");
                     writeValuesItem(writer, lineValueStore, valueCtrl, selectCtrl);
-                    writer.write("</div>");
+                    writer.write("</td>");
                 }
 
                 for (; j < columns; j++) {
-                    writer.write("<div class=\"section\" style=\"");
+                    writer.write("<td class=\"section\" style=\"");
                     writer.write(sectionStyle);
                     writer.write("\">");
-                    writer.write("</div>");
+                    writer.write("</td>");
                 }
-                writer.write("</div>");
+                writer.write("</tr>");
             }
 
         }
-        writer.write("</div>");
+        writer.write("</table>");
     }
 
     @Override

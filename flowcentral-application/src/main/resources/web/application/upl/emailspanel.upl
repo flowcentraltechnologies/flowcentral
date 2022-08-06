@@ -16,4 +16,4 @@
 !fc-emailspanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{emailArray}
 
 !fc-inputarray:emailArray style:$s{width:100%;} caption:$m{emailspanel.emails}
-	columns:2 binding:emails
+	columns:2

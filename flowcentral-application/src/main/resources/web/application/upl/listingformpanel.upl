@@ -22,7 +22,7 @@
 !fc-formlisting:listingForm binding:formListing
 
 // Emails panel
-!fc-emailspanel:emailsPanel binding:emails
+!fc-emailspanel:emailsPanel ignoreParentState:true binding:emails
 
 // Comments panel
 !fc-commentspanel:commentsPanel ignoreParentState:true binding:comments

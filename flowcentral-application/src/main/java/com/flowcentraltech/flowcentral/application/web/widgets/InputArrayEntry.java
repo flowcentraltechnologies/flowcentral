@@ -66,4 +66,10 @@ public class InputArrayEntry {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    @Override
+    public String toString() {
+        return "InputArrayEntry [key=" + key + ", label=" + label + ", valueInput=" + valueInput + ", editable="
+                + editable + ", selected=" + selected + "]";
+    }
 }

@@ -17,12 +17,14 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.data.ValueStoreWriter;
 
 /**
  * Entity input value list producer-consumer.
@@ -50,13 +52,13 @@ public interface EntityInputValueListProducerConsumer extends UnifyComponent {
      * 
      * @param entityDef
      *                         the entity definition;
-     * @param entityInstReader
-     *                         the entity instance reader
-     * @param valueList
+     * @param entityInstWriter
+     *                         the entity instance writer
+     * @param values
      *                         the values to consume
      * @throws UnifyException
      *                        if an error occurs
      */
-    void consume(EntityDef entityDef, ValueStoreReader entityInstReader, List<InputValue> valueList)
+    void consume(EntityDef entityDef, ValueStoreWriter entityInstWriter, Map<Object, InputValue> values)
             throws UnifyException;
 }
