@@ -637,7 +637,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
-            final String userAction, final String comment, WfReviewMode wfReviewMode) throws UnifyException {
+            final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode)
+            throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -659,10 +660,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setForwardTo(forwardTo);
             environment().updateByIdVersion(wfItem);
 
+            
             wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
             if (wfReviewMode.lean()) {
-                environment().updateLeanByIdVersion(wfEntityInst);
+                if (emails != null) {
+                    environment().findChildren(wfEntityInst); 
+                    updateEmails(wfDef, wfEntityInst, emails);
+                    environment().updateByIdVersion(wfEntityInst);
+                } else {
+                    environment().updateLeanByIdVersion(wfEntityInst);
+                }
             } else {
+                updateEmails(wfDef, wfEntityInst, emails);
                 environment().updateByIdVersion(wfEntityInst);
             }
 
@@ -677,7 +686,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public WfWizardDef getWfWizardDef(String wfWizardName) throws UnifyException {
         return wfWizardDefFactoryMap.get(wfWizardName);
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public void graduateWfWizardItem(String wfWizardName, Long workEntityId) throws UnifyException {
@@ -887,6 +896,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
+    }
+
+    private void updateEmails(WfDef wfDef, WorkEntity wfEntityInst, InputArrayEntries emails) throws UnifyException {
+        if (emails != null) {
+            EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
+                    wfDef.getEntityDef().getEmailProducerConsumer());
+            List<InputValue> emailList = emails.getValues();
+            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst).getReader(), emailList);
+        }       
     }
 
     private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity inst) throws UnifyException {

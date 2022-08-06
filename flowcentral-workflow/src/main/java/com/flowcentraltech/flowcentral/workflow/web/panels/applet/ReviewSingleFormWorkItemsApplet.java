@@ -133,7 +133,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     public void applyUserAction(String actionName) throws UnifyException {
         String comment = getNewComment();
         wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
-                WfReviewMode.SINGLEFORM);
+                form.getEmails(), WfReviewMode.SINGLEFORM);
         navBackToSearch();
     }
 

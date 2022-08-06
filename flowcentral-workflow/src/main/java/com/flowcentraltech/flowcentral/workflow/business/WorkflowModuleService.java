@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationWorkItemUtilities;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
@@ -267,6 +268,8 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                     the user action to apply
      * @param comment
      *                     optional comment
+     * @param emails
+     *                     optional email update
      * @param wfReviewMode
      *                     the review mode
      * @return true if successfully applied otherwise false when workflow item is
@@ -275,7 +278,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction, String comment,
-            WfReviewMode wfReviewMode) throws UnifyException;
+            InputArrayEntries emails, WfReviewMode wfReviewMode) throws UnifyException;
 
     /**
      * Gets application workflow wizard definition.
