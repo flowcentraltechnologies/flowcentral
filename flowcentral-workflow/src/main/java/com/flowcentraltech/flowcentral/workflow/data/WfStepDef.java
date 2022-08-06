@@ -86,7 +86,9 @@ public class WfStepDef {
     private boolean includeForwarder;
 
     private boolean forwarderPreferred;
-    
+
+    private boolean emails;
+
     private boolean comments;
 
     private WfStepSetValuesDef wfSetValuesDef;
@@ -105,9 +107,9 @@ public class WfStepDef {
             RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
             String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
             String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean includeForwarder, boolean forwarderPreferred, boolean comments, WfStepSetValuesDef wfSetValuesDef,
-            Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList, List<WfAlertDef> alertList,
-            Set<String> roleSet) {
+            boolean includeForwarder, boolean forwarderPreferred, boolean emails, boolean comments,
+            WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList,
+            List<WfAlertDef> alertList, Set<String> roleSet) {
         this.appletDef = appletDef;
         this.type = type;
         this.priority = priority;
@@ -128,6 +130,7 @@ public class WfStepDef {
         this.branchOnly = branchOnly;
         this.includeForwarder = includeForwarder;
         this.forwarderPreferred = forwarderPreferred;
+        this.emails = emails;
         this.comments = comments;
         this.userActions = userActions;
         this.formActionDefList = Collections.emptyList();
@@ -272,6 +275,10 @@ public class WfStepDef {
         return forwarderPreferred;
     }
 
+    public boolean isEmails() {
+        return emails;
+    }
+
     public boolean isComments() {
         return comments;
     }
@@ -346,10 +353,11 @@ public class WfStepDef {
             RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
             String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
             String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean includeForwarder, boolean forwarderPreferred, boolean comments) {
+            boolean includeForwarder, boolean forwarderPreferred, boolean emails, boolean comments) {
         return new Builder(appletDef, type, priority, recordActionType, nextStepName, altNextStepName,
                 binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name, description,
-                label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, comments);
+                label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, emails,
+                comments);
     }
 
     public static class Builder {
@@ -393,7 +401,9 @@ public class WfStepDef {
         private boolean includeForwarder;
 
         private boolean forwarderPreferred;
-        
+
+        private boolean emails;
+
         private boolean comments;
 
         private WfStepSetValuesDef wfSetValuesDef;
@@ -411,7 +421,7 @@ public class WfStepDef {
                 String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
                 String policy, String rule, String name, String description, String label, int criticalMinutes,
                 int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
-                boolean forwarderPreferred, boolean comments) {
+                boolean forwarderPreferred, boolean emails, boolean comments) {
             this.appletDef = appletDef;
             this.type = type;
             this.priority = priority;
@@ -433,6 +443,7 @@ public class WfStepDef {
             this.branchOnly = branchOnly;
             this.includeForwarder = includeForwarder;
             this.forwarderPreferred = forwarderPreferred;
+            this.emails = emails;
             this.comments = comments;
         }
 
@@ -511,7 +522,7 @@ public class WfStepDef {
             return new WfStepDef(appletDef, type, priority, recordActionType, nextStepName, altNextStepName,
                     binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name,
                     description, label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder,
-                    forwarderPreferred, comments, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),
+                    forwarderPreferred, emails, comments, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),
                     DataUtils.unmodifiableValuesList(routingList), DataUtils.unmodifiableValuesList(alertList),
                     DataUtils.unmodifiableSet(roleSet));
         }

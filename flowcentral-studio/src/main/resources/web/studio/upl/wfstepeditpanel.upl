@@ -23,7 +23,7 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmAutoLoadingCondition frmPolicy frmRule
-		frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred frmComments}}
+		frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred frmEmails frmComments}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
 !ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.description} size:32 binding:description required:true focus:true
@@ -38,6 +38,7 @@
 !ui-checkbox:frmBranchOnly caption:$m{wfstepeditpanel.branchonly} binding:branchOnly
 !ui-checkbox:frmIncludeForwarder caption:$m{wfstepeditpanel.includeforwarder} binding:includeForwarder
 !ui-checkbox:frmForwarderPreferred caption:$m{wfstepeditpanel.forwarderpreferred} binding:forwarderPreffered
+!ui-checkbox:frmEmails caption:$m{wfstepeditpanel.emails} binding:emails
 !ui-checkbox:frmComments caption:$m{wfstepeditpanel.comments} binding:comments
 !ui-select:frmType styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.type}
 	list:$s{wfsteptypelist} blankOption:$s{} binding:type required:true

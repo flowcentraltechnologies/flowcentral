@@ -1698,6 +1698,8 @@
 						column="1" editable="false" required="true" saveAs="true" />
 					<field name="tableName" inputWidget="application.text"
 						column="1" required="true" saveAs="true" />
+					<field name="emailProducerConsumer" inputWidget="application.emailproducerconsumerlist"
+						column="1" />
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="1" />
 					<field name="auditable" inputWidget="application.checkbox"

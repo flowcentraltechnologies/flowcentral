@@ -109,6 +109,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
+            setVisible("formPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
             setVisible("formPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
             setVisible("formPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
@@ -410,9 +411,17 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         if (evaluationMode.evaluation()) {
             FormPanel formPanel = getWidgetByShortName(FormPanel.class, "formPanel");
             ctx.mergeValidationErrors(formPanel.validate(evaluationMode));
-            if (commentRequired && ctx.getAppletContext().isReview()) {
-                FormPanel commentsformPanel = getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
-                ctx.mergeValidationErrors(commentsformPanel.validate(evaluationMode));
+            
+            if (ctx.getAppletContext().isReview()) {
+                if (commentRequired) {
+                    FormPanel commentsFormPanel = getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
+                    ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
+                }
+                
+                if (ctx.getAppletContext().isEmails()) {
+                    FormPanel emailsFormPanel = getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel");
+                    ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
+                }
             }
 
             if (ctx.isWithFormErrors()) {

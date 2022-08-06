@@ -30,6 +30,8 @@ public class AppEntityConfig extends BaseNameConfig {
 
     private String type;
 
+    private String emailProducerConsumer;
+    
     private String delegate;
 
     private String table;
@@ -57,6 +59,15 @@ public class AppEntityConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getEmailProducerConsumer() {
+        return emailProducerConsumer;
+    }
+
+    @XmlAttribute
+    public void setEmailProducerConsumer(String emailProducerConsumer) {
+        this.emailProducerConsumer = emailProducerConsumer;
     }
 
     public String getDelegate() {

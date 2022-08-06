@@ -14,25 +14,31 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.widgets;
+package com.flowcentraltech.flowcentral.application.data;
 
 /**
- * Input array value;
+ * Input value;
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class InputArrayValue {
+public class InputValue {
 
     private Object key;
-    
+
     private Object value;
-    
+
+    private String label;
+
+    private boolean editable;
+
     private boolean selected;
 
-    public InputArrayValue(Object key, Object value, boolean selected) {
+    public InputValue(Object key, Object value, String label, boolean editable, boolean selected) {
         this.key = key;
         this.value = value;
+        this.label = label;
+        this.editable = editable;
         this.selected = selected;
     }
 
@@ -44,12 +50,15 @@ public class InputArrayValue {
         return value;
     }
 
-    public boolean isSelected() {
-        return selected;
+    public String getLabel() {
+        return label;
     }
 
-    @Override
-    public String toString() {
-        return "InputArrayValue [key=" + key + ", value=" + value + ", selected=" + selected + "]";
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 }

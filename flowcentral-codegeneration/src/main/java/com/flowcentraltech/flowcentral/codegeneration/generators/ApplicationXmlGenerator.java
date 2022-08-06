@@ -328,6 +328,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appEntityConfig.setName(appEntity.getName());
                 appEntityConfig.setDescription("$m{" + descKey + "}");
                 appEntityConfig.setLabel("$m{" + labelKey + "}");
+                appEntityConfig.setEmailProducerConsumer(appEntity.getEmailProducerConsumer());
                 appEntityConfig.setDelegate(appEntity.getDelegate());
                 appEntityConfig.setTable(appEntity.getTableName());
                 appEntityConfig.setAuditable(appEntity.getAuditable());

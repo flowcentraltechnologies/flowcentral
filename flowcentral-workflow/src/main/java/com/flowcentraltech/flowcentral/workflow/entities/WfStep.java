@@ -104,6 +104,9 @@ public class WfStep extends BaseConfigNamedEntity {
     private boolean forwarderPreffered;
 
     @Column
+    private boolean emails;
+
+    @Column
     private boolean comments;
 
     @ListOnly(key = "type", property = "description")
@@ -311,6 +314,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setForwarderPreffered(boolean forwarderPreffered) {
         this.forwarderPreffered = forwarderPreffered;
+    }
+
+    public boolean isEmails() {
+        return emails;
+    }
+
+    public void setEmails(boolean emails) {
+        this.emails = emails;
     }
 
     public boolean isComments() {

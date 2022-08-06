@@ -22,6 +22,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
@@ -41,9 +42,15 @@ public class InputArrayWriter extends AbstractControlWriter {
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         InputArrayWidget inputArrayWidget = (InputArrayWidget) widget;
+        final String caption = inputArrayWidget.getCaption();
+        if (!StringUtils.isBlank(caption)) {
+            writer.write("<div class=\"iacaption\"><span>").writeWithHtmlEscape(caption).write("</span></div>");
+        }
+        
         writer.write("<div");
         writeTagAttributes(writer, inputArrayWidget);
         writer.write(">");
+        
         List<ValueStore> valueStoreList = inputArrayWidget.getValueList();
         if (valueStoreList != null) {
             DynamicField editCtrl = inputArrayWidget.getEditCtrl();

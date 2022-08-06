@@ -366,6 +366,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     wfStep.setBranchOnly(stepConfig.isBranchOnly());
                     wfStep.setIncludeForwarder(stepConfig.isIncludeForwarder());
                     wfStep.setForwarderPreffered(stepConfig.isForwarderPreffered());
+                    wfStep.setEmails(stepConfig.isEmails());
                     wfStep.setComments(stepConfig.isComments());
                     wfStep.setNextStepName(stepConfig.getNextStepName());
                     wfStep.setAltNextStepName(stepConfig.getAltNextStepName());
