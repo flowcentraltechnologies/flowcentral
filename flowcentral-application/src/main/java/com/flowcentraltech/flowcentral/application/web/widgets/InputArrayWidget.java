@@ -52,6 +52,11 @@ public class InputArrayWidget extends AbstractValueListWidget<InputArrayEntry> {
     }
 
     public int getColumns() throws UnifyException {
+        InputArrayEntries entries = getInputArrayEntries();
+        if (entries != null && entries.getColumns() > 0) {
+            return entries.getColumns();
+        }
+        
         return getUplAttribute(int.class, "columns");
     }
 

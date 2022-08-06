@@ -395,7 +395,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Input array */
 .fc-inputarray {display:table;}
 .fc-inputarray .line {display:table-row;}
-.fc-inputarray .section  {display:table-cell;vertical-align:top;padding: 3px 2px}
+.fc-inputarray .section  {display:table-cell;vertical-align:top;padding:3px 6px 3px 2px;}
 .fc-inputarray .iatable {display:table;width:100%;}
 .fc-inputarray .iarow {display:table-row;}
 .fc-inputarray .iapre {display:table-cell;width:96px;vertical-align:top;}

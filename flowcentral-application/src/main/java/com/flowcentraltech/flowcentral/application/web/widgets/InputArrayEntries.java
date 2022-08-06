@@ -37,12 +37,19 @@ public class InputArrayEntries {
 
     private List<InputArrayEntry> entryList;
 
-    private InputArrayEntries(List<InputArrayEntry> entryList) {
+    private int columns;
+    
+    private InputArrayEntries(List<InputArrayEntry> entryList, int columns) {
         this.entryList = entryList;
+        this.columns = columns;
     }
 
     public List<InputArrayEntry> getEntryList() {
         return entryList;
+    }
+
+    public int getColumns() {
+        return columns;
     }
 
     public List<InputArrayValue> getValues() {
@@ -70,6 +77,8 @@ public class InputArrayEntries {
 
         private List<InputArrayEntry> entryList;
 
+        private int columns;
+
         private Set<Object> keys;
 
         public Builder(WidgetTypeDef widgetTypeDef, EntryAttributes attributes) {
@@ -79,6 +88,11 @@ public class InputArrayEntries {
             this.keys = new HashSet<Object>();
         }
 
+        public Builder columns(int columns) {
+            this.columns = columns;
+            return this;
+        }
+        
         @SuppressWarnings("unchecked")
         public Builder addEntry(Object key, String label, Object val, boolean selected, boolean editable)
                 throws UnifyException {
@@ -95,7 +109,7 @@ public class InputArrayEntries {
         }
 
         public InputArrayEntries build() {
-            return new InputArrayEntries(DataUtils.unmodifiableList(entryList));
+            return new InputArrayEntries(DataUtils.unmodifiableList(entryList), columns);
         }
     }
 }
