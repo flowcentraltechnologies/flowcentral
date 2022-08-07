@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntryTablePolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
@@ -46,6 +47,12 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
+    }
+
+    @Override
+    public FixedRowActionType resolveFixedIndex(ValueStoreReader parentReader, ValueStore valueStore, int index,
+            int size) throws UnifyException {
+        return FixedRowActionType.FIXED;
     }
 
     @Override

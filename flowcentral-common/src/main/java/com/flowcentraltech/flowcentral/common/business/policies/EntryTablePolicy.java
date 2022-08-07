@@ -111,7 +111,24 @@ public interface EntryTablePolicy extends UnifyComponent {
      */
     void applyTableStateOverride(ValueStoreReader parentReader, ValueStore rowValueStore,
             TableStateOverride tableStateOverride) throws UnifyException;
-
+    
+    /**
+     * Resolves the table fixed index for the supplied value store.
+     * 
+     * @param parentReader
+     *                     optional parent value store reader
+     * @param valueStore
+     *                     the value store
+     * @param index
+     *                     the value store index
+     * @param size
+     *                     the number of records in entry table
+     * @return the action index
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FixedRowActionType resolveFixedIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
+            throws UnifyException;
     /**
      * Resolves the table action index for the supplied value store.
      * 

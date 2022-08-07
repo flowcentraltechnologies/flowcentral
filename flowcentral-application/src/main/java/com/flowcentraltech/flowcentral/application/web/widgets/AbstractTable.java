@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
@@ -458,10 +459,14 @@ public abstract class AbstractTable<T, U> {
         tableStateOverride.reset();
         if (entryPolicy != null) {
             entryPolicy.applyTableStateOverride(parentReader, rowValueStore, tableStateOverride);
-            ;
         }
 
         return tableStateOverride;
+    }
+    
+    public FixedRowActionType resolveFixedIndex(ValueStore valueStore, int index, int size) throws UnifyException {
+        return entryPolicy != null ? entryPolicy.resolveFixedIndex(parentReader, valueStore, index, size)
+                : FixedRowActionType.FIXED;
     }
 
     public int resolveActionIndex(ValueStore valueStore, int index, int size) throws UnifyException {

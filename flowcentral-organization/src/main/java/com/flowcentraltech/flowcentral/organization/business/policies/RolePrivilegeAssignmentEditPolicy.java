@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractChildListEditPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
@@ -87,6 +88,12 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     public void applyTableStateOverride(ValueStoreReader parentReader, ValueStore rowValueStore,
             TableStateOverride tableStateOverride) throws UnifyException {
 
+    }
+
+    @Override
+    public FixedRowActionType resolveFixedIndex(ValueStoreReader parentReader, ValueStore valueStore, int index,
+            int size) throws UnifyException {
+        return FixedRowActionType.FIXED;
     }
 
     @Override

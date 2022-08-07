@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -40,6 +41,7 @@ import com.tcdng.unify.core.data.MapValuesStore;
 import com.tcdng.unify.core.data.UniqueHistory;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.DataTransferBlock;
@@ -65,6 +67,8 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
         @UplAttribute(name = "summary", type = String.class),
         @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "fixedRows", type = boolean.class, defaultVal="false"),
+        @UplAttribute(name = "fixedHandler", type = EventHandler[].class),
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal="true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal="true")})
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
@@ -83,6 +87,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private Control tabMemCtrl;
 
     private Control[] actionCtrl;
+
+    private Control[] fixedCtrl;
 
     private List<StandalonePanel> summaryPanelList;
 
@@ -212,13 +218,17 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public boolean isFocusManagement() throws UnifyException {
         return getUplAttribute(boolean.class, "focusManagement");
     }
+    
+    public boolean isFixedRows() throws UnifyException {
+        return getUplAttribute(boolean.class, "fixedRows");
+    }
 
     public boolean isDetails() throws UnifyException {
         return !StringUtils.isBlank(getUplAttribute(String.class, "details"));
     }
     
     public boolean isActionColumn() throws UnifyException {
-        return actionCtrl != null;
+        return actionCtrl != null && !isFixedRows();
     }
 
     public String getSelectAllId() throws UnifyException {
@@ -231,6 +241,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public String getRowId() throws UnifyException {
         return getPrefixedId("row_");
+    }
+
+    public Control[] getFixedCtrl() {
+        return fixedCtrl;
     }
 
     public Control[] getActionCtrl() {
@@ -255,6 +269,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
         
         return detailsPanel;
+    }
+
+    public EventHandler[] getFixedEventHandler() throws UnifyException {
+        return getUplAttribute(EventHandler[].class, "fixedHandler");
     }
 
     public EventHandler[] getActionEventHandler() throws UnifyException {
@@ -473,20 +491,31 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             tabMemCtrl = createInternalHiddenControl("tabMemoryId");
         }
         
-        String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
-        if (actionSymbol != null && actionSymbol.length > 0) {
-            EventHandler[] actionHandler = getActionEventHandler();
-            if (actionHandler == null || actionHandler.length != actionSymbol.length) {
-                throwOperationErrorException(new IllegalArgumentException(
-                        "Number of action handlers must match number of action symbols. Widget [" + getLongName()
-                                + "]."));
+        if (isFixedRows()) {
+            List<Control> controls = new ArrayList<Control>();
+            for (FixedRowActionType fixedType : FixedRowActionType.values()) { 
+                controls.add((Control) addInternalChildWidget(
+                        "!ui-button styleClass:$e{mbtn} caption:" + fixedType.label()));
             }
 
-            actionCtrl = new Control[actionSymbol.length];
-            for (int i = 0; i < actionSymbol.length; i++) {
-                String symbol = actionSymbol[i];
-                actionCtrl[i] = (Control) addInternalChildWidget(
-                        "!ui-symbol styleClass:$e{mact} symbol:$s{" + symbol + "} ignoreParentState:true");
+            fixedCtrl = DataUtils.toArray(Control.class, controls);
+            fixedCtrl[FixedRowActionType.FIXED.index()].setDisabled(true);
+        } else {
+            String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
+            if (actionSymbol != null && actionSymbol.length > 0) {
+                EventHandler[] actionHandler = getActionEventHandler();
+                if (actionHandler == null || actionHandler.length != actionSymbol.length) {
+                    throwOperationErrorException(new IllegalArgumentException(
+                            "Number of action handlers must match number of action symbols. Widget [" + getLongName()
+                                    + "]."));
+                }
+
+                actionCtrl = new Control[actionSymbol.length];
+                for (int i = 0; i < actionSymbol.length; i++) {
+                    String symbol = actionSymbol[i];
+                    actionCtrl[i] = (Control) addInternalChildWidget(
+                            "!ui-symbol styleClass:$e{mact} symbol:$s{" + symbol + "} ignoreParentState:true");
+                }
             }
         }
 
