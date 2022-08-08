@@ -50,6 +50,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
 
     public EntityTable(AppletUtilities au, TableDef tableDef) {
         super(au, tableDef, DEFAULT_TABLE_ORDER, 0);
+        this.setFixedRows(tableDef.isFixedRows());
         this.limitSelectToColumns = true;
         this.saveGlobalTableQuickFilterPrivilege = PrivilegeNameUtils
                 .getFeaturePrivilegeName(ApplicationFeatureConstants.SAVE_GLOBAL_TABLE_QUICK_FILTER);

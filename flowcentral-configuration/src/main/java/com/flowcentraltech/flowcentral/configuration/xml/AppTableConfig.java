@@ -52,6 +52,8 @@ public class AppTableConfig extends BaseNameConfig {
 
     private boolean nonConforming;
 
+    private boolean fixedRows;
+
     private boolean limitSelectToColumns;
 
     private List<TableActionConfig> actionList;
@@ -174,6 +176,15 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute
     public void setNonConforming(boolean nonConforming) {
         this.nonConforming = nonConforming;
+    }
+
+    public boolean isFixedRows() {
+        return fixedRows;
+    }
+
+    @XmlAttribute
+    public void setFixedRows(boolean fixedRows) {
+        this.fixedRows = fixedRows;
     }
 
     public boolean isLimitSelectToColumns() {

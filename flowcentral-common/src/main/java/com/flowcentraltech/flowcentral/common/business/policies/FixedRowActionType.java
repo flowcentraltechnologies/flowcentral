@@ -23,22 +23,29 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  * @since 1.0
  */
 public enum FixedRowActionType {
-    FIXED(0, "$m{table.row.fixed}"),
-    EXCLUDE(1, "$m{table.row.exclude}"),
-    INCLUDE(2, "$m{table.row.include}"),
-    DELETE(3, "$m{table.row.delete}");
+    FIXED(0, "fix_", "$m{table.row.fixed}"),
+    EXCLUDE(1, "exc_", "$m{table.row.exclude}"),
+    INCLUDE(2, "inc_", "$m{table.row.include}"),
+    DELETE(3, "del_", "$m{table.row.delete}");
     
     private final int index;
     
+    private final String prefix;
+    
     private final String label;
     
-    private FixedRowActionType(int index, String label) {
+    private FixedRowActionType(int index, String prefix, String label) {
         this.index = index;
+        this.prefix = prefix;
         this.label = label;
     }
     
     public int index() {
         return index;
+    }
+    
+    public String prefix() {
+        return prefix;
     }
     
     public String label() {

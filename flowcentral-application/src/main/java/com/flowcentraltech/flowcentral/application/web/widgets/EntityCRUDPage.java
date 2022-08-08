@@ -22,15 +22,18 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
+import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
+import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity CRUD page object.
@@ -58,6 +61,8 @@ public class EntityCRUDPage {
 
     private final String tableName;
 
+    private final String entryEditPolicy;
+
     private final String createFormName;
 
     private final String maintainFormName;
@@ -81,8 +86,8 @@ public class EntityCRUDPage {
     public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst,
             EntityClassDef entityClassDef, String baseField, Object baseId, String childListName, SectorIcon sectorIcon,
-            BreadCrumbs breadCrumbs, String tableName, String createFormName, String maintainFormName,
-            Restriction baseRestriction) {
+            BreadCrumbs breadCrumbs, String tableName, String entryEditPolicy, String createFormName,
+            String maintainFormName, Restriction baseRestriction) {
         this.ctx = ctx;
         this.formAppletDef = formAppletDef;
         this.formEventHandlers = formEventHandlers;
@@ -96,6 +101,7 @@ public class EntityCRUDPage {
         this.sectorIcon = sectorIcon;
         this.breadCrumbs = breadCrumbs;
         this.tableName = tableName;
+        this.entryEditPolicy = entryEditPolicy;
         this.createFormName = createFormName;
         this.maintainFormName = maintainFormName;
         this.baseRestriction = baseRestriction;
@@ -184,7 +190,13 @@ public class EntityCRUDPage {
 
     public EntityCRUD getCrud() throws UnifyException {
         if (crud == null) {
-            EntityTable entityTable = new EntityTable(ctx.au(), ctx.au().getTableDef(tableName));
+            TableDef tableDef = ctx.au().getTableDef(tableName);
+            EntityTable entityTable = new EntityTable(ctx.au(), tableDef);
+            if (!StringUtils.isBlank(entryEditPolicy)) {
+                ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
+                entityTable.setPolicy(policy);
+            }
+
             FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
             createFrmCtx.setCrudMode();
             createFrmCtx.setParentEntityDef(parentEntityDef);

@@ -2780,6 +2780,8 @@
 						column="2" />
 					<field name="limitSelectToColumns"
 						inputWidget="application.checkbox" column="2" />
+					<field name="fixedRows"
+						inputWidget="application.checkbox" column="2" />
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.apptable.form.design}"

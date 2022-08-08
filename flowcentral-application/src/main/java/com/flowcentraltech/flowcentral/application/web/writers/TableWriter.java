@@ -182,14 +182,13 @@ public class TableWriter extends AbstractControlWriter {
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
-            final Control[] fixedCtrl = tableWidget.getFixedCtrl();
-            final Control[] actionCtrl = tableWidget.getActionCtrl();
-            final EventHandler[] fixedHandler = tableWidget.getFixedEventHandler();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
             final boolean isFixedRows = isContainerEditable && tableWidget.isFixedRows();
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isRowAction = !isFixedRows && !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
+            final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
+            final Control[] actionCtrl = tableWidget.getActionCtrl();
             final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
 
             List<String> tabWidgetIds = focusManagement ? new ArrayList<String>() : null;
@@ -260,12 +259,12 @@ public class TableWriter extends AbstractControlWriter {
                     }
                 }
 
-                if (isFixedRows) {
-                    FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
-                    Control _fixedCtrl = fixedCtrl[fixedType.index()];
-                    _fixedCtrl.setValueStore(valueStore);
-                    writer.writeBehavior(fixedHandler[fixedType.index()], _fixedCtrl.getId(), null);
-                }
+//                if (isFixedRows) {
+//                    FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
+//                    Control _fixedCtrl = fixedCtrl[fixedType.index()];
+//                    _fixedCtrl.setValueStore(valueStore);
+//                    writer.writeBehavior(fixedHandler[fixedType.index()], _fixedCtrl.getId(), null);
+//                }
 
                 if (isActionColumn) {
                     int _index = table.resolveActionIndex(valueStore, i, len);
@@ -324,6 +323,13 @@ public class TableWriter extends AbstractControlWriter {
 
             writer.writeParam("pRefPanels", table.getRefreshPanelIds());
 
+            if (isFixedRows) {
+                writer.writeParam("pFixedRows", true);
+                writer.writeParam("pfExcCtrlId", fixedCtrl[FixedRowActionType.EXCLUDE.index()].getGroupId());
+                writer.writeParam("pfIncCtrlId", fixedCtrl[FixedRowActionType.INCLUDE.index()].getGroupId());
+                writer.writeParam("pfDelCtrlId", fixedCtrl[FixedRowActionType.DELETE.index()].getGroupId());
+            }
+            
             boolean sortable = tableDef.isSortable() && table.getNumberOfPages() > 0;
             if (sortable) {
                 writer.writeParam("pSortIndexId", tableWidget.getSortColumnCtrl().getId());
@@ -492,7 +498,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</span></td>");
                 writer.write("</tr>");
             } else {
-                final Control[] fixedCtrl = tableWidget.getFixedCtrl();
+                final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
                 final int detailsIndex = table.getDetailsIndex();

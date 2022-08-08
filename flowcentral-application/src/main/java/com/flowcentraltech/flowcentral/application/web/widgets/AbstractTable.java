@@ -85,6 +85,8 @@ public abstract class AbstractTable<T, U> {
 
     private boolean editMode;
 
+    private boolean fixedRows;
+
     private boolean fixedAssignment;
 
     private ValueStoreReader parentReader;
@@ -242,6 +244,14 @@ public abstract class AbstractTable<T, U> {
 
     public void setParentReader(ValueStoreReader parentReader) {
         this.parentReader = parentReader;
+    }
+
+    public boolean isFixedRows() {
+        return fixedRows;
+    }
+
+    public void setFixedRows(boolean fixedRows) {
+        this.fixedRows = fixedRows;
     }
 
     public boolean isFixedAssignment() {

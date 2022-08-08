@@ -505,6 +505,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appTableConfig.setHeaderless(appTable.isHeaderless());
                 appTableConfig.setMultiSelect(appTable.isMultiSelect());
                 appTableConfig.setNonConforming(appTable.isNonConforming());
+                appTableConfig.setFixedRows(appTable.isFixedRows());
                 appTableConfig.setLimitSelectToColumns(appTable.isLimitSelectToColumns());
 
                 // Columns

@@ -820,6 +820,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     tdb.headerless(appTable.isHeaderless());
                     tdb.multiSelect(appTable.isMultiSelect());
                     tdb.nonConforming(appTable.isNonConforming());
+                    tdb.fixedRows(appTable.isFixedRows());
                     tdb.limitSelectToColumns(appTable.isLimitSelectToColumns());
                     return tdb.build();
                 }
@@ -2929,6 +2930,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setHeaderless(appTableConfig.isHeaderless());
                     appTable.setMultiSelect(appTableConfig.isMultiSelect());
                     appTable.setNonConforming(appTableConfig.isNonConforming());
+                    appTable.setFixedRows(appTableConfig.isFixedRows());
                     appTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
                     appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(appTable, applicationName, appTableConfig);
@@ -2951,6 +2953,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppTable.setHeaderless(appTableConfig.isHeaderless());
                         oldAppTable.setMultiSelect(appTableConfig.isMultiSelect());
                         oldAppTable.setNonConforming(appTableConfig.isNonConforming());
+                        oldAppTable.setFixedRows(appTableConfig.isFixedRows());
                         oldAppTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
                     }
 
