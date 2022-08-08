@@ -28,6 +28,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
@@ -38,13 +39,17 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameParts;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
+import com.flowcentraltech.flowcentral.application.validation.Validator;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
@@ -280,7 +285,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
-                                wfStep.isComments());
+                                wfStep.isEmails(), wfStep.isComments());
 
                         if (wfStep.getSetValues() != null) {
                             wsdb.addWfSetValuesDef(new WfStepSetValuesDef(
@@ -592,8 +597,23 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfItem.getWorkRecId());
         }
 
-        Comments comments = null;
         WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
+        InputArrayEntries emails = null;
+        if (wfStepDef.isEmails() && wfDef.getEntityDef().emailProducerConsumer()) {
+            EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
+                    wfDef.getEntityDef().getEmailProducerConsumer());
+            WidgetTypeDef widgetTypeDef = appService.getWidgetTypeDef("application.email");
+            Validator validator = (Validator) getComponent("fc-emailvalidator");
+            InputArrayEntries.Builder ieb = InputArrayEntries.newBuilder(widgetTypeDef);
+            ieb.columns(3); // TODO Get from system parameter
+            ieb.validator(validator);
+            List<InputValue> emailList = emailProducerConsumer.produce(wfDef.getEntityDef(),
+                    new BeanValueStore(workEntity).getReader());
+            ieb.addEntries(emailList);
+            emails = ieb.build();
+        }
+
+        Comments comments = null;
         if (wfStepDef.isComments()) {
             Comments.Builder cmb = Comments.newBuilder();//
             List<WfItemEvent> events = environment().findAll(new WfItemEventQuery()
@@ -612,12 +632,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             errors = new Errors(wfItem.getErrorMsg(), wfItem.getErrorTrace(), wfItem.getErrorDoc());
         }
 
-        return new WorkEntityItem(workEntity, comments, errors);
+        return new WorkEntityItem(workEntity, emails, comments, errors);
     }
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
-            final String userAction, final String comment, WfReviewMode wfReviewMode) throws UnifyException {
+            final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode)
+            throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -639,10 +660,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setForwardTo(forwardTo);
             environment().updateByIdVersion(wfItem);
 
+            
             wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
             if (wfReviewMode.lean()) {
-                environment().updateLeanByIdVersion(wfEntityInst);
+                if (emails != null) {
+                    environment().findChildren(wfEntityInst); 
+                    updateEmails(wfDef, wfEntityInst, emails);
+                    environment().updateByIdVersion(wfEntityInst);
+                } else {
+                    environment().updateLeanByIdVersion(wfEntityInst);
+                }
             } else {
+                updateEmails(wfDef, wfEntityInst, emails);
                 environment().updateByIdVersion(wfEntityInst);
             }
 
@@ -657,7 +686,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public WfWizardDef getWfWizardDef(String wfWizardName) throws UnifyException {
         return wfWizardDefFactoryMap.get(wfWizardName);
     }
-
+    
     @SuppressWarnings("unchecked")
     @Override
     public void graduateWfWizardItem(String wfWizardName, Long workEntityId) throws UnifyException {
@@ -869,6 +898,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     }
 
+    private void updateEmails(WfDef wfDef, WorkEntity wfEntityInst, InputArrayEntries emails) throws UnifyException {
+        if (emails != null) {
+            EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
+                    wfDef.getEntityDef().getEmailProducerConsumer());
+            Map<Object, InputValue> map = emails.getValueMap();
+            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst).getWriter(), map);
+        }       
+    }
+
     private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity inst) throws UnifyException {
         if (!wfDef.isCompatible(inst)) {
             Class<?> clazz = inst != null ? inst.getClass() : null;
@@ -884,7 +922,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             if (wfDef.isWithOnEntrySetValuesList()) {
                 Date now = getNow();
                 instValueStore.save(wfDef.getOnEntrySetValuesFields());
-                for (WfSetValuesDef wfSetValuesDef: wfDef.getOnEntrySetValuesList()) {
+                for (WfSetValuesDef wfSetValuesDef : wfDef.getOnEntrySetValuesList()) {
                     if (wfSetValuesDef.getOnCondition()
                             .getObjectFilter(wfDef.getEntityDef(), appletUtil.getSpecialParamProvider(), now)
                             .match(inst)) {
@@ -894,7 +932,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
             inst.setProcessingStatus(startStepDef.getProcessingStatus());
-            
+
             Long workRecId = (Long) inst.getId();
             if (workRecId == null) {
                 inst.setInWorkflow(true);

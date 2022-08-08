@@ -458,6 +458,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 AppletPropertyConstants.BASE_RESTRICTION);
         final FilterDef baseFilter = baseRestriction != null ? _formAppletDef.getFilterDef(baseRestriction) : null;
         final String tableName = _formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
+        final String entryTablePolicy = _formAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.ENTRY_TABLE_POLICY);
         final String createFormName = _formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
         final String maintainFormName = _formAppletDef.getPropValue(String.class,
                 AppletPropertyConstants.MAINTAIN_FORM);
@@ -466,8 +468,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final Object baseId = ((Entity) form.getFormBean()).getId();
         final String subTitle = ((Entity) form.getFormBean()).getDescription();
         saveCurrentForm(currFormTabDef);
-        entityCrudPage = constructNewEntityCRUDPage(_formAppletDef, tableName, createFormName, maintainFormName,
-                baseFilter, baseField, baseId, subTitle, currFormTabDef.getReference());
+        entityCrudPage = constructNewEntityCRUDPage(_formAppletDef, tableName, entryTablePolicy, createFormName,
+                maintainFormName, baseFilter, baseField, baseId, subTitle, currFormTabDef.getReference());
         entityCrudPage.loadCrudList();
         viewMode = ViewMode.ENTITY_CRUD_PAGE;
     }
@@ -860,8 +862,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     protected EntityCRUDPage constructNewEntityCRUDPage(AppletDef formAppletDef, String tableName,
-            String createFormName, String maintainFormName, FilterDef baseFilter, String baseField, Object baseId,
-            String subTitle, String childListName) throws UnifyException {
+            String entryTablePolicy, String createFormName, String maintainFormName, FilterDef baseFilter,
+            String baseField, Object baseId, String subTitle, String childListName) throws UnifyException {
         SectorIcon sectorIcon = getSectorIcon();
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
@@ -873,8 +875,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         EntityDef parentEntityDef = form.getEntityDef();
         Entity parentInst = (Entity) form.getCtx().getInst();
         return new EntityCRUDPage(getCtx(), formAppletDef, formEventHandlers, this, parentEntityDef, parentInst,
-                entityClassDef, baseField, baseId, childListName, sectorIcon, breadCrumbs, tableName, createFormName,
-                maintainFormName, baseRestriction);
+                entityClassDef, baseField, baseId, childListName, sectorIcon, breadCrumbs, tableName, entryTablePolicy,
+                createFormName, maintainFormName, baseRestriction);
     }
 
     protected EditPropertyList constructNewEditPropertyList(PropertyRuleDef propertyRuleDef, Entity inst,

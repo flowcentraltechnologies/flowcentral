@@ -84,6 +84,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
         this.mIndex = mIndex;
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
         getCtx().setRecovery(wfStepDef.isError());
+        getCtx().setEmails(wfStepDef.isEmails());
         getCtx().setComments(wfStepDef.isComments());
         if (form == null) {
             form = constructForm(currEntityInst, FormMode.MAINTAIN);
@@ -93,8 +94,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
             updateForm(EntitySingleForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
         }
 
-        form.setComments(entityItem.getComments());
-        form.setErrors(entityItem.getErrors());
+        form.setAppendables(entityItem);
 
         // Check if enter read-only mode
         getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
@@ -133,7 +133,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     public void applyUserAction(String actionName) throws UnifyException {
         String comment = getNewComment();
         wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
-                WfReviewMode.SINGLEFORM);
+                form.getEmails(), WfReviewMode.SINGLEFORM);
         navBackToSearch();
     }
 

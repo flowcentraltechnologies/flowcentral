@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -40,6 +41,7 @@ import com.tcdng.unify.core.data.MapValuesStore;
 import com.tcdng.unify.core.data.UniqueHistory;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.DataTransferBlock;
@@ -63,10 +65,10 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
-        @UplAttribute(name = "summary", type = String.class),
-        @UplAttribute(name = "details", type = String.class),
-        @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal="true"),
-        @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal="true")})
+        @UplAttribute(name = "summary", type = String.class), @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "fixedRows", type = boolean.class, defaultVal = "false"),
+        @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
+        @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
@@ -84,10 +86,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control[] actionCtrl;
 
+    private Control[] fixedCtrl;
+
     private List<StandalonePanel> summaryPanelList;
 
     private DetailsPanel detailsPanel;
-    
+
     private Integer[] selected;
 
     private String tabMemoryId;
@@ -117,7 +121,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (selectCtrl != null) {
             addPageAlias(selectCtrl);
         }
-        
+
         if (tabMemCtrl != null) {
             addPageAlias(tabMemCtrl);
         }
@@ -181,6 +185,24 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
     }
 
+    @Action
+    public void exclude() throws UnifyException {
+        int target = getRequestTarget(int.class);
+        // TODO
+    }
+
+    @Action
+    public void include() throws UnifyException {
+        int target = getRequestTarget(int.class);
+        // TODO
+    }
+
+    @Action
+    public void delete() throws UnifyException {
+        int target = getRequestTarget(int.class);
+        // TODO
+    }
+
     public String resolveChildWidgetName(String transferId) throws UnifyException {
         String childId = DataTransferUtils.stripTransferDataIndexPart(transferId);
         ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childId);
@@ -213,12 +235,17 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getUplAttribute(boolean.class, "focusManagement");
     }
 
+    public boolean isFixedRows() throws UnifyException {
+        T table = getTable();
+        return (table != null && table.isFixedRows()) || getUplAttribute(boolean.class, "fixedRows");
+    }
+
     public boolean isDetails() throws UnifyException {
         return !StringUtils.isBlank(getUplAttribute(String.class, "details"));
     }
-    
+
     public boolean isActionColumn() throws UnifyException {
-        return actionCtrl != null;
+        return actionCtrl != null && !isFixedRows();
     }
 
     public String getSelectAllId() throws UnifyException {
@@ -231,6 +258,23 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public String getRowId() throws UnifyException {
         return getPrefixedId("row_");
+    }
+
+    public Control[] getFixedCtrl() throws UnifyException {
+        if (fixedCtrl == null) {
+            List<Control> controls = new ArrayList<Control>();
+            for (FixedRowActionType fixedType : FixedRowActionType.values()) {
+                Control control = (Control) addInternalChildWidget(
+                        "!ui-button styleClass:$e{mbtn} caption:" + fixedType.label());
+                control.setGroupId(getPrefixedId(fixedType.prefix()));
+                controls.add(control);
+            }
+
+            fixedCtrl = DataUtils.toArray(Control.class, controls);
+            fixedCtrl[FixedRowActionType.FIXED.index()].setDisabled(true);
+        }
+        
+        return fixedCtrl;
     }
 
     public Control[] getActionCtrl() {
@@ -249,11 +293,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (detailsPanel == null) {
             String details = getUplAttribute(String.class, "details");
             if (!StringUtils.isBlank(details)) {
-                detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details,
-                        getId() + "_dtl");
+                detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details, getId() + "_dtl");
             }
         }
-        
+
         return detailsPanel;
     }
 
@@ -472,7 +515,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (isFocusManagement()) {
             tabMemCtrl = createInternalHiddenControl("tabMemoryId");
         }
-        
+
         String[] actionSymbol = getUplAttribute(String[].class, "actionSymbol");
         if (actionSymbol != null && actionSymbol.length > 0) {
             EventHandler[] actionHandler = getActionEventHandler();

@@ -672,7 +672,7 @@ public class FilterTest extends AbstractFlowCentralTest {
                     1L, "!ui-text", "!ui-label");
             ed = EntityDef
                     .newBuilder(ConfigType.STATIC, "com.flowcentraltech.flowcentral.application.web.widgets.Product",
-                            "Product", null, false, false, "application.product", "Products", 1L, 1L)
+                            "Product", null, null, false, false, "application.product", "Products", 1L, 1L)
                     .addFieldDef(textWidgetTypeDef, 
                             new WidgetTypeDef(DataType.STRING, InputType.STRING, "application.name", "Short Name", 1L,
                                     1L, "!ui-name", "!ui-label"),

@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class DoubleArrayInput extends AbstractArrayInput<Double[]> {
 
-    public DoubleArrayInput(String editor) {
-        super(Double[].class, editor);
+    public DoubleArrayInput(String editor, String renderer) {
+        super(Double[].class, editor, renderer);
     }
 
     public void setValue(Double[] val) {

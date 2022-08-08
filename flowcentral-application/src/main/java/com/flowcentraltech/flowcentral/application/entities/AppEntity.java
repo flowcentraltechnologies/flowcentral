@@ -41,6 +41,9 @@ public class AppEntity extends BaseApplicationEntity {
     private String label;
 
     @Column(length = 64, nullable = true)
+    private String emailProducerConsumer;
+
+    @Column(length = 64, nullable = true)
     private String delegate;
 
     @Column(length = 128)
@@ -92,11 +95,19 @@ public class AppEntity extends BaseApplicationEntity {
         this.label = label;
     }
 
-    public final String getDelegate() {
+    public String getEmailProducerConsumer() {
+        return emailProducerConsumer;
+    }
+
+    public void setEmailProducerConsumer(String emailProducerConsumer) {
+        this.emailProducerConsumer = emailProducerConsumer;
+    }
+
+    public String getDelegate() {
         return delegate;
     }
 
-    public final void setDelegate(String delegate) {
+    public void setDelegate(String delegate) {
         this.delegate = delegate;
     }
 

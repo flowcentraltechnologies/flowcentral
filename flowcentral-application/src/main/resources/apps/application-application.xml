@@ -5,39 +5,44 @@
 	label="$m{application.label}" module="application">
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="emailproducerconsumerlist"
+			description="$m{application.widgettype.emailproducerconsumerlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:emailproducerconsumerlist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="integer" listOption="true"
 			description="$m{application.widgettype.integer}" dataType="integer"
 			inputType="integer"
 			editor="!ui-integer precision:%s useGrouping:true"
 			renderer="!ui-label formatter:$d{!integerformat precision:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="integerformatless" listOption="true"
-			description="$m{application.widgettype.integerformatless}" dataType="integer"
-			inputType="integer"
+			description="$m{application.widgettype.integerformatless}"
+			dataType="integer" inputType="integer"
 			editor="!ui-integer precision:%s"
 			renderer="!ui-label formatter:$d{!integerformat precision:%s} style:$s{text-align:right;}" />
 		<widgetType name="onetotenlist" listOption="true"
-			description="$m{application.widgettype.onetotenlist}" dataType="integer"
-			inputType="integer"
+			description="$m{application.widgettype.onetotenlist}"
+			dataType="integer" inputType="integer"
 			editor="!ui-select list:onetotenlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:onetotenlist" />
 		<widgetType name="zerotoninelist" listOption="true"
-			description="$m{application.widgettype.zerotoninelist}" dataType="integer"
-			inputType="integer"
+			description="$m{application.widgettype.zerotoninelist}"
+			dataType="integer" inputType="integer"
 			editor="!ui-select list:zerotoninelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:zerotoninelist" />
 		<widgetType name="onetotwelvelist" listOption="true"
-			description="$m{application.widgettype.onetotwelvelist}" dataType="integer"
-			inputType="integer"
+			description="$m{application.widgettype.onetotwelvelist}"
+			dataType="integer" inputType="integer"
 			editor="!ui-select list:onetotwelvelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:onetotwelvelist" />
 		<widgetType name="zerotoelevenlist" listOption="true"
-			description="$m{application.widgettype.zerotoelevenlist}" dataType="integer"
-			inputType="integer"
+			description="$m{application.widgettype.zerotoelevenlist}"
+			dataType="integer" inputType="integer"
 			editor="!ui-select list:zerotoelevenlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:zerotoelevenlist" />
 		<widgetType name="pastyearlist" listOption="true"
-			description="$m{application.widgettype.pastyearlist}" dataType="integer"
-			inputType="integer"
+			description="$m{application.widgettype.pastyearlist}"
+			dataType="integer" inputType="integer"
 			editor="!ui-select list:pastyearlist listParams:$l{1970}  listParamType:$s{immediate} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="decimal" listOption="true"
@@ -51,38 +56,38 @@
 			editor="!ui-decimal precision:%s scale:%s useGrouping:true strictFormat:true"
 			renderer="!ui-label formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="amountwhole" listOption="true"
-			description="$m{application.widgettype.amountwhole}" dataType="decimal"
-			inputType="decimal"
+			description="$m{application.widgettype.amountwhole}"
+			dataType="decimal" inputType="decimal"
 			editor="!ui-decimal precision:%s useGrouping:true strictFormat:true"
 			renderer="!ui-label formatter:$d{!decimalformat precision:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="postingentry" listOption="true"
-			description="$m{application.widgettype.postingentry}" dataType="double"
-			inputType="double"
+			description="$m{application.widgettype.postingentry}"
+			dataType="double" inputType="double"
 			editor="!ui-debitcredit precision:%s scale:%s useGrouping:true negativeCredit:false"
 			renderer="!ui-debitcreditlabel negativeCredit:false formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="postingentryneg" listOption="true"
-			description="$m{application.widgettype.postingentryneg}" dataType="double"
-			inputType="double"
+			description="$m{application.widgettype.postingentryneg}"
+			dataType="double" inputType="double"
 			editor="!ui-debitcredit precision:%s scale:%s useGrouping:true negativeCredit:true"
 			renderer="!ui-debitcreditlabel negativeCredit:true formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="postingdebitonly" listOption="true"
-			description="$m{application.widgettype.postingdebit}" dataType="double"
-			inputType="double"
+			description="$m{application.widgettype.postingdebit}"
+			dataType="double" inputType="double"
 			editor="!ui-debitcredit precision:%s scale:%s useGrouping:true negativeCredit:true type:$s{debit}"
 			renderer="!ui-debitcreditlabel negativeCredit:true formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="postingdebitonlyneg" listOption="true"
-			description="$m{application.widgettype.postingdebitneg}" dataType="double"
-			inputType="double"
+			description="$m{application.widgettype.postingdebitneg}"
+			dataType="double" inputType="double"
 			editor="!ui-debitcredit precision:%s scale:%s useGrouping:true negativeCredit:false type:$s{debit}"
 			renderer="!ui-debitcreditlabel negativeCredit:false formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="postingcreditonly" listOption="true"
-			description="$m{application.widgettype.postingcredit}" dataType="double"
-			inputType="double"
+			description="$m{application.widgettype.postingcredit}"
+			dataType="double" inputType="double"
 			editor="!ui-debitcredit precision:%s scale:%s useGrouping:true negativeCredit:false type:$s{credit}"
 			renderer="!ui-debitcreditlabel negativeCredit:false formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="postingcreditonlyneg" listOption="true"
-			description="$m{application.widgettype.postingcreditneg}" dataType="double"
-			inputType="double"
+			description="$m{application.widgettype.postingcreditneg}"
+			dataType="double" inputType="double"
 			editor="!ui-debitcredit precision:%s scale:%s useGrouping:true negativeCredit:true type:$s{credit}"
 			renderer="!ui-debitcreditlabel negativeCredit:true formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="name" listOption="true"
@@ -90,8 +95,9 @@
 			inputType="string" editor="!ui-name minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="namewithupper" listOption="true"
-			description="$m{application.widgettype.namewithupper}" dataType="string"
-			inputType="string" editor="!ui-name minLen:%s maxLen:%s case:$s{%s}"
+			description="$m{application.widgettype.namewithupper}"
+			dataType="string" inputType="string"
+			editor="!ui-name minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="series" listOption="true"
 			description="$m{application.widgettype.series}" dataType="string"
@@ -123,7 +129,8 @@
 			dataType="string" inputType="string"
 			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s} space:true"
 			renderer="!ui-label" />
-		<widgetType name="alphanumericwithspaceupper" listOption="true"
+		<widgetType name="alphanumericwithspaceupper"
+			listOption="true"
 			description="$m{application.widgettype.alphanumericwithspaceupper}"
 			dataType="string" inputType="string"
 			editor="!ui-alphanumeric minLen:%s maxLen:%s case:$s{%s} space:true"
@@ -155,20 +162,22 @@
 			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="textwithupper" listOption="true"
-			description="$m{application.widgettype.textwithupper}" dataType="string"
-			inputType="string" editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
+			description="$m{application.widgettype.textwithupper}"
+			dataType="string" inputType="string"
+			editor="!ui-text minLen:%s maxLen:%s case:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="textarea" listOption="true"
 			description="$m{application.widgettype.textarea}" dataType="string"
 			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:3"
 			renderer="!ui-label" />
 		<widgetType name="textareamedium" listOption="true"
-			description="$m{application.widgettype.textareamedium}" dataType="string"
-			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:6"
-			renderer="!ui-label" />
+			description="$m{application.widgettype.textareamedium}"
+			dataType="string" inputType="string"
+			editor="!ui-textarea minLen:%s maxLen:%s rows:6" renderer="!ui-label" />
 		<widgetType name="textarealarge" listOption="true"
-			description="$m{application.widgettype.textarealarge}" dataType="string"
-			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:12"
+			description="$m{application.widgettype.textarealarge}"
+			dataType="string" inputType="string"
+			editor="!ui-textarea minLen:%s maxLen:%s rows:12"
 			renderer="!ui-label" />
 		<widgetType name="password" listOption="true"
 			description="$m{application.widgettype.password}" dataType="string"
@@ -217,17 +226,17 @@
 			description="$m{application.widgettype.booleanlist}"
 			dataType="boolean" inputType="boolean"
 			editor="!ui-select list:booleanlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:booleanlist" />
 		<widgetType name="lingualdatetypelist"
 			description="$m{application.widgettype.lingualdatetypelist}"
 			dataType="boolean" inputType="boolean"
 			editor="!ui-select list:lingualdatetypelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:lingualdatetypelist" />
 		<widgetType name="lingualstringtypelist"
 			description="$m{application.widgettype.lingualstringtypelist}"
 			dataType="String" inputType="String"
 			editor="!ui-select list:lingualstringtypelist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:lingualstringtypelist" />
 		<widgetType name="enumlist"
 			description="$m{application.widgettype.enumeration}"
 			dataType="string" inputType="string"
@@ -279,8 +288,7 @@
 			renderer="!ui-label" />
 		<widgetType name="yearEnd" listOption="true"
 			description="$m{application.widgettype.yearend}" dataType="date"
-			inputType="date"
-			editor="!ui-yearend"
+			inputType="date" editor="!ui-yearend"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{dd/MM}}" />
 		<widgetType name="date" listOption="true"
 			description="$m{application.widgettype.date}" dataType="date"
@@ -298,8 +306,8 @@
 			editor="!ui-date type:past formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
 		<widgetType name="datepasttoday" listOption="true"
-			description="$m{application.widgettype.datepasttoday}" dataType="date"
-			inputType="date"
+			description="$m{application.widgettype.datepasttoday}"
+			dataType="date" inputType="date"
 			editor="!ui-date type:past_today formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}} clearable:true"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
 		<widgetType name="datetext"
@@ -334,22 +342,22 @@
 			description="$m{application.widgettype.languagetag}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:$s{javalocalelist} blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:javalocalelist" />
 		<widgetType name="timezone"
 			description="$m{application.widgettype.timezone}" dataType="string"
 			inputType="string"
 			editor="!ui-select list:$s{javatimezonelist} blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:javatimezonelist" />
 		<widgetType name="formvalidatorlist"
 			description="$m{application.widgettype.formvalidatorlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:formvalidatorlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:formvalidatorlist" />
 		<widgetType name="reffiltergeneratorlist"
 			description="$m{application.widgettype.reffiltergeneratorlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:reffiltergeneratorlist blankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			renderer="!ui-listlabel list:reffiltergeneratorlist" />
 		<widgetType name="progressbar"
 			description="$m{application.widgettype.progressbar}"
 			dataType="integer" inputType="integer" editor="!fc-progressbar"
@@ -360,16 +368,16 @@
 		<widgetType name="fileattachmenttypelist"
 			description="$m{application.widgettype.fileattachmenttypelist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:fileattachmenttypelistblankOption:$m{blank.none}"
-			renderer="!ui-label" />
+			editor="!ui-select list:fileattachmenttypelist blankOption:$m{blank.none}"
+			renderer="!ui-listlabel list:fileattachmenttypelist" />
 		<widgetType name="fileupload"
 			description="$m{application.widgettype.fileupload}" dataType="string"
 			inputType="string"
 			editor="!ui-fileuploadview handler:$s{refblob-fileuploadviewhandler} category:$s{%s} parentCategory:$s{%s} parentFieldName:$s{%s}"
 			renderer="!ui-label" />
 		<widgetType name="suggestiontextsearch" listOption="true"
-			description="$m{application.widgettype.suggestiontextsearch}" dataType="string"
-			inputType="string"
+			description="$m{application.widgettype.suggestiontextsearch}"
+			dataType="string" inputType="string"
 			editor="!fc-suggestiontextsearch styleClass:$e{fc-entitysearch} type:$s{%s}"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -391,7 +399,7 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
-	</applets>	
+	</applets>
 	<!-- References -->
 	<references>
 		<reference name="applicationRef"
@@ -531,7 +539,7 @@
 				key="moduleId" property="description" />
 			<field name="moduleLabel"
 				label="$m{application.application.modulelabel}" type="list_only"
-				key="moduleId" property="label" />				
+				key="moduleId" property="label" />
 			<field name="sectorName"
 				label="$m{application.application.sectorname}" type="list_only"
 				key="moduleId" property="sectorName" />
@@ -629,7 +637,7 @@
 			<field name="childListActionType"
 				label="$m{application.appappletfilter.childlistactiontype}"
 				type="enum_ref" references="childlistactiontypelist"
-				inputWidget="application.enumlist" nullable="true"/>
+				inputWidget="application.enumlist" nullable="true" />
 			<field name="owner"
 				label="$m{application.appappletfilter.owner}" type="string"
 				nullable="true" />
@@ -637,8 +645,8 @@
 				label="$m{application.appappletfilter.preferredform}" type="string"
 				nullable="true" />
 			<field name="preferredChildListApplet"
-				label="$m{application.appappletfilter.preferredchildlistapplet}" type="string"
-				nullable="true" />				
+				label="$m{application.appappletfilter.preferredchildlistapplet}"
+				type="string" nullable="true" />
 			<field name="quickFilter"
 				label="$m{application.appappletfilter.quickfilter}" type="boolean" />
 			<field name="ownershipTypeDesc"
@@ -687,8 +695,12 @@
 				label="$m{application.appentity.entityclass}" type="string" />
 			<field name="tableName"
 				label="$m{application.appentity.tablename}" type="string" />
+			<field name="emailProducerConsumer"
+				label="$m{application.appentity.emailproducerconsumer}"
+				type="string" nullable="true" />
 			<field name="delegate"
-				label="$m{application.appentity.delegate}" type="string" nullable="true"/>
+				label="$m{application.appentity.delegate}" type="string"
+				nullable="true" />
 			<field name="auditable"
 				label="$m{application.appentity.auditable}" type="boolean" />
 			<field name="reportable"
@@ -990,6 +1002,8 @@
 				label="$m{application.apptable.multiselect}" type="boolean" />
 			<field name="nonConforming"
 				label="$m{application.apptable.nonconforming}" type="boolean" />
+			<field name="fixedRows"
+				label="$m{application.apptable.fixedrows}" type="boolean" />
 			<field name="limitSelectToColumns"
 				label="$m{application.apptable.limitselecttocolumns}" type="boolean" />
 			<field name="itemsPerPage"
@@ -1055,7 +1069,7 @@
 			<field name="policy"
 				label="$m{application.apptableaction.policy}" type="string" />
 			<field name="orderIndex"
-				label="$m{application.apptableaction.orderindex}" type="integer"/>
+				label="$m{application.apptableaction.orderindex}" type="integer" />
 			<uniqueConstraint name="labelUc"
 				description="$m{application.apptableaction.uc.label}"
 				fieldList="appTableId,label" />
@@ -1083,29 +1097,31 @@
 		<entity name="appForm" description="$m{application.appform}"
 			label="$m{application.appform.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppForm">
-			<field name="type"
-				label="$m{application.appform.type}" type="enum_ref"
-				references="formtypelist"
+			<field name="type" label="$m{application.appform.type}"
+				type="enum_ref" references="formtypelist"
 				inputWidget="application.enumlist" />
 			<field name="entity" label="$m{application.appform.entity}"
 				type="string" />
-			<field name="consolidatedValidation" label="$m{application.appform.consolidatedvalidation}"
-				type="string" nullable="true"/>
-			<field name="consolidatedReview" label="$m{application.appform.consolidatedreview}"
-				type="string" nullable="true"/>
-			<field name="consolidatedState" label="$m{application.appform.consolidatedstate}"
-				type="string" nullable="true"/>
-			<field name="listingGenerator" label="$m{application.appform.listinggenerator}"
-				type="string" nullable="true"/>
+			<field name="consolidatedValidation"
+				label="$m{application.appform.consolidatedvalidation}" type="string"
+				nullable="true" />
+			<field name="consolidatedReview"
+				label="$m{application.appform.consolidatedreview}" type="string"
+				nullable="true" />
+			<field name="consolidatedState"
+				label="$m{application.appform.consolidatedstate}" type="string"
+				nullable="true" />
+			<field name="listingGenerator"
+				label="$m{application.appform.listinggenerator}" type="string"
+				nullable="true" />
 			<field name="titleFormat"
 				label="$m{application.appform.titleformat}" type="string"
 				nullable="true" />
 			<field name="annotation"
 				label="$m{application.appform.annotation}" type="string"
 				nullable="true" />
-			<field name="typeDesc"
-				label="$m{application.appform.typedesc}" type="list_only"
-				key="type" property="description" />
+			<field name="typeDesc" label="$m{application.appform.typedesc}"
+				type="list_only" key="type" property="description" />
 			<field name="elementList"
 				label="$m{application.appform.elements}" type="child_list"
 				references="appFormElementRef" />
@@ -1122,8 +1138,8 @@
 				label="$m{application.appform.fieldstatepolicies}" type="child_list"
 				references="appFormStatePolicyRef" />
 			<field name="widgetRulesList"
-				label="$m{application.appform.widgetrulespolicies}" type="child_list"
-				references="appFormWidgetRulesPolicyRef" />
+				label="$m{application.appform.widgetrulespolicies}"
+				type="child_list" references="appFormWidgetRulesPolicyRef" />
 			<field name="fieldValidationList"
 				label="$m{application.appform.fieldvalidations}" type="child_list"
 				references="appFormFieldValidationPolicyRef" />
@@ -1249,9 +1265,10 @@
 			<field name="type" label="$m{application.appformaction.type}"
 				type="enum_ref" references="uiactiontypelist"
 				inputWidget="application.enumlist" />
-			<field name="highlightType" label="$m{application.appformaction.highlighttype}"
-				type="enum_ref" references="highlighttypelist"
-				inputWidget="application.enumlist" nullable="true"/>
+			<field name="highlightType"
+				label="$m{application.appformaction.highlighttype}" type="enum_ref"
+				references="highlighttypelist" inputWidget="application.enumlist"
+				nullable="true" />
 			<field name="label" label="$m{application.appformaction.label}"
 				type="string" />
 			<field name="policy"
@@ -1268,8 +1285,8 @@
 				label="$m{application.appformaction.typedesc}" type="list_only"
 				key="type" property="description" />
 			<field name="highlightTypeDesc"
-				label="$m{application.appformaction.highlighttypedesc}" type="list_only"
-				key="highlightType" property="description" />
+				label="$m{application.appformaction.highlighttypedesc}"
+				type="list_only" key="highlightType" property="description" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appformaction.uc.name}"
 				fieldList="appFormId,name" />
@@ -1313,7 +1330,8 @@
 				references="formstatepolicytypelist"
 				inputWidget="application.enumlist" />
 			<field name="valueGenerator"
-				label="$m{application.appformstatepolicy.valuegenerator}" type="string" />
+				label="$m{application.appformstatepolicy.valuegenerator}"
+				type="string" />
 			<field name="trigger"
 				label="$m{application.appformstatepolicy.trigger}" type="string" />
 			<field name="onCondition"
@@ -1334,14 +1352,17 @@
 			label="$m{application.appformwidgetrulespolicy.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppFormWidgetRulesPolicy">
 			<field name="appFormId"
-				label="$m{application.appformwidgetrulespolicy.appformid}" type="ref"
-				references="appFormRef" inputWidget="application.entitylist" />
+				label="$m{application.appformwidgetrulespolicy.appformid}"
+				type="ref" references="appFormRef"
+				inputWidget="application.entitylist" />
 			<field name="onCondition"
-				label="$m{application.appformwidgetrulespolicy.oncondition}" type="child"
-				category="formwidgetrulespolicy" references="appFilterRef" />
+				label="$m{application.appformwidgetrulespolicy.oncondition}"
+				type="child" category="formwidgetrulespolicy"
+				references="appFilterRef" />
 			<field name="widgetRules"
-				label="$m{application.appformwidgetrulespolicy.widgetrule}" type="child"
-				category="formwidgetrulespolicy" references="appWidgetRulesRef" />
+				label="$m{application.appformwidgetrulespolicy.widgetrule}"
+				type="child" category="formwidgetrulespolicy"
+				references="appWidgetRulesRef" />
 		</entity>
 		<entity name="appFormSetState"
 			description="$m{application.appformsetstate}"
@@ -1406,8 +1427,8 @@
 			<field name="target"
 				label="$m{application.appformvalidationpolicy.target}" type="string" />
 			<field name="entityName"
-				label="$m{application.appformvalidationpolicy.entityname}" type="list_only"
-				key="appFormId" property="entity" />
+				label="$m{application.appformvalidationpolicy.entityname}"
+				type="list_only" key="appFormId" property="entity" />
 			<field name="errorMatcher"
 				label="$m{application.appformvalidationpolicy.errormatcher}"
 				type="string" nullable="true" />
@@ -1424,31 +1445,29 @@
 				label="$m{application.appformreviewpolicy.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
 			<field name="messageType"
-				label="$m{application.appformreviewpolicy.messagetype}" type="enum_ref"
-				references="messagetypelist" inputWidget="application.enumlist" />
+				label="$m{application.appformreviewpolicy.messagetype}"
+				type="enum_ref" references="messagetypelist"
+				inputWidget="application.enumlist" />
 			<field name="message"
-				label="$m{application.appformreviewpolicy.message}"
-				type="string" />
+				label="$m{application.appformreviewpolicy.message}" type="string" />
 			<field name="skippable"
-				label="$m{application.appformreviewpolicy.skippable}"
-				type="boolean" />
+				label="$m{application.appformreviewpolicy.skippable}" type="boolean" />
 			<field name="formEvents"
 				label="$m{application.appformreviewpolicy.event}" type="string" />
 			<field name="target"
 				label="$m{application.appformreviewpolicy.target}" type="string" />
 			<field name="entityName"
-				label="$m{application.appformreviewpolicy.entityname}" type="list_only"
-				key="appFormId" property="entity" />
+				label="$m{application.appformreviewpolicy.entityname}"
+				type="list_only" key="appFormId" property="entity" />
 			<field name="errorMatcher"
 				label="$m{application.appformreviewpolicy.errormatcher}"
 				type="string" nullable="true" />
 			<field name="errorCondition"
 				label="$m{application.appformreviewpolicy.errorcondition}"
-				type="child" category="formreviewpolicy"
-				references="appFilterRef" />
+				type="child" category="formreviewpolicy" references="appFilterRef" />
 			<field name="messageTypeDesc"
-				label="$m{application.appformreviewpolicy.messagetypedesc}" type="list_only"
-				key="messageType" property="description" />
+				label="$m{application.appformreviewpolicy.messagetypedesc}"
+				type="list_only" key="messageType" property="description" />
 		</entity>
 		<entity name="appWidgetType"
 			description="$m{application.appwidgettype}"
@@ -1483,8 +1502,8 @@
 			label="$m{application.appsuggestiontype.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppSuggestionType">
 			<field name="parent"
-				label="$m{application.appsuggestiontype.parent}" type="string" nullable="true"
-				 inputWidget="application.text"/>
+				label="$m{application.appsuggestiontype.parent}" type="string"
+				nullable="true" inputWidget="application.text" />
 		</entity>
 		<entity name="appSuggestion"
 			description="$m{application.appsuggestion}"
@@ -1492,31 +1511,34 @@
 			type="com.flowcentraltech.flowcentral.application.entities.AppSuggestion">
 			<field name="suggestionTypeId"
 				label="$m{application.appsuggestion.suggestiontypeid}" type="ref"
-				references="appSuggestionTypeRef" inputWidget="application.entitysearch" />
+				references="appSuggestionTypeRef"
+				inputWidget="application.entitysearch" />
 			<field name="suggestion"
 				label="$m{application.appsuggestion.suggestion}" type="string" />
 			<field name="applicationName"
-				label="$m{application.appsuggestion.applicationname}" type="list_only"
-				key="suggestionTypeId" property="applicationName" />
+				label="$m{application.appsuggestion.applicationname}"
+				type="list_only" key="suggestionTypeId" property="applicationName" />
 			<field name="applicationDesc"
-				label="$m{application.appsuggestion.applicationdesc}" type="list_only"
-				key="suggestionTypeId" property="applicationDesc" />
+				label="$m{application.appsuggestion.applicationdesc}"
+				type="list_only" key="suggestionTypeId" property="applicationDesc" />
 			<field name="suggestionTypeName"
-				label="$m{application.appsuggestion.suggestiontypename}" type="list_only"
-				key="suggestionTypeId" property="name" />
+				label="$m{application.appsuggestion.suggestiontypename}"
+				type="list_only" key="suggestionTypeId" property="name" />
 			<field name="suggestionTypeDesc"
-				label="$m{application.appsuggestion.suggestiontypedesc}" type="list_only"
-				key="suggestionTypeId" property="description" />
+				label="$m{application.appsuggestion.suggestiontypedesc}"
+				type="list_only" key="suggestionTypeId" property="description" />
 		</entity>
 	</entities>
 	<!-- Tables -->
 	<tables>
-		<table name="suggestionTable" description="$m{application.appsuggestion.table}"
-			label="$m{application.appsuggestion.table.label}" entity="appSuggestion" itemsPerPage="20"  serialNo="true">
-			<column field="applicationDesc" renderWidget="application.text"
-				widthRatio="1" />
-			<column field="suggestionTypeDesc" renderWidget="application.text"
-				widthRatio="1" />
+		<table name="suggestionTable"
+			description="$m{application.appsuggestion.table}"
+			label="$m{application.appsuggestion.table.label}"
+			entity="appSuggestion" itemsPerPage="20" serialNo="true">
+			<column field="applicationDesc"
+				renderWidget="application.text" widthRatio="1" />
+			<column field="suggestionTypeDesc"
+				renderWidget="application.text" widthRatio="1" />
 			<column field="suggestion" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="createdBy" renderWidget="application.text" />
@@ -1529,15 +1551,17 @@
 	</tables>
 	<!-- Forms -->
 	<forms>
-		<form name="suggestionForm" description="$m{application.appsuggestion.form}"
+		<form name="suggestionForm"
+			description="$m{application.appsuggestion.form}"
 			entity="appSuggestion">
-			<tab name="basicDetails" label="$m{application.appsuggestion.form.basicdetails}"
+			<tab name="basicDetails"
+				label="$m{application.appsuggestion.form.basicdetails}"
 				contentType="miniform">
 				<section name="details" columns="type_2">
-					<field name="suggestionTypeId" inputWidget="application.entitysearch"
-						column="0" required="true" />
-					<field name="suggestion" inputWidget="application.textarea" column="1"
-						required="true" />
+					<field name="suggestionTypeId"
+						inputWidget="application.entitysearch" column="0" required="true" />
+					<field name="suggestion" inputWidget="application.textarea"
+						column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

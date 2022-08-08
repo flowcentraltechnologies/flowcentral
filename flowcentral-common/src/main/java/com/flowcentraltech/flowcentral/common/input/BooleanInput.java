@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class BooleanInput extends AbstractInput<Boolean> {
 
-    public BooleanInput(String editor) {
-        super(Boolean.class, editor);
+    public BooleanInput(String editor, String renderer) {
+        super(Boolean.class, editor, renderer);
     }
 
     public void setValue(Boolean value) {

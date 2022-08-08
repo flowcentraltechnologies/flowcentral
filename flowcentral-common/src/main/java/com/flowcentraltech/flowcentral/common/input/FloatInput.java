@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class FloatInput extends AbstractInput<Float> {
 
-    public FloatInput(String editor) {
-        super(Float.class, editor);
+    public FloatInput(String editor, String renderer) {
+        super(Float.class, editor, renderer);
     }
 
     public void setValue(Float value) {

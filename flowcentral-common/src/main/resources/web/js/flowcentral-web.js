@@ -528,6 +528,11 @@ fux.miniFormTabout = function(uEv) {
 	}
 }
 
+/** Input array */
+fux.rigInputArray = function(rgp) {
+
+}
+
 /** Set values */
 fux.rigSetValues = function(rgp) {
 	var id = rgp.pId;
@@ -570,10 +575,7 @@ fux.rigTabSheet = function(rgp) {
 		if (i != currSel) {
 			var elem = _id(pref + i);
 			if (elem) {
-				var evp = ux.newEvPrm(rgp);
-				evp.uCmd = id + "->choose";
-				evp.uRef = [ id ];
-				evp.uPanels = [ rgp.pContId ];
+				var evp = fux.newCmdEvPrm(rgp, "choose");
 				evp.uReqTrg = i;
 				ux.addHdl(elem, "click", ux.post, evp);
 			}
@@ -597,6 +599,12 @@ fux.rigTable = function(rgp) {
 		}
 	}
 	
+    if (rgp.pFixedRows) {
+    	fux.wireGroupClick(rgp, rgp.pfExcCtrlId, "exclude");
+    	fux.wireGroupClick(rgp, rgp.pfIncCtrlId, "include");
+    	fux.wireGroupClick(rgp, rgp.pfDelCtrlId, "delete");
+    }
+    
 	if (rgp.pMultiSel) {
 		tblToRig.uSelAllId = rgp.pSelAllId;
 		tblToRig.uSelCtrlId = rgp.pSelCtrlId;
@@ -628,10 +636,8 @@ fux.rigTable = function(rgp) {
 
 	if (rgp.pColHeaderId) {
 		for (var i = 0; i < rgp.pColCount; i++) {
-			const evp = ux.newEvPrm(rgp);
-			evp.uCmd = id + "->sortColumn";
+			const evp = fux.newCmdEvPrm(rgp, "sortColumn");
 			evp.uRef = [rgp.pSortIndexId];
-			evp.uPanels = [ rgp.pContId ];
 			if (rgp.pRefPanels) {
 				for (var panelId of rgp.pRefPanels) {
 					evp.uPanels.push(panelId);
@@ -663,6 +669,14 @@ fux.rigTable = function(rgp) {
 	
 	if (rgp.pFocusId) {
 		ux.setFocus({wdgid: rgp.pFocusId});
+	}
+}
+
+fux.wireGroupClick = function(rgp, groupId, action) {
+	const evp = fux.newCmdEvPrm(rgp, action);
+	var elems = _name(groupId);
+	for (var _elem of elems) {
+		ux.addHdl(_elem, "click", ux.post, evp);
 	}
 }
 
@@ -816,23 +830,23 @@ fux.rigWidgetRules = function(rgp) {
 	var chgId = rgp.pOnChgId;
 	if (chgId && chgId.length) {
 		const delId = rgp.pDelId;
-
-		const evpNorm = ux.newEvPrm(rgp);
-		evpNorm.uCmd = id + "->normalize";
-		evpNorm.uRef = [ id ];
-		evpNorm.uPanels = [ rgp.pContId ];
-
-		const evpDel = ux.newEvPrm(rgp);
-		evpDel.uCmd = id + "->delete";
-		evpDel.uRef = [ id ];
-		evpDel.uPanels = [ rgp.pContId ];
-
+		const evpNorm = fux.newCmdEvPrm(rgp, "normalize");
+		const evpDel = fux.newCmdEvPrm(rgp, "delete");
 		for (var i = 0; i < chgId.length; i++) {
 			var idx = "d" + i;
 			ux.addHdl(_id(chgId[i]), "change", ux.post, evpNorm);
 			ux.addHdl(_id(delId + idx), "click", ux.post, evpDel);
 		}
 	}
+}
+
+fux.newCmdEvPrm = function(rgp, cmd) {
+	var id = rgp.pId;
+	var evp = ux.newEvPrm(rgp);
+	evp.uCmd = id + "->" + cmd;
+	evp.uRef = [ id ];
+	evp.uPanels = [ rgp.pContId ];
+	return evp;
 }
 
 /** Initialization */
@@ -858,6 +872,7 @@ fux.init = function() {
 	ux.setfn(fux.rigTabSheet,"fux0f"); 
 	ux.setfn(fux.rigChart,"fux10");
 	ux.setfn(fux.rigWidgetRules,"fux11");
+	ux.setfn(fux.rigInputArray,"fux12");  
 }
 
 fux.init();

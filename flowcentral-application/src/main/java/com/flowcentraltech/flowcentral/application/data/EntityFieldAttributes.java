@@ -26,6 +26,8 @@ public interface EntityFieldAttributes {
 
     String getSuggestionType();
     
+    String getReferences();
+    
     int getMinLen();
 
     int getMaxLen();

@@ -218,6 +218,12 @@
 				type="boolean" />
 			<field name="includeForwarder"
 				label="$m{workflow.step.includeforwarder}" type="boolean" />
+			<field name="forwarderPreffered"
+				label="$m{workflow.step.forwarderpreffered}" type="boolean" />
+			<field name="emails"
+				label="$m{workflow.step.emails}" type="boolean" />
+			<field name="comments"
+				label="$m{workflow.step.comments}" type="boolean" />
 			<field name="typeDesc" label="$m{workflow.step.typedesc}"
 				type="list_only" key="type" property="description" />
 			<field name="priorityDesc" label="$m{workflow.step.prioritydesc}"

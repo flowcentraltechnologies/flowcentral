@@ -208,6 +208,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
+            setVisible("formPanel.emailsPanel", isRootForm && appCtx.isReview() && appCtx.isEmails());
             setVisible("formPanel.commentsPanel", isRootForm && appCtx.isReview() && appCtx.isComments());
             setVisible("formPanel.errorsPanel", isRootForm && appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
@@ -271,6 +272,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 switchContent("listingPanel");
                 setDisabled("listPrevBtn", !applet.isPrevNav());
                 setDisabled("listNextBtn", !applet.isNextNav());
+                setVisible("listingPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
                 setVisible("listingPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
                 setVisible("listingPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
                 setEditable("listingPanel.errorsPanel", false);
@@ -875,15 +877,24 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         if (evaluationMode.evaluation()) {
-            if (commentRequired && ctx.getAppletContext().isReview()) {
+            if (ctx.getAppletContext().isReview()) {
                 AbstractEntityFormApplet applet = getEntityFormApplet();
                 final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
-                FormPanel commentsformPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
-                        ? getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel")
-                        : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
-                ctx.mergeValidationErrors(commentsformPanel.validate(evaluationMode));
-            }
+                if (commentRequired) {
+                    FormPanel commentsFormPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
+                            ? getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel")
+                            : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
+                    ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
+                }
 
+                if (ctx.getAppletContext().isEmails()) {
+                    FormPanel emailsFormPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
+                            ? getWidgetByShortName(FormPanel.class, "listingPanel.emailsPanel")
+                            : getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel");
+                    ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
+                }
+            }
+            
             if (ctx.isWithFormErrors()) {
                 hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
             }

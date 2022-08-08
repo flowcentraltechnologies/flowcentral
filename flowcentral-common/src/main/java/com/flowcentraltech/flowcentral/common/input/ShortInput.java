@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class ShortInput extends AbstractInput<Short> {
 
-    public ShortInput(String editor) {
-        super(Short.class, editor);
+    public ShortInput(String editor, String renderer) {
+        super(Short.class, editor, renderer);
     }
 
     public void setValue(Short value) {

@@ -598,7 +598,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if ("application.propertyItem".equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
-                                getApplicationMessage("application.propertyitem.label"), null, false, false,
+                                getApplicationMessage("application.propertyitem.label"), null, null, false, false,
                                 "application.propertyItem", getApplicationMessage("application.propertyitem"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.propertyitem.name"));
@@ -617,8 +617,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     AppEntity appEntity = getApplicationEntity(AppEntity.class, longName);
                     EntityDef.Builder edb = EntityDef.newBuilder(appEntity.getBaseType(), appEntity.getConfigType(),
                             appEntity.getEntityClass(), appEntity.getTableName(), appEntity.getLabel(),
-                            appEntity.getDelegate(), appEntity.getAuditable(), appEntity.getReportable(), longName,
-                            appEntity.getDescription(), appEntity.getId(), appEntity.getVersionNo());
+                            appEntity.getEmailProducerConsumer(), appEntity.getDelegate(), appEntity.getAuditable(),
+                            appEntity.getReportable(), longName, appEntity.getDescription(), appEntity.getId(),
+                            appEntity.getVersionNo());
 
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
                         WidgetTypeDef inputWidgetTypeDef = null;
@@ -819,6 +820,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     tdb.headerless(appTable.isHeaderless());
                     tdb.multiSelect(appTable.isMultiSelect());
                     tdb.nonConforming(appTable.isNonConforming());
+                    tdb.fixedRows(appTable.isFixedRows());
                     tdb.limitSelectToColumns(appTable.isLimitSelectToColumns());
                     return tdb.build();
                 }
@@ -903,8 +905,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     List<StringToken> titleFormat = !StringUtils.isBlank(appForm.getTitleFormat())
-                                    ? StringUtils.breakdownParameterizedString(appForm.getTitleFormat())
-                                    : null;
+                            ? StringUtils.breakdownParameterizedString(appForm.getTitleFormat())
+                            : null;
                     fdb.titleFormat(titleFormat);
 
                     for (AppFormAnnotation appFormAnnotation : appForm.getAnnotationList()) {
@@ -2839,6 +2841,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setName(appEntityConfig.getName());
                     appEntity.setDescription(description);
                     appEntity.setLabel(label);
+                    appEntity.setEmailProducerConsumer(appEntityConfig.getEmailProducerConsumer());
                     appEntity.setDelegate(appEntityConfig.getDelegate());
                     appEntity.setEntityClass(appEntityConfig.getType());
                     appEntity.setTableName(tableName);
@@ -2857,6 +2860,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntity.setBaseType(baseType);
                         oldAppEntity.setDescription(description);
                         oldAppEntity.setLabel(label);
+                        oldAppEntity.setEmailProducerConsumer(appEntityConfig.getEmailProducerConsumer());
                         oldAppEntity.setDelegate(appEntityConfig.getDelegate());
                         oldAppEntity.setEntityClass(appEntityConfig.getType());
                         oldAppEntity.setTableName(tableName);
@@ -2926,6 +2930,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setHeaderless(appTableConfig.isHeaderless());
                     appTable.setMultiSelect(appTableConfig.isMultiSelect());
                     appTable.setNonConforming(appTableConfig.isNonConforming());
+                    appTable.setFixedRows(appTableConfig.isFixedRows());
                     appTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
                     appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(appTable, applicationName, appTableConfig);
@@ -2948,6 +2953,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppTable.setHeaderless(appTableConfig.isHeaderless());
                         oldAppTable.setMultiSelect(appTableConfig.isMultiSelect());
                         oldAppTable.setNonConforming(appTableConfig.isNonConforming());
+                        oldAppTable.setFixedRows(appTableConfig.isFixedRows());
                         oldAppTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
                     }
 

@@ -70,6 +70,9 @@ public class AppTable extends BaseApplicationEntity {
     private boolean nonConforming;
 
     @Column
+    private boolean fixedRows;
+
+    @Column
     private boolean limitSelectToColumns;
 
     @ChildList
@@ -183,6 +186,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setNonConforming(boolean nonConforming) {
         this.nonConforming = nonConforming;
+    }
+
+    public boolean isFixedRows() {
+        return fixedRows;
+    }
+
+    public void setFixedRows(boolean fixedRows) {
+        this.fixedRows = fixedRows;
     }
 
     public boolean isLimitSelectToColumns() {

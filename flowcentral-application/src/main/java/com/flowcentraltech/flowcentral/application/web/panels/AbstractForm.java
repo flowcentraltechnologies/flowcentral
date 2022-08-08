@@ -23,9 +23,11 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
+import com.flowcentraltech.flowcentral.application.data.FormAppendables;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.tcdng.unify.core.UnifyException;
@@ -79,9 +81,7 @@ public abstract class AbstractForm {
 
     private BreadCrumbs breadCrumbs;
 
-    private Comments comments;
-
-    private Errors errors;
+    private FormAppendables appendables;
 
     private FormMode formMode;
 
@@ -170,20 +170,24 @@ public abstract class AbstractForm {
         return breadCrumbs;
     }
 
-    public Comments getComments() {
-        return comments;
+    public FormAppendables getAppendables() {
+        return appendables;
     }
 
-    public void setComments(Comments comments) {
-        this.comments = comments;
+    public void setAppendables(FormAppendables appendables) {
+        this.appendables = appendables;
+    }
+
+    public InputArrayEntries getEmails() {
+        return appendables != null ? appendables.getEmails() : null;
+    }
+
+    public Comments getComments() {
+        return appendables != null ? appendables.getComments() : null;
     }
 
     public Errors getErrors() {
-        return errors;
-    }
-
-    public void setErrors(Errors errors) {
-        this.errors = errors;
+        return appendables != null ? appendables.getErrors() : null;
     }
 
     public List<FormActionDef> getFormActionDefList() {

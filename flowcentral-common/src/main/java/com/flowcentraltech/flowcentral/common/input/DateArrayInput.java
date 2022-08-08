@@ -26,8 +26,8 @@ import java.util.Date;
  */
 public class DateArrayInput extends AbstractArrayInput<Date[]> {
 
-    public DateArrayInput(String editor) {
-        super(Date[].class, editor);
+    public DateArrayInput(String editor, String renderer) {
+        super(Date[].class, editor, renderer);
     }
 
     public void setValue(Date[] val) {

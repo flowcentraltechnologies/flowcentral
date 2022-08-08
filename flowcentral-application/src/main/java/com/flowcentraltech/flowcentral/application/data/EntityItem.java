@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -24,16 +25,19 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityItem {
+public class EntityItem implements FormAppendables {
 
     private Entity entity;
+    
+    private InputArrayEntries emails;
     
     private Comments comments;
 
     private Errors errors;
     
-    public EntityItem(Entity entity, Comments comments, Errors errors) {
+    public EntityItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
         this.entity = entity;
+        this.emails = emails;
         this.comments = comments;
         this.errors = errors;
     }
@@ -46,10 +50,17 @@ public class EntityItem {
         return entity;
     }
 
+    @Override
+    public InputArrayEntries getEmails() {
+        return emails;
+    }
+
+    @Override
     public Comments getComments() {
         return comments;
     }
 
+    @Override
     public Errors getErrors() {
         return errors;
     }

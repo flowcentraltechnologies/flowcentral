@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.input;
  */
 public class IntegerInput extends AbstractInput<Integer> {
 
-    public IntegerInput(String editor) {
-        super(Integer.class, editor);
+    public IntegerInput(String editor, String renderer) {
+        super(Integer.class, editor, renderer);
     }
 
     public void setValue(Integer value) {

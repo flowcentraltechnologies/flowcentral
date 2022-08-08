@@ -52,7 +52,7 @@ public class FormWriter extends AbstractContainerWriter {
             groupId = form.getDataGroupId();
         }
 
-        String caption = form.getCaption();
+        final String caption = form.getCaption();
         if (!StringUtils.isBlank(caption)) {
             writer.write("<div class=\"fcaption\"><span>").writeWithHtmlEscape(caption).write("</span></div>");
         }

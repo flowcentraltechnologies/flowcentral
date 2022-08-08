@@ -392,6 +392,20 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formmessages .error{padding:8px 4px; background-color: #feefef;
 	border: 1px solid #ffcccc; color: #b02020;}
 
+/* Input array */
+.fc-inputarray {}
+.fc-inputarray .line {}
+.fc-inputarray .section  {vertical-align:top;padding:3px 6px 3px 2px;}
+.fc-inputarray .iatable {display:table;width:100%;}
+.fc-inputarray .iarow {display:table-row;}
+.fc-inputarray .iapre {display:table-cell;width:96px;vertical-align:top;}
+.fc-inputarray .iapre span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
+.fc-inputarray .iamid {display:table-cell;}
+.fc-inputarray .iapost {display:table-cell;width:42px;vertical-align:top;}
+.fc-inputarray .iacaption {}
+.fc-inputarray .iacaption span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
+	background-color:#6e819d; color: #ffffff; /*border-radius: 4px;*/}
+
 /* Mini form */
 .fc-miniform {}
 .fc-miniform .mfsection {}
@@ -516,6 +530,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .cselh {width: 32px;}
 .fc-table .table .cserialh {width: 48px;}
 .fc-table .table .cactionh {width: 32px;}
+.fc-table .table .cfixedh {width: 48px;}
 .fc-table .table .mselh {width: 32px;}
 .fc-table .table .mselh span {width:16px; height:16px;}
 .fc-table .table .mselh input {display:none;}
@@ -524,8 +539,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mseld input {display:none;}
 .fc-table .table .mserialh {width: 48px;}
 .fc-table .table .mactionh {width: 20px;}
+.fc-table .table .mfixedh {width: 48px;}
 .fc-table .table .mseriald {}
 .fc-table .table .mact {color:#858585;}
+.fc-table .table .mbtn {min-height:24px;font-size: 7pt;padding: 0px 6px;}
 .fc-table .table .mnorec {font-size:8pt;color: #606060;}
 .fc-table .mwarn {border: 1px solid #ff823b;font-size: 8pt;color: #ff823b;font-weight: bold;background-color: #ffe6d7;padding: 10px 0px;}
 .fc-table .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}

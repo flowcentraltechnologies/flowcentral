@@ -75,6 +75,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private boolean nonConforming;
 
+    private boolean fixedRows;
+
     private Map<String, TableFilterDef> filterDefMap;
 
     private List<TableFilterDef> rowColorFilterList;
@@ -84,7 +86,7 @@ public class TableDef extends BaseApplicationEntityDef {
     private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, Map<String, TableFilterDef> filterDefMap,
             String label, int sortHistory, int itemsPerPage, boolean serialNo, boolean sortable,
             boolean headerToUpperCase, boolean headerCenterAlign, boolean basicSearch, boolean totalSummary,
-            boolean headerless, boolean multiSelect, boolean nonConforming, boolean limitSelectToColumns,
+            boolean headerless, boolean multiSelect, boolean nonConforming, boolean fixedRows, boolean limitSelectToColumns,
             ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
@@ -101,6 +103,7 @@ public class TableDef extends BaseApplicationEntityDef {
         this.headerless = headerless;
         this.multiSelect = multiSelect;
         this.nonConforming = nonConforming;
+        this.fixedRows = fixedRows;
         this.limitSelectToColumns = limitSelectToColumns;
         this.summaryFields = new HashSet<String>();
         List<TableFilterDef> rowColorFilterList = new ArrayList<TableFilterDef>();
@@ -258,6 +261,10 @@ public class TableDef extends BaseApplicationEntityDef {
         return nonConforming;
     }
 
+    public boolean isFixedRows() {
+        return fixedRows;
+    }
+
     public boolean isLimitSelectToColumns() {
         return limitSelectToColumns;
     }
@@ -328,6 +335,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private boolean nonConforming;
 
+        private boolean fixedRows;
+        
         private boolean limitSelectToColumns;
 
         private String longName;
@@ -425,6 +434,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder nonConforming(boolean nonConforming) {
             this.nonConforming = nonConforming;
+            return this;
+        }
+
+        public Builder fixedRows(boolean fixedRows) {
+            this.fixedRows = fixedRows;
             return this;
         }
 
@@ -530,7 +544,7 @@ public class TableDef extends BaseApplicationEntityDef {
             return new TableDef(entityDef, DataUtils.unmodifiableList(_columnDefList),
                     DataUtils.unmodifiableMap(filterDefMap), label, sortHistory, itemsPerPage, serialNo, sortable,
                     headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect,
-                    nonConforming, limitSelectToColumns, nameParts, description, id, version);
+                    nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
         }
     }
 

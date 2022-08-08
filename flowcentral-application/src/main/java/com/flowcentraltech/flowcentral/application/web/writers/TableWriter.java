@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -140,8 +141,12 @@ public class TableWriter extends AbstractControlWriter {
                     writer.write("<col class=\"cselh\">");
                 }
 
-                if (isContainerEditable && tableWidget.isActionColumn()) {
-                    writer.write("<col class=\"cactionh\">");
+                if (isContainerEditable) {
+                    if (tableWidget.isFixedRows()) {
+                        writer.write("<col class=\"cfixedh\">");
+                    } else if (tableWidget.isActionColumn()) {
+                        writer.write("<col class=\"cactionh\">");
+                    }
                 }
 
                 writer.write("</colgroup>");
@@ -177,11 +182,13 @@ public class TableWriter extends AbstractControlWriter {
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
-            final Control[] actionCtrl = tableWidget.getActionCtrl();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
+            final boolean isFixedRows = isContainerEditable && tableWidget.isFixedRows();
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
-            final boolean isRowAction = !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
+            final boolean isRowAction = !isFixedRows && !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
+            final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
+            final Control[] actionCtrl = tableWidget.getActionCtrl();
             final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
 
             List<String> tabWidgetIds = focusManagement ? new ArrayList<String>() : null;
@@ -252,6 +259,13 @@ public class TableWriter extends AbstractControlWriter {
                     }
                 }
 
+//                if (isFixedRows) {
+//                    FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
+//                    Control _fixedCtrl = fixedCtrl[fixedType.index()];
+//                    _fixedCtrl.setValueStore(valueStore);
+//                    writer.writeBehavior(fixedHandler[fixedType.index()], _fixedCtrl.getId(), null);
+//                }
+
                 if (isActionColumn) {
                     int _index = table.resolveActionIndex(valueStore, i, len);
                     Control _actionCtrl = actionCtrl[_index];
@@ -309,6 +323,13 @@ public class TableWriter extends AbstractControlWriter {
 
             writer.writeParam("pRefPanels", table.getRefreshPanelIds());
 
+            if (isFixedRows) {
+                writer.writeParam("pFixedRows", true);
+                writer.writeParam("pfExcCtrlId", fixedCtrl[FixedRowActionType.EXCLUDE.index()].getGroupId());
+                writer.writeParam("pfIncCtrlId", fixedCtrl[FixedRowActionType.INCLUDE.index()].getGroupId());
+                writer.writeParam("pfDelCtrlId", fixedCtrl[FixedRowActionType.DELETE.index()].getGroupId());
+            }
+            
             boolean sortable = tableDef.isSortable() && table.getNumberOfPages() > 0;
             if (sortable) {
                 writer.writeParam("pSortIndexId", tableWidget.getSortColumnCtrl().getId());
@@ -405,9 +426,14 @@ public class TableWriter extends AbstractControlWriter {
                 writeHeaderMultiSelect(writer, tableWidget);
             }
 
-            if (isContainerEditable && tableWidget.isActionColumn()) {
-                writer.write("<th  class=\"mactionh\">");
-                writer.write("</th>");
+            if (isContainerEditable) {
+                if (tableWidget.isFixedRows()) {
+                    writer.write("<th  class=\"mfixedh\">");
+                    writer.write("</th>");
+                } else if (tableWidget.isActionColumn()) {
+                    writer.write("<th  class=\"mactionh\">");
+                    writer.write("</th>");
+                }
             }
 
             writer.write("</tr>");
@@ -441,6 +467,7 @@ public class TableWriter extends AbstractControlWriter {
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean totalSummary = table.isTotalSummary();
+            final boolean isFixedRows = isContainerEditable && tableWidget.isFixedRows();
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             table.clearSummaries();
@@ -471,13 +498,14 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</span></td>");
                 writer.write("</tr>");
             } else {
+                final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
                 final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
                 final int detailsIndex = table.getDetailsIndex();
                 final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
                 final boolean alternatingRows = tableWidget.isAlternatingRows();
                 final boolean isRowAction = !DataUtils.isBlank(table.getCrudActionHandlers())
-                        && !tableWidget.isActionColumn();
+                        && !tableWidget.isFixedRows() && !tableWidget.isActionColumn();
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final Date now = table.au().getNow();
                 final SpecialParamProvider specialParamProvider = table.au().getSpecialParamProvider();
@@ -587,6 +615,15 @@ public class TableWriter extends AbstractControlWriter {
 
                     if (supportSelect && multiSelect && entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
+                    }
+
+                    if (isFixedRows) {
+                        writer.write("<td>");
+                        FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
+                        Control _fixedCtrl = fixedCtrl[fixedType.index()];
+                        _fixedCtrl.setValueStore(valueStore);
+                        writer.writeStructureAndContent(_fixedCtrl);
+                        writer.write("</td>");
                     }
 
                     if (isActionColumn) {

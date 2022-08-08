@@ -16,10 +16,13 @@
 !fc-entitysingleformpanel mainForm:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{singleForm commentsPanel errorsPanel altActionPanel} 
+	components:$c{singleForm emailsPanel commentsPanel errorsPanel altActionPanel} 
  
 // Single form
 !fc-singleform:singleForm binding:singleForm
+
+// Emails panel
+!fc-emailspanel:emailsPanel ignoreParentState:true binding:emails
 
 // Comments panel
 !fc-commentspanel:commentsPanel ignoreParentState:true binding:comments
