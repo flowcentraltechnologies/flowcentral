@@ -39,6 +39,8 @@ public class TableColumnConfig {
 
     private boolean switchOnChange;
 
+    private boolean hidden;
+
     private boolean disabled;
 
     private boolean editable;
@@ -112,6 +114,15 @@ public class TableColumnConfig {
     @XmlAttribute
     public void setSwitchOnChange(boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    @XmlAttribute
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public boolean isDisabled() {

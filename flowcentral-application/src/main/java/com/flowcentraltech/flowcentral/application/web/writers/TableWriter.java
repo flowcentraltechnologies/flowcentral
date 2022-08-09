@@ -129,7 +129,7 @@ public class TableWriter extends AbstractControlWriter {
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                        TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                        TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
                         writer.write("<col ");
                         writeTagStyle(writer, tabelColumnDef.getHeaderStyle());
                         writer.write(">");
@@ -210,7 +210,7 @@ public class TableWriter extends AbstractControlWriter {
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                        TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                        TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
                         String fieldName = tabelColumnDef.getFieldName();
                         Widget chWidget = widgetInfo.getWidget();
                         if (entryMode) {
@@ -325,8 +325,8 @@ public class TableWriter extends AbstractControlWriter {
 
             if (isFixedRows) {
                 writer.writeParam("pFixedRows", true);
-                writer.writeParam("pfExcCtrlId", fixedCtrl[FixedRowActionType.EXCLUDE.index()].getGroupId());
-                writer.writeParam("pfIncCtrlId", fixedCtrl[FixedRowActionType.INCLUDE.index()].getGroupId());
+                writer.writeParam("pfExcCtrlId", fixedCtrl[FixedRowActionType.REMOVE.index()].getGroupId());
+                writer.writeParam("pfIncCtrlId", fixedCtrl[FixedRowActionType.ATTACH.index()].getGroupId());
                 writer.writeParam("pfDelCtrlId", fixedCtrl[FixedRowActionType.DELETE.index()].getGroupId());
             }
             
@@ -334,7 +334,7 @@ public class TableWriter extends AbstractControlWriter {
             if (sortable) {
                 writer.writeParam("pSortIndexId", tableWidget.getSortColumnCtrl().getId());
                 writer.writeParam("pColHeaderId", tableWidget.getColumnHeaderId());
-                writer.writeParam("pColCount", tableDef.getColumnCount());
+                writer.writeParam("pColCount", tableDef.getVisibleColumnCount());
             }
 
             if (table.getTotalItemCount() <= 0) {
@@ -373,7 +373,7 @@ public class TableWriter extends AbstractControlWriter {
             int index = 0;
             for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                 if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                    TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                    TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
                     writer.write("<th");
                     if (sysHeaderCenterAlign || tableDef.isHeaderCenterAlign()) {
                         writeTagStyle(writer, tabelColumnDef.getHeaderStyle() + "text-align:center;");
@@ -577,7 +577,7 @@ public class TableWriter extends AbstractControlWriter {
                     int index = 0;
                     for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                         if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                            TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                            TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
                             String fieldName = tabelColumnDef.getFieldName();
 
                             Widget chWidget = widgetInfo.getWidget();
@@ -620,9 +620,11 @@ public class TableWriter extends AbstractControlWriter {
                     if (isFixedRows) {
                         writer.write("<td>");
                         FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
-                        Control _fixedCtrl = fixedCtrl[fixedType.index()];
-                        _fixedCtrl.setValueStore(valueStore);
-                        writer.writeStructureAndContent(_fixedCtrl);
+                        if (!fixedType.fixed()) {
+                            Control _fixedCtrl = fixedCtrl[fixedType.index()];
+                            _fixedCtrl.setValueStore(valueStore);
+                            writer.writeStructureAndContent(_fixedCtrl);
+                        }
                         writer.write("</td>");
                     }
 
@@ -727,7 +729,7 @@ public class TableWriter extends AbstractControlWriter {
                 int index = 0;
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                        TableColumnDef tabelColumnDef = tableDef.getColumnDef(index);
+                        TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
                         Widget chWidget = table.getSummaryWidget(tabelColumnDef.getFieldName());
                         if (chWidget != null) {
                             chWidget.setEditable(false);

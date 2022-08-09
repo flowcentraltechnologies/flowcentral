@@ -53,6 +53,8 @@ public class TableColumnDef {
 
     private boolean switchOnChange;
 
+    private boolean hidden;
+
     private boolean disabled;
 
     private boolean editable;
@@ -63,7 +65,8 @@ public class TableColumnDef {
 
     public TableColumnDef(String label, String fieldName, String headerStyle, String cellRenderer, String cellEditor,
             String renderer, String editor, String linkAct, OrderType order, int widthRatio, int width,
-            boolean switchOnChange, boolean disabled, boolean editable, boolean sortable, boolean summary) {
+            boolean switchOnChange, boolean hidden, boolean disabled, boolean editable, boolean sortable,
+            boolean summary) {
         this.label = label;
         this.fieldName = fieldName;
         this.headerStyle = headerStyle;
@@ -76,6 +79,7 @@ public class TableColumnDef {
         this.widthRatio = widthRatio;
         this.width = width;
         this.switchOnChange = switchOnChange;
+        this.hidden = hidden;
         this.disabled = disabled;
         this.editable = editable;
         this.sortable = sortable;
@@ -83,7 +87,7 @@ public class TableColumnDef {
     }
 
     private TableColumnDef(String label, String fieldName, String renderer, String editor, String linkAct,
-            OrderType order, int widthRatio, boolean switchOnChange, boolean disabled, boolean editable,
+            OrderType order, int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable,
             boolean sortable, boolean summary) {
         this.label = label;
         this.fieldName = fieldName;
@@ -93,6 +97,7 @@ public class TableColumnDef {
         this.order = order;
         this.widthRatio = widthRatio;
         this.switchOnChange = switchOnChange;
+        this.hidden = hidden;
         this.disabled = disabled;
         this.editable = editable;
         this.sortable = sortable;
@@ -155,6 +160,10 @@ public class TableColumnDef {
         return switchOnChange;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
     public boolean isDisabled() {
         return disabled;
     }
@@ -203,6 +212,8 @@ public class TableColumnDef {
 
         private boolean switchOnChange;
 
+        private boolean hidden;
+
         private boolean disabled;
 
         private boolean editable;
@@ -250,6 +261,11 @@ public class TableColumnDef {
             return this;
         }
 
+        public Builder hidden(boolean hidden) {
+            this.hidden = hidden;
+            return this;
+        }
+
         public Builder disabled(boolean disabled) {
             this.disabled = disabled;
             return this;
@@ -277,7 +293,7 @@ public class TableColumnDef {
 
         public TableColumnDef build() throws UnifyException {
             return new TableColumnDef(label, fieldName, renderer, editor, linkAct, order, widthRatio, switchOnChange,
-                    disabled, editable, sortable, summary);
+                    hidden, disabled, editable, sortable, summary);
         }
     }
 

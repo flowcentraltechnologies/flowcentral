@@ -111,6 +111,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
                 appTableColumn.setWidthRatio(tableColumn.getWidth());
                 appTableColumn.setSwitchOnChange(tableColumn.isSwitchOnChange());
                 appTableColumn.setEditable(tableColumn.isEditable());
+                appTableColumn.setHidden(tableColumn.isHidden());
                 appTableColumn.setDisabled(tableColumn.isDisabled());
                 appTableColumn.setSortable(tableColumn.isSort());
                 appTableColumn.setSummary(tableColumn.isSummary());
@@ -128,8 +129,8 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
                 .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
             teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
                     appTableColumn.getLinkAct(), appTableColumn.getOrder(), appTableColumn.getWidthRatio(),
-                    appTableColumn.isSwitchOnChange(), appTableColumn.isDisabled(), appTableColumn.isEditable(),
-                    appTableColumn.isSortable(), appTableColumn.isSummary());
+                    appTableColumn.isSwitchOnChange(), appTableColumn.isHidden(), appTableColumn.isDisabled(),
+                    appTableColumn.isEditable(), appTableColumn.isSortable(), appTableColumn.isSummary());
         }
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);

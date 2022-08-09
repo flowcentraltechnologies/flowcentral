@@ -109,6 +109,12 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
+    protected void doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
+            FixedRowActionType fixedActionType) throws UnifyException {
+        
+    }
+
+    @Override
     protected void validateEntries(FormMessages messages, Class<? extends Entity> entityClass, String baseFieldName,
             Object baseId, List<?> instList) throws UnifyException {
 

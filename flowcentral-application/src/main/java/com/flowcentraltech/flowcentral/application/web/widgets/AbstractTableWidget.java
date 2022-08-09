@@ -170,13 +170,13 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
             sort.flip();
 
-            Order order = new Order().add(tableDef.getColumnDef(sort.getColumnIndex()).getFieldName(),
+            Order order = new Order().add(tableDef.getVisibleColumnDef(sort.getColumnIndex()).getFieldName(),
                     sort.getSortType());
             if (sortHistory != null) {
                 int index = sortHistory.size();
                 while (--index >= 0) {
                     Sort oldSort = sortHistory.get(index);
-                    order.add(tableDef.getColumnDef(oldSort.getColumnIndex()).getFieldName(), oldSort.getSortType());
+                    order.add(tableDef.getVisibleColumnDef(oldSort.getColumnIndex()).getFieldName(), oldSort.getSortType());
                 }
             }
 
@@ -187,22 +187,19 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     @Action
     public void exclude() throws UnifyException {
-        int target = getRequestTarget(int.class);
-        // TODO
+        applyFixedAction(FixedRowActionType.REMOVE);
     }
 
     @Action
     public void include() throws UnifyException {
-        int target = getRequestTarget(int.class);
-        // TODO
+        applyFixedAction(FixedRowActionType.ATTACH);
     }
 
     @Action
     public void delete() throws UnifyException {
-        int target = getRequestTarget(int.class);
-        // TODO
+        applyFixedAction(FixedRowActionType.DELETE);
     }
-
+    
     public String resolveChildWidgetName(String transferId) throws UnifyException {
         String childId = DataTransferUtils.stripTransferDataIndexPart(transferId);
         ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childId);
@@ -335,7 +332,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                     }
 
                     final boolean entryMode = table.isEntryMode();
-                    for (TableColumnDef tableColumnDef : tableDef.getColumnDefList()) {
+                    for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
                         final boolean useCellEditor = tableColumnDef.isWithCellEditor() && tableColumnDef.isEditable();
                         final String columnWidgetUpl = entryMode && useCellEditor ? tableColumnDef.getCellEditor()
                                 : tableColumnDef.getCellRenderer();
@@ -378,7 +375,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                         defaultOrder.add(tableColumnDef.getFieldName(), tableColumnDef.getOrder());
                     }
 
-                    if (totalSummary) {
+                    if (totalSummary && !tableColumnDef.isHidden()) {
                         EntityFieldDef entityFieldDef = tableDef.getFieldDef(tableColumnDef.getFieldName());
                         DataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
                                 ? entityFieldDef.getResolvedTypeFieldDef().getDataType().dataType()
@@ -558,6 +555,14 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     protected Class<U> getItemClass() {
         return itemClass;
+    }
+
+    private void applyFixedAction(FixedRowActionType fixedActionType) throws UnifyException {
+        int target = getRequestTarget(int.class);
+        T table = getTable();
+        if (table != null) {
+            table.applyFixedAction(getValueList().get(target), target, fixedActionType);
+        }
     }
 
     private void clearRenderers() {

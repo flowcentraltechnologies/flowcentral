@@ -164,9 +164,14 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
 
     public void applyUserAction(String actionName) throws UnifyException {
         String comment = getNewComment();
+        AbstractForm _form = getResolvedForm();
         wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
-                form.getEmails(), WfReviewMode.NORMAL);
+                _form.getEmails(), WfReviewMode.NORMAL);
         navBackToSearch();
+    }
+    
+    public boolean isFormReview(String actionName) throws UnifyException {
+        return wfStepDef.getUserActionDef(actionName).isFormReview();
     }
     
     public boolean isNewCommentRequired(String actionName) throws UnifyException {

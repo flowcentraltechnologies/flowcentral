@@ -25,6 +25,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for entry table policies.
@@ -42,11 +43,24 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     }
 
     @Override
-    public void onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore,
-            Set<Integer> selected) throws UnifyException {
+    public void onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
+            throws UnifyException {
         final int len = tableValueStore.size();
         for (int i = 0; i < len; i++) {
             onEntryRowChange(parentReader, tableValueStore, new RowChangeInfo(i));
+        }
+    }
+
+    @Override
+    public void applyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
+            FixedRowActionType fixedActionType) throws UnifyException {
+        if (!fixedActionType.fixed()) {
+            doApplyFixedAction(parentReader, valueStore, index, fixedActionType);
+            if (fixedActionType.updateLean()) {
+                environmentService.updateLean((Entity) valueStore.getValueObject()); 
+            } else if (fixedActionType.delete()){
+                environmentService.delete((Entity) valueStore.getValueObject()); 
+            }
         }
     }
 
@@ -64,4 +78,6 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
         return environmentService;
     }
 
+    protected abstract void doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
+            FixedRowActionType fixedActionType) throws UnifyException;
 }

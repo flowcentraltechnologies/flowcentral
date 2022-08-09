@@ -457,7 +457,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final String baseRestriction = _formAppletDef.getPropValue(String.class,
                 AppletPropertyConstants.BASE_RESTRICTION);
         final FilterDef baseFilter = baseRestriction != null ? _formAppletDef.getFilterDef(baseRestriction) : null;
-        final String tableName = _formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
+        final String tableName = _formAppletDef.isPropWithValue(AppletPropertyConstants.ENTRY_TABLE)
+                ? _formAppletDef.getPropValue(String.class, AppletPropertyConstants.ENTRY_TABLE)
+                : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
         final String entryTablePolicy = _formAppletDef.getPropValue(String.class,
                 AppletPropertyConstants.ENTRY_TABLE_POLICY);
         final String createFormName = _formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);

@@ -449,7 +449,7 @@ public class WfStepDef {
 
         public Builder addWfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
                 String description, String label, String symbol, String styleClass, String nextStepName, int orderIndex,
-                boolean validatePage, boolean forwarderPreferred) {
+                boolean formReview, boolean validatePage, boolean forwarderPreferred) {
             if (userActionList == null) {
                 userActionList = new LinkedHashMap<String, WfUserActionDef>();
             }
@@ -463,7 +463,7 @@ public class WfStepDef {
             }
 
             userActionList.put(name, new WfUserActionDef(commentRequirement, highlightType, name, description, label,
-                    symbol, styleClass, nextStepName, orderIndex, validatePage, forwarderPreferred));
+                    symbol, styleClass, nextStepName, orderIndex, formReview, validatePage, forwarderPreferred));
             return this;
         }
 

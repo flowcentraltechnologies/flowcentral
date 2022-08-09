@@ -310,7 +310,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepUserAction.getDescription(), wfStepUserAction.getLabel(),
                                     wfStepUserAction.getSymbol(), wfStepUserAction.getStyleClass(),
                                     wfStepUserAction.getNextStepName(), wfStepUserAction.getOrderIndex(),
-                                    wfStepUserAction.isValidatePage(), wfStepUserAction.isForwarderPreferred());
+                                    wfStepUserAction.isFormReview(), wfStepUserAction.isValidatePage(),
+                                    wfStepUserAction.isForwarderPreferred());
                         }
 
                         for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
@@ -660,11 +661,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setForwardTo(forwardTo);
             environment().updateByIdVersion(wfItem);
 
-            
             wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
             if (wfReviewMode.lean()) {
                 if (emails != null) {
-                    environment().findChildren(wfEntityInst); 
+                    environment().findChildren(wfEntityInst);
                     updateEmails(wfDef, wfEntityInst, emails);
                     environment().updateByIdVersion(wfEntityInst);
                 } else {
@@ -686,7 +686,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public WfWizardDef getWfWizardDef(String wfWizardName) throws UnifyException {
         return wfWizardDefFactoryMap.get(wfWizardName);
     }
-    
+
     @SuppressWarnings("unchecked")
     @Override
     public void graduateWfWizardItem(String wfWizardName, Long workEntityId) throws UnifyException {
@@ -904,7 +904,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfDef.getEntityDef().getEmailProducerConsumer());
             Map<Object, InputValue> map = emails.getValueMap();
             emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst).getWriter(), map);
-        }       
+        }
     }
 
     private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity inst) throws UnifyException {

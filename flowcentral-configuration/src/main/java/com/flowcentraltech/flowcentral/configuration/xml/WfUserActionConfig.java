@@ -40,13 +40,14 @@ public class WfUserActionConfig extends BaseNameConfig {
 
     private int orderIndex;
 
+    private boolean formReview;
+    
     private boolean validatePage;
     
     private boolean forwarderPreferred;
     
     public WfUserActionConfig() {
         this.commentRequirement = RequirementType.NONE;
-        this.validatePage = Boolean.FALSE;
     }
 
     public String getNextStepName() {
@@ -85,6 +86,15 @@ public class WfUserActionConfig extends BaseNameConfig {
     @XmlAttribute
     public void setOrderIndex(int orderIndex) {
         this.orderIndex = orderIndex;
+    }
+
+    public boolean isFormReview() {
+        return formReview;
+    }
+
+    @XmlAttribute
+    public void setFormReview(boolean formReview) {
+        this.formReview = formReview;
     }
 
     public boolean isValidatePage() {
