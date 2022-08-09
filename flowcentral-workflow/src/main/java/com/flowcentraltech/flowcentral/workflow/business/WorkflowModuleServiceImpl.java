@@ -613,7 +613,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             ieb.columns(3); // TODO Get from system parameter
             ieb.validator(validator);
             List<InputValue> emailList = emailProducerConsumer.produce(wfDef.getEntityDef(),
-                    workEntityValueStore.getReader());
+                    workEntityValueStore);
             ieb.addEntries(emailList);
             emails = ieb.build();
         }
@@ -909,7 +909,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
                     wfDef.getEntityDef().getEmailProducerConsumer());
             Map<Object, InputValue> map = emails.getValueMap();
-            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst).getWriter(), map);
+            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst), map);
         }
     }
 

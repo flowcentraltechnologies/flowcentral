@@ -23,8 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.core.data.ValueStoreWriter;
+import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Entity input value list producer-consumer.
@@ -39,26 +38,26 @@ public interface EntityInputValueListProducerConsumer extends UnifyComponent {
      * 
      * @param entityDef
      *                         the entity definition;
-     * @param entityInstReader
-     *                         the entity instance reader
+     * @param parentValueStore
+     *                         the parent entity values tore
      * @return the produced input value list
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<InputValue> produce(EntityDef entityDef, ValueStoreReader entityInstReader) throws UnifyException;
+    List<InputValue> produce(EntityDef entityDef, ValueStore parentValueStore) throws UnifyException;
 
     /**
      * Consumes an input value list.
      * 
      * @param entityDef
      *                         the entity definition;
-     * @param entityInstWriter
-     *                         the entity instance writer
+     * @param parentValueStore
+     *                         the parent entity value store
      * @param values
      *                         the values to consume
      * @throws UnifyException
      *                        if an error occurs
      */
-    void consume(EntityDef entityDef, ValueStoreWriter entityInstWriter, Map<Object, InputValue> values)
+    void consume(EntityDef entityDef, ValueStore parentValueStore, Map<Object, InputValue> values)
             throws UnifyException;
 }
