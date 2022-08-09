@@ -297,6 +297,8 @@
 				label="$m{workflow.stepuseraction.nextstepname}" type="string" maxLen="64"  />
 			<field name="orderIndex" label="$m{workflow.stepuseraction.orderindex}"
 				type="integer" />
+			<field name="formReview"
+				label="$m{workflow.stepuseraction.formreview}" type="boolean" />
 			<field name="validatePage"
 				label="$m{workflow.stepuseraction.validatepage}" type="boolean" />
 			<field name="wfStepDesc" label="$m{workflow.stepuseraction.stepdesc}"

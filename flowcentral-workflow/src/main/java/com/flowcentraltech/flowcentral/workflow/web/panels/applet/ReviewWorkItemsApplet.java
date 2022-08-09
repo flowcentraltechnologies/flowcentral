@@ -170,6 +170,10 @@ public class ReviewWorkItemsApplet extends AbstractEntityFormApplet {
         navBackToSearch();
     }
     
+    public boolean isFormReview(String actionName) throws UnifyException {
+        return wfStepDef.getUserActionDef(actionName).isFormReview();
+    }
+    
     public boolean isNewCommentRequired(String actionName) throws UnifyException {
         RequirementType commentRequirementType = wfStepDef.getUserActionDef(actionName).getCommentRequirement();
         return RequirementType.MANDATORY.equals(commentRequirementType);

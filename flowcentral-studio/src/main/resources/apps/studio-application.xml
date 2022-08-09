@@ -3763,6 +3763,8 @@
 						inputWidget="studio.wfsteproutetolist" column="1" required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						column="1" required="true" />
+					<field name="formReview" inputWidget="application.checkbox"
+						column="1" />
 					<field name="validatePage" inputWidget="application.checkbox"
 						column="1" />
 				</section>

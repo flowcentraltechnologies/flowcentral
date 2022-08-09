@@ -45,13 +45,15 @@ public class WfUserActionDef {
 
     private int orderIndex;
 
+    private boolean formReview;
+
     private boolean validatePage;
 
     private boolean forwarderPreferred;
 
     public WfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
             String description, String label, String symbol, String styleClass, String nextStepName, int orderIndex,
-            boolean validatePage, boolean forwarderPreferred) {
+            boolean formReview, boolean validatePage, boolean forwarderPreferred) {
         this.commentRequirement = commentRequirement;
         this.highlightType = highlightType;
         this.name = name;
@@ -61,6 +63,7 @@ public class WfUserActionDef {
         this.styleClass = styleClass;
         this.nextStepName = nextStepName;
         this.orderIndex = orderIndex;
+        this.formReview = formReview;
         this.validatePage = validatePage;
         this.forwarderPreferred = forwarderPreferred;
     }
@@ -99,6 +102,10 @@ public class WfUserActionDef {
 
     public int getOrderIndex() {
         return orderIndex;
+    }
+
+    public boolean isFormReview() {
+        return formReview;
     }
 
     public boolean isValidatePage() {

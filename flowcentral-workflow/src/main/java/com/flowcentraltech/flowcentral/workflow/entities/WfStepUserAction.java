@@ -60,6 +60,9 @@ public class WfStepUserAction extends BaseNamedEntity {
     private int orderIndex;
 
     @Column
+    private boolean formReview;
+
+    @Column
     private boolean validatePage;
 
     @Column
@@ -128,6 +131,14 @@ public class WfStepUserAction extends BaseNamedEntity {
 
     public void setOrderIndex(int orderIndex) {
         this.orderIndex = orderIndex;
+    }
+
+    public boolean isFormReview() {
+        return formReview;
+    }
+
+    public void setFormReview(boolean formReview) {
+        this.formReview = formReview;
     }
 
     public boolean isValidatePage() {

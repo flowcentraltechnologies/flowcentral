@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormAppletPanel;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleSysParamConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -92,7 +93,12 @@ public class ReviewWorkItemsAppletPanel extends AbstractEntityFormAppletPanel {
                 applet.isNewCommentRequired(actionName));
         if (!ctx.isWithFormErrors()) {
             if (ctx.getFormDef().isInputForm()) {
-                applet.updateInst();
+                EntityActionResult entityActionResult = applet.updateInst();
+                if (ctx.isWithReviewErrors() && applet.isFormReview(actionName)) {
+                    entityActionResult.setCloseView(true);
+                    onReviewErrors(entityActionResult);
+                    return;
+                }
             }
             applet.applyUserAction(actionName);
             hintUser("$m{reviewworkitemsapplet.apply.success.hint}");

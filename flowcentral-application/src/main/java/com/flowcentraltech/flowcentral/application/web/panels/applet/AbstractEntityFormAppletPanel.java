@@ -767,6 +767,39 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         return systemModuleService;
     }
 
+    protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
+        // Select first tab with review message TODO Move to method?
+        TabSheetWidget tabSheetWidget = getWidgetByShortName(TabSheetWidget.class, "formPanel.formTabSheet");
+        TabSheet tabSheet = tabSheetWidget.getTabSheet();
+        if (tabSheet != null && tabSheet.isInStateForDisplay()) {
+            List<TabDef> tabDefList = tabSheet.getTabDefList();
+            int len = tabDefList.size();
+            for (int i = 0; i < len; i++) {
+                if (tabSheet.getTabSheetItem(i).isVisible()) {
+                    TabDef tabDef = tabDefList.get(i);
+                    MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
+                    if (messageType != null) {
+                        tabSheet.setCurrentTabIndex(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Show message box
+        ReviewResult reviewResult = entityActionResult.getReviewResult();
+        if (reviewResult != null && reviewResult.isSkippableOnly()) {
+            getEntityFormApplet().getCtx().setOriginalEntityActionResult(entityActionResult);
+            final String message = getReviewSkippableMessage(reviewResult);
+            final String commandPath = getCommandFullPath("reviewConfirm");
+            showMessageBox(MessageIcon.WARNING, MessageMode.YES_NO, "$m{entityformapplet.formreview}", message,
+                    commandPath);
+        } else {
+            showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
+                    "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
+        }
+    }
+
     private void handleEntityActionResult(EntityActionResult entityActionResult) throws UnifyException {
         handleEntityActionResult(entityActionResult, null);
     }
@@ -778,36 +811,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         if (ctx != null && ctx.isWithReviewErrors()) {
-            // Select first tab with review message TODO Move to method?
-            TabSheetWidget tabSheetWidget = getWidgetByShortName(TabSheetWidget.class, "formPanel.formTabSheet");
-            TabSheet tabSheet = tabSheetWidget.getTabSheet();
-            if (tabSheet != null && tabSheet.isInStateForDisplay()) {
-                List<TabDef> tabDefList = tabSheet.getTabDefList();
-                int len = tabDefList.size();
-                for (int i = 0; i < len; i++) {
-                    if (tabSheet.getTabSheetItem(i).isVisible()) {
-                        TabDef tabDef = tabDefList.get(i);
-                        MessageType messageType = tabSheet.getReviewMessageType(tabDef.getTabName());
-                        if (messageType != null) {
-                            tabSheet.setCurrentTabIndex(i);
-                            break;
-                        }
-                    }
-                }
-            }
-
-            // Show message box
-            ReviewResult reviewResult = entityActionResult.getReviewResult();
-            if (reviewResult != null && reviewResult.isSkippableOnly()) {
-                getEntityFormApplet().getCtx().setOriginalEntityActionResult(entityActionResult);
-                final String message = getReviewSkippableMessage(reviewResult);
-                final String commandPath = getCommandFullPath("reviewConfirm");
-                showMessageBox(MessageIcon.WARNING, MessageMode.YES_NO, "$m{entityformapplet.formreview}", message,
-                        commandPath);
-            } else {
-                showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
-                        "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
-            }
+            onReviewErrors(entityActionResult);
         } else {
             setCommandResultMapping(entityActionResult, false);
         }
@@ -817,7 +821,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             formHintSuccess(successHint, ctx.getEntityName());
         }
     }
-
+    
     private void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
             throws UnifyException {
         if (entityActionResult.isHidePopupOnly()) {

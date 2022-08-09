@@ -15,7 +15,7 @@
 
 !fc-wfstepuseractionscrudpanel
 	tableComponents:$c{nameLabel descLabel}
-	formSection:$d{!ui-section components:$c{frmName frmDesc frmLabel frmNextStepName frmComment frmHighlight frmValidatePage frmForwarderPreferred}}
+	formSection:$d{!ui-section components:$c{frmName frmDesc frmLabel frmNextStepName frmComment frmHighlight frmFormReview frmValidatePage frmForwarderPreferred}}
 !ui-label:nameLabel caption:$m{wfstepuseractionscrudpanel.name} binding:name
 !ui-label:descLabel caption:$m{wfstepuseractionscrudpanel.description} binding:description
 !ui-name:frmName caption:$m{wfstepuseractionscrudpanel.name} size:32 binding:name required:true focus:true
@@ -28,6 +28,7 @@
 	list:$s{requirementtypelist} blankOption:$s{} binding:commentRequirement required:true
 !ui-select:frmHighlight caption:$m{wfstepuseractionscrudpanel.highlight}
 	list:$s{highlighttypelist} blankOption:$s{} binding:highlightType
+!ui-checkbox:frmFormReview caption:$m{wfstepuseractionscrudpanel.formreview} layoutCaption:true binding:formReview
 !ui-checkbox:frmValidatePage caption:$m{wfstepuseractionscrudpanel.validatepage} layoutCaption:true binding:validatePage
 !ui-checkbox:frmForwarderPreferred caption:$m{wfstepuseractionscrudpanel.forwarderpreferred} layoutCaption:true binding:forwarderPreferred
 	
