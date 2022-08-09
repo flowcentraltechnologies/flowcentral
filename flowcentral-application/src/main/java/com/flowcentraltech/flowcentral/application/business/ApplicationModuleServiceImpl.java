@@ -775,10 +775,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 getApplicationMessage("application.propertyitem.table.description"), 0L, 1L);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
-                        tdb.addColumnDef("name", renderer, null, 2, false, false, true, false, false);
-                        tdb.addColumnDef("description", renderer, null, 2, false, false, true, false, false);
+                        tdb.addColumnDef("name", renderer, null, 2, false, false, false, true, false, false);
+                        tdb.addColumnDef("description", renderer, null, 2, false, false, false, true, false, false);
                         tdb.addColumnDef(getApplicationMessage("application.propertyitem.value"), "displayValue",
-                                renderer, null, null, 2, false, false, true, false, false);
+                                renderer, null, null, 2, false, false, false, true, false, false);
 
                         tdb.itemsPerPage(-1);
                         return tdb.build();
@@ -807,8 +807,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         OrderType order = OrderType.fromCode(appTableColumn.getOrder());
                         tdb.addColumnDef(appTableColumn.getLabel(), appTableColumn.getField(), renderer, editor,
                                 appTableColumn.getLinkAct(), order, appTableColumn.getWidthRatio(),
-                                appTableColumn.isSwitchOnChange(), appTableColumn.isDisabled(),
-                                appTableColumn.isEditable(), appTableColumn.isSortable(), appTableColumn.isSummary());
+                                appTableColumn.isSwitchOnChange(), appTableColumn.isHidden(),
+                                appTableColumn.isDisabled(), appTableColumn.isEditable(), appTableColumn.isSortable(),
+                                appTableColumn.isSummary());
                     }
 
                     tdb.sortHistory(appTable.getSortHistory());
@@ -3647,6 +3648,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
                 appTableColumn.setSwitchOnChange(tableColumnConfig.isSwitchOnChange());
                 appTableColumn.setEditable(tableColumnConfig.isEditable());
+                appTableColumn.setHidden(tableColumnConfig.isHidden());
                 appTableColumn.setDisabled(tableColumnConfig.isDisabled());
                 appTableColumn.setSortable(tableColumnConfig.isSortable());
                 appTableColumn.setSummary(tableColumnConfig.isSummary());

@@ -167,7 +167,7 @@ public abstract class AbstractTable<T, U> {
     }
 
     public List<TableColumnDef> getColumnDefList() {
-        return tableDef.getColumnDefList();
+        return tableDef.getVisibleColumnDefList();
     }
 
     public void setPolicy(EntryTablePolicy policy) {

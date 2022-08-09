@@ -55,6 +55,9 @@ public class AppTableColumn extends BaseConfigEntity {
     private boolean switchOnChange;
 
     @Column
+    private boolean hidden;
+
+    @Column
     private boolean disabled;
 
     @Column
@@ -133,6 +136,14 @@ public class AppTableColumn extends BaseConfigEntity {
 
     public void setSwitchOnChange(boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public boolean isDisabled() {

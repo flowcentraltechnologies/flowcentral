@@ -1045,6 +1045,8 @@
 				label="$m{application.apptablecolumn.widthratio}" type="integer" />
 			<field name="switchOnChange"
 				label="$m{application.apptablecolumn.switchonchange}" type="boolean" />
+			<field name="hidden"
+				label="$m{application.apptablecolumn.hidden}" type="boolean" />
 			<field name="disabled"
 				label="$m{application.apptablecolumn.disabled}" type="boolean" />
 			<field name="editable"

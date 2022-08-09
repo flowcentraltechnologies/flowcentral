@@ -224,7 +224,7 @@ public class ApplicationModuleServiceMasterTest extends AbstractFlowCentralTest 
         assertEquals("com.flowcentraltech.flowcentral.application.entities.Product", entityClassDef.getEntityClass().getName());
         assertEquals(20, tableDef.getItemsPerPage());
 
-        List<TableColumnDef> columnList = tableDef.getColumnDefList();
+        List<TableColumnDef> columnList = tableDef.getVisibleColumnDefList();
         assertNotNull(columnList);
         assertEquals(5, columnList.size());
 
