@@ -14,15 +14,22 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.workflow.constants;
+package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
+
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Workflow step constants.
+ * Convenient abstract base class for review single form applets.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WfStepConstants {
+public abstract class AbstractReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApplet {
 
-    String RESERVED_ALWAYS_FILTERNAME = "__always";
+    public AbstractReviewSingleFormWorkItemsApplet(AppletUtilities au, String pathVariable) throws UnifyException {
+        super(au, pathVariable);
+    }
+
 }

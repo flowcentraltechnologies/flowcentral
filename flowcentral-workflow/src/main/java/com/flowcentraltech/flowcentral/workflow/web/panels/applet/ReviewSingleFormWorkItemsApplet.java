@@ -24,7 +24,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
-import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -33,10 +32,12 @@ import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -45,7 +46,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApplet {
+public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWorkItemsApplet {
 
     private final WorkflowModuleService wms;
 
@@ -83,9 +84,15 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
+        ValueStore currEntityInstValueStore = new BeanValueStore(currEntityInst);
+        WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
+        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au, currEntityInstValueStore, wfDef,
+                wfStepDef.getEmails());
+        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(au, currEntityInstValueStore, wfDef,
+                wfStepDef.getComments());
         getCtx().setRecovery(wfStepDef.isError());
-        getCtx().setEmails(wfStepDef.isEmails());
-        getCtx().setComments(wfStepDef.isComments());
+        getCtx().setEmails(emails);
+        getCtx().setComments(comments);
         if (form == null) {
             form = constructForm(currEntityInst, FormMode.MAINTAIN);
             form.setFormTitle(getRootAppletDef().getLabel());
@@ -98,11 +105,9 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractEntitySingleFormApp
 
         // Check if enter read-only mode
         getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
-        if (userActionRight && wfStepDef.isWithReadOnlyCondition()) {
-            WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
-            boolean readOnly = wfStepDef.isReadOnlyAlways() || wfDef.getFilterDef(wfStepDef.getReadOnlyConditionName())
-                    .getObjectFilter(wfDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow())
-                    .match(new BeanValueStore(currEntityInst));
+        if (userActionRight) {
+            final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(au, currEntityInstValueStore, wfDef,
+                    wfStepDef.getReadOnlyConditionName());
             getCtx().setReadOnly(readOnly);
         }
 

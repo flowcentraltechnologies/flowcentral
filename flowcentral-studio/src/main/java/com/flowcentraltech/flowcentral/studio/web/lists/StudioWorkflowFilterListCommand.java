@@ -56,7 +56,7 @@ public class StudioWorkflowFilterListCommand extends AbstractApplicationListComm
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
             List<ListData> list = new ArrayList<ListData>();
-            list.add(new ListData(WfStepConstants.RESERVED_READONLY_FILTERNAME,
+            list.add(new ListData(WfStepConstants.RESERVED_ALWAYS_FILTERNAME,
                     resolveSessionMessage("$m{studio.workflow.filter.always}")));
             for (Listable filter : workflowModuleService
                     .findWorkflowFilters((WorkflowFilterQuery) new WorkflowFilterQuery()
