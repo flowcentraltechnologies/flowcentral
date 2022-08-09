@@ -24,8 +24,8 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  */
 public enum FixedRowActionType {
     FIXED(0, "fix_", "$m{table.row.fixed}"),
-    EXCLUDE(1, "exc_", "$m{table.row.exclude}"),
-    INCLUDE(2, "inc_", "$m{table.row.include}"),
+    REMOVE(1, "rem_", "$m{table.row.remove}"),
+    ATTACH(2, "add_", "$m{table.row.attach}"),
     DELETE(3, "del_", "$m{table.row.delete}");
     
     private final int index;
@@ -51,4 +51,18 @@ public enum FixedRowActionType {
     public String label() {
         return label;
     }
+    
+    public boolean fixed() {
+        return FIXED.equals(this);
+    }
+    
+    public boolean updateLean() {
+        return ATTACH.equals(this) || REMOVE.equals(this);
+    }
+    
+    public boolean delete() {
+        return DELETE.equals(this);
+    }
+    
+    
 }

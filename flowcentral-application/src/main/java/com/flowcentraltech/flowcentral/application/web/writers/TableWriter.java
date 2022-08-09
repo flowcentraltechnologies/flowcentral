@@ -325,8 +325,8 @@ public class TableWriter extends AbstractControlWriter {
 
             if (isFixedRows) {
                 writer.writeParam("pFixedRows", true);
-                writer.writeParam("pfExcCtrlId", fixedCtrl[FixedRowActionType.EXCLUDE.index()].getGroupId());
-                writer.writeParam("pfIncCtrlId", fixedCtrl[FixedRowActionType.INCLUDE.index()].getGroupId());
+                writer.writeParam("pfExcCtrlId", fixedCtrl[FixedRowActionType.REMOVE.index()].getGroupId());
+                writer.writeParam("pfIncCtrlId", fixedCtrl[FixedRowActionType.ATTACH.index()].getGroupId());
                 writer.writeParam("pfDelCtrlId", fixedCtrl[FixedRowActionType.DELETE.index()].getGroupId());
             }
             
@@ -620,9 +620,11 @@ public class TableWriter extends AbstractControlWriter {
                     if (isFixedRows) {
                         writer.write("<td>");
                         FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
-                        Control _fixedCtrl = fixedCtrl[fixedType.index()];
-                        _fixedCtrl.setValueStore(valueStore);
-                        writer.writeStructureAndContent(_fixedCtrl);
+                        if (!fixedType.fixed()) {
+                            Control _fixedCtrl = fixedCtrl[fixedType.index()];
+                            _fixedCtrl.setValueStore(valueStore);
+                            writer.writeStructureAndContent(_fixedCtrl);
+                        }
                         writer.write("</td>");
                     }
 

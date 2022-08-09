@@ -474,6 +474,14 @@ public abstract class AbstractTable<T, U> {
         return tableStateOverride;
     }
     
+    public void applyFixedAction(ValueStore valueStore, int index, FixedRowActionType fixedActionType)
+            throws UnifyException {
+        if (entryPolicy != null) {
+            entryPolicy.applyFixedAction(parentReader, valueStore, index, fixedActionType);
+            reset();
+        }
+    }
+    
     public FixedRowActionType resolveFixedIndex(ValueStore valueStore, int index, int size) throws UnifyException {
         return entryPolicy != null ? entryPolicy.resolveFixedIndex(parentReader, valueStore, index, size)
                 : FixedRowActionType.FIXED;
