@@ -116,6 +116,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfWizardAppletNameParts;
@@ -285,7 +286,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
-                                wfStep.isEmails(), wfStep.isComments());
+                                wfStep.getEmails(), wfStep.getComments());
 
                         if (wfStep.getSetValues() != null) {
                             wsdb.addWfSetValuesDef(new WfStepSetValuesDef(
@@ -598,9 +599,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfItem.getWorkRecId());
         }
 
+        ValueStore workEntityValueStore = new BeanValueStore(workEntity);
         WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
         InputArrayEntries emails = null;
-        if (wfStepDef.isEmails() && wfDef.getEntityDef().emailProducerConsumer()) {
+        final boolean isEmails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, workEntityValueStore, wfDef,
+                wfStepDef.getEmails());
+        if (isEmails && wfDef.getEntityDef().emailProducerConsumer()) {
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
                     wfDef.getEntityDef().getEmailProducerConsumer());
             WidgetTypeDef widgetTypeDef = appService.getWidgetTypeDef("application.email");
@@ -608,14 +612,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             InputArrayEntries.Builder ieb = InputArrayEntries.newBuilder(widgetTypeDef);
             ieb.columns(3); // TODO Get from system parameter
             ieb.validator(validator);
+            if (wfReviewMode.lean()) {
+                environment().findChildren(workEntity);
+            }
             List<InputValue> emailList = emailProducerConsumer.produce(wfDef.getEntityDef(),
-                    new BeanValueStore(workEntity).getReader());
+                    workEntityValueStore);
             ieb.addEntries(emailList);
             emails = ieb.build();
         }
 
         Comments comments = null;
-        if (wfStepDef.isComments()) {
+        final boolean isComments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, workEntityValueStore,
+                wfDef, wfStepDef.getComments());
+        if (isComments) {
             Comments.Builder cmb = Comments.newBuilder();//
             List<WfItemEvent> events = environment().findAll(new WfItemEventQuery()
                     .wfItemHistId(wfItem.getWfItemHistId()).commentsOnly()
@@ -903,7 +912,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
                     wfDef.getEntityDef().getEmailProducerConsumer());
             Map<Object, InputValue> map = emails.getValueMap();
-            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst).getWriter(), map);
+            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst), map);
         }
     }
 

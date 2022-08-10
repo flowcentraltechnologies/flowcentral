@@ -159,7 +159,7 @@ public final class InputWidgetUtils {
         if (entityFieldDef.isEnumDataType()) {
             String editor = String.format("!ui-dropdownchecklist list:%s columns:3 formatter:$d{!pipearrayformat}",
                     _entityFieldDef.getReferences());
-            return (AbstractInput<?>) ReflectUtils.newInstance(StringInput.class, NEW_INPUT_PARAMS, editor);
+            return (AbstractInput<?>) ReflectUtils.newInstance(StringInput.class, NEW_INPUT_PARAMS, editor, "!ui-label");
         }
 
         return null;

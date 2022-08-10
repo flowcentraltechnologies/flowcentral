@@ -67,9 +67,11 @@ public class InputArrayEntries {
         if (validator != null) {
             validationFailedKeys = new HashSet<Object>();
             for (InputArrayEntry entry : entryList) {
-                Object val = entry.getValueInput().getValue();
-                if (val != null && !validator.validate(val)) {
-                    validationFailedKeys.add(entry.getKey());
+                if (entry.isEditable()) {
+                    Object val = entry.getValueInput().getValue();
+                    if (val != null && !validator.validate(val)) {
+                        validationFailedKeys.add(entry.getKey());
+                    }
                 }
             }
 

@@ -59,6 +59,7 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
         EntityTreeTableWidget tableWidget = (EntityTreeTableWidget) widget;
         EntityTreeTable table = tableWidget.getEntityTreeTable();
         if (table != null) {
+            widget.setDisabled(true); // TODO Remove
             if (table.isMultiSelect()) {
                 writeHiddenPush(writer, tableWidget.getSelectCtrl(), PushType.CHECKBOX);
             }

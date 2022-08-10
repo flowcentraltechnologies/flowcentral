@@ -293,8 +293,8 @@ public class TableDef extends BaseApplicationEntityDef {
         return visibleColumnDefList.get(index);
     }
 
-    public TableColumnDef getColumnDef(String fieldName) {
-        for (TableColumnDef tableColumnDef : columnDefList) {
+    public TableColumnDef getVisibleColumnDef(String fieldName) {
+        for (TableColumnDef tableColumnDef : visibleColumnDefList) {
             if (tableColumnDef.getFieldName().equals(fieldName)) {
                 return tableColumnDef;
             }

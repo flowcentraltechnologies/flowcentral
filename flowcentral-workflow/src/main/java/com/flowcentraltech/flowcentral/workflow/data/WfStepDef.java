@@ -87,9 +87,9 @@ public class WfStepDef {
 
     private boolean forwarderPreferred;
 
-    private boolean emails;
+    private String emails;
 
-    private boolean comments;
+    private String comments;
 
     private WfStepSetValuesDef wfSetValuesDef;
 
@@ -107,7 +107,7 @@ public class WfStepDef {
             RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
             String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
             String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean includeForwarder, boolean forwarderPreferred, boolean emails, boolean comments,
+            boolean includeForwarder, boolean forwarderPreferred, String emails, String comments,
             WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList,
             List<WfAlertDef> alertList, Set<String> roleSet) {
         this.appletDef = appletDef;
@@ -206,9 +206,27 @@ public class WfStepDef {
         return !StringUtils.isBlank(readOnlyConditionName);
     }
 
+    public boolean isWithEmails() {
+        return !StringUtils.isBlank(emails);
+    }
+
+    public boolean isWithComments() {
+        return !StringUtils.isBlank(comments);
+    }
+
     public boolean isReadOnlyAlways() {
         return readOnlyConditionName != null
-                && WfStepConstants.RESERVED_READONLY_FILTERNAME.equals(readOnlyConditionName);
+                && WfStepConstants.RESERVED_ALWAYS_FILTERNAME.equals(readOnlyConditionName);
+    }
+
+    public boolean isEmailsAlways() {
+        return emails != null
+                && WfStepConstants.RESERVED_ALWAYS_FILTERNAME.equals(emails);
+    }
+
+    public boolean isCommentsAlways() {
+        return comments != null
+                && WfStepConstants.RESERVED_ALWAYS_FILTERNAME.equals(comments);
     }
 
     public String getAutoLoadingConditionName() {
@@ -275,11 +293,11 @@ public class WfStepDef {
         return forwarderPreferred;
     }
 
-    public boolean isEmails() {
+    public String getEmails() {
         return emails;
     }
 
-    public boolean isComments() {
+    public String getComments() {
         return comments;
     }
 
@@ -353,7 +371,7 @@ public class WfStepDef {
             RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
             String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
             String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean includeForwarder, boolean forwarderPreferred, boolean emails, boolean comments) {
+            boolean includeForwarder, boolean forwarderPreferred, String emails, String comments) {
         return new Builder(appletDef, type, priority, recordActionType, nextStepName, altNextStepName,
                 binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name, description,
                 label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, emails,
@@ -402,9 +420,9 @@ public class WfStepDef {
 
         private boolean forwarderPreferred;
 
-        private boolean emails;
+        private String emails;
 
-        private boolean comments;
+        private String comments;
 
         private WfStepSetValuesDef wfSetValuesDef;
 
@@ -421,7 +439,7 @@ public class WfStepDef {
                 String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
                 String policy, String rule, String name, String description, String label, int criticalMinutes,
                 int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
-                boolean forwarderPreferred, boolean emails, boolean comments) {
+                boolean forwarderPreferred, String emails, String comments) {
             this.appletDef = appletDef;
             this.type = type;
             this.priority = priority;

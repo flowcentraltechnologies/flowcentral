@@ -93,7 +93,7 @@ public class ReviewWorkItemsAppletPanel extends AbstractEntityFormAppletPanel {
                 applet.isNewCommentRequired(actionName));
         if (!ctx.isWithFormErrors()) {
             if (ctx.getFormDef().isInputForm()) {
-                EntityActionResult entityActionResult = applet.updateInst();
+                EntityActionResult entityActionResult = applet.updateInstAndClose();
                 if (ctx.isWithReviewErrors() && applet.isFormReview(actionName)) {
                     entityActionResult.setCloseView(true);
                     onReviewErrors(entityActionResult);

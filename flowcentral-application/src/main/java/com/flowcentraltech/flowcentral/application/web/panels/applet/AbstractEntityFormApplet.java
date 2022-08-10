@@ -657,15 +657,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public EntityActionResult updateInstAndClose() throws UnifyException {
         EntityActionResult entityActionResult = updateInst(FormReviewType.ON_UPDATE_CLOSE);
-        if (isRootForm() && getRootAppletDef().getType().isFormInitial()) {
-            entityActionResult.setClosePage(true);
-        } else {
-            entityActionResult.setCloseView(true);
-        }
-
+        setClosePage(entityActionResult);
         return entityActionResult;
     }
-
+    
     public EntityActionResult deleteInst() throws UnifyException {
         final AppletDef formAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.deleteEntityInstByFormContext(formAppletDef, form.getCtx(), this);
@@ -1205,6 +1200,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (FormReviewType.ON_SAVE.equals(reviewType) || formContext.isWithReviewErrors()) {
             enterMaintainForm(formContext, entityInstId);
             entityActionResult.setReviewResult(reviewResult);
+            if (reviewType.formClosedOrReplaced()) {
+                setClosePage(entityActionResult);
+            }
         } else {
             if (actionMode.isWithNext()) {
                 enterNextForm();
@@ -1267,6 +1265,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         return entityActionResult;
+    }
+
+    private void setClosePage(EntityActionResult entityActionResult) throws UnifyException {
+        if (isRootForm() && getRootAppletDef().getType().isFormInitial()) {
+            entityActionResult.setClosePage(true);
+        } else {
+            entityActionResult.setCloseView(true);
+        }
     }
 
     private EntityActionResult updateInst(FormReviewType reviewType) throws UnifyException {
