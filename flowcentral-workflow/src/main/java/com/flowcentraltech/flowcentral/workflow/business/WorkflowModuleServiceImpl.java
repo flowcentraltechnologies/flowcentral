@@ -612,6 +612,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             InputArrayEntries.Builder ieb = InputArrayEntries.newBuilder(widgetTypeDef);
             ieb.columns(3); // TODO Get from system parameter
             ieb.validator(validator);
+            if (wfReviewMode.lean()) {
+                environment().findChildren(workEntity);
+            }
             List<InputValue> emailList = emailProducerConsumer.produce(wfDef.getEntityDef(),
                     workEntityValueStore);
             ieb.addEntries(emailList);
