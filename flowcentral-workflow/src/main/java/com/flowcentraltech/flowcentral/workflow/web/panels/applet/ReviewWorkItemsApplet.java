@@ -126,6 +126,9 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
             listingForm.setFormTitle(getRootAppletDef().getLabel());
             listingForm.setFormActionDefList(wfStepDef.getFormActionDefList());
             listingForm.setAppendables(entityItem);
+            final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au, currEntityInstValueStore, wfDef,
+                    wfStepDef.getEmails());
+            getCtx().setEmails(emails);
             getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
             setDisplayModeMessage(listingForm);
             viewMode = ViewMode.LISTING_FORM;
