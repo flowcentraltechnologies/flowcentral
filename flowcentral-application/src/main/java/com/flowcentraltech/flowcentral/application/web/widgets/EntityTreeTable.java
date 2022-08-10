@@ -218,7 +218,7 @@ public class EntityTreeTable {
                 String... fieldNames) throws UnifyException {
             List<TableColumnDef> columnDefList = new ArrayList<TableColumnDef>();
             for (String fieldName : fieldNames) {
-                TableColumnDef tableColumnDef = tableDef.getColumnDef(fieldName);
+                TableColumnDef tableColumnDef = tableDef.getVisibleColumnDef(fieldName);
                 columnDefList.add(tableColumnDef);
             }
 
