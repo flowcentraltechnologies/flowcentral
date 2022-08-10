@@ -104,8 +104,6 @@ public class EntityTreeTableWidget extends AbstractValueListMultiControl<ValueSt
                     final boolean cellEditor = tableColumnDef.isWithCellEditor();
                     final String columnWidgetUpl = entryMode && cellEditor ? tableColumnDef.getCellEditor()
                             : tableColumnDef.getCellRenderer();
-                    System.out.println("@caribou: columnWidgetUpl = " + columnWidgetUpl);
-                    System.out.println("@caribou: tableColumnDef = " + tableColumnDef);
                     Widget widget = addExternalChildWidget(columnWidgetUpl);
                     tableColumnInfo.setWidget(widget);
                     
