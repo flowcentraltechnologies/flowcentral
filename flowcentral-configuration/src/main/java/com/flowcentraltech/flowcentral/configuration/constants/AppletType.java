@@ -169,6 +169,10 @@ public enum AppletType implements EnumConst {
         return CREATE_ENTITY.equals(this) || CREATE_ENTITY_SINGLEFORM.equals(this);
     }
     
+    public boolean isStudioComponent() {
+        return STUDIO_FC_COMPONENT.equals(this);
+    }
+    
     public static AppletType fromCode(String code) {
         return EnumUtils.fromCode(AppletType.class, code);
     }

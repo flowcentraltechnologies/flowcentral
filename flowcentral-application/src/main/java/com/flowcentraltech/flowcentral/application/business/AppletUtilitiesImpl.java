@@ -553,9 +553,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             setCollaborationContext(form);
         }
 
-        boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(getAppletDef(applet.getAppletName()),
-                form, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-        formContext.setConditionalDisabled(conditionalDisabled);
+        final AppletDef _formAppletDef = applet != null ? applet.getFormAppletDef(): null;
+        if (_formAppletDef != null && !_formAppletDef.isStudioComponent()) {
+            boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(getAppletDef(applet.getAppletName()),
+                    form, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+            formContext.setConditionalDisabled(conditionalDisabled);
+        }
+
         // Tabs
         final EntityDef entityDef = formDef.getEntityDef();
         final boolean isCreateMode = formMode.isCreate();

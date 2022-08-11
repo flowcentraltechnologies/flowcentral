@@ -167,6 +167,10 @@ public class AppletDef extends BaseApplicationEntityDef {
         return type;
     }
 
+    public boolean isStudioComponent() {
+        return type.isStudioComponent();
+    }
+    
     public String getOriginApplicationName() {
         return originApplicationName;
     }
