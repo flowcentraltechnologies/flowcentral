@@ -39,6 +39,10 @@ public class EntityActionResult {
 
     private ReviewResult reviewResult;
     
+    private ActionMode actionMode;
+    
+    private boolean submitToWorkflow;
+    
     private boolean refreshMenu;
 
     private boolean closeView;
@@ -72,6 +76,22 @@ public class EntityActionResult {
 
     public String getResultTaskCaption() {
         return resultTaskCaption;
+    }
+
+    public ActionMode getActionMode() {
+        return actionMode;
+    }
+
+    public void setActionMode(ActionMode actionMode) {
+        this.actionMode = actionMode;
+    }
+
+    public boolean isSubmitToWorkflow() {
+        return submitToWorkflow;
+    }
+
+    public void setSubmitToWorkflow(boolean submitToWorkflow) {
+        this.submitToWorkflow = submitToWorkflow;
     }
 
     public String getResultPath() {
@@ -142,10 +162,4 @@ public class EntityActionResult {
         this.successHint = successHint;
     }
 
-    @Override
-    public String toString() {
-        return "EntityActionResult [resultTaskSetup=" + resultTaskSetup + ", resultTaskCaption=" + resultTaskCaption
-                + ", resultPath=" + resultPath + ", successHint=" + successHint + ", result=" + result
-                + ", refreshMenu=" + refreshMenu + ", closeView=" + closeView + ", closePage=" + closePage + "]";
-    }
 }

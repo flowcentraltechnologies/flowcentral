@@ -757,6 +757,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         MessageResult messageResult = getMessageResult();
         if (MessageResult.YES.equals(messageResult)) {
             EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
+            if (entityActionResult.isSubmitToWorkflow()) {
+                entityActionResult = getEntityFormApplet().submitCurrentInst(entityActionResult.getActionMode());
+            }
+
             setCommandResultMapping(entityActionResult, true);
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
@@ -821,7 +825,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             formHintSuccess(successHint, ctx.getEntityName());
         }
     }
-    
+
     private void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
             throws UnifyException {
         if (entityActionResult.isHidePopupOnly()) {
@@ -898,7 +902,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
                 }
             }
-            
+
             if (ctx.isWithFormErrors()) {
                 hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
             }
