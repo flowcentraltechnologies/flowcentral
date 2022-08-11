@@ -553,10 +553,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             setCollaborationContext(form);
         }
 
-        final AppletDef _formAppletDef = applet != null ? applet.getFormAppletDef(): null;
+        final AppletDef _formAppletDef = applet != null ? applet.getFormAppletDef() : null;
         if (_formAppletDef != null && !_formAppletDef.isStudioComponent()) {
-            boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(getAppletDef(applet.getAppletName()),
-                    form, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+            boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(_formAppletDef, form,
+                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
             formContext.setConditionalDisabled(conditionalDisabled);
         }
 
@@ -851,9 +851,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final EntitySingleForm form = new EntitySingleForm(formContext, sectorIcon, breadCrumbs, panelName, bean);
         form.setBeanTitle(beanTitle);
         form.setFormMode(formMode);
-        
-        boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(applet.getSingleFormAppletDef(),
-                form, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+
+        boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(applet.getSingleFormAppletDef(), form,
+                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
         formContext.setConditionalDisabled(conditionalDisabled);
         return form;
     }
@@ -885,6 +885,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         form.setFormBean(inst);
         if (applet.isCollaboration() && applet.isRootForm()) {
             setCollaborationContext(form);
+        }
+        
+        final AppletDef _formAppletDef = applet != null ? applet.getFormAppletDef() : null;
+        if (_formAppletDef != null && !_formAppletDef.isStudioComponent()) {
+            boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(_formAppletDef, form,
+                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+            formContext.setConditionalDisabled(conditionalDisabled);
         }
 
         // Update tabs
@@ -1257,8 +1264,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         String condFilterName = appletDef.getPropValue(String.class, conditionPropName, null);
         if (condFilterName != null) {
             return appletDef.getFilterDef(condFilterName)
-                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(),
-                            specialParamProvider, getNow())
+                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(), specialParamProvider,
+                            getNow())
                     .match(form.getFormBean());
         }
 

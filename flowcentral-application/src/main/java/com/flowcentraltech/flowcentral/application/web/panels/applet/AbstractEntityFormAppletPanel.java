@@ -766,7 +766,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
 
             setCommandResultMapping(entityActionResult, true);
-            handleHints(entityActionResult, getEntityFormApplet().getResolvedForm().getCtx());
+            handleHints(entityActionResult, null);
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
@@ -830,8 +830,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
         String successHint = entityActionResult.getSuccessHint();
-        if (ctx != null && !StringUtils.isBlank(successHint)) {
-            formHintSuccess(successHint, ctx.getEntityName());
+        if (!StringUtils.isBlank(successHint)) {
+            formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
         }
     }
 
