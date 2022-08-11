@@ -59,6 +59,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntryTablePage;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
@@ -92,20 +93,6 @@ import com.tcdng.unify.web.ui.widget.data.FileAttachmentsInfo;
  * @since 1.0
  */
 public abstract class AbstractEntityFormApplet extends AbstractApplet implements SweepingCommitPolicy {
-
-    protected enum ActionMode {
-        ACTION_ONLY,
-        ACTION_AND_NEXT,
-        ACTION_AND_CLOSE;
-
-        public boolean isWithNext() {
-            return ACTION_AND_NEXT.equals(this);
-        }
-
-        public boolean isWithClose() {
-            return ACTION_AND_CLOSE.equals(this);
-        }
-    }
 
     public enum ViewMode {
         SEARCH,
@@ -643,6 +630,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return saveNewInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SAVE_CLOSE);
     }
 
+    public void applyUserAction(String actionName) throws UnifyException {
+
+    }
+
     public EntityActionResult submitInst() throws UnifyException {
         return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }
@@ -650,6 +641,35 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public EntityActionResult submitInstAndNext() throws UnifyException {
         return submitInst(ActionMode.ACTION_AND_NEXT, FormReviewType.ON_SUBMIT_NEXT);
     }
+
+    public EntityActionResult submitCurrentInst(ActionMode actionMode) throws UnifyException {
+        final Entity inst = (Entity) form.getFormBean();
+        final AppletDef _currFormAppletDef = getFormAppletDef();
+        final EntityDef _entityDef = form.getFormDef().getEntityDef();
+        String channel = _currFormAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);
+        String policy = _currFormAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
+        if (StringUtils.isBlank(channel)) {
+            channel = _currFormAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
+            policy = _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
+        }
+
+        EntityActionResult entityActionResult = au().getWorkItemUtilities().submitToWorkflowChannel(_entityDef, channel,
+                (WorkEntity) inst, policy);
+        if (actionMode.isWithNext()) {
+            enterNextForm();
+        } else {
+            if (viewMode == ViewMode.NEW_PRIMARY_FORM) {
+                entityActionResult.setClosePage(true);
+            } else {
+                entityActionResult.setCloseView(true);
+            }
+        }
+
+        return entityActionResult;
+    }    
 
     public EntityActionResult updateInst() throws UnifyException {
         return updateInst(FormReviewType.ON_UPDATE);
@@ -1221,7 +1241,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     private EntityActionResult submitInst(ActionMode actionMode, FormReviewType reviewType) throws UnifyException {
         final FormContext formContext = form.getCtx();
         final Entity inst = (Entity) form.getFormBean();
-        final AppletDef _currFormAppletDef = getFormAppletDef();
         final EntityDef _entityDef = form.getFormDef().getEntityDef();
         EntityActionResult entityActionResult = null;
         Long entityInstId = (Long) inst.getId();
@@ -1233,40 +1252,20 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             }
         }
 
-        // Review form
         ReviewResult reviewResult = reviewFormContext(formContext, EvaluationMode.CREATE_SUBMIT, reviewType);
         if (formContext.isWithReviewErrors()) {
             enterMaintainForm(formContext, entityInstId);
             entityActionResult = new EntityActionResult(new EntityActionContext(_entityDef, inst, null));
             entityActionResult.setReviewResult(reviewResult);
+            entityActionResult.setSubmitToWorkflow(true);
+            entityActionResult.setActionMode(actionMode);
         } else {
-            String channel = _currFormAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);
-            String policy = _currFormAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
-            if (StringUtils.isBlank(channel)) {
-                channel = _currFormAppletDef.getPropValue(String.class,
-                        AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
-                policy = _currFormAppletDef.getPropValue(String.class,
-                        AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
-            }
-
-            entityActionResult = au().getWorkItemUtilities().submitToWorkflowChannel(_entityDef, channel,
-                    (WorkEntity) inst, policy);
-            if (actionMode.isWithNext()) {
-                enterNextForm();
-            } else {
-                if (viewMode == ViewMode.NEW_PRIMARY_FORM) {
-                    entityActionResult.setClosePage(true);
-                } else {
-                    navBackToPrevious();
-                }
-            }
+            entityActionResult = submitCurrentInst(actionMode);
         }
 
         return entityActionResult;
     }
-
+    
     private void setClosePage(EntityActionResult entityActionResult) throws UnifyException {
         if (isRootForm() && getRootAppletDef().getType().isFormInitial()) {
             entityActionResult.setClosePage(true);

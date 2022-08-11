@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -148,6 +149,25 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
     }
 
     @Override
+    public EntityActionResult updateInstAndClose() throws UnifyException {
+        EntityActionResult entityActionResult = super.updateInstAndClose();
+        if (isRootForm()) {
+            currEntityInst = (WorkEntity) form.getFormBean();
+        }
+
+        return entityActionResult;
+    }
+
+    @Override
+    public void applyUserAction(String actionName) throws UnifyException {
+        String comment = getNewComment();
+        AbstractForm _form = getResolvedForm();
+        wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
+                _form.getEmails(), WfReviewMode.NORMAL);
+        navBackToSearch();
+    }
+
+    @Override
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         if (isNoForm()) {
             currWfItem = (WfItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
@@ -165,14 +185,6 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         }
 
         return super.getEntitySearchItem(entitySearch, index);
-    }
-
-    public void applyUserAction(String actionName) throws UnifyException {
-        String comment = getNewComment();
-        AbstractForm _form = getResolvedForm();
-        wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
-                _form.getEmails(), WfReviewMode.NORMAL);
-        navBackToSearch();
     }
 
     public boolean isFormReview(String actionName) throws UnifyException {

@@ -757,7 +757,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         MessageResult messageResult = getMessageResult();
         if (MessageResult.YES.equals(messageResult)) {
             EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
+            if (entityActionResult.isSubmitToWorkflow()) {
+                entityActionResult = getEntityFormApplet().submitCurrentInst(entityActionResult.getActionMode());
+                entityActionResult.setSuccessHint("$m{entityformapplet.submit.success.hint}");
+            } else if (entityActionResult.isApplyUserAction()) {
+                getEntityFormApplet().applyUserAction(entityActionResult.getUserAction());
+                entityActionResult.setSuccessHint("$m{reviewworkitemsapplet.apply.success.hint}");
+            }
+
             setCommandResultMapping(entityActionResult, true);
+            handleHints(entityActionResult, getEntityFormApplet().getResolvedForm().getCtx());
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
@@ -816,12 +825,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             setCommandResultMapping(entityActionResult, false);
         }
 
+        handleHints(entityActionResult, ctx);
+    }
+
+    private void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
         String successHint = entityActionResult.getSuccessHint();
         if (ctx != null && !StringUtils.isBlank(successHint)) {
             formHintSuccess(successHint, ctx.getEntityName());
         }
     }
-    
+
     private void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
             throws UnifyException {
         if (entityActionResult.isHidePopupOnly()) {
@@ -898,7 +911,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
                 }
             }
-            
+
             if (ctx.isWithFormErrors()) {
                 hintUser(MODE.ERROR, "$m{entityformapplet.formvalidation.error.hint}");
             }
