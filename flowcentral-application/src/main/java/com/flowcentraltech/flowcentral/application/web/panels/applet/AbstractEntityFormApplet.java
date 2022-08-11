@@ -630,6 +630,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return saveNewInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SAVE_CLOSE);
     }
 
+    public void applyUserAction(String actionName) throws UnifyException {
+
+    }
+
     public EntityActionResult submitInst() throws UnifyException {
         return submitInst(ActionMode.ACTION_AND_CLOSE, FormReviewType.ON_SUBMIT);
     }

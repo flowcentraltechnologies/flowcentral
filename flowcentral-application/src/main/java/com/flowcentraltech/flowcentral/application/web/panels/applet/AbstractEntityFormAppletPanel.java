@@ -759,6 +759,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             EntityActionResult entityActionResult = getEntityFormApplet().getCtx().getOriginalEntityActionResult();
             if (entityActionResult.isSubmitToWorkflow()) {
                 entityActionResult = getEntityFormApplet().submitCurrentInst(entityActionResult.getActionMode());
+            } else if (entityActionResult.isApplyUserAction()) {
+                getEntityFormApplet().applyUserAction(entityActionResult.getUserAction());
             }
 
             setCommandResultMapping(entityActionResult, true);

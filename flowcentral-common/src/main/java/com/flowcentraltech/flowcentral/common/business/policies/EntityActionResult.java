@@ -35,6 +35,8 @@ public class EntityActionResult {
 
     private String successHint;
 
+    private String userAction;
+
     private Object result;
 
     private ReviewResult reviewResult;
@@ -42,6 +44,8 @@ public class EntityActionResult {
     private ActionMode actionMode;
     
     private boolean submitToWorkflow;
+    
+    private boolean applyUserAction;
     
     private boolean refreshMenu;
 
@@ -92,6 +96,22 @@ public class EntityActionResult {
 
     public void setSubmitToWorkflow(boolean submitToWorkflow) {
         this.submitToWorkflow = submitToWorkflow;
+    }
+
+    public String getUserAction() {
+        return userAction;
+    }
+
+    public void setUserAction(String userAction) {
+        this.userAction = userAction;
+    }
+
+    public boolean isApplyUserAction() {
+        return applyUserAction;
+    }
+
+    public void setApplyUserAction(boolean applyUserAction) {
+        this.applyUserAction = applyUserAction;
     }
 
     public String getResultPath() {
