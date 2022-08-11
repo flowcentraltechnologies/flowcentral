@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
@@ -1031,7 +1032,23 @@ public interface AppletUtilities extends UnifyComponent {
      */
     EntityParamValues constructEntityParamValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityParamValuesMode) throws UnifyException;
-
+    
+    /**
+     * Matches a form bean with applet condition property
+     * 
+     * @param appletDef
+     *                          the applet definition
+     * @param form
+     *                          the form
+     * @param conditionPropName
+     *                          the condition applet property name
+     * @return true if matched or on no condition otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form, String conditionPropName)
+            throws UnifyException;
+    
     /**
      * Gets child entity foreign key field name
      * 

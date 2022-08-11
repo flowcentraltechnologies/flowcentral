@@ -152,19 +152,6 @@ public abstract class AbstractApplet {
         return !StringUtils.isBlank(formName) ? au.getFormDef(formName) : null;
     }
 
-    protected boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form,
-            String conditionPropName) throws UnifyException {
-        String condFilterName = appletDef.getPropValue(String.class, conditionPropName, null);
-        if (condFilterName != null) {
-            return appletDef.getFilterDef(condFilterName)
-                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(),
-                            au.getSpecialParamProvider(), au.getNow())
-                    .match(form.getFormBean());
-        }
-
-        return true;
-    }
-
     protected boolean isRootAppletProp(String propName) throws UnifyException {
         return getRootAppletDef().isProp(propName);
     }

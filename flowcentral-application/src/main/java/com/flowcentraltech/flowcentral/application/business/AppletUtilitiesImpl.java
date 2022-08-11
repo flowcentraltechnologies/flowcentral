@@ -553,6 +553,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             setCollaborationContext(form);
         }
 
+        boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(getAppletDef(applet.getAppletName()),
+                form, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+        formContext.setConditionalDisabled(conditionalDisabled);
         // Tabs
         final EntityDef entityDef = formDef.getEntityDef();
         final boolean isCreateMode = formMode.isCreate();
@@ -844,6 +847,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final EntitySingleForm form = new EntitySingleForm(formContext, sectorIcon, breadCrumbs, panelName, bean);
         form.setBeanTitle(beanTitle);
         form.setFormMode(formMode);
+        
+        boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(applet.getSingleFormAppletDef(),
+                form, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+        formContext.setConditionalDisabled(conditionalDisabled);
         return form;
     }
 
@@ -1238,6 +1245,20 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         logDebug("Constructing entity parameter values for [{0}] using entity definition [{1}]...", tabName,
                 ownerEntityDef.getLongName());
         return new EntityParamValues(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityParamValuesMode);
+    }
+
+    @Override
+    public boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form,
+            String conditionPropName) throws UnifyException {
+        String condFilterName = appletDef.getPropValue(String.class, conditionPropName, null);
+        if (condFilterName != null) {
+            return appletDef.getFilterDef(condFilterName)
+                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(),
+                            specialParamProvider, getNow())
+                    .match(form.getFormBean());
+        }
+
+        return true;
     }
 
     @Override
