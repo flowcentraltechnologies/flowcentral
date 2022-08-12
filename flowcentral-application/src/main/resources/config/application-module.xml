@@ -68,5 +68,8 @@
 		<sysParameter code="APP-0013" defaultVal="false"
 			description="$m{application.sysparam.sectionindicationonpage}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0014" defaultVal="true"
+			description="$m{application.sysparam.saveheaderformontabaction}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

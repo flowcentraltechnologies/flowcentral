@@ -17,11 +17,9 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
-import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
@@ -59,9 +57,7 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     @Override
     protected void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode) throws UnifyException {
-        FormContextEvaluator formContextEvaluator = au().getComponent(FormContextEvaluator.class,
-                ApplicationModuleNameConstants.FORMCONTEXT_EVALUATOR);
-        formContextEvaluator.evaluateFormContext(formContext, evaluationMode);
+        au().getFormContextEvaluator().evaluateFormContext(formContext, evaluationMode);
     }
 
     @Override

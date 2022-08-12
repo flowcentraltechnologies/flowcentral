@@ -61,4 +61,6 @@ public interface ApplicationModuleSysParamConstants {
 
     String SECTOR_INDICATION_ON_PAGE = "APP-0013";
 
+    String SAVE_HEADER_FORM_ON_TAB_ACTION = "APP-0014";
+
 }

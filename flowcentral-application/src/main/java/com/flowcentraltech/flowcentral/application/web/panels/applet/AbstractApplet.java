@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -50,7 +51,7 @@ public abstract class AbstractApplet {
                     || (this.equals(LISTING_ONLY) && formDef.isListingForm()) || this.equals(ALL);
         }
     }
-    
+
     protected final AppletUtilities au;
 
     protected final AppletContext ctx;
@@ -59,7 +60,7 @@ public abstract class AbstractApplet {
 
     private AppletDef rootAppletDef;
 
-    private String altSubCaption;;
+    private String altSubCaption;
 
     public AbstractApplet(AppletUtilities au, String appletName) throws UnifyException {
         this.appletName = ApplicationNameUtils.removeVestigialNamePart(appletName);
@@ -100,6 +101,11 @@ public abstract class AbstractApplet {
         }
 
         return rootAppletDef;
+    }
+
+    public boolean isSaveHeaderFormOnTabAction() throws UnifyException {
+        return au.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SAVE_HEADER_FORM_ON_TAB_ACTION);
     }
 
     protected void setAltSubCaption(String altSubCaption) {
@@ -150,19 +156,6 @@ public abstract class AbstractApplet {
 
         String formName = appletDef.getPropValue(String.class, formProperty);
         return !StringUtils.isBlank(formName) ? au.getFormDef(formName) : null;
-    }
-
-    protected boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form,
-            String conditionPropName) throws UnifyException {
-        String condFilterName = appletDef.getPropValue(String.class, conditionPropName, null);
-        if (condFilterName != null) {
-            return appletDef.getFilterDef(condFilterName)
-                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(),
-                            au.getSpecialParamProvider(), au.getNow())
-                    .match(form.getFormBean());
-        }
-
-        return true;
     }
 
     protected boolean isRootAppletProp(String propName) throws UnifyException {

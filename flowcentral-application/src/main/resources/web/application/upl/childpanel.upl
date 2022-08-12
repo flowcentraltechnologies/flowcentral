@@ -40,6 +40,6 @@
 !fc-miniform:childMiniForm binding:childForm
 
 // Actions
-!ui-post:createAct path:$p{/newChildItem}
-!ui-post:editAct path:$p{/editChildItem}
+!ui-post:createAct path:$p{/newChildItem} pushComponents:$r{mainform.push.components}
+!ui-post:editAct path:$p{/editChildItem} pushComponents:$r{mainform.push.components}
 	

@@ -28,7 +28,6 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
-import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -81,9 +80,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     protected ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
-    private FormContextEvaluator formContextEvaluator;
-
-    @Configurable
     private SystemModuleService systemModuleService;
 
     @Configurable
@@ -102,10 +98,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setFormContextEvaluator(FormContextEvaluator formContextEvaluator) {
-        this.formContextEvaluator = formContextEvaluator;
     }
 
     public final void setSystemModuleService(SystemModuleService systemModuleService) {
@@ -303,6 +295,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 }
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
                 switchContent("formPanel");
@@ -321,6 +314,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_CHILDLIST_FORM_NO_SCROLL:
             case MAINTAIN_RELATEDLIST_FORM_NO_SCROLL:
@@ -341,6 +335,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_FORM:
             case MAINTAIN_CHILDLIST_FORM:
@@ -364,6 +359,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case NEW_PRIMARY_FORM:
                 enableCreate = true;
@@ -412,6 +408,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", false);
                 setVisible("deleteBtn", false);
                 setEditable("formPanel", true);
+                addPanelToPushComponents("formPanel", true);
                 break;
             case CUSTOM_PAGE:
                 break;
@@ -424,7 +421,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         logDebug("Switching completed for form applet panel [{0}].",
                 formAppletDef != null ? formAppletDef.getLongName() : null);
     }
-
+    
     @Action
     public void newInst() throws UnifyException {
         getEntityFormApplet().newEntityInst();
@@ -766,7 +763,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
 
             setCommandResultMapping(entityActionResult, true);
-            handleHints(entityActionResult, getEntityFormApplet().getResolvedForm().getCtx());
+            handleHints(entityActionResult, null);
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
@@ -830,8 +827,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
         String successHint = entityActionResult.getSuccessHint();
-        if (ctx != null && !StringUtils.isBlank(successHint)) {
-            formHintSuccess(successHint, ctx.getEntityName());
+        if (!StringUtils.isBlank(successHint)) {
+            formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
         }
     }
 
@@ -894,7 +891,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         if (evaluationMode.evaluation()) {
-            if (ctx.getAppletContext().isReview()) {
+            if (evaluationMode.review() && ctx.getAppletContext().isReview()) {
                 AbstractEntityFormApplet applet = getEntityFormApplet();
                 final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
                 if (commentRequired) {
@@ -923,7 +920,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     private FormContext evaluateCurrentFormContext(final FormContext ctx, EvaluationMode evaluationMode)
             throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        formContextEvaluator.evaluateFormContext(ctx, evaluationMode);
+        applet.au().getFormContextEvaluator().evaluateFormContext(ctx, evaluationMode);
 
         // Detect tab error
         final boolean isWithFieldErrors = ctx.isWithFieldErrors();

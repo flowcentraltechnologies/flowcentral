@@ -146,7 +146,7 @@
 !ui-postcommand:prevAct command:previous
 !ui-postcommand:nextAct command:next
 !ui-postcommand:formActionAct command:performFormAction components:$c{formPanel}
-!ui-postcommand:maintainAct command:maintain debounce:true
+!ui-postcommand:maintainAct command:maintain pushComponents:$r{mainform.push.components} debounce:true
 !ui-postcommand:listingAct command:listing debounce:true
 !ui-postcommand:saveAssignCloseAct command:saveAssignAndClose components:$c{assignmentPanel}
 !ui-postcommand:saveEntryCloseAct command:saveEntryAndClose components:$c{entryTablePanel}

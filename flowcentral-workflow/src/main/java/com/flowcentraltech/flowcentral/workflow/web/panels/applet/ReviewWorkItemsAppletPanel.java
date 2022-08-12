@@ -52,7 +52,7 @@ public class ReviewWorkItemsAppletPanel extends AbstractEntityFormAppletPanel {
                 WorkflowModuleSysParamConstants.WF_ENABLE_UPDATES_ON_REVIEW);
         setVisible("frmActionBtns", userActionRight);
         setVisible("updateBtn", update);
-        setVisible("updateCloseBtn", update);
+        setVisible("updateCloseBtn", false);
         setVisible("deleteBtn", false);
         setVisible("listFrmActionBtns", userActionRight);
 

@@ -334,7 +334,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
-        return formBeanMatchAppletPropertyCondition(getRootAppletDef(), form, conditionPropName);
+        return au.formBeanMatchAppletPropertyCondition(getRootAppletDef(), form, conditionPropName);
     }
 
     @SuppressWarnings("unchecked")

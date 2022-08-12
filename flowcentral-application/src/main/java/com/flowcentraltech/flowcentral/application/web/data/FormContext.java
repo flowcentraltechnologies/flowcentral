@@ -120,6 +120,8 @@ public class FormContext extends AbstractContext {
 
     private int tabIndexCounter;
 
+    private boolean conditionalDisabled;
+
     private boolean formFocused;
 
     private Mode mode;
@@ -458,6 +460,14 @@ public class FormContext extends AbstractContext {
         this.tabWidgetIds = tabWidgetIds;
     }
 
+    public boolean isConditionalDisabled() {
+        return conditionalDisabled;
+    }
+
+    public void setConditionalDisabled(boolean conditionalDisabled) {
+        this.conditionalDisabled = conditionalDisabled;
+    }
+
     public boolean isFormFocused() {
         return formFocused;
     }
@@ -573,12 +583,12 @@ public class FormContext extends AbstractContext {
 
     public boolean isTabEditable(String name) {
         FormTab tab = formTabs.get(name);
-        return tab == null || (tab.isEditable() && !tab.isDisabled());
+        return !conditionalDisabled && (tab == null || (tab.isEditable() && !tab.isDisabled()));
     }
 
     public boolean isTabDisabled(String name) {
         FormTab tab = formTabs.get(name);
-        return tab != null && tab.isDisabled();
+        return conditionalDisabled || (tab != null && tab.isDisabled());
     }
 
     public List<FormAnnotationDef> getFormAnnotationDef() {

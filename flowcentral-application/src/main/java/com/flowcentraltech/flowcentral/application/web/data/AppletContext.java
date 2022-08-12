@@ -109,6 +109,10 @@ public class AppletContext extends AbstractContext {
         return ref != null ? ref : type.readEntity();
     }
 
+    public boolean isStudioComponent() throws UnifyException {
+        return applet.getRootAppletDef().isStudioComponent();
+    }
+
     public void incTabReadOnlyCounter() {
         tabReadOnlyCounter++;
     }

@@ -148,6 +148,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                     form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 }
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
                 switchContent("formPanel");
@@ -164,6 +165,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_FORM:
                 switchContent("formPanel");
@@ -182,6 +184,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case NEW_PRIMARY_FORM:
                 enableCreate = true;
@@ -215,6 +218,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                 setVisible("updateCloseBtn", false);
                 setVisible("deleteBtn", false);
                 setEditable("formPanel", true);
+                addPanelToPushComponents("formPanel", true);
                 break;
             case SEARCH:
             default:
@@ -411,13 +415,13 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         if (evaluationMode.evaluation()) {
             FormPanel formPanel = getWidgetByShortName(FormPanel.class, "formPanel");
             ctx.mergeValidationErrors(formPanel.validate(evaluationMode));
-            
-            if (ctx.getAppletContext().isReview()) {
+
+            if (evaluationMode.review() && ctx.getAppletContext().isReview()) {
                 if (commentRequired) {
                     FormPanel commentsFormPanel = getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
                     ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
                 }
-                
+
                 if (ctx.getAppletContext().isEmails()) {
                     FormPanel emailsFormPanel = getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel");
                     ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
