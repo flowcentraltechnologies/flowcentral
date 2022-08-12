@@ -119,6 +119,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                 appFormElement.setTabReference(formTab.getReference());
                 appFormElement.setFilter(formTab.getFilter());
                 appFormElement.setEditAction(formTab.getEditAction());
+                appFormElement.setShowSearch(formTab.isShowSearch());
                 appFormElement.setVisible(formTab.isVisible());
                 appFormElement.setEditable(formTab.isEditable());
                 appFormElement.setDisabled(formTab.isDisabled());
