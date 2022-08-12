@@ -63,6 +63,7 @@
 // Search entries panel
 !ui-panel:searchEntriesPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{searchEntriesHeader searchEntriesBodyPanel}
+	ignoreParentState:true
 
 !ui-panel:searchEntriesHeader style:$s{display:inline-block;} components:$c{baseFilterTranslation}
 
@@ -87,6 +88,7 @@
 // Search filter panel
 !ui-panel:searchFilterPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{searchFilterHeader searchFilterBody}
+	ignoreParentState:true
 	
 !ui-panel:searchFilterHeader layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{none 100% 128px}}
 	components:$c{toggleFilterBtn filterTrnBlock switchToBasic}
