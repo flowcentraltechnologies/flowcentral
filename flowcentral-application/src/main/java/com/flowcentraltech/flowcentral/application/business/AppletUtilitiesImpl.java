@@ -51,6 +51,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -123,6 +124,7 @@ import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.font.FontSymbolManager;
 import com.tcdng.unify.web.ui.PageRequestContextUtil;
 import com.tcdng.unify.web.ui.widget.Panel;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Applet utilities implementation.
@@ -138,6 +140,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Configurable
     private SpecialParamProvider specialParamProvider;
+
+    @Configurable
+    private FormContextEvaluator formContextEvaluator;
 
     @Configurable
     private SequenceCodeGenerator sequenceCodeGenerator;
@@ -194,6 +199,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         this.specialParamProvider = specialParamProvider;
     }
 
+    public final void setFormContextEvaluator(FormContextEvaluator formContextEvaluator) {
+        this.formContextEvaluator = formContextEvaluator;
+    }
+
     public final void setSequenceCodeGenerator(SequenceCodeGenerator sequenceCodeGenerator) {
         this.sequenceCodeGenerator = sequenceCodeGenerator;
     }
@@ -228,6 +237,16 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public void hintUser(String messageKey, Object... params) throws UnifyException {
+        pageRequestContextUtil.hintUser(MODE.INFO, messageKey, params);
+    }
+
+    @Override
+    public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
+        pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
     public SectorIcon getPageSectorIconByApplication(String applicationName) throws UnifyException {
         if (!applicationName.startsWith(ApplicationNameUtils.RESERVED_FC_PREFIX)) {
             boolean indicatePageSectors = systemModuleService.getSysParameterValue(boolean.class,
@@ -254,6 +273,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public SpecialParamProvider getSpecialParamProvider() {
         return specialParamProvider;
+    }
+
+    @Override
+    public FormContextEvaluator getFormContextEvaluator() throws UnifyException {
+        return formContextEvaluator;
     }
 
     @Override

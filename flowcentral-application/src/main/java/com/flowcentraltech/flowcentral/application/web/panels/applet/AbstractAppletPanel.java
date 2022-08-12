@@ -61,7 +61,7 @@ public abstract class AbstractAppletPanel extends SwitchPanel {
     }
 
     protected void addPanelToPushComponents(String panelName, boolean editable) throws UnifyException {
-        if (editable && getApplet().saveHeaderFormOnTabAction()) {
+        if (editable && getApplet().isSaveHeaderFormOnTabAction()) {
             Panel formPanel = getWidgetByShortName(Panel.class, panelName);
             getRequestContextUtil().addListItem("mainform.push.components", formPanel.getId());
         }

@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -73,6 +74,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Applet utilities component.
@@ -101,6 +103,32 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     String getTriggerWidgetId() throws UnifyException;
+
+    /**
+     * Hints user in current request with supplied message in INFO mode.
+     * 
+     * @param messageKey
+     *            the message key
+     * @param params
+     *            the message parameters
+     * @throws UnifyException
+     *             if an error occurs
+     */
+    void hintUser(String messageKey, Object... params) throws UnifyException;
+
+    /**
+     * Hints user in current request with supplied message.
+     * 
+     * @param mode
+     *            the hint mode
+     * @param messageKey
+     *            the message key
+     * @param params
+     *            the message parameters
+     * @throws UnifyException
+     *             if an error occurs
+     */
+    void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException;
 
     /**
      * Checks if widget type is entity search widget.
@@ -136,6 +164,15 @@ public interface AppletUtilities extends UnifyComponent {
      */
     SpecialParamProvider getSpecialParamProvider() throws UnifyException;
 
+    /**
+     * Gets form context evaluator.
+     * 
+     * @return the evaluator
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FormContextEvaluator getFormContextEvaluator() throws UnifyException;
+    
     /**
      * Gets the sequence code generator
      * 

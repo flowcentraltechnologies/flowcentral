@@ -416,7 +416,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             FormPanel formPanel = getWidgetByShortName(FormPanel.class, "formPanel");
             ctx.mergeValidationErrors(formPanel.validate(evaluationMode));
 
-            if (ctx.getAppletContext().isReview()) {
+            if (evaluationMode.review() && ctx.getAppletContext().isReview()) {
                 if (commentRequired) {
                     FormPanel commentsFormPanel = getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
                     ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));

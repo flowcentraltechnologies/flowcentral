@@ -28,7 +28,6 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
-import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -81,9 +80,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     protected ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
-    private FormContextEvaluator formContextEvaluator;
-
-    @Configurable
     private SystemModuleService systemModuleService;
 
     @Configurable
@@ -102,10 +98,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setFormContextEvaluator(FormContextEvaluator formContextEvaluator) {
-        this.formContextEvaluator = formContextEvaluator;
     }
 
     public final void setSystemModuleService(SystemModuleService systemModuleService) {
@@ -899,7 +891,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         if (evaluationMode.evaluation()) {
-            if (ctx.getAppletContext().isReview()) {
+            if (evaluationMode.review() && ctx.getAppletContext().isReview()) {
                 AbstractEntityFormApplet applet = getEntityFormApplet();
                 final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
                 if (commentRequired) {
@@ -928,7 +920,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     private FormContext evaluateCurrentFormContext(final FormContext ctx, EvaluationMode evaluationMode)
             throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        formContextEvaluator.evaluateFormContext(ctx, evaluationMode);
+        applet.au().getFormContextEvaluator().evaluateFormContext(ctx, evaluationMode);
 
         // Detect tab error
         final boolean isWithFieldErrors = ctx.isWithFieldErrors();

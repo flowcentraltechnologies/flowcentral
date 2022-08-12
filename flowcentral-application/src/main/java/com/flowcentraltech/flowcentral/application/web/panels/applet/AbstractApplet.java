@@ -103,7 +103,7 @@ public abstract class AbstractApplet {
         return rootAppletDef;
     }
 
-    public boolean saveHeaderFormOnTabAction() throws UnifyException {
+    public boolean isSaveHeaderFormOnTabAction() throws UnifyException {
         return au.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SAVE_HEADER_FORM_ON_TAB_ACTION);
     }

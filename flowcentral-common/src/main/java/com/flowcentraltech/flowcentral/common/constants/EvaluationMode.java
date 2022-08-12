@@ -25,18 +25,22 @@ package com.flowcentraltech.flowcentral.common.constants;
  */
 public enum EvaluationMode {
 
-    CREATE(true),
-    UPDATE(true),
-    CREATE_SUBMIT(true),
-    UPDATE_SUBMIT(true),
-    DELETE(false),
-    REQUIRED(true),
-    NOP(false);
+    CREATE(true, true),
+    CREATE_SUBMIT(true, true),
+    UPDATE(true, true),
+    UPDATE_SUBMIT(true, true),
+    UPDATE_TABACTION(true, false),
+    DELETE(false, false),
+    REQUIRED(true, true),
+    NOP(false, false);
 
     private final boolean evaluation;
+
+    private final boolean review;
     
-    private EvaluationMode(boolean evaluation) {
+    private EvaluationMode(boolean evaluation, boolean review) {
         this.evaluation = evaluation;
+        this.review = review;
     }
     
     public static EvaluationMode getCreateMode(boolean create) {
@@ -93,5 +97,9 @@ public enum EvaluationMode {
     
     public boolean evaluation() {
         return evaluation;
+    }
+    
+    public boolean review() {
+        return review;
     }
 }
