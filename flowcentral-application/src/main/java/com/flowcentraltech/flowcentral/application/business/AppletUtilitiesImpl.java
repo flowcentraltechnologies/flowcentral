@@ -651,7 +651,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 : formTabDef.getEditAction();
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef, editAction,
-                                EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
+                                formTabDef.isShowSearch() ? EntitySearch.ENABLE_ALL
+                                        : EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH);
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                             _entitySearch.setBaseFilter(_appletDef.getFilterDef(
@@ -910,7 +911,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         if (applet.isCollaboration() && applet.isRootForm()) {
             setCollaborationContext(form);
         }
-        
+
         final AppletDef _formAppletDef = applet != null ? applet.getFormAppletDef() : null;
         if (_formAppletDef != null && !_formAppletDef.isStudioComponent()) {
             boolean conditionalDisabled = !formBeanMatchAppletPropertyCondition(_formAppletDef, form,

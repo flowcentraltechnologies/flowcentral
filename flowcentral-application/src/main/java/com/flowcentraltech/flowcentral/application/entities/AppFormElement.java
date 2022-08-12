@@ -86,6 +86,9 @@ public class AppFormElement extends BaseConfigEntity {
     private boolean required;
 
     @Column
+    private boolean showSearch;
+
+    @Column
     private boolean visible;
 
     @Column
@@ -242,6 +245,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    public boolean isShowSearch() {
+        return showSearch;
+    }
+
+    public void setShowSearch(boolean showSearch) {
+        this.showSearch = showSearch;
     }
 
     public boolean isVisible() {

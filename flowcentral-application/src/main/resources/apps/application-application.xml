@@ -1219,6 +1219,8 @@
 				label="$m{application.appformelement.showannotation}" type="boolean" />
 			<field name="required"
 				label="$m{application.appformelement.required}" type="boolean" />
+			<field name="showSearch"
+				label="$m{application.appformelement.showsearch}" type="boolean" />
 			<field name="visible"
 				label="$m{application.appformelement.visible}" type="boolean" />
 			<field name="editable"
