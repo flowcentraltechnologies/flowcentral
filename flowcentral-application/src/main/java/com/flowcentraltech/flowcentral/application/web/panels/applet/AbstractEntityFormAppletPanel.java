@@ -303,6 +303,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     form.setDisplayItemCounter(applet.getDisplayItemCounter());
                 }
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
                 switchContent("formPanel");
@@ -321,6 +322,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_CHILDLIST_FORM_NO_SCROLL:
             case MAINTAIN_RELATEDLIST_FORM_NO_SCROLL:
@@ -341,6 +343,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case MAINTAIN_FORM:
             case MAINTAIN_CHILDLIST_FORM:
@@ -364,6 +367,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", enableUpdate);
                 setVisible("deleteBtn", enableDelete);
                 setEditable("formPanel", enableUpdate);
+                addPanelToPushComponents("formPanel", enableUpdate);
                 break;
             case NEW_PRIMARY_FORM:
                 enableCreate = true;
@@ -412,6 +416,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("updateCloseBtn", false);
                 setVisible("deleteBtn", false);
                 setEditable("formPanel", true);
+                addPanelToPushComponents("formPanel", true);
                 break;
             case CUSTOM_PAGE:
                 break;
@@ -424,7 +429,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         logDebug("Switching completed for form applet panel [{0}].",
                 formAppletDef != null ? formAppletDef.getLongName() : null);
     }
-
+    
     @Action
     public void newInst() throws UnifyException {
         getEntityFormApplet().newEntityInst();

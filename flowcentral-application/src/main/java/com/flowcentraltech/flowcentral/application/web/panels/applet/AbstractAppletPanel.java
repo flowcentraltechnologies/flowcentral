@@ -23,6 +23,7 @@ import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
+import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
 
@@ -59,4 +60,14 @@ public abstract class AbstractAppletPanel extends SwitchPanel {
         setCommandResultMapping("showapplicationreportoptions");
     }
 
+    protected void addPanelToPushComponents(String panelName, boolean editable) throws UnifyException {
+        if (editable && getApplet().saveHeaderFormOnTabAction()) {
+            Panel formPanel = getWidgetByShortName(Panel.class, panelName);
+            getRequestContextUtil().addListItem("mainform.push.components", formPanel.getId());
+        }
+    }
+
+    protected AbstractApplet getApplet() throws UnifyException {
+        return getValue(AbstractApplet.class);
+    }
 }

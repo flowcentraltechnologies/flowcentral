@@ -25,6 +25,6 @@
 	searchResultMarker:$j{com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants.RELATED_LIST}
 
 // Actions
-!ui-post:newAct path:$p{/newRelatedItem}
-!ui-post:assignAct path:$r{relatedlist.edit.actionpath}
+!ui-post:newAct path:$p{/newRelatedItem} pushComponents:$r{mainform.push.components}
+!ui-post:assignAct path:$r{relatedlist.edit.actionpath} pushComponents:$r{mainform.push.components}
 	
