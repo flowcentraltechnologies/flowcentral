@@ -235,9 +235,10 @@ public class FormEditor {
         }
 
         public Builder addTab(String contentType, String name, String label, String applet, String reference,
-                String filter, String editAction, boolean visible, boolean editable, boolean disabled) {
-            currentTab = new FormTab(contentType, name, label, applet, reference, filter, editAction, visible, editable,
-                    disabled);
+                String filter, String editAction, boolean showSearch, boolean visible, boolean editable,
+                boolean disabled) {
+            currentTab = new FormTab(contentType, name, label, applet, reference, filter, editAction, showSearch,
+                    visible, editable, disabled);
             tabs.add(currentTab);
             return this;
         }
@@ -377,6 +378,8 @@ public class FormEditor {
 
         private String editAction;
 
+        private boolean showSearch;
+
         private boolean visible;
 
         private boolean editable;
@@ -386,7 +389,7 @@ public class FormEditor {
         private List<FormSection> sections;
 
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
-                String editAction, boolean visible, boolean editable, boolean disabled) {
+                String editAction, boolean showSearch, boolean visible, boolean editable, boolean disabled) {
             this();
             this.contentType = contentType;
             this.name = name;
@@ -395,6 +398,7 @@ public class FormEditor {
             this.reference = reference;
             this.filter = filter;
             this.editAction = editAction;
+            this.showSearch = showSearch;
             this.visible = visible;
             this.editable = editable;
             this.disabled = disabled;
@@ -482,6 +486,14 @@ public class FormEditor {
 
         public void setEditAction(String editAction) {
             this.editAction = editAction;
+        }
+
+        public boolean isShowSearch() {
+            return showSearch;
+        }
+
+        public void setShowSearch(boolean showSearch) {
+            this.showSearch = showSearch;
         }
 
         public boolean isVisible() {

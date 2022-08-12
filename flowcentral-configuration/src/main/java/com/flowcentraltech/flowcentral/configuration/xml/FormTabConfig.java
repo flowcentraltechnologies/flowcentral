@@ -46,6 +46,8 @@ public class FormTabConfig {
 
     private String editAction;
 
+    private boolean showSearch;
+
     private boolean visible;
 
     private boolean editable;
@@ -122,6 +124,15 @@ public class FormTabConfig {
     @XmlAttribute
     public void setEditAction(String editAction) {
         this.editAction = editAction;
+    }
+
+    public boolean isShowSearch() {
+        return showSearch;
+    }
+
+    @XmlAttribute
+    public void setShowSearch(boolean showSearch) {
+        this.showSearch = showSearch;
     }
 
     public boolean isVisible() {

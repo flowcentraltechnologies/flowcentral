@@ -49,6 +49,8 @@ public class FormTabDef {
 
     private List<String> fieldNameList;
 
+    private boolean showSearch;
+
     private boolean visible;
 
     private boolean editable;
@@ -58,7 +60,7 @@ public class FormTabDef {
     private int listOnlyCheck;
 
     public FormTabDef(TabContentType contentType, String name, String label, String applet, String reference,
-            String filter, String editAction, List<FormSectionDef> formSectionDefList, boolean visible,
+            String filter, String editAction, List<FormSectionDef> formSectionDefList, boolean showSearch, boolean visible,
             boolean editable, boolean disabled) {
         this.contentType = contentType;
         this.name = name;
@@ -68,6 +70,7 @@ public class FormTabDef {
         this.reference = reference;
         this.editAction = editAction;
         this.formSectionDefList = formSectionDefList;
+        this.showSearch = showSearch;
         this.visible = visible;
         this.editable = editable;
         this.disabled = disabled;
@@ -83,6 +86,7 @@ public class FormTabDef {
         this.filter = srcFormTabDef.filter;
         this.reference = srcFormTabDef.reference;
         this.editAction = srcFormTabDef.editAction;
+        this.showSearch = srcFormTabDef.showSearch;
         this.visible = srcFormTabDef.visible;
         this.editable = srcFormTabDef.editable;
         this.disabled = srcFormTabDef.disabled;
@@ -179,6 +183,10 @@ public class FormTabDef {
         }
 
         return fieldNameList;
+    }
+
+    public boolean isShowSearch() {
+        return showSearch;
     }
 
     public boolean isVisible() {

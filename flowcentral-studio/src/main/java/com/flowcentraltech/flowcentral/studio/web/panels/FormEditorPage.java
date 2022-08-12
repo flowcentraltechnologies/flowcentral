@@ -119,6 +119,7 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                 appFormElement.setTabReference(formTab.getReference());
                 appFormElement.setFilter(formTab.getFilter());
                 appFormElement.setEditAction(formTab.getEditAction());
+                appFormElement.setShowSearch(formTab.isShowSearch());
                 appFormElement.setVisible(formTab.isVisible());
                 appFormElement.setEditable(formTab.isEditable());
                 appFormElement.setDisabled(formTab.isDisabled());
@@ -188,8 +189,8 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                 case TAB:
                     feb.addTab(appFormElement.getTabContentType().name(), appFormElement.getElementName(),
                             appFormElement.getLabel(), appFormElement.getTabApplet(), appFormElement.getTabReference(),
-                            appFormElement.getFilter(), appFormElement.getEditAction(), appFormElement.isVisible(),
-                            appFormElement.isEditable(), appFormElement.isDisabled());
+                            appFormElement.getFilter(), appFormElement.getEditAction(), appFormElement.isShowSearch(),
+                            appFormElement.isVisible(), appFormElement.isEditable(), appFormElement.isDisabled());
                     break;
                 default:
                     break;
