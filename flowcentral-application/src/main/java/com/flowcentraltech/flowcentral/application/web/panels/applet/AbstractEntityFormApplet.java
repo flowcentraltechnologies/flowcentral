@@ -448,7 +448,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
     }
 
-    public void crudToChildItem(int childTabIndex) throws UnifyException {
+    public void crudToChildItem(int childTabIndex, boolean formless) throws UnifyException {
         if (ensureSaveOnTabAction()) {
             currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
             final AppletDef _formAppletDef = getAppletDef(currFormTabDef.getApplet());
@@ -460,9 +460,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
             final String entryTablePolicy = _formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.ENTRY_TABLE_POLICY);
-            final String createFormName = _formAppletDef.getPropValue(String.class,
+            final String createFormName = formless ? null : _formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.CREATE_FORM);
-            final String maintainFormName = _formAppletDef.getPropValue(String.class,
+            final String maintainFormName = formless ? null : _formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.MAINTAIN_FORM);
             final String baseField = au().getChildFkFieldName(form.getFormDef().getEntityDef(),
                     currFormTabDef.getReference());

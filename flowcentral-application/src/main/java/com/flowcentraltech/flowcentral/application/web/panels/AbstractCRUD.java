@@ -52,7 +52,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     private final Object baseId;
 
     private final String addCaption;
-    
+
     private int maintainIndex;
 
     private boolean create;
@@ -100,7 +100,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     public void evaluateTabStates() throws UnifyException {
         getForm().getCtx().evaluateTabStates();
     }
-    
+
     public boolean isCreate() {
         return create;
     }
@@ -109,27 +109,35 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         return !create;
     }
 
+    public boolean isFormless() {
+        return createForm == null && maintainForm == null;
+    }
+
     public void enterCreate() throws UnifyException {
         create = true;
-        Object _inst = createObject();
-        FormContext formContext = getForm().getCtx();
-        formContext.clearValidationErrors();
-        formContext.setInst(_inst);
-        prepareCreate(formContext);
-        table.setHighlightedRow(-1);
+        if (!isFormless()) {
+            Object _inst = createObject();
+            FormContext formContext = getForm().getCtx();
+            formContext.clearValidationErrors();
+            formContext.setInst(_inst);
+            prepareCreate(formContext);
+            table.setHighlightedRow(-1);
+        }
     }
 
     public void enterMaintain(int index) throws UnifyException {
         create = false;
-        if (table.isWithDisplayItems()) {
-            Object inst = table.getDisplayItem(index);
-            Object _inst = reload(inst);
-            FormContext formContext = getForm().getCtx();
-            formContext.setInst(_inst);
-            prepareMaintain(formContext);
-            maintainIndex = index;
-            table.setHighlightedRow(maintainIndex);
-        }        
+        if (!isFormless()) {
+            if (table.isWithDisplayItems()) {
+                Object inst = table.getDisplayItem(index);
+                Object _inst = reload(inst);
+                FormContext formContext = getForm().getCtx();
+                formContext.setInst(_inst);
+                prepareMaintain(formContext);
+                maintainIndex = index;
+                table.setHighlightedRow(maintainIndex);
+            }
+        }
     }
 
     public void save() throws UnifyException {
@@ -169,17 +177,17 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     }
 
     protected FormTabDef getCreateFormTabDef() {
-        return createForm.getFormTabDef();
+        return createForm != null ? createForm.getFormTabDef() : null;
     }
 
     protected FormDef getCreateFormDef() {
-        return createForm.getCtx().getFormDef();
+        return createForm != null ? createForm.getCtx().getFormDef() : null;
     }
 
     protected FormDef getMaintainFormDef() {
-        return maintainForm.getCtx().getFormDef();
+        return maintainForm != null ? maintainForm.getCtx().getFormDef() : null;
     }
-    
+
     protected abstract void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode)
             throws UnifyException;
 

@@ -168,6 +168,10 @@ public class EntityCRUDPage {
         return sectorIcon != null;
     }
 
+    public boolean isFormless() {
+        return StringUtils.isBlank(createFormName) && StringUtils.isBlank(maintainFormName);
+    }
+    
     public void crudSelectItem(int index) throws UnifyException {
         getCrud().enterMaintain(index);
     }
@@ -197,22 +201,27 @@ public class EntityCRUDPage {
                 entityTable.setPolicy(policy);
             }
 
-            FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
-            createFrmCtx.setCrudMode();
-            createFrmCtx.setParentEntityDef(parentEntityDef);
-            createFrmCtx.setParentInst(parentInst);
+            if (isFormless()) {
+                crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
+                        entityTable, null, null, childListName);
+            } else {
+                FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
+                createFrmCtx.setCrudMode();
+                createFrmCtx.setParentEntityDef(parentEntityDef);
+                createFrmCtx.setParentInst(parentInst);
 
-            FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);
-            maintainFrmCtx.setCrudMode();
-            maintainFrmCtx.setParentEntityDef(parentEntityDef);
-            maintainFrmCtx.setParentInst(parentInst);
+                FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);
+                maintainFrmCtx.setCrudMode();
+                maintainFrmCtx.setParentEntityDef(parentEntityDef);
+                maintainFrmCtx.setParentInst(parentInst);
 
-            MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
-                    createFrmCtx.getFormDef().getFormTabDef(0));
-            MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
-                    maintainFrmCtx.getFormDef().getFormTabDef(0));
-            crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
-                    entityTable, createForm, maintainForm, childListName);
+                MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
+                        createFrmCtx.getFormDef().getFormTabDef(0));
+                MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
+                        maintainFrmCtx.getFormDef().getFormTabDef(0));
+                crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
+                        entityTable, createForm, maintainForm, childListName);
+            }
         }
 
         return crud;

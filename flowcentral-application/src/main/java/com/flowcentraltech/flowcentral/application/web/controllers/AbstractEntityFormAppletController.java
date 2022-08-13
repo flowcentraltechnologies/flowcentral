@@ -153,7 +153,20 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
             int childTabIndex = getRequestTarget(int.class);
-            applet.crudToChildItem(childTabIndex);
+            applet.crudToChildItem(childTabIndex, false);
+            getPageRequestContextUtil().setContentScrollReset();
+        }
+
+        return "refreshapplet";
+    }
+
+    @Action
+    public String crudFormlessToChildItem() throws UnifyException {
+        AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
+        AbstractEntityFormApplet applet = pageBean.getApplet();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            applet.crudToChildItem(childTabIndex, true);
             getPageRequestContextUtil().setContentScrollReset();
         }
 
