@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
@@ -86,6 +87,10 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     }
 
     public boolean isWithFormErrors() {
+        if (isFormless()) {
+            return false;
+        }
+        
         return getForm().getCtx().isWithFormErrors();
     }
 
@@ -94,11 +99,17 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
     }
 
     public List<FormMessage> getValidationErrors() {
+        if (isFormless()) {
+            return Collections.emptyList();
+        }
+
         return getForm().getCtx().getValidationErrors();
     }
 
     public void evaluateTabStates() throws UnifyException {
-        getForm().getCtx().evaluateTabStates();
+        if (!isFormless()) {
+            getForm().getCtx().evaluateTabStates();
+        }
     }
 
     public boolean isCreate() {
