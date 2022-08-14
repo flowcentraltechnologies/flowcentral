@@ -64,6 +64,12 @@ public class AppFormElement extends BaseConfigEntity {
     @Column(length = 64, nullable = true)
     private String editAction;
 
+    @Column(length = 64, nullable = true)
+    private String editFormless;
+
+    @Column(length = 64, nullable = true)
+    private String editFixedRows;
+
     @Column(length = 128, nullable = true)
     private String inputReference;
 
@@ -84,6 +90,9 @@ public class AppFormElement extends BaseConfigEntity {
 
     @Column
     private boolean required;
+
+    @Column
+    private boolean ignoreParentCondition;
 
     @Column
     private boolean showSearch;
@@ -191,6 +200,22 @@ public class AppFormElement extends BaseConfigEntity {
         this.editAction = editAction;
     }
 
+    public String getEditFormless() {
+        return editFormless;
+    }
+
+    public void setEditFormless(String editFormless) {
+        this.editFormless = editFormless;
+    }
+
+    public String getEditFixedRows() {
+        return editFixedRows;
+    }
+
+    public void setEditFixedRows(String editFixedRows) {
+        this.editFixedRows = editFixedRows;
+    }
+
     public String getInputReference() {
         return inputReference;
     }
@@ -245,6 +270,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    public boolean isIgnoreParentCondition() {
+        return ignoreParentCondition;
+    }
+
+    public void setIgnoreParentCondition(boolean ignoreParentCondition) {
+        this.ignoreParentCondition = ignoreParentCondition;
     }
 
     public boolean isShowSearch() {

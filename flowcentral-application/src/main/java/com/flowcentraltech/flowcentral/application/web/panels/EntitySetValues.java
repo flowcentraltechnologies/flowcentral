@@ -46,9 +46,9 @@ public class EntitySetValues extends AbstractPanelFormBinding {
 
     private Long ownerInstId;
 
-    public EntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, EntityDef ownerEntityDef,
-            int mode) {
-        super(ctx, sweepingCommitPolicy, tabName);
+    public EntitySetValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
     }
@@ -66,14 +66,15 @@ public class EntitySetValues extends AbstractPanelFormBinding {
     }
 
     public void load(EntityDef entityDef) throws UnifyException {
-        SetValuesDef setValuesDef = getAppletCtx().au().retrieveSetValuesDef(category, ownerEntityDef.getLongName(), ownerInstId);
+        SetValuesDef setValuesDef = getAppletCtx().au().retrieveSetValuesDef(category, ownerEntityDef.getLongName(),
+                ownerInstId);
         setValueEntries = new SetValueEntries(entityDef, setValuesDef, Editable.fromBoolean(isApplyButtonVisible()));
     }
 
     public void save() throws UnifyException {
         if (setValueEntries != null) {
-            getAppletCtx().au().saveSetValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId,
-                    setValueEntries.getSetValuesDef());
+            getAppletCtx().au().saveSetValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
+                    ownerInstId, setValueEntries.getSetValuesDef());
         }
     }
 

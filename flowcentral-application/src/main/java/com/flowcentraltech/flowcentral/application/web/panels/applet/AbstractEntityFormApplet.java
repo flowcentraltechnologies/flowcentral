@@ -460,17 +460,20 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
             final String entryTablePolicy = _formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.ENTRY_TABLE_POLICY);
-            final String createFormName = _formAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.CREATE_FORM);
-            final String maintainFormName = _formAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM);
+            final boolean formless = form.matchFormBean(currFormTabDef.getEditFormless());
+            final boolean fixedRows = form.matchFormBean(currFormTabDef.getEditFixedRows());
+            final String createFormName = formless ? null
+                    : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
+            final String maintainFormName = formless ? null
+                    : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
             final String baseField = au().getChildFkFieldName(form.getFormDef().getEntityDef(),
                     currFormTabDef.getReference());
             final Object baseId = ((Entity) form.getFormBean()).getId();
             final String subTitle = ((Entity) form.getFormBean()).getDescription();
             saveCurrentForm(currFormTabDef);
             entityCrudPage = constructNewEntityCRUDPage(_formAppletDef, tableName, entryTablePolicy, createFormName,
-                    maintainFormName, baseFilter, baseField, baseId, subTitle, currFormTabDef.getReference());
+                    maintainFormName, baseFilter, baseField, baseId, subTitle, currFormTabDef.getReference(),
+                    fixedRows);
             entityCrudPage.loadCrudList();
             viewMode = ViewMode.ENTITY_CRUD_PAGE;
         }
@@ -900,7 +903,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected EntityCRUDPage constructNewEntityCRUDPage(AppletDef formAppletDef, String tableName,
             String entryTablePolicy, String createFormName, String maintainFormName, FilterDef baseFilter,
-            String baseField, Object baseId, String subTitle, String childListName) throws UnifyException {
+            String baseField, Object baseId, String subTitle, String childListName, boolean fixedRows)
+            throws UnifyException {
         SectorIcon sectorIcon = getSectorIcon();
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
@@ -913,7 +917,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Entity parentInst = (Entity) form.getCtx().getInst();
         return new EntityCRUDPage(getCtx(), formAppletDef, formEventHandlers, this, parentEntityDef, parentInst,
                 entityClassDef, baseField, baseId, childListName, sectorIcon, breadCrumbs, tableName, entryTablePolicy,
-                createFormName, maintainFormName, baseRestriction);
+                createFormName, maintainFormName, baseRestriction, fixedRows);
     }
 
     protected EditPropertyList constructNewEditPropertyList(PropertyRuleDef propertyRuleDef, Entity inst,
@@ -1033,7 +1037,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             formStack = new Stack<FormState>();
         }
 
-        if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName())) {
+        if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName(),
+                readOnlyFormTabDef.isIgnoreParentCondition())) {
             getCtx().incTabReadOnlyCounter();
         }
 
@@ -1054,7 +1059,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
             if (form != null) {
                 FormTabDef readOnlyFormTabDef = formState.getReadOnlyFormTabDef();
-                if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName())) {
+                if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName(),
+                        readOnlyFormTabDef.isIgnoreParentCondition())) {
                     getCtx().decTabReadOnlyCounter();
                 }
 
@@ -1192,7 +1198,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
             final AppletDef _currFormAppletDef = getFormAppletDef();
             au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(), this);
-       }
+        }
 
         return true;
     }

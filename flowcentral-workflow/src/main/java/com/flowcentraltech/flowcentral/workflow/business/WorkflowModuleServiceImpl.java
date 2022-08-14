@@ -228,10 +228,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             workflow.getDescription(), workflow.getId(), workflow.getVersionNo());
 
                     Set<String> filterNames = new HashSet<String>();
-                    for (WorkflowFilter appAppletFilter : workflow.getFilterList()) {
-                        filterNames.add(appAppletFilter.getName());
-                        wdb.addFilterDef(InputWidgetUtils.getFilterDef(appAppletFilter.getName(),
-                                appAppletFilter.getDescription(), null, null, null, appAppletFilter.getFilter()));
+                    for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
+                        filterNames.add(workflowFilter.getName());
+                        wdb.addFilterDef(InputWidgetUtils.getFilterDef(workflowFilter.getName(),
+                                workflowFilter.getDescription(), null, null, null, workflowFilter.getFilter()));
                     }
 
                     for (WorkflowSetValues workflowSetValues : workflow.getSetValuesList()) {

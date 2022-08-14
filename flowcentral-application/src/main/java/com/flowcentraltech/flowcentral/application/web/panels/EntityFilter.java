@@ -52,8 +52,8 @@ public class EntityFilter extends AbstractPanelFormBinding {
     private FilterConditionListType listType;
 
     public EntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int mode) {
-        super(ctx, sweepingCommitPolicy, tabName);
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
     }

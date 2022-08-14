@@ -32,6 +32,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.FormTypeXmlAdap
  */
 public class AppFormConfig extends BaseNameConfig {
 
+    private List<FilterConfig> filterList;
+    
     private List<FormAnnotationConfig> annotationList;
 
     private List<FormActionConfig> actionList;
@@ -66,6 +68,15 @@ public class AppFormConfig extends BaseNameConfig {
 
     public AppFormConfig() {
         this.type = FormType.INPUT;
+    }
+
+    public List<FilterConfig> getFilterList() {
+        return filterList;
+    }
+
+    @XmlElement(name = "filter", required = true)
+    public void setFilterList(List<FilterConfig> filterList) {
+        this.filterList = filterList;
     }
     
     public List<FormAnnotationConfig> getAnnotationList() {

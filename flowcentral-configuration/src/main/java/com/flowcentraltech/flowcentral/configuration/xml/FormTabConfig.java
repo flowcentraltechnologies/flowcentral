@@ -46,6 +46,12 @@ public class FormTabConfig {
 
     private String editAction;
 
+    private String editFormless;
+
+    private String editFixedRows;
+    
+    private boolean ignoreParentCondition;
+
     private boolean showSearch;
 
     private boolean visible;
@@ -124,6 +130,33 @@ public class FormTabConfig {
     @XmlAttribute
     public void setEditAction(String editAction) {
         this.editAction = editAction;
+    }
+
+    public String getEditFormless() {
+        return editFormless;
+    }
+
+    @XmlAttribute
+    public void setEditFormless(String editFormless) {
+        this.editFormless = editFormless;
+    }
+
+    public String getEditFixedRows() {
+        return editFixedRows;
+    }
+
+    @XmlAttribute
+    public void setEditFixedRows(String editFixedRows) {
+        this.editFixedRows = editFixedRows;
+    }
+
+    public boolean isIgnoreParentCondition() {
+        return ignoreParentCondition;
+    }
+
+    @XmlAttribute
+    public void setIgnoreParentCondition(boolean ignoreParentCondition) {
+        this.ignoreParentCondition = ignoreParentCondition;
     }
 
     public boolean isShowSearch() {

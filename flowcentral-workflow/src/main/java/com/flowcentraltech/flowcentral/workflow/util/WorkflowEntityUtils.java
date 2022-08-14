@@ -16,8 +16,8 @@
 package com.flowcentraltech.flowcentral.workflow.util;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityInstNameParts;
-import com.flowcentraltech.flowcentral.workflow.constants.WfStepConstants;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -51,7 +51,7 @@ public final class WorkflowEntityUtils {
 
     public static boolean isWorkflowConditionMatched(AppletUtilities au, ValueStore valueStore, WfDef wfDef,
             String conditionName) throws UnifyException {
-        return conditionName != null && (WfStepConstants.RESERVED_ALWAYS_FILTERNAME.equals(conditionName) || wfDef
+        return conditionName != null && (ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(conditionName) || wfDef
                 .getFilterDef(conditionName)
                 .getObjectFilter(wfDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow()).match(valueStore));
     }

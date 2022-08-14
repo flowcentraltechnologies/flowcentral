@@ -109,9 +109,9 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private boolean newButtonVisible;
 
     public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, TableDef tableDef, Long appAppletId, String editAction, Long appAppletFilterId, int mode)
-            throws UnifyException {
-        super(ctx, sweepingCommitPolicy, tabName);
+            String tabName, TableDef tableDef, Long appAppletId, String editAction, Long appAppletFilterId, int mode,
+            boolean ignoreConditionalDisabled) throws UnifyException {
+        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 FilterConditionListType.IMMEDIATE_FIELD);

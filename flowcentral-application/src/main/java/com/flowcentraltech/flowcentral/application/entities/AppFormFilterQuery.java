@@ -13,16 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.application.entities;
 
-package com.flowcentraltech.flowcentral.workflow.constants;
+import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 
 /**
- * Workflow step constants.
+ * Application form filter query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WfStepConstants {
+public class AppFormFilterQuery extends BaseConfigNamedEntityQuery<AppFormFilter> {
 
-    String RESERVED_ALWAYS_FILTERNAME = "__always";
+    public AppFormFilterQuery() {
+        super(AppFormFilter.class);
+    }
+
+    public AppFormFilterQuery appFormId(Long appFormId) {
+        return (AppFormFilterQuery) addEquals("appFormId", appFormId);
+    }
+
 }

@@ -476,6 +476,9 @@
 		<reference name="appFormRef"
 			description="$m{application.appform.reference}" entity="appForm"
 			searchField="description" />
+		<reference name="appFormFilterRef"
+			description="$m{application.appformfilter.reference}"
+			entity="appFormFilter" searchField="description" />
 		<reference name="appFormElementRef"
 			description="$m{application.appformelement.reference}"
 			entity="appFormElement" searchField="label" />
@@ -1088,7 +1091,7 @@
 				nullable="true" />
 			<field name="filter"
 				label="$m{application.apptablefilter.filter}" type="child"
-				category="applet" references="appFilterRef" />
+				category="table" references="appFilterRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.apptablefilter.uc.name}"
 				fieldList="appTableId,name" />
@@ -1127,6 +1130,9 @@
 			<field name="elementList"
 				label="$m{application.appform.elements}" type="child_list"
 				references="appFormElementRef" />
+			<field name="filterList"
+				label="$m{application.appform.filters}" type="child_list"
+				references="appFormFilterRef" />
 			<field name="annotationList"
 				label="$m{application.appform.annotations}" type="child_list"
 				references="appFormAnnotationRef" />
@@ -1157,6 +1163,23 @@
 			<uniqueConstraint name="descUc"
 				description="$m{application.appform.uc.description}"
 				fieldList="applicationId,description" />
+		</entity>
+		<entity name="appFormFilter"
+			description="$m{application.appformfilter}"
+			label="$m{application.appformfilter.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppFormFilter">
+			<field name="appFormId"
+				label="$m{application.appformfilter.appformid}" type="ref"
+				references="appFormRef" inputWidget="application.entitylist" />
+			<field name="filter"
+				label="$m{application.appformfilter.filter}" type="child"
+				category="form" references="appFilterRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appformfilter.uc.name}"
+				fieldList="appFormId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{application.appformfilter.uc.description}"
+				fieldList="appFormId,description" />
 		</entity>
 		<entity name="appFormElement"
 			description="$m{application.appformelement}"
@@ -1219,6 +1242,8 @@
 				label="$m{application.appformelement.showannotation}" type="boolean" />
 			<field name="required"
 				label="$m{application.appformelement.required}" type="boolean" />
+			<field name="ignoreParentCondition"
+				label="$m{application.appformelement.ignoreparentcondition}" type="boolean" />
 			<field name="showSearch"
 				label="$m{application.appformelement.showsearch}" type="boolean" />
 			<field name="visible"

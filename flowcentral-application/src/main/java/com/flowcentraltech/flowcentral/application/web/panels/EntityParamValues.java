@@ -49,9 +49,9 @@ public class EntityParamValues extends AbstractPanelFormBinding {
 
     private Long ownerInstId;
 
-    public EntityParamValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, EntityDef ownerEntityDef,
-            int mode) {
-        super(ctx, sweepingCommitPolicy, tabName);
+    public EntityParamValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
     }
@@ -69,15 +69,15 @@ public class EntityParamValues extends AbstractPanelFormBinding {
     }
 
     public void load(List<ParamConfig> paramConfigList) throws UnifyException {
-        ParamValuesDef paramValuesDef = getAppletCtx().au().retrieveParamValuesDef(category, ownerEntityDef.getLongName(), ownerInstId,
-                paramConfigList);
+        ParamValuesDef paramValuesDef = getAppletCtx().au().retrieveParamValuesDef(category,
+                ownerEntityDef.getLongName(), ownerInstId, paramConfigList);
         paramValueEntries = new ParamValueEntries(paramValuesDef);
     }
 
     public void save() throws UnifyException {
         if (paramValueEntries != null) {
-            getAppletCtx().au().saveParamValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId,
-                    paramValueEntries.getParamValuesDef());
+            getAppletCtx().au().saveParamValuesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
+                    ownerInstId, paramValueEntries.getParamValuesDef());
         }
     }
 

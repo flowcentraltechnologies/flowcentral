@@ -78,7 +78,7 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
         AppletDef _appletDef = getRootAppletDef();
         this.entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
                 getRootAppletDef().getDescription(), _appletDef, null,
-                EntitySearch.ENABLE_ALL & (~EntitySearch.SHOW_EDIT_BUTTON));
+                EntitySearch.ENABLE_ALL & (~EntitySearch.SHOW_EDIT_BUTTON), false);
         final String wfWizardName = _appletDef.getPropValue(String.class,
                 WfWizardAppletPropertyConstants.WORKFLOW_WIZARD);
         AndBuilder ab = (AndBuilder) new AndBuilder().equals("wizard", wfWizardName);

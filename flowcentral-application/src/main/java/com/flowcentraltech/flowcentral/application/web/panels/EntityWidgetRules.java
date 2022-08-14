@@ -47,8 +47,8 @@ public class EntityWidgetRules extends AbstractPanelFormBinding {
     private Long ownerInstId;
 
     public EntityWidgetRules(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int mode) {
-        super(ctx, sweepingCommitPolicy, tabName);
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
     }
@@ -73,8 +73,8 @@ public class EntityWidgetRules extends AbstractPanelFormBinding {
 
     public void save() throws UnifyException {
         if (widgetRules != null) {
-            getAppletCtx().au().saveWidgetRulesDef(getSweepingCommitPolicy(), category,
-                    ownerEntityDef.getLongName(), ownerInstId, widgetRules.getWidgetRulesDef());
+            getAppletCtx().au().saveWidgetRulesDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
+                    ownerInstId, widgetRules.getWidgetRulesDef());
         }
     }
 

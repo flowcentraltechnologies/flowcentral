@@ -38,10 +38,14 @@ public abstract class AbstractPanelFormBinding {
 
     private final String tabName;
 
-    public AbstractPanelFormBinding(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName) {
+    private final boolean ignoreConditionalDisabled;
+    
+    public AbstractPanelFormBinding(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
+            boolean ignoreConditionalDisabled) {
         this.ctx = ctx;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.tabName = tabName;
+        this.ignoreConditionalDisabled = ignoreConditionalDisabled;
     }
 
     public FormContext getFormCtx() {
@@ -63,12 +67,12 @@ public abstract class AbstractPanelFormBinding {
     public List<FormMessage> getMessages() throws UnifyException {
         return ctx.getReviewMessages(tabName);
     }
-    
+
     protected boolean isTabEditable() {
-        return ctx.isTabEditable(tabName);
+        return ctx.isTabEditable(tabName, ignoreConditionalDisabled);
     }
-    
+
     protected boolean isTabDisabled() {
-        return ctx.isTabDisabled(tabName);
+        return ctx.isTabDisabled(tabName, ignoreConditionalDisabled);
     }
 }

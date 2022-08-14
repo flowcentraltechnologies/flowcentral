@@ -36,6 +36,7 @@ import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.StringUtils;
@@ -104,6 +105,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
         if (refDefs != null) {
             List<Listable> fullResult = new ArrayList<Listable>();
             final boolean encode = refDefs.length > 1;
+            final ValueStore _valueStore = getValueStore();
             for (int i = 0; i < refDefs.length; i++) {
                 RefDef refDef = refDefs[i];
                 final boolean listFormat = refDef.isWithListFormat();
@@ -112,7 +114,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 Restriction br = null;
                 if (refDef.isWithFilterGenerator()) {
                     br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
-                            .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
+                            .generate(_valueStore.getReader(), refDef.getFilterGeneratorRule());
                 } else {
                     br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
                             specialParamProvider(), application().getNow()) : null;
@@ -141,7 +143,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                     ParameterizedStringGenerator generator = null;
                     if (listFormat) {
                         generator = specialParamProvider().getStringGenerator(new BeanValueListStore(result),
-                                getValueStore(), refDef.getListFormat());
+                                _valueStore, refDef.getListFormat());
                     }
                     final int len = result.size();
                     for (int j = 0; j < len; j++) {

@@ -23,7 +23,7 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmContType frmName frmLabel
-		frmReference frmApplet frmFilter frmEditAction frmShowSearch frmVisible frmEditable frmDisabled}}
+		frmReference frmApplet frmFilter frmEditAction frmEditFixedRows frmEditFormless frmIgnoreParentCondition frmShowSearch frmVisible frmEditable frmDisabled}}
 
 !ui-select:frmContType styleClass:$e{fc-formfield} caption:$m{formeditor.tab.contenttype}
 	list:studiotabcontenttypelist blankOption:$s{} binding:contentType required:true
@@ -40,6 +40,12 @@
 	list:studioformappletfilterlist listParams:$l{applet} blankOption:$s{} binding:filter
 !ui-select:frmEditAction styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editaction}
 	list:childlisteditactionlist blankOption:$s{} binding:editAction
+!ui-select:frmEditFormless styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editformless}
+	list:studioformfilterlist listParams:$l{form} blankOption:$s{} binding:editFormless
+!ui-select:frmEditFixedRows styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editfixedrows}
+	list:studioformfilterlist listParams:$l{form} blankOption:$s{} binding:editFixedRows
+!ui-checkbox:frmIgnoreParentCondition caption:$m{formeditor.tab.ignoreparentcondition}
+	binding:ignoreParentCondition layoutCaption:true
 !ui-checkbox:frmShowSearch caption:$m{formeditor.tab.showsearch} binding:showSearch layoutCaption:true
 !ui-checkbox:frmVisible caption:$m{formeditor.tab.visible} binding:visible layoutCaption:true
 !ui-checkbox:frmEditable caption:$m{formeditor.tab.editable} binding:editable layoutCaption:true

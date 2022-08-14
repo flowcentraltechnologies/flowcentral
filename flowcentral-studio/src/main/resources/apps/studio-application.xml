@@ -672,6 +672,23 @@
 			<property name="maintainForm.update" value="false" />
 			<property name="maintainForm.delete" value="false" />
 		</applet>
+		<applet name="manageAppFormFilter"
+			description="$m{studio.appformfilter.manage}"
+			label="$m{studio.appformfilter.manage.label}"
+			type="manage_entitylist" entity="application.appFormFilter"
+			menuAccess="false">
+			<property name="searchTable" value="appFormFilterTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appFormFilterForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appFormFilterForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageAppFormAnnotation"
 			description="$m{studio.appformannotation.manage}"
 			label="$m{studio.appformannotation.manage.label}"
@@ -1153,6 +1170,19 @@
 				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{application.appformannotation.type}" widthRatio="1" />
+		</table>
+		<table name="appFormFilterTable"
+			description="$m{studio.appformfilter.table}"
+			label="$m{studio.appformfilter.table.label}"
+			entity="application.appFormFilter">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
 		</table>
 		<table name="appFormActionTable"
 			description="$m{studio.appformaction.table}"
@@ -2955,6 +2985,10 @@
 				contentType="child_list" applet="manageAppFormElement"
 				reference="elementList" editAction="/designChildItem"
 				visible="false" />
+			<tab name="filters"
+				label="$m{studio.appform.form.filters}" contentType="child_list"
+				applet="manageAppFormFilter" reference="filterList"
+				visible="false" />
 			<tab name="annotations"
 				label="$m{studio.appform.form.annotations}" contentType="child_list"
 				applet="manageAppFormAnnotation" reference="annotationList"
@@ -3031,7 +3065,7 @@
 						target="consolidatedValidation,consolidatedReview,consolidatedState"
 						visible="true" />
 					<setState type="tab"
-						target="design,annotations,actions,relatedLists,widgetRulesPolicies,fieldValidationPolicies,fieldStatePolicies,formValidationPolicies,formReviewPolicies"
+						target="design,filters,annotations,actions,relatedLists,widgetRulesPolicies,fieldValidationPolicies,fieldStatePolicies,formValidationPolicies,formReviewPolicies"
 						visible="true" />
 				</setStates>
 			</formStatePolicy>
@@ -3093,6 +3127,10 @@
 						inputWidget="application.checkbox" column="1" />
 					<field name="required" inputWidget="application.checkbox"
 						column="1" />
+					<field name="ignoreParentCondition" inputWidget="application.checkbox"
+						column="1" />
+					<field name="showSearch" inputWidget="application.checkbox"
+						column="1" />
 					<field name="visible" inputWidget="application.checkbox"
 						column="1" />
 					<field name="editable" inputWidget="application.checkbox"
@@ -3101,6 +3139,25 @@
 						column="1" />
 				</section>
 			</tab>
+		</form>
+		<form name="appFormFilterForm"
+			description="$m{studio.appformfilter.form}"
+			entity="application.appFormFilter">
+			<tab name="basicDetails"
+				label="$m{studio.appformfilter.form.basicdetails}"
+				contentType="miniform">
+				<section name="filterDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="condition"
+				label="$m{studio.appformfilter.form.condition}"
+				reference="app_form" contentType="filter_condition" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="appFormAnnotationForm"
 			description="$m{studio.appformannotation.form}"

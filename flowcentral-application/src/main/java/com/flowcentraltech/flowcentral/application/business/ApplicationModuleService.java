@@ -53,6 +53,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotationQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
+import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyList;
 import com.flowcentraltech.flowcentral.application.entities.AppPropertyRule;
@@ -515,6 +516,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<AppForm> findAppForms(AppFormQuery query) throws UnifyException;
+
+    /**
+     * Finds application form filters.
+     * 
+     * @param appFormName
+     *                    the application form name
+     * @return list of form filters
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<AppFormFilter> findAppFormFilters(String appFormName) throws UnifyException;
 
     /**
      * Finds application form annotations based on query.

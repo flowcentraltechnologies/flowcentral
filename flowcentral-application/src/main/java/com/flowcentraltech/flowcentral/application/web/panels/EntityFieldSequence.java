@@ -47,8 +47,8 @@ public class EntityFieldSequence extends AbstractPanelFormBinding {
     private Long ownerInstId;
 
     public EntityFieldSequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            EntityDef ownerEntityDef, int mode) {
-        super(ctx, sweepingCommitPolicy, tabName);
+            EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
+        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.ownerEntityDef = ownerEntityDef;
         this.mode = mode;
     }
@@ -73,8 +73,8 @@ public class EntityFieldSequence extends AbstractPanelFormBinding {
 
     public void save() throws UnifyException {
         if (fieldSequence != null) {
-            getAppletCtx().au().saveFieldSequenceDef(getSweepingCommitPolicy(), category,
-                    ownerEntityDef.getLongName(), ownerInstId, fieldSequence.getFieldSequenceDef());
+            getAppletCtx().au().saveFieldSequenceDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
+                    ownerInstId, fieldSequence.getFieldSequenceDef());
         }
     }
 

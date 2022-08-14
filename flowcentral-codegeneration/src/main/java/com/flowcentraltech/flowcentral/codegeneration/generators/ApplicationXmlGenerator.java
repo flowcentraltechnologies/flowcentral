@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormAction;
 import com.flowcentraltech.flowcentral.application.entities.AppFormAnnotation;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFieldValidationPolicy;
+import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFormRelatedList;
 import com.flowcentraltech.flowcentral.application.entities.AppFormReviewPolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormSetState;
@@ -599,6 +600,21 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appFormConfig.setListingGenerator(appForm.getListingGenerator());
                 appFormConfig.setTitleFormat(appForm.getTitleFormat());
 
+                // Filters
+                if (!DataUtils.isBlank(appForm.getFilterList())) {
+                    List<FilterConfig> filterList = new ArrayList<FilterConfig>();
+                    for (AppFormFilter appFormFilter : appForm.getFilterList()) {
+                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(appFormFilter.getFilter());
+                        filterConfig.setName(appFormFilter.getName());
+                        descKey = getDescriptionKey(formDescKey, "formfilter", appFormFilter.getName());
+                        ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormFilter.getDescription());
+                        filterConfig.setDescription("$m{" + descKey + "}");
+                        filterList.add(filterConfig);
+                    }
+
+                    appFormConfig.setFilterList(filterList);
+                }
+
                 // Annotations
                 if (!DataUtils.isBlank(appForm.getAnnotationList())) {
                     List<FormAnnotationConfig> annotationConfigList = new ArrayList<FormAnnotationConfig>();
@@ -669,6 +685,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formTabConfig.setReference(appFormElement.getTabReference());
                         formTabConfig.setFilter(appFormElement.getFilter());
                         formTabConfig.setEditAction(appFormElement.getEditAction());
+                        formTabConfig.setEditFormless(appFormElement.getEditFormless());
+                        formTabConfig.setEditFixedRows(appFormElement.getEditFixedRows());
+                        formTabConfig.setIgnoreParentCondition(appFormElement.isIgnoreParentCondition());
                         formTabConfig.setShowSearch(appFormElement.isShowSearch());
                         formTabConfig.setVisible(appFormElement.isVisible());
                         formTabConfig.setEditable(appFormElement.isEditable());
