@@ -1091,7 +1091,7 @@
 				nullable="true" />
 			<field name="filter"
 				label="$m{application.apptablefilter.filter}" type="child"
-				category="applet" references="appFilterRef" />
+				category="table" references="appFilterRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.apptablefilter.uc.name}"
 				fieldList="appTableId,name" />
@@ -1173,7 +1173,7 @@
 				references="appFormRef" inputWidget="application.entitylist" />
 			<field name="filter"
 				label="$m{application.appformfilter.filter}" type="child"
-				category="applet" references="appFilterRef" />
+				category="form" references="appFilterRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appformfilter.uc.name}"
 				fieldList="appFormId,name" />

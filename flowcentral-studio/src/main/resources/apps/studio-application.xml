@@ -3133,7 +3133,7 @@
 			</tab>
 		</form>
 		<form name="appFormFilterForm"
-			description="$m{studio.apptformfilter.form}"
+			description="$m{studio.appformfilter.form}"
 			entity="application.appFormFilter">
 			<tab name="basicDetails"
 				label="$m{studio.appformfilter.form.basicdetails}"
