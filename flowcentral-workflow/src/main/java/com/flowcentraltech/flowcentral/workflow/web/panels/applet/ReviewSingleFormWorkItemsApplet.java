@@ -65,7 +65,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         AppletDef _appletDef = getRootAppletDef();
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), null, null,
                 getRootAppletDef().getDescription(), _appletDef, null,
-                EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON));
+                EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON), false);
         final String originApplicationName = _appletDef.getOriginApplicationName();
         final String workflowName = _appletDef.getPropValue(String.class, WfAppletPropertyConstants.WORKFLOW);
         final String wfStepName = _appletDef.getPropValue(String.class, WfAppletPropertyConstants.WORKFLOW_STEP);

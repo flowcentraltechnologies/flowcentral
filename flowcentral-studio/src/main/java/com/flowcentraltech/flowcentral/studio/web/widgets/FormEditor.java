@@ -237,10 +237,11 @@ public class FormEditor {
         }
 
         public Builder addTab(String contentType, String name, String label, String applet, String reference,
-                String filter, String editAction, String editFormless, String editFixedRows, boolean showSearch,
-                boolean visible, boolean editable, boolean disabled) {
+                String filter, String editAction, String editFormless, String editFixedRows,
+                boolean ignoreParentCondition, boolean showSearch, boolean visible, boolean editable,
+                boolean disabled) {
             currentTab = new FormTab(contentType, name, label, applet, reference, filter, editAction, editFormless,
-                    editFixedRows, showSearch, visible, editable, disabled);
+                    editFixedRows, ignoreParentCondition, showSearch, visible, editable, disabled);
             tabs.add(currentTab);
             return this;
         }
@@ -386,6 +387,8 @@ public class FormEditor {
 
         private String editFixedRows;
 
+        private boolean ignoreParentCondition;
+
         private boolean showSearch;
 
         private boolean visible;
@@ -397,8 +400,8 @@ public class FormEditor {
         private List<FormSection> sections;
 
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
-                String editAction, String editFormless, String editFixedRows, boolean showSearch, boolean visible,
-                boolean editable, boolean disabled) {
+                String editAction, String editFormless, String editFixedRows, boolean ignoreParentCondition,
+                boolean showSearch, boolean visible, boolean editable, boolean disabled) {
             this();
             this.contentType = contentType;
             this.name = name;
@@ -409,6 +412,7 @@ public class FormEditor {
             this.editAction = editAction;
             this.editFormless = editFormless;
             this.editFixedRows = editFixedRows;
+            this.ignoreParentCondition = ignoreParentCondition;
             this.showSearch = showSearch;
             this.visible = visible;
             this.editable = editable;
@@ -521,6 +525,14 @@ public class FormEditor {
 
         public void setEditFixedRows(String editFixedRows) {
             this.editFixedRows = editFixedRows;
+        }
+
+        public boolean isIgnoreParentCondition() {
+            return ignoreParentCondition;
+        }
+
+        public void setIgnoreParentCondition(boolean ignoreParentCondition) {
+            this.ignoreParentCondition = ignoreParentCondition;
         }
 
         public boolean isShowSearch() {

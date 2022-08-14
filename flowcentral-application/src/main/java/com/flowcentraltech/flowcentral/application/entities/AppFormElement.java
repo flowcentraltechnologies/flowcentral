@@ -92,6 +92,9 @@ public class AppFormElement extends BaseConfigEntity {
     private boolean required;
 
     @Column
+    private boolean ignoreParentCondition;
+
+    @Column
     private boolean showSearch;
 
     @Column
@@ -267,6 +270,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setRequired(boolean required) {
         this.required = required;
+    }
+
+    public boolean isIgnoreParentCondition() {
+        return ignoreParentCondition;
+    }
+
+    public void setIgnoreParentCondition(boolean ignoreParentCondition) {
+        this.ignoreParentCondition = ignoreParentCondition;
     }
 
     public boolean isShowSearch() {

@@ -45,13 +45,14 @@ public class EntityChild extends AbstractPanelFormBinding {
     private FormContext mCtx;
 
     private Restriction mRestriction;
-    
+
     private int childTabIndex;
 
     private boolean canCreate;
 
-    public EntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, FormDef childFormDef) {
-        super(ctx, sweepingCommitPolicy, tabName);
+    public EntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, FormDef childFormDef,
+            boolean ignoreConditionalDisabled) {
+        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.childFormDef = childFormDef;
     }
 
@@ -104,23 +105,22 @@ public class EntityChild extends AbstractPanelFormBinding {
     }
 
     public boolean isViewButtonVisible() {
-        return !getAppletCtx().isContextEditable() || !isTabEditable() ;
+        return !getAppletCtx().isContextEditable() || !isTabEditable();
     }
 
     public void reload() throws UnifyException {
-        if (mCtx != null && mRestriction != null ) {
+        if (mCtx != null && mRestriction != null) {
             load(mCtx, mRestriction);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     public void load(FormContext ctx, Restriction restriction) throws UnifyException {
         final EntityClassDef entityClassDef = ctx.au().getEntityClassDef(childFormDef.getEntityDef().getLongName());
         mCtx = ctx;
         mRestriction = restriction;
-        childInst = ctx.getEnvironment()
-                .listLean(Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                        .addRestriction(restriction));
+        childInst = ctx.getEnvironment().listLean(
+                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addRestriction(restriction));
         if (childInst != null) {
             FormContext _ctx = new FormContext(ctx.getAppletContext(), childFormDef, ctx.getFormEventHandlers(),
                     childInst);

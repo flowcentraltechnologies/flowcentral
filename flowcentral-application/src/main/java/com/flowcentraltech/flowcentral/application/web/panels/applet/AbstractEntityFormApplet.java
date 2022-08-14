@@ -1037,7 +1037,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             formStack = new Stack<FormState>();
         }
 
-        if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName())) {
+        if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName(),
+                readOnlyFormTabDef.isIgnoreParentCondition())) {
             getCtx().incTabReadOnlyCounter();
         }
 
@@ -1058,7 +1059,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
             if (form != null) {
                 FormTabDef readOnlyFormTabDef = formState.getReadOnlyFormTabDef();
-                if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName())) {
+                if (readOnlyFormTabDef != null && form.getCtx().isTabDisabled(readOnlyFormTabDef.getName(),
+                        readOnlyFormTabDef.isIgnoreParentCondition())) {
                     getCtx().decTabReadOnlyCounter();
                 }
 

@@ -3127,6 +3127,10 @@
 						inputWidget="application.checkbox" column="1" />
 					<field name="required" inputWidget="application.checkbox"
 						column="1" />
+					<field name="ignoreParentCondition" inputWidget="application.checkbox"
+						column="1" />
+					<field name="showSearch" inputWidget="application.checkbox"
+						column="1" />
 					<field name="visible" inputWidget="application.checkbox"
 						column="1" />
 					<field name="editable" inputWidget="application.checkbox"

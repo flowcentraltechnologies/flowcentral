@@ -255,10 +255,8 @@ public class FormContext extends AbstractContext {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef != null && formDef.isWithTitleFormat()
-                ? appletContext.specialParamProvider()
-                        .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate()
-                : null;
+        altFormTitle = formDef != null && formDef.isWithTitleFormat() ? appletContext.specialParamProvider()
+                .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate() : null;
     }
 
     public Object getInst() {
@@ -581,14 +579,16 @@ public class FormContext extends AbstractContext {
         return formTabs.get(name);
     }
 
-    public boolean isTabEditable(String name) {
+    public boolean isTabEditable(String name, boolean ignoreConditionalDisabled) {
         FormTab tab = formTabs.get(name);
-        return !conditionalDisabled && (tab == null || (tab.isEditable() && !tab.isDisabled()));
+        return ignoreConditionalDisabled ? tab == null || (tab.isEditable() && !tab.isDisabled())
+                : !conditionalDisabled && (tab == null || (tab.isEditable() && !tab.isDisabled()));
     }
 
-    public boolean isTabDisabled(String name) {
+    public boolean isTabDisabled(String name, boolean ignoreConditionalDisabled) {
         FormTab tab = formTabs.get(name);
-        return conditionalDisabled || (tab != null && tab.isDisabled());
+        return ignoreConditionalDisabled ? tab != null && tab.isDisabled()
+                : conditionalDisabled || (tab != null && tab.isDisabled());
     }
 
     public List<FormAnnotationDef> getFormAnnotationDef() {

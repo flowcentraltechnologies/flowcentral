@@ -54,6 +54,8 @@ public class FormTabDef {
 
     private List<String> fieldNameList;
 
+    private boolean ignoreParentCondition;
+
     private boolean showSearch;
 
     private boolean visible;
@@ -66,7 +68,7 @@ public class FormTabDef {
 
     public FormTabDef(TabContentType contentType, String name, String label, String applet, String reference,
             String filter, String editAction, String editFormless, String editFixedRows,
-            List<FormSectionDef> formSectionDefList, boolean showSearch, boolean visible, boolean editable,
+            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch, boolean visible, boolean editable,
             boolean disabled) {
         this.contentType = contentType;
         this.name = name;
@@ -78,6 +80,7 @@ public class FormTabDef {
         this.editFormless = editFormless;
         this.editFixedRows = editFixedRows;
         this.formSectionDefList = formSectionDefList;
+        this.ignoreParentCondition = ignoreParentCondition;
         this.showSearch = showSearch;
         this.visible = visible;
         this.editable = editable;
@@ -96,6 +99,7 @@ public class FormTabDef {
         this.editAction = srcFormTabDef.editAction;
         this.editFormless = srcFormTabDef.editFormless;
         this.editFixedRows = srcFormTabDef.editFixedRows;
+        this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
         this.showSearch = srcFormTabDef.showSearch;
         this.visible = srcFormTabDef.visible;
         this.editable = srcFormTabDef.editable;
@@ -209,6 +213,10 @@ public class FormTabDef {
         }
 
         return fieldNameList;
+    }
+
+    public boolean isIgnoreParentCondition() {
+        return ignoreParentCondition;
     }
 
     public boolean isShowSearch() {
