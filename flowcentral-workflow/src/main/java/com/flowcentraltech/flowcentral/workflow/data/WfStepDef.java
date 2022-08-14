@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
@@ -34,7 +35,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
-import com.flowcentraltech.flowcentral.workflow.constants.WfStepConstants;
 import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -216,17 +216,17 @@ public class WfStepDef {
 
     public boolean isReadOnlyAlways() {
         return readOnlyConditionName != null
-                && WfStepConstants.RESERVED_ALWAYS_FILTERNAME.equals(readOnlyConditionName);
+                && ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(readOnlyConditionName);
     }
 
     public boolean isEmailsAlways() {
         return emails != null
-                && WfStepConstants.RESERVED_ALWAYS_FILTERNAME.equals(emails);
+                && ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(emails);
     }
 
     public boolean isCommentsAlways() {
         return comments != null
-                && WfStepConstants.RESERVED_ALWAYS_FILTERNAME.equals(comments);
+                && ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(comments);
     }
 
     public String getAutoLoadingConditionName() {

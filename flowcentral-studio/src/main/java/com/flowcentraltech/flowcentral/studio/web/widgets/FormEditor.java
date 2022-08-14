@@ -133,6 +133,7 @@ public class FormEditor {
         editTab = new FormTab();
         editTab.setMode("CREATE");
         editTab.setEntity(formDef.getEntityDef().getLongName());
+        editTab.setForm(formDef.getLongName());
         return editTabPanelName;
     }
 
@@ -142,6 +143,7 @@ public class FormEditor {
         editTab = design.getFormTab(tabName);
         editTab.setMode("UPDATE");
         editTab.setEntity(formDef.getEntityDef().getLongName());
+        editTab.setForm(formDef.getLongName());
         return editTabPanelName;
     }
 
@@ -235,10 +237,10 @@ public class FormEditor {
         }
 
         public Builder addTab(String contentType, String name, String label, String applet, String reference,
-                String filter, String editAction, boolean showSearch, boolean visible, boolean editable,
-                boolean disabled) {
-            currentTab = new FormTab(contentType, name, label, applet, reference, filter, editAction, showSearch,
-                    visible, editable, disabled);
+                String filter, String editAction, String editFormless, String editFixedRows, boolean showSearch,
+                boolean visible, boolean editable, boolean disabled) {
+            currentTab = new FormTab(contentType, name, label, applet, reference, filter, editAction, editFormless,
+                    editFixedRows, showSearch, visible, editable, disabled);
             tabs.add(currentTab);
             return this;
         }
@@ -360,6 +362,8 @@ public class FormEditor {
 
         private String entity;
 
+        private String form;
+
         private String mode;
 
         private String caption;
@@ -378,6 +382,10 @@ public class FormEditor {
 
         private String editAction;
 
+        private String editFormless;
+
+        private String editFixedRows;
+
         private boolean showSearch;
 
         private boolean visible;
@@ -389,7 +397,8 @@ public class FormEditor {
         private List<FormSection> sections;
 
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
-                String editAction, boolean showSearch, boolean visible, boolean editable, boolean disabled) {
+                String editAction, String editFormless, String editFixedRows, boolean showSearch, boolean visible,
+                boolean editable, boolean disabled) {
             this();
             this.contentType = contentType;
             this.name = name;
@@ -398,6 +407,8 @@ public class FormEditor {
             this.reference = reference;
             this.filter = filter;
             this.editAction = editAction;
+            this.editFormless = editFormless;
+            this.editFixedRows = editFixedRows;
             this.showSearch = showSearch;
             this.visible = visible;
             this.editable = editable;
@@ -414,6 +425,14 @@ public class FormEditor {
 
         public void setEntity(String entity) {
             this.entity = entity;
+        }
+
+        public String getForm() {
+            return form;
+        }
+
+        public void setForm(String form) {
+            this.form = form;
         }
 
         public String getMode() {
@@ -486,6 +505,22 @@ public class FormEditor {
 
         public void setEditAction(String editAction) {
             this.editAction = editAction;
+        }
+
+        public String getEditFormless() {
+            return editFormless;
+        }
+
+        public void setEditFormless(String editFormless) {
+            this.editFormless = editFormless;
+        }
+
+        public String getEditFixedRows() {
+            return editFixedRows;
+        }
+
+        public void setEditFixedRows(String editFixedRows) {
+            this.editFixedRows = editFixedRows;
         }
 
         public boolean isShowSearch() {

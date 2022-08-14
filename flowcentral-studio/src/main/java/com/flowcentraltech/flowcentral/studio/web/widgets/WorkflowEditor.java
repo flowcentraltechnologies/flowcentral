@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -36,7 +37,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioWorkflowEditType;
 import com.flowcentraltech.flowcentral.studio.web.data.DialogSetValuesInfo;
 import com.flowcentraltech.flowcentral.studio.web.data.StepDialogCrudInfo;
-import com.flowcentraltech.flowcentral.workflow.constants.WfStepConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
@@ -308,7 +308,7 @@ public class WorkflowEditor {
                 break;
             case USER_ACTION:
                 editStep.setUserActionList(new ArrayList<WfStepUserAction>());
-                editStep.setComments(WfStepConstants.RESERVED_ALWAYS_FILTERNAME);
+                editStep.setComments(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
                 break;
             case START:
             case ERROR:

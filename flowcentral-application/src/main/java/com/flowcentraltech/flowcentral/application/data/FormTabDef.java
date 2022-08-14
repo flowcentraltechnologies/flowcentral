@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Form tab definition.
@@ -43,6 +44,10 @@ public class FormTabDef {
 
     private String editAction;
 
+    private String editFormless;
+
+    private String editFixedRows;
+
     private List<FormSectionDef> formSectionDefList;
 
     private List<FormFieldDef> condRefDefFormFieldDefList;
@@ -60,8 +65,9 @@ public class FormTabDef {
     private int listOnlyCheck;
 
     public FormTabDef(TabContentType contentType, String name, String label, String applet, String reference,
-            String filter, String editAction, List<FormSectionDef> formSectionDefList, boolean showSearch, boolean visible,
-            boolean editable, boolean disabled) {
+            String filter, String editAction, String editFormless, String editFixedRows,
+            List<FormSectionDef> formSectionDefList, boolean showSearch, boolean visible, boolean editable,
+            boolean disabled) {
         this.contentType = contentType;
         this.name = name;
         this.label = label;
@@ -69,6 +75,8 @@ public class FormTabDef {
         this.filter = filter;
         this.reference = reference;
         this.editAction = editAction;
+        this.editFormless = editFormless;
+        this.editFixedRows = editFixedRows;
         this.formSectionDefList = formSectionDefList;
         this.showSearch = showSearch;
         this.visible = visible;
@@ -86,6 +94,8 @@ public class FormTabDef {
         this.filter = srcFormTabDef.filter;
         this.reference = srcFormTabDef.reference;
         this.editAction = srcFormTabDef.editAction;
+        this.editFormless = srcFormTabDef.editFormless;
+        this.editFixedRows = srcFormTabDef.editFixedRows;
         this.showSearch = srcFormTabDef.showSearch;
         this.visible = srcFormTabDef.visible;
         this.editable = srcFormTabDef.editable;
@@ -119,6 +129,22 @@ public class FormTabDef {
 
     public String getEditAction() {
         return editAction;
+    }
+
+    public String getEditFormless() {
+        return editFormless;
+    }
+
+    public boolean isWithEditFormless() {
+        return !StringUtils.isBlank(editFormless);
+    }
+
+    public String getEditFixedRows() {
+        return editFixedRows;
+    }
+
+    public boolean isWithEditFixedRows() {
+        return !StringUtils.isBlank(editFixedRows);
     }
 
     public boolean isChildOrChildList() {

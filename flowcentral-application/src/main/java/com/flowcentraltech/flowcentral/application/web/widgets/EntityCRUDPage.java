@@ -77,6 +77,8 @@ public class EntityCRUDPage {
 
     private final Restriction baseRestriction;
 
+    private final boolean fixedRows;
+
     private String displayItemCounter;
 
     private String displayItemCounterClass;
@@ -87,7 +89,7 @@ public class EntityCRUDPage {
             SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst,
             EntityClassDef entityClassDef, String baseField, Object baseId, String childListName, SectorIcon sectorIcon,
             BreadCrumbs breadCrumbs, String tableName, String entryEditPolicy, String createFormName,
-            String maintainFormName, Restriction baseRestriction) {
+            String maintainFormName, Restriction baseRestriction, boolean fixedRows) {
         this.ctx = ctx;
         this.formAppletDef = formAppletDef;
         this.formEventHandlers = formEventHandlers;
@@ -105,6 +107,7 @@ public class EntityCRUDPage {
         this.createFormName = createFormName;
         this.maintainFormName = maintainFormName;
         this.baseRestriction = baseRestriction;
+        this.fixedRows = fixedRows;
     }
 
     public String getMainTitle() {
@@ -171,7 +174,7 @@ public class EntityCRUDPage {
     public boolean isFormless() {
         return StringUtils.isBlank(createFormName) && StringUtils.isBlank(maintainFormName);
     }
-    
+
     public void crudSelectItem(int index) throws UnifyException {
         getCrud().enterMaintain(index);
     }
@@ -196,6 +199,7 @@ public class EntityCRUDPage {
         if (crud == null) {
             TableDef tableDef = ctx.au().getTableDef(tableName);
             EntityTable entityTable = new EntityTable(ctx.au(), tableDef);
+            entityTable.setFixedRows(fixedRows);
             if (!StringUtils.isBlank(entryEditPolicy)) {
                 ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
                 entityTable.setPolicy(policy);
@@ -210,7 +214,8 @@ public class EntityCRUDPage {
                 createFrmCtx.setParentEntityDef(parentEntityDef);
                 createFrmCtx.setParentInst(parentInst);
 
-                FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);
+                FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName),
+                        formEventHandlers);
                 maintainFrmCtx.setCrudMode();
                 maintainFrmCtx.setParentEntityDef(parentEntityDef);
                 maintainFrmCtx.setParentInst(parentInst);

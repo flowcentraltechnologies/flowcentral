@@ -599,19 +599,19 @@ public class FormDef extends BaseApplicationEntityDef {
 
         public Builder addFormTab(TabContentType contentType, String name, String tabLabel, boolean showSearch,
                 boolean visible, boolean editable, boolean disabled) {
-            return addFormTab(contentType, name, tabLabel, null, null, null, null, showSearch, visible, editable,
-                    disabled);
+            return addFormTab(contentType, name, tabLabel, null, null, null, null, null, null, showSearch, visible,
+                    editable, disabled);
         }
 
         public Builder addFormTab(TabContentType contentType, String name, String tabLabel, String tabApplet,
-                String tabReference, String filter, String editAction, boolean showSearch, boolean visible,
-                boolean editable, boolean disabled) {
+                String tabReference, String filter, String editAction, String editFormless,
+                String editFixedRows, boolean showSearch, boolean visible, boolean editable, boolean disabled) {
             if (tabLabels.contains(name)) {
                 throw new RuntimeException("Tab with name [" + name + "] already exists on this form.");
             }
 
             formTabDefList.add(new TempFormTabDef(contentType, name, tabLabel, tabApplet, tabReference, filter,
-                    editAction, showSearch, visible, editable, disabled));
+                    editAction, editFormless, editFixedRows, showSearch, visible, editable, disabled));
             tabLabels.add(tabLabel);
             return this;
         }
@@ -830,6 +830,7 @@ public class FormDef extends BaseApplicationEntityDef {
                 formTabDefList.add(new FormTabDef(tempFormTabDef.getContentType(), tempFormTabDef.getName(),
                         tempFormTabDef.getTabLabel(), tempFormTabDef.getTabApplet(), tempFormTabDef.getTabReference(),
                         tempFormTabDef.getFilter(), tempFormTabDef.getEditAction(),
+                        tempFormTabDef.getEditFormless(), tempFormTabDef.getEditFixedRows(),
                         DataUtils.unmodifiableList(formSectionDefList), tempFormTabDef.isShowSearch(),
                         tempFormTabDef.isVisible(), tempFormTabDef.isEditable(), tempFormTabDef.isDisabled()));
             }
@@ -873,6 +874,10 @@ public class FormDef extends BaseApplicationEntityDef {
 
             private String editAction;
 
+            private String editFormless;
+
+            private String editFixedRows;
+
             private boolean showSearch;
 
             private boolean visible;
@@ -884,8 +889,9 @@ public class FormDef extends BaseApplicationEntityDef {
             private List<TempFormSectionDef> formSectionDefList;
 
             public TempFormTabDef(TabContentType contentType, String name, String tabLabel, String tabApplet,
-                    String tabReference, String filter, String editAction, boolean showSearch, boolean visible,
-                    boolean editable, boolean disabled) {
+                    String tabReference, String filter, String editAction, String editFormless,
+                    String editFixedRows, boolean showSearch, boolean visible, boolean editable,
+                    boolean disabled) {
                 this.contentType = contentType;
                 this.name = name;
                 this.tabLabel = tabLabel;
@@ -893,6 +899,8 @@ public class FormDef extends BaseApplicationEntityDef {
                 this.tabReference = tabReference;
                 this.filter = filter;
                 this.editAction = editAction;
+                this.editFormless = editFormless;
+                this.editFixedRows = editFixedRows;
                 this.showSearch = showSearch;
                 this.visible = visible;
                 this.editable = editable;
@@ -926,6 +934,14 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public String getEditAction() {
                 return editAction;
+            }
+
+            public String getEditFormless() {
+                return editFormless;
+            }
+
+            public String getEditFixedRows() {
+                return editFixedRows;
             }
 
             public List<TempFormSectionDef> getFormSectionDefList() {

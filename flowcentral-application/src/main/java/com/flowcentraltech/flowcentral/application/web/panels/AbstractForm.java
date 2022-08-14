@@ -18,9 +18,11 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.Errors;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.data.FormAppendables;
@@ -31,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Convenient abstract base class for forms.
@@ -129,6 +132,22 @@ public abstract class AbstractForm {
 
     public void setFormBean(Object formBean) throws UnifyException {
         ctx.setInst(formBean);
+    }
+
+    public boolean matchFormBean(String formFilterName) throws UnifyException {
+        if (!StringUtils.isBlank(formFilterName)) {
+            if (ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(formFilterName)) {
+                return true;
+            }
+
+            FormDef _formDef = ctx.getFormDef();
+            FilterDef _filterDef = _formDef.getFilterDef(formFilterName);
+            return _filterDef
+                    .getObjectFilter(_formDef.getEntityDef(), ctx.au().getSpecialParamProvider(), ctx.au().getNow())
+                    .match(ctx.getInst());
+        }
+
+        return false;
     }
 
     public SectorIcon getSectorIcon() {

@@ -862,7 +862,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             fdb.addFormTab(appFormElement.getTabContentType(), appFormElement.getElementName(),
                                     appFormElement.getLabel(), appFormElement.getTabApplet(),
                                     appFormElement.getTabReference(), appFormElement.getFilter(),
-                                    appFormElement.getEditAction(), appFormElement.isShowSearch(),
+                                    appFormElement.getEditAction(), appFormElement.getEditFormless(),
+                                    appFormElement.getEditFixedRows(), appFormElement.isShowSearch(),
                                     appFormElement.isVisible(), appFormElement.isEditable(),
                                     appFormElement.isDisabled());
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
@@ -912,7 +913,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? StringUtils.breakdownParameterizedString(appForm.getTitleFormat())
                             : null;
                     fdb.titleFormat(titleFormat);
-                    
+
                     for (AppFormFilter appFormFilter : appForm.getFilterList()) {
                         fdb.addFilterDef(InputWidgetUtils.getFilterDef(appFormFilter.getName(),
                                 appFormFilter.getDescription(), null, null, null, appFormFilter.getFilter()));
@@ -1545,6 +1546,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<AppForm> findAppForms(AppFormQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public List<AppFormFilter> findAppFormFilters(String appFormName) throws UnifyException {
+        ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(appFormName);
+        Long appFormId = environment().value(Long.class, "id",
+                new AppFormQuery().applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+        return environment().findAll(new AppFormFilterQuery().appFormId(appFormId));
     }
 
     @Override
@@ -3880,6 +3889,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 appFormElement.setTabReference(formTabConfig.getReference());
                 appFormElement.setFilter(formTabConfig.getFilter());
                 appFormElement.setEditAction(formTabConfig.getEditAction());
+                appFormElement.setEditFormless(formTabConfig.getEditFormless());
+                appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
                 appFormElement.setShowSearch(formTabConfig.isShowSearch());
                 appFormElement.setVisible(formTabConfig.isVisible());
                 appFormElement.setEditable(formTabConfig.isEditable());

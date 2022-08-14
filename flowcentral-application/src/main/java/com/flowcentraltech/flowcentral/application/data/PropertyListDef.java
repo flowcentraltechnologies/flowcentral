@@ -131,7 +131,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
             }
 
             FormTabDef formTabDef = new FormTabDef(TabContentType.MINIFORM, "details", description, null, null, null,
-                    null, formSectionDefList, false, true, true, false);
+                    null, null, null, formSectionDefList, false, true, true, false);
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             return new PropertyListDef(formTabDef, DataUtils.unmodifiableList(itemList), nameParts, description, id,

@@ -14,15 +14,15 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.workflow.constants;
+package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Workflow step constants.
+ * Application filter constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WfStepConstants {
+public interface ApplicationFilterConstants {
 
     String RESERVED_ALWAYS_FILTERNAME = "__always";
 }

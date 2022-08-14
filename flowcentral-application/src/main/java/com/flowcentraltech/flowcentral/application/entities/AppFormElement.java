@@ -64,6 +64,12 @@ public class AppFormElement extends BaseConfigEntity {
     @Column(length = 64, nullable = true)
     private String editAction;
 
+    @Column(length = 64, nullable = true)
+    private String editFormless;
+
+    @Column(length = 64, nullable = true)
+    private String editFixedRows;
+
     @Column(length = 128, nullable = true)
     private String inputReference;
 
@@ -189,6 +195,22 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setEditAction(String editAction) {
         this.editAction = editAction;
+    }
+
+    public String getEditFormless() {
+        return editFormless;
+    }
+
+    public void setEditFormless(String editFormless) {
+        this.editFormless = editFormless;
+    }
+
+    public String getEditFixedRows() {
+        return editFixedRows;
+    }
+
+    public void setEditFixedRows(String editFixedRows) {
+        this.editFixedRows = editFixedRows;
     }
 
     public String getInputReference() {
