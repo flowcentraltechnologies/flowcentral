@@ -82,6 +82,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private Map<String, FormStatePolicyDef> onCreateFormStatePolicyDefMap;
 
+    private Map<String, FilterDef> filterDefMap;
+
     private Map<String, FormAnnotationDef> formAnnotationDefMap;
 
     private Map<String, FormActionDef> formActionDefMap;
@@ -102,9 +104,10 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private FormDef(FormType type, EntityDef entityDef, String consolidatedFormValidation,
             String consolidatedFormReview, String consolidatedFormState, String listingGenerator,
-            List<StringToken> titleFormat, Map<String, FormAnnotationDef> formAnnotationDefMap,
-            List<FormActionDef> formActionDefList, List<FormTabDef> formTabDefList,
-            List<FormRelatedListDef> formRelatedListDefList, List<FormStatePolicyDef> formStatePolicyDefList,
+            List<StringToken> titleFormat, Map<String, FilterDef> filterDefMap,
+            Map<String, FormAnnotationDef> formAnnotationDefMap, List<FormActionDef> formActionDefList,
+            List<FormTabDef> formTabDefList, List<FormRelatedListDef> formRelatedListDefList,
+            List<FormStatePolicyDef> formStatePolicyDefList,
             List<FormWidgetRulesPolicyDef> formWidgetRulesPolicyDefList,
             List<FieldValidationPolicyDef> fieldValidationPolicyDefList,
             List<FormValidationPolicyDef> formValidationPolicyDefList,
@@ -118,6 +121,7 @@ public class FormDef extends BaseApplicationEntityDef {
         this.consolidatedFormState = consolidatedFormState;
         this.listingGenerator = listingGenerator;
         this.titleFormat = titleFormat;
+        this.filterDefMap = filterDefMap;
         this.formAnnotationDefMap = formAnnotationDefMap;
         this.formActionDefList = formActionDefList;
         this.formTabDefList = formTabDefList;
@@ -293,6 +297,20 @@ public class FormDef extends BaseApplicationEntityDef {
         return saveAsFormTabDef;
     }
 
+    public boolean isFilter(String name) {
+        return filterDefMap.containsKey(name);
+    }
+
+    public FilterDef getFilterDef(String name) {
+        FilterDef filterDef = filterDefMap.get(name);
+        if (filterDef == null) {
+            throw new RuntimeException(
+                    "Filter with name [" + name + "] is unknown for workflow definition [" + getName() + "].");
+        }
+
+        return filterDef;
+    }
+
     public List<FormAnnotationDef> getFormAnnotationDefList() {
         if (formAnnotationDefList == null) {
             formAnnotationDefList = Collections
@@ -458,6 +476,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
         private String listingGenerator;
 
+        private Map<String, FilterDef> filterDefMap;
+
         private Map<String, FormAnnotationDef> formAnnotationDefMap;
 
         private List<FormActionDef> formActionList;
@@ -500,6 +520,7 @@ public class FormDef extends BaseApplicationEntityDef {
             this.consolidatedFormValidation = consolidatedFormValidation;
             this.consolidatedFormReview = consolidatedFormReview;
             this.consolidatedFormState = consolidatedFormState;
+            this.filterDefMap = new HashMap<String, FilterDef>();
             this.listingGenerator = listingGenerator;
             this.longName = longName;
             this.description = description;
@@ -784,6 +805,16 @@ public class FormDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addFilterDef(FilterDef filterDef) {
+            if (filterDefMap.containsKey(filterDef.getName())) {
+                throw new RuntimeException(
+                        "Filter with name [" + filterDef.getName() + "] already exists in this definition.");
+            }
+
+            filterDefMap.put(filterDef.getName(), filterDef);
+            return this;
+        }
+
         public FormDef build() throws UnifyException {
             List<FormTabDef> formTabDefList = new ArrayList<FormTabDef>();
             for (TempFormTabDef tempFormTabDef : this.formTabDefList) {
@@ -809,7 +840,7 @@ public class FormDef extends BaseApplicationEntityDef {
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             return new FormDef(type, entityDef, consolidatedFormValidation, consolidatedFormReview,
-                    consolidatedFormState, listingGenerator, titleFormat,
+                    consolidatedFormState, listingGenerator, titleFormat, DataUtils.unmodifiableMap(filterDefMap),
                     DataUtils.unmodifiableMap(formAnnotationDefMap), DataUtils.unmodifiableList(formActionList),
                     DataUtils.unmodifiableList(formTabDefList),
                     DataUtils.unmodifiableValuesList(formRelatedListDefList),

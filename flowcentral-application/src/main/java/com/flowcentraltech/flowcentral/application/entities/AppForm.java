@@ -56,6 +56,9 @@ public class AppForm extends BaseApplicationEntity {
 
     @ListOnly(name = "form_type_desc", key = "type", property="description")
     private String typeDesc;
+
+    @ChildList
+    private List<AppFormFilter> filterList;
     
     @ChildList
     private List<AppFormAnnotation> annotationList;
@@ -146,6 +149,14 @@ public class AppForm extends BaseApplicationEntity {
 
     public void setConsolidatedState(String consolidatedState) {
         this.consolidatedState = consolidatedState;
+    }
+
+    public List<AppFormFilter> getFilterList() {
+        return filterList;
+    }
+
+    public void setFilterList(List<AppFormFilter> filterList) {
+        this.filterList = filterList;
     }
 
     public List<AppFormAnnotation> getAnnotationList() {

@@ -106,6 +106,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElementQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFieldValidationPolicy;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFieldValidationPolicyQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppFormFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppFormRelatedList;
 import com.flowcentraltech.flowcentral.application.entities.AppFormRelatedListQuery;
@@ -910,6 +912,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             ? StringUtils.breakdownParameterizedString(appForm.getTitleFormat())
                             : null;
                     fdb.titleFormat(titleFormat);
+                    
+                    for (AppFormFilter appFormFilter : appForm.getFilterList()) {
+                        fdb.addFilterDef(InputWidgetUtils.getFilterDef(appFormFilter.getName(),
+                                appFormFilter.getDescription(), null, null, null, appFormFilter.getFilter()));
+                    }
 
                     for (AppFormAnnotation appFormAnnotation : appForm.getAnnotationList()) {
                         fdb.addFormAnnotation(appFormAnnotation.getType(), appFormAnnotation.getName(),
@@ -3732,6 +3739,37 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private void populateChildList(final AppForm appForm, AppFormConfig appFormConfig, final Long applicationId,
             String applicationName) throws UnifyException {
+        // Filters
+        List<AppFormFilter> filterList = null;
+        if (!DataUtils.isBlank(appFormConfig.getFilterList())) {
+            filterList = new ArrayList<AppFormFilter>();
+            Map<String, AppFormFilter> map = appForm.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppFormFilterQuery().appFormId(appForm.getId()));
+            for (FilterConfig filterConfig : appFormConfig.getFilterList()) {
+                AppFormFilter appFormFilter = map.get(filterConfig.getName());
+                if (appFormFilter == null) {
+                    AppFormFilter workflowFilter = new AppFormFilter();
+                    workflowFilter.setName(filterConfig.getName());
+                    workflowFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                    workflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                    workflowFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    filterList.add(workflowFilter);
+                } else {
+                    if (ConfigUtils.isSetInstall(appFormFilter)) {
+                        appFormFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                        appFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                    } else {
+                        environment().findChildren(appFormFilter);
+                    }
+
+                    filterList.add(appFormFilter);
+                }
+
+            }
+        }
+        appForm.setFilterList(filterList);
+
         // Form annotations
         List<AppFormAnnotation> annotationList = null;
         if (!DataUtils.isBlank(appFormConfig.getAnnotationList())) {

@@ -56,6 +56,13 @@ public enum EntityChildCategoryType implements EnumConst {
             "entity-upload",
             FilterConditionListType.IMMEDIATE_FIELD,
             null),
+    APP_FORM(
+            "FORM",
+            "application.appForm",
+            "entity",
+            "form",
+            FilterConditionListType.IMMEDIATE_FIELD,
+            null),
     APP_FORMSTATEPOLICY(
             "FORMSTATEPOLICY",
             "application.appForm",
