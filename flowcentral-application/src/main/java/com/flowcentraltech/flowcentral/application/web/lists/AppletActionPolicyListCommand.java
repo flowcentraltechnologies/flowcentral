@@ -53,4 +53,9 @@ public class AppletActionPolicyListCommand extends AbstractEntityTypeListCommand
         return null;
     }
 
+    @Override
+    protected final boolean acceptNonReferenced() {
+        return false;
+    }
+
 }

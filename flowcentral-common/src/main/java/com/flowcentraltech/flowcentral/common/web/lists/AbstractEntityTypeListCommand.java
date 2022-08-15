@@ -47,10 +47,13 @@ public abstract class AbstractEntityTypeListCommand<T extends UnifyComponent, U 
             final String entityName = getEntityName(param);
             if (!StringUtils.isBlank(entityName)) {
                 List<UnifyComponentConfig> list = new ArrayList<UnifyComponentConfig>();
+                final boolean accept = acceptNonReferenced();
                 for (UnifyComponentConfig unifyComponentConfig : baseConfigList) {
                     EntityReferences era = unifyComponentConfig.getType().getAnnotation(EntityReferences.class);
                     if (era == null) {
-                        list.add(unifyComponentConfig);
+                        if (accept) {
+                            list.add(unifyComponentConfig);
+                        }
                     } else {
                         for (String entity : era.value()) {
                             if (entityName.equals(entity)) {
@@ -67,5 +70,9 @@ public abstract class AbstractEntityTypeListCommand<T extends UnifyComponent, U 
         return Collections.emptyList();
     }
 
+    protected boolean acceptNonReferenced() {
+        return true;
+    }
+    
     protected abstract String getEntityName(U param) throws UnifyException;
 }

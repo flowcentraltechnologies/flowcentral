@@ -46,10 +46,15 @@ public class FormActionPolicyListCommand extends AbstractEntityTypeListCommand<F
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {
-            return applicationModuleService.findAppFormEntityLongName(param.getValue());
+           return applicationModuleService.findAppFormEntityLongName(param.getValue());
         }
 
         return null;
+    }
+
+    @Override
+    protected final boolean acceptNonReferenced() {
+        return false;
     }
 
 }
