@@ -34,7 +34,7 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component("studiooncreatecomponent-policy")
-public class StudioOnCreateComponentPolicy extends AbstractStudioEntityActionPolicy {
+public class StudioOnCreateComponentPolicy extends AbstractStudioAppletActionPolicy {
 
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {

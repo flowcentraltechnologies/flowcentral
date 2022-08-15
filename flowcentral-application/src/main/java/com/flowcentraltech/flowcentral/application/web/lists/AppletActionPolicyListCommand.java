@@ -14,10 +14,10 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.studio.web.lists;
+package com.flowcentraltech.flowcentral.application.web.lists;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AppletActionPolicy;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -25,19 +25,19 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.list.LongParam;
 
 /**
- * Studio entity action policy list command.
+ * Applet action policy list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studioentityactionpolicylist")
-public class StudioEntityActionPolicyListCommand extends AbstractEntityTypeListCommand<EntityActionPolicy, LongParam> {
+@Component("appletactionpolicylist")
+public class AppletActionPolicyListCommand extends AbstractEntityTypeListCommand<AppletActionPolicy, LongParam> {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public StudioEntityActionPolicyListCommand() {
-        super(EntityActionPolicy.class, LongParam.class);
+    public AppletActionPolicyListCommand() {
+        super(AppletActionPolicy.class, LongParam.class);
     }
 
     public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {

@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.system.business.policies;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
@@ -33,7 +33,7 @@ import com.tcdng.unify.core.database.Entity;
  */
 @EntityReferences({ "system.sysParam" })
 @Component(name = "sysparam-updateactionpolicy", description = "$m{system.entityactionpolicy.sysparamupdate}")
-public class SysParamUpdateActionPolicy extends AbstractEntityActionPolicy {
+public class SysParamUpdateActionPolicy extends AbstractAppletActionPolicy {
 
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {

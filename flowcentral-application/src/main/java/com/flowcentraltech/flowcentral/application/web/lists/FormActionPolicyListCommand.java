@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.lists;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FormActionPolicy;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -30,13 +30,13 @@ import com.tcdng.unify.core.list.LongParam;
  * @since 1.0
  */
 @Component("formactionpolicylist")
-public class FormActionPolicyListCommand extends AbstractEntityTypeListCommand<EntityActionPolicy, LongParam> {
+public class FormActionPolicyListCommand extends AbstractEntityTypeListCommand<FormActionPolicy, LongParam> {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
     public FormActionPolicyListCommand() {
-        super(EntityActionPolicy.class, LongParam.class);
+        super(FormActionPolicy.class, LongParam.class);
     }
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {

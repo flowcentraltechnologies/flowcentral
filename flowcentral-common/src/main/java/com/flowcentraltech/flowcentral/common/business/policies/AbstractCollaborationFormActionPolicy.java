@@ -21,12 +21,12 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
- * Convenient abstract base class for collaboration entity action policies.
+ * Convenient abstract base class for collaboration form action policies.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractCollaborationEntityActionPolicy extends AbstractEntityActionPolicy {
+public abstract class AbstractCollaborationFormActionPolicy extends AbstractFormActionPolicy {
 
     @Configurable
     private CollaborationProvider collaborationProvider;

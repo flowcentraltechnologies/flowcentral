@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.studio.business.policies;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractCollaborationEntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractCollaborationFormActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component(name = "unlockresource-actionpolicy", description = "$m{studio.entityactionpolicy.unlockresource}")
-public class StudioUnlockResourceActionPolicy extends AbstractCollaborationEntityActionPolicy {
+public class StudioUnlockResourceActionPolicy extends AbstractCollaborationFormActionPolicy {
 
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {

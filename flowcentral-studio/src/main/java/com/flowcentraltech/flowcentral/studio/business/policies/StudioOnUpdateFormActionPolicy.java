@@ -33,7 +33,7 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component("studioonupdateformaction-policy")
-public class StudioOnUpdateFormActionPolicy extends AbstractStudioEntityActionPolicy {
+public class StudioOnUpdateFormActionPolicy extends AbstractStudioAppletActionPolicy {
 
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
