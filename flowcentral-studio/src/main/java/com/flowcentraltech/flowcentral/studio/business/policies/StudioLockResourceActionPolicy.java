@@ -20,7 +20,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.RequestUserPhotoGenerator;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractCollaborationEntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractCollaborationFormActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
@@ -41,7 +41,7 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component(name = "lockresource-actionpolicy", description = "$m{studio.entityactionpolicy.lockresource}")
-public class StudioLockResourceActionPolicy extends AbstractCollaborationEntityActionPolicy {
+public class StudioLockResourceActionPolicy extends AbstractCollaborationFormActionPolicy {
 
     @Configurable
     private SecurityModuleService securityModuleService;

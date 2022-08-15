@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
+import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
@@ -31,6 +32,7 @@ import com.tcdng.unify.core.util.QueryUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@EntityReferences({"application.appEntityField"})
 @Component("studiooncreateappentityfield-policy")
 public class StudioOnCreateAppEntityFieldPolicy extends AbstractStudioAppEntityFieldPolicy {
 

@@ -29,7 +29,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractStudioAppEntityFieldPolicy extends AbstractStudioEntityActionPolicy {
+public abstract class AbstractStudioAppEntityFieldPolicy extends AbstractStudioAppletActionPolicy {
 
     @Configurable
     private ReportModuleService reportModuleService;

@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.application.policies;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationEntityActionPolicy extends AbstractEntityActionPolicy {
+public abstract class AbstractApplicationAppletActionPolicy extends AbstractAppletActionPolicy {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;

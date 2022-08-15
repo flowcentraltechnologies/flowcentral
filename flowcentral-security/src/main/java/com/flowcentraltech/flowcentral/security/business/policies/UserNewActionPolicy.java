@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.security.business.policies;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
@@ -38,7 +38,7 @@ import com.tcdng.unify.core.security.PasswordGenerator;
  */
 @EntityReferences({ "security.user" })
 @Component(name = "user-newactionpolicy", description = "$m{security.entityactionpolicy.newuser}")
-public class UserNewActionPolicy extends AbstractEntityActionPolicy {
+public class UserNewActionPolicy extends AbstractAppletActionPolicy {
 
 //    private static final String USER_PASSWORD = "USER_PASSWORD";
 

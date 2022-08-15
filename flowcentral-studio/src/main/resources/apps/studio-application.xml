@@ -343,7 +343,7 @@
 		<widgetType name="propertyentityactionpolicylist"
 			description="$m{studio.widgettype.propertyentityactionpolicylist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studioentityactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			editor="!ui-select list:appletactionpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tableentitylistactionpolicylist"
 			description="$m{studio.widgettype.tableentitylistactionpolicylist}"

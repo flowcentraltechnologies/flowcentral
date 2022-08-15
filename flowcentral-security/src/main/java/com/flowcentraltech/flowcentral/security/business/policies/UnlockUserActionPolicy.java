@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.security.business.policies;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityActionPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
@@ -35,7 +35,7 @@ import com.tcdng.unify.core.database.Entity;
  */
 @EntityReferences({ "security.user" })
 @Component(name = "unlockuser-actionpolicy", description = "$m{security.entityactionpolicy.unlockuser}")
-public class UnlockUserActionPolicy extends AbstractEntityActionPolicy {
+public class UnlockUserActionPolicy extends AbstractFormActionPolicy {
 
     @Configurable
     private SecurityModuleService securityModuleService;

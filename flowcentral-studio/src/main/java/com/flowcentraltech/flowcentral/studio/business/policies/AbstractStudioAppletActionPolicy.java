@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
+import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityActionPolicy;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -39,7 +40,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractStudioEntityActionPolicy extends AbstractEntityActionPolicy {
+public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletActionPolicy {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
