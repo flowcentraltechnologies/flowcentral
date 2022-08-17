@@ -39,15 +39,6 @@ public interface CollaborationProvider extends UnifyComponent {
      *                        if an error occurs
      */
     List<String> getCollaborationApplets() throws UnifyException;
-    
-    /**
-     * Checks if licensed for collaboration.
-     * 
-     * @return true if licensed otherwise false
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean isLicensedForCollaboration() throws UnifyException;
 
     /**
      * Checks if resource is frozen.

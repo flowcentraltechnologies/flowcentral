@@ -22,7 +22,6 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractApplicationForwarderController;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
-import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAuditConstants;
@@ -279,10 +278,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     private String openApplication(UserRoleInfo userRole) throws UnifyException {
         getSessionContext().removeAllAttributes();
-
-        boolean isWorkspaceLicensed = licenseProvider != null
-                && licenseProvider.isLicensed(LicenseFeatureCodeConstants.APPLICATION_WORKSPACES);
-        if (userRole != null && isWorkspaceLicensed
+        if (userRole != null && workspacePrivilegeManager != null
                 && workspacePrivilegeManager.countRoleWorkspaces(userRole.getRoleCode()) <= 0) {
             throw new UnifyException(SecurityModuleErrorConstants.USER_ROLE_HAS_NO_WORKSPACE, userRole.getRoleDesc());
         }

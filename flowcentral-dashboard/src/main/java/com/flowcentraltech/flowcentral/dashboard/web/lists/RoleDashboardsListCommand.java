@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManag
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
-import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -72,15 +71,13 @@ public class RoleDashboardsListCommand extends AbstractDashboardListCommand<Zero
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        final boolean isWorkspaceLicensed = licenseProvider != null
-                && licenseProvider.isLicensed(LicenseFeatureCodeConstants.APPLICATION_WORKSPACES);
         final String workspaceCode = (String) getSessionAttribute(FlowCentralSessionAttributeConstants.WORKSPACE_CODE);
         List<String> roleDashboardList = appPrivilegeManager.findRolePrivileges(
                 ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, getUserToken().getRoleCode());
         if (!DataUtils.isBlank(roleDashboardList)) {
             List<Listable> resultList = new ArrayList<Listable>();
             for (String dashboardPrivName : roleDashboardList) {
-                if (!isWorkspaceLicensed
+                if (wkspPrivilegeManager == null
                         || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode, dashboardPrivName)) {
                     DashboardDef dashboardDef = getDashboardModuleService().getDashboardDef(
                             PrivilegeNameUtils.getPrivilegeNameParts(dashboardPrivName).getEntityName());

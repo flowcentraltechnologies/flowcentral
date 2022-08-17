@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!-- Integration module configuration -->
+<module name="integration" description="$m{integration.module}"
+	shortCode="INT" label="$m{integration.label}">
+	<!-- Applications -->
+	<applications>
+		<application name="integration"
+			shortDescription="$m{integration.short.description}"
+			longDescription="$m{integration.long.description}" autoInstall="true"
+			configFile="apps/integration-application.xml" />
+	</applications>
+	<!-- System Parameters -->
+	<sysParameters>
+		<sysParameter code="INT-0001" defaultVal="false"
+			description="$m{integration.sysparam.inwardendpointenabled}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+	</sysParameters>
+</module>

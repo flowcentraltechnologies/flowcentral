@@ -60,7 +60,7 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         final BaseApplicationEntity _appInst = (BaseApplicationEntity) inst;
-        if (isLicensedForCollaboration()) {
+        if (isCollaboration()) {
             final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
             if (type != null) {
                 final String resourceName = ApplicationNameUtils

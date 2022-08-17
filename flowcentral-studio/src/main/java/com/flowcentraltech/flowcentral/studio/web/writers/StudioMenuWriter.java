@@ -136,13 +136,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         writer.writeWithHtmlEscape(getSessionMessage("studio.menu.application.components"));
         writer.write("</span></div><div class=\"mbody\">");
 
-        final boolean isCollaborationLicensed = collaborationProvider != null
-                && collaborationProvider.isLicensedForCollaboration();
-        final List<StudioAppComponentType> selMenuCategoryList = isCollaborationLicensed ? collaborationMenuCategoryList
+        final boolean isCollaborationEnabled = collaborationProvider != null;
+        final List<StudioAppComponentType> selMenuCategoryList = isCollaborationEnabled ? collaborationMenuCategoryList
                 : menuCategoryList;
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
         if (currCategory == null) {
-            currCategory = isCollaborationLicensed ? StudioAppComponentType.COLLABORATION
+            currCategory = isCollaborationEnabled ? StudioAppComponentType.COLLABORATION
                     : (codeGenerationProvider != null ? StudioAppComponentType.CODEGENERATION
                             : StudioAppComponentType.ENTITY);
             studioMenuWidget.setCurrentSel(currCategory);

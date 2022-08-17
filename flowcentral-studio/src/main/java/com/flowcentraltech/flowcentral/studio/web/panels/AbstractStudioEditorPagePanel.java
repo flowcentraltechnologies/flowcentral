@@ -48,8 +48,7 @@ public abstract class AbstractStudioEditorPagePanel extends AbstractPanel {
     public void switchState() throws UnifyException {
         super.switchState();
         final StudioAppComponentApplet applet = (StudioAppComponentApplet) getValueStore().getValueObject();
-        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null
-                && collaborationProvider.isLicensedForCollaboration();
+        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null;
         final boolean isEditable = !applet.getCtx().isReadOnly();
         if (isCollaboration) {
             AbstractStudioEditorPage editorPage = getValue(AbstractStudioEditorPage.class);

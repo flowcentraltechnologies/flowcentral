@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!-- Collaboration module configuration -->
+<module name="collaboration" description="$m{collaboration.module}" shortCode="CLB"
+	label="$m{collaboration.label}">
+	<!-- applications -->
+	<applications>
+		<application name="collaboration"
+			shortDescription="$m{collaboration.short.description}"
+			longDescription="$m{collaboration.long.description}" autoInstall="true"
+			configFile="apps/collaboration-application.xml" />
+	</applications>
+
+	<!-- Privileges -->
+
+	<!-- System Parameters -->
+</module>

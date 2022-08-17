@@ -33,7 +33,6 @@ import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
-import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemColorType;
 import com.tcdng.unify.core.UnifyException;
@@ -179,8 +178,6 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                     ApplicationModuleSysParamConstants.STUDIO_MENU_ENABLED);
             final boolean sectionWithItemsOnly = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_MENU_SECTIONS_ITEMS_ONLY);
-            final boolean isWorkspaceLicensed = licenseProvider != null
-                    && licenseProvider.isLicensed(LicenseFeatureCodeConstants.APPLICATION_WORKSPACES);
             final boolean enterprise = collaborationProvider != null;
 
             final StringBuilder msb = new StringBuilder();
@@ -194,7 +191,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             List<ApplicationMenuDef> applicationDefList = applicationModuleService.getApplicationMenuDefs(searchInput);
             for (ApplicationMenuDef applicationMenuDef : applicationDefList) {
                 final String appPrivilegeCode = applicationMenuDef.getPrivilege();
-                if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appPrivilegeCode) && (!isWorkspaceLicensed
+                if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appPrivilegeCode) && (wkspPrivilegeManager == null
                         || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode, appPrivilegeCode))) {
                     if (sectionWithItemsOnly && DataUtils.isBlank(applicationMenuDef.getAppletDefList())) {
                         continue;
@@ -241,7 +238,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
                         final String appletPrivilegeCode = appletDef.getPrivilege();
                         if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
-                                && (!isWorkspaceLicensed || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode,
+                                && (wkspPrivilegeManager == null || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode,
                                         appletPrivilegeCode))) {
                             writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
                             appendISym = true;

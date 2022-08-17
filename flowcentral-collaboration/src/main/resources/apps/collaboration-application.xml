@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<!-- Collaboration application -->
+<application name="collaboration"
+	description="$m{collaboration.short.description}"
+	label="$m{collaboration.label}" module="collaboration">
+	<!-- Applets -->
+	<applets>
+		<applet name="manageHeldCollaborationLock"
+			description="$m{collaboration.heldcollaborationlock.manage}"
+			label="$m{collaboration.heldcollaborationlock.manage.label}"
+			entity="collaborationLock" type="manage_entitylist"
+			menuAccess="false">
+			<property name="page.alternateCaption" value="$m{collaboration.heldcollaborationlock.manage.label}" />
+			<property name="page.alternateSubCaption" value="$m{collaboration.collaborationlock}" />
+			<property name="searchTable" value="collaborationLockTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.actionFooter" value="true" />
+			<property name="baseRestriction" value="myLocksFilter" />
+			<filter name="myLocksFilter"
+				description="$m{collaboration.heldcollaborationlock.filter.mylocks">
+				<restriction type="and">
+					<!--restriction type="equals" field="applicationName"
+						paramA="{{s:fc.CURRENT_APPLICATION_NAME}}" /-->
+					<restriction type="equals" field="createdBy"
+						paramA="{{u:loginId}}" />
+				</restriction>
+			</filter>
+		</applet>
+		<applet name="manageFreezeUnfreeze"
+			description="$m{collaboration.freezeunfreeze.manage}"
+			label="$m{collaboration.freezeunfreeze.manage.label}"
+			entity="freezeUnfreeze" type="manage_entitylist"
+			menuAccess="false">
+			<property name="searchTable" value="freezeUnfreezeTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.quickFilter" value="false" />
+			<property name="searchTable.actionFooter" value="true" />
+            <property name="searchTable.basicSearchOnly" value="true"/>
+			<property name="baseRestriction" value="byApplicationFilter" />
+			<filter name="byApplicationFilter"
+				description="$m{collaboration.freezeunfreeze.filter.byapplication">
+				<restriction type="and">
+					<restriction type="equals" field="applicationName"
+						paramA="{{s:fc.CURRENT_APPLICATION_NAME}}" />
+				</restriction>
+			</filter>
+		</applet>
+	</applets>
+	<!-- References -->
+	<references>
+		<reference name="collaborationLockRef"
+			description="$m{collaboration.collaborationlock.reference}"
+			entity="collaborationLock" searchField="resourceName" />
+	</references>
+	<!-- Entities -->
+	<entities>
+		<entity name="collaborationLock"
+			description="$m{collaboration.collaborationlock}"
+			label="$m{collaboration.collaborationlock.label}"
+			type="com.flowcentraltech.flowcentral.collaboration.entities.CollaborationLock">
+			<field name="type"
+				label="$m{collaboration.collaborationlock.type}" type="enum_ref"
+				references="collaborationtypelist"
+				inputWidget="application.enumlist" />
+			<field name="applicationName"
+				label="$m{collaboration.collaborationlock.applicationname}"
+				type="string" inputWidget="application.name" maxLen="64"
+				descriptive="true" />
+			<field name="resourceName"
+				label="$m{collaboration.collaborationlock.resourcename}"
+				type="string" inputWidget="application.name" maxLen="128"
+				descriptive="true" />
+			<field name="typeDesc"
+				label="$m{collaboration.collaborationlock.typedesc}"
+				type="list_only" key="type" property="description" />
+		</entity>
+		<entity name="freezeUnfreeze" delegate="freezeunfreeze-environmentdelegate" 
+			description="$m{collaboration.freezeunfreeze}"  table="FC_FREEZEUNFREEZE"
+			label="$m{collaboration.freezeunfreeze.label}"
+			type="com.flowcentraltech.flowcentral.collaboration.entities.FreezeUnfreeze">
+			<field name="type" basicSearch="true"
+				label="$m{collaboration.freezeunfreeze.type}" type="enum_ref"
+				references="collaborationtypelist"
+				inputWidget="application.enumlist" />
+			<field name="status" basicSearch="true"
+				label="$m{collaboration.freezeunfreeze.status}" type="enum_ref"
+				references="frozenstatuslist"
+				inputWidget="application.enumlist" />
+			<field name="applicationName"
+				label="$m{collaboration.freezeunfreeze.applicationname}"
+				type="string" inputWidget="application.name" maxLen="64"/>
+			<field name="resourceName"
+				label="$m{collaboration.freezeunfreeze.resourcename}"
+				type="string" inputWidget="application.name" maxLen="128"/>
+			<field name="resourceDesc"
+				label="$m{collaboration.freezeunfreeze.resourcedesc}"
+				type="string" inputWidget="application.text" maxLen="128"/>
+			<field name="typeDesc"
+				label="$m{collaboration.freezeunfreeze.typedesc}"
+				type="list_only" key="type" property="description" />
+			<field name="statusDesc"
+				label="$m{collaboration.freezeunfreeze.statusdesc}"
+				type="list_only" key="status" property="description" />
+			<field name="frozenBy"
+				label="$m{collaboration.freezeunfreeze.frozenby}"
+				type="string" inputWidget="application.text" maxLen="64"/>
+			<field name="frozenOn"
+				label="$m{collaboration.freezeunfreeze.frozenon}"
+				type="timestamp_utc" inputWidget="application.datetime"/>
+		</entity>
+	</entities>
+	<!-- Tables -->
+	<tables>
+		<table name="collaborationLockTable"
+			description="$m{collaboration.collaborationlock.table}"
+			label="$m{collaboration.collaborationlock.table.label}"
+			entity="collaborationLock" itemsPerPage="20" multiSelect="true" serialNo="false">
+			<column field="applicationName"
+				renderWidget="application.text" widthRatio="2" />
+			<column field="resourceName" renderWidget="application.text"
+				widthRatio="3" />
+			<column field="typeDesc" renderWidget="application.text"
+				label="$m{collaboration.collaborationlock.type}" widthRatio="2" />
+			<column field="createdBy" renderWidget="application.text"
+				label="$m{collaboration.collaborationlock.heldby}" widthRatio="2" />
+			<column field="createDt" renderWidget="application.datetime"
+				label="$m{collaboration.collaborationlock.heldon}" widthRatio="2" />
+			<action name="releaseLocks"
+				description="$m{collaboration.collaborationlock.table.releaselocks}"
+				label="$m{collaboration.collaborationlock.table.releaselocks.label}"
+				policy="releasecollaborationlocks-actionpolicy" />
+		</table>
+		<table name="freezeUnfreezeTable" basicSearch="true"
+			description="$m{collaboration.freezeunfreeze.table}"
+			label="$m{collaboration.freezeunfreeze.table.label}"
+			entity="freezeUnfreeze" itemsPerPage="-1" multiSelect="true" serialNo="false">
+			<column field="applicationName"
+				renderWidget="application.text"/>
+			<column field="resourceName" renderWidget="application.text"/>
+			<column field="resourceDesc" renderWidget="application.text"/>
+			<column field="typeDesc" renderWidget="application.text"
+				label="$m{collaboration.freezeunfreeze.type}"/>
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{collaboration.freezeunfreeze.status}"/>
+			<column field="frozenBy" renderWidget="application.text"/>
+			<column field="frozenOn" renderWidget="application.datetime"/>
+			<action name="freezeComponents"
+				description="$m{collaboration.freezeunfreeze.table.freezecomponents}"
+				label="$m{collaboration.freezeunfreeze.table.freezecomponents.label}"
+				policy="freezecomponents-actionpolicy" />
+			<action name="unfreezeComponents"
+				description="$m{collaboration.freezeunfreeze.table.unfreezecomponents}"
+				label="$m{collaboration.freezeunfreeze.table.unfreezecomponents.label}"
+				policy="unfreezecomponents-actionpolicy" />
+		</table>
+	</tables>
+	<!-- Forms -->
+</application>

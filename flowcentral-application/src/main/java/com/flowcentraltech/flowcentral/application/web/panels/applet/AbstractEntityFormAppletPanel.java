@@ -125,8 +125,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final AppletDef formAppletDef = applet.getFormAppletDef();
         logDebug("Switching form applet panel [{0}]...", formAppletDef != null ? formAppletDef.getLongName() : null);
         final AppletContext appCtx = applet.getCtx();
-        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null
-                && collaborationProvider.isLicensedForCollaboration();
+        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null;
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
         final String roleCode = getUserToken().getRoleCode();
         final AbstractForm form = applet.getResolvedForm();

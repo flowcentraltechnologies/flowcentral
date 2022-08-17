@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!-- Workspace module configuration -->
+<module name="workspace" description="$m{workspace.module}" shortCode="WKS"
+	label="$m{workspace.label}">
+	<!-- Applications -->
+	<applications>
+		<application name="workspace"
+			shortDescription="$m{workspace.short.description}"
+			longDescription="$m{workspace.long.description}" autoInstall="true"
+			configFile="apps/workspace-application.xml" />
+	</applications>
+
+	<!-- System Parameters -->
+</module>
