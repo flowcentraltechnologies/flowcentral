@@ -1630,7 +1630,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     private void setCollaborationContext(HeaderWithTabsForm form) throws UnifyException {
         boolean enterReadOnlyMode = false;
-        if (collaborationProvider != null && collaborationProvider.isLicensedForCollaboration()) {
+        if (collaborationProvider != null) {
             final BaseApplicationEntity _appInst = (BaseApplicationEntity) ((AbstractForm) form).getCtx().getInst();
             final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
             if (type != null) {

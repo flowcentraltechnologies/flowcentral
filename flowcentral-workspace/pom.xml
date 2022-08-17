@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.flowcentraltech.flowcentral</groupId>
+		<artifactId>flowcentral</artifactId>
+		<version>1.0.33-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>flowcentral-workspace</artifactId>
+	<name>flowcentral-workspace</name>
+	<description>Flowcentral Workspace Module</description>
+	<url>http://www.flowcentraltechnologies.com</url>
+
+	<dependencies>
+		<!-- Main dependencies -->
+		<dependency>
+			<groupId>com.flowcentraltech.flowcentral</groupId>
+			<artifactId>flowcentral-application</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flowcentraltech.flowcentral</groupId>
+			<artifactId>flowcentral-dashboard</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flowcentraltech.flowcentral</groupId>
+			<artifactId>flowcentral-organization</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>

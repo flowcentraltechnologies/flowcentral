@@ -149,7 +149,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     private final FactoryMap<String, LicenseDef> licenseDefFactoryMap;
 
     private final List<String> featureList = Collections.unmodifiableList(Arrays.asList(
-            LicenseFeatureCodeConstants.APPLICATION_WORKSPACES, LicenseFeatureCodeConstants.APPLICATION_COLLABORATION,
             LicenseFeatureCodeConstants.APPLICATION_AUDIT, LicenseFeatureCodeConstants.APPLICATION_ARCHIVING));
 
     public SystemModuleServiceImpl() {

@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractEntityActionPolicy;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;

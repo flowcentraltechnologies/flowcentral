@@ -23,10 +23,6 @@ package com.flowcentraltech.flowcentral.common.constants;
  * @since 1.0
  */
 public interface LicenseFeatureCodeConstants {
-
-    String APPLICATION_WORKSPACES = "application-workspaces";
-    
-    String APPLICATION_COLLABORATION = "application-collaboration";
     
     String APPLICATION_AUDIT = "application-audit";
     

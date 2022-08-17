@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
-import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.common.data.UserRoleOptions;
 import com.tcdng.unify.core.UnifyException;
@@ -189,8 +188,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         super.onIndexPage();
         ApplicationPageBean pageBean = getPageBean();
 
-        final boolean isWorkspaceEnabled = wkspPrivilegeManager != null && licenseProvider != null
-                && licenseProvider.isLicensed(LicenseFeatureCodeConstants.APPLICATION_WORKSPACES);
+        final boolean isWorkspaceEnabled = wkspPrivilegeManager != null;
         setPageWidgetVisible("wkspSelPanel", isWorkspaceEnabled);
         if (isWorkspaceEnabled) {
             List<String> workspaceCodes = wkspPrivilegeManager.findRoleWorkspaceCodes(getUserToken().getRoleCode());

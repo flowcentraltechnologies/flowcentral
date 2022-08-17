@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.flowcentraltech.flowcentral</groupId>
+		<artifactId>flowcentral</artifactId>
+		<version>1.0.33-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>flowcentral-collaboration</artifactId>
+	<name>flowcentral-collaboration</name>
+	<description>Flowcentral Collaboration Module</description>
+	<url>http://www.flowcentraltechnologies.com</url>
+
+	<dependencies>
+		<!-- Main dependencies -->
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-configuration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-application</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-dashboard</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-chart</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-notification</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-report</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-workflow</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-delegate</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+		<!-- Test dependencies -->
+		<dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-common</artifactId>
+            <version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>

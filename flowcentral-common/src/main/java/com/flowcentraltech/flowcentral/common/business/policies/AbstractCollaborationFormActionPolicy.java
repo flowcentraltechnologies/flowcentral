@@ -39,7 +39,7 @@ public abstract class AbstractCollaborationFormActionPolicy extends AbstractForm
         return collaborationProvider;
     }
 
-    protected boolean isLicensedForCollaboration() throws UnifyException {
-        return collaborationProvider != null && collaborationProvider.isLicensedForCollaboration();
+    protected boolean isCollaboration() throws UnifyException {
+        return collaborationProvider != null;
     }
 }
