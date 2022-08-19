@@ -51,8 +51,6 @@ public abstract class AbstractTable<T, U> {
 
     public static final int ENTRY_ENABLED = 0x00000001;
 
-    public static final int ENTRY_SUMMARY_IGNORE_LAST = 0x00000002;
-
     protected final AppletUtilities au;
 
     private TableDef tableDef;
@@ -218,10 +216,6 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isEntryMode() {
         return (entryMode & ENTRY_ENABLED) > 0;
-    }
-
-    public boolean isEntrySummaryIgnoreLast() {
-        return (entryMode & ENTRY_SUMMARY_IGNORE_LAST) > 0;
     }
 
     public boolean isCrudMode() {

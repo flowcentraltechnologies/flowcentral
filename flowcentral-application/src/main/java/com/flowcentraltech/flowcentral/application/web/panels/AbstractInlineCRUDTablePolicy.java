@@ -56,9 +56,9 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
     }
 
     @Override
-    public int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
+    public final int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
             throws UnifyException {
-        return (index + 1) >= size ? 0 : 1;
+        return 0;
     }
 
     protected void commandShowPopup(String panelName) throws UnifyException {

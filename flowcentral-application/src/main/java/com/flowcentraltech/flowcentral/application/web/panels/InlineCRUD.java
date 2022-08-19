@@ -45,8 +45,10 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
     private FormValidationErrors errors;
     
+    private String addCaption;
+    
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
-        this.table = new BeanTable(au, tableDef, BeanTable.ENTRY_ENABLED | BeanTable.ENTRY_SUMMARY_IGNORE_LAST);
+        this.table = new BeanTable(au, tableDef, BeanTable.ENTRY_ENABLED);
         this.entryClass = entryClass;
         this.errors = new FormValidationErrors();
     }
@@ -55,7 +57,15 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         return table;
     }
 
-    public void addEntry() throws UnifyException {
+    public String getAddCaption() {
+		return addCaption;
+	}
+
+	public void setAddCaption(String addCaption) {
+		this.addCaption = addCaption;
+	}
+
+	public void addEntry() throws UnifyException {
         addEntry(true);
     }
 
@@ -76,7 +86,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     @SuppressWarnings("unchecked")
     public void insertEntries(List<T> entries, int index, boolean replace) throws UnifyException {
         List<T> _entries = (List<T>) table.getSourceObject();
-        if (replace && index < (_entries.size() - 1)) {
+        if (replace && index < entries.size()) {
             _entries.remove(index);
         }
         
@@ -105,7 +115,9 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         table.setPolicy(tablePolicy);
         table.setParentReader(parentReader);
         table.setSourceObject(_entries);
-        addEntry(false);
+        if (_entries.isEmpty()) {
+        	addEntry(false);
+        }
     }
 
     public void clearEntries() throws UnifyException {
@@ -116,9 +128,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     @SuppressWarnings("unchecked")
     public List<T> unload() throws UnifyException {
         List<T> entries = (List<T>) table.getSourceObject();
-        List<T> _entries = new ArrayList<T>(entries);
-        _entries.remove(_entries.size() - 1);
-        return _entries;
+        return new ArrayList<T>(entries);
     }
 
     @SuppressWarnings("unchecked")

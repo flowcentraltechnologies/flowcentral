@@ -175,7 +175,6 @@ public class TableWriter extends AbstractControlWriter {
 		// External control behavior
 		final AbstractTable<?, ?> table = tableWidget.getTable();
 		if (table != null) {
-			final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
 			final TableDef tableDef = table.getTableDef();
 			final boolean entryMode = table.isEntryMode();
 			final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
@@ -205,11 +204,6 @@ public class TableWriter extends AbstractControlWriter {
 			List<ValueStore> valueList = tableWidget.getValueList();
 			int len = valueList.size();
 			for (int i = 0; i < len; i++) {
-				final int last = (len - 1);
-				if (i == last && entrySummaryIgnoreLast && !isContainerEditable) {
-					break;
-				}
-
 				ValueStore valueStore = valueList.get(i);
 				boolean matchRowFocus = focusWidgetId == null && lastRowChangeInfo != null
 						&& lastRowChangeInfo.matchRowIndex(i);
@@ -508,7 +502,6 @@ public class TableWriter extends AbstractControlWriter {
 			} else {
 				final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
 				final Control[] actionCtrl = tableWidget.getActionCtrl();
-				final boolean entrySummaryIgnoreLast = table.isEntrySummaryIgnoreLast();
 				final int detailsIndex = table.getDetailsIndex();
 				final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
 				final boolean alternatingRows = tableWidget.isAlternatingRows();
@@ -532,12 +525,6 @@ public class TableWriter extends AbstractControlWriter {
 				}		
 				
 				for (int i = 0; i < len; i++) {
-					final int last = (len - 1);
-					if (i == last && entrySummaryIgnoreLast && !isContainerEditable) {
-						break;
-					}
-
-					boolean _totalSummary = entrySummaryIgnoreLast ? totalSummary && (i < last) : totalSummary;
 					ValueStore valueStore = valueList.get(i);
 					if (entryMode) {
 						tableStateOverride[i] = table.getTableStateOverride(valueStore);
@@ -619,7 +606,7 @@ public class TableWriter extends AbstractControlWriter {
 							}
 							writer.write("</td>");
 
-							if (_totalSummary) {
+							if (totalSummary) {
 								table.addTotalSummary(fieldName, valueStore.retrieve(fieldName));
 							}
 

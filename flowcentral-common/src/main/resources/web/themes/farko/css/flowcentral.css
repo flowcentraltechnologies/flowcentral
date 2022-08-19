@@ -211,6 +211,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-graybutton {background-color:#c8c8c8; font-weight:bold; color: #FFF; border: 1px solid #b8b8b8;}
 .fc-graybutton:hover:enabled {background-color:#b8b8b8;color: #FFF;}
 
+.fc-inline-entry-button {}
 
 /** Chart */
 .fc-chart {}
