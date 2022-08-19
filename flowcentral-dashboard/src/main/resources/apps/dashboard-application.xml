@@ -1,89 +1,169 @@
 <?xml version="1.0"?>
 <!-- Dashboard application -->
-<application name="dashboard" description="$m{dashboard.short.description}"
+<application name="dashboard"
+	description="$m{dashboard.short.description}"
 	label="$m{dashboard.label}" module="dashboard" displayIndex="-10">
 	<!-- Applets -->
 	<applets>
-		<applet name="appDashboard" description="$m{dashboard.application.appdashboard}"
-			label="$m{dashboard.application.appdashboard.label}" icon="chart-pie" type="path_page"
-			path="/application/dashboard/openPage" menuAccess="true">
+		<applet name="appDashboard"
+			description="$m{dashboard.application.appdashboard}"
+			label="$m{dashboard.application.appdashboard.label}" icon="chart-pie"
+			type="path_page" path="/application/dashboard/openPage"
+			menuAccess="true">
+		</applet>
+		<applet name="manageDashboard"
+			description="$m{dashboard.dashboard.manage}"
+			label="$m{dashboard.dashboard.manage.label}" entity="dashboard"
+			type="manage_entitylist" menuAccess="false">
+			<property name="page.alternateCaption"
+				value="$m{dashboard.dashboard.manage.label}" />
+			<!--property name="page.alternateSubCaption" value="$m{collaboration.collaborationlock}" 
+				/ -->
+			<property name="searchTable" value="dashboardTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.actionFooter" value="true" />
 		</applet>
 	</applets>
 	<!-- Dashboards -->
 	<dashboards>
-		<dashboard name="sampleDashboard" description="$m{dashboard.sampledashboard}" sections="2">
-			<dashboard-tile name="sampleTile1" description="$m{dashboard.sampledashboard.sampletile1}" type="SPARKLINE" chart="sampleChart1" section="0" index="0"/>
-			<dashboard-tile name="sampleTile2" description="$m{dashboard.sampledashboard.sampletile2}" type="SPARKLINE" chart="sampleChart2" section="0" index="1"/>
-			<dashboard-tile name="sampleTile3" description="$m{dashboard.sampledashboard.sampletile3}" type="SPARKLINE" chart="sampleChart3" section="0" index="2"/>
-			<dashboard-tile name="sampleTile4" description="$m{dashboard.sampledashboard.sampletile4}" type="SPARKLINE" chart="sampleChart4" section="0" index="3"/>
-			<dashboard-tile name="sampleTile5" description="$m{dashboard.sampledashboard.sampletile5}" type="SIMPLE" chart="sampleChart5" section="1" index="0"/>
-			<dashboard-tile name="sampleTile6" description="$m{dashboard.sampledashboard.sampletile6}" type="SIMPLE" chart="sampleChart6" section="1" index="1"/>
+		<dashboard name="sampleDashboard"
+			description="$m{dashboard.sampledashboard}" sections="2">
+			<dashboard-tile name="sampleTile1"
+				description="$m{dashboard.sampledashboard.sampletile1}"
+				type="SPARKLINE" chart="sampleChart1" section="0" index="0" />
+			<dashboard-tile name="sampleTile2"
+				description="$m{dashboard.sampledashboard.sampletile2}"
+				type="SPARKLINE" chart="sampleChart2" section="0" index="1" />
+			<dashboard-tile name="sampleTile3"
+				description="$m{dashboard.sampledashboard.sampletile3}"
+				type="SPARKLINE" chart="sampleChart3" section="0" index="2" />
+			<dashboard-tile name="sampleTile4"
+				description="$m{dashboard.sampledashboard.sampletile4}"
+				type="SPARKLINE" chart="sampleChart4" section="0" index="3" />
+			<dashboard-tile name="sampleTile5"
+				description="$m{dashboard.sampledashboard.sampletile5}"
+				type="SIMPLE" chart="sampleChart5" section="1" index="0" />
+			<dashboard-tile name="sampleTile6"
+				description="$m{dashboard.sampledashboard.sampletile6}"
+				type="SIMPLE" chart="sampleChart6" section="1" index="1" />
 		</dashboard>
 	</dashboards>
 	<!-- Charts -->
 	<charts>
 		<chart name="sampleChart1"
 			description="$m{dashboard.samplechart1.description}" type="bar"
-			title="$m{dashboard.samplechart1.title}" subTitle="$m{dashboard.samplechart1.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot" showGrid="false" smooth="true" showDataLabels="true"/>
+			title="$m{dashboard.samplechart1.title}"
+			subTitle="$m{dashboard.samplechart1.subtitle}"
+			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
+			showGrid="false" smooth="true" showDataLabels="true" />
 		<chart name="sampleChart2"
-			description="$m{dashboard.samplechart2.description}" type="bar" palette="palette3"
-			title="$m{dashboard.samplechart2.title}" subTitle="$m{dashboard.samplechart2.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot" showGrid="false" smooth="true" showDataLabels="true"/>
+			description="$m{dashboard.samplechart2.description}" type="bar"
+			palette="palette3" title="$m{dashboard.samplechart2.title}"
+			subTitle="$m{dashboard.samplechart2.subtitle}"
+			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
+			showGrid="false" smooth="true" showDataLabels="true" />
 
 		<chart name="sampleChart3"
 			description="$m{dashboard.samplechart3.description}" type="area"
-			title="$m{dashboard.samplechart3.title}" subTitle="$m{dashboard.samplechart3.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot" showGrid="false" smooth="false"/>
+			title="$m{dashboard.samplechart3.title}"
+			subTitle="$m{dashboard.samplechart3.subtitle}"
+			provider="chartsnapshot-provider" rule="sampleSalesChartSnapshot"
+			showGrid="false" smooth="false" />
 		<chart name="sampleChart4"
-			description="$m{dashboard.samplechart4.description}" type="area" palette="palette7"
-			title="$m{dashboard.samplechart4.title}" subTitle="$m{dashboard.samplechart4.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot" showGrid="false" smooth="false"/>
+			description="$m{dashboard.samplechart4.description}" type="area"
+			palette="palette7" title="$m{dashboard.samplechart4.title}"
+			subTitle="$m{dashboard.samplechart4.subtitle}"
+			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
+			showGrid="false" smooth="false" />
 
 		<chart name="sampleChart5"
 			description="$m{dashboard.samplechart5.description}" type="column"
-			title="$m{dashboard.samplechart5.title}" subTitle="$m{dashboard.samplechart5.subtitle}"
-			provider="chartsnapshot-provider" rule="sampleSalesAndCostsChartSnapshot" showGrid="true" smooth="true" stacked="true"/>
+			title="$m{dashboard.samplechart5.title}"
+			subTitle="$m{dashboard.samplechart5.subtitle}"
+			provider="chartsnapshot-provider"
+			rule="sampleSalesAndCostsChartSnapshot" showGrid="true" smooth="true"
+			stacked="true" />
 		<chart name="sampleChart6"
 			description="$m{dashboard.samplechart6.description}" type="donut"
-			title="$m{dashboard.samplechart6.title}" subTitle="$m{dashboard.samplechart6.subtitle}" height="300"
-			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot" showGrid="true" smooth="true" stacked="false"/>
+			title="$m{dashboard.samplechart6.title}"
+			subTitle="$m{dashboard.samplechart6.subtitle}" height="300"
+			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
+			showGrid="true" smooth="true" stacked="false" />
 	</charts>
 	<!-- References -->
 	<references>
-		<reference name="dashboardRef" description="$m{dashboard.dashboard.reference}"
-			entity="dashboard" searchField="description" />
-		<reference name="dashboardTileRef" description="$m{dashboard.dashboardtile.reference}"
+		<reference name="dashboardRef"
+			description="$m{dashboard.dashboard.reference}" entity="dashboard"
+			searchField="description" />
+		<reference name="dashboardTileRef"
+			description="$m{dashboard.dashboardtile.reference}"
 			entity="dashboardTile" searchField="description" />
 	</references>
 	<!-- Entities -->
 	<entities>
 		<entity name="dashboard" description="$m{dashboard.dashboard}"
 			label="$m{dashboard.dashboard.label}"
-			type="com.flowcentraltech.flowcentral.dashboard.entities.Dashboard" auditable="true"
-			reportable="true">
-			<field name="sections" label="$m{dashboard.dashboard.sections}" type="integer"
-				inputWidget="application.integer" />
+			type="com.flowcentraltech.flowcentral.dashboard.entities.Dashboard"
+			auditable="true" reportable="true">
+			<field name="sections" label="$m{dashboard.dashboard.sections}"
+				type="integer" inputWidget="application.integer" />
+			<field name="status" label="$m{dashboard.dashboard.status}"
+				type="enum_ref" references="statuslist"
+				inputWidget="application.enumlist" />
+			<field name="statusDesc"
+				label="$m{dashboard.dashboard.statusdesc}" type="list_only"
+				key="status" property="description" />
 			<field name="tileList" label="$m{dashboard.dashboard.tiles}"
 				type="child_list" references="dashboardTileRef" />
 		</entity>
-		<entity name="dashboardTile" description="$m{dashboard.dashboardtile}"
+		<entity name="dashboardTile"
+			description="$m{dashboard.dashboardtile}"
 			label="$m{dashboard.dashboardtile.label}"
-			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile" auditable="true"
-			reportable="true">
-			<field name="dashboardId" label="$m{dashboard.dashboardtile.dashboardid}"
-				type="ref" references="dashboardRef" filterLabel="$m{dashboard.dashboardtile.dashboard}"
+			type="com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile"
+			auditable="true" reportable="true">
+			<field name="dashboardId"
+				label="$m{dashboard.dashboardtile.dashboardid}" type="ref"
+				references="dashboardRef"
+				filterLabel="$m{dashboard.dashboardtile.dashboard}"
 				inputWidget="application.entitysearch" />
-			<field name="chart" label="$m{dashboard.dashboardtile.chart}" type="string"
-				inputWidget="chart.chartlist" maxLen="128"/>
-			<field name="section" label="$m{dashboard.dashboardtile.section}" type="integer"
+			<field name="chart" label="$m{dashboard.dashboardtile.chart}"
+				type="string" inputWidget="chart.chartlist" maxLen="128" />
+			<field name="section"
+				label="$m{dashboard.dashboardtile.section}" type="integer"
 				inputWidget="application.integer" />
-			<field name="index" label="$m{dashboard.dashboardtile.index}" type="integer"
-				inputWidget="application.integer" />
-			<field name="type" label="$m{dashboard.dashboardtile.type}" type="enum_ref"
-				references="dashboardtiletypelist" inputWidget="application.enumlist" />
-			<field name="typeDesc" label="$m{dashboard.dashboardtile.typedesc}" type="list_only"
+			<field name="index" label="$m{dashboard.dashboardtile.index}"
+				type="integer" inputWidget="application.integer" />
+			<field name="type" label="$m{dashboard.dashboardtile.type}"
+				type="enum_ref" references="dashboardtiletypelist"
+				inputWidget="application.enumlist" />
+			<field name="typeDesc"
+				label="$m{dashboard.dashboardtile.typedesc}" type="list_only"
 				key="type" property="description" />
 		</entity>
 	</entities>
+	<!-- Tables -->
+	<tables>
+		<table name="dashboardTable"
+			description="$m{dashboard.dashboard.table}"
+			label="$m{dashboard.dashboard.table.label}"
+			entity="dashboard" itemsPerPage="20" multiSelect="true" serialNo="false">
+			<column field="applicationName"
+				renderWidget="application.text" widthRatio="1" />
+			<column field="name" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{dashboard.dashboard.status}" widthRatio="1" />
+			<action name="activateDashboards"
+				description="$m{dashboard.dashboard.table.activatedashboards}"
+				label="$m{dashboard.dashboard.table.table.activatedashboards.label}"
+				policy="activatedashboards-actionpolicy" />
+			<action name="deactivateDashboards"
+				description="$m{dashboard.dashboard.table.deactivatedashboards}"
+				label="$m{dashboard.dashboard.table.table.deactivatedashboards.label}"
+				policy="deactivatedashboards-actionpolicy" />
+		</table>
+	</tables>
 </application>

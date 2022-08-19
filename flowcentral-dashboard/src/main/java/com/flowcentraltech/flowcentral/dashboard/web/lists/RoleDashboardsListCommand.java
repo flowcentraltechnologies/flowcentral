@@ -81,7 +81,9 @@ public class RoleDashboardsListCommand extends AbstractDashboardListCommand<Zero
                         || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode, dashboardPrivName)) {
                     DashboardDef dashboardDef = getDashboardModuleService().getDashboardDef(
                             PrivilegeNameUtils.getPrivilegeNameParts(dashboardPrivName).getEntityName());
-                    resultList.add(dashboardDef);
+                    if (dashboardDef.isActive()) {
+                    	resultList.add(dashboardDef);
+                    }
                 }
             }
 

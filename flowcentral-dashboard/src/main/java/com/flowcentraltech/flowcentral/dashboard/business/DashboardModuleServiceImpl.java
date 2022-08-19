@@ -20,6 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleErrorConstants;
 import com.flowcentraltech.flowcentral.dashboard.constants.DashboardModuleNameConstants;
@@ -30,6 +31,7 @@ import com.flowcentraltech.flowcentral.dashboard.entities.DashboardTile;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 
 /**
@@ -42,59 +44,65 @@ import com.tcdng.unify.core.data.FactoryMap;
 @Component(DashboardModuleNameConstants.DASHBOARD_MODULE_SERVICE)
 public class DashboardModuleServiceImpl extends AbstractFlowCentralService implements DashboardModuleService {
 
-    private FactoryMap<String, DashboardDef> dashboardDefFactoryMap;
+	private FactoryMap<String, DashboardDef> dashboardDefFactoryMap;
 
-    public DashboardModuleServiceImpl() {
+	public DashboardModuleServiceImpl() {
 
-        this.dashboardDefFactoryMap = new FactoryMap<String, DashboardDef>(true)
-            {
-                @Override
-                protected boolean stale(String dashboardName, DashboardDef dashboardDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new DashboardQuery().id(dashboardDef.getId())) > dashboardDef.getVersion();
-                }
+		this.dashboardDefFactoryMap = new FactoryMap<String, DashboardDef>(true) {
+			@Override
+			protected boolean stale(String dashboardName, DashboardDef dashboardDef) throws Exception {
+				return environment().value(long.class, "versionNo",
+						new DashboardQuery().id(dashboardDef.getId())) > dashboardDef.getVersion();
+			}
 
-                @Override
-                protected DashboardDef create(String longName, Object... arg1) throws Exception {
-                    ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    Dashboard dashboard = environment().list(new DashboardQuery()
-                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
-                    if (dashboard == null) {
-                        throw new UnifyException(DashboardModuleErrorConstants.CANNOT_FIND_APPLICATION_DASHBOARD,
-                                longName);
-                    }
+			@Override
+			protected DashboardDef create(String longName, Object... arg1) throws Exception {
+				ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
+				Dashboard dashboard = environment().list(new DashboardQuery()
+						.applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+				if (dashboard == null) {
+					throw new UnifyException(DashboardModuleErrorConstants.CANNOT_FIND_APPLICATION_DASHBOARD, longName);
+				}
 
-                    DashboardDef.Builder ddb = DashboardDef.newBuilder(dashboard.getSections(), longName,
-                            dashboard.getDescription(), dashboard.getId(), dashboard.getVersionNo());
-                    for (DashboardTile dashboardTile : dashboard.getTileList()) {
-                        ddb.addTile(dashboardTile.getType(), dashboardTile.getName(), dashboardTile.getDescription(),
-                                dashboardTile.getChart(), dashboardTile.getSection(), dashboardTile.getIndex());
-                    }
-                    return ddb.build();
-                }
+				DashboardDef.Builder ddb = DashboardDef.newBuilder(dashboard.getSections(), dashboard.getStatus(),
+						longName, dashboard.getDescription(), dashboard.getId(), dashboard.getVersionNo());
+				for (DashboardTile dashboardTile : dashboard.getTileList()) {
+					ddb.addTile(dashboardTile.getType(), dashboardTile.getName(), dashboardTile.getDescription(),
+							dashboardTile.getChart(), dashboardTile.getSection(), dashboardTile.getIndex());
+				}
+				return ddb.build();
+			}
 
-            };
+		};
 
-    }
+	}
 
-    @Override
-    public Dashboard findDashboard(Long dashboardId) throws UnifyException {
-        return environment().find(Dashboard.class, dashboardId);
-    }
+	@Override
+	public Dashboard findDashboard(Long dashboardId) throws UnifyException {
+		return environment().find(Dashboard.class, dashboardId);
+	}
 
-    @Override
-    public List<Long> findDashboardIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new DashboardQuery().applicationName(applicationName));
-    }
+	@Override
+	public List<Long> findDashboardIdList(String applicationName) throws UnifyException {
+		return environment().valueList(Long.class, "id", new DashboardQuery().applicationName(applicationName));
+	}
 
-    @Override
-    public DashboardDef getDashboardDef(String dashboardName) throws UnifyException {
-        return dashboardDefFactoryMap.get(dashboardName);
-    }
+	@Override
+	public DashboardDef getDashboardDef(String dashboardName) throws UnifyException {
+		return dashboardDefFactoryMap.get(dashboardName);
+	}
 
-    @Override
-    protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+	@Override
+	public void updateDashboardStatus(DashboardQuery query, RecordStatus status) throws UnifyException {
+    	int updated = environment().updateAll(query, new Update().add("status", status));
+    	if (updated > 0) {
+    		dashboardDefFactoryMap.clear();
+    	}
+	}
 
-    }
+	@Override
+	protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
+
+	}
 
 }
