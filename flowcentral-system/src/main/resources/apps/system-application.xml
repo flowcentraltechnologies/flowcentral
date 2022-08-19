@@ -216,6 +216,10 @@
 			routeToApplet="application.manageSuggestion" type="FACADE"
 			description="$m{system.suggestion.manage}"
 			label="$m{system.suggestion.manage.label}" name="manageSuggestion" />
+		<applet menuAccess="true"
+			routeToApplet="dashboard.manageDashboard" type="FACADE"
+			description="$m{system.dashboard.manage}"
+			label="$m{system.dashboard.manage.label}" name="manageDashboard" />
 	</applets>
 	<!-- References -->
 	<references>
