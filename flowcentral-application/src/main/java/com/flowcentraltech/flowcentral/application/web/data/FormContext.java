@@ -120,6 +120,8 @@ public class FormContext extends AbstractContext {
 
     private int tabIndexCounter;
 
+    private boolean readOnly;
+
     private boolean conditionalDisabled;
 
     private boolean formFocused;
@@ -474,8 +476,12 @@ public class FormContext extends AbstractContext {
         this.formFocused = formFocused;
     }
 
-    public boolean isReadOnly() throws UnifyException {
-        return appletContext.isReadOnly();
+    public void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
+	}
+
+	public boolean isReadOnly() throws UnifyException {
+        return readOnly || appletContext.isReadOnly();
     }
 
     public List<FormReviewPolicyDef> getReviewPolicies(FormReviewType type) {

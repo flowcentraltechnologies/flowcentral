@@ -43,210 +43,211 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class EntityCRUDPage {
 
-    private final AppletContext ctx;
+	private final AppletContext ctx;
 
-    private final AppletDef formAppletDef;
+	private final AppletDef formAppletDef;
 
-    private final SweepingCommitPolicy sweepingCommitPolicy;
+	private final SweepingCommitPolicy sweepingCommitPolicy;
 
-    private final EntityDef parentEntityDef;
+	private final EntityDef parentEntityDef;
 
-    private final Entity parentInst;
+	private final Entity parentInst;
 
-    private final EntityClassDef entityClassDef;
+	private final EntityClassDef entityClassDef;
 
-    private final String baseField;
+	private final String baseField;
 
-    private final Object baseId;
+	private final Object baseId;
 
-    private final String tableName;
+	private final String tableName;
 
-    private final String entryEditPolicy;
+	private final String entryEditPolicy;
 
-    private final String createFormName;
+	private final String createFormName;
 
-    private final String maintainFormName;
+	private final String maintainFormName;
 
-    private final String childListName;
+	private final String childListName;
 
-    private final SectorIcon sectorIcon;
+	private final SectorIcon sectorIcon;
 
-    private final BreadCrumbs breadCrumbs;
+	private final BreadCrumbs breadCrumbs;
 
-    private final EntityFormEventHandlers formEventHandlers;
+	private final EntityFormEventHandlers formEventHandlers;
 
-    private final Restriction baseRestriction;
+	private final Restriction baseRestriction;
 
-    private final boolean fixedRows;
+	private final boolean fixedRows;
 
-    private String displayItemCounter;
+	private String displayItemCounter;
 
-    private String displayItemCounterClass;
+	private String displayItemCounterClass;
 
-    private EntityCRUD crud;
+	private EntityCRUD crud;
 
-    public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
-            SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst,
-            EntityClassDef entityClassDef, String baseField, Object baseId, String childListName, SectorIcon sectorIcon,
-            BreadCrumbs breadCrumbs, String tableName, String entryEditPolicy, String createFormName,
-            String maintainFormName, Restriction baseRestriction, boolean fixedRows) {
-        this.ctx = ctx;
-        this.formAppletDef = formAppletDef;
-        this.formEventHandlers = formEventHandlers;
-        this.sweepingCommitPolicy = sweepingCommitPolicy;
-        this.parentEntityDef = parentEntityDef;
-        this.parentInst = parentInst;
-        this.entityClassDef = entityClassDef;
-        this.baseField = baseField;
-        this.baseId = baseId;
-        this.childListName = childListName;
-        this.sectorIcon = sectorIcon;
-        this.breadCrumbs = breadCrumbs;
-        this.tableName = tableName;
-        this.entryEditPolicy = entryEditPolicy;
-        this.createFormName = createFormName;
-        this.maintainFormName = maintainFormName;
-        this.baseRestriction = baseRestriction;
-        this.fixedRows = fixedRows;
-    }
+	public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
+			SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst,
+			EntityClassDef entityClassDef, String baseField, Object baseId, String childListName, SectorIcon sectorIcon,
+			BreadCrumbs breadCrumbs, String tableName, String entryEditPolicy, String createFormName,
+			String maintainFormName, Restriction baseRestriction, boolean fixedRows) {
+		this.ctx = ctx;
+		this.formAppletDef = formAppletDef;
+		this.formEventHandlers = formEventHandlers;
+		this.sweepingCommitPolicy = sweepingCommitPolicy;
+		this.parentEntityDef = parentEntityDef;
+		this.parentInst = parentInst;
+		this.entityClassDef = entityClassDef;
+		this.baseField = baseField;
+		this.baseId = baseId;
+		this.childListName = childListName;
+		this.sectorIcon = sectorIcon;
+		this.breadCrumbs = breadCrumbs;
+		this.tableName = tableName;
+		this.entryEditPolicy = entryEditPolicy;
+		this.createFormName = createFormName;
+		this.maintainFormName = maintainFormName;
+		this.baseRestriction = baseRestriction;
+		this.fixedRows = fixedRows;
+	}
 
-    public String getMainTitle() {
-        return breadCrumbs.getLastBreadCrumb().getTitle();
-    }
+	public String getMainTitle() {
+		return breadCrumbs.getLastBreadCrumb().getTitle();
+	}
 
-    public String getSubTitle() {
-        return breadCrumbs.getLastBreadCrumb().getSubTitle();
-    }
+	public String getSubTitle() {
+		return breadCrumbs.getLastBreadCrumb().getSubTitle();
+	}
 
-    public SectorIcon getSectorIcon() {
-        return sectorIcon;
-    }
+	public SectorIcon getSectorIcon() {
+		return sectorIcon;
+	}
 
-    public BreadCrumbs getBreadCrumbs() {
-        return breadCrumbs;
-    }
+	public BreadCrumbs getBreadCrumbs() {
+		return breadCrumbs;
+	}
 
-    public AppletUtilities getAu() {
-        return ctx.au();
-    }
+	public AppletUtilities getAu() {
+		return ctx.au();
+	}
 
-    public AppletContext getCtx() {
-        return ctx;
-    }
+	public AppletContext getCtx() {
+		return ctx;
+	}
 
-    public EntityDef getEntityDef() {
-        return entityClassDef.getEntityDef();
-    }
+	public EntityDef getEntityDef() {
+		return entityClassDef.getEntityDef();
+	}
 
-    public Object getBaseId() {
-        return baseId;
-    }
+	public Object getBaseId() {
+		return baseId;
+	}
 
-    public String getDisplayItemCounter() {
-        return displayItemCounter;
-    }
+	public String getDisplayItemCounter() {
+		return displayItemCounter;
+	}
 
-    public void setDisplayItemCounter(String displayItemCounter) {
-        this.displayItemCounter = displayItemCounter;
-    }
+	public void setDisplayItemCounter(String displayItemCounter) {
+		this.displayItemCounter = displayItemCounter;
+	}
 
-    public boolean isWithValidationErrors() {
-        return crud.getForm().getCtx().isWithValidationErrors();
-    }
+	public boolean isWithValidationErrors() {
+		return crud.getForm().getCtx().isWithValidationErrors();
+	}
 
-    public String getDisplayItemCounterClass() {
-        return displayItemCounterClass;
-    }
+	public String getDisplayItemCounterClass() {
+		return displayItemCounterClass;
+	}
 
-    public void setDisplayItemCounterClass(String displayItemCounterClass) {
-        this.displayItemCounterClass = displayItemCounterClass;
-    }
+	public void setDisplayItemCounterClass(String displayItemCounterClass) {
+		this.displayItemCounterClass = displayItemCounterClass;
+	}
 
-    public void clearDisplayItem() {
-        displayItemCounter = null;
-        displayItemCounterClass = null;
-    }
+	public void clearDisplayItem() {
+		displayItemCounter = null;
+		displayItemCounterClass = null;
+	}
 
-    public boolean isWithSectorIcon() {
-        return sectorIcon != null;
-    }
+	public boolean isWithSectorIcon() {
+		return sectorIcon != null;
+	}
 
-    public boolean isFormless() {
-        return StringUtils.isBlank(createFormName) && StringUtils.isBlank(maintainFormName);
-    }
+	public boolean isCreate() {
+		return StringUtils.isNotBlank(createFormName);
+	}
 
-    public void crudSelectItem(int index) throws UnifyException {
-        getCrud().enterMaintain(index);
-    }
+	public void crudSelectItem(int index) throws UnifyException {
+		getCrud().enterMaintain(index);
+	}
 
-    public void switchOnChange() throws UnifyException {
-        MiniForm form = getCrud().getForm();
-        form.getCtx().resetTabIndex();
+	public void switchOnChange() throws UnifyException {
+		MiniForm form = getCrud().getForm();
+		form.getCtx().resetTabIndex();
 
-        Entity inst = (Entity) form.getFormBean();
-        FormTabDef formTabDef = form.getFormTabDef();
-        // Clear unsatisfactory foreign key fields
-        if (formTabDef.isWithCondRefDefFormFields()) {
-            ctx.au().clearUnsatisfactoryRefs(formTabDef, entityClassDef.getEntityDef(),
-                    form.getCtx().getFormValueStore().getReader(), inst);
-        }
+		Entity inst = (Entity) form.getFormBean();
+		FormTabDef formTabDef = form.getFormTabDef();
+		// Clear unsatisfactory foreign key fields
+		if (formTabDef.isWithCondRefDefFormFields()) {
+			ctx.au().clearUnsatisfactoryRefs(formTabDef, entityClassDef.getEntityDef(),
+					form.getCtx().getFormValueStore().getReader(), inst);
+		}
 
-        // Populate entity list-only fields
-        ctx.au().populateListOnlyFields(entityClassDef.getEntityDef(), inst);
-    }
+		// Populate entity list-only fields
+		ctx.au().populateListOnlyFields(entityClassDef.getEntityDef(), inst);
+	}
 
-    public EntityCRUD getCrud() throws UnifyException {
-        if (crud == null) {
-            TableDef tableDef = ctx.au().getTableDef(tableName);
-            EntityTable entityTable = new EntityTable(ctx.au(), tableDef);
-            entityTable.setFixedRows(fixedRows);
-            if (!StringUtils.isBlank(entryEditPolicy)) {
-                ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
-                entityTable.setPolicy(policy);
-            }
+	public EntityCRUD getCrud() throws UnifyException {
+		if (crud == null) {
+			TableDef tableDef = ctx.au().getTableDef(tableName);
+			EntityTable entityTable = new EntityTable(ctx.au(), tableDef);
+			entityTable.setCrudMode(true);
+			entityTable.setFixedRows(fixedRows);
+			if (!StringUtils.isBlank(entryEditPolicy)) {
+				ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
+				entityTable.setPolicy(policy);
+			}
 
-            if (isFormless()) {
-                crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
-                        entityTable, null, null, childListName);
-            } else {
-                FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
-                createFrmCtx.setCrudMode();
-                createFrmCtx.setParentEntityDef(parentEntityDef);
-                createFrmCtx.setParentInst(parentInst);
+			MiniForm createForm = null;
+			if (isCreate()) {
+				FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
+				createFrmCtx.setCrudMode();
+				createFrmCtx.setParentEntityDef(parentEntityDef);
+				createFrmCtx.setParentInst(parentInst);
 
-                FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName),
-                        formEventHandlers);
-                maintainFrmCtx.setCrudMode();
-                maintainFrmCtx.setParentEntityDef(parentEntityDef);
-                maintainFrmCtx.setParentInst(parentInst);
+				createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
+						createFrmCtx.getFormDef().getFormTabDef(0));
+			} else {
+				entityTable.setView(true);
+			}
 
-                MiniForm createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
-                        createFrmCtx.getFormDef().getFormTabDef(0));
-                MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
-                        maintainFrmCtx.getFormDef().getFormTabDef(0));
-                crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
-                        entityTable, createForm, maintainForm, childListName);
-            }
-        }
+			FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);
+			maintainFrmCtx.setCrudMode();
+			maintainFrmCtx.setParentEntityDef(parentEntityDef);
+			maintainFrmCtx.setParentInst(parentInst);
 
-        return crud;
-    }
+			MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
+					maintainFrmCtx.getFormDef().getFormTabDef(0));
+			crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
+					entityTable, createForm, maintainForm, childListName);
+		}
 
-    public void loadCrudList() throws UnifyException {
-        EntityTable entityTable = getCrud().getTable();
-        Restriction restriction = new Equals(baseField, baseId);
-        if (baseRestriction != null) {
-            restriction = new And().add(restriction).add(baseRestriction);
-        }
+		return crud;
+	}
 
-        entityTable.setSourceObject(restriction);
-        entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
+	public void loadCrudList() throws UnifyException {
+		EntityTable entityTable = getCrud().getTable();
+		Restriction restriction = new Equals(baseField, baseId);
+		if (baseRestriction != null) {
+			restriction = new And().add(restriction).add(baseRestriction);
+		}
 
-        if (ctx.isContextEditable()) {
-            getCrud().enterCreate();
-        } else {
-            getCrud().enterMaintain(0);
-        }
-    }
+		entityTable.setSourceObject(restriction);
+		entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
+
+		if (ctx.isContextEditable() && isCreate()) {
+			getCrud().enterCreate();
+		} else {
+			getCrud().enterMaintain(0);
+		}
+	}
 
 }

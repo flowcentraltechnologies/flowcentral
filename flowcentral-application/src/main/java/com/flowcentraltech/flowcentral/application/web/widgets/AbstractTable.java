@@ -83,7 +83,9 @@ public abstract class AbstractTable<T, U> {
 
     private boolean basicSearchMode;
 
-    private boolean editMode;
+    private boolean crudMode;
+
+    private boolean view;
 
     private boolean fixedRows;
 
@@ -222,20 +224,28 @@ public abstract class AbstractTable<T, U> {
         return (entryMode & ENTRY_SUMMARY_IGNORE_LAST) > 0;
     }
 
-    public boolean isEditMode() {
-        return editMode;
-    }
+    public boolean isCrudMode() {
+		return crudMode;
+	}
 
-    public int getDetailsIndex() {
+	public void setCrudMode(boolean crudMode) {
+		this.crudMode = crudMode;
+	}
+
+    public boolean isView() {
+		return view;
+	}
+
+	public void setView(boolean view) {
+		this.view = view;
+	}
+
+	public int getDetailsIndex() {
         return detailsIndex;
     }
 
     public void setDetailsIndex(int detailsIndex) {
         this.detailsIndex = detailsIndex;
-    }
-
-    public void setEditMode(boolean editMode) {
-        this.editMode = editMode;
     }
 
     public ValueStoreReader getParentReader() {

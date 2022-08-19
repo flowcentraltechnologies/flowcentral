@@ -88,6 +88,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control[] fixedCtrl;
 
+    private Control viewCtrl;
+
+    private Control editCtrl;
+
     private List<StandalonePanel> summaryPanelList;
 
     private DetailsPanel detailsPanel;
@@ -237,6 +241,11 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return (table != null && table.isFixedRows()) || getUplAttribute(boolean.class, "fixedRows");
     }
 
+    public boolean isCrudMode() throws UnifyException {
+        T table = getTable();
+        return table != null && table.isCrudMode();
+    }
+
     public boolean isDetails() throws UnifyException {
         return !StringUtils.isBlank(getUplAttribute(String.class, "details"));
     }
@@ -274,7 +283,25 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return fixedCtrl;
     }
 
-    public Control[] getActionCtrl() {
+    public Control getViewCtrl() throws UnifyException {
+    	if (viewCtrl == null) {
+    		viewCtrl = (Control) addInternalChildWidget(
+                    "!ui-button styleClass:$e{mbtn} caption:" + "$m{table.row.view}");
+    	}
+    	
+		return viewCtrl;
+	}
+
+	public Control getEditCtrl() throws UnifyException {
+    	if (editCtrl == null) {
+    		editCtrl = (Control) addInternalChildWidget(
+                    "!ui-button styleClass:$e{mbtn} caption:" + "$m{table.row.edit}");
+    	}
+    	
+		return editCtrl;
+	}
+
+	public Control[] getActionCtrl() {
         return actionCtrl;
     }
 

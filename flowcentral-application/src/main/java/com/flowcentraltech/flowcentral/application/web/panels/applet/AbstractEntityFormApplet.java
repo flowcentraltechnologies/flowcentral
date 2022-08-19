@@ -460,12 +460,11 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
             final String entryTablePolicy = _formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.ENTRY_TABLE_POLICY);
-            final boolean formless = form.matchFormBean(currFormTabDef.getEditFormless());
+            final boolean viewOnly = form.matchFormBean(currFormTabDef.getEditFormless());
             final boolean fixedRows = form.matchFormBean(currFormTabDef.getEditFixedRows());
-            final String createFormName = formless ? null
+            final String createFormName = viewOnly ? null
                     : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
-            final String maintainFormName = formless ? null
-                    : _formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
+            final String maintainFormName = _formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
             final String baseField = au().getChildFkFieldName(form.getFormDef().getEntityDef(),
                     currFormTabDef.getReference());
             final Object baseId = ((Entity) form.getFormBean()).getId();
