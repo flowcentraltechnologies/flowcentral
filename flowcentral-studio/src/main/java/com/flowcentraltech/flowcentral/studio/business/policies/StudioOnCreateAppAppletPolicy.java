@@ -75,13 +75,16 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                 StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         final AppApplet appApplet = (AppApplet) ctx.getInst();
+        if (!appApplet.isIdBlank()) {
+        	return;
+        }
+        
         final AppletType type = appApplet.getType();
-
         if (AppletType.DATA_IMPORT.equals(type)) {
             appApplet.setIcon("file-import");
             return;
         }
-
+        
         if (type.isCreate() || type.isEntityList()) {
             final String entity = appApplet.getEntity();
             EntityDef entityDef = application().getEntityDef(entity);
