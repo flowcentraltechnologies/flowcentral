@@ -489,8 +489,9 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder addColumnDef(TableColumnDef tableColumnDef) {
             totalWidth += tableColumnDef.getWidthRatio();
-            columnDefList.add(tableColumnDef);
-            if (!tableColumnDef.isHidden()) {
+            if (tableColumnDef.isHidden()) {
+                columnDefList.add(tableColumnDef);
+            } else {
                 visibleColumnDefList.add(tableColumnDef);
             }
             
@@ -515,14 +516,14 @@ public class TableDef extends BaseApplicationEntityDef {
             int usedPercent = 0;
             int len = visibleColumnDefList.size();
             for (int i = 0; i < len; i++) {
-                TableColumnDef tempColumDef = visibleColumnDefList.get(i);
+                TableColumnDef tempColumnDef = visibleColumnDefList.get(i);
                 TableColumnDef tableColumnDef = null;
-                String fieldName = tempColumDef.getFieldName();
-                String renderer = tempColumDef.getRenderer();
-                String editor = !StringUtils.isBlank(tempColumDef.getEditor())
-                        ? tempColumDef.getEditor() + " binding:" + fieldName
+                String fieldName = tempColumnDef.getFieldName();
+                String renderer = tempColumnDef.getRenderer();
+                String editor = !StringUtils.isBlank(tempColumnDef.getEditor())
+                        ? tempColumnDef.getEditor() + " binding:" + fieldName
                         : null;
-                String linkAct = tempColumDef.getLinkAct();
+                String linkAct = tempColumnDef.getLinkAct();
                 if (!StringUtils.isBlank(linkAct)) {
                     String formatter = "";
                     int fromIndex = renderer.indexOf("formatter");
@@ -541,23 +542,24 @@ public class TableDef extends BaseApplicationEntityDef {
                 }
 
                 if (i == (len - 1)) {
-                    tableColumnDef = new TableColumnDef(tempColumDef.getLabel(), fieldName,
-                            "width:" + (100 - usedPercent) + "%;", renderer, editor, tempColumDef.getRenderer(),
-                            tempColumDef.getEditor(), tempColumDef.getLinkAct(), tempColumDef.getOrder(),
-                            tempColumDef.getWidthRatio(), (100 - usedPercent), tempColumDef.isSwitchOnChange(),
-                            tempColumDef.isHidden(), tempColumDef.isDisabled(), tempColumDef.isEditable(),
-                            tempColumDef.isSortable(), tempColumDef.isSummary());
+                    tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName,
+                            "width:" + (100 - usedPercent) + "%;", renderer, editor, tempColumnDef.getRenderer(),
+                            tempColumnDef.getEditor(), tempColumnDef.getLinkAct(), tempColumnDef.getOrder(),
+                            tempColumnDef.getWidthRatio(), (100 - usedPercent), tempColumnDef.isSwitchOnChange(),
+                            tempColumnDef.isHidden(), tempColumnDef.isDisabled(), tempColumnDef.isEditable(),
+                            tempColumnDef.isSortable(), tempColumnDef.isSummary());
                 } else {
-                    int width = (tempColumDef.getWidthRatio() * 100) / totalWidth;
-                    tableColumnDef = new TableColumnDef(tempColumDef.getLabel(), fieldName, "width:" + width + "%;",
-                            renderer, editor, tempColumDef.getRenderer(), tempColumDef.getEditor(),
-                            tempColumDef.getLinkAct(), tempColumDef.getOrder(), tempColumDef.getWidthRatio(), width,
-                            tempColumDef.isSwitchOnChange(), tempColumDef.isHidden(), tempColumDef.isDisabled(),
-                            tempColumDef.isEditable(), tempColumDef.isSortable(), tempColumDef.isSummary());
+                    int width = (tempColumnDef.getWidthRatio() * 100) / totalWidth;
+                    tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + width + "%;",
+                            renderer, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(),
+                            tempColumnDef.getLinkAct(), tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(), width,
+                            tempColumnDef.isSwitchOnChange(), tempColumnDef.isHidden(), tempColumnDef.isDisabled(),
+                            tempColumnDef.isEditable(), tempColumnDef.isSortable(), tempColumnDef.isSummary());
                     usedPercent += width;
                 }
 
                 _visibleColumnDefList.add(tableColumnDef);
+                columnDefList.add(tableColumnDef);
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
