@@ -45,9 +45,9 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     private Class<T> entryClass;
 
     private FormValidationErrors errors;
-    
+
     private String addCaption;
-    
+
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
         this.table = new BeanTable(au, tableDef, BeanTable.ENTRY_ENABLED);
         this.entryClass = entryClass;
@@ -59,14 +59,14 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     }
 
     public String getAddCaption() {
-		return addCaption;
-	}
+        return addCaption;
+    }
 
-	public void setAddCaption(String addCaption) {
-		this.addCaption = addCaption;
-	}
+    public void setAddCaption(String addCaption) {
+        this.addCaption = addCaption;
+    }
 
-	public void addEntry() throws UnifyException {
+    public void addEntry() throws UnifyException {
         addEntry(true);
     }
 
@@ -79,7 +79,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     public List<FormMessage> getValidationErrors() {
         return errors != null ? errors.getValidationErrors() : null;
     }
-    
+
     public void insertEntries(List<T> entries, int index) throws UnifyException {
         insertEntries(entries, index, false);
     }
@@ -90,16 +90,22 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         if (replace && index < entries.size()) {
             _entries.remove(index);
         }
-        
+
         _entries.addAll(index, entries);
-        table.fireOnTableChange();
+        EntryActionType actionType = table.fireOnTableChange();
+        if (actionType.isAddItem()) {
+            addEntry(false);
+        }
     }
 
     @SuppressWarnings("unchecked")
     public void deleteEntry(int index) throws UnifyException {
         List<T> _entries = (List<T>) table.getSourceObject();
         _entries.remove(index);
-        table.fireOnTableChange();
+        EntryActionType actionType = table.fireOnTableChange();
+        if (actionType.isAddItem()) {
+            addEntry(false);
+        }
     }
 
     public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
@@ -109,8 +115,8 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         }
     }
 
-    public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries,
-            ValueStoreReader parentReader) throws UnifyException {
+    public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries, ValueStoreReader parentReader)
+            throws UnifyException {
         if (tablePolicy == null) {
             throw new IllegalArgumentException("Inline CRUD table policy is required.");
         }
@@ -120,7 +126,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         table.setParentReader(parentReader);
         table.setSourceObject(_entries);
         if (_entries.isEmpty()) {
-        	addEntry(false);
+            addEntry(false);
         }
     }
 
@@ -140,7 +146,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         List<T> entries = (List<T>) table.getSourceObject();
         return Collections.unmodifiableList(entries);
     }
-    
+
     @SuppressWarnings("unchecked")
     private void addEntry(boolean fireTableChange) throws UnifyException {
         createAndAddInst((List<T>) table.getSourceObject());
@@ -153,7 +159,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     private void createAndAddInst(List<T> items) throws UnifyException {
         T item = ReflectUtils.newInstance(entryClass);
         items.add(item);
-        
+
         InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
             policy.onAddItem(table.getParentReader(), items, item);

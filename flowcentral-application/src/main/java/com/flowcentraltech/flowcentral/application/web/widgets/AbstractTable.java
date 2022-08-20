@@ -111,7 +111,7 @@ public abstract class AbstractTable<T, U> {
     private RowChangeInfo lastRowChangeInfo;
 
     private int detailsIndex;
-    
+
     public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, int entryMode) {
         this.au = au;
         this.tableDef = tableDef;
@@ -220,22 +220,22 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean isCrudMode() {
-		return crudMode;
-	}
+        return crudMode;
+    }
 
-	public void setCrudMode(boolean crudMode) {
-		this.crudMode = crudMode;
-	}
+    public void setCrudMode(boolean crudMode) {
+        this.crudMode = crudMode;
+    }
 
     public boolean isView() {
-		return view;
-	}
+        return view;
+    }
 
-	public void setView(boolean view) {
-		this.view = view;
-	}
+    public void setView(boolean view) {
+        this.view = view;
+    }
 
-	public int getDetailsIndex() {
+    public int getDetailsIndex() {
         return detailsIndex;
     }
 
@@ -326,8 +326,8 @@ public abstract class AbstractTable<T, U> {
         reset();
     }
 
-    public void fireOnTableChange() throws UnifyException {
-        onFireOnTableChange(sourceObject, selected);
+    public EntryActionType fireOnTableChange() throws UnifyException {
+        return onFireOnTableChange(sourceObject, selected);
     }
 
     public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
@@ -478,7 +478,7 @@ public abstract class AbstractTable<T, U> {
 
         return tableStateOverride;
     }
-    
+
     public void applyFixedAction(ValueStore valueStore, int index, FixedRowActionType fixedActionType)
             throws UnifyException {
         if (entryPolicy != null) {
@@ -486,7 +486,7 @@ public abstract class AbstractTable<T, U> {
             reset();
         }
     }
-    
+
     public FixedRowActionType resolveFixedIndex(ValueStore valueStore, int index, int size) throws UnifyException {
         return entryPolicy != null ? entryPolicy.resolveFixedIndex(parentReader, valueStore, index, size)
                 : FixedRowActionType.FIXED;
@@ -509,9 +509,10 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract void onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
+    protected abstract EntryActionType onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract EntryActionType onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException;
+    protected abstract EntryActionType onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo)
+            throws UnifyException;
 
     protected abstract int getSourceObjectSize(T sourceObject) throws UnifyException;
 

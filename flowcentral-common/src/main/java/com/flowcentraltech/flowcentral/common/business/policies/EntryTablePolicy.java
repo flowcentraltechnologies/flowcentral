@@ -77,10 +77,11 @@ public interface EntryTablePolicy extends UnifyComponent {
      *                        the list data value store object
      * @param selected
      *                        selected item index
+     * @return the entry action type
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
+    EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
             throws UnifyException;
 
     /**
