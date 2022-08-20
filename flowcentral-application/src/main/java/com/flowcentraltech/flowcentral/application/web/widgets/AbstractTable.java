@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
+import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
@@ -333,9 +334,9 @@ public abstract class AbstractTable<T, U> {
         validate(evaluationMode, sourceObject, errors);
     }
 
-    public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
+    public EntryActionType fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         lastRowChangeInfo = rowChangeInfo;
-        onFireOnRowChange(sourceObject, rowChangeInfo);
+        return onFireOnRowChange(sourceObject, rowChangeInfo);
     }
 
     public void setDefaultOrder(Order defaultOrder) {
@@ -510,7 +511,7 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract void onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException;
+    protected abstract EntryActionType onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException;
 
     protected abstract int getSourceObjectSize(T sourceObject) throws UnifyException;
 

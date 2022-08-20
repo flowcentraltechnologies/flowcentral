@@ -23,6 +23,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
@@ -102,7 +103,10 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     }
 
     public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
-        table.fireOnRowChange(rowChangeInfo);
+        EntryActionType actionType = table.fireOnRowChange(rowChangeInfo);
+        if (actionType.isAddItem()) {
+            addEntry(false);
+        }
     }
 
     public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries,

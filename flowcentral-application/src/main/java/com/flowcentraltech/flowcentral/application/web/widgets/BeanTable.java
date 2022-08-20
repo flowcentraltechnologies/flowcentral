@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -77,12 +78,15 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected void onFireOnRowChange(List<?> sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException {
+    protected EntryActionType onFireOnRowChange(List<?> sourceObject, RowChangeInfo rowChangeInfo)
+            throws UnifyException {
         if (isWithEntryPolicy()) {
             ValueStore tableValueStore = getValueStore(sourceObject);
             tableValueStore.setDataIndex(rowChangeInfo.getRowIndex());
-            getEntryPolicy().onEntryRowChange(getParentReader(), tableValueStore, rowChangeInfo);
+            return getEntryPolicy().onEntryRowChange(getParentReader(), tableValueStore, rowChangeInfo);
         }
+
+        return EntryActionType.NONE;
     }
 
     @Override
