@@ -62,7 +62,10 @@ public class InlineCRUDPanel extends AbstractStandalonePanel {
     }
 
     public FormValidationErrors validate(EvaluationMode evaluationMode) throws UnifyException {
-        return getCrud().validate(evaluationMode);
+        FormValidationErrors errors = getCrud().validate(evaluationMode);
+        BeanTableWidget entryTableWidget = getWidgetByShortName(BeanTableWidget.class, "entryTable");
+        entryTableWidget.validate(evaluationMode, errors);
+        return errors;
     }
 
     private InlineCRUD<?> getCrud() throws UnifyException {

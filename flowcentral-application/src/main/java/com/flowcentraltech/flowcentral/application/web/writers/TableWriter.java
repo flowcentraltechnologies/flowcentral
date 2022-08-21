@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSy
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
+import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
@@ -475,7 +476,7 @@ public class TableWriter extends AbstractControlWriter {
 			table.clearSummaries();
 
 			List<ValueStore> valueList = tableWidget.getValueList();
-			int len = valueList.size();
+			final int len = valueList.size();
 			if (len == 0) {
 				writer.write("<tr class=\"even\">");
 				int skip = 0;
@@ -679,7 +680,7 @@ public class TableWriter extends AbstractControlWriter {
 					}
 
 					// Summary
-					StandalonePanel summaryPanel = tableWidget.getSummaryPanel(i);
+					SummaryPanel summaryPanel = tableWidget.getSummaryPanel(i);
 					if (summaryPanel != null) {
 						writer.write("<tr>");
 						int skip = 0;

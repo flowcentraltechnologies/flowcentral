@@ -28,7 +28,10 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -92,7 +95,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private Control editCtrl;
 
-    private List<StandalonePanel> summaryPanelList;
+    private List<SummaryPanel> summaryPanelList;
 
     private DetailsPanel detailsPanel;
 
@@ -309,10 +312,23 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return summaryPanelList != null && !summaryPanelList.isEmpty();
     }
 
-    public StandalonePanel getSummaryPanel(int index) {
+    public SummaryPanel getSummaryPanel(int index) {
         return isSummary() ? summaryPanelList.get(index) : null;
     }
 
+    public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
+        List<ValueStore> valueList = getValueList();
+        final int len = valueList.size();
+        for (int i = 0; i < len; i++) {
+            ValueStore valueStore = valueList.get(i);
+            SummaryPanel summaryPanel = getSummaryPanel(i);
+            if (summaryPanel != null) {
+                summaryPanel.setValueStore(valueStore);
+                summaryPanel.validate(evaluationMode, errors);
+            }
+        }
+    }
+    
     public DetailsPanel getDetailsPanel() throws UnifyException {
         if (detailsPanel == null) {
             String details = getUplAttribute(String.class, "details");
@@ -515,12 +531,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             String summary = getUplAttribute(String.class, "summary");
             if (!StringUtils.isBlank(summary)) {
                 if (summaryPanelList == null) {
-                    summaryPanelList = new ArrayList<StandalonePanel>();
+                    summaryPanelList = new ArrayList<SummaryPanel>();
                 }
 
                 int extra = valueList.size() - summaryPanelList.size();
                 for (int i = 0; i < extra; i++) {
-                    StandalonePanel summaryPanel = (StandalonePanel) addExternalChildStandalonePanel(summary,
+                    SummaryPanel summaryPanel = (SummaryPanel) addExternalChildStandalonePanel(summary,
                             getId() + "_" + summaryPanelList.size() + "sm");
                     summaryPanelList.add(summaryPanel);
                 }
