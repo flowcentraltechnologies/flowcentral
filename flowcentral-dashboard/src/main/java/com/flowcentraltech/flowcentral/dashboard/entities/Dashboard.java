@@ -19,8 +19,11 @@ package com.flowcentraltech.flowcentral.dashboard.entities;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -32,13 +35,23 @@ import com.tcdng.unify.core.annotation.Table;
 @Table(name = "FC_DASHBOARD")
 public class Dashboard extends BaseApplicationEntity {
 
+	@ForeignKey
+	private RecordStatus status;
+	
     @Column
     private int sections;
 
+    @ListOnly(key = "status", property = "description")
+    private String statusDesc;
+    
     @ChildList
     private List<DashboardTile> tileList;
 
-    public int getSections() {
+    public Dashboard() {
+		this.status = RecordStatus.ACTIVE;
+	}
+
+	public int getSections() {
         return sections;
     }
 
@@ -46,7 +59,23 @@ public class Dashboard extends BaseApplicationEntity {
         this.sections = sections;
     }
 
-    public List<DashboardTile> getTileList() {
+    public RecordStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(RecordStatus status) {
+		this.status = status;
+	}
+
+	public String getStatusDesc() {
+		return statusDesc;
+	}
+
+	public void setStatusDesc(String statusDesc) {
+		this.statusDesc = statusDesc;
+	}
+
+	public List<DashboardTile> getTileList() {
         return tileList;
     }
 

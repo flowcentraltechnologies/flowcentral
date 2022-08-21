@@ -45,6 +45,19 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum StudioAppComponentType implements EnumConst {
 
     // Codes MUST always have a length of 4
+    APPLICATION(
+            "app_",
+            null,
+            "$m{studio.application.component.type.application}",
+            "$m{studio.application.component.type.applications}",
+            "studio.menu.label.application",
+            "desktop",
+            null,
+            null,
+            null,
+            0,
+            AppletType.MANAGE_ENTITYLIST,
+            null),
     COLLABORATION(
             "clb_",
             null,

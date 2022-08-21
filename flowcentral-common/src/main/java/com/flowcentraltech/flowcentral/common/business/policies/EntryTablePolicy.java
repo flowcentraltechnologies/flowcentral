@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyComponent;
@@ -76,10 +77,11 @@ public interface EntryTablePolicy extends UnifyComponent {
      *                        the list data value store object
      * @param selected
      *                        selected item index
+     * @return the entry action type
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
+    EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
             throws UnifyException;
 
     /**
@@ -91,11 +93,12 @@ public interface EntryTablePolicy extends UnifyComponent {
      *                        the list data store object
      * @param rowChangeInfo
      *                        the row change information
+     * @return the entry action type
      * @throws UnifyException
      *                        if an error occurs
      */
-    void onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore, RowChangeInfo rowChangeInfo)
-            throws UnifyException;
+    EntryActionType onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore,
+            RowChangeInfo rowChangeInfo) throws UnifyException;
 
     /**
      * Apply table state overrides.

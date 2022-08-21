@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureC
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
+import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -88,13 +89,15 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     }
 
     @Override
-    protected void onFireOnTableChange(Restriction sourceObject, Set<Integer> selected) throws UnifyException {
-
+    protected EntryActionType onFireOnTableChange(Restriction sourceObject, Set<Integer> selected)
+            throws UnifyException {
+        return EntryActionType.NONE;
     }
 
     @Override
-    protected void onFireOnRowChange(Restriction sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException {
-
+    protected EntryActionType onFireOnRowChange(Restriction sourceObject, RowChangeInfo rowChangeInfo)
+            throws UnifyException {
+        return EntryActionType.NONE;
     }
 
     @Override

@@ -35,11 +35,13 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 @UplBinding("web/application/upl/inlinecrudpanel.upl")
 public class InlineCRUDPanel extends AbstractStandalonePanel {
 
-    public FormValidationErrors validate(EvaluationMode evaluationMode) throws UnifyException {
-        return getCrud().validate(evaluationMode);
-    }
+    @Override
+	public void switchState() throws UnifyException {
+		super.switchState();
+		setWidgetVisible("addEntryBtn", isContainerEditable());
+	}
 
-    @Action
+	@Action
     public void addItem() throws UnifyException {
         getCrud().addEntry();
     }
@@ -57,6 +59,13 @@ public class InlineCRUDPanel extends AbstractStandalonePanel {
         BeanTableWidget entryTableWidget = getWidgetByShortName(BeanTableWidget.class, "entryTable");
         String trigger = entryTableWidget.resolveChildWidgetName(focusWidgetId);
         getCrud().fireOnRowChange(new RowChangeInfo(trigger, index));
+    }
+
+    public FormValidationErrors validate(EvaluationMode evaluationMode) throws UnifyException {
+        FormValidationErrors errors = getCrud().validate(evaluationMode);
+        BeanTableWidget entryTableWidget = getWidgetByShortName(BeanTableWidget.class, "entryTable");
+        entryTableWidget.validate(evaluationMode, errors);
+        return errors;
     }
 
     private InlineCRUD<?> getCrud() throws UnifyException {

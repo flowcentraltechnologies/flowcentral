@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
+import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
@@ -50,8 +51,6 @@ import com.tcdng.unify.web.ui.widget.Widget;
 public abstract class AbstractTable<T, U> {
 
     public static final int ENTRY_ENABLED = 0x00000001;
-
-    public static final int ENTRY_SUMMARY_IGNORE_LAST = 0x00000002;
 
     protected final AppletUtilities au;
 
@@ -83,7 +82,9 @@ public abstract class AbstractTable<T, U> {
 
     private boolean basicSearchMode;
 
-    private boolean editMode;
+    private boolean crudMode;
+
+    private boolean view;
 
     private boolean fixedRows;
 
@@ -110,7 +111,7 @@ public abstract class AbstractTable<T, U> {
     private RowChangeInfo lastRowChangeInfo;
 
     private int detailsIndex;
-    
+
     public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, int entryMode) {
         this.au = au;
         this.tableDef = tableDef;
@@ -218,12 +219,20 @@ public abstract class AbstractTable<T, U> {
         return (entryMode & ENTRY_ENABLED) > 0;
     }
 
-    public boolean isEntrySummaryIgnoreLast() {
-        return (entryMode & ENTRY_SUMMARY_IGNORE_LAST) > 0;
+    public boolean isCrudMode() {
+        return crudMode;
     }
 
-    public boolean isEditMode() {
-        return editMode;
+    public void setCrudMode(boolean crudMode) {
+        this.crudMode = crudMode;
+    }
+
+    public boolean isView() {
+        return view;
+    }
+
+    public void setView(boolean view) {
+        this.view = view;
     }
 
     public int getDetailsIndex() {
@@ -232,10 +241,6 @@ public abstract class AbstractTable<T, U> {
 
     public void setDetailsIndex(int detailsIndex) {
         this.detailsIndex = detailsIndex;
-    }
-
-    public void setEditMode(boolean editMode) {
-        this.editMode = editMode;
     }
 
     public ValueStoreReader getParentReader() {
@@ -321,17 +326,17 @@ public abstract class AbstractTable<T, U> {
         reset();
     }
 
-    public void fireOnTableChange() throws UnifyException {
-        onFireOnTableChange(sourceObject, selected);
+    public EntryActionType fireOnTableChange() throws UnifyException {
+        return onFireOnTableChange(sourceObject, selected);
     }
 
     public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
         validate(evaluationMode, sourceObject, errors);
     }
 
-    public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
+    public EntryActionType fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         lastRowChangeInfo = rowChangeInfo;
-        onFireOnRowChange(sourceObject, rowChangeInfo);
+        return onFireOnRowChange(sourceObject, rowChangeInfo);
     }
 
     public void setDefaultOrder(Order defaultOrder) {
@@ -473,7 +478,7 @@ public abstract class AbstractTable<T, U> {
 
         return tableStateOverride;
     }
-    
+
     public void applyFixedAction(ValueStore valueStore, int index, FixedRowActionType fixedActionType)
             throws UnifyException {
         if (entryPolicy != null) {
@@ -481,7 +486,7 @@ public abstract class AbstractTable<T, U> {
             reset();
         }
     }
-    
+
     public FixedRowActionType resolveFixedIndex(ValueStore valueStore, int index, int size) throws UnifyException {
         return entryPolicy != null ? entryPolicy.resolveFixedIndex(parentReader, valueStore, index, size)
                 : FixedRowActionType.FIXED;
@@ -504,9 +509,10 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract void onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
+    protected abstract EntryActionType onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract void onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo) throws UnifyException;
+    protected abstract EntryActionType onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo)
+            throws UnifyException;
 
     protected abstract int getSourceObjectSize(T sourceObject) throws UnifyException;
 

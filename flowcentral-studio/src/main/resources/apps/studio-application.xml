@@ -368,6 +368,55 @@
 			label="$m{studio.application.launch.label}" icon="rocket"
 			type="path_window" path="/applicationstudio" menuAccess="true">
 		</applet>
+		<applet name="stuManageModule"
+			description="$m{studio.module.manage}"
+			label="$m{studio.module.manage.label}" icon="cubes"
+			type="manage_entitylist" entity="system.module" menuAccess="false">
+			<property name="searchTable" value="system.moduleTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="stuModuleForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="stuModuleForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+			<property name="maintainForm.update.condition"
+				value="moduleEditable" />
+			<property name="maintainForm.delete.condition"
+				value="moduleEditable" />
+			<filter name="moduleEditable"
+				description="$m{system.module.filter.editable}">
+				<restriction type="not_amongst" field="shortCode"
+					paramA="SYS|SEC|ORG|APP|RPT|CHT|NOT|DSH|WRK|INT|STU|WKS|CLB|CDN" />
+			</filter>
+		</applet>
+		<applet name="manageApplication"
+			description="$m{studio.application.manage}"
+			label="$m{studio.application.manage.label}" icon="desktop"
+			type="manage_entitylist" entity="application.application" menuAccess="false">
+			<property name="searchTable" value="appApplicationTable" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="appApplicationForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appApplicationForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+			<property name="maintainForm.update.condition"
+				value="appEditable" />
+			<property name="maintainForm.delete.condition"
+				value="appEditable" />
+			<filter name="appEditable"
+				description="$m{studio.application.filter.editable}">
+				<restriction type="equals" field="developable" paramA="Y" />
+			</filter>
+		</applet>
 		<applet name="manageAppEntityField"
 			description="$m{studio.appentityfield.manage}"
 			label="$m{studio.appentityfield.manage.label}"
@@ -982,6 +1031,17 @@
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="dialogMaintainAct" />
 		</table>
+		<table name="appApplicationTable"
+			description="$m{studio.application.table}"
+			label="$m{studio.application.table.label}"
+			entity="application.application" itemsPerPage="20" serialNo="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="moduleLabel" renderWidget="application.text"
+				widthRatio="1" label="$m{application.application.module}" />
+		</table>
 		<table name="appEntityFieldTable"
 			description="$m{studio.appentityfield.table}"
 			label="$m{studio.appentityfield.table.label}"
@@ -1436,6 +1496,65 @@
 	</tables>
 	<!-- Forms -->
 	<forms>
+		<form name="stuModuleForm" description="$m{system.module.form}"
+			entity="system.module">
+			<tab name="basicDetails"
+				label="$m{system.module.form.basicdetails}" contentType="miniform">
+				<section name="details1" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" editable="false" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="shortCode" inputWidget="application.name"
+						column="0" required="true" editable="false" />
+					<field name="sectorId" inputWidget="application.entitylist"
+						column="1" required="true" />
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch" name="onNewPolicy"
+				description="$m{studio.common.form.formstatepolicy.onstatic}">
+				<onCondition>
+					<restriction type="is_null" field="id" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="name,shortCode"
+						editable="true" />
+				</setStates>
+			</formStatePolicy>
+		</form>
+		<form name="appApplicationForm"
+			description="$m{studio.application.form}"
+			entity="application.application">
+			<tab name="basicDetails"
+				label="$m{studio.application.form.basicdetails}"
+				contentType="miniform">
+				<section name="details1" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" editable="false" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="moduleId" inputWidget="application.entitylist"
+						column="1" required="true" />
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+			<formStatePolicy type="on_switch" name="onNewPolicy"
+				description="$m{studio.common.form.formstatepolicy.onstatic}">
+				<onCondition>
+					<restriction type="is_null" field="id" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="name" editable="true" />
+				</setStates>
+			</formStatePolicy>
+		</form>
 		<form name="appAppletForm"
 			description="$m{studio.appapplet.form}"
 			entity="application.appApplet">
@@ -1728,8 +1847,8 @@
 						column="1" editable="false" required="true" saveAs="true" />
 					<field name="tableName" inputWidget="application.text"
 						column="1" required="true" saveAs="true" />
-					<field name="emailProducerConsumer" inputWidget="application.emailproducerconsumerlist"
-						column="1" />
+					<field name="emailProducerConsumer"
+						inputWidget="application.emailproducerconsumerlist" column="1" />
 					<field name="delegate" inputWidget="environmentdelegatelist"
 						column="1" />
 					<field name="auditable" inputWidget="application.checkbox"
@@ -2810,8 +2929,8 @@
 						column="2" />
 					<field name="limitSelectToColumns"
 						inputWidget="application.checkbox" column="2" />
-					<field name="fixedRows"
-						inputWidget="application.checkbox" column="2" />
+					<field name="fixedRows" inputWidget="application.checkbox"
+						column="2" />
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.apptable.form.design}"
@@ -2985,10 +3104,9 @@
 				contentType="child_list" applet="manageAppFormElement"
 				reference="elementList" editAction="/designChildItem"
 				visible="false" />
-			<tab name="filters"
-				label="$m{studio.appform.form.filters}" contentType="child_list"
-				applet="manageAppFormFilter" reference="filterList"
-				visible="false" />
+			<tab name="filters" label="$m{studio.appform.form.filters}"
+				contentType="child_list" applet="manageAppFormFilter"
+				reference="filterList" visible="false" />
 			<tab name="annotations"
 				label="$m{studio.appform.form.annotations}" contentType="child_list"
 				applet="manageAppFormAnnotation" reference="annotationList"
@@ -3127,8 +3245,8 @@
 						inputWidget="application.checkbox" column="1" />
 					<field name="required" inputWidget="application.checkbox"
 						column="1" />
-					<field name="ignoreParentCondition" inputWidget="application.checkbox"
-						column="1" />
+					<field name="ignoreParentCondition"
+						inputWidget="application.checkbox" column="1" />
 					<field name="showSearch" inputWidget="application.checkbox"
 						column="1" />
 					<field name="visible" inputWidget="application.checkbox"
@@ -3154,8 +3272,8 @@
 				</section>
 			</tab>
 			<tab name="condition"
-				label="$m{studio.appformfilter.form.condition}"
-				reference="app_form" contentType="filter_condition" />
+				label="$m{studio.appformfilter.form.condition}" reference="app_form"
+				contentType="filter_condition" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>

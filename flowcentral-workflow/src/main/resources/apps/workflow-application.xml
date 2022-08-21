@@ -201,8 +201,6 @@
 				label="$m{workflow.step.recordactiontype}" type="enum_ref"
 				references="recordactiontypelist" inputWidget="application.enumlist" />
 			<field name="label" label="$m{workflow.step.label}" type="string" maxLen="64"  />
-			<field name="formName" label="$m{workflow.step.formname}" type="string"
-				nullable="true"  maxLen="128" />
 			<field name="nextStepName" label="$m{workflow.step.nextstepname}"
 				type="string" nullable="true" />
 			<field name="policy" label="$m{workflow.step.policy}" type="string"
@@ -711,7 +709,6 @@
 						column="0" required="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="formName" inputWidget="application.text" column="0" />
 					<field name="type" inputWidget="application.enumlist" column="1"
 						required="true" />
 					<field name="recordActionType" inputWidget="application.enumlist"

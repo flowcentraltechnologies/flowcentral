@@ -525,10 +525,10 @@
 			description="$m{application.application}"
 			label="$m{application.application.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.Application">
-			<field name="moduleId"
+			<field name="moduleId" basicSearch="true"
 				label="$m{application.application.module}" type="ref"
 				references="system.moduleRef" inputWidget="application.entitylist" />
-			<field name="label" label="$m{application.application.label}"
+			<field name="label" label="$m{application.application.labelf}"
 				type="string" />
 			<field name="displayIndex"
 				label="$m{application.application.displayindex}" type="integer" />
