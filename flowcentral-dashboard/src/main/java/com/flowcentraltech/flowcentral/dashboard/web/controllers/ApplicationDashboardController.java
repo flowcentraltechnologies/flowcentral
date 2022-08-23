@@ -29,6 +29,7 @@ import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -75,9 +76,14 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
     @Action
     public String loadDashboardSlate() throws UnifyException {
         ApplicationDashboardPageBean pageBean = getPageBean();
-        DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pageBean.getSelDashboard());
-        if (dashboardDef.isActive()) {
-        	pageBean.setDashboardSlate(new DashboardSlate(dashboardDef));
+        pageBean.setDashboardSlate(null);
+        if (!StringUtils.isBlank(pageBean.getSelDashboard())) {
+            DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pageBean.getSelDashboard());
+            if (dashboardDef.isActive()) {
+                pageBean.setDashboardSlate(new DashboardSlate(dashboardDef));
+            } else {
+                pageBean.setSelDashboard(null);
+            }
         }
 
         return refreshSlate();
@@ -99,11 +105,17 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
             List<String> roleDashboardList = applicationPrivilegeManager.findRolePrivileges(
                     ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, userToken.getRoleCode());
             if (!roleDashboardList.isEmpty()) {
-                PrivilegeNameParts pnp = PrivilegeNameUtils.getPrivilegeNameParts(roleDashboardList.get(0));
-                pageBean.setSelDashboard(pnp.getEntityName());
-                loadDashboardSlate();
+                for (String privilege : roleDashboardList) {
+                    PrivilegeNameParts pnp = PrivilegeNameUtils.getPrivilegeNameParts(privilege);
+                    DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pnp.getEntityName());
+                    if (dashboardDef.isActive()) {
+                        pageBean.setSelDashboard(pnp.getEntityName());
+                    }
+                }
             }
         }
+
+        loadDashboardSlate();
     }
 
 }

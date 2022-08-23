@@ -131,8 +131,9 @@ public class DashboardDef extends BaseApplicationEntityDef {
 	}
 
 	@Override
-	public String toString() {
-		return "DashboardDef [sections=" + sections + ", tileList=" + tileList + "]";
-	}
+    public String toString() {
+        return "DashboardDef [sections=" + sections + ", status=" + status + ", tileList=" + tileList
+                + ", getLongName()=" + getLongName() + "]";
+    }
 
 }

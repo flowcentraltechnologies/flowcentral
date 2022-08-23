@@ -125,13 +125,14 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     }
 
     @Override
-    public void navBackToSearch() throws UnifyException {
-        super.navBackToSearch();
+    public boolean navBackToSearch() throws UnifyException {
+        boolean success = super.navBackToSearch();
 
         priEntityInst = null;
         currEntityInst = null;
         wfWizardStepFormDef = null;
         breadCrumbStack.clear();
+        return success;
     }
 
     public void graduateWfWizardItem() throws UnifyException {

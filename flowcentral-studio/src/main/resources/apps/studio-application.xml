@@ -4080,6 +4080,25 @@
 				<property name="createForm.submit.validate"
 					description="$m{studio.appappletprop.createentity.createform.submitvalidate}"
 					inputWidget="application.checkbox" />
+				<property name="maintainForm.submit.policy"
+					description="$m{studio.appappletprop.manageentity.maintainform.submitpolicy}"
+					inputWidget="studio.propertyentityactionpolicylist" />
+				<property name="maintainForm.submit.workflow.channel"
+					description="$m{studio.appappletprop.manageentity.maintainform.submitworkflow}"
+					inputWidget="studio.propertyappletworkflowchannellist"
+					required="false" />
+				<property name="maintainForm.submit.condition"
+					description="$m{studio.appappletprop.manageentity.maintainform.submitcondition}"
+					inputWidget="studio.propertyappletfilterlist" required="false" />
+				<property name="maintainForm.submit"
+					description="$m{studio.appappletprop.manageentity.maintainform.submit}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.submitnext"
+					description="$m{studio.appappletprop.manageentity.maintainform.submitnext}"
+					inputWidget="application.checkbox" />
+				<property name="maintainForm.submit.validate"
+					description="$m{studio.appappletprop.manageentity.maintainform.submitvalidate}"
+					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
 		<propertyList name="cnsAppAppletPropList"
