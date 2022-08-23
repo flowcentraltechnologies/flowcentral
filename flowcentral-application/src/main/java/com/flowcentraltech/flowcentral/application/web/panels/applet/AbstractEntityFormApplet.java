@@ -235,7 +235,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             if (headlessForm != null) {
                 navBackToHeadless();
             } else {
-                navBackToSearch();
+                success = navBackToSearch();
             }
         }
 
@@ -247,7 +247,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return success;
     }
 
-    public void navBackToSearch() throws UnifyException {
+    public boolean navBackToSearch() throws UnifyException {
         getCtx().setInWorkflow(false);
         form = null;
         listingForm = null;
@@ -256,7 +256,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         currFormTabDef = null;
         currFormRelatedListDef = null;
         formFileAttachments.setFileAttachmentsInfo(null);
-        entitySearch.applyFilterToSearch();
+        if (entitySearch != null) {
+            entitySearch.applyFilterToSearch();
+            return true;
+        }
+        
+        return false;
     }
 
     public void navBackToHeadless() throws UnifyException {

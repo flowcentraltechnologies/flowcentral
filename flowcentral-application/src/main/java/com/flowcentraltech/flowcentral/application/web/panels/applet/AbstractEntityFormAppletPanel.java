@@ -302,8 +302,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
-                setVisible("submitCloseBtn", false);
-                setVisible("submitNextBtn", false);
+                setVisible("submitCloseBtn", enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
+                        AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false));
+                setVisible("submitNextBtn", enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
+                        AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setVisible("prevBtn", false);
                 setVisible("nextBtn", false);
                 setVisible("displayCounterLabel", isCollaboration);
@@ -840,9 +842,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         } else if (entityActionResult.isWithTaskResult()) {
             fireEntityActionResultTask(entityActionResult);
         } else if (entityActionResult.isCloseView()) {
-            getEntityFormApplet().navBackToPrevious();
-            if (refereshPanel) {
-                getEntityFormApplet().au().commandRefreshPanelsAndHidePopup(this);
+            if (getEntityFormApplet().navBackToPrevious()) {
+                if (refereshPanel) {
+                    getEntityFormApplet().au().commandRefreshPanelsAndHidePopup(this);
+                }
+            } else {
+                setCommandResultMapping(ResultMappingConstants.CLOSE);
             }
         } else if (entityActionResult.isClosePage()) {
             setCommandResultMapping(ResultMappingConstants.CLOSE);
