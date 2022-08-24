@@ -50,6 +50,10 @@ public class EntitySelectWriter extends AbstractPopupTextFieldWriter {
         if (listable != null) {
             writer.writeParam("pDesc", listable.getListDescription());
         }
+        String formPanelId = entitySelectWidget.getFormPanelId();
+        if (formPanelId != null) {
+            writer.writeParam("pFormId", formPanelId);
+        }
         writer.endFunction();
     }
 

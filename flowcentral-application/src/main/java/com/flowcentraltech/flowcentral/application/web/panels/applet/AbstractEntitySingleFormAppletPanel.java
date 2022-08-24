@@ -37,6 +37,7 @@ import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
+import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
@@ -114,6 +115,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             setVisible("formPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
             setEditable("formPanel.errorsPanel", false);
+            Panel formPanel = getWidgetByShortName(Panel.class, "formPanel");
+            setPageAttribute("formPanel.id", formPanel.getId());
         }
 
         if (form != null) {
