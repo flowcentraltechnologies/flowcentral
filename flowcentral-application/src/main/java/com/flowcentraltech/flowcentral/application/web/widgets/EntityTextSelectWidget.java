@@ -126,6 +126,10 @@ public class EntityTextSelectWidget extends AbstractPopupTextField {
         return getUplAttribute(boolean.class, "space");
     }
 
+    public String getFormPanelId() throws UnifyException {
+        return getPageAttribute(String.class, "formPanel.id");
+    }
+
     public boolean isSpecial() throws UnifyException {
         return getUplAttribute(boolean.class, "special");
     }

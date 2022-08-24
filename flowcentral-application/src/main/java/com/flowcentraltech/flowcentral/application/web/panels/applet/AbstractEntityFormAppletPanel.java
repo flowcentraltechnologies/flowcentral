@@ -60,6 +60,7 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
+import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.MessageIcon;
 import com.tcdng.unify.web.ui.widget.data.MessageMode;
@@ -204,6 +205,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             setVisible("formPanel.errorsPanel", isRootForm && appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
             setEditable("formPanel.errorsPanel", false);
+            Panel formPanel = getWidgetByShortName(Panel.class, "formPanel");
+            setPageAttribute("formPanel.id", formPanel.getId());
             form.getCtx().setFocusMemoryId(focusMemoryId);
             form.getCtx().setTabMemoryId(tabMemoryId);
         }

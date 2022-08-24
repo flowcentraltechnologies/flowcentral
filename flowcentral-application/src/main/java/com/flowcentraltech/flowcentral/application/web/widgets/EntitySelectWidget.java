@@ -157,6 +157,10 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         return getUplAttribute(String.class, "listKey");
     }
 
+    public String getFormPanelId() throws UnifyException {
+        return getPageAttribute(String.class, "formPanel.id");
+    }
+    
     public Listable getCurrentSelect() throws UnifyException {
         Object keyVal = getValue(Object.class);
         if (keyVal != null) {

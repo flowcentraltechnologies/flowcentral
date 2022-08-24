@@ -100,7 +100,8 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         super.onOpenPage();
         getPageRequestContextUtil().considerDefaultFocusOnWidget();
         ApplicationDashboardPageBean pageBean = getPageBean();
-        if (pageBean.getDashboardSlate() == null) {
+        if (pageBean.getDashboardSlate() == null || (!StringUtils.isBlank(pageBean.getSelDashboard())
+                && !dashboardModuleService.getDashboardDef(pageBean.getSelDashboard()).isActive())) {
             UserToken userToken = getUserToken();
             List<String> roleDashboardList = applicationPrivilegeManager.findRolePrivileges(
                     ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, userToken.getRoleCode());

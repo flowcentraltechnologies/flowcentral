@@ -338,6 +338,9 @@ fux.rigEntitySelect = function(rgp) {
 		evp.uId = id;
 		evp.uFacId = rgp.pFacId;
 		evp.uCmd = id + "->search";
+		if (rgp.pFormId) {
+			evp.uRef = [ rgp.pFormId ];	
+		}
 		evp.uIsReqTrg = true;
 		evp.altered = false;
 		evp.selectOnly = rgp.pSelOnly;
