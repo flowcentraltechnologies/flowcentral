@@ -100,17 +100,15 @@ public class ApplicationDashboardController extends AbstractPageController<Appli
         super.onOpenPage();
         getPageRequestContextUtil().considerDefaultFocusOnWidget();
         ApplicationDashboardPageBean pageBean = getPageBean();
-        if (pageBean.getDashboardSlate() == null) {
-            UserToken userToken = getUserToken();
-            List<String> roleDashboardList = applicationPrivilegeManager.findRolePrivileges(
-                    ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, userToken.getRoleCode());
-            if (!roleDashboardList.isEmpty()) {
-                for (String privilege : roleDashboardList) {
-                    PrivilegeNameParts pnp = PrivilegeNameUtils.getPrivilegeNameParts(privilege);
-                    DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pnp.getEntityName());
-                    if (dashboardDef.isActive()) {
-                        pageBean.setSelDashboard(pnp.getEntityName());
-                    }
+        UserToken userToken = getUserToken();
+        List<String> roleDashboardList = applicationPrivilegeManager.findRolePrivileges(
+                ApplicationPrivilegeConstants.APPLICATION_DASHBOARD_CATEGORY_CODE, userToken.getRoleCode());
+        if (!roleDashboardList.isEmpty()) {
+            for (String privilege : roleDashboardList) {
+                PrivilegeNameParts pnp = PrivilegeNameUtils.getPrivilegeNameParts(privilege);
+                DashboardDef dashboardDef = dashboardModuleService.getDashboardDef(pnp.getEntityName());
+                if (dashboardDef.isActive()) {
+                    pageBean.setSelDashboard(pnp.getEntityName());
                 }
             }
         }
