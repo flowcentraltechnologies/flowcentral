@@ -14,18 +14,26 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.common.business;
+
+import com.tcdng.unify.core.UnifyComponent;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Flow central container property constants.
+ * Studio provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralContainerPropertyConstants {
+public interface StudioProvider extends UnifyComponent {
 
-    String FLOWCENTRAL_INSTALLATION_TYPE = "flowcentral.installation.type";
-
-    String FLOWCENTRAL_INSTALL_DEVELOPER_ROLES = "flowcentral.install.developer.roles";
+    /**
+     * Indicates if default developer roles should be installed
+     * 
+     * @return true if to be installed otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isInstallDefaultDeveloperRoles() throws UnifyException;
 
 }

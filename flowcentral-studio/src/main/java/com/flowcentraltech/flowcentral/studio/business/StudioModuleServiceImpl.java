@@ -29,7 +29,9 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
@@ -58,7 +60,7 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 @Transactional
 @Component(StudioModuleNameConstants.STUDIO_MODULE_SERVICE)
-public class StudioModuleServiceImpl extends AbstractFlowCentralService implements StudioModuleService {
+public class StudioModuleServiceImpl extends AbstractFlowCentralService implements StudioModuleService, StudioProvider {
 
     static {
         ApplicationCollaborationUtils.registerCollaborationType(Chart.class, CollaborationType.CHART);
@@ -181,12 +183,17 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             };
     }
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
+    }
+
+    @Override
+    public boolean isInstallDefaultDeveloperRoles() throws UnifyException {
+        return getContainerSetting(boolean.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALL_DEVELOPER_ROLES, true);
     }
 
     @Override
