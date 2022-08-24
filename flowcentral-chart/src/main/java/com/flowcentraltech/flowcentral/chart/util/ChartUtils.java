@@ -142,6 +142,7 @@ public final class ChartUtils {
 
         if (chartType.axisChart()) {
             // Series
+            boolean integers = true;
             jw.beginArray("series");
             for (ChartSeries<?> series : chartData.getSeries()) {
                 jw.beginObject();
@@ -149,6 +150,7 @@ public final class ChartUtils {
                 switch (series.getSeriesType()) {
                     case DOUBLE:
                         jw.write("data", ((DoubleChartSeries) series).dataToArray());
+                        integers = false;
                         break;
                     case INTEGER:
                         jw.write("data", ((IntegerChartSeries) series).dataToArray());
@@ -162,7 +164,10 @@ public final class ChartUtils {
                 jw.endObject();
             }
             jw.endArray();
-
+            
+            // Y-axis
+            jw.write("_yintegers", integers);
+            
             // X-axis
             jw.beginObject("xaxis");
             jw.write("type", categoryType.optionsType());

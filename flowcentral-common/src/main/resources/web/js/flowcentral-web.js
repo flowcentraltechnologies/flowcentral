@@ -133,7 +133,19 @@ fux.rigMenuSectionResult = function(rgp) {
 fux.chartList = [];
 fux.rigChart = function(rgp) {
 	const id = rgp.pId;
-	var chart = new ApexCharts(_id(id), rgp.pOptions);
+	const options = rgp.pOptions
+	if (options._yintegers) {
+		options.yaxis = [
+			{
+			    labels: {
+			      formatter: function(val) {
+			        return val.toFixed(0);
+			      }
+			    }
+  			}
+		]
+	}
+	var chart = new ApexCharts(_id(id), options);
     chart.render();
     fux.chartList.push(chart);
 }
