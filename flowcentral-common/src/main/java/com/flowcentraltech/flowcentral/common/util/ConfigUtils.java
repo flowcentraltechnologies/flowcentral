@@ -16,8 +16,6 @@
 
 package com.flowcentraltech.flowcentral.common.util;
 
-import java.util.List;
-
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.ConfigEntity;
 import com.tcdng.unify.core.UnifyException;
@@ -59,15 +57,6 @@ public final class ConfigUtils {
         } else if (ConfigType.MUTABLE.equals(type)) {
             configEntity.setConfigType(ConfigType.CUSTOMIZED);
         }
-    }
-
-    public static boolean isChanged(List<? extends ConfigEntity> configEntityList) {
-        boolean noChange = true;
-        for (ConfigEntity configEntity : configEntityList) {
-            noChange &= ConfigUtils.isSetInstall(configEntity);
-        }
-        
-        return noChange;
     }
     
     public static boolean isSetInstall(ConfigEntity configEntity) {

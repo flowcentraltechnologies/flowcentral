@@ -53,7 +53,6 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRole;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRoleQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting;
@@ -62,7 +61,6 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizard;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfWizardStep;
-import com.flowcentraltech.flowcentral.workflow.entities.WfWizardStepQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
@@ -244,31 +242,23 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
     private void populateChildList(final WfWizard wfWizard, WfWizardConfig wfWizardConfig, final Long applicationId,
             String applicationName) throws UnifyException {
         // Workflow wizard steps
-        List<WfWizardStep> oldStepList = wfWizard.isIdBlank() ? Collections.emptyList()
-                : environment().findAll(new WfWizardStepQuery().wfWizardId(wfWizard.getId()).orderById());
-        boolean noChange = ConfigUtils.isChanged(oldStepList);
-
-        if (noChange) {
-            List<WfWizardStep> stepList = null;
-            if (!DataUtils.isBlank(wfWizardConfig.getStepList())) {
-                stepList = new ArrayList<WfWizardStep>();
-                for (WfWizardStepConfig wfWizardStepConfig : wfWizardConfig.getStepList()) {
-                    WfWizardStep wfWizardStep = new WfWizardStep();
-                    wfWizardStep.setName(wfWizardStepConfig.getName());
-                    wfWizardStep.setDescription(resolveApplicationMessage(wfWizardStepConfig.getDescription()));
-                    wfWizardStep.setLabel(resolveApplicationMessage(wfWizardStepConfig.getLabel()));
-                    wfWizardStep.setForm(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                            wfWizardStepConfig.getForm()));
-                    wfWizardStep.setReference(wfWizardStepConfig.getReference());
-                    wfWizardStep.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    stepList.add(wfWizardStep);
-                }
+        List<WfWizardStep> stepList = null;
+        if (!DataUtils.isBlank(wfWizardConfig.getStepList())) {
+            stepList = new ArrayList<WfWizardStep>();
+            for (WfWizardStepConfig wfWizardStepConfig : wfWizardConfig.getStepList()) {
+                WfWizardStep wfWizardStep = new WfWizardStep();
+                wfWizardStep.setName(wfWizardStepConfig.getName());
+                wfWizardStep.setDescription(resolveApplicationMessage(wfWizardStepConfig.getDescription()));
+                wfWizardStep.setLabel(resolveApplicationMessage(wfWizardStepConfig.getLabel()));
+                wfWizardStep.setForm(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                        wfWizardStepConfig.getForm()));
+                wfWizardStep.setReference(wfWizardStepConfig.getReference());
+                wfWizardStep.setConfigType(ConfigType.MUTABLE_INSTALL);
+                stepList.add(wfWizardStep);
             }
-
-            wfWizard.setStepList(stepList);
-        } else {
-            wfWizard.setStepList(oldStepList);
         }
+
+        wfWizard.setStepList(stepList);
     }
 
     private void populateChildList(final WfConfig wfConfig, Workflow workflow, String applicationName)
@@ -342,57 +332,45 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
         workflow.setSetValuesList(setValuesList);
 
         // Steps
-        List<WfStep> oldStepList = workflow.isIdBlank() ? Collections.emptyList()
-                : environment().findAll(new WfStepQuery().workflowId(workflow.getId()).orderById());
-        boolean noChange = ConfigUtils.isChanged(oldStepList);
-
-        if (noChange) {
-            List<WfStep> stepList = null;
-            if (wfConfig.getStepsConfig() != null && !DataUtils.isBlank(wfConfig.getStepsConfig().getStepList())) {
-                stepList = new ArrayList<WfStep>();
-                for (WfStepConfig stepConfig : wfConfig.getStepsConfig().getStepList()) {
-                    WfStep wfStep = new WfStep();
-                    wfStep.setType(stepConfig.getType());
-                    wfStep.setPriority(stepConfig.getPriority());
-                    wfStep.setRecordActionType(stepConfig.getActionType());
-                    wfStep.setName(stepConfig.getName());
-                    wfStep.setDescription(resolveApplicationMessage(stepConfig.getDescription()));
-                    wfStep.setLabel(resolveApplicationMessage(stepConfig.getLabel()));
-                    wfStep.setAppletName(
-                            ApplicationNameUtils.ensureLongNameReference(applicationName, stepConfig.getAppletName()));
-                    wfStep.setCriticalMinutes(stepConfig.getCriticalMinutes());
-                    wfStep.setExpiryMinutes(stepConfig.getExpiryMinutes());
-                    wfStep.setAudit(stepConfig.isAudit());
-                    wfStep.setBranchOnly(stepConfig.isBranchOnly());
-                    wfStep.setIncludeForwarder(stepConfig.isIncludeForwarder());
-                    wfStep.setForwarderPreffered(stepConfig.isForwarderPreffered());
-                    wfStep.setEmails(stepConfig.isEmails());
-                    wfStep.setComments(stepConfig.isComments());
-                    wfStep.setNextStepName(stepConfig.getNextStepName());
-                    wfStep.setAltNextStepName(stepConfig.getAltNextStepName());
-                    wfStep.setBinaryConditionName(stepConfig.getBinaryCondition());
-                    wfStep.setReadOnlyConditionName(stepConfig.getReadOnlyCondition());
-                    wfStep.setAutoLoadConditionName(stepConfig.getAutoLoadCondition());
-                    wfStep.setPolicy(stepConfig.getPolicy());
-                    wfStep.setRule(stepConfig.getRule());
-                    wfStep.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    populateChildList(stepConfig, applicationName, wfStep);
-                    List<WfStepRole> participatingRoleList = environment()
-                            .findAll(new WfStepRoleQuery().applicationName(applicationName)
-                                    .workflowName(workflow.getName()).wfStepName(stepConfig.getName()));
-                    wfStep.setRoleList(participatingRoleList);
-                    stepList.add(wfStep);
-                }
+        List<WfStep> stepList = null;
+        if (wfConfig.getStepsConfig() != null && !DataUtils.isBlank(wfConfig.getStepsConfig().getStepList())) {
+            stepList = new ArrayList<WfStep>();
+            for (WfStepConfig stepConfig : wfConfig.getStepsConfig().getStepList()) {
+                WfStep wfStep = new WfStep();
+                wfStep.setType(stepConfig.getType());
+                wfStep.setPriority(stepConfig.getPriority());
+                wfStep.setRecordActionType(stepConfig.getActionType());
+                wfStep.setName(stepConfig.getName());
+                wfStep.setDescription(resolveApplicationMessage(stepConfig.getDescription()));
+                wfStep.setLabel(resolveApplicationMessage(stepConfig.getLabel()));
+                wfStep.setAppletName(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, stepConfig.getAppletName()));
+                wfStep.setCriticalMinutes(stepConfig.getCriticalMinutes());
+                wfStep.setExpiryMinutes(stepConfig.getExpiryMinutes());
+                wfStep.setAudit(stepConfig.isAudit());
+                wfStep.setBranchOnly(stepConfig.isBranchOnly());
+                wfStep.setIncludeForwarder(stepConfig.isIncludeForwarder());
+                wfStep.setForwarderPreffered(stepConfig.isForwarderPreffered());
+                wfStep.setEmails(stepConfig.isEmails());
+                wfStep.setComments(stepConfig.isComments());
+                wfStep.setNextStepName(stepConfig.getNextStepName());
+                wfStep.setAltNextStepName(stepConfig.getAltNextStepName());
+                wfStep.setBinaryConditionName(stepConfig.getBinaryCondition());
+                wfStep.setReadOnlyConditionName(stepConfig.getReadOnlyCondition());
+                wfStep.setAutoLoadConditionName(stepConfig.getAutoLoadCondition());
+                wfStep.setPolicy(stepConfig.getPolicy());
+                wfStep.setRule(stepConfig.getRule());
+                wfStep.setConfigType(ConfigType.MUTABLE_INSTALL);
+                populateChildList(stepConfig, applicationName, wfStep);
+                List<WfStepRole> participatingRoleList = environment()
+                        .findAll(new WfStepRoleQuery().applicationName(applicationName)
+                                .workflowName(workflow.getName()).wfStepName(stepConfig.getName()));
+                wfStep.setRoleList(participatingRoleList);
+                stepList.add(wfStep);
             }
-
-            workflow.setStepList(stepList);
-        } else {
-            for (WfStep wfStep : oldStepList) {
-                environment().findChildren(wfStep);
-            }
-
-            workflow.setStepList(oldStepList);
         }
+
+        workflow.setStepList(stepList);
     }
 
     private AppSetValues newAppSetValues(SetValuesConfig setValuesConfig) throws UnifyException {

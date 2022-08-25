@@ -140,7 +140,6 @@ import com.flowcentraltech.flowcentral.application.entities.AppTable;
 import com.flowcentraltech.flowcentral.application.entities.AppTableAction;
 import com.flowcentraltech.flowcentral.application.entities.AppTableActionQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
-import com.flowcentraltech.flowcentral.application.entities.AppTableColumnQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
@@ -3648,35 +3647,27 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private void populateChildList(AppTable appTable, String applicationName, AppTableConfig appTableConfig)
             throws UnifyException {
-        List<AppTableColumn> oldColumnList = appTable.isIdBlank() ? Collections.emptyList()
-                : environment().findAll(new AppTableColumnQuery().appTableId(appTable.getId()).orderById());
-        boolean noChange = ConfigUtils.isChanged(oldColumnList);
-
-        if (noChange) {
-            List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
-            for (TableColumnConfig tableColumnConfig : appTableConfig.getColumnList()) {
-                AppTableColumn appTableColumn = new AppTableColumn();
-                appTableColumn.setField(tableColumnConfig.getField());
-                appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
-                appTableColumn.setRenderWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                        tableColumnConfig.getRenderWidget()));
-                appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
-                appTableColumn.setOrder(tableColumnConfig.getOrder());
-                appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
-                appTableColumn.setSwitchOnChange(tableColumnConfig.isSwitchOnChange());
-                appTableColumn.setEditable(tableColumnConfig.isEditable());
-                appTableColumn.setHidden(tableColumnConfig.isHidden());
-                appTableColumn.setDisabled(tableColumnConfig.isDisabled());
-                appTableColumn.setSortable(tableColumnConfig.isSortable());
-                appTableColumn.setSummary(tableColumnConfig.isSummary());
-                appTableColumn.setConfigType(ConfigType.MUTABLE_INSTALL);
-                columnList.add(appTableColumn);
-            }
-
-            appTable.setColumnList(columnList);
-        } else {
-            appTable.setColumnList(oldColumnList);
+        List<AppTableColumn> columnList = new ArrayList<AppTableColumn>();
+        for (TableColumnConfig tableColumnConfig : appTableConfig.getColumnList()) {
+            AppTableColumn appTableColumn = new AppTableColumn();
+            appTableColumn.setField(tableColumnConfig.getField());
+            appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
+            appTableColumn.setRenderWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                    tableColumnConfig.getRenderWidget()));
+            appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
+            appTableColumn.setOrder(tableColumnConfig.getOrder());
+            appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
+            appTableColumn.setSwitchOnChange(tableColumnConfig.isSwitchOnChange());
+            appTableColumn.setEditable(tableColumnConfig.isEditable());
+            appTableColumn.setHidden(tableColumnConfig.isHidden());
+            appTableColumn.setDisabled(tableColumnConfig.isDisabled());
+            appTableColumn.setSortable(tableColumnConfig.isSortable());
+            appTableColumn.setSummary(tableColumnConfig.isSummary());
+            appTableColumn.setConfigType(ConfigType.MUTABLE_INSTALL);
+            columnList.add(appTableColumn);
         }
+
+        appTable.setColumnList(columnList);
 
         List<AppTableFilter> filterList = null;
         if (!DataUtils.isBlank(appTableConfig.getFilterList())) {
@@ -3871,81 +3862,73 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         appForm.setActionList(actionList);
 
         // Form elements
-        List<AppFormElement> oldElementList = appForm.isIdBlank() ? Collections.emptyList()
-                : environment().findAll(new AppFormElementQuery().appFormId(appForm.getId()).orderById());
-        boolean noChange = ConfigUtils.isChanged(oldElementList);
+        List<AppFormElement> elementList = new ArrayList<AppFormElement>();
+        for (FormTabConfig formTabConfig : appFormConfig.getTabList()) {
+            // Tab
+            AppFormElement appFormElement = new AppFormElement();
+            appFormElement.setType(FormElementType.TAB);
+            appFormElement.setElementName(formTabConfig.getName());
+            appFormElement.setTabContentType(formTabConfig.getContentType());
+            appFormElement.setLabel(resolveApplicationMessage(formTabConfig.getLabel()));
+            appFormElement.setTabApplet(
+                    ApplicationNameUtils.ensureLongNameReference(applicationName, formTabConfig.getApplet()));
+            appFormElement.setTabReference(formTabConfig.getReference());
+            appFormElement.setFilter(formTabConfig.getFilter());
+            appFormElement.setEditAction(formTabConfig.getEditAction());
+            appFormElement.setEditFormless(formTabConfig.getEditFormless());
+            appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
+            appFormElement.setIgnoreParentCondition(formTabConfig.isIgnoreParentCondition());
+            appFormElement.setShowSearch(formTabConfig.isShowSearch());
+            appFormElement.setVisible(formTabConfig.isVisible());
+            appFormElement.setEditable(formTabConfig.isEditable());
+            appFormElement.setDisabled(formTabConfig.isDisabled());
+            appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
+            elementList.add(appFormElement);
 
-        if (noChange) {
-            List<AppFormElement> elementList = new ArrayList<AppFormElement>();
-            for (FormTabConfig formTabConfig : appFormConfig.getTabList()) {
-                // Tab
-                AppFormElement appFormElement = new AppFormElement();
-                appFormElement.setType(FormElementType.TAB);
-                appFormElement.setElementName(formTabConfig.getName());
-                appFormElement.setTabContentType(formTabConfig.getContentType());
-                appFormElement.setLabel(resolveApplicationMessage(formTabConfig.getLabel()));
-                appFormElement.setTabApplet(
-                        ApplicationNameUtils.ensureLongNameReference(applicationName, formTabConfig.getApplet()));
-                appFormElement.setTabReference(formTabConfig.getReference());
-                appFormElement.setFilter(formTabConfig.getFilter());
-                appFormElement.setEditAction(formTabConfig.getEditAction());
-                appFormElement.setEditFormless(formTabConfig.getEditFormless());
-                appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
-                appFormElement.setIgnoreParentCondition(formTabConfig.isIgnoreParentCondition());
-                appFormElement.setShowSearch(formTabConfig.isShowSearch());
-                appFormElement.setVisible(formTabConfig.isVisible());
-                appFormElement.setEditable(formTabConfig.isEditable());
-                appFormElement.setDisabled(formTabConfig.isDisabled());
-                appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
-                elementList.add(appFormElement);
+            if (TabContentType.MINIFORM.equals(formTabConfig.getContentType())) {
+                for (FormSectionConfig formSectionConfig : formTabConfig.getSectionList()) {
+                    // Section
+                    appFormElement = new AppFormElement();
+                    appFormElement.setType(FormElementType.SECTION);
+                    appFormElement.setElementName(formSectionConfig.getName());
+                    appFormElement.setSectionColumns(formSectionConfig.getColumns());
+                    appFormElement.setLabel(resolveApplicationMessage(formSectionConfig.getLabel()));
+                    appFormElement.setVisible(formSectionConfig.isVisible());
+                    appFormElement.setEditable(formSectionConfig.isEditable());
+                    appFormElement.setDisabled(formSectionConfig.isDisabled());
+                    appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    elementList.add(appFormElement);
 
-                if (TabContentType.MINIFORM.equals(formTabConfig.getContentType())) {
-                    for (FormSectionConfig formSectionConfig : formTabConfig.getSectionList()) {
-                        // Section
-                        appFormElement = new AppFormElement();
-                        appFormElement.setType(FormElementType.SECTION);
-                        appFormElement.setElementName(formSectionConfig.getName());
-                        appFormElement.setSectionColumns(formSectionConfig.getColumns());
-                        appFormElement.setLabel(resolveApplicationMessage(formSectionConfig.getLabel()));
-                        appFormElement.setVisible(formSectionConfig.isVisible());
-                        appFormElement.setEditable(formSectionConfig.isEditable());
-                        appFormElement.setDisabled(formSectionConfig.isDisabled());
-                        appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
-                        elementList.add(appFormElement);
-
-                        if (!DataUtils.isBlank(formSectionConfig.getFieldList())) {
-                            for (FormFieldConfig formFieldConfig : formSectionConfig.getFieldList()) {
-                                // Field
-                                appFormElement = new AppFormElement();
-                                appFormElement.setType(FormElementType.FIELD);
-                                appFormElement.setElementName(formFieldConfig.getName());
-                                appFormElement.setLabel(resolveApplicationMessage(formFieldConfig.getLabel()));
-                                appFormElement.setInputWidget(ApplicationNameUtils
-                                        .ensureLongNameReference(applicationName, formFieldConfig.getInputWidget()));
-                                appFormElement.setInputReference(ApplicationNameUtils
-                                        .ensureLongNameReference(applicationName, formFieldConfig.getReference()));
-                                appFormElement.setFieldColumn(formFieldConfig.getColumn());
-                                appFormElement.setSwitchOnChange(formFieldConfig.isSwitchOnChange());
-                                appFormElement.setSaveAs(formFieldConfig.isSaveAs());
-                                appFormElement.setRequired(formFieldConfig.isRequired());
-                                appFormElement.setVisible(formFieldConfig.isVisible());
-                                appFormElement.setColor(formFieldConfig.getColor());
-                                appFormElement.setEditable(formFieldConfig.isEditable());
-                                appFormElement.setDisabled(formFieldConfig.isDisabled());
-                                appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
-                                elementList.add(appFormElement);
-                            }
+                    if (!DataUtils.isBlank(formSectionConfig.getFieldList())) {
+                        for (FormFieldConfig formFieldConfig : formSectionConfig.getFieldList()) {
+                            // Field
+                            appFormElement = new AppFormElement();
+                            appFormElement.setType(FormElementType.FIELD);
+                            appFormElement.setElementName(formFieldConfig.getName());
+                            appFormElement.setLabel(resolveApplicationMessage(formFieldConfig.getLabel()));
+                            appFormElement.setInputWidget(ApplicationNameUtils
+                                    .ensureLongNameReference(applicationName, formFieldConfig.getInputWidget()));
+                            appFormElement.setInputReference(ApplicationNameUtils
+                                    .ensureLongNameReference(applicationName, formFieldConfig.getReference()));
+                            appFormElement.setFieldColumn(formFieldConfig.getColumn());
+                            appFormElement.setSwitchOnChange(formFieldConfig.isSwitchOnChange());
+                            appFormElement.setSaveAs(formFieldConfig.isSaveAs());
+                            appFormElement.setRequired(formFieldConfig.isRequired());
+                            appFormElement.setVisible(formFieldConfig.isVisible());
+                            appFormElement.setColor(formFieldConfig.getColor());
+                            appFormElement.setEditable(formFieldConfig.isEditable());
+                            appFormElement.setDisabled(formFieldConfig.isDisabled());
+                            appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
+                            elementList.add(appFormElement);
                         }
                     }
-                } else if (TabContentType.MINIFORM_CHANGELOG.equals(formTabConfig.getContentType())) {
-                    ApplicationEntityUtils.addChangeLogFormElements(elementList);
                 }
+            } else if (TabContentType.MINIFORM_CHANGELOG.equals(formTabConfig.getContentType())) {
+                ApplicationEntityUtils.addChangeLogFormElements(elementList);
             }
-
-            appForm.setElementList(elementList);
-        } else {
-            appForm.setElementList(oldElementList);
         }
+
+        appForm.setElementList(elementList);
 
         // Related lists
         List<AppFormRelatedList> relatedList = null;
