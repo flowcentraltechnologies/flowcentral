@@ -33,13 +33,56 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class ChartData {
 
+    private String title;
+    
+    private String subTitle;
+
+    private int titleOffsetX;
+
+    private int titleFontSize;
+
+    private int subTitleOffsetX;
+
+    private int subTitleFontSize;
+    
     private ChartCategories<?> categories;
 
     private List<ChartSeries<?>> series;
 
-    private ChartData(ChartCategories<?> categories, List<ChartSeries<?>> series) {
+    private ChartData(String title, String subTitle, int titleOffsetX, int titleFontSize, int subTitleOffsetX,
+            int subTitleFontSize, ChartCategories<?> categories, List<ChartSeries<?>> series) {
+        this.title = title;
+        this.subTitle = subTitle;
+        this.titleOffsetX = titleOffsetX;
+        this.titleFontSize = titleFontSize;
+        this.subTitleOffsetX = subTitleOffsetX;
+        this.subTitleFontSize = subTitleFontSize;
         this.categories = categories;
         this.series = series;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public int getTitleOffsetX() {
+        return titleOffsetX;
+    }
+
+    public int getTitleFontSize() {
+        return titleFontSize;
+    }
+
+    public int getSubTitleOffsetX() {
+        return subTitleOffsetX;
+    }
+
+    public int getSubTitleFontSize() {
+        return subTitleFontSize;
     }
 
     public ChartCategories<?> getCategories() {
@@ -56,6 +99,18 @@ public class ChartData {
 
     public static class Builder {
 
+        private String title;
+        
+        private String subTitle;
+
+        private int titleOffsetX;
+
+        private int titleFontSize;
+
+        private int subTitleOffsetX;
+
+        private int subTitleFontSize;
+
         private ChartCategories<?> categories;
 
         private List<ChartSeries<?>> series;
@@ -64,6 +119,36 @@ public class ChartData {
             series = new ArrayList<ChartSeries<?>>();
         }
 
+        public Builder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder titleOffsetX(int titleOffsetX) {
+            this.titleOffsetX = titleOffsetX;
+            return this;
+        }
+
+        public Builder titleFontSize(int titleFontSize) {
+            this.titleFontSize = titleFontSize;
+            return this;
+        }
+
+        public Builder subTitle(String subTitle) {
+            this.subTitle = subTitle;
+            return this;
+        }
+
+        public Builder subTitleOffsetX(int subTitleOffsetX) {
+            this.subTitleOffsetX = subTitleOffsetX;
+            return this;
+        }
+
+        public Builder subTitleFontSize(int subTitleFontSize) {
+            this.subTitleFontSize = subTitleFontSize;
+            return this;
+        }
+        
         public Builder categories(ChartCategoryDataType type, String categoriesJson) throws UnifyException {
             switch (type) {
                 case DATE:
@@ -112,7 +197,8 @@ public class ChartData {
                 throw new RuntimeException("At least one series is required.");
             }
 
-            return new ChartData(categories, series);
+            return new ChartData(title, subTitle, titleOffsetX, titleFontSize, subTitleOffsetX,
+                    subTitleFontSize, categories, series);
         }
     }
 }

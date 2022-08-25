@@ -54,18 +54,38 @@ public final class ChartUtils {
         final ChartCategories<?> categories = chartData.getCategories();
         final ChartCategoryDataType categoryType = categories.getCategoryType();
         // Title
-        if (!StringUtils.isBlank(chartDef.getTitle())) {
+        String title = !StringUtils.isBlank(chartData.getTitle()) ? chartData.getTitle() : chartDef.getTitle();
+        if (!StringUtils.isBlank(title)) {
             jw.beginObject("title");
-            jw.write("text", chartDef.getTitle());
+            jw.write("text", title);
+            if (chartData.getTitleOffsetX() > 0) {
+                jw.write("offsetX", chartData.getTitleOffsetX());
+            }
+
+            if (chartData.getTitleFontSize() > 0) {
+                jw.beginObject("style");
+                jw.write("fontSize", chartData.getTitleFontSize() + "px");
+                jw.endObject();
+            }
+
             jw.endObject();
         }
 
         // Sub-title
-        if (!StringUtils.isBlank(chartDef.getSubTitle())) {
+        String subTitle = !StringUtils.isBlank(chartData.getSubTitle()) ? chartData.getSubTitle()
+                : chartDef.getSubTitle();
+        if (!StringUtils.isBlank(subTitle)) {
             jw.beginObject("subtitle");
-            jw.write("text", chartDef.getSubTitle());
+            jw.write("text", subTitle);
+            if (chartData.getSubTitleOffsetX() > 0) {
+                jw.write("offsetX", chartData.getSubTitleOffsetX());
+            }
+
             jw.beginObject("style");
             jw.write("color", "#a0a0a0");
+            if (chartData.getSubTitleFontSize() > 0) {
+                jw.write("fontSize", chartData.getSubTitleFontSize() + "px");
+            }
             jw.endObject();
             jw.endObject();
         }
@@ -164,10 +184,10 @@ public final class ChartUtils {
                 jw.endObject();
             }
             jw.endArray();
-            
+
             // Y-axis
             jw.write("_yintegers", integers);
-            
+
             // X-axis
             jw.beginObject("xaxis");
             jw.write("type", categoryType.optionsType());
