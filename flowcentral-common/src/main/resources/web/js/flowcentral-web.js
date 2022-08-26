@@ -678,6 +678,10 @@ fux.rigTable = function(rgp) {
 		}
 	}
 	
+	if (rgp.pMultiSelDepList) {
+		ux.setDisabledById(rgp.pMultiSelDepList, rgp.pSelCount == 0);
+	}
+	
 	if (rgp.pConDepList) {
 		ux.setDisabledById(rgp.pConDepList, true);
 	}

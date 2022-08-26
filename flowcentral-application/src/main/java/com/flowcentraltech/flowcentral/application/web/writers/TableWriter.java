@@ -187,7 +187,6 @@ public class TableWriter extends AbstractControlWriter {
 			final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
 			final boolean focusManagement = tableWidget.isFocusManagement();
 			final boolean isCrudMode = tableWidget.isCrudMode();
-//            final boolean isRowAction = !isFixedRows && !isActionColumn && !DataUtils.isBlank(crudActionHandlers);
 			final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
 			final Control[] actionCtrl = tableWidget.getActionCtrl();
 			final RowChangeInfo lastRowChangeInfo = focusManagement ? table.getLastRowChangeInfo() : null;
@@ -287,12 +286,6 @@ public class TableWriter extends AbstractControlWriter {
 					}
 				}
 			}
-//
-//            if (isRowAction) {
-//                for (EventHandler eventHandler : crudActionHandlers) {
-//                    writer.writeBehavior(eventHandler, tableWidget.getRowId(), null);
-//                }
-//            }
 
 			final boolean supportSelect = !table.isFixedAssignment();
 			if (isContainerEditable && table.isEntryMode()) {
@@ -317,7 +310,8 @@ public class TableWriter extends AbstractControlWriter {
 			if (supportSelect && multiSelect) {
 				writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
 				writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
-				writer.writeParam("pMultiSel", true);
+                writer.writeParam("pSelCount", table.getSelectedCount());
+                writer.writeParam("pMultiSel", true);
 				writer.writeParam("pMultiSelDepList",
 						DataUtils.toArray(String.class, tableWidget.getMultiSelDependentList()));
 			}

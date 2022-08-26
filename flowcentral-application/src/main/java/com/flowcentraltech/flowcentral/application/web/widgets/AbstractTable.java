@@ -199,6 +199,10 @@ public abstract class AbstractTable<T, U> {
         return selected.contains(index);
     }
 
+    public int getSelectedCount() {
+        return selected.isEmpty() ? 0 : selected.size();
+    }
+
     public boolean isSupportsBasicSearch() {
         return tableDef.isBasicSearch();
     }
