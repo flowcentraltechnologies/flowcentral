@@ -92,6 +92,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         }
 
         _entries.addAll(index, entries);
+        table.setSourceObject(new ArrayList<T>(_entries));
         EntryActionType actionType = table.fireOnTableChange();
         if (actionType.isAddItem()) {
             addEntry(false);
@@ -102,6 +103,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     public void deleteEntry(int index) throws UnifyException {
         List<T> _entries = (List<T>) table.getSourceObject();
         _entries.remove(index);
+        table.setSourceObject(new ArrayList<T>(_entries));
          EntryActionType actionType = table.fireOnTableChange();
         if (actionType.isAddItem()) {
             addEntry(false);
