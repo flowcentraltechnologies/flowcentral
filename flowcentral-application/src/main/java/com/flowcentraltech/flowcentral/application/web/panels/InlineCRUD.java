@@ -102,7 +102,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     public void deleteEntry(int index) throws UnifyException {
         List<T> _entries = (List<T>) table.getSourceObject();
         _entries.remove(index);
-        EntryActionType actionType = table.fireOnTableChange();
+         EntryActionType actionType = table.fireOnTableChange();
         if (actionType.isAddItem()) {
             addEntry(false);
         }

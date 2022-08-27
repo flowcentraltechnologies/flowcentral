@@ -40,8 +40,6 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class BeanTable extends AbstractTable<List<?>, Object> {
 
-    private ValueStore valueStore;
-
     public BeanTable(AppletUtilities au, TableDef tableDef) {
         this(au, tableDef, 0);
     }
@@ -136,16 +134,6 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     private ValueStore getValueStore(List<?> sourceObject) throws UnifyException {
-        List<?> oldSourceObject = valueStore != null ? (List<?>) valueStore.getValueObject() : null;
-        if (sourceObject != oldSourceObject) {
-            synchronized (this) {
-                oldSourceObject = valueStore != null ? (List<?>) valueStore.getValueObject() : null;
-                if (sourceObject != oldSourceObject) {
-                    valueStore = new BeanValueListStore(sourceObject);
-                }
-            }
-        }
-
-        return valueStore;
+        return new BeanValueListStore(sourceObject);
     }
 }
