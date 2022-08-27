@@ -104,7 +104,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         List<T> _entries = (List<T>) table.getSourceObject();
         _entries.remove(index);
         table.setSourceObject(new ArrayList<T>(_entries));
-         EntryActionType actionType = table.fireOnTableChange();
+        EntryActionType actionType = table.fireOnTableChange();
         if (actionType.isAddItem()) {
             addEntry(false);
         }
