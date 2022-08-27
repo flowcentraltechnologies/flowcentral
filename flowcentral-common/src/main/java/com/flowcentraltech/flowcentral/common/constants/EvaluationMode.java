@@ -32,6 +32,7 @@ public enum EvaluationMode {
     UPDATE_TABACTION(true, false),
     DELETE(false, false),
     REQUIRED(true, true),
+    SWITCH_ONCHANGE(true, false),
     NOP(false, false);
 
     private final boolean evaluation;

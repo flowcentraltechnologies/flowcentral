@@ -664,6 +664,16 @@ fux.rigTable = function(rgp) {
 		}
 	}
 	
+	const swhCmdList = rgp.pSwhCmdList;
+	if (swhCmdList) {
+		for (var i = 0; i < swhCmdList.length; i++) {
+			var info = swhCmdList[i];
+			const evp = fux.newCmdEvPrm(rgp, "switchOnChange");
+			evp.uCmdTag = info.cmdTag;
+			ux.addHdl(_id(info.cId), "change", ux.post, evp);
+		}
+	}
+	
 	const tabWidgetIds = rgp.pTabWidId;
 	if (tabWidgetIds && tabWidgetIds.length) {
 		const tabMemId = rgp.pTabMemId;
