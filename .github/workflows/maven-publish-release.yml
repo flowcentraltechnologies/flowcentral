@@ -47,12 +47,6 @@ jobs:
             "enabled": "false"
             }
             }] 
-          mirrors: |
-            [{
-              "id": "maven-central-mirror",
-              "mirrorOf":"central",
-              "url":"https://repo.maven.apache.org/maven2"
-            }]
           
       - name: Import GPG Key
         uses: crazy-max/ghaction-import-gpg@v1
