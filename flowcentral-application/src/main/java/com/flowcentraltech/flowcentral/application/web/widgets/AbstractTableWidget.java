@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
@@ -31,7 +32,9 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -68,8 +71,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
-        @UplAttribute(name = "summary", type = String.class),
-        @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "summary", type = String.class), @UplAttribute(name = "details", type = String.class),
         @UplAttribute(name = "fixedRows", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
@@ -161,6 +163,31 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     @Action
+    public void switchOnChange() throws UnifyException {
+        int index = getRequestTarget(int.class);
+        String trigger = getRequestCommandTag();
+        T table = getTable();
+        table.fireOnRowChange(new RowChangeInfo(trigger, index));
+        FormValidationErrors errors = new FormValidationErrors();
+        table.validate(EvaluationMode.SWITCH_ONCHANGE, errors);
+        if (errors.isWithValidationErrors()) {
+            StringBuilder sb = new StringBuilder();
+            boolean appendSym = false;
+            for (FormMessage msg : errors.getValidationErrors()) {
+                if (appendSym) {
+                    sb.append(" ");
+                } else {
+                    appendSym = true;
+                }
+
+                sb.append(msg.getMessage());
+            }
+
+            setRequestAttribute(AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG, sb.toString());
+        }
+    }
+
+    @Action
     public void sortColumn() throws UnifyException {
         if (oldTable != null) {
             TableDef tableDef = oldTable.getTableDef();
@@ -184,7 +211,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 int index = sortHistory.size();
                 while (--index >= 0) {
                     Sort oldSort = sortHistory.get(index);
-                    order.add(tableDef.getVisibleColumnDef(oldSort.getColumnIndex()).getFieldName(), oldSort.getSortType());
+                    order.add(tableDef.getVisibleColumnDef(oldSort.getColumnIndex()).getFieldName(),
+                            oldSort.getSortType());
                 }
             }
 
@@ -207,7 +235,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public void delete() throws UnifyException {
         applyFixedAction(FixedRowActionType.DELETE);
     }
-    
+
     public String resolveChildWidgetName(String transferId) throws UnifyException {
         String childId = DataTransferUtils.stripTransferDataIndexPart(transferId);
         ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childId);
@@ -283,29 +311,29 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             fixedCtrl = DataUtils.toArray(Control.class, controls);
             fixedCtrl[FixedRowActionType.FIXED.index()].setDisabled(true);
         }
-        
+
         return fixedCtrl;
     }
 
     public Control getViewCtrl() throws UnifyException {
-    	if (viewCtrl == null) {
-    		viewCtrl = (Control) addInternalChildWidget(
+        if (viewCtrl == null) {
+            viewCtrl = (Control) addInternalChildWidget(
                     "!ui-button styleClass:$e{mbtn} caption:" + "$m{table.row.view}");
-    	}
-    	
-		return viewCtrl;
-	}
+        }
 
-	public Control getEditCtrl() throws UnifyException {
-    	if (editCtrl == null) {
-    		editCtrl = (Control) addInternalChildWidget(
+        return viewCtrl;
+    }
+
+    public Control getEditCtrl() throws UnifyException {
+        if (editCtrl == null) {
+            editCtrl = (Control) addInternalChildWidget(
                     "!ui-button styleClass:$e{mbtn} caption:" + "$m{table.row.edit}");
-    	}
-    	
-		return editCtrl;
-	}
+        }
 
-	public Control[] getActionCtrl() {
+        return editCtrl;
+    }
+
+    public Control[] getActionCtrl() {
         return actionCtrl;
     }
 
@@ -329,7 +357,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             }
         }
     }
-    
+
     public DetailsPanel getDetailsPanel() throws UnifyException {
         if (detailsPanel == null) {
             String details = getUplAttribute(String.class, "details");

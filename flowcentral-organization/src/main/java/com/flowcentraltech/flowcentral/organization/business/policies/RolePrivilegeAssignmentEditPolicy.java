@@ -80,6 +80,12 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
+    public EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore,
+            Set<Integer> selected) throws UnifyException {
+        return EntryActionType.NONE;
+    }
+
+    @Override
     public EntryActionType onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore,
             RowChangeInfo rowChangeInfo) throws UnifyException {
         return EntryActionType.NONE;
