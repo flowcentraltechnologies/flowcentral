@@ -85,10 +85,10 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private Set<String> summaryFields;
 
-    private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, List<TableColumnDef> visibleColumnDefList, Map<String, TableFilterDef> filterDefMap,
-            String label, int sortHistory, int itemsPerPage, boolean serialNo, boolean sortable,
-            boolean headerToUpperCase, boolean headerCenterAlign, boolean basicSearch, boolean totalSummary,
-            boolean headerless, boolean multiSelect, boolean nonConforming, boolean fixedRows,
+    private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, List<TableColumnDef> visibleColumnDefList,
+            Map<String, TableFilterDef> filterDefMap, String label, int sortHistory, int itemsPerPage, boolean serialNo,
+            boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign, boolean basicSearch,
+            boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming, boolean fixedRows,
             boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description, Long id,
             long version) {
         super(nameParts, description, id, version);
@@ -494,7 +494,7 @@ public class TableDef extends BaseApplicationEntityDef {
             } else {
                 visibleColumnDefList.add(tableColumnDef);
             }
-            
+
             return this;
         }
 
@@ -534,9 +534,15 @@ public class TableDef extends BaseApplicationEntityDef {
                         }
                     }
 
+                    EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
+                    entityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
+                            ? entityFieldDef.getResolvedTypeFieldDef()
+                            : entityFieldDef;
+                    String styleClass = entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "";
                     renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter + " binding:"
-                            + fieldName + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{"
-                            + linkAct + "}}";
+                            + fieldName + styleClass
+                            + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
+                            + "}}";
                 } else {
                     renderer = renderer + " binding:" + fieldName;
                 }
@@ -563,10 +569,11 @@ public class TableDef extends BaseApplicationEntityDef {
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new TableDef(entityDef, DataUtils.unmodifiableList(columnDefList), DataUtils.unmodifiableList(_visibleColumnDefList),
-                    DataUtils.unmodifiableMap(filterDefMap), label, sortHistory, itemsPerPage, serialNo, sortable,
-                    headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect,
-                    nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
+            return new TableDef(entityDef, DataUtils.unmodifiableList(columnDefList),
+                    DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableMap(filterDefMap), label,
+                    sortHistory, itemsPerPage, serialNo, sortable, headerToUpperCase, headerCenterAlign, basicSearch,
+                    totalSummary, headerless, multiSelect, nonConforming, fixedRows, limitSelectToColumns, nameParts,
+                    description, id, version);
         }
     }
 

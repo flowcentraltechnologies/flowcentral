@@ -550,6 +550,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-table .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
 .fc-table .classic .mselh {width: 32px;background-color: #e3e7ea;}
+.fc-table .link-right {display:block;text-align:right;}
 
 .fc-beantable {}
 .fc-beantable .table .mseld {background-color: transparent;}
