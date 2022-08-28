@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.MessageType;
 
 /**
@@ -36,11 +37,15 @@ public class FormValidationErrors {
     private Map<String, String> invalidFields;
 
     private List<FormMessage> validationErrors;
-    
+
+    private int hiddenErrors;
+
+    private boolean hidden;
+
     public void addValidationError(String message) {
         addValidationError(new FormMessage(MessageType.ERROR, message));
     }
-    
+
     public void addLocalValidationError(String message) {
         addValidationError(new FormMessage(MessageType.ERROR, message, true));
     }
@@ -63,13 +68,34 @@ public class FormValidationErrors {
 
     public void merge(List<FormValidationErrors> errors) {
         if (errors != null) {
-            for (FormValidationErrors error: errors) {
+            for (FormValidationErrors error : errors) {
                 merge(error);
             }
         }
     }
 
+    public FormValidationErrors hide() {
+        FormValidationErrors errors = new FormValidationErrors();
+        errors.invalidFields = invalidFields;
+        errors.validationErrors = validationErrors;
+        errors.hidden = true;
+        return errors;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
     public void merge(FormValidationErrors errors) {
+        if (errors.isHidden()) {
+            if (errors.invalidFields != null || errors.validationErrors != null) {
+                hiddenErrors++;
+            }
+            return;
+        }
+
+        hiddenErrors += errors.hiddenErrors;
+        
         if (errors.invalidFields != null) {
             if (invalidFields == null) {
                 invalidFields = new HashMap<String, String>();
@@ -77,13 +103,13 @@ public class FormValidationErrors {
 
             invalidFields.putAll(errors.invalidFields);
         }
-        
+
         if (errors.validationErrors != null) {
             if (validationErrors == null) {
                 validationErrors = new ArrayList<FormMessage>();
             }
 
-            for(FormMessage formMessage: errors.validationErrors) {
+            for (FormMessage formMessage : errors.validationErrors) {
                 if (!formMessage.isLocal()) {
                     validationErrors.add(formMessage);
                 }
@@ -92,13 +118,17 @@ public class FormValidationErrors {
     }
 
     public void clearValidationErrors() {
+        hiddenErrors = 0;
         invalidFields = null;
         validationErrors = null;
     }
 
-
     public boolean isWithFormErrors() {
-        return !DataUtils.isBlank(invalidFields) || !DataUtils.isBlank(validationErrors);
+        return isWithHiddenErrors() || isWithFieldErrors() || isWithValidationErrors();
+    }
+
+    public boolean isWithHiddenErrors() {
+        return hiddenErrors > 0;
     }
 
     public boolean isWithFieldErrors() {
@@ -135,7 +165,7 @@ public class FormValidationErrors {
 
     @Override
     public String toString() {
-        return "FormValidationErrors [invalidFields=" + invalidFields + ", validationErrors=" + validationErrors + "]";
+        return StringUtils.toXmlString(this);
     }
-    
+
 }
