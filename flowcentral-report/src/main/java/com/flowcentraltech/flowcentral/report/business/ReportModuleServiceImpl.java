@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -109,6 +110,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     private ApplicationModuleService applicationModuleService;
 
     @Configurable
+    private AppletUtilities appletUtilities;
+
+    @Configurable
     private ReportServer reportServer;
 
     @Configurable
@@ -121,24 +125,28 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         this.themeManager = themeManager;
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
 
-    public void setReportServer(ReportServer reportServer) {
+    public final  void setReportServer(ReportServer reportServer) {
         this.reportServer = reportServer;
     }
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
     }
 
-    public void setSpecialParamProvider(SpecialParamProvider specialParamProvider) {
+    public final void setSpecialParamProvider(SpecialParamProvider specialParamProvider) {
         this.specialParamProvider = specialParamProvider;
+    }
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -539,7 +547,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         if (reportConfiguration.getFilter() != null) {
             Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
-            FilterDef filterDef = InputWidgetUtils.getFilterDef(reportConfiguration.getFilter());
+            FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, reportConfiguration.getFilter());
             ReportFilterOptions reportFilterOptions = createReportFilterOptions(sqlEntityInfo, null, parameters,
                     filterDef.getFilterRestrictionDefList(), new IndexInfo());
             reportOptions.setFilterOptions(reportFilterOptions);

@@ -19,15 +19,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.configuration.constants.ChildListActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.filter.ObjectFilter;
-import com.tcdng.unify.core.util.CriteriaUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -39,11 +38,9 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class FilterDef implements Listable {
 
+    private AppletUtilities au;
+
     private List<FilterRestrictionDef> filterRestrictionDefList;
-
-    private Restriction restriction;
-
-    private ObjectFilter objectFilter;
 
     private String name;
 
@@ -52,10 +49,11 @@ public class FilterDef implements Listable {
     private String preferredForm;
 
     private String preferredChildListApplet;
-    
+
     private ChildListActionType childListActionType;
-   
+
     public FilterDef(FilterDef _filterDef) {
+        this.au = _filterDef.au;
         this.filterRestrictionDefList = _filterDef.filterRestrictionDefList;
         this.name = _filterDef.name;
         this.description = _filterDef.description;
@@ -64,8 +62,10 @@ public class FilterDef implements Listable {
         this.childListActionType = _filterDef.childListActionType;
     }
 
-    private FilterDef(List<FilterRestrictionDef> filterRestrictionDefList, String name, String description,
-            String preferredForm, String preferredChildListApplet, ChildListActionType childListActionType) {
+    private FilterDef(AppletUtilities au, List<FilterRestrictionDef> filterRestrictionDefList, String name,
+            String description, String preferredForm, String preferredChildListApplet,
+            ChildListActionType childListActionType) {
+        this.au = au;
         this.filterRestrictionDefList = filterRestrictionDefList;
         this.name = name;
         this.description = description;
@@ -107,7 +107,7 @@ public class FilterDef implements Listable {
     public boolean isShowPopupChildListAction() {
         return childListActionType != null && childListActionType.isShowPopup();
     }
-    
+
     public boolean isShowMultiSelectChildListAction() {
         return ChildListActionType.SHOW_MULTISELECT.equals(childListActionType);
     }
@@ -119,7 +119,7 @@ public class FilterDef implements Listable {
     public boolean isHideAddWidgetChildListAction() {
         return ChildListActionType.HIDE_ADDWIDGET.equals(childListActionType);
     }
-    
+
     public boolean isWithPreferredForm() {
         return !StringUtils.isBlank(preferredForm);
     }
@@ -132,49 +132,25 @@ public class FilterDef implements Listable {
         return filterRestrictionDefList;
     }
 
-    public Restriction getRestriction(EntityDef entityDef, SpecialParamProvider specialParamProvider, Date now)
-            throws UnifyException {
-        if (restriction == null) {
-            synchronized (filterRestrictionDefList) {
-                if (restriction == null) {
-                    restriction = CriteriaUtils.unmodifiableRestriction(
-                            InputWidgetUtils.getRestriction(entityDef, this, specialParamProvider, now));
-                }
-            }
-        }
-
-        return restriction;
+    public Restriction getRestriction(EntityDef entityDef, Date now) throws UnifyException {
+        return InputWidgetUtils.getRestriction(entityDef, this, au.getSpecialParamProvider(), now);
     }
 
-    public ObjectFilter getObjectFilter(EntityDef entityDef, SpecialParamProvider specialParamProvider, Date now)
-            throws UnifyException {
-        if (objectFilter == null) {
-            synchronized (filterRestrictionDefList) {
-                if (objectFilter == null) {
-                    objectFilter = new ObjectFilter(getRestriction(entityDef, specialParamProvider, now));
-                }
-            }
-        }
-
-        return objectFilter;
+    public ObjectFilter getObjectFilter(EntityDef entityDef, Date now) throws UnifyException {
+        return new ObjectFilter(getRestriction(entityDef, now));
     }
 
     public boolean isBlank() {
         return filterRestrictionDefList == null || filterRestrictionDefList.isEmpty();
     }
 
-    @Override
-    public String toString() {
-        return "FilterDef [filterRestrictionDefList=" + filterRestrictionDefList + ", restriction=" + restriction
-                + ", objectFilter=" + objectFilter + ", name=" + name + ", description=" + description
-                + ", preferredForm=" + preferredForm + ", preferredChildListApplet=" + preferredChildListApplet + "]";
-    }
-
-    public static Builder newBuilder() {
-        return new Builder();
+    public static Builder newBuilder(AppletUtilities au) {
+        return new Builder(au);
     }
 
     public static class Builder {
+
+        private AppletUtilities au;
 
         private String name;
 
@@ -183,13 +159,14 @@ public class FilterDef implements Listable {
         private String preferredForm;
 
         private String preferredChildListApplet;
-        
+
         private ChildListActionType childListActionType;
-        
+
         private List<FilterRestrictionDef> filterRestrictionDefList;
 
-        public Builder() {
-            this.filterRestrictionDefList = new ArrayList<FilterRestrictionDef>();
+        public Builder(AppletUtilities au) {
+            this.au = au;
+             this.filterRestrictionDefList = new ArrayList<FilterRestrictionDef>();
         }
 
         public Builder name(String name) {
@@ -224,7 +201,7 @@ public class FilterDef implements Listable {
         }
 
         public FilterDef build() throws UnifyException {
-            return new FilterDef(DataUtils.unmodifiableList(filterRestrictionDefList), name, description,
+            return new FilterDef(au, DataUtils.unmodifiableList(filterRestrictionDefList), name, description,
                     preferredForm, preferredChildListApplet, childListActionType);
         }
     }

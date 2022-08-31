@@ -23,6 +23,8 @@ package com.flowcentraltech.flowcentral.application.data;
  */
 public class FormRelatedListDef {
 
+    private FilterGroupDef filterGroupDef;
+
     private String name;
 
     private String description;
@@ -31,18 +33,20 @@ public class FormRelatedListDef {
 
     private String applet;
 
-    private String filter;
-
     private String editAction;
 
-    public FormRelatedListDef(String name, String description, String label, String applet, String filter,
+    public FormRelatedListDef(FilterGroupDef filterGroupDef, String name, String description, String label, String applet,
             String editAction) {
+        this.filterGroupDef = filterGroupDef;
         this.description = description;
         this.name = name;
         this.label = label;
         this.applet = applet;
-        this.filter = filter;
         this.editAction = editAction;
+    }
+
+    public FilterGroupDef getFilterGroupDef() {
+        return filterGroupDef;
     }
 
     public String getName() {
@@ -61,18 +65,8 @@ public class FormRelatedListDef {
         return applet;
     }
 
-    public String getFilter() {
-        return filter;
-    }
-
     public String getEditAction() {
         return editAction;
-    }
-
-    @Override
-    public String toString() {
-        return "FormRelatedListDef [name=" + name + ", description=" + description + ", label=" + label + ", applet="
-                + applet + ", editAction=" + editAction + "]";
     }
 
 }

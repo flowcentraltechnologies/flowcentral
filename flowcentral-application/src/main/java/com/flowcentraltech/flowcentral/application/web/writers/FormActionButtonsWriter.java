@@ -24,7 +24,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormActionButtons;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.FormActionPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -71,7 +70,6 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
         final Entity inst = (Entity) formContext.getInst();
         final ValueStore formValueStore = formContext.getFormValueStore();
         final Date now = formContext.au().getNow();
-        final SpecialParamProvider specialParamProvider = formContext.au().getSpecialParamProvider();
         final UserToken userToken = getUserToken();
         final FormMode formMode = formActionButtons.getValue(FormMode.class, "formMode");
         final Set<String> showActionSet = (Set<String>) formActionButtons.getWriteWork()
@@ -82,7 +80,7 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
             if (formActionDef.isButtonType()) {
                 if (formActionDef.isWithCondition()) {
                     ObjectFilter filter = formActionDef.getOnCondition().getObjectFilter(formContext.getEntityDef(),
-                            specialParamProvider, now);
+                            now);
                     if (!filter.match(formValueStore)) {
                         continue;
                     }

@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
@@ -537,7 +536,6 @@ public class TableWriter extends AbstractControlWriter {
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final boolean isCrudMode = tableWidget.isCrudMode();
                 final Date now = table.au().getNow();
-                final SpecialParamProvider specialParamProvider = table.au().getSpecialParamProvider();
                 final String even = isRowAction ? "even pnt" : "even";
                 final String odd = isRowAction ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
@@ -580,7 +578,7 @@ public class TableWriter extends AbstractControlWriter {
                     if (rowColors) {
                         for (TableFilterDef tableFilterDef : tableDef.getRowColorFilterList()) {
                             if (tableFilterDef.getFilterDef()
-                                    .getObjectFilter(tableDef.getEntityDef(), specialParamProvider, now)
+                                    .getObjectFilter(tableDef.getEntityDef(), now)
                                     .match(valueStore)) {
                                 writer.write(" style=\"background-color:");
                                 writer.write(tableFilterDef.getRowColor());

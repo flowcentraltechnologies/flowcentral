@@ -234,9 +234,8 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                                 }
                             }
 
-                            if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                                    .getObjectFilter(entityDef, ctx.getAppletContext().specialParamProvider(), now)
-                                    .match(inst)) {
+                            if (policyDef.isErrorCondition()
+                                    && policyDef.getErrorCondition().getObjectFilter(entityDef, now).match(inst)) {
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
@@ -249,7 +248,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
     @Override
     public ReviewResult reviewFormContext(FormContext ctx, EvaluationMode evaluationMode, FormReviewType reviewType)
             throws UnifyException {
-        ReviewResult.Builder rrb = ReviewResult.newBuilder();        
+        ReviewResult.Builder rrb = ReviewResult.newBuilder();
         ctx.clearReviewErrors();
         if (ctx.isWithReviewPolicies(reviewType)) {
             final FormDef formDef = ctx.getFormDef();
@@ -275,14 +274,13 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                     }
                 }
 
-                if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                        .getObjectFilter(entityDef, ctx.getAppletContext().specialParamProvider(), now)
-                        .match(inst)) {
+                if (policyDef.isErrorCondition()
+                        && policyDef.getErrorCondition().getObjectFilter(entityDef, now).match(inst)) {
                     ctx.addReviewError(rrb, policyDef);
                 }
             }
         }
-        
+
         return rrb.build();
     }
 

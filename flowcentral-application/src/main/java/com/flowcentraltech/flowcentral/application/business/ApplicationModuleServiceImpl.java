@@ -53,6 +53,8 @@ import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
@@ -314,6 +316,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private ListManager listManager;
 
     @Configurable
+    private AppletUtilities appletUtilities;
+
+    @Configurable
     private TwoWayStringCryptograph twoWayStringCryptograph;
 
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
@@ -393,7 +398,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     for (AppAppletFilter appAppletFilter : appApplet.getFilterList()) {
-                        adb.addFilterDef(InputWidgetUtils.getFilterDef(appAppletFilter.getName(),
+                        adb.addFilterDef(InputWidgetUtils.getFilterDef(appletUtilities, appAppletFilter.getName(),
                                 appAppletFilter.getDescription(), appAppletFilter.getPreferredForm(),
                                 appAppletFilter.getPreferredChildListApplet(), appAppletFilter.getChildListActionType(),
                                 appAppletFilter.getFilter()));
@@ -439,9 +444,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             {
                 @Override
                 protected boolean stale(String longName, SuggestionTypeDef suggestionTypeDef) throws Exception {
-                    return environment().value(long.class, "versionNo",
-                            new AppSuggestionTypeQuery().id(suggestionTypeDef.getId())) > suggestionTypeDef
-                                    .getVersion();
+                    return environment().value(long.class, "versionNo", new AppSuggestionTypeQuery()
+                            .id(suggestionTypeDef.getId())) > suggestionTypeDef.getVersion();
                 }
 
                 @Override
@@ -739,7 +743,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected RefDef create(String longName, Object... arg1) throws Exception {
                     AppRef appRef = getApplicationEntity(AppRef.class, longName);
-                    FilterDef filterDef = InputWidgetUtils.getFilterDef(appRef.getFilter());
+                    FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appRef.getFilter());
                     List<StringToken> listFormat = !StringUtils.isBlank(appRef.getListFormat())
                             ? StringUtils.breakdownParameterizedString(appRef.getListFormat())
                             : null;
@@ -792,7 +796,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appTable.getVersionNo());
 
                     for (AppTableFilter appTableFilter : appTable.getFilterList()) {
-                        FilterDef _filterDef = InputWidgetUtils.getFilterDef(appTableFilter.getName(),
+                        FilterDef _filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appTableFilter.getName(),
                                 appTableFilter.getDescription(), null, null, null, appTableFilter.getFilter());
                         tdb.addFilterDef(new TableFilterDef(_filterDef, appTableFilter.getRowColor()));
                     }
@@ -858,9 +862,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (FormElementType.TAB.equals(appFormElement.getType())) {
                             tabIndex++;
                             sectionIndex = -1;
-                            fdb.addFormTab(appFormElement.getTabContentType(), appFormElement.getElementName(),
-                                    appFormElement.getLabel(), appFormElement.getTabApplet(),
-                                    appFormElement.getTabReference(), appFormElement.getFilter(),
+                            FilterGroupDef filterGroupDef = getFilterGroupDef(appFormElement.getTabApplet(),
+                                    appFormElement.getFilter());
+                            fdb.addFormTab(appFormElement.getTabContentType(), filterGroupDef,
+                                    appFormElement.getElementName(), appFormElement.getLabel(),
+                                    appFormElement.getTabApplet(), appFormElement.getTabReference(),
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditFixedRows(), appFormElement.isIgnoreParentCondition(),
                                     appFormElement.isShowSearch(), appFormElement.isVisible(),
@@ -914,7 +920,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     fdb.titleFormat(titleFormat);
 
                     for (AppFormFilter appFormFilter : appForm.getFilterList()) {
-                        fdb.addFilterDef(InputWidgetUtils.getFilterDef(appFormFilter.getName(),
+                        fdb.addFilterDef(InputWidgetUtils.getFilterDef(appletUtilities, appFormFilter.getName(),
                                 appFormFilter.getDescription(), null, null, null, appFormFilter.getFilter()));
                     }
 
@@ -931,13 +937,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 appFormAction.getStyleClass(), appFormAction.getPolicy(), appFormAction.getOrderIndex(),
                                 appFormAction.isShowOnCreate(), appFormAction.isShowOnMaintain(),
                                 appFormAction.isValidateForm(),
-                                InputWidgetUtils.getFilterDef(appFormAction.getOnCondition()));
+                                InputWidgetUtils.getFilterDef(appletUtilities, appFormAction.getOnCondition()));
                     }
 
                     for (AppFormRelatedList appFormRelatedList : appForm.getRelatedList()) {
-                        fdb.addRelatedList(appFormRelatedList.getName(), appFormRelatedList.getDescription(),
-                                appFormRelatedList.getLabel(), appFormRelatedList.getApplet(),
-                                appFormRelatedList.getFilter(), appFormRelatedList.getEditAction());
+                        FilterGroupDef _filterGroupDef = getFilterGroupDef(appFormRelatedList.getApplet(),
+                                appFormRelatedList.getFilter());
+                        fdb.addRelatedList(_filterGroupDef, appFormRelatedList.getName(),
+                                appFormRelatedList.getDescription(), appFormRelatedList.getLabel(),
+                                appFormRelatedList.getApplet(), appFormRelatedList.getEditAction());
                     }
 
                     for (AppFormStatePolicy appFormStatePolicy : appForm.getFieldStateList()) {
@@ -951,7 +959,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                         fdb.addFormStatePolicy(appFormStatePolicy.getName(), appFormStatePolicy.getDescription(),
                                 appFormStatePolicy.getType(),
-                                InputWidgetUtils.getFilterDef(appFormStatePolicy.getOnCondition()), ssdb.build(),
+                                InputWidgetUtils.getFilterDef(appletUtilities, appFormStatePolicy.getOnCondition()),
+                                ssdb.build(),
                                 InputWidgetUtils.getSetValuesDef(appFormStatePolicy.getValueGenerator(),
                                         appFormStatePolicy.getSetValues()),
                                 DataUtils.convert(List.class, String.class, appFormStatePolicy.getTrigger(), null));
@@ -974,8 +983,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         }
 
                         fdb.addFormWidgetRulesPolicy(appFormWidgetRulesPolicy.getName(),
-                                appFormWidgetRulesPolicy.getDescription(),
-                                InputWidgetUtils.getFilterDef(appFormWidgetRulesPolicy.getOnCondition()),
+                                appFormWidgetRulesPolicy.getDescription(), InputWidgetUtils
+                                        .getFilterDef(appletUtilities, appFormWidgetRulesPolicy.getOnCondition()),
                                 widgetRulesDef, ruleEditors);
                     }
 
@@ -988,7 +997,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     for (AppFormValidationPolicy appFormValidationPolicy : appForm.getFormValidationList()) {
                         fdb.addFormValidationPolicy(
-                                InputWidgetUtils.getFilterDef(appFormValidationPolicy.getErrorCondition()),
+                                InputWidgetUtils.getFilterDef(appletUtilities,
+                                        appFormValidationPolicy.getErrorCondition()),
                                 appFormValidationPolicy.getName(), appFormValidationPolicy.getDescription(),
                                 appFormValidationPolicy.getMessage(), appFormValidationPolicy.getErrorMatcher(),
                                 DataUtils.convert(List.class, String.class, appFormValidationPolicy.getTarget(), null));
@@ -998,7 +1008,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         fdb.addFormReviewPolicy(
                                 DataUtils.convert(List.class, FormReviewType.class, appFormReviewPolicy.getFormEvents(),
                                         null),
-                                InputWidgetUtils.getFilterDef(appFormReviewPolicy.getErrorCondition()),
+                                InputWidgetUtils.getFilterDef(appletUtilities, appFormReviewPolicy.getErrorCondition()),
                                 appFormReviewPolicy.getName(), appFormReviewPolicy.getDescription(),
                                 appFormReviewPolicy.getMessageType(), appFormReviewPolicy.getMessage(),
                                 appFormReviewPolicy.getErrorMatcher(),
@@ -1016,9 +1026,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected boolean stale(String longName, AssignmentPageDef assignmentPageDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new AppAssignmentPageQuery().id(assignmentPageDef.getId())) > assignmentPageDef
-                                    .getVersion());
+                    return (environment().value(long.class, "versionNo", new AppAssignmentPageQuery()
+                            .id(assignmentPageDef.getId())) > assignmentPageDef.getVersion());
                 }
 
                 @Override
@@ -1131,8 +1140,45 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         this.listManager = listManager;
     }
 
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
+    }
+
     public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
         this.twoWayStringCryptograph = twoWayStringCryptograph;
+    }
+
+    @Override
+    public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
+        if (!StringUtils.isBlank(appletName)) {
+            AppletDef _appletDef = getAppletDef(appletName);
+            EntityDef _entityDef = getEntityDef(_appletDef.getEntity());
+            FilterGroupDef.Builder fgdb = FilterGroupDef.newBuilder(_entityDef);
+            if (!StringUtils.isBlank(tabFilter)) {
+                fgdb.addFilter(FilterType.TAB, _appletDef.getFilterDef(tabFilter));
+            }
+
+            String baseCondition = _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION);
+            if (!StringUtils.isBlank(baseCondition)) {
+                fgdb.addFilter(FilterType.BASE, _appletDef.getFilterDef(baseCondition));
+            }
+
+            String updateCondition = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+            if (!StringUtils.isBlank(updateCondition)) {
+                fgdb.addFilter(FilterType.MAINTAIN_UPDATE, _appletDef.getFilterDef(updateCondition));
+            }
+
+            String deleteCondition = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
+            if (!StringUtils.isBlank(deleteCondition)) {
+                fgdb.addFilter(FilterType.MAINTAIN_DELETE, _appletDef.getFilterDef(deleteCondition));
+            }
+
+            return fgdb.build();
+        }
+
+        return null;
     }
 
     @Override
@@ -2020,7 +2066,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId)
             throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return InputWidgetUtils.getFilterDef(environment().find(
+        return InputWidgetUtils.getFilterDef(appletUtilities, environment().find(
                 new AppFilterQuery().category(category).entity(entityDef.getTableName()).entityInstId(ownerInstId)));
     }
 
@@ -3652,8 +3698,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             AppTableColumn appTableColumn = new AppTableColumn();
             appTableColumn.setField(tableColumnConfig.getField());
             appTableColumn.setLabel(resolveApplicationMessage(tableColumnConfig.getLabel()));
-            appTableColumn.setRenderWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                    tableColumnConfig.getRenderWidget()));
+            appTableColumn.setRenderWidget(
+                    ApplicationNameUtils.ensureLongNameReference(applicationName, tableColumnConfig.getRenderWidget()));
             appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
             appTableColumn.setOrder(tableColumnConfig.getOrder());
             appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
@@ -3906,8 +3952,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appFormElement.setType(FormElementType.FIELD);
                             appFormElement.setElementName(formFieldConfig.getName());
                             appFormElement.setLabel(resolveApplicationMessage(formFieldConfig.getLabel()));
-                            appFormElement.setInputWidget(ApplicationNameUtils
-                                    .ensureLongNameReference(applicationName, formFieldConfig.getInputWidget()));
+                            appFormElement.setInputWidget(ApplicationNameUtils.ensureLongNameReference(applicationName,
+                                    formFieldConfig.getInputWidget()));
                             appFormElement.setInputReference(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, formFieldConfig.getReference()));
                             appFormElement.setFieldColumn(formFieldConfig.getColumn());

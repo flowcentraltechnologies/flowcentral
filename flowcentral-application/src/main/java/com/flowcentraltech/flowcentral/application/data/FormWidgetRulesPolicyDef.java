@@ -18,9 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.Date;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.filter.ObjectFilter;
@@ -63,15 +61,14 @@ public class FormWidgetRulesPolicyDef implements Listable {
         return name;
     }
 
-    public boolean match(FormDef formDef, Object inst, SpecialParamProvider specialParamProvider, Date now)
-            throws UnifyException {
-        return match(formDef, new BeanValueStore(inst), specialParamProvider, now);
+    public boolean match(FormDef formDef, Object inst, Date now) throws UnifyException {
+        ObjectFilter objectFilter = onCondition != null ? onCondition.getObjectFilter(formDef.getEntityDef(), now)
+                : null;
+        return objectFilter == null || objectFilter.match(inst);
     }
 
-    public boolean match(FormDef formDef, ValueStore instValueStore, SpecialParamProvider specialParamProvider,
-            Date now) throws UnifyException {
-        ObjectFilter objectFilter = onCondition != null
-                ? onCondition.getObjectFilter(formDef.getEntityDef(), specialParamProvider, now)
+    public boolean match(FormDef formDef, ValueStore instValueStore, Date now) throws UnifyException {
+        ObjectFilter objectFilter = onCondition != null ? onCondition.getObjectFilter(formDef.getEntityDef(), now)
                 : null;
         return objectFilter == null || objectFilter.match(instValueStore);
     }

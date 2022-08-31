@@ -49,7 +49,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     private String addCaption;
 
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
-        this.table = new BeanTable(au, tableDef, BeanTable.ENTRY_ENABLED);
+        this.table = new BeanTable(au, tableDef, null, BeanTable.ENTRY_ENABLED);
         this.entryClass = entryClass;
         this.errors = new FormValidationErrors();
     }

@@ -88,7 +88,7 @@ public class EntityFilter extends AbstractPanelFormBinding {
     public void save() throws UnifyException {
         if (filter != null) {
             getAppletCtx().au().saveFilterDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
-                    ownerInstId, filter.getFilterDef());
+                    ownerInstId, filter.getFilterDef(getAppletCtx().au()));
         }
     }
 

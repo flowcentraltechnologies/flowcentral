@@ -125,7 +125,7 @@
 !ui-postcommand:showAttachmentAct command:showFormFileAttachments
 !ui-postcommand:navBackAct command:navBackToPrevious
 !ui-postcommand:switchOnChangeAct command:formSwitchOnChange components:$c{formPanel}
-	refresh:$c{formPanel.formBodyPanel}
+	refresh:$c{formPanel.headerBar formPanel.formBodyPanel}
 !ui-postcommand:crudSwitchOnChangeAct command:crudSwitchOnChange components:$c{entityCrudPanel}
 	refresh:$c{entityCrudPanel.crudEntityCrudPanel}
 !ui-postcommand:assnSwitchOnChangeAct command:assignSwitchOnChange components:$c{assignmentPanel}

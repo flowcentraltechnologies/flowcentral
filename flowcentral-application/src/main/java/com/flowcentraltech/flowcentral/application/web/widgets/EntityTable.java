@@ -21,6 +21,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
@@ -49,8 +50,8 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
 
     private boolean limitSelectToColumns;
 
-    public EntityTable(AppletUtilities au, TableDef tableDef) {
-        super(au, tableDef, DEFAULT_TABLE_ORDER, 0);
+    public EntityTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef) {
+        super(au, tableDef, filterGroupDef, DEFAULT_TABLE_ORDER, 0);
         this.setFixedRows(tableDef.isFixedRows());
         this.limitSelectToColumns = true;
         this.saveGlobalTableQuickFilterPrivilege = PrivilegeNameUtils

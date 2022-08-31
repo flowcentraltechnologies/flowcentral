@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSy
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldValidationPolicyDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -84,11 +85,11 @@ public class FormPreview {
                 int tabIndex = -1;
                 for (FormTab formTab : design.getTabs()) {
                     tabIndex++;
-                    fdb.addFormTab(TabContentType.fromName(formTab.getContentType()), formTab.getName(),
-                            formTab.getLabel(), formTab.getApplet(), formTab.getReference(), formTab.getFilter(),
-                            formTab.getEditAction(), formTab.getEditFormless(), formTab.getEditFixedRows(),
-                            formTab.isIgnoreParentCondition(), formTab.isShowSearch(), formTab.isVisible(),
-                            formTab.isEditable(), formTab.isDisabled());
+                    FilterGroupDef filterGroupDef = au.getFilterGroupDef(formTab.getApplet(), formTab.getFilter());
+                    fdb.addFormTab(TabContentType.fromName(formTab.getContentType()), filterGroupDef, formTab.getName(),
+                            formTab.getLabel(), formTab.getApplet(), formTab.getReference(), formTab.getEditAction(),
+                            formTab.getEditFormless(), formTab.getEditFixedRows(), formTab.isIgnoreParentCondition(),
+                            formTab.isShowSearch(), formTab.isVisible(), formTab.isEditable(), formTab.isDisabled());
                     int sectionIndex = -1;
                     for (FormSection formSection : formTab.getSections()) {
                         sectionIndex++;

@@ -27,7 +27,8 @@ import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
@@ -70,7 +71,7 @@ public class AssignmentPage {
 
     private final String assnEditPolicy;
 
-    private final FilterDef assgnFilter;
+    private final FilterGroupDef filterGroupDef;
 
     private final boolean fixedAssignment;
 
@@ -84,8 +85,8 @@ public class AssignmentPage {
 
     public AssignmentPage(AppletContext ctx, List<EventHandler> assnSwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, AssignmentPageDef assignmentPageDef,
-            EntityClassDef entityClassDef, Object baseId, SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String entryTable,
-            String assnEditPolicy, FilterDef assgnFilter, boolean fixedAssignment) {
+            EntityClassDef entityClassDef, Object baseId, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
+            String entryTable, String assnEditPolicy, FilterGroupDef filterGroupDef, boolean fixedAssignment) {
         this.ctx = ctx;
         this.assnSwitchOnChangeHandlers = assnSwitchOnChangeHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
@@ -96,7 +97,7 @@ public class AssignmentPage {
         this.breadCrumbs = breadCrumbs;
         this.entryTable = entryTable;
         this.assnEditPolicy = assnEditPolicy;
-        this.assgnFilter = assgnFilter;
+        this.filterGroupDef = filterGroupDef;
         this.fixedAssignment = fixedAssignment;
     }
 
@@ -177,7 +178,8 @@ public class AssignmentPage {
 
     public BeanTable getEntryBeanTable() throws UnifyException {
         if (isEntryTableMode() && entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), BeanTable.ENTRY_ENABLED);
+            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), filterGroupDef,
+                    BeanTable.ENTRY_ENABLED);
             if (!StringUtils.isBlank(assnEditPolicy)) {
                 ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, assnEditPolicy);
                 entryBeanTable.setPolicy(policy);
@@ -198,9 +200,8 @@ public class AssignmentPage {
             // Assigned list
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                     .addEquals(assignmentPageDef.getBaseField(), baseId);
-            if (assgnFilter != null) {
-                Restriction br = assgnFilter.getRestriction(entityClassDef.getEntityDef(),
-                        ctx.au().getSpecialParamProvider(), now);
+            if (filterGroupDef != null) {
+                Restriction br = filterGroupDef.getRestriction(FilterType.TAB, now);
                 query.addRestriction(br);
             }
 
@@ -234,7 +235,7 @@ public class AssignmentPage {
                     query.addRestriction(br);
                 } else if (_assignRefDef.isWithFilter()) {
                     Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
-                            null, now);
+                            now);
                     query.addRestriction(br);
                 }
 

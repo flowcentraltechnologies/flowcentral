@@ -16,9 +16,13 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -32,13 +36,13 @@ public class FormTabDef {
 
     private TabContentType contentType;
 
+    private FilterGroupDef filterGroupDef;
+
     private String name;
 
     private String label;
 
     private String applet;
-
-    private String filter;
 
     private String reference;
 
@@ -66,15 +70,15 @@ public class FormTabDef {
 
     private int listOnlyCheck;
 
-    public FormTabDef(TabContentType contentType, String name, String label, String applet, String reference,
-            String filter, String editAction, String editFormless, String editFixedRows,
-            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch, boolean visible, boolean editable,
-            boolean disabled) {
+    public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label,
+            String applet, String reference, String editAction, String editFormless, String editFixedRows,
+            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch, boolean visible,
+            boolean editable, boolean disabled) {
         this.contentType = contentType;
+        this.filterGroupDef = filterGroupDef;
         this.name = name;
         this.label = label;
         this.applet = applet;
-        this.filter = filter;
         this.reference = reference;
         this.editAction = editAction;
         this.editFormless = editFormless;
@@ -91,10 +95,10 @@ public class FormTabDef {
     public FormTabDef(FormTabDef srcFormTabDef, List<FormSectionDef> formSectionDefList) {
         this.formSectionDefList = formSectionDefList;
         this.contentType = srcFormTabDef.contentType;
+        this.filterGroupDef = srcFormTabDef.filterGroupDef;
         this.name = srcFormTabDef.name;
         this.label = srcFormTabDef.label;
         this.applet = srcFormTabDef.applet;
-        this.filter = srcFormTabDef.filter;
         this.reference = srcFormTabDef.reference;
         this.editAction = srcFormTabDef.editAction;
         this.editFormless = srcFormTabDef.editFormless;
@@ -111,6 +115,18 @@ public class FormTabDef {
         return contentType;
     }
 
+    public FilterGroupDef getFilterGroupDef() {
+        return filterGroupDef;
+    }
+
+    public boolean isWithFilterType(FilterType type) {
+        return filterGroupDef != null && filterGroupDef.isWithFilterType(type);
+    }
+
+    public Restriction getRestriction(FilterType type, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.getRestriction(type, now) : null;
+    }
+
     public String getName() {
         return name;
     }
@@ -121,10 +137,6 @@ public class FormTabDef {
 
     public String getApplet() {
         return applet;
-    }
-
-    public String getFilter() {
-        return filter;
     }
 
     public String getReference() {

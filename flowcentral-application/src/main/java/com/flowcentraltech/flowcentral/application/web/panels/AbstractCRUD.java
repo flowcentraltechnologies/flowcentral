@@ -17,9 +17,11 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -54,7 +56,11 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 
 	private final String addCaption;
 
-	private int maintainIndex;
+    private int maintainIndex;
+
+    private boolean allowUpdate;
+
+    private boolean allowDelete;
 
 	private boolean create;
 
@@ -120,7 +126,15 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 		return !table.isView();
 	}
 
-	public void enterCreate() throws UnifyException {
+	public boolean isAllowUpdate() {
+        return allowUpdate;
+    }
+
+    public boolean isAllowDelete() {
+        return allowDelete;
+    }
+
+    public void enterCreate() throws UnifyException {
 		create = true;
 		if (isEditable()) {
 			Object _inst = createObject();
@@ -137,6 +151,10 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 		if (table.isWithDisplayItems()) {
 			Object inst = table.getDisplayItem(index);
 			Object _inst = reload(inst);
+			final Date now = table.au().getNow();
+            allowUpdate = table.match(FilterType.MAINTAIN_UPDATE, _inst, now);
+            allowDelete = table.match(FilterType.MAINTAIN_DELETE, _inst, now);
+            
 			FormContext formContext = getForm().getCtx();
 			formContext.setReadOnly(table.isView());
 			formContext.setInst(_inst);

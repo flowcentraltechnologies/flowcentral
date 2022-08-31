@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormSectionDef;
@@ -37,7 +36,6 @@ import com.flowcentraltech.flowcentral.application.data.FormWidgetRulesPolicyDef
 import com.flowcentraltech.flowcentral.application.data.SetStateDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormTab;
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
 import com.flowcentraltech.flowcentral.common.data.TargetFormState;
@@ -45,6 +43,7 @@ import com.flowcentraltech.flowcentral.common.data.TargetFormWidgetStates;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.data.ValueStore;
@@ -67,6 +66,9 @@ import com.tcdng.unify.web.ui.widget.control.TextField;
 @Component("fc-miniform")
 @UplAttributes({ @UplAttribute(name = "strictRows", type = boolean.class) })
 public class MiniFormWidget extends AbstractMultiControl implements FormTriggerEvaluator {
+    
+    @Configurable
+    private AppletUtilities appletUtilities;
 
     private MiniForm oldMiniForm;
 
@@ -75,6 +77,10 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
     private Map<String, FormSection> formSections;
 
     private Map<String, FormWidget> formWidgets;
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
+    }
 
     @SuppressWarnings("unchecked")
     public MiniForm getMiniForm() throws UnifyException {
@@ -189,8 +195,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
     public void evaluateWidgetStates() throws UnifyException {
         final MiniForm form = getMiniForm();
         final FormContext ctx = form.getCtx();
-        final AppletUtilities au = (AppletUtilities) getComponent(ApplicationModuleNameConstants.APPLET_UTILITIES);
-        final Date now = au.getNow();
+        final Date now = appletUtilities.getNow();
 
         final ValueStore formValueStore = ctx.getFormValueStore();
         for (FormSection formSection : formSections.values()) {
@@ -201,14 +206,13 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
         List<FormStateRule> fieldRules = new ArrayList<FormStateRule>();
         String trigger = getTrigger();
         if (form.getScope().isMainForm()) {
-            final SpecialParamProvider specialParamProvider = au.getSpecialParamProvider();
             final FormDef formDef = ctx.getFormDef();
             boolean setValuesExecuted = false;
 
             if (formDef.isWithFormWidgetRulesPolicy()) {
                 activatedAltRules = new HashSet<String>();
                 for (FormWidgetRulesPolicyDef formWidgetRulesPolicyDef : formDef.getFormWidgetRulesPolicyDefList()) {
-                    if (formWidgetRulesPolicyDef.match(formDef, formValueStore, specialParamProvider, now)) {
+                    if (formWidgetRulesPolicyDef.match(formDef, formValueStore, now)) {
                         activatedAltRules.add(formWidgetRulesPolicyDef.getName());
                     }
                 }
@@ -243,8 +247,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                 if (formStatePolicyDef.isTriggered(trigger)) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
-                                    specialParamProvider, now)
+                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), now)
                             : null;
                     if (objectFilter == null || objectFilter.match(formValueStore)) {
                         for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
@@ -261,7 +264,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                         }
 
                         if (formStatePolicyDef.isSetValues()) {
-                            formStatePolicyDef.getSetValuesDef().apply(au, formDef.getEntityDef(), now, formValueStore,
+                            formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now, formValueStore,
                                     variables, trigger);
                             setValuesExecuted = true;
                         }
@@ -621,14 +624,14 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             FormSection formSection = formSections.get(sectionName);
             _widget = widget;
             if (!activatedAltRules.isEmpty() && !altWidgets.isEmpty()) {
-                for (Map.Entry<String, Widget> _entry: altWidgets.entrySet()) {
+                for (Map.Entry<String, Widget> _entry : altWidgets.entrySet()) {
                     if (activatedAltRules.contains(_entry.getKey())) {
                         _widget = _entry.getValue();
                         break;
                     }
                 }
             }
-            
+
             _widget.setVisible(formFieldDef.isVisible());
             _widget.setEditable(isContainerEditable() && formSection.isEditable() && formFieldDef.isEditable());
             _widget.setDisabled(formSection.isDisabled() || formFieldDef.isDisabled()

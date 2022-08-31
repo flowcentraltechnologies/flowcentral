@@ -142,9 +142,7 @@ public abstract class AbstractForm {
 
             FormDef _formDef = ctx.getFormDef();
             FilterDef _filterDef = _formDef.getFilterDef(formFilterName);
-            return _filterDef
-                    .getObjectFilter(_formDef.getEntityDef(), ctx.au().getSpecialParamProvider(), ctx.au().getNow())
-                    .match(ctx.getInst());
+            return _filterDef.getObjectFilter(_formDef.getEntityDef(), ctx.au().getNow()).match(ctx.getInst());
         }
 
         return false;

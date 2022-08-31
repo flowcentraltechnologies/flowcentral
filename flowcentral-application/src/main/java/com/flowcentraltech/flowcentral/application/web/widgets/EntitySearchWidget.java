@@ -117,7 +117,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                             .generate(_valueStore.getReader(), refDef.getFilterGeneratorRule());
                 } else {
                     br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                            specialParamProvider(), application().getNow()) : null;
+                            application().getNow()) : null;
                 }
 
                 Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());

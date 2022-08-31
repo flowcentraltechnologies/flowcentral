@@ -159,7 +159,7 @@ public class EntityTextSearchWidget extends AbstractPopupTextField {
                         .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
             } else {
                 br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                        specialParamProvider, applicationModuleService.getNow()) : null;
+                        applicationModuleService.getNow()) : null;
             }
 
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());

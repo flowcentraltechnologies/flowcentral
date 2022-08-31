@@ -39,17 +39,11 @@ import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.InputType;
-import com.tcdng.unify.core.UnifyComponentContext;
-import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.ParameterizedStringGenerator;
-import com.tcdng.unify.core.data.StringToken;
-import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Application module service master tests.
@@ -174,41 +168,7 @@ public class ApplicationModuleServiceMasterTest extends AbstractFlowCentralTest 
         FilterDef filterDef = appletDef.getFilterDef("expensiveShirt");
         assertNotNull(filterDef);
 
-        Restriction restriction = filterDef.getRestriction(entityDef, new SpecialParamProvider() {
-
-            @Override
-            public String getName() {
-                return null;
-            }
-
-            @Override
-            public UnifyComponentContext getUnifyComponentContext() throws UnifyException {
-                return null;
-            }
-
-            @Override
-            public void initialize(UnifyComponentContext arg0) throws UnifyException {
-            }
-
-            @Override
-            public boolean isInitialized() {
-                return false;
-            }
-
-            @Override
-            public void terminate() throws UnifyException {
-            }
-
-            @Override
-            public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore,
-                    ValueStore generatorValueStore, List<StringToken> tokenList) throws UnifyException {
-                return null;
-            }
-
-            @Override
-            public Object resolveSpecialParameter(String param) throws UnifyException {
-                return param;
-            }}, au.getNow());
+        Restriction restriction = filterDef.getRestriction(entityDef, au.getNow());
         assertNotNull(restriction);
         String filterTxt = au.translate(restriction, entityDef);
         assertEquals("Category == 'Shirts' AND (Cost Price > 30.0 OR Sales Price > 50.0)", filterTxt);

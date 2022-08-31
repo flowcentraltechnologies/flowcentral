@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -81,6 +82,9 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Configurable
     private SystemModuleService systemModuleService;
+
+    @Configurable
+    private AppletUtilities appletUtilities;
 
     private final FactoryMap<String, AppletDef> appletDefMap;
 
@@ -160,9 +164,9 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION,
                                     "studioentity-deletecondition");
 
-                            adb.addFilterDef(InputWidgetUtils.getFilterDef("studioentity-updatecondition", "",
+                            adb.addFilterDef(InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-updatecondition", "",
                                     "", null, null, entityFormUpdateCondition));
-                            adb.addFilterDef(InputWidgetUtils.getFilterDef("studioentity-deletecondition", "",
+                            adb.addFilterDef(InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-deletecondition", "",
                                     "", null,null,  entityFormDeleteCondition));
 
                             adb.openPath(
@@ -189,6 +193,10 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
+    }
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override

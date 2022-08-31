@@ -75,7 +75,7 @@ public class EntitySelect {
 
     public EntitySelect(AppletUtilities au, TableDef tableDef, String searchFieldName, String fieldNameA,
             String fieldNameB, ValueStore formValueStore, String selectHandlerName, int limit) {
-        this.entityTable = new EntityTable(au, tableDef);
+        this.entityTable = new EntityTable(au, tableDef, null);
         this.entityTable.setOrder(new Order().add(searchFieldName));
         this.entityTable.setLimit(limit);
         this.fieldName = searchFieldName;
@@ -206,7 +206,7 @@ public class EntitySelect {
         TableDef _eTableDef = entityTable.getTableDef();
         TableDef _nTableDef = entityTable.au().getTableDef(_eTableDef.getLongName());
         if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
-            entityTable = new EntityTable(entityTable.au(), _nTableDef);
+            entityTable = new EntityTable(entityTable.au(), _nTableDef, null);
             applyFilterToSearch();
         }
     }
