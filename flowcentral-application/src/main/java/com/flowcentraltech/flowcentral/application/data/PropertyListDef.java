@@ -130,7 +130,7 @@ public class PropertyListDef extends BaseApplicationEntityDef {
                         FormColumnsType.TYPE_1, true, true, false));
             }
 
-            FormTabDef formTabDef = new FormTabDef(TabContentType.MINIFORM, "details", description, null, null, null,
+            FormTabDef formTabDef = new FormTabDef(TabContentType.MINIFORM, null, "details", description, null, null,
                     null, null, null, formSectionDefList, false, false, true, true, false);
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);

@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormRelatedListDef;
@@ -571,6 +572,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 ? getPageSectorIconByApplication(applet.getRootAppletDef().getApplicationName())
                 : null;
         final HeaderWithTabsForm form = new HeaderWithTabsForm(formContext, sectorIcon, breadCrumbs);
+        final Date now = getNow();
         form.setBeanTitle(beanTitle);
         form.setFormMode(formMode);
         if (applet != null && applet.isCollaboration() && applet.isNoForm()) {
@@ -652,7 +654,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef, editAction,
                                 formTabDef.isShowSearch() ? EntitySearch.ENABLE_ALL
-                                        : EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH, formTabDef.isIgnoreParentCondition());
+                                        : EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH,
+                                formTabDef.isIgnoreParentCondition());
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                             _entitySearch.setBaseFilter(_appletDef.getFilterDef(
@@ -661,15 +664,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         }
 
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
-                        Restriction tabRestriction = formTabDef.getFilter() != null
-                                ? _appletDef.getFilterDef(formTabDef.getFilter()).getRestriction(
-                                        _entitySearch.getEntityDef(), specialParamProvider, getNow())
-                                : null;
+                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setChildTabIndex(tabIndex);
                         _entitySearch.setRelatedList(formTabDef.getApplet());
-//                        _entitySearch.setOrder(ORDER_BY_ID);
                         _entitySearch.setBaseRestriction(childRestriction, specialParamProvider);
                         _entitySearch.applyFilterToSearch();
 
@@ -687,7 +686,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntityFilter _entityFilter = constructEntityFilter(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL, formTabDef.isIgnoreParentCondition());
+                                formTabDef.getName(), formDef.getEntityDef(), EntityFilter.ENABLE_ALL,
+                                formTabDef.isIgnoreParentCondition());
                         _entityFilter.setListType(categoryType.listType());
                         _entityFilter.setParamList(categoryType.paramList());
                         _entityFilter.setCategory(categoryType.category());
@@ -744,7 +744,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 .fromName(formTabDef.getReference());
                         EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
                         EntitySetValues _entitySetValues = constructEntitySetValues(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), formDef.getEntityDef(), EntitySetValues.ENABLE_ALL, formTabDef.isIgnoreParentCondition());
+                                formTabDef.getName(), formDef.getEntityDef(), EntitySetValues.ENABLE_ALL,
+                                formTabDef.isIgnoreParentCondition());
                         _entitySetValues.setCategory(categoryType.category());
                         _entitySetValues.setOwnerInstId((Long) inst.getId());
                         _entitySetValues.load(_entityDef);
@@ -889,6 +890,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final EntityDef entityDef = formDef.getEntityDef();
         final FormContext formContext = form.getCtx();
         final AbstractEntityFormApplet applet = (AbstractEntityFormApplet) formContext.getAppletContext().applet();
+        final Date now = getNow();
         logDebug("Updating header with tabs form for [{0}] using form definition [{1}]...", inst.getId(),
                 formDef.getLongName());
         boolean isCreateMode = form.getFormMode().isCreate();
@@ -957,12 +959,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         final boolean newButtonVisible = !hideAddActionButton(form, applet.getFormAppletDef(),
                                 formTabDef.getApplet());
                         EntitySearch _entitySearch = (EntitySearch) tabSheetItem.getValObject();
-                        AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
-                        Restriction tabRestriction = formTabDef.getFilter() != null
-                                ? _appletDef.getFilterDef(formTabDef.getFilter()).getRestriction(
-                                        _entitySearch.getEntityDef(), specialParamProvider, getNow())
-                                : null;
+                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setNewButtonVisible(newButtonVisible);
@@ -1222,9 +1220,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         } else {
             EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(refDef.getEntity());
 
-            br = refDef.isWithFilter()
-                    ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(), null,
-                            applicationModuleService.getNow())
+            br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(), getNow())
                     : null;
         }
 
@@ -1298,8 +1294,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         String condFilterName = appletDef.getPropValue(String.class, conditionPropName, null);
         if (condFilterName != null) {
             return appletDef.getFilterDef(condFilterName)
-                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(), specialParamProvider,
-                            getNow())
+                    .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(), getNow())
                     .match(form.getFormBean());
         }
 
@@ -1320,13 +1315,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             throws UnifyException {
         List<FilterDef> filterList = _currFormAppletDef.getChildListFilterDefs(childAppletName);
         if (!filterList.isEmpty()) {
+            final Date now = getNow();
             EntityDef entityDef = form.getFormDef().getEntityDef();
             ValueStore formValueStore = form.getCtx().getFormValueStore();
-            SpecialParamProvider specialParamProvider = form.getCtx().getAppletContext().specialParamProvider();
-            Date now = getNow();
             for (FilterDef filterDef : filterList) {
                 if (filterDef.isHideAddWidgetChildListAction()) {
-                    ObjectFilter filter = filterDef.getObjectFilter(entityDef, specialParamProvider, now);
+                    ObjectFilter filter = filterDef.getObjectFilter(entityDef, now);
                     if (filter.match(formValueStore)) {
                         return true;
                     }
@@ -1341,6 +1335,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public void clearUnsatisfactoryRefs(FormTabDef _formTabDef, EntityDef entityDef, ValueStoreReader _reader,
             Entity inst) throws UnifyException {
+        final Date now = getNow();
         int depth = 4;
         boolean change = true;
         while ((--depth >= 0) && change) {
@@ -1355,8 +1350,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator())).generate(_reader,
                                 refDef.getFilterGeneratorRule());
                     } else {
-                        br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(_entityClassDef.getEntityDef(),
-                                getSpecialParamProvider(), getNow()) : null;
+                        br = refDef.isWithFilter()
+                                ? refDef.getFilter().getRestriction(_entityClassDef.getEntityDef(), now)
+                                : null;
                     }
 
                     Query<? extends Entity> query = br != null
@@ -1593,8 +1589,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final Map<String, Object> variables = Collections.emptyMap();
         for (FormStatePolicyDef formStatePolicyDef : _formDef.getOnDelayedSetValuesFormStatePolicyDefList()) {
             ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                    ? formStatePolicyDef.getOnCondition().getObjectFilter(_formDef.getEntityDef(),
-                            getSpecialParamProvider(), now)
+                    ? formStatePolicyDef.getOnCondition().getObjectFilter(_formDef.getEntityDef(), now)
                     : null;
             if (objectFilter == null || objectFilter.match(_formValueStore)) {
                 if (formStatePolicyDef.isSetValues()) {

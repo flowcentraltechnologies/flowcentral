@@ -49,6 +49,9 @@ public class ApplicationQueryEncoder extends AbstractUnifyComponent implements Q
     @Configurable
     private SpecialParamProvider specialParamProvider;
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
@@ -57,9 +60,13 @@ public class ApplicationQueryEncoder extends AbstractUnifyComponent implements Q
         this.specialParamProvider = specialParamProvider;
     }
 
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
+    }
+
     @Override
     public String encodeQueryFilter(Query<? extends Entity> query) throws UnifyException {
-        return !query.isEmptyCriteria() ? InputWidgetUtils.getFilterDefinition(query.getRestrictions()) : null;
+        return !query.isEmptyCriteria() ? InputWidgetUtils.getFilterDefinition(appletUtilities, query.getRestrictions()) : null;
     }
 
     @Override
@@ -73,7 +80,7 @@ public class ApplicationQueryEncoder extends AbstractUnifyComponent implements Q
         EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
         Restriction restriction = null;
         if (!StringUtils.isBlank(queryStr)) {
-            FilterDef filterDef = InputWidgetUtils.getFilterDef(queryStr);
+            FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, queryStr);
             restriction = InputWidgetUtils.getRestriction(entityClassDef.getEntityDef(), filterDef,
                     specialParamProvider, applicationModuleService.getNow());
         }

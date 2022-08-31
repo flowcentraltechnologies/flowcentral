@@ -28,6 +28,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig;
@@ -50,12 +52,14 @@ import com.tcdng.unify.core.util.CalendarUtils;
  */
 public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
 
+    private AppletUtilities au;
+
     @Test
     public void testFilterDefinitionFromSimpleRestriction() throws UnifyException {
-        String definition = InputWidgetUtils.getFilterDefinition(new IsNull("name"));
+        String definition = InputWidgetUtils.getFilterDefinition(au, new IsNull("name"));
         assertTrue(Arrays.asList("NL]0]name]\r\n", "NL]0]name]\n").contains(definition));
 
-        definition = InputWidgetUtils.getFilterDefinition(new Equals("name", "Amina"));
+        definition = InputWidgetUtils.getFilterDefinition(au, new Equals("name", "Amina"));
         assertTrue(Arrays.asList("EQ]0]name]Amina]\r\n", "EQ]0]name]Amina]\n").contains(definition));
 
         Calendar cal = Calendar.getInstance();
@@ -65,18 +69,18 @@ public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
         cal.set(2021, 10, 4);
         Date date2 = CalendarUtils.getMidnightDate(cal.getTime());
 
-        definition = InputWidgetUtils.getFilterDefinition(new Between("birthDt", date1, date2));
+        definition = InputWidgetUtils.getFilterDefinition(au, new Between("birthDt", date1, date2));
         assertTrue(Arrays.asList("BT]0]birthDt]2021-12-25 00:00:00.000]2021-11-04 00:00:00.000]\r\n",
                 "BT]0]birthDt]2021-12-25 00:00:00.000]2021-11-04 00:00:00.000]\n").contains(definition));
 
-        definition = InputWidgetUtils.getFilterDefinition(new Amongst("name", Arrays.asList("Amina", "Zainab")));
+        definition = InputWidgetUtils.getFilterDefinition(au, new Amongst("name", Arrays.asList("Amina", "Zainab")));
         assertTrue(Arrays.asList("IN]0]name]Amina|Zainab]\r\n", "IN]0]name]Amina|Zainab]\n").contains(definition));
     }
 
     @Test
     public void testFilterDefinitionFromCompoundRestriction() throws UnifyException {
         String definition = InputWidgetUtils
-                .getFilterDefinition(new And().add(new IsNull("name")).add(new Equals("name", "Amina")));
+                .getFilterDefinition(au, new And().add(new IsNull("name")).add(new Equals("name", "Amina")));
         assertTrue(
                 Arrays.asList("AND]0]\r\nNL]1]name]\r\nEQ]1]name]Amina]\r\n", "AND]0]\nNL]1]name]\nEQ]1]name]Amina]\n")
                         .contains(definition));
@@ -89,7 +93,7 @@ public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
         Date date1 = CalendarUtils.getMidnightDate(cal.getTime());
         cal.set(2021, 10, 4);
         Date date2 = CalendarUtils.getMidnightDate(cal.getTime());
-        String definition = InputWidgetUtils.getFilterDefinition(new And().add(new IsNull("name"))
+        String definition = InputWidgetUtils.getFilterDefinition(au, new And().add(new IsNull("name"))
                 .add(new Equals("name", "Amina")).add(new Or().add(new Between("birthDt", date1, date2))
                         .add(new Amongst("name", Arrays.asList("Amina", "Zainab")))));
         assertTrue(Arrays.asList(
@@ -101,7 +105,7 @@ public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
     @Test
     public void testGetFilterConfig() throws Exception {
         FilterConfig filterConfig = InputWidgetUtils
-                .getFilterConfig(new AppAppletFilter("test1", "Test 1", "EQ]0]type]BSE]\r\n" + ""));
+                .getFilterConfig(au, new AppAppletFilter("test1", "Test 1", "EQ]0]type]BSE]\r\n" + ""));
         assertNotNull(filterConfig);
         assertEquals("test1", filterConfig.getName());
         assertEquals("Test 1", filterConfig.getDescription());
@@ -116,7 +120,7 @@ public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
         assertEquals("BSE", cfg.getParamA());
         assertNull(cfg.getParamB());
 
-        filterConfig = InputWidgetUtils.getFilterConfig(new AppAppletFilter("test2", "Test 2",
+        filterConfig = InputWidgetUtils.getFilterConfig(au, new AppAppletFilter("test2", "Test 2",
                 "AND]0]\r\n" + "IN]1]type]MEL|MEA|CEN|DIM]\r\n" + "NL]1]entity]\r\n" + ""));
         assertNotNull(filterConfig);
         assertEquals("test2", filterConfig.getName());
@@ -151,7 +155,7 @@ public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
         assertNull(cfg.getParamB());
 
         filterConfig = InputWidgetUtils
-                .getFilterConfig(new AppAppletFilter("test3", "Test 3", "AND]0]\r\n" + "EQ]1]category]SHT]\r\n"
+                .getFilterConfig(au, new AppAppletFilter("test3", "Test 3", "AND]0]\r\n" + "EQ]1]category]SHT]\r\n"
                         + "OR]1]\r\n" + "GT]2]costPrice]30.00]\r\n" + "GT]2]salesPrice]50.00]\r\n" + ""));
         assertNotNull(filterConfig);
         assertEquals("test3", filterConfig.getName());
@@ -206,7 +210,7 @@ public class InputWidgetUtilsTest extends AbstractUnifyComponentTest {
 
     @Override
     protected void onSetup() throws Exception {
-
+        au = (AppletUtilities) getComponent(ApplicationModuleNameConstants.APPLET_UTILITIES);
     }
 
     @Override

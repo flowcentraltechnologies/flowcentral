@@ -68,7 +68,7 @@ public class EntityListWidget extends AbstractEntityListWidget {
                             .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
                 } else {
                     br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                            specialParamProvider(), application().getNow()) : null;
+                           application().getNow()) : null;
                 }
             }
 

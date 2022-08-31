@@ -187,7 +187,7 @@ public class EntitySelectWidget extends AbstractPopupTextField {
                     .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
         } else {
             br = refDef.isWithFilter()
-                    ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(), null,
+                    ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
                             applicationModuleService.getNow())
                     : null;
         }

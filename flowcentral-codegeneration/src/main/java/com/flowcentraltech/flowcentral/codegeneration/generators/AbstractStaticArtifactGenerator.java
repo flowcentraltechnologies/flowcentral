@@ -21,8 +21,10 @@ import java.text.MessageFormat;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Singleton;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -36,6 +38,9 @@ import com.tcdng.unify.core.util.StringUtils;
 public abstract class AbstractStaticArtifactGenerator extends AbstractUnifyComponent
         implements StaticArtifactGenerator {
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
     private String zipDir;
 
     public AbstractStaticArtifactGenerator(String zipDir) {
@@ -44,6 +49,10 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractUnifyCompo
 
     public AbstractStaticArtifactGenerator() {
 
+    }
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -66,6 +75,10 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractUnifyCompo
         }
 
         doGenerate(ctx, entityName, zos);
+    }
+
+    protected AppletUtilities au() {
+        return appletUtilities;
     }
 
     protected abstract void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String name, ZipOutputStream zos)

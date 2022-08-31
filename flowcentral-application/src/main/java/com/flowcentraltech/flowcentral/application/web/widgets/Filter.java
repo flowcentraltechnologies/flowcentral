@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -216,9 +217,9 @@ public class Filter {
         }
     }
 
-    public FilterDef getFilterDef() throws UnifyException {
+    public FilterDef getFilterDef(AppletUtilities au) throws UnifyException {
         if (conditionList.size() > 1) {
-            FilterDef.Builder fdb = FilterDef.newBuilder();
+            FilterDef.Builder fdb = FilterDef.newBuilder(au);
             for (FilterCondition fo : conditionList) {
                 if (fo.getType().isFieldVal() || fo.getType().isParameterVal()) {
                     fdb.addRestrictionDef(fo.getType(), fo.getFieldName(), fo.getParamFieldA(), fo.getParamFieldB(),

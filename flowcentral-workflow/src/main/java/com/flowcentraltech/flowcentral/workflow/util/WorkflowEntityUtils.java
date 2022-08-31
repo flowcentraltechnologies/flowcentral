@@ -53,7 +53,7 @@ public final class WorkflowEntityUtils {
             String conditionName) throws UnifyException {
         return conditionName != null && (ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(conditionName) || wfDef
                 .getFilterDef(conditionName)
-                .getObjectFilter(wfDef.getEntityDef(), au.getSpecialParamProvider(), au.getNow()).match(valueStore));
+                .getObjectFilter(wfDef.getEntityDef(), au.getNow()).match(valueStore));
     }
 
 }

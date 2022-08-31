@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -159,7 +160,8 @@ public final class InputWidgetUtils {
         if (_entityFieldDef.isEnumDataType()) {
             String editor = String.format("!ui-dropdownchecklist list:%s columns:3 formatter:$d{!pipearrayformat}",
                     _entityFieldDef.getReferences());
-            return (AbstractInput<?>) ReflectUtils.newInstance(StringInput.class, NEW_INPUT_PARAMS, editor, "!ui-label");
+            return (AbstractInput<?>) ReflectUtils.newInstance(StringInput.class, NEW_INPUT_PARAMS, editor,
+                    "!ui-label");
         }
 
         return null;
@@ -769,8 +771,9 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static FilterConfig getFilterConfig(AppAppletFilter appAppletFilter) throws UnifyException {
-        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(appAppletFilter.getName(),
+    public static FilterConfig getFilterConfig(AppletUtilities au, AppAppletFilter appAppletFilter)
+            throws UnifyException {
+        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au, appAppletFilter.getName(),
                 appAppletFilter.getDescription(), appAppletFilter.getPreferredForm(),
                 appAppletFilter.getPreferredChildListApplet(), appAppletFilter.getChildListActionType(),
                 appAppletFilter.getFilter());
@@ -781,10 +784,11 @@ public final class InputWidgetUtils {
         return filterConfig;
     }
 
-    public static TableFilterConfig getFilterConfig(AppTableFilter appTableFilter) throws UnifyException {
+    public static TableFilterConfig getFilterConfig(AppletUtilities au, AppTableFilter appTableFilter)
+            throws UnifyException {
         if (appTableFilter != null) {
             TableFilterConfig tableFilterConfig = new TableFilterConfig();
-            InputWidgetUtils.getFilterConfig(tableFilterConfig, appTableFilter.getName(),
+            InputWidgetUtils.getFilterConfig(au, tableFilterConfig, appTableFilter.getName(),
                     appTableFilter.getDescription(), null, null, null, appTableFilter.getFilter());
             tableFilterConfig.setRowColor(appTableFilter.getRowColor());
             return tableFilterConfig;
@@ -793,16 +797,16 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static FilterConfig getFilterConfig(AppFilter appFilter) throws UnifyException {
-        return InputWidgetUtils.getFilterConfig(null, null, null, null, null, appFilter);
+    public static FilterConfig getFilterConfig(AppletUtilities au, AppFilter appFilter) throws UnifyException {
+        return InputWidgetUtils.getFilterConfig(au, null, null, null, null, null, appFilter);
     }
 
-    public static FilterConfig getFilterConfig(String name, String description, String preferredForm,
-            String preferredChildListApplet, ChildListActionType childListActionType, AppFilter appFilter)
-            throws UnifyException {
+    public static FilterConfig getFilterConfig(AppletUtilities au, String name, String description,
+            String preferredForm, String preferredChildListApplet, ChildListActionType childListActionType,
+            AppFilter appFilter) throws UnifyException {
         if (appFilter != null) {
             FilterConfig filterConfig = new FilterConfig();
-            getFilterConfig(filterConfig, name, description, preferredForm, preferredChildListApplet,
+            getFilterConfig(au, filterConfig, name, description, preferredForm, preferredChildListApplet,
                     childListActionType, appFilter);
             return filterConfig;
         }
@@ -810,11 +814,11 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static void getFilterConfig(FilterConfig filterConfig, String name, String description, String preferredForm,
-            String preferredChildListApplet, ChildListActionType childListActionType, AppFilter appFilter)
-            throws UnifyException {
+    public static void getFilterConfig(AppletUtilities au, FilterConfig filterConfig, String name, String description,
+            String preferredForm, String preferredChildListApplet, ChildListActionType childListActionType,
+            AppFilter appFilter) throws UnifyException {
         if (appFilter != null) {
-            FilterDef filterDef = InputWidgetUtils.getFilterDef(name, description, preferredForm,
+            FilterDef filterDef = InputWidgetUtils.getFilterDef(au, name, description, preferredForm,
                     preferredChildListApplet, childListActionType, appFilter);
             filterConfig.setName(name);
             filterConfig.setDescription(description);
@@ -869,15 +873,15 @@ public final class InputWidgetUtils {
         return index;
     }
 
-    public static FilterDef getFilterDef(AppFilter appFilter) throws UnifyException {
-        return InputWidgetUtils.getFilterDef(null, null, null, null, null, appFilter);
+    public static FilterDef getFilterDef(AppletUtilities au, AppFilter appFilter) throws UnifyException {
+        return InputWidgetUtils.getFilterDef(au, null, null, null, null, null, appFilter);
     }
 
-    public static FilterDef getFilterDef(String name, String description, String preferredForm,
+    public static FilterDef getFilterDef(AppletUtilities au, String name, String description, String preferredForm,
             String preferredChildListApplet, ChildListActionType childListActionType, AppFilter appFilter)
             throws UnifyException {
         if (appFilter != null) {
-            FilterDef.Builder fdb = FilterDef.newBuilder();
+            FilterDef.Builder fdb = FilterDef.newBuilder(au);
             fdb.name(name).description(description).preferredForm(preferredForm)
                     .preferredChildListApplet(preferredChildListApplet).childListActionType(childListActionType);
             addFilterDefinition(fdb, appFilter.getDefinition());
@@ -887,9 +891,9 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static FilterDef getFilterDef(String filterDefinition) throws UnifyException {
+    public static FilterDef getFilterDef(AppletUtilities au, String filterDefinition) throws UnifyException {
         if (filterDefinition != null) {
-            FilterDef.Builder fdb = FilterDef.newBuilder();
+            FilterDef.Builder fdb = FilterDef.newBuilder(au);
             addFilterDefinition(fdb, filterDefinition);
             return fdb.build();
         }
@@ -916,15 +920,15 @@ public final class InputWidgetUtils {
         }
     }
 
-    public static FilterDef getFilterDef(Restriction restriction) throws UnifyException {
-        return InputWidgetUtils.getFilterDef(null, null, null, null, null, restriction);
+    public static FilterDef getFilterDef(AppletUtilities au, Restriction restriction) throws UnifyException {
+        return InputWidgetUtils.getFilterDef(au, null, null, null, null, null, restriction);
     }
 
-    public static FilterDef getFilterDef(String name, String description, String preferredForm,
+    public static FilterDef getFilterDef(AppletUtilities au, String name, String description, String preferredForm,
             String preferredChildListApplet, ChildListActionType childListActionType, Restriction restriction)
             throws UnifyException {
         if (restriction != null) {
-            FilterDef.Builder fdb = FilterDef.newBuilder();
+            FilterDef.Builder fdb = FilterDef.newBuilder(au);
             fdb.name(name).description(description).preferredForm(preferredForm)
                     .preferredChildListApplet(preferredChildListApplet).childListActionType(childListActionType);
             InputWidgetUtils.addRestriction(fdb, restriction, 0);
@@ -964,8 +968,8 @@ public final class InputWidgetUtils {
         }
     }
 
-    public static String getFilterDefinition(Restriction restriction) throws UnifyException {
-        return InputWidgetUtils.getFilterDefinition(InputWidgetUtils.getFilterDef(restriction));
+    public static String getFilterDefinition(AppletUtilities au, Restriction restriction) throws UnifyException {
+        return InputWidgetUtils.getFilterDefinition(InputWidgetUtils.getFilterDef(au, restriction));
     }
 
     public static String getFilterDefinition(FilterDef filterDef) throws UnifyException {

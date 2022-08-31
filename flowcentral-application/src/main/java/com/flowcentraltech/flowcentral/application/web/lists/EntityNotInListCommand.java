@@ -66,7 +66,7 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
                         .generate(new BeanValueStore(baseInst).getReader(), _assignRefDef.getFilterGeneratorRule());
                 query.addRestriction(br);
             } else if (_assignRefDef.isWithFilter()) {
-                Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(), null,
+                Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
                         application().getNow());
                 query.addRestriction(br);
             }

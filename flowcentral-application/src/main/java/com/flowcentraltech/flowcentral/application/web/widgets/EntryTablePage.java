@@ -17,13 +17,13 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
@@ -67,7 +67,7 @@ public class EntryTablePage {
 
     private final String entryEditPolicy;
 
-    private final FilterDef entryFilter;
+    private final FilterGroupDef filterGroupDef;
 
     private String displayItemCounter;
 
@@ -82,7 +82,7 @@ public class EntryTablePage {
     public EntryTablePage(AppletContext ctx, List<EventHandler> entrySwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
             SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String entryTable, String entryEditPolicy,
-            FilterDef entryFilter) {
+            FilterGroupDef filterGroupDef) {
         this.ctx = ctx;
         this.entrySwitchOnChangeHandlers = entrySwitchOnChangeHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
@@ -93,7 +93,7 @@ public class EntryTablePage {
         this.breadCrumbs = breadCrumbs;
         this.entryTable = entryTable;
         this.entryEditPolicy = entryEditPolicy;
-        this.entryFilter = entryFilter;
+        this.filterGroupDef = filterGroupDef;
     }
 
     public String getMainTitle() {
@@ -195,13 +195,12 @@ public class EntryTablePage {
 
     @SuppressWarnings("unchecked")
     public void loadEntryList() throws UnifyException {
-        final Date now = ctx.au().getNow();
         // Entry list
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                 .addEquals(baseField, baseId);
-        if (entryFilter != null) {
-            Restriction br = entryFilter.getRestriction(entityClassDef.getEntityDef(),
-                    ctx.au().getSpecialParamProvider(), now);
+        Restriction br = filterGroupDef != null ? filterGroupDef.getRestriction(FilterType.TAB, ctx.au().getNow())
+                : null;
+        if (br != null) {
             query.addRestriction(br);
         }
 
@@ -232,9 +231,8 @@ public class EntryTablePage {
 
         validationErrors = null;
         if (entryEditPolicy != null) {
-            FormMessages messages = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy)
-                    .validateEntries((Class<? extends Entity>) entityClassDef.getEntityClass(), baseField, baseId,
-                            entryList);
+            FormMessages messages = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy).validateEntries(
+                    (Class<? extends Entity>) entityClassDef.getEntityClass(), baseField, baseId, entryList);
             validationErrors = messages != null ? messages.getMessages() : null;
         }
     }

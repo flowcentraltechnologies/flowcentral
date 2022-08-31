@@ -137,7 +137,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
         super("src/main/resources/apps/");
     }
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
 
@@ -227,7 +227,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         String filterKey = getDescriptionKey(descKey, "filter", appAppletFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.APPLET, filterKey, appAppletFilter.getDescription());
                         appAppletFilter.setDescription("$m{" + filterKey + "}");
-                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(appAppletFilter);
+                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), appAppletFilter);
                         filterList.add(filterConfig);
                     }
 
@@ -302,7 +302,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 refConfig.setListFormat(appRef.getListFormat());
                 refConfig.setFilterGenerator(appRef.getFilterGenerator());
                 refConfig.setFilterGeneratorRule(appRef.getFilterGeneratorRule());
-                refConfig.setFilter(InputWidgetUtils.getFilterConfig(appRef.getFilter()));
+                refConfig.setFilter(InputWidgetUtils.getFilterConfig(au(), appRef.getFilter()));
                 refList.add(refConfig);
             }
 
@@ -544,7 +544,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         String filterKey = getDescriptionKey(descKey, "filter", appTableFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.TABLE, filterKey, appTableFilter.getDescription());
                         appTableFilter.setDescription("$m{" + filterKey + "}");
-                        TableFilterConfig tableFilterConfig = InputWidgetUtils.getFilterConfig(appTableFilter);
+                        TableFilterConfig tableFilterConfig = InputWidgetUtils.getFilterConfig(au(),
+                                appTableFilter);
                         filterList.add(tableFilterConfig);
                     }
 
@@ -604,7 +605,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 if (!DataUtils.isBlank(appForm.getFilterList())) {
                     List<FilterConfig> filterList = new ArrayList<FilterConfig>();
                     for (AppFormFilter appFormFilter : appForm.getFilterList()) {
-                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(appFormFilter.getFilter());
+                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(),
+                                appFormFilter.getFilter());
                         filterConfig.setName(appFormFilter.getName());
                         descKey = getDescriptionKey(formDescKey, "formfilter", appFormFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormFilter.getDescription());
@@ -657,8 +659,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formActionConfig.setOrderIndex(appFormAction.getOrderIndex());
                         formActionConfig.setType(appFormAction.getType());
                         formActionConfig.setHighlightType(appFormAction.getHighlightType());
-                        formActionConfig
-                                .setOnCondition(InputWidgetUtils.getFilterConfig(appFormAction.getOnCondition()));
+                        formActionConfig.setOnCondition(
+                                InputWidgetUtils.getFilterConfig(au(), appFormAction.getOnCondition()));
                         actionConfigList.add(formActionConfig);
                     }
 
@@ -793,8 +795,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formStatePolicyConfig.setValueGenerator(appFormStatePolicy.getValueGenerator());
                         formStatePolicyConfig.setTrigger(appFormStatePolicy.getTrigger());
                         formStatePolicyConfig.setType(appFormStatePolicy.getType());
-                        formStatePolicyConfig
-                                .setOnCondition(InputWidgetUtils.getFilterConfig(appFormStatePolicy.getOnCondition()));
+                        formStatePolicyConfig.setOnCondition(
+                                InputWidgetUtils.getFilterConfig(au(), appFormStatePolicy.getOnCondition()));
                         formStatePolicyConfig.setSetValues(InputWidgetUtils.getSetValuesConfig(
                                 appFormStatePolicy.getValueGenerator(), appFormStatePolicy.getSetValues()));
 
@@ -833,8 +835,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey,
                                 appFormWidgetRulesPolicy.getDescription());
                         formStatePolicyConfig.setDescription("$m{" + descKey + "}");
-                        formStatePolicyConfig.setOnCondition(
-                                InputWidgetUtils.getFilterConfig(appFormWidgetRulesPolicy.getOnCondition()));
+                        formStatePolicyConfig.setOnCondition(InputWidgetUtils.getFilterConfig(au(),
+                                appFormWidgetRulesPolicy.getOnCondition()));
                         formStatePolicyConfig.setWidgetRules(
                                 InputWidgetUtils.getWidgetRulesConfig(appFormWidgetRulesPolicy.getWidgetRules()));
                         widgetRulesPolicyList.add(formStatePolicyConfig);
@@ -878,8 +880,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formValidationPolicyConfig.setMessage("$m{" + msgKey + "}");
                         formValidationPolicyConfig.setTarget(appFormValidationPolicy.getTarget());
                         formValidationPolicyConfig.setErrorMatcher(appFormValidationPolicy.getErrorMatcher());
-                        formValidationPolicyConfig.setErrorCondition(
-                                InputWidgetUtils.getFilterConfig(appFormValidationPolicy.getErrorCondition()));
+                        formValidationPolicyConfig.setErrorCondition(InputWidgetUtils.getFilterConfig(au(),
+                                appFormValidationPolicy.getErrorCondition()));
                         formValidationPolicyList.add(formValidationPolicyConfig);
                     }
 
@@ -903,8 +905,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formReviewPolicyConfig.setTarget(appFormReviewPolicy.getTarget());
                         formReviewPolicyConfig.setSkippable(appFormReviewPolicy.isSkippable());
                         formReviewPolicyConfig.setErrorMatcher(appFormReviewPolicy.getErrorMatcher());
-                        formReviewPolicyConfig.setErrorCondition(
-                                InputWidgetUtils.getFilterConfig(appFormReviewPolicy.getErrorCondition()));
+                        formReviewPolicyConfig.setErrorCondition(InputWidgetUtils.getFilterConfig(au(),
+                                appFormReviewPolicy.getErrorCondition()));
                         formReviewPolicyList.add(formReviewPolicyConfig);
                     }
 

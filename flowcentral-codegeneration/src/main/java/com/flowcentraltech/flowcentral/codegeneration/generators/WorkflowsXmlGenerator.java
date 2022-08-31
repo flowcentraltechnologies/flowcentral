@@ -115,7 +115,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                 if (!DataUtils.isBlank(workflow.getFilterList())) {
                     List<FilterConfig> filterList = new ArrayList<FilterConfig>();
                     for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
-                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(workflowFilter.getFilter());
+                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), workflowFilter.getFilter());
                         filterConfig.setName(workflowFilter.getName());
                         descKey = getDescriptionKey(workflowDescKey, "workflowfilter", workflowFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.WORKFLOW, descKey, workflowFilter.getDescription());
@@ -137,7 +137,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfSetValuesConfig.setDescription("$m{" + descKey + "}");
                         wfSetValuesConfig.setType(workflowSetValues.getType());
                         wfSetValuesConfig
-                                .setOnCondition(InputWidgetUtils.getFilterConfig(workflowSetValues.getOnCondition()));
+                                .setOnCondition(InputWidgetUtils.getFilterConfig(au(), workflowSetValues.getOnCondition()));
                         wfSetValuesConfig.setSetValues(InputWidgetUtils.getSetValuesConfig(
                                 null, workflowSetValues.getSetValues()));
                         setValuesList.add(wfSetValuesConfig);

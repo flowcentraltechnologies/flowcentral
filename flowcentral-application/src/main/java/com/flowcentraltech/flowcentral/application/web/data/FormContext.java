@@ -477,10 +477,10 @@ public class FormContext extends AbstractContext {
     }
 
     public void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
-	}
+        this.readOnly = readOnly;
+    }
 
-	public boolean isReadOnly() throws UnifyException {
+    public boolean isReadOnly() throws UnifyException {
         return readOnly || appletContext.isReadOnly();
     }
 
@@ -547,8 +547,7 @@ public class FormContext extends AbstractContext {
         for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
             if (formStatePolicyDef.isTriggered("")) {
                 ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                        ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef,
-                                appletContext.specialParamProvider(), now)
+                        ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, now)
                         : null;
                 if (objectFilter == null || objectFilter.match(formValueStore)) {
                     for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {

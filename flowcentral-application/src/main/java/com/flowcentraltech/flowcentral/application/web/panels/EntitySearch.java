@@ -324,7 +324,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
         if (baseFilterDef != null || restriction != null) {
             And and = new And();
             if (baseFilterDef != null) {
-                and.add(baseFilterDef.getRestriction(entityFilter.getEntityDef(), specialParamProvider,
+                and.add(baseFilterDef.getRestriction(entityFilter.getEntityDef(),
                         getAppletCtx().au().getNow()));
             }
 
@@ -359,7 +359,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void saveQuickFilter(String name, String description, OwnershipType ownershipType) throws UnifyException {
         getAppletCtx().au().saveAppletQuickFilterDef(getSweepingCommitPolicy(), appAppletId, name, description,
-                ownershipType, entityFilter.getFilterDef());
+                ownershipType, entityFilter.getFilterDef(getAppletCtx().au()));
     }
 
     public void ensureTableStruct() throws UnifyException {

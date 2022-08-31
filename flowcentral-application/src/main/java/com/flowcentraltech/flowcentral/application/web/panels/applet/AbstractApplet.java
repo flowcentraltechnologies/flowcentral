@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
@@ -142,9 +144,10 @@ public abstract class AbstractApplet {
     protected FormDef getPreferredForm(PreferredFormType type, AppletDef appletDef, Entity inst, String formProperty)
             throws UnifyException {
         if (appletDef.isWithPreferredFormFilters()) {
+            final Date now = au.getNow();
             EntityDef _entityDef = getEntityClassDef(appletDef.getEntity()).getEntityDef();
             for (FilterDef filterDef : appletDef.getPreferredFormFilterList()) {
-                if (filterDef.getObjectFilter(_entityDef, au.getSpecialParamProvider(), au.getNow()).match(inst)) {
+                if (filterDef.getObjectFilter(_entityDef, now).match(inst)) {
                     String formName = filterDef.getPreferredForm();
                     FormDef formDef = au.getFormDef(formName);
                     if (type.supports(formDef)) {
