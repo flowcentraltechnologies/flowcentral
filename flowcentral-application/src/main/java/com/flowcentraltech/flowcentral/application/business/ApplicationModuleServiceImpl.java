@@ -862,26 +862,30 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (FormElementType.TAB.equals(appFormElement.getType())) {
                             tabIndex++;
                             sectionIndex = -1;
-                            AppletDef _appletDef = getAppletDef(appFormElement.getTabApplet());
-                            EntityDef _entityDef = getEntityDef(_appletDef.getEntity());
-                            FilterGroupDef.Builder fgdb = FilterGroupDef.newBuilder(_entityDef);
-                            if (!StringUtils.isBlank(appFormElement.getFilter())) {
-                                fgdb.addFilter(FilterType.TAB, _appletDef.getFilterDef(appFormElement.getFilter()));
-                            }
+                            FilterGroupDef filterGroupDef = null;
+                            if (!StringUtils.isBlank(appFormElement.getTabApplet())) {
+                                AppletDef _appletDef = getAppletDef(appFormElement.getTabApplet());
+                                EntityDef _entityDef = getEntityDef(_appletDef.getEntity());
+                                FilterGroupDef.Builder fgdb = FilterGroupDef.newBuilder(_entityDef);
+                                if (!StringUtils.isBlank(appFormElement.getFilter())) {
+                                    fgdb.addFilter(FilterType.TAB, _appletDef.getFilterDef(appFormElement.getFilter()));
+                                }
 
-                            String updateCondition = _appletDef.getPropValue(String.class,
-                                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-                            if (!StringUtils.isBlank(updateCondition)) {
-                                fgdb.addFilter(FilterType.MAINTAIN_UPDATE, _appletDef.getFilterDef(updateCondition));
-                            }
+                                String updateCondition = _appletDef.getPropValue(String.class,
+                                        AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+                                if (!StringUtils.isBlank(updateCondition)) {
+                                    fgdb.addFilter(FilterType.MAINTAIN_UPDATE, _appletDef.getFilterDef(updateCondition));
+                                }
 
-                            String deleteCondition = _appletDef.getPropValue(String.class,
-                                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
-                            if (!StringUtils.isBlank(deleteCondition)) {
-                                fgdb.addFilter(FilterType.MAINTAIN_DELETE, _appletDef.getFilterDef(deleteCondition));
+                                String deleteCondition = _appletDef.getPropValue(String.class,
+                                        AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
+                                if (!StringUtils.isBlank(deleteCondition)) {
+                                    fgdb.addFilter(FilterType.MAINTAIN_DELETE, _appletDef.getFilterDef(deleteCondition));
+                                }
+                                
+                                filterGroupDef = fgdb.build();
                             }
-
-                            FilterGroupDef filterGroupDef = fgdb.build();
+                            
                             fdb.addFormTab(appFormElement.getTabContentType(), filterGroupDef,
                                     appFormElement.getElementName(), appFormElement.getLabel(),
                                     appFormElement.getTabApplet(), appFormElement.getTabReference(),
