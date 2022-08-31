@@ -134,10 +134,6 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
         return allowDelete;
     }
 
-    public boolean isAllowMaintain() {
-        return allowUpdate || allowDelete;
-    }
-
     public void enterCreate() throws UnifyException {
 		create = true;
 		if (isEditable()) {
