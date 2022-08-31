@@ -40,10 +40,12 @@ public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractPanel 
             final boolean create = crud.isCreate();
 
             setVisible("crudFormPanel", editable || displayItems);
+            setEditable("crudFormPanel", editable && crud.isAllowMaintain());
+            
             setVisible("crudActionPanel", editable);
             setVisible("crudAddBtn", create);
-            setVisible("crudUpdateBtn", !create);
-            setVisible("crudDeleteBtn", !create);
+            setVisible("crudUpdateBtn", !create && crud.isAllowUpdate());
+            setVisible("crudDeleteBtn", !create && crud.isAllowDelete());
             setVisible("crudCancelBtn", !create);
         } else {
             setVisible("crudActionPanel", false);
