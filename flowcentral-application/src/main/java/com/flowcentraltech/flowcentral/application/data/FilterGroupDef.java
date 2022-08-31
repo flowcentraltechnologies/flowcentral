@@ -17,6 +17,7 @@ import com.tcdng.unify.core.data.ValueStore;
 public class FilterGroupDef {
 
     public enum FilterType {
+        BASE,
         TAB,
         MAINTAIN_UPDATE,
         MAINTAIN_DELETE

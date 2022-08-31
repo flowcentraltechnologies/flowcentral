@@ -21,6 +21,8 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
@@ -75,7 +77,7 @@ public class EntityCRUDPage {
 
 	private final EntityFormEventHandlers formEventHandlers;
 
-	private final Restriction baseRestriction;
+	private final FilterGroupDef filterGroupDef;
 
 	private final boolean fixedRows;
 
@@ -89,7 +91,7 @@ public class EntityCRUDPage {
 			SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst,
 			EntityClassDef entityClassDef, String baseField, Object baseId, String childListName, SectorIcon sectorIcon,
 			BreadCrumbs breadCrumbs, String tableName, String entryEditPolicy, String createFormName,
-			String maintainFormName, Restriction baseRestriction, boolean fixedRows) {
+			String maintainFormName, FilterGroupDef filterGroupDef, boolean fixedRows) {
 		this.ctx = ctx;
 		this.formAppletDef = formAppletDef;
 		this.formEventHandlers = formEventHandlers;
@@ -106,7 +108,7 @@ public class EntityCRUDPage {
 		this.entryEditPolicy = entryEditPolicy;
 		this.createFormName = createFormName;
 		this.maintainFormName = maintainFormName;
-		this.baseRestriction = baseRestriction;
+		this.filterGroupDef = filterGroupDef;
 		this.fixedRows = fixedRows;
 	}
 
@@ -198,7 +200,7 @@ public class EntityCRUDPage {
 	public EntityCRUD getCrud() throws UnifyException {
 		if (crud == null) {
 			TableDef tableDef = ctx.au().getTableDef(tableName);
-			EntityTable entityTable = new EntityTable(ctx.au(), tableDef);
+			EntityTable entityTable = new EntityTable(ctx.au(), tableDef, filterGroupDef);
 			entityTable.setCrudMode(true);
 			entityTable.setFixedRows(fixedRows);
 			if (!StringUtils.isBlank(entryEditPolicy)) {
@@ -236,6 +238,7 @@ public class EntityCRUDPage {
 	public void loadCrudList() throws UnifyException {
 		EntityTable entityTable = getCrud().getTable();
 		Restriction restriction = new Equals(baseField, baseId);
+		Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, ctx.au().getNow());
 		if (baseRestriction != null) {
 			restriction = new And().add(restriction).add(baseRestriction);
 		}

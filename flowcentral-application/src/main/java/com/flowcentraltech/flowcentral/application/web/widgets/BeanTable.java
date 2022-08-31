@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
@@ -40,12 +41,12 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class BeanTable extends AbstractTable<List<?>, Object> {
 
-    public BeanTable(AppletUtilities au, TableDef tableDef) {
-        this(au, tableDef, 0);
+    public BeanTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef) {
+        this(au, tableDef, filterGroupDef, 0);
     }
 
-    public BeanTable(AppletUtilities au, TableDef tableDef, int entryMode) {
-        super(au, tableDef, null, entryMode);
+    public BeanTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, int entryMode) {
+        super(au, tableDef, filterGroupDef, null, entryMode);
     }
 
     public int getItemCount() throws UnifyException {

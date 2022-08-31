@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
@@ -83,6 +84,19 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 public interface AppletUtilities extends UnifyComponent {
+
+    /**
+     * Gets filter group definition for applet.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @param tabFilter
+     *                   the tab filter
+     * @return the filter group definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException;
 
     /**
      * Gets page sector icon by application.

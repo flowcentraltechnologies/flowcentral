@@ -862,30 +862,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (FormElementType.TAB.equals(appFormElement.getType())) {
                             tabIndex++;
                             sectionIndex = -1;
-                            FilterGroupDef filterGroupDef = null;
-                            if (!StringUtils.isBlank(appFormElement.getTabApplet())) {
-                                AppletDef _appletDef = getAppletDef(appFormElement.getTabApplet());
-                                EntityDef _entityDef = getEntityDef(_appletDef.getEntity());
-                                FilterGroupDef.Builder fgdb = FilterGroupDef.newBuilder(_entityDef);
-                                if (!StringUtils.isBlank(appFormElement.getFilter())) {
-                                    fgdb.addFilter(FilterType.TAB, _appletDef.getFilterDef(appFormElement.getFilter()));
-                                }
-
-                                String updateCondition = _appletDef.getPropValue(String.class,
-                                        AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-                                if (!StringUtils.isBlank(updateCondition)) {
-                                    fgdb.addFilter(FilterType.MAINTAIN_UPDATE, _appletDef.getFilterDef(updateCondition));
-                                }
-
-                                String deleteCondition = _appletDef.getPropValue(String.class,
-                                        AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
-                                if (!StringUtils.isBlank(deleteCondition)) {
-                                    fgdb.addFilter(FilterType.MAINTAIN_DELETE, _appletDef.getFilterDef(deleteCondition));
-                                }
-                                
-                                filterGroupDef = fgdb.build();
-                            }
-                            
+                            FilterGroupDef filterGroupDef = getFilterGroupDef(appFormElement.getTabApplet(),
+                                    appFormElement.getFilter());
                             fdb.addFormTab(appFormElement.getTabContentType(), filterGroupDef,
                                     appFormElement.getElementName(), appFormElement.getLabel(),
                                     appFormElement.getTabApplet(), appFormElement.getTabReference(),
@@ -963,14 +941,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     for (AppFormRelatedList appFormRelatedList : appForm.getRelatedList()) {
-                        AppletDef _appletDef = getAppletDef(appFormRelatedList.getApplet());
-                        EntityDef _entityDef = getEntityDef(_appletDef.getEntity());
-                        FilterGroupDef.Builder fgdb = FilterGroupDef.newBuilder(_entityDef);
-                        if (!StringUtils.isBlank(appFormRelatedList.getFilter())) {
-                            fgdb.addFilter(FilterType.TAB, _appletDef.getFilterDef(appFormRelatedList.getFilter()));
-                        }
-
-                        FilterGroupDef _filterGroupDef = fgdb.build();
+                        FilterGroupDef _filterGroupDef = getFilterGroupDef(appFormRelatedList.getApplet(),
+                                appFormRelatedList.getFilter());
                         fdb.addRelatedList(_filterGroupDef, appFormRelatedList.getName(),
                                 appFormRelatedList.getDescription(), appFormRelatedList.getLabel(),
                                 appFormRelatedList.getApplet(), appFormRelatedList.getEditAction());
@@ -1174,6 +1146,39 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
         this.twoWayStringCryptograph = twoWayStringCryptograph;
+    }
+
+    @Override
+    public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
+        if (!StringUtils.isBlank(appletName)) {
+            AppletDef _appletDef = getAppletDef(appletName);
+            EntityDef _entityDef = getEntityDef(_appletDef.getEntity());
+            FilterGroupDef.Builder fgdb = FilterGroupDef.newBuilder(_entityDef);
+            if (!StringUtils.isBlank(tabFilter)) {
+                fgdb.addFilter(FilterType.TAB, _appletDef.getFilterDef(tabFilter));
+            }
+
+            String baseCondition = _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION);
+            if (!StringUtils.isBlank(baseCondition)) {
+                fgdb.addFilter(FilterType.BASE, _appletDef.getFilterDef(baseCondition));
+            }
+
+            String updateCondition = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+            if (!StringUtils.isBlank(updateCondition)) {
+                fgdb.addFilter(FilterType.MAINTAIN_UPDATE, _appletDef.getFilterDef(updateCondition));
+            }
+
+            String deleteCondition = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
+            if (!StringUtils.isBlank(deleteCondition)) {
+                fgdb.addFilter(FilterType.MAINTAIN_DELETE, _appletDef.getFilterDef(deleteCondition));
+            }
+
+            return fgdb.build();
+        }
+
+        return null;
     }
 
     @Override

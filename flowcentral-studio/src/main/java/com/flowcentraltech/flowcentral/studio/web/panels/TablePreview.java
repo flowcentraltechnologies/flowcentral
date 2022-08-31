@@ -75,7 +75,7 @@ public class TablePreview {
                 }
             }
 
-            entityTable = new EntityTable(au, tdb.build());
+            entityTable = new EntityTable(au, tdb.build(), null);
             Restriction searchRestriction = null;
             entityTable.setSourceObject(searchRestriction);
             oldDesign = design;

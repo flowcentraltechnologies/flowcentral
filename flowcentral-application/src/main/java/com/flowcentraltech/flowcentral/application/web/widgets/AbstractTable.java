@@ -16,12 +16,15 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -36,6 +39,7 @@ import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
@@ -53,6 +57,8 @@ public abstract class AbstractTable<T, U> {
     public static final int ENTRY_ENABLED = 0x00000001;
 
     protected final AppletUtilities au;
+
+    private FilterGroupDef filterGroupDef;
 
     private TableDef tableDef;
 
@@ -112,15 +118,29 @@ public abstract class AbstractTable<T, U> {
 
     private int detailsIndex;
 
-    public AbstractTable(AppletUtilities au, TableDef tableDef, Order defaultOrder, int entryMode) {
+    public AbstractTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, Order defaultOrder,
+            int entryMode) {
         this.au = au;
         this.tableDef = tableDef;
+        this.filterGroupDef = filterGroupDef;
         this.defaultOrder = defaultOrder;
         this.basicSearchMode = tableDef.isBasicSearch();
         this.entryMode = entryMode;
         this.selected = Collections.emptySet();
         this.highlightedRow = -1;
         this.detailsIndex = -1;
+    }
+
+    public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.match(type, bean, now) : true;
+    }
+
+    public boolean match(FilterType type, ValueStore beanValueStore, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.match(type, beanValueStore, now) : true;
+    }
+
+    public Restriction getRestriction(FilterType type, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.getRestriction(type, now) : null;
     }
 
     public void setTableSelect(TableSelect<?> tableSelect) {

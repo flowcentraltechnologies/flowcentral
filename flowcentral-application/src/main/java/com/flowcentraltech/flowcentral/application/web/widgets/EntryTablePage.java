@@ -183,7 +183,8 @@ public class EntryTablePage {
 
     public BeanTable getEntryBeanTable() throws UnifyException {
         if (entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), BeanTable.ENTRY_ENABLED);
+            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), filterGroupDef,
+                    BeanTable.ENTRY_ENABLED);
             if (!StringUtils.isBlank(entryEditPolicy)) {
                 ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
                 entryBeanTable.setPolicy(policy);
@@ -195,7 +196,7 @@ public class EntryTablePage {
 
     @SuppressWarnings("unchecked")
     public void loadEntryList() throws UnifyException {
-        // Entry list
+        final BeanTable _beanTable = getEntryBeanTable();
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                 .addEquals(baseField, baseId);
         Restriction br = filterGroupDef != null ? filterGroupDef.getRestriction(FilterType.TAB, ctx.au().getNow())
@@ -206,7 +207,6 @@ public class EntryTablePage {
 
         List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
 
-        final BeanTable _beanTable = getEntryBeanTable();
         _beanTable.setSwitchOnChangeHandlers(entrySwitchOnChangeHandlers);
         _beanTable.setSourceObject(resultList);
         _beanTable.setFixedAssignment(true);

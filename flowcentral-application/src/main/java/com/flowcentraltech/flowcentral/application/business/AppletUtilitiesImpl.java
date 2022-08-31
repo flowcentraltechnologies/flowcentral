@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
@@ -230,6 +231,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     public final void setPageRequestContextUtil(PageRequestContextUtil pageRequestContextUtil) {
         this.pageRequestContextUtil = pageRequestContextUtil;
+    }
+
+    @Override
+    public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
+         return applicationModuleService.getFilterGroupDef(appletName, tabFilter);
     }
 
     @Override
