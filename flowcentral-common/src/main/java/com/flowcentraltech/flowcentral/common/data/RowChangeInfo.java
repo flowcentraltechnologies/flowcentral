@@ -60,6 +60,18 @@ public class RowChangeInfo {
     public boolean matchTrigger(String trigger) {
         return trigger != null && trigger.equals(this.trigger);
     }
+    
+    public boolean matchTrigger(String... triggers) {
+        if (trigger != null) {
+            for (String _trigger: triggers) {
+                if (trigger.equals(_trigger)) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 
     @Override
     public String toString() {

@@ -202,7 +202,9 @@ public class AssignmentPage {
                     .addEquals(assignmentPageDef.getBaseField(), baseId);
             if (filterGroupDef != null) {
                 Restriction br = filterGroupDef.getRestriction(FilterType.TAB, now);
-                query.addRestriction(br);
+                if (br != null) {
+                    query.addRestriction(br);
+                }
             }
 
             List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
