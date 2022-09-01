@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.WorkflowSetValuesType;
 
 /**
  * Workflow set values query.
@@ -33,4 +34,7 @@ public class WorkflowSetValuesQuery extends BaseConfigNamedEntityQuery<WorkflowS
         return (WorkflowSetValuesQuery) addEquals("workflowId", workflowId);
     }
 
+    public WorkflowSetValuesQuery type(WorkflowSetValuesType type) {
+        return (WorkflowSetValuesQuery) addEquals("type", type);
+    }
 }

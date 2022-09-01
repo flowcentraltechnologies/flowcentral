@@ -21,10 +21,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
+import com.flowcentraltech.flowcentral.configuration.constants.WorkflowSetValuesType;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
-import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -33,18 +33,18 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.LongParam;
 
 /**
- * Studio workflow filter list command
+ * Studio workflow user action set values list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studioworkflowfilterlist")
-public class StudioWorkflowFilterListCommand extends AbstractApplicationListCommand<LongParam> {
+@Component("studioworkflowuseractionsetvalueslist")
+public class StudioWorkflowUserActionSetValuesListCommand extends AbstractApplicationListCommand<LongParam> {
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
-    public StudioWorkflowFilterListCommand() {
+    public StudioWorkflowUserActionSetValuesListCommand() {
         super(LongParam.class);
     }
 
@@ -56,12 +56,11 @@ public class StudioWorkflowFilterListCommand extends AbstractApplicationListComm
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
             List<ListData> list = new ArrayList<ListData>();
-            list.add(new ListData(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME,
-                    resolveSessionMessage("$m{studio.workflow.filter.always}")));
-            for (Listable filter : workflowModuleService.findWorkflowFilters(
-                    (WorkflowFilterQuery) new WorkflowFilterQuery().workflowId(longParam.getValue())
+            for (Listable setValues : workflowModuleService
+                    .findWorkflowSetValues((WorkflowSetValuesQuery) new WorkflowSetValuesQuery()
+                            .workflowId(longParam.getValue()).type(WorkflowSetValuesType.USER_ACTION)
                             .addSelect("name", "description").addOrder("description"))) {
-                list.add(new ListData(filter.getListKey(), filter.getListDescription()));
+                list.add(new ListData(setValues.getListKey(), setValues.getListDescription()));
             }
 
             return list;

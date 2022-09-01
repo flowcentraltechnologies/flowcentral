@@ -421,6 +421,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStepUserAction.setDescription(resolveApplicationMessage(wfUserActionConfig.getDescription()));
                 wfStepUserAction.setLabel(resolveApplicationMessage(wfUserActionConfig.getLabel()));
                 wfStepUserAction.setNextStepName(wfUserActionConfig.getNextStepName());
+                wfStepUserAction.setSetValuesName(wfUserActionConfig.getSetValuesName());
                 wfStepUserAction.setOrderIndex(wfUserActionConfig.getOrderIndex());
                 wfStepUserAction.setFormReview(wfUserActionConfig.isFormReview());
                 wfStepUserAction.setValidatePage(wfUserActionConfig.isValidatePage());

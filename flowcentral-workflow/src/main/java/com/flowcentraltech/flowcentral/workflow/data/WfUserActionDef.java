@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.tcdng.unify.core.constant.RequirementType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Workflow user action definition.
@@ -43,6 +44,8 @@ public class WfUserActionDef {
 
     private String nextStepName;
 
+    private String setValuesName;
+    
     private int orderIndex;
 
     private boolean formReview;
@@ -52,7 +55,7 @@ public class WfUserActionDef {
     private boolean forwarderPreferred;
 
     public WfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
-            String description, String label, String symbol, String styleClass, String nextStepName, int orderIndex,
+            String description, String label, String symbol, String styleClass, String nextStepName, String setValuesName, int orderIndex,
             boolean formReview, boolean validatePage, boolean forwarderPreferred) {
         this.commentRequirement = commentRequirement;
         this.highlightType = highlightType;
@@ -62,6 +65,7 @@ public class WfUserActionDef {
         this.symbol = symbol;
         this.styleClass = styleClass;
         this.nextStepName = nextStepName;
+        this.setValuesName = setValuesName;
         this.orderIndex = orderIndex;
         this.formReview = formReview;
         this.validatePage = validatePage;
@@ -100,6 +104,10 @@ public class WfUserActionDef {
         return nextStepName;
     }
 
+    public String getSetValuesName() {
+        return setValuesName;
+    }
+
     public int getOrderIndex() {
         return orderIndex;
     }
@@ -114,6 +122,10 @@ public class WfUserActionDef {
 
     public boolean isForwarderPreferred() {
         return forwarderPreferred;
+    }
+
+    public boolean isWithSetValues() {
+        return !StringUtils.isBlank(setValuesName);
     }
 
 }
