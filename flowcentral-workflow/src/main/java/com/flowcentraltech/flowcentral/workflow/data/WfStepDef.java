@@ -220,13 +220,11 @@ public class WfStepDef {
     }
 
     public boolean isEmailsAlways() {
-        return emails != null
-                && ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(emails);
+        return emails != null && ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(emails);
     }
 
     public boolean isCommentsAlways() {
-        return comments != null
-                && ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(comments);
+        return comments != null && ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(comments);
     }
 
     public String getAutoLoadingConditionName() {
@@ -466,8 +464,9 @@ public class WfStepDef {
         }
 
         public Builder addWfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
-                String description, String label, String symbol, String styleClass, String nextStepName, int orderIndex,
-                boolean formReview, boolean validatePage, boolean forwarderPreferred) {
+                String description, String label, String symbol, String styleClass, String nextStepName,
+                String setValuesName, int orderIndex, boolean formReview, boolean validatePage,
+                boolean forwarderPreferred) {
             if (userActionList == null) {
                 userActionList = new LinkedHashMap<String, WfUserActionDef>();
             }
@@ -480,8 +479,9 @@ public class WfStepDef {
                 throw new RuntimeException("Can not add user action policy to step type [" + type + "].");
             }
 
-            userActionList.put(name, new WfUserActionDef(commentRequirement, highlightType, name, description, label,
-                    symbol, styleClass, nextStepName, orderIndex, formReview, validatePage, forwarderPreferred));
+            userActionList.put(name,
+                    new WfUserActionDef(commentRequirement, highlightType, name, description, label, symbol, styleClass,
+                            nextStepName, setValuesName, orderIndex, formReview, validatePage, forwarderPreferred));
             return this;
         }
 

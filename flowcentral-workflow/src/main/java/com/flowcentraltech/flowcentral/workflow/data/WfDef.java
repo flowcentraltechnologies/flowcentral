@@ -110,6 +110,15 @@ public class WfDef extends BaseApplicationEntityDef {
         return false;
     }
 
+    public WfSetValuesDef getSetValuesDef(String name) {
+        WfSetValuesDef wfSetValuesDef = setValuesDefMap.get(name);
+        if (wfSetValuesDef == null) {
+            throw new RuntimeException("Workflow [" + getLongName() + "] does not have a setvalues definition [" + name + "].");
+        }
+        
+        return wfSetValuesDef;
+    }
+    
     public boolean isWithOnEntrySetValuesList() {
         return !DataUtils.isBlank(getOnEntrySetValuesList());
     }

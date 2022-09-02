@@ -15,7 +15,7 @@
 
 !fc-wfstepuseractionscrudpanel
 	tableComponents:$c{nameLabel descLabel}
-	formSection:$d{!ui-section components:$c{frmName frmDesc frmLabel frmNextStepName frmComment frmHighlight frmFormReview frmValidatePage frmForwarderPreferred}}
+	formSection:$d{!ui-section components:$c{frmName frmDesc frmLabel frmNextStepName frmSetValuesName frmComment frmHighlight frmFormReview frmValidatePage frmForwarderPreferred}}
 !ui-label:nameLabel caption:$m{wfstepuseractionscrudpanel.name} binding:name
 !ui-label:descLabel caption:$m{wfstepuseractionscrudpanel.description} binding:description
 !ui-name:frmName caption:$m{wfstepuseractionscrudpanel.name} size:32 binding:name required:true focus:true
@@ -24,6 +24,9 @@
 	binding:label required:true
 !ui-text:frmNextStepName caption:$m{wfstepuseractionscrudpanel.nextstepname} size:32
 	binding:nextStepName
+!ui-select:frmSetValuesName caption:$m{wfstepuseractionscrudpanel.setvalues}
+	list:$s{studioworkflowuseractionsetvalueslist} listParamType:$s{PANEL} listParams:$l{workflowId} blankOption:$s{}
+	binding:setValuesName
 !ui-select:frmComment caption:$m{wfstepuseractionscrudpanel.commentrequirement}
 	list:$s{requirementtypelist} blankOption:$s{} binding:commentRequirement required:true
 !ui-select:frmHighlight caption:$m{wfstepuseractionscrudpanel.highlight}

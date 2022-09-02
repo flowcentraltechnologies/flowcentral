@@ -33,6 +33,8 @@ import com.tcdng.unify.core.util.xml.adapter.RequirementTypeXmlAdapter;
 public class WfUserActionConfig extends BaseNameConfig {
 
     private String nextStepName;
+    
+    private String setValuesName;
 
     private RequirementType commentRequirement;
 
@@ -57,6 +59,15 @@ public class WfUserActionConfig extends BaseNameConfig {
     @XmlAttribute(name = "nextStep", required = true)
     public void setNextStepName(String nextStepName) {
         this.nextStepName = nextStepName;
+    }
+
+    public String getSetValuesName() {
+        return setValuesName;
+    }
+
+    @XmlAttribute(name = "setValues")
+    public void setSetValuesName(String setValuesName) {
+        this.setValuesName = setValuesName;
     }
 
     public RequirementType getCommentRequirement() {

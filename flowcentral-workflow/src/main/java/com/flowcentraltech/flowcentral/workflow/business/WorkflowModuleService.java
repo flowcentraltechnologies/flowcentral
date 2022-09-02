@@ -35,6 +35,8 @@ import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -208,6 +210,17 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     List<WorkflowFilter> findWorkflowFilters(WorkflowFilterQuery query) throws UnifyException;
+
+    /**
+     * Finds workflow set-values by query.
+     * 
+     * @param query
+     *              the query to use
+     * @return list of workflow set-values
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkflowSetValues> findWorkflowSetValues(WorkflowSetValuesQuery query) throws UnifyException;
 
     /**
      * Finds workflow step by ID.

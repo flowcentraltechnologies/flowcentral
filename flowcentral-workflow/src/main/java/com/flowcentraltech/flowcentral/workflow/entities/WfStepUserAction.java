@@ -56,6 +56,9 @@ public class WfStepUserAction extends BaseNamedEntity {
     @Column(name = "NEXT_STEP_NM", length = 64, nullable = true)
     private String nextStepName;
 
+    @Column(name = "SET_VALUES_NM", length = 64, nullable = true)
+    private String setValuesName;
+
     @Column
     private int orderIndex;
 
@@ -123,6 +126,14 @@ public class WfStepUserAction extends BaseNamedEntity {
 
     public void setNextStepName(String nextStepName) {
         this.nextStepName = nextStepName;
+    }
+
+    public String getSetValuesName() {
+        return setValuesName;
+    }
+
+    public void setSetValuesName(String setValuesName) {
+        this.setValuesName = setValuesName;
     }
 
     public int getOrderIndex() {

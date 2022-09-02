@@ -116,6 +116,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
+import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
@@ -310,9 +311,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepUserAction.getHighlightType(), wfStepUserAction.getName(),
                                     wfStepUserAction.getDescription(), wfStepUserAction.getLabel(),
                                     wfStepUserAction.getSymbol(), wfStepUserAction.getStyleClass(),
-                                    wfStepUserAction.getNextStepName(), wfStepUserAction.getOrderIndex(),
-                                    wfStepUserAction.isFormReview(), wfStepUserAction.isValidatePage(),
-                                    wfStepUserAction.isForwarderPreferred());
+                                    wfStepUserAction.getNextStepName(), wfStepUserAction.getSetValuesName(),
+                                    wfStepUserAction.getOrderIndex(), wfStepUserAction.isFormReview(),
+                                    wfStepUserAction.isValidatePage(), wfStepUserAction.isForwarderPreferred());
                         }
 
                         for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
@@ -571,6 +572,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public List<WorkflowSetValues> findWorkflowSetValues(WorkflowSetValuesQuery query) throws UnifyException {
+        return environment().findAll(query);
+    }
+
+    @Override
     public WfStep findLeanWorkflowStepById(Long wfStepId) throws UnifyException {
         return environment().listLean(WfStep.class, wfStepId);
     }
@@ -670,6 +676,17 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             environment().updateByIdVersion(wfItem);
 
             wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
+            if (userActionDef.isWithSetValues()) {
+                final EntityDef entityDef = wfDef.getEntityDef();
+                final Date now = getNow();
+                final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
+                if (!wfSetValuesDef.isWithOnCondition()
+                        || wfSetValuesDef.getOnCondition().getObjectFilter(entityDef, now).match(wfEntityInst)) {
+                    wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst, Collections.emptyMap(),
+                            null);
+                }
+            }
+            
             if (wfReviewMode.lean()) {
                 if (emails != null) {
                     environment().findChildren(wfEntityInst);
@@ -928,12 +945,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final WfStepDef startStepDef = wfDef.getStartStepDef();
             // Set values on entry
             if (wfDef.isWithOnEntrySetValuesList()) {
+                final EntityDef entityDef = wfDef.getEntityDef();
                 final Date now = getNow();
                 instValueStore.save(wfDef.getOnEntrySetValuesFields());
                 for (WfSetValuesDef wfSetValuesDef : wfDef.getOnEntrySetValuesList()) {
-                    if (wfSetValuesDef.getOnCondition().getObjectFilter(wfDef.getEntityDef(), now).match(inst)) {
-                        wfSetValuesDef.getSetValues().apply(appletUtil, wfDef.getEntityDef(), now, inst,
-                                Collections.emptyMap(), null);
+                    if (!wfSetValuesDef.isWithOnCondition()
+                            || wfSetValuesDef.getOnCondition().getObjectFilter(entityDef, now).match(inst)) {
+                        wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, inst, Collections.emptyMap(),
+                                null);
                     }
                 }
             }

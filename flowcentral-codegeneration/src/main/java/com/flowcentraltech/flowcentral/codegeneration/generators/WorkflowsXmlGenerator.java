@@ -228,6 +228,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                                 wfUserActionConfig.setDescription("$m{" + descKey + "}");
                                 wfUserActionConfig.setLabel("$m{" + labelKey + "}");
                                 wfUserActionConfig.setNextStepName(wfStepUserAction.getNextStepName());
+                                wfUserActionConfig.setSetValuesName(wfStepUserAction.getSetValuesName());
                                 wfUserActionConfig.setOrderIndex(wfStepUserAction.getOrderIndex());
                                 wfUserActionConfig.setFormReview(wfStepUserAction.isFormReview());
                                 wfUserActionConfig.setValidatePage(wfStepUserAction.isValidatePage());

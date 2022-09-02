@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>flowcentral-integration-rabbitmq</artifactId>
-	<name>flowcentral-integratio-rabbitmq</name>
+	<name>flowcentral-integration-rabbitmq</name>
 	<description>Flowcentral Integration (RabbitMQ) Module</description>
 	<url>http://www.flowcentraltechnologies.com</url>
 

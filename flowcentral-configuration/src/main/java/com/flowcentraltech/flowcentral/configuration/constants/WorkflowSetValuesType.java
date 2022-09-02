@@ -31,7 +31,9 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum WorkflowSetValuesType implements EnumConst {
 
     ON_ENTRY(
-            "OE");
+            "OE"),
+    USER_ACTION(
+            "UA");
 
     private final String code;
 
