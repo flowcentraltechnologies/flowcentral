@@ -394,7 +394,13 @@ public class FormContext extends AbstractContext {
         if (message.isSkippable()) {
             rrb.addSkippable(message.getFormMessage().getMessage());
         } else {
-            rrb.addRequired(message.getFormMessage().getMessage());
+            FormMessage formMessage = message.getFormMessage();
+            rrb.addRequired(formMessage.getMessage());
+            
+            String mainTabName = formDef.getFormTabDef(0).getName();
+            if (message.isTarget(mainTabName)) {
+                addValidationError(formMessage);
+            }         
         }
     }
 
