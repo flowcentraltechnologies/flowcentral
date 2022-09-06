@@ -122,6 +122,7 @@ public final class LingualDateUtils {
                 cal2.add(Calendar.DATE, -1);
                 break;
             case TODAY:
+            case NOW:
             default:
                 break;
         }
@@ -197,6 +198,8 @@ public final class LingualDateUtils {
             case YESTERDAY:
                 cal1.add(Calendar.DATE, -1);
                 break;
+            case NOW:
+                return now;
             case TODAY:
             default:
                 break;

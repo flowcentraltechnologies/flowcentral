@@ -30,6 +30,8 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "lingualdatetypelist", description = "$m{staticlist.lingualdatetypelist}")
 public enum LingualDateType implements EnumConst {
 
+    NOW(
+            "NOW"),
     TODAY(
             "TDY"),
     YESTERDAY(
