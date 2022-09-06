@@ -889,7 +889,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 WidgetColor color = appFormElement.getColor();
                                 if (useFormColorScheme) {
                                     color = entitySearchTypes.contains(widgetTypeDef.getLongName()) ? WidgetColor.PURPLE
-                                            : entityFieldDef.isWithAutoFormat() ? WidgetColor.NAVY_GRAY : color;
+                                            : (entityFieldDef.isWithAutoFormat() ? WidgetColor.NAVY_GRAY : color);
                                 }
 
                                 fieldRenderInfos.put(fieldName,

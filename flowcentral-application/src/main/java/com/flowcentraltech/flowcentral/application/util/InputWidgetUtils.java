@@ -219,8 +219,14 @@ public final class InputWidgetUtils {
         String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, false);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
-            esb.append(" style:$s{width:100%;}");
-            return esb.toString();
+            esb.append(" style:$s{width:100%;");
+
+            if ("application.entitysearch".equals(widgetTypeDef.getLongName())) {
+                esb.append("background-color:").append(WidgetColor.WHITE.hex()).append(";");
+            }
+
+            esb.append("}");
+           return esb.toString();
         }
 
         return editor;
