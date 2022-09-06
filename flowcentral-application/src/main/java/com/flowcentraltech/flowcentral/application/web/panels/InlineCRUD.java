@@ -110,6 +110,10 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         }
     }
 
+    public void fireOnRowChange(String trigger, int rowIndex) throws UnifyException {
+        fireOnRowChange(new RowChangeInfo(trigger, rowIndex));
+    }
+
     public void fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         EntryActionType actionType = table.fireOnRowChange(rowChangeInfo);
         if (actionType.isAddItem()) {
@@ -149,6 +153,22 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         return Collections.unmodifiableList(entries);
     }
 
+    @SuppressWarnings("unchecked")
+    public int size() {
+        List<T> entries = (List<T>) table.getSourceObject();
+        return entries != null ? entries.size() : 0;
+    }
+    
+    @SuppressWarnings("unchecked")
+    public T getEntry(int index) {
+        if (index < 0 || index >= size()) {
+            throw new IllegalArgumentException("Invalid index " + index + " accessing inline CRUD of size " + size());
+        }
+        
+        List<T> entries = (List<T>) table.getSourceObject();
+        return entries.get(index);
+    }
+    
     @SuppressWarnings("unchecked")
     private void addEntry(boolean fireTableChange) throws UnifyException {
         createAndAddInst((List<T>) table.getSourceObject());
