@@ -556,6 +556,8 @@ public class TableWriter extends AbstractControlWriter {
                     }
 
                     // Normal row
+                    String summaryClass = null;
+                    String summaryColor = null;
                     Long id = valueStore.retrieve(Long.class, "id");
                     writer.write("<tr");
                     if (i == highlightRow) {
@@ -565,8 +567,10 @@ public class TableWriter extends AbstractControlWriter {
                         writeTagStyleClass(writer, entryMessage.getMessageType().styleClass());
                     } else if (alternatingRows) {
                         if (i % 2 == 0) {
+                            summaryClass = even;
                             writeTagStyleClass(writer, even);
                         } else {
+                            summaryClass = odd;
                             writeTagStyleClass(writer, odd);
                         }
                     } else if (isRowAction) {
@@ -581,7 +585,7 @@ public class TableWriter extends AbstractControlWriter {
                                     .getObjectFilter(tableDef.getEntityDef(), now)
                                     .match(valueStore)) {
                                 writer.write(" style=\"background-color:");
-                                writer.write(tableFilterDef.getRowColor());
+                                writer.write(summaryColor = tableFilterDef.getRowColor());
                                 writer.write(";\"");
                                 break;
                             }
@@ -673,7 +677,18 @@ public class TableWriter extends AbstractControlWriter {
                     if (details && detailsIndex == i) {
                         DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
                         if (detailsPanel != null) {
-                            writer.write("<tr>");
+                            writer.write("<tr");
+                            if (summaryClass != null) {
+                                writeTagStyleClass(writer, summaryClass);
+                            }
+                            
+                            if (summaryColor != null) {
+                                writer.write(" style=\"background-color:");
+                                writer.write(summaryColor);
+                                writer.write(";\"");
+                            }
+                            writer.write(">");
+                            
                             int skip = 1;
                             if (isSerialNo) {
                                 writer.write("<td class=\"mseriald\"></td>");
@@ -706,7 +721,18 @@ public class TableWriter extends AbstractControlWriter {
                     // Summary
                     SummaryPanel summaryPanel = tableWidget.getSummaryPanel(i);
                     if (summaryPanel != null) {
-                        writer.write("<tr>");
+                        writer.write("<tr");
+                        if (summaryClass != null) {
+                            writeTagStyleClass(writer, summaryClass);
+                        }
+                        
+                        if (summaryColor != null) {
+                            writer.write(" style=\"background-color:");
+                            writer.write(summaryColor);
+                            writer.write(";\"");
+                        }
+                        writer.write(">");
+
                         int skip = 0;
                         if (supportSelect && !entryMode) {
                             writer.write("<td class=\"mseld\"></td>");
