@@ -36,6 +36,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.security.TwoFactorAutenticationService;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
@@ -172,6 +173,10 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     @Action
     public String selectUserRole() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
+        if (DataUtils.isBlank(pageBean.getUserRoleList())) {
+            return noResult();
+        }
+        
         UserRoleInfo userRoleInfo = pageBean.getUserRoleList().get(getRoleTable().getViewIndex());
         pageBean.setUserRoleList(null);
         try {

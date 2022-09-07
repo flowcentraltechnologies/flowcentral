@@ -30,6 +30,9 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "widgetcolorlist", description = "$m{staticlist.widgetcolorlist}")
 public enum WidgetColor implements EnumConst {
 
+    WHITE(
+            "WHT",
+            "#ffffff"),
     RED(
             "RED",
             "#eacbc8"),
