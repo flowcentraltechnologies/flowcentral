@@ -1804,14 +1804,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<Class<?>> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException {
         List<AppEntity> entityList = environment()
-                .listAll(new AppEntityQuery().isDelegated().addSelect("applicationName", "name"));
+                .listAll(new AppEntityQuery().isDelegated().addSelect("applicationName", "name", "delegate"));
         if (!entityList.isEmpty()) {
             List<Class<?>> delegateList = new ArrayList<Class<?>>();
             for (AppEntity entity : entityList) {
                 String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(entity.getApplicationName(),
                         entity.getName());
+                EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
                 if (dataSourceName.equals(environment().getEntityDataSourceName(entityLongName))) {
-                    EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
                     delegateList.add(entityClassDef.getEntityClass());
                 }
             }
