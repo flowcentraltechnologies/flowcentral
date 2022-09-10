@@ -44,4 +44,6 @@ public interface ApplicationModuleNameConstants {
     String LOGIN_USER_PHOTO_GENERATOR = "login-userphotogenerator";
 
     String COMMENT_USER_PHOTO_GENERATOR = "comment-userphotogenerator";
+
+    String DELEGATE_ENTITYLIST_PROVIDER = "application-delegate-entitylist-provider";
 }

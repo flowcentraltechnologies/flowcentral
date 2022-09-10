@@ -245,7 +245,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportableDefinition.getApplicationName(), reportableDefinition.getName()));
         reportOptions.setTitle(reportableDefinition.getTitle());
         Class<? extends Entity> entityClass = (Class<? extends Entity>) entityClassDef.getEntityClass();
-        String dataSourceName = environment().getDataSourceName(entityClass);
+        String dataSourceName = environment().getEntityDataSourceName(entityClass);
         reportOptions.setRecordName(entityClass.getName());
         reportOptions.setDataSource(dataSourceName);
 
@@ -444,7 +444,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         reportOptions.setShadeOddRows(reportConfiguration.isShadeOddRows());
         reportOptions.setUnderlineRows(reportConfiguration.isUnderlineRows());
         Class<? extends Entity> entityClass = (Class<? extends Entity>) entityClassDef.getEntityClass();
-        String dataSourceName = environment().getDataSourceName(entityClass);
+        String dataSourceName = environment().getEntityDataSourceName(entityClass);
         reportOptions.setRecordName(entityClass.getName());
         reportOptions.setDataSource(dataSourceName);
 

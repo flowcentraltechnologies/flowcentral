@@ -828,6 +828,17 @@ public interface EnvironmentService extends BusinessService {
             String valueName, Query<V> query) throws UnifyException;
     
     /**
+     * Gets the datasource that the entity belongs to.
+     * 
+     * @param entityLongName
+     *                    the entity long name
+     * @return the datasource name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getEntityDataSourceName(String entityLongName) throws UnifyException;
+    
+    /**
      * Gets the datasource that the entity class belongs to.
      * 
      * @param entityClass
@@ -836,5 +847,5 @@ public interface EnvironmentService extends BusinessService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    String getDataSourceName(Class<? extends Entity> entityClass) throws UnifyException;
+    String getEntityDataSourceName(Class<? extends Entity> entityClass) throws UnifyException;
 }
