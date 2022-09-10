@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -122,7 +123,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Configurable
     private SpecialParamProvider specialParamProvider;
-    
+
     public void setThemeManager(ThemeManager themeManager) {
         this.themeManager = themeManager;
     }
@@ -135,7 +136,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         this.applicationModuleService = applicationModuleService;
     }
 
-    public final  void setReportServer(ReportServer reportServer) {
+    public final void setReportServer(ReportServer reportServer) {
         this.reportServer = reportServer;
     }
 
@@ -158,7 +159,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public List<Long> findReportConfigurationIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new ReportConfigurationQuery().applicationName(applicationName));
+        return environment().valueList(Long.class, "id",
+                new ReportConfigurationQuery().applicationName(applicationName));
     }
 
     @Override
@@ -174,8 +176,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public Long getReportableDefinitionId(String reportableName) throws UnifyException {
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(reportableName);
-        return environment().value(Long.class, "id", new ReportableDefinitionQuery().applicationName(np.getApplicationName())
-                .name(np.getEntityName()).mustMatch(false));
+        return environment().value(Long.class, "id", new ReportableDefinitionQuery()
+                .applicationName(np.getApplicationName()).name(np.getEntityName()).mustMatch(false));
     }
 
     @Override
@@ -217,7 +219,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public ReportColumn[] findReportableColumns(String reportableName) throws UnifyException {
-        ReportableDefinition reportableDefinition = environment().find(new ReportableDefinitionQuery().name(reportableName));
+        ReportableDefinition reportableDefinition = environment()
+                .find(new ReportableDefinitionQuery().name(reportableName));
 
         List<ReportableField> reportFieldList = environment()
                 .findAll(new ReportableFieldQuery().reportableId(reportableDefinition.getId()).orderById());
@@ -237,7 +240,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public ReportOptions getDynamicReportOptions(String entityName, List<DefaultReportColumn> defaultReportColumnList)
             throws UnifyException {
-        EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entityName);
+        final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entityName);
         ReportableDefinition reportableDefinition = environment()
                 .listLean(new ReportableDefinitionQuery().entity(entityName));
         ReportOptions reportOptions = new ReportOptions();
@@ -486,7 +489,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         // Report column options
         final Database db = db(reportOptions.getDataSource());
-        EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
+        final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
+        final EntityDef entityDef = entityClassDef.getEntityDef();
         SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db.getDataSource().getDialect())
                 .findSqlEntityInfo(entityClassDef.getEntityClass());
 
@@ -507,18 +511,20 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportColumnOptions.setOrderType(reportColumn.getColumnOrder());
                 reportColumnOptions.setIncluded(true);
 
+                final String fieldName = reportColumn.getFieldName();
                 String type = reportColumn.getType();
                 String formatter = reportColumn.getFormatter();
                 HAlignType hAlignType = reportColumn.getHorizAlignType();
                 int width = reportColumn.getWidth();
                 if (sqlEntityInfo != null) {
                     reportColumnOptions.setTableName(sqlEntityInfo.getPreferredViewName());
+                    if (StringUtils.isNotBlank(fieldName)) {
+                        final String columnName = entityDef.isWithColumnName(fieldName)
+                                ? entityDef.getColumnName(fieldName)
+                                : sqlEntityInfo.getListFieldInfo(reportColumn.getFieldName()).getPreferredColumnName();
+                        reportColumnOptions.setColumnName(columnName);
 
-                    if (StringUtils.isNotBlank(reportColumn.getFieldName())) {
-                        reportColumnOptions.setColumnName(
-                                sqlEntityInfo.getListFieldInfo(reportColumn.getFieldName()).getPreferredColumnName());
-
-                        ReportableField reportableField = fieldMap.get(reportColumn.getFieldName());
+                        ReportableField reportableField = fieldMap.get(fieldName);
                         if (type == null) {
                             type = reportableField.getType();
                         }
@@ -536,7 +542,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                         }
                     }
                 } else {
-                    reportColumnOptions.setColumnName(reportColumn.getFieldName());
+                    reportColumnOptions.setColumnName(fieldName);
                 }
 
                 if (type == null) {
@@ -593,7 +599,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     }
                 } else {
                     Object param1 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamA());
-                    Object param2= specialParamProvider.resolveSpecialParameter(restrictionDef.getParamB());
+                    Object param2 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamB());
                     if (restrictionDef.isParameterVal()) {
                         if (param1 != null) {
                             param1 = parameters.get((String) param1);

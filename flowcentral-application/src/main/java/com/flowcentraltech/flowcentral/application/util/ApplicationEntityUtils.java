@@ -59,6 +59,9 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
+    private static final Set<String> baseFields = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createdBy", "updatedBy", "createDt", "updateDt")));
+
     private static final Set<String> nonReportables = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "applicationId", "originWorkRecId")));
 
@@ -89,6 +92,10 @@ public final class ApplicationEntityUtils {
 
     }
 
+    public static boolean isBaseField(String fieldName) {
+        return baseFields.contains(fieldName);
+    }
+    
     public static String getEntityInstName(String entityName, Long id) {
         return StringUtils.concatenateUsingSeparator(':', entityName, id);
     }

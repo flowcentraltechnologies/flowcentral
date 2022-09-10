@@ -27,6 +27,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
@@ -108,6 +109,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private Set<String> auditFieldNames;
 
+    private Map<String, String> columnNames;
+    
     private String blobFieldName;
 
     private String originClassName;
@@ -180,7 +183,12 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         this.fieldLabelMap = new HashMap<String, String>();
+        this.columnNames = new HashMap<String, String>();
         for (EntityFieldDef entityFieldDef : this.fieldDefList) {
+            if (ApplicationEntityUtils.isBaseField(entityFieldDef.getFieldName()) && entityFieldDef.isWithColumnName()) {
+                this.columnNames.put(entityFieldDef.getFieldName(), entityFieldDef.getColumnName());
+            }
+            
             this.withSuggestionFields |= entityFieldDef.isWithSuggestionType();
             this.withListOnly |= entityFieldDef.isListOnly();
             this.withCustomFields |= entityFieldDef.isCustom();
@@ -214,6 +222,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         this.descriptiveFieldDefList = DataUtils.unmodifiableList(this.descriptiveFieldDefList);
         this.fieldLabelMap = DataUtils.unmodifiableMap(this.fieldLabelMap);
+        this.columnNames = DataUtils.unmodifiableMap(this.columnNames);
         this.refFieldDefMap = DataUtils.unmodifiableMap(refFieldDefMap);
         this.addPrivilege = PrivilegeNameUtils.getAddPrivilegeName(nameParts.getLongName());
         this.editPrivilege = PrivilegeNameUtils.getEditPrivilegeName(nameParts.getLongName());
@@ -230,6 +239,14 @@ public class EntityDef extends BaseApplicationEntityDef {
         return type;
     }
 
+    public String getColumnName(String fieldName) {
+        return columnNames.get(fieldName);
+    }
+
+    public boolean isWithColumnName(String fieldName) {
+        return columnNames.containsKey(fieldName);
+    }
+    
     public boolean isWithCustomFields() {
         return withCustomFields;
     }

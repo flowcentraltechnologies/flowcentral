@@ -212,6 +212,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return columnName;
     }
 
+    public boolean isWithColumnName() {
+        return !StringUtils.isBlank(columnName);
+    }
+
     @Override
     public String getReferences() {
         return references;
@@ -779,18 +783,4 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         }
     }
 
-    @Override
-    public String toString() {
-        return "EntityFieldDef [textWidgetTypeDef=" + textWidgetTypeDef + ", inputWidgetTypeDef=" + inputWidgetTypeDef
-                + ", ligualWidgetTypeDef=" + ligualWidgetTypeDef + ", resolvedTypeFieldDef=" + resolvedTypeFieldDef
-                + ", refDef=" + refDef + ", dataType=" + dataType + ", type=" + type + ", textCase=" + textCase
-                + ", entityLongName=" + entityLongName + ", fieldName=" + fieldName + ", fieldLabel=" + fieldLabel
-                + ", columnName=" + columnName + ", references=" + references + ", key=" + key + ", property="
-                + property + ", category=" + category + ", suggestionType=" + suggestionType + ", inputLabel="
-                + inputLabel + ", inputListKey=" + inputListKey + ", lingualListKey=" + lingualListKey + ", autoFormat="
-                + autoFormat + ", defaultVal=" + defaultVal + ", rows=" + rows + ", columns=" + columns + ", minLen="
-                + minLen + ", maxLen=" + maxLen + ", precision=" + precision + ", scale=" + scale + ", nullable="
-                + nullable + ", auditable=" + auditable + ", reportable=" + reportable + ", descriptive=" + descriptive
-                + ", maintainLink=" + maintainLink + ", basicSearch=" + basicSearch + "]";
-    }
 }

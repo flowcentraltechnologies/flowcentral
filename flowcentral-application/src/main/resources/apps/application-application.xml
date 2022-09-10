@@ -218,6 +218,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s underscore:true dollar:true"
 			renderer="!ui-label" />
+		<widgetType name="columnname" listOption="true"
+			description="$m{application.widgettype.columnname}"
+			dataType="string" inputType="string"
+			editor="!ui-name minLen:%s maxLen:%s underscore:true"
+			renderer="!ui-label" />
 		<widgetType name="checkbox" listOption="true"
 			description="$m{application.widgettype.checkbox}" dataType="boolean"
 			inputType="boolean" editor="!ui-checkbox" renderer="!ui-label"
