@@ -1954,7 +1954,23 @@
 					<setState type="tab" target="basicDetails" editable="true" />
 					<setState type="field" target="baseType" disabled="false" />
 					<setState type="field"
-						target="name,description,entityClass,tableName" disabled="true" />
+						target="name,description,entityClass" disabled="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="tableNameMutablePolicy"
+				description="$m{studio.common.form.formstatepolicy.tablenamemutable}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="is_not_null" field="id" />
+						<restriction type="is_null" field="delegate" />
+						<restriction type="equals" field="configType"
+							paramA="C" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="field"
+						target="tableName" disabled="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -1997,6 +2013,8 @@
 						column="0" visible="false" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" disabled="true" />
+					<field name="columnName" inputWidget="application.javafieldname"
+						column="1" required="false" />
 					<field name="inputWidget" inputWidget="entityfieldwidgetlist"
 						column="1" switchOnChange="true" />
 					<field name="suggestionType" inputWidget="suggestiontypelist"

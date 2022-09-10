@@ -754,6 +754,8 @@
 				inputWidget="application.enumlist" />
 			<field name="name" label="$m{application.appentityfield.name}"
 				type="string" inputWidget="application.name" />
+			<field name="columnName" label="$m{application.appentityfield.columnname}"
+				type="string" inputWidget="application.name" nullable = "true"/>
 			<field name="label"
 				label="$m{application.appentityfield.label}" type="string" />
 			<field name="references"
