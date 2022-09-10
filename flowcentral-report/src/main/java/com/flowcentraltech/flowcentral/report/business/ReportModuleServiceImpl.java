@@ -75,6 +75,8 @@ import com.tcdng.unify.core.criterion.SingleParamRestriction;
 import com.tcdng.unify.core.criterion.ZeroParamRestriction;
 import com.tcdng.unify.core.data.Input;
 import com.tcdng.unify.core.data.Inputs;
+import com.tcdng.unify.core.database.Database;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
 import com.tcdng.unify.core.database.sql.SqlEntityInfo;
 import com.tcdng.unify.core.report.Report;
@@ -231,6 +233,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         return reportColumns;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ReportOptions getDynamicReportOptions(String entityName, List<DefaultReportColumn> defaultReportColumnList)
             throws UnifyException {
@@ -241,7 +244,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         reportOptions.setReportName(ApplicationNameUtils.getApplicationEntityLongName(
                 reportableDefinition.getApplicationName(), reportableDefinition.getName()));
         reportOptions.setTitle(reportableDefinition.getTitle());
-        reportOptions.setRecordName(entityClassDef.getEntityClass().getName());
+        Class<? extends Entity> entityClass = (Class<? extends Entity>) entityClassDef.getEntityClass();
+        String dataSourceName = environment().getDataSourceName(entityClass);
+        reportOptions.setRecordName(entityClass.getName());
+        reportOptions.setDataSource(dataSourceName);
 
         Map<String, ReportableField> fieldMap = environment().listAllMap(String.class, "name",
                 new ReportableFieldQuery().reportableId(reportableDefinition.getId()).parameterOnly(false));
@@ -309,9 +315,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         DataUtils.sortDescending(reportColumnOptionsList, ReportColumnOptions.class, "group");
 
         List<ReportColumnOptions> sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
-        // TODO Get from report data source. For now just get from application data
-        // source
-        SqlDataSourceDialect sqlDialect = (SqlDataSourceDialect) db().getDataSource().getDialect();
+        final Database db = db(reportOptions.getDataSource());
+        SqlDataSourceDialect sqlDialect = (SqlDataSourceDialect) db.getDataSource().getDialect();
         Class<?> dataClass = ReflectUtils.classForName(reportOptions.getRecordName());
         SqlEntityInfo sqlEntityInfo = null;
         if (reportOptions.isReportEntityList()) {
@@ -412,6 +417,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         return Collections.emptyList();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ReportOptions getReportOptionsForConfiguration(String reportConfigName) throws UnifyException {
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(reportConfigName);
@@ -428,7 +434,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         ReportOptions reportOptions = new ReportOptions();
         reportOptions.setReportLayout(reportConfiguration.getLayout());
         reportOptions.setReportName(reportConfigName);
-        reportOptions.setRecordName(entityClassDef.getEntityClass().getName());
         reportOptions.setReportDescription(reportConfiguration.getDescription().toUpperCase());
         reportOptions.setTitle(resolveSessionMessage(reportConfiguration.getTitle()));
         reportOptions.setProcessor(reportConfiguration.getProcessor());
@@ -438,6 +443,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         reportOptions.setLandscape(reportConfiguration.isLandscape());
         reportOptions.setShadeOddRows(reportConfiguration.isShadeOddRows());
         reportOptions.setUnderlineRows(reportConfiguration.isUnderlineRows());
+        Class<? extends Entity> entityClass = (Class<? extends Entity>) entityClassDef.getEntityClass();
+        String dataSourceName = environment().getDataSourceName(entityClass);
+        reportOptions.setRecordName(entityClass.getName());
+        reportOptions.setDataSource(dataSourceName);
 
         // Report parameters
         List<Input<?>> userInputList = new ArrayList<Input<?>>();
@@ -476,8 +485,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 new ReportableDefinitionQuery().applicationName(rnp.getApplicationName()).name(rnp.getEntityName()));
 
         // Report column options
+        final Database db = db(reportOptions.getDataSource());
         EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
-        SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db().getDataSource().getDialect())
+        SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db.getDataSource().getDialect())
                 .findSqlEntityInfo(entityClassDef.getEntityClass());
 
         Long reportableDefinitionId = environment().value(Long.class, "id",

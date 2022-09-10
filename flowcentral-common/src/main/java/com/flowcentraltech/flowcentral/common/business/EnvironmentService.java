@@ -826,4 +826,15 @@ public interface EnvironmentService extends BusinessService {
      */
     <T, U, V extends Entity> Map<T, List<U>> valueListMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException;
+    
+    /**
+     * Gets the datasource that the entity class belongs to.
+     * 
+     * @param entityClass
+     *                    the entity class
+     * @return the datasource name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getDataSourceName(Class<? extends Entity> entityClass) throws UnifyException;
 }

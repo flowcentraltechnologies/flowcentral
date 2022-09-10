@@ -38,4 +38,15 @@ public interface EnvironmentDelegate extends Database {
      *                        if an error occurs
      */
     void executeProcedure(String operation, String... payload) throws UnifyException;
+    
+    /**
+     * Gets the datasource name for entity
+     * 
+     * @param entityLongName
+     *                       the entity long name
+     * @return the data source name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getDataSourceName(String entityLongName) throws UnifyException;
 }

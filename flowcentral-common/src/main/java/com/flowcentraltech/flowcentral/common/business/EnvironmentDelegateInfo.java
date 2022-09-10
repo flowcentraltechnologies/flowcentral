@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -50,4 +51,9 @@ public class EnvironmentDelegateInfo {
     public EnvironmentDelegate getEnvironmentDelegate() {
         return environmentDelegate;
     }
+    
+    public String getDataSourceName() throws UnifyException {
+        return environmentDelegate.getDataSourceName(entityLongName);
+    }
+
 }
