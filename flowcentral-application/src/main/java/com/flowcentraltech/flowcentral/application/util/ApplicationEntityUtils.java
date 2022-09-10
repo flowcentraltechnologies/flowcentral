@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -59,8 +60,7 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    private static final Set<String> baseFields = Collections
-            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createdBy", "updatedBy", "createDt", "updateDt")));
+    private static final Map<String, String> baseFieldColumns ;
 
     private static final Set<String> nonReportables = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "applicationId", "originWorkRecId")));
@@ -86,14 +86,22 @@ public final class ApplicationEntityUtils {
         map.put(EntityBaseType.BASE_CONFIG_ENTITY, BaseConfigEntity.class);
         map.put(EntityBaseType.BASE_CONFIG_NAMED_ENTITY, BaseConfigNamedEntity.class);
         entityClassMap = Collections.unmodifiableMap(map);
+        
+        Map<String, String> _map = new HashMap<String, String>();
+        _map.put("versionNo", "VERSION_NO");
+        _map.put("createdBy", "CREATED_BY");
+        _map.put("updatedBy", "UPDATE_BY");
+        _map.put("createDt", "CREATE_DT");
+        _map.put("updateDt", "UPDATE_DT");
+        baseFieldColumns = Collections.unmodifiableMap(_map);
     }
 
     private ApplicationEntityUtils() {
 
     }
 
-    public static boolean isBaseField(String fieldName) {
-        return baseFields.contains(fieldName);
+    public static String getBaseFieldColumnName(String fieldName) {
+        return baseFieldColumns.get(fieldName);
     }
     
     public static String getEntityInstName(String entityName, Long id) {

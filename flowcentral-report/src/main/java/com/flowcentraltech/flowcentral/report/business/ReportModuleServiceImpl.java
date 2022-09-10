@@ -244,6 +244,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         ReportableDefinition reportableDefinition = environment()
                 .listLean(new ReportableDefinitionQuery().entity(entityName));
         ReportOptions reportOptions = new ReportOptions();
+        reportOptions.setEntity(entityName);
         reportOptions.setReportName(ApplicationNameUtils.getApplicationEntityLongName(
                 reportableDefinition.getApplicationName(), reportableDefinition.getName()));
         reportOptions.setTitle(reportableDefinition.getTitle());
@@ -319,6 +320,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         List<ReportColumnOptions> sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
         final Database db = db(reportOptions.getDataSource());
+        final EntityDef entityDef = reportOptions.getEntity() != null
+                ? applicationModuleService.getEntityDef(reportOptions.getEntity())
+                : null;
         SqlDataSourceDialect sqlDialect = (SqlDataSourceDialect) db.getDataSource().getDialect();
         Class<?> dataClass = ReflectUtils.classForName(reportOptions.getRecordName());
         SqlEntityInfo sqlEntityInfo = null;
@@ -334,10 +338,14 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
 
                 String tableName = reportColumnOptions.getTableName();
-                String columnName = reportColumnOptions.getColumnName();
+                String columnName = reportColumnOptions.getColumnName();                
                 if (reportOptions.isReportEntityList()) {
                     tableName = sqlEntityInfo.getPreferredViewName();
                     columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
+                }
+                
+                if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
+                    columnName = entityDef.getPreferedColumnName(columnName);
                 }
 
                 rb.addColumn(reportColumnOptions.getDescription(), tableName, columnName, reportColumnOptions.getType(),
@@ -435,6 +443,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         // Report column options
         EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
         ReportOptions reportOptions = new ReportOptions();
+        reportOptions.setEntity(entity);
         reportOptions.setReportLayout(reportConfiguration.getLayout());
         reportOptions.setReportName(reportConfigName);
         reportOptions.setReportDescription(reportConfiguration.getDescription().toUpperCase());
@@ -490,7 +499,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         // Report column options
         final Database db = db(reportOptions.getDataSource());
         final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
-        final EntityDef entityDef = entityClassDef.getEntityDef();
         SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db.getDataSource().getDialect())
                 .findSqlEntityInfo(entityClassDef.getEntityClass());
 
@@ -519,9 +527,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 if (sqlEntityInfo != null) {
                     reportColumnOptions.setTableName(sqlEntityInfo.getPreferredViewName());
                     if (StringUtils.isNotBlank(fieldName)) {
-                        final String columnName = entityDef.isWithColumnName(fieldName)
-                                ? entityDef.getColumnName(fieldName)
-                                : sqlEntityInfo.getListFieldInfo(reportColumn.getFieldName()).getPreferredColumnName();
+                        final String columnName = sqlEntityInfo.getListFieldInfo(fieldName).getPreferredColumnName();
                         reportColumnOptions.setColumnName(columnName);
 
                         ReportableField reportableField = fieldMap.get(fieldName);
