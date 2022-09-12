@@ -1058,6 +1058,8 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="dataTypeDesc" renderWidget="application.text"
 				label="$m{application.appentityfield.datatype}" widthRatio="1" />
+			<column field="columnName" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="references" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="nullable" renderWidget="application.text"
