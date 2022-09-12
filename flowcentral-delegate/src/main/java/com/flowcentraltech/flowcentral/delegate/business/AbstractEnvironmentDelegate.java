@@ -82,6 +82,11 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     }
 
     @Override
+    public boolean isReadOnly() throws UnifyException {
+        return true;
+    }
+
+    @Override
     public final DataSource getDataSource() throws UnifyException {
         throw new UnsupportedOperationException();
     }

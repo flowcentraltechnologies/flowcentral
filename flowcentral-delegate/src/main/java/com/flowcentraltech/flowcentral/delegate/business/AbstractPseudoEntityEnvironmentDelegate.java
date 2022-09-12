@@ -44,14 +44,19 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
         this.environmentService = environmentService;
     }
 
-    protected final EnvironmentService environment() {
-        return environmentService;
+    @Override
+    public String getDataSourceName(String entityLongName) throws UnifyException {
+        return "application-datasource";
     }
 
     @Override
     public void executeProcedure(String operation, String... payload) throws UnifyException {
         // TODO Auto-generated method stub
         
+    }
+
+    protected final EnvironmentService environment() {
+        return environmentService;
     }
 
     @Override

@@ -455,17 +455,4 @@ public class AppEntityField extends BaseConfigEntity {
         this.rows = rows;
     }
 
-    @Override
-    public String toString() {
-        return "AppEntityField [appEntityId=" + appEntityId + ", dataType=" + dataType + ", type=" + type + ", name="
-                + name + ", label=" + label + ", references=" + references + ", key=" + key + ", property=" + property
-                + ", columnName=" + columnName + ", category=" + category + ", inputLabel=" + inputLabel
-                + ", inputWidget=" + inputWidget + ", inputListKey=" + inputListKey + ", lingualWidget=" + lingualWidget
-                + ", lingualListKey=" + lingualListKey + ", maxLen=" + maxLen + ", minLen=" + minLen + ", precision="
-                + precision + ", scale=" + scale + ", nullable=" + nullable + ", auditable=" + auditable
-                + ", reportable=" + reportable + ", descriptive=" + descriptive + ", maintainLink=" + maintainLink
-                + ", appEntityName=" + appEntityName + ", applicationName=" + applicationName + ", dataTypeDesc="
-                + dataTypeDesc + ", typeDesc=" + typeDesc + "]";
-    }
-
 }

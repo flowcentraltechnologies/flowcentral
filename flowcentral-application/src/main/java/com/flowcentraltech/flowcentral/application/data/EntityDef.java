@@ -27,6 +27,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
@@ -108,6 +109,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private Set<String> auditFieldNames;
 
+    private Map<String, String> preferedColumnNames;
+    
     private String blobFieldName;
 
     private String originClassName;
@@ -180,12 +183,19 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         this.fieldLabelMap = new HashMap<String, String>();
+        this.preferedColumnNames = new HashMap<String, String>();
         for (EntityFieldDef entityFieldDef : this.fieldDefList) {
+            final String fieldName = entityFieldDef.getFieldName();
+            final String baseColumnName = ApplicationEntityUtils.getBaseFieldColumnName(fieldName);
+            if (baseColumnName != null && entityFieldDef.isWithColumnName()) {
+                this.preferedColumnNames.put(baseColumnName, entityFieldDef.getColumnName());
+            }
+            
             this.withSuggestionFields |= entityFieldDef.isWithSuggestionType();
             this.withListOnly |= entityFieldDef.isListOnly();
             this.withCustomFields |= entityFieldDef.isCustom();
             this.withChildFields |= entityFieldDef.isChildRef();
-            this.withDescriptionField |= "description".equals(entityFieldDef.getFieldName());
+            this.withDescriptionField |= "description".equals(fieldName);
             if (entityFieldDef.isDescriptive()) {
                 if (this.descriptiveFieldDefList == null) {
                     this.descriptiveFieldDefList = new ArrayList<EntityFieldDef>();
@@ -214,6 +224,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         this.descriptiveFieldDefList = DataUtils.unmodifiableList(this.descriptiveFieldDefList);
         this.fieldLabelMap = DataUtils.unmodifiableMap(this.fieldLabelMap);
+        this.preferedColumnNames = DataUtils.unmodifiableMap(this.preferedColumnNames);
         this.refFieldDefMap = DataUtils.unmodifiableMap(refFieldDefMap);
         this.addPrivilege = PrivilegeNameUtils.getAddPrivilegeName(nameParts.getLongName());
         this.editPrivilege = PrivilegeNameUtils.getEditPrivilegeName(nameParts.getLongName());
@@ -230,6 +241,14 @@ public class EntityDef extends BaseApplicationEntityDef {
         return type;
     }
 
+    public String getPreferedColumnName(String columnName) {
+        return preferedColumnNames.get(columnName);
+    }
+
+    public boolean isWithPreferedColumnName(String columnName) {
+        return preferedColumnNames.containsKey(columnName);
+    }
+    
     public boolean isWithCustomFields() {
         return withCustomFields;
     }

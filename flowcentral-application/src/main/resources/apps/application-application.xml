@@ -218,6 +218,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s underscore:true dollar:true"
 			renderer="!ui-label" />
+		<widgetType name="columnname" listOption="true"
+			description="$m{application.widgettype.columnname}"
+			dataType="string" inputType="string"
+			editor="!ui-name minLen:%s maxLen:%s underscore:true"
+			renderer="!ui-label" />
 		<widgetType name="checkbox" listOption="true"
 			description="$m{application.widgettype.checkbox}" dataType="boolean"
 			inputType="boolean" editor="!ui-checkbox" renderer="!ui-label"
@@ -754,6 +759,8 @@
 				inputWidget="application.enumlist" />
 			<field name="name" label="$m{application.appentityfield.name}"
 				type="string" inputWidget="application.name" />
+			<field name="columnName" label="$m{application.appentityfield.columnname}"
+				type="string" inputWidget="application.name" nullable = "true"/>
 			<field name="label"
 				label="$m{application.appentityfield.label}" type="string" />
 			<field name="references"

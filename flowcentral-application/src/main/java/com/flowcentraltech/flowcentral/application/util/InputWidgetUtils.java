@@ -338,6 +338,7 @@ public final class InputWidgetUtils {
             }
                 break;
             case "application.javafieldname":
+            case "application.columnname":
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
                 break;
             case "application.integer":

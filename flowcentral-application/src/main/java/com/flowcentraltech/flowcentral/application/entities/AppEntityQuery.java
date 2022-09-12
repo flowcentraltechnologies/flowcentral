@@ -42,4 +42,8 @@ public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
     public AppEntityQuery isWorkEntity() {
         return (AppEntityQuery) addAmongst("baseType", BASE_WORK_TYPES);
     }
+
+    public AppEntityQuery isDelegated() {
+        return (AppEntityQuery) addIsNotNull("delegate");
+    }
 }

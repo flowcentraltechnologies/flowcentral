@@ -54,6 +54,8 @@ public class ReportOptions {
 
     private String tableName;
 
+    private String entity;
+
     private List<ReportColumnOptions> columnOptionsList;
 
     private List<ReportJoinOptions> joinOptionsList;
@@ -133,6 +135,14 @@ public class ReportOptions {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public final String getEntity() {
+        return entity;
+    }
+
+    public final void setEntity(String entity) {
+        this.entity = entity;
     }
 
     public String getReportFormat() {

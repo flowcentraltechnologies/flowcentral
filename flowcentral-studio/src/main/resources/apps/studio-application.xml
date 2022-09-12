@@ -396,7 +396,8 @@
 		<applet name="manageApplication"
 			description="$m{studio.application.manage}"
 			label="$m{studio.application.manage.label}" icon="desktop"
-			type="manage_entitylist" entity="application.application" menuAccess="false">
+			type="manage_entitylist" entity="application.application"
+			menuAccess="false">
 			<property name="searchTable" value="appApplicationTable" />
 			<property name="searchTable.report" value="false" />
 			<property name="searchTable.new" value="false" />
@@ -414,7 +415,8 @@
 				value="appEditable" />
 			<filter name="appEditable"
 				description="$m{studio.application.filter.editable}">
-				<restriction type="equals" field="developable" paramA="Y" />
+				<restriction type="equals" field="developable"
+					paramA="Y" />
 			</filter>
 		</applet>
 		<applet name="manageAppEntityField"
@@ -444,9 +446,13 @@
 			<property name="maintainForm.delete.policy"
 				value="studioondeleteappentityfield-policy" />
 			<property name="maintainForm.delete.condition"
-				value="appEntityFieldEditable" />
+				value="appEntityFieldDeletable" />
 			<filter name="appEntityFieldEditable"
 				description="$m{application.appentityfield.filter.editable}">
+				<restriction type="not_equals" field="type" paramA="STC" />
+			</filter>
+			<filter name="appEntityFieldDeletable"
+				description="$m{application.appentityfield.filter.deletable}">
 				<restriction type="equals" field="type" paramA="CST" />
 			</filter>
 			<filter name="baseFieldFilter"
@@ -1052,6 +1058,8 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="dataTypeDesc" renderWidget="application.text"
 				label="$m{application.appentityfield.datatype}" widthRatio="1" />
+			<column field="columnName" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="references" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="nullable" renderWidget="application.text"
@@ -1954,7 +1962,22 @@
 					<setState type="tab" target="basicDetails" editable="true" />
 					<setState type="field" target="baseType" disabled="false" />
 					<setState type="field"
-						target="name,description,entityClass,tableName" disabled="true" />
+						target="name,description,entityClass" disabled="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="tableNameMutablePolicy"
+				description="$m{studio.common.form.formstatepolicy.tablenamemutable}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="is_not_null" field="id" />
+						<restriction type="is_null" field="delegate" />
+						<restriction type="equals" field="configType"
+							paramA="C" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="field" target="tableName" disabled="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -1997,6 +2020,8 @@
 						column="0" visible="false" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" disabled="true" />
+					<field name="columnName" inputWidget="application.columnname"
+						column="1" required="false" />
 					<field name="inputWidget" inputWidget="entityfieldwidgetlist"
 						column="1" switchOnChange="true" />
 					<field name="suggestionType" inputWidget="suggestiontypelist"
@@ -2063,13 +2088,23 @@
 				name="typeEditablePolicy"
 				description="$m{studio.appentityfield.form.formstatepolicy.typeeditable}">
 				<onCondition>
-					<restriction type="amongst" field="type"
-						paramA="BSE|STC" />
+					<restriction type="equals" field="type" paramA="STC" />
 				</onCondition>
 				<setStates>
 					<setState type="annotation" target="baseStaticAnnotation"
 						visible="true" />
 					<setState type="tab" target="basicDetails"
+						editable="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="basicEditablePolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.basiceditable}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="BSE" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,nullable"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>

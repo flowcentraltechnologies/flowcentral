@@ -579,6 +579,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
         return db(query.getEntityClass()).valueListMap(keyClass, keyName, valueClass, valueName, query);
     }
 
+    @Override
+    public String getEntityDataSourceName(String entityLongName) throws UnifyException {
+        EnvironmentDelegateInfo delegateInfo = delegateInfoByLongName.get(entityLongName);
+        return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
+    }
+
+    @Override
+    public String getEntityDataSourceName(Class<? extends Entity> entityClass) throws UnifyException {
+        EnvironmentDelegateInfo delegateInfo = delegateInfoByEntityClass.get(entityClass);
+        return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
+    }
+
     private Database db(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateInfo delegateInfo = delegateInfoByEntityClass.get(entityClass);
         return delegateInfo != null ? delegateInfo.getEnvironmentDelegate() : db();
