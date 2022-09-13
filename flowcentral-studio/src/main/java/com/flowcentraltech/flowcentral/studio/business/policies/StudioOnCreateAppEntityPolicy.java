@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
-import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
@@ -94,10 +93,6 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
         appRef.setName(appEntity.getName() + "Ref");
         appRef.setDescription(resolveSessionMessage("$m{studio.appref.reference.template}", nameDesc));
         appRef.setEntity(entity);
-        if (((EntityDef) ctx.getEntityDef()).isWithDescriptionField()) {
-            appRef.setSearchField("description");
-        }
-
         application().createAppRef(appRef);
 
         // Create reportable if necessary
