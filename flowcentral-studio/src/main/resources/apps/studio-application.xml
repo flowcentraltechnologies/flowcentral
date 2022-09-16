@@ -2549,6 +2549,8 @@
 					<field name="showDataLabels" column="1" />
 				</section>
 			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
 				name="onStaticPolicy"
 				description="$m{studio.common.form.formstatepolicy.onstatic}">
