@@ -933,6 +933,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity inst) throws UnifyException {
+        logDebug("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(), inst);
         if (!wfDef.isCompatible(inst)) {
             Class<?> clazz = inst != null ? inst.getClass() : null;
             throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_SUBMIT_INST_TO_INCOMPATIBLE_WORKFLOW, clazz,
