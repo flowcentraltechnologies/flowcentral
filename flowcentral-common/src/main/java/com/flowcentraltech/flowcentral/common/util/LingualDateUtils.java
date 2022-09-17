@@ -21,7 +21,9 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.data.DateRange;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.CalendarUtils;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Lingual date utilities.
@@ -161,6 +163,11 @@ public final class LingualDateUtils {
                 CalendarUtils.getLastSecondDate(cal2.getTime()));
     }
 
+    public static Date getDateFromNow(Date now, String typeVal) throws UnifyException {
+        LingualDateType lingualType = DataUtils.convert(LingualDateType.class, typeVal);
+        return LingualDateUtils.getDateFromNow(now, lingualType);
+    }
+    
     public static Date getDateFromNow(Date now, LingualDateType type) {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(now);
