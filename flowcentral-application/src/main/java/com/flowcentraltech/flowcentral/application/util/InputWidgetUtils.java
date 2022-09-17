@@ -1164,41 +1164,48 @@ public final class InputWidgetUtils {
     public static ResolvedCondition resolveDateCondition(EntityFieldDef entityFieldDef, Date now,
             FilterConditionType type, Object paramA, Object paramB) throws UnifyException {
         if (type.isLingual()) {
-            LingualDateType lingualType = DataUtils.convert(LingualDateType.class, (String) paramA);
-            if (lingualType != null) {
-                DateRange range = LingualDateUtils.getDateRangeFromNow(now, lingualType);
-                switch (type) {
-                    case EQUALS_LINGUAL:
-                        paramA = range.getFrom();
-                        paramB = range.getTo();
-                        type = FilterConditionType.BETWEEN;
-                        break;
-                    case NOT_EQUALS_LINGUAL:
-                        paramA = range.getFrom();
-                        paramB = range.getTo();
-                        type = FilterConditionType.NOT_BETWEEN;
-                        break;
-                    case GREATER_OR_EQUAL_LINGUAL:
-                        paramA = CalendarUtils.getMidnightDate(range.getFrom());
-                        type = FilterConditionType.GREATER_OR_EQUAL;
-                        break;
-                    case GREATER_THAN_LINGUAL:
-                        paramA = CalendarUtils.getLastSecondDate(range.getFrom());
-                        type = FilterConditionType.GREATER_THAN;
-                        break;
-                    case LESS_OR_EQUAL_LINGUAL:
-                        paramA = CalendarUtils.getLastSecondDate(range.getFrom());
-                        type = FilterConditionType.LESS_OR_EQUAL;
-                        break;
-                    case LESS_THAN_LINGUAL:
-                        paramA = CalendarUtils.getMidnightDate(range.getFrom());
-                        type = FilterConditionType.LESS_THAN;
-                        break;
-                    default:
-                        break;
-                }
+            if (type.isRange()) {
+                paramA = LingualDateUtils.getDateFromNow(now, (String) paramA);
+                paramB = LingualDateUtils.getDateFromNow(now, (String) paramB);
+                paramA = CalendarUtils.getMidnightDate((Date) paramA);
+                paramB = CalendarUtils.getLastSecondDate((Date) paramB);
             } else {
-                type = null;
+                LingualDateType lingualType = DataUtils.convert(LingualDateType.class, (String) paramA);
+                if (lingualType != null) {
+                    DateRange range = LingualDateUtils.getDateRangeFromNow(now, lingualType);
+                    switch (type) {
+                        case EQUALS_LINGUAL:
+                            paramA = range.getFrom();
+                            paramB = range.getTo();
+                            type = FilterConditionType.BETWEEN;
+                            break;
+                        case NOT_EQUALS_LINGUAL:
+                            paramA = range.getFrom();
+                            paramB = range.getTo();
+                            type = FilterConditionType.NOT_BETWEEN;
+                            break;
+                        case GREATER_OR_EQUAL_LINGUAL:
+                            paramA = CalendarUtils.getMidnightDate(range.getFrom());
+                            type = FilterConditionType.GREATER_OR_EQUAL;
+                            break;
+                        case GREATER_THAN_LINGUAL:
+                            paramA = CalendarUtils.getLastSecondDate(range.getFrom());
+                            type = FilterConditionType.GREATER_THAN;
+                            break;
+                        case LESS_OR_EQUAL_LINGUAL:
+                            paramA = CalendarUtils.getLastSecondDate(range.getFrom());
+                            type = FilterConditionType.LESS_OR_EQUAL;
+                            break;
+                        case LESS_THAN_LINGUAL:
+                            paramA = CalendarUtils.getMidnightDate(range.getFrom());
+                            type = FilterConditionType.LESS_THAN;
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    type = null;
+                }
             }
         } else {
             if (entityFieldDef.isTimestamp()) {

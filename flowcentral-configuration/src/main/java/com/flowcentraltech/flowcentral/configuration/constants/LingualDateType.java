@@ -38,6 +38,26 @@ public enum LingualDateType implements EnumConst {
             "YST"),
     TOMORROW(
             "TMR"),
+    LAST_15_DAYS(
+            "L15"),
+    NEXT_15_DAYS(
+            "N15"),
+    LAST_30_DAYS(
+            "L30"),
+    NEXT_30_DAYS(
+            "N30"),
+    LAST_45_DAYS(
+            "L45"),
+    NEXT_45_DAYS(
+            "N45"),
+    LAST_60_DAYS(
+            "L60"),
+    NEXT_60_DAYS(
+            "N60"),
+    LAST_90_DAYS(
+            "L90"),
+    NEXT_90_DAYS(
+            "N90"),
     THIS_WEEK(
             "TWK"),
     LAST_WEEK(

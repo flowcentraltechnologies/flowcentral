@@ -21,7 +21,9 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.data.DateRange;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.CalendarUtils;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Lingual date utilities.
@@ -39,8 +41,23 @@ public final class LingualDateUtils {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal1.setTime(now);
-        cal1.setTime(now);
+        cal2.setTime(now);
         switch (type) {
+            case LAST_15_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -15);
+                break;
+            case LAST_30_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -30);
+                break;
+            case LAST_45_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -45);
+                break;
+            case LAST_60_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -60);
+                break;
+            case LAST_90_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -90);
+                break;
             case LAST_12MONTHS:
                 cal1.add(Calendar.MONTH, -12);
                 break;
@@ -70,6 +87,21 @@ public final class LingualDateUtils {
                 cal2.add(Calendar.YEAR, -1);
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
                 cal2.set(Calendar.DAY_OF_YEAR, cal2.getActualMaximum(Calendar.DAY_OF_YEAR));
+                break;
+            case NEXT_15_DAYS:
+                cal2.add(Calendar.DAY_OF_YEAR, 15);
+                break;
+            case NEXT_30_DAYS:
+                cal2.add(Calendar.DAY_OF_YEAR, 30);
+                break;
+            case NEXT_45_DAYS:
+                cal2.add(Calendar.DAY_OF_YEAR, 45);
+                break;
+            case NEXT_60_DAYS:
+                cal2.add(Calendar.DAY_OF_YEAR, 60);
+                break;
+            case NEXT_90_DAYS:
+                cal2.add(Calendar.DAY_OF_YEAR, 90);
                 break;
             case NEXT_12MONTHS:
                 cal2.add(Calendar.MONTH, 12);
@@ -131,10 +163,30 @@ public final class LingualDateUtils {
                 CalendarUtils.getLastSecondDate(cal2.getTime()));
     }
 
+    public static Date getDateFromNow(Date now, String typeVal) throws UnifyException {
+        LingualDateType lingualType = DataUtils.convert(LingualDateType.class, typeVal);
+        return LingualDateUtils.getDateFromNow(now, lingualType);
+    }
+    
     public static Date getDateFromNow(Date now, LingualDateType type) {
         Calendar cal1 = Calendar.getInstance();
         cal1.setTime(now);
         switch (type) {
+            case LAST_15_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -15);
+                break;
+            case LAST_30_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -30);
+                break;
+            case LAST_45_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -45);
+                break;
+            case LAST_60_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -60);
+                break;
+            case LAST_90_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, -90);
+                break;
             case LAST_12MONTHS:
                 cal1.add(Calendar.MONTH, -12);
                 break;
@@ -158,6 +210,21 @@ public final class LingualDateUtils {
             case LAST_YEAR:
                 cal1.add(Calendar.YEAR, -1);
                 cal1.set(Calendar.DAY_OF_YEAR, 1);
+                break;
+            case NEXT_15_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, 15);
+                break;
+            case NEXT_30_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, 30);
+                break;
+            case NEXT_45_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, 45);
+                break;
+            case NEXT_60_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, 60);
+                break;
+            case NEXT_90_DAYS:
+                cal1.add(Calendar.DAY_OF_YEAR, 90);
                 break;
             case NEXT_12MONTHS:
                 cal1.add(Calendar.MONTH, 12);
