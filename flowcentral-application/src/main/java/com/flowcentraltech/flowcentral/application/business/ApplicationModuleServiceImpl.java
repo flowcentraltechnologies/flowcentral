@@ -3743,27 +3743,28 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     : environment().findAllMap(String.class, "name",
                             new AppTableFilterQuery().appTableId(appTable.getId()));
             for (TableFilterConfig filterConfig : appTableConfig.getFilterList()) {
-                AppTableFilter oldAppAppletFilter = map.get(filterConfig.getName());
-                if (oldAppAppletFilter == null) {
-                    AppTableFilter appAppletFilter = new AppTableFilter();
-                    appAppletFilter.setName(filterConfig.getName());
-                    appAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                    appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                    appAppletFilter.setRowColor(filterConfig.getRowColor());
-                    appAppletFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    filterList.add(appAppletFilter);
-                } else {
-                    if (ConfigUtils.isSetInstall(oldAppAppletFilter)) {
-                        oldAppAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                        oldAppAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                        oldAppAppletFilter.setRowColor(filterConfig.getRowColor());
+                if (!DataUtils.isBlank(filterConfig.getRestrictionList())) {
+                    AppTableFilter oldAppAppletFilter = map.get(filterConfig.getName());
+                    if (oldAppAppletFilter == null) {
+                        AppTableFilter appAppletFilter = new AppTableFilter();
+                        appAppletFilter.setName(filterConfig.getName());
+                        appAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                        appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                        appAppletFilter.setRowColor(filterConfig.getRowColor());
+                        appAppletFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                        filterList.add(appAppletFilter);
                     } else {
-                        environment().findChildren(oldAppAppletFilter);
+                        if (ConfigUtils.isSetInstall(oldAppAppletFilter)) {
+                            oldAppAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                            oldAppAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                            oldAppAppletFilter.setRowColor(filterConfig.getRowColor());
+                        } else {
+                            environment().findChildren(oldAppAppletFilter);
+                        }
+
+                        filterList.add(oldAppAppletFilter);
                     }
-
-                    filterList.add(oldAppAppletFilter);
                 }
-
             }
         }
         appTable.setFilterList(filterList);
