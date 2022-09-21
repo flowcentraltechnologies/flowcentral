@@ -52,6 +52,9 @@ public final class ApplicationQueryUtils {
                     query.addRestriction(new And().add(new Equals("applicationName", "application"))
                             .add(new Amongst("name", Arrays.asList("entitylist", "entitysearch", "entityselect"))));
                 }
+            } else if (EntityFieldDataType.BLOB.equals(entityFieldDataType)) {
+                query.addRestriction(new And().add(new Equals("applicationName", "application"))
+                        .add(new Amongst("name", Arrays.asList("simplefileupload", "picture"))));
             } else if (entityFieldDataType.isEnumDataType()) {
                 query.addRestriction(new Or()
                         .add(new And().add(new Equals("applicationName", "application")).add(

@@ -139,7 +139,11 @@ public enum InputType implements EnumConst {
             "STA",
             true,
             DataType.STRING,
-            DataType.CLOB);
+            DataType.CLOB),
+    FILE(
+            "FIL",
+            false,
+            DataType.BLOB);
 
     private final String code;
 

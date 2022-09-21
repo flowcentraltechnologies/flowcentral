@@ -219,8 +219,8 @@
 			editor="!ui-name minLen:%s maxLen:%s underscore:true dollar:true"
 			renderer="!ui-label" />
 		<widgetType name="columnname" listOption="true"
-			description="$m{application.widgettype.columnname}"
-			dataType="string" inputType="string"
+			description="$m{application.widgettype.columnname}" dataType="string"
+			inputType="string"
 			editor="!ui-name minLen:%s maxLen:%s underscore:true"
 			renderer="!ui-label" />
 		<widgetType name="checkbox" listOption="true"
@@ -379,7 +379,17 @@
 			description="$m{application.widgettype.fileupload}" dataType="string"
 			inputType="string"
 			editor="!ui-fileuploadview handler:$s{refblob-fileuploadviewhandler} category:$s{%s} parentCategory:$s{%s} parentFieldName:$s{%s}"
-			renderer="!ui-label" />
+			renderer="!ui-label"
+			stretch="false" />
+		<widgetType name="simplefileupload"
+			description="$m{application.widgettype.simplefileupload}"
+			dataType="blob" inputType="file" editor="!ui-fileuploadview"
+			renderer="!ui-label"
+			stretch="false" />
+		<widgetType name="picture"
+			description="$m{application.widgettype.picture}" dataType="blob"
+			inputType="file" editor="!ui-picture" renderer="!ui-label"
+			stretch="false" />
 		<widgetType name="suggestiontextsearch" listOption="true"
 			description="$m{application.widgettype.suggestiontextsearch}"
 			dataType="string" inputType="string"
@@ -759,8 +769,9 @@
 				inputWidget="application.enumlist" />
 			<field name="name" label="$m{application.appentityfield.name}"
 				type="string" inputWidget="application.name" />
-			<field name="columnName" label="$m{application.appentityfield.columnname}"
-				type="string" inputWidget="application.name" nullable = "true"/>
+			<field name="columnName"
+				label="$m{application.appentityfield.columnname}" type="string"
+				inputWidget="application.name" nullable="true" />
 			<field name="label"
 				label="$m{application.appentityfield.label}" type="string" />
 			<field name="references"
@@ -1250,7 +1261,8 @@
 			<field name="required"
 				label="$m{application.appformelement.required}" type="boolean" />
 			<field name="ignoreParentCondition"
-				label="$m{application.appformelement.ignoreparentcondition}" type="boolean" />
+				label="$m{application.appformelement.ignoreparentcondition}"
+				type="boolean" />
 			<field name="showSearch"
 				label="$m{application.appformelement.showsearch}" type="boolean" />
 			<field name="visible"
