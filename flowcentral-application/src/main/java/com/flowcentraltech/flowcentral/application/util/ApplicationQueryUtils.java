@@ -54,7 +54,8 @@ public final class ApplicationQueryUtils {
                 }
             } else if (EntityFieldDataType.BLOB.equals(entityFieldDataType)) {
                 query.addRestriction(new And().add(new Equals("applicationName", "application"))
-                        .add(new Amongst("name", Arrays.asList("fileuploadwildcard", "fileuploadimage", "fileuploadcsv", "fileuploadexcel", "fileuploadpdf", "fileuploadtext", "picture"))));
+                        .add(new Amongst("name", Arrays.asList("fileuploadwildcard", "fileuploadimage", "fileuploadcsv",
+                                "fileuploadexcel", "fileuploadpdf", "fileuploadtext", "picture"))));
             } else if (entityFieldDataType.isEnumDataType()) {
                 query.addRestriction(new Or()
                         .add(new And().add(new Equals("applicationName", "application")).add(
