@@ -381,9 +381,34 @@
 			editor="!ui-fileuploadview handler:$s{refblob-fileuploadviewhandler} category:$s{%s} parentCategory:$s{%s} parentFieldName:$s{%s}"
 			renderer="!ui-label"
 			stretch="false" />
-		<widgetType name="simplefileupload"
-			description="$m{application.widgettype.simplefileupload}"
-			dataType="blob" inputType="file" editor="!ui-fileuploadview"
+		<widgetType name="fileuploadwildcard"
+			description="$m{application.widgettype.fileupload.wildcard}"
+			dataType="blob" inputType="file" editor="!ui-fileuploadview type:wildcard"
+			renderer="!ui-label"
+			stretch="false" />
+		<widgetType name="fileuploadimage"
+			description="$m{application.widgettype.fileupload.image}"
+			dataType="blob" inputType="file" editor="!ui-fileuploadview type:image"
+			renderer="!ui-label"
+			stretch="false" />
+		<widgetType name="fileuploadcsv"
+			description="$m{application.widgettype.fileupload.csv}"
+			dataType="blob" inputType="file" editor="!ui-fileuploadview type:csv"
+			renderer="!ui-label"
+			stretch="false" />
+		<widgetType name="fileuploadexcel"
+			description="$m{application.widgettype.fileupload.excel}"
+			dataType="blob" inputType="file" editor="!ui-fileuploadview type:excel"
+			renderer="!ui-label"
+			stretch="false" />
+		<widgetType name="fileuploadpdf"
+			description="$m{application.widgettype.fileupload.pdf}"
+			dataType="blob" inputType="file" editor="!ui-fileuploadview type:pdf"
+			renderer="!ui-label"
+			stretch="false" />
+		<widgetType name="fileuploadtext"
+			description="$m{application.widgettype.fileupload.text}"
+			dataType="blob" inputType="file" editor="!ui-fileuploadview type:text"
 			renderer="!ui-label"
 			stretch="false" />
 		<widgetType name="picture"
