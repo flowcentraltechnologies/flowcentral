@@ -73,6 +73,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Link */
 .ui-link {text-decoration:none; word-wrap:break-word;}
 .ui-link:hover {text-decoration:underline; color:#0366d6;}
+/* Picture*/
+.ui-picture {border:solid 1px #b0b0b0;}
 
 /* Select */
 .ui-select .sslist .norm {}

@@ -116,11 +116,22 @@ public class MiniFormWriter extends AbstractControlWriter {
                     Widget chWidget = formWidget.getResolvedWidget();
                     if (chWidget.isVisible()) {
                         final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId() : chWidget.getId();
-                        writer.writeBehavior(chWidget);
-                        if (switchOnChangeHandlers != null && formWidget.isSwitchOnChange()) {
+                        final boolean refreshesContainer = chWidget.isRefreshesContainer();
+                        if (refreshesContainer) {
+                            writer.setKeepPostCommandRefs();
+                        } else {
+                            writer.writeBehavior(chWidget);
+                        }
+                        
+                        if (switchOnChangeHandlers != null && (refreshesContainer || formWidget.isSwitchOnChange())) {
                             for (EventHandler eventHandler : switchOnChangeHandlers) {
                                 writer.writeBehavior(eventHandler, cId, formWidget.getFieldName());
                             }
+                        }
+
+                        if (refreshesContainer) {
+                            writer.writeBehavior(chWidget);
+                            writer.clearKeepPostCommandRefs();
                         }
 
                         addPageAlias(miniFormWidget.getId(), chWidget);
