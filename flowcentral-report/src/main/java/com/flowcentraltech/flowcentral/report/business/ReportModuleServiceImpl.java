@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
+import com.flowcentraltech.flowcentral.application.util.ResolvedCondition;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
@@ -58,6 +59,7 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.tcdng.unify.convert.util.ConverterUtils;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
@@ -80,12 +82,12 @@ import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
 import com.tcdng.unify.core.database.sql.SqlEntityInfo;
+import com.tcdng.unify.core.database.sql.SqlFieldInfo;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.Report.Builder;
 import com.tcdng.unify.core.report.ReportColumn;
 import com.tcdng.unify.core.report.ReportFormat;
 import com.tcdng.unify.core.report.ReportServer;
-import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.GetterSetterInfo;
 import com.tcdng.unify.core.util.IOUtils;
@@ -591,6 +593,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     private ReportFilterOptions createReportFilterOptions(SqlEntityInfo sqlEntityInfo,
             ReportFilterOptions parentFilterOptions, Map<String, Object> parameters,
             List<FilterRestrictionDef> filterRestrictionDefList, IndexInfo indexInfo) throws UnifyException {
+        Date now = getNow();
         ReportFilterOptions reportFilterOptions = null;
         while (indexInfo.index < filterRestrictionDefList.size()) {
             FilterRestrictionDef restrictionDef = filterRestrictionDefList.get(indexInfo.index++);
@@ -616,17 +619,17 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                         }
                     }
 
-                    if (restrictionDef.getType().isRange()) {
-                        if (param1 instanceof Date) {
-                            param1 = CalendarUtils.getMidnightDate((Date) param1);
-                        }
-
-                        if (param2 instanceof Date) {
-                            param2 = CalendarUtils.getLastSecondDate((Date) param2);
-                        }
+                    FilterConditionType type = restrictionDef.getType();
+                    SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getFieldInfo(restrictionDef.getFieldName());
+                    ColumnType columnType = sqlFieldInfo.getColumnType();
+                    if (columnType.isDate() || columnType.isTimestamp()) {
+                        ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(now, type, param1, param2, columnType.isTimestamp());
+                        type = condition.getType();
+                        param1 = condition.getParamA();
+                        param2 = condition.getParamB();
                     }
 
-                    reportFilterOptions = new ReportFilterOptions(restrictionDef.getType().restrictionType(),
+                    reportFilterOptions = new ReportFilterOptions(type.restrictionType(),
                             sqlEntityInfo.getPreferredViewName(),
                             sqlEntityInfo.getListFieldInfo(restrictionDef.getFieldName()).getPreferredColumnName(),
                             param1, param2);
