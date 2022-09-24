@@ -1160,9 +1160,14 @@ public final class InputWidgetUtils {
 
         return new ResolvedCondition(type, paramA, paramB);
     }
-
+    
     public static ResolvedCondition resolveDateCondition(EntityFieldDef entityFieldDef, Date now,
             FilterConditionType type, Object paramA, Object paramB) throws UnifyException {
+        return InputWidgetUtils.resolveDateCondition(now, type, paramA, paramB, entityFieldDef.isTimestamp());
+    }
+
+    public static ResolvedCondition resolveDateCondition(Date now,
+            FilterConditionType type, Object paramA, Object paramB, boolean timestamp) throws UnifyException {
         if (type.isLingual()) {
             if (type.isRange()) {
                 paramA = LingualDateUtils.getDateFromNow(now, (String) paramA);
@@ -1208,7 +1213,7 @@ public final class InputWidgetUtils {
                 }
             }
         } else {
-            if (entityFieldDef.isTimestamp()) {
+            if (timestamp) {
                 switch (type) {
                     case EQUALS:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
