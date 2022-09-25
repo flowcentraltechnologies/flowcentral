@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -392,14 +393,14 @@ public class TableDef extends BaseApplicationEntityDef {
             this.id = id;
             this.description = description;
             this.version = version;
-            this.filterDefMap = new HashMap<String, TableFilterDef>();
+            this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
         }
 
         public Builder(EntityDef entityDef) {
             this.entityDef = entityDef;
-            this.filterDefMap = new HashMap<String, TableFilterDef>();
+            this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
         }
