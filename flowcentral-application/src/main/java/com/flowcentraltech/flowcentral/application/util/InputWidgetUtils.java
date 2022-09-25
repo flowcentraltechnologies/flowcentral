@@ -346,10 +346,12 @@ public final class InputWidgetUtils {
                 editor = String.format(editor, efa.getPrecision());
                 break;
             case "application.amountwhole":
+            case "application.amountaccountingwhole":
                 int precision = efa.getScale() > 0 ? efa.getPrecision() - efa.getScale() : efa.getPrecision();
                 editor = String.format(editor, precision);
                 break;
             case "application.amount":
+            case "application.amountaccounting":
             case "application.decimal":
             case "application.postingentry":
             case "application.postingentryneg":
