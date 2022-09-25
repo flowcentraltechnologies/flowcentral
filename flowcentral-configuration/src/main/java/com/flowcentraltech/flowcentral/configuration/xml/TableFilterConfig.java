@@ -27,6 +27,8 @@ public class TableFilterConfig extends FilterConfig {
 
     private String rowColor;
 
+    private String legendLabel;
+
     public String getRowColor() {
         return rowColor;
     }
@@ -34,6 +36,15 @@ public class TableFilterConfig extends FilterConfig {
     @XmlAttribute
     public void setRowColor(String rowColor) {
         this.rowColor = rowColor;
+    }
+
+    public String getLegendLabel() {
+        return legendLabel;
+    }
+
+    @XmlAttribute
+    public void setLegendLabel(String legendLabel) {
+        this.legendLabel = legendLabel;
     }
 
 }

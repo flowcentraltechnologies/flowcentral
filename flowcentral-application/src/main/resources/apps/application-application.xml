@@ -45,6 +45,11 @@
 			dataType="integer" inputType="integer"
 			editor="!ui-select list:pastyearlist listParams:$l{1970}  listParamType:$s{immediate} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="colorspan" listOption="true"
+			description="$m{application.widgettype.colorspan}"
+			dataType="string" inputType="string"
+			editor="!ui-colorspan"
+			renderer="!ui-colorspan" />
 		<widgetType name="decimal" listOption="true"
 			description="$m{application.widgettype.decimal}" dataType="double"
 			inputType="double"
@@ -1141,6 +1146,9 @@
 				references="appTableRef" inputWidget="application.entitylist" />
 			<field name="rowColor"
 				label="$m{application.apptablefilter.rowcolor}" type="string"
+				nullable="true" />
+			<field name="legendLabel"
+				label="$m{application.apptablefilter.legendlabel}" type="string"
 				nullable="true" />
 			<field name="filter"
 				label="$m{application.apptablefilter.filter}" type="child"

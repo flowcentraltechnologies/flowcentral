@@ -1197,8 +1197,10 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
-			<column field="rowColor" renderWidget="application.text"
+			<column field="rowColor" renderWidget="application.colorspan"
 				label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
+			<column field="legendLabel" renderWidget="application.text"
+				label="$m{application.apptablefilter.legendlabel}" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -3080,6 +3082,8 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="rowColor" inputWidget="studio.tablerowcolorlist"
+						column="1" />
+					<field name="legendLabel" inputWidget="application.text"
 						column="1" />
 				</section>
 			</tab>
