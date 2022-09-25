@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum StudioTableRowColorType implements EnumConst {
 
     RED("#f1948a"),
-    YELLOW("#f7dc6f"),
+    YELLOW("#f9e79f"),
     GREEN("#76d7c4"),
     BLUE("#85c1e9"),
     VIOLET("#bb8fce"),
