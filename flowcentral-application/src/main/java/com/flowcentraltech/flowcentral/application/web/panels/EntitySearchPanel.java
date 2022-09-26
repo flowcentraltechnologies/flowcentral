@@ -88,6 +88,7 @@ public class EntitySearchPanel extends AbstractPanel {
         setVisible("viewBtn", entitySearch.isViewButtonVisible()
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
+        setVisible("colorLegend", entityTable.isWithColorLegendInfo());
         if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
             setVisible("searchEntriesPanel", entitySearch.isShowSearch());
             setVisible("searchFilterPanel", false);

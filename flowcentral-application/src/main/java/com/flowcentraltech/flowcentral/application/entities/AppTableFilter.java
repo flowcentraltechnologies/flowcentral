@@ -38,6 +38,9 @@ public class AppTableFilter extends BaseConfigNamedEntity {
     @Column(length = 16, nullable = true)
     private String rowColor;
     
+    @Column(length = 96, nullable = true)
+    private String legendLabel;
+    
     @Child(category = "table")
     private AppFilter filter;
 
@@ -65,6 +68,14 @@ public class AppTableFilter extends BaseConfigNamedEntity {
 
     public void setRowColor(String rowColor) {
         this.rowColor = rowColor;
+    }
+
+    public String getLegendLabel() {
+        return legendLabel;
+    }
+
+    public void setLegendLabel(String legendLabel) {
+        this.legendLabel = legendLabel;
     }
 
     public AppFilter getFilter() {

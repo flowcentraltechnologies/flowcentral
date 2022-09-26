@@ -800,6 +800,7 @@ public final class InputWidgetUtils {
             InputWidgetUtils.getFilterConfig(au, tableFilterConfig, appTableFilter.getName(),
                     appTableFilter.getDescription(), null, null, null, appTableFilter.getFilter());
             tableFilterConfig.setRowColor(appTableFilter.getRowColor());
+            tableFilterConfig.setLegendLabel(appTableFilter.getLegendLabel());
             return tableFilterConfig;
         }
 

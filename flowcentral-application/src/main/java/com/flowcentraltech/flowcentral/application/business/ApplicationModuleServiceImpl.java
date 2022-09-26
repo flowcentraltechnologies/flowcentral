@@ -798,7 +798,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     for (AppTableFilter appTableFilter : appTable.getFilterList()) {
                         FilterDef _filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appTableFilter.getName(),
                                 appTableFilter.getDescription(), null, null, null, appTableFilter.getFilter());
-                        tdb.addFilterDef(new TableFilterDef(_filterDef, appTableFilter.getRowColor()));
+                        tdb.addFilterDef(new TableFilterDef(_filterDef, appTableFilter.getRowColor(), appTableFilter.getLegendLabel()));
                     }
 
                     for (AppTableColumn appTableColumn : appTable.getColumnList()) {
@@ -3751,6 +3751,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         appAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
                         appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
                         appAppletFilter.setRowColor(filterConfig.getRowColor());
+                        appAppletFilter.setLegendLabel(filterConfig.getLegendLabel());
                         appAppletFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
                         filterList.add(appAppletFilter);
                     } else {
@@ -3758,6 +3759,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             oldAppAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
                             oldAppAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
                             oldAppAppletFilter.setRowColor(filterConfig.getRowColor());
+                            oldAppAppletFilter.setLegendLabel(filterConfig.getLegendLabel());
                         } else {
                             environment().findChildren(oldAppAppletFilter);
                         }

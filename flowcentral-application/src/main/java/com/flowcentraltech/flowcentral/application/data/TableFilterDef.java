@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Table filter definition.
@@ -29,9 +30,12 @@ public class TableFilterDef implements Listable {
 
     private String rowColor;
 
-    public TableFilterDef(FilterDef filterDef, String rowColor) {
+    private String legendLabel;
+
+    public TableFilterDef(FilterDef filterDef, String rowColor, String legendLabel) {
         this.filterDef = filterDef;
         this.rowColor = rowColor;
+        this.legendLabel = legendLabel;
     }
 
     @Override
@@ -48,6 +52,10 @@ public class TableFilterDef implements Listable {
         return filterDef;
     }
 
+    public String getLegendLabel() {
+        return legendLabel;
+    }
+
     public String getName() {
         return filterDef.getName();
     }
@@ -56,7 +64,11 @@ public class TableFilterDef implements Listable {
         return rowColor;
     }
 
-    public boolean isRowColor() {
+    public boolean isWithRowColor() {
         return rowColor != null;
+    }
+
+    public boolean isWithLegendLabel() {
+        return !StringUtils.isBlank(legendLabel);
     }
 }

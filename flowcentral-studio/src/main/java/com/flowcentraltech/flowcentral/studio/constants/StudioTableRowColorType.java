@@ -29,11 +29,12 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "studiotablerowcolorlist", description="Studio Table Row Color List")
 public enum StudioTableRowColorType implements EnumConst {
 
-    RED("#ffbeb2"),
-    YELLOW("#fff5b0"),
-    GREEN("#b7ffdd"),
-    BLUE("#c3e9ff"),
-    VIOLET("#e5baff");
+    RED("#f1948a"),
+    YELLOW("#f9e79f"),
+    GREEN("#76d7c4"),
+    BLUE("#85c1e9"),
+    VIOLET("#bb8fce"),
+    GRAY("#85929e");
 
     private final String code;
     

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,6 +31,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Select;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
 
 /**
  * Table definition;
@@ -83,6 +85,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private List<TableFilterDef> rowColorFilterList;
 
+    private ColorLegendInfo colorLegendInfo;
+    
     private Set<String> summaryFields;
 
     private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, List<TableColumnDef> visibleColumnDefList,
@@ -112,7 +116,7 @@ public class TableDef extends BaseApplicationEntityDef {
         this.summaryFields = new HashSet<String>();
         List<TableFilterDef> rowColorFilterList = new ArrayList<TableFilterDef>();
         for (TableFilterDef filterDef : filterDefMap.values()) {
-            if (filterDef.isRowColor()) {
+            if (filterDef.isWithRowColor()) {
                 rowColorFilterList.add(filterDef);
             }
         }
@@ -162,6 +166,24 @@ public class TableDef extends BaseApplicationEntityDef {
 
     public boolean isRowColorFilters() {
         return !rowColorFilterList.isEmpty();
+    }
+
+    public ColorLegendInfo getColorLegendInfo() {
+        if (colorLegendInfo == null && isRowColorFilters()) {
+            synchronized(this) {
+                if (colorLegendInfo == null) {
+                    ColorLegendInfo.Builder clib = ColorLegendInfo.newBuilder();
+                    for (TableFilterDef tableFilterDef: rowColorFilterList) {
+                        String label = tableFilterDef.isWithLegendLabel() ? tableFilterDef.getLegendLabel() : tableFilterDef.getListDescription();
+                        clib.addItem(tableFilterDef.getRowColor(), label);
+                    }
+                    
+                    colorLegendInfo = clib.build();
+                }
+            }
+        }
+        
+        return colorLegendInfo;
     }
 
     public TableFilterDef getFilterDef(String name) {
@@ -371,14 +393,14 @@ public class TableDef extends BaseApplicationEntityDef {
             this.id = id;
             this.description = description;
             this.version = version;
-            this.filterDefMap = new HashMap<String, TableFilterDef>();
+            this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
         }
 
         public Builder(EntityDef entityDef) {
             this.entityDef = entityDef;
-            this.filterDefMap = new HashMap<String, TableFilterDef>();
+            this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
         }

@@ -14,7 +14,7 @@
 // the License.
 
 !fc-entitysearchpanel layout:$d{!ui-vertical}
-	components:$c{headerBar searchFilterPanel searchEntriesPanel searchResultPanel footerActionPanel}
+	components:$c{headerBar searchFilterPanel searchEntriesPanel colorLegend searchResultPanel footerActionPanel}
 
 // Header Bar
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
@@ -125,6 +125,9 @@
     eventHandler:$d{!ui-event event:onclick action:$c{cancelSaveFilterAct}}
    
 !fc-filter:searchFilter binding:entityFilter
+
+// Color legend
+!ui-colorlegend:colorLegend style:$s{width:100%;} columns:6 binding:entityTable.colorLegendInfo
 
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}

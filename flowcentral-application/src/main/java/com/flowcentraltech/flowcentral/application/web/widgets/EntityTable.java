@@ -33,6 +33,7 @@ import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
 
 /**
  * Entity table object.
@@ -60,6 +61,14 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
 
     public String getSaveGlobalTableQuickFilterPrivilege() {
         return saveGlobalTableQuickFilterPrivilege;
+    }
+    
+    public ColorLegendInfo getColorLegendInfo() {
+        return getTableDef().getColorLegendInfo();
+    }
+    
+    public boolean isWithColorLegendInfo() {
+        return getTableDef().getColorLegendInfo() != null;
     }
 
     public int getLimit() {
