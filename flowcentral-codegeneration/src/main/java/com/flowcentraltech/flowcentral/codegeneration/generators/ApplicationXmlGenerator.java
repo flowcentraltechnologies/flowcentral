@@ -373,6 +373,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                             entityFieldConfig.setMaxLen(appEntityField.getMaxLen());
                             entityFieldConfig.setPrecision(appEntityField.getPrecision());
                             entityFieldConfig.setScale(appEntityField.getScale());
+                            entityFieldConfig.setAllowNegative(appEntityField.isAllowNegative());
                             entityFieldConfig.setNullable(appEntityField.isNullable());
                             entityFieldConfig.setAuditable(appEntityField.isAuditable());
                             entityFieldConfig.setReportable(appEntityField.isReportable());

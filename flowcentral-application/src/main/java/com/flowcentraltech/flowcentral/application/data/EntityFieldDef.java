@@ -88,6 +88,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     private int scale;
 
+    private boolean allowNegative;
+
     private boolean nullable;
 
     private boolean auditable;
@@ -116,7 +118,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             TextCase textCase, String entityLongName, String fieldName, String fieldLabel, String columnName,
             String references, String category, String suggestionType, String inputLabel, String inputListKey,
             String lingualListKey, String autoFormat, String defaultVal, String key, String property, int rows,
-            int columns, int minLen, int maxLen, int precision, int scale, boolean nullable, boolean auditable,
+            int columns, int minLen, int maxLen, int precision, int scale, boolean allowNegative, boolean nullable, boolean auditable,
             boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive) {
         this.textWidgetTypeDef = textWidgetTypeDef;
         this.inputWidgetTypeDef = inputWidgetTypeDef;
@@ -145,6 +147,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.maxLen = maxLen > 0 ? maxLen : 0;
         this.precision = precision;
         this.scale = scale;
+        this.allowNegative = allowNegative;
         this.nullable = nullable;
         this.auditable = auditable;
         this.reportable = reportable;
@@ -321,6 +324,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     @Override
     public int getScale() {
         return scale;
+    }
+
+    @Override
+    public boolean isAllowNegative() {
+        return allowNegative;
     }
 
     public boolean isLenLimits() {
@@ -596,6 +604,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         private int scale;
 
+        private boolean allowNegative;
+        
         private boolean nullable;
 
         private boolean auditable;
@@ -732,6 +742,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             return this;
         }
 
+        public Builder allowNegative(boolean allowNegative) throws UnifyException {
+            this.allowNegative = allowNegative;
+            return this;
+        }
+
         public Builder nullable(boolean nullable) throws UnifyException {
             this.nullable = nullable;
             return this;
@@ -778,7 +793,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, ligualWidgetTypeDef, refDef, dataType,
                     type, textCase, entityLongName, fieldName, fieldLabel, columnName, references, category,
                     suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
-                    rows, columns, minLen, maxLen, precision, scale, nullable, auditable, reportable, maintainLink,
+                    rows, columns, minLen, maxLen, precision, scale, allowNegative, nullable, auditable, reportable, maintainLink,
                     basicSearch, descriptive);
         }
     }

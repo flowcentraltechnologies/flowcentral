@@ -874,7 +874,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throws UnifyException {
             return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, null, dataType, type, null, fieldName, fieldLabel,
                     null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                    null, false, false, false, false, false, false);
+                    null, false, false, false, false, false, false, false);
         }
 
         public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
@@ -882,13 +882,13 @@ public class EntityDef extends BaseApplicationEntityDef {
                 TextCase textCase, String fieldName, String fieldLabel, String columnName, String category,
                 String suggestionType, String inputLabel, String inputListKey, String lingualListKey, String autoFormat,
                 String defaultVal, String references, String key, String property, Integer rows, Integer columns,
-                Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean nullable, boolean auditable,
+                Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean allowNegative, boolean nullable, boolean auditable,
                 boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive)
                 throws UnifyException {
             return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, null, dataType, type,
                     textCase, fieldName, fieldLabel, columnName, category, suggestionType, inputLabel, inputListKey,
                     lingualListKey, autoFormat, defaultVal, references, key, property, rows, columns, minLen, maxLen,
-                    precision, scale, nullable, auditable, reportable, maintainLink, basicSearch, descriptive);
+                    precision, scale, allowNegative, nullable, auditable, reportable, maintainLink, basicSearch, descriptive);
         }
 
         public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
@@ -896,7 +896,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 TextCase textCase, String fieldName, String fieldLabel, String columnName, String category,
                 String suggestionType, String inputLabel, String inputListKey, String lingualListKey, String autoFormat,
                 String defaultVal, String references, String key, String property, Integer rows, Integer columns,
-                Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean nullable, boolean auditable,
+                Integer minLen, Integer maxLen, Integer precision, Integer scale, boolean allowNegative, boolean nullable, boolean auditable,
                 boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive)
                 throws UnifyException {
             if (fieldDefMap.containsKey(fieldName)) {
@@ -909,7 +909,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                             suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key,
                             property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
                             DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
-                            DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), nullable,
+                            DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), allowNegative, nullable,
                             auditable, reportable, maintainLink, basicSearch, descriptive));
             return this;
         }

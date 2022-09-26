@@ -13,12 +13,12 @@
 		<widgetType name="integer" listOption="true"
 			description="$m{application.widgettype.integer}" dataType="integer"
 			inputType="integer"
-			editor="!ui-integer precision:%s useGrouping:true"
+			editor="!ui-integer precision:%s useGrouping:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!integerformat precision:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="integerformatless" listOption="true"
 			description="$m{application.widgettype.integerformatless}"
 			dataType="integer" inputType="integer"
-			editor="!ui-integer precision:%s"
+			editor="!ui-integer precision:%s acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!integerformat precision:%s} style:$s{text-align:right;}" />
 		<widgetType name="onetotenlist" listOption="true"
 			description="$m{application.widgettype.onetotenlist}"
@@ -53,27 +53,27 @@
 		<widgetType name="decimal" listOption="true"
 			description="$m{application.widgettype.decimal}" dataType="double"
 			inputType="double"
-			editor="!ui-decimal precision:%s scale:%s useGrouping:true strictFormat:true"
+			editor="!ui-decimal precision:%s scale:%s useGrouping:true strictFormat:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="amount" listOption="true"
 			description="$m{application.widgettype.amount}" dataType="decimal"
 			inputType="decimal"
-			editor="!ui-decimal precision:%s scale:%s useGrouping:true strictFormat:true"
+			editor="!ui-decimal precision:%s scale:%s useGrouping:true strictFormat:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!decimalformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="amountwhole" listOption="true"
 			description="$m{application.widgettype.amountwhole}"
 			dataType="decimal" inputType="decimal"
-			editor="!ui-decimal precision:%s useGrouping:true strictFormat:true"
+			editor="!ui-decimal precision:%s useGrouping:true strictFormat:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!decimalformat precision:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="amountaccounting" listOption="true"
 			description="$m{application.widgettype.amountaccounting}" dataType="decimal"
 			inputType="decimal"
-			editor="!ui-decimal-accounting precision:%s scale:%s useGrouping:true strictFormat:true acceptNegative:true"
+			editor="!ui-decimal-accounting precision:%s scale:%s useGrouping:true strictFormat:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!decimalaccountingformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="amountaccountingwhole" listOption="true"
 			description="$m{application.widgettype.amountaccountingwhole}"
 			dataType="decimal" inputType="decimal"
-			editor="!ui-decimal-accounting precision:%s useGrouping:true strictFormat:true acceptNegative:true"
+			editor="!ui-decimal-accounting precision:%s useGrouping:true strictFormat:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!decimalaccountingformat precision:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="postingentry" listOption="true"
 			description="$m{application.widgettype.postingentry}"
@@ -854,6 +854,8 @@
 			<field name="scale"
 				label="$m{application.appentityfield.scale}" type="integer"
 				nullable="true" />
+			<field name="allowNegative"
+				label="$m{application.appentityfield.allownegative}" type="boolean" />
 			<field name="nullable"
 				label="$m{application.appentityfield.nullable}" type="boolean" />
 			<field name="auditable"
