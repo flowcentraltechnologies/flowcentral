@@ -231,7 +231,7 @@ public final class ApplicationEntityUtils {
                 DataUtils.convert(int.class, appEntityField.getMinLen()),
                 DataUtils.convert(int.class, appEntityField.getMaxLen()),
                 DataUtils.convert(int.class, appEntityField.getPrecision()),
-                DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isNullable(),
+                DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isAllowNegative(), appEntityField.isNullable(),
                 appEntityField.isAuditable(), appEntityField.isReportable(), appEntityField.isMaintainLink(),
                 appEntityField.isBasicSearch(), appEntityField.isDescriptive());
     }
@@ -415,10 +415,11 @@ public final class ApplicationEntityUtils {
         boolean nullable = nullables.contains(name);
         boolean reportable = !nonReportables.contains(name);
         boolean maintainLink = maintainLinks.contains(name);
+        boolean allowNegative = false;
         boolean auditable = false;
         String suggestionType = null;
         AppEntityField field = new AppEntityField(type, name, label, references, key, property, category, inputLabel,
-                inputWidget, suggestionType, inputListKey, length, nullable, auditable, reportable, maintainLink);
+                inputWidget, suggestionType, inputListKey, length, allowNegative, nullable, auditable, reportable, maintainLink);
         if (type.isDate() || type.isTimestamp()) {
             field.setLingualWidget("application.lingualdatetypelist");
         }

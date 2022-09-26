@@ -38,20 +38,24 @@ public class EntryAttributes implements EntityFieldAttributes {
 
     private int scale;
 
-    public EntryAttributes(String suggestionType, String references, int minLen, int maxLen, int precision, int scale) {
+    private boolean allowNegative;
+
+    public EntryAttributes(String suggestionType, String references, int minLen, int maxLen, int precision, int scale, boolean allowNegative) {
         this.suggestionType = suggestionType;
         this.references = references;
         this.minLen = minLen;
         this.maxLen = maxLen;
         this.precision = precision;
         this.scale = scale;
+        this.allowNegative = allowNegative;
     }
 
-    public EntryAttributes(int minLen, int maxLen, int precision, int scale) {
+    public EntryAttributes(int minLen, int maxLen, int precision, int scale, boolean allowNegative) {
         this.minLen = minLen;
         this.maxLen = maxLen;
         this.precision = precision;
         this.scale = scale;
+        this.allowNegative = allowNegative;
     }
 
     public EntryAttributes() {
@@ -86,6 +90,11 @@ public class EntryAttributes implements EntityFieldAttributes {
     @Override
     public int getScale() {
         return scale;
+    }
+
+    @Override
+    public boolean isAllowNegative() {
+        return allowNegative;
     }
 
 }

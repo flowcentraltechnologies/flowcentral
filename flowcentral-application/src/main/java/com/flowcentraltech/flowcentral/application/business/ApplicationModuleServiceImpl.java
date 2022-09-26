@@ -656,7 +656,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references,
                                     appEntityField.getKey(), appEntityField.getProperty(), appEntityField.getRows(),
                                     appEntityField.getColumns(), appEntityField.getMinLen(), appEntityField.getMaxLen(),
-                                    appEntityField.getPrecision(), appEntityField.getScale(),
+                                    appEntityField.getPrecision(), appEntityField.getScale(), appEntityField.isAllowNegative(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
                                     appEntityField.isBasicSearch(), appEntityField.isDescriptive());
@@ -670,7 +670,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references,
                                     appEntityField.getKey(), appEntityField.getProperty(), appEntityField.getRows(),
                                     appEntityField.getColumns(), appEntityField.getMinLen(), appEntityField.getMaxLen(),
-                                    appEntityField.getPrecision(), appEntityField.getScale(),
+                                    appEntityField.getPrecision(), appEntityField.getScale(), appEntityField.isAllowNegative(),
                                     appEntityField.isNullable(), appEntityField.isAuditable(),
                                     appEntityField.isReportable(), appEntityField.isMaintainLink(),
                                     appEntityField.isBasicSearch(), appEntityField.isDescriptive());
@@ -3493,6 +3493,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                     appEntityField.setPrecision(entityFieldConfig.getPrecision());
                     appEntityField.setScale(entityFieldConfig.getScale());
+                    appEntityField.setAllowNegative(entityFieldConfig.isAllowNegative());
                     appEntityField.setNullable(entityFieldConfig.isNullable());
                     appEntityField.setAuditable(entityFieldConfig.isAuditable());
                     appEntityField.setReportable(entityFieldConfig.isReportable());
@@ -3537,6 +3538,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                         oldAppEntityField.setPrecision(entityFieldConfig.getPrecision());
                         oldAppEntityField.setScale(entityFieldConfig.getScale());
+                        oldAppEntityField.setAllowNegative(entityFieldConfig.isAllowNegative());
                         oldAppEntityField.setNullable(entityFieldConfig.isNullable());
                         oldAppEntityField.setAuditable(entityFieldConfig.isAuditable());
                         oldAppEntityField.setReportable(entityFieldConfig.isReportable());

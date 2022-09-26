@@ -2044,6 +2044,8 @@
 						column="1" visible="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
+					<field name="allowNegative" inputWidget="application.checkbox"
+						column="1" visible="false" />
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="auditable" inputWidget="application.checkbox"
@@ -2106,7 +2108,7 @@
 					<restriction type="equals" field="type" paramA="BSE" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,nullable"
+					<setState type="field" target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,allowNegative,nullable"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
@@ -2155,7 +2157,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="precision,defaultVal,nullable,auditable,reportable,descriptive,basicSearch"
+						target="precision,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
 						visible="true" />
 				</setStates>
 			</formStatePolicy>
@@ -2168,7 +2170,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="precision,scale,defaultVal,nullable,auditable,reportable,descriptive,basicSearch"
+						target="precision,scale,defaultVal,allowNegative,nullable,auditable,reportable,descriptive,basicSearch"
 						visible="true" />
 				</setStates>
 			</formStatePolicy>

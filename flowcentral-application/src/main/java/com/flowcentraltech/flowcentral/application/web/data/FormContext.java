@@ -536,6 +536,10 @@ public class FormContext extends AbstractContext {
                     formDef.getConsolidatedFormState());
             String trigger = triggerEvaluator != null ? triggerEvaluator.evaluateTrigger() : null;
             TargetFormTabStates states = policy.evaluateTabStates(formValueStore.getReader(), trigger);
+            if (states.isWithValueList()) {
+                states.applyValues(formValueStore);
+            }
+            
             for (TargetFormState state : states.getTargetStateList()) {
                 for (String target : state.getTarget()) {
                     FormTab tb = formTabs.get(target);
@@ -543,10 +547,6 @@ public class FormContext extends AbstractContext {
                         tb.applyStatePolicy(state);
                     }
                 }
-            }
-
-            if (states.isWithValueList()) {
-                states.applyValues(formValueStore);
             }
         }
 

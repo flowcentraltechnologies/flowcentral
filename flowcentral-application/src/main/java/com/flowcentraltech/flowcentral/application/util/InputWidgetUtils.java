@@ -343,16 +343,18 @@ public final class InputWidgetUtils {
                 break;
             case "application.integer":
             case "application.integerformatless":
-                editor = String.format(editor, efa.getPrecision());
+                editor = String.format(editor, efa.getPrecision(), efa.isAllowNegative());
                 break;
             case "application.amountwhole":
             case "application.amountaccountingwhole":
                 int precision = efa.getScale() > 0 ? efa.getPrecision() - efa.getScale() : efa.getPrecision();
-                editor = String.format(editor, precision);
+                editor = String.format(editor, precision, efa.isAllowNegative());
                 break;
             case "application.amount":
             case "application.amountaccounting":
             case "application.decimal":
+                editor = String.format(editor, efa.getPrecision(), efa.getScale(), efa.isAllowNegative());
+                break;
             case "application.postingentry":
             case "application.postingentryneg":
             case "application.postingdebitonly":

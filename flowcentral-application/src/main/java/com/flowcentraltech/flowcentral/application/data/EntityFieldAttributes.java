@@ -35,4 +35,6 @@ public interface EntityFieldAttributes {
     int getPrecision();
     
     int getScale();
+    
+    boolean isAllowNegative();
 }

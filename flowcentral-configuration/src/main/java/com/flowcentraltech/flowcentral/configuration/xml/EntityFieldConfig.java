@@ -77,6 +77,8 @@ public class EntityFieldConfig {
 
     private Integer scale;
 
+    private boolean allowNegative;
+
     private boolean nullable;
 
     private boolean auditable;
@@ -301,6 +303,15 @@ public class EntityFieldConfig {
     @XmlAttribute
     public void setScale(Integer scale) {
         this.scale = scale;
+    }
+
+    public boolean isAllowNegative() {
+        return allowNegative;
+    }
+
+    @XmlAttribute
+    public void setAllowNegative(boolean allowNegative) {
+        this.allowNegative = allowNegative;
     }
 
     public boolean isNullable() {
