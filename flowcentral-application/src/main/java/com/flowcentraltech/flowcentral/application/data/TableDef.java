@@ -509,10 +509,10 @@ public class TableDef extends BaseApplicationEntityDef {
         }
 
         public Builder addColumnDef(TableColumnDef tableColumnDef) {
-            totalWidth += tableColumnDef.getWidthRatio();
             if (tableColumnDef.isHidden()) {
                 columnDefList.add(tableColumnDef);
             } else {
+                totalWidth += tableColumnDef.getWidthRatio();
                 visibleColumnDefList.add(tableColumnDef);
             }
 
