@@ -34,4 +34,6 @@ public interface SystemModuleNameConstants {
     String CENTRAL_SECTOR_NAME = "central";
     
     String CENTRAL_SECTOR_SHORTCODE = "CEN";
+
+    String SESSION_ATTRIBUTE_PROVIDER = "system-sessionattributeprovider";
 }

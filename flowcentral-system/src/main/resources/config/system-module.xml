@@ -49,5 +49,8 @@
 		<sysParameter code="SYS-000A" defaultVal="false"
 			description="$m{system.sysparam.downloadpathlogging}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="SYS-000B" defaultVal="false"
+			description="$m{system.sysparam.enableglobalaccountinginput}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>
