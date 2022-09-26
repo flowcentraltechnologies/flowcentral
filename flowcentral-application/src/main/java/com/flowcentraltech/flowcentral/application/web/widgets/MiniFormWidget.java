@@ -218,11 +218,43 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                 }
             }
 
+            // Set values first
             if (formDef.isWithConsolidatedFormState()) {
                 ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
                         formDef.getConsolidatedFormState());
-                TargetFormWidgetStates states = policy.evaluateWidgetStates(formValueStore.getReader(), trigger);
-                for (TargetFormState state : states.getTargetStateList()) {
+                TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStore.getReader(), trigger);
+                if (_states.isWithValueList()) {
+                    _states.applyValues(formValueStore);
+                    setValuesExecuted = true;
+                }
+            }
+
+            final Map<String, Object> variables = Collections.emptyMap();
+            for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
+                if (formStatePolicyDef.isTriggered(trigger)) {
+                    ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
+                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), now)
+                            : null;
+                    if (objectFilter == null || objectFilter.match(formValueStore)) {
+                        if (formStatePolicyDef.isSetValues()) {
+                            formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now, formValueStore,
+                                    variables, trigger);
+                            setValuesExecuted = true;
+                        }
+                    }
+                }
+            }
+
+            if (setValuesExecuted) {
+                ctx.au().populateListOnlyFields(formDef.getEntityDef(), (Entity) formValueStore.getValueObject());
+            }
+            
+            // Then switch states
+            if (formDef.isWithConsolidatedFormState()) {
+                ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
+                        formDef.getConsolidatedFormState());
+                TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStore.getReader(), trigger);
+                for (TargetFormState state : _states.getTargetStateList()) {
                     if (state.isSectionRule()) {
                         for (String target : state.getTarget()) {
                             FormSection fs = formSections.get(target);
@@ -235,15 +267,9 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                     }
                 }
 
-                if (states.isWithValueList()) {
-                    states.applyValues(formValueStore);
-                    setValuesExecuted = true;
-                }
-
                 policy.onFormSwitch(formValueStore, trigger);
             }
 
-            final Map<String, Object> variables = Collections.emptyMap();
             for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                 if (formStatePolicyDef.isTriggered(trigger)) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
@@ -262,18 +288,8 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                                 fieldRules.add(setStateDef);
                             }
                         }
-
-                        if (formStatePolicyDef.isSetValues()) {
-                            formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now, formValueStore,
-                                    variables, trigger);
-                            setValuesExecuted = true;
-                        }
                     }
                 }
-            }
-
-            if (setValuesExecuted) {
-                ctx.au().populateListOnlyFields(formDef.getEntityDef(), (Entity) formValueStore.getValueObject());
             }
         }
 
