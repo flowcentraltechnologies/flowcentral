@@ -406,9 +406,18 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                     final boolean entryMode = table.isEntryMode();
                     for (TableColumnDef tableColumnDef : tableDef.getVisibleColumnDefList()) {
                         final boolean useCellEditor = tableColumnDef.isWithCellEditor() && tableColumnDef.isEditable();
-                        final String columnWidgetUpl = entryMode && useCellEditor ? tableColumnDef.getCellEditor()
+                        final boolean _entry = entryMode && useCellEditor;
+                        final String columnWidgetUpl = _entry ? tableColumnDef.getCellEditor()
                                 : tableColumnDef.getCellRenderer();
                         Widget widget = addExternalChildWidget(columnWidgetUpl);
+                        if (!_entry) {
+                            EntityFieldDef entityFieldDef = tableDef.getFieldDef(tableColumnDef.getFieldName());
+                            if (entityFieldDef.isNumber()) {
+                                widget.setPrecision(entityFieldDef.getPrecision());
+                                widget.setScale(entityFieldDef.getScale());
+                            }
+                        }
+                        
                         if (useCellEditor) {
                             if (inputs == null) {
                                 inputs = new HashSet<Widget>();

@@ -16,13 +16,21 @@
 
 package com.flowcentraltech.flowcentral.system.business.policies;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractAppletActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
+import com.tcdng.unify.core.SessionAttributeProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -34,6 +42,16 @@ import com.tcdng.unify.core.database.Entity;
 @EntityReferences({ "system.sysParam" })
 @Component(name = "sysparam-updateactionpolicy", description = "$m{system.entityactionpolicy.sysparamupdate}")
 public class SysParamUpdateActionPolicy extends AbstractAppletActionPolicy {
+
+    private static final Set<String> resetParams = Collections.unmodifiableSet(new HashSet<String>(
+            Arrays.asList(SystemModuleSysParamConstants.SYSTEM_GLOBAL_ACCOUNTING_INPUT_ENABLED)));
+
+    @Configurable
+    private SessionAttributeProvider sessionAttributeProvider;
+
+    public final void setSessionAttributeProvider(SessionAttributeProvider sessionAttributeProvider) {
+        this.sessionAttributeProvider = sessionAttributeProvider;
+    }
 
     @Override
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
@@ -50,8 +68,13 @@ public class SysParamUpdateActionPolicy extends AbstractAppletActionPolicy {
         SystemParameter systemParameter = (SystemParameter) ctx.getInst();
         EntityActionResult result = new EntityActionResult(ctx);
         // TODO This system parameter code should fetched
-        boolean refreshMenu = "APP-0005".equals(systemParameter.getCode());
+        final String code = systemParameter.getCode();
+        boolean refreshMenu = "APP-0005".equals(code);
         result.setRefreshMenu(refreshMenu);
+        
+        if (resetParams.contains(code))  {
+            sessionAttributeProvider.reset();
+        }           
         return result;
     }
 
