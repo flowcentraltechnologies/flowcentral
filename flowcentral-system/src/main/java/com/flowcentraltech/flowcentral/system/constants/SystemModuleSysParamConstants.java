@@ -42,4 +42,6 @@ public interface SystemModuleSysParamConstants {
     String SYSTEM_LOGINPAGE_SUBTITLE = "SYS-0009";
 
     String SYSTEM_DOWNLOADPATH_LOG_ENABLED = "SYS-000A";
+    
+    String SYSTEM_GLOBAL_ACCOUNTING_INPUT_ENABLED = "SYS-000B";
 }

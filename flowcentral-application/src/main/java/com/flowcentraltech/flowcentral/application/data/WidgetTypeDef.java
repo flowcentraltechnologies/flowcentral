@@ -78,9 +78,4 @@ public class WidgetTypeDef extends BaseApplicationEntityDef {
         return InputWidgetUtils.isEnumerationWidget(getName());
     }
 
-    @Override
-    public String toString() {
-        return "WidgetTypeDef [dataType=" + dataType + ", type=" + type + ", editor=" + editor + ", renderer="
-                + renderer + ", stretch=" + stretch + ", longName=" + getLongName() + "]";
-    }
 }

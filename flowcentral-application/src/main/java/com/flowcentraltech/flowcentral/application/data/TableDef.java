@@ -123,6 +123,9 @@ public class TableDef extends BaseApplicationEntityDef {
 
         if (this.limitSelectToColumns) {
             this.select = new Select().add("id").add("versionNo");
+            for (TableColumnDef tableColumnDef: columnDefList) {
+                this.select.add(tableColumnDef.getFieldName());
+            }
         }
 
         this.defaultReportColumnList = new ArrayList<DefaultReportColumn>();
@@ -130,10 +133,6 @@ public class TableDef extends BaseApplicationEntityDef {
         for (int i = 0; i < len; i++) {
             TableColumnDef tableColumnDef = visibleColumnDefList.get(i);
             this.defaultReportColumnList.add(new DefaultReportColumn(tableColumnDef.getFieldName(), getFieldLabel(i)));
-            if (this.limitSelectToColumns) {
-                this.select.add(tableColumnDef.getFieldName());
-            }
-
             if (tableColumnDef.isSummary()) {
                 this.summaryFields.add(tableColumnDef.getFieldName());
             }
@@ -510,10 +509,10 @@ public class TableDef extends BaseApplicationEntityDef {
         }
 
         public Builder addColumnDef(TableColumnDef tableColumnDef) {
-            totalWidth += tableColumnDef.getWidthRatio();
             if (tableColumnDef.isHidden()) {
                 columnDefList.add(tableColumnDef);
             } else {
+                totalWidth += tableColumnDef.getWidthRatio();
                 visibleColumnDefList.add(tableColumnDef);
             }
 
