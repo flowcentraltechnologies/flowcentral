@@ -488,44 +488,46 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         buildDynamicEntityInfo(getEntityDef(entity), dynamicEntityInfoMap, null);
                     }
 
-                    int lastCount = 0;
-                    while (lastCount != dynamicEntityInfoMap.size()) {
-                        // All consider all children in a cyclic manner
-                        lastCount = dynamicEntityInfoMap.size();
-                        Map<String, DynamicEntityInfo> temp = new HashMap<String, DynamicEntityInfo>(
-                                dynamicEntityInfoMap);
-                        for (Map.Entry<String, DynamicEntityInfo> entry : temp.entrySet()) {
-                            DynamicEntityInfo _dynamicEntityInfo = entry.getValue();
-                            if (_dynamicEntityInfo.isGeneration()) {
-                                EntityDef _entityDef = getEntityDef(entry.getKey());
-                                if (_entityDef.isWithChildFields() && !_dynamicEntityInfo.isWithChildField()) {
-                                    for (EntityFieldDef entityFieldDef : _entityDef.getFieldDefList()) {
-                                        if (entityFieldDef.isChildRef()) {
-                                            DynamicFieldType fieldType = entityFieldDef.isCustom()
-                                                    ? DynamicFieldType.GENERATION
-                                                    : DynamicFieldType.INFO_ONLY;
-                                            EntityDef _refEntityDef = getEntityDef(
-                                                    entityFieldDef.getRefDef().getEntity());
-                                            DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(
-                                                    _refEntityDef, dynamicEntityInfoMap, null);
-                                            if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
-                                                _dynamicEntityInfo.addChildField(fieldType, _childDynamicEntityInfo,
-                                                        entityFieldDef.getFieldName());
-                                            } else {// Child list
-                                                _dynamicEntityInfo.addChildListField(fieldType, _childDynamicEntityInfo,
-                                                        entityFieldDef.getFieldName());
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+//                    int lastCount = 0;
+//                    while (lastCount != dynamicEntityInfoMap.size()) {
+//                        // All consider all children in a cyclic manner
+//                        lastCount = dynamicEntityInfoMap.size();
+//                        Map<String, DynamicEntityInfo> temp = new HashMap<String, DynamicEntityInfo>(
+//                                dynamicEntityInfoMap);
+//                        for (Map.Entry<String, DynamicEntityInfo> entry : temp.entrySet()) {
+//                            DynamicEntityInfo _dynamicEntityInfo = entry.getValue();
+//                            if (_dynamicEntityInfo.isGeneration()) {
+//                                EntityDef _entityDef = getEntityDef(entry.getKey());
+//                                if (_entityDef.isWithChildFields() && !_dynamicEntityInfo.isWithChildField()) {
+//                                    for (EntityFieldDef entityFieldDef : _entityDef.getFieldDefList()) {
+//                                        if (entityFieldDef.isChildRef()) {
+//                                            DynamicFieldType fieldType = entityFieldDef.isCustom()
+//                                                    ? DynamicFieldType.GENERATION
+//                                                    : DynamicFieldType.INFO_ONLY;
+//                                            EntityDef _refEntityDef = getEntityDef(
+//                                                    entityFieldDef.getRefDef().getEntity());
+//                                            DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(
+//                                                    _refEntityDef, dynamicEntityInfoMap, null);
+//                                            if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
+//                                                _dynamicEntityInfo.addChildField(fieldType, _childDynamicEntityInfo,
+//                                                        entityFieldDef.getFieldName());
+//                                            } else {// Child list
+//                                                _dynamicEntityInfo.addChildListField(fieldType, _childDynamicEntityInfo,
+//                                                        entityFieldDef.getFieldName());
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
 
                     // Get entity definitions for type that need to be generated
                     List<DynamicEntityInfo> _dynamicEntityInfos = new ArrayList<DynamicEntityInfo>();
                     for (Map.Entry<String, DynamicEntityInfo> entry : dynamicEntityInfoMap.entrySet()) {
-                        if (entry.getValue().isGeneration()) {
+                        DynamicEntityInfo info = entry.getValue();
+                        info.finalizeResolution();
+                        if (info.isGeneration()) {
                             _dynamicEntityInfos.add(entry.getValue());
                         }
                     }
@@ -2353,7 +2355,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         List<DynamicEntityInfo> resultList = new ArrayList<DynamicEntityInfo>();
         for (String entityName : entityNames) {
-            resultList.add(workingMap.get(entityName));
+            DynamicEntityInfo info = workingMap.get(entityName);
+            info.finalizeResolution();
+            resultList.add(info);
         }
         return resultList;
     }
@@ -4382,6 +4386,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private DynamicEntityInfo buildDynamicEntityInfo(final EntityDef entityDef,
             Map<String, DynamicEntityInfo> dynamicEntityInfoMap, String basePackage) throws UnifyException {
+        logDebug("Constructing dynamic information for entity [{0}]...", entityDef.getLongName());
         DynamicEntityInfo _dynamicEntityInfo = dynamicEntityInfoMap.get(entityDef.getLongName());
         if (_dynamicEntityInfo == null) {
             DynamicEntityType dynamicEntityType = DynamicEntityType.INFO_ONLY;
@@ -4410,6 +4415,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     : DynamicEntityInfo.ManagedType.MANAGED;
             DynamicEntityInfo.Builder deib = DynamicEntityInfo.newBuilder(dynamicEntityType, className, managedType)
                     .baseClassName(baseClassName).tableName(entityDef.getTableName()).version(1L);
+            _dynamicEntityInfo = deib.prefetch();
+            dynamicEntityInfoMap.put(entityDef.getLongName(), _dynamicEntityInfo);
+            
             List<EntityFieldDef> listOnlyFieldList = null;
             for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                 DynamicFieldType type = entityFieldDef.isCustom() ? DynamicFieldType.GENERATION
@@ -4421,9 +4429,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
                                 entityFieldDef.getDefaultVal(), entityFieldDef.isNullable());
                     } else if (entityFieldDef.isChildRef()) {
-                        // Postpone
+                        DynamicFieldType fieldType = entityFieldDef.isCustom() ? DynamicFieldType.GENERATION
+                                : DynamicFieldType.INFO_ONLY;
+                        EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());
+                        DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(_refEntityDef,
+                                dynamicEntityInfoMap, basePackage);
+                        if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
+                            deib.addChildField(fieldType, _childDynamicEntityInfo,
+                                    entityFieldDef.getFieldName());
+                        } else {// Child list
+                            deib.addChildListField(fieldType, _childDynamicEntityInfo,
+                                    entityFieldDef.getFieldName());
+                        }
                     } else {
                         EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());
+                        logDebug("Constructing dynamic information for entity [{0}] referenced by [{1}]...",
+                                _refEntityDef.getLongName(), entityDef.getLongName() + "." +entityFieldDef.getFieldName());
                         DynamicEntityInfo _refDynamicEntityInfo = entityDef.getLongName()
                                 .equals(_refEntityDef.getLongName()) ? DynamicEntityInfo.SELF_REFERENCE
                                         : buildDynamicEntityInfo(_refEntityDef, dynamicEntityInfoMap, basePackage);
@@ -4464,26 +4485,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            _dynamicEntityInfo = deib.build();
-            dynamicEntityInfoMap.put(entityDef.getLongName(), _dynamicEntityInfo);
-
-            for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
-                if (entityFieldDef.isChildRef()) {
-                    DynamicFieldType fieldType = entityFieldDef.isCustom() ? DynamicFieldType.GENERATION
-                            : DynamicFieldType.INFO_ONLY;
-                    EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());
-                    DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(_refEntityDef,
-                            dynamicEntityInfoMap, basePackage);
-                    if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
-                        _dynamicEntityInfo.addChildField(fieldType, _childDynamicEntityInfo,
-                                entityFieldDef.getFieldName());
-                    } else {// Child list
-                        _dynamicEntityInfo.addChildListField(fieldType, _childDynamicEntityInfo,
-                                entityFieldDef.getFieldName());
-                    }
-                }
-            }
-
+            deib.build();
         }
 
         return _dynamicEntityInfo;
