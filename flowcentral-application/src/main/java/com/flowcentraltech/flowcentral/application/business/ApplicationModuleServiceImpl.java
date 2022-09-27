@@ -4411,6 +4411,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     : DynamicEntityInfo.ManagedType.MANAGED;
             DynamicEntityInfo.Builder deib = DynamicEntityInfo.newBuilder(dynamicEntityType, className, managedType)
                     .baseClassName(baseClassName).tableName(entityDef.getTableName()).version(1L);
+            _dynamicEntityInfo = deib.prefetch();
+            dynamicEntityInfoMap.put(entityDef.getLongName(), _dynamicEntityInfo);
+            
             List<EntityFieldDef> listOnlyFieldList = null;
             for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                 DynamicFieldType type = entityFieldDef.isCustom() ? DynamicFieldType.GENERATION
@@ -4467,8 +4470,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            _dynamicEntityInfo = deib.build();
-            dynamicEntityInfoMap.put(entityDef.getLongName(), _dynamicEntityInfo);
+            deib.build();
 
             for (EntityFieldDef entityFieldDef : entityDef.getFieldDefList()) {
                 if (entityFieldDef.isChildRef()) {
