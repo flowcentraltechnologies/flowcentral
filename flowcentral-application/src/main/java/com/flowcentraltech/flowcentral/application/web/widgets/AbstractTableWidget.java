@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -102,7 +101,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private DetailsPanel detailsPanel;
 
-    private Integer[] selected;
+    private List<Integer> selected;
 
     private String tabMemoryId;
 
@@ -511,15 +510,15 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return sortColumnCtrl;
     }
 
-    public Integer[] getSelected() {
+    public List<Integer> getSelected() {
         return selected;
     }
 
-    public void setSelected(Integer[] selected) throws UnifyException {
+    public void setSelected(List<Integer> selected) throws UnifyException {
         this.selected = selected;
-        Set<Integer> set = selected == null || selected.length == 0 ? Collections.emptySet()
-                : new HashSet<Integer>(Arrays.asList(selected));
-        getTable().setSelected(set);
+        Set<Integer> set = selected == null || selected.isEmpty() ? Collections.emptySet()
+                : new HashSet<Integer>(selected);
+        getTable().setSelectedRows(set);
     }
 
     public String getTabMemoryId() {
@@ -548,16 +547,27 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     @Override
     public List<U> getSelectedItems() throws UnifyException {
-        if (selected != null) {
+        if (selected != null && !selected.isEmpty()) {
             List<U> list = new ArrayList<U>();
-            for (int i = 0; i < selected.length; i++) {
-                list.add(getItem(selected[i]));
+            for (Integer rowIndex: selected) {
+                list.add(getItem(rowIndex));
             }
 
             return list;
         }
 
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean isRowSelected(int rowIndex) throws UnifyException {
+        return selected != null && selected.contains(rowIndex);
+    }
+
+    @Override
+    public void setRowSelected(int rowIndex, boolean selected) throws UnifyException {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override

@@ -28,5 +28,35 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface TableSelect<T> {
 
+    /**
+     * Gets all selected items.
+     * 
+     * @return list of selected items
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     List<T> getSelectedItems() throws UnifyException;
+
+    /**
+     * Checks if row is selected
+     * 
+     * @param rowIndex
+     *                 the row index
+     * @return true if selected otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isRowSelected(int rowIndex) throws UnifyException;
+
+    /**
+     * Sets row is selected
+     * 
+     * @param rowIndex
+     *                 the row index
+     * @param selected
+     *                 the row selected flag
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setRowSelected(int rowIndex, boolean selected) throws UnifyException;
 }

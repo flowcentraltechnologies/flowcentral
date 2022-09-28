@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -126,7 +128,7 @@ public abstract class AbstractTable<T, U> {
         this.defaultOrder = defaultOrder;
         this.basicSearchMode = tableDef.isBasicSearch();
         this.entryMode = entryMode;
-        this.selected = Collections.emptySet();
+        this.selected = new HashSet<Integer>();
         this.highlightedRow = -1;
         this.detailsIndex = -1;
     }
@@ -211,16 +213,27 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = highlightedRow;
     }
 
-    public void setSelected(Set<Integer> selected) {
-        this.selected = selected;
+    public void setSelectedRows(Collection<Integer> selected) {
+        this.selected.clear();
+        if (selected != null) {
+            this.selected.addAll(selected);
+        }
     }
 
-    public boolean isSelected(Integer index) {
-        return selected.contains(index);
+    public boolean isSelectedRow(Integer rowIndex) {
+        return selected.contains(rowIndex);
+    }
+
+    public void setSelected(Integer rowIndex, boolean selected) {
+        if (selected) {
+            this.selected.add(rowIndex);
+        } else {
+            this.selected.remove(rowIndex);
+        }
     }
 
     public int getSelectedCount() {
-        return selected.isEmpty() ? 0 : selected.size();
+        return selected.size();
     }
 
     public boolean isSupportsBasicSearch() {
@@ -360,7 +373,11 @@ public abstract class AbstractTable<T, U> {
 
     public EntryActionType fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         lastRowChangeInfo = rowChangeInfo;
-        return onFireOnRowChange(sourceObject, rowChangeInfo);
+        final int rowIndex = rowChangeInfo.getRowIndex();
+        rowChangeInfo.setSelected(tableSelect.isRowSelected(rowIndex));
+        EntryActionType actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
+        tableSelect.setRowSelected(rowIndex, rowChangeInfo.isSelected());
+        return actionType;
     }
 
     public void setDefaultOrder(Order defaultOrder) {

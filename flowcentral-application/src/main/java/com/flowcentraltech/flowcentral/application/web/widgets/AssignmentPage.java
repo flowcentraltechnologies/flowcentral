@@ -259,7 +259,7 @@ public class AssignmentPage {
 
             final BeanTable _beanTable = getEntryBeanTable();
             _beanTable.setSwitchOnChangeHandlers(assnSwitchOnChangeHandlers);
-            _beanTable.setSelected(selected);
+            _beanTable.setSelectedRows(selected);
             _beanTable.setSourceObject(resultList);
             _beanTable.setFixedAssignment(fixedAssignment);
         } else {
