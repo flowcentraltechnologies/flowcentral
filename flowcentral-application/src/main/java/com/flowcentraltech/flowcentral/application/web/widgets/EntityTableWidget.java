@@ -15,7 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -37,11 +40,13 @@ public class EntityTableWidget extends AbstractTableWidget<EntityTable, Entity, 
     }
 
     public Long[] getSelectedItemIds() throws UnifyException {
-        List<Integer> selected = getSelected();
-        if (selected != null && !selected.isEmpty()) {
-            Long[] ids = new Long[selected.size()];
+        Set<Integer> selected = getSelected();
+        if (!selected.isEmpty()) {
+            List<Integer> _selected = new ArrayList<Integer>(selected);
+            Collections.sort(_selected);
+            Long[] ids = new Long[_selected.size()];
             for (int i = 0; i < ids.length; i++) {
-                ids[i] = (Long) getItem(selected.get(i)).getId();
+                ids[i] = (Long) getItem(_selected.get(i)).getId();
             }
 
             return ids;

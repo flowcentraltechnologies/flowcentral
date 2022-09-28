@@ -101,8 +101,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     private DetailsPanel detailsPanel;
 
-    private List<Integer> selected;
-
     private String tabMemoryId;
 
     private Sort sort;
@@ -510,15 +508,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return sortColumnCtrl;
     }
 
-    public List<Integer> getSelected() {
-        return selected;
+    public Set<Integer> getSelected() throws UnifyException {
+        return getTable().getSelectedRows();
     }
 
-    public void setSelected(List<Integer> selected) throws UnifyException {
-        this.selected = selected;
-        Set<Integer> set = selected == null || selected.isEmpty() ? Collections.emptySet()
-                : new HashSet<Integer>(selected);
-        getTable().setSelectedRows(set);
+    public void setSelected(Set<Integer> selected) throws UnifyException {
+        getTable().setSelectedRows(selected);
     }
 
     public String getTabMemoryId() {
@@ -547,9 +542,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     @Override
     public List<U> getSelectedItems() throws UnifyException {
-        if (selected != null && !selected.isEmpty()) {
+        Set<Integer> selected = getSelected();
+        if (!selected.isEmpty()) {
+            List<Integer> _selected = new ArrayList<Integer>(selected);
+            Collections.sort(_selected);
             List<U> list = new ArrayList<U>();
-            for (Integer rowIndex: selected) {
+            for (Integer rowIndex: _selected) {
                 list.add(getItem(rowIndex));
             }
 
@@ -561,13 +559,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     @Override
     public boolean isRowSelected(int rowIndex) throws UnifyException {
-        return selected != null && selected.contains(rowIndex);
+        return getTable().isSelectedRow(rowIndex);
     }
 
     @Override
     public void setRowSelected(int rowIndex, boolean selected) throws UnifyException {
-        // TODO Auto-generated method stub
-        
+        getTable().setSelected(rowIndex, selected);
     }
 
     @Override

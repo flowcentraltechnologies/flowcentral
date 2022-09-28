@@ -213,6 +213,10 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = highlightedRow;
     }
 
+    public Set<Integer> getSelectedRows() {
+        return selected;
+    }
+    
     public void setSelectedRows(Collection<Integer> selected) {
         this.selected.clear();
         if (selected != null) {
@@ -220,11 +224,11 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public boolean isSelectedRow(Integer rowIndex) {
+    public boolean isSelectedRow(int rowIndex) {
         return selected.contains(rowIndex);
     }
 
-    public void setSelected(Integer rowIndex, boolean selected) {
+    public void setSelected(int rowIndex, boolean selected) {
         if (selected) {
             this.selected.add(rowIndex);
         } else {
@@ -375,7 +379,9 @@ public abstract class AbstractTable<T, U> {
         lastRowChangeInfo = rowChangeInfo;
         final int rowIndex = rowChangeInfo.getRowIndex();
         rowChangeInfo.setSelected(tableSelect.isRowSelected(rowIndex));
+        System.out.println("@testframe: table.fireOnRowChange() before rowChangeInfo = " +  rowChangeInfo);
         EntryActionType actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
+        System.out.println("@testframe: table.fireOnRowChange() after rowChangeInfo = " +  rowChangeInfo);
         tableSelect.setRowSelected(rowIndex, rowChangeInfo.isSelected());
         return actionType;
     }
