@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionTy
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
@@ -81,7 +82,7 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
 
     @Override
     public EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore,
-            Set<Integer> selected) throws UnifyException {
+            Set<Integer> selected, TableChangeType changeType) throws UnifyException {
         return EntryActionType.NONE;
     }
 

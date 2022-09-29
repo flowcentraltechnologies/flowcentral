@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
@@ -70,11 +71,13 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected EntryActionType onFireOnTableChange(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
+    protected EntryActionType onFireOnTableChange(List<?> sourceObject, Set<Integer> selected,
+            TableChangeType changeType) throws UnifyException {
         if (isWithEntryPolicy()) {
-            return getEntryPolicy().onEntryTableChange(getParentReader(), getValueStore(sourceObject), selected);
+            return getEntryPolicy().onEntryTableChange(getParentReader(), getValueStore(sourceObject), selected,
+                    changeType);
         }
-        
+
         return EntryActionType.NONE;
     }
 

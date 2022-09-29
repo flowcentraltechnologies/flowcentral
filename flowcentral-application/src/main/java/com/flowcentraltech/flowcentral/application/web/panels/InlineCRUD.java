@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -93,7 +94,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
         _entries.addAll(index, entries);
         table.setSourceObject(new ArrayList<T>(_entries));
-        EntryActionType actionType = table.fireOnTableChange();
+        EntryActionType actionType = table.fireOnTableChange(TableChangeType.INSERT_ENTRIES);
         if (actionType.isAddItem()) {
             addEntry(false);
         }
@@ -104,7 +105,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         List<T> _entries = (List<T>) table.getSourceObject();
         _entries.remove(index);
         table.setSourceObject(new ArrayList<T>(_entries));
-        EntryActionType actionType = table.fireOnTableChange();
+        EntryActionType actionType = table.fireOnTableChange(TableChangeType.DELETE_ENTRY);
         if (actionType.isAddItem()) {
             addEntry(false);
         }
@@ -173,7 +174,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     private void addEntry(boolean fireTableChange) throws UnifyException {
         createAndAddInst((List<T>) table.getSourceObject());
         if (fireTableChange) {
-            table.fireOnTableChange();
+            table.fireOnTableChange(TableChangeType.ADD_ENTRY);
         }
     }
 

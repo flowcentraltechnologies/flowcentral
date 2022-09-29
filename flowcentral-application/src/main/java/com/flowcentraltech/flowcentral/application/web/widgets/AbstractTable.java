@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionTy
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
@@ -367,8 +368,8 @@ public abstract class AbstractTable<T, U> {
         reset();
     }
 
-    public EntryActionType fireOnTableChange() throws UnifyException {
-        return onFireOnTableChange(sourceObject, selected);
+    public EntryActionType fireOnTableChange(TableChangeType changeType) throws UnifyException {
+        return onFireOnTableChange(sourceObject, selected, changeType);
     }
 
     public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
@@ -379,9 +380,7 @@ public abstract class AbstractTable<T, U> {
         lastRowChangeInfo = rowChangeInfo;
         final int rowIndex = rowChangeInfo.getRowIndex();
         rowChangeInfo.setSelected(tableSelect.isRowSelected(rowIndex));
-        System.out.println("@testframe: table.fireOnRowChange() before rowChangeInfo = " +  rowChangeInfo);
         EntryActionType actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
-        System.out.println("@testframe: table.fireOnRowChange() after rowChangeInfo = " +  rowChangeInfo);
         tableSelect.setRowSelected(rowIndex, rowChangeInfo.isSelected());
         return actionType;
     }
@@ -556,7 +555,8 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract EntryActionType onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
+    protected abstract EntryActionType onFireOnTableChange(T sourceObject, Set<Integer> selected,
+            TableChangeType changeType) throws UnifyException;
 
     protected abstract EntryActionType onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo)
             throws UnifyException;

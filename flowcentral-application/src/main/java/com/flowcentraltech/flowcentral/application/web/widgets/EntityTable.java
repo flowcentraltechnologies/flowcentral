@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
@@ -99,8 +100,8 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     }
 
     @Override
-    protected EntryActionType onFireOnTableChange(Restriction sourceObject, Set<Integer> selected)
-            throws UnifyException {
+    protected EntryActionType onFireOnTableChange(Restriction sourceObject, Set<Integer> selected,
+            TableChangeType changeType) throws UnifyException {
         return EntryActionType.NONE;
     }
 

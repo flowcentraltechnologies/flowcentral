@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -81,7 +82,8 @@ public interface EntryTablePolicy extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
+    EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected,
+            TableChangeType changeType)
             throws UnifyException;
 
     /**
