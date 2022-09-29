@@ -30,6 +30,8 @@ public class RowChangeInfo {
     
     private int rowIndex;
 
+    private boolean selected;
+    
     public RowChangeInfo(String trigger, int rowIndex) {
         this.trigger = trigger;
         this.rowIndex = rowIndex;
@@ -53,6 +55,14 @@ public class RowChangeInfo {
         return rowIndex;
     }
     
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public boolean matchRowIndex(int rowIndex) {
         return this.rowIndex == rowIndex;
     }

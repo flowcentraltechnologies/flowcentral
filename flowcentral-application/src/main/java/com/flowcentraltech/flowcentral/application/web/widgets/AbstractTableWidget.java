@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,8 +100,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private List<SummaryPanel> summaryPanelList;
 
     private DetailsPanel detailsPanel;
-
-    private Integer[] selected;
 
     private String tabMemoryId;
 
@@ -511,15 +508,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return sortColumnCtrl;
     }
 
-    public Integer[] getSelected() {
-        return selected;
+    public Set<Integer> getSelected() throws UnifyException {
+        return getTable().getSelectedRows();
     }
 
-    public void setSelected(Integer[] selected) throws UnifyException {
-        this.selected = selected;
-        Set<Integer> set = selected == null || selected.length == 0 ? Collections.emptySet()
-                : new HashSet<Integer>(Arrays.asList(selected));
-        getTable().setSelected(set);
+    public void setSelected(Set<Integer> selected) throws UnifyException {
+        getTable().setSelectedRows(selected);
     }
 
     public String getTabMemoryId() {
@@ -548,16 +542,29 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     @Override
     public List<U> getSelectedItems() throws UnifyException {
-        if (selected != null) {
+        Set<Integer> selected = getSelected();
+        if (!selected.isEmpty()) {
+            List<Integer> _selected = new ArrayList<Integer>(selected);
+            Collections.sort(_selected);
             List<U> list = new ArrayList<U>();
-            for (int i = 0; i < selected.length; i++) {
-                list.add(getItem(selected[i]));
+            for (Integer rowIndex: _selected) {
+                list.add(getItem(rowIndex));
             }
 
             return list;
         }
 
         return Collections.emptyList();
+    }
+
+    @Override
+    public boolean isRowSelected(int rowIndex) throws UnifyException {
+        return getTable().isSelectedRow(rowIndex);
+    }
+
+    @Override
+    public void setRowSelected(int rowIndex, boolean selected) throws UnifyException {
+        getTable().setSelected(rowIndex, selected);
     }
 
     @Override

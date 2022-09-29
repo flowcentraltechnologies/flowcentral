@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +35,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionTy
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
@@ -126,7 +129,7 @@ public abstract class AbstractTable<T, U> {
         this.defaultOrder = defaultOrder;
         this.basicSearchMode = tableDef.isBasicSearch();
         this.entryMode = entryMode;
-        this.selected = Collections.emptySet();
+        this.selected = new HashSet<Integer>();
         this.highlightedRow = -1;
         this.detailsIndex = -1;
     }
@@ -211,16 +214,31 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = highlightedRow;
     }
 
-    public void setSelected(Set<Integer> selected) {
-        this.selected = selected;
+    public Set<Integer> getSelectedRows() {
+        return selected;
+    }
+    
+    public void setSelectedRows(Collection<Integer> selected) {
+        this.selected.clear();
+        if (selected != null) {
+            this.selected.addAll(selected);
+        }
     }
 
-    public boolean isSelected(Integer index) {
-        return selected.contains(index);
+    public boolean isSelectedRow(int rowIndex) {
+        return selected.contains(rowIndex);
+    }
+
+    public void setSelected(int rowIndex, boolean selected) {
+        if (selected) {
+            this.selected.add(rowIndex);
+        } else {
+            this.selected.remove(rowIndex);
+        }
     }
 
     public int getSelectedCount() {
-        return selected.isEmpty() ? 0 : selected.size();
+        return selected.size();
     }
 
     public boolean isSupportsBasicSearch() {
@@ -350,8 +368,8 @@ public abstract class AbstractTable<T, U> {
         reset();
     }
 
-    public EntryActionType fireOnTableChange() throws UnifyException {
-        return onFireOnTableChange(sourceObject, selected);
+    public EntryActionType fireOnTableChange(TableChangeType changeType) throws UnifyException {
+        return onFireOnTableChange(sourceObject, selected, changeType);
     }
 
     public void validate(EvaluationMode evaluationMode, FormValidationErrors errors) throws UnifyException {
@@ -360,7 +378,11 @@ public abstract class AbstractTable<T, U> {
 
     public EntryActionType fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         lastRowChangeInfo = rowChangeInfo;
-        return onFireOnRowChange(sourceObject, rowChangeInfo);
+        final int rowIndex = rowChangeInfo.getRowIndex();
+        rowChangeInfo.setSelected(tableSelect.isRowSelected(rowIndex));
+        EntryActionType actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
+        tableSelect.setRowSelected(rowIndex, rowChangeInfo.isSelected());
+        return actionType;
     }
 
     public void setDefaultOrder(Order defaultOrder) {
@@ -533,7 +555,8 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void onLoadSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException;
 
-    protected abstract EntryActionType onFireOnTableChange(T sourceObject, Set<Integer> selected) throws UnifyException;
+    protected abstract EntryActionType onFireOnTableChange(T sourceObject, Set<Integer> selected,
+            TableChangeType changeType) throws UnifyException;
 
     protected abstract EntryActionType onFireOnRowChange(T sourceObject, RowChangeInfo rowChangeInfo)
             throws UnifyException;
