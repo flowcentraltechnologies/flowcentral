@@ -180,13 +180,13 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
 
     @SuppressWarnings("unchecked")
     private void insertEntries(List<T> entries, int index, boolean replace) throws UnifyException {
-        List<T> _entries = (List<T>) table.getSourceObject();
-        if (replace && index < entries.size()) {
-            _entries.remove(index);
+        List<T> _resultEntries = (List<T>) table.getSourceObject();
+        if (replace && index < _resultEntries.size()) {
+            _resultEntries.remove(index);
         }
 
-        _entries.addAll(index, entries);
-        table.setSourceObject(new ArrayList<T>(_entries));
+        _resultEntries.addAll(index, entries);
+        table.setSourceObject(new ArrayList<T>(_resultEntries));
         EntryActionType actionType = table
                 .fireOnTableChange(replace ? TableChangeType.REPLACE_ENTRIES : TableChangeType.INSERT_ENTRIES);
         if (actionType.isAddItem()) {
