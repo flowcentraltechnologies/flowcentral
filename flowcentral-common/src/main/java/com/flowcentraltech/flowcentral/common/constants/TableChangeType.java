@@ -25,7 +25,8 @@ package com.flowcentraltech.flowcentral.common.constants;
 public enum TableChangeType {
     ADD_ENTRY,
     DELETE_ENTRY,
-    INSERT_ENTRIES;
+    INSERT_ENTRIES,
+    REPLACE_ENTRIES;
     
     public boolean isAddEntry() {
         return ADD_ENTRY.equals(this);
@@ -37,5 +38,9 @@ public enum TableChangeType {
     
     public boolean isInsertEntries() {
         return INSERT_ENTRIES.equals(this);
+    }
+    
+    public boolean isReplaceEntries() {
+        return REPLACE_ENTRIES.equals(this);
     }
 }
