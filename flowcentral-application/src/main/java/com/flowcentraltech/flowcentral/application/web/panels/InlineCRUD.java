@@ -85,19 +85,8 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         insertEntries(entries, index, false);
     }
 
-    @SuppressWarnings("unchecked")
-    public void insertEntries(List<T> entries, int index, boolean replace) throws UnifyException {
-        List<T> _entries = (List<T>) table.getSourceObject();
-        if (replace && index < entries.size()) {
-            _entries.remove(index);
-        }
-
-        _entries.addAll(index, entries);
-        table.setSourceObject(new ArrayList<T>(_entries));
-        EntryActionType actionType = table.fireOnTableChange(TableChangeType.INSERT_ENTRIES);
-        if (actionType.isAddItem()) {
-            addEntry(false);
-        }
+    public void replaceEntries(List<T> entries, int index) throws UnifyException {
+        insertEntries(entries, index, true);
     }
 
     @SuppressWarnings("unchecked")
@@ -186,6 +175,22 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         InlineCRUDTablePolicy<T> policy = (InlineCRUDTablePolicy<T>) table.getEntryPolicy();
         if (policy != null) {
             policy.onAddItem(table.getParentReader(), items, item);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void insertEntries(List<T> entries, int index, boolean replace) throws UnifyException {
+        List<T> _resultEntries = (List<T>) table.getSourceObject();
+        if (replace && index < _resultEntries.size()) {
+            _resultEntries.remove(index);
+        }
+
+        _resultEntries.addAll(index, entries);
+        table.setSourceObject(new ArrayList<T>(_resultEntries));
+        EntryActionType actionType = table
+                .fireOnTableChange(replace ? TableChangeType.REPLACE_ENTRIES : TableChangeType.INSERT_ENTRIES);
+        if (actionType.isAddItem()) {
+            addEntry(false);
         }
     }
 
