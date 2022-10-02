@@ -40,7 +40,6 @@ import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
-import com.flowcentraltech.flowcentral.common.data.TableColumnSummaryVal;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -330,16 +329,21 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void addTotalSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
+    public void addParentColumnSummary() throws UnifyException {
+        if (tableTotalSummary != null && entryPolicy != null) {
+            for (EntityFieldTotalSummary summary: tableTotalSummary.getSummaries().values()) {
+                Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
+                summary.add(val);
+            }
+        }
+    }
+    
+    public void addTableColumnSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
             if (entryPolicy != null) {
-                TableColumnSummaryVal val = entryPolicy.getColumnSummaryValue(parentReader, fieldName, itemValueStore);
-                if (val.isReplace()) {
-                    summary.set(val.getVal());
-                } else {
-                    summary.add(val.getVal());
-                }
+                Number val = entryPolicy.getTableColumnSummaryValue(parentReader, fieldName, itemValueStore);
+                summary.add(val);
             } else {
                 summary.add((Number) itemValueStore.retrieve(fieldName));
             }

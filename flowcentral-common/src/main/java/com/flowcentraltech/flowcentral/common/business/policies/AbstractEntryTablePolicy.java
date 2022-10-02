@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.flowcentraltech.flowcentral.common.data.TableColumnSummaryVal;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -41,10 +40,14 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     }
 
     @Override
-    public TableColumnSummaryVal getColumnSummaryValue(ValueStoreReader parentReader, String fieldName,
-            ValueStore itemValueStore) throws UnifyException {
-        Number val = (Number) itemValueStore.retrieve(fieldName);
-        return new TableColumnSummaryVal(val);
+    public Number getParentColumnSummaryValue(ValueStoreReader parentReader, String fieldName) throws UnifyException {
+        return null;
+    }
+
+    @Override
+    public Number getTableColumnSummaryValue(ValueStoreReader parentReader, String fieldName, ValueStore itemValueStore)
+            throws UnifyException {
+        return (Number) itemValueStore.retrieve(fieldName);
     }
 
     @Override

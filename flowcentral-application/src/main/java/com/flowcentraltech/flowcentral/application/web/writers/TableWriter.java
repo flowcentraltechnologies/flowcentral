@@ -636,7 +636,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write("</td>");
 
                             if (totalSummary) {
-                                table.addTotalSummary(fieldName, valueStore);
+                                table.addTableColumnSummary(fieldName, valueStore);
                             }
 
                             index++;
@@ -770,6 +770,7 @@ public class TableWriter extends AbstractControlWriter {
 
             // Total summary
             if (totalSummary) {
+                table.addParentColumnSummary();
                 table.loadTotalSummaryValueStore();
                 ValueStore totalSummaryValueStore = table.getTableTotalSummary().getTotalSummaryValueStore();
 
