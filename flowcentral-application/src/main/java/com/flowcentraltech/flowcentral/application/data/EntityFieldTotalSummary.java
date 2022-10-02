@@ -36,7 +36,10 @@ public class EntityFieldTotalSummary {
     
     private Object total;
 
-    public EntityFieldTotalSummary(EntityFieldDef entityFieldDef, Widget renderer) throws UnifyException {
+    private boolean visible;
+    
+    public EntityFieldTotalSummary(EntityFieldDef entityFieldDef, Widget renderer, boolean visible)
+            throws UnifyException {
         if (!entityFieldDef.isNumber()) {
             throw new IllegalArgumentException("Total summary can not be computed for field ["
                     + entityFieldDef.getFieldName() + "] of type [" + entityFieldDef.getDataType() + "]");
@@ -44,6 +47,7 @@ public class EntityFieldTotalSummary {
 
         this.entityFieldDef = entityFieldDef;
         this.renderer = renderer;
+        this.visible = visible;
         clear();
     }
     
@@ -57,6 +61,18 @@ public class EntityFieldTotalSummary {
     
     public Object getTotal() {
         return total;
+    }
+
+    public void replaceTotalWith(Number total) throws UnifyException {
+        this.total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), total);
+    }
+
+    public void replaceTotalWith(EntityFieldTotalSummary summary) throws UnifyException {
+        this.total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), summary.total);
+    }
+    
+    public boolean isVisible() {
+        return visible;
     }
 
     public void clear() throws UnifyException {

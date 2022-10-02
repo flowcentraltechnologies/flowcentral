@@ -786,7 +786,7 @@ public class TableWriter extends AbstractControlWriter {
                 for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
                     if (widgetInfo.isExternal() && widgetInfo.isControl()) {
                         TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
-                        Widget chWidget = table.getSummaryWidget(tabelColumnDef.getFieldName());
+                        Widget chWidget = table.getVisibleSummaryWidget(tabelColumnDef.getFieldName());
                         if (chWidget != null) {
                             chWidget.setEditable(false);
                             chWidget.setValueStore(totalSummaryValueStore);

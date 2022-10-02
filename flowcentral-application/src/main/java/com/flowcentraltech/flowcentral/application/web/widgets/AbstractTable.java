@@ -44,6 +44,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStorePolicy;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -107,6 +108,8 @@ public abstract class AbstractTable<T, U> {
 
     private EntryTablePolicy entryPolicy;
 
+    private ValueStorePolicy summaryValueStorePolicy;
+    
     private TableTotalSummary tableTotalSummary;
 
     private Set<Integer> selected;
@@ -321,6 +324,10 @@ public abstract class AbstractTable<T, U> {
         return entryMessage;
     }
 
+    public void setSummaryValueStorePolicy(ValueStorePolicy summaryValueStorePolicy) {
+        this.summaryValueStorePolicy = summaryValueStorePolicy;
+    }
+
     public void clearSummaries() throws UnifyException {
         if (tableTotalSummary != null) {
             for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
@@ -339,6 +346,7 @@ public abstract class AbstractTable<T, U> {
     public void loadTotalSummaryValueStore() throws UnifyException {
         if (tableTotalSummary != null) {
             ValueStore totalSummaryValueStore = tableTotalSummary.getTotalSummaryValueStore();
+            totalSummaryValueStore.setPolicy(summaryValueStorePolicy);
             for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
                 totalSummaryValueStore.store(summary.getFieldName(), summary.getTotal());
             }
@@ -353,10 +361,12 @@ public abstract class AbstractTable<T, U> {
         return au.resolveSessionMessage("$m{tablewidget.total}");
     }
 
-    public Widget getSummaryWidget(String fieldName) {
+    public Widget getVisibleSummaryWidget(String fieldName) {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
-            return summary.getRenderer();
+            if (summary.isVisible()) {
+                return summary.getRenderer();
+            }
         }
 
         return null;
