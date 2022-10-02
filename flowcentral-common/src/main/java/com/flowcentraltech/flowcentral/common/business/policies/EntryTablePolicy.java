@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
+import com.flowcentraltech.flowcentral.common.data.TableColumnSummaryVal;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -36,6 +37,22 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public interface EntryTablePolicy extends UnifyComponent {
 
+    /**
+     * Gets column summary value.
+     * 
+     * @param parentReader
+     *                       the parent reader
+     * @param fieldName
+     *                       the column field name
+     * @param itemValueStore
+     *                       the item value store
+     * @return the column summary value
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    TableColumnSummaryVal getColumnSummaryValue(ValueStoreReader parentReader, String fieldName,
+            ValueStore itemValueStore) throws UnifyException;
+    
     /**
      * Validate entries,
      * 

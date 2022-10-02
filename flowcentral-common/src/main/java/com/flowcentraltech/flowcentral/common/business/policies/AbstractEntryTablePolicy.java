@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.data.TableColumnSummaryVal;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -37,6 +38,13 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
 
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
+    }
+
+    @Override
+    public TableColumnSummaryVal getColumnSummaryValue(ValueStoreReader parentReader, String fieldName,
+            ValueStore itemValueStore) throws UnifyException {
+        Number val = (Number) itemValueStore.retrieve(fieldName);
+        return new TableColumnSummaryVal(val);
     }
 
     @Override

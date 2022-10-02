@@ -36,10 +36,7 @@ public class EntityFieldTotalSummary {
     
     private Object total;
 
-    private boolean visible;
-    
-    public EntityFieldTotalSummary(EntityFieldDef entityFieldDef, Widget renderer, boolean visible)
-            throws UnifyException {
+    public EntityFieldTotalSummary(EntityFieldDef entityFieldDef, Widget renderer) throws UnifyException {
         if (!entityFieldDef.isNumber()) {
             throw new IllegalArgumentException("Total summary can not be computed for field ["
                     + entityFieldDef.getFieldName() + "] of type [" + entityFieldDef.getDataType() + "]");
@@ -47,7 +44,6 @@ public class EntityFieldTotalSummary {
 
         this.entityFieldDef = entityFieldDef;
         this.renderer = renderer;
-        this.visible = visible;
         clear();
     }
     
@@ -63,23 +59,19 @@ public class EntityFieldTotalSummary {
         return total;
     }
 
-    public void replaceTotalWith(Number total) throws UnifyException {
-        this.total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), total);
-    }
-
-    public void replaceTotalWith(EntityFieldTotalSummary summary) throws UnifyException {
-        this.total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), summary.total);
-    }
-    
-    public boolean isVisible() {
-        return visible;
-    }
-
     public void clear() throws UnifyException {
-        this.total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), 0);
+        total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), 0);
     }
     
-    public void add(Object val) throws UnifyException {
+    public void set(Number val) throws UnifyException {
+        if (val != null) {
+            total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), val);
+        } else {
+            clear();
+        }
+    }
+    
+    public void add(Number val) throws UnifyException {
         if (val != null) {
             switch(entityFieldDef.getDataType()) {
                 case DECIMAL:

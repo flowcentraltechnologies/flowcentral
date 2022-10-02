@@ -414,7 +414,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                                 widget.setScale(entityFieldDef.getScale());
                             }
                         }
-
+                        
                         if (useCellEditor) {
                             if (inputs == null) {
                                 inputs = new HashSet<Widget>();
@@ -446,7 +446,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 final Map<String, EntityFieldTotalSummary> summaries = totalSummary
                         ? new HashMap<String, EntityFieldTotalSummary>()
                         : Collections.emptyMap();
-                int visibleSummaries = 0;
                 Order defaultOrder = new Order();
                 String totalLabelColumn = null;
                 for (TableColumnDef tableColumnDef : tableDef.getColumnDefList()) {
@@ -463,18 +462,16 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                             totalSummaryValues.addValue(entityFieldDef.getFieldName(), dataType.javaClass());
                             if (entityFieldDef.isNumber()) {
                                 Widget renderer = getRenderer(tableColumnDef.getCellRenderer());
-                                boolean visible = tableDef.isSummaryField(entityFieldDef.getFieldName());
-                                if (visible) {
-                                    visibleSummaries++;
-                                }
-                                
                                 EntityFieldTotalSummary entityFieldTotalSummary = new EntityFieldTotalSummary(
-                                        entityFieldDef, renderer, visible);
-                                summaries.put(entityFieldDef.getFieldName(), entityFieldTotalSummary);
+                                        entityFieldDef, renderer);
+                                if (!tableDef.isWithSummaryFields()
+                                        || tableDef.isSummaryField(entityFieldDef.getFieldName())) {
+                                    summaries.put(entityFieldDef.getFieldName(), entityFieldTotalSummary);
+                                }
                             }
                         }
 
-                        if (visibleSummaries == 0) {
+                        if (summaries.isEmpty()) {
                             totalLabelColumn = entityFieldDef.getFieldName();
                         }
                     }
@@ -550,7 +547,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             List<Integer> _selected = new ArrayList<Integer>(selected);
             Collections.sort(_selected);
             List<U> list = new ArrayList<U>();
-            for (Integer rowIndex : _selected) {
+            for (Integer rowIndex: _selected) {
                 list.add(getItem(rowIndex));
             }
 

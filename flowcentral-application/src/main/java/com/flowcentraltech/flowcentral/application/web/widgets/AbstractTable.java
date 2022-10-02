@@ -40,11 +40,11 @@ import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
+import com.flowcentraltech.flowcentral.common.data.TableColumnSummaryVal;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.data.ValueStorePolicy;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -107,8 +107,6 @@ public abstract class AbstractTable<T, U> {
     private EntryTableMessage entryMessage;
 
     private EntryTablePolicy entryPolicy;
-
-    private ValueStorePolicy summaryValueStorePolicy;
     
     private TableTotalSummary tableTotalSummary;
 
@@ -324,10 +322,6 @@ public abstract class AbstractTable<T, U> {
         return entryMessage;
     }
 
-    public void setSummaryValueStorePolicy(ValueStorePolicy summaryValueStorePolicy) {
-        this.summaryValueStorePolicy = summaryValueStorePolicy;
-    }
-
     public void clearSummaries() throws UnifyException {
         if (tableTotalSummary != null) {
             for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
@@ -336,17 +330,25 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void addTotalSummary(String fieldName, Object val) throws UnifyException {
+    public void addTotalSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
-            summary.add(val);
+            if (entryPolicy != null) {
+                TableColumnSummaryVal val = entryPolicy.getColumnSummaryValue(parentReader, fieldName, itemValueStore);
+                if (val.isReplace()) {
+                    summary.set(val.getVal());
+                } else {
+                    summary.add(val.getVal());
+                }
+            } else {
+                summary.add((Number) itemValueStore.retrieve(fieldName));
+            }
         }
     }
 
     public void loadTotalSummaryValueStore() throws UnifyException {
         if (tableTotalSummary != null) {
             ValueStore totalSummaryValueStore = tableTotalSummary.getTotalSummaryValueStore();
-            totalSummaryValueStore.setPolicy(summaryValueStorePolicy);
             for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
                 totalSummaryValueStore.store(summary.getFieldName(), summary.getTotal());
             }
@@ -361,12 +363,10 @@ public abstract class AbstractTable<T, U> {
         return au.resolveSessionMessage("$m{tablewidget.total}");
     }
 
-    public Widget getVisibleSummaryWidget(String fieldName) {
+    public Widget getSummaryWidget(String fieldName) {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
-            if (summary.isVisible()) {
-                return summary.getRenderer();
-            }
+            return summary.getRenderer();
         }
 
         return null;

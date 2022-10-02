@@ -30,7 +30,6 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStorePolicy;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.ReflectUtils;
 
@@ -110,10 +109,6 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         if (actionType.isAddItem()) {
             addEntry(false);
         }
-    }
-
-    public void setSummaryValueStorePolicy(ValueStorePolicy summaryValueStorePolicy) throws UnifyException {
-        table.setSummaryValueStorePolicy(summaryValueStorePolicy);
     }
     
     public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries, ValueStoreReader parentReader)
