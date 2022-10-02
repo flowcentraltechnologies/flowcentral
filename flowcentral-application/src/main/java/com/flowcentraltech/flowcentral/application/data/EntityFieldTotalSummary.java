@@ -60,10 +60,18 @@ public class EntityFieldTotalSummary {
     }
 
     public void clear() throws UnifyException {
-        this.total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), 0);
+        total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), 0);
     }
     
-    public void add(Object val) throws UnifyException {
+    public void set(Number val) throws UnifyException {
+        if (val != null) {
+            total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), val);
+        } else {
+            clear();
+        }
+    }
+    
+    public void add(Number val) throws UnifyException {
         if (val != null) {
             switch(entityFieldDef.getDataType()) {
                 case DECIMAL:

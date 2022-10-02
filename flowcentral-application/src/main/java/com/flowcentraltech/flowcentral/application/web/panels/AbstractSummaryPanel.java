@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
@@ -25,4 +27,19 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 public abstract class AbstractSummaryPanel extends AbstractStandalonePanel implements SummaryPanel {
 
+    /**
+     * Get value from parent reader stored as temporary value
+     * 
+     * @param dataType
+     *                     the value data type
+     * @param propertyName
+     *                     the property name
+     * @return the value
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected <T> T getParentValue(Class<T> dataType, String propertyName) throws UnifyException {
+        ValueStoreReader parentReader = getValueStore().getTempValue(ValueStoreReader.class, "parentReader");
+        return parentReader != null ? parentReader.read(dataType, propertyName) : null;
+    }
 }

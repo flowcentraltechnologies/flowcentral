@@ -551,6 +551,7 @@ public class TableWriter extends AbstractControlWriter {
 
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
+                    valueStore.setTempValue("parentReader", table.getParentReader());
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
                     }
@@ -636,7 +637,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write("</td>");
 
                             if (totalSummary) {
-                                table.addTotalSummary(fieldName, valueStore.retrieve(fieldName));
+                                table.addTableColumnSummary(fieldName, valueStore);
                             }
 
                             index++;
@@ -770,6 +771,7 @@ public class TableWriter extends AbstractControlWriter {
 
             // Total summary
             if (totalSummary) {
+                table.addParentColumnSummary();
                 table.loadTotalSummaryValueStore();
                 ValueStore totalSummaryValueStore = table.getTableTotalSummary().getTotalSummaryValueStore();
 

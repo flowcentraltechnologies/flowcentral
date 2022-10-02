@@ -110,7 +110,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
             addEntry(false);
         }
     }
-
+    
     public void loadEntries(InlineCRUDTablePolicy<T> tablePolicy, List<T> entries, ValueStoreReader parentReader)
             throws UnifyException {
         if (tablePolicy == null) {

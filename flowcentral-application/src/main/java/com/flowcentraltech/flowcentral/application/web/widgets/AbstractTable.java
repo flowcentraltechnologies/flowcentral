@@ -106,7 +106,7 @@ public abstract class AbstractTable<T, U> {
     private EntryTableMessage entryMessage;
 
     private EntryTablePolicy entryPolicy;
-
+    
     private TableTotalSummary tableTotalSummary;
 
     private Set<Integer> selected;
@@ -329,10 +329,24 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void addTotalSummary(String fieldName, Object val) throws UnifyException {
+    public void addParentColumnSummary() throws UnifyException {
+        if (tableTotalSummary != null && entryPolicy != null) {
+            for (EntityFieldTotalSummary summary: tableTotalSummary.getSummaries().values()) {
+                Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
+                summary.add(val);
+            }
+        }
+    }
+    
+    public void addTableColumnSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
-            summary.add(val);
+            if (entryPolicy != null) {
+                Number val = entryPolicy.getTableColumnSummaryValue(parentReader, fieldName, itemValueStore);
+                summary.add(val);
+            } else {
+                summary.add((Number) itemValueStore.retrieve(fieldName));
+            }
         }
     }
 
