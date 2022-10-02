@@ -551,6 +551,7 @@ public class TableWriter extends AbstractControlWriter {
 
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
+                    valueStore.setTempValue("parentReader", table.getParentReader());
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
                     }
