@@ -32,6 +32,10 @@ public class FilterConfig {
 
     private String description;
 
+    private String filterGenerator;
+
+    private String filterGeneratorRule;
+
     private List<FilterRestrictionConfig> restrictionList;
 
     public String getName() {
@@ -50,6 +54,24 @@ public class FilterConfig {
     @XmlAttribute
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFilterGenerator() {
+        return filterGenerator;
+    }
+
+    @XmlAttribute
+    public void setFilterGenerator(String filterGenerator) {
+        this.filterGenerator = filterGenerator;
+    }
+
+    public String getFilterGeneratorRule() {
+        return filterGeneratorRule;
+    }
+
+    @XmlAttribute
+    public void setFilterGeneratorRule(String filterGeneratorRule) {
+        this.filterGeneratorRule = filterGeneratorRule;
     }
 
     public List<FilterRestrictionConfig> getRestrictionList() {

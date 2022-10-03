@@ -106,7 +106,7 @@ public abstract class AbstractTable<T, U> {
     private EntryTableMessage entryMessage;
 
     private EntryTablePolicy entryPolicy;
-    
+
     private TableTotalSummary tableTotalSummary;
 
     private Set<Integer> selected;
@@ -142,8 +142,8 @@ public abstract class AbstractTable<T, U> {
         return filterGroupDef != null ? filterGroupDef.match(type, beanValueStore, now) : true;
     }
 
-    public Restriction getRestriction(FilterType type, Date now) throws UnifyException {
-        return filterGroupDef != null ? filterGroupDef.getRestriction(type, now) : null;
+    public Restriction getRestriction(FilterType type, ValueStore beanValueStore, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.getRestriction(type, beanValueStore, now) : null;
     }
 
     public void setTableSelect(TableSelect<?> tableSelect) {
@@ -217,7 +217,7 @@ public abstract class AbstractTable<T, U> {
     public Set<Integer> getSelectedRows() {
         return selected;
     }
-    
+
     public void setSelectedRows(Collection<Integer> selected) {
         this.selected.clear();
         if (selected != null) {
@@ -331,13 +331,13 @@ public abstract class AbstractTable<T, U> {
 
     public void addParentColumnSummary() throws UnifyException {
         if (tableTotalSummary != null && entryPolicy != null) {
-            for (EntityFieldTotalSummary summary: tableTotalSummary.getSummaries().values()) {
+            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
                 Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
                 summary.add(val);
             }
         }
     }
-    
+
     public void addTableColumnSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);

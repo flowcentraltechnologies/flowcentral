@@ -37,10 +37,6 @@ public class AppletFilterConfig extends FilterConfig {
     
     private boolean quickFilter;
 
-    private String filterGenerator;
-
-    private String filterGeneratorRule;
-
     public String getPreferredForm() {
         return preferredForm;
     }
@@ -76,24 +72,6 @@ public class AppletFilterConfig extends FilterConfig {
     @XmlAttribute
     public void setQuickFilter(boolean quickFilter) {
         this.quickFilter = quickFilter;
-    }
-
-    public String getFilterGenerator() {
-        return filterGenerator;
-    }
-
-    @XmlAttribute
-    public void setFilterGenerator(String filterGenerator) {
-        this.filterGenerator = filterGenerator;
-    }
-
-    public String getFilterGeneratorRule() {
-        return filterGeneratorRule;
-    }
-
-    @XmlAttribute
-    public void setFilterGeneratorRule(String filterGeneratorRule) {
-        this.filterGeneratorRule = filterGeneratorRule;
     }
 
 }

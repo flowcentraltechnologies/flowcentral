@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -160,8 +159,7 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
             entityName = refDef.getEntity();
             logDebug("Using listing reference value [{0}]...", refDef.getLongName());
             if (refDef.isWithFilterGenerator()) {
-                br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
-                        .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
+                br = refDef.getFilter().getRestriction(null, getValueStore().getReader(), null);
             }
         }
 

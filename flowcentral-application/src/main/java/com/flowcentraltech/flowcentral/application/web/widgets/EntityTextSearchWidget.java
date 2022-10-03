@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.common.annotation.LongName;
@@ -153,14 +152,8 @@ public class EntityTextSearchWidget extends AbstractPopupTextField {
             final boolean listFormat = refDef.isWithListFormat();
             EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(refDef.getEntity());
             String searchField = getSearchField(entityClassDef, refDef);
-            Restriction br = null;
-            if (refDef.isWithFilterGenerator()) {
-                br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
-                        .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
-            } else {
-                br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                        applicationModuleService.getNow()) : null;
-            }
+            Restriction br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                    getValueStore().getReader(), applicationModuleService.getNow()) : null;
 
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
             query.ignoreEmptyCriteria(true);

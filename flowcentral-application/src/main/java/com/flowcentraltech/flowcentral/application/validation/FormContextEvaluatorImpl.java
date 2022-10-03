@@ -47,6 +47,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
@@ -93,6 +94,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
             final Object inst = ctx.getInst();
             final AppletUtilities au = ctx.au();
             final ValueStore instValueStore = ctx.getFormValueStore();
+            final ValueStoreReader instValueStoreReader = instValueStore.getReader();
             Map<String, Object> fieldsInScope = new HashMap<String, Object>();
             // Pull fields in scope and check required fields and lengths
             for (FormWidgetState formWidgetState : ctx.getFormWidgetStateList()) {
@@ -235,7 +237,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                             }
 
                             if (policyDef.isErrorCondition()
-                                    && policyDef.getErrorCondition().getObjectFilter(entityDef, now).match(inst)) {
+                                    && policyDef.getErrorCondition().getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
@@ -257,6 +259,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
             final Date now = au.getNow();
             final Object inst = ctx.getInst();
             final ValueStore instValueStore = ctx.getFormValueStore();
+            final ValueStoreReader instValueStoreReader = instValueStore.getReader();
             if (formDef.isWithConsolidatedFormReview()) {
                 ConsolidatedFormReviewPolicy policy = au.getComponent(ConsolidatedFormReviewPolicy.class,
                         formDef.getConsolidatedFormReview());
@@ -275,7 +278,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                 }
 
                 if (policyDef.isErrorCondition()
-                        && policyDef.getErrorCondition().getObjectFilter(entityDef, now).match(inst)) {
+                        && policyDef.getErrorCondition().getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
                     ctx.addReviewError(rrb, policyDef);
                 }
             }

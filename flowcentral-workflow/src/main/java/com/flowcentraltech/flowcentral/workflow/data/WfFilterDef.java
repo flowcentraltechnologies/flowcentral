@@ -13,38 +13,41 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.configuration.xml;
+package com.flowcentraltech.flowcentral.workflow.data;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.tcdng.unify.core.data.Listable;
 
 /**
- * Table filter configuration
+ * Workflow filter definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class TableFilterConfig extends FilterConfig {
+public class WfFilterDef implements Listable {
 
-    private String rowColor;
+    private FilterDef filterDef;
 
-    private String legendLabel;
-
-    public String getRowColor() {
-        return rowColor;
+    public WfFilterDef(FilterDef filterDef) {
+        this.filterDef = filterDef;
     }
 
-    @XmlAttribute
-    public void setRowColor(String rowColor) {
-        this.rowColor = rowColor;
+    @Override
+    public String getListDescription() {
+        return filterDef.getListDescription();
     }
 
-    public String getLegendLabel() {
-        return legendLabel;
+    @Override
+    public String getListKey() {
+        return filterDef.getListKey();
     }
 
-    @XmlAttribute
-    public void setLegendLabel(String legendLabel) {
-        this.legendLabel = legendLabel;
+    public FilterDef getFilterDef() {
+        return filterDef;
+    }
+
+    public String getName() {
+        return filterDef.getName();
     }
 
 }

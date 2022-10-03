@@ -13,14 +13,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.configuration.xml;
+package com.flowcentraltech.flowcentral.application.data;
+
+import com.tcdng.unify.core.data.Listable;
 
 /**
- * Workflow filter configuration.
+ * Form filter definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WfFilterConfig extends FilterConfig {
+public class FormFilterDef implements Listable {
+
+    private FilterDef filterDef;
+
+    public FormFilterDef(FilterDef filterDef) {
+        this.filterDef = filterDef;
+    }
+
+    @Override
+    public String getListDescription() {
+        return filterDef.getListDescription();
+    }
+
+    @Override
+    public String getListKey() {
+        return filterDef.getListKey();
+    }
+
+    public FilterDef getFilterDef() {
+        return filterDef;
+    }
+
+    public String getName() {
+        return filterDef.getName();
+    }
 
 }

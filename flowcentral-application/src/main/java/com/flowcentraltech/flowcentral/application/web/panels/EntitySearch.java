@@ -325,7 +325,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             And and = new And();
             if (baseFilterDef != null) {
                 and.add(baseFilterDef.getRestriction(entityFilter.getEntityDef(),
-                        getAppletCtx().au().getNow()));
+                        null, getAppletCtx().au().getNow()));
             }
 
             if (restriction != null) {

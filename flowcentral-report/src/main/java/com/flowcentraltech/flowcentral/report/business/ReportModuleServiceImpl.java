@@ -571,7 +571,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         if (reportConfiguration.getFilter() != null) {
             Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
-            FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, reportConfiguration.getFilter());
+            FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
             ReportFilterOptions reportFilterOptions = createReportFilterOptions(sqlEntityInfo, null, parameters,
                     filterDef.getFilterRestrictionDefList(), new IndexInfo());
             reportOptions.setFilterOptions(reportFilterOptions);

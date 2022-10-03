@@ -52,8 +52,8 @@ public final class WorkflowEntityUtils {
     public static boolean isWorkflowConditionMatched(AppletUtilities au, ValueStore valueStore, WfDef wfDef,
             String conditionName) throws UnifyException {
         return conditionName != null && (ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(conditionName) || wfDef
-                .getFilterDef(conditionName)
-                .getObjectFilter(wfDef.getEntityDef(), au.getNow()).match(valueStore));
+                .getFilterDef(conditionName).getFilterDef()
+                .getObjectFilter(wfDef.getEntityDef(), valueStore.getReader(), au.getNow()).match(valueStore));
     }
 
 }

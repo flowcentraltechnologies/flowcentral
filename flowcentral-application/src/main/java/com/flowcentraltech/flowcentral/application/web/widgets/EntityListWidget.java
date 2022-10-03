@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -63,13 +62,8 @@ public class EntityListWidget extends AbstractEntityListWidget {
             } else {
                 refDef = getRefDef(0);
                 entityClassDef = application().getEntityClassDef(refDef.getEntity());
-                if (refDef.isWithFilterGenerator()) {
-                    br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
-                            .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
-                } else {
-                    br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                           application().getNow()) : null;
-                }
+                br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                        getValueStore().getReader(), application().getNow()) : null;
             }
 
             Query<? extends Entity> query = null;

@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
-import javax.xml.bind.annotation.XmlAttribute;
-
 /**
  * Form filter configuration.
  * 
@@ -24,27 +22,5 @@ import javax.xml.bind.annotation.XmlAttribute;
  * @since 1.0
  */
 public class FormFilterConfig extends FilterConfig {
-
-    private String filterGenerator;
-
-    private String filterGeneratorRule;
-
-    public String getFilterGenerator() {
-        return filterGenerator;
-    }
-
-    @XmlAttribute
-    public void setFilterGenerator(String filterGenerator) {
-        this.filterGenerator = filterGenerator;
-    }
-
-    public String getFilterGeneratorRule() {
-        return filterGeneratorRule;
-    }
-
-    @XmlAttribute
-    public void setFilterGeneratorRule(String filterGeneratorRule) {
-        this.filterGeneratorRule = filterGeneratorRule;
-    }
 
 }

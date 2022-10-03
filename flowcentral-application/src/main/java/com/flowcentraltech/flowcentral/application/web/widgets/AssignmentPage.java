@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -201,7 +200,7 @@ public class AssignmentPage {
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                     .addEquals(assignmentPageDef.getBaseField(), baseId);
             if (filterGroupDef != null) {
-                Restriction br = filterGroupDef.getRestriction(FilterType.TAB, now);
+                Restriction br = filterGroupDef.getRestriction(FilterType.TAB, null, now);
                 if (br != null) {
                     query.addRestriction(br);
                 }
@@ -231,13 +230,12 @@ public class AssignmentPage {
                     EntityClassDef _baseEntityClassDef = ctx.au().getEntityClassDef(_baseRefDef.getEntity());
                     Entity baseInst = ctx.au().environment()
                             .listLean((Class<? extends Entity>) _baseEntityClassDef.getEntityClass(), baseId);
-                    Restriction br = ctx.au()
-                            .getComponent(EntityBasedFilterGenerator.class, _assignRefDef.getFilterGenerator())
-                            .generate(new BeanValueStore(baseInst).getReader(), _assignRefDef.getFilterGeneratorRule());
+                    Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
+                            new BeanValueStore(baseInst).getReader(), now);
                     query.addRestriction(br);
                 } else if (_assignRefDef.isWithFilter()) {
                     Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
-                            now);
+                            null, now);
                     query.addRestriction(br);
                 }
 

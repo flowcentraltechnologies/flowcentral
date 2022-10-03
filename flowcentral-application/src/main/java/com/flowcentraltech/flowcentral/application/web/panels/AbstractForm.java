@@ -22,17 +22,19 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterCo
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.Errors;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
 import com.flowcentraltech.flowcentral.application.data.FormAppendables;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.FormFilterDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -134,6 +136,14 @@ public abstract class AbstractForm {
         ctx.setInst(formBean);
     }
 
+    public ValueStore getFormValueStore() {
+        return ctx.getFormValueStore();
+    }
+
+    public ValueStoreReader getFormValueStoreReader() {
+        return ctx.getFormValueStore().getReader();
+    }
+
     public boolean matchFormBean(String formFilterName) throws UnifyException {
         if (!StringUtils.isBlank(formFilterName)) {
             if (ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(formFilterName)) {
@@ -141,8 +151,10 @@ public abstract class AbstractForm {
             }
 
             FormDef _formDef = ctx.getFormDef();
-            FilterDef _filterDef = _formDef.getFilterDef(formFilterName);
-            return _filterDef.getObjectFilter(_formDef.getEntityDef(), ctx.au().getNow()).match(ctx.getInst());
+            FormFilterDef _filterDef = _formDef.getFilterDef(formFilterName);
+            return _filterDef.getFilterDef()
+                    .getObjectFilter(_formDef.getEntityDef(), getFormValueStoreReader(), ctx.au().getNow())
+                    .match(ctx.getInst());
         }
 
         return false;

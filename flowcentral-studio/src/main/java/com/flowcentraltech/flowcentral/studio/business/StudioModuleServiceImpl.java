@@ -23,6 +23,8 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -164,10 +166,12 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION,
                                     "studioentity-deletecondition");
 
-                            adb.addFilterDef(InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-updatecondition", "",
-                                    "", null, null, entityFormUpdateCondition));
-                            adb.addFilterDef(InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-deletecondition", "",
-                                    "", null,null,  entityFormDeleteCondition));
+                            FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-updatecondition", "",
+                                    null, entityFormUpdateCondition);
+                            adb.addFilterDef(new AppletFilterDef(filterDef, null, null, null));
+                            filterDef = InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-deletecondition", "",
+                                    null, entityFormDeleteCondition);
+                            adb.addFilterDef(new AppletFilterDef(filterDef, null, null, null));
 
                             adb.openPath(
                                     ApplicationPageUtils.constructAppletOpenPagePath(type.appletPath(), appletName));

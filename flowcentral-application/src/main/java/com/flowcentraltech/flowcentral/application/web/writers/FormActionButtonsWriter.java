@@ -31,6 +31,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.web.ui.widget.Control;
@@ -69,6 +70,7 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
         final FormContext formContext = ((AbstractForm) formActionButtons.getValueStore().getValueObject()).getCtx();
         final Entity inst = (Entity) formContext.getInst();
         final ValueStore formValueStore = formContext.getFormValueStore();
+        final ValueStoreReader formValueStoreReader = formValueStore.getReader();
         final Date now = formContext.au().getNow();
         final UserToken userToken = getUserToken();
         final FormMode formMode = formActionButtons.getValue(FormMode.class, "formMode");
@@ -80,7 +82,7 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
             if (formActionDef.isButtonType()) {
                 if (formActionDef.isWithCondition()) {
                     ObjectFilter filter = formActionDef.getOnCondition().getObjectFilter(formContext.getEntityDef(),
-                            now);
+                            formValueStoreReader, now);
                     if (!filter.match(formValueStore)) {
                         continue;
                     }

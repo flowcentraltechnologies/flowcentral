@@ -34,7 +34,7 @@ public final class WorkflowInputWidgetUtils {
         if (workflowFilter != null) {
             WfFilterConfig wfFilterConfig = new WfFilterConfig();
             InputWidgetUtils.getFilterConfig(au, wfFilterConfig, workflowFilter.getName(),
-                    workflowFilter.getDescription(), null, null, null, workflowFilter.getFilter());
+                    workflowFilter.getDescription(), workflowFilter.getFilter());
             wfFilterConfig.setFilterGenerator(workflowFilter.getFilterGenerator());
             wfFilterConfig.setFilterGeneratorRule(workflowFilter.getFilterGeneratorRule());
             return wfFilterConfig;

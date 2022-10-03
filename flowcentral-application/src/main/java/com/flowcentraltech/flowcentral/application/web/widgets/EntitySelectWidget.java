@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
@@ -181,16 +180,10 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         RefDef refDef = getRefDef();
         final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(refDef.getEntity());
         Query<? extends Entity> query = null;
-        Restriction br = null;
-        if (refDef.isWithFilterGenerator()) {
-            br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
-                    .generate(getValueStore().getReader(), refDef.getFilterGeneratorRule());
-        } else {
-            br = refDef.isWithFilter()
-                    ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                            applicationModuleService.getNow())
-                    : null;
-        }
+        Restriction br = refDef.isWithFilter()
+                ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                        getValueStore().getReader(), applicationModuleService.getNow())
+                : null;
 
         if (br != null) {
             query = Query.ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), br);

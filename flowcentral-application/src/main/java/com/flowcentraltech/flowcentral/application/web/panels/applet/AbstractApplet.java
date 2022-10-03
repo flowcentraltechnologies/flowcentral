@@ -21,10 +21,10 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -32,6 +32,8 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -145,9 +147,11 @@ public abstract class AbstractApplet {
             throws UnifyException {
         if (appletDef.isWithPreferredFormFilters()) {
             final Date now = au.getNow();
+            final ValueStore instValueStore = new BeanValueStore(inst);
             EntityDef _entityDef = getEntityClassDef(appletDef.getEntity()).getEntityDef();
-            for (FilterDef filterDef : appletDef.getPreferredFormFilterList()) {
-                if (filterDef.getObjectFilter(_entityDef, now).match(inst)) {
+            for (AppletFilterDef filterDef : appletDef.getPreferredFormFilterList()) {
+                if (filterDef.getFilterDef().getObjectFilter(_entityDef, instValueStore.getReader(), now)
+                        .match(instValueStore)) {
                     String formName = filterDef.getPreferredForm();
                     FormDef formDef = au.getFormDef(formName);
                     if (type.supports(formDef)) {
@@ -195,7 +199,7 @@ public abstract class AbstractApplet {
         return au.getTableDef(getRootAppletDef().getPropValue(String.class, tblPropName));
     }
 
-    protected FilterDef getRootAppletFilterDef(String frmPropName) throws UnifyException {
+    protected AppletFilterDef getRootAppletFilterDef(String frmPropName) throws UnifyException {
         return getRootAppletDef().getFilterDef(getRootAppletDef().getPropValue(String.class, frmPropName));
     }
 

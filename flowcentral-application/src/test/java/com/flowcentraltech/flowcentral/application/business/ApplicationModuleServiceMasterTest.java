@@ -26,11 +26,11 @@ import org.junit.Test;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AppletPropDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FormSectionDef;
@@ -165,10 +165,10 @@ public class ApplicationModuleServiceMasterTest extends AbstractFlowCentralTest 
     public void testFilterDefGetRestriction() throws Exception {
         EntityDef entityDef = ams.getEntityDef("manageProduct.product");
         AppletDef appletDef = ams.getAppletDef("manageProduct.manageProduct");
-        FilterDef filterDef = appletDef.getFilterDef("expensiveShirt");
+        AppletFilterDef filterDef = appletDef.getFilterDef("expensiveShirt");
         assertNotNull(filterDef);
 
-        Restriction restriction = filterDef.getRestriction(entityDef, au.getNow());
+        Restriction restriction = filterDef.getFilterDef().getRestriction(entityDef, null,  au.getNow());
         assertNotNull(restriction);
         String filterTxt = au.translate(restriction, entityDef);
         assertEquals("Category == 'Shirts' AND (Cost Price > 30.0 OR Sales Price > 50.0)", filterTxt);
