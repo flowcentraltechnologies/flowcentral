@@ -217,7 +217,7 @@ public class EntitySearchPanel extends AbstractPanel {
     @Action
     public void search() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.setAppAppletFilterId(null);
+        entitySearch.setAppAppletFilterName(null);
         entitySearch.applySearchEntriesToSearch();
         getRequestContextUtil().setContentScrollReset();
     }
@@ -225,7 +225,7 @@ public class EntitySearchPanel extends AbstractPanel {
     @Action
     public void clear() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.setAppAppletFilterId(null);
+        entitySearch.setAppAppletFilterName(null);
         entitySearch.clearSearchEntries();
         entitySearch.applySearchEntriesToSearch();;
         getRequestContextUtil().setContentScrollReset();
@@ -234,7 +234,7 @@ public class EntitySearchPanel extends AbstractPanel {
     @Action
     public void runFilter() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.setAppAppletFilterId(null);
+        entitySearch.setAppAppletFilterName(null);
         entitySearch.applyFilterToSearch();
         if (!entitySearch.isFilterEditorPinned()) {
             entitySearch.toggleFilterEditor();

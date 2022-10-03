@@ -35,8 +35,8 @@
 	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
 !ui-panel:quickFilterBlock layout:$d{!ui-horizontal cellType:middle} components:$c{quickFilterTitle quickFilter}
 !ui-label:quickFilterTitle caption:$m{entitysearchpanel.quickfilter}
-!ui-select:quickFilter list:$s{appletquickfilterlist} blankOption:$s{}
-	listParams:$l{appAppletId} binding:appAppletFilterId ignoreParentState:true
+!ui-select:quickFilter list:$s{appletquickfilterlist} blankOption:$s{} listKey:$s{name}
+	listParams:$l{appAppletId} binding:appAppletFilterName ignoreParentState:true
     eventHandler:$d{!ui-event event:onchange action:$c{quickFilterAct}}
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle}

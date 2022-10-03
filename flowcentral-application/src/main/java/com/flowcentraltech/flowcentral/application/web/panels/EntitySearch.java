@@ -94,7 +94,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private OwnershipType saveFilterScope;
 
-    private Long appAppletFilterId;
+    private String appAppletFilterName;
 
     private int childTabIndex;
 
@@ -109,14 +109,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private boolean newButtonVisible;
 
     public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, TableDef tableDef, Long appAppletId, String editAction, Long appAppletFilterId, int mode,
+            String tabName, TableDef tableDef, Long appAppletId, String editAction, String appAppletFilterName, int mode,
             boolean ignoreConditionalDisabled) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 FilterConditionListType.IMMEDIATE_FIELD);
-        this.appAppletFilterId = appAppletFilterId;
-        if (appAppletFilterId != null) {
+        this.appAppletFilterName = appAppletFilterName;
+        if (appAppletFilterName != null) {
             localApplyQuickFilter();
         }
 
@@ -137,7 +137,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public void setBasicSearchMode(boolean basicSearchMode) throws UnifyException {
-        setAppAppletFilterId(null);
+        setAppAppletFilterName(null);
         entityTable.setBasicSearchMode(basicSearchMode);
         if (basicSearchMode) {
             if (searchEntries != null) {
@@ -218,12 +218,12 @@ public class EntitySearch extends AbstractPanelFormBinding {
         this.appTableActionPolicy = appTableActionPolicy;
     }
 
-    public Long getAppAppletFilterId() {
-        return appAppletFilterId;
+    public String getAppAppletFilterName() {
+        return appAppletFilterName;
     }
 
-    public void setAppAppletFilterId(Long appAppletFilterId) {
-        this.appAppletFilterId = appAppletFilterId;
+    public void setAppAppletFilterName(String appAppletFilterName) {
+        this.appAppletFilterName= appAppletFilterName;
     }
 
     public String getEditAction() {
@@ -388,8 +388,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     private void localApplyQuickFilter() throws UnifyException {
-        FilterDef quickFilterDef = appAppletFilterId != null
-                ? getAppletCtx().au().retrieveFilterDef("applet", "application.appAppletFilter", appAppletFilterId)
+        FilterDef quickFilterDef = appAppletFilterName != null
+                ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
                 : null;
         entityFilter = quickFilterDef != null
                 ? new Filter(null, null, entityFilter.getEntityDef(), quickFilterDef,

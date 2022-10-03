@@ -911,10 +911,13 @@ public final class InputWidgetUtils {
 
     public static FilterDef getFilterDef(AppletUtilities au, String name, String description, String filterGenerator,
             AppFilter appFilter) throws UnifyException {
-        if (appFilter != null) {
+        if (appFilter != null || !StringUtils.isBlank(filterGenerator)) {
             FilterDef.Builder fdb = FilterDef.newBuilder(au);
             fdb.name(name).description(description).filterGenerator(filterGenerator);
-            addFilterDefinition(fdb, appFilter.getDefinition());
+            if (appFilter != null) {
+                addFilterDefinition(fdb, appFilter.getDefinition());
+            }
+
             return fdb.build();
         }
 

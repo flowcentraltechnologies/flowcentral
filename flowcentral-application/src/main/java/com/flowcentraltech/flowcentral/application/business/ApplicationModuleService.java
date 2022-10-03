@@ -723,11 +723,22 @@ public interface ApplicationModuleService extends FlowCentralService {
      * 
      * @param appletName
      *                   the applet long name
-     * @return the widget types definition
+     * @return the applet definition
      * @throws UnifyException
      *                        if an error occurs
      */
     AppletDef getAppletDef(String appletName) throws UnifyException;
+
+    /**
+     * Gets a application applet definition.
+     * 
+     * @param appAppletId
+     *                   the applet ID
+     * @return the applet definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    AppletDef getAppletDef(Long appAppletId) throws UnifyException;
 
     /**
      * Lists application widget types.
@@ -1011,11 +1022,14 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        the entity type long name
      * @param ownerInstId
      *                        the entity instance ID
+     * @param filterGenerator
+     *                        the filter generator
      * @return the filter definition if found otherwise null
      * @throws UnifyException
      *                        if an error occurs
      */
-    FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId) throws UnifyException;
+    FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId, String filterGenerator)
+            throws UnifyException;
 
     /**
      * Saves application filter definition for an entity instance.

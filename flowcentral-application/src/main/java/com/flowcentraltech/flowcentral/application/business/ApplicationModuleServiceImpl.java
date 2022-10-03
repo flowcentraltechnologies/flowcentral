@@ -404,9 +404,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appAppletFilter.getName(),
                                 appAppletFilter.getDescription(), appAppletFilter.getFilterGenerator(),
                                 appAppletFilter.getFilter());
-                        adb.addFilterDef(new AppletFilterDef(filterDef, appAppletFilter.getPreferredForm(),
-                                appAppletFilter.getPreferredChildListApplet(),
-                                appAppletFilter.getChildListActionType()));
+                        if (filterDef != null) {
+                            adb.addFilterDef(new AppletFilterDef(filterDef, appAppletFilter.getPreferredForm(),
+                                    appAppletFilter.getPreferredChildListApplet(),
+                                    appAppletFilter.getChildListActionType()));
+                        }
                     }
 
                     for (AppAppletSetValues appAppletSetValues : appApplet.getSetValuesList()) {
@@ -808,8 +810,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         FilterDef _filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appTableFilter.getName(),
                                 appTableFilter.getDescription(), appTableFilter.getFilterGenerator(),
                                 appTableFilter.getFilter());
-                        tdb.addFilterDef(new TableFilterDef(_filterDef, appTableFilter.getRowColor(),
-                                appTableFilter.getLegendLabel()));
+                        if (_filterDef != null) {
+                            tdb.addFilterDef(new TableFilterDef(_filterDef, appTableFilter.getRowColor(),
+                                    appTableFilter.getLegendLabel()));
+                        }
                     }
 
                     for (AppTableColumn appTableColumn : appTable.getColumnList()) {
@@ -933,7 +937,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     for (AppFormFilter appFormFilter : appForm.getFilterList()) {
                         FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, appFormFilter.getName(),
                                 appFormFilter.getDescription(), appFormFilter.getFilterGenerator(), appFormFilter.getFilter());
-                        fdb.addFilterDef(new FormFilterDef(filterDef));
+                        if (filterDef != null) {
+                            fdb.addFilterDef(new FormFilterDef(filterDef));
+                        }
                     }
 
                     for (AppFormAnnotation appFormAnnotation : appForm.getAnnotationList()) {
@@ -1791,6 +1797,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public AppletDef getAppletDef(Long appAppletId) throws UnifyException {
+        AppApplet appEntity = environment()
+                .listLean(new AppAppletQuery().id(appAppletId).addSelect("applicationName", "name"));
+        String appletName = ApplicationNameUtils.getApplicationEntityLongName(appEntity.getApplicationName(),
+                appEntity.getName());
+        return appletDefFactoryMap.get(appletName);
+    }
+
+    @Override
     public WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException {
         return widgetDefFactoryMap.get(widgetName);
     }
@@ -2104,10 +2119,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId)
+    public FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId, String filterGenerator)
             throws UnifyException {
         final EntityDef entityDef = getEntityDef(ownerEntityName);
-        return InputWidgetUtils.getFilterDef(appletUtilities, null, environment().find(
+        return InputWidgetUtils.getFilterDef(appletUtilities, filterGenerator, environment().find(
                 new AppFilterQuery().category(category).entity(entityDef.getTableName()).entityInstId(ownerInstId)));
     }
 

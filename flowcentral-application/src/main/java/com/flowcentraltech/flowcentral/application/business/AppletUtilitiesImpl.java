@@ -50,7 +50,6 @@ import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
-import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -379,6 +378,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public AppletDef getAppletDef(Long appAppletId) throws UnifyException {
+        return applicationModuleService.getAppletDef(appAppletId);
+    }
+
+    @Override
     public WidgetTypeDef getWidgetTypeDef(String widgetName) throws UnifyException {
         return applicationModuleService.getWidgetTypeDef(widgetName);
     }
@@ -438,9 +442,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId)
+    public FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId, String filterGenerator)
             throws UnifyException {
-        return applicationModuleService.retrieveFilterDef(category, ownerEntityName, ownerInstId);
+        return applicationModuleService.retrieveFilterDef(category, ownerEntityName, ownerInstId, filterGenerator);
     }
 
     @Override
@@ -1177,12 +1181,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         String defaultQuickFilter = _appletDef.getPropValue(String.class,
                 AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER_DEFAULT);
 
-        Long appAppletFilterId = !StringUtils.isBlank(defaultQuickFilter) ? environmentService.value(Long.class, "id",
-                new AppAppletFilterQuery().appAppletId(_appletDef.getId()).name(defaultQuickFilter)) : null;
-
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
-                _appletDef.getId(), editAction, appAppletFilterId, entitySearchMode, isIgnoreParentCondition);
+                _appletDef.getId(), editAction, defaultQuickFilter, entitySearchMode, isIgnoreParentCondition);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         if (_appletDef.isDescriptiveButtons()) {
