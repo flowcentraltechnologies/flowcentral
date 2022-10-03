@@ -84,6 +84,15 @@ public class FilterDef implements Listable {
         return description;
     }
 
+    public FilterDef explodeGenerator(EntityDef entityDef, Date now) throws UnifyException {
+        if (isWithFilterGenerator()) {
+            Restriction restriction = getRestriction(entityDef, null, now);
+            return InputWidgetUtils.getFilterDef(au, name, description, restriction);
+        }
+        
+        return this;
+    }
+    
     public String getFilterGenerator() {
         return filterGenerator;
     }

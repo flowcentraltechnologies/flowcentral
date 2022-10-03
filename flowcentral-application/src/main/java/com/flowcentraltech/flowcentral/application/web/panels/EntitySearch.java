@@ -391,9 +391,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
         FilterDef quickFilterDef = appAppletFilterName != null
                 ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
                 : null;
-        entityFilter = quickFilterDef != null
-                ? new Filter(null, null, entityFilter.getEntityDef(), quickFilterDef,
-                        FilterConditionListType.IMMEDIATE_FIELD)
+        entityFilter = quickFilterDef != null ? new Filter(null, null, entityFilter.getEntityDef(),
+                quickFilterDef.explodeGenerator(getEntityDef(), au().getNow()), FilterConditionListType.IMMEDIATE_FIELD)
                 : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
                         FilterConditionListType.IMMEDIATE_FIELD);
     }
