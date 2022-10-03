@@ -46,6 +46,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
@@ -61,10 +62,12 @@ import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
@@ -781,18 +784,39 @@ public final class InputWidgetUtils {
 
         return null;
     }
-
-    public static FilterConfig getFilterConfig(AppletUtilities au, AppAppletFilter appAppletFilter)
+    
+    public static AppletFilterConfig getFilterConfig(AppletUtilities au, AppAppletFilter appAppletFilter)
             throws UnifyException {
-        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au, appAppletFilter.getName(),
-                appAppletFilter.getDescription(), appAppletFilter.getPreferredForm(),
-                appAppletFilter.getPreferredChildListApplet(), appAppletFilter.getChildListActionType(),
-                appAppletFilter.getFilter());
-        filterConfig.setPreferredForm(appAppletFilter.getPreferredForm());
-        filterConfig.setPreferredChildListApplet(appAppletFilter.getPreferredChildListApplet());
-        filterConfig.setQuickFilter(appAppletFilter.isQuickFilter());
-        filterConfig.setChildListActionType(appAppletFilter.getChildListActionType());
-        return filterConfig;
+        if (appAppletFilter != null) {
+            AppletFilterConfig appletFilterConfig = new AppletFilterConfig();
+            InputWidgetUtils.getFilterConfig(au, appletFilterConfig, appAppletFilter.getName(),
+                    appAppletFilter.getDescription(), appAppletFilter.getPreferredForm(),
+                    appAppletFilter.getPreferredChildListApplet(), appAppletFilter.getChildListActionType(),
+                    appAppletFilter.getFilter());
+            appletFilterConfig.setPreferredForm(appAppletFilter.getPreferredForm());
+            appletFilterConfig.setPreferredChildListApplet(appAppletFilter.getPreferredChildListApplet());
+            appletFilterConfig.setQuickFilter(appAppletFilter.isQuickFilter());
+            appletFilterConfig.setChildListActionType(appAppletFilter.getChildListActionType());
+            appletFilterConfig.setFilterGenerator(appAppletFilter.getFilterGenerator());
+            appletFilterConfig.setFilterGeneratorRule(appAppletFilter.getFilterGeneratorRule());
+            return appletFilterConfig;
+        }
+
+        return null;
+    }
+
+    public static FormFilterConfig getFilterConfig(AppletUtilities au, AppFormFilter appFormFilter)
+            throws UnifyException {
+        if (appFormFilter != null) {
+            FormFilterConfig formFilterConfig = new FormFilterConfig();
+            InputWidgetUtils.getFilterConfig(au, formFilterConfig, appFormFilter.getName(),
+                    appFormFilter.getDescription(), null, null, null, appFormFilter.getFilter());
+            formFilterConfig.setFilterGenerator(appFormFilter.getFilterGenerator());
+            formFilterConfig.setFilterGeneratorRule(appFormFilter.getFilterGeneratorRule());
+            return formFilterConfig;
+        }
+
+        return null;
     }
 
     public static TableFilterConfig getFilterConfig(AppletUtilities au, AppTableFilter appTableFilter)
@@ -803,12 +827,14 @@ public final class InputWidgetUtils {
                     appTableFilter.getDescription(), null, null, null, appTableFilter.getFilter());
             tableFilterConfig.setRowColor(appTableFilter.getRowColor());
             tableFilterConfig.setLegendLabel(appTableFilter.getLegendLabel());
+            tableFilterConfig.setFilterGenerator(appTableFilter.getFilterGenerator());
+            tableFilterConfig.setFilterGeneratorRule(appTableFilter.getFilterGeneratorRule());
             return tableFilterConfig;
         }
 
         return null;
     }
-
+    
     public static FilterConfig getFilterConfig(AppletUtilities au, AppFilter appFilter) throws UnifyException {
         return InputWidgetUtils.getFilterConfig(au, null, null, null, null, null, appFilter);
     }

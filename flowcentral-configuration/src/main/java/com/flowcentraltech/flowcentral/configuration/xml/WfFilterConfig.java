@@ -18,38 +18,16 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * Table filter configuration
+ * Workflow filter configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class TableFilterConfig extends FilterConfig {
-
-    private String rowColor;
-
-    private String legendLabel;
+public class WfFilterConfig extends FilterConfig {
 
     private String filterGenerator;
 
     private String filterGeneratorRule;
-
-    public String getRowColor() {
-        return rowColor;
-    }
-
-    @XmlAttribute
-    public void setRowColor(String rowColor) {
-        this.rowColor = rowColor;
-    }
-
-    public String getLegendLabel() {
-        return legendLabel;
-    }
-
-    @XmlAttribute
-    public void setLegendLabel(String legendLabel) {
-        this.legendLabel = legendLabel;
-    }
 
     public String getFilterGenerator() {
         return filterGenerator;

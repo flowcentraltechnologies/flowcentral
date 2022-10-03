@@ -200,6 +200,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppFormConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTableConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ChoiceConfig;
@@ -211,10 +212,10 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintC
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFieldConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormReviewPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormStatePolicyConfig;
@@ -3391,7 +3392,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Map<String, AppAppletFilter> map = appApplet.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppAppletFilterQuery().appAppletId(appApplet.getId()));
-            for (FilterConfig filterConfig : appletConfig.getFilterList()) {
+            for (AppletFilterConfig filterConfig : appletConfig.getFilterList()) {
                 AppAppletFilter oldAppAppletFilter = map.get(filterConfig.getName());
                 if (oldAppAppletFilter == null) {
                     AppAppletFilter appAppletFilter = new AppAppletFilter();
@@ -3403,6 +3404,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAppletFilter.setPreferredChildListApplet(filterConfig.getPreferredChildListApplet());
                     appAppletFilter.setQuickFilter(filterConfig.isQuickFilter());
                     appAppletFilter.setChildListActionType(filterConfig.getChildListActionType());
+                    appAppletFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                    appAppletFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
                     appAppletFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
                     filterList.add(appAppletFilter);
                 } else {
@@ -3414,6 +3417,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppAppletFilter.setPreferredChildListApplet(filterConfig.getPreferredChildListApplet());
                         oldAppAppletFilter.setQuickFilter(filterConfig.isQuickFilter());
                         oldAppAppletFilter.setChildListActionType(filterConfig.getChildListActionType());
+                        oldAppAppletFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                        oldAppAppletFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
                     } else {
                         environment().findChildren(oldAppAppletFilter);
                     }
@@ -3750,27 +3755,31 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             new AppTableFilterQuery().appTableId(appTable.getId()));
             for (TableFilterConfig filterConfig : appTableConfig.getFilterList()) {
                 if (!DataUtils.isBlank(filterConfig.getRestrictionList())) {
-                    AppTableFilter oldAppAppletFilter = map.get(filterConfig.getName());
-                    if (oldAppAppletFilter == null) {
-                        AppTableFilter appAppletFilter = new AppTableFilter();
-                        appAppletFilter.setName(filterConfig.getName());
-                        appAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                        appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                        appAppletFilter.setRowColor(filterConfig.getRowColor());
-                        appAppletFilter.setLegendLabel(filterConfig.getLegendLabel());
-                        appAppletFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
-                        filterList.add(appAppletFilter);
+                    AppTableFilter oldAppTableFilter = map.get(filterConfig.getName());
+                    if (oldAppTableFilter == null) {
+                        AppTableFilter appTableFilter = new AppTableFilter();
+                        appTableFilter.setName(filterConfig.getName());
+                        appTableFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                        appTableFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                        appTableFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
+                        appTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                        appTableFilter.setRowColor(filterConfig.getRowColor());
+                        appTableFilter.setLegendLabel(filterConfig.getLegendLabel());
+                        appTableFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                        filterList.add(appTableFilter);
                     } else {
-                        if (ConfigUtils.isSetInstall(oldAppAppletFilter)) {
-                            oldAppAppletFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                            oldAppAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                            oldAppAppletFilter.setRowColor(filterConfig.getRowColor());
-                            oldAppAppletFilter.setLegendLabel(filterConfig.getLegendLabel());
+                        if (ConfigUtils.isSetInstall(oldAppTableFilter)) {
+                            oldAppTableFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                            oldAppTableFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                            oldAppTableFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
+                            oldAppTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                            oldAppTableFilter.setRowColor(filterConfig.getRowColor());
+                            oldAppTableFilter.setLegendLabel(filterConfig.getLegendLabel());
                         } else {
-                            environment().findChildren(oldAppAppletFilter);
+                            environment().findChildren(oldAppTableFilter);
                         }
 
-                        filterList.add(oldAppAppletFilter);
+                        filterList.add(oldAppTableFilter);
                     }
                 }
             }
@@ -3822,24 +3831,28 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             Map<String, AppFormFilter> map = appForm.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppFormFilterQuery().appFormId(appForm.getId()));
-            for (FilterConfig filterConfig : appFormConfig.getFilterList()) {
-                AppFormFilter appFormFilter = map.get(filterConfig.getName());
-                if (appFormFilter == null) {
-                    AppFormFilter workflowFilter = new AppFormFilter();
-                    workflowFilter.setName(filterConfig.getName());
-                    workflowFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                    workflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                    workflowFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    filterList.add(workflowFilter);
+            for (FormFilterConfig filterConfig : appFormConfig.getFilterList()) {
+                AppFormFilter oldAppFormFilter = map.get(filterConfig.getName());
+                if (oldAppFormFilter == null) {
+                    AppFormFilter appFormFilter = new AppFormFilter();
+                    appFormFilter.setName(filterConfig.getName());
+                    appFormFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                    appFormFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                    appFormFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
+                    appFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                    appFormFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    filterList.add(appFormFilter);
                 } else {
-                    if (ConfigUtils.isSetInstall(appFormFilter)) {
-                        appFormFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
-                        appFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                    if (ConfigUtils.isSetInstall(oldAppFormFilter)) {
+                        oldAppFormFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                        oldAppFormFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                        oldAppFormFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
+                        oldAppFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
                     } else {
-                        environment().findChildren(appFormFilter);
+                        environment().findChildren(oldAppFormFilter);
                     }
 
-                    filterList.add(appFormFilter);
+                    filterList.add(oldAppFormFilter);
                 }
 
             }

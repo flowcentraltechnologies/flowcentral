@@ -73,6 +73,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppFormsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTableConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTablesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletsConfig;
@@ -84,10 +85,10 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFieldConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormReviewPolicyConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormSectionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormStatePolicyConfig;
@@ -222,12 +223,12 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
 
                 // Filters
                 if (!DataUtils.isBlank(appApplet.getFilterList())) {
-                    List<FilterConfig> filterList = new ArrayList<FilterConfig>();
+                    List<AppletFilterConfig> filterList = new ArrayList<AppletFilterConfig>();
                     for (AppAppletFilter appAppletFilter : appApplet.getFilterList()) {
-                        String filterKey = getDescriptionKey(descKey, "filter", appAppletFilter.getName());
+                        AppletFilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), appAppletFilter);
+                        String filterKey = getDescriptionKey(descKey, "appletfilter", appAppletFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.APPLET, filterKey, appAppletFilter.getDescription());
-                        appAppletFilter.setDescription("$m{" + filterKey + "}");
-                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), appAppletFilter);
+                        filterConfig.setDescription("$m{" + filterKey + "}");
                         filterList.add(filterConfig);
                     }
 
@@ -542,11 +543,10 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 if (!DataUtils.isBlank(appTable.getFilterList())) {
                     List<TableFilterConfig> filterList = new ArrayList<TableFilterConfig>();
                     for (AppTableFilter appTableFilter : appTable.getFilterList()) {
-                        String filterKey = getDescriptionKey(descKey, "filter", appTableFilter.getName());
+                        TableFilterConfig tableFilterConfig = InputWidgetUtils.getFilterConfig(au(), appTableFilter);
+                        String filterKey = getDescriptionKey(descKey, "tablefilter", appTableFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.TABLE, filterKey, appTableFilter.getDescription());
-                        appTableFilter.setDescription("$m{" + filterKey + "}");
-                        TableFilterConfig tableFilterConfig = InputWidgetUtils.getFilterConfig(au(),
-                                appTableFilter);
+                        tableFilterConfig.setDescription("$m{" + filterKey + "}");
                         filterList.add(tableFilterConfig);
                     }
 
@@ -604,11 +604,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
 
                 // Filters
                 if (!DataUtils.isBlank(appForm.getFilterList())) {
-                    List<FilterConfig> filterList = new ArrayList<FilterConfig>();
+                    List<FormFilterConfig> filterList = new ArrayList<FormFilterConfig>();
                     for (AppFormFilter appFormFilter : appForm.getFilterList()) {
-                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(),
-                                appFormFilter.getFilter());
-                        filterConfig.setName(appFormFilter.getName());
+                        FormFilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), appFormFilter);
                         descKey = getDescriptionKey(formDescKey, "formfilter", appFormFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormFilter.getDescription());
                         filterConfig.setDescription("$m{" + descKey + "}");
@@ -660,8 +658,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formActionConfig.setOrderIndex(appFormAction.getOrderIndex());
                         formActionConfig.setType(appFormAction.getType());
                         formActionConfig.setHighlightType(appFormAction.getHighlightType());
-                        formActionConfig.setOnCondition(
-                                InputWidgetUtils.getFilterConfig(au(), appFormAction.getOnCondition()));
+                        formActionConfig
+                                .setOnCondition(InputWidgetUtils.getFilterConfig(au(), appFormAction.getOnCondition()));
                         actionConfigList.add(formActionConfig);
                     }
 
@@ -836,8 +834,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey,
                                 appFormWidgetRulesPolicy.getDescription());
                         formStatePolicyConfig.setDescription("$m{" + descKey + "}");
-                        formStatePolicyConfig.setOnCondition(InputWidgetUtils.getFilterConfig(au(),
-                                appFormWidgetRulesPolicy.getOnCondition()));
+                        formStatePolicyConfig.setOnCondition(
+                                InputWidgetUtils.getFilterConfig(au(), appFormWidgetRulesPolicy.getOnCondition()));
                         formStatePolicyConfig.setWidgetRules(
                                 InputWidgetUtils.getWidgetRulesConfig(appFormWidgetRulesPolicy.getWidgetRules()));
                         widgetRulesPolicyList.add(formStatePolicyConfig);
@@ -881,8 +879,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formValidationPolicyConfig.setMessage("$m{" + msgKey + "}");
                         formValidationPolicyConfig.setTarget(appFormValidationPolicy.getTarget());
                         formValidationPolicyConfig.setErrorMatcher(appFormValidationPolicy.getErrorMatcher());
-                        formValidationPolicyConfig.setErrorCondition(InputWidgetUtils.getFilterConfig(au(),
-                                appFormValidationPolicy.getErrorCondition()));
+                        formValidationPolicyConfig.setErrorCondition(
+                                InputWidgetUtils.getFilterConfig(au(), appFormValidationPolicy.getErrorCondition()));
                         formValidationPolicyList.add(formValidationPolicyConfig);
                     }
 
@@ -906,8 +904,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formReviewPolicyConfig.setTarget(appFormReviewPolicy.getTarget());
                         formReviewPolicyConfig.setSkippable(appFormReviewPolicy.isSkippable());
                         formReviewPolicyConfig.setErrorMatcher(appFormReviewPolicy.getErrorMatcher());
-                        formReviewPolicyConfig.setErrorCondition(InputWidgetUtils.getFilterConfig(au(),
-                                appFormReviewPolicy.getErrorCondition()));
+                        formReviewPolicyConfig.setErrorCondition(
+                                InputWidgetUtils.getFilterConfig(au(), appFormReviewPolicy.getErrorCondition()));
                         formReviewPolicyList.add(formReviewPolicyConfig);
                     }
 

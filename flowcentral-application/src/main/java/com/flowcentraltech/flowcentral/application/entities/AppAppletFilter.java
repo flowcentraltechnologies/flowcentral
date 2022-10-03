@@ -61,6 +61,12 @@ public class AppAppletFilter extends BaseConfigNamedEntity {
 
     @ListOnly(key = "childListActionType", property = "description")
     private String childListActionTypeDesc;
+    
+    @Column(length = 64, nullable = true)
+    private String filterGenerator;
+
+    @Column(length = 64, nullable = true)
+    private String filterGeneratorRule;
 
     @Child(category = "applet")
     private AppFilter filter;
@@ -129,6 +135,22 @@ public class AppAppletFilter extends BaseConfigNamedEntity {
 
     public void setOwnershipTypeDesc(String ownershipTypeDesc) {
         this.ownershipTypeDesc = ownershipTypeDesc;
+    }
+
+    public String getFilterGenerator() {
+        return filterGenerator;
+    }
+
+    public void setFilterGenerator(String filterGenerator) {
+        this.filterGenerator = filterGenerator;
+    }
+
+    public String getFilterGeneratorRule() {
+        return filterGeneratorRule;
+    }
+
+    public void setFilterGeneratorRule(String filterGeneratorRule) {
+        this.filterGeneratorRule = filterGeneratorRule;
     }
 
     public AppFilter getFilter() {

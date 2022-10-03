@@ -37,7 +37,7 @@ public class WfConfig extends BaseNameConfig {
 
     private String descFormat;
 
-    private List<FilterConfig> filterList;
+    private List<WfFilterConfig> filterList;
 
     private List<WfSetValuesConfig> setValuesList;
 
@@ -68,12 +68,12 @@ public class WfConfig extends BaseNameConfig {
         this.descFormat = descFormat;
     }
 
-    public List<FilterConfig> getFilterList() {
+    public List<WfFilterConfig> getFilterList() {
         return filterList;
     }
 
     @XmlElement(name = "filter", required = true)
-    public void setFilterList(List<FilterConfig> filterList) {
+    public void setFilterList(List<WfFilterConfig> filterList) {
         this.filterList = filterList;
     }
 

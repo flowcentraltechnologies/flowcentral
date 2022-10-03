@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Child;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
@@ -33,6 +34,12 @@ public class AppFormFilter extends BaseConfigNamedEntity {
 
     @ForeignKey(AppForm.class)
     private Long appFormId;
+    
+    @Column(length = 64, nullable = true)
+    private String filterGenerator;
+
+    @Column(length = 64, nullable = true)
+    private String filterGeneratorRule;
     
     @Child(category = "form")
     private AppFilter filter;
@@ -53,6 +60,22 @@ public class AppFormFilter extends BaseConfigNamedEntity {
 
     public void setAppFormId(Long appFormId) {
         this.appFormId = appFormId;
+    }
+
+    public String getFilterGenerator() {
+        return filterGenerator;
+    }
+
+    public void setFilterGenerator(String filterGenerator) {
+        this.filterGenerator = filterGenerator;
+    }
+
+    public String getFilterGeneratorRule() {
+        return filterGeneratorRule;
+    }
+
+    public void setFilterGeneratorRule(String filterGeneratorRule) {
+        this.filterGeneratorRule = filterGeneratorRule;
     }
 
     public AppFilter getFilter() {

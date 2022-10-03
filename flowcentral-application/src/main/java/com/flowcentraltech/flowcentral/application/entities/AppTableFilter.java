@@ -41,6 +41,12 @@ public class AppTableFilter extends BaseConfigNamedEntity {
     @Column(length = 96, nullable = true)
     private String legendLabel;
     
+    @Column(length = 64, nullable = true)
+    private String filterGenerator;
+
+    @Column(length = 64, nullable = true)
+    private String filterGeneratorRule;
+    
     @Child(category = "table")
     private AppFilter filter;
 
@@ -76,6 +82,22 @@ public class AppTableFilter extends BaseConfigNamedEntity {
 
     public void setLegendLabel(String legendLabel) {
         this.legendLabel = legendLabel;
+    }
+
+    public String getFilterGenerator() {
+        return filterGenerator;
+    }
+
+    public void setFilterGenerator(String filterGenerator) {
+        this.filterGenerator = filterGenerator;
+    }
+
+    public String getFilterGeneratorRule() {
+        return filterGeneratorRule;
+    }
+
+    public void setFilterGeneratorRule(String filterGeneratorRule) {
+        this.filterGeneratorRule = filterGeneratorRule;
     }
 
     public AppFilter getFilter() {
