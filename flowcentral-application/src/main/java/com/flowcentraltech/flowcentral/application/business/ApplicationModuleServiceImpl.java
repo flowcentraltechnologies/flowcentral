@@ -1350,6 +1350,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return environment().value(String.class, "entity", new AppTableQuery().id(appTableId));
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public String getAppComponentEntity(String componentEntityName, Long appComponentId) throws UnifyException {
+        EntityClassDef entityClassDef = getEntityClassDef(componentEntityName);
+        return environment().value(String.class, "entity",
+                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", appComponentId));
+    }
+
     @Override
     public List<AppAppletSetValues> findAppAppletSetValues(Long appAppletId) throws UnifyException {
         return environment().findAll(new AppAppletSetValuesQuery().appAppletId(appAppletId));

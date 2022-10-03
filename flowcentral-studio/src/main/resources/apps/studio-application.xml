@@ -280,6 +280,26 @@
 			inputType="string"
 			editor="!ui-select list:studioappletallformlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="appletfiltergeneratorlist"
+			description="$m{studio.widgettype.appletfiltergeneratorlist}" dataType="string"
+			inputType="string"
+			editor="!ui-select list:studioappletfiltergeneratorlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="tablefiltergeneratorlist"
+			description="$m{studio.widgettype.tablefiltergeneratorlist}" dataType="string"
+			inputType="string"
+			editor="!ui-select list:studiotablefiltergeneratorlist listParams:$l{appTableId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="formfiltergeneratorlist"
+			description="$m{studio.widgettype.formfiltergeneratorlist}" dataType="string"
+			inputType="string"
+			editor="!ui-select list:studioformfiltergeneratorlist listParams:$l{appFormId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="workflowfiltergeneratorlist"
+			description="$m{studio.widgettype.workflowfiltergeneratorlist}" dataType="string"
+			inputType="string"
+			editor="!ui-select list:studioworkflowfiltergeneratorlist listParams:$l{workflowId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="appletchildlistappletlist"
 			description="$m{studio.widgettype.appletchildlistappletlist}"
 			dataType="string" inputType="string"
@@ -1778,6 +1798,9 @@
 						inputWidget="studio.appletchildlistappletlist" column="1" />
 					<field name="childListActionType"
 						inputWidget="application.enumlist" column="1" visible="false" />
+					<field name="filterGenerator"
+						inputWidget="studio.appletfiltergeneratorlist"
+						switchOnChange="true" column="1" />
 					<field name="quickFilter" inputWidget="application.checkbox"
 						column="1" />
 				</section>
@@ -3087,6 +3110,9 @@
 						column="1" />
 					<field name="legendLabel" inputWidget="application.text"
 						column="1" />
+					<field name="filterGenerator"
+						inputWidget="studio.tablefiltergeneratorlist"
+						switchOnChange="true" column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
@@ -3311,7 +3337,10 @@
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
-						column="1" required="true" />
+						column="0" required="true" />
+					<field name="filterGenerator"
+						inputWidget="studio.formfiltergeneratorlist"
+						switchOnChange="true" column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
@@ -3733,6 +3762,9 @@
 						required="true" saveAs="true" />
 					<field name="descFormat" inputWidget="application.text"
 						column="1" />
+					<field name="filterGenerator"
+						inputWidget="studio.workflowfiltergeneratorlist"
+						switchOnChange="true" column="1" />
 				</section>
 			</tab>
 			<tab name="design" label="$m{studio.workflow.form.design}"

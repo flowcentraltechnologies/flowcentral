@@ -150,6 +150,12 @@
 			<field name="workflowId"
 				label="$m{workflow.workflowfilter.workflowid}" type="ref"
 				references="workflowRef" inputWidget="application.entitylist" />
+			<field name="filterGenerator"
+				label="$m{workflow.workflowfilter.filtergenerator}" type="string"
+				nullable="true" />
+			<field name="filterGeneratorRule"
+				label="$m{workflow.workflowfilter.filtergeneratorrule}" type="string"
+				nullable="true" />
 			<field name="filter" label="$m{workflow.workflowfilter.filter}"
 				type="child" category="workflow" references="application.appFilterRef" />
 			<uniqueConstraint name="nameUc"

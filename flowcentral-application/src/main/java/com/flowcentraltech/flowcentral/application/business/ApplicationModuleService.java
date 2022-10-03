@@ -290,6 +290,19 @@ public interface ApplicationModuleService extends FlowCentralService {
     String getAppTableEntity(Long appTableId) throws UnifyException;
 
     /**
+     * Gets an application component entity.
+     * 
+     * @param componentEntityName
+     *                            the component entity name
+     * @param appComponentId
+     *                            the application component ID
+     * @return the entity name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getAppComponentEntity(String componentEntityName, Long appComponentId) throws UnifyException;
+
+    /**
      * Finds application applet set values.
      * 
      * @param appAppletId
