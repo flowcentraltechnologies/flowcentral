@@ -24,13 +24,14 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
     user-select: auto;*/
 }
 
-/*.ui-text-popup .tread {border-radius: 4px 0px 0px 4px;}*/
-
 /** Button */ 
 .ui-button {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 .ui-button:hover:enabled {color:#000000; background-color: #fafafa;}
 .ui-button:disabled {cursor:default; color: #dfdfdf;}
 .ui-button-alert {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
+
+.ui-buttongroup .btn {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
+.ui-buttongroup .btn:hover:enabled {background-color:#005dbc;color: #FFF;}
 
 /** Checkbox */ 
 .ui-checkbox {width: 18px; height: 18px;} 

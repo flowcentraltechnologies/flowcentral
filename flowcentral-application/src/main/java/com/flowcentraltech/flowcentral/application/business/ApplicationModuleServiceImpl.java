@@ -1802,10 +1802,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public AppletDef getAppletDef(Long appAppletId) throws UnifyException {
-        AppApplet appEntity = environment()
+        AppApplet appApplet = environment()
                 .listLean(new AppAppletQuery().id(appAppletId).addSelect("applicationName", "name"));
-        String appletName = ApplicationNameUtils.getApplicationEntityLongName(appEntity.getApplicationName(),
-                appEntity.getName());
+        String appletName = ApplicationNameUtils.getApplicationEntityLongName(appApplet.getApplicationName(),
+                appApplet.getName());
         return appletDefFactoryMap.get(appletName);
     }
 

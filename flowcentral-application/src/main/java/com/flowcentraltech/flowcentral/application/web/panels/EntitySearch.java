@@ -399,7 +399,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     private void localApplyQuickFilter() throws UnifyException {
-        FilterDef quickFilterDef = appAppletFilterName != null
+        FilterDef quickFilterDef = appAppletId != null && appAppletFilterName != null
                 ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
                 : null;
         entityFilter = quickFilterDef != null ? new Filter(null, null, entityFilter.getEntityDef(),
