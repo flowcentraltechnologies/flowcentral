@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.util.RefEncodingUtils;
@@ -111,14 +110,8 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 final boolean listFormat = refDef.isWithListFormat();
                 EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
                 String searchField = getSearchField(entityClassDef, refDef);
-                Restriction br = null;
-                if (refDef.isWithFilterGenerator()) {
-                    br = ((EntityBasedFilterGenerator) getComponent(refDef.getFilterGenerator()))
-                            .generate(_valueStore.getReader(), refDef.getFilterGeneratorRule());
-                } else {
-                    br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                            application().getNow()) : null;
-                }
+                Restriction br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                        _valueStore.getReader(), application().getNow()) : null;
 
                 Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                 query.ignoreEmptyCriteria(true);

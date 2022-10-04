@@ -46,6 +46,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
@@ -55,16 +56,17 @@ import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.common.input.StringInput;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
-import com.flowcentraltech.flowcentral.configuration.constants.ChildListActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
@@ -781,18 +783,37 @@ public final class InputWidgetUtils {
 
         return null;
     }
-
-    public static FilterConfig getFilterConfig(AppletUtilities au, AppAppletFilter appAppletFilter)
+    
+    public static AppletFilterConfig getFilterConfig(AppletUtilities au, AppAppletFilter appAppletFilter)
             throws UnifyException {
-        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au, appAppletFilter.getName(),
-                appAppletFilter.getDescription(), appAppletFilter.getPreferredForm(),
-                appAppletFilter.getPreferredChildListApplet(), appAppletFilter.getChildListActionType(),
-                appAppletFilter.getFilter());
-        filterConfig.setPreferredForm(appAppletFilter.getPreferredForm());
-        filterConfig.setPreferredChildListApplet(appAppletFilter.getPreferredChildListApplet());
-        filterConfig.setQuickFilter(appAppletFilter.isQuickFilter());
-        filterConfig.setChildListActionType(appAppletFilter.getChildListActionType());
-        return filterConfig;
+        if (appAppletFilter != null) {
+            AppletFilterConfig appletFilterConfig = new AppletFilterConfig();
+            InputWidgetUtils.getFilterConfig(au, appletFilterConfig, appAppletFilter.getName(),
+                    appAppletFilter.getDescription(), appAppletFilter.getFilter());
+            appletFilterConfig.setPreferredForm(appAppletFilter.getPreferredForm());
+            appletFilterConfig.setPreferredChildListApplet(appAppletFilter.getPreferredChildListApplet());
+            appletFilterConfig.setQuickFilter(appAppletFilter.isQuickFilter());
+            appletFilterConfig.setChildListActionType(appAppletFilter.getChildListActionType());
+            appletFilterConfig.setFilterGenerator(appAppletFilter.getFilterGenerator());
+            appletFilterConfig.setFilterGeneratorRule(appAppletFilter.getFilterGeneratorRule());
+            return appletFilterConfig;
+        }
+
+        return null;
+    }
+
+    public static FormFilterConfig getFilterConfig(AppletUtilities au, AppFormFilter appFormFilter)
+            throws UnifyException {
+        if (appFormFilter != null) {
+            FormFilterConfig formFilterConfig = new FormFilterConfig();
+            InputWidgetUtils.getFilterConfig(au, formFilterConfig, appFormFilter.getName(),
+                    appFormFilter.getDescription(), appFormFilter.getFilter());
+            formFilterConfig.setFilterGenerator(appFormFilter.getFilterGenerator());
+            formFilterConfig.setFilterGeneratorRule(appFormFilter.getFilterGeneratorRule());
+            return formFilterConfig;
+        }
+
+        return null;
     }
 
     public static TableFilterConfig getFilterConfig(AppletUtilities au, AppTableFilter appTableFilter)
@@ -800,26 +821,25 @@ public final class InputWidgetUtils {
         if (appTableFilter != null) {
             TableFilterConfig tableFilterConfig = new TableFilterConfig();
             InputWidgetUtils.getFilterConfig(au, tableFilterConfig, appTableFilter.getName(),
-                    appTableFilter.getDescription(), null, null, null, appTableFilter.getFilter());
+                    appTableFilter.getDescription(), appTableFilter.getFilter());
             tableFilterConfig.setRowColor(appTableFilter.getRowColor());
             tableFilterConfig.setLegendLabel(appTableFilter.getLegendLabel());
+            tableFilterConfig.setFilterGenerator(appTableFilter.getFilterGenerator());
+            tableFilterConfig.setFilterGeneratorRule(appTableFilter.getFilterGeneratorRule());
             return tableFilterConfig;
         }
 
         return null;
     }
-
+    
     public static FilterConfig getFilterConfig(AppletUtilities au, AppFilter appFilter) throws UnifyException {
-        return InputWidgetUtils.getFilterConfig(au, null, null, null, null, null, appFilter);
+        return InputWidgetUtils.getFilterConfig(au, null, null, appFilter);
     }
 
-    public static FilterConfig getFilterConfig(AppletUtilities au, String name, String description,
-            String preferredForm, String preferredChildListApplet, ChildListActionType childListActionType,
-            AppFilter appFilter) throws UnifyException {
+    public static FilterConfig getFilterConfig(AppletUtilities au, String name, String description, AppFilter appFilter) throws UnifyException {
         if (appFilter != null) {
             FilterConfig filterConfig = new FilterConfig();
-            getFilterConfig(au, filterConfig, name, description, preferredForm, preferredChildListApplet,
-                    childListActionType, appFilter);
+            getFilterConfig(au, filterConfig, name, description, appFilter);
             return filterConfig;
         }
 
@@ -827,11 +847,10 @@ public final class InputWidgetUtils {
     }
 
     public static void getFilterConfig(AppletUtilities au, FilterConfig filterConfig, String name, String description,
-            String preferredForm, String preferredChildListApplet, ChildListActionType childListActionType,
             AppFilter appFilter) throws UnifyException {
         if (appFilter != null) {
-            FilterDef filterDef = InputWidgetUtils.getFilterDef(au, name, description, preferredForm,
-                    preferredChildListApplet, childListActionType, appFilter);
+            FilterDef filterDef = InputWidgetUtils.getFilterDef(au, name, description,
+                    filterConfig.getFilterGenerator(), appFilter);
             filterConfig.setName(name);
             filterConfig.setDescription(description);
             List<FilterRestrictionConfig> restrictionList = new ArrayList<FilterRestrictionConfig>();
@@ -885,18 +904,20 @@ public final class InputWidgetUtils {
         return index;
     }
 
-    public static FilterDef getFilterDef(AppletUtilities au, AppFilter appFilter) throws UnifyException {
-        return InputWidgetUtils.getFilterDef(au, null, null, null, null, null, appFilter);
+    public static FilterDef getFilterDef(AppletUtilities au, String filterGenerator, AppFilter appFilter)
+            throws UnifyException {
+        return InputWidgetUtils.getFilterDef(au, null, null, filterGenerator, appFilter);
     }
 
-    public static FilterDef getFilterDef(AppletUtilities au, String name, String description, String preferredForm,
-            String preferredChildListApplet, ChildListActionType childListActionType, AppFilter appFilter)
-            throws UnifyException {
-        if (appFilter != null) {
+    public static FilterDef getFilterDef(AppletUtilities au, String name, String description, String filterGenerator,
+            AppFilter appFilter) throws UnifyException {
+        if (appFilter != null || !StringUtils.isBlank(filterGenerator)) {
             FilterDef.Builder fdb = FilterDef.newBuilder(au);
-            fdb.name(name).description(description).preferredForm(preferredForm)
-                    .preferredChildListApplet(preferredChildListApplet).childListActionType(childListActionType);
-            addFilterDefinition(fdb, appFilter.getDefinition());
+            fdb.name(name).description(description).filterGenerator(filterGenerator);
+            if (appFilter != null) {
+                addFilterDefinition(fdb, appFilter.getDefinition());
+            }
+
             return fdb.build();
         }
 
@@ -933,16 +954,14 @@ public final class InputWidgetUtils {
     }
 
     public static FilterDef getFilterDef(AppletUtilities au, Restriction restriction) throws UnifyException {
-        return InputWidgetUtils.getFilterDef(au, null, null, null, null, null, restriction);
+        return InputWidgetUtils.getFilterDef(au, null, null, restriction);
     }
 
-    public static FilterDef getFilterDef(AppletUtilities au, String name, String description, String preferredForm,
-            String preferredChildListApplet, ChildListActionType childListActionType, Restriction restriction)
+    public static FilterDef getFilterDef(AppletUtilities au, String name, String description, Restriction restriction)
             throws UnifyException {
         if (restriction != null) {
             FilterDef.Builder fdb = FilterDef.newBuilder(au);
-            fdb.name(name).description(description).preferredForm(preferredForm)
-                    .preferredChildListApplet(preferredChildListApplet).childListActionType(childListActionType);
+            fdb.name(name).description(description);
             InputWidgetUtils.addRestriction(fdb, restriction, 0);
             return fdb.build();
         }

@@ -25,13 +25,13 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowsConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfAlertsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfSetValuesConfig;
@@ -53,6 +53,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WfWizardStep;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilter;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowInputWidgetUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -113,10 +114,9 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
 
                 // Filters
                 if (!DataUtils.isBlank(workflow.getFilterList())) {
-                    List<FilterConfig> filterList = new ArrayList<FilterConfig>();
+                    List<WfFilterConfig> filterList = new ArrayList<WfFilterConfig>();
                     for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
-                        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), workflowFilter.getFilter());
-                        filterConfig.setName(workflowFilter.getName());
+                        WfFilterConfig filterConfig = WorkflowInputWidgetUtils.getFilterConfig(au(), workflowFilter);
                         descKey = getDescriptionKey(workflowDescKey, "workflowfilter", workflowFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.WORKFLOW, descKey, workflowFilter.getDescription());
                         filterConfig.setDescription("$m{" + descKey + "}");

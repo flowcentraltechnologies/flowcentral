@@ -85,6 +85,7 @@ import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleSysParam
 import com.flowcentraltech.flowcentral.workflow.data.WfAlertDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfFilterDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfRoutingDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfSetValuesDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
@@ -231,14 +232,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     Set<String> filterNames = new HashSet<String>();
                     for (WorkflowFilter workflowFilter : workflow.getFilterList()) {
                         filterNames.add(workflowFilter.getName());
-                        wdb.addFilterDef(InputWidgetUtils.getFilterDef(appletUtil, workflowFilter.getName(),
-                                workflowFilter.getDescription(), null, null, null, workflowFilter.getFilter()));
+                        wdb.addFilterDef(new WfFilterDef(InputWidgetUtils.getFilterDef(appletUtil,
+                                workflowFilter.getName(), workflowFilter.getDescription(),
+                                workflowFilter.getFilterGenerator(), workflowFilter.getFilter())));
                     }
 
                     for (WorkflowSetValues workflowSetValues : workflow.getSetValuesList()) {
                         FilterDef onCondition = InputWidgetUtils.getFilterDef(appletUtil, workflowSetValues.getName(),
-                                workflowSetValues.getDescription(), null, null, null,
-                                workflowSetValues.getOnCondition());
+                                workflowSetValues.getDescription(), null, workflowSetValues.getOnCondition());
                         SetValuesDef setValues = InputWidgetUtils.getSetValuesDef(workflowSetValues.getName(),
                                 workflowSetValues.getDescription(), null, workflowSetValues.getSetValues());
                         WfSetValuesDef wfSetValuesDef = new WfSetValuesDef(workflowSetValues.getType(),
@@ -676,17 +677,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             environment().updateByIdVersion(wfItem);
 
             wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
+            final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
             if (userActionDef.isWithSetValues()) {
                 final EntityDef entityDef = wfDef.getEntityDef();
                 final Date now = getNow();
                 final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
-                if (!wfSetValuesDef.isWithOnCondition()
-                        || wfSetValuesDef.getOnCondition().getObjectFilter(entityDef, now).match(wfEntityInst)) {
-                    wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst, Collections.emptyMap(),
-                            null);
+                if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
+                        .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
+                        .match(wfEntityInstValueStore)) {
+                    wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
+                            Collections.emptyMap(), null);
                 }
             }
-            
+
             if (wfReviewMode.lean()) {
                 if (emails != null) {
                     environment().findChildren(wfEntityInst);
@@ -886,8 +889,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     logDebug("Performing workflow auto loading for [{0}]...", workflowName);
                     WfDef wfDef = getWfDef(workflowName);
                     EntityClassDef entityClassDef = appService.getEntityClassDef(wfDef.getEntity());
-                    Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName())
-                            .getRestriction(entityClassDef.getEntityDef(), now);
+                    Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName()).getFilterDef()
+                            .getRestriction(entityClassDef.getEntityDef(), null, now);
                     List<? extends WorkEntity> entityList = environment().listAll(Query
                             .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
                             .addRestriction(restriction)
@@ -950,8 +953,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final Date now = getNow();
                 instValueStore.save(wfDef.getOnEntrySetValuesFields());
                 for (WfSetValuesDef wfSetValuesDef : wfDef.getOnEntrySetValuesList()) {
-                    if (!wfSetValuesDef.isWithOnCondition()
-                            || wfSetValuesDef.getOnCondition().getObjectFilter(entityDef, now).match(inst)) {
+                    if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
+                            .getObjectFilter(entityDef, instValueStore.getReader(), now).match(instValueStore)) {
                         wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, inst, Collections.emptyMap(),
                                 null);
                     }
@@ -1091,8 +1094,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     }
                     break;
                 case BINARY_ROUTING:
-                    if (wfDef.getFilterDef(currWfStepDef.getBinaryConditionName())
-                            .getObjectFilter(wfDef.getEntityDef(), now).match(transitionItem.getWfInstValueStore())) {
+                    if (wfDef.getFilterDef(currWfStepDef.getBinaryConditionName()).getFilterDef()
+                            .getObjectFilter(wfDef.getEntityDef(), transitionItem.getWfInstValueStore().getReader(),
+                                    now)
+                            .match(transitionItem.getWfInstValueStore())) {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getNextStepName());
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
@@ -1211,7 +1216,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final Date now = getNow();
             for (WfRoutingDef wfRoutingDef : currWfStepDef.getRoutingList()) {
                 if (wfRoutingDef.isWithCondition()) {
-                    if (wfDef.getFilterDef(wfRoutingDef.getCondition()).getObjectFilter(wfDef.getEntityDef(), now)
+                    if (wfDef.getFilterDef(wfRoutingDef.getCondition()).getFilterDef()
+                            .getObjectFilter(wfDef.getEntityDef(), wfInstValueStore.getReader(), now)
                             .match(wfInstValueStore)) {
                         return wfDef.getWfStepDef(wfRoutingDef.getNextStepName());
                     }
@@ -1252,7 +1258,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final WfItem wfItem = transitionItem.getWfItem();
         final Date now = getNow();
         if (wfAlertDef.isWithFireAlertOnCondition()) {
-            if (wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getObjectFilter(wfDef.getEntityDef(), now)
+            if (wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
+                    .getObjectFilter(wfDef.getEntityDef(), transitionItem.getWfInstValueStore().getReader(), now)
                     .match(transitionItem.getWfInstValueStore())) {
                 return;
             }

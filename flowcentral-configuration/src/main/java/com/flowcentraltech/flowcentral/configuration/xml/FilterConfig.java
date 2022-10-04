@@ -19,10 +19,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.flowcentraltech.flowcentral.configuration.constants.ChildListActionType;
-import com.flowcentraltech.flowcentral.configuration.xml.adapter.ChildListActionTypeXmlAdapter;
 
 /**
  * Filter configuration
@@ -36,13 +32,9 @@ public class FilterConfig {
 
     private String description;
 
-    private String preferredForm;
-    
-    private String preferredChildListApplet;
-    
-    private ChildListActionType childListActionType;
-    
-    private boolean quickFilter;
+    private String filterGenerator;
+
+    private String filterGeneratorRule;
 
     private List<FilterRestrictionConfig> restrictionList;
 
@@ -64,41 +56,22 @@ public class FilterConfig {
         this.description = description;
     }
 
-    public String getPreferredForm() {
-        return preferredForm;
+    public String getFilterGenerator() {
+        return filterGenerator;
     }
 
     @XmlAttribute
-    public void setPreferredForm(String preferredForm) {
-        this.preferredForm = preferredForm;
+    public void setFilterGenerator(String filterGenerator) {
+        this.filterGenerator = filterGenerator;
     }
 
-    public String getPreferredChildListApplet() {
-        return preferredChildListApplet;
-    }
-
-    @XmlAttribute
-    public  void setPreferredChildListApplet(String preferredChildListApplet) {
-        this.preferredChildListApplet = preferredChildListApplet;
-    }
-
-    public ChildListActionType getChildListActionType() {
-        return childListActionType;
-    }
-
-    @XmlJavaTypeAdapter(ChildListActionTypeXmlAdapter.class)
-    @XmlAttribute
-    public void setChildListActionType(ChildListActionType childListActionType) {
-        this.childListActionType = childListActionType;
-    }
-
-    public boolean isQuickFilter() {
-        return quickFilter;
+    public String getFilterGeneratorRule() {
+        return filterGeneratorRule;
     }
 
     @XmlAttribute
-    public void setQuickFilter(boolean quickFilter) {
-        this.quickFilter = quickFilter;
+    public void setFilterGeneratorRule(String filterGeneratorRule) {
+        this.filterGeneratorRule = filterGeneratorRule;
     }
 
     public List<FilterRestrictionConfig> getRestrictionList() {
@@ -110,9 +83,4 @@ public class FilterConfig {
         this.restrictionList = restrictionList;
     }
 
-    @Override
-    public String toString() {
-        return "FilterConfig [name=" + name + ", description=" + description + ", quickFilter=" + quickFilter
-                + ", restrictionList=" + restrictionList + "]";
-    }
 }

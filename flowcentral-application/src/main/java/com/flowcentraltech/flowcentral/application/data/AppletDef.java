@@ -78,14 +78,14 @@ public class AppletDef extends BaseApplicationEntityDef {
 
     private Map<String, AppletSetValuesDef> setValuesDefMap;
 
-    private Map<String, FilterDef> filterDefMap;
+    private Map<String, AppletFilterDef> filterDefMap;
 
-    private List<FilterDef> preferredFormFilterList;
+    private List<AppletFilterDef> preferredFormFilterList;
 
-    private Map<String, List<FilterDef>> childListAppletFilterDefMap;
+    private Map<String, List<AppletFilterDef>> childListAppletFilterDefMap;
 
     private AppletDef(AppletType type, List<AppletPropDef> propDefList, Map<String, AppletPropDef> propDefMap,
-            Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, FilterDef> filterDefMap, String entity,
+            Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
             String label, String icon, String assignDescField, String routeToApplet, String openPath,
             String originApplicationName, String originName, int displayIndex, boolean openWindow, boolean menuAccess,
             boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
@@ -109,17 +109,17 @@ public class AppletDef extends BaseApplicationEntityDef {
         this.propDefMap = propDefMap;
         this.setValuesDefMap = setValuesDefMap;
         this.filterDefMap = filterDefMap;
-        List<FilterDef> preferredFormFilterList = new ArrayList<FilterDef>();
-        Map<String, List<FilterDef>> childListAppletFilterDefMap = new HashMap<String, List<FilterDef>>();
-        for (FilterDef filterDef : filterDefMap.values()) {
+        List<AppletFilterDef> preferredFormFilterList = new ArrayList<AppletFilterDef>();
+        Map<String, List<AppletFilterDef>> childListAppletFilterDefMap = new HashMap<String, List<AppletFilterDef>>();
+        for (AppletFilterDef filterDef : filterDefMap.values()) {
             if (filterDef.isWithPreferredForm()) {
                 preferredFormFilterList.add(filterDef);
             }
 
             if (filterDef.isWithPreferredChildListApplet()) {
-                List<FilterDef> list = childListAppletFilterDefMap.get(filterDef.getPreferredChildListApplet());
+                List<AppletFilterDef> list = childListAppletFilterDefMap.get(filterDef.getPreferredChildListApplet());
                 if (list == null) {
-                    list = new ArrayList<FilterDef>();
+                    list = new ArrayList<AppletFilterDef>();
                     childListAppletFilterDefMap.put(filterDef.getPreferredChildListApplet(), list);
                 }
                 list.add(filterDef);
@@ -251,7 +251,7 @@ public class AppletDef extends BaseApplicationEntityDef {
         return menuAccess;
     }
 
-    public List<FilterDef> getPreferredFormFilterList() {
+    public List<AppletFilterDef> getPreferredFormFilterList() {
         return preferredFormFilterList;
     }
 
@@ -318,8 +318,8 @@ public class AppletDef extends BaseApplicationEntityDef {
         return filterDefMap.containsKey(name);
     }
 
-    public FilterDef getFilterDef(String name) {
-        FilterDef filterDef = filterDefMap.get(name);
+    public AppletFilterDef getFilterDef(String name) {
+        AppletFilterDef filterDef = filterDefMap.get(name);
         if (filterDef == null) {
             throw new RuntimeException(
                     "Filter with name [" + name + "] is unknown for applet definition [" + getName() + "].");
@@ -328,8 +328,8 @@ public class AppletDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public List<FilterDef> getChildListFilterDefs(String prefferedChildListApplet) {
-        List<FilterDef> result = childListAppletFilterDefMap.get(prefferedChildListApplet);
+    public List<AppletFilterDef> getChildListFilterDefs(String prefferedChildListApplet) {
+        List<AppletFilterDef> result = childListAppletFilterDefMap.get(prefferedChildListApplet);
         return result != null ? result : Collections.emptyList();
     }
 
@@ -352,7 +352,7 @@ public class AppletDef extends BaseApplicationEntityDef {
 
         private Map<String, AppletSetValuesDef> setValuesDefMap;
 
-        private Map<String, FilterDef> filterDefMap;
+        private Map<String, AppletFilterDef> filterDefMap;
 
         private AppletType type;
 
@@ -394,7 +394,7 @@ public class AppletDef extends BaseApplicationEntityDef {
             this.type = type;
             this.propDefMap = new HashMap<String, AppletPropDef>();
             this.setValuesDefMap = new HashMap<String, AppletSetValuesDef>();
-            this.filterDefMap = new HashMap<String, FilterDef>();
+            this.filterDefMap = new HashMap<String, AppletFilterDef>();
             this.entity = entity;
             this.label = label;
             this.icon = icon;
@@ -451,7 +451,7 @@ public class AppletDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addFilterDef(FilterDef filterDef) {
+        public Builder addFilterDef(AppletFilterDef filterDef) {
             if (filterDef != null) {
                 if (filterDefMap.containsKey(filterDef.getName())) {
                     throw new RuntimeException(
@@ -475,18 +475,6 @@ public class AppletDef extends BaseApplicationEntityDef {
                     openPath, originApplicationName, originName, displayIndex, openWindow, menuAccess,
                     descriptiveButtons, nameParts, description, id, version);
         }
-    }
-
-    @Override
-    public String toString() {
-        return "AppletDef [type=" + type + ", entity=" + entity + ", label=" + label + ", privilege=" + privilege
-                + ", openPath=" + openPath + ", originApplicationName=" + originApplicationName + ", viewId=" + viewId
-                + ", icon=" + icon + ", assignDescField=" + assignDescField + ", displayIndex=" + displayIndex
-                + ", openWindow=" + openWindow + ", menuAccess=" + menuAccess + ", descriptiveButtons="
-                + descriptiveButtons + ", propDefList=" + propDefList + ", propDefMap=" + propDefMap + ", filterDefMap="
-                + filterDefMap + ", getLongName()=" + getLongName() + ", getApplicationName()=" + getApplicationName()
-                + ", getName()=" + getName() + ", getDescription()=" + getDescription() + ", getId()=" + getId()
-                + ", getVersion()=" + getVersion() + "]";
     }
 
 }

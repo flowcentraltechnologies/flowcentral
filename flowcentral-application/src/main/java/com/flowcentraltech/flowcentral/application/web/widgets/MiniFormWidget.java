@@ -47,6 +47,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
@@ -198,6 +199,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
         final Date now = appletUtilities.getNow();
 
         final ValueStore formValueStore = ctx.getFormValueStore();
+        final ValueStoreReader formValueStoreReader = formValueStore.getReader();
         for (FormSection formSection : formSections.values()) {
             formSection.revertState();
         }
@@ -233,7 +235,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                 if (formStatePolicyDef.isTriggered(trigger)) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), now)
+                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), formValueStoreReader, now)
                             : null;
                     if (objectFilter == null || objectFilter.match(formValueStore)) {
                         if (formStatePolicyDef.isSetValues()) {
@@ -273,7 +275,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                 if (formStatePolicyDef.isTriggered(trigger)) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), now)
+                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), formValueStoreReader, now)
                             : null;
                     if (objectFilter == null || objectFilter.match(formValueStore)) {
                         for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {

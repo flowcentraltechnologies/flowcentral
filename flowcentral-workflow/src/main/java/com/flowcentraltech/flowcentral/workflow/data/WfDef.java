@@ -28,7 +28,6 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -54,7 +53,7 @@ public class WfDef extends BaseApplicationEntityDef {
 
     private List<AppletDef> appletList;
 
-    private Map<String, FilterDef> filterDefMap;
+    private Map<String, WfFilterDef> filterDefMap;
 
     private Map<String, WfSetValuesDef> setValuesDefMap;
 
@@ -65,7 +64,7 @@ public class WfDef extends BaseApplicationEntityDef {
     private Set<String> onEntrySetValuesFields;
     
     private WfDef(EntityClassDef entityClassDef, WfStepDef startStepDef, WfStepDef errorStepDef,
-            Map<String, WfStepDef> steps, Map<String, FilterDef> filterDefMap,
+            Map<String, WfStepDef> steps, Map<String, WfFilterDef> filterDefMap,
             Map<String, WfSetValuesDef> setValuesDefMap, List<StringToken> descFormat,
             ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
@@ -199,8 +198,8 @@ public class WfDef extends BaseApplicationEntityDef {
         return filterDefMap.containsKey(name);
     }
 
-    public FilterDef getFilterDef(String name) {
-        FilterDef filterDef = filterDefMap.get(name);
+    public WfFilterDef getFilterDef(String name) {
+        WfFilterDef filterDef = filterDefMap.get(name);
         if (filterDef == null) {
             throw new RuntimeException(
                     "Filter with name [" + name + "] is unknown for workflow definition [" + getName() + "].");
@@ -220,7 +219,7 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private Map<String, WfStepDef> steps;
 
-        private Map<String, FilterDef> filterDefMap;
+        private Map<String, WfFilterDef> filterDefMap;
 
         private Map<String, WfSetValuesDef> setValuesDefMap;
 
@@ -247,7 +246,7 @@ public class WfDef extends BaseApplicationEntityDef {
             this.id = id;
             this.version = version;
             this.steps = new HashMap<String, WfStepDef>();
-            this.filterDefMap = new HashMap<String, FilterDef>();
+            this.filterDefMap = new HashMap<String, WfFilterDef>();
             this.setValuesDefMap = new HashMap<String, WfSetValuesDef>();
         }
 
@@ -281,7 +280,7 @@ public class WfDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addFilterDef(FilterDef filterDef) {
+        public Builder addFilterDef(WfFilterDef filterDef) {
             if (filterDefMap.containsKey(filterDef.getName())) {
                 throw new RuntimeException(
                         "Filter with name [" + filterDef.getName() + "] already exists in this definition.");

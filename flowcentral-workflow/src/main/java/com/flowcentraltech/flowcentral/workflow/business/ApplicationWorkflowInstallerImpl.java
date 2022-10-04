@@ -36,11 +36,11 @@ import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WfFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfRoutingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfSetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfStepConfig;
@@ -250,8 +250,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfWizardStep.setName(wfWizardStepConfig.getName());
                 wfWizardStep.setDescription(resolveApplicationMessage(wfWizardStepConfig.getDescription()));
                 wfWizardStep.setLabel(resolveApplicationMessage(wfWizardStepConfig.getLabel()));
-                wfWizardStep.setForm(ApplicationNameUtils.ensureLongNameReference(applicationName,
-                        wfWizardStepConfig.getForm()));
+                wfWizardStep.setForm(
+                        ApplicationNameUtils.ensureLongNameReference(applicationName, wfWizardStepConfig.getForm()));
                 wfWizardStep.setReference(wfWizardStepConfig.getReference());
                 wfWizardStep.setConfigType(ConfigType.MUTABLE_INSTALL);
                 stepList.add(wfWizardStep);
@@ -270,18 +270,22 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             Map<String, WorkflowFilter> map = workflow.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new WorkflowFilterQuery().workflowId(workflow.getId()));
-            for (FilterConfig filterConfig : wfConfig.getFilterList()) {
+            for (WfFilterConfig filterConfig : wfConfig.getFilterList()) {
                 WorkflowFilter oldWorkflowFilter = map.get(filterConfig.getName());
                 if (oldWorkflowFilter == null) {
                     WorkflowFilter workflowFilter = new WorkflowFilter();
                     workflowFilter.setName(filterConfig.getName());
                     workflowFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                    workflowFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                    workflowFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
                     workflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
                     workflowFilter.setConfigType(ConfigType.MUTABLE_INSTALL);
                     filterList.add(workflowFilter);
                 } else {
                     if (ConfigUtils.isSetInstall(oldWorkflowFilter)) {
                         oldWorkflowFilter.setDescription(resolveApplicationMessage(filterConfig.getDescription()));
+                        oldWorkflowFilter.setFilterGenerator(filterConfig.getFilterGenerator());
+                        oldWorkflowFilter.setFilterGeneratorRule(filterConfig.getFilterGeneratorRule());
                         oldWorkflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
                     } else {
                         environment().findChildren(oldWorkflowFilter);
@@ -363,8 +367,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setConfigType(ConfigType.MUTABLE_INSTALL);
                 populateChildList(stepConfig, applicationName, wfStep);
                 List<WfStepRole> participatingRoleList = environment()
-                        .findAll(new WfStepRoleQuery().applicationName(applicationName)
-                                .workflowName(workflow.getName()).wfStepName(stepConfig.getName()));
+                        .findAll(new WfStepRoleQuery().applicationName(applicationName).workflowName(workflow.getName())
+                                .wfStepName(stepConfig.getName()));
                 wfStep.setRoleList(participatingRoleList);
                 stepList.add(wfStep);
             }

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.workflow.entities;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Child;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
@@ -34,6 +35,12 @@ public class WorkflowFilter extends BaseConfigNamedEntity {
 
     @ForeignKey(Workflow.class)
     private Long workflowId;
+    
+    @Column(length = 64, nullable = true)
+    private String filterGenerator;
+
+    @Column(length = 64, nullable = true)
+    private String filterGeneratorRule;
 
     @Child(category = "workflow")
     private AppFilter filter;
@@ -49,6 +56,22 @@ public class WorkflowFilter extends BaseConfigNamedEntity {
 
     public void setWorkflowId(Long workflowId) {
         this.workflowId = workflowId;
+    }
+
+    public String getFilterGenerator() {
+        return filterGenerator;
+    }
+
+    public void setFilterGenerator(String filterGenerator) {
+        this.filterGenerator = filterGenerator;
+    }
+
+    public String getFilterGeneratorRule() {
+        return filterGeneratorRule;
+    }
+
+    public void setFilterGeneratorRule(String filterGeneratorRule) {
+        this.filterGeneratorRule = filterGeneratorRule;
     }
 
     public AppFilter getFilter() {

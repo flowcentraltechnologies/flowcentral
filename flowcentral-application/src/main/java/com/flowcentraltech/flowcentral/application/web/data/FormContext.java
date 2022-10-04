@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
@@ -529,7 +530,8 @@ public class FormContext extends AbstractContext {
 
     public void evaluateTabStates() throws UnifyException {
         revertTabStates();
-        ValueStore formValueStore = getFormValueStore();
+        final ValueStore formValueStore = getFormValueStore();
+        final ValueStoreReader formValueStoreReader = formValueStore.getReader();
         final Date now = appletContext.au().getNow();
         if (formDef.isWithConsolidatedFormState()) {
             ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
@@ -553,7 +555,7 @@ public class FormContext extends AbstractContext {
         for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
             if (formStatePolicyDef.isTriggered("")) {
                 ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                        ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, now)
+                        ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, formValueStoreReader, now)
                         : null;
                 if (objectFilter == null || objectFilter.match(formValueStore)) {
                     for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {

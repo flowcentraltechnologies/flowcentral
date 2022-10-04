@@ -35,8 +35,8 @@
 	eventHandler:$f{editInstEventHandler} binding:$f{editBtnBinding}
 !ui-panel:quickFilterBlock layout:$d{!ui-horizontal cellType:middle} components:$c{quickFilterTitle quickFilter}
 !ui-label:quickFilterTitle caption:$m{entitysearchpanel.quickfilter}
-!ui-select:quickFilter list:$s{appletquickfilterlist} blankOption:$s{}
-	listParams:$l{appAppletId} binding:appAppletFilterId ignoreParentState:true
+!ui-select:quickFilter list:$s{appletquickfilterlist} blankOption:$s{} listKey:$s{name}
+	listParams:$l{appAppletId} binding:appAppletFilterName ignoreParentState:true
     eventHandler:$d{!ui-event event:onchange action:$c{quickFilterAct}}
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle}
@@ -134,11 +134,14 @@
 !fc-entitytable:searchResultTbl binding:entityTable multiSelect:false valueMarker:$f{searchResultMarker}
 
 // Footer action panel
-!ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
+!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns}
+!ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
 !ui-select:tblActionSel styleClass:$e{footersel} list:$s{tableactionlist} listKey:$s{policy} blankOption:$m{select.apply.toselected}
 	listParams:$l{appTableId} binding:appTableActionPolicy
 !ui-button:applyTblActionBtn caption:$m{button.applyaction}
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableAct}}
+!ui-buttongroup:tblActionBtns styleClass:$e{footerbtns} binding:appTableActionButtonInfo
+    eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}
 
 // Actions
 !ui-postcommand:switchToBasicAct command:switchToBasicSearch
@@ -160,4 +163,5 @@
 	components:$c{saveFilterPanel searchFilter}
 !ui-postcommand:cancelSaveFilterAct command:cancelSaveFilter refresh:$c{searchFilterBody}
 !ui-postcommand:applyTableAct command:applyTableAction refresh:$c{searchResultPanel} components:$c{searchResultTbl tblActionSel}
+!ui-postcommand:applyTableBtnAct command:applyTableBtnAction refresh:$c{searchResultPanel} components:$c{searchResultTbl}
 

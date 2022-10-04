@@ -38,24 +38,18 @@ public class RefDef extends BaseApplicationEntityDef {
 
     private String selectHandler;
 
-    private String filterGenerator;
-
-    private String filterGeneratorRule;
-
     private FilterDef filter;
 
     private List<StringToken> listFormat;
 
-    public RefDef(String entity, String searchField, String searchTable, String selectHandler, String filterGenerator,
-            String filterGeneratorRule, FilterDef filter, List<StringToken> listFormat, String longName,
-            String description, Long id, long version) throws UnifyException {
+    public RefDef(String entity, String searchField, String searchTable, String selectHandler, FilterDef filter,
+            List<StringToken> listFormat, String longName, String description, Long id, long version)
+            throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         this.entity = entity;
         this.searchField = searchField;
         this.searchTable = searchTable;
         this.selectHandler = selectHandler;
-        this.filterGenerator = filterGenerator;
-        this.filterGeneratorRule = filterGeneratorRule;
         this.filter = filter;
         this.listFormat = listFormat;
     }
@@ -84,14 +78,6 @@ public class RefDef extends BaseApplicationEntityDef {
         return listFormat != null;
     }
 
-    public String getFilterGenerator() {
-        return filterGenerator;
-    }
-
-    public String getFilterGeneratorRule() {
-        return filterGeneratorRule;
-    }
-
     public FilterDef getFilter() {
         return filter;
     }
@@ -109,11 +95,7 @@ public class RefDef extends BaseApplicationEntityDef {
     }
 
     public boolean isWithFilterGenerator() {
-        return filterGenerator != null;
-    }
-
-    public boolean isWithCondition() {
-        return filter != null || filterGenerator != null;
+        return filter != null && filter.isWithFilterGenerator();
     }
 
 }

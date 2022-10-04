@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
@@ -57,18 +56,16 @@ public class EntityNotInListCommand extends AbstractApplicationListCommand<Assig
 
             EntityClassDef _assignEntityClassDef = application().getEntityClassDef(_assignRefDef.getEntity());
             Query<?> query = Query.of((Class<? extends Entity>) _assignEntityClassDef.getEntityClass());
-            if (_assignRefDef.isWithFilterGenerator()) {
+            if (_assignRefDef.isWithFilter()) {
                 RefDef _baseRefDef = _rootEntityDef.getFieldDef(parts.getBaseFieldName()).getRefDef();
                 EntityClassDef _baseEntityClassDef = application().getEntityClassDef(_baseRefDef.getEntity());
                 Entity baseInst = environment().listLean(
                         (Class<? extends Entity>) _baseEntityClassDef.getEntityClass(), params.getAssignBaseId());
-                Restriction br = ((EntityBasedFilterGenerator) getComponent(_assignRefDef.getFilterGenerator()))
-                        .generate(new BeanValueStore(baseInst).getReader(), _assignRefDef.getFilterGeneratorRule());
-                query.addRestriction(br);
-            } else if (_assignRefDef.isWithFilter()) {
                 Restriction br = _assignRefDef.getFilter().getRestriction(_assignEntityClassDef.getEntityDef(),
-                        application().getNow());
-                query.addRestriction(br);
+                        new BeanValueStore(baseInst).getReader(), application().getNow());
+                if (br != null) {
+                    query.addRestriction(br);
+                }
             }
 
             if (params.isAssignedIdList()) {

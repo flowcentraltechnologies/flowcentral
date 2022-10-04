@@ -80,7 +80,7 @@ public class EntityFilter extends AbstractPanelFormBinding {
 
     public void load(EntityDef entityDef) throws UnifyException {
         FilterDef filterDef = getAppletCtx().au().retrieveFilterDef(category, ownerEntityDef.getLongName(),
-                ownerInstId);
+                ownerInstId, null);
         filter = new Filter(ownerInstId, paramList, entityDef, filterDef, listType,
                 Editable.fromBoolean(isApplyButtonVisible()));
     }

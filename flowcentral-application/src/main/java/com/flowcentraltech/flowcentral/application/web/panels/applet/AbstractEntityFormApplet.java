@@ -26,13 +26,13 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormRelatedListDef;
@@ -343,16 +343,17 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public ShowPopupInfo newChildShowPopup(int childTabIndex) throws UnifyException {
         FormTabDef _currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
-        List<FilterDef> filterList = currFormAppletDef != null
+        List<AppletFilterDef> filterList = currFormAppletDef != null
                 ? currFormAppletDef.getChildListFilterDefs(_currFormTabDef.getApplet())
                 : null;
         if (!DataUtils.isBlank(filterList)) {
-            EntityDef entityDef = form.getFormDef().getEntityDef();
-            ValueStore formValueStore = form.getCtx().getFormValueStore();
+            final EntityDef entityDef = form.getFormDef().getEntityDef();
+            final ValueStore formValueStore = form.getCtx().getFormValueStore();
             final Date now = au.getNow();
-            for (FilterDef filterDef : filterList) {
+            for (AppletFilterDef filterDef : filterList) {
                 if (filterDef.isShowPopupChildListAction()) {
-                    ObjectFilter filter = filterDef.getObjectFilter(entityDef, now);
+                    ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef,
+                            formValueStore.getReader(), now);
                     if (filter.match(formValueStore)) {
                         AppletDef _childAppletDef = getAppletDef(_currFormTabDef.getApplet());
                         ShowPopupInfo.Type type = null;
@@ -468,8 +469,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final String subTitle = ((Entity) form.getFormBean()).getDescription();
             saveCurrentForm(currFormTabDef);
             entityCrudPage = constructNewEntityCRUDPage(_formAppletDef, tableName, entryTablePolicy, createFormName,
-                    maintainFormName, currFormTabDef.getFilterGroupDef(), baseField, baseId, subTitle, currFormTabDef.getReference(),
-                    fixedRows);
+                    maintainFormName, currFormTabDef.getFilterGroupDef(), baseField, baseId, subTitle,
+                    currFormTabDef.getReference(), fixedRows);
             entityCrudPage.loadCrudList();
             viewMode = ViewMode.ENTITY_CRUD_PAGE;
         }
@@ -881,7 +882,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
         breadCrumbs.setLastCrumbSubTitle(subTitle);
         return new AssignmentPage(getCtx(), formEventHandlers.getAssnSwitchOnChangeHandlers(), this, assignPageDef,
-                entityClassDef, id, sectorIcon, breadCrumbs, entryTable, assnEditPolicy, filterGroupDef, fixedAssignment);
+                entityClassDef, id, sectorIcon, breadCrumbs, entryTable, assnEditPolicy, filterGroupDef,
+                fixedAssignment);
     }
 
     protected EntryTablePage constructNewEntryPage(String entity, String entryTable, String entryTablePolicy,

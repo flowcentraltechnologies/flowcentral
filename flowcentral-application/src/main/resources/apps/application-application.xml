@@ -707,6 +707,12 @@
 				type="string" nullable="true" />
 			<field name="quickFilter"
 				label="$m{application.appappletfilter.quickfilter}" type="boolean" />
+			<field name="filterGenerator"
+				label="$m{application.appappletfilter.filtergenerator}" type="string"
+				nullable="true" />
+			<field name="filterGeneratorRule"
+				label="$m{application.appappletfilter.filtergeneratorrule}" type="string"
+				nullable="true" />
 			<field name="ownershipTypeDesc"
 				label="$m{application.appappletfilter.ownershiptypedesc}"
 				type="list_only" key="ownershipType" property="description" />
@@ -1152,6 +1158,12 @@
 			<field name="legendLabel"
 				label="$m{application.apptablefilter.legendlabel}" type="string"
 				nullable="true" />
+			<field name="filterGenerator"
+				label="$m{application.apptablefilter.filtergenerator}" type="string"
+				nullable="true" />
+			<field name="filterGeneratorRule"
+				label="$m{application.apptablefilter.filtergeneratorrule}" type="string"
+				nullable="true" />
 			<field name="filter"
 				label="$m{application.apptablefilter.filter}" type="child"
 				category="table" references="appFilterRef" />
@@ -1234,6 +1246,12 @@
 			<field name="appFormId"
 				label="$m{application.appformfilter.appformid}" type="ref"
 				references="appFormRef" inputWidget="application.entitylist" />
+			<field name="filterGenerator"
+				label="$m{application.appformfilter.filtergenerator}" type="string"
+				nullable="true" />
+			<field name="filterGeneratorRule"
+				label="$m{application.appformfilter.filtergeneratorrule}" type="string"
+				nullable="true" />
 			<field name="filter"
 				label="$m{application.appformfilter.filter}" type="child"
 				category="form" references="appFilterRef" />

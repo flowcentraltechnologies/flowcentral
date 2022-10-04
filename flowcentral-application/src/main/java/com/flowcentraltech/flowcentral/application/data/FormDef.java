@@ -82,7 +82,7 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private Map<String, FormStatePolicyDef> onCreateFormStatePolicyDefMap;
 
-    private Map<String, FilterDef> filterDefMap;
+    private Map<String, FormFilterDef> filterDefMap;
 
     private Map<String, FormAnnotationDef> formAnnotationDefMap;
 
@@ -104,7 +104,7 @@ public class FormDef extends BaseApplicationEntityDef {
 
     private FormDef(FormType type, EntityDef entityDef, String consolidatedFormValidation,
             String consolidatedFormReview, String consolidatedFormState, String listingGenerator,
-            List<StringToken> titleFormat, Map<String, FilterDef> filterDefMap,
+            List<StringToken> titleFormat, Map<String, FormFilterDef> filterDefMap,
             Map<String, FormAnnotationDef> formAnnotationDefMap, List<FormActionDef> formActionDefList,
             List<FormTabDef> formTabDefList, List<FormRelatedListDef> formRelatedListDefList,
             List<FormStatePolicyDef> formStatePolicyDefList,
@@ -301,8 +301,8 @@ public class FormDef extends BaseApplicationEntityDef {
         return filterDefMap.containsKey(name);
     }
 
-    public FilterDef getFilterDef(String name) {
-        FilterDef filterDef = filterDefMap.get(name);
+    public FormFilterDef getFilterDef(String name) {
+        FormFilterDef filterDef = filterDefMap.get(name);
         if (filterDef == null) {
             throw new RuntimeException(
                     "Filter with name [" + name + "] is unknown for workflow definition [" + getName() + "].");
@@ -476,7 +476,7 @@ public class FormDef extends BaseApplicationEntityDef {
 
         private String listingGenerator;
 
-        private Map<String, FilterDef> filterDefMap;
+        private Map<String, FormFilterDef> filterDefMap;
 
         private Map<String, FormAnnotationDef> formAnnotationDefMap;
 
@@ -520,7 +520,7 @@ public class FormDef extends BaseApplicationEntityDef {
             this.consolidatedFormValidation = consolidatedFormValidation;
             this.consolidatedFormReview = consolidatedFormReview;
             this.consolidatedFormState = consolidatedFormState;
-            this.filterDefMap = new HashMap<String, FilterDef>();
+            this.filterDefMap = new HashMap<String, FormFilterDef>();
             this.listingGenerator = listingGenerator;
             this.longName = longName;
             this.description = description;
@@ -808,7 +808,7 @@ public class FormDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addFilterDef(FilterDef filterDef) {
+        public Builder addFilterDef(FormFilterDef filterDef) {
             if (filterDefMap.containsKey(filterDef.getName())) {
                 throw new RuntimeException(
                         "Filter with name [" + filterDef.getName() + "] already exists in this definition.");

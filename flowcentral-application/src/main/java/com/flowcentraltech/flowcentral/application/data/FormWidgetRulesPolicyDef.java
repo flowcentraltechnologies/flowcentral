@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Map;
 
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.filter.ObjectFilter;
@@ -62,13 +63,15 @@ public class FormWidgetRulesPolicyDef implements Listable {
     }
 
     public boolean match(FormDef formDef, Object inst, Date now) throws UnifyException {
-        ObjectFilter objectFilter = onCondition != null ? onCondition.getObjectFilter(formDef.getEntityDef(), now)
+        ObjectFilter objectFilter = onCondition != null
+                ? onCondition.getObjectFilter(formDef.getEntityDef(), new BeanValueStore(inst).getReader(), now)
                 : null;
         return objectFilter == null || objectFilter.match(inst);
     }
 
     public boolean match(FormDef formDef, ValueStore instValueStore, Date now) throws UnifyException {
-        ObjectFilter objectFilter = onCondition != null ? onCondition.getObjectFilter(formDef.getEntityDef(), now)
+        ObjectFilter objectFilter = onCondition != null
+                ? onCondition.getObjectFilter(formDef.getEntityDef(), instValueStore.getReader(), now)
                 : null;
         return objectFilter == null || objectFilter.match(instValueStore);
     }

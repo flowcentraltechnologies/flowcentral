@@ -199,7 +199,7 @@ public class EntryTablePage {
         final BeanTable _beanTable = getEntryBeanTable();
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                 .addEquals(baseField, baseId);
-        Restriction br = filterGroupDef != null ? filterGroupDef.getRestriction(FilterType.TAB, ctx.au().getNow())
+        Restriction br = filterGroupDef != null ? filterGroupDef.getRestriction(FilterType.TAB, null, ctx.au().getNow())
                 : null;
         if (br != null) {
             query.addRestriction(br);

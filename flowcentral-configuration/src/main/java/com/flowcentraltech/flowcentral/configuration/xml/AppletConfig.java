@@ -54,7 +54,7 @@ public class AppletConfig extends BaseNameConfig {
 
     private List<AppletPropConfig> propList;
 
-    private List<FilterConfig> filterList;
+    private List<AppletFilterConfig> filterList;
 
     private List<AppletSetValuesConfig> setValuesList;
     
@@ -158,12 +158,12 @@ public class AppletConfig extends BaseNameConfig {
         this.propList = propList;
     }
 
-    public List<FilterConfig> getFilterList() {
+    public List<AppletFilterConfig> getFilterList() {
         return filterList;
     }
 
     @XmlElement(name = "filter", required = true)
-    public void setFilterList(List<FilterConfig> filterList) {
+    public void setFilterList(List<AppletFilterConfig> filterList) {
         this.filterList = filterList;
     }
 

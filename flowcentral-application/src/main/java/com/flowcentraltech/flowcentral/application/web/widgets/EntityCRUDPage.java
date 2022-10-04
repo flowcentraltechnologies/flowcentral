@@ -238,7 +238,7 @@ public class EntityCRUDPage {
 	public void loadCrudList() throws UnifyException {
 		EntityTable entityTable = getCrud().getTable();
 		Restriction restriction = new Equals(baseField, baseId);
-		Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, ctx.au().getNow());
+		Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, null, ctx.au().getNow());
 		if (baseRestriction != null) {
 			restriction = new And().add(restriction).add(baseRestriction);
 		}
