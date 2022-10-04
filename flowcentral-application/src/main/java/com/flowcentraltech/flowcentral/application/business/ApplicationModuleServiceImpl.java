@@ -832,6 +832,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 appTableColumn.isSummary());
                     }
 
+                    for (AppTableAction appTableAction: appTable.getActionList()) {
+                        tdb.addTableAction(appTableAction.getPolicy(), appTableAction.getLabel());
+                    }
+                    
                     tdb.sortHistory(appTable.getSortHistory());
                     tdb.itemsPerPage(appTable.getItemsPerPage());
                     tdb.headerToUpperCase(appTable.isHeaderToUpperCase());

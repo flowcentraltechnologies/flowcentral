@@ -31,6 +31,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Select;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.widget.data.ButtonInfo;
 import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
 
 /**
@@ -50,6 +51,8 @@ public class TableDef extends BaseApplicationEntityDef {
     private List<DefaultReportColumn> defaultReportColumnList;
 
     private LabelSuggestionDef labelSuggestionDef;
+
+    private List<ButtonInfo> actionBtnInfos;
 
     private Select select;
 
@@ -86,19 +89,20 @@ public class TableDef extends BaseApplicationEntityDef {
     private List<TableFilterDef> rowColorFilterList;
 
     private ColorLegendInfo colorLegendInfo;
-    
+
     private Set<String> summaryFields;
 
     private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, List<TableColumnDef> visibleColumnDefList,
-            Map<String, TableFilterDef> filterDefMap, String label, int sortHistory, int itemsPerPage, boolean serialNo,
-            boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign, boolean basicSearch,
-            boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming, boolean fixedRows,
-            boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description, Long id,
-            long version) {
+            List<ButtonInfo> actionBtnInfos, Map<String, TableFilterDef> filterDefMap, String label, int sortHistory,
+            int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
+            boolean basicSearch, boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming,
+            boolean fixedRows, boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description,
+            Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
         this.columnDefList = columnDefList;
         this.visibleColumnDefList = visibleColumnDefList;
+        this.actionBtnInfos = actionBtnInfos;
         this.label = label;
         this.sortHistory = sortHistory;
         this.itemsPerPage = itemsPerPage;
@@ -123,7 +127,7 @@ public class TableDef extends BaseApplicationEntityDef {
 
         if (this.limitSelectToColumns) {
             this.select = new Select().add("id").add("versionNo");
-            for (TableColumnDef tableColumnDef: columnDefList) {
+            for (TableColumnDef tableColumnDef : columnDefList) {
                 this.select.add(tableColumnDef.getFieldName());
             }
         }
@@ -151,6 +155,10 @@ public class TableDef extends BaseApplicationEntityDef {
         return rowColorFilterList;
     }
 
+    public List<ButtonInfo> getActionBtnInfos() {
+        return actionBtnInfos;
+    }
+
     public Set<String> getSummaryFields() {
         return summaryFields;
     }
@@ -169,19 +177,20 @@ public class TableDef extends BaseApplicationEntityDef {
 
     public ColorLegendInfo getColorLegendInfo() {
         if (colorLegendInfo == null && isRowColorFilters()) {
-            synchronized(this) {
+            synchronized (this) {
                 if (colorLegendInfo == null) {
                     ColorLegendInfo.Builder clib = ColorLegendInfo.newBuilder();
-                    for (TableFilterDef tableFilterDef: rowColorFilterList) {
-                        String label = tableFilterDef.isWithLegendLabel() ? tableFilterDef.getLegendLabel() : tableFilterDef.getListDescription();
+                    for (TableFilterDef tableFilterDef : rowColorFilterList) {
+                        String label = tableFilterDef.isWithLegendLabel() ? tableFilterDef.getLegendLabel()
+                                : tableFilterDef.getListDescription();
                         clib.addItem(tableFilterDef.getRowColor(), label);
                     }
-                    
+
                     colorLegendInfo = clib.build();
                 }
             }
         }
-        
+
         return colorLegendInfo;
     }
 
@@ -344,6 +353,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private List<TableColumnDef> visibleColumnDefList;
 
+        private List<ButtonInfo> actionBtnInfos;
+
         private String label;
 
         private int totalWidth;
@@ -395,6 +406,7 @@ public class TableDef extends BaseApplicationEntityDef {
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
+            this.actionBtnInfos = new ArrayList<ButtonInfo>();
         }
 
         public Builder(EntityDef entityDef) {
@@ -402,6 +414,7 @@ public class TableDef extends BaseApplicationEntityDef {
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
+            this.actionBtnInfos = new ArrayList<ButtonInfo>();
         }
 
         public Builder label(String label) {
@@ -481,6 +494,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder limitSelectToColumns(boolean limitSelectToColumns) {
             this.limitSelectToColumns = limitSelectToColumns;
+            return this;
+        }
+
+        public Builder addTableAction(String actionPolicy, String actionLabel) {
+            this.actionBtnInfos.add(new ButtonInfo(actionPolicy, actionLabel));
             return this;
         }
 
@@ -591,10 +609,10 @@ public class TableDef extends BaseApplicationEntityDef {
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             return new TableDef(entityDef, DataUtils.unmodifiableList(columnDefList),
-                    DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableMap(filterDefMap), label,
-                    sortHistory, itemsPerPage, serialNo, sortable, headerToUpperCase, headerCenterAlign, basicSearch,
-                    totalSummary, headerless, multiSelect, nonConforming, fixedRows, limitSelectToColumns, nameParts,
-                    description, id, version);
+                    DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
+                    DataUtils.unmodifiableMap(filterDefMap), label, sortHistory, itemsPerPage, serialNo, sortable,
+                    headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect,
+                    nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
         }
     }
 

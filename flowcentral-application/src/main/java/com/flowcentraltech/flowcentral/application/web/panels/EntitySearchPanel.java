@@ -16,13 +16,16 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTableWidget;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -33,6 +36,7 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
+import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 
@@ -50,13 +54,20 @@ public class EntitySearchPanel extends AbstractPanel {
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
+    private SystemModuleService systemModuleService;
+
+    @Configurable
     private TaskLauncher taskLauncher;
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
     }
 
-    public void setTaskLauncher(TaskLauncher taskLauncher) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
+        this.systemModuleService = systemModuleService;
+    }
+
+    public final void setTaskLauncher(TaskLauncher taskLauncher) {
         this.taskLauncher = taskLauncher;
     }
 
@@ -79,8 +90,9 @@ public class EntitySearchPanel extends AbstractPanel {
         }
 
         String roleCode = getUserToken().getRoleCode();
-        EntityTable entityTable = entitySearch.getEntityTable();
-        EntityDef entityDef = entityTable.getTableDef().getEntityDef();
+        final EntityTable entityTable = entitySearch.getEntityTable();
+        final TableDef tableDef = entityTable.getTableDef();
+        final EntityDef entityDef = tableDef.getEntityDef();
         setVisible("newBtn", entitySearch.isNewButtonVisible()
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
         setVisible("editBtn", entitySearch.isEditButtonVisible()
@@ -115,6 +127,22 @@ public class EntitySearchPanel extends AbstractPanel {
             }
         }
 
+        if (entitySearch.isShowActionFooter()) {
+            boolean buttonsForFooterAction = systemModuleService.getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
+            if (buttonsForFooterAction) {
+                ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
+                bgib.addItems(tableDef.getActionBtnInfos());
+                entitySearch.setAppTableActionButtonInfo(bgib.build());
+                setVisible("tblActionBtns", true);
+                setVisible("selFooterActionPanel", false);
+            } else {
+                entitySearch.setAppTableActionButtonInfo(null);
+                setVisible("tblActionBtns", false);
+                setVisible("selFooterActionPanel", true);
+            }
+        }
+
         setDisabled("fastBackBtn", entityTable.isAtFirstPage());
         setDisabled("backBtn", entityTable.isAtFirstPage());
         setDisabled("forwardBtn", entityTable.isAtLastPage());
@@ -134,7 +162,7 @@ public class EntitySearchPanel extends AbstractPanel {
     public void switchToAdvancedSearch() throws UnifyException {
         getEntitySearch().setBasicSearchMode(false);
     }
-    
+
     @Action
     public void fastBack() throws UnifyException {
         getEntitySearch().getEntityTable().firstPage();
@@ -227,7 +255,8 @@ public class EntitySearchPanel extends AbstractPanel {
         EntitySearch entitySearch = getEntitySearch();
         entitySearch.setAppAppletFilterName(null);
         entitySearch.clearSearchEntries();
-        entitySearch.applySearchEntriesToSearch();;
+        entitySearch.applySearchEntriesToSearch();
+        ;
         getRequestContextUtil().setContentScrollReset();
     }
 
@@ -246,12 +275,22 @@ public class EntitySearchPanel extends AbstractPanel {
     @Action
     public void applyTableAction() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        if (!StringUtils.isBlank(entitySearch.getAppTableActionPolicy())) {
+        applyTableBtnAction(entitySearch.getAppTableActionPolicy());
+    }
+
+    @Action
+    public void applyTableBtnAction() throws UnifyException {
+        String appTableActionPolicy = getRequestTarget(String.class);
+        applyTableBtnAction(appTableActionPolicy);
+    }
+
+    private void applyTableBtnAction(String appTableActionPolicy) throws UnifyException {
+        EntitySearch entitySearch = getEntitySearch();
+        if (!StringUtils.isBlank(appTableActionPolicy)) {
             EntityTableWidget tableWidget = getWidgetByShortName(EntityTableWidget.class, "searchResultTbl");
             EntityListActionContext eCtx = new EntityListActionContext(tableWidget.getSelectedItems(),
-                    entitySearch.getAppTableActionPolicy());
-            EntityListActionResult entityActionResult = entitySearch.environment()
-                    .performEntityAction(eCtx);
+                    appTableActionPolicy);
+            EntityListActionResult entityActionResult = entitySearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
             entitySearch.applyFilterToSearch();
             getRequestContextUtil().setContentScrollReset();
@@ -281,7 +320,7 @@ public class EntitySearchPanel extends AbstractPanel {
     private void hideSaveFilter() throws UnifyException {
         setVisible("saveFilterPanel", false);
     }
-    
+
     private void hideFilterEditor() throws UnifyException {
         getEntitySearch().hideFilterEditor();
         setVisible("searchFilterBody", false);

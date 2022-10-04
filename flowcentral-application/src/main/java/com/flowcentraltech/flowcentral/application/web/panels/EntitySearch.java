@@ -35,6 +35,7 @@ import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.FilterConditionListType;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 
 /**
  * Entity search object.
@@ -92,6 +93,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private String appTableActionPolicy;
 
+    private ButtonGroupInfo appTableActionButtonInfo;
+    
     private OwnershipType saveFilterScope;
 
     private String appAppletFilterName;
@@ -216,6 +219,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void setAppTableActionPolicy(String appTableActionPolicy) {
         this.appTableActionPolicy = appTableActionPolicy;
+    }
+
+    public ButtonGroupInfo getAppTableActionButtonInfo() {
+        return appTableActionButtonInfo;
+    }
+
+    public void setAppTableActionButtonInfo(ButtonGroupInfo appTableActionButtonInfo) {
+        this.appTableActionButtonInfo = appTableActionButtonInfo;
     }
 
     public String getAppAppletFilterName() {

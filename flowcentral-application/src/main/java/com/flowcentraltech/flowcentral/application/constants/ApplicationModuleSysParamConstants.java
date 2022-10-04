@@ -63,4 +63,6 @@ public interface ApplicationModuleSysParamConstants {
 
     String SAVE_HEADER_FORM_ON_TAB_ACTION = "APP-0014";
 
+    String SHOW_BUTTONS_FOR_FOOTER_ACTION = "APP-0015";
+
 }
