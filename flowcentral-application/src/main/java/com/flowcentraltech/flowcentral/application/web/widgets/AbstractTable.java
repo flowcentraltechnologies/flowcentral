@@ -393,9 +393,15 @@ public abstract class AbstractTable<T, U> {
     public EntryActionType fireOnRowChange(RowChangeInfo rowChangeInfo) throws UnifyException {
         lastRowChangeInfo = rowChangeInfo;
         final int rowIndex = rowChangeInfo.getRowIndex();
-        rowChangeInfo.setSelected(tableSelect.isRowSelected(rowIndex));
-        EntryActionType actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
-        tableSelect.setRowSelected(rowIndex, rowChangeInfo.isSelected());
+        EntryActionType actionType = null;
+        if (tableSelect != null) {
+            rowChangeInfo.setSelected(tableSelect.isRowSelected(rowIndex));
+            actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
+            tableSelect.setRowSelected(rowIndex, rowChangeInfo.isSelected());
+        } else {
+            actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
+        }
+        
         return actionType;
     }
 
