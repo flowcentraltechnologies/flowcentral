@@ -1073,29 +1073,31 @@ public final class InputWidgetUtils {
             throws UnifyException {
         String result = null;
         try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
-            for (FilterRestrictionConfig filterRestrictionConfig : restrictionConfigList) {
-                bw.write(filterRestrictionConfig.getType().code());
-                bw.write(']');
-                bw.write(String.valueOf(depth));
-                bw.write(']');
-                if (filterRestrictionConfig.getField() != null) {
-                    bw.write(filterRestrictionConfig.getField());
+            if (!DataUtils.isBlank(restrictionConfigList)) {
+                for (FilterRestrictionConfig filterRestrictionConfig : restrictionConfigList) {
+                    bw.write(filterRestrictionConfig.getType().code());
                     bw.write(']');
-                    if (filterRestrictionConfig.getParamA() != null) {
-                        bw.write(filterRestrictionConfig.getParamA());
+                    bw.write(String.valueOf(depth));
+                    bw.write(']');
+                    if (filterRestrictionConfig.getField() != null) {
+                        bw.write(filterRestrictionConfig.getField());
                         bw.write(']');
-                        if (filterRestrictionConfig.getParamB() != null) {
-                            bw.write(filterRestrictionConfig.getParamB());
+                        if (filterRestrictionConfig.getParamA() != null) {
+                            bw.write(filterRestrictionConfig.getParamA());
                             bw.write(']');
+                            if (filterRestrictionConfig.getParamB() != null) {
+                                bw.write(filterRestrictionConfig.getParamB());
+                                bw.write(']');
+                            }
                         }
                     }
-                }
-                bw.newLine();
+                    bw.newLine();
 
-                if (!DataUtils.isBlank(filterRestrictionConfig.getRestrictionList())) {
-                    String _result = InputWidgetUtils
-                            .writeFilterConfigRestrictions(filterRestrictionConfig.getRestrictionList(), depth + 1);
-                    bw.write(_result);
+                    if (!DataUtils.isBlank(filterRestrictionConfig.getRestrictionList())) {
+                        String _result = InputWidgetUtils
+                                .writeFilterConfigRestrictions(filterRestrictionConfig.getRestrictionList(), depth + 1);
+                        bw.write(_result);
+                    }
                 }
             }
 
