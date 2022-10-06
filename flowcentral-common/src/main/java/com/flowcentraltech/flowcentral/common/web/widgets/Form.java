@@ -202,7 +202,7 @@ public class Form extends AbstractContainer {
                 for (int i = 0; i < columns; i++) {
                     for (Widget widget : formSection.getWidgetList(i)) {
                         Object val = widget.getValue();
-                        if (widget instanceof Control) {
+                        if (widget.isVisible() && widget instanceof Control) {
                             TriState required = ((Control) widget).getRequired();
                             if (TriState.TRUE.equals(required)
                                     && com.flowcentraltech.flowcentral.common.util.ValidationUtils.isBlank(val)) {
