@@ -72,7 +72,10 @@ public class Form extends AbstractContainer {
             int j = 0;
             for (String longName : section.getReferences()) {
                 Widget widget = getWidgetByLongName(longName);
-                widget.setExtraStyle("width:100%;");
+                if (widget.isSupportStretch()) {
+                    widget.setExtraStyle("width:100%;");
+                }
+                
                 formWidgetLists[j].add(widget);
 
                 j++;
