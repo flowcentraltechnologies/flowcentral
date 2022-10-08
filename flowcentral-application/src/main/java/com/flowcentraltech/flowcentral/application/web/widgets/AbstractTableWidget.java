@@ -414,7 +414,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                                 widget.setScale(entityFieldDef.getScale());
                             }
                         }
-                        
+
                         if (useCellEditor) {
                             if (inputs == null) {
                                 inputs = new HashSet<Widget>();
@@ -547,7 +547,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             List<Integer> _selected = new ArrayList<Integer>(selected);
             Collections.sort(_selected);
             List<U> list = new ArrayList<U>();
-            for (Integer rowIndex: _selected) {
+            for (Integer rowIndex : _selected) {
                 list.add(getItem(rowIndex));
             }
 
@@ -573,7 +573,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (valueList == null) {
             summaryPanelList = null;
         } else {
-            String summary = getUplAttribute(String.class, "summary");
+            String summary = oldTable != null && oldTable.getTableDef().isWithSummaryPanelName()
+                    ? oldTable.getTableDef().getSummaryPanelName()
+                    : getUplAttribute(String.class, "summary");
             if (!StringUtils.isBlank(summary)) {
                 if (summaryPanelList == null) {
                     summaryPanelList = new ArrayList<SummaryPanel>();

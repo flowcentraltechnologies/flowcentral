@@ -58,6 +58,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private String label;
 
+    private String summaryPanelName;
+
     private int sortHistory;
 
     private int itemsPerPage;
@@ -93,7 +95,7 @@ public class TableDef extends BaseApplicationEntityDef {
     private Set<String> summaryFields;
 
     private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, List<TableColumnDef> visibleColumnDefList,
-            List<ButtonInfo> actionBtnInfos, Map<String, TableFilterDef> filterDefMap, String label, int sortHistory,
+            List<ButtonInfo> actionBtnInfos, Map<String, TableFilterDef> filterDefMap, String label, String summaryPanelName, int sortHistory,
             int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
             boolean basicSearch, boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming,
             boolean fixedRows, boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description,
@@ -104,6 +106,7 @@ public class TableDef extends BaseApplicationEntityDef {
         this.visibleColumnDefList = visibleColumnDefList;
         this.actionBtnInfos = actionBtnInfos;
         this.label = label;
+        this.summaryPanelName = summaryPanelName;
         this.sortHistory = sortHistory;
         this.itemsPerPage = itemsPerPage;
         this.serialNo = serialNo;
@@ -251,6 +254,14 @@ public class TableDef extends BaseApplicationEntityDef {
         return label;
     }
 
+    public String getSummaryPanelName() {
+        return summaryPanelName;
+    }
+
+    public boolean isWithSummaryPanelName() {
+        return !StringUtils.isBlank(summaryPanelName);
+    }
+    
     public int getSortHistory() {
         return sortHistory;
     }
@@ -357,6 +368,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private String label;
 
+        private String summaryPanelName;
+
         private int totalWidth;
 
         private int sortHistory;
@@ -419,6 +432,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder label(String label) {
             this.label = label;
+            return this;
+        }
+
+        public Builder summaryPanelName(String summaryPanelName) {
+            this.summaryPanelName = summaryPanelName;
             return this;
         }
 
@@ -610,7 +628,7 @@ public class TableDef extends BaseApplicationEntityDef {
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
             return new TableDef(entityDef, DataUtils.unmodifiableList(columnDefList),
                     DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
-                    DataUtils.unmodifiableMap(filterDefMap), label, sortHistory, itemsPerPage, serialNo, sortable,
+                    DataUtils.unmodifiableMap(filterDefMap), label, summaryPanelName, sortHistory, itemsPerPage, serialNo, sortable,
                     headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect,
                     nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
         }
