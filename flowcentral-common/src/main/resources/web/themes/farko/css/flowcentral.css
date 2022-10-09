@@ -564,6 +564,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytable .total {font-weight:bold;}
 .fc-entitytable .total .blank {border-right: none;border-left: none;}
 
+.fc-loadingtable {}
+.fc-loadingtable .total {font-weight:bold;}
+.fc-loadingtable .total .blank {border-right: none;border-left: none;}
+
 .fc-entitytreetable {}
 .fc-entitytreetable .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-entitytreetable .table .odd {background-color:#f1f4f5;}

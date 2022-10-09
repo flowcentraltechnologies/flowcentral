@@ -581,7 +581,7 @@ public abstract class AbstractTable<T, U> {
         this.sections = DataUtils.unmodifiableList(sections);
     }
 
-    protected class Section {
+    public static class Section {
         
         private final int startItemIndex;
         
