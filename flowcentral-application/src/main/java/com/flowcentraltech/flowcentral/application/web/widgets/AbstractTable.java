@@ -119,6 +119,8 @@ public abstract class AbstractTable<T, U> {
 
     private RowChangeInfo lastRowChangeInfo;
 
+    private List<Section> sections;
+    
     private int detailsIndex;
 
     public AbstractTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, Order defaultOrder,
@@ -132,6 +134,7 @@ public abstract class AbstractTable<T, U> {
         this.selected = new HashSet<Integer>();
         this.highlightedRow = -1;
         this.detailsIndex = -1;
+        this.sections = Collections.emptyList();
     }
 
     public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
@@ -471,6 +474,10 @@ public abstract class AbstractTable<T, U> {
         return _lastRowChangeInfo;
     }
 
+    public List<Section> getSections() {
+        return sections;
+    }
+
     public void reset() throws UnifyException {
         int _pageIndex = pageIndex;
         calcPageDimensions();
@@ -570,6 +577,48 @@ public abstract class AbstractTable<T, U> {
         return entryPolicy != null;
     }
 
+    protected void setSections(List<Section> sections) {
+        this.sections = DataUtils.unmodifiableList(sections);
+    }
+
+    protected class Section {
+        
+        private final int startItemIndex;
+        
+        private final int endItemIndex;
+        
+        private final String label;
+
+        public Section(int startItemIndex, int endItemIndex, String label) {
+            this.startItemIndex = startItemIndex;
+            this.endItemIndex = endItemIndex;
+            this.label = label;
+        }
+
+        public Section(String label) {
+            this.startItemIndex = -1;
+            this.endItemIndex = -1;
+            this.label = label;
+        }
+
+        public int getStartItemIndex() {
+            return startItemIndex;
+        }
+
+        public int getEndItemIndex() {
+            return endItemIndex;
+        }
+
+        public String getLabel() {
+            return label;
+        }
+        
+        public boolean isIndexWithin(int index) {
+            return index >= startItemIndex && index <= endItemIndex;
+        }
+    }
+    
+    
     protected abstract void validate(EvaluationMode evaluationMode, T sourceObject, FormValidationErrors errors)
             throws UnifyException;
 

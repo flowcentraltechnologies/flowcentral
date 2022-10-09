@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for table loading providers..
@@ -26,7 +27,8 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractLoadingTableProvider extends AbstractUnifyComponent implements LoadingTableProvider {
+public abstract class AbstractLoadingTableProvider<T extends Entity> extends AbstractUnifyComponent
+        implements LoadingTableProvider<T> {
 
     @Configurable
     private EnvironmentService environmentService;

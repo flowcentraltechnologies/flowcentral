@@ -28,7 +28,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface LoadingTableProvider extends UnifyComponent {
+public interface LoadingTableProvider<T extends Entity> extends UnifyComponent {
 
     /**
      * Gets the loading label
@@ -40,6 +40,17 @@ public interface LoadingTableProvider extends UnifyComponent {
     String getLoadingLabel() throws UnifyException;
 
     /**
+     * Count items for table loading.
+     * 
+     * @param restriction
+     *                    optional restriction
+     * @return loading item count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int countLoadingItems(Restriction restriction) throws UnifyException;
+
+    /**
      * Gets items for table loading.
      * 
      * @param restriction
@@ -48,7 +59,7 @@ public interface LoadingTableProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Entity> getLoadingItems(Restriction restriction) throws UnifyException;
+    List<T> getLoadingItems(Restriction restriction) throws UnifyException;
 
     /**
      * Commit change to entity
@@ -58,5 +69,5 @@ public interface LoadingTableProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void commitChange(Entity item) throws UnifyException;
+    void commitChange(T item) throws UnifyException;
 }

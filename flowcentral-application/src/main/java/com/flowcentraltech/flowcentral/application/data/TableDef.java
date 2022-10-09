@@ -166,6 +166,14 @@ public class TableDef extends BaseApplicationEntityDef {
         return !loadingDefList.isEmpty();
     }
 
+    public TableLoadingDef getTableLoadingDef(int index) {
+        return loadingDefList.get(index);
+    }
+    
+    public int getLoadingDefCount() {
+        return loadingDefList.size();
+    }
+
     public List<TableFilterDef> getRowColorFilterList() {
         return rowColorFilterList;
     }

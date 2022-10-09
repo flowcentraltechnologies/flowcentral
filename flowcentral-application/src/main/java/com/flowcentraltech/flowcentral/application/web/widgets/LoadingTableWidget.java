@@ -15,9 +15,18 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Loading table widget.
@@ -28,6 +37,26 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 @Component("fc-loadingtable")
 @UplAttributes({
     @UplAttribute(name = "multiSelect", type = boolean.class, defaultVal = "true") })
-public class LoadingTableWidget extends EntityTableWidget {
+public class LoadingTableWidget extends AbstractTableWidget<LoadingTable, Entity, Restriction> {
+
+    public LoadingTableWidget() {
+        super(LoadingTable.class, Entity.class);
+    }
+
+    public Long[] getSelectedItemIds() throws UnifyException {
+        Set<Integer> selected = getSelected();
+        if (!selected.isEmpty()) {
+            List<Integer> _selected = new ArrayList<Integer>(selected);
+            Collections.sort(_selected);
+            Long[] ids = new Long[_selected.size()];
+            for (int i = 0; i < ids.length; i++) {
+                ids[i] = (Long) getItem(_selected.get(i)).getId();
+            }
+
+            return ids;
+        }
+
+        return DataUtils.ZEROLEN_LONG_ARRAY;
+    }
 
 }
