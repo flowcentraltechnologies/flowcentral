@@ -30,6 +30,8 @@ public class AppTableConfig extends BaseNameConfig {
 
     private String entity;
 
+    private String summaryPanelName;
+
     private int sortHistory;
 
     private int itemsPerPage;
@@ -79,6 +81,15 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getSummaryPanelName() {
+        return summaryPanelName;
+    }
+
+    @XmlAttribute(required = true, name = "summaryPanel")
+    public void setSummaryPanelName(String summaryPanelName) {
+        this.summaryPanelName = summaryPanelName;
     }
 
     public int getSortHistory() {

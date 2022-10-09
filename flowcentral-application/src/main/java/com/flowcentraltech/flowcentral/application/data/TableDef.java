@@ -44,6 +44,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private EntityDef entityDef;
 
+    private List<TableLoadingDef> loadingDefList;
+
     private List<TableColumnDef> columnDefList;
 
     private List<TableColumnDef> visibleColumnDefList;
@@ -94,14 +96,16 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private Set<String> summaryFields;
 
-    private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, List<TableColumnDef> visibleColumnDefList,
-            List<ButtonInfo> actionBtnInfos, Map<String, TableFilterDef> filterDefMap, String label, String summaryPanelName, int sortHistory,
+    private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
+            List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
+            Map<String, TableFilterDef> filterDefMap, String label, String summaryPanelName, int sortHistory,
             int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
             boolean basicSearch, boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming,
             boolean fixedRows, boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description,
             Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
+        this.loadingDefList = loadingDefList;
         this.columnDefList = columnDefList;
         this.visibleColumnDefList = visibleColumnDefList;
         this.actionBtnInfos = actionBtnInfos;
@@ -152,6 +156,14 @@ public class TableDef extends BaseApplicationEntityDef {
 
     public EntityDef getEntityDef() {
         return entityDef;
+    }
+
+    public List<TableLoadingDef> getLoadingDefList() {
+        return loadingDefList;
+    }
+
+    public boolean isWithLoading() {
+        return !loadingDefList.isEmpty();
     }
 
     public List<TableFilterDef> getRowColorFilterList() {
@@ -261,7 +273,7 @@ public class TableDef extends BaseApplicationEntityDef {
     public boolean isWithSummaryPanelName() {
         return !StringUtils.isBlank(summaryPanelName);
     }
-    
+
     public int getSortHistory() {
         return sortHistory;
     }
@@ -360,6 +372,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private Map<String, TableFilterDef> filterDefMap;
 
+        private List<TableLoadingDef> loadingDefList;
+
         private List<TableColumnDef> columnDefList;
 
         private List<TableColumnDef> visibleColumnDefList;
@@ -417,6 +431,7 @@ public class TableDef extends BaseApplicationEntityDef {
             this.description = description;
             this.version = version;
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
+            this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
             this.actionBtnInfos = new ArrayList<ButtonInfo>();
@@ -425,6 +440,7 @@ public class TableDef extends BaseApplicationEntityDef {
         public Builder(EntityDef entityDef) {
             this.entityDef = entityDef;
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
+            this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
             this.actionBtnInfos = new ArrayList<ButtonInfo>();
@@ -555,6 +571,11 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addTableLoadingDef(TableLoadingDef tableLoadingDef) {
+            loadingDefList.add(tableLoadingDef);
+            return this;
+        }
+
         public Builder addFilterDef(TableFilterDef filterDef) {
             if (filterDef != null) {
                 if (filterDefMap.containsKey(filterDef.getName())) {
@@ -626,11 +647,11 @@ public class TableDef extends BaseApplicationEntityDef {
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new TableDef(entityDef, DataUtils.unmodifiableList(columnDefList),
+            return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
                     DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
-                    DataUtils.unmodifiableMap(filterDefMap), label, summaryPanelName, sortHistory, itemsPerPage, serialNo, sortable,
-                    headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect,
-                    nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
+                    DataUtils.unmodifiableMap(filterDefMap), label, summaryPanelName, sortHistory, itemsPerPage,
+                    serialNo, sortable, headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless,
+                    multiSelect, nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
         }
     }
 

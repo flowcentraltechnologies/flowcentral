@@ -69,6 +69,7 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
+import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
@@ -838,7 +839,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     for (AppTableAction appTableAction: appTable.getActionList()) {
                         tdb.addTableAction(appTableAction.getPolicy(), appTableAction.getLabel());
                     }
+
+                    for (AppTableLoading appTableLoading : appTable.getLoadingList()) {
+                        tdb.addTableLoadingDef(new TableLoadingDef(appTableLoading.getName(),
+                                appTableLoading.getDescription(), appTableLoading.getLabel(),
+                                appTableLoading.getProvider(), appTableLoading.getOrderIndex()));
+                    }
                     
+                    tdb.summaryPanelName(appTable.getSummaryPanelName());
                     tdb.sortHistory(appTable.getSortHistory());
                     tdb.itemsPerPage(appTable.getItemsPerPage());
                     tdb.headerToUpperCase(appTable.isHeaderToUpperCase());
@@ -3047,6 +3055,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setName(appTableConfig.getName());
                     appTable.setDescription(description);
                     appTable.setLabel(label);
+                    appTable.setSummaryPanelName(appTableConfig.getSummaryPanelName());
                     appTable.setSortHistory(appTableConfig.getSortHistory());
                     appTable.setItemsPerPage(appTableConfig.getItemsPerPage());
                     appTable.setSerialNo(appTableConfig.isSerialNo());
@@ -3070,6 +3079,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 appTableConfig.getEntity()));
                         oldAppTable.setDescription(description);
                         oldAppTable.setLabel(label);
+                        oldAppTable.setSummaryPanelName(appTableConfig.getSummaryPanelName());
                         oldAppTable.setSortHistory(appTableConfig.getSortHistory());
                         oldAppTable.setItemsPerPage(appTableConfig.getItemsPerPage());
                         oldAppTable.setSerialNo(appTableConfig.isSerialNo());

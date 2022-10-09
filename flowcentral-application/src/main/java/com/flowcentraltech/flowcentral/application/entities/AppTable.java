@@ -36,6 +36,9 @@ public class AppTable extends BaseApplicationEntity {
     @Column(length = 128)
     private String entity;
 
+    @Column(name = "SUMMARY_PANEL_NM", length = 64, nullable = true)
+    private String summaryPanelName;
+
     @Column
     private int sortHistory;
 
@@ -101,6 +104,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getSummaryPanelName() {
+        return summaryPanelName;
+    }
+
+    public void setSummaryPanelName(String summaryPanelName) {
+        this.summaryPanelName = summaryPanelName;
     }
 
     public int getSortHistory() {
