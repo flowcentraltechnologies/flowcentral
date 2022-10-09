@@ -56,6 +56,8 @@ public class AppTableConfig extends BaseNameConfig {
 
     private boolean limitSelectToColumns;
 
+    private List<TableLoadingConfig> loadingList;
+
     private List<TableActionConfig> actionList;
 
     private List<TableColumnConfig> columnList;
@@ -194,6 +196,15 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute
     public void setLimitSelectToColumns(boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
+    }
+
+    public List<TableLoadingConfig> getLoadingList() {
+        return loadingList;
+    }
+
+    @XmlElement(name = "loading", required = true)
+    public void setLoadingList(List<TableLoadingConfig> loadingList) {
+        this.loadingList = loadingList;
     }
 
     public List<TableActionConfig> getActionList() {

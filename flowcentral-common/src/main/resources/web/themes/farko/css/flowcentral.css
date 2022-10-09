@@ -598,6 +598,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
 .fc-entitytreetable .classic .mselh {width: 32px;background-color: #e3e7ea;}
 
+.fc-loadingtable {}
+
 .fc-dispcounter {display:inline-block; background-color:#a6aeb9; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
 .fc-dispcountergreen {display:inline-block; background-color:#90d883; color:#404040; font-weight:bold; font-size:7pt;

@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.tcdng.unify.core.UnifyException;
@@ -33,7 +34,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(name = "tableloading-environmentdelegate", description = "Table Loading Environment Delegate")
+@Component(name = ApplicationModuleNameConstants.TABLE_LOADING_ENVIRONMENT_DELEGATE, description = "Table Loading Environment Delegate")
 public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate {
 
     @Override

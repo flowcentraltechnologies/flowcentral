@@ -146,6 +146,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableActionQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
+import com.flowcentraltech.flowcentral.application.entities.AppTableLoadingQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRulesQuery;
@@ -238,6 +240,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.SuggestionTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
@@ -3856,6 +3859,39 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         appTable.setActionList(actionList);
 
+        List<AppTableLoading> loadingList = null;
+        if (!DataUtils.isBlank(appTableConfig.getLoadingList())) {
+            loadingList = new ArrayList<AppTableLoading>();
+            Map<String, AppTableLoading> map = appTable.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppTableLoadingQuery().appTableId(appTable.getId()));
+            for (TableLoadingConfig tableLoadingConfig : appTableConfig.getLoadingList()) {
+                AppTableLoading oldAppTableLoading = map.get(tableLoadingConfig.getName());
+                if (oldAppTableLoading == null) {
+                    AppTableLoading appTableLoading = new AppTableLoading();
+                    appTableLoading.setName(tableLoadingConfig.getName());
+                    appTableLoading.setDescription(resolveApplicationMessage(tableLoadingConfig.getDescription()));
+                    appTableLoading.setLabel(resolveApplicationMessage(tableLoadingConfig.getLabel()));
+                    appTableLoading.setProvider(tableLoadingConfig.getProvider());
+                    appTableLoading.setOrderIndex(tableLoadingConfig.getOrderIndex());
+                    appTableLoading.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    loadingList.add(appTableLoading);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldAppTableLoading)) {
+                        oldAppTableLoading.setDescription(resolveApplicationMessage(tableLoadingConfig.getDescription()));
+                        oldAppTableLoading.setLabel(resolveApplicationMessage(tableLoadingConfig.getLabel()));
+                        oldAppTableLoading.setProvider(tableLoadingConfig.getProvider());
+                        oldAppTableLoading.setOrderIndex(tableLoadingConfig.getOrderIndex());
+                    } else {
+                        environment().findChildren(oldAppTableLoading);
+                    }
+
+                    loadingList.add(oldAppTableLoading);
+                }
+            }
+        }
+
+        appTable.setLoadingList(loadingList);
     }
 
     private void populateChildList(final AppForm appForm, AppFormConfig appFormConfig, final Long applicationId,

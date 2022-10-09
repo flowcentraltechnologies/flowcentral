@@ -70,7 +70,8 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
-        @UplAttribute(name = "summary", type = String.class), @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "summary", type = String.class),
+        @UplAttribute(name = "details", type = String.class),
         @UplAttribute(name = "fixedRows", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })

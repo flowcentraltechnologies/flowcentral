@@ -76,6 +76,9 @@ public class AppTable extends BaseApplicationEntity {
     private boolean limitSelectToColumns;
 
     @ChildList
+    private List<AppTableLoading> loadingList;
+    
+    @ChildList
     private List<AppTableAction> actionList;
 
     @ChildList
@@ -202,6 +205,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setLimitSelectToColumns(boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
+    }
+
+    public List<AppTableLoading> getLoadingList() {
+        return loadingList;
+    }
+
+    public void setLoadingList(List<AppTableLoading> loadingList) {
+        this.loadingList = loadingList;
     }
 
     public List<AppTableAction> getActionList() {

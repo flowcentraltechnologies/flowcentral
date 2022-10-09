@@ -290,6 +290,11 @@
 			inputType="string"
 			editor="!ui-select list:studiotablefiltergeneratorlist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="tableloadingproviderlist"
+			description="$m{studio.widgettype.tableloadingproviderlist}" dataType="string"
+			inputType="string"
+			editor="!ui-select list:studiotableloadingproviderlist listParams:$l{appTableId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="formfiltergeneratorlist"
 			description="$m{studio.widgettype.formfiltergeneratorlist}" dataType="string"
 			inputType="string"
@@ -710,6 +715,23 @@
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="appTableActionForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageAppTableLoading"
+			description="$m{studio.apptableloading.manage}"
+			label="$m{studio.apptableloading.manage.label}"
+			type="manage_entitylist" entity="application.appTableLoading"
+			menuAccess="false">
+			<property name="searchTable" value="appTableLoadingTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appTableLoadingForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appTableLoadingForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -1205,6 +1227,17 @@
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="policy" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="orderIndex" renderWidget="application.integer"
+				widthRatio="1" />
+		</table>
+		<table name="appTableLoadingTable"
+			description="$m{studio.apptableloading.table}"
+			label="$m{studio.apptableloading.table.label}"
+			entity="application.appTableLoading">
+			<column field="label" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="provider" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="orderIndex" renderWidget="application.integer"
 				widthRatio="1" />
@@ -3006,6 +3039,9 @@
 			<tab name="actions" label="$m{studio.apptable.form.actions}"
 				contentType="child_list" applet="manageAppTableAction"
 				reference="actionList" />
+			<tab name="loadings" label="$m{studio.apptable.form.loadings}"
+				contentType="child_list" applet="manageAppTableLoading"
+				reference="loadingList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
@@ -3089,6 +3125,29 @@
 						required="true" />
 					<field name="policy"
 						inputWidget="studio.tableentitylistactionpolicylist" column="1"
+						required="true" />
+					<field name="orderIndex" inputWidget="application.integer"
+						column="1" />
+				</section>
+			</tab>
+		</form>
+		<form name="appTableLoadingForm"
+			description="$m{studio.apptableloading.form}"
+			entity="application.appTableLoading">
+			<tab name="basicDetails"
+				label="$m{studio.apptableloading.form.basicdetails}"
+				contentType="miniform">
+				<section name="tableColumnDetails" columns="type_2">
+					<field name="appTableId"
+						inputWidget="application.entitysearch" column="0" required="true" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" saveAs="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" saveAs="true" />
+					<field name="label" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="policy"
+						inputWidget="studio.tableloadingproviderlist" column="1"
 						required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						column="1" />
