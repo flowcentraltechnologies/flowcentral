@@ -28,7 +28,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface LoadingTableProvider<T extends Entity> extends UnifyComponent {
+public interface LoadingTableProvider extends UnifyComponent {
 
     /**
      * Gets the loading label
@@ -59,7 +59,7 @@ public interface LoadingTableProvider<T extends Entity> extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<T> getLoadingItems(Restriction restriction) throws UnifyException;
+    List<? extends Entity> getLoadingItems(Restriction restriction) throws UnifyException;
 
     /**
      * Commit change to entity
@@ -69,5 +69,5 @@ public interface LoadingTableProvider<T extends Entity> extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void commitChange(T item) throws UnifyException;
+    void commitChange(Entity item) throws UnifyException;
 }

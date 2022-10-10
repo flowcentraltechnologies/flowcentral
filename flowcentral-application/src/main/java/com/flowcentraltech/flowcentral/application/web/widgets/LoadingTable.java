@@ -94,7 +94,7 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
         int count = 0;
         for (int i = 0; i < len; i++) {
             TableLoadingDef tableLoadingDef = tableDef.getTableLoadingDef(i);
-            LoadingTableProvider<?> loadingTableProvider = au.getComponent(LoadingTableProvider.class,
+            LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     tableLoadingDef.getProvider());
             count += loadingTableProvider.countLoadingItems(restriction);
         }
@@ -112,7 +112,7 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
         int startItemIndex = 0;
         for (int i = 0; i < len; i++) {
             TableLoadingDef tableLoadingDef = tableDef.getTableLoadingDef(i);
-            LoadingTableProvider<?> loadingTableProvider = au.getComponent(LoadingTableProvider.class,
+            LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     tableLoadingDef.getProvider());
             String label = loadingTableProvider.getLoadingLabel();
             List<? extends Entity> _items = loadingTableProvider.getLoadingItems(restriction);
