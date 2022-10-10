@@ -282,7 +282,7 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public String getDataSourceName(String entityLongName) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return "application-datasource";
     }
 
     @Override

@@ -286,28 +286,28 @@
 			editor="!ui-select list:studioappletallformlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletfiltergeneratorlist"
-			description="$m{studio.widgettype.appletfiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.appletfiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletfiltergeneratorlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tablefiltergeneratorlist"
-			description="$m{studio.widgettype.tablefiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.tablefiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studiotablefiltergeneratorlist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tableloadingproviderlist"
-			description="$m{studio.widgettype.tableloadingproviderlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.tableloadingproviderlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studiotableloadingproviderlist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="formfiltergeneratorlist"
-			description="$m{studio.widgettype.formfiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.formfiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studioformfiltergeneratorlist listParams:$l{appFormId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="workflowfiltergeneratorlist"
-			description="$m{studio.widgettype.workflowfiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.workflowfiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studioworkflowfiltergeneratorlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletchildlistappletlist"
@@ -2105,8 +2105,8 @@
 						column="1" visible="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
-					<field name="allowNegative" inputWidget="application.checkbox"
-						column="1" visible="false" />
+					<field name="allowNegative"
+						inputWidget="application.checkbox" column="1" visible="false" />
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="auditable" inputWidget="application.checkbox"
@@ -2169,7 +2169,8 @@
 					<restriction type="equals" field="type" paramA="BSE" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,allowNegative,nullable"
+					<setState type="field"
+						target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,allowNegative,nullable"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
@@ -3002,17 +3003,17 @@
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
+					<field name="label" inputWidget="application.text" column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
-						column="1" required="true" switchOnChange="true"/>
-					<field name="summaryPanelName" inputWidget="studio.summarypanellist"
-						column="1" required="true" />
+						column="1" required="true" switchOnChange="true" />
+					<field name="summaryPanelName"
+						inputWidget="studio.summarypanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"
 						column="1" />
 				</section>
 				<section name="tableFlags" columns="type_1_2">
-					<field name="label" inputWidget="application.text" column="0" />
 					<field name="headerless" inputWidget="application.checkbox"
 						column="1" />
 					<field name="headerToUpperCase"
@@ -3405,8 +3406,8 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="filterGenerator"
-						inputWidget="studio.formfiltergeneratorlist"
-						switchOnChange="true" column="1" />
+						inputWidget="studio.formfiltergeneratorlist" switchOnChange="true"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
