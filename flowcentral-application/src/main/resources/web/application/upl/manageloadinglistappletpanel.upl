@@ -13,7 +13,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-managloadinglistappletpanel components:$c{loadingSearchPanel}
+!fc-manageloadinglistappletpanel components:$c{loadingSearchPanel}
 
 // Search list
 !fc-loadingsearchpanel:loadingSearchPanel binding:loadingSearch

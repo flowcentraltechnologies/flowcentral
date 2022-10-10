@@ -822,6 +822,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Manage entity list applet panel */
 .fc-manageentitylistappletpanel {}
 
+/* Manage loading list applet panel */
+.fc-manageloadinglistappletpanel {}
+
 /* Headless tabs for applet panel */
 .fc-headlesstabsformappletpanel {}
 

@@ -22,6 +22,7 @@
 	ignoreParentState:true
 
 !ui-panel:searchEntriesHeader style:$s{display:inline-block;} components:$c{baseFilterTranslation}
+!ui-label:baseFilterTranslation styleClass:$s{filbasetxt} binding:baseFilterTranslation
 
 !ui-panel:searchEntriesBodyPanel layout:$d{!ui-horizontal style:$s{width:100%;}  widths:$l{100% none}}
 	components:$c{searchEntriesBody}
