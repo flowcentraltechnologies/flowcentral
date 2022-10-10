@@ -19,13 +19,12 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
-import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
-import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Order;
@@ -38,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class LoadingSearch extends AbstractPanelFormBinding {
+public class LoadingSearch {
 
     public static final int SHOW_ACTIONFOOTER = 0x00000002;
     
@@ -47,7 +46,11 @@ public class LoadingSearch extends AbstractPanelFormBinding {
     public static final int ENABLE_ALL = SHOW_ACTIONFOOTER | SHOW_SEARCH;
 
     private final Long appAppletId;
-
+    
+    final private AppletContext appletContext;
+    
+    final private SectorIcon sectorIcon;
+    
     private FilterDef baseFilterDef;
 
     private SearchEntries searchEntries;
@@ -66,22 +69,21 @@ public class LoadingSearch extends AbstractPanelFormBinding {
 
     private int mode;
 
-    public LoadingSearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
-            String tabName, TableDef tableDef, Long appAppletId, int mode,
-            boolean ignoreConditionalDisabled) throws UnifyException {
-        super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
+    public LoadingSearch(AppletContext appletContext, SectorIcon sectorIcon, TableDef tableDef, Long appAppletId, int mode) throws UnifyException {
+        this.appletContext = appletContext;
+        this.sectorIcon = sectorIcon;
         this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), 4);
-        this.loadingTable = new LoadingTable(ctx.au(), tableDef, null);
+        this.loadingTable = new LoadingTable(appletContext.au(), tableDef, null);
         this.appAppletId = appAppletId;
         this.mode = mode;
     }
 
     public AppletUtilities au() {
-        return getAppletCtx().au();
+        return appletContext.au();
     }
 
     public EnvironmentService environment() {
-        return getAppletCtx().environment();
+        return appletContext.environment();
     }
 
     public SearchEntries getSearchEntries() {
@@ -134,6 +136,10 @@ public class LoadingSearch extends AbstractPanelFormBinding {
         return baseFilterTranslation;
     }
 
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
+    }
+
     public void setOrder(Order order) {
         loadingTable.setOrder(order);
     }
@@ -149,7 +155,7 @@ public class LoadingSearch extends AbstractPanelFormBinding {
             And and = new And();
             if (baseFilterDef != null) {
                 and.add(baseFilterDef.getRestriction(getEntityDef(),
-                        null, getAppletCtx().au().getNow()));
+                        null, appletContext.au().getNow()));
             }
 
             if (restriction != null) {
@@ -157,8 +163,8 @@ public class LoadingSearch extends AbstractPanelFormBinding {
             }
 
             baseRestriction = and;
-            baseFilterTranslation = getAppletCtx().au().resolveSessionMessage("$m{loadingsearch.basefilter.translation}",
-                    getAppletCtx().au().translate(baseRestriction, getEntityDef()));
+            baseFilterTranslation = appletContext.au().resolveSessionMessage("$m{loadingsearch.basefilter.translation}",
+                    appletContext.au().translate(baseRestriction, getEntityDef()));
             return;
         }
 
@@ -179,9 +185,9 @@ public class LoadingSearch extends AbstractPanelFormBinding {
         searchEntries.normalize();
         if (loadingTable != null) {
             TableDef _eTableDef = loadingTable.getTableDef();
-            TableDef _nTableDef = getAppletCtx().au().getTableDef(_eTableDef.getLongName());
+            TableDef _nTableDef = appletContext.au().getTableDef(_eTableDef.getLongName());
             if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
-                loadingTable = new LoadingTable(getAppletCtx().au(), _nTableDef, null);
+                loadingTable = new LoadingTable(appletContext.au(), _nTableDef, null);
                 applySearchEntriesToSearch();
             }
         }

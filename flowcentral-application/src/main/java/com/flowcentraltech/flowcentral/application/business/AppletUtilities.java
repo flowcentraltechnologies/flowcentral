@@ -52,6 +52,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
+import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
@@ -960,6 +961,18 @@ public interface AppletUtilities extends UnifyComponent {
     EntitySearch constructEntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode,
             boolean isIgnoreParentCondition) throws UnifyException;
+
+    /**
+     * Constructs loading search.
+     * 
+     * @param ctx applet context
+     * @param loadingSearchMode
+     *                             the loading search mode
+     * @return the loading search
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException;
 
     /**
      * Constructs an entity select object.

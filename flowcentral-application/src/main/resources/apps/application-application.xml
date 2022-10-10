@@ -483,6 +483,14 @@
 		<reference name="appEntityRef"
 			description="$m{application.appentity.reference}" entity="appEntity"
 			searchField="description" />
+		<reference name="appEntityLoadingRef"
+			description="$m{application.appentity.loading.reference}" entity="appEntity"
+			searchField="description">
+			<filter>
+				<restriction type="equals" field="delegate"
+					paramA="tableloading-environmentdelegate" />
+			</filter>
+		</reference>
 		<reference name="appEntityFieldRef"
 			description="$m{application.appentityfield.reference}"
 			entity="appEntityField" searchField="description" />

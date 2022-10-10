@@ -64,7 +64,7 @@
 		<widgetType name="entitysearch"
 			description="$m{studio.widgettype.entitysearch}" dataType="string"
 			inputType="string"
-			editor="!fc-entitysearch ref:$s{application.appEntityRef} listKey:$s{longName}"
+			editor="!fc-entitysearch ref:$s{application.appEntityLoadingRef} listKey:$s{longName}"
 			renderer="!ui-label" />
 		<widgetType name="entityfieldwidgetlist"
 			description="$m{studio.widgettype.entityfieldwidgetlist}"
@@ -1697,7 +1697,7 @@
 				<errorCondition>
 					<restriction type="and">
 						<restriction type="amongst" field="type"
-							paramA="MEL|MEA|MLS|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
 						<restriction type="is_null" field="entity" />
 					</restriction>
 				</errorCondition>
@@ -1777,7 +1777,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="amongst" field="type"
-						paramA="MEL|MEA|MLS|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="entity" visible="true" />
@@ -4327,6 +4327,27 @@
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="mllAppAppletPropList"
+			description="$m{studio.appappletprop.manageloading.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.manageloading.loadingproperties}">
+				<property name="page.alternateCaption"
+					description="$m{studio.appappletprop.manageloading.pagealtcaption}"
+					inputWidget="application.text" />
+				<property name="page.alternateSubCaption"
+					description="$m{studio.appappletprop.manageloading.pagealtsubcaption}"
+					inputWidget="application.text" />
+				<property name="baseRestriction"
+					description="$m{studio.appappletprop.manageloading.baserestriction}"
+					inputWidget="studio.propertyappletfilterlist" />
+				<property name="loadingTable"
+					description="$m{studio.appappletprop.manageloading.loadingtable}"
+					inputWidget="studio.propertyapplettablelist" required="true" />
+				<property name="loadingTable.actionFooter"
+					description="$m{studio.appappletprop.manageloading.loadingtable.actionfooter}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+		</propertyList>
 		<propertyList name="melAppAppletPropList"
 			description="$m{studio.appappletprop.manageentity.propertylist}">
 			<propertySet
@@ -4711,6 +4732,7 @@
 			ignoreCase="true">
 			<choice name="cen" val="cenAppAppletPropList" />
 			<choice name="cns" val="cnsAppAppletPropList" />
+			<choice name="mll" val="mllAppAppletPropList" />
 			<choice name="mel" val="melAppAppletPropList" />
 			<choice name="mls" val="mlsAppAppletPropList" />
 			<choice name="mea" val="meaAppAppletPropList" />
