@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Restriction;
 
 /**
  * Convenient abstract base class for table loading providers..
@@ -38,6 +39,11 @@ public abstract class AbstractLoadingTableProvider extends AbstractUnifyComponen
 
     protected EnvironmentService environment() {
         return environmentService;
+    }
+
+    @Override
+    public int countLoadingItems(Restriction restriction) throws UnifyException {
+        return 0;
     }
 
     @Override
