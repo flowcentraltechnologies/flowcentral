@@ -59,6 +59,8 @@ public class LoadingSearch {
 
     private LoadingTable loadingTable;
 
+    private String entitySubTitle;
+
     private String baseFilterTranslation;
 
     private String entityFilterTranslation;
@@ -100,8 +102,20 @@ public class LoadingSearch {
         return loadingTable;
     }
 
+    public String getEntityTitle() {
+        return loadingTable.getTableDef().getLabel();
+    }
+
     public EntityDef getEntityDef() {
         return loadingTable.getTableDef().getEntityDef();
+    }
+
+    public String getEntitySubTitle() {
+        return entitySubTitle;
+    }
+
+    public void setEntitySubTitle(String entitySubTitle) {
+        this.entitySubTitle = entitySubTitle;
     }
 
     public Long getAppAppletId() {

@@ -41,6 +41,8 @@ public class ManageLoadingListApplet extends AbstractApplet {
             loadingSearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()),
                     au.getSpecialParamProvider());
         }
+        
+        loadingSearch.applySearchEntriesToSearch();
     }
 
     public LoadingSearch getLoadingSearch() {

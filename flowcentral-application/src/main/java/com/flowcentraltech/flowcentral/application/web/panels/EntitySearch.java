@@ -35,7 +35,6 @@ import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.FilterConditionListType;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 
 /**
@@ -403,7 +402,6 @@ public class EntitySearch extends AbstractPanelFormBinding {
         FilterDef quickFilterDef = appAppletId != null && appAppletFilterName != null
                 ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
                 : null;
-        System.out.println("@prime: localApplyQuickFilter()  quickFilterDef = " + StringUtils.toXmlString(quickFilterDef));
         entityFilter = quickFilterDef != null ? new Filter(null, null, entityFilter.getEntityDef(),
                 quickFilterDef.explodeGenerator(getEntityDef(), au().getNow()), FilterConditionListType.IMMEDIATE_FIELD)
                 : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),

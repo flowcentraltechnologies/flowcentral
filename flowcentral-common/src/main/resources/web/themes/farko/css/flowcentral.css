@@ -211,8 +211,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-redbutton {background-color:#c83234; font-weight:bold; color: #FFF; border: 1px solid #b82224;}
 .fc-redbutton:hover:enabled {background-color:#b82224;color: #FFF;}
 
-.fc-graybutton {background-color:#c8c8c8; font-weight:bold; color: #FFF; border: 1px solid #b8b8b8;}
-.fc-graybutton:hover:enabled {background-color:#b8b8b8;color: #FFF;}
+.fc-graybutton {background-color:#989898; font-weight:bold; color: #FFF; border: 1px solid #888888;}
+.fc-graybutton:hover:enabled {background-color:#888888;color: #FFF;}
 
 .fc-inline-entry-button {font-size:7pt;font-weight:bold; min-height: 18px !important;margin-top: 2px; color: #404040;}
 

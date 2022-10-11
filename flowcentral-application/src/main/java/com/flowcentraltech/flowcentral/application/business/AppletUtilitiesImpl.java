@@ -1214,6 +1214,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 loadingSearchMode);
+        
+        loadingSearch.setEntitySubTitle(_rootAppletDef.getDescription());
         return loadingSearch;
     }
 

@@ -14,33 +14,31 @@
 // the License.
 
 !fc-loadingsearchpanel layout:$d{!ui-vertical}
-	components:$c{searchEntriesPanel colorLegend searchResultPanel footerActionPanel}
+	components:$c{headerBar searchEntriesPanel searchResultPanel footerActionPanel}
+
+// Header Bar
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
+	components:$c{headerLeftPanel}
+	
+!ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$c{sectorIcon titleBlock}
+!fc-sectoricon:sectorIcon binding:sectorIcon
+!ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
+!ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
+!ui-label:subTitle styleClass:$s{hdsubtitle} binding:entityTitle
 
 // Search entries panel
-!ui-panel:searchEntriesPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{searchEntriesHeader searchEntriesBodyPanel}
-	ignoreParentState:true
-
-!ui-panel:searchEntriesHeader style:$s{display:inline-block;} components:$c{baseFilterTranslation}
-!ui-label:baseFilterTranslation styleClass:$s{filbasetxt} binding:baseFilterTranslation
-
-!ui-panel:searchEntriesBodyPanel layout:$d{!ui-horizontal style:$s{width:100%;}  widths:$l{100% none}}
-	components:$c{searchEntriesBody}
-
-!ui-panel:searchEntriesBody layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{85% none}}
-	components:$c{searchEntries searchEntriesAction}
+!ui-panel:searchEntriesPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{85% none} cellPadding:false}
+	components:$c{searchEntries searchEntriesAction} ignoreParentState:true
 !fc-search:searchEntries binding:searchEntries
     eventHandler:$d{!ui-event event:onchange action:$c{searchAct}}
     eventHandler:$d{!ui-event event:onenter action:$c{searchAct}}
 !ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
-	components:$c{clearBtn}
-//!ui-button:searchBtn caption:$m{button.search}
-//    eventHandler:$d{!ui-event event:onclick action:$c{searchAct}}
-!ui-button:clearBtn caption:$m{button.clear}
+	components:$c{refreshBtn clearBtn}
+!ui-button:refreshBtn caption:$m{button.refresh} styleClass:$e{fc-bluebutton}
+	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
+!ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-graybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
-
-// Color legend
-!ui-colorlegend:colorLegend style:$s{width:100%;} columns:6 binding:loadingTable.colorLegendInfo
 
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
@@ -57,6 +55,7 @@
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}
 
 // Actions
+!ui-postcommand:refreshAct command:refresh components:$c{searchEntries}
 !ui-postcommand:searchAct command:search components:$c{searchEntries}
 !ui-postcommand:clearAct command:clear
 !ui-postcommand:applyTableAct command:applyTableAction refresh:$c{searchResultPanel} components:$c{searchResultTbl tblActionSel}

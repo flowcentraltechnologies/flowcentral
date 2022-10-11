@@ -80,7 +80,6 @@ public class LoadingSearchPanel extends AbstractPanel {
 
         final LoadingTable loadingTable = loadingSearch.getLoadingTable();
         final TableDef tableDef = loadingTable.getTableDef();
-        setVisible("colorLegend", loadingTable.isWithColorLegendInfo());
         setVisible("footerActionPanel", loadingSearch.isShowActionFooter());
         if (loadingSearch.isShowActionFooter()) {
             boolean buttonsForFooterAction = systemModuleService.getSysParameterValue(boolean.class,
