@@ -70,7 +70,8 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
-        @UplAttribute(name = "summary", type = String.class), @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "summary", type = String.class),
+        @UplAttribute(name = "details", type = String.class),
         @UplAttribute(name = "fixedRows", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
@@ -276,9 +277,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public boolean isDetails() throws UnifyException {
-        return !StringUtils.isBlank(getUplAttribute(String.class, "details"));
+        return !StringUtils.isBlank(getDetails());
     }
-
+    
     public boolean isActionColumn() throws UnifyException {
         return actionCtrl != null && !isFixedRows();
     }
@@ -357,7 +358,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public DetailsPanel getDetailsPanel() throws UnifyException {
         if (detailsPanel == null) {
-            String details = getUplAttribute(String.class, "details");
+            String details = getDetails();
             if (!StringUtils.isBlank(details)) {
                 detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details, getId() + "_dtl");
             }
@@ -414,7 +415,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                                 widget.setScale(entityFieldDef.getScale());
                             }
                         }
-                        
+
                         if (useCellEditor) {
                             if (inputs == null) {
                                 inputs = new HashSet<Widget>();
@@ -547,7 +548,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             List<Integer> _selected = new ArrayList<Integer>(selected);
             Collections.sort(_selected);
             List<U> list = new ArrayList<U>();
-            for (Integer rowIndex: _selected) {
+            for (Integer rowIndex : _selected) {
                 list.add(getItem(rowIndex));
             }
 
@@ -643,6 +644,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     protected Class<U> getItemClass() {
         return itemClass;
+    }
+
+    private String getDetails() throws UnifyException {
+        return oldTable != null && oldTable.getTableDef().isWithDetailsPanelName()
+                ? oldTable.getTableDef().getDetailsPanelName()
+                : getUplAttribute(String.class, "details");
     }
 
     private void applyFixedAction(FixedRowActionType fixedActionType) throws UnifyException {

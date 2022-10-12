@@ -46,4 +46,6 @@ public interface ApplicationModuleNameConstants {
     String COMMENT_USER_PHOTO_GENERATOR = "comment-userphotogenerator";
 
     String DELEGATE_ENTITYLIST_PROVIDER = "application-delegate-entitylist-provider";
+    
+    String TABLE_LOADING_ENVIRONMENT_DELEGATE = "tableloading-environmentdelegate";
 }

@@ -43,9 +43,9 @@ public class StudioAppletTypeListCommand extends AbstractApplicationListCommand<
 
     private static final List<AppletType> CREATABLE_APPLETTYPE_LIST = Collections
             .unmodifiableList(Arrays.asList(AppletType.MANAGE_ENTITYLIST, AppletType.MANAGE_ENTITYLIST_ASSIGN,
-                    AppletType.MANAGE_ENTITYLIST_SINGLEFORM, AppletType.HEADLESS_TABS, AppletType.CREATE_ENTITY,
-                    AppletType.CREATE_ENTITY_SINGLEFORM, AppletType.TASK_EXECUTION, AppletType.DATA_IMPORT,
-                    AppletType.FACADE, AppletType.PATH_WINDOW, AppletType.PATH_PAGE));
+                    AppletType.MANAGE_ENTITYLIST_SINGLEFORM, AppletType.MANAGE_LOADINGLIST, AppletType.HEADLESS_TABS,
+                    AppletType.CREATE_ENTITY, AppletType.CREATE_ENTITY_SINGLEFORM, AppletType.TASK_EXECUTION,
+                    AppletType.DATA_IMPORT, AppletType.FACADE, AppletType.PATH_WINDOW, AppletType.PATH_PAGE));
 
     @Configurable
     private ListManager listManager;

@@ -36,6 +36,9 @@ public class AppTable extends BaseApplicationEntity {
     @Column(length = 128)
     private String entity;
 
+    @Column(name = "DETAILS_PANEL_NM", length = 64, nullable = true)
+    private String detailsPanelName;
+
     @Column
     private int sortHistory;
 
@@ -76,6 +79,9 @@ public class AppTable extends BaseApplicationEntity {
     private boolean limitSelectToColumns;
 
     @ChildList
+    private List<AppTableLoading> loadingList;
+    
+    @ChildList
     private List<AppTableAction> actionList;
 
     @ChildList
@@ -98,6 +104,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getDetailsPanelName() {
+        return detailsPanelName;
+    }
+
+    public void setDetailsPanelName(String detailsPanelName) {
+        this.detailsPanelName = detailsPanelName;
     }
 
     public int getSortHistory() {
@@ -202,6 +216,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setLimitSelectToColumns(boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
+    }
+
+    public List<AppTableLoading> getLoadingList() {
+        return loadingList;
+    }
+
+    public void setLoadingList(List<AppTableLoading> loadingList) {
+        this.loadingList = loadingList;
     }
 
     public List<AppTableAction> getActionList() {

@@ -26,6 +26,11 @@
 			inputType="string"
 			editor="!ui-select list:passfaillist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="detailspanellist"
+			description="$m{studio.widgettype.detailspanellist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiodetailspanellist listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="consformvalidationpolicylist"
 			description="$m{studio.widgettype.consformvalidationpolicylist}"
 			dataType="string" inputType="string"
@@ -59,7 +64,7 @@
 		<widgetType name="entitysearch"
 			description="$m{studio.widgettype.entitysearch}" dataType="string"
 			inputType="string"
-			editor="!fc-entitysearch ref:$s{application.appEntityRef} listKey:$s{longName}"
+			editor="!fc-entitysearch ref:$s{application.appEntityLoadingRef} listKey:$s{longName}"
 			renderer="!ui-label" />
 		<widgetType name="entityfieldwidgetlist"
 			description="$m{studio.widgettype.entityfieldwidgetlist}"
@@ -281,23 +286,28 @@
 			editor="!ui-select list:studioappletallformlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletfiltergeneratorlist"
-			description="$m{studio.widgettype.appletfiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.appletfiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletfiltergeneratorlist listParams:$l{appAppletId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="tablefiltergeneratorlist"
-			description="$m{studio.widgettype.tablefiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.tablefiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studiotablefiltergeneratorlist listParams:$l{appTableId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="tableloadingproviderlist"
+			description="$m{studio.widgettype.tableloadingproviderlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiotableloadingproviderlist listParams:$l{appTableId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="formfiltergeneratorlist"
-			description="$m{studio.widgettype.formfiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.formfiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studioformfiltergeneratorlist listParams:$l{appFormId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="workflowfiltergeneratorlist"
-			description="$m{studio.widgettype.workflowfiltergeneratorlist}" dataType="string"
-			inputType="string"
+			description="$m{studio.widgettype.workflowfiltergeneratorlist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:studioworkflowfiltergeneratorlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="appletchildlistappletlist"
@@ -710,6 +720,23 @@
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="appTableActionForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageAppTableLoading"
+			description="$m{studio.apptableloading.manage}"
+			label="$m{studio.apptableloading.manage.label}"
+			type="manage_entitylist" entity="application.appTableLoading"
+			menuAccess="false">
+			<property name="searchTable" value="appTableLoadingTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appTableLoadingForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appTableLoadingForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -1209,6 +1236,17 @@
 			<column field="orderIndex" renderWidget="application.integer"
 				widthRatio="1" />
 		</table>
+		<table name="appTableLoadingTable"
+			description="$m{studio.apptableloading.table}"
+			label="$m{studio.apptableloading.table.label}"
+			entity="application.appTableLoading">
+			<column field="label" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="provider" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="orderIndex" renderWidget="application.integer"
+				widthRatio="1" />
+		</table>
 		<table name="appTableFilterTable"
 			description="$m{studio.apptablefilter.table}"
 			label="$m{studio.apptablefilter.table.label}"
@@ -1659,7 +1697,7 @@
 				<errorCondition>
 					<restriction type="and">
 						<restriction type="amongst" field="type"
-							paramA="MEL|MEA|MLS|CEN|CNS|DIM" />
+							paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
 						<restriction type="is_null" field="entity" />
 					</restriction>
 				</errorCondition>
@@ -1739,7 +1777,7 @@
 				description="$m{studio.appapplet.form.formstatepolicy.entity}">
 				<onCondition>
 					<restriction type="amongst" field="type"
-						paramA="MEL|MEA|MLS|CEN|CNS|DIM" />
+						paramA="MEL|MEA|MLS|MLL|CEN|CNS|DIM" />
 				</onCondition>
 				<setStates>
 					<setState type="field" target="entity" visible="true" />
@@ -2067,8 +2105,8 @@
 						column="1" visible="false" />
 				</section>
 				<section name="optionDetails" columns="type_1_2">
-					<field name="allowNegative" inputWidget="application.checkbox"
-						column="1" visible="false" />
+					<field name="allowNegative"
+						inputWidget="application.checkbox" column="1" visible="false" />
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="auditable" inputWidget="application.checkbox"
@@ -2131,7 +2169,8 @@
 					<restriction type="equals" field="type" paramA="BSE" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,allowNegative,nullable"
+					<setState type="field"
+						target="appEntityId,name,label,dataType,references,key,property,minLen,maxLen,precision,scale,allowNegative,nullable"
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
@@ -2964,15 +3003,17 @@
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
+					<field name="label" inputWidget="application.text" column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
-						column="1" required="true" />
+						column="1" required="true" switchOnChange="true" />
+					<field name="detailsPanelName"
+						inputWidget="studio.detailspanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"
 						column="1" />
 				</section>
 				<section name="tableFlags" columns="type_1_2">
-					<field name="label" inputWidget="application.text" column="0" />
 					<field name="headerless" inputWidget="application.checkbox"
 						column="1" />
 					<field name="headerToUpperCase"
@@ -3006,6 +3047,9 @@
 			<tab name="actions" label="$m{studio.apptable.form.actions}"
 				contentType="child_list" applet="manageAppTableAction"
 				reference="actionList" />
+			<tab name="loadings" label="$m{studio.apptable.form.loadings}"
+				contentType="child_list" applet="manageAppTableLoading"
+				reference="loadingList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
@@ -3089,6 +3133,29 @@
 						required="true" />
 					<field name="policy"
 						inputWidget="studio.tableentitylistactionpolicylist" column="1"
+						required="true" />
+					<field name="orderIndex" inputWidget="application.integer"
+						column="1" />
+				</section>
+			</tab>
+		</form>
+		<form name="appTableLoadingForm"
+			description="$m{studio.apptableloading.form}"
+			entity="application.appTableLoading">
+			<tab name="basicDetails"
+				label="$m{studio.apptableloading.form.basicdetails}"
+				contentType="miniform">
+				<section name="tableColumnDetails" columns="type_2">
+					<field name="appTableId"
+						inputWidget="application.entitysearch" column="0" required="true" />
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" saveAs="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" saveAs="true" />
+					<field name="label" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="provider"
+						inputWidget="studio.tableloadingproviderlist" column="1"
 						required="true" />
 					<field name="orderIndex" inputWidget="application.integer"
 						column="1" />
@@ -3339,8 +3406,8 @@
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="filterGenerator"
-						inputWidget="studio.formfiltergeneratorlist"
-						switchOnChange="true" column="1" />
+						inputWidget="studio.formfiltergeneratorlist" switchOnChange="true"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
@@ -4261,6 +4328,27 @@
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="mllAppAppletPropList"
+			description="$m{studio.appappletprop.manageloading.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.manageloading.loadingproperties}">
+				<property name="page.alternateCaption"
+					description="$m{studio.appappletprop.manageloading.pagealtcaption}"
+					inputWidget="application.text" />
+				<property name="page.alternateSubCaption"
+					description="$m{studio.appappletprop.manageloading.pagealtsubcaption}"
+					inputWidget="application.text" />
+				<property name="baseRestriction"
+					description="$m{studio.appappletprop.manageloading.baserestriction}"
+					inputWidget="studio.propertyappletfilterlist" />
+				<property name="loadingTable"
+					description="$m{studio.appappletprop.manageloading.loadingtable}"
+					inputWidget="studio.propertyapplettablelist" required="true" />
+				<property name="loadingTable.actionFooter"
+					description="$m{studio.appappletprop.manageloading.loadingtable.actionfooter}"
+					inputWidget="application.checkbox" />
+			</propertySet>
+		</propertyList>
 		<propertyList name="melAppAppletPropList"
 			description="$m{studio.appappletprop.manageentity.propertylist}">
 			<propertySet
@@ -4645,6 +4733,7 @@
 			ignoreCase="true">
 			<choice name="cen" val="cenAppAppletPropList" />
 			<choice name="cns" val="cnsAppAppletPropList" />
+			<choice name="mll" val="mllAppAppletPropList" />
 			<choice name="mel" val="melAppAppletPropList" />
 			<choice name="mls" val="mlsAppAppletPropList" />
 			<choice name="mea" val="meaAppAppletPropList" />

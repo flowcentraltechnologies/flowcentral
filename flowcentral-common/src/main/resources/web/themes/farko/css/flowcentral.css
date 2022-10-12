@@ -30,8 +30,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-button:disabled {cursor:default; color: #dfdfdf;}
 .ui-button-alert {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 
+/*
 .ui-buttongroup .btn {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
 .ui-buttongroup .btn:hover:enabled {background-color:#005dbc;color: #FFF;}
+*/
 
 /** Checkbox */ 
 .ui-checkbox {width: 18px; height: 18px;} 
@@ -211,8 +213,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-redbutton {background-color:#c83234; font-weight:bold; color: #FFF; border: 1px solid #b82224;}
 .fc-redbutton:hover:enabled {background-color:#b82224;color: #FFF;}
 
-.fc-graybutton {background-color:#c8c8c8; font-weight:bold; color: #FFF; border: 1px solid #b8b8b8;}
-.fc-graybutton:hover:enabled {background-color:#b8b8b8;color: #FFF;}
+.fc-graybutton {background-color:#989898; font-weight:bold; color: #FFF; border: 1px solid #888888;}
+.fc-graybutton:hover:enabled {background-color:#888888;color: #FFF;}
 
 .fc-inline-entry-button {font-size:7pt;font-weight:bold; min-height: 18px !important;margin-top: 2px; color: #404040;}
 
@@ -531,11 +533,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table th {text-align:left; font-weight: bold; padding: 8px 6px;}
 .fc-table .table th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
 .fc-table .table td {height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
+.fc-table .table .minfo td {padding: 0px 0px;}
 .fc-table .table .cselh {width: 32px;}
 .fc-table .table .cserialh {width: 48px;}
 .fc-table .table .cactionh {width: 32px;}
 .fc-table .table .cfixedh {width: 48px;}
-.fc-table .table .mselh {width: 32px;}
+.fc-table .table .mselh {width: 22px;}
 .fc-table .table .mselh span {width:16px; height:16px;}
 .fc-table .table .mselh input {display:none;}
 .fc-table .table .mseld {background-color: #e3e7ea;}
@@ -548,11 +551,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mseriald {}
 .fc-table .table .mact {color:#525252;}
 .fc-table .table .mbtn {min-width:52px; min-height:22px;font-size: 7pt;padding: 0px 6px;}
-.fc-table .table .mnorec {font-size:8pt;color: #606060;}
+.fc-table .table .msection {display:block;text-align:left; font-weight:bold; font-size:8pt;color:#121212;background-color: #e4e4e4;padding: 6px 8px;}
+.fc-table .table .mnorec {display:block;text-align:center; font-size:8pt;color: #606060;}
 .fc-table .mwarn {border: 1px solid #ff823b;font-size: 8pt;color: #ff823b;font-weight: bold;background-color: #ffe6d7;padding: 10px 0px;}
 .fc-table .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-table .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
-.fc-table .classic .mselh {width: 32px;background-color: #e3e7ea;}
+.fc-table .classic .mselh {width: 22px;background-color: #e3e7ea;}
 .fc-table .link-right {display:block;text-align:right;}
 
 .fc-beantable {}
@@ -563,6 +567,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytable {}
 .fc-entitytable .total {font-weight:bold;}
 .fc-entitytable .total .blank {border-right: none;border-left: none;}
+
+.fc-loadingtable {}
+.fc-loadingtable .total {font-weight:bold;}
+.fc-loadingtable .total .blank {border-right: none;border-left: none;}
 
 .fc-entitytreetable {}
 .fc-entitytreetable .table {table-layout:fixed; width:100%; border-collapse:collapse;}
@@ -581,7 +589,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .table .small th {text-align:left; font-weight: bold; padding: 8px 6px;}
 .fc-entitytreetable .table .small th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;font-size:7pt;}
 .fc-entitytreetable .table td {height:24px; padding: 4px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;font-size:8pt;}
-.fc-entitytreetable .table .mselh {width: 32px;}
+.fc-entitytreetable .table .mselh {width: 22px;}
 .fc-entitytreetable .table .mselh span {width:16px; height:16px;}
 .fc-entitytreetable .table .mselh input {display:none;}
 .fc-entitytreetable .table .cpre {width:32px;}
@@ -596,7 +604,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .table .mline {}
 .fc-entitytreetable .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-entitytreetable .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
-.fc-entitytreetable .classic .mselh {width: 32px;background-color: #e3e7ea;}
+.fc-entitytreetable .classic .mselh {width: 22px;background-color: #e3e7ea;}
+
+.fc-loadingtable {}
 
 .fc-dispcounter {display:inline-block; background-color:#a6aeb9; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
@@ -815,6 +825,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Manage entity list applet panel */
 .fc-manageentitylistappletpanel {}
+
+/* Manage loading list applet panel */
+.fc-manageloadinglistappletpanel {}
 
 /* Headless tabs for applet panel */
 .fc-headlesstabsformappletpanel {}

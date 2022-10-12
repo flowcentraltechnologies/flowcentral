@@ -70,6 +70,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityWidgetRules;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
+import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.SingleFormBean;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
@@ -1198,6 +1199,24 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         _entitySearch.setEntitySubTitle(rootTitle);
         return _entitySearch;
+    }
+
+    @Override
+    public LoadingSearch constructLoadingSearch(AppletContext ctx, int loadingSearchMode) throws UnifyException {
+        logDebug("Constructing loading search using applet definition [{0}]...", ctx.getRootAppletName());
+        final AppletDef _rootAppletDef = ctx.getRootAppletDef();
+        TableDef _tableDef = getTableDef(
+                _rootAppletDef.getPropValue(String.class, AppletPropertyConstants.LOADING_TABLE));
+        if (!_rootAppletDef.getPropValue(boolean.class, AppletPropertyConstants.LOADING_TABLE_ACTIONFOOTER, false)) {
+            loadingSearchMode = loadingSearchMode & ~LoadingSearch.SHOW_ACTIONFOOTER;
+        }
+
+        SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
+        LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
+                loadingSearchMode);
+        
+        loadingSearch.setEntitySubTitle(_rootAppletDef.getDescription());
+        return loadingSearch;
     }
 
     @Override

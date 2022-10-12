@@ -44,6 +44,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private EntityDef entityDef;
 
+    private List<TableLoadingDef> loadingDefList;
+
     private List<TableColumnDef> columnDefList;
 
     private List<TableColumnDef> visibleColumnDefList;
@@ -57,6 +59,8 @@ public class TableDef extends BaseApplicationEntityDef {
     private Select select;
 
     private String label;
+
+    private String detailsPanelName;
 
     private int sortHistory;
 
@@ -92,18 +96,21 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private Set<String> summaryFields;
 
-    private TableDef(EntityDef entityDef, List<TableColumnDef> columnDefList, List<TableColumnDef> visibleColumnDefList,
-            List<ButtonInfo> actionBtnInfos, Map<String, TableFilterDef> filterDefMap, String label, int sortHistory,
+    private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
+            List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
+            Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
             int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
             boolean basicSearch, boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming,
             boolean fixedRows, boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description,
             Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
+        this.loadingDefList = loadingDefList;
         this.columnDefList = columnDefList;
         this.visibleColumnDefList = visibleColumnDefList;
         this.actionBtnInfos = actionBtnInfos;
         this.label = label;
+        this.detailsPanelName = detailsPanelName;
         this.sortHistory = sortHistory;
         this.itemsPerPage = itemsPerPage;
         this.serialNo = serialNo;
@@ -149,6 +156,22 @@ public class TableDef extends BaseApplicationEntityDef {
 
     public EntityDef getEntityDef() {
         return entityDef;
+    }
+
+    public List<TableLoadingDef> getLoadingDefList() {
+        return loadingDefList;
+    }
+
+    public boolean isWithLoading() {
+        return !loadingDefList.isEmpty();
+    }
+
+    public TableLoadingDef getTableLoadingDef(int index) {
+        return loadingDefList.get(index);
+    }
+    
+    public int getLoadingDefCount() {
+        return loadingDefList.size();
     }
 
     public List<TableFilterDef> getRowColorFilterList() {
@@ -251,6 +274,14 @@ public class TableDef extends BaseApplicationEntityDef {
         return label;
     }
 
+    public String getDetailsPanelName() {
+        return detailsPanelName;
+    }
+
+    public boolean isWithDetailsPanelName() {
+        return !StringUtils.isBlank(detailsPanelName);
+    }
+
     public int getSortHistory() {
         return sortHistory;
     }
@@ -349,6 +380,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private Map<String, TableFilterDef> filterDefMap;
 
+        private List<TableLoadingDef> loadingDefList;
+
         private List<TableColumnDef> columnDefList;
 
         private List<TableColumnDef> visibleColumnDefList;
@@ -356,6 +389,8 @@ public class TableDef extends BaseApplicationEntityDef {
         private List<ButtonInfo> actionBtnInfos;
 
         private String label;
+
+        private String detailsPanelName;
 
         private int totalWidth;
 
@@ -404,6 +439,7 @@ public class TableDef extends BaseApplicationEntityDef {
             this.description = description;
             this.version = version;
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
+            this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
             this.actionBtnInfos = new ArrayList<ButtonInfo>();
@@ -412,6 +448,7 @@ public class TableDef extends BaseApplicationEntityDef {
         public Builder(EntityDef entityDef) {
             this.entityDef = entityDef;
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
+            this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
             this.actionBtnInfos = new ArrayList<ButtonInfo>();
@@ -419,6 +456,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder label(String label) {
             this.label = label;
+            return this;
+        }
+
+        public Builder detailsPanelName(String detailsPanelName) {
+            this.detailsPanelName = detailsPanelName;
             return this;
         }
 
@@ -537,6 +579,11 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addTableLoadingDef(TableLoadingDef tableLoadingDef) {
+            loadingDefList.add(tableLoadingDef);
+            return this;
+        }
+
         public Builder addFilterDef(TableFilterDef filterDef) {
             if (filterDef != null) {
                 if (filterDefMap.containsKey(filterDef.getName())) {
@@ -608,11 +655,11 @@ public class TableDef extends BaseApplicationEntityDef {
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new TableDef(entityDef, DataUtils.unmodifiableList(columnDefList),
+            return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
                     DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
-                    DataUtils.unmodifiableMap(filterDefMap), label, sortHistory, itemsPerPage, serialNo, sortable,
-                    headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect,
-                    nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
+                    DataUtils.unmodifiableMap(filterDefMap), label, detailsPanelName, sortHistory, itemsPerPage,
+                    serialNo, sortable, headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless,
+                    multiSelect, nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
         }
     }
 

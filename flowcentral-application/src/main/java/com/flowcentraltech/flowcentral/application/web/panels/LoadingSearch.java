@@ -1,0 +1,239 @@
+/*
+ * Copyright 2021-2022 FlowCentral Technologies Limited.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.flowcentraltech.flowcentral.application.web.panels;
+
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
+import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.Order;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
+
+/**
+ * Loading search object.
+ * 
+ * @author FlowCentral Technologies Limited
+ * @since 1.0
+ */
+public class LoadingSearch {
+
+    public static final int SHOW_ACTIONFOOTER = 0x00000002;
+    
+    public static final int SHOW_SEARCH = 0x00000001;
+
+    public static final int ENABLE_ALL = SHOW_ACTIONFOOTER | SHOW_SEARCH;
+
+    private final Long appAppletId;
+    
+    final private AppletContext appletContext;
+    
+    final private SectorIcon sectorIcon;
+    
+    private FilterDef baseFilterDef;
+
+    private SearchEntries searchEntries;
+
+    private Restriction baseRestriction;
+
+    private LoadingTable loadingTable;
+
+    private String entitySubTitle;
+
+    private String baseFilterTranslation;
+
+    private String entityFilterTranslation;
+
+    private String appTableActionPolicy;
+
+    private ButtonGroupInfo appTableActionButtonInfo;
+
+    private int mode;
+
+    public LoadingSearch(AppletContext appletContext, SectorIcon sectorIcon, TableDef tableDef, Long appAppletId, int mode) throws UnifyException {
+        this.appletContext = appletContext;
+        this.sectorIcon = sectorIcon;
+        this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), 4);
+        this.loadingTable = new LoadingTable(appletContext.au(), tableDef, null);
+        this.appAppletId = appAppletId;
+        this.mode = mode;
+    }
+
+    public AppletUtilities au() {
+        return appletContext.au();
+    }
+
+    public EnvironmentService environment() {
+        return appletContext.environment();
+    }
+
+    public SearchEntries getSearchEntries() {
+        return searchEntries;
+    }
+
+    public void clearSearchEntries() {
+        if (searchEntries != null) {
+            searchEntries.clear();
+        }
+    }
+
+    public LoadingTable getLoadingTable() {
+        return loadingTable;
+    }
+
+    public String getEntityTitle() {
+        return loadingTable.getTableDef().getLabel();
+    }
+
+    public EntityDef getEntityDef() {
+        return loadingTable.getTableDef().getEntityDef();
+    }
+
+    public String getEntitySubTitle() {
+        return entitySubTitle;
+    }
+
+    public void setEntitySubTitle(String entitySubTitle) {
+        this.entitySubTitle = entitySubTitle;
+    }
+
+    public Long getAppAppletId() {
+        return appAppletId;
+    }
+
+    public Long getAppTableId() {
+        return loadingTable.getTableDef().getId();
+    }
+
+    public String getAppTableActionPolicy() {
+        return appTableActionPolicy;
+    }
+
+    public void setAppTableActionPolicy(String appTableActionPolicy) {
+        this.appTableActionPolicy = appTableActionPolicy;
+    }
+
+    public ButtonGroupInfo getAppTableActionButtonInfo() {
+        return appTableActionButtonInfo;
+    }
+
+    public void setAppTableActionButtonInfo(ButtonGroupInfo appTableActionButtonInfo) {
+        this.appTableActionButtonInfo = appTableActionButtonInfo;
+    }
+
+    public String getEntityFilterTranslation() {
+        return entityFilterTranslation;
+    }
+
+    public String getBaseFilterTranslation() {
+        return baseFilterTranslation;
+    }
+
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
+    }
+
+    public void setOrder(Order order) {
+        loadingTable.setOrder(order);
+    }
+
+    public void setBaseFilter(FilterDef filterDef, SpecialParamProvider specialParamProvider) throws UnifyException {
+        this.baseFilterDef = filterDef;
+        setBaseRestriction(null, specialParamProvider);
+    }
+
+    public void setBaseRestriction(Restriction restriction, SpecialParamProvider specialParamProvider)
+            throws UnifyException {
+        if (baseFilterDef != null || restriction != null) {
+            And and = new And();
+            if (baseFilterDef != null) {
+                and.add(baseFilterDef.getRestriction(getEntityDef(),
+                        null, appletContext.au().getNow()));
+            }
+
+            if (restriction != null) {
+                and.add(restriction);
+            }
+
+            baseRestriction = and;
+            baseFilterTranslation = appletContext.au().resolveSessionMessage("$m{loadingsearch.basefilter.translation}",
+                    appletContext.au().translate(baseRestriction, getEntityDef()));
+            return;
+        }
+
+        baseRestriction = null;
+        baseFilterTranslation = null;
+    }
+
+    public void clearBaseRestriction() {
+        baseRestriction = null;
+        baseFilterTranslation = null;
+    }
+
+    public boolean isWithBaseFilter() {
+        return baseRestriction != null;
+    }
+
+    public void ensureTableStruct() throws UnifyException {
+        searchEntries.normalize();
+        if (loadingTable != null) {
+            TableDef _eTableDef = loadingTable.getTableDef();
+            TableDef _nTableDef = appletContext.au().getTableDef(_eTableDef.getLongName());
+            if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
+                loadingTable = new LoadingTable(appletContext.au(), _nTableDef, null);
+                applySearchEntriesToSearch();
+            }
+        }
+    }
+
+    public void applySearchEntriesToSearch() throws UnifyException {
+        EntityDef entityDef = searchEntries.getEntityDef();
+        Restriction restriction = searchEntries.getRestriction();
+        applyRestrictionToSearch(entityDef, restriction);
+    }
+
+    private void applyRestrictionToSearch(EntityDef entityDef, Restriction restriction) throws UnifyException {
+        Restriction searchRestriction = null;
+        if (isWithBaseFilter()) {
+            if (restriction != null) {
+                searchRestriction = new And().add(baseRestriction).add(restriction);
+            } else {
+                searchRestriction = baseRestriction;
+            }
+        } else {
+            searchRestriction = restriction;
+        }
+
+        loadingTable.setSourceObject(searchRestriction);
+    }
+
+    public boolean isShowActionFooter() {
+        return (mode & SHOW_ACTIONFOOTER) > 0;
+    }
+
+    public boolean isShowSearch() {
+        return (mode & SHOW_SEARCH) > 0;
+    }
+
+}

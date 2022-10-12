@@ -28,6 +28,10 @@ public interface AppletPropertyConstants {
 
     String PAGE_ALTERNATE_SUBCAPTION = "page.alternateSubCaption";
 
+    String LOADING_TABLE = "loadingTable";
+    
+    String LOADING_TABLE_ACTIONFOOTER = "loadingTable.actionFooter";
+
     String SEARCH_TABLE = "searchTable";
 
     String SEARCH_TABLE_NEW = "searchTable.new";

@@ -20,6 +20,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -82,6 +83,14 @@ public class AppletContext extends AbstractContext {
 
     public EnvironmentService environment() {
         return au.environment();
+    }
+
+    public String getRootAppletName() {
+        return applet.getAppletName();
+    }
+
+    public AppletDef getRootAppletDef() throws UnifyException {
+        return applet.getRootAppletDef();
     }
 
     public SpecialParamProvider specialParamProvider() throws UnifyException {

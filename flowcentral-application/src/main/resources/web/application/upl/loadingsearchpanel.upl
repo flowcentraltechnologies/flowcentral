@@ -1,0 +1,64 @@
+// UPL template for loading search panel
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-loadingsearchpanel layout:$d{!ui-vertical}
+	components:$c{headerBar searchEntriesPanel searchResultPanel footerActionPanel}
+
+// Header Bar
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
+	components:$c{headerLeftPanel}
+	
+!ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$c{sectorIcon titleBlock}
+!fc-sectoricon:sectorIcon binding:sectorIcon
+!ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
+!ui-label:title styleClass:$s{hdtitle} binding:entitySubTitle
+!ui-label:subTitle styleClass:$s{hdsubtitle} binding:entityTitle
+
+// Search entries panel
+!ui-panel:searchEntriesPanel layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{85% none} cellPadding:false}
+	components:$c{searchEntries searchEntriesAction} ignoreParentState:true
+!fc-search:searchEntries binding:searchEntries
+    eventHandler:$d{!ui-event event:onchange action:$c{searchAct}}
+    eventHandler:$d{!ui-event event:onenter action:$c{searchAct}}
+!ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
+	components:$c{reloadBtn clearBtn}
+!ui-button:reloadBtn caption:$m{button.reload} styleClass:$e{fc-bluebutton}
+	eventHandler:$d{!ui-event event:onclick action:$c{reloadAct}}
+!ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-graybutton}
+    eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
+
+// Search result panel
+!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
+!fc-loadingtable:searchResultTbl binding:loadingTable multiSelect:true valueMarker:$f{searchResultMarker}
+
+// Footer action panel
+!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns}
+!ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
+!ui-select:tblActionSel styleClass:$e{footersel} list:$s{tableactionlist} listKey:$s{policy} blankOption:$m{select.apply.toselected}
+	listParams:$l{appTableId} binding:appTableActionPolicy
+!ui-button:applyTblActionBtn caption:$m{button.applyaction}
+    eventHandler:$d{!ui-event event:onclick action:$c{applyTableAct}}
+!ui-buttongroup:tblActionBtns styleClass:$e{footerbtns} binding:appTableActionButtonInfo
+    eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}
+
+// Actions
+!ui-postcommand:reloadAct command:reload components:$c{searchEntries}
+!ui-postcommand:searchAct command:search components:$c{searchEntries}
+!ui-postcommand:clearAct command:clear
+!ui-postcommand:applyTableAct command:applyTableAction refresh:$c{searchResultPanel} components:$c{searchResultTbl tblActionSel}
+!ui-postcommand:applyTableBtnAct command:applyTableBtnAction refresh:$c{searchResultPanel} components:$c{searchResultTbl}
+!ui-postcommand:detailsAct command:details refresh:$c{searchResultPanel} components:$c{searchResultTbl}
+

@@ -56,6 +56,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTable;
 import com.flowcentraltech.flowcentral.application.entities.AppTableAction;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -112,6 +113,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.SuggestionTypesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -497,6 +499,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appTableConfig.setDescription("$m{" + descKey + "}");
                 appTableConfig.setLabel("$m{" + labelKey + "}");
                 appTableConfig.setEntity(appTable.getEntity());
+                appTableConfig.setDetailsPanelName(appTable.getDetailsPanelName());
                 appTableConfig.setSortHistory(appTable.getSortHistory());
                 appTableConfig.setItemsPerPage(appTable.getItemsPerPage());
                 appTableConfig.setSerialNo(appTable.isSerialNo());
@@ -571,6 +574,26 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                     }
 
                     appTableConfig.setActionList(actionList);
+                }
+
+                // Loading
+                if (!DataUtils.isBlank(appTable.getLoadingList())) {
+                    List<TableLoadingConfig> loadingList = new ArrayList<TableLoadingConfig>();
+                    for (AppTableLoading appTableLoading : appTable.getLoadingList()) {
+                        TableLoadingConfig tableLoadingConfig = new TableLoadingConfig();
+                        descKey = getDescriptionKey(tableDescKey, "loading", appTableLoading.getName());
+                        labelKey = getDescriptionKey(tableDescKey, "loading.label", appTableLoading.getLabel());
+                        ctx.addMessage(StaticMessageCategoryType.TABLE, descKey, appTableLoading.getDescription());
+                        ctx.addMessage(StaticMessageCategoryType.TABLE, labelKey, appTableLoading.getLabel());
+                        tableLoadingConfig.setName(appTableLoading.getName());
+                        tableLoadingConfig.setDescription("$m{" + descKey + "}");
+                        tableLoadingConfig.setLabel("$m{" + labelKey + "}");
+                        tableLoadingConfig.setProvider(appTableLoading.getProvider());
+                        tableLoadingConfig.setOrderIndex(appTableLoading.getOrderIndex());
+                        loadingList.add(tableLoadingConfig);
+                    }
+
+                    appTableConfig.setLoadingList(loadingList);
                 }
 
                 tableConfigList.add(appTableConfig);

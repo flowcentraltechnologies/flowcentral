@@ -483,6 +483,14 @@
 		<reference name="appEntityRef"
 			description="$m{application.appentity.reference}" entity="appEntity"
 			searchField="description" />
+		<reference name="appEntityLoadingRef"
+			description="$m{application.appentity.loading.reference}" entity="appEntity"
+			searchField="description">
+			<filter>
+				<restriction type="equals" field="delegate"
+					paramA="tableloading-environmentdelegate" />
+			</filter>
+		</reference>
 		<reference name="appEntityFieldRef"
 			description="$m{application.appentityfield.reference}"
 			entity="appEntityField" searchField="description" />
@@ -528,6 +536,9 @@
 		<reference name="appTableActionRef"
 			description="$m{application.apptableaction.reference}"
 			entity="appTableAction" searchField="label" />
+		<reference name="appTableLoadingRef"
+			description="$m{application.apptableloading.reference}"
+			entity="appTableLoading" searchField="label" />
 		<reference name="appFormRef"
 			description="$m{application.appform.reference}" entity="appForm"
 			searchField="description" />
@@ -1053,6 +1064,8 @@
 				type="string" />
 			<field name="label" label="$m{application.apptable.label}"
 				type="string" />
+			<field name="detailsPanelName" label="$m{application.apptable.detailspanelname}"
+				type="string" nullable="true" />
 			<field name="sortable"
 				label="$m{application.apptable.sortable}" type="boolean" />
 			<field name="serialNo"
@@ -1083,6 +1096,9 @@
 			<field name="actionList"
 				label="$m{application.apptable.actions}" type="child_list"
 				references="appTableActionRef" />
+			<field name="loadingList"
+				label="$m{application.apptable.loadings}" type="child_list"
+				references="appTableLoadingRef" />
 			<field name="filterList"
 				label="$m{application.apptable.filters}" type="child_list"
 				references="appTableFilterRef" />
@@ -1143,6 +1159,23 @@
 				label="$m{application.apptableaction.orderindex}" type="integer" />
 			<uniqueConstraint name="labelUc"
 				description="$m{application.apptableaction.uc.label}"
+				fieldList="appTableId,label" />
+		</entity>
+		<entity name="appTableLoading"
+			description="$m{application.apptableloading}"
+			label="$m{application.apptableloading.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppTableLoading">
+			<field name="appTableId"
+				label="$m{application.apptableloading.apptableid}" type="ref"
+				references="appTableRef" inputWidget="application.entitylist" />
+			<field name="label"
+				label="$m{application.apptableloading.loadinglabel}" type="string" />
+			<field name="provider"
+				label="$m{application.apptableloading.provider}" type="string" />
+			<field name="orderIndex"
+				label="$m{application.apptableloading.orderindex}" type="integer" />
+			<uniqueConstraint name="labelUc"
+				description="$m{application.apptableloading.uc.label}"
 				fieldList="appTableId,label" />
 		</entity>
 		<entity name="appTableFilter"

@@ -30,6 +30,8 @@ public class AppTableConfig extends BaseNameConfig {
 
     private String entity;
 
+    private String detailsPanelName;
+
     private int sortHistory;
 
     private int itemsPerPage;
@@ -56,6 +58,8 @@ public class AppTableConfig extends BaseNameConfig {
 
     private boolean limitSelectToColumns;
 
+    private List<TableLoadingConfig> loadingList;
+
     private List<TableActionConfig> actionList;
 
     private List<TableColumnConfig> columnList;
@@ -77,6 +81,15 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getDetailsPanelName() {
+        return detailsPanelName;
+    }
+
+    @XmlAttribute(required = true, name = "detailsPanel")
+    public void setDetailsPanelName(String detailsPanelName) {
+        this.detailsPanelName = detailsPanelName;
     }
 
     public int getSortHistory() {
@@ -194,6 +207,15 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute
     public void setLimitSelectToColumns(boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
+    }
+
+    public List<TableLoadingConfig> getLoadingList() {
+        return loadingList;
+    }
+
+    @XmlElement(name = "loading", required = true)
+    public void setLoadingList(List<TableLoadingConfig> loadingList) {
+        this.loadingList = loadingList;
     }
 
     public List<TableActionConfig> getActionList() {

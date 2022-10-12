@@ -46,6 +46,10 @@ public enum AppletType implements EnumConst {
             "MLS",
             "/manageentitylistsingleformapplet",
             false),
+    MANAGE_LOADINGLIST(
+            "MLL",
+            "/manageloadinglistapplet",
+            false),
     HEADLESS_TABS(
             "HDL",
             "/headlesstabsformapplet",
@@ -100,11 +104,11 @@ public enum AppletType implements EnumConst {
             true);
 
     public static final List<AppletType> MANAGE_ENTITY_LIST_TYPES = Collections
-            .unmodifiableList(Arrays.asList(AppletType.MANAGE_ENTITYLIST, AppletType.MANAGE_ENTITYLIST_ASSIGN,
-                    AppletType.MANAGE_ENTITYLIST_SINGLEFORM));
+            .unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST, MANAGE_ENTITYLIST_ASSIGN,
+                    MANAGE_ENTITYLIST_SINGLEFORM));
 
     public static final List<AppletType> UNRESERVED_LIST = Collections.unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST,
-            MANAGE_ENTITYLIST_ASSIGN, AppletType.MANAGE_ENTITYLIST_SINGLEFORM, HEADLESS_TABS, CREATE_ENTITY,
+            MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SINGLEFORM, MANAGE_LOADINGLIST,  HEADLESS_TABS, CREATE_ENTITY,
             CREATE_ENTITY_SINGLEFORM, TASK_EXECUTION, FACADE, PATH_WINDOW, PATH_PAGE));
 
     private final String code;
