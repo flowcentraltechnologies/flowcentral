@@ -26,10 +26,10 @@
 			inputType="string"
 			editor="!ui-select list:passfaillist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="summarypanellist"
-			description="$m{studio.widgettype.summarypanellist}"
+		<widgetType name="detailspanellist"
+			description="$m{studio.widgettype.detailspanellist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studiosummarypanellist listParams:$l{entity} blankOption:$m{blank.none}"
+			editor="!ui-select list:studiodetailspanellist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="consformvalidationpolicylist"
 			description="$m{studio.widgettype.consformvalidationpolicylist}"
@@ -3008,8 +3008,8 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" required="true" switchOnChange="true" />
-					<field name="summaryPanelName"
-						inputWidget="studio.summarypanellist" column="1" />
+					<field name="detailsPanelName"
+						inputWidget="studio.detailspanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"
 						column="1" />
 				</section>

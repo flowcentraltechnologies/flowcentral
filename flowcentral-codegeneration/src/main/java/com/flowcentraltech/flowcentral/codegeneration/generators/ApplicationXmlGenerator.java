@@ -499,7 +499,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appTableConfig.setDescription("$m{" + descKey + "}");
                 appTableConfig.setLabel("$m{" + labelKey + "}");
                 appTableConfig.setEntity(appTable.getEntity());
-                appTableConfig.setSummaryPanelName(appTable.getSummaryPanelName());
+                appTableConfig.setDetailsPanelName(appTable.getDetailsPanelName());
                 appTableConfig.setSortHistory(appTable.getSortHistory());
                 appTableConfig.setItemsPerPage(appTable.getItemsPerPage());
                 appTableConfig.setSerialNo(appTable.isSerialNo());

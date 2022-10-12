@@ -16,23 +16,23 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
+import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.list.StringParam;
 
 /**
- * Studio summary panel list command
+ * Studio details panel list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studiosummarypanellist")
-public class StudioSummaryPanelListCommand extends AbstractEntityTypeListCommand<SummaryPanel, StringParam> {
+@Component("studiodetailspanellist")
+public class StudioDetailsPanelListCommand extends AbstractEntityTypeListCommand<DetailsPanel, StringParam> {
 
-    public StudioSummaryPanelListCommand() {
-        super(SummaryPanel.class, StringParam.class);
+    public StudioDetailsPanelListCommand() {
+        super(DetailsPanel.class, StringParam.class);
     }
 
     @Override

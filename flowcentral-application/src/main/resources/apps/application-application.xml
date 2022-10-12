@@ -1064,7 +1064,7 @@
 				type="string" />
 			<field name="label" label="$m{application.apptable.label}"
 				type="string" />
-			<field name="summaryPanelName" label="$m{application.apptable.summarypanelname}"
+			<field name="detailsPanelName" label="$m{application.apptable.detailspanelname}"
 				type="string" nullable="true" />
 			<field name="sortable"
 				label="$m{application.apptable.sortable}" type="boolean" />

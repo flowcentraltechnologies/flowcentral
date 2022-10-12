@@ -177,6 +177,8 @@ public class TableWriter extends AbstractControlWriter {
         if (table != null) {
             final TableDef tableDef = table.getTableDef();
             final boolean entryMode = table.isEntryMode();
+            final int detailsIndex = table.getDetailsIndex();
+            final boolean details = tableWidget.isDetails() && detailsIndex >= 0;
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             final List<EventHandler> switchOnChangeHandlers = table.getSwitchOnChangeHandlers();
             final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
@@ -281,6 +283,15 @@ public class TableWriter extends AbstractControlWriter {
                     }
                 }
 
+                // Details            
+                if (details && detailsIndex == i) {
+                    DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
+                    if (detailsPanel != null) {
+                        writer.writeBehavior(detailsPanel);
+                    }
+                }
+                
+                // Summary
                 StandalonePanel summaryPanel = tableWidget.getSummaryPanel(i);
                 if (summaryPanel != null) {
                     summaryPanel.setValueStore(valueStore);
@@ -293,6 +304,7 @@ public class TableWriter extends AbstractControlWriter {
                         valueStore.setDataPrefix(null);
                     }
                 }
+                
             }
 
             final boolean supportSelect = !table.isFixedAssignment();
@@ -704,12 +716,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write(tableWidget.getChildWidgetInfos().size() - skip);
                             writer.write("\">");
                             detailsPanel.loadDetails(valueStore);
-                            try {
-                                valueStore.setDataPrefix(detailsPanel.getId());
-                                writer.writeStructureAndContent(detailsPanel);
-                            } finally {
-                                valueStore.setDataPrefix(null);
-                            }
+                            writer.writeStructureAndContent(detailsPanel);
                             writer.write("</td>");
 
                             if (supportSelect && entryMode) {

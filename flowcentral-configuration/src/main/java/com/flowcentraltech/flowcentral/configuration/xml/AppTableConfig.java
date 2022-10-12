@@ -30,7 +30,7 @@ public class AppTableConfig extends BaseNameConfig {
 
     private String entity;
 
-    private String summaryPanelName;
+    private String detailsPanelName;
 
     private int sortHistory;
 
@@ -83,13 +83,13 @@ public class AppTableConfig extends BaseNameConfig {
         this.entity = entity;
     }
 
-    public String getSummaryPanelName() {
-        return summaryPanelName;
+    public String getDetailsPanelName() {
+        return detailsPanelName;
     }
 
-    @XmlAttribute(required = true, name = "summaryPanel")
-    public void setSummaryPanelName(String summaryPanelName) {
-        this.summaryPanelName = summaryPanelName;
+    @XmlAttribute(required = true, name = "detailsPanel")
+    public void setDetailsPanelName(String detailsPanelName) {
+        this.detailsPanelName = detailsPanelName;
     }
 
     public int getSortHistory() {

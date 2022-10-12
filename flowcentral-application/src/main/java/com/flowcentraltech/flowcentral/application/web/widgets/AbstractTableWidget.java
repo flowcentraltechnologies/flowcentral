@@ -277,9 +277,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     public boolean isDetails() throws UnifyException {
-        return !StringUtils.isBlank(getUplAttribute(String.class, "details"));
+        return !StringUtils.isBlank(getDetails());
     }
-
+    
     public boolean isActionColumn() throws UnifyException {
         return actionCtrl != null && !isFixedRows();
     }
@@ -358,7 +358,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public DetailsPanel getDetailsPanel() throws UnifyException {
         if (detailsPanel == null) {
-            String details = getUplAttribute(String.class, "details");
+            String details = getDetails();
             if (!StringUtils.isBlank(details)) {
                 detailsPanel = (DetailsPanel) addExternalChildStandalonePanel(details, getId() + "_dtl");
             }
@@ -574,9 +574,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (valueList == null) {
             summaryPanelList = null;
         } else {
-            String summary = oldTable != null && oldTable.getTableDef().isWithSummaryPanelName()
-                    ? oldTable.getTableDef().getSummaryPanelName()
-                    : getUplAttribute(String.class, "summary");
+            String summary = getUplAttribute(String.class, "summary");
             if (!StringUtils.isBlank(summary)) {
                 if (summaryPanelList == null) {
                     summaryPanelList = new ArrayList<SummaryPanel>();
@@ -646,6 +644,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     protected Class<U> getItemClass() {
         return itemClass;
+    }
+
+    private String getDetails() throws UnifyException {
+        return oldTable != null && oldTable.getTableDef().isWithDetailsPanelName()
+                ? oldTable.getTableDef().getDetailsPanelName()
+                : getUplAttribute(String.class, "details");
     }
 
     private void applyFixedAction(FixedRowActionType fixedActionType) throws UnifyException {
