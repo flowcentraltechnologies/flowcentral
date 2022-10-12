@@ -45,7 +45,7 @@
 !fc-loadingtable:searchResultTbl binding:loadingTable multiSelect:true valueMarker:$f{searchResultMarker}
 
 // Footer action panel
-!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns}
+!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns commitActionBtn}
 !ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
 !ui-select:tblActionSel styleClass:$e{footersel} list:$s{tableactionlist} listKey:$s{policy} blankOption:$m{select.apply.toselected}
 	listParams:$l{appTableId} binding:appTableActionPolicy
@@ -53,8 +53,11 @@
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableAct}}
 !ui-buttongroup:tblActionBtns styleClass:$e{footerbtns} binding:appTableActionButtonInfo
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}
+!ui-button:commitActionBtn styleClass:$e{fc-orangebutton} caption:$m{button.commit} captionBinding:$s{commitCaption}
+    eventHandler:$d{!ui-event event:onclick action:$c{commitChangeAct}}
 
 // Actions
+!ui-postcommand:commitChangeAct command:commitChange
 !ui-postcommand:reloadAct command:reload components:$c{searchEntries}
 !ui-postcommand:searchAct command:search components:$c{searchEntries}
 !ui-postcommand:clearAct command:clear

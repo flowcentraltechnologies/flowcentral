@@ -32,6 +32,8 @@ import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueListStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
@@ -49,6 +51,28 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
     public LoadingTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef) {
         super(au, tableDef, filterGroupDef, DEFAULT_TABLE_ORDER, 0);
         this.setFixedRows(tableDef.isFixedRows());
+    }
+    
+    public void commitChange() throws UnifyException {
+        TableDef _tableDef = getTableDef();
+        List<Section> sections = getSections();
+        final int slen = sections.size();
+        Section currentSection = null;
+        TableLoadingDef currentTableLoadingDef = null;
+        int sectionIndex = -1;
+        ValueStore valueStore = new BeanValueListStore(getDispItemList());
+        final int len = valueStore.size();
+        for (int i = 0; i < len; i++) {
+            valueStore.setDataIndex(i);
+            while ((currentSection == null || !currentSection.isIndexWithin(i)) && ((++sectionIndex) < slen)) {
+                currentSection = sections.get(sectionIndex);
+                currentTableLoadingDef = _tableDef.getTableLoadingDef(sectionIndex);
+            }
+
+            LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
+                    currentTableLoadingDef.getProvider());
+            loadingTableProvider.commitChange(valueStore);
+        }
     }
     
     public ColorLegendInfo getColorLegendInfo() {
