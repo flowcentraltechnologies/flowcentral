@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business.policies;
 
-import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
@@ -55,7 +55,17 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         return wfStepName;
     }
 
-    protected List<Long> getIdsOfItemsInWfStep(String heldBy) throws UnifyException {
+    /**
+     * Gets IDs of items in workflow step.
+     * 
+     * @param heldBy
+     *               Optional. If supplied, Restricts fetched items to those held by
+     *               user
+     * @return a map of workflow entity IDs by work item IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected Map<Long, Long> getIdsOfItemsInWfStep(String heldBy) throws UnifyException {
         WfItemQuery query = new WfItemQuery();
         query.workflowName(workflowName);
         query.wfStepName(wfStepName);
@@ -63,7 +73,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
             query.heldBy(heldBy);
         }
 
-        return environment().valueList(Long.class, "workRecId", query);
+        return environment().valueMap(Long.class, "id", Long.class, "workRecId", query);
     }
 
 }
