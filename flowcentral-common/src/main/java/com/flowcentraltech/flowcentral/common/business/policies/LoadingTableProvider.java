@@ -20,6 +20,7 @@ import java.util.List;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -64,10 +65,10 @@ public interface LoadingTableProvider extends UnifyComponent {
     /**
      * Commit change to entity
      * 
-     * @param item
-     *             the entity
+     * @param itemValueStore
+     *             the item value store
      * @throws UnifyException
      *                        if an error occurs
      */
-    void commitChange(Entity item) throws UnifyException;
+    void commitChange(ValueStore itemValueStore) throws UnifyException;
 }
