@@ -684,7 +684,7 @@ public class TableWriter extends AbstractControlWriter {
                         if (detailsPanel != null) {
                             writer.write("<tr");
                             if (summaryClass != null) {
-                                writeTagStyleClass(writer, summaryClass);
+                                writeTagStyleClass(writer, "even");
                             }
 
                             if (summaryColor != null) {
