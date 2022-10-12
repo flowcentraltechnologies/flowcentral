@@ -61,7 +61,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
      * @param heldBy
      *               Optional. If supplied, Restricts fetched items to those held by
      *               user
-     * @return a map of workflow entity IDs by work item IDs
+     * @return a map of work item IDs by workflow entity IDs
      * @throws UnifyException
      *                        if an error occurs
      */
@@ -73,7 +73,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
             query.heldBy(heldBy);
         }
 
-        return environment().valueMap(Long.class, "id", Long.class, "workRecId", query);
+        return environment().valueMap(Long.class, "workRecId", Long.class, "id", query);
     }
 
 }
