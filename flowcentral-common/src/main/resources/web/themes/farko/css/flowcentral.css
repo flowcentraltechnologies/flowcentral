@@ -538,7 +538,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .cserialh {width: 48px;}
 .fc-table .table .cactionh {width: 32px;}
 .fc-table .table .cfixedh {width: 48px;}
-.fc-table .table .mselh {width: 32px;}
+.fc-table .table .mselh {width: 22px;}
 .fc-table .table .mselh span {width:16px; height:16px;}
 .fc-table .table .mselh input {display:none;}
 .fc-table .table .mseld {background-color: #e3e7ea;}
@@ -556,7 +556,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .mwarn {border: 1px solid #ff823b;font-size: 8pt;color: #ff823b;font-weight: bold;background-color: #ffe6d7;padding: 10px 0px;}
 .fc-table .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-table .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
-.fc-table .classic .mselh {width: 32px;background-color: #e3e7ea;}
+.fc-table .classic .mselh {width: 22px;background-color: #e3e7ea;}
 .fc-table .link-right {display:block;text-align:right;}
 
 .fc-beantable {}
@@ -589,7 +589,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .table .small th {text-align:left; font-weight: bold; padding: 8px 6px;}
 .fc-entitytreetable .table .small th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;font-size:7pt;}
 .fc-entitytreetable .table td {height:24px; padding: 4px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;font-size:8pt;}
-.fc-entitytreetable .table .mselh {width: 32px;}
+.fc-entitytreetable .table .mselh {width: 22px;}
 .fc-entitytreetable .table .mselh span {width:16px; height:16px;}
 .fc-entitytreetable .table .mselh input {display:none;}
 .fc-entitytreetable .table .cpre {width:32px;}
@@ -604,7 +604,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .table .mline {}
 .fc-entitytreetable .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-entitytreetable .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
-.fc-entitytreetable .classic .mselh {width: 32px;background-color: #e3e7ea;}
+.fc-entitytreetable .classic .mselh {width: 22px;background-color: #e3e7ea;}
 
 .fc-loadingtable {}
 
