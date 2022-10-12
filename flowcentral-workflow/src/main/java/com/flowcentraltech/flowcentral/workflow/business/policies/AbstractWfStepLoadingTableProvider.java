@@ -68,7 +68,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     }
 
     @Override
-    public void commitChange(ValueStore itemValueStore) throws UnifyException {
+    public final void commitChange(ValueStore itemValueStore) throws UnifyException {
         CommitChangeInfo commitChangeInfo = resolveCommitChangeInfo(itemValueStore);
         if (commitChangeInfo != null && commitChangeInfo.isPresent()) {
             workflowModuleService.applyUserAction(commitChangeInfo.getWorkEntity(), commitChangeInfo.getWfItemId(),
