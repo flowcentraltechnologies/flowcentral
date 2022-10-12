@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable.Section;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
@@ -250,7 +251,7 @@ public class TableWriter extends AbstractControlWriter {
                                     if (switchCmdList == null) {
                                         switchCmdList = new ArrayList<CommandInfo>();
                                     }
-                                    
+
                                     switchCmdList.add(new CommandInfo(cId, fieldName));
                                 }
 
@@ -283,14 +284,14 @@ public class TableWriter extends AbstractControlWriter {
                     }
                 }
 
-                // Details            
+                // Details
                 if (details && detailsIndex == i) {
                     DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
                     if (detailsPanel != null) {
                         writer.writeBehavior(detailsPanel);
                     }
                 }
-                
+
                 // Summary
                 StandalonePanel summaryPanel = tableWidget.getSummaryPanel(i);
                 if (summaryPanel != null) {
@@ -304,7 +305,7 @@ public class TableWriter extends AbstractControlWriter {
                         valueStore.setDataPrefix(null);
                     }
                 }
-                
+
             }
 
             final boolean supportSelect = !table.isFixedAssignment();
@@ -321,11 +322,11 @@ public class TableWriter extends AbstractControlWriter {
             if (focusWidgetId != null) {
                 writer.writeParam("pFocusId", focusWidgetId);
             }
-            
+
             if (switchCmdList != null) {
                 writer.writeObjectParam("pSwhCmdList", DataUtils.toArray(CommandInfo.class, switchCmdList));
             }
-            
+
             if (focusManagement) {
                 writer.writeParam("pTabMemId", tableWidget.getTabMemCtrl().getId());
                 writer.writeParam("pTabWidId", tabWidgetIds.toArray(new String[tabWidgetIds.size()]));
@@ -364,7 +365,7 @@ public class TableWriter extends AbstractControlWriter {
         }
     }
 
-     public class CommandInfo {
+    public class CommandInfo {
         private final String cId;
 
         private final String cmdTag;
@@ -515,28 +516,7 @@ public class TableWriter extends AbstractControlWriter {
             List<ValueStore> valueList = tableWidget.getValueList();
             final int len = valueList.size();
             if (len == 0) {
-                writer.write("<tr class=\"even\">");
-                int skip = 0;
-                if (!entryMode && multiSelect) {
-                    writer.write("<td class=\"mseld\"><span></span></td>");
-                    skip++;
-                }
-
-                if (isSerialNo) {
-                    writer.write("<td class=\"mseriald\"><span></span></td>");
-                    skip++;
-                }
-
-                if (tableWidget.isSummary()) {
-                    skip++;
-                }
-
-                writer.write("<td colspan=\"");
-                writer.write(tableWidget.getChildWidgetInfos().size() - skip);
-                writer.write("\"><span class=\"mnorec\" style=\"display:block;text-align:center;\">");
-                writer.write(resolveSessionMessage("$m{tablewidget.norecordsfound}"));
-                writer.write("</span></td>");
-                writer.write("</tr>");
+                writeNoRecordsFoundRow(writer, tableWidget, entryMode, multiSelect, isSerialNo);
             } else {
                 final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
@@ -561,8 +541,20 @@ public class TableWriter extends AbstractControlWriter {
                     _crudCtrl = table.isView() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
                 }
 
+                List<Section> sections = table.getSections();
+                final int slen = sections.size();
+                final boolean isSections = slen > 0;
+                Section currentSection = null;
+                int sectionIndex = -1;
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
+                    if (isSections) {
+                        while ((currentSection == null || !currentSection.isIndexWithin(i)) && ((++sectionIndex) < slen)) {
+                            currentSection = sections.get(sectionIndex);
+                            writeSectionRow(currentSection, writer, tableWidget, entryMode, multiSelect, isSerialNo);
+                        }
+                    }
+
                     valueStore.setTempValue("parentReader", table.getParentReader());
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
@@ -694,15 +686,20 @@ public class TableWriter extends AbstractControlWriter {
                             if (summaryClass != null) {
                                 writeTagStyleClass(writer, summaryClass);
                             }
-                            
+
                             if (summaryColor != null) {
                                 writer.write(" style=\"background-color:");
                                 writer.write(summaryColor);
                                 writer.write(";\"");
                             }
                             writer.write(">");
-                            
-                            int skip = 1;
+
+                            int skip = 0;
+                            if (supportSelect && !entryMode) {
+                                writer.write("<td class=\"mseld\"></td>");
+                                skip++;
+                            }
+
                             if (isSerialNo) {
                                 writer.write("<td class=\"mseriald\"></td>");
                                 skip++;
@@ -733,7 +730,7 @@ public class TableWriter extends AbstractControlWriter {
                         if (summaryClass != null) {
                             writeTagStyleClass(writer, summaryClass);
                         }
-                        
+
                         if (summaryColor != null) {
                             writer.write(" style=\"background-color:");
                             writer.write(summaryColor);
@@ -824,6 +821,46 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</tr>");
             }
         }
+    }
+
+    private void writeSectionRow(Section section, ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget,
+            boolean entryMode, boolean multiSelect, boolean isSerialNo) throws UnifyException {
+        writeNonDataRow(writer, tableWidget, entryMode, multiSelect, isSerialNo, "minfo", "msection", section.getLabel());
+        if (section.isEmpty()) {
+            writeNoRecordsFoundRow(writer, tableWidget, entryMode, multiSelect, isSerialNo);
+        }
+    }
+
+    private void writeNoRecordsFoundRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget,
+            boolean entryMode, boolean multiSelect, boolean isSerialNo) throws UnifyException {
+        writeNonDataRow(writer, tableWidget, entryMode, multiSelect, isSerialNo, "even", "mnorec",
+                resolveSessionMessage("$m{tablewidget.norecordsfound}"));
+    }
+
+    private void writeNonDataRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, boolean entryMode,
+            boolean multiSelect, boolean isSerialNo, String rowClass, String styleClass, String text) throws UnifyException {
+        writer.write("<tr class=\"").write(rowClass).write("\">");
+        int skip = 0;
+        if (!entryMode && multiSelect) {
+            writer.write("<td class=\"mseld\"><span></span></td>");
+            skip++;
+        }
+
+        if (isSerialNo) {
+            writer.write("<td class=\"mseriald\"><span></span></td>");
+            skip++;
+        }
+
+        if (tableWidget.isSummary()) {
+            skip++;
+        }
+
+        writer.write("<td colspan=\"");
+        writer.write(tableWidget.getChildWidgetInfos().size() - skip);
+        writer.write("\"><span class=\"").write(styleClass).write("\">");
+        writer.writeWithHtmlEscape(text);
+        writer.write("</span></td>");
+        writer.write("</tr>");
     }
 
     public void writeRowMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, Long id, int index)

@@ -477,7 +477,7 @@ public abstract class AbstractTable<T, U> {
     public List<Section> getSections() {
         return sections;
     }
-
+    
     public void reset() throws UnifyException {
         int _pageIndex = pageIndex;
         calcPageDimensions();
@@ -611,6 +611,10 @@ public abstract class AbstractTable<T, U> {
 
         public String getLabel() {
             return label;
+        }
+        
+        public boolean isEmpty() {
+            return startItemIndex < 0;
         }
         
         public boolean isIndexWithin(int index) {

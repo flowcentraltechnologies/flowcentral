@@ -99,7 +99,17 @@ public class LoadingSearchPanel extends AbstractPanel {
     }
 
     @Action
-    public void refresh() throws UnifyException {
+    public void details() throws UnifyException {
+        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
+        if (po.length > 0) {
+            int mIndex = Integer.parseInt(po[1]);
+            LoadingSearch loadingSearch = getLoadingSearch();
+            loadingSearch.getLoadingTable().setDetailsIndex(mIndex);
+         }
+    }
+
+    @Action
+    public void reload() throws UnifyException {
         LoadingSearch loadingSearch = getLoadingSearch();
         loadingSearch.applySearchEntriesToSearch();;
         getRequestContextUtil().setContentScrollReset();
