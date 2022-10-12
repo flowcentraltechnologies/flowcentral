@@ -18,8 +18,13 @@ package com.flowcentraltech.flowcentral.workflow.business.policies;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
+import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -29,6 +34,9 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplicationLoadingTableProvider {
+
+    @Configurable
+    private WorkflowModuleService workflowModuleService;
 
     private final String workflowName;
 
@@ -42,6 +50,10 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         this.loadingLabel = loadingLabel;
     }
 
+    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
+        this.workflowModuleService = workflowModuleService;
+    }
+
     @Override
     public String getLoadingLabel() throws UnifyException {
         return loadingLabel;
@@ -53,6 +65,16 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
 
     public String getWfStepName() {
         return wfStepName;
+    }
+
+    @Override
+    public void commitChange(ValueStore itemValueStore) throws UnifyException {
+        CommitChangeInfo commitChangeInfo = resolveCommitChangeInfo(itemValueStore);
+        if (commitChangeInfo != null && commitChangeInfo.isPresent()) {
+            workflowModuleService.applyUserAction(commitChangeInfo.getWorkEntity(), commitChangeInfo.getWfItemId(),
+                    wfStepName, commitChangeInfo.getActionName(), commitChangeInfo.getComment(), null,
+                    WfReviewMode.NORMAL);
+        }
     }
 
     /**
@@ -76,4 +98,43 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         return environment().valueMap(Long.class, "workRecId", Long.class, "id", query);
     }
 
+    protected abstract CommitChangeInfo resolveCommitChangeInfo(ValueStore itemValueStore) throws UnifyException;
+    
+    protected static class CommitChangeInfo {
+        
+        private final Long wfItemId;
+        
+        private final WorkEntity workEntity;
+        
+        private final String actionName;
+        
+        private final String comment;
+
+        public CommitChangeInfo(Long wfItemId, WorkEntity workEntity, String actionName, String comment) {
+            this.wfItemId = wfItemId;
+            this.workEntity = workEntity;
+            this.actionName = actionName;
+            this.comment = comment;
+        }
+
+        public Long getWfItemId() {
+            return wfItemId;
+        }
+
+        public WorkEntity getWorkEntity() {
+            return workEntity;
+        }
+
+        public String getActionName() {
+            return actionName;
+        }
+
+        public String getComment() {
+            return comment;
+        }
+        
+        public boolean isPresent() {
+            return wfItemId != null && workEntity != null && !StringUtils.isBlank(actionName);
+        }
+    }
 }

@@ -67,6 +67,8 @@ public class LoadingSearch {
 
     private String appTableActionPolicy;
 
+    private String commitCaption;
+    
     private ButtonGroupInfo appTableActionButtonInfo;
 
     private int mode;
@@ -96,6 +98,14 @@ public class LoadingSearch {
         if (searchEntries != null) {
             searchEntries.clear();
         }
+    }
+
+    public String getCommitCaption() {
+        return commitCaption;
+    }
+
+    public void setCommitCaption(String commitCaption) {
+        this.commitCaption = commitCaption;
     }
 
     public LoadingTable getLoadingTable() {

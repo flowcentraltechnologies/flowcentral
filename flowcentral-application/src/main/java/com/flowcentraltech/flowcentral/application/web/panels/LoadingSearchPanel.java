@@ -99,6 +99,13 @@ public class LoadingSearchPanel extends AbstractPanel {
     }
 
     @Action
+    public void commitChange() throws UnifyException {
+        LoadingSearch loadingSearch = getLoadingSearch();
+        loadingSearch.getLoadingTable().commitChange();
+        reload();
+    }
+    
+    @Action
     public void details() throws UnifyException {
         String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
         if (po.length > 0) {
