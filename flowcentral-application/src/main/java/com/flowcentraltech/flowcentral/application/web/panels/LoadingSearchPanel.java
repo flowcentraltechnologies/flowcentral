@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
-import com.flowcentraltech.flowcentral.application.web.widgets.EntityTableWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTableWidget;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
@@ -152,7 +152,7 @@ public class LoadingSearchPanel extends AbstractPanel {
     private void applyTableBtnAction(String appTableActionPolicy) throws UnifyException {
         LoadingSearch loadingSearch = getLoadingSearch();
         if (!StringUtils.isBlank(appTableActionPolicy)) {
-            EntityTableWidget tableWidget = getWidgetByShortName(EntityTableWidget.class, "searchResultTbl");
+            LoadingTableWidget tableWidget = getWidgetByShortName(LoadingTableWidget.class, "searchResultTbl");
             EntityListActionContext eCtx = new EntityListActionContext(tableWidget.getSelectedItems(),
                     appTableActionPolicy);
             EntityListActionResult entityActionResult = loadingSearch.environment().performEntityAction(eCtx);
