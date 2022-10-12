@@ -117,6 +117,13 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
             this.comment = comment;
         }
 
+        public CommitChangeInfo() {
+            this.wfItemId = null;
+            this.workEntity = null;
+            this.actionName = null;
+            this.comment = null;
+        }
+        
         public Long getWfItemId() {
             return wfItemId;
         }
