@@ -286,6 +286,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return !StringUtils.isBlank(defaultVal);
     }
 
+    public boolean isWithUnresolvedInputWidget() {
+        return inputWidgetTypeDef != null;
+    }
+
     public boolean isWithInputWidget() {
         return inputWidgetTypeDef != null || (resolvedTypeFieldDef != null && resolvedTypeFieldDef.isWithInputWidget());
     }

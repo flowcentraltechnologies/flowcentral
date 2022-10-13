@@ -226,12 +226,13 @@ public class FilterCondition {
 
     private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef, AbstractInput<?> currentIn)
             throws UnifyException {
+        final boolean search = false;
         if (currentIn == null) {
-            return InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), false);
+            return InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), search);
         }
 
         if (fieldChange || typeChange) {
-            AbstractInput<?> newIn = InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), false);
+            AbstractInput<?> newIn = InputWidgetUtils.newInput(entityFieldDef, type.isLingual(), search);
             if (!newIn.compatible(currentIn)) {
                 return newIn;
             }
