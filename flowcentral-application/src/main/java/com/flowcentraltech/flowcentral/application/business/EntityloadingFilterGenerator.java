@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) 2019, 2021, FlowCentral Technologies.
+ * All rights reserved.
+ * 
+ * PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE TERMS.
+ */
+package com.flowcentraltech.flowcentral.application.business;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.data.ValueStoreReader;
+
+@EntityReferences({"application.appRef"})
+@Component(name = "entityloading-filtergenerator", description = "Entity Loading Filter Generator")
+public class EntityloadingFilterGenerator extends AbstractEntityBasedFilterGenerator {
+
+    @Override
+    public Restriction generate(ValueStoreReader entityInstReader, String rule) throws UnifyException {
+        AppletType type = entityInstReader.read(AppletType.class, "type");
+        if (AppletType.MANAGE_LOADINGLIST.equals(type)) {
+            return new Equals("delegate", ApplicationModuleNameConstants.TABLE_LOADING_ENVIRONMENT_DELEGATE);
+        }
+        
+        return allRecordsRestriction();
+    }
+
+    @Override
+    public List<? extends Listable> getRuleList(Locale locale) throws UnifyException {
+        return Collections.emptyList();
+    }
+
+}
