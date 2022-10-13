@@ -164,6 +164,10 @@ public class LoadingSearch {
         return sectorIcon;
     }
 
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
+    }
+
     public void setOrder(Order order) {
         loadingTable.setOrder(order);
     }

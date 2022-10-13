@@ -41,19 +41,19 @@
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
 
 // Search result panel
-!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
+!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:86%;}} components:$c{searchResultTbl}
 !fc-loadingtable:searchResultTbl binding:loadingTable multiSelect:true valueMarker:$f{searchResultMarker}
 
 // Footer action panel
-!ui-panel:footerActionPanel styleClass:$e{footer} style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns commitActionBtn}
+!ui-panel:footerActionPanel style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns commitActionBtn}
 !ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}
 !ui-select:tblActionSel styleClass:$e{footersel} list:$s{tableactionlist} listKey:$s{policy} blankOption:$m{select.apply.toselected}
 	listParams:$l{appTableId} binding:appTableActionPolicy
 !ui-button:applyTblActionBtn caption:$m{button.applyaction}
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableAct}}
-!ui-buttongroup:tblActionBtns styleClass:$e{footerbtns} binding:appTableActionButtonInfo
+!ui-buttongroup:tblActionBtns style:$s{display:inline-block;} binding:appTableActionButtonInfo
     eventHandler:$d{!ui-event event:onclick action:$c{applyTableBtnAct}}
-!ui-button:commitActionBtn styleClass:$e{fc-orangebutton} caption:$m{button.commit} captionBinding:$s{commitCaption}
+!ui-button:commitActionBtn styleClass:$e{fc-orangebutton} style:$s{margin-left:20px;} caption:$m{button.commit} captionBinding:$s{commitCaption}
     eventHandler:$d{!ui-event event:onclick action:$c{commitChangeAct}}
 
 // Actions

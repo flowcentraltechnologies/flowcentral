@@ -73,6 +73,8 @@ public class LoadingSearchPanel extends AbstractPanel {
         super.switchState();
 
         LoadingSearch loadingSearch = getLoadingSearch();
+        setVisible("sectorIcon", loadingSearch.isWithSectorIcon());
+        
         loadingSearch.ensureTableStruct();
         if (Boolean.TRUE.equals(getRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
             loadingSearch.applySearchEntriesToSearch();;
@@ -157,8 +159,8 @@ public class LoadingSearchPanel extends AbstractPanel {
                     appTableActionPolicy);
             EntityListActionResult entityActionResult = loadingSearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
-            loadingSearch.applySearchEntriesToSearch();
-            getRequestContextUtil().setContentScrollReset();
+//            loadingSearch.applySearchEntriesToSearch();
+//            getRequestContextUtil().setContentScrollReset();
         }
     }
 
