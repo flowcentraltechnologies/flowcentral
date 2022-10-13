@@ -41,7 +41,7 @@
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
 
 // Search result panel
-!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:92%;}} components:$c{searchResultTbl}
+!ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:86%;}} components:$c{searchResultTbl}
 !fc-loadingtable:searchResultTbl binding:loadingTable multiSelect:true valueMarker:$f{searchResultMarker}
 
 // Footer action panel
