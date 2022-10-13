@@ -175,7 +175,6 @@ fux.rigEntitySearch = function(rgp) {
 		evp.uCmd = id + "->search";
 		evp.uIsReqTrg = true;
 		evp.altered = false;
-		evp.manual = false;
 		evp.withlabels=!rgp.pText;
 		ux.addHdl(sel, "focusout", fux.entityFocusOut, evp);
 		ux.addHdl(sel, "keydown", fux.entityListSwitch, evp);
@@ -191,30 +190,21 @@ fux.rigEntitySearch = function(rgp) {
 fux.rigEntitySearchResult = function(rgp) {
 	const id = rgp.pId;
 	const sel = _id(id);
-	if (rgp.pKeys && rgp.pKeys.length > 0) {
-		const frm = _id(rgp.pRltId);
-		if (frm && !frm.wired) {
-			const evp = {};
-			evp.uId = id;
-			evp.withlabels=!rgp.pText;
-			ux.addHdl(frm, "keydown", fux.entityListManual, evp);
-			frm.wired = true;
-		}
-		
+	if (rgp.pKeys && rgp.pKeys.length > 0) {	
 		for (var i = 0; i < rgp.pKeys.length; i++) {
 			const evp = {};
 			evp.uId = id;
 			evp.uFacId = rgp.pFacId;
 			evp.uKey = rgp.pKeys[i];
 			evp.withlabels = !rgp.pText;
-			const label = _id(rgp.pSelectIds[i]);
+			const _label = _id(rgp.pSelectIds[i]);
 			if (evp.withlabels) {
-				label.innerHTML = rgp.pLabels[i];
+				_label.innerHTML = rgp.pLabels[i];
 			} else {
-				label.innerHTML = rgp.pKeys[i];
+				_label.innerHTML = rgp.pKeys[i];
 			}
-			evp.uLabel = label;
-			ux.addHdl(label, "click", fux.entityListSelect, evp);
+			evp.uLabel = _label;
+			ux.addHdl(_label, "click", fux.entityListSelect, evp);
 		}
 
 		sel._sel = -1;
@@ -254,12 +244,7 @@ fux.entityListSelect = function(uEv) {
 }
 
 fux.entityListSwitch = function(uEv) {
-	const evp = uEv.evp;
-	const sel = _id(evp.uId);
-	if (sel._result && (uEv.uKeyCode == UNIFY_KEY_UP || uEv.uKeyCode == UNIFY_KEY_DOWN)) {
-		evp.manual = true;
-		fux.entityListManual(uEv);
-		ux.setFocus(evp.uRltId);
+	if (fux.entityListManual(uEv)) {
 		return;
 	}
 	
@@ -280,21 +265,19 @@ fux.entityListManual = function(uEv) {
 	const sel = _id(evp.uId);
 	if (sel._result) {
 		if (uEv.uKeyCode == UNIFY_KEY_ESCAPE) {
-			evp.manual = false;
 			ux.setFocus(sel._facId);
 			ux.hidePopup(null);
 			uEv.uStop();
-			return;
+			return true;
 		}
 		
 		if (uEv.uKeyCode == UNIFY_KEY_ENTER) {
-			evp.manual = false;
 			evp.uKey = sel._key[sel._sel]
 			evp.uLabel = _id(sel._label[sel._sel]);
 			evp.uFacId = sel._facId;
 			fux.entityListSelect(uEv);
 			uEv.uStop();
-			return;
+			return true;
 		}
 
 		if (uEv.uKeyCode == UNIFY_KEY_UP || uEv.uKeyCode == UNIFY_KEY_DOWN) {
@@ -319,8 +302,11 @@ fux.entityListManual = function(uEv) {
 			label.className = sel._clsSel;
 			sel._oldSel = sel._sel;
 			uEv.uStop();
+			return true;
 		}
 	}
+	
+	return false;
 }
 
 fux.entityListInput = function(uEv) {
