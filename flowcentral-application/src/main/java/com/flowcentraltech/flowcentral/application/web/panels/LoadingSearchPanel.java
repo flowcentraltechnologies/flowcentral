@@ -73,6 +73,8 @@ public class LoadingSearchPanel extends AbstractPanel {
         super.switchState();
 
         LoadingSearch loadingSearch = getLoadingSearch();
+        setVisible("sectorIcon", loadingSearch.isWithSectorIcon());
+        
         loadingSearch.ensureTableStruct();
         if (Boolean.TRUE.equals(getRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
             loadingSearch.applySearchEntriesToSearch();;

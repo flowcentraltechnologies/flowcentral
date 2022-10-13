@@ -683,15 +683,6 @@ public class TableWriter extends AbstractControlWriter {
                         DetailsPanel detailsPanel = tableWidget.getDetailsPanel();
                         if (detailsPanel != null) {
                             writer.write("<tr");
-                            if (summaryClass != null) {
-                                writeTagStyleClass(writer, "even");
-                            }
-
-                            if (summaryColor != null) {
-                                writer.write(" style=\"background-color:");
-                                writer.write(summaryColor);
-                                writer.write(";\"");
-                            }
                             writer.write(">");
 
                             int skip = 0;
@@ -825,9 +816,8 @@ public class TableWriter extends AbstractControlWriter {
 
     private void writeSectionRow(Section section, ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget,
             boolean entryMode, boolean multiSelect, boolean isSerialNo) throws UnifyException {
-        writeNonDataRow(writer, tableWidget, entryMode, multiSelect, isSerialNo, "minfo", "msection", section.getLabel());
-        if (section.isEmpty()) {
-            writeNoRecordsFoundRow(writer, tableWidget, entryMode, multiSelect, isSerialNo);
+        if (!section.isEmpty()) {
+            writeNonDataRow(writer, tableWidget, entryMode, multiSelect, isSerialNo, "minfo", "msection", section.getLabel());
         }
     }
 
