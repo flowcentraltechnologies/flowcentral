@@ -74,10 +74,6 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
         int triggerDataIndex = getRequestTriggerDataIndex();
         recallValueStore(triggerDataIndex);
         List<? extends Listable> result = doSearch(input, getUplAttribute(int.class, "limit"));
-        System.out.println("@search: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("@search: getResultPanelId() = " + getResultPanelId());
-        System.out.println("@search: result = " + result);
-        System.out.println("@search: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         setRequestAttribute(UnifyWebRequestAttributeConstants.REFRESH_SECTION,
                 new RefreshSection(this, getResultPanelId())); // Always create new because widget Id may have changed.
         WriteWork work = getWriteWork();
@@ -123,9 +119,6 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                     query.addRestriction(br);
                 }
 
-                System.out.println("@case: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-                System.out.println("@case: input = [" + input + "]");
-                System.out.println("@case: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
                 if (!StringUtils.isBlank(input)) {
                     Restriction like = getUplAttribute(boolean.class, "caseInsensitive") ? new ILike(searchField, input)
                             : new Like(searchField, input);
