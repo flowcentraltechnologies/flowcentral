@@ -673,7 +673,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write(">");
 
                             int skip = 0;
-                            if (supportSelect && !entryMode) {
+                            if (supportSelect && multiSelect && !entryMode) {
                                 writer.write("<td class=\"mseld\"></td>");
                                 skip++;
                             }
@@ -694,7 +694,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.writeStructureAndContent(detailsPanel);
                             writer.write("</td>");
 
-                            if (supportSelect && entryMode) {
+                            if (supportSelect && multiSelect && entryMode) {
                                 writer.write("<td class=\"mseld\"></td>");
                             }
                             writer.write("</tr>");
