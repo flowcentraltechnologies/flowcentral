@@ -122,7 +122,7 @@
 			reportable="true">
 			<field name="zoneId" label="$m{organization.branch.zoneid}" type="ref"
 				filterLabel="$m{organization.branch.zone}"
-				inputWidget="application.entitylist" references="zoneRef" />
+				inputWidget="application.entitysearch" references="zoneRef" />
 			<field name="code" label="$m{organization.branch.code}" type="string"
 				inputWidget="application.name"  maxLen="16"/>
 			<field name="description" label="$m{organization.branch.description}"

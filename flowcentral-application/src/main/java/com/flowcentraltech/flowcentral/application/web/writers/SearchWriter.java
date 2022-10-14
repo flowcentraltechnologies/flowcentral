@@ -91,19 +91,13 @@ public class SearchWriter extends AbstractControlWriter {
         SearchWidget searchWidget = (SearchWidget) widget;
         List<ValueStore> valueStoreList = searchWidget.getValueList();
         if (valueStoreList != null) {
-            DynamicField paramCtrlA = searchWidget.getParamCtrl();
+            DynamicField paramCtrl = searchWidget.getParamCtrl();
             final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
-                writeBehavior(writer, searchWidget, lineValueStore, paramCtrlA);
+                writeBehavior(writer, searchWidget, lineValueStore, paramCtrl);
             }
         }
-
-        writer.beginFunction("fux.rigSearch");
-        writer.writeParam("pId", searchWidget.getId());
-        writer.writeCommandURLParam("pCmdURL");
-        writer.writeParam("pContId", searchWidget.getContainerId());
-        writer.endFunction();
     }
 
     private void writeFieldCell(ResponseWriter writer, SearchEntries searchEntries, ValueStore lineValueStore,
@@ -144,21 +138,8 @@ public class SearchWriter extends AbstractControlWriter {
         writer.writeBehavior(ctrl);
         addPageAlias(searchWidget.getId(), ctrl);
         
-        // TODO Depend on flal in search entries value object
-        if (!searchWidget.isContainerDisabled()) {
-            EventHandler[] eventHandlers = searchWidget.getUplAttribute(EventHandler[].class, "eventHandler");
-            if (eventHandlers != null) {
-                String id = ctrl.getId();
-                if (ctrl.isBindEventsToFacade()) {
-                    id = ctrl.getFacadeId();
-                }
-
-                //getRequestContext().setQuickReference(ctrl.getValueStore());
-                for (EventHandler eventHandler : eventHandlers) {
-                    writer.writeBehavior(eventHandler, id, ctrl.getBinding());
-                }
-            }
-        }
+        EventHandler[] eventHandlers = searchWidget.getUplAttribute(EventHandler[].class, "eventHandler");
+        doWriteBehavior(writer, ctrl.getControl(), eventHandlers);
         
         if (!getRequestContextUtil().isFocusOnWidget()) {
             ChildWidgetInfo info = new ArrayList<ChildWidgetInfo>(ctrl.getChildWidgetInfos()).get(0);

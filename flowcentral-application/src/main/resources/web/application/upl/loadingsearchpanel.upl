@@ -14,7 +14,7 @@
 // the License.
 
 !fc-loadingsearchpanel layout:$d{!ui-vertical}
-	components:$c{headerBar searchEntriesPanel searchResultPanel footerActionPanel}
+	components:$c{headerBar searchEntriesPanel colorLegend searchResultPanel footerActionPanel}
 
 // Header Bar
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
@@ -40,10 +40,14 @@
 !ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-graybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
 
+// Color legend
+!ui-colorlegend:colorLegend style:$s{width:100%;} columns:6 binding:loadingTable.colorLegendInfo
+
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:86%;}} components:$c{searchResultTbl}
 !fc-loadingtable:searchResultTbl binding:loadingTable multiSelect:true valueMarker:$f{searchResultMarker}
-
+	multiSelDependentList:$c{tblActionSel tblActionBtns commitActionBtn}
+	
 // Footer action panel
 !ui-panel:footerActionPanel style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns commitActionBtn}
 !ui-panel:selFooterActionPanel layout:$d{!ui-horizontal} components:$c{tblActionSel applyTblActionBtn}

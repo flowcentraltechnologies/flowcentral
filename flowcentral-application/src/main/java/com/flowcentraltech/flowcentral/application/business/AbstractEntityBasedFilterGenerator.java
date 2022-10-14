@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.IsNotNull;
 import com.tcdng.unify.core.criterion.IsNull;
 import com.tcdng.unify.core.criterion.Restriction;
 
@@ -33,6 +34,8 @@ public abstract class AbstractEntityBasedFilterGenerator extends AbstractUnifyCo
         implements EntityBasedFilterGenerator {
 
     private static final Restriction ID_NULL_RESTRICTION = new IsNull("id");
+
+    private static final Restriction ID_NOT_NULL_RESTRICTION = new IsNotNull("id");
     
     @Configurable
     private ApplicationModuleService applicationModuleService;
@@ -68,6 +71,10 @@ public abstract class AbstractEntityBasedFilterGenerator extends AbstractUnifyCo
 
     protected Restriction noRestriction() {
         return null;
+    }
+
+    protected Restriction allRecordsRestriction() {
+        return ID_NOT_NULL_RESTRICTION;
     }
 
     protected Restriction noRecordsRestriction() {

@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
-import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable.Section;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
@@ -541,20 +540,8 @@ public class TableWriter extends AbstractControlWriter {
                     _crudCtrl = table.isView() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
                 }
 
-                List<Section> sections = table.getSections();
-                final int slen = sections.size();
-                final boolean isSections = slen > 0;
-                Section currentSection = null;
-                int sectionIndex = -1;
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
-                    if (isSections) {
-                        while ((currentSection == null || !currentSection.isIndexWithin(i)) && ((++sectionIndex) < slen)) {
-                            currentSection = sections.get(sectionIndex);
-                            writeSectionRow(currentSection, writer, tableWidget, entryMode, multiSelect, isSerialNo);
-                        }
-                    }
-
                     valueStore.setTempValue("parentReader", table.getParentReader());
                     if (entryMode) {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
@@ -686,7 +673,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write(">");
 
                             int skip = 0;
-                            if (supportSelect && !entryMode) {
+                            if (supportSelect && multiSelect && !entryMode) {
                                 writer.write("<td class=\"mseld\"></td>");
                                 skip++;
                             }
@@ -707,7 +694,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.writeStructureAndContent(detailsPanel);
                             writer.write("</td>");
 
-                            if (supportSelect && entryMode) {
+                            if (supportSelect && multiSelect && entryMode) {
                                 writer.write("<td class=\"mseld\"></td>");
                             }
                             writer.write("</tr>");
@@ -811,13 +798,6 @@ public class TableWriter extends AbstractControlWriter {
 
                 writer.write("</tr>");
             }
-        }
-    }
-
-    private void writeSectionRow(Section section, ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget,
-            boolean entryMode, boolean multiSelect, boolean isSerialNo) throws UnifyException {
-        if (!section.isEmpty()) {
-            writeNonDataRow(writer, tableWidget, entryMode, multiSelect, isSerialNo, "minfo", "msection", section.getLabel());
         }
     }
 
