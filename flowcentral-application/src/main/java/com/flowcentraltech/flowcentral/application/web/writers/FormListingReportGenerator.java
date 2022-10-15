@@ -16,31 +16,27 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
-import com.flowcentraltech.flowcentral.application.data.ListingProperties;
+import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.web.ui.widget.ResponseWriter;
+import com.tcdng.unify.core.report.Report;
 
 /**
- * Form listing generator.
+ * Form listing report generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FormListingGenerator extends FormListingReportGenerator {
+public interface FormListingReportGenerator extends UnifyComponent {
 
     /**
-     * Generates form listing into writer.
+     * Generates form report into writer.
      * 
      * @param formBeanValueStore
      *                           the form bean value store
-     * @param listingProperties
-     *                           the listing properties
-     * @param writer
-     *                           the response writer
+     * @return report
      * @throws UnifyException
      *                        if an error occurs
      */
-    void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties, ResponseWriter writer)
-            throws UnifyException;
+    Report generateReport(ValueStore formBeanValueStore) throws UnifyException;
 }

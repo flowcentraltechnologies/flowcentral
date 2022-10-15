@@ -44,6 +44,7 @@ import com.tcdng.unify.web.ui.AbstractCommonUtilitiesPageController;
                 response = { "!showpopupresponse popup:$s{reportRunnerPopup}" }),
         @ResultMapping(name = "viewreport",
                 response = { "!refreshpanelresponse panels:$l{reportRunnerPopup}", "!commonreportresponse" }),
+        @ResultMapping(name = "viewlistingreport", response = { "!commonlistingreportresponse" }),
         @ResultMapping(name = "showlockedresource", response = { "!showpopupresponse popup:$s{lockedResourcePopup}" }),
         @ResultMapping(name = "grablocksuccess", response = { "!hidepopupresponse" }) })
 public class FlowCentralCommonUtilitiesController

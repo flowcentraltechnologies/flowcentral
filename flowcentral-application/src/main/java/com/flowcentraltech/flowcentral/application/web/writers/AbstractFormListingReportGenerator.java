@@ -16,31 +16,31 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
-import com.flowcentraltech.flowcentral.application.data.ListingProperties;
+import java.util.Arrays;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
+import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
 /**
- * Form listing generator.
+ * Convenient abstract base class for form listing report generators.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FormListingGenerator extends FormListingReportGenerator {
+public abstract class AbstractFormListingReportGenerator extends AbstractUnifyComponent
+        implements FormListingReportGenerator {
 
-    /**
-     * Generates form listing into writer.
-     * 
-     * @param formBeanValueStore
-     *                           the form bean value store
-     * @param listingProperties
-     *                           the listing properties
-     * @param writer
-     *                           the response writer
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties, ResponseWriter writer)
-            throws UnifyException;
+    protected List<ListingReportProperties> getReportProperties() throws UnifyException {
+        return Arrays.asList(new ListingReportProperties("default_prop"));
+    }
+
+    protected abstract void generateReportHeader(ValueStore formBeanValueStore, ListingReportProperties properties,
+            ResponseWriter writer) throws UnifyException;
+
+    protected abstract void generateReportFooter(ValueStore formBeanValueStore, ListingReportProperties properties,
+            ResponseWriter writer) throws UnifyException;
 }

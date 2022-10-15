@@ -713,6 +713,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Entity _inst = (Entity) form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(form.getFormDef().getEntityDef(), _inst, actionPolicyName);
         efCtx.setAll(form.getCtx());
+        if (isListingView()) {
+            final String listingGenerator = listingForm.getFormListing().getListingGenerator();
+            efCtx.setListingGenerator(listingGenerator);
+            return au().environment().performEntityAction(efCtx);
+        }
+        
         EntityActionResult entityActionResult = au().environment().performEntityAction(efCtx);
         updateForm(HeaderWithTabsForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst, false));
         return entityActionResult;
@@ -816,6 +822,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return viewMode;
     }
 
+    public boolean isListingView() {
+        return ViewMode.LISTING_FORM.equals(viewMode);
+    }
+    
     public boolean isRootForm() {
         return form != null && (formStack == null || formStack.isEmpty());
     }

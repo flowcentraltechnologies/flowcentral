@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.Map;
 
 /**
- * Label suggestions defintion.
+ * Label suggestions definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0

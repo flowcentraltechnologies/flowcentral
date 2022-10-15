@@ -47,6 +47,7 @@ import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
@@ -825,7 +826,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     private void handleEntityActionResult(EntityActionResult entityActionResult, FormContext ctx)
-            throws UnifyException {
+            throws UnifyException {        
         if (entityActionResult.isRefreshMenu()) {
             refreshApplicationMenu();
         }
@@ -864,6 +865,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
         } else if (entityActionResult.isClosePage()) {
             setCommandResultMapping(ResultMappingConstants.CLOSE);
+        } else if (entityActionResult.isDisplayListingReport()) {
+            setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
+//            getEventLogger().logUserEvent(CommonModuleAuditConstants.GENERATE_REPORT, reportOptions.getTitle());
+            setCommandResultMapping("viewlistingreport");
         }
     }
 

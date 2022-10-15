@@ -394,6 +394,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
+    public void generateReport(Report report, OutputStream outputStream) throws UnifyException {
+        reportServer.generateReport(report, outputStream);
+    }
+
+    @Override
     public boolean isReportable(String entityName) throws UnifyException {
         return environment().find(new ReportableDefinitionQuery().entity(entityName)) != null;
     }

@@ -18,18 +18,25 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.data.ListingProperties;
+import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.format.Formatter;
+import com.tcdng.unify.core.report.Report;
+import com.tcdng.unify.core.report.ReportLayoutType;
+import com.tcdng.unify.core.report.ReportPageProperties;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ui.WebUIApplicationComponents;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
 /**
@@ -38,7 +45,8 @@ import com.tcdng.unify.web.ui.widget.ResponseWriter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractFormListingGenerator extends AbstractUnifyComponent implements FormListingGenerator {
+public abstract class AbstractFormListingGenerator extends AbstractFormListingReportGenerator
+        implements FormListingGenerator {
 
     protected enum AmountFormat {
         WHOLE_NUMBER,
@@ -89,18 +97,41 @@ public abstract class AbstractFormListingGenerator extends AbstractUnifyComponen
 
             };
     }
-    
+
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
-    
+
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
     }
 
     @Override
-    public void generate(ValueStore formBeanValueStore, ResponseWriter writer) throws UnifyException {
-        doGenerate(formBeanValueStore, new ListingGeneratorWriter(writer));
+    public final Report generateReport(ValueStore formBeanValueStore) throws UnifyException {
+        ResponseWriter writer = getComponent(ResponseWriter.class,
+                WebUIApplicationComponents.APPLICATION_RESPONSEWRITER);
+        ReportPageProperties reportPageProperties = ReportPageProperties.newBuilder().build();
+        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, reportPageProperties);
+        List<ListingReportProperties> reportProperties = getReportProperties();
+        for (ListingReportProperties listingReportProperties : reportProperties) {
+            writer.reset(Collections.emptyMap());
+            generateReportHeader(formBeanValueStore, listingReportProperties, writer);
+            writer.write("<div class=\"fc-formlisting\">");
+            generateListing(formBeanValueStore, listingReportProperties, writer);
+            writer.write("</div>");
+            generateReportFooter(formBeanValueStore, listingReportProperties, writer);
+            String bodyContent = writer.toString();
+            String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
+            rb.addBodyContentHtml(listingReportProperties.getName(), style, bodyContent);
+        }
+
+        return rb.build();
+    }
+
+    @Override
+    public void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
+            ResponseWriter writer) throws UnifyException {
+        doGenerate(formBeanValueStore, listingProperties, new ListingGeneratorWriter(writer));
     }
 
     @Override
@@ -168,7 +199,7 @@ public abstract class AbstractFormListingGenerator extends AbstractUnifyComponen
 
         return valueStore.retrieve(String.class, propertyName, amountFormatterMap.get(getSessionLocale()));
     }
-    
+
     @SuppressWarnings("unchecked")
     protected <T> T[] retrieveValues(Class<T> typeClass, ValueStore valueStore, String... propertyNames)
             throws UnifyException {
@@ -179,7 +210,7 @@ public abstract class AbstractFormListingGenerator extends AbstractUnifyComponen
 
         return values;
     }
-   
-    protected abstract void doGenerate(ValueStore formBeanValueStore, ListingGeneratorWriter writer)
-            throws UnifyException;
+
+    protected abstract void doGenerate(ValueStore formBeanValueStore, ListingProperties listingProperties,
+            ListingGeneratorWriter writer) throws UnifyException;
 }
