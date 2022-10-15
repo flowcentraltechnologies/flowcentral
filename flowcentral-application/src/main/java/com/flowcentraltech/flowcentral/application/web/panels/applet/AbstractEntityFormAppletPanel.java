@@ -773,6 +773,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+    @Action
+    public void print() throws UnifyException {
+        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.CREATE);
+        if (!ctx.isWithFormErrors()) {
+            EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndClose();
+            entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
+            handleEntityActionResult(entityActionResult, ctx);
+        }
+    }
+
     protected SystemModuleService system() {
         return systemModuleService;
     }

@@ -23,6 +23,7 @@ import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.Table;
+import com.tcdng.unify.core.report.ReportLayoutType;
 
 /**
  * Report configuration data. Represents a report setup.
@@ -43,7 +44,7 @@ public class ReportConfiguration extends BaseApplicationEntity {
     private String template;
 
     @Column(length = 64, nullable = true)
-    private String layout;
+    private ReportLayoutType layout;
 
     @Column(length = 64, nullable = true)
     private String processor;
@@ -96,11 +97,11 @@ public class ReportConfiguration extends BaseApplicationEntity {
         this.template = template;
     }
 
-    public String getLayout() {
+    public ReportLayoutType getLayout() {
         return layout;
     }
 
-    public void setLayout(String layout) {
+    public void setLayout(ReportLayoutType layout) {
         this.layout = layout;
     }
 

@@ -64,7 +64,7 @@
 // Listing Form
 !fc-listingformpanel:listingPanel binding:listingForm
 	moreCenterComponents:$c{listDisplayCounterLabel}
-	moreActionButtons:$c{listFrmActionBtns}
+	moreActionButtons:$c{listPrintBtn listFrmActionBtns}
 	moreActionButtons:$c{listCancelBtn listPrevBtn listNextBtn}
 	altActionButtons:$c{listFrmActionBtns listCancelBtn}
 !ui-label:listDisplayCounterLabel styleClass:$e{fc-dispcounter}
@@ -75,6 +75,8 @@
     eventHandler:$d{!ui-event event:onclick action:$c{nextAct}}
 !ui-button:listCancelBtn caption:$m{button.close}
 	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
+!ui-button:listPrintBtn caption:$m{button.print}
+	eventHandler:$d{!ui-event event:onclick action:$c{printAct}}
 !fc-formactionbuttons:listFrmActionBtns binding:formActionDefList
     eventHandler:$f{frmActionsHandler}
 
@@ -135,6 +137,7 @@
 !ui-postcommand:crudAct command:crudSelectItem refresh:$c{entityCrudPanel.crudBodyPanel}
 !ui-postcommand:saveAsSwitchOnChangeAct command:saveAsSwitchOnChange components:$c{entitySaveAsPanel}
 	refresh:$c{entitySaveAsPanel.entityFormBodyPanel}
+!ui-postcommand:printAct command:print
 !ui-postcommand:saveAct command:save components:$c{formPanel}
 !ui-postcommand:saveNextAct command:saveAndNext components:$c{formPanel}
 !ui-postcommand:saveCloseAct command:saveAndClose components:$c{formPanel}
