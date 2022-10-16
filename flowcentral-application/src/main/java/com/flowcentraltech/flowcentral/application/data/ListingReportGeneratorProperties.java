@@ -13,26 +13,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.flowcentraltech.flowcentral.application.data;
 
-import java.util.Map;
+import java.util.List;
+
+import com.tcdng.unify.core.report.ReportPageProperties;
 
 /**
- * Label suggestions definition.
+ * Listing report generator properties.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class LabelSuggestionDef {
+public class ListingReportGeneratorProperties {
 
-    private Map<String, String> labelByFieldNames;
-
-    public LabelSuggestionDef(Map<String, String> labelByFieldNames) {
-        this.labelByFieldNames = labelByFieldNames;
-    }
+    private ReportPageProperties reportPageProperties;
     
-    public String getSuggestedLabel(String fieldName) {
-        return labelByFieldNames.get(fieldName);
+    private List<ListingReportProperties> reportProperties;
+
+    public ListingReportGeneratorProperties(ReportPageProperties reportPageProperties,
+            List<ListingReportProperties> reportProperties) {
+        this.reportPageProperties = reportPageProperties;
+        this.reportProperties = reportProperties;
+    }
+
+    public ReportPageProperties getReportPageProperties() {
+        return reportPageProperties;
+    }
+
+    public List<ListingReportProperties> getReportProperties() {
+        return reportProperties;
     }
 }

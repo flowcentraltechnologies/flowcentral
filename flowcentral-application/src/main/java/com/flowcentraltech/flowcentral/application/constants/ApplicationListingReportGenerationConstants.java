@@ -13,21 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Keys for storing certain values in request scope.
+ * Application listing report generation task constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralRequestAttributeConstants {
+public class ApplicationListingReportGenerationConstants {
 
-    /** Report options */
-    String REPORTOPTIONS = "fc.REPORTOPTIONS";
+    String LISTING_REPORT_GENERATOR_TASK_NAME = "application.listingreportgeneration.task";
 
-    String REPORT = "fc.REPORT";
-
-    /** User login ID */
-    String USER_LOGINID = "fc.userloginid";
+    String LISTING_ITEM = "listingItem";
 }

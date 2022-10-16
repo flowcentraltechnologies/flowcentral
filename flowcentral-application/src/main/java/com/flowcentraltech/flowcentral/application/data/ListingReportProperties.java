@@ -13,21 +13,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.application.data;
+
+import java.util.Map;
 
 /**
- * Keys for storing certain values in request scope.
+ * Listing report properties.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralRequestAttributeConstants {
+public class ListingReportProperties extends ListingProperties {
 
-    /** Report options */
-    String REPORTOPTIONS = "fc.REPORTOPTIONS";
+    public static final String PROPERTY_DOCSTYLE = "prop.document.style";
+    
+    private String name;
 
-    String REPORT = "fc.REPORT";
+    public ListingReportProperties(String name, Map<String, Object> properties) {
+        super(properties);
+        this.name = name;
+    }
 
-    /** User login ID */
-    String USER_LOGINID = "fc.userloginid";
+    public ListingReportProperties(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
 }

@@ -87,6 +87,7 @@ import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.Report.Builder;
 import com.tcdng.unify.core.report.ReportColumn;
 import com.tcdng.unify.core.report.ReportFormat;
+import com.tcdng.unify.core.report.ReportPageProperties;
 import com.tcdng.unify.core.report.ReportServer;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.GetterSetterInfo;
@@ -284,13 +285,13 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public void generateDynamicReport(ReportOptions reportOptions, OutputStream outputStream) throws UnifyException {
-        Report.Builder rb = Report.newBuilder();
+        ReportPageProperties pageProperties = ReportPageProperties.newBuilder().pageWidth(getPreferredPort())
+                .pageHeight(getPreferredPort()).landscape(isApplicationIgnoreViewDirective()).build();
+        Report.Builder rb = Report.newBuilder(reportOptions.getReportLayout(), pageProperties);
         rb.code(reportOptions.getReportName());
         rb.title(reportOptions.getTitle());
         rb.dataSource(reportOptions.getDataSource());
         rb.processor(reportOptions.getProcessor());
-        rb.pageWidth(reportOptions.getPageWidth());
-        rb.pageHeight(reportOptions.getPageHeight());
         rb.dynamicDataSource(reportOptions.isDynamicDataSource());
         rb.printColumnNames(reportOptions.isPrintColumnNames());
         rb.printGroupColumnNames(reportOptions.isPrintGroupColumnNames());
@@ -298,12 +299,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         rb.invertGroupColors(reportOptions.isInvertGroupColors());
         rb.underlineRows(reportOptions.isUnderlineRows());
         rb.shadeOddRows(reportOptions.isShadeOddRows());
-        rb.landscape(reportOptions.isLandscape());
         rb.format(ReportFormat.fromName(reportOptions.getReportFormat()));
-        if (StringUtils.isNotBlank(reportOptions.getReportLayout())) {
-            rb.layout(reportOptions.getReportLayout());
-        }
-
         if (DataUtils.isNotBlank(reportOptions.getSystemInputList())) {
             for (Input<?> input : reportOptions.getSystemInputList()) {
                 rb.addParameter(input.getName(), input.getDescription(), input.getTypeValue());
@@ -340,12 +336,12 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
 
                 String tableName = reportColumnOptions.getTableName();
-                String columnName = reportColumnOptions.getColumnName();                
+                String columnName = reportColumnOptions.getColumnName();
                 if (reportOptions.isReportEntityList()) {
                     tableName = sqlEntityInfo.getPreferredViewName();
                     columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
                 }
-                
+
                 if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
                     columnName = entityDef.getPreferedColumnName(columnName);
                 }
@@ -394,6 +390,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         Report report = rb.build();
         setCommonReportParameters(report);
+        reportServer.generateReport(report, outputStream);
+    }
+
+    @Override
+    public void generateReport(Report report, OutputStream outputStream) throws UnifyException {
         reportServer.generateReport(report, outputStream);
     }
 
@@ -623,7 +624,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getFieldInfo(restrictionDef.getFieldName());
                     ColumnType columnType = sqlFieldInfo.getColumnType();
                     if (columnType.isDate() || columnType.isTimestamp()) {
-                        ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(now, type, param1, param2, columnType.isTimestamp());
+                        ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(now, type, param1, param2,
+                                columnType.isTimestamp());
                         type = condition.getType();
                         param1 = condition.getParamA();
                         param2 = condition.getParamB();
@@ -662,10 +664,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 ReportModuleSysParamConstants.REPORT_TEMPLATE_PATH);
         String template = report.getTemplate();
         if (template == null) {
-            String templateParameter = ReportModuleSysParamConstants.DYNAMIC_REPORT_PORTRAIT_TEMPLATE;
-            if (report.isLandscape()) {
-                templateParameter = ReportModuleSysParamConstants.DYNAMIC_REPORT_LANDSCAPE_TEMPLATE;
-            }
+            String templateParameter = report.getPageProperties().isLandscape()
+                    ? ReportModuleSysParamConstants.DYNAMIC_REPORT_LANDSCAPE_TEMPLATE
+                    : ReportModuleSysParamConstants.DYNAMIC_REPORT_PORTRAIT_TEMPLATE;
             template = systemModuleService.getSysParameterValue(String.class, templateParameter);
         }
         report.setTemplate(IOUtils.buildFilename(templatePath, template));

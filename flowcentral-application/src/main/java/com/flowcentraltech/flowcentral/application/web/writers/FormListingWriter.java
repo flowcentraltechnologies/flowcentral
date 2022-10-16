@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormListing;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormListingWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -43,7 +44,7 @@ public class FormListingWriter extends AbstractContainerWriter {
 
         FormListing formListing = formListingWidget.getFormListing();
         FormListingGenerator generator = (FormListingGenerator) getComponent(formListing.getListingGenerator());
-        generator.generate(formListing.getFormValueStore(), writer);
+        generator.generateListing(formListing.getFormValueStore(), new ListingProperties(), writer);
         writer.write("</div>");
     }
 }

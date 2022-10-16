@@ -13,21 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.configuration.xml.adapter;
+
+import com.tcdng.unify.core.report.ReportLayoutType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
- * Keys for storing certain values in request scope.
+ * Report layout type XML adapter.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralRequestAttributeConstants {
+public class ReportLayoutTypeXmlAdapter extends AbstractEnumConstXmlAdapter<ReportLayoutType> {
 
-    /** Report options */
-    String REPORTOPTIONS = "fc.REPORTOPTIONS";
-
-    String REPORT = "fc.REPORT";
-
-    /** User login ID */
-    String USER_LOGINID = "fc.userloginid";
+    public ReportLayoutTypeXmlAdapter() {
+        super(ReportLayoutType.class);
+    }
 }

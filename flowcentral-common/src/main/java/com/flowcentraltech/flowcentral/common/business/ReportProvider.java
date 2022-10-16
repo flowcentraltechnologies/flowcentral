@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportColumn;
 
 /**
@@ -59,6 +60,18 @@ public interface ReportProvider extends UnifyComponent {
      *                        if an error occurs
      */
     void generateDynamicReport(ReportOptions reportOptions, OutputStream outputStream) throws UnifyException;
+
+    /**
+     * Generates a report.
+     * 
+     * @param report
+     *                      the report to generate
+     * @param outputStream
+     *                      the output stream where generated report is written to
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateReport(Report report, OutputStream outputStream) throws UnifyException;
 
     /**
      * Finds report columns of a reportable.

@@ -18,6 +18,10 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportLayoutTypeXmlAdapter;
+import com.tcdng.unify.core.report.ReportLayoutType;
 
 /**
  * Report configuration.
@@ -36,7 +40,7 @@ public class ReportConfig extends BaseNameConfig {
 
     private String template;
 
-    private String layout;
+    private ReportLayoutType layout;
 
     private ReportColumnsConfig columns;
 
@@ -117,12 +121,13 @@ public class ReportConfig extends BaseNameConfig {
         this.template = template;
     }
 
-    public String getLayout() {
+    public ReportLayoutType getLayout() {
         return layout;
     }
 
+    @XmlJavaTypeAdapter(ReportLayoutTypeXmlAdapter.class)
     @XmlAttribute
-    public void setLayout(String layout) {
+    public void setLayout(ReportLayoutType layout) {
         this.layout = layout;
     }
 

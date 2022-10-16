@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Input;
+import com.tcdng.unify.core.report.ReportLayoutType;
 
 /**
  * Report options.
@@ -36,7 +37,7 @@ public class ReportOptions {
 
     private String reportFormat;
 
-    private String reportLayout;
+    private ReportLayoutType reportLayout;
 
     private String reportResourcePath;
 
@@ -97,6 +98,7 @@ public class ReportOptions {
     private boolean reportEntityList;
 
     public ReportOptions() {
+        reportLayout = ReportLayoutType.TABULAR;
         columnOptionsList = new ArrayList<ReportColumnOptions>();
         joinOptionsList = new ArrayList<ReportJoinOptions>();
         printColumnNames = true;
@@ -153,11 +155,11 @@ public class ReportOptions {
         this.reportFormat = reportFormat;
     }
 
-    public String getReportLayout() {
+    public ReportLayoutType getReportLayout() {
         return reportLayout;
     }
 
-    public void setReportLayout(String reportLayout) {
+    public void setReportLayout(ReportLayoutType reportLayout) {
         this.reportLayout = reportLayout;
     }
 

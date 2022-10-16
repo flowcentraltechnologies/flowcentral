@@ -13,21 +13,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.application.data;
+
+import java.util.Collections;
+import java.util.Map;
+
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Keys for storing certain values in request scope.
+ * Listing properties.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralRequestAttributeConstants {
+public class ListingProperties {
+    
+    private Map<String, Object> properties;
 
-    /** Report options */
-    String REPORTOPTIONS = "fc.REPORTOPTIONS";
+    public ListingProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
 
-    String REPORT = "fc.REPORT";
-
-    /** User login ID */
-    String USER_LOGINID = "fc.userloginid";
+    public ListingProperties() {
+        this.properties = Collections.emptyMap();
+    }
+    
+    public <T> T getProperty(Class<T> propertyClass, String propertyName) throws UnifyException {
+        return DataUtils.convert(propertyClass, properties.get(propertyName));
+    }
 }

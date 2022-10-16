@@ -62,6 +62,10 @@ public final class ConfigurationUtils {
         XmlConfigUtils.writeXmlConfigNoEscape(config, outputStream);
     }
     
+    public static String readString(String fileResource, String workingPath) throws UnifyException {
+        return IOUtils.readAllLines(fileResource, workingPath);
+    }
+    
     public static List<String> readStringList(String fileResource, String workingPath)
             throws UnifyException {
         return IOUtils.readFileResourceLines(fileResource, workingPath);

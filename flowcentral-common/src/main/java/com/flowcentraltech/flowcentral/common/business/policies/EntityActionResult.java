@@ -55,6 +55,8 @@ public class EntityActionResult {
 
     private boolean hidePopupOnly;
 
+    private boolean displayListingReport;
+
     public EntityActionResult(EntityActionContext ctx, TaskSetup resultTaskSetup, String resultTaskCaption) {
         this.resultTaskSetup = resultTaskSetup;
         this.resultTaskCaption = resultTaskCaption;
@@ -172,6 +174,14 @@ public class EntityActionResult {
 
     public void setCloseView(boolean closeView) {
         this.closeView = closeView;
+    }
+
+    public boolean isDisplayListingReport() {
+        return displayListingReport;
+    }
+
+    public void setDisplayListingReport(boolean displayListingReport) {
+        this.displayListingReport = displayListingReport;
     }
 
     public String getSuccessHint() {

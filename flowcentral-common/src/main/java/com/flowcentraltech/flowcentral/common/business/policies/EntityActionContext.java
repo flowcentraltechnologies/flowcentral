@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.data.Audit;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.constant.MessageType;
 
 /**
@@ -38,6 +39,10 @@ public class EntityActionContext extends AbstractContext {
     private Entity inst;
 
     private String actionPolicyName;
+
+    private String formActionName;
+    
+    private String listingGenerator;
 
     private SweepingCommitPolicy sweepingCommitPolicy;
 
@@ -98,12 +103,20 @@ public class EntityActionContext extends AbstractContext {
         return actionType;
     }
 
+    public String getFormActionName() {
+        return formActionName;
+    }
+
+    public void setFormActionName(String formActionName) {
+        this.formActionName = formActionName;
+    }
+
     public String getActionPolicyName() {
         return actionPolicyName;
     }
 
     public boolean isWithActionPolicy() {
-        return actionPolicyName != null;
+        return !StringUtils.isBlank(actionPolicyName);
     }
 
     public SweepingCommitPolicy getSweepingCommitPolicy() {
@@ -112,6 +125,18 @@ public class EntityActionContext extends AbstractContext {
 
     public boolean isWithSweepingCommitPolicy() {
         return sweepingCommitPolicy != null;
+    }
+
+    public String getListingGenerator() {
+        return listingGenerator;
+    }
+
+    public void setListingGenerator(String listingGenerator) {
+        this.listingGenerator = listingGenerator;
+    }
+
+    public boolean isWithListingGenerator() {
+        return !StringUtils.isBlank(listingGenerator);
     }
 
     public Object getResult() {
