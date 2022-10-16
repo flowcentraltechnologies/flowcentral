@@ -36,41 +36,9 @@ jobs:
               "username": "${{ secrets.REPO_USERNAME }}",
               "password": "${{ secrets.REPO_PASSWORD }}"
           },{
-            "id": "s01-sonatype-nexus-staging",
+            "id": "sonatype-nexus-staging",
             "username": "${{ secrets.REPO_USERNAME }}",
             "password": "${{ secrets.REPO_PASSWORD }}"
-            }] 
-        repositories: |
-          [{
-              "id": "sonatype-nexus-snapshots",
-              "name": "Sonatype Nexus Snapshots",
-              "url": "http://oss.sonatype.org/content/repositories/snapshots/",
-              "releases": {
-                "enabled": "false"
-              },
-              "snapshots": {
-                "enabled": "true"
-              }
-          },{
-              "id": "s01-sonatype-nexus-snapshots",
-              "name": "Sonatype Nexus Snapshots 2",
-              "url": "http://s01.oss.sonatype.org/content/repositories/snapshots/",
-              "releases": {
-                "enabled": "false"
-              },
-              "snapshots": {
-                "enabled": "true"
-              }
-          },{
-            "id": "s01-sonatype-nexus-staging",
-            "name": "Sonatype Nexus Staging 2",
-            "url": "http://s01.oss.sonatype.org/service/local/staging/deploy/maven2/",
-            "releases": {
-            "enabled": "true"
-            },
-            "snapshots": {
-            "enabled": "false"
-            }
           }] 
           
     - name: Import GPG Key
