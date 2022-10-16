@@ -117,11 +117,11 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                 .title("listingReport");
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
-            generateReportHeader(formBeanValueStore, listingReportProperties, writer);
+            generateReportHeader(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
             writer.write("<div class=\"fc-formlisting\">");
             generateListing(formBeanValueStore, listingReportProperties, writer);
             writer.write("</div>");
-            generateReportFooter(formBeanValueStore, listingReportProperties, writer);
+            generateReportFooter(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
             if (style == null) {

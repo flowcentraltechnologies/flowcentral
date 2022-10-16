@@ -24,7 +24,6 @@ import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.report.ReportPageProperties;
-import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
 /**
  * Convenient abstract base class for form listing report generators.
@@ -42,8 +41,8 @@ public abstract class AbstractFormListingReportGenerator extends AbstractUnifyCo
     }
 
     protected abstract void generateReportHeader(ValueStore formBeanValueStore, ListingReportProperties properties,
-            ResponseWriter writer) throws UnifyException;
+            ListingGeneratorWriter writer) throws UnifyException;
 
     protected abstract void generateReportFooter(ValueStore formBeanValueStore, ListingReportProperties properties,
-            ResponseWriter writer) throws UnifyException;
+            ListingGeneratorWriter writer) throws UnifyException;
 }
