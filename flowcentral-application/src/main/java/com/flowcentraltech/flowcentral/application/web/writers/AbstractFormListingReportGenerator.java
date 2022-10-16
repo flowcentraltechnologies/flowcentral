@@ -44,6 +44,9 @@ public abstract class AbstractFormListingReportGenerator extends AbstractUnifyCo
     protected abstract void generateReportHeader(ValueStore formBeanValueStore, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 
+    protected abstract void generateReportAddendum(ValueStore formBeanValueStore, ListingReportProperties properties,
+            ListingGeneratorWriter writer) throws UnifyException;
+
     protected abstract void generateReportFooter(ValueStore formBeanValueStore, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 }

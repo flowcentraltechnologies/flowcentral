@@ -119,7 +119,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writer.reset(Collections.emptyMap());
             writer.write("<div class=\"fc-formlisting\">");
             generateReportHeader(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
+            writer.write("<div class=\"flbody\">");
             generateListing(formBeanValueStore, listingReportProperties, writer);
+            generateReportAddendum(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
+            writer.write("</div>");
             generateReportFooter(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
             writer.write("</div>");
             String bodyContent = writer.toString();
