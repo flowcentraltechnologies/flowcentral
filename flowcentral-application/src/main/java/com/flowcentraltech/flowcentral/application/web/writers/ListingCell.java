@@ -97,43 +97,6 @@ public class ListingCell {
         return borders;
     }
 
-    public boolean isBorderTop() {
-        return (borders & BORDER_TOP)  > 0;
-    }
-
-    public boolean isBorderRight() {
-        return (borders & BORDER_RIGHT)  > 0;
-    }
-
-    public boolean isBorderBottom() {
-        return (borders & BORDER_BOTTOM)  > 0;
-    }
-
-    public boolean isBorderLeft() {
-        return (borders & BORDER_LEFT)  > 0;
-    }
-
-    public String getBorderStyle() {
-        StringBuilder sb = new StringBuilder();
-        if (isBorderTop()) {
-            sb.append(" flbtop");
-        }
-        
-        if (isBorderRight()) {
-            sb.append(" flbright");
-        }
-        
-        if (isBorderBottom()) {
-            sb.append(" flbbottom");
-        }
-        
-        if (isBorderLeft()) {
-            sb.append(" flbleft");
-        }
-        
-        return sb.toString();
-    }
-
     public boolean isWithContent() {
         return !StringUtils.isBlank(content);
     }

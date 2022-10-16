@@ -64,12 +64,12 @@ public class ListingGeneratorWriter {
     }
 
     public void beginSection(int sectionColumns, int widthPercent, HAlignType horizontalAlign,
-            boolean alternatingColumn) throws UnifyException {
-        beginSection(null, sectionColumns, widthPercent, horizontalAlign, alternatingColumn);
+            boolean alternatingColumn, int borders) throws UnifyException {
+        beginSection(null, sectionColumns, widthPercent, horizontalAlign, alternatingColumn, borders);
     }
 
     public void beginSection(String header, int sectionColumns, int widthPercent, HAlignType horizontalAlign,
-            boolean alternatingColumn) throws UnifyException {
+            boolean alternatingColumn, int borders) throws UnifyException {
         if (sectionColumns <= 0) {
             throw new RuntimeException("Section columns must be greater than zero.");
         }
@@ -84,16 +84,16 @@ public class ListingGeneratorWriter {
                 ? ListingSectionHeader.newBuilder()
                         .addColumn(HAlignType.LEFT, 100, ListingCellType.BOLD_TEXT, header, 0).build()
                 : null;
-        internalBeginSection(_header, sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn);
+        internalBeginSection(_header, sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn, borders);
     }
 
     public void beginSection(int[] sectionColumnWidth, int widthPercent, HAlignType horizontalAlign,
-            boolean alternatingColumn) throws UnifyException {
-        beginSection(null, sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn);
+            boolean alternatingColumn, int borders) throws UnifyException {
+        beginSection(null, sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn, borders);
     }
 
     public void beginSection(ListingSectionHeader header, int[] sectionColumnWidth, int widthPercent,
-            HAlignType horizontalAlign, boolean alternatingColumn) throws UnifyException {
+            HAlignType horizontalAlign, boolean alternatingColumn, int borders) throws UnifyException {
         int totalWidth = 0;
         for (int i = 0; i < sectionColumnWidth.length; i++) {
             int width = sectionColumnWidth[i];
@@ -109,11 +109,11 @@ public class ListingGeneratorWriter {
             _sectionColumnWidth[i] = (sectionColumnWidth[i] * 100) / totalWidth;
         }
 
-        internalBeginSection(header, _sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn);
+        internalBeginSection(header, _sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn, borders);
     }
 
     private void internalBeginSection(ListingSectionHeader header, int[] sectionColumnWidth, int widthPercent,
-            HAlignType horizontalAlign, boolean alternatingColumn) throws UnifyException {
+            HAlignType horizontalAlign, boolean alternatingColumn, int borders) throws UnifyException {
         if (sectionColumnWidth == null || sectionColumnWidth.length == 0) {
             throw new RuntimeException("Section columns must be greater than zero.");
         }
@@ -127,7 +127,7 @@ public class ListingGeneratorWriter {
         this.alternatingColumn = alternatingColumn;
 
         // Begin section
-        writer.write("<div class=\"flsection\">");
+        writer.write("<div class=\"flsection").write(ListingUtils.getBorderStyle(borders)).write("\">");
         if (header != null) {
             writer.write("<div class=\"fltable flsectionheader\">");
             internalWriteRow(header.getColumns(), header.getCells());
@@ -196,8 +196,8 @@ public class ListingGeneratorWriter {
         for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             ListingColumn column = columns[cellIndex];
             ListingCell cell = cells[cellIndex];
-            writer.write("<div class=\"flcell").write(cell.getBorderStyle()).write("\" style=\"width:")
-                    .write(column.getWidthPercent()).write("%;\">");
+            writer.write("<div class=\"flcell").write(ListingUtils.getBorderStyle(cell.getBorders()))
+                    .write("\" style=\"width:").write(column.getWidthPercent()).write("%;\">");
             writer.write("<span class=\"flcontent ").write(cell.getType().styleClass()).write(" ")
                     .write(column.getAlign().styleClass()).write("\">");
             if (cell.isWithContent()) {
