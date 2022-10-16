@@ -339,15 +339,20 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Form Listing */
 .fc-formlisting {max-width:1240px;}
+.fc-formlisting .flbody {}
 .fc-formlisting .flsection {}
-.fc-formlisting .flsection span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
-	background-color:#6e819d; color: #ffffff; /*border-radius: 4px;*/}
-.fc-formlisting .flsectionbody {display:table;margin-bottom:8px;}
+.fc-formlisting .flsectionheader {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
+	background-color:#6e819d; color: #ffffff;}
+.fc-formlisting .flsectionbody {display:table;padding-bottom:8px;box-sizing: border-box;}
 .fc-formlisting .flsectionbodyrow {display:table-row;}
 .fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;padding-bottom: 5px;vertical-align: top;}
 .fc-formlisting .flgray {background-color:#f4f4f4;}
 .fc-formlisting .fltable {display:table;width:100%;}
 .fc-formlisting .flrow {display:table-row;}
+.fc-formlisting .flbtop {}
+.fc-formlisting .flbright {}
+.fc-formlisting .flbbottom {}
+.fc-formlisting .flbleft {}
 .fc-formlisting .flcell {display:table-cell;box-sizing: border-box;padding: 4px 2px;}
 .fc-formlisting .flcontent {display:block;}
 .fc-formlisting .flimage {display:block;width:100%;}
