@@ -80,4 +80,4 @@ jobs:
         PASSPHRASE: ${{ secrets.MVN_GPG_PASSPHRASE }} 
     
     - name: Deploy Snapshot with Maven
-      run: mvn clean deploy -B -DrepoDeployMode=true
+      run: mvn clean -U deploy -B -DrepoDeployMode=true
