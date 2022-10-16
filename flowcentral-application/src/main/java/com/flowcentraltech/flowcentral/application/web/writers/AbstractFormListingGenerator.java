@@ -112,7 +112,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     public final Report generateReport(ValueStore formBeanValueStore, String formActionName) throws UnifyException {
         ResponseWriter writer = getComponent(ResponseWriter.class,
                 WebUIApplicationComponents.APPLICATION_RESPONSEWRITER);
-        ListingReportGeneratorProperties properties = getReportProperties(formActionName);
+        ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, formActionName);
         Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
                 .title("listingReport");
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {

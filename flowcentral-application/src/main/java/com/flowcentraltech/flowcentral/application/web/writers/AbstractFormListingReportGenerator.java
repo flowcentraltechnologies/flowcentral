@@ -35,7 +35,8 @@ import com.tcdng.unify.web.ui.widget.ResponseWriter;
 public abstract class AbstractFormListingReportGenerator extends AbstractUnifyComponent
         implements FormListingReportGenerator {
 
-    protected ListingReportGeneratorProperties getReportProperties(String formActionName) throws UnifyException {
+    protected ListingReportGeneratorProperties getReportProperties(ValueStore formBeanValueStore, String formActionName)
+            throws UnifyException {
         return new ListingReportGeneratorProperties(ReportPageProperties.newBuilder().build(),
                 Arrays.asList(new ListingReportProperties("default_prop")));
     }
