@@ -553,7 +553,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         FormActionDef formActionDef = applet.getCurrentFormDef().getFormActionDef(actionName);
         FormContext ctx = evaluateCurrentFormContext(EvaluationMode.getRequiredMode(formActionDef.isValidateForm()));
         if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy());
+            EntityActionResult entityActionResult = applet.formActionOnInst(formActionDef.getPolicy(), actionName);
             handleEntityActionResult(entityActionResult);
         }
     }
@@ -771,16 +771,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             handleHints(entityActionResult, null);
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
-        }
-    }
-
-    @Action
-    public void print() throws UnifyException {
-        FormContext ctx = evaluateCurrentFormContext(EvaluationMode.CREATE);
-        if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = getEntityFormApplet().saveNewInstAndClose();
-            entityActionResult.setSuccessHint("$m{entityformapplet.new.success.hint}");
-            handleEntityActionResult(entityActionResult, ctx);
         }
     }
 

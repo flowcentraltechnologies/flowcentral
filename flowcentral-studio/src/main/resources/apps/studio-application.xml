@@ -3332,6 +3332,9 @@
 				<setStates>
 					<setState type="field" target="listingGenerator"
 						visible="true" />
+					<setState type="tab"
+						target="actions"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>

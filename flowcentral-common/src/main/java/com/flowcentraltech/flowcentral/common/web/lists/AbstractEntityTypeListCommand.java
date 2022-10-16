@@ -56,7 +56,7 @@ public abstract class AbstractEntityTypeListCommand<T extends UnifyComponent, U 
                         }
                     } else {
                         for (String entity : era.value()) {
-                            if (entityName.equals(entity)) {
+                            if (entityName.equals(entity) || "*".equals(entity)) { // TODO Implement partial wildcard
                                 list.add(unifyComponentConfig);
                                 break;
                             }
@@ -73,6 +73,6 @@ public abstract class AbstractEntityTypeListCommand<T extends UnifyComponent, U 
     protected boolean acceptNonReferenced() {
         return true;
     }
-    
+
     protected abstract String getEntityName(U param) throws UnifyException;
 }

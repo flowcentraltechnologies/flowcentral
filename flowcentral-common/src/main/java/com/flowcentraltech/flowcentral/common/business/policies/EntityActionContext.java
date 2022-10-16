@@ -40,6 +40,8 @@ public class EntityActionContext extends AbstractContext {
 
     private String actionPolicyName;
 
+    private String formActionName;
+    
     private String listingGenerator;
 
     private SweepingCommitPolicy sweepingCommitPolicy;
@@ -99,6 +101,14 @@ public class EntityActionContext extends AbstractContext {
 
     public RecordActionType getActionType() {
         return actionType;
+    }
+
+    public String getFormActionName() {
+        return formActionName;
+    }
+
+    public void setFormActionName(String formActionName) {
+        this.formActionName = formActionName;
     }
 
     public String getActionPolicyName() {

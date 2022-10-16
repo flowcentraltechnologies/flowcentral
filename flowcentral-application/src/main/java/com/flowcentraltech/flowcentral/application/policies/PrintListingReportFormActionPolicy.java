@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.policies;
 
 import com.flowcentraltech.flowcentral.application.web.writers.FormListingGenerator;
+import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.tcdng.unify.core.UnifyException;
@@ -30,6 +31,7 @@ import com.tcdng.unify.core.report.Report;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@EntityReferences({"*"})
 @Component(name = "printlistingreport-actionpolicy",
         description = "$m{application.entityactionpolicy.printlistingreport}")
 public class PrintListingReportFormActionPolicy extends AbstractApplicationFormActionPolicy {
@@ -44,7 +46,7 @@ public class PrintListingReportFormActionPolicy extends AbstractApplicationFormA
         EntityActionResult result = new EntityActionResult(ctx);
         if (ctx.isWithListingGenerator()) {
             FormListingGenerator generator = (FormListingGenerator) getComponent(ctx.getListingGenerator());
-            Report report = generator.generateReport(new BeanValueStore(ctx.getInst()));
+            Report report = generator.generateReport(new BeanValueStore(ctx.getInst()), ctx.getFormActionName());
             ctx.setResult(report);
             result = new EntityActionResult(ctx);
             result.setDisplayListingReport(true);

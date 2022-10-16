@@ -34,9 +34,12 @@ public interface FormListingReportGenerator extends UnifyComponent {
      * 
      * @param formBeanValueStore
      *                           the form bean value store
+     * @param formActionName
+     *                           the name of form action triggering this generation.
+     *                           (optional)
      * @return report
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateReport(ValueStore formBeanValueStore) throws UnifyException;
+    Report generateReport(ValueStore formBeanValueStore, String formActionName) throws UnifyException;
 }

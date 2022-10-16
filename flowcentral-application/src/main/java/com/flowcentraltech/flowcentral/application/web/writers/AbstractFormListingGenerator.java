@@ -20,13 +20,14 @@ import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
+import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
@@ -34,7 +35,6 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportLayoutType;
-import com.tcdng.unify.core.report.ReportPageProperties;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.WebUIApplicationComponents;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -65,6 +65,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     private final LocaleFactoryMap<Formatter<?>> wholeAmountFormatterMap;
 
+    private String defaultListingReportStyle;
+    
     public AbstractFormListingGenerator() {
         this.dateFormatterMap = new LocaleFactoryMap<Formatter<?>>()
             {
@@ -107,13 +109,13 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
-    public final Report generateReport(ValueStore formBeanValueStore) throws UnifyException {
+    public final Report generateReport(ValueStore formBeanValueStore, String formActionName) throws UnifyException {
         ResponseWriter writer = getComponent(ResponseWriter.class,
                 WebUIApplicationComponents.APPLICATION_RESPONSEWRITER);
-        ReportPageProperties reportPageProperties = ReportPageProperties.newBuilder().build();
-        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, reportPageProperties);
-        List<ListingReportProperties> reportProperties = getReportProperties();
-        for (ListingReportProperties listingReportProperties : reportProperties) {
+        ListingReportGeneratorProperties properties = getReportProperties(formActionName);
+        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
+                .title("listingReport");
+        for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
             generateReportHeader(formBeanValueStore, listingReportProperties, writer);
             writer.write("<div class=\"fc-formlisting\">");
@@ -122,6 +124,9 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             generateReportFooter(formBeanValueStore, listingReportProperties, writer);
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
+            if (style == null) {
+                style = getDefaultListingStyle();
+            }
             rb.addBodyContentHtml(listingReportProperties.getName(), style, bodyContent);
         }
 
@@ -211,6 +216,20 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return values;
     }
 
+    private String getDefaultListingStyle() throws UnifyException {
+        if (defaultListingReportStyle == null) {
+            synchronized (this) {
+                if (defaultListingReportStyle == null) {
+                    defaultListingReportStyle = ConfigurationUtils.readString(
+                            "web/themes/farko/css/flowcentral-listingreport.css",
+                            getUnifyComponentContext().getWorkingPath());
+                }
+            }
+        }
+
+        return defaultListingReportStyle;
+    }
+    
     protected abstract void doGenerate(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException;
 }
