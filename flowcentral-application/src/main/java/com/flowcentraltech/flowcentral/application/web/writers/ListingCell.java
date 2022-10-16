@@ -26,19 +26,60 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class ListingCell {
 
+    public static final int BORDER_TOP = 0x00000001;
+    
+    public static final int BORDER_RIGHT = 0x00000002;
+    
+    public static final int BORDER_BOTTOM = 0x00000004;
+    
+    public static final int BORDER_LEFT = 0x00000008;
+    
+    public static final int BORDER_ALL = BORDER_TOP | BORDER_RIGHT | BORDER_BOTTOM | BORDER_LEFT;
+    
     private  ListingCellType type;
     
     private String content;
+    
+    private String contentStyle;
+    
+    private int borders;
+
+    public ListingCell(ListingCellType type, String content, int borders) {
+        this.type = type;
+        this.content = content;
+        this.borders = borders;
+    }
+
+    public ListingCell(ListingCellType type, String content, String contentStyle, int borders) {
+        this.type = type;
+        this.content = content;
+        this.contentStyle = contentStyle;
+        this.borders = borders;
+    }
+
+    public ListingCell(String content, String contentStyle, int borders) {
+        this.type = ListingCellType.TEXT;
+        this.content = content;
+        this.contentStyle = contentStyle;
+        this.borders = borders;
+   }
 
     public ListingCell(ListingCellType type, String content) {
         this.type = type;
         this.content = content;
     }
 
-    public ListingCell(String content) {
+    public ListingCell(ListingCellType type, String content, String contentStyle) {
+        this.type = type;
+        this.content = content;
+        this.contentStyle = contentStyle;
+    }
+
+    public ListingCell(String content, String contentStyle) {
         this.type = ListingCellType.TEXT;
         this.content = content;
-    }
+        this.contentStyle = contentStyle;
+   }
 
     public ListingCellType getType() {
         return type;
@@ -48,8 +89,57 @@ public class ListingCell {
         return content;
     }
 
+    public String getContentStyle() {
+        return contentStyle;
+    }
+
+    public int getBorders() {
+        return borders;
+    }
+
+    public boolean isBorderTop() {
+        return (borders & BORDER_TOP)  > 0;
+    }
+
+    public boolean isBorderRight() {
+        return (borders & BORDER_RIGHT)  > 0;
+    }
+
+    public boolean isBorderBottom() {
+        return (borders & BORDER_BOTTOM)  > 0;
+    }
+
+    public boolean isBorderLeft() {
+        return (borders & BORDER_LEFT)  > 0;
+    }
+
+    public String getBorderStyle() {
+        StringBuilder sb = new StringBuilder();
+        if (isBorderTop()) {
+            sb.append(" flbtop");
+        }
+        
+        if (isBorderRight()) {
+            sb.append(" flbright");
+        }
+        
+        if (isBorderBottom()) {
+            sb.append(" flbbottom");
+        }
+        
+        if (isBorderLeft()) {
+            sb.append(" flbleft");
+        }
+        
+        return sb.toString();
+    }
+
     public boolean isWithContent() {
         return !StringUtils.isBlank(content);
+    }
+
+    public boolean isWithContentStyle() {
+        return !StringUtils.isBlank(contentStyle);
     }
     
     public boolean isFileImage() {

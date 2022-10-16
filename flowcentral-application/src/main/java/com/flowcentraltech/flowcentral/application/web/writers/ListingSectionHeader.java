@@ -21,18 +21,18 @@ import java.util.List;
 import com.tcdng.unify.core.constant.HAlignType;
 
 /**
- * Listing header.
+ * Listing section header.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ListingHeader {
+public class ListingSectionHeader {
 
     private ListingColumn[] columns;
 
     private ListingCell[] cells;
 
-    private ListingHeader(ListingColumn[] columns, ListingCell[] cells) {
+    private ListingSectionHeader(ListingColumn[] columns, ListingCell[] cells) {
         this.columns = columns;
         this.cells = cells;
     }
@@ -48,7 +48,7 @@ public class ListingHeader {
     public static Builder newBuilder() {
         return new Builder();
     }
-    
+
     public static class Builder {
 
         private List<ListingColumn> columns;
@@ -60,14 +60,15 @@ public class ListingHeader {
             this.cells = new ArrayList<ListingCell>();
         }
 
-        public Builder addColumn(HAlignType align, int widthPercent, ListingCellType cellType, String content) {
+        public Builder addColumn(HAlignType align, int widthPercent, ListingCellType cellType, String content,
+                int borders) {
             columns.add(new ListingColumn(align, widthPercent));
-            cells.add(new ListingCell(cellType, content));
+            cells.add(new ListingCell(cellType, content, borders));
             return this;
         }
 
-        public ListingHeader build() {
-            return new ListingHeader(columns.toArray(new ListingColumn[columns.size()]),
+        public ListingSectionHeader build() {
+            return new ListingSectionHeader(columns.toArray(new ListingColumn[columns.size()]),
                     cells.toArray(new ListingCell[cells.size()]));
         }
     }

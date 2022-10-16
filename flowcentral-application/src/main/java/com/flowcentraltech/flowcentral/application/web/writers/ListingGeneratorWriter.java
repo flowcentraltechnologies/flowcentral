@@ -80,8 +80,9 @@ public class ListingGeneratorWriter {
             sectionColumnWidth[i] = width;
         }
 
-        ListingHeader _header = header != null
-                ? ListingHeader.newBuilder().addColumn(HAlignType.RIGHT, 100, ListingCellType.BOLD_TEXT, header).build()
+        ListingSectionHeader _header = header != null
+                ? ListingSectionHeader.newBuilder()
+                        .addColumn(HAlignType.LEFT, 100, ListingCellType.BOLD_TEXT, header, 0).build()
                 : null;
         internalBeginSection(_header, sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn);
     }
@@ -91,7 +92,7 @@ public class ListingGeneratorWriter {
         beginSection(null, sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn);
     }
 
-    public void beginSection(ListingHeader header, int[] sectionColumnWidth, int widthPercent,
+    public void beginSection(ListingSectionHeader header, int[] sectionColumnWidth, int widthPercent,
             HAlignType horizontalAlign, boolean alternatingColumn) throws UnifyException {
         int totalWidth = 0;
         for (int i = 0; i < sectionColumnWidth.length; i++) {
@@ -111,7 +112,7 @@ public class ListingGeneratorWriter {
         internalBeginSection(header, _sectionColumnWidth, widthPercent, horizontalAlign, alternatingColumn);
     }
 
-    private void internalBeginSection(ListingHeader header, int[] sectionColumnWidth, int widthPercent,
+    private void internalBeginSection(ListingSectionHeader header, int[] sectionColumnWidth, int widthPercent,
             HAlignType horizontalAlign, boolean alternatingColumn) throws UnifyException {
         if (sectionColumnWidth == null || sectionColumnWidth.length == 0) {
             throw new RuntimeException("Section columns must be greater than zero.");
@@ -145,7 +146,7 @@ public class ListingGeneratorWriter {
         inSection = true;
     }
 
-    public void beginTable(ListingColumn... columns) throws UnifyException {
+    public void beginTable(ListingColumn... _columns) throws UnifyException {
         if (!inSection) {
             throw new RuntimeException("No section started.");
         }
@@ -161,7 +162,7 @@ public class ListingGeneratorWriter {
         int width = sectionColumnWidth[currentSectionColumn];
         currentSectionColumn++;
 
-        this.columns = columns;
+        this.columns = _columns;
         writer.write("<div class=\"flsectionbodycell");
         if (alternatingColumn && (currentSectionColumn % 2) == 0) {
             writer.write(" flgray");
@@ -195,14 +196,22 @@ public class ListingGeneratorWriter {
         for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             ListingColumn column = columns[cellIndex];
             ListingCell cell = cells[cellIndex];
-            writer.write("<div class=\"flcell\" style=\"width:").write(column.getWidthPercent()).write("%;\">");
+            writer.write("<div class=\"flcell").write(cell.getBorderStyle()).write("\" style=\"width:")
+                    .write(column.getWidthPercent()).write("%;\">");
             writer.write("<span class=\"flcontent ").write(cell.getType().styleClass()).write(" ")
                     .write(column.getAlign().styleClass()).write("\">");
             if (cell.isWithContent()) {
                 if (cell.isFileImage()) {
                     writer.write("<img src=\"");
                     writer.writeFileImageContextURL(cell.getContent());
-                    writer.write("\"></img>");
+                    writer.write("\"");
+                    if (cell.isWithContentStyle()) {
+                        writer.write(" style=\"");
+                        writer.write(cell.getContentStyle());
+                        writer.write("\"");
+                    }
+                    writer.write(">");
+                    writer.write("</img>");
                 } else if (cell.isScopeImage()) {
                     writer.writeScopeImageContextURL(null); // TODO
                 } else {
