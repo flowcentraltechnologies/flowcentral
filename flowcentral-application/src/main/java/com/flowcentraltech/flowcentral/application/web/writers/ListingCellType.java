@@ -26,7 +26,9 @@ public enum ListingCellType {
 
     BOLD_LABEL("flboldlabel"),
     BOLD_TEXT("flboldtext"),
-    TEXT("") ;
+    TEXT(""),
+    FILE_IMAGE("flimage"),
+    SCOPE_IMAGE("flimage") ;
     
     private String styleClass;
     
@@ -36,5 +38,13 @@ public enum ListingCellType {
     
     public String styleClass() {
         return styleClass;
+    }
+    
+    public boolean isFileImage() {
+        return FILE_IMAGE.equals(this);
+    }
+    
+    public boolean isScopeImage() {
+        return SCOPE_IMAGE.equals(this);
     }
 }

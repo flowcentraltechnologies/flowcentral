@@ -51,4 +51,12 @@ public class ListingCell {
     public boolean isWithContent() {
         return !StringUtils.isBlank(content);
     }
+    
+    public boolean isFileImage() {
+        return type.isFileImage();
+    }
+    
+    public boolean isScopeImage() {
+        return type.isScopeImage();
+    }
 }
