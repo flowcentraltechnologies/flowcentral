@@ -44,7 +44,7 @@ jobs:
           [{
               "id": "sonatype-nexus-snapshots",
               "name": "Sonatype Nexus Snapshots",
-              "url": "https://oss.sonatype.org/content/repositories/snapshots/",
+              "url": "http://oss.sonatype.org/content/repositories/snapshots/",
               "releases": {
                 "enabled": "false"
               },
@@ -54,7 +54,7 @@ jobs:
           },{
               "id": "s01-sonatype-nexus-snapshots",
               "name": "Sonatype Nexus Snapshots 2",
-              "url": "https://s01.oss.sonatype.org/content/repositories/snapshots/",
+              "url": "http://s01.oss.sonatype.org/content/repositories/snapshots/",
               "releases": {
                 "enabled": "false"
               },
