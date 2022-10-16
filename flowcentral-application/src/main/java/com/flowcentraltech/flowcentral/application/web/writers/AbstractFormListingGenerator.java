@@ -65,7 +65,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     private final LocaleFactoryMap<Formatter<?>> wholeAmountFormatterMap;
 
-    private String defaultListingReportStyle;
+    private static String defaultListingReportStyle;
     
     public AbstractFormListingGenerator() {
         this.dateFormatterMap = new LocaleFactoryMap<Formatter<?>>()
@@ -216,13 +216,15 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return values;
     }
 
+    protected String loadListingStyle(String resourceName) throws UnifyException {
+        return ConfigurationUtils.readString(resourceName, getUnifyComponentContext().getWorkingPath());
+    }
+    
     private String getDefaultListingStyle() throws UnifyException {
         if (defaultListingReportStyle == null) {
-            synchronized (this) {
+            synchronized (AbstractFormListingGenerator.class) {
                 if (defaultListingReportStyle == null) {
-                    defaultListingReportStyle = ConfigurationUtils.readString(
-                            "web/themes/farko/css/flowcentral-listingreport.css",
-                            getUnifyComponentContext().getWorkingPath());
+                    defaultListingReportStyle = loadListingStyle("web/themes/farko/css/flowcentral-listingreport.css");
                 }
             }
         }
