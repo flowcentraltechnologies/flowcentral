@@ -196,7 +196,7 @@ public class ListingGeneratorWriter {
                     .write(column.getAlign().styleClass()).write("\">");
             if (cell.isWithContent()) {
                 if (cell.isFileImage()) {
-                    writer.write("<img class=\"image\" src=\"");
+                    writer.write("<img src=\"");
                     writer.writeFileImageContextURL(cell.getContent());
                     writer.write("\"></img>");
                 } else if (cell.isScopeImage()) {
