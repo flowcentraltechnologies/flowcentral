@@ -221,7 +221,7 @@ public abstract class AbstractForm {
 
     public List<FormActionDef> getFormActionDefList() {
         if (formActionDefList != null) {
-            return formActionDefList;
+           return formActionDefList;
         }
 
         return ctx.getFormActionDefList();
