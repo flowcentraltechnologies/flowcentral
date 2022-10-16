@@ -6,19 +6,19 @@
  */
 /** Form Listing */
 .fc-formlisting {font-size:10px;}
-.fc-formlisting .flbody {border-left: 1px solid #404040;border-right: 1px solid #404040;}
+.fc-formlisting .flbody {border-left: 1px solid #c0c0c0;border-right: 1px solid #c0c0c0;}
 .fc-formlisting .flsection {}
-.fc-formlisting .flsectionheader {display: block; margin-bottom: 8px; font-weight: bold;}
-.fc-formlisting .flsectionbody {display:table;padding-bottom:8px;box-sizing: border-box;}
+.fc-formlisting .flsectionheader {display: block; margin-bottom: 2px; font-weight: bold;}
+.fc-formlisting .flsectionbody {display:table;padding-bottom:2px;box-sizing: border-box;}
 .fc-formlisting .flsectionbodyrow {display:table-row;}
-.fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;padding-bottom: 5px;vertical-align: top;}
+.fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;vertical-align: top;}
 .fc-formlisting .flgray {background-color:#f4f4f4;}
 .fc-formlisting .fltable {display:table;width:100%;}
 .fc-formlisting .flrow {display:table-row;}
-.fc-formlisting .flbtop {border-top: 1px solid #404040;}
-.fc-formlisting .flbright {border-right: 1px solid #404040;}
-.fc-formlisting .flbbottom {border-bottom: 1px solid #404040;}
-.fc-formlisting .flbleft {border-left: 1px solid #404040;}
+.fc-formlisting .flbtop {border-top: 1px solid #c0c0c0;}
+.fc-formlisting .flbright {border-right: 1px solid #c0c0c0;}
+.fc-formlisting .flbbottom {border-bottom: 1px solid #c0c0c0;}
+.fc-formlisting .flbleft {border-left: 1px solid #c0c0c0;}
 .fc-formlisting .flcell {display:table-cell;box-sizing: border-box;padding: 4px 2px;}
 .fc-formlisting .flcontent {display:block;}
 .fc-formlisting .flimage {display:block;width:100%;}
