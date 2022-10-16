@@ -127,6 +127,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             if (style == null) {
                 style = getDefaultListingStyle();
             }
+            
             rb.addBodyContentHtml(listingReportProperties.getName(), style, bodyContent);
         }
 

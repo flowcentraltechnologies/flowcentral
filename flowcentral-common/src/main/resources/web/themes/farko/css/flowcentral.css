@@ -344,12 +344,13 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	background-color:#6e819d; color: #ffffff; /*border-radius: 4px;*/}
 .fc-formlisting .flsectionbody {display:table;margin-bottom:8px;}
 .fc-formlisting .flsectionbodyrow {display:table-row;}
-.fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;padding-bottom: 5px;}
+.fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;padding-bottom: 5px;vertical-align: top;}
 .fc-formlisting .flgray {background-color:#f4f4f4;}
 .fc-formlisting .fltable {display:table;width:100%;}
 .fc-formlisting .flrow {display:table-row;}
 .fc-formlisting .flcell {display:table-cell;box-sizing: border-box;padding: 4px 2px;}
 .fc-formlisting .flcontent {display:block;}
+.fc-formlisting .flimage {display:block;width:100%;}
 .fc-formlisting .flboldlabel {font-weight:bold;} /*TODO Add color*/
 .fc-formlisting .flboldtext {font-weight:bold;}
 .fc-formlisting .haleft {text-align:left;}

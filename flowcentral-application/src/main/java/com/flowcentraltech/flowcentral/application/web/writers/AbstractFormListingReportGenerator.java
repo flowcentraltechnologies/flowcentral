@@ -36,7 +36,8 @@ public abstract class AbstractFormListingReportGenerator extends AbstractUnifyCo
 
     protected ListingReportGeneratorProperties getReportProperties(ValueStore formBeanValueStore, String formActionName)
             throws UnifyException {
-        return new ListingReportGeneratorProperties(ReportPageProperties.newBuilder().build(),
+        return new ListingReportGeneratorProperties(
+                ReportPageProperties.newBuilder().resourceBaseUri(getSessionContext().getUriBase()).build(),
                 Arrays.asList(new ListingReportProperties("default_prop")));
     }
 
