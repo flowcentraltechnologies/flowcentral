@@ -81,8 +81,10 @@ public abstract class AbstractEntityActionPolicy extends AbstractUnifyComponent 
 
     protected void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
             String privilegeDesc) throws UnifyException {
-        applicationPrivilegeManager.registerPrivilege(applicationId, privilegeCategoryCode, privilegeCode,
-                privilegeDesc);
+        if (!applicationPrivilegeManager.isRegisteredPrivilege(privilegeCategoryCode, privilegeCode)) {
+            applicationPrivilegeManager.registerPrivilege(applicationId, privilegeCategoryCode, privilegeCode,
+                    privilegeDesc);
+        }
     }
 
     protected void unregisterPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode)

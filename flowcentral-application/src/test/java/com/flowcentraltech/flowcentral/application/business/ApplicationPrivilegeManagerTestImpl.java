@@ -39,6 +39,12 @@ public class ApplicationPrivilegeManagerTestImpl extends AbstractUnifyComponent 
     }
 
     @Override
+    public boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
     public boolean unregisterPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode)
             throws UnifyException {
         return false;

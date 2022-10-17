@@ -145,6 +145,12 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
+        return environment().countAll(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode)
+                .code(privilegeCode)) > 0;
+    }
+
+    @Override
     public List<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
         if (getUserToken().isReservedUser()) {
             return environment().valueList(String.class, "code",
