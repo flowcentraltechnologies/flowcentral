@@ -4024,9 +4024,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     actionList.add(oldAppFormAction);
                 }
 
-                applicationPrivilegeManager.registerPrivilege(applicationId,
-                        ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
-                        PrivilegeNameUtils.getFormActionPrivilegeName(formActionConfig.getName()), description);
+                if (!applicationPrivilegeManager.isRegisteredPrivilege(ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
+                        PrivilegeNameUtils.getFormActionPrivilegeName(formActionConfig.getName()))) {
+                    applicationPrivilegeManager.registerPrivilege(applicationId,
+                            ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
+                            PrivilegeNameUtils.getFormActionPrivilegeName(formActionConfig.getName()), description);
+                }
             }
         }
 
