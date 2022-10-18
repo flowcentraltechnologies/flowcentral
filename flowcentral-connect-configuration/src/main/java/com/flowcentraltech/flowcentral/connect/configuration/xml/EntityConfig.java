@@ -40,6 +40,8 @@ public class EntityConfig {
 
     private String handler;
 
+    private String actionPolicy;
+
     private List<EntityFieldConfig> entityFieldList;
 
     public String getName() {
@@ -96,7 +98,16 @@ public class EntityConfig {
 		this.handler = handler;
 	}
 
-	public List<EntityFieldConfig> getEntityFieldList() {
+	public String getActionPolicy() {
+        return actionPolicy;
+    }
+
+    @XmlAttribute(name = "actionPolicy")
+    public void setActionPolicy(String actionPolicy) {
+        this.actionPolicy = actionPolicy;
+    }
+
+    public List<EntityFieldConfig> getEntityFieldList() {
         return entityFieldList;
     }
 

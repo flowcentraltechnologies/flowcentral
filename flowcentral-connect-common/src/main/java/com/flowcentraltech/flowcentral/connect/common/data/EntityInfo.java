@@ -43,6 +43,8 @@ public class EntityInfo {
 
     private String handler;
 
+    private String actionPolicy;
+
     private Class<?> implClass;
 
     private Map<String, EntityFieldInfo> fieldsByName;
@@ -62,13 +64,14 @@ public class EntityInfo {
     private Map<String, String> fieldFromLocal;
     
     public EntityInfo(String entityManagerFactory, String name, String description, String idFieldName,
-            String versionNoFieldName, String handler, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
+            String versionNoFieldName, String handler, String actionPolicy, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
         this.name = name;
         this.description = description;
         this.idFieldName = idFieldName;
         this.versionNoFieldName = versionNoFieldName;
         this.handler = handler;
+        this.actionPolicy = actionPolicy;
         this.implClass = implClass;
         this.fieldsByName = fieldsByName;
         this.refFieldList = new ArrayList<EntityFieldInfo>();
@@ -140,6 +143,14 @@ public class EntityInfo {
         return handler != null && !handler.trim().isEmpty();
     }
 
+    public String getActionPolicy() {
+        return actionPolicy;
+    }
+
+    public boolean isWithActionPolicy() {
+        return actionPolicy != null && !actionPolicy.trim().isEmpty();
+    }
+
     public Class<?> getImplClass() {
         return implClass;
     }
@@ -206,6 +217,8 @@ public class EntityInfo {
 
         private String handler;
 
+        private String actionPolicy;
+        
         private String implementation;
 
         private Map<String, EntityFieldInfo> fieldsByName;
@@ -234,9 +247,14 @@ public class EntityInfo {
             this.versionNoFieldName = versionNoFieldName;
             return this;
         }
-
+        
         public Builder handler(String handler) {
             this.handler = handler;
+            return this;
+        }
+
+        public Builder actionPolicy(String actionPolicy) {
+            this.actionPolicy = actionPolicy;
             return this;
         }
 
@@ -280,7 +298,7 @@ public class EntityInfo {
 
             Class<?> implClass = Class.forName(implementation);
             return new EntityInfo(entityManagerFactory, name, description, idFieldName, versionNoFieldName, handler,
-                    implClass, fieldsByName);
+                    actionPolicy, implClass, fieldsByName);
         }
     }
 

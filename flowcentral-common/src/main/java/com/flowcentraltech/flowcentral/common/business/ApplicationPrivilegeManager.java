@@ -91,6 +91,19 @@ public interface ApplicationPrivilegeManager extends UnifyComponent {
     boolean assignPrivilegeToRole(String roleCode, String privilegeCode) throws UnifyException;
 
     /**
+     * Checks if supplied string is known registered privilege code.
+     * 
+     * @param privilegeCategoryCode
+     *                      the privilege category code
+     * @param privilegeCode
+     *                      the privilege code
+     * @return true if supplied string is a privilege otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException;
+
+    /**
      * Checks if a role has a privilege.
      * 
      * @param roleCode
