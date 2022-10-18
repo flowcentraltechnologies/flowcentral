@@ -164,6 +164,8 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         } else {
             EntityManager em = null;
             EntityTransaction tx = null;
+            EntityActionPolicy entityActionPolicy = entityInfo.isWithActionPolicy() ? context.getBean(entityInfo.getActionPolicy(),
+                    EntityActionPolicy.class) : null;        
             try {
                 em = platform.emf.createEntityManager();
                 tx = em.getTransaction();
@@ -178,8 +180,16 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         break;
                     case CREATE: {
                         Object reqBean = interconnect.getBeanFromJsonPayload(req);
+                        if (entityActionPolicy != null) {
+                            entityActionPolicy.executePreAction(reqBean);
+                        }
+                        
                         em.persist(reqBean);
                         em.flush();
+                        if (entityActionPolicy != null) {
+                            entityActionPolicy.executePostAction(reqBean);
+                        }
+                        
                         Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
                         result = new Object[] { id };
                     }
@@ -261,7 +271,15 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                             PropertyUtils.setProperty(saveBean, entityInfo.getVersionNoFieldName(), versionNo);
                         }
 
+                        if (entityActionPolicy != null) {
+                            entityActionPolicy.executePreAction(saveBean);
+                        }
+                        
                         em.merge(saveBean);
+                        if (entityActionPolicy != null) {
+                            entityActionPolicy.executePostAction(saveBean);
+                        }
+                        
                         result = new Object[] { 1L };
                     }
                         break;
