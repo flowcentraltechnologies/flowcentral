@@ -86,4 +86,10 @@ public class ReportFilterOptions {
     public List<ReportFilterOptions> getSubFilterOptionList() {
         return subFilterOptionList;
     }
+
+    @Override
+    public String toString() {
+        return "ReportFilterOptions [op=" + op + ", tableName=" + tableName + ", columnName=" + columnName + ", param1="
+                + param1 + ", param2=" + param2 + ", subFilterOptionList=" + subFilterOptionList + "]";
+    }
 }
