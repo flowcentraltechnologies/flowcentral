@@ -87,6 +87,7 @@ import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.Report.Builder;
 import com.tcdng.unify.core.report.ReportColumn;
 import com.tcdng.unify.core.report.ReportFormat;
+import com.tcdng.unify.core.report.ReportLayoutType;
 import com.tcdng.unify.core.report.ReportPageProperties;
 import com.tcdng.unify.core.report.ReportServer;
 import com.tcdng.unify.core.util.DataUtils;
@@ -447,7 +448,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
         ReportOptions reportOptions = new ReportOptions();
         reportOptions.setEntity(entity);
-        reportOptions.setReportLayout(reportConfiguration.getLayout());
+        reportOptions.setReportLayout(
+                reportConfiguration.getLayout() == null ? ReportLayoutType.TABULAR : reportConfiguration.getLayout());
         reportOptions.setReportName(reportConfigName);
         reportOptions.setReportDescription(reportConfiguration.getDescription().toUpperCase());
         reportOptions.setTitle(resolveSessionMessage(reportConfiguration.getTitle()));
@@ -613,10 +615,16 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     if (restrictionDef.isParameterVal()) {
                         if (param1 != null) {
                             param1 = parameters.get((String) param1);
+                            if (param1 == null && (restrictionDef.isSingleParam() || restrictionDef.isRange())) {
+                                continue;
+                            }
                         }
 
                         if (param2 != null) {
                             param2 = parameters.get((String) param2);
+                            if (param2 == null && restrictionDef.isRange()) {
+                                continue;
+                            }
                         }
                     }
 

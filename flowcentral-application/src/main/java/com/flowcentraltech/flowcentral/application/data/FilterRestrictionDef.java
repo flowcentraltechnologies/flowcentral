@@ -52,6 +52,14 @@ public class FilterRestrictionDef {
         return type;
     }
 
+    public boolean isSingleParam() {
+        return type.isSingleParam();
+    }
+
+    public boolean isRange() {
+        return type.isRange();
+    }
+
     public boolean isFieldVal() {
         return type.isFieldVal();
     }
