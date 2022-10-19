@@ -598,7 +598,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             List<FilterRestrictionDef> filterRestrictionDefList, IndexInfo indexInfo) throws UnifyException {
         Date now = getNow();
         ReportFilterOptions reportFilterOptions = null;
-        while (indexInfo.index < filterRestrictionDefList.size()) {
+         while (indexInfo.index < filterRestrictionDefList.size()) {
             FilterRestrictionDef restrictionDef = filterRestrictionDefList.get(indexInfo.index++);
             if (restrictionDef.getDepth() == indexInfo.subCompoundIndex) {
                 if (restrictionDef.isCompound()) {
@@ -609,7 +609,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     if (parentFilterOptions != null) {
                         parentFilterOptions.getSubFilterOptionList().add(reportFilterOptions);
                     }
-                } else {
+                    indexInfo.subCompoundIndex--;
+               } else {
                     Object param1 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamA());
                     Object param2 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamB());
                     if (restrictionDef.isParameterVal()) {
