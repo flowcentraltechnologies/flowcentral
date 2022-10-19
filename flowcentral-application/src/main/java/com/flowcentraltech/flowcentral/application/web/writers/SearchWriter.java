@@ -86,7 +86,7 @@ public class SearchWriter extends AbstractControlWriter {
 
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+//        super.doWriteBehavior(writer, widget);
 
         SearchWidget searchWidget = (SearchWidget) widget;
         List<ValueStore> valueStoreList = searchWidget.getValueList();
@@ -135,7 +135,7 @@ public class SearchWriter extends AbstractControlWriter {
     private void writeBehavior(ResponseWriter writer, SearchWidget searchWidget, ValueStore lineValueStore,
             DynamicField ctrl) throws UnifyException {
         ctrl.setValueStore(lineValueStore);
-        writer.writeBehavior(ctrl);
+//        writer.writeBehavior(ctrl);
         addPageAlias(searchWidget.getId(), ctrl);
         
         EventHandler[] eventHandlers = searchWidget.getUplAttribute(EventHandler[].class, "eventHandler");
