@@ -22,7 +22,7 @@
 !ui-formpanel:formPanel
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
-	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmValueGeneratorfrmAppletName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmAutoLoadingCondition
+	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmAutoLoadingCondition
 		frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
