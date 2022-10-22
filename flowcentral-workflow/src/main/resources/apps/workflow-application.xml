@@ -178,6 +178,8 @@
 				inputWidget="application.enumlist" />
 			<field name="onCondition" label="$m{workflow.workflowsetvalues.oncondition}"
 				type="child" category="workflow" references="application.appFilterRef" />
+			<field name="valueGenerator" label="$m{workflow.workflowsetvalues.valuegenerator}"
+				type="string" nullable = "true" />
 			<field name="setValues"
 				label="$m{workflow.workflowsetvalues.setvalue}" type="child"
 				category="workflow" references="application.appSetValuesRef" />
@@ -200,6 +202,8 @@
 				inputWidget="application.entitysearch" />
 			<field name="type" label="$m{workflow.step.type}" type="enum_ref"
 				references="wfsteptypelist" inputWidget="application.enumlist" />
+			<field name="valueGenerator" label="$m{workflow.step.valuegenerator}"
+				type="string" nullable = "true" />
 			<field name="priority" label="$m{workflow.step.priority}"
 				type="enum_ref" references="wfstepprioritylist"
 				inputWidget="application.enumlist" />

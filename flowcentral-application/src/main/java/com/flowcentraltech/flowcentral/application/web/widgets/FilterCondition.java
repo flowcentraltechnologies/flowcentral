@@ -259,10 +259,10 @@ public class FilterCondition {
 
     @Override
     public String toString() {
-        return "FilterCondition [type=" + type + ", listType=" + listType + ", typeSelector=" + typeSelector
-                + ", fieldName=" + fieldName + ", paramFieldA=" + paramFieldA + ", paramFieldB=" + paramFieldB
-                + ", paramInputA=" + paramInputA + ", paramInputB=" + paramInputB + ", ownerInstId=" + ownerInstId
-                + ", depth=" + depth + ", typeChange=" + typeChange + ", fieldChange=" + fieldChange + ", editable="
-                + editable + "]";
+        return "FilterCondition [entityDef=" + entityDef + ", labelSuggestionDef=" + labelSuggestionDef + ", type="
+                + type + ", listType=" + listType + ", typeSelector=" + typeSelector + ", fieldName=" + fieldName
+                + ", paramFieldA=" + paramFieldA + ", paramFieldB=" + paramFieldB + ", paramInputA=" + paramInputA
+                + ", paramInputB=" + paramInputB + ", ownerInstId=" + ownerInstId + ", depth=" + depth + ", typeChange="
+                + typeChange + ", fieldChange=" + fieldChange + ", editable=" + editable + "]";
     }
 }

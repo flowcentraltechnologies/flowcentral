@@ -210,10 +210,20 @@
 			dataType="string" inputType="string"
 			editor="!ui-dropdownchecklist list:formreviewtypelist columns:1"
 			renderer="!ui-label" />
-		<widgetType name="entitysetvaluesgenlist"
-			description="$m{studio.widgettype.entitysetvaluesgenlist}"
+		<widgetType name="formentitysetvaluesgenlist"
+			description="$m{studio.widgettype.formentitysetvaluesgenlist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studioentitysetvaluesgenlist listParams:$l{appFormId} blankOption:$m{blank.none}"
+			editor="!ui-select list:studioformentitysetvaluesgenlist listParams:$l{appFormId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="appletentitysetvaluesgenlist"
+			description="$m{studio.widgettype.appletentitysetvaluesgenlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletentitysetvaluesgenlist listParams:$l{appAppletd} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="wfentitysetvaluesgenlist"
+			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiowfentitysetvaluesgenlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="workflowformlist"
 			description="$m{studio.widgettype.workflowformlist}"
@@ -1871,7 +1881,9 @@
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
-						column="1" required="true" />
+						column="0" required="true" />
+					<field name="valueGenerator"
+						inputWidget="studio.appletentitysetvaluesgenlist" column="1" />
 				</section>
 			</tab>
 			<tab name="setValues"
@@ -3525,7 +3537,7 @@
 					<field name="type" inputWidget="application.enumlist"
 						switchOnChange="true" column="1" required="true" />
 					<field name="valueGenerator"
-						inputWidget="studio.entitysetvaluesgenlist" column="1" />
+						inputWidget="studio.formentitysetvaluesgenlist" column="1" />
 					<field name="trigger" inputWidget="studio.formstatefieldlist"
 						column="1" />
 				</section>
@@ -3925,6 +3937,8 @@
 						column="0" required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="false" />
+					<field name="valueGenerator"
+						inputWidget="studio.wfentitysetvaluesgenlist" column="1" />
 				</section>
 			</tab>
 			<tab name="condition"
@@ -3955,6 +3969,8 @@
 						column="0" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" />
+					<field name="valueGenerator"
+						inputWidget="studio.wfentitysetvaluesgenlist" column="1" />
 					<field name="recordActionType"
 						inputWidget="application.enumlist" column="1" required="true"
 						visible="false" />

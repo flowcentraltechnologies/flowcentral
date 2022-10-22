@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowSetValuesType;
 import com.tcdng.unify.core.annotation.Child;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
@@ -40,6 +41,9 @@ public class WorkflowSetValues extends BaseConfigNamedEntity {
     
     @ForeignKey(Workflow.class)
     private Long workflowId;
+
+    @Column(length = 128, nullable = true)
+    private String valueGenerator;
 
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
@@ -71,6 +75,14 @@ public class WorkflowSetValues extends BaseConfigNamedEntity {
         this.workflowId = workflowId;
     }
 
+    public String getValueGenerator() {
+        return valueGenerator;
+    }
+
+    public void setValueGenerator(String valueGenerator) {
+        this.valueGenerator = valueGenerator;
+    }
+
     public String getTypeDesc() {
         return typeDesc;
     }
@@ -78,7 +90,6 @@ public class WorkflowSetValues extends BaseConfigNamedEntity {
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
     }
-
 
     public AppFilter getOnCondition() {
         return onCondition;

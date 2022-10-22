@@ -83,6 +83,7 @@ public class FormStatePolicyConfig extends BaseNameConfig {
         return valueGenerator;
     }
 
+    @XmlAttribute
     public void setValueGenerator(String valueGenerator) {
         this.valueGenerator = valueGenerator;
     }

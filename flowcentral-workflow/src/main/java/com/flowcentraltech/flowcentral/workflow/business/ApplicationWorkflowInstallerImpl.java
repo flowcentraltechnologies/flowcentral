@@ -313,6 +313,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                     workflowSetValues.setName(wfSetValuesConfig.getName());
                     workflowSetValues.setDescription(resolveApplicationMessage(wfSetValuesConfig.getDescription()));
                     workflowSetValues.setOnCondition(InputWidgetUtils.newAppFilter(wfSetValuesConfig.getOnCondition()));
+                    workflowSetValues.setValueGenerator(wfSetValuesConfig.getValueGenerator());
                     workflowSetValues.setSetValues(newAppSetValues(wfSetValuesConfig.getSetValues()));
                     workflowSetValues.setConfigType(ConfigType.MUTABLE_INSTALL);
                     setValuesList.add(workflowSetValues);
@@ -323,6 +324,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                                 .setDescription(resolveApplicationMessage(wfSetValuesConfig.getDescription()));
                         oldWorkflowSetValues
                                 .setOnCondition(InputWidgetUtils.newAppFilter(wfSetValuesConfig.getOnCondition()));
+                        oldWorkflowSetValues.setValueGenerator(wfSetValuesConfig.getValueGenerator());
                         oldWorkflowSetValues.setSetValues(newAppSetValues(wfSetValuesConfig.getSetValues()));
                     } else {
                         environment().findChildren(oldWorkflowSetValues);

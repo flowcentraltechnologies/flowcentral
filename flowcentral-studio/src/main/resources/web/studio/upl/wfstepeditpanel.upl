@@ -22,7 +22,7 @@
 !ui-formpanel:formPanel
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
-	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmEmails frmComments frmAutoLoadingCondition
+	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmAutoLoadingCondition
 		frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
@@ -38,6 +38,9 @@
 !ui-checkbox:frmBranchOnly caption:$m{wfstepeditpanel.branchonly} binding:branchOnly
 !ui-checkbox:frmIncludeForwarder caption:$m{wfstepeditpanel.includeforwarder} binding:includeForwarder
 !ui-checkbox:frmForwarderPreferred caption:$m{wfstepeditpanel.forwarderpreferred} binding:forwarderPreffered
+!ui-select:frmValueGenerator styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.valuegenerator}
+	list:$s{studiowfentitysetvaluesgenlist} listParams:$l{workflowId} blankOption:$s{}
+	binding:valueGenerator
 !ui-select:frmEmails styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.emails}
 	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
 	binding:emails

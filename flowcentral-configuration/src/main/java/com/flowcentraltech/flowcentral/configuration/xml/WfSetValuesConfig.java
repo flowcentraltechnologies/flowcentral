@@ -36,6 +36,8 @@ public class WfSetValuesConfig extends BaseNameConfig {
 
     private SetValuesConfig setValues;
 
+    private String valueGenerator;
+
     public WorkflowSetValuesType getType() {
         return type;
     }
@@ -62,6 +64,15 @@ public class WfSetValuesConfig extends BaseNameConfig {
     @XmlElement(name = "setValue")
     public void setSetValues(SetValuesConfig setValues) {
         this.setValues = setValues;
+    }
+
+    public String getValueGenerator() {
+        return valueGenerator;
+    }
+
+    @XmlAttribute
+    public void setValueGenerator(String valueGenerator) {
+        this.valueGenerator = valueGenerator;
     }
 
 }

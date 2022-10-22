@@ -79,6 +79,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column(name = "STEP_RULE", length = 64, nullable = true)
     private String rule;
 
+    @Column(length = 128, nullable = true) 
+    private String valueGenerator;
+
     @Column
     private int designX;
 
@@ -250,6 +253,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setRule(String rule) {
         this.rule = rule;
+    }
+
+    public String getValueGenerator() {
+        return valueGenerator;
+    }
+
+    public void setValueGenerator(String valueGenerator) {
+        this.valueGenerator = valueGenerator;
     }
 
     public int getDesignX() {

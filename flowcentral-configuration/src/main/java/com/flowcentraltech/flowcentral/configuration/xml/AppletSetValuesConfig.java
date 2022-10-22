@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -25,7 +26,18 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppletSetValuesConfig extends BaseNameConfig {
 
+    private String valueGenerator;
+    
     private SetValuesConfig setValues;
+
+    public String getValueGenerator() {
+        return valueGenerator;
+    }
+
+    @XmlAttribute
+    public void setValueGenerator(String valueGenerator) {
+        this.valueGenerator = valueGenerator;
+    }
 
     public SetValuesConfig getSetValues() {
         return setValues;
