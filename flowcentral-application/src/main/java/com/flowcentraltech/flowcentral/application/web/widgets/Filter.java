@@ -247,6 +247,13 @@ public class Filter {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "Filter [entityDef=" + entityDef + ", labelSuggestionDef=" + labelSuggestionDef + ", conditionList="
+                + conditionList + ", viewConditionList=" + viewConditionList + ", listType=" + listType
+                + ", ownerInstId=" + ownerInstId + ", paramList=" + paramList + "]";
+    }
+
     private class FilterConditionList extends ArrayList<FilterCondition> {
 
         private static final long serialVersionUID = 5913942222681181614L;

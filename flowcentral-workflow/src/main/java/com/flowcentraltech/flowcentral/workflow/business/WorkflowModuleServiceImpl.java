@@ -241,7 +241,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         FilterDef onCondition = InputWidgetUtils.getFilterDef(appletUtil, workflowSetValues.getName(),
                                 workflowSetValues.getDescription(), null, workflowSetValues.getOnCondition());
                         SetValuesDef setValues = InputWidgetUtils.getSetValuesDef(workflowSetValues.getName(),
-                                workflowSetValues.getDescription(), null, workflowSetValues.getSetValues());
+                                workflowSetValues.getDescription(), workflowSetValues.getValueGenerator(),
+                                workflowSetValues.getSetValues());
                         WfSetValuesDef wfSetValuesDef = new WfSetValuesDef(workflowSetValues.getType(),
                                 workflowSetValues.getName(), workflowSetValues.getDescription(), onCondition,
                                 setValues);
@@ -291,8 +292,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getEmails(), wfStep.getComments());
 
                         if (wfStep.getSetValues() != null) {
-                            wsdb.addWfSetValuesDef(new WfStepSetValuesDef(
-                                    InputWidgetUtils.getSetValuesDef(null, wfStep.getSetValues().getSetValues())));
+                            wsdb.addWfSetValuesDef(new WfStepSetValuesDef(InputWidgetUtils.getSetValuesDef(
+                                    wfStep.getValueGenerator(), wfStep.getSetValues().getSetValues())));
                         }
 
                         for (WfStepRouting wfStepRouting : wfStep.getRoutingList()) {

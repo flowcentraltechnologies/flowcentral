@@ -742,6 +742,9 @@
 			<field name="appAppletId"
 				label="$m{application.appappletsetvalues.appappletid}" type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
+			<field name="valueGenerator"
+				label="$m{application.appappletsetvalues.valuegenerator}"
+				type="string" nullable = "true" />
 			<field name="setValues"
 				label="$m{application.appappletsetvalues.setvalue}" type="child"
 				category="applet" references="appSetValuesRef" />
@@ -1470,7 +1473,7 @@
 				inputWidget="application.enumlist" />
 			<field name="valueGenerator"
 				label="$m{application.appformstatepolicy.valuegenerator}"
-				type="string" />
+				type="string" nullable = "true" />
 			<field name="trigger"
 				label="$m{application.appformstatepolicy.trigger}" type="string" />
 			<field name="onCondition"

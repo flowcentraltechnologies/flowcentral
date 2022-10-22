@@ -118,17 +118,16 @@ public class EntitySearch extends AbstractPanelFormBinding {
         this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 FilterConditionListType.IMMEDIATE_FIELD);
-        this.appAppletFilterName = appAppletFilterName;
-        if (appAppletFilterName != null) {
-            localApplyQuickFilter();
-        }
-
         this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), 4);
         this.entityTable = new EntityTable(ctx.au(), tableDef, null);
+        this.appAppletFilterName = appAppletFilterName;
         this.appAppletId = appAppletId;
         this.editAction = editAction;
         this.mode = mode;
         this.newButtonVisible = true;
+        if (appAppletFilterName != null) {
+            localApplyQuickFilter();
+        }
     }
 
     public AppletUtilities au() {

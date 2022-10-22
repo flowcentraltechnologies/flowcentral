@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Child;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
@@ -34,6 +35,9 @@ public class AppAppletSetValues extends BaseConfigNamedEntity {
     @ForeignKey(AppApplet.class)
     private Long appAppletId;
 
+    @Column(length = 128, nullable = true)  
+    private String valueGenerator;
+
     @Child(category = "applet")
     private AppSetValues setValues;
 
@@ -43,6 +47,14 @@ public class AppAppletSetValues extends BaseConfigNamedEntity {
 
     public void setAppAppletId(Long appAppletId) {
         this.appAppletId = appAppletId;
+    }
+
+    public String getValueGenerator() {
+        return valueGenerator;
+    }
+
+    public void setValueGenerator(String valueGenerator) {
+        this.valueGenerator = valueGenerator;
     }
 
     public AppSetValues getSetValues() {

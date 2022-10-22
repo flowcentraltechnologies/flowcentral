@@ -244,8 +244,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         AppletSetValuesConfig appletSetValuesConfig = new AppletSetValuesConfig();
                         appletSetValuesConfig.setName(appAppletSetValues.getName());
                         appletSetValuesConfig.setDescription(appAppletSetValues.getDescription());
-                        appletSetValuesConfig.setSetValues(
-                                InputWidgetUtils.getSetValuesConfig(null, appAppletSetValues.getSetValues()));
+                        appletSetValuesConfig.setValueGenerator(appAppletSetValues.getValueGenerator());
+                        appletSetValuesConfig.setSetValues(InputWidgetUtils.getSetValuesConfig(
+                                appAppletSetValues.getValueGenerator(), appAppletSetValues.getSetValues()));
                         setValuesList.add(appletSetValuesConfig);
                     }
 

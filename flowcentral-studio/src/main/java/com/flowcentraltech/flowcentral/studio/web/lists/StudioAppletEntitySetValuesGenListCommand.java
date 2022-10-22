@@ -16,39 +16,24 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.business.EntitySetValuesGenerator;
-import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
+import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationEntitySetValuesGenListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.list.LongParam;
 
 /**
- * Studio entity set values generator list command
+ * Studio applet entity set values generator list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studioentitysetvaluesgenlist")
-public class StudioEntitySetValuesGenListCommand
-        extends AbstractEntityTypeListCommand<EntitySetValuesGenerator, LongParam> {
-
-    @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    public StudioEntitySetValuesGenListCommand() {
-        super(EntitySetValuesGenerator.class, LongParam.class);
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
+@Component("studioappletentitysetvaluesgenlist")
+public class StudioAppletEntitySetValuesGenListCommand extends AbstractApplicationEntitySetValuesGenListCommand {
 
     @Override
     protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {
-            return applicationModuleService.findAppFormEntityLongName(param.getValue());
+            return application().getAppAppletEntity(param.getValue());
         }
 
         return null;

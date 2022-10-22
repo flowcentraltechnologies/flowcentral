@@ -138,8 +138,9 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfSetValuesConfig.setType(workflowSetValues.getType());
                         wfSetValuesConfig
                                 .setOnCondition(InputWidgetUtils.getFilterConfig(au(), workflowSetValues.getOnCondition()));
+                        wfSetValuesConfig.setValueGenerator(workflowSetValues.getValueGenerator());
                         wfSetValuesConfig.setSetValues(InputWidgetUtils.getSetValuesConfig(
-                                null, workflowSetValues.getSetValues()));
+                                workflowSetValues.getValueGenerator(), workflowSetValues.getSetValues()));
                         setValuesList.add(wfSetValuesConfig);
                     }
 
@@ -180,11 +181,12 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfStepConfig.setAutoLoadCondition(wfStep.getAutoLoadConditionName());
                         wfStepConfig.setPolicy(wfStep.getPolicy());
                         wfStepConfig.setRule(wfStep.getRule());
+                        wfStepConfig.setValueGenerator(wfStep.getValueGenerator());
 
                         // Set values
                         if (wfStep.getSetValues() != null) {
                             SetValuesConfig setValuesConfig = InputWidgetUtils
-                                    .getSetValuesConfig(null, wfStep.getSetValues().getSetValues());
+                                    .getSetValuesConfig(wfStep.getValueGenerator(), wfStep.getSetValues().getSetValues());
                             wfStepConfig.setSetValuesConfig(setValuesConfig);
                         }
 
