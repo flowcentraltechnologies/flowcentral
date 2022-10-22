@@ -150,7 +150,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public <T extends Entity> T findConstraint(T record) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
@@ -162,24 +162,26 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public <T extends Entity> List<T> findAllWithChildren(Query<T> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.FIND_ALL);
+        setQueryDetails(req, query);
+        return multipleEntityResultOperation(query.getEntityClass(), req);
     }
 
     @Override
     public <T, U extends Entity> Map<T, U> findAllMap(Class<T> keyClass, String keyName, Query<U> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     @Override
     public <T, U extends Entity> Map<T, List<U>> findAllListMap(Class<T> keyClass, String keyName, Query<U> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     @Override
     public <T extends Entity> void findChildren(T record) throws UnifyException {
-        throw new UnsupportedOperationException();
+        
     }
 
     @Override
@@ -233,24 +235,26 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public <T extends Entity> List<T> listAllWithChildren(Query<T> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST_ALL);
+        setQueryDetails(req, query);
+        return multipleEntityResultOperation(query.getEntityClass(), req);
     }
 
     @Override
     public <T, U extends Entity> Map<T, U> listAllMap(Class<T> keyClass, String keyName, Query<U> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     @Override
     public <T, U extends Entity> Map<T, List<U>> listAllListMap(Class<T> keyClass, String keyName, Query<U> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return Collections.emptyMap();
     }
 
     @Override
     public <T extends Entity> void listChildren(T record) throws UnifyException {
-        throw new UnsupportedOperationException();
+
     }
 
     @Override
@@ -283,24 +287,27 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     @Override
     public <T, U extends Entity> Set<T> valueSet(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        // TODO
+        return null;
     }
 
     @Override
     public <T, U, V extends Entity> Map<T, U> valueMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        // TODO
+        return null;
     }
 
     @Override
     public <T, U, V extends Entity> Map<T, List<U>> valueListMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        // TODO
+        return null;
     }
 
     @Override
     public void populateListOnly(Entity record) throws UnifyException {
-        throw new UnsupportedOperationException();
+
     }
 
     @Override
@@ -406,23 +413,23 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     @Override
     public Aggregation aggregate(AggregateFunction aggregateFunction, Query<? extends Entity> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
     public List<Aggregation> aggregateMany(Aggregate aggregate, Query<? extends Entity> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
     public List<GroupAggregation> aggregateGroupMany(Aggregate aggregate, Query<? extends Entity> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
     public Entity getExtendedInstance(Class<? extends Entity> entityClass) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return null;
     }
 
     @Override
