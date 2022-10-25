@@ -119,6 +119,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         WfFilterConfig filterConfig = WorkflowInputWidgetUtils.getFilterConfig(au(), workflowFilter);
                         descKey = getDescriptionKey(workflowDescKey, "workflowfilter", workflowFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.WORKFLOW, descKey, workflowFilter.getDescription());
+                        filterConfig.setName(workflowFilter.getName());
                         filterConfig.setDescription("$m{" + descKey + "}");
                         filterList.add(filterConfig);
                     }
