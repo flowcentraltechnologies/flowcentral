@@ -23,13 +23,13 @@ package com.flowcentraltech.flowcentral.common.constants;
  */
 public enum MaintainType {
     EDIT,
-	USER_ACTION;
+    WORK_ITEM;
 	
 	public boolean isEdit() {
 		return this.equals(EDIT);
 	}
 	
-	public boolean isUserAction() {
-		return this.equals(USER_ACTION);
+	public boolean isWorkItem() {
+		return this.equals(WORK_ITEM);
 	}
 }

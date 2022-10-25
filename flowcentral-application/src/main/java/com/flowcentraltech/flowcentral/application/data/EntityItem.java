@@ -16,7 +16,6 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
-import com.flowcentraltech.flowcentral.application.data.FormAppendables;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.constants.MaintainType;
 import com.tcdng.unify.core.database.Entity;
@@ -61,8 +60,8 @@ public class EntityItem implements FormAppendables {
         return maintainType.isEdit();
     }
 
-    public boolean isUserAction() {
-        return maintainType.isUserAction();
+    public boolean isWorkItem() {
+        return maintainType.isWorkItem();
     }
 
     public Entity getEntity() {

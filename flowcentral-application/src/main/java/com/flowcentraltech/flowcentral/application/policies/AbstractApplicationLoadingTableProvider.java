@@ -16,11 +16,17 @@
 package com.flowcentraltech.flowcentral.application.policies;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for application table loading providers..
@@ -37,6 +43,12 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
     @Configurable
     private EnvironmentService environmentService;
 
+    private final String sourceEntity;
+    
+    public AbstractApplicationLoadingTableProvider(String sourceEntity) {
+        this.sourceEntity = sourceEntity;
+    }
+
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
     }
@@ -50,12 +62,30 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
         return 0;
     }
 
+    @Override
+    public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst) throws UnifyException {
+        return new LoadingWorkItemInfo();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public EntityItem getSourceItem(Long sourceItemId) throws UnifyException {
+        EntityClassDef sourceEntityClassDef = application().getEntityClassDef(sourceEntity);
+        Entity entity = environment().list((Class<? extends Entity>) sourceEntityClassDef.getEntityClass(),
+                sourceItemId);
+        return new EditEntityItem(entity);
+    }
+
     protected EnvironmentService environment() {
         return environmentService;
     }
 
     protected ApplicationModuleService application() {
         return applicationModuleService;
+    }
+
+    protected String getSourceEntity() {
+        return sourceEntity;
     }
 
     @Override

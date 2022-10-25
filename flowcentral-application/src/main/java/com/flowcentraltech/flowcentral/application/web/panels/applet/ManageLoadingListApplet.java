@@ -22,10 +22,14 @@ import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.FormDef;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
+import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 
@@ -60,6 +64,18 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     }
 
     @Override
+    public boolean navBackToSearch() throws UnifyException {
+        if (!super.navBackToSearch()) {
+            if (loadingSearch != null) {
+                loadingSearch.applySearchEntriesToSearch();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem item = loadingSearch.getSourceItem(mIndex);
@@ -72,18 +88,51 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
             }
 
-            viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
-        } else if (item.isUserAction()) {
-            // TODO
+            viewMode = ViewMode.MAINTAIN_FORM;
+        } else if (item.isWorkItem()) {
+            final AppletDef _currentFormAppletDef = getFormAppletDef();
+            WorkEntity currEntityInst = (WorkEntity) item.getEntity();
+            FormDef formDef = getPreferredForm(PreferredFormType.ALL, _currentFormAppletDef, currEntityInst,
+                    FormMode.MAINTAIN.formProperty());
+            LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
+            getCtx().setRecovery(loadingWorkItemInfo.isError());
+            getCtx().setComments(loadingWorkItemInfo.isComments());
+            if (formDef.isInputForm()) {
+                if (form == null) {
+                    form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);
+                    currEntityInst = (WorkEntity) form.getFormBean();
+                    form.setFormTitle(getRootAppletDef().getLabel());
+                    form.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+                } else {
+                    updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
+                }
+
+                form.setAppendables(item);
+                getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+                viewMode = ViewMode.MAINTAIN_FORM;
+            } else { // Listing
+                listingForm = constructListingForm(formDef, currEntityInst);
+                listingForm.setFormTitle(getRootAppletDef().getLabel());
+                listingForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+                listingForm.setAppendables(item);
+                getCtx().setEmails(loadingWorkItemInfo.isEmails());
+                getCtx().setReadOnly(loadingWorkItemInfo.isError());
+                viewMode = ViewMode.LISTING_FORM;
+            }
         }
         
         return;
     }
 
     @Override
+    protected AbstractTable<?, ? extends Entity> getSearchTable()  throws UnifyException {
+        return loadingSearch.getLoadingTable();
+    }
+
+    @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
-        // TODO Auto-generated method stub
-        return null;
+        String formAppletName = loadingSearch.getSourceItemFormApplet(mIndex);
+        return au.getAppletDef(formAppletName);
     }
 
 }

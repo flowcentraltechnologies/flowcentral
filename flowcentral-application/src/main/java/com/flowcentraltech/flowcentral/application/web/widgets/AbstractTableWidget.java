@@ -72,6 +72,8 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
         @UplAttribute(name = "summary", type = String.class),
         @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "viewButtonClass", type = String.class, defaultVal = "mbtn"),
+        @UplAttribute(name = "editButtonClass", type = String.class, defaultVal = "mbtn"),
         @UplAttribute(name = "fixedRows", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
@@ -315,8 +317,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public Control getViewCtrl() throws UnifyException {
         if (viewCtrl == null) {
-            viewCtrl = (Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{mbtn} caption:" + "$m{table.row.view}");
+            viewCtrl = (Control) addInternalChildWidget("!ui-button styleClass:$e{"
+                    + getUplAttribute(String.class, "viewButtonClass") + "} caption:" + "$m{table.row.view}");
         }
 
         return viewCtrl;
@@ -324,8 +326,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public Control getEditCtrl() throws UnifyException {
         if (editCtrl == null) {
-            editCtrl = (Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{mbtn} caption:" + "$m{table.row.edit}");
+            editCtrl = (Control) addInternalChildWidget("!ui-button styleClass:$e{"
+                    + getUplAttribute(String.class, "editButtonClass") + "} caption:" + "$m{table.row.edit}");
         }
 
         return editCtrl;

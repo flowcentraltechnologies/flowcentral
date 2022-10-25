@@ -53,6 +53,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
+import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
@@ -731,8 +732,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return mIndex > 0;
     }
 
-    public boolean isNextNav() {
-        return mIndex < (entitySearch.getEntityTable().getDispItemList().size() - 1);
+    public boolean isNextNav() throws UnifyException {
+        return mIndex < (getSearchTable().getDispItemList().size() - 1);
     }
 
     public String getDisplayItemCounter() throws UnifyException {
@@ -743,9 +744,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         return au().resolveSessionMessage("$m{entityformapplet.displaycounter}", mIndex + 1,
-                entitySearch.getEntityTable().getDispItemList().size());
+                getSearchTable().getDispItemList().size());
     }
 
+    protected AbstractTable<?, ? extends Entity> getSearchTable()  throws UnifyException {
+        return entitySearch.getEntityTable();
+    }
+    
     public EntitySearch getEntitySearch() {
         return entitySearch;
     }

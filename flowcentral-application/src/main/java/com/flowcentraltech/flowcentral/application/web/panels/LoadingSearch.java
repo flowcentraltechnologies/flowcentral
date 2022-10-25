@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
@@ -27,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Order;
@@ -186,6 +188,16 @@ public class LoadingSearch {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
         return loadingTableProvider.getSourceItem((Long) loadingEntity.getId());
+    }
+    
+    public String getSourceItemFormApplet(int index) throws UnifyException {
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider.getSourceItemFormApplet();
+    }
+
+    public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst, int index) throws UnifyException {
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider.getLoadingWorkItemInfo(inst);
     }
     
     public void setOrder(Order order) {

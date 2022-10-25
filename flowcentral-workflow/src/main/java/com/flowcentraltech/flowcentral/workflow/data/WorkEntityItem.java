@@ -17,10 +17,12 @@
 package com.flowcentraltech.flowcentral.workflow.data;
 
 import com.flowcentraltech.flowcentral.application.data.Comments;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.Errors;
-import com.flowcentraltech.flowcentral.application.data.UserActionEntityItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
+import com.flowcentraltech.flowcentral.common.constants.MaintainType;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Work entity item
@@ -28,14 +30,14 @@ import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WorkEntityItem extends UserActionEntityItem {
+public class WorkEntityItem extends EntityItem {
 
-    public WorkEntityItem(WorkEntity entity, InputArrayEntries emails, Comments comments, Errors errors) {
-        super(entity, emails, comments, errors);
+    public WorkEntityItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
+        super(MaintainType.WORK_ITEM, entity, emails, comments, errors);
     }
 
-    public WorkEntityItem(WorkEntity entity) {
-        super(entity);
+    public WorkEntityItem(Entity entity) {
+        super(MaintainType.WORK_ITEM, entity);
     }
 
     public WorkEntity getWorkEntity() {

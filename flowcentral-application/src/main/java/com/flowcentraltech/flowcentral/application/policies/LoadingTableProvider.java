@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.application.policies;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -73,12 +75,32 @@ public interface LoadingTableProvider extends UnifyComponent {
      *                        if an error occurs
      */
     EntityItem getSourceItem(Long sourceItemId) throws UnifyException;
+
+    /**
+     * Gets the source entity item form applet.
+     * 
+     * @return the source entity item form applet
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getSourceItemFormApplet() throws UnifyException;
+
+    /**
+     * Gets loading work item information.
+     * 
+     * @param inst
+     *             the work item instance
+     * @return the loading work item information
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst) throws UnifyException;
     
     /**
      * Commit change to entity
      * 
      * @param itemValueStore
-     *             the item value store
+     *                       the item value store
      * @throws UnifyException
      *                        if an error occurs
      */
