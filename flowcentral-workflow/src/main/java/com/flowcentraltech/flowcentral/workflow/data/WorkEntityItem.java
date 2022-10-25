@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.workflow.data;
 
 import com.flowcentraltech.flowcentral.application.data.Comments;
-import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.Errors;
+import com.flowcentraltech.flowcentral.application.data.UserActionEntityItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 
@@ -28,7 +28,7 @@ import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WorkEntityItem extends EntityItem {
+public class WorkEntityItem extends UserActionEntityItem {
 
     public WorkEntityItem(WorkEntity entity, InputArrayEntries emails, Comments comments, Errors errors) {
         super(entity, emails, comments, errors);
