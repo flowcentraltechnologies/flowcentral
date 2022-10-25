@@ -18,6 +18,4 @@
 // Search list
 !fc-loadingsearchpanel:loadingSearchPanel binding:loadingSearch
 	searchResultMarker:$j{com.flowcentraltech.flowcentral.application.web.panels.LoadingSearchValueMarkerConstants.DEFAULT_LIST}
-
-// Actions
 	

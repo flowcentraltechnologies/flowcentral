@@ -13,10 +13,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.business.policies;
+package com.flowcentraltech.flowcentral.application.policies;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -62,6 +63,17 @@ public interface LoadingTableProvider extends UnifyComponent {
      */
     List<? extends Entity> getLoadingItems(Restriction restriction) throws UnifyException;
 
+    /**
+     * Gets the source entity items using supplied ID
+     * 
+     * @param sourceItemId
+     *                     the id to use
+     * @return the source entity item
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityItem getSourceItem(Long sourceItemId) throws UnifyException;
+    
     /**
      * Commit change to entity
      * 

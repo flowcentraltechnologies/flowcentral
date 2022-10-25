@@ -43,8 +43,7 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
                 getRootAppletDef().getDescription(), currFormAppletDef, null, EntitySearch.ENABLE_ALL, false);
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);
-            entitySearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()),
-                    au.getSpecialParamProvider());
+            entitySearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()), au.getSpecialParamProvider());
         }
 
         navBackToSearch();

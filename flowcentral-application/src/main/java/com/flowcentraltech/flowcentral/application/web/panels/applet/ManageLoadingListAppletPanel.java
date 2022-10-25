@@ -27,14 +27,43 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-manageloadinglistappletpanel")
 @UplBinding("web/application/upl/manageloadinglistappletpanel.upl")
-public class ManageLoadingListAppletPanel extends AbstractAppletPanel {
+public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel {
 
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
 
-        ManageLoadingListApplet applet = getManageLoadingListApplet();
-        applet.ensureRootAppletStruct();
+        final ManageLoadingListApplet applet = getManageLoadingListApplet();
+//        applet.ensureRootAppletStruct();
+        final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
+        switch (viewMode) {
+            case ENTITY_CRUD_PAGE:
+            case ENTRY_TABLE_PAGE:
+            case ASSIGNMENT_PAGE:
+            case PROPERTYLIST_PAGE:
+            case LISTING_FORM:
+            case MAINTAIN_FORM_SCROLL:
+            case MAINTAIN_PRIMARY_FORM_NO_SCROLL:
+            case MAINTAIN_CHILDLIST_FORM_NO_SCROLL:
+            case MAINTAIN_RELATEDLIST_FORM_NO_SCROLL:
+            case MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL:
+            case MAINTAIN_FORM:
+            case MAINTAIN_CHILDLIST_FORM:
+            case MAINTAIN_RELATEDLIST_FORM:
+            case MAINTAIN_HEADLESSLIST_FORM:
+            case NEW_FORM:
+            case NEW_PRIMARY_FORM:
+            case NEW_CHILD_FORM:
+            case NEW_CHILDLIST_FORM:
+            case NEW_RELATEDLIST_FORM:
+            case NEW_HEADLESSLIST_FORM:
+            case HEADLESS_TAB:
+                break;
+            case SEARCH:
+                switchContent("loadingSearchPanel");
+            default:
+                break;
+        }
     }
 
     private ManageLoadingListApplet getManageLoadingListApplet() throws UnifyException {

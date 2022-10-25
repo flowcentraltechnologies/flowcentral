@@ -15,6 +15,8 @@
 
 !fc-entityformappletpanel components:$c{formPanel assignmentPanel entryTablePanel}
 	frmActionsHandler:$d{!ui-event event:onclick action:$c{formActionAct}}
+
+!ui-hidden:maintainActHolder eventHandler:$d{!ui-event event:onclick action:$c{maintainAct}}
 	
 // Form
 !fc-headerwithtabsformpanel:formPanel binding:form

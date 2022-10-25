@@ -231,9 +231,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         EventHandler[] saveAsSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
                 "appletPanel.entitySaveAsPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
                         "eventHandler");
+        EventHandler[] maintainActHandlers = getPageWidgetByShortName(Widget.class,
+                "appletPanel.maintainActHolder").getUplAttribute(EventHandler[].class,
+                        "eventHandler");
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
                 entrySwitchOnChangeHandlers, crudActionHandlers, crudSwitchOnChangeHandlers,
-                saveAsSwitchOnChangeHandlers);
+                saveAsSwitchOnChangeHandlers, maintainActHandlers);
     }
     
     private boolean saveFormState(AbstractEntityFormApplet applet) throws UnifyException {

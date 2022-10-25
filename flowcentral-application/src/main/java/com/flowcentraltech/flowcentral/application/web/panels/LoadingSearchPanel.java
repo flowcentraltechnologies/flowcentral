@@ -103,7 +103,7 @@ public class LoadingSearchPanel extends AbstractPanel {
     @Action
     public void commitChange() throws UnifyException {
         LoadingSearch loadingSearch = getLoadingSearch();
-        loadingSearch.getLoadingTable().commitChange();
+        loadingSearch.commitChange();
         reload();
     }
     

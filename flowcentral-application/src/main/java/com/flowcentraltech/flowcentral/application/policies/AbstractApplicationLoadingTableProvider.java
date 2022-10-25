@@ -16,9 +16,11 @@
 package com.flowcentraltech.flowcentral.application.policies;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractLoadingTableProvider;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Restriction;
 
 /**
  * Convenient abstract base class for application table loading providers..
@@ -26,13 +28,30 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationLoadingTableProvider extends AbstractLoadingTableProvider {
+public abstract class AbstractApplicationLoadingTableProvider extends AbstractUnifyComponent
+    implements LoadingTableProvider {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
+    @Configurable
+    private EnvironmentService environmentService;
+
+    public final void setEnvironmentService(EnvironmentService environmentService) {
+        this.environmentService = environmentService;
+    }
+
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
+    }
+
+    @Override
+    public int countLoadingItems(Restriction restriction) throws UnifyException {
+        return 0;
+    }
+
+    protected EnvironmentService environment() {
+        return environmentService;
     }
 
     protected ApplicationModuleService application() {

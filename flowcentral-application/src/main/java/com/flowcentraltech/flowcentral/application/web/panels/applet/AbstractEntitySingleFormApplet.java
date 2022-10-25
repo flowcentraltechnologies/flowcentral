@@ -23,6 +23,7 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
@@ -330,7 +331,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         Entity entity = entitySearch.getEntityTable().getDispItemList().get(index);
-        return new EntityItem(entity);
+        return new EditEntityItem(entity);
     }
 
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {

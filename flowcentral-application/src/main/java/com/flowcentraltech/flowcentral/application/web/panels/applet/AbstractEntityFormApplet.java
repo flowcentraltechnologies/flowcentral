@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNa
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -1090,7 +1091,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         Entity entity = entitySearch.getEntityTable().getDispItemList().get(index);
-        return new EntityItem(entity);
+        return new EditEntityItem(entity);
+    }
+
+    protected Entity reloadEntity(Entity _inst, boolean maintainAct) throws UnifyException {
+        if (maintainAct) {
+            // TODO Fire on-maintain-action policy
+        }
+
+        return au().environment().listLean((Class<? extends Entity>) _inst.getClass(), _inst.getId());
     }
 
     public static class ShowPopupInfo {
@@ -1230,14 +1239,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currentFormAppletDef = getFormAppletDef();
         final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
         return au().environment().listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);
-    }
-
-    private Entity reloadEntity(Entity _inst, boolean maintainAct) throws UnifyException {
-        if (maintainAct) {
-            // TODO Fire on-maintain-action policy
-        }
-
-        return au().environment().listLean((Class<? extends Entity>) _inst.getClass(), _inst.getId());
     }
 
     private BreadCrumbs makeFormBreadCrumbs() {

@@ -13,26 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.controllers;
+package com.flowcentraltech.flowcentral.application.data;
 
-import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingListApplet;
-import com.tcdng.unify.core.UnifyException;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
+import com.flowcentraltech.flowcentral.common.constants.MaintainType;
+import com.tcdng.unify.core.database.Entity;
 
 /**
- * Manage loading list applet page bean.
+ * User action entity item.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ManageLoadingListAppletPageBean extends AbstractEntityFormAppletPageBean<ManageLoadingListApplet> {
+public class UserActionEntityItem extends EntityItem {
 
-    public ManageLoadingListApplet getApplet() {
-        return super.getApplet();
+    public UserActionEntityItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
+        super(MaintainType.USER_ACTION, entity, emails, comments, errors);
     }
 
-    @Override
-    public void setApplet(ManageLoadingListApplet applet) throws UnifyException {
-        super.setApplet(applet);
+    public UserActionEntityItem(Entity entity) {
+        super(MaintainType.USER_ACTION, entity);
     }
 
 }
