@@ -25,6 +25,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.WidgetCalculationUtils;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.OrderType;
@@ -388,11 +389,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private List<ButtonInfo> actionBtnInfos;
 
+        private List<Integer> widthRatios;
+
         private String label;
 
         private String detailsPanelName;
-
-        private int totalWidth;
 
         private int sortHistory;
 
@@ -438,6 +439,7 @@ public class TableDef extends BaseApplicationEntityDef {
             this.id = id;
             this.description = description;
             this.version = version;
+            this.widthRatios = new ArrayList<Integer>();
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
@@ -447,6 +449,7 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder(EntityDef entityDef) {
             this.entityDef = entityDef;
+            this.widthRatios = new ArrayList<Integer>();
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
             this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
@@ -572,7 +575,7 @@ public class TableDef extends BaseApplicationEntityDef {
             if (tableColumnDef.isHidden()) {
                 columnDefList.add(tableColumnDef);
             } else {
-                totalWidth += tableColumnDef.getWidthRatio();
+                widthRatios.add(tableColumnDef.getWidthRatio());
                 visibleColumnDefList.add(tableColumnDef);
             }
 
@@ -600,7 +603,9 @@ public class TableDef extends BaseApplicationEntityDef {
         public TableDef build() throws UnifyException {
             List<TableColumnDef> _visibleColumnDefList = new ArrayList<TableColumnDef>();
             int usedPercent = 0;
-            int len = visibleColumnDefList.size();
+            final int len = visibleColumnDefList.size();
+            final int[] _widthRatios = DataUtils.convert(int[].class, widthRatios);
+            final int[] widths = WidgetCalculationUtils.shareAsEqualAsPossible(100, _widthRatios);
             for (int i = 0; i < len; i++) {
                 TableColumnDef tempColumnDef = visibleColumnDefList.get(i);
                 TableColumnDef tableColumnDef = null;
@@ -633,22 +638,12 @@ public class TableDef extends BaseApplicationEntityDef {
                     renderer = renderer + " binding:" + fieldName;
                 }
 
-                if (i == (len - 1)) {
-                    tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName,
-                            "width:" + (100 - usedPercent) + "%;", renderer, editor, tempColumnDef.getRenderer(),
-                            tempColumnDef.getEditor(), tempColumnDef.getLinkAct(), tempColumnDef.getOrder(),
-                            tempColumnDef.getWidthRatio(), (100 - usedPercent), tempColumnDef.isSwitchOnChange(),
-                            tempColumnDef.isHidden(), tempColumnDef.isDisabled(), tempColumnDef.isEditable(),
-                            tempColumnDef.isSortable(), tempColumnDef.isSummary());
-                } else {
-                    int width = (tempColumnDef.getWidthRatio() * 100) / totalWidth;
-                    tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + width + "%;",
-                            renderer, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(),
-                            tempColumnDef.getLinkAct(), tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(), width,
-                            tempColumnDef.isSwitchOnChange(), tempColumnDef.isHidden(), tempColumnDef.isDisabled(),
-                            tempColumnDef.isEditable(), tempColumnDef.isSortable(), tempColumnDef.isSummary());
-                    usedPercent += width;
-                }
+                tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName,
+                        "width:" + widths[i] + "%;", renderer, editor, tempColumnDef.getRenderer(),
+                        tempColumnDef.getEditor(), tempColumnDef.getLinkAct(), tempColumnDef.getOrder(),
+                        tempColumnDef.getWidthRatio(), (100 - usedPercent), tempColumnDef.isSwitchOnChange(),
+                        tempColumnDef.isHidden(), tempColumnDef.isDisabled(), tempColumnDef.isEditable(),
+                        tempColumnDef.isSortable(), tempColumnDef.isSummary());
 
                 _visibleColumnDefList.add(tableColumnDef);
                 columnDefList.add(tableColumnDef);
