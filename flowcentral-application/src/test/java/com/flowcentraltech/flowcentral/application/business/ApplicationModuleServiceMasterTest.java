@@ -192,13 +192,13 @@ public class ApplicationModuleServiceMasterTest extends AbstractFlowCentralTest 
         assertNotNull(tableColumnDef);
         assertEquals("name", tableColumnDef.getFieldName());
         assertEquals("!ui-label binding:name", tableColumnDef.getCellRenderer());
-        assertEquals("width:14%;", tableColumnDef.getHeaderStyle());
+        assertEquals("width:15%;", tableColumnDef.getHeaderStyle());
 
         tableColumnDef = columnList.get(1);
         assertNotNull(tableColumnDef);
         assertEquals("description", tableColumnDef.getFieldName());
         assertEquals("!ui-label binding:description", tableColumnDef.getCellRenderer());
-        assertEquals("width:42%;", tableColumnDef.getHeaderStyle());
+        assertEquals("width:43%;", tableColumnDef.getHeaderStyle());
 
         tableColumnDef = columnList.get(2);
         assertNotNull(tableColumnDef);
@@ -220,7 +220,7 @@ public class ApplicationModuleServiceMasterTest extends AbstractFlowCentralTest 
         assertNotNull(tableColumnDef);
         assertEquals("categoryDesc", tableColumnDef.getFieldName());
         assertEquals("!ui-label binding:categoryDesc", tableColumnDef.getCellRenderer());
-        assertEquals("width:16%;", tableColumnDef.getHeaderStyle());
+        assertEquals("width:14%;", tableColumnDef.getHeaderStyle());
     }
 
     @Test

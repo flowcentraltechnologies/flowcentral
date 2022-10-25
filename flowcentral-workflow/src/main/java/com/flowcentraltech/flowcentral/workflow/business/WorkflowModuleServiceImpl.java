@@ -675,6 +675,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setWfItemEventId(wfItemEventId);
             wfItem.setForwardedBy(getUserToken().getUserLoginId());
             wfItem.setForwardTo(forwardTo);
+            wfItem.setHeldBy(getUserToken().getUserLoginId());
             environment().updateByIdVersion(wfItem);
 
             wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());

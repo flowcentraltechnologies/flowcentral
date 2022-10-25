@@ -230,6 +230,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         AppletFilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), appAppletFilter);
                         String filterKey = getDescriptionKey(descKey, "appletfilter", appAppletFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.APPLET, filterKey, appAppletFilter.getDescription());
+                        filterConfig.setName(appAppletFilter.getName());
                         filterConfig.setDescription("$m{" + filterKey + "}");
                         filterList.add(filterConfig);
                     }
@@ -550,6 +551,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         TableFilterConfig tableFilterConfig = InputWidgetUtils.getFilterConfig(au(), appTableFilter);
                         String filterKey = getDescriptionKey(descKey, "tablefilter", appTableFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.TABLE, filterKey, appTableFilter.getDescription());
+                        tableFilterConfig.setName(appTableFilter.getName());
                         tableFilterConfig.setDescription("$m{" + filterKey + "}");
                         filterList.add(tableFilterConfig);
                     }
@@ -633,6 +635,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         FormFilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), appFormFilter);
                         descKey = getDescriptionKey(formDescKey, "formfilter", appFormFilter.getName());
                         ctx.addMessage(StaticMessageCategoryType.FORM, descKey, appFormFilter.getDescription());
+                        filterConfig.setName(appFormFilter.getName());
                         filterConfig.setDescription("$m{" + descKey + "}");
                         filterList.add(filterConfig);
                     }
