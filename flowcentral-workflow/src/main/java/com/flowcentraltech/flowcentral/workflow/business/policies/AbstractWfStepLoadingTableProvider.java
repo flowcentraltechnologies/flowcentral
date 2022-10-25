@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.business.policies;
 
-import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
@@ -126,11 +126,11 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
      * @param heldBy
      *               Optional. If supplied, Restricts fetched items to those held by
      *               user
-     * @return a list of work item IDs
+     * @return a map of work item IDs by workflow entity IDs
      * @throws UnifyException
      *                        if an error occurs
      */
-    protected List<Long> getIdsOfItemsInWfStep(String heldBy) throws UnifyException {
+    protected Map<Long, Long> getIdsOfItemsInWfStep(String heldBy) throws UnifyException {
         WfItemQuery query = new WfItemQuery();
         query.workflowName(workflowName);
         query.wfStepName(wfStepName);
@@ -138,7 +138,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
             query.heldBy(heldBy);
         }
 
-        return environment().valueList(Long.class, "id", query);
+        return environment().valueMap(Long.class, "workRecId", Long.class, "id", query);
     }
 
     protected abstract CommitChangeInfo resolveCommitChangeInfo(ValueStore itemValueStore) throws UnifyException;
