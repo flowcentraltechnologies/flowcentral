@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
@@ -27,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
@@ -43,6 +45,8 @@ import com.tcdng.unify.core.database.Entity;
 public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
     private LoadingSearch loadingSearch;
+
+    private EntitySingleForm singleForm;
 
     public ManageLoadingListApplet(AppletUtilities au, String pathVariable,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
@@ -65,14 +69,21 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     }
 
     @Override
+    public AbstractForm getResolvedForm() {
+        return singleForm != null ? singleForm : super.getResolvedForm();
+    }
+
+    @Override
     public boolean navBackToSearch() throws UnifyException {
         if (!super.navBackToSearch()) {
             if (loadingSearch != null) {
                 loadingSearch.applySearchEntriesToSearch();
+                singleForm = null;
                 return true;
             }
         }
 
+        singleForm = null;
         return false;
     }
 
@@ -122,8 +133,26 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 getCtx().setReadOnly(loadingWorkItemInfo.isError());
                 viewMode = ViewMode.LISTING_FORM;
             }
+        } else if (item.isWorkItemSingleForm()) {
+            WorkEntity currEntityInst = (WorkEntity) item.getEntity();
+            LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
+            getCtx().setRecovery(loadingWorkItemInfo.isError());
+            getCtx().setEmails(loadingWorkItemInfo.isEmails());
+            getCtx().setComments(loadingWorkItemInfo.isComments());
+            if (singleForm == null) {
+                singleForm = constructSingleForm(currEntityInst, FormMode.MAINTAIN);
+                singleForm.setFormTitle(getRootAppletDef().getLabel());
+                singleForm.setFormActionDefList(loadingWorkItemInfo.getFormActionDefList());
+            } else {
+                updateSingleForm(EntitySingleForm.UpdateType.MAINTAIN_INST, singleForm, currEntityInst);
+            }
+
+            singleForm.setAppendables(item);
+
+            getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+            viewMode = ViewMode.MAINTAIN_FORM;
         }
-        
+
         return;
     }
 
@@ -137,7 +166,12 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     }
 
     @Override
-    protected AbstractTable<?, ? extends Entity> getSearchTable()  throws UnifyException {
+    public AppletDef getSingleFormAppletDef() throws UnifyException {
+        return getAlternateFormAppletDef();
+    }
+
+    @Override
+    protected AbstractTable<?, ? extends Entity> getSearchTable() throws UnifyException {
         return loadingSearch.getLoadingTable();
     }
 
@@ -145,6 +179,15 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         String formAppletName = loadingSearch.getSourceItemFormApplet(mIndex);
         return au.getAppletDef(formAppletName);
+    }
+
+    public final EntityDef getEntityDef() throws UnifyException {
+        if (loadingSearch != null) {
+            // TODO
+//            return entitySearch.getEntityTable().getEntityDef();
+        }
+
+        return au().getEntityDef(getRootAppletDef().getEntity());
     }
 
 }

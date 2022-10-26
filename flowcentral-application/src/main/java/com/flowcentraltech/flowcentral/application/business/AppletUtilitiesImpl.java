@@ -73,8 +73,8 @@ import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.SingleFormBean;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
-import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
@@ -874,7 +874,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public EntitySingleForm constructEntitySingleForm(AbstractEntitySingleFormApplet applet, String rootTitle,
+    public EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle,
             String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
@@ -1089,7 +1089,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public void updateEntitySingleForm(AbstractEntitySingleFormApplet applet, EntitySingleForm form, Entity inst)
+    public void updateEntitySingleForm(AbstractApplet applet, EntitySingleForm form, Entity inst)
             throws UnifyException {
         if (!form.getFormMode().isCreate()) {
             form.setBeanTitle(inst.getDescription());

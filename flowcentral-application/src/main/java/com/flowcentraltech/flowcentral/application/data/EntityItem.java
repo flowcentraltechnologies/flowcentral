@@ -63,6 +63,10 @@ public class EntityItem implements FormAppendables {
     public boolean isWorkItem() {
         return maintainType.isWorkItem();
     }
+    
+    public boolean isWorkItemSingleForm() {
+        return maintainType.isWorkItemSingleForm();
+    }
 
     public Entity getEntity() {
         return entity;

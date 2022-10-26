@@ -94,11 +94,11 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         getCtx().setEmails(emails);
         getCtx().setComments(comments);
         if (form == null) {
-            form = constructForm(currEntityInst, FormMode.MAINTAIN);
+            form = constructSingleForm(currEntityInst, FormMode.MAINTAIN);
             form.setFormTitle(getRootAppletDef().getLabel());
             form.setFormActionDefList(wfStepDef.getFormActionDefList());
         } else {
-            updateForm(EntitySingleForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
+            updateSingleForm(EntitySingleForm.UpdateType.MAINTAIN_INST, form, currEntityInst);
         }
 
         form.setAppendables(entityItem);

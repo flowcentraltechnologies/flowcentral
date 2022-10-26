@@ -49,15 +49,18 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     @Configurable
     private AppletUtilities appletUtilities;
 
+    private final WfReviewMode wfReviewMode;
+    
     private final String workflowName;
 
     private final String wfStepName;
 
     private final String loadingLabel;
 
-    public AbstractWfStepLoadingTableProvider(String sourceEntity, String workflowName, String wfStepName,
-            String loadingLabel) {
+    public AbstractWfStepLoadingTableProvider(WfReviewMode wfReviewMode, String sourceEntity, String workflowName,
+            String wfStepName, String loadingLabel) {
         super(sourceEntity);
+        this.wfReviewMode = wfReviewMode;
         this.workflowName = workflowName;
         this.wfStepName = wfStepName;
         this.loadingLabel = loadingLabel;
@@ -86,7 +89,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
 
     @Override
     public EntityItem getSourceItem(Long sourceItemId) throws UnifyException {
-        return workflowModuleService.getWfItemWorkEntity(sourceItemId, WfReviewMode.NORMAL);
+        return workflowModuleService.getWfItemWorkEntity(sourceItemId, wfReviewMode);
     }
 
     @Override
@@ -114,8 +117,8 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     @Override
     public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
             InputArrayEntries emails) throws UnifyException {
-        return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, comment, userAction, comment, emails,
-                WfReviewMode.NORMAL);
+        return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, wfStepName, userAction, comment, emails,
+                wfReviewMode);
     }
 
     @Override
@@ -124,7 +127,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         if (commitChangeInfo != null && commitChangeInfo.isPresent()) {
             workflowModuleService.applyUserAction(commitChangeInfo.getWorkEntity(), commitChangeInfo.getWfItemId(),
                     wfStepName, commitChangeInfo.getActionName(), commitChangeInfo.getComment(), null,
-                    WfReviewMode.NORMAL);
+                    wfReviewMode);
         }
     }
 

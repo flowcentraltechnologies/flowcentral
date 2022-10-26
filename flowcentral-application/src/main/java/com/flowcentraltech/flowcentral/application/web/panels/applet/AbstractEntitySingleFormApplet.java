@@ -30,7 +30,6 @@ import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
-import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
@@ -114,6 +113,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         super(au, pathVariable);
     }
 
+    @Override
     public AppletDef getSingleFormAppletDef() throws UnifyException {
         return singleFormAppletDef != null ? singleFormAppletDef : getRootAppletDef();
     }
@@ -155,9 +155,9 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         // Reload
         _inst = reloadEntity(_inst);
         if (form == null) {
-            form = constructForm(_inst, FormMode.MAINTAIN);
+            form = constructSingleForm(_inst, FormMode.MAINTAIN);
         } else {
-            updateForm(EntitySingleForm.UpdateType.MAINTAIN_INST, form, _inst);
+            updateSingleForm(EntitySingleForm.UpdateType.MAINTAIN_INST, form, _inst);
         }
 
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
@@ -173,7 +173,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         eCtx.setAll(form.getCtx());
 
         EntityActionResult entityActionResult = au().environment().updateByIdVersion(eCtx);
-        updateForm(EntitySingleForm.UpdateType.UPDATE_INST, form, reloadEntity(inst));
+        updateSingleForm(EntitySingleForm.UpdateType.UPDATE_INST, form, reloadEntity(inst));
         return entityActionResult;
     }
 
@@ -220,7 +220,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         EntityActionContext efCtx = new EntityActionContext(getEntityDef(), _inst, actionPolicyName);
         efCtx.setAll(form.getCtx());
         EntityActionResult entityActionResult = au().environment().performEntityAction(efCtx);
-        updateForm(EntitySingleForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst));
+        updateSingleForm(EntitySingleForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst));
         return entityActionResult;
     }
 
@@ -277,6 +277,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         return form == null;
     }
 
+    @Override
     public final EntityDef getEntityDef() throws UnifyException {
         if (entitySearch != null) {
             return entitySearch.getEntityTable().getEntityDef();
@@ -293,36 +294,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                 AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
         final String beanTitle = !StringUtils.isBlank(createNewCaption) ? createNewCaption
                 : au.resolveSessionMessage("$m{form.newrecord}");
-        return constructForm((Entity) inst, formMode, beanTitle);
-    }
-
-    protected EntitySingleForm constructForm(Entity inst, FormMode formMode) throws UnifyException {
-        final String createNewCaption = getRootAppletProp(String.class,
-                AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
-        final String beanTitle = inst.getDescription() != null ? inst.getDescription()
-                : !StringUtils.isBlank(createNewCaption) ? createNewCaption
-                        : au.resolveSessionMessage("$m{form.newrecord}");
-        return constructForm(inst, formMode, beanTitle);
-    }
-
-    protected EntitySingleForm constructForm(Entity inst, FormMode formMode, String beanTitle) throws UnifyException {
-        EntitySingleForm form = au.constructEntitySingleForm(this, getRootAppletDef().getDescription(), beanTitle, inst,
-                formMode, makeFormBreadCrumbs());
-        if (formMode.isCreate()) {
-            // TODO
-        }
-
-        form.loadSingleFormBean();
-        setFormProperties(getRootAppletDef(), form);
-        return form;
-    }
-    
-    protected void updateForm(EntitySingleForm.UpdateType updateType, EntitySingleForm form, Entity inst)
-            throws UnifyException {
-        form.getCtx().resetTabIndex();
-        form.setUpdateType(updateType);
-        au.updateEntitySingleForm(this, form, inst);
-        form.loadSingleFormBean();
+        return constructSingleForm((Entity) inst, formMode, beanTitle);
     }
 
     protected List<BreadCrumb> getBaseFormBreadCrumbs() {
@@ -349,12 +321,6 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     private Entity reloadEntity(Entity _inst) throws UnifyException {
         // For single form we list with child/ children information
         return au().environment().list((Class<? extends Entity>) _inst.getClass(), _inst.getId());
-    }
-
-    private BreadCrumbs makeFormBreadCrumbs() {
-        BreadCrumbs.Builder bcb = BreadCrumbs.newBuilder();
-        //bcb.addHistoryCrumb(form.getFormTitle(), form.getBeanTitle(), form.getFormStepIndex());
-        return bcb.build();
     }
 
     private EntityActionResult saveNewInst(ActionMode actionMode) throws UnifyException {
@@ -393,7 +359,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                         form = constructNewForm(FormMode.CREATE);
                     } else {
                         inst = loadEntity(entityInstId);
-                        form = constructForm(inst, FormMode.MAINTAIN);
+                        form = constructSingleForm(inst, FormMode.MAINTAIN);
                         viewMode = ViewMode.MAINTAIN_FORM;
                     }
                 }
@@ -403,7 +369,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                         form = constructNewForm(FormMode.CREATE);
                     } else {
                         inst = loadEntity(entityInstId);
-                        form = constructForm(inst, FormMode.MAINTAIN);
+                        form = constructSingleForm(inst, FormMode.MAINTAIN);
                         viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
                     }
                 }

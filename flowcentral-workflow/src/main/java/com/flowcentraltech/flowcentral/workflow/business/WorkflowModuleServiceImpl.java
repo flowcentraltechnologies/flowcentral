@@ -93,6 +93,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfStepSetValuesDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
+import com.flowcentraltech.flowcentral.workflow.data.WorkEntitySingleFormItem;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
@@ -649,7 +650,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             errors = new Errors(wfItem.getErrorMsg(), wfItem.getErrorTrace(), wfItem.getErrorDoc());
         }
 
-        return new WorkEntityItem(workEntity, emails, comments, errors);
+        return WfReviewMode.SINGLEFORM.equals(wfReviewMode)
+                ? new WorkEntitySingleFormItem(workEntity, emails, comments, errors)
+                : new WorkEntityItem(workEntity, emails, comments, errors);
     }
 
     @Override
@@ -657,6 +660,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode)
             throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
+        System.out.println("@prime: applyUserAction()");
+        System.out.println("@prime: wfItem = " + wfItem);
+        System.out.println("@prime: stepName = " + stepName);
+        System.out.println("@prime: userAction = " + userAction);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             WfStepDef prevWfStepDef = wfDef.getWfStepDef(stepName);
