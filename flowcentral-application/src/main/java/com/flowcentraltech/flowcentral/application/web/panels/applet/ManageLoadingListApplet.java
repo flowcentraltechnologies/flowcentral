@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
@@ -122,6 +123,15 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         }
         
         return;
+    }
+
+    @Override
+    public void applyUserAction(String actionName) throws UnifyException {
+        String comment = null;// getNewComment();
+        final AbstractForm _form = getResolvedForm();
+        WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
+        loadingSearch.applyUserAction(currEntityInst, actionName, comment, _form.getEmails(), mIndex);
+        navBackToSearch();
     }
 
     @Override

@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
@@ -92,7 +93,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     public String getSourceItemFormApplet() throws UnifyException {
         WfDef wfDef = workflowModuleService.getWfDef(workflowName);
         WfStepDef wfStepDef = wfDef.getWfStepDef(wfStepName);
-        return wfStepDef.isWithApplet() ? wfStepDef.getAppletDef().getLongName() : null;
+        return wfStepDef.getStepAppletName();
     }
 
     @Override
@@ -108,6 +109,13 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
                 currEntityInstValueStore, wfDef, wfStepDef.getReadOnlyConditionName());
         return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), readOnly, comments, emails,
                 wfStepDef.isError());
+    }
+
+    @Override
+    public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
+            InputArrayEntries emails) throws UnifyException {
+        return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, comment, userAction, comment, emails,
+                WfReviewMode.NORMAL);
     }
 
     @Override

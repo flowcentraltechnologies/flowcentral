@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
@@ -198,6 +199,14 @@ public class LoadingSearch {
     public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst, int index) throws UnifyException {
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
         return loadingTableProvider.getLoadingWorkItemInfo(inst);
+    }
+    
+    public boolean applyUserAction(WorkEntity wfEntityInst, String userAction, String comment, InputArrayEntries emails,
+            int index) throws UnifyException {
+        Entity loadingEntity = loadingTable.getDispItemList().get(index);
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider.applyUserAction(wfEntityInst, (Long) loadingEntity.getId(), userAction, comment,
+                emails);
     }
     
     public void setOrder(Order order) {

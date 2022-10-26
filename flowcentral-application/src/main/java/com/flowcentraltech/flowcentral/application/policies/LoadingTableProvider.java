@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -95,6 +96,26 @@ public interface LoadingTableProvider extends UnifyComponent {
      *                        if an error occurs.
      */
     LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst) throws UnifyException;
+    
+    /**
+     * Applies user action to work item.
+     * 
+     * @param wfEntityInst
+     *                     the work item instance
+     * @param sourceItemId
+     *                     the source item ID
+     * @param userAction
+     *                     the user action to apply
+     * @param comment
+     *                     the comment on this action
+     * @param emails
+     *                     the emails
+     * @return if successful
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
+            InputArrayEntries emails) throws UnifyException;
     
     /**
      * Commit change to entity

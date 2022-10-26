@@ -15,9 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.annotation.Action;
 
 /**
  * Manage loading list applet panel.
@@ -30,8 +34,35 @@ import com.tcdng.unify.core.annotation.UplBinding;
 public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel {
 
     @Override
+    @Action
+    public void performFormAction() throws UnifyException {
+        super.performFormAction();
+        final String actionName = getRequestTarget(String.class);
+        final ManageLoadingListApplet applet = getManageLoadingListApplet();
+        final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
+                false);
+        if (!ctx.isWithFormErrors()) {
+            if (ctx.getFormDef().isInputForm()) {
+                EntityActionResult entityActionResult = applet.updateInstAndClose();
+                if (ctx.isWithReviewErrors()/* && applet.isFormReview(actionName)*/) {
+                    entityActionResult.setApplyUserAction(true);
+                    entityActionResult.setUserAction(actionName);
+                    entityActionResult.setCloseView(true);
+                    onReviewErrors(entityActionResult);
+                    return;
+                }
+            }
+            
+            applet.applyUserAction(actionName);
+            hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
+        }
+    }
+
+    @Override
     public void switchState() throws UnifyException {
         super.switchState();
+        setVisible("listPrevBtn", false);
+        setVisible("listNextBtn", false);
 
         final ManageLoadingListApplet applet = getManageLoadingListApplet();
 //        applet.ensureRootAppletStruct();

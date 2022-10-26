@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.AbstractUnifyComponent;
@@ -74,6 +75,12 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
         Entity entity = environment().list((Class<? extends Entity>) sourceEntityClassDef.getEntityClass(),
                 sourceItemId);
         return new EditEntityItem(entity);
+    }
+
+    @Override
+    public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
+            InputArrayEntries emails) throws UnifyException {
+        return false;
     }
 
     protected EnvironmentService environment() {
