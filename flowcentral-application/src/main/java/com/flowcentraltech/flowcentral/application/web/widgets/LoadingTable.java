@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
-import com.flowcentraltech.flowcentral.common.business.policies.LoadingTableProvider;
+import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
@@ -73,6 +73,22 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
                     currentTableLoadingDef.getProvider());
             loadingTableProvider.commitChange(valueStore);
         }
+    }
+    
+    public LoadingTableProvider getLoadingTableProvider(int itemIndex) throws UnifyException {
+        TableDef _tableDef = getTableDef();
+        List<Section> sections = getSections();
+        final int len = sections.size();
+        for (int i = 0; i < len; i++) {
+            Section section =  sections.get(i);
+            if (section.isIndexWithin(itemIndex)) {
+                TableLoadingDef currentTableLoadingDef = _tableDef.getTableLoadingDef(i);
+                return au.getComponent(LoadingTableProvider.class,
+                        currentTableLoadingDef.getProvider());
+            }
+        }
+        
+        return null;
     }
     
     public ColorLegendInfo getColorLegendInfo() {

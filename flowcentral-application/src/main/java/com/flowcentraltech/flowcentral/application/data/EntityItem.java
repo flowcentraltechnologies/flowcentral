@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
+import com.flowcentraltech.flowcentral.common.constants.MaintainType;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -27,23 +28,40 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class EntityItem implements FormAppendables {
 
+    private MaintainType maintainType;
+
     private Entity entity;
-    
+
     private InputArrayEntries emails;
-    
+
     private Comments comments;
 
     private Errors errors;
-    
-    public EntityItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
+
+    protected EntityItem(MaintainType maintainType, Entity entity, InputArrayEntries emails, Comments comments,
+            Errors errors) {
+        this.maintainType = maintainType;
         this.entity = entity;
         this.emails = emails;
         this.comments = comments;
         this.errors = errors;
     }
 
-    public EntityItem(Entity entity) {
+    protected EntityItem(MaintainType maintainType, Entity entity) {
+        this.maintainType = maintainType;
         this.entity = entity;
+    }
+
+    public MaintainType getMaintainType() {
+        return maintainType;
+    }
+
+    public boolean isEdit() {
+        return maintainType.isEdit();
+    }
+
+    public boolean isWorkItem() {
+        return maintainType.isWorkItem();
     }
 
     public Entity getEntity() {

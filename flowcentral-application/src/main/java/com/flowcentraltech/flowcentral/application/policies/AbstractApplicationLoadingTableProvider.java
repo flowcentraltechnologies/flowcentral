@@ -16,9 +16,18 @@
 package com.flowcentraltech.flowcentral.application.policies;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.policies.AbstractLoadingTableProvider;
+import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Convenient abstract base class for application table loading providers..
@@ -26,17 +35,64 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationLoadingTableProvider extends AbstractLoadingTableProvider {
+public abstract class AbstractApplicationLoadingTableProvider extends AbstractUnifyComponent
+    implements LoadingTableProvider {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
+
+    @Configurable
+    private EnvironmentService environmentService;
+
+    private final String sourceEntity;
+    
+    public AbstractApplicationLoadingTableProvider(String sourceEntity) {
+        this.sourceEntity = sourceEntity;
+    }
+
+    public final void setEnvironmentService(EnvironmentService environmentService) {
+        this.environmentService = environmentService;
+    }
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
 
+    @Override
+    public int countLoadingItems(Restriction restriction) throws UnifyException {
+        return 0;
+    }
+
+    @Override
+    public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst) throws UnifyException {
+        return new LoadingWorkItemInfo();
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Override
+    public EntityItem getSourceItem(Long sourceItemId) throws UnifyException {
+        EntityClassDef sourceEntityClassDef = application().getEntityClassDef(sourceEntity);
+        Entity entity = environment().list((Class<? extends Entity>) sourceEntityClassDef.getEntityClass(),
+                sourceItemId);
+        return new EditEntityItem(entity);
+    }
+
+    @Override
+    public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
+            InputArrayEntries emails) throws UnifyException {
+        return false;
+    }
+
+    protected EnvironmentService environment() {
+        return environmentService;
+    }
+
     protected ApplicationModuleService application() {
         return applicationModuleService;
+    }
+
+    protected String getSourceEntity() {
+        return sourceEntity;
     }
 
     @Override

@@ -15,12 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingListApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.annotation.ResultMapping;
-import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -33,10 +32,8 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component("/manageloadinglistapplet")
 @UplBinding("web/application/upl/manageloadinglistappletpage.upl")
-@ResultMappings({ @ResultMapping(name = "refreshapplet",
-response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{appletPanel}" }) })
 public class ManageLoadingListAppletController
-        extends AbstractAppletController<ManageLoadingListAppletPageBean> {
+        extends AbstractEntityFormAppletController<ManageLoadingListApplet, ManageLoadingListAppletPageBean> {
 
     public ManageLoadingListAppletController() {
         super(ManageLoadingListAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
@@ -48,7 +45,10 @@ public class ManageLoadingListAppletController
 
         ManageLoadingListAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ManageLoadingListApplet applet = new ManageLoadingListApplet(getAu(), getPathVariable());
+            AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
+            EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
+            ManageLoadingListApplet applet = new ManageLoadingListApplet(getAu(), getPathVariable(),
+                    appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

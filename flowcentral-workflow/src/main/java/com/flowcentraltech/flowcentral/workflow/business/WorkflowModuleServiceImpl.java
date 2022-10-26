@@ -282,7 +282,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         }
 
                         WfStepDef.Builder wsdb = WfStepDef.newBuilder(appletDef, wfStep.getType(), wfStep.getPriority(),
-                                wfStep.getRecordActionType(), wfStep.getNextStepName(), wfStep.getAltNextStepName(),
+                                wfStep.getRecordActionType(), wfStep.getAppletName(),  wfStep.getNextStepName(), wfStep.getAltNextStepName(),
                                 wfStep.getBinaryConditionName(), wfStep.getReadOnlyConditionName(),
                                 wfStep.getAutoLoadConditionName(), wfStep.getPolicy(), wfStep.getRule(),
                                 wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),

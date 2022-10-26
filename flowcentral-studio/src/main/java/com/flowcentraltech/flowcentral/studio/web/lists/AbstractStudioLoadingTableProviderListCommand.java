@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.common.business.policies.LoadingTableProvider;
+import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;

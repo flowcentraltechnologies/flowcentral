@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNa
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityAttachmentDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -52,6 +53,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
+import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
@@ -730,8 +732,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return mIndex > 0;
     }
 
-    public boolean isNextNav() {
-        return mIndex < (entitySearch.getEntityTable().getDispItemList().size() - 1);
+    public boolean isNextNav() throws UnifyException {
+        return mIndex < (getSearchTable().getDispItemList().size() - 1);
     }
 
     public String getDisplayItemCounter() throws UnifyException {
@@ -742,9 +744,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         return au().resolveSessionMessage("$m{entityformapplet.displaycounter}", mIndex + 1,
-                entitySearch.getEntityTable().getDispItemList().size());
+                getSearchTable().getDispItemList().size());
     }
 
+    protected AbstractTable<?, ? extends Entity> getSearchTable()  throws UnifyException {
+        return entitySearch.getEntityTable();
+    }
+    
     public EntitySearch getEntitySearch() {
         return entitySearch;
     }
@@ -1090,7 +1096,15 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         Entity entity = entitySearch.getEntityTable().getDispItemList().get(index);
-        return new EntityItem(entity);
+        return new EditEntityItem(entity);
+    }
+
+    protected Entity reloadEntity(Entity _inst, boolean maintainAct) throws UnifyException {
+        if (maintainAct) {
+            // TODO Fire on-maintain-action policy
+        }
+
+        return au().environment().listLean((Class<? extends Entity>) _inst.getClass(), _inst.getId());
     }
 
     public static class ShowPopupInfo {
@@ -1230,14 +1244,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currentFormAppletDef = getFormAppletDef();
         final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
         return au().environment().listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);
-    }
-
-    private Entity reloadEntity(Entity _inst, boolean maintainAct) throws UnifyException {
-        if (maintainAct) {
-            // TODO Fire on-maintain-action policy
-        }
-
-        return au().environment().listLean((Class<? extends Entity>) _inst.getClass(), _inst.getId());
     }
 
     private BreadCrumbs makeFormBreadCrumbs() {

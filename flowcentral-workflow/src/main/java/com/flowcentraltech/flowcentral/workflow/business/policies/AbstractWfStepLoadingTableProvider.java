@@ -17,13 +17,21 @@ package com.flowcentraltech.flowcentral.workflow.business.policies;
 
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
+import com.flowcentraltech.flowcentral.workflow.data.WfDef;
+import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -38,13 +46,18 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
     private final String workflowName;
 
     private final String wfStepName;
 
     private final String loadingLabel;
 
-    public AbstractWfStepLoadingTableProvider(String workflowName, String wfStepName, String loadingLabel) {
+    public AbstractWfStepLoadingTableProvider(String sourceEntity, String workflowName, String wfStepName,
+            String loadingLabel) {
+        super(sourceEntity);
         this.workflowName = workflowName;
         this.wfStepName = wfStepName;
         this.loadingLabel = loadingLabel;
@@ -52,6 +65,10 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
 
     public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
+    }
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -65,6 +82,40 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
 
     public String getWfStepName() {
         return wfStepName;
+    }
+
+    @Override
+    public EntityItem getSourceItem(Long sourceItemId) throws UnifyException {
+        return workflowModuleService.getWfItemWorkEntity(sourceItemId, WfReviewMode.NORMAL);
+    }
+
+    @Override
+    public String getSourceItemFormApplet() throws UnifyException {
+        WfDef wfDef = workflowModuleService.getWfDef(workflowName);
+        WfStepDef wfStepDef = wfDef.getWfStepDef(wfStepName);
+        return wfStepDef.getStepAppletName();
+    }
+
+    @Override
+    public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst) throws UnifyException {
+        WfDef wfDef = workflowModuleService.getWfDef(workflowName);
+        WfStepDef wfStepDef = wfDef.getWfStepDef(wfStepName);
+        ValueStore currEntityInstValueStore = new BeanValueStore(inst);
+        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities,
+                currEntityInstValueStore, wfDef, wfStepDef.getComments());
+        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, currEntityInstValueStore,
+                wfDef, wfStepDef.getEmails());
+        final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities,
+                currEntityInstValueStore, wfDef, wfStepDef.getReadOnlyConditionName());
+        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), readOnly, comments, emails,
+                wfStepDef.isError());
+    }
+
+    @Override
+    public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
+            InputArrayEntries emails) throws UnifyException {
+        return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, comment, userAction, comment, emails,
+                WfReviewMode.NORMAL);
     }
 
     @Override

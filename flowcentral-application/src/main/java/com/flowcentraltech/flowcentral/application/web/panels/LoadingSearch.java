@@ -17,18 +17,24 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 
 /**
@@ -73,11 +79,14 @@ public class LoadingSearch {
 
     private int mode;
 
-    public LoadingSearch(AppletContext appletContext, SectorIcon sectorIcon, TableDef tableDef, Long appAppletId, int mode) throws UnifyException {
+    public LoadingSearch(AppletContext appletContext, SectorIcon sectorIcon, TableDef tableDef, Long appAppletId,
+            int mode) throws UnifyException {
         this.appletContext = appletContext;
         this.sectorIcon = sectorIcon;
         this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), 4);
         this.loadingTable = new LoadingTable(appletContext.au(), tableDef, null);
+        this.loadingTable.setCrudMode(true);
+        this.loadingTable.setView(true);
         this.appAppletId = appAppletId;
         this.mode = mode;
     }
@@ -167,7 +176,39 @@ public class LoadingSearch {
     public boolean isWithSectorIcon() {
         return sectorIcon != null;
     }
+    
+    public void commitChange() throws UnifyException {
+        loadingTable.commitChange();
+    }
+    
+    public LoadingTableProvider getLoadingTableProvider(int itemIndex) throws UnifyException {
+        return loadingTable.getLoadingTableProvider(itemIndex);
+    }
+    
+    public EntityItem getSourceItem(int index) throws UnifyException {
+        Entity loadingEntity = loadingTable.getDispItemList().get(index);
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider.getSourceItem((Long) loadingEntity.getId());
+    }
+    
+    public String getSourceItemFormApplet(int index) throws UnifyException {
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider.getSourceItemFormApplet();
+    }
 
+    public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst, int index) throws UnifyException {
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider.getLoadingWorkItemInfo(inst);
+    }
+    
+    public boolean applyUserAction(WorkEntity wfEntityInst, String userAction, String comment, InputArrayEntries emails,
+            int index) throws UnifyException {
+        Entity loadingEntity = loadingTable.getDispItemList().get(index);
+        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        return loadingTableProvider.applyUserAction(wfEntityInst, (Long) loadingEntity.getId(), userAction, comment,
+                emails);
+    }
+    
     public void setOrder(Order order) {
         loadingTable.setOrder(order);
     }

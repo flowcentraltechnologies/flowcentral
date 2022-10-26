@@ -55,6 +55,8 @@ public class WfStepDef {
 
     private RecordActionType recordActionType;
 
+    private String stepAppletName;
+
     private String nextStepName;
 
     private String altNextStepName;
@@ -104,7 +106,7 @@ public class WfStepDef {
     private Set<String> roleSet;
 
     private WfStepDef(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-            RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
+            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName, String binaryConditionName,
             String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
             String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
             boolean includeForwarder, boolean forwarderPreferred, String emails, String comments,
@@ -114,6 +116,7 @@ public class WfStepDef {
         this.type = type;
         this.priority = priority;
         this.recordActionType = recordActionType;
+        this.stepAppletName = stepAppletName;
         this.nextStepName = nextStepName;
         this.altNextStepName = altNextStepName;
         this.binaryConditionName = binaryConditionName;
@@ -172,6 +175,10 @@ public class WfStepDef {
 
     public boolean isWithRecordAction() {
         return recordActionType != null;
+    }
+
+    public String getStepAppletName() {
+        return stepAppletName;
     }
 
     public String getNextStepName() {
@@ -366,11 +373,11 @@ public class WfStepDef {
     }
 
     public static Builder newBuilder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-            RecordActionType recordActionType, String nextStepName, String altNextStepName, String binaryConditionName,
+            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName, String binaryConditionName,
             String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
             String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
             boolean includeForwarder, boolean forwarderPreferred, String emails, String comments) {
-        return new Builder(appletDef, type, priority, recordActionType, nextStepName, altNextStepName,
+        return new Builder(appletDef, type, priority, recordActionType, stepAppletName, nextStepName, altNextStepName,
                 binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name, description,
                 label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, emails,
                 comments);
@@ -386,6 +393,8 @@ public class WfStepDef {
 
         private RecordActionType recordActionType;
 
+        private String stepAppletName;
+        
         private String nextStepName;
 
         private String altNextStepName;
@@ -433,7 +442,7 @@ public class WfStepDef {
         private Set<String> roleSet;
 
         public Builder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-                RecordActionType recordActionType, String nextStepName, String altNextStepName,
+                RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName,
                 String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
                 String policy, String rule, String name, String description, String label, int criticalMinutes,
                 int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
@@ -444,6 +453,7 @@ public class WfStepDef {
             this.recordActionType = recordActionType;
             this.priority = priority;
             this.rule = rule;
+            this.stepAppletName = stepAppletName;
             this.nextStepName = nextStepName;
             this.altNextStepName = altNextStepName;
             this.binaryConditionName = binaryConditionName;
@@ -537,7 +547,7 @@ public class WfStepDef {
         }
 
         public WfStepDef build() {
-            return new WfStepDef(appletDef, type, priority, recordActionType, nextStepName, altNextStepName,
+            return new WfStepDef(appletDef, type, priority, recordActionType, stepAppletName, nextStepName, altNextStepName,
                     binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name,
                     description, label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder,
                     forwarderPreferred, emails, comments, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),

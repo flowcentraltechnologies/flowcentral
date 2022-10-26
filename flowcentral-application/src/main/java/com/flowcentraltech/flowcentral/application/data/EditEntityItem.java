@@ -13,34 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.application.data;
 
-package com.flowcentraltech.flowcentral.workflow.data;
-
-import com.flowcentraltech.flowcentral.application.data.Comments;
-import com.flowcentraltech.flowcentral.application.data.EntityItem;
-import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.constants.MaintainType;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.database.Entity;
 
 /**
- * Work entity item
+ * Edit entity item.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WorkEntityItem extends EntityItem {
+public class EditEntityItem extends EntityItem {
 
-    public WorkEntityItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
-        super(MaintainType.WORK_ITEM, entity, emails, comments, errors);
+    public EditEntityItem(Entity entity, InputArrayEntries emails, Comments comments,
+            Errors errors) {
+        super(MaintainType.EDIT, entity, emails, comments, errors);
     }
 
-    public WorkEntityItem(Entity entity) {
-        super(MaintainType.WORK_ITEM, entity);
+    public EditEntityItem(Entity entity) {
+        super(MaintainType.EDIT, entity);
     }
 
-    public WorkEntity getWorkEntity() {
-        return (WorkEntity) getEntity();
-    }
 }

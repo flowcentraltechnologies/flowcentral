@@ -46,7 +46,7 @@
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:86%;}} components:$c{searchResultTbl}
 !fc-loadingtable:searchResultTbl binding:loadingTable multiSelect:true valueMarker:$f{searchResultMarker}
-	multiSelDependentList:$c{tblActionSel tblActionBtns commitActionBtn}
+	multiSelDependentList:$c{tblActionSel tblActionBtns commitActionBtn} viewButtonClass:$s{mbtn mblue}
 	
 // Footer action panel
 !ui-panel:footerActionPanel style:$s{width:100%;} components:$c{selFooterActionPanel tblActionBtns commitActionBtn}
