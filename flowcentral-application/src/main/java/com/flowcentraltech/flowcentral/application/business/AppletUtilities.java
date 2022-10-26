@@ -38,8 +38,8 @@ import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
-import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
@@ -54,8 +54,8 @@ import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
-import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntitySingleFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -883,7 +883,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntitySingleForm constructEntitySingleForm(AbstractEntitySingleFormApplet applet, String rootTitle,
+    EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle,
             String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException;
 
     /**
@@ -910,7 +910,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void updateEntitySingleForm(AbstractEntitySingleFormApplet applet, EntitySingleForm form, Entity inst)
+    void updateEntitySingleForm(AbstractApplet applet, EntitySingleForm form, Entity inst)
             throws UnifyException;
 
     /**

@@ -31,6 +31,9 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
+import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
@@ -107,6 +110,14 @@ public abstract class AbstractApplet {
         return rootAppletDef;
     }
 
+    public AppletDef getSingleFormAppletDef() throws UnifyException {
+        return null;
+    }
+
+    public EntityDef getEntityDef() throws UnifyException {
+        return au().getEntityDef(getRootAppletDef().getEntity());
+    }
+
     public boolean isSaveHeaderFormOnTabAction() throws UnifyException {
         return au.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SAVE_HEADER_FORM_ON_TAB_ACTION);
@@ -145,6 +156,10 @@ public abstract class AbstractApplet {
 
     protected FormDef getPreferredForm(PreferredFormType type, AppletDef appletDef, Entity inst, String formProperty)
             throws UnifyException {
+        System.out.println("@prime: getPreferredForm()");
+        System.out.println("@prime: appletDef.getLongName() = " + appletDef.getLongName());
+        System.out.println("@prime: appletDef.isWithPreferredFormFilters() = " + appletDef.isWithPreferredFormFilters());
+        System.out.println("@prime: formProperty = " + formProperty);
         if (appletDef.isWithPreferredFormFilters()) {
             final Date now = au.getNow();
             final ValueStore instValueStore = new BeanValueStore(inst);
@@ -162,6 +177,7 @@ public abstract class AbstractApplet {
         }
 
         String formName = appletDef.getPropValue(String.class, formProperty);
+        System.out.println("@prime: formName = " + formName);
         return !StringUtils.isBlank(formName) ? au.getFormDef(formName) : null;
     }
 
@@ -222,5 +238,40 @@ public abstract class AbstractApplet {
 
     protected PropertyRuleDef getPropertyRuleDef(AppletDef appletDef, String frmPropName) throws UnifyException {
         return au.getPropertyRuleDef(appletDef.getPropValue(String.class, frmPropName));
+    }
+
+    protected EntitySingleForm constructSingleForm(Entity inst, FormMode formMode) throws UnifyException {
+        final String createNewCaption = getRootAppletProp(String.class,
+                AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
+        final String beanTitle = inst.getDescription() != null ? inst.getDescription()
+                : !StringUtils.isBlank(createNewCaption) ? createNewCaption
+                        : au.resolveSessionMessage("$m{form.newrecord}");
+        return constructSingleForm(inst, formMode, beanTitle);
+    }
+
+    protected EntitySingleForm constructSingleForm(Entity inst, FormMode formMode, String beanTitle) throws UnifyException {
+        EntitySingleForm form = au.constructEntitySingleForm(this, getRootAppletDef().getDescription(), beanTitle, inst,
+                formMode, makeSingleFormBreadCrumbs());
+        if (formMode.isCreate()) {
+            // TODO
+        }
+
+        form.loadSingleFormBean();
+        setFormProperties(getRootAppletDef(), form);
+        return form;
+    }
+    
+    protected void updateSingleForm(EntitySingleForm.UpdateType updateType, EntitySingleForm form, Entity inst)
+            throws UnifyException {
+        form.getCtx().resetTabIndex();
+        form.setUpdateType(updateType);
+        au.updateEntitySingleForm(this, form, inst);
+        form.loadSingleFormBean();
+    }
+
+    private BreadCrumbs makeSingleFormBreadCrumbs() {
+        BreadCrumbs.Builder bcb = BreadCrumbs.newBuilder();
+        //bcb.addHistoryCrumb(form.getFormTitle(), form.getBeanTitle(), form.getFormStepIndex());
+        return bcb.build();
     }
 }
