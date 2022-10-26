@@ -81,6 +81,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         this.mIndex = mIndex;
         EntityItem item = loadingSearch.getSourceItem(mIndex);
         if (item.isEdit()) {
+            getCtx().setReview(false);
             Entity _inst = item.getEntity();
             _inst = reloadEntity(_inst, true);
             if (form == null) {
@@ -98,6 +99,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
             getCtx().setRecovery(loadingWorkItemInfo.isError());
             getCtx().setComments(loadingWorkItemInfo.isComments());
+            getCtx().setReview(true);
             if (formDef.isInputForm()) {
                 if (form == null) {
                     form = constructForm(formDef, currEntityInst, FormMode.MAINTAIN, null, false);

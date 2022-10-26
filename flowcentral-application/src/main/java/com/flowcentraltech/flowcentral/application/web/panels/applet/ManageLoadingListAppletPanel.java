@@ -36,26 +36,31 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
     @Override
     @Action
     public void performFormAction() throws UnifyException {
-        super.performFormAction();
-        final String actionName = getRequestTarget(String.class);
         final ManageLoadingListApplet applet = getManageLoadingListApplet();
-        final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
-                false);
-        if (!ctx.isWithFormErrors()) {
-            if (ctx.getFormDef().isInputForm()) {
-                EntityActionResult entityActionResult = applet.updateInstAndClose();
-                if (ctx.isWithReviewErrors()/* && applet.isFormReview(actionName)*/) {
-                    entityActionResult.setApplyUserAction(true);
-                    entityActionResult.setUserAction(actionName);
-                    entityActionResult.setCloseView(true);
-                    onReviewErrors(entityActionResult);
-                    return;
+        if (applet.getCtx().isReview()) {
+            final String actionName = getRequestTarget(String.class);
+            final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
+                    false);
+            if (!ctx.isWithFormErrors()) {
+                if (ctx.getFormDef().isInputForm()) {
+                    EntityActionResult entityActionResult = applet.updateInstAndClose();
+                    if (ctx.isWithReviewErrors()/* && applet.isFormReview(actionName)*/) {
+                        entityActionResult.setApplyUserAction(true);
+                        entityActionResult.setUserAction(actionName);
+                        entityActionResult.setCloseView(true);
+                        onReviewErrors(entityActionResult);
+                        return;
+                    }
                 }
+                
+                applet.applyUserAction(actionName);
+                hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
             }
             
-            applet.applyUserAction(actionName);
-            hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
+            return;
         }
+
+        super.performFormAction();
     }
 
     @Override
