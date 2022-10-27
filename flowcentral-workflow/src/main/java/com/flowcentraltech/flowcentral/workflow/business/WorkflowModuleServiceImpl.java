@@ -660,10 +660,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode)
             throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
-        System.out.println("@prime: applyUserAction()");
-        System.out.println("@prime: wfItem = " + wfItem);
-        System.out.println("@prime: stepName = " + stepName);
-        System.out.println("@prime: userAction = " + userAction);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             WfStepDef prevWfStepDef = wfDef.getWfStepDef(stepName);

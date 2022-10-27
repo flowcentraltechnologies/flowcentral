@@ -105,6 +105,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         NEW_CHILDLIST_FORM,
         NEW_RELATEDLIST_FORM,
         NEW_HEADLESSLIST_FORM,
+        SINGLE_FORM,
         LISTING_FORM,
         MAINTAIN_FORM,
         MAINTAIN_FORM_SCROLL,
@@ -127,10 +128,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         private static final Set<ViewMode> maintainEntityModes = EnumSet.of(MAINTAIN_FORM, MAINTAIN_FORM_SCROLL,
                 MAINTAIN_PRIMARY_FORM_NO_SCROLL, MAINTAIN_CHILDLIST_FORM, MAINTAIN_CHILDLIST_FORM_NO_SCROLL,
                 MAINTAIN_RELATEDLIST_FORM, MAINTAIN_RELATEDLIST_FORM_NO_SCROLL, MAINTAIN_HEADLESSLIST_FORM,
-                MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL);
+                MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL, SINGLE_FORM);
 
         private static final Set<ViewMode> rootEntityModes = EnumSet.of(NEW_FORM, NEW_PRIMARY_FORM, MAINTAIN_FORM,
-                MAINTAIN_FORM_SCROLL, MAINTAIN_PRIMARY_FORM_NO_SCROLL);
+                MAINTAIN_FORM_SCROLL, MAINTAIN_PRIMARY_FORM_NO_SCROLL, SINGLE_FORM);
 
         public boolean isCreateForm() {
             return newEntityModes.contains(this);
@@ -154,6 +155,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
         public boolean isInForm() {
             return isCreateForm() || isMaintainForm();
+        }
+
+        public boolean isSingleForm() {
+            return SINGLE_FORM.equals(this);
         }
     };
 
@@ -722,7 +727,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             efCtx.setListingGenerator(listingGenerator);
             return au().environment().performEntityAction(efCtx);
         }
-        
+
         EntityActionResult entityActionResult = au().environment().performEntityAction(efCtx);
         updateForm(HeaderWithTabsForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst, false));
         return entityActionResult;
@@ -747,10 +752,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 getSearchTable().getDispItemList().size());
     }
 
-    protected AbstractTable<?, ? extends Entity> getSearchTable()  throws UnifyException {
+    protected AbstractTable<?, ? extends Entity> getSearchTable() throws UnifyException {
         return entitySearch.getEntityTable();
     }
-    
+
     public EntitySearch getEntitySearch() {
         return entitySearch;
     }
@@ -787,7 +792,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return currFormAppletDef != null ? currFormAppletDef : getAlternateFormAppletDef();
     }
 
-    public HeaderWithTabsForm getForm() {
+    public AbstractForm getForm() {
         return form;
     }
 
@@ -833,7 +838,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public boolean isListingView() {
         return ViewMode.LISTING_FORM.equals(viewMode);
     }
-    
+
     public boolean isRootForm() {
         return form != null && (formStack == null || formStack.isEmpty());
     }

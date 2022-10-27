@@ -66,9 +66,6 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-        setVisible("listPrevBtn", false);
-        setVisible("listNextBtn", false);
-
         final ManageLoadingListApplet applet = getManageLoadingListApplet();
 //        applet.ensureRootAppletStruct();
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
@@ -77,6 +74,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
             case ENTRY_TABLE_PAGE:
             case ASSIGNMENT_PAGE:
             case PROPERTYLIST_PAGE:
+            case SINGLE_FORM:
             case LISTING_FORM:
             case MAINTAIN_FORM_SCROLL:
             case MAINTAIN_PRIMARY_FORM_NO_SCROLL:

@@ -13,7 +13,25 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-manageloadinglistappletpanel components:$c{loadingSearchPanel}
+!fc-manageloadinglistappletpanel components:$c{singleFormPanel loadingSearchPanel}
+
+// Form
+!fc-entitysingleformpanel:singleFormPanel binding:singleForm
+	moreCenterComponents:$c{sdisplayCounterLabel}
+	moreActionButtons:$c{sfrmActionBtns supdateBtn supdateCloseBtn sdeleteBtn scancelBtn}
+	altActionButtons:$c{sfrmActionBtns supdateBtn supdateCloseBtn sdeleteBtn scancelBtn}
+!ui-label:sdisplayCounterLabel styleClass:$e{fc-dispcounter}
+	styleClassBinding:displayItemCounterClass binding:displayItemCounter
+!ui-button:supdateBtn caption:$m{button.update}
+	eventHandler:$d{!ui-event event:onclick action:$c{updateAct}}
+!ui-button:supdateCloseBtn caption:$m{button.updateclose}
+	eventHandler:$d{!ui-event event:onclick action:$c{updateCloseAct}}
+!ui-button:sdeleteBtn caption:$m{button.delete}
+	eventHandler:$d{!ui-event event:onclick action:$c{deleteAct}}
+!ui-button:scancelBtn caption:$m{button.close}
+	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
+!fc-formactionbuttons:sfrmActionBtns binding:formActionDefList
+    eventHandler:$f{frmActionsHandler}
 
 // Search list
 !fc-loadingsearchpanel:loadingSearchPanel binding:loadingSearch

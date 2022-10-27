@@ -67,4 +67,8 @@ public class EntitySingleForm extends AbstractForm {
     public void unloadSingleFormBean() throws UnifyException {
         singleForm.getBean().unload((Entity) getFormBean());
     }
+
+    public boolean isSingleFormType() {
+        return true;
+    }
 }

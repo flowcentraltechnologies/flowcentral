@@ -156,10 +156,6 @@ public abstract class AbstractApplet {
 
     protected FormDef getPreferredForm(PreferredFormType type, AppletDef appletDef, Entity inst, String formProperty)
             throws UnifyException {
-        System.out.println("@prime: getPreferredForm()");
-        System.out.println("@prime: appletDef.getLongName() = " + appletDef.getLongName());
-        System.out.println("@prime: appletDef.isWithPreferredFormFilters() = " + appletDef.isWithPreferredFormFilters());
-        System.out.println("@prime: formProperty = " + formProperty);
         if (appletDef.isWithPreferredFormFilters()) {
             final Date now = au.getNow();
             final ValueStore instValueStore = new BeanValueStore(inst);
@@ -177,7 +173,6 @@ public abstract class AbstractApplet {
         }
 
         String formName = appletDef.getPropValue(String.class, formProperty);
-        System.out.println("@prime: formName = " + formName);
         return !StringUtils.isBlank(formName) ? au.getFormDef(formName) : null;
     }
 
