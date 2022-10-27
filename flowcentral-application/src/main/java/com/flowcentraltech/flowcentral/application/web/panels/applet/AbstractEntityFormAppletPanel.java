@@ -936,7 +936,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode, boolean commentRequired)
             throws UnifyException {
         FormContext ctx = getEntityFormApplet().getResolvedForm().getCtx();
-        if (ctx.getFormDef().isInputForm()) {
+        if (ctx.getFormDef() != null && ctx.getFormDef().isInputForm()) {
             evaluateCurrentFormContext(ctx, evaluationMode);
         } else {
             ctx.clearReviewErrors();
@@ -950,14 +950,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (commentRequired) {
                     FormPanel commentsFormPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
                             ? getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel")
-                            : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
+                            : (viewMode == AbstractEntityFormApplet.ViewMode.SINGLE_FORM
+                                    ? getWidgetByShortName(FormPanel.class, "singleFormPanel.commentsPanel")
+                                    : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel"));
                     ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
                 }
 
                 if (ctx.getAppletContext().isEmails()) {
                     FormPanel emailsFormPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
                             ? getWidgetByShortName(FormPanel.class, "listingPanel.emailsPanel")
-                            : getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel");
+                            : (viewMode == AbstractEntityFormApplet.ViewMode.SINGLE_FORM
+                                    ? getWidgetByShortName(FormPanel.class, "singleFormPanel.emailsPanel")
+                                    : getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel"));
                     ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
                 }
             }

@@ -42,19 +42,25 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
             final FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE,
                     false);
             if (!ctx.isWithFormErrors()) {
-                if (ctx.getFormDef().isInputForm()) {
-                    EntityActionResult entityActionResult = applet.updateInstAndClose();
-                    if (ctx.isWithReviewErrors()/* && applet.isFormReview(actionName)*/) {
-                        entityActionResult.setApplyUserAction(true);
-                        entityActionResult.setUserAction(actionName);
-                        entityActionResult.setCloseView(true);
-                        onReviewErrors(entityActionResult);
-                        return;
+                if (ctx.getFormDef() == null) {
+                    applet.updateSingleFormInst();
+                    applet.applyUserAction(actionName);
+                    hintUser("$m{reviewsingleformworkitemsapplet.apply.success.hint}");
+                } else {
+                    if (ctx.getFormDef().isInputForm()) {
+                        EntityActionResult entityActionResult = applet.updateInstAndClose();
+                        if (ctx.isWithReviewErrors()/* && applet.isFormReview(actionName)*/) {
+                            entityActionResult.setApplyUserAction(true);
+                            entityActionResult.setUserAction(actionName);
+                            entityActionResult.setCloseView(true);
+                            onReviewErrors(entityActionResult);
+                            return;
+                        }
                     }
+                    
+                    applet.applyUserAction(actionName);
+                    hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
                 }
-                
-                applet.applyUserAction(actionName);
-                hintUser("$m{reviewworkitemsapplet.apply.success.hint}");
             }
             
             return;

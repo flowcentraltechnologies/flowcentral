@@ -32,9 +32,13 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Manage loading list applet object.
@@ -94,6 +98,24 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
         singleForm = null;
         return false;
+    }
+
+    public EntityActionResult updateSingleFormInst() throws UnifyException {
+        singleForm.unloadSingleFormBean();
+        Entity inst = (Entity) singleForm.getFormBean();
+        String updatePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
+        EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst,
+                RecordActionType.UPDATE, null, updatePolicy);
+        eCtx.setAll(singleForm.getCtx());
+
+        EntityActionResult entityActionResult = au().environment().updateByIdVersion(eCtx);
+        updateSingleForm(EntitySingleForm.UpdateType.UPDATE_INST, singleForm, reloadSingleFormEntity(inst));
+        return entityActionResult;
+    }
+
+    private Entity reloadSingleFormEntity(Entity _inst) throws UnifyException {
+        // For single form we list with child/ children information
+        return au().environment().list((Class<? extends Entity>) _inst.getClass(), _inst.getId());
     }
 
     @Override
@@ -188,7 +210,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         String formAppletName = loadingSearch.getSourceItemFormApplet(mIndex);
-        return au.getAppletDef(formAppletName);
+        return !StringUtils.isBlank(formAppletName) ? au.getAppletDef(formAppletName) : null;
     }
 
     public final EntityDef getEntityDef() throws UnifyException {
