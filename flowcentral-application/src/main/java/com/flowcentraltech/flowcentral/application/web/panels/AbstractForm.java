@@ -136,6 +136,10 @@ public abstract class AbstractForm {
         ctx.setInst(formBean);
     }
 
+    public boolean isSingleFormType() {
+        return false;
+    }
+    
     public ValueStore getFormValueStore() {
         return ctx.getFormValueStore();
     }

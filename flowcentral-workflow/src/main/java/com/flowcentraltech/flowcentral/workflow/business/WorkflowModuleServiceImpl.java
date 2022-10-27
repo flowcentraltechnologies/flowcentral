@@ -292,9 +292,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
                                 wfStep.getEmails(), wfStep.getComments());
 
-                        if (wfStep.getSetValues() != null) {
+                        if (wfStep.getSetValues() != null || !StringUtils.isBlank(wfStep.getValueGenerator())) {
                             wsdb.addWfSetValuesDef(new WfStepSetValuesDef(InputWidgetUtils.getSetValuesDef(
-                                    wfStep.getValueGenerator(), wfStep.getSetValues().getSetValues())));
+                                    wfStep.getValueGenerator(), wfStep.getSetValues() != null ? wfStep.getSetValues().getSetValues() : null)));
                         }
 
                         for (WfStepRouting wfStepRouting : wfStep.getRoutingList()) {
@@ -660,10 +660,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode)
             throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
-        System.out.println("@prime: applyUserAction()");
-        System.out.println("@prime: wfItem = " + wfItem);
-        System.out.println("@prime: stepName = " + stepName);
-        System.out.println("@prime: userAction = " + userAction);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
             WfStepDef prevWfStepDef = wfDef.getWfStepDef(stepName);

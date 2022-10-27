@@ -154,62 +154,93 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             enableCreateSubmit = isRootForm && applet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
-            EntityDef formEntityDef = form.getFormDef().getEntityDef();
-            if (formAppletDef != null) { // Normal, null for workflow applet root
-                enableSaveAs = formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SAVEAS,
-                        false)
-                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getAddPrivilege());
+            if (form.isSingleFormType()) {
+                final AppletDef _appletDef = applet.getRootAppletDef();
+                final EntityDef _entityDef = applet.getEntityDef();
                 enableUpdate = isContextEditable
-                        && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE,
-                                false)
-                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getEditPrivilege())
+                        && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
+                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
                         && applet.formBeanMatchAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
                 enableDelete = !isInWorkflow && isContextEditable
-                        && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE,
-                                false)
-                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getDeletePrivilege())
+                        && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE, false)
+                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
                         && applet.formBeanMatchAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
-                enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
-                        && formEntityDef.isWithAttachments() && formAppletDef.getPropValue(boolean.class,
-                                AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS, false);
-                enableUpdateSubmit = !isInWorkflow && isRootForm && applet
+                enableUpdateSubmit = !isInWorkflow && applet
                         .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
-                if (enableAttachment) {
-                    applet.setFileAttachmentsDisabled(!applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
-                            formEntityDef.getAttachPrivilege()));
-                }
             } else {
-                enableUpdate = isContextEditable
-                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, formEntityDef.getEditPrivilege())
-                        && applet.formBeanMatchAppletPropertyCondition(
-                                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-                enableDelete = false;
-                enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
-                        && formEntityDef.isWithAttachments();
-            }
+                EntityDef formEntityDef = form.getFormDef().getEntityDef();
+                if (formAppletDef != null) { // Normal, null for workflow applet root
+                    enableSaveAs = formAppletDef.getPropValue(boolean.class,
+                            AppletPropertyConstants.MAINTAIN_FORM_SAVEAS, false)
+                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                                    formEntityDef.getAddPrivilege());
+                    enableUpdate = isContextEditable
+                            && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE,
+                                    false)
+                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                                    formEntityDef.getEditPrivilege())
+                            && applet.formBeanMatchAppletPropertyCondition(
+                                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+                    enableDelete = !isInWorkflow && isContextEditable
+                            && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE,
+                                    false)
+                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                                    formEntityDef.getDeletePrivilege())
+                            && applet.formBeanMatchAppletPropertyCondition(
+                                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
+                    enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
+                            && formEntityDef.isWithAttachments() && formAppletDef.getPropValue(boolean.class,
+                                    AppletPropertyConstants.MAINTAIN_FORM_ATTACHMENTS, false);
+                    enableUpdateSubmit = !isInWorkflow && isRootForm && applet.formBeanMatchAppletPropertyCondition(
+                            AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_CONDITION);
+                    if (enableAttachment) {
+                        applet.setFileAttachmentsDisabled(!applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                                formEntityDef.getAttachPrivilege()));
+                    }
+                } else {
+                    enableUpdate = isContextEditable
+                            && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                                    formEntityDef.getEditPrivilege())
+                            && applet.formBeanMatchAppletPropertyCondition(
+                                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+                    enableDelete = false;
+                    enableAttachment = isRootForm && formEntityDef.getBaseType().isWorkEntityType()
+                            && formEntityDef.isWithAttachments();
+                }
 
-            if (enableAttachment) {
-                form.setAttachmentCount(fileAttachmentProvider.countFileAttachments(WORK_CATEGORY,
-                        formEntityDef.getLongName(), (Long) inst.getId()));
+                if (enableAttachment) {
+                    form.setAttachmentCount(fileAttachmentProvider.countFileAttachments(WORK_CATEGORY,
+                            formEntityDef.getLongName(), (Long) inst.getId()));
+                }
             }
-
         }
 
         if (viewMode.isInForm()) {
             boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
-            setVisible("formPanel.altActionPanel", showAlternateFormActions);
-            setVisible("formPanel.emailsPanel", isRootForm && appCtx.isReview() && appCtx.isEmails());
-            setVisible("formPanel.commentsPanel", isRootForm && appCtx.isReview() && appCtx.isComments());
-            setVisible("formPanel.errorsPanel", isRootForm && appCtx.isReview() && appCtx.isRecovery());
-            setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
-            setEditable("formPanel.errorsPanel", false);
-            Panel formPanel = getWidgetByShortName(Panel.class, "formPanel");
-            setPageAttribute("formPanel.id", formPanel.getId());
-            form.getCtx().setFocusMemoryId(focusMemoryId);
-            form.getCtx().setTabMemoryId(tabMemoryId);
+            if (viewMode.isSingleForm()) {
+                setVisible("singleFormPanel.altActionPanel", showAlternateFormActions);
+                setVisible("singleFormPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
+                setVisible("singleFormPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
+                setVisible("singleFormPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
+                setVisible("sfrmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
+                setEditable("singleFormPanel.errorsPanel", false);
+                Panel singleFormPanel = getWidgetByShortName(Panel.class, "singleFormPanel");
+                setPageAttribute("singleFormPanel.id", singleFormPanel.getId());
+            } else {
+                setVisible("formPanel.altActionPanel", showAlternateFormActions);
+                setVisible("formPanel.emailsPanel", isRootForm && appCtx.isReview() && appCtx.isEmails());
+                setVisible("formPanel.commentsPanel", isRootForm && appCtx.isReview() && appCtx.isComments());
+                setVisible("formPanel.errorsPanel", isRootForm && appCtx.isReview() && appCtx.isRecovery());
+                setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
+                setEditable("formPanel.errorsPanel", false);
+                Panel formPanel = getWidgetByShortName(Panel.class, "formPanel");
+                setPageAttribute("formPanel.id", formPanel.getId());
+                form.getCtx().setFocusMemoryId(focusMemoryId);
+                form.getCtx().setTabMemoryId(tabMemoryId);
+            }
         }
 
         if (form != null) {
@@ -262,6 +293,16 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setEditable("editPropertyListPanel", isContextEditable);
                 setVisible("editPropertyListPanel.saveBtn", isContextEditable);
                 setVisible("savePropListCloseBtn", isContextEditable);
+                break;
+            case SINGLE_FORM:
+                switchContent("singleFormPanel");
+                setVisible("scancelBtn", true);
+                setVisible("sdisplayCounterLabel", isCollaboration);
+                setVisible("supdateBtn", enableUpdate);
+                setVisible("supdateCloseBtn", enableUpdate);
+                setVisible("sdeleteBtn", enableDelete);
+                setEditable("singleFormPanel", enableUpdate);
+                addPanelToPushComponents("singleFormPanel", enableUpdate);
                 break;
             case LISTING_FORM:
                 switchContent("listingPanel");
@@ -426,7 +467,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         logDebug("Switching completed for form applet panel [{0}].",
                 formAppletDef != null ? formAppletDef.getLongName() : null);
     }
-    
+
     @Action
     public void newInst() throws UnifyException {
         getEntityFormApplet().newEntityInst();
@@ -816,7 +857,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     private void handleEntityActionResult(EntityActionResult entityActionResult, FormContext ctx)
-            throws UnifyException {        
+            throws UnifyException {
         if (entityActionResult.isRefreshMenu()) {
             refreshApplicationMenu();
         }
@@ -895,7 +936,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     protected FormContext evaluateCurrentFormContext(EvaluationMode evaluationMode, boolean commentRequired)
             throws UnifyException {
         FormContext ctx = getEntityFormApplet().getResolvedForm().getCtx();
-        if (ctx.getFormDef().isInputForm()) {
+        if (ctx.getFormDef() != null && ctx.getFormDef().isInputForm()) {
             evaluateCurrentFormContext(ctx, evaluationMode);
         } else {
             ctx.clearReviewErrors();
@@ -909,14 +950,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 if (commentRequired) {
                     FormPanel commentsFormPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
                             ? getWidgetByShortName(FormPanel.class, "listingPanel.commentsPanel")
-                            : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel");
+                            : (viewMode == AbstractEntityFormApplet.ViewMode.SINGLE_FORM
+                                    ? getWidgetByShortName(FormPanel.class, "singleFormPanel.commentsPanel")
+                                    : getWidgetByShortName(FormPanel.class, "formPanel.commentsPanel"));
                     ctx.mergeValidationErrors(commentsFormPanel.validate(evaluationMode));
                 }
 
                 if (ctx.getAppletContext().isEmails()) {
                     FormPanel emailsFormPanel = viewMode == AbstractEntityFormApplet.ViewMode.LISTING_FORM
                             ? getWidgetByShortName(FormPanel.class, "listingPanel.emailsPanel")
-                            : getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel");
+                            : (viewMode == AbstractEntityFormApplet.ViewMode.SINGLE_FORM
+                                    ? getWidgetByShortName(FormPanel.class, "singleFormPanel.emailsPanel")
+                                    : getWidgetByShortName(FormPanel.class, "formPanel.emailsPanel"));
                     ctx.mergeValidationErrors(emailsFormPanel.validate(evaluationMode));
                 }
             }
@@ -936,7 +981,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         // Detect tab error
         final boolean isWithFieldErrors = ctx.isWithFieldErrors();
-        HeaderWithTabsForm form = applet.getForm();
+        HeaderWithTabsForm form = (HeaderWithTabsForm) applet.getForm();
         if (form.isWithTabSheet()) {
             FormDef formDef = form.getFormDef();
             TabSheet tabSheet = form.getTabSheet();

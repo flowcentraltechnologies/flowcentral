@@ -46,17 +46,17 @@ import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 public class LoadingSearch {
 
     public static final int SHOW_ACTIONFOOTER = 0x00000002;
-    
+
     public static final int SHOW_SEARCH = 0x00000001;
 
     public static final int ENABLE_ALL = SHOW_ACTIONFOOTER | SHOW_SEARCH;
 
     private final Long appAppletId;
-    
+
     final private AppletContext appletContext;
-    
+
     final private SectorIcon sectorIcon;
-    
+
     private FilterDef baseFilterDef;
 
     private SearchEntries searchEntries;
@@ -74,7 +74,7 @@ public class LoadingSearch {
     private String appTableActionPolicy;
 
     private String commitCaption;
-    
+
     private ButtonGroupInfo appTableActionButtonInfo;
 
     private int mode;
@@ -176,39 +176,42 @@ public class LoadingSearch {
     public boolean isWithSectorIcon() {
         return sectorIcon != null;
     }
-    
+
     public void commitChange() throws UnifyException {
         loadingTable.commitChange();
     }
-    
+
     public LoadingTableProvider getLoadingTableProvider(int itemIndex) throws UnifyException {
         return loadingTable.getLoadingTableProvider(itemIndex);
     }
-    
+
     public EntityItem getSourceItem(int index) throws UnifyException {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
-        return loadingTableProvider.getSourceItem((Long) loadingEntity.getId());
+        return loadingTableProvider != null ? loadingTableProvider.getSourceItem((Long) loadingEntity.getId()) : null;
     }
-    
+
     public String getSourceItemFormApplet(int index) throws UnifyException {
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
-        return loadingTableProvider.getSourceItemFormApplet();
+        return loadingTableProvider != null ? loadingTableProvider.getSourceItemFormApplet() : null;
     }
 
     public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst, int index) throws UnifyException {
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
-        return loadingTableProvider.getLoadingWorkItemInfo(inst);
+        return loadingTableProvider != null ? loadingTableProvider.getLoadingWorkItemInfo(inst)
+                : new LoadingWorkItemInfo();
     }
-    
+
     public boolean applyUserAction(WorkEntity wfEntityInst, String userAction, String comment, InputArrayEntries emails,
             int index) throws UnifyException {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
-        return loadingTableProvider.applyUserAction(wfEntityInst, (Long) loadingEntity.getId(), userAction, comment,
-                emails);
+        return loadingTableProvider != null
+                ? loadingTableProvider.applyUserAction(wfEntityInst, (Long) loadingEntity.getId(), userAction, comment,
+                        emails)
+                : false;
     }
-    
+
     public void setOrder(Order order) {
         loadingTable.setOrder(order);
     }
@@ -223,8 +226,7 @@ public class LoadingSearch {
         if (baseFilterDef != null || restriction != null) {
             And and = new And();
             if (baseFilterDef != null) {
-                and.add(baseFilterDef.getRestriction(getEntityDef(),
-                        null, appletContext.au().getNow()));
+                and.add(baseFilterDef.getRestriction(getEntityDef(), null, appletContext.au().getNow()));
             }
 
             if (restriction != null) {
