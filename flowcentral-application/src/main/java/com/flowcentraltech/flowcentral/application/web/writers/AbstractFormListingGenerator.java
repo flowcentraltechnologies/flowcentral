@@ -144,9 +144,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
-    public void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
+    public final void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        doGenerate(formBeanValueStore, listingProperties, new ListingGeneratorWriter(writer));
+        Set<ListingRowColorType> pausePrintColors = getPausePrintColors();
+        doGenerate(formBeanValueStore, listingProperties, new ListingGeneratorWriter(writer, pausePrintColors, false));
     }
 
     protected abstract Set<ListingRowColorType> getPausePrintColors() throws UnifyException;
