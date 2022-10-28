@@ -21,8 +21,10 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.ListingRowColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
@@ -115,22 +117,26 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, formActionName);
         Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
                 .title("listingReport");
+        Set<ListingRowColorType> pausePrintColors = getPausePrintColors();
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
             writer.write("<div class=\"fc-formlisting\">");
-            generateReportHeader(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
+            generateReportHeader(formBeanValueStore, listingReportProperties,
+                    new ListingGeneratorWriter(writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateListing(formBeanValueStore, listingReportProperties, writer);
-            generateReportAddendum(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
+            generateListing(formBeanValueStore, listingReportProperties, writer, pausePrintColors, false);
+            generateReportAddendum(formBeanValueStore, listingReportProperties,
+                    new ListingGeneratorWriter(writer, pausePrintColors, false));
             writer.write("</div>");
-            generateReportFooter(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(writer));
+            generateReportFooter(formBeanValueStore, listingReportProperties,
+                    new ListingGeneratorWriter(writer, pausePrintColors, false));
             writer.write("</div>");
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
             if (style == null) {
                 style = getDefaultListingStyle();
             }
-            
+
             rb.addBodyContentHtml(listingReportProperties.getName(), style, bodyContent);
         }
 
@@ -138,10 +144,12 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
-    public void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
+    public final void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        doGenerate(formBeanValueStore, listingProperties, new ListingGeneratorWriter(writer));
+        generateListing(formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
     }
+
+    protected abstract Set<ListingRowColorType> getPausePrintColors() throws UnifyException;
 
     @Override
     protected void onInitialize() throws UnifyException {
@@ -222,6 +230,13 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     protected String loadListingStyle(String resourceName) throws UnifyException {
         return ConfigurationUtils.readString(resourceName, getUnifyComponentContext().getWorkingPath());
+    }
+
+    private void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
+            ResponseWriter writer, Set<ListingRowColorType> pausePrintColors, boolean highlighting)
+            throws UnifyException {
+        doGenerate(formBeanValueStore, listingProperties,
+                new ListingGeneratorWriter(writer, pausePrintColors, highlighting));
     }
     
     private String getDefaultListingStyle() throws UnifyException {
