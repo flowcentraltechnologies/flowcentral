@@ -124,7 +124,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             generateReportHeader(formBeanValueStore, listingReportProperties,
                     new ListingGeneratorWriter(writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateListing(formBeanValueStore, listingReportProperties, writer);
+            generateListing(formBeanValueStore, listingReportProperties, writer, pausePrintColors, false);
             generateReportAddendum(formBeanValueStore, listingReportProperties,
                     new ListingGeneratorWriter(writer, pausePrintColors, false));
             writer.write("</div>");
@@ -146,8 +146,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     @Override
     public final void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        Set<ListingRowColorType> pausePrintColors = getPausePrintColors();
-        doGenerate(formBeanValueStore, listingProperties, new ListingGeneratorWriter(writer, pausePrintColors, false));
+        generateListing(formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
     }
 
     protected abstract Set<ListingRowColorType> getPausePrintColors() throws UnifyException;
@@ -231,6 +230,13 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     protected String loadListingStyle(String resourceName) throws UnifyException {
         return ConfigurationUtils.readString(resourceName, getUnifyComponentContext().getWorkingPath());
+    }
+
+    private void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
+            ResponseWriter writer, Set<ListingRowColorType> pausePrintColors, boolean highlighting)
+            throws UnifyException {
+        doGenerate(formBeanValueStore, listingProperties,
+                new ListingGeneratorWriter(writer, pausePrintColors, highlighting));
     }
     
     private String getDefaultListingStyle() throws UnifyException {
