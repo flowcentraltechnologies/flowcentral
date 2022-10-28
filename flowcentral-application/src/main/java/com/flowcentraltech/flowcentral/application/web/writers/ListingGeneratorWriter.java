@@ -16,6 +16,9 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.application.constants.ListingRowColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
@@ -43,8 +46,25 @@ public class ListingGeneratorWriter {
 
     private boolean alternatingColumn;
 
+    private final boolean highlighting;
+
+    private boolean pauseRowPrinting;
+    
+    private Set<ListingRowColorType> pauseRowPrintColors;
+    
     public ListingGeneratorWriter(ResponseWriter writer) {
         this.writer = writer;
+        this.highlighting = true;
+        this.pauseRowPrinting = false;
+        this.pauseRowPrintColors = Collections.emptySet();
+    }
+
+    public ListingGeneratorWriter(ResponseWriter writer, Set<ListingRowColorType> pausePrintColors,
+            boolean highlighting) {
+        this.writer = writer;
+        this.highlighting = highlighting;
+        this.pauseRowPrinting = false;
+        this.pauseRowPrintColors = pausePrintColors;
     }
 
     public ListingRowColorType getRowColor() {
@@ -52,7 +72,10 @@ public class ListingGeneratorWriter {
     }
 
     public void setRowColor(ListingRowColorType rowColor) {
-        this.rowColor = rowColor;
+        pauseRowPrinting = pauseRowPrintColors.contains(rowColor);
+        if (highlighting) {
+            this.rowColor = rowColor;
+        }
     }
 
     public boolean isWithRowColor() {
@@ -60,6 +83,7 @@ public class ListingGeneratorWriter {
     }
 
     public void clearRowColor() {
+        pauseRowPrinting = false;
         rowColor = null;
     }
 
@@ -181,7 +205,9 @@ public class ListingGeneratorWriter {
                     "Length of supplied cells does not match current section number of columns.");
         }
 
-        internalWriteRow(columns, cells);
+        if (!pauseRowPrinting) {
+            internalWriteRow(columns, cells);
+        }
     }
 
     private void internalWriteRow(ListingColumn[] columns, ListingCell... cells) throws UnifyException {
