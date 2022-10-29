@@ -29,14 +29,22 @@ import com.tcdng.unify.core.util.EnumUtils;
 @StaticList(name = "studiotablerowcolorlist", description="Studio Table Row Color List")
 public enum StudioTableRowColorType implements EnumConst {
 
-    RED("#f1948a"),
-    ORANGE("#fcc981"),
-    YELLOW("#f9e79f"),
-    GREEN("#76d7c4"),
-    CYAN("#75e9e5"),
-    BLUE("#85c1e9"),
-    VIOLET("#bb8fce"),
-    GRAY("#85929e");
+    RED_LIGHT("#f8c9c4"),
+    ORANGE_LIGHT("#fde3c0"),
+    YELLOW_LIGHT("#fcf3cf"),
+    GREEN_LIGHT("#baeae1"),
+    CYAN_LIGHT("#baf3f2"),
+    BLUE_LIGHT("#c2e0f3"),
+    VIOLET_LIGHT("#dcc6e6"),
+    GRAY_LIGHT("#c2c8ce"),
+    RED_DARK("#f1948a"),
+    ORANGE_DARK("#fcc981"),
+    YELLOW_DARK("#f9e79f"),
+    GREEN_DARK("#76d7c4"),
+    CYAN_DARK("#75e9e5"),
+    BLUE_DARK("#85c1e9"),
+    VIOLET_DARK("#bb8fce"),
+    GRAY_DARK("#85929e");
 
     private final String code;
     
@@ -51,7 +59,7 @@ public enum StudioTableRowColorType implements EnumConst {
 
     @Override
     public String defaultCode() {
-        return RED.code;
+        return RED_LIGHT.code;
     }
 
     public static StudioTableRowColorType fromCode(String code) {
