@@ -152,6 +152,14 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         return environment().valueMap(Long.class, "workRecId", Long.class, "id", query);
     }
 
+    protected WfReviewMode getWfReviewMode() {
+        return wfReviewMode;
+    }
+
+    protected WorkflowModuleService workflow() {
+        return workflowModuleService;
+    }
+
     protected abstract CommitChangeInfo resolveCommitChangeInfo(ValueStore itemValueStore) throws UnifyException;
     
     protected static class CommitChangeInfo {
