@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
+import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable.Section;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
@@ -539,6 +540,11 @@ public class TableWriter extends AbstractControlWriter {
                     _crudCtrl = table.isView() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
                 }
 
+                final List<Section> sections = table.getSections();
+                final int slen = sections.size();
+                final boolean sectionHeaders = !sections.isEmpty();
+                Section currentSection = null;
+                int sectionIndex = -1;
                 for (int i = 0; i < len; i++) {
                     ValueStore valueStore = valueList.get(i);
                     valueStore.setTempValue("parentReader", table.getParentReader());
@@ -546,6 +552,18 @@ public class TableWriter extends AbstractControlWriter {
                         tableStateOverride[i] = table.getTableStateOverride(valueStore);
                     }
 
+                    // Section header
+                    if (sectionHeaders) {
+                        while ((currentSection == null || !currentSection.isIndexWithin(i)) && ((++sectionIndex) < slen)) {
+                            currentSection = sections.get(sectionIndex);
+                            if (!currentSection.isEmpty()) {
+                                writer.write("<tr><td class=\"sheader\" colspan=\"100%\"><span>");
+                                writer.writeWithHtmlEscape(currentSection.getLabel());
+                                writer.write("</span></td></tr>");
+                            }
+                        }
+                    }
+                    
                     // Normal row
                     String summaryClass = null;
                     String summaryColor = null;
