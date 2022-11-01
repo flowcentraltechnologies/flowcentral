@@ -227,7 +227,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void logoutUser(boolean complete) throws UnifyException {
-        userSessionManager.logout(complete);
         // Log login event
         Long userId = environment().value(Long.class, "id", new UserQuery().loginId(getUserToken().getUserLoginId()));
         SessionContext ctx = getSessionContext();
@@ -237,6 +236,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         userLoginEvent.setRemoteAddress(ctx.getRemoteAddress());
         userLoginEvent.setRemoteHost(ctx.getRemoteHost());
         environment().create(userLoginEvent);
+        
+        // Logout
+        userSessionManager.logout(complete);
     }
 
     @Override

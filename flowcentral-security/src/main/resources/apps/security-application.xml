@@ -146,8 +146,8 @@
 		</applet>
 		<applet name="manageUserLoginEvent"
 			description="$m{security.userloginevent.manage}"
-			label="$m{security.userloginevent.manage.label}" icon="userLoginEvent"
-			type="manage_entitylist" entity="userLoginEvent" menuAccess="true">
+			label="$m{security.userloginevent.manage.label}"
+			type="manage_entitylist" entity="userLoginEvent" menuAccess="false">
 			<property name="searchTable" value="userLoginEventTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="false" />
@@ -540,7 +540,7 @@
 			<column field="remoteHost" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
+				widthRatio="1" order="DESC" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="eventTypeDesc" renderWidget="application.text"
