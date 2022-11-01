@@ -112,6 +112,9 @@ public class User extends BaseStatusWorkEntity {
     @ChildList
     private List<UserRole> userRoleList;
 
+    @ChildList
+    private List<UserLoginEvent> userLoginEventList;
+    
     public User(Long id, String fullName, String loginId, String email, Boolean passwordExpires) {
         this.setId(id);
         this.fullName = fullName;
@@ -324,6 +327,14 @@ public class User extends BaseStatusWorkEntity {
 
     public void setUserRoleList(List<UserRole> userRoleList) {
         this.userRoleList = userRoleList;
+    }
+
+    public List<UserLoginEvent> getUserLoginEventList() {
+        return userLoginEventList;
+    }
+
+    public void setUserLoginEventList(List<UserLoginEvent> userLoginEventList) {
+        this.userLoginEventList = userLoginEventList;
     }
 
 }
