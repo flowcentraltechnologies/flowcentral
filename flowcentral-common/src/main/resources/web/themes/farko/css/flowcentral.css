@@ -554,7 +554,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mserialh {width: 48px;}
 .fc-table .table .mactionh {width: 20px;}
 .fc-table .table .mfixedh {width: 48px;}
-.fc-table .table .mcrudh {width: 52px;}
+.fc-table .table .mcrudh {width: 64px;}
 .fc-table .table .mseriald {}
 .fc-table .table .mact {color:#525252;}
 .fc-table .table .mbtn {min-width:52px; min-height:22px;font-size: 7pt;padding: 0px 6px;}

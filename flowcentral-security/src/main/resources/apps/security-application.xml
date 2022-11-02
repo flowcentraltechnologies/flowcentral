@@ -144,6 +144,15 @@
 				<restriction type="greater_than" field="id" paramA="0" />
 			</filter>
 		</applet>
+		<applet name="manageUserLoginEvent"
+			description="$m{security.userloginevent.manage}"
+			label="$m{security.userloginevent.manage.label}"
+			type="manage_entitylist" entity="userLoginEvent" menuAccess="false">
+			<property name="searchTable" value="userLoginEventTable" />
+			<property name="searchTable.new" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="searchTable.quickFilter" value="true" />
+		</applet>
 	</applets>
 	<!-- References -->
 	<references>
@@ -162,6 +171,9 @@
 		<reference name="userGroupMemberRef"
 			description="$m{security.usergroupmember.reference}"
 			entity="userGroupMember" searchField="userFullName" />
+		<reference name="userLoginEventRef"
+			description="$m{security.userloginevent.reference}"
+			entity="userLoginEvent" searchField="userFullName" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -342,6 +354,8 @@
 				label="$m{security.user.plainpassword}" type="scratch" />
 			<field name="userRoleList" label="$m{security.user.rolelist}"
 				type="child_list" references="userRoleRef" />
+			<field name="userLoginEventList" label="$m{security.user.userlogineventlist}"
+				type="child_list" references="userLoginEventRef" />
 			<uniqueConstraint name="loginIdUc"
 				description="$m{security.user.uc.loginid}" fieldList="loginId" />
 			<attachment type="image" name="photo"
@@ -393,6 +407,34 @@
 			<uniqueConstraint name="roleUc"
 				description="$m{security.userrole.uc.role}"
 				fieldList="userId,roleId" />
+		</entity>
+		<entity name="userLoginEvent"
+			description="$m{security.userloginevent}"
+			label="$m{security.userloginevent.label}"
+			type="com.flowcentraltech.flowcentral.security.entities.UserLoginEvent">
+			<field name="eventType"
+				label="$m{security.userloginevent.eventtype}" type="enum_ref"
+				inputWidget="application.enumlist"
+				references="logineventtypelist" />
+			<field name="userId"
+				label="$m{security.userloginevent.userid}" type="ref"
+				references="userRef" filterLabel="$m{security.userloginevent.user}"
+				inputWidget="application.entitysearch" />
+			<field name="remoteAddress" label="$m{security.userloginevent.remoteaddress}"
+				type="string" inputWidget="application.text" auditable="false"
+				reportable="true" nullable="true" />
+			<field name="remoteHost" label="$m{security.userloginevent.remotehost}"
+				type="string" inputWidget="application.text" auditable="false"
+				reportable="true" nullable="true" />
+			<field name="userLoginId"
+				label="$m{security.userloginevent.userloginid}" type="list_only"
+				key="userId" property="loginId" />
+			<field name="userFullName"
+				label="$m{security.userloginevent.userfullname}" type="list_only"
+				key="userId" property="fullName" />
+			<field name="eventTypeDesc"
+				label="$m{security.userloginevent.eventtypedesc}" type="list_only"
+				key="eventType" property="description" />
 		</entity>
 	</entities>
 	<!-- Tables -->
@@ -487,6 +529,23 @@
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
 		</table>
+		<table name="userLoginEventTable"
+			description="$m{security.userloginevent.table}"
+			label="$m{security.userloginevent.table.label}" entity="userLoginEvent"
+			itemsPerPage="20"  serialNo="true">
+			<column field="userFullName" renderWidget="application.name"
+				widthRatio="1" />
+			<column field="remoteAddress" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="remoteHost" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" order="DESC" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="eventTypeDesc" renderWidget="application.text"
+				label="$m{security.userloginevent.eventtype}" widthRatio="1" />
+		</table>
 	</tables>
 	<!-- Forms -->
 	<forms>
@@ -551,6 +610,9 @@
 			<tab name="roles" label="$m{security.user.form.roles}"
 				contentType="child_list" applet="manageUserRole"
 				reference="userRoleList" />
+			<tab name="userLoginEvents" label="$m{security.user.form.loginevents}"
+				contentType="child_list" applet="manageUserLoginEvent"
+				reference="userLoginEventList" />
 			<tab name="branchDetails"
 				label="$m{security.user.form.branchdetails}" contentType="miniform"
 				disabled="true">

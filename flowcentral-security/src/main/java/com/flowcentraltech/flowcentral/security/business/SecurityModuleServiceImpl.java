@@ -41,6 +41,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleErrorConstants;
@@ -53,6 +54,7 @@ import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupMemberQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRole;
 import com.flowcentraltech.flowcentral.security.entities.UserGroupRoleQuery;
+import com.flowcentraltech.flowcentral.security.entities.UserLoginEvent;
 import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
@@ -156,6 +158,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
 
+        // Update login details
         Date now = environment().getNow();
         Update update = new Update().add("lastLoginDt", now).add("loginAttempts", Integer.valueOf(0));
         Date paswwordExpiryDt = user.getPasswordExpiryDt();
@@ -164,6 +167,14 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             user.setChangePassword(Boolean.TRUE);
         }
         environment().updateAll(new UserQuery().id(user.getId()), update);
+        // Log login event
+        SessionContext ctx = getSessionContext();
+        UserLoginEvent userLoginEvent = new UserLoginEvent();
+        userLoginEvent.setEventType(LoginEventType.LOGIN);
+        userLoginEvent.setUserId(user.getId());
+        userLoginEvent.setRemoteAddress(ctx.getRemoteAddress());
+        userLoginEvent.setRemoteHost(ctx.getRemoteHost());
+        environment().create(userLoginEvent);
 
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
@@ -216,6 +227,17 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void logoutUser(boolean complete) throws UnifyException {
+        // Log login event
+        Long userId = environment().value(Long.class, "id", new UserQuery().loginId(getUserToken().getUserLoginId()));
+        SessionContext ctx = getSessionContext();
+        UserLoginEvent userLoginEvent = new UserLoginEvent();
+        userLoginEvent.setEventType(LoginEventType.LOGOUT);
+        userLoginEvent.setUserId(userId);
+        userLoginEvent.setRemoteAddress(ctx.getRemoteAddress());
+        userLoginEvent.setRemoteHost(ctx.getRemoteHost());
+        environment().create(userLoginEvent);
+        
+        // Logout
         userSessionManager.logout(complete);
     }
 
