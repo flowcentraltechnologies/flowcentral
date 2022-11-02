@@ -13,33 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.application.data;
+
+import com.flowcentraltech.flowcentral.common.constants.MaintainType;
+import com.tcdng.unify.core.database.Entity;
 
 /**
- * Maintain type.
+ * Listing entity item.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum MaintainType {
-    EDIT,
-    REPORT,
-    WORK_ITEM,
-    WORK_ITEM_SINGLEFORM;
-    
-    public boolean isEdit() {
-        return this.equals(EDIT);
+public class ListingEntityItem extends EntityItem {
+
+    public ListingEntityItem(Entity entity, String listingGenerator) {
+        super(MaintainType.REPORT, entity, listingGenerator);
     }
-    
-    public boolean isReport() {
-        return this.equals(REPORT);
-    }
-    
-    public boolean isWorkItem() {
-        return this.equals(WORK_ITEM);
-    }
-    
-    public boolean isWorkItemSingleForm() {
-        return this.equals(WORK_ITEM_SINGLEFORM);
-    }
+
 }

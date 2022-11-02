@@ -46,6 +46,7 @@ import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
@@ -743,7 +744,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void maintain() throws UnifyException {
         String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        if (po.length > 0) { // Solves the exception on double click.
+        if (po.length > 0) {
             String valMarker = po[0];
             int mIndex = Integer.parseInt(po[1]);
             if (valMarker != null) {
@@ -761,7 +762,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
             }
 
-            getEntityFormApplet().maintainInst(mIndex);
+            TableActionResult result = getEntityFormApplet().maintainInst(mIndex);
+            if (result != null) {
+                if (result.isDisplayListingReport()) {
+                    setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
+                    setCommandResultMapping("viewlistingreport");
+                }
+            }
+            
             getRequestContextUtil().setContentScrollReset();
         } else {
             setCommandResultMapping(ResultMappingConstants.NONE);

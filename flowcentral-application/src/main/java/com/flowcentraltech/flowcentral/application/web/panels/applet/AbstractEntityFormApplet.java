@@ -67,6 +67,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
@@ -558,7 +559,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         entitySaveAs = null;
     }
 
-    public void maintainInst(int mIndex) throws UnifyException {
+    public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         _inst = reloadEntity(_inst, true);
@@ -569,7 +570,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
-        return;
+        return null;
     }
 
     public void listingInst(int mIndex) throws UnifyException {

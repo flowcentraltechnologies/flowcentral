@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
@@ -102,14 +103,14 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void maintainInst(int mIndex) throws UnifyException {
+    public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         WfWizardItem currWfWizardItem = (WfWizardItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
         final EntityClassDef _entityClassDef = au().getEntityClassDef(priEntityDef.getLongName());
         priEntityInst = (WorkEntity) au().environment().listLean(
                 (Class<? extends Entity>) _entityClassDef.getEntityClass(), currWfWizardItem.getPrimaryEntityId());
         loadWizardStep(0);
-        return;
+        return null;
     }
 
     @Override

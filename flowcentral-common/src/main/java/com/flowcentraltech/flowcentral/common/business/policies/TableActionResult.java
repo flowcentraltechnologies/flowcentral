@@ -13,33 +13,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.common.business.policies;
 
 /**
- * Maintain type.
+ * Table action result
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum MaintainType {
-    EDIT,
-    REPORT,
-    WORK_ITEM,
-    WORK_ITEM_SINGLEFORM;
+public class TableActionResult {
+
+    private final Object result;
     
-    public boolean isEdit() {
-        return this.equals(EDIT);
+    private boolean displayListingReport;
+
+    public TableActionResult(Object result) {
+        this.result = result;
     }
-    
-    public boolean isReport() {
-        return this.equals(REPORT);
+
+    public Object getResult() {
+        return result;
     }
-    
-    public boolean isWorkItem() {
-        return this.equals(WORK_ITEM);
+
+    public boolean isDisplayListingReport() {
+        return displayListingReport;
     }
-    
-    public boolean isWorkItemSingleForm() {
-        return this.equals(WORK_ITEM_SINGLEFORM);
+
+    public void setDisplayListingReport(boolean displayListingReport) {
+        this.displayListingReport = displayListingReport;
     }
+
 }
