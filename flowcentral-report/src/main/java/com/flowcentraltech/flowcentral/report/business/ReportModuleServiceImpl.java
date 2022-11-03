@@ -396,6 +396,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public void generateReport(Report report, OutputStream outputStream) throws UnifyException {
+        logDebug("Generating report [{0}]...", report.getTitle());
         reportServer.generateReport(report, outputStream);
     }
 

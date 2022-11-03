@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -34,12 +35,11 @@ public interface FormListingReportGenerator extends UnifyComponent {
      * 
      * @param formBeanValueStore
      *                           the form bean value store
-     * @param formActionName
-     *                           the name of form action triggering this generation.
-     *                           (optional)
+     * @param listingOptions
+     *                           form listing options
      * @return report
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateReport(ValueStore formBeanValueStore, String formActionName) throws UnifyException;
+    Report generateReport(ValueStore formBeanValueStore, FormListingOptions listingOptions) throws UnifyException;
 }

@@ -46,7 +46,7 @@ public class PrintListingReportFormActionPolicy extends AbstractApplicationFormA
         EntityActionResult result = new EntityActionResult(ctx);
         if (ctx.isWithListingGenerator()) {
             FormListingGenerator generator = (FormListingGenerator) getComponent(ctx.getListingGenerator());
-            Report report = generator.generateReport(new BeanValueStore(ctx.getInst()), ctx.getFormActionName());
+            Report report = generator.generateReport(new BeanValueStore(ctx.getInst()), ctx.getListingOptions());
             ctx.setResult(report);
             result = new EntityActionResult(ctx);
             result.setDisplayListingReport(true);

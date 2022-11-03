@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -34,8 +35,8 @@ import com.tcdng.unify.core.report.ReportPageProperties;
 public abstract class AbstractFormListingReportGenerator extends AbstractUnifyComponent
         implements FormListingReportGenerator {
 
-    protected ListingReportGeneratorProperties getReportProperties(ValueStore formBeanValueStore, String formActionName)
-            throws UnifyException {
+    protected ListingReportGeneratorProperties getReportProperties(ValueStore formBeanValueStore,
+            FormListingOptions listingOptions) throws UnifyException {
         return new ListingReportGeneratorProperties(
                 ReportPageProperties.newBuilder().resourceBaseUri(getSessionContext().getUriBase()).build(),
                 Arrays.asList(new ListingReportProperties("default_prop")));

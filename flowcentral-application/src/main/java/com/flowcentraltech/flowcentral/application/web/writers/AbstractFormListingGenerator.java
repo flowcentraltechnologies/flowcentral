@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -111,10 +112,11 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
-    public final Report generateReport(ValueStore formBeanValueStore, String formActionName) throws UnifyException {
+    public final Report generateReport(ValueStore formBeanValueStore, FormListingOptions listingOptions)
+            throws UnifyException {
         ResponseWriter writer = getComponent(ResponseWriter.class,
                 WebUIApplicationComponents.APPLICATION_RESPONSEWRITER);
-        ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, formActionName);
+        ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
         Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
                 .title("listingReport");
         Set<ListingRowColorType> pausePrintColors = getPausePrintColors();

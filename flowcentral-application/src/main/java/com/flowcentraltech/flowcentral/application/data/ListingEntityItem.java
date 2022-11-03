@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.common.constants.MaintainType;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -26,8 +27,8 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class ListingEntityItem extends EntityItem {
 
-    public ListingEntityItem(Entity entity, String listingGenerator) {
-        super(MaintainType.REPORT, entity, listingGenerator);
+    public ListingEntityItem(Entity entity, FormListingOptions listingOptions, String listingGenerator) {
+        super(MaintainType.REPORT, entity, listingOptions, listingGenerator);
     }
 
 }

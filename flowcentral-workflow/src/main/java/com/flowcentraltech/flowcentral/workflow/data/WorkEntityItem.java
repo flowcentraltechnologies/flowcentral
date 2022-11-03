@@ -33,20 +33,20 @@ import com.tcdng.unify.core.database.Entity;
 public class WorkEntityItem extends EntityItem {
 
     public WorkEntityItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
-        super(MaintainType.WORK_ITEM, entity, emails, comments, errors, null);
+        super(MaintainType.WORK_ITEM, entity, emails, comments, errors, null, null);
     }
 
     public WorkEntityItem(Entity entity) {
-        super(MaintainType.WORK_ITEM, entity, null);
+        super(MaintainType.WORK_ITEM, entity, null, null);
     }
 
     protected WorkEntityItem(MaintainType type, Entity entity, InputArrayEntries emails, Comments comments,
             Errors errors) {
-        super(type, entity, emails, comments, errors, null);
+        super(type, entity, emails, comments, errors, null, null);
     }
 
     protected WorkEntityItem(MaintainType type, Entity entity) {
-        super(type, entity, null);
+        super(type, entity, null, null);
     }
 
     public WorkEntity getWorkEntity() {

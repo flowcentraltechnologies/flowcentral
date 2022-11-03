@@ -906,7 +906,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             setCommandResultMapping(ResultMappingConstants.CLOSE);
         } else if (entityActionResult.isDisplayListingReport()) {
             setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
-//            getEventLogger().logUserEvent(CommonModuleAuditConstants.GENERATE_REPORT, reportOptions.getTitle());
             setCommandResultMapping("viewlistingreport");
         }
     }

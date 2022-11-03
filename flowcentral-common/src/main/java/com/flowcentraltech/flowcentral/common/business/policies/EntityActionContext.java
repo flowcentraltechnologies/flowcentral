@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.AbstractContext;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.data.Audit;
@@ -40,8 +41,8 @@ public class EntityActionContext extends AbstractContext {
 
     private String actionPolicyName;
 
-    private String formActionName;
-    
+    private FormListingOptions listingOptions;
+
     private String listingGenerator;
 
     private SweepingCommitPolicy sweepingCommitPolicy;
@@ -49,13 +50,13 @@ public class EntityActionContext extends AbstractContext {
     private RecordActionType actionType;
 
     private Object entityDef;
-    
+
     private Object result;
 
     private Audit audit;
 
     private List<FormMessage> formMessages;
-    
+
     public EntityActionContext(Object entityDef, Entity inst, String actionPolicyName) {
         this.entityDef = entityDef;
         this.inst = inst;
@@ -70,7 +71,7 @@ public class EntityActionContext extends AbstractContext {
         this.sweepingCommitPolicy = sweepingCommitPolicy;
         this.actionPolicyName = actionPolicyName;
     }
-    
+
     public void addFormMessage(MessageType type, String message) {
         if (formMessages == null) {
             formMessages = new ArrayList<FormMessage>();
@@ -80,7 +81,7 @@ public class EntityActionContext extends AbstractContext {
     }
 
     public List<FormMessage> getFormMessages() {
-        return formMessages != null ? formMessages: Collections.emptyList();
+        return formMessages != null ? formMessages : Collections.emptyList();
     }
 
     public Object getEntityDef() {
@@ -103,12 +104,12 @@ public class EntityActionContext extends AbstractContext {
         return actionType;
     }
 
-    public String getFormActionName() {
-        return formActionName;
+    public FormListingOptions getListingOptions() {
+        return listingOptions;
     }
 
-    public void setFormActionName(String formActionName) {
-        this.formActionName = formActionName;
+    public void setListingOptions(FormListingOptions listingOptions) {
+        this.listingOptions = listingOptions;
     }
 
     public String getActionPolicyName() {
