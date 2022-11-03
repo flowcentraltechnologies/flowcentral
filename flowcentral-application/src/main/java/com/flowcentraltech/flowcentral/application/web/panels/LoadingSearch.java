@@ -188,7 +188,9 @@ public class LoadingSearch {
     public EntityItem getSourceItem(int index) throws UnifyException {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
-        return loadingTableProvider != null ? loadingTableProvider.getSourceItem((Long) loadingEntity.getId()) : null;
+        int options = loadingTableProvider.getSourceItemOptions(loadingEntity);
+        return loadingTableProvider != null ? loadingTableProvider.getSourceItem((Long) loadingEntity.getId(), options)
+                : null;
     }
 
     public String getSourceItemFormApplet(int index) throws UnifyException {
