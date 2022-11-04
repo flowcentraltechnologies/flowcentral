@@ -32,12 +32,16 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
+import com.flowcentraltech.flowcentral.application.web.writers.FormListingGenerator;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -104,8 +108,8 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         singleForm.unloadSingleFormBean();
         Entity inst = (Entity) singleForm.getFormBean();
         String updatePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-        EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst,
-                RecordActionType.UPDATE, null, updatePolicy);
+        EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst, RecordActionType.UPDATE, null,
+                updatePolicy);
         eCtx.setAll(singleForm.getCtx());
 
         EntityActionResult entityActionResult = au().environment().updateByIdVersion(eCtx);
@@ -119,7 +123,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     }
 
     @Override
-    public void maintainInst(int mIndex) throws UnifyException {
+    public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem item = loadingSearch.getSourceItem(mIndex);
         if (item.isEdit()) {
@@ -133,6 +137,14 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             }
 
             viewMode = ViewMode.MAINTAIN_FORM;
+        } else if (item.isReport()) {
+            if (item.isWithListingParams()) {
+                FormListingGenerator generator = au().getComponent(FormListingGenerator.class, item.getListingGenerator());
+                Report report = generator.generateReport(new BeanValueStore(item.getEntity()), item.getListingOptions());
+                TableActionResult result = new TableActionResult(report);
+                result.setDisplayListingReport(true);
+                return result;
+            }
         } else if (item.isWorkItem()) {
             final AppletDef _currentFormAppletDef = getFormAppletDef();
             WorkEntity currEntityInst = (WorkEntity) item.getEntity();
@@ -185,7 +197,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             viewMode = ViewMode.SINGLE_FORM;
         }
 
-        return;
+        return null;
     }
 
     @Override

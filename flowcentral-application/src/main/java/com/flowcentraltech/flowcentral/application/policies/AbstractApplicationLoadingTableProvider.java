@@ -70,7 +70,7 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
     
     @SuppressWarnings("unchecked")
     @Override
-    public EntityItem getSourceItem(Long sourceItemId) throws UnifyException {
+    public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
         EntityClassDef sourceEntityClassDef = application().getEntityClassDef(sourceEntity);
         Entity entity = environment().list((Class<? extends Entity>) sourceEntityClassDef.getEntityClass(),
                 sourceItemId);

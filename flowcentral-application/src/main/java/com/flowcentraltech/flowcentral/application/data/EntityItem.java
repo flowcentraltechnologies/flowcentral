@@ -18,7 +18,9 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.constants.MaintainType;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity item.
@@ -38,34 +40,58 @@ public class EntityItem implements FormAppendables {
 
     private Errors errors;
 
+    private FormListingOptions listingOptions;
+
+    private String listingGenerator;
+
     protected EntityItem(MaintainType maintainType, Entity entity, InputArrayEntries emails, Comments comments,
-            Errors errors) {
+            Errors errors, FormListingOptions listingOptions, String listingGenerator) {
         this.maintainType = maintainType;
         this.entity = entity;
         this.emails = emails;
         this.comments = comments;
         this.errors = errors;
+        this.listingOptions = listingOptions;
+        this.listingGenerator = listingGenerator;
     }
 
-    protected EntityItem(MaintainType maintainType, Entity entity) {
+    protected EntityItem(MaintainType maintainType, Entity entity, FormListingOptions listingOptions, String listingGenerator) {
         this.maintainType = maintainType;
         this.entity = entity;
+        this.listingOptions = listingOptions;
+        this.listingGenerator = listingGenerator;
     }
 
     public MaintainType getMaintainType() {
         return maintainType;
     }
 
+    public FormListingOptions getListingOptions() {
+        return listingOptions;
+    }
+
+    public String getListingGenerator() {
+        return listingGenerator;
+    }
+
     public boolean isEdit() {
         return maintainType.isEdit();
+    }
+
+    public boolean isReport() {
+        return maintainType.isReport();
     }
 
     public boolean isWorkItem() {
         return maintainType.isWorkItem();
     }
-    
+
     public boolean isWorkItemSingleForm() {
         return maintainType.isWorkItemSingleForm();
+    }
+
+    public boolean isWithListingParams() {
+        return listingOptions != null && !StringUtils.isBlank(listingGenerator);
     }
 
     public Entity getEntity() {

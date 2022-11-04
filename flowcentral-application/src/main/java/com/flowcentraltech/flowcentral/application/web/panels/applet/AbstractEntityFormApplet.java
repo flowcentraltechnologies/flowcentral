@@ -67,7 +67,9 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -558,7 +560,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         entitySaveAs = null;
     }
 
-    public void maintainInst(int mIndex) throws UnifyException {
+    public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         _inst = reloadEntity(_inst, true);
@@ -569,7 +571,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         viewMode = ViewMode.MAINTAIN_FORM_SCROLL;
-        return;
+        return null;
     }
 
     public void listingInst(int mIndex) throws UnifyException {
@@ -721,7 +723,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Entity _inst = (Entity) _form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(_form.getFormDef().getEntityDef(), _inst, actionPolicyName);
         efCtx.setAll(_form.getCtx());
-        efCtx.setFormActionName(formActionName);
+        efCtx.setListingOptions(new FormListingOptions(formActionName));
         if (isListingView()) {
             final String listingGenerator = listingForm.getFormListing().getListingGenerator();
             efCtx.setListingGenerator(listingGenerator);

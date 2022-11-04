@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormM
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -88,7 +89,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
     }
 
     @Override
-    public void maintainInst(int mIndex) throws UnifyException {
+    public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
         final AppletDef _currentFormAppletDef = getFormAppletDef();
@@ -135,7 +136,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
             viewMode = ViewMode.LISTING_FORM;
         }
 
-        return;
+        return null;
     }
 
     @Override

@@ -13,33 +13,39 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.common.data;
 
 /**
- * Maintain type.
+ * Form listing options
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum MaintainType {
-    EDIT,
-    REPORT,
-    WORK_ITEM,
-    WORK_ITEM_SINGLEFORM;
+public class FormListingOptions {
+
+    private final String formActionName;
     
-    public boolean isEdit() {
-        return this.equals(EDIT);
+    private final int optionFlags;
+
+    public FormListingOptions(String formActionName) {
+        this.formActionName = formActionName;
+        this.optionFlags = ~0;
+    }
+
+    public FormListingOptions(String formActionName, int optionFlags) {
+        this.formActionName = formActionName;
+        this.optionFlags = optionFlags;
+    }
+
+    public String getFormActionName() {
+        return formActionName;
+    }
+
+    public int getOptionFlags() {
+        return optionFlags;
     }
     
-    public boolean isReport() {
-        return this.equals(REPORT);
-    }
-    
-    public boolean isWorkItem() {
-        return this.equals(WORK_ITEM);
-    }
-    
-    public boolean isWorkItemSingleForm() {
-        return this.equals(WORK_ITEM_SINGLEFORM);
+    public boolean isOption(int option) {
+        return (optionFlags & option) ==  option; 
     }
 }

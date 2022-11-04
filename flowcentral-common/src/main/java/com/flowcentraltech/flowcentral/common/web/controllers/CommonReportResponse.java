@@ -51,6 +51,7 @@ public class CommonReportResponse extends AbstractOpenWindowPageControllerRespon
             mimeType = ReportFormat.fromName(reportFormat).mimeType();
         }
 
+        logDebug("Preparing window resource for report [{0}]...", resourceName);
         return new WindowResourceInfo(reportOptions, reportOptions.getReportResourcePath(), resourceName,
                 mimeType.template(), download);
     }

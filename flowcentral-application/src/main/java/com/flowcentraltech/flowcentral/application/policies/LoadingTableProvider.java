@@ -65,17 +65,30 @@ public interface LoadingTableProvider extends UnifyComponent {
      *                        if an error occurs
      */
     List<? extends Entity> getLoadingItems(Restriction restriction) throws UnifyException;
-
+    
+    /**
+     * Get source item options.
+     * 
+     * @param loadingEntity
+     *                      the loading entity
+     * @return source item options
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int getSourceItemOptions(Entity loadingEntity) throws UnifyException;
+   
     /**
      * Gets the source entity items using supplied ID
      * 
      * @param sourceItemId
      *                     the id to use
+     * @param options
+     *                     options
      * @return the source entity item
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntityItem getSourceItem(Long sourceItemId) throws UnifyException;
+    EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException;
 
     /**
      * Gets the source entity item form applet.

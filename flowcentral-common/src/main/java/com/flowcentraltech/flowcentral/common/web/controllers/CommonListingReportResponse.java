@@ -40,6 +40,7 @@ public class CommonListingReportResponse extends AbstractOpenWindowPageControlle
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {
         Report report = (Report) getRequestAttribute(FlowCentralRequestAttributeConstants.REPORT);
         String resourceName = getTimestampedResourceName(report.getTitle()) + ReportFormat.PDF.fileExt();
+        logDebug("Preparing window resource for listing report [{0}]...", resourceName);
         return new WindowResourceInfo(report, "/common/resource/listingreport", resourceName,
                 ReportFormat.PDF.mimeType().template(), false);
     }

@@ -29,11 +29,11 @@ public class EditEntityItem extends EntityItem {
 
     public EditEntityItem(Entity entity, InputArrayEntries emails, Comments comments,
             Errors errors) {
-        super(MaintainType.EDIT, entity, emails, comments, errors);
+        super(MaintainType.EDIT, entity, emails, comments, errors, null, null);
     }
 
     public EditEntityItem(Entity entity) {
-        super(MaintainType.EDIT, entity);
+        super(MaintainType.EDIT, entity, null, null);
     }
 
 }
