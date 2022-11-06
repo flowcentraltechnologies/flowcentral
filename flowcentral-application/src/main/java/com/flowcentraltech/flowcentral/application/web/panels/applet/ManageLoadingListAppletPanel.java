@@ -49,7 +49,7 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
                 } else {
                     if (ctx.getFormDef().isInputForm()) {
                         EntityActionResult entityActionResult = applet.updateInstAndClose();
-                        if (ctx.isWithReviewErrors()/* && applet.isFormReview(actionName)*/) {
+                        if (ctx.isWithReviewErrors()) {
                             entityActionResult.setApplyUserAction(true);
                             entityActionResult.setUserAction(actionName);
                             entityActionResult.setCloseView(true);
@@ -73,7 +73,6 @@ public class ManageLoadingListAppletPanel extends AbstractEntityFormAppletPanel 
     public void switchState() throws UnifyException {
         super.switchState();
         final ManageLoadingListApplet applet = getManageLoadingListApplet();
-//        applet.ensureRootAppletStruct();
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
