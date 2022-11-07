@@ -48,6 +48,7 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Implementation of code generation module service.
@@ -151,7 +152,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             }            
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
-            String zipFilename = String.format("flowcentral_extension_%s%s", smf.format(now), ".zip");
+            final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
+            String zipFilename = String.format("%s_extension_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
             codeGenerationItem.setFilename(zipFilename);
