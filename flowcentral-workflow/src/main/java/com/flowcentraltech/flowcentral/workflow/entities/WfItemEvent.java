@@ -71,7 +71,7 @@ public class WfItemEvent extends BaseEntity {
     @Column(name = "ERROR_CD", length = 32, nullable = true)
     private String errorCode;
 
-    @Column(type = ColumnType.CLOB, name = "ERROR_MSG", nullable = true)
+    @Column(name = "ERROR_MSG", length = 4000, nullable = true)
     private String errorMsg;
 
     @Column(type = ColumnType.CLOB, name = "ERROR_TRACE", nullable = true)
