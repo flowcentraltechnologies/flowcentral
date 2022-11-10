@@ -35,6 +35,5 @@
             <artifactId>flowcentral-application</artifactId>
             <version>${project.version}</version>
         </dependency>
-		<!-- Test dependencies -->
 	</dependencies>
 </project>
