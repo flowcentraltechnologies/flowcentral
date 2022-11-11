@@ -36,6 +36,7 @@ public class DataImportApplet extends AbstractApplet {
     public DataImportApplet(AppletUtilities au, String appletName) throws UnifyException {
         super(au, appletName);
         importTitle = getRootAppletDef().getLabel();
+        setAltSubCaption(importTitle);
     }
 
     public String getImportTitle() {

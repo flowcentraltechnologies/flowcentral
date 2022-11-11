@@ -36,6 +36,7 @@ public class CreateEntityApplet extends AbstractEntityFormApplet {
         currFormAppletDef = getRootAppletDef();
         form = constructNewForm(FormMode.CREATE, null, false);
         viewMode = ViewMode.NEW_PRIMARY_FORM;
+        setAltSubCaption(form.getFormTitle());
     }
 
     @Override

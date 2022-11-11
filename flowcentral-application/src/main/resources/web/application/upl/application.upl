@@ -65,7 +65,7 @@
 !fc-appletmenu:menuColPanel searchable:true
 
 // Content
-!ui-contentpanel:content styleClass:$e{fc-content} path:$s{/application/dashboard/openPage}
+!ui-contentpanel:content styleClassBinding:$s{contentStyleClass} path:$s{/application/dashboard/openPage}
 	tabbedBinding:enableMultipleTabs
 
 

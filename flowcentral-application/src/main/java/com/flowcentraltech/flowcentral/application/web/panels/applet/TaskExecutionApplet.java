@@ -46,6 +46,7 @@ public class TaskExecutionApplet extends AbstractApplet {
         ParamValuesDef paramValuesDef = CommonInputUtils.getParamValuesDef(paramConfigList);
         paramValueEntries = new ParamValueEntries(paramValuesDef);
         taskTitle = getRootAppletDef().getLabel();
+        setAltSubCaption(taskTitle);
     }
 
     public String getTaskTitle() {
