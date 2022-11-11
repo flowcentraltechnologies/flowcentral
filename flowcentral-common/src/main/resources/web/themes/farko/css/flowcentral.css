@@ -695,6 +695,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-logout:hover:enabled {color: #DE5050;}
 
 .fc-content {overflow-y: scroll; max-height: calc(100vh - 40px) !important;}
+.fc-content-tabbed {}
 
 /*** COMMON ***/
 .hdbar {background-color: #e3e7ea;}

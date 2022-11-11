@@ -59,7 +59,7 @@
 !fc-studiomenu:studioMenuPanel
 
 // Content
-!ui-contentpanel:content styleClass:$e{fc-content} path:$s{/applicationstudio/dashboard/openPage} tabbed:true
+!ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed} path:$s{/applicationstudio/dashboard/openPage} tabbed:true
     
 // Show user details popup
 !fc-userdetailspanel:userDetailsPopup dialogCaption:$m{application.user.details}

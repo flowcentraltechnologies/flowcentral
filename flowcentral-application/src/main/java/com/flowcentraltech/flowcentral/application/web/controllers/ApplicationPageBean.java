@@ -32,6 +32,8 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
     
     private String headerTitle;
     
+    private String contentStyleClass;
+    
     private boolean enableMultipleTabs;
     
     public LoginUserPhotoGenerator getUserPhotoGenerator() {
@@ -56,6 +58,14 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setHeaderTitle(String headerTitle) {
         this.headerTitle = headerTitle;
+    }
+
+    public String getContentStyleClass() {
+        return contentStyleClass;
+    }
+
+    public void setContentStyleClass(String contentStyleClass) {
+        this.contentStyleClass = contentStyleClass;
     }
 
     public boolean isEnableMultipleTabs() {

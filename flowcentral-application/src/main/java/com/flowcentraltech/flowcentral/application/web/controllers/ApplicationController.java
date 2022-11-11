@@ -180,7 +180,9 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
         final boolean enableMultipleTabs = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_MULTIPLE_TABS);
+        final String contentStyleClass = enableMultipleTabs ? "$e{fc-content-tabbed}" : "$e{fc-content}";
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
+        pageBean.setContentStyleClass(contentStyleClass);
     }
 
     @Override
