@@ -124,14 +124,14 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writer.reset(Collections.emptyMap());
             writer.write("<div class=\"fc-formlisting\">");
             generateReportHeader(formBeanValueStore, listingReportProperties,
-                    new ListingGeneratorWriter(writer, pausePrintColors, false));
+                    new ListingGeneratorWriter(listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
             generateListing(formBeanValueStore, listingReportProperties, writer, pausePrintColors, false);
             generateReportAddendum(formBeanValueStore, listingReportProperties,
-                    new ListingGeneratorWriter(writer, pausePrintColors, false));
+                    new ListingGeneratorWriter(listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
             generateReportFooter(formBeanValueStore, listingReportProperties,
-                    new ListingGeneratorWriter(writer, pausePrintColors, false));
+                    new ListingGeneratorWriter(listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
@@ -238,7 +238,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             ResponseWriter writer, Set<ListingRowColorType> pausePrintColors, boolean highlighting)
             throws UnifyException {
         doGenerate(formBeanValueStore, listingProperties,
-                new ListingGeneratorWriter(writer, pausePrintColors, highlighting));
+                new ListingGeneratorWriter("", writer, pausePrintColors, highlighting));
     }
     
     private String getDefaultListingStyle() throws UnifyException {

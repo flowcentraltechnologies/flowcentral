@@ -38,6 +38,8 @@ public class ListingGeneratorWriter {
 
     private ListingRowColorType rowColor;
 
+    private final String listingType;
+    
     private int[] sectionColumnWidth;
 
     private int currentSectionColumn;
@@ -52,19 +54,25 @@ public class ListingGeneratorWriter {
     
     private Set<ListingRowColorType> pauseRowPrintColors;
     
-    public ListingGeneratorWriter(ResponseWriter writer) {
+    public ListingGeneratorWriter(String listingType, ResponseWriter writer) {
+        this.listingType = listingType;
         this.writer = writer;
         this.highlighting = true;
         this.pauseRowPrinting = false;
         this.pauseRowPrintColors = Collections.emptySet();
     }
 
-    public ListingGeneratorWriter(ResponseWriter writer, Set<ListingRowColorType> pausePrintColors,
+    public ListingGeneratorWriter(String listingType, ResponseWriter writer, Set<ListingRowColorType> pausePrintColors,
             boolean highlighting) {
+        this.listingType = listingType;
         this.writer = writer;
         this.highlighting = highlighting;
         this.pauseRowPrinting = false;
         this.pauseRowPrintColors = pausePrintColors;
+    }
+
+    public String getListingType() {
+        return listingType;
     }
 
     public ListingRowColorType getRowColor() {
