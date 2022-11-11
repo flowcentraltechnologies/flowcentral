@@ -32,6 +32,8 @@ public class ChangePasswordPageBean extends AbstractPageBean {
 
     private String confirmPassword;
     
+    private String altSubCaption;
+    
     public String getOldPassword() {
         return oldPassword;
     }
@@ -54,6 +56,14 @@ public class ChangePasswordPageBean extends AbstractPageBean {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public String getAltSubCaption() {
+        return altSubCaption;
+    }
+
+    public void setAltSubCaption(String altSubCaption) {
+        this.altSubCaption = altSubCaption;
     }
 
 }

@@ -14,6 +14,7 @@
 // the License.
 
 !ui-page caption:$m{dataimportappletpage.title} components:$c{appletPanel}
+	captionBinding:altCaption subCaptionBinding:altSubCaption
 
 // Applet panel
 !fc-dataimportappletpanel:appletPanel style:$s{width:100%;height:100%;} binding:applet

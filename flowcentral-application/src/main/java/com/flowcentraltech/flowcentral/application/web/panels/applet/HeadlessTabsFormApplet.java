@@ -36,7 +36,7 @@ public class HeadlessTabsFormApplet extends AbstractEntityFormApplet {
         currFormAppletDef = getRootAppletDef();
         headlessForm = au.constructHeadlessTabsForm(getCtx(), this, getRootAppletDef().getDescription(),
                 currFormAppletDef);
-
+        setAltSubCaption(getRootAppletDef().getDescription());
         navBackToHeadless();
     }
 

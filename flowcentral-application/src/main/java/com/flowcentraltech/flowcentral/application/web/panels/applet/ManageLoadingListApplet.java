@@ -69,6 +69,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         loadingSearch.applySearchEntriesToSearch();
         loadingSearch.getLoadingTable().setCrudActionHandlers(formEventHandlers.getMaintainActHandlers());
 
+        setAltSubCaption(loadingSearch.getEntityTitle());
         navBackToSearch();
     }
 

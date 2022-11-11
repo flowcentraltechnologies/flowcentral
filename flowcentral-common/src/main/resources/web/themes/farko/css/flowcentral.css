@@ -30,11 +30,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-button:disabled {cursor:default; color: #dfdfdf;}
 .ui-button-alert {padding: 0px 8px; min-height:32px; background-color: #f2f2f2; border: 1px solid #c8c8c8; cursor: pointer;/*border-radius: 4px;*/}
 
-/*
-.ui-buttongroup .btn {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
-.ui-buttongroup .btn:hover:enabled {background-color:#005dbc;color: #FFF;}
-*/
-
 /** Checkbox */ 
 .ui-checkbox {width: 18px; height: 18px;} 
 
@@ -126,6 +121,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Content Panel */
 .ui-contentpanel .cphint {max-height: 1px; overflow-y: visible;}
 .ui-contentpanel .cptabbar {min-height: 36px;}
+.ui-contentpanel .cptab .cptitle .hd {width:156px;}
+.ui-contentpanel .cptab .cptitle .hds {width:156px;}
 .contentpanel-popup .mitem:hover {background-color: #2f303f; color: #FFF;}
 
 .ui-inlabel {display:inline-block !important;font-size:11px;font-weight:bold; color:#525e6d;}

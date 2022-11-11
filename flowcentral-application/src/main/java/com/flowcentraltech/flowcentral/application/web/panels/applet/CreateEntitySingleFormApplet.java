@@ -32,5 +32,6 @@ public class CreateEntitySingleFormApplet extends AbstractEntitySingleFormApplet
         super(au, pathVariable);
         form = constructNewForm(FormMode.CREATE);
         viewMode = ViewMode.NEW_PRIMARY_FORM;
+        setAltSubCaption(form.getFormTitle());
     }
 }
