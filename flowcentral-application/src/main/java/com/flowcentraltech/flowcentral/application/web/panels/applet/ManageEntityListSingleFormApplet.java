@@ -40,7 +40,7 @@ public class ManageEntityListSingleFormApplet extends AbstractEntitySingleFormAp
                     au.getSpecialParamProvider());
         }
 
-        setAltSubCaption(entitySearch.getEntityTitle());
+        setAltSubCaption(entitySearch.getEntityDef().getDescription());
         navBackToSearch();
     }
 
