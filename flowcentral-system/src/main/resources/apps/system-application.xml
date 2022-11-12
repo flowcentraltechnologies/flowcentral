@@ -45,6 +45,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="sectorForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -96,6 +97,7 @@
 			<property name="searchTable" value="sysParamTable" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="maintainForm" value="sysParamForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.update.policy"
@@ -141,6 +143,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="scheduledTaskForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -157,6 +160,7 @@
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="maintainForm" value="scheduledTaskHistForm" />
 			<property name="maintainForm.update" value="false" />
 			<property name="maintainForm.delete" value="false" />
@@ -168,6 +172,7 @@
 			<property name="searchTable" value="credentialTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="credentialForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -182,6 +187,7 @@
 			type="manage_entitylist" entity="downloadLog" menuAccess="true">
 			<property name="searchTable" value="downloadLogTable" />
 			<property name="searchTable.report" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="maintainForm" value="downloadLogForm" />
 		</applet>
 		<applet name="manageUIOptions"
@@ -203,6 +209,7 @@
 				value="environmentVariableTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="environmentVariableForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -228,7 +235,7 @@
 			searchField="description" />
 		<reference name="moduleRef"
 			description="$m{system.module.reference}" entity="module"
-			searchField="description" />
+			searchField="description" listFormat="{{label}}"/>
 		<reference name="scheduledTaskRef"
 			description="$m{system.scheduledtask.reference}"
 			entity="scheduledTask" searchField="description" />
@@ -251,17 +258,17 @@
 			label="$m{system.sector.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Sector"
 			auditable="true" reportable="true">
-			<field name="status" label="$m{system.sector.status}"
-				type="enum_ref" references="sectorstatuslist"
-				inputWidget="application.enumlist" />
 			<field name="name" label="$m{system.sector.name}" type="string"
-				inputWidget="application.name" maxLen="32" />
+				inputWidget="application.name" maxLen="32" basicSearch="true"/>
 			<field name="description" label="$m{system.sector.description}"
-				type="string" inputWidget="application.text" maxLen="64" />
+				type="string" inputWidget="application.text" maxLen="64" basicSearch="true"/>
 			<field name="shortCode" label="$m{system.sector.shortcode}"
 				type="string" inputWidget="application.name" minLen="3" maxLen="3" />
 			<field name="color" label="$m{system.sector.color}"
 				type="string" inputWidget="system.colorlist" maxLen="16" />
+			<field name="status" label="$m{system.sector.status}"
+				type="enum_ref" references="sectorstatuslist"
+				inputWidget="application.enumlist" basicSearch="true"/>
 			<field name="statusDesc" label="$m{system.sector.statusdesc}"
 				type="list_only" inputWidget="application.text" key="status"
 				property="description" />
@@ -318,12 +325,12 @@
 			type="com.flowcentraltech.flowcentral.system.entities.ModuleApp">
 			<field name="moduleId" label="$m{system.moduleapp.module}"
 				type="ref" references="moduleRef"
-				inputWidget="application.entitylist" />
+				inputWidget="application.entitylist" basicSearch="true"/>
 			<field name="name" label="$m{system.moduleapp.name}"
-				type="string" inputWidget="application.name" maxLen="64" />
+				type="string" inputWidget="application.name" maxLen="64" basicSearch="true"/>
 			<field name="shortDescription"
 				label="$m{system.moduleapp.shortdescription}" type="string"
-				inputWidget="application.text" maxLen="96" />
+				inputWidget="application.text" maxLen="96" basicSearch="true"/>
 			<field name="longDescription"
 				label="$m{system.moduleapp.longdescription}" type="string"
 				inputWidget="application.text" maxLen="256" />
@@ -359,16 +366,16 @@
 			<field name="moduleId"
 				label="$m{system.systemparameter.moduleid}" type="ref"
 				references="moduleRef"
-				filterLabel="$m{system.systemparameter.module}"
-				inputWidget="application.entitylist" />
+				inputLabel="$m{system.systemparameter.module}"
+				inputWidget="application.entitylist" basicSearch="true"/>
 			<field name="type" label="$m{system.systemparameter.type}"
 				type="enum_ref" references="sysparamtypelist"
-				inputWidget="application.enumlist" />
+				inputWidget="application.enumlist" basicSearch="true"/>
 			<field name="code" label="$m{system.systemparameter.code}"
-				type="string" inputWidget="application.name" maxLen="32" />
+				type="string" inputWidget="application.name" maxLen="32" basicSearch="true"/>
 			<field name="description"
 				label="$m{system.systemparameter.description}" type="string"
-				inputWidget="application.text" maxLen="196" />
+				inputWidget="application.text" maxLen="196" basicSearch="true"/>
 			<field name="value" label="$m{system.systemparameter.value}"
 				type="string" inputWidget="sysparamvalue" maxLen="256"
 				nullable="true" />
@@ -411,10 +418,10 @@
 			auditable="true" reportable="true">
 			<field name="description"
 				label="$m{system.scheduledtask.description}" type="string"
-				inputWidget="application.text" maxLen="64" />
+				inputWidget="application.text" maxLen="64" basicSearch="true"/>
 			<field name="taskName"
 				label="$m{system.scheduledtask.taskname}" type="string"
-				inputWidget="schedulabletasklist" maxLen="32" />
+				inputWidget="schedulabletasklist" maxLen="32" basicSearch="true"/>
 			<field name="startTime"
 				label="$m{system.scheduledtask.starttime}" type="timestamp_utc"
 				inputWidget="application.time" />
@@ -452,11 +459,11 @@
 			<field name="scheduledTaskId"
 				label="$m{system.scheduledtaskhist.scheduledtaskid}" type="ref"
 				references="scheduledTaskRef"
-				filterLabel="$m{system.scheduledtaskhist.scheduledtask}"
-				inputWidget="application.entitylist" />
+				inputLabel="$m{system.scheduledtaskhist.scheduledtask}"
+				inputWidget="application.entitylist" basicSearch="true"/>
 			<field name="taskStatus"
 				label="$m{system.scheduledtaskhist.status}" type="enum_ref"
-				references="taskstatuslist" inputWidget="application.enumlist" />
+				references="taskstatuslist" inputWidget="application.enumlist" basicSearch="true"/>
 			<field name="startedOn"
 				label="$m{system.scheduledtaskhist.startedon}" type="timestamp_utc"
 				inputWidget="application.datetime" />
@@ -484,10 +491,10 @@
 			type="com.flowcentraltech.flowcentral.system.entities.Credential"
 			auditable="true" reportable="true">
 			<field name="name" label="$m{system.credential.name}"
-				type="string" inputWidget="application.name" maxLen="64" />
+				type="string" inputWidget="application.name" maxLen="64" basicSearch="true"/>
 			<field name="description"
 				label="$m{system.credential.description}" type="string"
-				inputWidget="application.text" maxLen="128" />
+				inputWidget="application.text" maxLen="128" basicSearch="true"/>
 			<field name="userName" label="$m{system.credential.username}"
 				type="string" maxLen="64" />
 			<field name="password" label="$m{system.credential.password}"
@@ -504,13 +511,13 @@
 			auditable="true" reportable="true">
 			<field name="resourceName"
 				label="$m{system.downloadlog.resourcename}" type="string"
-				inputWidget="application.name" maxLen="128" />
+				inputWidget="application.name" maxLen="128" basicSearch="true"/>
 			<field name="remoteAddress"
 				label="$m{system.downloadlog.remoteaddress}" type="string"
-				inputWidget="application.text" maxLen="64" />
+				inputWidget="application.text" maxLen="64" basicSearch="true"/>
 			<field name="remoteHost"
 				label="$m{system.downloadlog.remotehost}" type="string" maxLen="96"
-				nullable="true" />
+				nullable="true" basicSearch="true"/>
 		</entity>
 		<entity name="environmentVariable"
 			description="$m{system.environmentvariable}"
@@ -518,10 +525,10 @@
 			type="com.flowcentraltech.flowcentral.system.entities.EnvironmentVariable"
 			auditable="true" reportable="true">
 			<field name="name" label="$m{system.environmentvariable.name}"
-				type="string" inputWidget="application.name" maxLen="64" />
+				type="string" inputWidget="application.name" maxLen="64" basicSearch="true"/>
 			<field name="description"
 				label="$m{system.environmentvariable.description}" type="string"
-				inputWidget="application.text" maxLen="128" />
+				inputWidget="application.text" maxLen="128" basicSearch="true"/>
 			<field name="variable"
 				label="$m{system.environmentvariable.variable}" type="string"
 				maxLen="1024" />
@@ -537,7 +544,7 @@
 	<tables>
 		<table name="sectorTable" description="$m{system.sector.table}"
 			label="$m{system.sector.table.label}" entity="sector"
-			itemsPerPage="20" serialNo="true">
+			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -572,7 +579,7 @@
 		<table name="moduleAppTable"
 			description="$m{system.moduleapp.table}"
 			label="$m{system.moduleapp.table.label}" entity="moduleApp"
-			itemsPerPage="20" serialNo="true">
+			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -593,7 +600,7 @@
 		<table name="sysParamTable"
 			description="$m{system.systemparameter.table}"
 			label="$m{system.systemparameter.table.label}" entity="sysParam"
-			itemsPerPage="20" serialNo="true" sortHistory="2">
+			itemsPerPage="20" serialNo="true" sortHistory="2" basicSearch="true">
 			<column field="moduleLabel" renderWidget="application.text"
 				label="$m{system.systemparameter.module}" widthRatio="1" />
 			<column field="code" renderWidget="application.text"
@@ -616,7 +623,7 @@
 		<table name="scheduledTaskTable"
 			description="$m{system.scheduledtask.table}"
 			label="$m{system.scheduledtask.table.label}" entity="scheduledTask"
-			itemsPerPage="20" serialNo="true">
+			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="taskName" renderWidget="application.text"
@@ -635,7 +642,7 @@
 		<table name="scheduledTaskHistTable"
 			description="$m{system.scheduledtaskhist.table}"
 			label="$m{system.scheduledtaskhist.table.label}"
-			entity="scheduledTaskHist" itemsPerPage="20" serialNo="true">
+			entity="scheduledTaskHist" itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="scheduledTaskDesc"
 				renderWidget="application.text" widthRatio="1" linkAct="maintainAct" />
 			<column field="taskName" renderWidget="application.text"
@@ -650,7 +657,7 @@
 		<table name="credentialTable"
 			description="$m{system.credential.table}"
 			label="$m{system.credential.table.label}" entity="credential"
-			itemsPerPage="20" serialNo="true">
+			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -663,7 +670,7 @@
 		<table name="downloadLogTable"
 			description="$m{system.downloadlog.table}"
 			label="$m{system.downloadlog.table.label}" entity="downloadLog"
-			itemsPerPage="20" serialNo="true">
+			itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="resourceName" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="remoteAddress" renderWidget="application.text"
@@ -678,7 +685,7 @@
 		<table name="environmentVariableTable"
 			description="$m{system.environmentvariable.table}"
 			label="$m{system.environmentvariable.table.label}"
-			entity="environmentVariable" itemsPerPage="20" serialNo="true">
+			entity="environmentVariable" itemsPerPage="20" serialNo="true" basicSearch="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"

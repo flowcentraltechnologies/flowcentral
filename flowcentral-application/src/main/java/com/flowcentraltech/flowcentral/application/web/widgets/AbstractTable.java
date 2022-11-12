@@ -201,8 +201,14 @@ public abstract class AbstractTable<T, U> {
         this.entryPolicy = policy;
     }
 
-    public int getItemsPerPage() {
-        return tableDef.getItemsPerPage();
+    public int getItemsPerPage() throws UnifyException {
+        final int itemsPerPage = tableDef.getItemsPerPage();
+        if (itemsPerPage >= 0) {
+            final int minItemsPerPage = au.getSearchMinimumItemsPerPage();
+            return itemsPerPage < minItemsPerPage  ? minItemsPerPage :itemsPerPage;
+        }
+
+        return itemsPerPage;
     }
 
     public List<DefaultReportColumn> getDefaultReportColumnList() {
@@ -649,7 +655,7 @@ public abstract class AbstractTable<T, U> {
             numberOfPages = 0;
         } else {
             if (tableDef.isPagination()) {
-                int itemsPerPage = tableDef.getItemsPerPage();
+                int itemsPerPage = getItemsPerPage();
                 numberOfPages = totalItemCount / itemsPerPage;
                 if (totalItemCount % itemsPerPage > 0) {
                     numberOfPages++;
@@ -662,7 +668,7 @@ public abstract class AbstractTable<T, U> {
 
     private void getDispItems() throws UnifyException {
         if (tableDef.isPagination()) {
-            int itemsPerPage = tableDef.getItemsPerPage();
+            int itemsPerPage = getItemsPerPage();
             dispStartIndex = pageIndex * itemsPerPage;
             dispEndIndex = dispStartIndex + itemsPerPage;
             if (dispEndIndex > totalItemCount) {

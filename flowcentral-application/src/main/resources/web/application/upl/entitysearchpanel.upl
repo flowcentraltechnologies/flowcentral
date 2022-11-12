@@ -78,9 +78,9 @@
 !fc-search:searchEntries binding:searchEntries
 !ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
 	components:$c{searchBtn clearBtn}
-!ui-button:searchBtn caption:$m{button.search}
+!ui-button:searchBtn caption:$m{button.search} styleClass:$e{fc-bluebutton fc-tinybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{searchAct}}
-!ui-button:clearBtn caption:$m{button.clear}
+!ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-tinybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
 	
 // Search filter panel

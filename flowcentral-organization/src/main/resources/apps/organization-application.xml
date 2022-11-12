@@ -13,6 +13,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="branchForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -29,6 +30,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="departmentForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -44,6 +46,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="roleForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -67,6 +70,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="zoneForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -121,14 +125,14 @@
 			type="com.flowcentraltech.flowcentral.organization.entities.Branch" auditable="true"
 			reportable="true">
 			<field name="zoneId" label="$m{organization.branch.zoneid}" type="ref"
-				filterLabel="$m{organization.branch.zone}"
-				inputWidget="application.entitysearch" references="zoneRef" />
+				inputLabel="$m{organization.branch.zone}"
+				inputWidget="application.entitysearch" references="zoneRef" basicSearch="true"/>
 			<field name="code" label="$m{organization.branch.code}" type="string"
-				inputWidget="application.name"  maxLen="16"/>
+				inputWidget="application.name"  maxLen="16" basicSearch="true"/>
 			<field name="description" label="$m{organization.branch.description}"
-				type="string" inputWidget="application.text" maxLen="64" />
+				type="string" inputWidget="application.text" maxLen="64" basicSearch="true"/>
 			<field name="sortCode" label="$m{organization.branch.sortcode}"
-				type="string" inputWidget="application.text" maxLen="32" nullable="true"/>
+				type="string" inputWidget="application.text" maxLen="32" nullable="true" basicSearch="true"/>
 			<field name="address" label="$m{organization.branch.address}"
 				type="string" inputWidget="application.textarea" maxLen="512" nullable="true"/>
 			<field name="headOffice" label="$m{organization.branch.headoffice}"
@@ -164,10 +168,10 @@
 			type="com.flowcentraltech.flowcentral.organization.entities.Department"
 			auditable="true" reportable="true">
 			<field name="code" label="$m{organization.department.code}"
-				type="string" inputWidget="application.name" maxLen="16" />
+				type="string" inputWidget="application.name" maxLen="16" basicSearch="true"/>
 			<field name="description"
 				label="$m{organization.department.description}" type="string"
-				inputWidget="application.text" maxLen="64" />
+				inputWidget="application.text" maxLen="64" basicSearch="true"/>
 			<uniqueConstraint name="codeUc"
 				description="$m{organization.department.uc.code}" fieldList="code" />
 			<uniqueConstraint name="descUc"
@@ -196,12 +200,12 @@
 			<field name="applicationId"
 				label="$m{organization.privilege.applicationid}" type="ref"
 				references="application.applicationRef"
-				filterLabel="$m{organization.privilege.application}"
+				inputLabel="$m{organization.privilege.application}"
 				inputWidget="application.entitylist" />
 			<field name="privilegeCategoryId"
 				label="$m{organization.privilege.privilegecategoryid}" type="ref"
 				references="privilegeCategoryRef"
-				filterLabel="$m{organization.privilege.privilegecategory}"
+				inputLabel="$m{organization.privilege.privilegecategory}"
 				inputWidget="application.entitylist" />
 			<field name="code" label="$m{organization.privilege.code}"
 				type="string" inputWidget="application.name" maxLen="64" />
@@ -225,12 +229,12 @@
 			reportable="true">
 			<field name="departmentId" label="$m{organization.role.departmentid}"
 				type="ref" references="departmentRef"
-				filterLabel="$m{organization.role.department}"
-				inputWidget="application.entitylist" />
+				inputLabel="$m{organization.role.department}"
+				inputWidget="application.entitylist" basicSearch="true"/>
 			<field name="code" label="$m{organization.role.code}" type="string"
-				inputWidget="application.name"  maxLen="16" />
+				inputWidget="application.name"  maxLen="16" basicSearch="true"/>
 			<field name="description" label="$m{organization.role.description}"
-				type="string" inputWidget="application.text" maxLen="64"  />
+				type="string" inputWidget="application.text" maxLen="64"  basicSearch="true"/>
 			<field name="activeAfter" label="$m{organization.role.activeafter}"
 				type="timestamp_utc" inputWidget="application.time" />
 			<field name="activeBefore" label="$m{organization.role.activebefore}"
@@ -256,7 +260,7 @@
 			label="$m{organization.roleprivilege.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.RolePrivilege">
 			<field name="roleId" label="$m{organization.roleprivilege.roleid}"
-				filterLabel="$m{organization.roleprivilege.role}" type="ref"
+				inputLabel="$m{organization.roleprivilege.role}" type="ref"
 				references="roleRef" inputWidget="application.entitysearch" />
 			<field name="privilegeId"
 				label="$m{organization.roleprivilege.privilegeid}" type="ref"
@@ -274,7 +278,7 @@
 			<field name="privilegeCategoryId"
 				label="$m{organization.roleprivilege.privilegecatid}" type="list_only"
 				key="privilegeId" property="privilegeCategoryId"
-				filterLabel="$m{organization.roleprivilege.privilegecat}"
+				inputLabel="$m{organization.roleprivilege.privilegecat}"
 				references="privilegeCategoryRef" inputWidget="application.entitylist" />
 			<field name="privilegeCatCode"
 				label="$m{organization.roleprivilege.privilegecatcode}" type="list_only"
@@ -285,7 +289,7 @@
 			<field name="applicationId"
 				label="$m{organization.roleprivilege.applicationid}" type="list_only"
 				key="privilegeId" property="applicationId"
-				filterLabel="$m{organization.roleprivilege.application}"
+				inputLabel="$m{organization.roleprivilege.application}"
 				references="application.applicationRef" inputWidget="application.entitylist" />
 			<field name="applicationName"
 				label="$m{organization.roleprivilege.applicationcode}" type="list_only"
@@ -302,9 +306,9 @@
 			type="com.flowcentraltech.flowcentral.organization.entities.Zone" auditable="true"
 			reportable="true">
 			<field name="code" label="$m{organization.zone.code}" type="string"
-				inputWidget="application.name" maxLen="16"  />
+				inputWidget="application.name" maxLen="16"  basicSearch="true"/>
 			<field name="description" label="$m{organization.zone.description}"
-				type="string" inputWidget="application.text" maxLen="64"  />
+				type="string" inputWidget="application.text" maxLen="64"  basicSearch="true"/>
 			<field name="languageTag" label="$m{organization.zone.languagetag}"
 				type="string" inputWidget="application.languagetag" maxLen="64"  nullable="true" />
 			<field name="timeZone" label="$m{organization.zone.timezone}"
@@ -325,7 +329,7 @@
 	<!-- Tables -->
 	<tables>
 		<table name="branchTable" description="$m{organization.branch.table}"
-			label="$m{organization.branch.table.label}" entity="branch" itemsPerPage="20"  serialNo="true">
+			label="$m{organization.branch.table.label}" entity="branch" itemsPerPage="20"  serialNo="true" basicSearch="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -344,7 +348,7 @@
 		<table name="departmentTable"
 			description="$m{organization.department.table}"
 			label="$m{organization.department.table.label}" entity="department"
-			itemsPerPage="20"  serialNo="true">
+			itemsPerPage="20"  serialNo="true" basicSearch="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -357,7 +361,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="roleTable" description="$m{organization.role.table}"
-			label="$m{organization.role.table.label}" entity="role" itemsPerPage="20"  serialNo="true">
+			label="$m{organization.role.table.label}" entity="role" itemsPerPage="20"  serialNo="true" basicSearch="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -391,7 +395,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="zoneTable" description="$m{organization.zone.table}"
-			label="$m{organization.zone.table.label}" entity="zone" itemsPerPage="20"  serialNo="true">
+			label="$m{organization.zone.table.label}" entity="zone" itemsPerPage="20"  serialNo="true" basicSearch="true">
 			<column field="code" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"

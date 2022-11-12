@@ -87,6 +87,15 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 public interface AppletUtilities extends UnifyComponent {
 
     /**
+     * Gets search minimum items per page.
+     * 
+     * @return the minimum items per page
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int getSearchMinimumItemsPerPage() throws UnifyException;
+    
+    /**
      * Gets filter group definition for applet.
      * 
      * @param appletName

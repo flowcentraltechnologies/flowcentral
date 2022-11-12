@@ -216,6 +216,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-inline-entry-button {font-size:7pt;font-weight:bold; min-height: 18px !important;margin-top: 2px; color: #404040;}
 
+.fc-tinybutton {font-size: 7pt; min-height: 24px;}
+
 /** Chart */
 .fc-chart {}
 
@@ -469,11 +471,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sfcol {display:table-cell; vertical-align: top;}
 .fc-search .sffield {display:table;width:100%;padding:2px 2px;border-collapse:initial;}
 .fc-search .sffieldrow {display:table-row;}
-.fc-search .sfpre {display:table-cell;width:96px;vertical-align:top;}
+.fc-search .sfpre {display:table-cell;width:72px;vertical-align:top;}
 .fc-search .sfmid {display:table-cell;}
 .fc-search .sfcon {}
 .fc-search .sflabel {margin-top:2px; text-align:right;}
-.fc-search .sflabel span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
+.fc-search .sflabel span {display:inline-block; padding-right:3px;font-size: 10px;font-weight: bold;color: #262c33;}
 .fc-search .sflabel .mfreq {width:9px; padding-right:4px;}
 .fc-search .sfcontent {}
 

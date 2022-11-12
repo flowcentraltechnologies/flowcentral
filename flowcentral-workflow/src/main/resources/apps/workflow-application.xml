@@ -198,7 +198,7 @@
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfStep" reportable="false"
 			auditable="false">
 			<field name="workflowId" label="$m{workflow.step.workflowid}"
-				type="ref" references="workflowRef" filterLabel="$m{workflow.step.workflow}"
+				type="ref" references="workflowRef" inputLabel="$m{workflow.step.workflow}"
 				inputWidget="application.entitysearch" />
 			<field name="type" label="$m{workflow.step.type}" type="enum_ref"
 				references="wfsteptypelist" inputWidget="application.enumlist" />
@@ -262,7 +262,7 @@
 			reportable="false" auditable="false">
 			<field name="wfStepId" label="$m{workflow.stepsetvalues.stepid}"
 				type="ref" references="wfStepRef"
-				filterLabel="$m{workflow.stepsetvalues.step}"
+				inputLabel="$m{workflow.stepsetvalues.step}"
 				inputWidget="application.entitylist" />
 			<field name="wfStepDesc" label="$m{workflow.stepsetvalues.stepdesc}"
 				type="list_only" key="wfStepId" property="description" />
@@ -275,7 +275,7 @@
 			reportable="false" auditable="false">
 			<field name="wfStepId" label="$m{workflow.steprouting.stepid}"
 				type="ref" references="wfStepRef"
-				filterLabel="$m{workflow.steprouting.step}"
+				inputLabel="$m{workflow.steprouting.step}"
 				inputWidget="application.entitylist" />
 			<field name="nextStepName"
 				label="$m{workflow.steprouting.nextstepname}" type="string"  maxLen="64" />
@@ -291,7 +291,7 @@
 			reportable="false" auditable="false">
 			<field name="wfStepId" label="$m{workflow.stepuseraction.stepid}"
 				type="ref" references="wfStepRef"
-				filterLabel="$m{workflow.stepuseraction.step}"
+				inputLabel="$m{workflow.stepuseraction.step}"
 				inputWidget="application.entitylist" />
 			<field name="commentRequirement"
 				label="$m{workflow.stepuseraction.commentrequirement}" type="enum_ref"
@@ -323,7 +323,7 @@
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert" reportable="false"
 			auditable="false">
 			<field name="wfStepId" label="$m{workflow.stepalert.stepid}" type="ref"
-				references="wfStepRef" filterLabel="$m{workflow.stepalert.step}"
+				references="wfStepRef" inputLabel="$m{workflow.stepalert.step}"
 				inputWidget="application.entitylist" />
 			<field name="type" label="$m{workflow.stepalert.type}" type="enum_ref"
 				references="wfalerttypelist" inputWidget="application.enumlist" />
@@ -357,10 +357,10 @@
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepRole" reportable="false"
 			auditable="false">
 			<field name="wfStepId" label="$m{workflow.steprole.stepid}" type="ref"
-				references="wfStepRef" filterLabel="$m{workflow.steprole.step}"
+				references="wfStepRef" inputLabel="$m{workflow.steprole.step}"
 				inputWidget="application.entitylist" />
 			<field name="roleId" label="$m{workflow.steprole.roleid}" type="ref"
-				references="organization.roleRef" filterLabel="$m{workflow.steprole.role}"
+				references="organization.roleRef" inputLabel="$m{workflow.steprole.role}"
 				inputWidget="application.entitysearch" />
 			<field name="wfStepName" label="$m{workflow.steprole.stepname}"
 				type="list_only" key="wfStepId" property="name" />

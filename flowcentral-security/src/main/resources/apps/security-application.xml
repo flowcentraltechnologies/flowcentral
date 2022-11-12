@@ -41,6 +41,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="userGroupForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -77,6 +78,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="userForm" />
             <property name="createForm.onCreate.state.policy" value="onCreateFormStatePolicy"/>
 			<property name="createForm.new.policy"
@@ -136,6 +138,7 @@
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="false" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="maintainForm" value="userResetForm" />
 			<property name="maintainForm.attachments" value="false" />
 			<property name="baseRestriction" value="nonSystemRecords" />
@@ -182,10 +185,10 @@
 			type="com.flowcentraltech.flowcentral.security.entities.UserGroup"
 			reportable="true" auditable="true">
 			<field name="name" label="$m{security.usergroup.name}"
-				type="string" inputWidget="application.name" maxLen="64" />
+				type="string" inputWidget="application.name" maxLen="64" basicSearch="true"/>
 			<field name="description"
 				label="$m{security.usergroup.description}" type="string"
-				inputWidget="application.text" maxLen="96" />
+				inputWidget="application.text" maxLen="96" basicSearch="true"/>
 			<field name="email" label="$m{security.usergroup.email}"
 				type="string" inputWidget="application.text" maxLen="64"
 				nullable="true" />
@@ -208,11 +211,11 @@
 			<field name="userGroupId"
 				label="$m{security.usergrouprole.usergroupid}" type="ref"
 				references="userGroupRef"
-				filterLabel="$m{security.usergrouprole.usergroup}"
+				inputLabel="$m{security.usergrouprole.usergroup}"
 				inputWidget="application.entitysearch" />
 			<field name="roleId" label="$m{security.usergrouprole.roleid}"
 				type="ref" references="organization.roleRef"
-				filterLabel="$m{security.usergrouprole.role}"
+				inputLabel="$m{security.usergrouprole.role}"
 				inputWidget="application.entitysearch" />
 			<field name="userGroupName"
 				label="$m{security.usergrouprole.usergroupname}" type="list_only"
@@ -252,11 +255,11 @@
 			<field name="userGroupId"
 				label="$m{security.usergroupmember.usergroupid}" type="ref"
 				references="userGroupRef"
-				filterLabel="$m{security.usergroupmember.usergroup}"
-				inputWidget="application.entitysearch" />
+				inputLabel="$m{security.usergroupmember.usergroup}"
+				inputWidget="application.entitysearch" basicSearch="true"/>
 			<field name="userId"
 				label="$m{security.usergroupmember.userid}" type="ref"
-				references="userRef" filterLabel="$m{security.usergroupmember.user}"
+				references="userRef" inputLabel="$m{security.usergroupmember.user}"
 				inputWidget="application.entitysearch" />
 			<field name="userGroupName"
 				label="$m{security.usergroupmember.usergroupname}" type="list_only"
@@ -290,16 +293,16 @@
 			<field name="workflowStatus"
 				label="$m{security.user.workflowstatus}" type="enum_ref"
 				inputWidget="application.enumlist"
-				references="userworkflowstatuslist" />
+				references="userworkflowstatuslist" basicSearch="true"/>
 			<field name="workflowStatusDesc"
 				label="$m{security.user.workflowstatus.description}"
 				type="list_only" inputWidget="application.text" key="workflowStatus"
 				property="description" />
 			<field name="branchId" label="$m{security.user.branch}"
 				type="ref" inputWidget="application.entitylist"
-				references="organization.branchRef" />
+				references="organization.branchRef" basicSearch="true"/>
 			<field name="fullName" label="$m{security.user.fullname}"
-				type="string" inputWidget="application.fullname" maxLen="96" />
+				type="string" inputWidget="application.fullname" maxLen="96" basicSearch="true"/>
 			<field name="loginId" label="$m{security.user.loginid}"
 				type="string" inputWidget="application.name" maxLen="64"
 				case="upper" />
@@ -366,11 +369,11 @@
 			type="com.flowcentraltech.flowcentral.security.entities.UserRole">
 			<field name="userId" label="$m{security.userrole.userid}"
 				type="ref" references="userRef"
-				filterLabel="$m{security.userrole.user}"
+				inputLabel="$m{security.userrole.user}"
 				inputWidget="application.entitysearch" />
 			<field name="roleId" label="$m{security.userrole.roleid}"
 				type="ref" references="organization.roleRef"
-				filterLabel="$m{security.userrole.role}"
+				inputLabel="$m{security.userrole.role}"
 				inputWidget="application.entitysearch" />
 			<field name="userName" label="$m{security.userrole.username}"
 				type="list_only" key="userId" property="fullName" />
@@ -418,7 +421,7 @@
 				references="logineventtypelist" />
 			<field name="userId"
 				label="$m{security.userloginevent.userid}" type="ref"
-				references="userRef" filterLabel="$m{security.userloginevent.user}"
+				references="userRef" inputLabel="$m{security.userloginevent.user}"
 				inputWidget="application.entitysearch" />
 			<field name="remoteAddress" label="$m{security.userloginevent.remoteaddress}"
 				type="string" inputWidget="application.text" auditable="false"
@@ -442,7 +445,7 @@
 		<table name="userGroupTable"
 			description="$m{security.usergroup.table}"
 			label="$m{security.usergroup.table.label}" entity="userGroup"
-			itemsPerPage="20"  serialNo="true">
+			itemsPerPage="20"  serialNo="true" basicSearch="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -489,7 +492,7 @@
 				widthRatio="1" />
 		</table>
 		<table name="userTable" description="$m{security.user.table}"
-			label="$m{security.user.table.label}" entity="user" itemsPerPage="20"  serialNo="true">
+			label="$m{security.user.table.label}" entity="user" itemsPerPage="20"  serialNo="true" basicSearch="true">
 			<column field="loginId" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="fullName" renderWidget="application.text"

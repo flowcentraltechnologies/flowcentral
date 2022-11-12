@@ -53,6 +53,7 @@ public class SearchWriter extends AbstractControlWriter {
         if (valueStoreList != null) {
             SearchEntries searchEntries = searchWidget.getSearchEntries();
             DynamicField paramCtrl = searchWidget.getParamCtrl();
+            final String captionSuffix = searchWidget.getCaptionSuffix();
             final int len = valueStoreList.size();
             final int columns = searchEntries.getColumns() > 0 ? searchEntries.getColumns() : 1;
             writer.write("<div class=\"sftable\">");
@@ -65,7 +66,7 @@ public class SearchWriter extends AbstractControlWriter {
                 for (j = 0; j < columns && i < len; j++, i++) {
                     writer.write("<div class=\"sfcol\">");
                     ValueStore itemValueStore = valueStoreList.get(i);
-                    writeFieldCell(writer, searchEntries, itemValueStore, paramCtrl);
+                    writeFieldCell(writer, searchEntries, itemValueStore, paramCtrl, captionSuffix);
                     writer.write("</div>");
                 }
 
@@ -106,7 +107,7 @@ public class SearchWriter extends AbstractControlWriter {
     }
 
     private void writeFieldCell(ResponseWriter writer, SearchEntries searchEntries, ValueStore lineValueStore,
-            Control ctrl) throws UnifyException {
+            Control ctrl, String captionSuffix) throws UnifyException {
         SearchEntry searchEntry = (SearchEntry) lineValueStore.getValueObject();
         writer.write("<div class=\"sffield\">");
         writer.write("<div class=\"sffieldrow\">");
@@ -117,8 +118,13 @@ public class SearchWriter extends AbstractControlWriter {
         writer.write("<span>");
         EntityFieldDef entityFieldDef = searchEntry.getEntityFieldDef();
         String suggestedLabel = searchEntries.getLabelSuggestion(entityFieldDef.getFieldName());
-        suggestedLabel = suggestedLabel != null ? suggestedLabel : entityFieldDef.getFieldLabel();
+        suggestedLabel = suggestedLabel != null ? suggestedLabel
+                : (entityFieldDef.isWithInputLabel() ? entityFieldDef.getInputLabel() : entityFieldDef.getFieldLabel());
         writer.writeWithHtmlEscape(suggestedLabel);
+        if (captionSuffix != null) {
+            writer.write(captionSuffix);
+        }
+
         writer.write("</span>");
         writer.write("</div>");
         writer.write("</div>");

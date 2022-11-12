@@ -65,4 +65,8 @@ public interface ApplicationModuleSysParamConstants {
 
     String SHOW_BUTTONS_FOR_FOOTER_ACTION = "APP-0015";
 
+    String SEARCH_ENTRY_COLUMNS = "APP-0016";
+
+    String SEARCH_MINIMUM_ITEMS_PER_PAGE = "APP-0017";
+
 }

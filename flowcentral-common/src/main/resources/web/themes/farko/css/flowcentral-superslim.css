@@ -8,6 +8,10 @@
 input[type = "text"],input[type = "password"] {height:24px;border-color: #b0b0b0;}
 select:not([multiple]){height:24px;}
 
+body, td, th, button, input, select, textarea {
+  font-size: 8pt;
+}
+
 /** Button */ 
 .ui-button {min-height:24px;}
 .ui-button-alert {min-height:24px;}
