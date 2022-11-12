@@ -24,7 +24,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.constants.ListingRowColorType;
+import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
@@ -119,7 +119,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
         Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
                 .title("listingReport");
-        Set<ListingRowColorType> pausePrintColors = getPausePrintColors();
+        Set<ListingColorType> pausePrintColors = getPausePrintColors();
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
             writer.write("<div class=\"fc-formlisting\">");
@@ -151,7 +151,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         generateListing(formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
     }
 
-    protected abstract Set<ListingRowColorType> getPausePrintColors() throws UnifyException;
+    protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;
 
     @Override
     protected void onInitialize() throws UnifyException {
@@ -235,7 +235,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     private void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
-            ResponseWriter writer, Set<ListingRowColorType> pausePrintColors, boolean highlighting)
+            ResponseWriter writer, Set<ListingColorType> pausePrintColors, boolean highlighting)
             throws UnifyException {
         doGenerate(formBeanValueStore, listingProperties,
                 new ListingGeneratorWriter("", writer, pausePrintColors, highlighting));

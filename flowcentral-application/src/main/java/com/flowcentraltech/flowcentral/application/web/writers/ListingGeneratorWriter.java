@@ -16,12 +16,17 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
-import com.flowcentraltech.flowcentral.application.constants.ListingRowColorType;
+import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
+import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
 /**
@@ -36,7 +41,7 @@ public class ListingGeneratorWriter {
 
     private ListingColumn[] columns;
 
-    private ListingRowColorType rowColor;
+    private ListingColorType rowColor;
 
     private final String listingType;
     
@@ -52,7 +57,9 @@ public class ListingGeneratorWriter {
 
     private boolean pauseRowPrinting;
     
-    private Set<ListingRowColorType> pauseRowPrintColors;
+    private List<ItemColorRule> itemColorRules;
+    
+    private Set<ListingColorType> pauseRowPrintColors;
     
     public ListingGeneratorWriter(String listingType, ResponseWriter writer) {
         this.listingType = listingType;
@@ -60,26 +67,56 @@ public class ListingGeneratorWriter {
         this.highlighting = true;
         this.pauseRowPrinting = false;
         this.pauseRowPrintColors = Collections.emptySet();
+        this.itemColorRules = new ArrayList<ItemColorRule>();
     }
 
-    public ListingGeneratorWriter(String listingType, ResponseWriter writer, Set<ListingRowColorType> pausePrintColors,
+    public ListingGeneratorWriter(String listingType, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) {
         this.listingType = listingType;
         this.writer = writer;
         this.highlighting = highlighting;
         this.pauseRowPrinting = false;
         this.pauseRowPrintColors = pausePrintColors;
+        this.itemColorRules = new ArrayList<ItemColorRule>();
     }
 
     public String getListingType() {
         return listingType;
     }
 
-    public ListingRowColorType getRowColor() {
+    public ListingColorType getRowColor() {
         return rowColor;
     }
 
-    public void setRowColor(ListingRowColorType rowColor) {
+    public void addItemColorRule(Restriction restriction, ListingColorType color) {
+        itemColorRules.add(new ItemColorRule(new ObjectFilter(restriction), color));
+    }
+    
+    public void clearItemColorRules() {
+        itemColorRules.clear();
+    }
+    
+    public ListingColorType getItemColor(ValueStore valueStore) throws UnifyException {
+        for (ItemColorRule rule: itemColorRules) {
+            if (rule.filter.match(valueStore)) {
+                return rule.color;
+            }
+        }
+        
+        return null;
+    }
+    
+    public ListingColorType getItemColor(Object bean) throws UnifyException {
+        for (ItemColorRule rule: itemColorRules) {
+            if (rule.filter.match(bean)) {
+                return rule.color;
+            }
+        }
+        
+        return null;
+    }
+    
+    public void setRowColor(ListingColorType rowColor) {
         pauseRowPrinting = pauseRowPrintColors.contains(rowColor);
         if (highlighting) {
             this.rowColor = rowColor;
@@ -218,6 +255,19 @@ public class ListingGeneratorWriter {
         }
     }
 
+    private class ItemColorRule {
+        
+        private final ObjectFilter filter;
+        
+        private final ListingColorType color;
+
+        public ItemColorRule(ObjectFilter filter, ListingColorType color) {
+            this.filter = filter;
+            this.color = color;
+        }
+        
+    }
+    
     private void internalWriteRow(ListingColumn[] columns, ListingCell... cells) throws UnifyException {
         writer.write("<div class=\"flrow\"");
         if (isWithRowColor()) {
@@ -231,7 +281,13 @@ public class ListingGeneratorWriter {
             ListingColumn column = columns[cellIndex];
             ListingCell cell = cells[cellIndex];
             writer.write("<div class=\"flcell").write(ListingUtils.getBorderStyle(cell.getBorders()))
-                    .write("\" style=\"width:").write(column.getWidthPercent()).write("%;\">");
+                    .write("\" style=\"width:").write(column.getWidthPercent()).write("%;");
+            if (cell.isWithCellColor()) {
+                writer.write("background-color:");
+                writer.write(cell.getCellColor().backgroundColor());
+                writer.write(";");
+            }
+            writer.write("\">");
             writer.write("<span class=\"flcontent ").write(cell.getType().styleClass()).write(" ")
                     .write(column.getAlign().styleClass()).write("\">");
             if (cell.isWithContent()) {
