@@ -35,9 +35,9 @@
     eventHandler:$d{!ui-event event:onenter action:$c{searchAct}}
 !ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
 	components:$c{reloadBtn clearBtn}
-!ui-button:reloadBtn caption:$m{button.reload} styleClass:$e{fc-bluebutton}
+!ui-button:reloadBtn caption:$m{button.reload} styleClass:$e{fc-bluebutton fc-tinybutton}
 	eventHandler:$d{!ui-event event:onclick action:$c{reloadAct}}
-!ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-graybutton}
+!ui-button:clearBtn caption:$m{button.clear} styleClass:$e{fc-tinybutton}
     eventHandler:$d{!ui-event event:onclick action:$c{clearAct}}
 
 // Color legend

@@ -234,7 +234,8 @@ public class TableDef extends BaseApplicationEntityDef {
             return columnDef.getLabel();
         }
 
-        return entityDef.getFieldDef(columnDef.getFieldName()).getFieldLabel();
+        EntityFieldDef entityFieldDef = entityDef.getFieldDef(columnDef.getFieldName());
+        return entityFieldDef.isWithInputLabel() ? entityFieldDef.getInputLabel() : entityFieldDef.getFieldLabel();
     }
 
     public EntityFieldDef getFieldDef(String name) {

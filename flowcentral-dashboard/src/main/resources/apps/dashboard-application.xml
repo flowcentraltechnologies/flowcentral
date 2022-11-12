@@ -125,7 +125,7 @@
 			<field name="dashboardId"
 				label="$m{dashboard.dashboardtile.dashboardid}" type="ref"
 				references="dashboardRef"
-				filterLabel="$m{dashboard.dashboardtile.dashboard}"
+				inputLabel="$m{dashboard.dashboardtile.dashboard}"
 				inputWidget="application.entitysearch" />
 			<field name="chart" label="$m{dashboard.dashboardtile.chart}"
 				type="string" inputWidget="chart.chartlist" maxLen="128" />

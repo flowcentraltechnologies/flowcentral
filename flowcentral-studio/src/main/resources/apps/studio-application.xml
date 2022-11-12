@@ -2097,6 +2097,8 @@
 						column="1" required="true" disabled="true" />
 					<field name="columnName" inputWidget="application.columnname"
 						column="1" required="false" />
+					<field name="inputLabel" inputWidget="application.text" column="1"
+						required="false" />
 					<field name="inputWidget" inputWidget="entityfieldwidgetlist"
 						column="1" switchOnChange="true" />
 					<field name="suggestionType" inputWidget="suggestiontypelist"

@@ -15,6 +15,7 @@
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="createForm" value="workspaceForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -62,9 +63,9 @@
 			<field name="code" label="$m{workspace.workspace.code}" type="string"
 				inputWidget="application.name"  maxLen="32" />
 			<field name="name" label="$m{workspace.workspace.name}" type="string"
-				inputWidget="application.name"  maxLen="64" />
+				inputWidget="application.name"  maxLen="64"  basicSearch="true"/>
 			<field name="description" label="$m{workspace.workspace.description}"
-				type="string" inputWidget="application.text" maxLen="96"  />
+				type="string" inputWidget="application.text" maxLen="96"  basicSearch="true"/>
 			<field name="privilegeList" label="$m{workspace.workspace.privileges}"
 				type="child_list" references="workspacePrivilegeRef" />
 			<uniqueConstraint name="codeUc"
@@ -79,7 +80,7 @@
 			label="$m{workspace.workspaceprivilege.label}"
 			type="com.flowcentraltech.flowcentral.workspace.entities.WorkspacePrivilege">
 			<field name="workspaceId" label="$m{workspace.workspaceprivilege.workspaceid}"
-				filterLabel="$m{workspace.workspaceprivilege.workspace}" type="ref"
+				inputLabel="$m{workspace.workspaceprivilege.workspace}" type="ref"
 				references="workspaceRef" inputWidget="application.entitylist" />
 			<field name="privilegeId"
 				label="$m{workspace.workspaceprivilege.privilegeid}" type="ref"
@@ -97,7 +98,7 @@
 			<field name="privilegeCategoryId"
 				label="$m{workspace.workspaceprivilege.privilegecatid}" type="list_only"
 				key="privilegeId" property="privilegeCategoryId"
-				filterLabel="$m{workspace.workspaceprivilege.privilegecat}"
+				inputLabel="$m{workspace.workspaceprivilege.privilegecat}"
 				references="organization.privilegeCategoryRef" inputWidget="application.entitylist" />
 			<field name="privilegeCatCode"
 				label="$m{workspace.workspaceprivilege.privilegecatcode}" type="list_only"
@@ -108,7 +109,7 @@
 			<field name="applicationId"
 				label="$m{workspace.workspaceprivilege.applicationid}" type="list_only"
 				key="privilegeId" property="applicationId"
-				filterLabel="$m{workspace.workspaceprivilege.application}"
+				inputLabel="$m{workspace.workspaceprivilege.application}"
 				references="application.applicationRef" inputWidget="application.entitylist" />
 			<field name="applicationName"
 				label="$m{workspace.workspaceprivilege.applicationcode}" type="list_only"
@@ -125,7 +126,7 @@
 	<tables>
 		<table name="workspaceTable" description="$m{workspace.workspace.table}"
 			label="$m{workspace.workspace.table.label}" entity="workspace"
-			itemsPerPage="20">
+			itemsPerPage="20" basicSearch="true">
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="code" renderWidget="application.text"

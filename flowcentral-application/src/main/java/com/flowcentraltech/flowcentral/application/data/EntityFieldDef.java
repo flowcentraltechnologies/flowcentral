@@ -219,6 +219,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return !StringUtils.isBlank(columnName);
     }
 
+    public boolean isWithInputLabel() {
+        return !StringUtils.isBlank(inputLabel);
+    }
+
     @Override
     public String getReferences() {
         return references;

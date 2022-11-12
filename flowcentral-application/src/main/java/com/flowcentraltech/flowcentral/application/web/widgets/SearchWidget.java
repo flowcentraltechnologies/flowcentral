@@ -20,6 +20,8 @@ import java.util.List;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplAttribute;
+import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
@@ -31,6 +33,7 @@ import com.tcdng.unify.web.ui.widget.control.DynamicField;
  * @since 1.0
  */
 @Component("fc-search")
+@UplAttributes({@UplAttribute(name = "captionSuffix", type = String.class, defaultVal = ":")})
 public class SearchWidget extends AbstractValueListWidget<SearchEntry> {
 
     private DynamicField paramCtrl;
@@ -49,6 +52,10 @@ public class SearchWidget extends AbstractValueListWidget<SearchEntry> {
         }
     }
 
+    public String getCaptionSuffix() throws UnifyException {
+        return getUplAttribute(String.class, "captionSuffix");
+    }
+    
     public DynamicField getParamCtrl() {
         return paramCtrl;
     }

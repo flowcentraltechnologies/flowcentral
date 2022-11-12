@@ -837,6 +837,8 @@
 			<field name="property"
 				label="$m{application.appentityfield.property}" type="string"
 				nullable="true" />
+			<field name="inputLabel"
+				label="$m{application.appentityfield.inputlabel}" type="string" nullable="true"/>
 			<field name="inputWidget"
 				label="$m{application.appentityfield.inputwidget}" type="string"
 				nullable="true" />
