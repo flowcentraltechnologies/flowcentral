@@ -475,7 +475,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sfmid {display:table-cell;}
 .fc-search .sfcon {}
 .fc-search .sflabel {margin-top:2px; text-align:right;}
-.fc-search .sflabel span {display:inline-block; padding-right:3px;font-size: 10px;font-weight: bold;color: #262c33;}
+.fc-search .sflabel span {display:inline-block; padding-right:3px;font-size: 7pt;font-weight: bold;color: #262c33;}
 .fc-search .sflabel .mfreq {width:9px; padding-right:4px;}
 .fc-search .sfcontent {}
 
