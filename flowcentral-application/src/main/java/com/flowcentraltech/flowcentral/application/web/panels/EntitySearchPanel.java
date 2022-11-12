@@ -292,6 +292,7 @@ public class EntitySearchPanel extends AbstractPanel {
                     appTableActionPolicy);
             EntityListActionResult entityActionResult = entitySearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
+            tableWidget.clearSelected();
             entitySearch.applyFilterToSearch();
             getRequestContextUtil().setContentScrollReset();
         }

@@ -525,6 +525,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         getTable().setSelectedRows(selected);
     }
 
+    public void clearSelected() throws UnifyException {
+        getTable().setSelectedRows(Collections.emptySet());
+    }
+
     public String getTabMemoryId() {
         return tabMemoryId;
     }
