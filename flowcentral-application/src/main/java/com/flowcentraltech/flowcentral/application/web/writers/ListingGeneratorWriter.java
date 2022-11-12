@@ -122,6 +122,16 @@ public class ListingGeneratorWriter {
             this.rowColor = rowColor;
         }
     }
+    
+    public boolean isPausePrint(ValueStore valueStore) throws UnifyException {
+        ListingColorType color = getItemColor(valueStore);
+        return color != null && pauseRowPrintColors.contains(color);
+    }
+    
+    public boolean isPausePrint(Object bean) throws UnifyException {
+        ListingColorType color = getItemColor(bean);
+        return color != null && pauseRowPrintColors.contains(color);
+    }
 
     public boolean isWithRowColor() {
         return rowColor != null;
@@ -282,7 +292,7 @@ public class ListingGeneratorWriter {
             ListingCell cell = cells[cellIndex];
             writer.write("<div class=\"flcell").write(ListingUtils.getBorderStyle(cell.getBorders()))
                     .write("\" style=\"width:").write(column.getWidthPercent()).write("%;");
-            if (cell.isWithCellColor()) {
+            if (highlighting && cell.isWithCellColor()) {
                 writer.write("background-color:");
                 writer.write(cell.getCellColor().backgroundColor());
                 writer.write(";");
