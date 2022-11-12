@@ -745,6 +745,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void maintain() throws UnifyException {
         String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
         if (po.length > 0) {
+            getRequestContextUtil().setContentScrollReset();
             String valMarker = po[0];
             int mIndex = Integer.parseInt(po[1]);
             if (valMarker != null) {
@@ -768,9 +769,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
                     setCommandResultMapping("viewlistingreport");
                 }
-            }
-            
-            getRequestContextUtil().setContentScrollReset();
+            }            
         } else {
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
@@ -778,6 +777,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void listing() throws UnifyException {
+        getRequestContextUtil().setContentScrollReset();
         String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
         String valMarker = po[0];
         int mIndex = Integer.parseInt(po[1]);
@@ -800,7 +800,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         getEntityFormApplet().listingInst(mIndex);
-        getRequestContextUtil().setContentScrollReset();
     }
 
     @Action
