@@ -17,12 +17,12 @@
 package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Listing row color type.
+ * Listing color type.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum ListingRowColorType {
+public enum ListingColorType {
 
     RED("#ffbeb2"),
     YELLOW("#fff5b0"),
@@ -32,7 +32,7 @@ public enum ListingRowColorType {
 
     private final String backgroundColor;
     
-    private ListingRowColorType(String backgroundColor) {
+    private ListingColorType(String backgroundColor) {
         this.backgroundColor = backgroundColor;
     }
 

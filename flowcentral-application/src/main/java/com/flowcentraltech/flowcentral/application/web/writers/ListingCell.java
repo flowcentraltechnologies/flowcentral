@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -36,7 +37,9 @@ public class ListingCell {
     
     public static final int BORDER_ALL = BORDER_TOP | BORDER_RIGHT | BORDER_BOTTOM | BORDER_LEFT;
     
-    private  ListingCellType type;
+    private ListingCellType type;
+    
+    private ListingColorType cellColor;
     
     private String content;
     
@@ -81,6 +84,49 @@ public class ListingCell {
         this.contentStyle = contentStyle;
    }
 
+    public ListingCell(ListingCellType type, ListingColorType cellColor, String content, int borders) {
+        this.type = type;
+        this.cellColor = cellColor;
+        this.content = content;
+        this.borders = borders;
+    }
+
+    public ListingCell(ListingCellType type, ListingColorType cellColor, String content, String contentStyle, int borders) {
+        this.type = type;
+        this.cellColor = cellColor;
+        this.content = content;
+        this.contentStyle = contentStyle;
+        this.borders = borders;
+    }
+
+    public ListingCell(ListingColorType cellColor, String content, String contentStyle, int borders) {
+        this.type = ListingCellType.TEXT;
+        this.cellColor = cellColor;
+        this.content = content;
+        this.contentStyle = contentStyle;
+        this.borders = borders;
+   }
+
+    public ListingCell(ListingCellType type, ListingColorType cellColor, String content) {
+        this.type = type;
+        this.cellColor = cellColor;
+        this.content = content;
+    }
+
+    public ListingCell(ListingCellType type, ListingColorType cellColor, String content, String contentStyle) {
+        this.type = type;
+        this.cellColor = cellColor;
+        this.content = content;
+        this.contentStyle = contentStyle;
+    }
+
+    public ListingCell(ListingColorType cellColor, String content, String contentStyle) {
+        this.type = ListingCellType.TEXT;
+        this.cellColor = cellColor;
+        this.content = content;
+        this.contentStyle = contentStyle;
+   }
+    
     public ListingCellType getType() {
         return type;
     }
@@ -103,6 +149,14 @@ public class ListingCell {
 
     public boolean isWithContentStyle() {
         return !StringUtils.isBlank(contentStyle);
+    }
+    
+    public ListingColorType getCellColor() {
+        return cellColor;
+    }
+
+    public boolean isWithCellColor() {
+        return cellColor != null;
     }
     
     public boolean isFileImage() {
