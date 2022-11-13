@@ -536,8 +536,6 @@
 			description="$m{security.userloginevent.table}"
 			label="$m{security.userloginevent.table.label}" entity="userLoginEvent"
 			itemsPerPage="20"  serialNo="true">
-			<column field="userFullName" renderWidget="application.name"
-				widthRatio="1" />
 			<column field="remoteAddress" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="remoteHost" renderWidget="application.text"

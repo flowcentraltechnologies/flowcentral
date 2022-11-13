@@ -304,6 +304,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE, tableName));
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_NEW, "true"));
                     appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER, "true"));
+                    appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_BASICSEARCHONLY, "true"));
                     if (entityDef.isReportable()) {
                         appletPropList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_REPORT, "true"));
                     }

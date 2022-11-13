@@ -542,7 +542,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table td {height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
 .fc-table .table .minfo td {padding: 0px 0px;}
 .fc-table .table .cselh {width: 32px;}
-.fc-table .table .cserialh {width: 48px;}
+.fc-table .table .cserialh {width: 32px;}
 .fc-table .table .cactionh {width: 32px;}
 .fc-table .table .cfixedh {width: 48px;}
 .fc-table .table .mselh {width: 22px;}
@@ -551,7 +551,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mseld {background-color: #e3e7ea;}
 .fc-table .table .mseld span {width:16px; height:16px;}
 .fc-table .table .mseld input {display:none;}
-.fc-table .table .mserialh {width: 48px;}
+.fc-table .table .mserialh {width: 32px;}
 .fc-table .table .mactionh {width: 20px;}
 .fc-table .table .mfixedh {width: 48px;}
 .fc-table .table .mcrudh {width: 64px;}
@@ -715,7 +715,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-assignmentpagepanel .ui-assignmentbox .abmselect {height: 472px;}
 
 /** Comments panel */
-.fc-commentspanel {}
+.fc-commentspanel {max-width:1240px;}
 
 /* Child panel */
 .fc-childpanel {}

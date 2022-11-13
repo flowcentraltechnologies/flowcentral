@@ -152,16 +152,16 @@ public class LoadingSearchPanel extends AbstractPanel {
     }
 
     private void applyTableBtnAction(String appTableActionPolicy) throws UnifyException {
-        LoadingSearch loadingSearch = getLoadingSearch();
+        LoadingTableWidget tableWidget = getWidgetByShortName(LoadingTableWidget.class, "searchResultTbl");
         if (!StringUtils.isBlank(appTableActionPolicy)) {
-            LoadingTableWidget tableWidget = getWidgetByShortName(LoadingTableWidget.class, "searchResultTbl");
+            LoadingSearch loadingSearch = getLoadingSearch();
             EntityListActionContext eCtx = new EntityListActionContext(tableWidget.getSelectedItems(),
                     appTableActionPolicy);
             EntityListActionResult entityActionResult = loadingSearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
-//            loadingSearch.applySearchEntriesToSearch();
-//            getRequestContextUtil().setContentScrollReset();
         }
+        
+        tableWidget.clearSelected();
     }
 
     private void handleEntityActionResult(EntityListActionResult entityActionResult) throws UnifyException {

@@ -77,7 +77,7 @@
 		<sysParameter code="APP-0016" defaultVal="4"
 			description="$m{application.sysparam.searchentrycolumns}"
 			editor="!ui-integer precision:1" type="number" editable="true" />
-		<sysParameter code="APP-0017" defaultVal="30"
+		<sysParameter code="APP-0017" defaultVal="25"
 			description="$m{application.sysparam.searchminimumitemsperpage}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
 	</sysParameters>
