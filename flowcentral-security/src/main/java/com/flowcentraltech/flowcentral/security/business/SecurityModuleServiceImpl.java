@@ -144,7 +144,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (!UserWorkflowStatus.APPROVED.equals(user.getWorkflowStatus())) {
             throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_APPROVED);
         }
-        
+
         if (!RecordStatus.ACTIVE.equals(user.getStatus())) {
             throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ACTIVE);
         }
@@ -168,13 +168,17 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
         environment().updateAll(new UserQuery().id(user.getId()), update);
         // Log login event
-        SessionContext ctx = getSessionContext();
-        UserLoginEvent userLoginEvent = new UserLoginEvent();
-        userLoginEvent.setEventType(LoginEventType.LOGIN);
-        userLoginEvent.setUserId(user.getId());
-        userLoginEvent.setRemoteAddress(ctx.getRemoteAddress());
-        userLoginEvent.setRemoteHost(ctx.getRemoteHost());
-        environment().create(userLoginEvent);
+        final boolean keepUserLoginEvents = systemModuleService.getSysParameterValue(boolean.class,
+                SecurityModuleSysParamConstants.KEEP_USER_LOGIN_EVENTS);
+        if (keepUserLoginEvents) {
+            SessionContext ctx = getSessionContext();
+            UserLoginEvent userLoginEvent = new UserLoginEvent();
+            userLoginEvent.setEventType(LoginEventType.LOGIN);
+            userLoginEvent.setUserId(user.getId());
+            userLoginEvent.setRemoteAddress(ctx.getRemoteAddress());
+            userLoginEvent.setRemoteHost(ctx.getRemoteHost());
+            environment().create(userLoginEvent);
+        }
 
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
@@ -228,15 +232,20 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void logoutUser(boolean complete) throws UnifyException {
         // Log login event
-        Long userId = environment().value(Long.class, "id", new UserQuery().loginId(getUserToken().getUserLoginId()));
-        SessionContext ctx = getSessionContext();
-        UserLoginEvent userLoginEvent = new UserLoginEvent();
-        userLoginEvent.setEventType(LoginEventType.LOGOUT);
-        userLoginEvent.setUserId(userId);
-        userLoginEvent.setRemoteAddress(ctx.getRemoteAddress());
-        userLoginEvent.setRemoteHost(ctx.getRemoteHost());
-        environment().create(userLoginEvent);
-        
+        final boolean keepUserLoginEvents = systemModuleService.getSysParameterValue(boolean.class,
+                SecurityModuleSysParamConstants.KEEP_USER_LOGIN_EVENTS);
+        if (keepUserLoginEvents) {
+            Long userId = environment().value(Long.class, "id",
+                    new UserQuery().loginId(getUserToken().getUserLoginId()));
+            SessionContext ctx = getSessionContext();
+            UserLoginEvent userLoginEvent = new UserLoginEvent();
+            userLoginEvent.setEventType(LoginEventType.LOGOUT);
+            userLoginEvent.setUserId(userId);
+            userLoginEvent.setRemoteAddress(ctx.getRemoteAddress());
+            userLoginEvent.setRemoteHost(ctx.getRemoteHost());
+            environment().create(userLoginEvent);
+        }
+
         // Logout
         userSessionManager.logout(complete);
     }

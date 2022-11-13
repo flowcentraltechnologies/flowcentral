@@ -57,4 +57,6 @@ public interface SecurityModuleSysParamConstants {
 
     String USE_LOGIN_LOCALE = "SEC-0011";
 
+    String KEEP_USER_LOGIN_EVENTS = "SEC-0012";
+
 }
