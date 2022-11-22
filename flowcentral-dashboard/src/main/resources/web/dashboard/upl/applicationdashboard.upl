@@ -14,7 +14,7 @@
 // the License.
 
 !ui-page caption:$m{applicationdashboard.title} components:$c{basePanel}
-
+	subCaption:$m{applicationdashboard.title}
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{dashboardHeaderPanel dashboardSlatePanel}
 

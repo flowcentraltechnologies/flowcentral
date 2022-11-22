@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
@@ -93,6 +94,13 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     public void setLicenseProvider(LicenseProvider licenseProvider) {
         this.licenseProvider = licenseProvider;
+    }
+
+    @Action
+    @Override
+    public String content() throws UnifyException {
+        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
     @Action
@@ -180,8 +188,11 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
         final boolean enableMultipleTabs = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_MULTIPLE_TABS);
+        final boolean indicateHighLatency = system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_HIGH_LATENCY_INDICATION);
         final String contentStyleClass = enableMultipleTabs ? "fc-content-tabbed" : "fc-content";
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
+        pageBean.setIndicateHighLatency(indicateHighLatency);
         pageBean.setContentStyleClass(contentStyleClass);
     }
 

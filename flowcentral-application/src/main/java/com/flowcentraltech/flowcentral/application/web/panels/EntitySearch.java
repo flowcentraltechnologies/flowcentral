@@ -391,10 +391,12 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public void applyFilterToSearch() throws UnifyException {
-        EntityDef entityDef = entityFilter.getEntityDef();
-        Restriction restriction = entityFilter.getRestriction(getAppletCtx().au().getNow());
-        applyRestrictionToSearch(entityDef, restriction);
-        entityFilterTranslation = getAppletCtx().au().translate(restriction, entityDef);
+        if (!getAppletCtx().au().isLowLatencyRequest()) {
+            EntityDef entityDef = entityFilter.getEntityDef();
+            Restriction restriction = entityFilter.getRestriction(getAppletCtx().au().getNow());
+            applyRestrictionToSearch(entityDef, restriction);
+            entityFilterTranslation = getAppletCtx().au().translate(restriction, entityDef);
+        }
     }
 
     private void localApplyQuickFilter() throws UnifyException {

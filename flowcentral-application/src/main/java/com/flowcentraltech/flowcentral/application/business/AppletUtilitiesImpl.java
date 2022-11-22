@@ -255,6 +255,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public boolean isLowLatencyRequest() throws UnifyException {
+        return pageRequestContextUtil.isLowLatencyRequest();
+    }
+
+    @Override
     public int getSearchMinimumItemsPerPage() throws UnifyException {
         int minimumItemsPerPage = systemModuleService.getSysParameterValue(int.class,
                 ApplicationModuleSysParamConstants.SEARCH_MINIMUM_ITEMS_PER_PAGE);

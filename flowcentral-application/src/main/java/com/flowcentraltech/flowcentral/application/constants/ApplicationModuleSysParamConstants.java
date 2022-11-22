@@ -69,4 +69,5 @@ public interface ApplicationModuleSysParamConstants {
 
     String SEARCH_MINIMUM_ITEMS_PER_PAGE = "APP-0017";
 
+    String ENABLE_HIGH_LATENCY_INDICATION = "APP-0018";
 }

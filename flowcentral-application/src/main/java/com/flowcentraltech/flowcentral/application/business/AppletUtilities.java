@@ -87,6 +87,15 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 public interface AppletUtilities extends UnifyComponent {
 
     /**
+     * Checks if request is low latency
+     * 
+     * @return true if low latency otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isLowLatencyRequest() throws UnifyException;
+
+    /**
      * Gets search minimum items per page.
      * 
      * @return the minimum items per page
