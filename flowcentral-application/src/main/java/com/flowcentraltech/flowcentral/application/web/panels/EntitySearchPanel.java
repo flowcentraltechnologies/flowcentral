@@ -107,7 +107,7 @@ public class EntitySearchPanel extends AbstractPanel {
             setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
             setVisible("footerActionPanel", entitySearch.isShowActionFooter());
             setVisible("switchToAdvanced", !entitySearch.isBasicSearchOnly());
-            setVisible("searchEntriesHeader", entitySearch.isWithBaseFilter());
+            setVisible("searchEntriesHeader", entitySearch.isShowBaseFilter());
         } else {
             setVisible("searchEntriesPanel", false);
             setVisible("searchFilterPanel", entitySearch.isShowSearch());
@@ -115,7 +115,7 @@ public class EntitySearchPanel extends AbstractPanel {
             setVisible("footerActionPanel", entitySearch.isShowActionFooter());
             setVisible("searchFilterBody", entitySearch.isFilterEditorVisible());
             setDisabled("toggleFilterBtn", !entitySearch.isEditFilterEnabled());
-            setVisible("baseFilterTranslation", entitySearch.isWithBaseFilter());
+            setVisible("baseFilterTranslation", entitySearch.isShowBaseFilter());
             if (entitySearch.isFilterEditorVisible()) {
                 setVisible("tackFilterBtn", entitySearch.isShowFilterThumbtack());
                 setDisabled("tackFilterBtn", entitySearch.isFilterEditorPinned());

@@ -1194,6 +1194,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final String defaultQuickFilter = _appletDef.getPropValue(String.class,
                 AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER_DEFAULT);
 
+        final boolean showBaseRestriction = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SHOW_RESOLVED_BASE_RESTRICTION);
+
         final int searchEntryColumns = systemModuleService.getSysParameterValue(int.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
@@ -1202,6 +1205,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 isIgnoreParentCondition);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
+        _entitySearch.setShowBaseRestriction(showBaseRestriction);
         if (_appletDef.isDescriptiveButtons()) {
             String addCaption = _appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE_NEW_CAPTION);
             if (!StringUtils.isBlank(addCaption)) {

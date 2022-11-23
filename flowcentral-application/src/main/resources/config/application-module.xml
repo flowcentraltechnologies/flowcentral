@@ -80,8 +80,11 @@
 		<sysParameter code="APP-0017" defaultVal="25"
 			description="$m{application.sysparam.searchminimumitemsperpage}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
-		<sysParameter code="APP-0018" defaultVal="false"
+		<sysParameter code="APP-0018" defaultVal="true"
 			description="$m{application.sysparam.highlatencyindication}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0019" defaultVal="false"
+			description="$m{application.sysparam.showresolvedbaserestriction}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>
