@@ -36,6 +36,8 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
     
     private boolean enableMultipleTabs;
     
+    private boolean indicateHighLatency;
+    
     public LoginUserPhotoGenerator getUserPhotoGenerator() {
         return userPhotoGenerator;
     }
@@ -74,6 +76,14 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setEnableMultipleTabs(boolean enableMultipleTabs) {
         this.enableMultipleTabs = enableMultipleTabs;
+    }
+
+    public boolean isIndicateHighLatency() {
+        return indicateHighLatency;
+    }
+
+    public void setIndicateHighLatency(boolean indicateHighLatency) {
+        this.indicateHighLatency = indicateHighLatency;
     }
 
 }

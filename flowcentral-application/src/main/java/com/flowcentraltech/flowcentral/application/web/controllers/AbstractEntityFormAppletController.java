@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.EntityTreeSelectGenerator;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
@@ -26,7 +27,9 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEnt
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
@@ -48,9 +51,16 @@ import com.tcdng.unify.web.ui.widget.Widget;
 public abstract class AbstractEntityFormAppletController<T extends AbstractEntityFormApplet, U extends AbstractEntityFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 
+    @Configurable
+    private SystemModuleService systemModuleService;
+
     public AbstractEntityFormAppletController(Class<U> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
+    }
+
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
+        this.systemModuleService = systemModuleService;
     }
 
     @Action
@@ -203,7 +213,23 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        final boolean indicateHighLatency = system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_HIGH_LATENCY_INDICATION);
+        if (indicateHighLatency) {
+            getPageRequestContextUtil().setLowLatencyRequest();
+        } else {
+            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        }
+    }
+
+    @Override
+    protected void onClosePage() throws UnifyException {
+        super.onClosePage();
+        final boolean indicateHighLatency = system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_HIGH_LATENCY_INDICATION);
+        if (indicateHighLatency) {
+            getPageRequestContextUtil().setLowLatencyRequest();
+        }
     }
 
     protected AppletWidgetReferences getAppletWidgetReferences() throws UnifyException {
@@ -237,6 +263,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
                 entrySwitchOnChangeHandlers, crudActionHandlers, crudSwitchOnChangeHandlers,
                 saveAsSwitchOnChangeHandlers, maintainActHandlers);
+    }
+
+    protected SystemModuleService system() {
+        return systemModuleService;
     }
     
     private boolean saveFormState(AbstractEntityFormApplet applet) throws UnifyException {

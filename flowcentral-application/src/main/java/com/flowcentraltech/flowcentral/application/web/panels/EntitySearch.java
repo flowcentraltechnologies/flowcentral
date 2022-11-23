@@ -109,6 +109,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private boolean basicSearchOnly;
 
+    private boolean showBaseRestriction;
+
     private boolean newButtonVisible;
 
     public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
@@ -361,6 +363,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
         return baseRestriction != null;
     }
 
+    public boolean isShowBaseFilter() {
+        return showBaseRestriction && isWithBaseFilter();
+    }
+    
     public void applyQuickFilter() throws UnifyException {
         localApplyQuickFilter();
         applyFilterToSearch();
@@ -391,10 +397,12 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public void applyFilterToSearch() throws UnifyException {
-        EntityDef entityDef = entityFilter.getEntityDef();
-        Restriction restriction = entityFilter.getRestriction(getAppletCtx().au().getNow());
-        applyRestrictionToSearch(entityDef, restriction);
-        entityFilterTranslation = getAppletCtx().au().translate(restriction, entityDef);
+        if (!getAppletCtx().au().isLowLatencyRequest()) {
+            EntityDef entityDef = entityFilter.getEntityDef();
+            Restriction restriction = entityFilter.getRestriction(getAppletCtx().au().getNow());
+            applyRestrictionToSearch(entityDef, restriction);
+            entityFilterTranslation = getAppletCtx().au().translate(restriction, entityDef);
+        }
     }
 
     private void localApplyQuickFilter() throws UnifyException {
@@ -450,6 +458,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void setBasicSearchOnly(boolean basicSearchOnly) {
         this.basicSearchOnly = basicSearchOnly;
+    }
+
+    public boolean isShowBaseRestriction() {
+        return showBaseRestriction;
+    }
+
+    public void setShowBaseRestriction(boolean showBaseRestriction) {
+        this.showBaseRestriction = showBaseRestriction;
     }
 
     public void setNewButtonVisible(boolean newButtonVisible) {

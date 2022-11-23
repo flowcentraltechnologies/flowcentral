@@ -16,4 +16,4 @@
 !ui-document layout:$d{!ui-desktoptype1} contentPanel:$c{content}
 
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
-	path:$s{/security/loginpage/openPage}
+	path:$s{/security/loginpage/openPage} documentPath:$s{/application/home}

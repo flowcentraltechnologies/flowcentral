@@ -16,7 +16,9 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
@@ -44,7 +46,9 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
 @UplBinding("web/studio/upl/applicationstudio.upl")
 @ResultMappings({
     @ResultMapping(name = "showuserdetails", response = { "!showpopupresponse popup:$s{userDetailsPopup}" }),
-    @ResultMapping(name = "forwardtohome", response = { "!forwardresponse path:$x{application.web.home}" })})
+    @ResultMapping(name = "forwardtohome", response = { "!forwardresponse path:$x{application.web.home}" }),
+    @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
+    response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" })})
 public class ApplicationStudioController extends AbstractFlowCentralPageController<ApplicationStudioPageBean> {
 
     @Configurable
@@ -63,6 +67,13 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
 
     public void setUserLoginActivityProvider(UserLoginActivityProvider userLoginActivityProvider) {
         this.userLoginActivityProvider = userLoginActivityProvider;
+    }
+
+    @Action
+    @Override
+    public String content() throws UnifyException {
+        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
     @Action
