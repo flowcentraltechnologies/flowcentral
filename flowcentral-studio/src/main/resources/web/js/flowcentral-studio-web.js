@@ -54,7 +54,7 @@ fuxstudio.rigStudioMenu = function(rgp) {
 	if (menuItems) {
 		for (var i = 0; i < menuItems.length; i++) {
 			const mItem = menuItems[i];
-			const evp = {uMain:false, uOpenPath:mItem.path};
+			const evp = {uMain:false, uOpenPath:mItem.path, uIsDebounce:true};
 			ux.addHdl(_id(mItem.id), "click", ux.menuOpenPath, evp);
 		}
 	}
