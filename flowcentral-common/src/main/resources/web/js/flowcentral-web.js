@@ -67,6 +67,7 @@ fux.menuWire = function(rgp) {
 			} else {
 				evp.uMain = false;
 				evp.uOpenPath = mItem.path;
+				evp.uIsDebounce = true;
 				ux.addHdl(_id(mItem.id), "click", ux.menuOpenPath, evp);
 			}
 		}
