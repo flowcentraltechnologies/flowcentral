@@ -43,6 +43,11 @@ import com.tcdng.unify.core.util.StringUtils;
 public class SuggestionTextSearchWidget extends EntityTextSearchWidget {
 
     @Override
+    public boolean isBindEventsToFacade() throws UnifyException {
+        return false;
+    }
+
+    @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
         String suggestionType = getUplAttribute(String.class, "type");
         if (!StringUtils.isBlank(suggestionType)) {

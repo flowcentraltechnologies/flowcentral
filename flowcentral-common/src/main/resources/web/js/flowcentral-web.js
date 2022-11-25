@@ -255,8 +255,7 @@ fux.entityListSwitch = function(uEv) {
 fux.entityFocusOut = function(uEv) {
 	const evp = uEv.evp;
 	const sel = _id(evp.uId);
-	
-	if (evp.altered && (uEv.uKeyCode == UNIFY_KEY_TAB)) {
+	if (evp.altered && (uEv.uKeyCode === undefined || uEv.uKeyCode == UNIFY_KEY_TAB)) {
 		ux.fireEvent(sel, "change", true);
 	}
 }
