@@ -2102,7 +2102,7 @@
 					<field name="inputWidget" inputWidget="entityfieldwidgetlist"
 						column="1" switchOnChange="true" />
 					<field name="suggestionType" inputWidget="suggestiontypelist"
-						column="1" visible="false" required="true" />
+						column="1" visible="false" />
 					<field name="inputListKey" inputWidget="application.text"
 						column="1" visible="false" />
 					<field name="minLen" inputWidget="application.integer"

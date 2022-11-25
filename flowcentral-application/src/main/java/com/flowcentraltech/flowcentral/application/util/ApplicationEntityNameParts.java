@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.util;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Application entity name parts.
  * 
@@ -30,10 +32,19 @@ public class ApplicationEntityNameParts {
 
     private String entityName;
 
+    private String fieldName;
+
     public ApplicationEntityNameParts(String longName, String applicationName, String entityName) {
         this.longName = longName;
         this.applicationName = applicationName;
         this.entityName = entityName;
+    }
+
+    public ApplicationEntityNameParts(String longName, String applicationName, String entityName, String fieldName) {
+        this.longName = longName;
+        this.applicationName = applicationName;
+        this.entityName = entityName;
+        this.fieldName = fieldName;
     }
 
     public String getLongName() {
@@ -48,4 +59,11 @@ public class ApplicationEntityNameParts {
         return entityName;
     }
 
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public boolean isWithFieldName() {
+        return !StringUtils.isBlank(fieldName);
+    }
 }

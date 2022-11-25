@@ -42,38 +42,39 @@ public final class ApplicationNameUtils {
 
     static {
         applicationNameParts = new FactoryMap<String, ApplicationEntityNameParts>()
-        {
+            {
 
-            @Override
-            protected ApplicationEntityNameParts create(String longName, Object... arg1) throws Exception {
-                try {
-                    String[] po = StringUtils.dotSplit(longName);
-                    return new ApplicationEntityNameParts(longName, po[0], po[1]);
-                } catch (Exception e) {
-                    throw new RuntimeException("Name parts error: longName = " + longName, e);
-                }
-            }
-
-        };
-        
-        assignRuleNameParts = new FactoryMap<String, EntityAssignRuleNameParts>()
-        {
-
-            @Override
-            protected EntityAssignRuleNameParts create(String assignRule, Object... arg1) throws Exception {
-                try {
-                    String[] po = StringUtils.charSplit(assignRule, ':');
-                    if (po.length == 4) {
-                        return new EntityAssignRuleNameParts(po[0], po[1], po[2], po[3]);
-                    } else {
-                        return new EntityAssignRuleNameParts(po[0], po[1], po[2], null);
+                @Override
+                protected ApplicationEntityNameParts create(String longName, Object... arg1) throws Exception {
+                    try {
+                        String[] po = StringUtils.dotSplit(longName);
+                        return po.length == 3 ? new ApplicationEntityNameParts(longName, po[0], po[1], po[2])
+                                : new ApplicationEntityNameParts(longName, po[0], po[1]);
+                    } catch (Exception e) {
+                        throw new RuntimeException("Name parts error: longName = " + longName, e);
                     }
-                } catch (Exception e) {
-                    throw new RuntimeException("Name parts error: assignRule = " + assignRule, e);
                 }
-            }
 
-        };
+            };
+
+        assignRuleNameParts = new FactoryMap<String, EntityAssignRuleNameParts>()
+            {
+
+                @Override
+                protected EntityAssignRuleNameParts create(String assignRule, Object... arg1) throws Exception {
+                    try {
+                        String[] po = StringUtils.charSplit(assignRule, ':');
+                        if (po.length == 4) {
+                            return new EntityAssignRuleNameParts(po[0], po[1], po[2], po[3]);
+                        } else {
+                            return new EntityAssignRuleNameParts(po[0], po[1], po[2], null);
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException("Name parts error: assignRule = " + assignRule, e);
+                    }
+                }
+
+            };
     }
 
     private ApplicationNameUtils() {

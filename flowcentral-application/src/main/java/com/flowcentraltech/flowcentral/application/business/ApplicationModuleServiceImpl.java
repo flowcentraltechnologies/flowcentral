@@ -461,8 +461,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 @Override
-                protected SuggestionTypeDef create(String longName, Object... arg1) throws Exception {
-                    AppSuggestionType appSuggestionType = getApplicationEntity(AppSuggestionType.class, longName);
+                protected SuggestionTypeDef create(String longName, Object... args) throws Exception {
+                    ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
+                    AppSuggestionType appSuggestionType = environment()
+                            .list(Query.of(AppSuggestionType.class).addEquals("name", nameParts.getEntityName())
+                                    .addEquals("applicationName", nameParts.getApplicationName()));
+                    if (appSuggestionType == null) {
+                        appSuggestionType = new AppSuggestionType();
+                        Long applicationId = getApplicationDef(nameParts.getApplicationName()).getId();
+                        appSuggestionType.setApplicationId(applicationId);
+                        appSuggestionType.setConfigType(ConfigType.STATIC);
+                        appSuggestionType.setName(nameParts.getEntityName());
+                        appSuggestionType.setDescription(nameParts.getEntityName());
+                        environment().create(appSuggestionType);
+                    }
+
                     return new SuggestionTypeDef(appSuggestionType.getParent(), longName,
                             appSuggestionType.getDescription(), appSuggestionType.getId(),
                             appSuggestionType.getVersionNo());
@@ -499,40 +512,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     for (String entity : entityNameList) {
                         buildDynamicEntityInfo(getEntityDef(entity), dynamicEntityInfoMap, null);
                     }
-
-//                    int lastCount = 0;
-//                    while (lastCount != dynamicEntityInfoMap.size()) {
-//                        // All consider all children in a cyclic manner
-//                        lastCount = dynamicEntityInfoMap.size();
-//                        Map<String, DynamicEntityInfo> temp = new HashMap<String, DynamicEntityInfo>(
-//                                dynamicEntityInfoMap);
-//                        for (Map.Entry<String, DynamicEntityInfo> entry : temp.entrySet()) {
-//                            DynamicEntityInfo _dynamicEntityInfo = entry.getValue();
-//                            if (_dynamicEntityInfo.isGeneration()) {
-//                                EntityDef _entityDef = getEntityDef(entry.getKey());
-//                                if (_entityDef.isWithChildFields() && !_dynamicEntityInfo.isWithChildField()) {
-//                                    for (EntityFieldDef entityFieldDef : _entityDef.getFieldDefList()) {
-//                                        if (entityFieldDef.isChildRef()) {
-//                                            DynamicFieldType fieldType = entityFieldDef.isCustom()
-//                                                    ? DynamicFieldType.GENERATION
-//                                                    : DynamicFieldType.INFO_ONLY;
-//                                            EntityDef _refEntityDef = getEntityDef(
-//                                                    entityFieldDef.getRefDef().getEntity());
-//                                            DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(
-//                                                    _refEntityDef, dynamicEntityInfoMap, null);
-//                                            if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
-//                                                _dynamicEntityInfo.addChildField(fieldType, _childDynamicEntityInfo,
-//                                                        entityFieldDef.getFieldName());
-//                                            } else {// Child list
-//                                                _dynamicEntityInfo.addChildListField(fieldType, _childDynamicEntityInfo,
-//                                                        entityFieldDef.getFieldName());
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
 
                     // Get entity definitions for type that need to be generated
                     List<DynamicEntityInfo> _dynamicEntityInfos = new ArrayList<DynamicEntityInfo>();
@@ -1243,12 +1222,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (environment().countAll(
                                 new AppSuggestionQuery().addEquals("applicationName", parts.getApplicationName())
                                         .addEquals("suggestionTypeName", parts.getEntityName())
+                                        .addEquals("fieldName", entityFieldDef.getFieldName())
                                         .addIEquals("suggestion", suggestion)) == 0) {
                             Long suggestionTypeId = environment().value(Long.class, "id", new AppSuggestionTypeQuery()
                                     .applicationName(parts.getApplicationName()).name(parts.getEntityName()));
                             AppSuggestion appSuggestion = new AppSuggestion();
                             appSuggestion.setSuggestionTypeId(suggestionTypeId);
                             appSuggestion.setSuggestion(suggestion);
+                            appSuggestion.setFieldName(entityFieldDef.getFieldName());
                             environment().create(appSuggestion);
                         }
 

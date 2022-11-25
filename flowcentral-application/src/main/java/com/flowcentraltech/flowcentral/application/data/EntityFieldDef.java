@@ -297,6 +297,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     public boolean isWithInputWidget() {
         return inputWidgetTypeDef != null || (resolvedTypeFieldDef != null && resolvedTypeFieldDef.isWithInputWidget());
     }
+    
+    public String getFieldLongName() {
+        return StringUtils.dotify(entityLongName, fieldName);
+    }
 
     public String getKey() {
         return key;

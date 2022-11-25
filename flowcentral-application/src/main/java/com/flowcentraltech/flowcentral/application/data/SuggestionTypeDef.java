@@ -41,14 +41,5 @@ public class SuggestionTypeDef extends BaseApplicationEntityDef {
     public boolean isWithParent() {
         return parent != null;
     }
-    
-    @Override
-    public String toString() {
-        return "SuggestionTypeDef [getListDescription()=" + getListDescription() + ", getListKey()=" + getListKey()
-                + ", getNameParts()=" + getNameParts() + ", getLongName()=" + getLongName() + ", getApplicationName()="
-                + getApplicationName() + ", getName()=" + getName() + ", getDescription()=" + getDescription()
-                + ", getId()=" + getId() + ", getVersion()=" + getVersion() + ", getClass()=" + getClass()
-                + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
-    }
 
 }
