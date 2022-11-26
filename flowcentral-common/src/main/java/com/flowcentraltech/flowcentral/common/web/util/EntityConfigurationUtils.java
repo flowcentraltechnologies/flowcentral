@@ -93,7 +93,7 @@ public final class EntityConfigurationUtils {
                 String description = unifyComponentConfig.getDescription() != null
                         ? messageResolver.resolveSessionMessage(unifyComponentConfig.getDescription())
                         : unifyComponentConfig.getName();
-                if (input != null && !description.contains(input)) {
+                if (input != null && !description.toLowerCase().contains(input)) {
                     continue;
                 }
 
