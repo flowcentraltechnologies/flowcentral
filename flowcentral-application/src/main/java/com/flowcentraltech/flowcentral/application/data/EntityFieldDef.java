@@ -237,7 +237,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     }
 
     public boolean isWithSuggestionType() {
-        return !StringUtils.isBlank(suggestionType);
+        return inputWidgetTypeDef != null
+                && "application.suggestiontextsearch".equals(inputWidgetTypeDef.getLongName());
     }
 
     public EntityFieldDef getResolvedTypeFieldDef() {

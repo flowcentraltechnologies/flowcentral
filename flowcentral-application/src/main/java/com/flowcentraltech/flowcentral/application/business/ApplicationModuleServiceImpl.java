@@ -1216,18 +1216,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 for (EntityFieldDef entityFieldDef : _entityDef.getSuggestionFieldDefList()) {
                     String suggestion = DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName());
                     if (!StringUtils.isBlank(suggestion)) {
+                        final String suggestionTypeLongName = entityFieldDef.getSuggestionType() != null
+                                ? entityFieldDef.getSuggestionType()
+                                : entityFieldDef.getFieldLongName();
                         ApplicationEntityNameParts parts = ApplicationNameUtils
-                                .getApplicationEntityNameParts(entityFieldDef.getSuggestionType());
+                                .getApplicationEntityNameParts(suggestionTypeLongName);
                         suggestion = suggestion.trim();
-                        if (environment().countAll(
-                                new AppSuggestionQuery().addEquals("applicationName", parts.getApplicationName())
-                                        .addEquals("suggestionTypeName", parts.getEntityName())
-                                        .addEquals("fieldName", entityFieldDef.getFieldName())
-                                        .addIEquals("suggestion", suggestion)) == 0) {
-                            Long suggestionTypeId = environment().value(Long.class, "id", new AppSuggestionTypeQuery()
-                                    .applicationName(parts.getApplicationName()).name(parts.getEntityName()));
+                        AppSuggestionQuery query = (AppSuggestionQuery) new AppSuggestionQuery()
+                                .addEquals("applicationName", parts.getApplicationName())
+                                .addEquals("suggestionTypeName", parts.getEntityName())
+                                .addIEquals("suggestion", suggestion);
+                        if (parts.isWithFieldName()) {
+                            query.addEquals("fieldName", entityFieldDef.getFieldName());
+                        }
+
+                        if (environment().countAll(query) == 0) {
+                            SuggestionTypeDef suggestionTypeDef = getSuggestionTypeDef(suggestionTypeLongName);
                             AppSuggestion appSuggestion = new AppSuggestion();
-                            appSuggestion.setSuggestionTypeId(suggestionTypeId);
+                            appSuggestion.setSuggestionTypeId(suggestionTypeDef.getId());
                             appSuggestion.setSuggestion(suggestion);
                             appSuggestion.setFieldName(entityFieldDef.getFieldName());
                             environment().create(appSuggestion);
