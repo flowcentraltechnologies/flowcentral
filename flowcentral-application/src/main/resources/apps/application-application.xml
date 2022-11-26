@@ -655,6 +655,9 @@
 			<field name="assignDescField"
 				label="$m{application.appapplet.assigndescfield}" type="string"
 				nullable="true" />
+			<field name="pseudoDeleteField"
+				label="$m{application.appapplet.pseudodeletefield}" type="string"
+				nullable="true" />
 			<field name="menuAccess"
 				label="$m{application.appapplet.menuaccess}" type="boolean" />
 			<field name="displayIndex"

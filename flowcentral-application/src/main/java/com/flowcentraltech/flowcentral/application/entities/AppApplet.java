@@ -60,6 +60,9 @@ public class AppApplet extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String assignDescField;
 
+    @Column(length = 64, nullable = true)
+    private String pseudoDeleteField;
+
     @Column
     private boolean menuAccess;
 
@@ -148,6 +151,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setAssignDescField(String assignDescField) {
         this.assignDescField = assignDescField;
+    }
+
+    public String getPseudoDeleteField() {
+        return pseudoDeleteField;
+    }
+
+    public void setPseudoDeleteField(String pseudoDeleteField) {
+        this.pseudoDeleteField = pseudoDeleteField;
     }
 
     public boolean isMenuAccess() {

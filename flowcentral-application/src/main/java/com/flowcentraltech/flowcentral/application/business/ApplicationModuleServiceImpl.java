@@ -398,8 +398,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     AppletDef.Builder adb = AppletDef.newBuilder(appApplet.getType(), appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
-                            appApplet.getDisplayIndex(), appApplet.isMenuAccess(), descriptiveButtons, _actLongName,
-                            appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
+                            appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
+                            descriptiveButtons, _actLongName, appApplet.getDescription(), appApplet.getId(),
+                            appApplet.getVersionNo());
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
                     }
@@ -2812,6 +2813,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setBaseField(appletConfig.getBaseField());
                     appApplet.setAssignField(appletConfig.getAssignField());
                     appApplet.setAssignDescField(appletConfig.getAssignDescField());
+                    appApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
                     appApplet.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appApplet, applicationName, appletConfig);
                     environment().create(appApplet);
@@ -2830,6 +2832,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppApplet.setBaseField(appletConfig.getBaseField());
                         oldAppApplet.setAssignField(appletConfig.getAssignField());
                         oldAppApplet.setAssignDescField(appletConfig.getAssignDescField());
+                        oldAppApplet.setPseudoDeleteField(appletConfig.getPseudoDeleteField());
                     }
 
                     populateChildList(oldAppApplet, applicationName, appletConfig);

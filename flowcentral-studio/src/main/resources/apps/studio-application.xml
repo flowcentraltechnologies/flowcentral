@@ -140,6 +140,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioentityreffieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="entitybooleanfieldlist"
+			description="$m{studio.widgettype.entitybooleanfieldlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioentitybooleanfieldlist listKey:$s{name} listParams:$l{entity} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="entitysearchfieldlist"
 			description="$m{studio.widgettype.entitysearchfieldlist}"
 			dataType="string" inputType="string"
@@ -1677,6 +1682,8 @@
 						switchOnChange="true" required="true" visible="false" />
 					<field name="assignDescField"
 						inputWidget="studio.entityrefdesclist" column="1" visible="false" />
+					<field name="pseudoDeleteField"
+						inputWidget="studio.entitybooleanfieldlist" column="1" visible="false" />
 					<field name="routeToApplet"
 						inputWidget="studio.facadeappletroutetoappletlist" column="1"
 						required="true" visible="false" />
@@ -1751,7 +1758,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="name,description,entity,type,label,baseField,assignField,assignDescField"
+						target="name,description,entity,type,label,baseField,assignField,assignDescField,pseudoDeleteField"
 						disabled="true" />
 				</setStates>
 			</formStatePolicy>
@@ -1801,7 +1808,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="baseField,assignField,assignDescField" visible="true" />
+						target="baseField,assignField,assignDescField,pseudoDeleteField" visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch" name="facadePolicy"
@@ -4698,6 +4705,9 @@
 					inputWidget="studio.propertyappletbeantablepolicylist" />
 				<property name="assignmentFixed"
 					description="$m{studio.appappletprop.manageentity.assignmentfixed}"
+					inputWidget="application.checkbox" />
+				<property name="assignmentPseudoDelete"
+					description="$m{studio.appappletprop.manageentity.assignmentpseudodelete}"
 					inputWidget="application.checkbox" />
 			</propertySet>
 		</propertyList>

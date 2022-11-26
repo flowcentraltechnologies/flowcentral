@@ -48,6 +48,8 @@ public class AppletConfig extends BaseNameConfig {
 
     private String assignDescField;
 
+    private String pseudoDeleteField;
+    
     private int displayIndex;
 
     private boolean menuAccess;
@@ -129,6 +131,15 @@ public class AppletConfig extends BaseNameConfig {
     @XmlAttribute
     public void setAssignDescField(String assignDescField) {
         this.assignDescField = assignDescField;
+    }
+
+    public String getPseudoDeleteField() {
+        return pseudoDeleteField;
+    }
+
+    @XmlAttribute
+    public void setPseudoDeleteField(String pseudoDeleteField) {
+        this.pseudoDeleteField = pseudoDeleteField;
     }
 
     public boolean isMenuAccess() {

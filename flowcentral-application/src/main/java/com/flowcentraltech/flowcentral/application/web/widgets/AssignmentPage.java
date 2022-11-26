@@ -35,7 +35,9 @@ import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPo
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
@@ -70,6 +72,8 @@ public class AssignmentPage {
 
     private final String assnEditPolicy;
 
+    private final String pseudoDeleteField;
+
     private final FilterGroupDef filterGroupDef;
 
     private final boolean fixedAssignment;
@@ -85,7 +89,8 @@ public class AssignmentPage {
     public AssignmentPage(AppletContext ctx, List<EventHandler> assnSwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, AssignmentPageDef assignmentPageDef,
             EntityClassDef entityClassDef, Object baseId, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
-            String entryTable, String assnEditPolicy, FilterGroupDef filterGroupDef, boolean fixedAssignment) {
+            String entryTable, String assnEditPolicy, String pseudoDeleteField, FilterGroupDef filterGroupDef,
+            boolean fixedAssignment) {
         this.ctx = ctx;
         this.assnSwitchOnChangeHandlers = assnSwitchOnChangeHandlers;
         this.sweepingCommitPolicy = sweepingCommitPolicy;
@@ -96,6 +101,7 @@ public class AssignmentPage {
         this.breadCrumbs = breadCrumbs;
         this.entryTable = entryTable;
         this.assnEditPolicy = assnEditPolicy;
+        this.pseudoDeleteField = pseudoDeleteField;
         this.filterGroupDef = filterGroupDef;
         this.fixedAssignment = fixedAssignment;
     }
@@ -192,6 +198,10 @@ public class AssignmentPage {
         return !StringUtils.isBlank(entryTable);
     }
 
+    public boolean isPseudoDelete() {
+        return !StringUtils.isBlank(pseudoDeleteField);
+    }
+
     @SuppressWarnings("unchecked")
     public void loadAssignedList() throws UnifyException {
         if (isEntryTableMode()) {
@@ -207,11 +217,23 @@ public class AssignmentPage {
             }
 
             List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
-
             Set<Integer> selected = new HashSet<Integer>();
             final int len = resultList.size();
-            for (int i = 0; i < len; i++) {
-                selected.add(i);
+            if (len > 0) {
+                if (isPseudoDelete()) {
+                    DataUtils.sortAscending(resultList, entityClassDef.getEntityClass(), pseudoDeleteField);
+                    ValueStore resultValueStore = new BeanValueListStore(resultList);
+                    for (int i = 0; i < len; i++) {
+                        resultValueStore.setDataIndex(i);
+                        if (!resultValueStore.retrieve(boolean.class, pseudoDeleteField)) {
+                            selected.add(i);
+                        } else break;
+                    }
+                } else {
+                    for (int i = 0; i < len; i++) {
+                        selected.add(i);
+                    }
+                }
             }
 
             if (!fixedAssignment) {
@@ -270,9 +292,21 @@ public class AssignmentPage {
     @SuppressWarnings("unchecked")
     public void commitAssignedList(boolean reload) throws UnifyException {
         if (isEntryTableMode()) {
-            List<? extends Entity> assignedList = fixedAssignment
-                    ? (List<? extends Entity>) getEntryBeanTable().getSourceObject()
-                    : (List<? extends Entity>) getEntryBeanTable().getSelectedItems();
+            List<? extends Entity> assignedList = (List<? extends Entity>) getEntryBeanTable().getSourceObject();
+            if (!fixedAssignment) {
+                if (isPseudoDelete()) {
+                    final ValueStore resultValueStore = new BeanValueListStore(assignedList);
+                    final Set<Integer> selected = getEntryBeanTable().getSelectedRows();
+                    final int len = assignedList.size();
+                    for (int i = 0; i < len; i++) {
+                        resultValueStore.setDataIndex(i);
+                        resultValueStore.store(pseudoDeleteField, !selected.contains(i));
+                    }
+                } else {
+                    assignedList = (List<? extends Entity>) getEntryBeanTable().getSelectedItems();
+                }
+            }
+
             String assnUpdatePolicy = !StringUtils.isBlank(assnEditPolicy) ? assnEditPolicy
                     : assignmentPageDef.getUpdatePolicy();
             ctx.environment().updateAssignedList(sweepingCommitPolicy, assnUpdatePolicy,

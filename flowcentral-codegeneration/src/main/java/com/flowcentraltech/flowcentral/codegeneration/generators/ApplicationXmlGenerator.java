@@ -209,6 +209,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appletConfig.setBaseField(appApplet.getBaseField());
                 appletConfig.setAssignField(appApplet.getAssignField());
                 appletConfig.setAssignDescField(appApplet.getAssignDescField());
+                appletConfig.setPseudoDeleteField(appApplet.getPseudoDeleteField());
 
                 // Properties
                 if (!DataUtils.isBlank(appApplet.getPropList())) {

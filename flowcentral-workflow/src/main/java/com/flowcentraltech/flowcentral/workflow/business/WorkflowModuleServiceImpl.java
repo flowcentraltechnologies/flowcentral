@@ -264,8 +264,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String label = getApplicationMessage("workflow.applet.label", workflow.getLabel(),
                                     wfStep.getLabel());
                             final String assignDescField = null;
+                            final String pseudoDeleteField = null;
                             AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
-                                    assignDescField, 0, true, descriptiveButtons, appletName, label);
+                                    assignDescField, pseudoDeleteField, 0, true, descriptiveButtons, appletName, label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -283,18 +284,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         }
 
                         WfStepDef.Builder wsdb = WfStepDef.newBuilder(appletDef, wfStep.getType(), wfStep.getPriority(),
-                                wfStep.getRecordActionType(), wfStep.getAppletName(),  wfStep.getNextStepName(), wfStep.getAltNextStepName(),
-                                wfStep.getBinaryConditionName(), wfStep.getReadOnlyConditionName(),
-                                wfStep.getAutoLoadConditionName(), wfStep.getPolicy(), wfStep.getRule(),
-                                wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
-                                DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
+                                wfStep.getRecordActionType(), wfStep.getAppletName(), wfStep.getNextStepName(),
+                                wfStep.getAltNextStepName(), wfStep.getBinaryConditionName(),
+                                wfStep.getReadOnlyConditionName(), wfStep.getAutoLoadConditionName(),
+                                wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(), wfStep.getDescription(),
+                                wfStep.getLabel(), DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
                                 wfStep.getEmails(), wfStep.getComments());
 
                         if (wfStep.getSetValues() != null || !StringUtils.isBlank(wfStep.getValueGenerator())) {
                             wsdb.addWfSetValuesDef(new WfStepSetValuesDef(InputWidgetUtils.getSetValuesDef(
-                                    wfStep.getValueGenerator(), wfStep.getSetValues() != null ? wfStep.getSetValues().getSetValues() : null)));
+                                    wfStep.getValueGenerator(),
+                                    wfStep.getSetValues() != null ? wfStep.getSetValues().getSetValues() : null)));
                         }
 
                         for (WfStepRouting wfStepRouting : wfStep.getRoutingList()) {
@@ -368,8 +370,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     final boolean descriptiveButtons = systemModuleService.getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     final String assignDescField = null;
+                    final String pseudoDeleteField = null;
                     AppletDef.Builder adb = AppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS, null, label,
-                            "magic", assignDescField, 0, true, descriptiveButtons, appletName, label);
+                            "magic", assignDescField, pseudoDeleteField, 0, true, descriptiveButtons, appletName,
+                            label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
