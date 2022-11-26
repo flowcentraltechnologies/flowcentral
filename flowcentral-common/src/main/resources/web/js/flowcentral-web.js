@@ -236,12 +236,14 @@ fux.entityListSelect = function(uEv) {
 	fac.value = ux.unescape(evp.uLabel.innerHTML);
 
 	const sel = _id(evp.uId);
-	sel.value = evp.uKey;
 	sel._sel = -1;
 	sel._oldSel = -1;
 	ux.setFocus(evp.uFacId);
 	ux.hidePopup(null);
-	ux.fireEvent(sel, "change", true);
+	if (!(sel.value === evp.uKey)) {
+		sel.value = evp.uKey;
+		ux.fireEvent(sel, "change", true);
+	}
 }
 
 fux.entityListSwitch = function(uEv) {
@@ -254,8 +256,8 @@ fux.entityListSwitch = function(uEv) {
 
 fux.entityFocusOut = function(uEv) {
 	const evp = uEv.evp;
-	const sel = _id(evp.uId);
-	if (evp.altered && (uEv.uKeyCode === undefined || uEv.uKeyCode == UNIFY_KEY_TAB)) {
+	if (evp.altered && uEv.uKeyCode == UNIFY_KEY_TAB) {
+		const sel = _id(evp.uId);
 		ux.fireEvent(sel, "change", true);
 	}
 }
