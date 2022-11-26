@@ -2541,7 +2541,7 @@
 					<field name="listFormat" inputWidget="application.text"
 						column="1" />
 					<field name="filterGenerator"
-						inputWidget="application.reffiltergeneratorlist"
+						inputWidget="application.reffiltergeneratorsearch"
 						switchOnChange="true" column="1" />
 					<field name="filterGeneratorRule"
 						inputWidget="studio.reffiltergeneratorrulelist" column="1" />

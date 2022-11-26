@@ -378,6 +378,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:reffiltergeneratorlist blankOption:$m{blank.none}"
 			renderer="!ui-listlabel list:reffiltergeneratorlist" />
+		<widgetType name="reffiltergeneratorsearch"
+			description="$m{application.widgettype.reffiltergeneratorsearch}"
+			dataType="string" inputType="string"
+			editor="!fc-filtergeneratorsearch entityName:$s{application.appRef}"
+			renderer="!ui-label" />
 		<widgetType name="progressbar"
 			description="$m{application.widgettype.progressbar}"
 			dataType="integer" inputType="integer" editor="!fc-progressbar"

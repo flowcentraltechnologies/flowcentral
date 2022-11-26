@@ -15,17 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.common.web.lists;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
+import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ListParam;
-import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Convenient abstract base class for entity type list command.
@@ -41,33 +38,14 @@ public abstract class AbstractEntityTypeListCommand<T extends UnifyComponent, U 
     }
 
     @Override
-    final protected List<UnifyComponentConfig> filterList(List<UnifyComponentConfig> baseConfigList, U param)
+    final protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U param)
             throws UnifyException {
-        if (!DataUtils.isBlank(baseConfigList)) {
-            final String entityName = getEntityName(param);
-            if (!StringUtils.isBlank(entityName)) {
-                List<UnifyComponentConfig> list = new ArrayList<UnifyComponentConfig>();
-                final boolean accept = acceptNonReferenced();
-                for (UnifyComponentConfig unifyComponentConfig : baseConfigList) {
-                    EntityReferences era = unifyComponentConfig.getType().getAnnotation(EntityReferences.class);
-                    if (era == null) {
-                        if (accept) {
-                            list.add(unifyComponentConfig);
-                        }
-                    } else {
-                        for (String entity : era.value()) {
-                            if (entityName.equals(entity) || "*".equals(entity)) { // TODO Implement partial wildcard
-                                list.add(unifyComponentConfig);
-                                break;
-                            }
-                        }
-                    }
-                }
-                return list;
-            }
-        }
-
-        return Collections.emptyList();
+        final String entityName = getEntityName(param);
+        final boolean accept = acceptNonReferenced();
+        return accept
+                ? EntityConfigurationUtils.getConfigListableByEntityAcceptNonReferenced(baseConfigList, entityName,
+                        getMessageResolver())
+                : EntityConfigurationUtils.getConfigListableByEntity(baseConfigList, entityName, getMessageResolver());
     }
 
     protected boolean acceptNonReferenced() {
