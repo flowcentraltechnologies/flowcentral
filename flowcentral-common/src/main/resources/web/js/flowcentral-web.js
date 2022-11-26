@@ -206,6 +206,8 @@ fux.rigEntitySearchResult = function(rgp) {
 			}
 			evp.uLabel = _label;
 			ux.addHdl(_label, "click", fux.entityListSelect, evp);
+			ux.addHdl(_label, "mouseenter", fux.entityListEnter, evp);
+			ux.addHdl(_label, "mouseleave", fux.entityListLeave, evp);
 		}
 
 		sel._sel = -1;
@@ -228,6 +230,14 @@ fux.esOnShow = function(rgp) {
 	}
 	
 	ux.setFocus(rgp.pFilId);
+}
+
+fux.entityListEnter = function(uEv) {
+	_id(uEv.evp.uId)._msel = true;
+}
+
+fux.entityListLeave = function(uEv) {
+	_id(uEv.evp.uId)._msel = false;
 }
 
 fux.entityListSelect = function(uEv) {
@@ -256,8 +266,9 @@ fux.entityListSwitch = function(uEv) {
 
 fux.entityFocusOut = function(uEv) {
 	const evp = uEv.evp;
-	if (evp.altered && uEv.uKeyCode == UNIFY_KEY_TAB) {
-		const sel = _id(evp.uId);
+	const sel = _id(evp.uId);
+	if (evp.altered &&
+		(uEv.uKeyCode == UNIFY_KEY_TAB || (uEv.uKeyCode === undefined && !sel._msel))) {
 		ux.fireEvent(sel, "change", true);
 	}
 }
