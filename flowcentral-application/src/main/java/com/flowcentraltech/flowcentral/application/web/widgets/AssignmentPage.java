@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -83,6 +84,8 @@ public class AssignmentPage {
     private String displayItemCounterClass;
 
     private List<Long> assignedIdList;
+    
+    private Set<Integer> selectedOnLoad;
 
     private BeanTable entryBeanTable;
 
@@ -217,22 +220,19 @@ public class AssignmentPage {
             }
 
             List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
-            Set<Integer> selected = new HashSet<Integer>();
+            selectedOnLoad = new HashSet<Integer>();
             final int len = resultList.size();
-            if (len > 0) {
-                if (isPseudoDelete()) {
-                    DataUtils.sortAscending(resultList, entityClassDef.getEntityClass(), pseudoDeleteField);
-                    ValueStore resultValueStore = new BeanValueListStore(resultList);
-                    for (int i = 0; i < len; i++) {
-                        resultValueStore.setDataIndex(i);
-                        if (!resultValueStore.retrieve(boolean.class, pseudoDeleteField)) {
-                            selected.add(i);
-                        } else break;
+            if (isPseudoDelete()) {
+                final ValueStore resultValueStore = new BeanValueListStore(resultList);
+                for (int i = 0; i < len; i++) {
+                    resultValueStore.setDataIndex(i);
+                    if (!resultValueStore.retrieve(boolean.class, pseudoDeleteField)) {
+                        selectedOnLoad.add(i);
                     }
-                } else {
-                    for (int i = 0; i < len; i++) {
-                        selected.add(i);
-                    }
+                }
+            } else {
+                for (int i = 0; i < len; i++) {
+                    selectedOnLoad.add(i);
                 }
             }
 
@@ -279,7 +279,7 @@ public class AssignmentPage {
 
             final BeanTable _beanTable = getEntryBeanTable();
             _beanTable.setSwitchOnChangeHandlers(assnSwitchOnChangeHandlers);
-            _beanTable.setSelectedRows(selected);
+            _beanTable.setSelectedRows(selectedOnLoad);
             _beanTable.setSourceObject(resultList);
             _beanTable.setFixedAssignment(fixedAssignment);
         } else {
@@ -292,18 +292,25 @@ public class AssignmentPage {
     @SuppressWarnings("unchecked")
     public void commitAssignedList(boolean reload) throws UnifyException {
         if (isEntryTableMode()) {
-            List<? extends Entity> assignedList = (List<? extends Entity>) getEntryBeanTable().getSourceObject();
+            List<? extends Entity> resultList = (List<? extends Entity>) getEntryBeanTable().getSourceObject();
             if (!fixedAssignment) {
                 if (isPseudoDelete()) {
-                    final ValueStore resultValueStore = new BeanValueListStore(assignedList);
+                    List<Entity> tempResultList = new ArrayList<>();
+                    final ValueStore resultValueStore = new BeanValueListStore(resultList);
                     final Set<Integer> selected = getEntryBeanTable().getSelectedRows();
-                    final int len = assignedList.size();
+                    final int len = resultList.size();
                     for (int i = 0; i < len; i++) {
-                        resultValueStore.setDataIndex(i);
-                        resultValueStore.store(pseudoDeleteField, !selected.contains(i));
+                        boolean deleted = false;
+                        if (selected.contains(i) || (deleted = selectedOnLoad.contains(i))) {
+                            resultValueStore.setDataIndex(i);
+                            resultValueStore.store(pseudoDeleteField, deleted);
+                            tempResultList.add(resultList.get(i));
+                        }                        
                     }
+                    
+                    resultList = tempResultList;
                 } else {
-                    assignedList = (List<? extends Entity>) getEntryBeanTable().getSelectedItems();
+                    resultList = (List<? extends Entity>) getEntryBeanTable().getSelectedItems();
                 }
             }
 
@@ -311,7 +318,7 @@ public class AssignmentPage {
                     : assignmentPageDef.getUpdatePolicy();
             ctx.environment().updateAssignedList(sweepingCommitPolicy, assnUpdatePolicy,
                     (Class<? extends Entity>) entityClassDef.getEntityClass(), assignmentPageDef.getBaseField(), baseId,
-                    assignedList, fixedAssignment);
+                    resultList, fixedAssignment);
             if (reload) {
                 loadAssignedList();
             }
