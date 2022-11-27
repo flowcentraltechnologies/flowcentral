@@ -29,4 +29,8 @@ public interface AppletRequestAttributeConstants {
     String SILENT_FORM_ERROR_MSG = "app:silentformerrormsg";
 
     String RELOAD_ONSWITCH = "app:reloadonswitch";
+    
+    String CHILDLIST_EDIT_ACTIONPATH = "childlist.edit.actionpath";
+    
+    String MAINFORM_PUSH_COMPONENTS = "mainform.push.components";
 }

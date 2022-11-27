@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 
@@ -30,7 +31,7 @@ public class ChildListPanel extends AbstractInlineEntitySearchPanel {
 
     @Override
     protected String getEditActionKey() {
-        return "childlist.edit.actionpath";
+        return AppletRequestAttributeConstants.CHILDLIST_EDIT_ACTIONPATH;
     }
 
 }

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyException;
@@ -63,7 +64,8 @@ public abstract class AbstractAppletPanel extends SwitchPanel {
     protected void addPanelToPushComponents(String panelName, boolean editable) throws UnifyException {
         if (editable && getApplet().isSaveHeaderFormOnTabAction()) {
             Panel formPanel = getWidgetByShortName(Panel.class, panelName);
-            getRequestContextUtil().addListItem("mainform.push.components", formPanel.getId());
+            getRequestContextUtil().addListItem(AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS,
+                    formPanel.getId());
         }
     }
 

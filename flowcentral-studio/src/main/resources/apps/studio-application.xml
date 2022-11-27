@@ -4706,7 +4706,7 @@
 				<property name="assignmentFixed"
 					description="$m{studio.appappletprop.manageentity.assignmentfixed}"
 					inputWidget="application.checkbox" />
-				<property name="assignmentPseudoDelete"
+				<property name="assignment.pseudo.delete"
 					description="$m{studio.appappletprop.manageentity.assignmentpseudodelete}"
 					inputWidget="application.checkbox" />
 			</propertySet>
