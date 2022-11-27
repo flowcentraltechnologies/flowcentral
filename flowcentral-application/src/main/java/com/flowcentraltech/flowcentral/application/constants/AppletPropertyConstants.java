@@ -134,6 +134,8 @@ public interface AppletPropertyConstants {
 
     String ASSIGNMENT_FIXED = "assignmentFixed";
 
+    String ASSIGNMENT_PSEUDO_DELETE = "assignment.pseudo.delete";
+    
     String ENTRY_TABLE = "entryTable";
 
     String ENTRY_TABLE_POLICY = "entryTable.policy";

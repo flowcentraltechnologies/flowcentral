@@ -59,6 +59,8 @@ public abstract class AbstractTable<T, U> {
 
     public static final int ENTRY_ENABLED = 0x00000001;
 
+    public static final int SORT_DISABLED = 0x00000002;
+
     protected final AppletUtilities au;
 
     private FilterGroupDef filterGroupDef;
@@ -268,6 +270,10 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isEntryMode() {
         return (entryMode & ENTRY_ENABLED) > 0;
+    }
+
+    public boolean isSortDisabled() {
+        return (entryMode & SORT_DISABLED) > 0;
     }
 
     public boolean isCrudMode() {
@@ -492,7 +498,10 @@ public abstract class AbstractTable<T, U> {
             pageIndex = _pageIndex < numberOfPages ? _pageIndex : (numberOfPages > 0 ? numberOfPages - 1 : 0);
         }
 
-        orderOnReset();
+        if (!isSortDisabled()) {
+            orderOnReset();
+        }
+
         getDispItems();
     }
 

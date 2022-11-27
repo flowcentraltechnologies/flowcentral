@@ -68,6 +68,10 @@ public abstract class BaseApplicationEntityDef implements Listable {
         return nameParts.getEntityName();
     }
 
+    public String getFieldName() {
+        return nameParts.getFieldName();
+    }
+
     public String getDescription() {
         return description;
     }

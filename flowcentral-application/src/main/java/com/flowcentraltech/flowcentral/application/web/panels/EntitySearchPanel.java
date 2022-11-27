@@ -35,6 +35,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.ui.PageRequestContextUtil;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -230,7 +231,18 @@ public class EntitySearchPanel extends AbstractPanel {
         EntitySearch entitySearch = getEntitySearch();
         entitySearch.applyFilterToSearch();
         hideFilterEditor();
-        getRequestContextUtil().setContentScrollReset();
+
+        PageRequestContextUtil rcUtil = getRequestContextUtil();
+        if (entitySearch.isWithPushFormIds()) {
+            rcUtil.addListItem(AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS,
+                    entitySearch.getPushFormIds());
+        }
+
+        if (entitySearch.isWithEditActionKey()) {
+            setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
+        }
+
+        rcUtil.setContentScrollReset();
     }
 
     @Action

@@ -310,6 +310,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
 .fc-filter .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
 
+/* Filter generator search */
+.fc-filtergeneratorsearch {}
 
 /** Form */
 .fc-form {}
@@ -464,6 +466,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-fieldsequence .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
 .fc-fieldsequence .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
 
+/* Ref
 /* Search */
 .fc-search {}
 .fc-search .sftable {display:table;width:100%;table-layout:fixed;}

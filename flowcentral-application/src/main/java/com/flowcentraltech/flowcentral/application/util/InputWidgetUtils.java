@@ -291,7 +291,8 @@ public final class InputWidgetUtils {
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
                 break;
             case "application.suggestiontextsearch":
-                String type = !StringUtils.isBlank(efa.getSuggestionType()) ? efa.getSuggestionType() : "";
+                String type = !StringUtils.isBlank(efa.getSuggestionType()) ? efa.getSuggestionType()
+                        : entityFieldDef.getFieldLongName();
                 editor = String.format(editor, type);
                 break;
             case "application.text":

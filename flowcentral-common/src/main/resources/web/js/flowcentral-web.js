@@ -206,6 +206,8 @@ fux.rigEntitySearchResult = function(rgp) {
 			}
 			evp.uLabel = _label;
 			ux.addHdl(_label, "click", fux.entityListSelect, evp);
+			ux.addHdl(_label, "mouseenter", fux.entityListEnter, evp);
+			ux.addHdl(_label, "mouseleave", fux.entityListLeave, evp);
 		}
 
 		sel._sel = -1;
@@ -230,18 +232,28 @@ fux.esOnShow = function(rgp) {
 	ux.setFocus(rgp.pFilId);
 }
 
+fux.entityListEnter = function(uEv) {
+	_id(uEv.evp.uId)._msel = true;
+}
+
+fux.entityListLeave = function(uEv) {
+	_id(uEv.evp.uId)._msel = false;
+}
+
 fux.entityListSelect = function(uEv) {
 	const evp = uEv.evp;
 	const fac = _id(evp.uFacId);
 	fac.value = ux.unescape(evp.uLabel.innerHTML);
 
 	const sel = _id(evp.uId);
-	sel.value = evp.uKey;
 	sel._sel = -1;
 	sel._oldSel = -1;
 	ux.setFocus(evp.uFacId);
 	ux.hidePopup(null);
-	ux.fireEvent(sel, "change", true);
+	if (!(sel.value === evp.uKey)) {
+		sel.value = evp.uKey;
+		ux.fireEvent(sel, "change", true);
+	}
 }
 
 fux.entityListSwitch = function(uEv) {
@@ -255,8 +267,8 @@ fux.entityListSwitch = function(uEv) {
 fux.entityFocusOut = function(uEv) {
 	const evp = uEv.evp;
 	const sel = _id(evp.uId);
-	
-	if (evp.altered && (uEv.uKeyCode == UNIFY_KEY_TAB)) {
+	if (evp.altered &&
+		(uEv.uKeyCode == UNIFY_KEY_TAB || (uEv.uKeyCode === undefined && !sel._msel))) {
 		ux.fireEvent(sel, "change", true);
 	}
 }

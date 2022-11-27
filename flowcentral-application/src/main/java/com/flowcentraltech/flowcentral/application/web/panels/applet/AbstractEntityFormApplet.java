@@ -428,8 +428,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final Object id = ((Entity) form.getFormBean()).getId();
             final String subTitle = ((Entity) form.getFormBean()).getDescription();
             saveCurrentForm(currFormTabDef);
-            assignmentPage = constructNewAssignmentPage(assignPageDef, entryTable, assnEditPolicy, filterGroupDef,
-                    fixedAssignment, id, subTitle);
+            assignmentPage = constructNewAssignmentPage(_appletDef, assignPageDef, entryTable, assnEditPolicy,
+                    filterGroupDef, fixedAssignment, id, subTitle);
             assignmentPage.loadAssignedList();
             viewMode = ViewMode.ASSIGNMENT_PAGE;
         }
@@ -520,8 +520,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final Object id = ((Entity) form.getFormBean()).getId();
         final String subTitle = ((Entity) form.getFormBean()).getDescription();
         saveCurrentForm(null);
-        assignmentPage = constructNewAssignmentPage(assignPageDef, entryTable, assgnEditPolicy, filterGroupDef,
-                fixedAssignment, id, subTitle);
+        assignmentPage = constructNewAssignmentPage(_appletDef, assignPageDef, entryTable, assgnEditPolicy,
+                filterGroupDef, fixedAssignment, id, subTitle);
         assignmentPage.loadAssignedList();
         viewMode = ViewMode.ASSIGNMENT_PAGE;
     }
@@ -898,17 +898,19 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     protected abstract AppletDef getAlternateFormAppletDef() throws UnifyException;
 
-    protected AssignmentPage constructNewAssignmentPage(AssignmentPageDef assignPageDef, String entryTable,
-            String assnEditPolicy, FilterGroupDef filterGroupDef, boolean fixedAssignment, Object id, String subTitle)
-            throws UnifyException {
+    protected AssignmentPage constructNewAssignmentPage(AppletDef _appletDef, AssignmentPageDef assignPageDef,
+            String entryTable, String assnEditPolicy, FilterGroupDef filterGroupDef, boolean fixedAssignment, Object id,
+            String subTitle) throws UnifyException {
         SectorIcon sectorIcon = getSectorIcon();
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         EntityClassDef entityClassDef = getEntityClassDef(assignPageDef.getEntity());
         breadCrumbs.setLastCrumbTitle(entityClassDef.getEntityDef().getDescription());
         breadCrumbs.setLastCrumbSubTitle(subTitle);
+        final String pseudoDeleteField = _appletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.ASSIGNMENT_PSEUDO_DELETE) ? _appletDef.getPseudoDeleteField() : null;
         return new AssignmentPage(getCtx(), formEventHandlers.getAssnSwitchOnChangeHandlers(), this, assignPageDef,
-                entityClassDef, id, sectorIcon, breadCrumbs, entryTable, assnEditPolicy, filterGroupDef,
-                fixedAssignment);
+                entityClassDef, id, sectorIcon, breadCrumbs, entryTable, assnEditPolicy, pseudoDeleteField,
+                filterGroupDef, fixedAssignment);
     }
 
     protected EntryTablePage constructNewEntryPage(String entity, String entryTable, String entryTablePolicy,

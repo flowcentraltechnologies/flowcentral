@@ -15,18 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.common.web.lists;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ListData;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.ListParam;
+import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -38,6 +37,9 @@ import com.tcdng.unify.core.util.DataUtils;
 public abstract class AbstractFlowCentralTypeListCommand<T extends UnifyComponent, U extends ListParam>
         extends AbstractListCommand<U> {
 
+    @Configurable
+    private MessageResolver messageResolver;
+    
     private Class<T> typeClass;
 
     private List<UnifyComponentConfig> configList;
@@ -47,29 +49,29 @@ public abstract class AbstractFlowCentralTypeListCommand<T extends UnifyComponen
         this.typeClass = typeClazz;
     }
 
-    @Override
-    public List<? extends Listable> execute(Locale locale, U params) throws UnifyException {
-        List<UnifyComponentConfig> filteredList = filterList(getConfigList(), params);
-        if (!DataUtils.isBlank(filteredList)) {
-            List<Listable> list = new ArrayList<Listable>();
-            for (UnifyComponentConfig unifyComponentConfig : filteredList) {
-                String description = unifyComponentConfig.getDescription() != null
-                        ? resolveSessionMessage(unifyComponentConfig.getDescription())
-                        : unifyComponentConfig.getName();
-                list.add(new ListData(unifyComponentConfig.getName(), description));
-            }
-            DataUtils.sortAscending(list, Listable.class, "listDescription");
-            return list;
-        }
-        return Collections.emptyList();
+    public final void setMessageResolver(MessageResolver messageResolver) {
+        this.messageResolver = messageResolver;
     }
 
-    protected abstract List<UnifyComponentConfig> filterList(List<UnifyComponentConfig> baseConfigList, U params)
+    @Override
+    public List<? extends Listable> execute(Locale locale, U params) throws UnifyException {
+        return  filterList(getConfigList(), params);
+    }
+
+    protected MessageResolver getMessageResolver() {
+        return messageResolver;
+    }
+
+    protected abstract List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U params)
             throws UnifyException;
 
     private List<UnifyComponentConfig> getConfigList() throws UnifyException {
         if (configList == null) {
-            configList = DataUtils.unmodifiableList(getComponentConfigs(typeClass));
+            synchronized(this) {
+                if (configList == null) {
+                    configList = DataUtils.unmodifiableList(getComponentConfigs(typeClass));
+                }
+            }
         }
 
         return configList;

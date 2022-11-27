@@ -13,25 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.panels;
+package com.flowcentraltech.flowcentral.application.web.widgets;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.annotation.UplAttribute;
+import com.tcdng.unify.core.annotation.UplAttributes;
 
 /**
- * Child list panel.
+ * Filter generator search.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-childlistpanel")
-@UplBinding("web/application/upl/childlistpanel.upl")
-public class ChildListPanel extends AbstractInlineEntitySearchPanel {
+@Component("fc-filtergeneratorsearch")
+@UplAttributes({ @UplAttribute(name = "ref", type = String[].class, defaultVal = "$l{}"),
+        @UplAttribute(name = "direct", type = boolean.class, defaultVal = "true"),
+        @UplAttribute(name = "listKey", type = String.class) })
+public class FilterGeneratorSearch extends AbstractEntityTypeSearchWidget<EntityBasedFilterGenerator> {
 
-    @Override
-    protected String getEditActionKey() {
-        return AppletRequestAttributeConstants.CHILDLIST_EDIT_ACTIONPATH;
+    public FilterGeneratorSearch() {
+        super(EntityBasedFilterGenerator.class);
     }
 
 }

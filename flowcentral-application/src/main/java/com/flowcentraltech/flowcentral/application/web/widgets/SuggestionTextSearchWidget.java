@@ -39,7 +39,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component("fc-suggestiontextsearch")
 @UplAttributes({ @UplAttribute(name = "ref", type = String.class, defaultVal = "application.appSuggestionRef"),
         @UplAttribute(name = "searchField", type = String.class, defaultVal = "suggestion"),
-        @UplAttribute(name = "type", type = String.class, mandatory = false) })
+        @UplAttribute(name = "type", type = String.class)})
 public class SuggestionTextSearchWidget extends EntityTextSearchWidget {
 
     @Override
@@ -59,6 +59,10 @@ public class SuggestionTextSearchWidget extends EntityTextSearchWidget {
             } else {
                 query.addEquals("applicationName", parts.getApplicationName()).addEquals("suggestionTypeName",
                         parts.getEntityName());
+            }
+            
+            if (parts.isWithFieldName()) {
+                query.addEquals("fieldName", parts.getFieldName());
             }
         }
     }

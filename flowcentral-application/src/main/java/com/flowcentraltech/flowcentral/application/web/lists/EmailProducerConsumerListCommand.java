@@ -20,9 +20,11 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralTypeListCommand;
+import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**
@@ -39,9 +41,9 @@ public class EmailProducerConsumerListCommand extends AbstractFlowCentralTypeLis
     }
 
     @Override
-    protected List<UnifyComponentConfig> filterList(List<UnifyComponentConfig> baseConfigList, ZeroParams params)
+    protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, ZeroParams params)
             throws UnifyException {
-        return baseConfigList;
+        return EntityConfigurationUtils.getConfigListable(baseConfigList, getMessageResolver());
     }
 
 }

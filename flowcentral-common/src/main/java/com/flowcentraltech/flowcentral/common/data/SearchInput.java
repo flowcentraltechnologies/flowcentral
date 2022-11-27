@@ -13,33 +13,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.data;
 
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.tcdng.unify.core.UnifyException;
+package com.flowcentraltech.flowcentral.common.data;
 
 /**
- * Suggestion type definition.
+ * Search input.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SuggestionTypeDef extends BaseApplicationEntityDef {
+public class SearchInput {
 
-    private String parent;
+    private String input;
     
-    public SuggestionTypeDef(String parent, String longName, String description, Long id,
-            long versionNo) throws UnifyException {
-        super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, versionNo);
-        this.parent = parent;
+    private int limit;
+
+    public SearchInput(String input, int limit) {
+        this.input = input;
+        this.limit = limit;
     }
 
-    public String getParent() {
-        return parent;
+    public String getInput() {
+        return input;
     }
 
-    public boolean isWithParent() {
-        return parent != null;
+    public int getLimit() {
+        return limit;
     }
-
 }

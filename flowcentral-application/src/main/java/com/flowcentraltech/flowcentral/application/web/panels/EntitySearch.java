@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -35,6 +36,8 @@ import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.FilterConditionListType;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 
 /**
@@ -86,6 +89,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private String paginationLabel;
 
     private String editAction;
+
+    private String editActionKey;
+
+    private List<String> pushFormIds;
 
     private String saveFilterName;
 
@@ -240,6 +247,30 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public String getEditAction() {
         return editAction;
+    }
+
+    public String getEditActionKey() {
+        return editActionKey;
+    }
+
+    public void setEditActionKey(String editActionKey) {
+        this.editActionKey = editActionKey;
+    }
+
+    public boolean isWithEditActionKey() {
+        return !StringUtils.isBlank(editActionKey);
+    }
+
+    public List<String> getPushFormIds() {
+        return pushFormIds;
+    }
+
+    public void setPushFormIds(List<String> pushFormIds) {
+        this.pushFormIds = pushFormIds;
+    }
+
+    public boolean isWithPushFormIds() {
+        return !DataUtils.isBlank(pushFormIds);
     }
 
     public String getSaveFilterName() {

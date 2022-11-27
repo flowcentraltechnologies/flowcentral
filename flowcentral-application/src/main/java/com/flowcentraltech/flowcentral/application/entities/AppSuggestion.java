@@ -36,6 +36,9 @@ public class AppSuggestion extends BaseAuditEntity {
     
     @Column(length = 512)
     private String suggestion;
+    
+    @Column(name = "FIELD_NM", length = 32, nullable = true)
+    private String fieldName;
 
     @ListOnly(key = "suggestionTypeId", property = "applicationName")
     private String applicationName;
@@ -68,6 +71,14 @@ public class AppSuggestion extends BaseAuditEntity {
 
     public void setSuggestion(String suggestion) {
         this.suggestion = suggestion;
+    }
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void setFieldName(String fieldName) {
+        this.fieldName = fieldName;
     }
 
     public String getApplicationName() {

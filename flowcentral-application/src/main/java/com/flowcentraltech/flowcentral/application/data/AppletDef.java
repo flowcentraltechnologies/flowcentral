@@ -64,6 +64,8 @@ public class AppletDef extends BaseApplicationEntityDef {
 
     private String assignDescField;
 
+    private String pseudoDeleteField;
+
     private int displayIndex;
 
     private boolean openWindow;
@@ -86,10 +88,10 @@ public class AppletDef extends BaseApplicationEntityDef {
 
     private AppletDef(AppletType type, List<AppletPropDef> propDefList, Map<String, AppletPropDef> propDefMap,
             Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
-            String label, String icon, String assignDescField, String routeToApplet, String openPath,
-            String originApplicationName, String originName, int displayIndex, boolean openWindow, boolean menuAccess,
-            boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
-            long version) {
+            String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
+            String openPath, String originApplicationName, String originName, int displayIndex, boolean openWindow,
+            boolean menuAccess, boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description,
+            Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -97,6 +99,7 @@ public class AppletDef extends BaseApplicationEntityDef {
         this.lowerCaseLabel = label != null ? label.toLowerCase() : null;
         this.icon = icon;
         this.assignDescField = assignDescField;
+        this.pseudoDeleteField = pseudoDeleteField;
         this.routeToApplet = routeToApplet;
         this.openPath = openPath;
         this.originApplicationName = originApplicationName;
@@ -147,6 +150,7 @@ public class AppletDef extends BaseApplicationEntityDef {
         _facade.label = label;
         _facade.icon = icon;
         _facade.assignDescField = assignDescField;
+        _facade.pseudoDeleteField = pseudoDeleteField;
         _facade.routeToApplet = routeToApplet;
         _facade.openPath = openPath;
         _facade.originApplicationName = originApplicationName;
@@ -170,7 +174,7 @@ public class AppletDef extends BaseApplicationEntityDef {
     public boolean isStudioComponent() {
         return type.isStudioComponent();
     }
-    
+
     public String getOriginApplicationName() {
         return originApplicationName;
     }
@@ -185,6 +189,10 @@ public class AppletDef extends BaseApplicationEntityDef {
 
     public String getAssignDescField() {
         return assignDescField;
+    }
+
+    public String getPseudoDeleteField() {
+        return pseudoDeleteField;
     }
 
     public String getLabel() {
@@ -205,6 +213,10 @@ public class AppletDef extends BaseApplicationEntityDef {
 
     public boolean isWithAssignDescField() {
         return assignDescField != null;
+    }
+
+    public boolean isWithPseudoDeleteField() {
+        return pseudoDeleteField != null;
     }
 
     public boolean isWithIcon() {
@@ -313,7 +325,7 @@ public class AppletDef extends BaseApplicationEntityDef {
 
         return appletSetValuesDef;
     }
-    
+
     public boolean isFilter(String name) {
         return filterDefMap.containsKey(name);
     }
@@ -334,16 +346,17 @@ public class AppletDef extends BaseApplicationEntityDef {
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            int displayIndex, boolean menuAccess, boolean descriptiveButtons, String longName, String description) {
-        return new Builder(type, entity, label, icon, assignDescField, displayIndex, menuAccess, descriptiveButtons,
-                longName, description, null, 0L);
+            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean descriptiveButtons, String longName,
+            String description) {
+        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
+                descriptiveButtons, longName, description, null, 0L);
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            int displayIndex, boolean menuAccess, boolean descriptiveButtons, String longName, String description,
-            Long id, long version) {
-        return new Builder(type, entity, label, icon, assignDescField, displayIndex, menuAccess, descriptiveButtons,
-                longName, description, id, version);
+            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean descriptiveButtons, String longName,
+            String description, Long id, long version) {
+        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
+                descriptiveButtons, longName, description, id, version);
     }
 
     public static class Builder {
@@ -363,6 +376,8 @@ public class AppletDef extends BaseApplicationEntityDef {
         private String icon;
 
         private String assignDescField;
+
+        private String pseudoDeleteField;
 
         private String routeToApplet;
 
@@ -389,8 +404,8 @@ public class AppletDef extends BaseApplicationEntityDef {
         private long version;
 
         public Builder(AppletType type, String entity, String label, String icon, String assignDescField,
-                int displayIndex, boolean menuAccess, boolean descriptiveButtons, String longName, String description,
-                Long id, long version) {
+                String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean descriptiveButtons,
+                String longName, String description, Long id, long version) {
             this.type = type;
             this.propDefMap = new HashMap<String, AppletPropDef>();
             this.setValuesDefMap = new HashMap<String, AppletSetValuesDef>();
@@ -399,6 +414,7 @@ public class AppletDef extends BaseApplicationEntityDef {
             this.label = label;
             this.icon = icon;
             this.assignDescField = assignDescField;
+            this.pseudoDeleteField = pseudoDeleteField;
             this.displayIndex = displayIndex;
             this.menuAccess = menuAccess;
             this.descriptiveButtons = descriptiveButtons;
@@ -471,8 +487,8 @@ public class AppletDef extends BaseApplicationEntityDef {
             }
             return new AppletDef(type, DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())),
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
-                    DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, routeToApplet,
-                    openPath, originApplicationName, originName, displayIndex, openWindow, menuAccess,
+                    DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
+                    routeToApplet, openPath, originApplicationName, originName, displayIndex, openWindow, menuAccess,
                     descriptiveButtons, nameParts, description, id, version);
         }
     }

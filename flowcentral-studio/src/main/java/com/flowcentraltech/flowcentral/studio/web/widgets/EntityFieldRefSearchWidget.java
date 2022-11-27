@@ -109,7 +109,7 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
         EntityFieldDataType type = getEntityFieldDataType();
         if (type != null) {
             switch (type) {
-                case ENUM:
+                case ENUM: 
                 case ENUM_REF:
                     return listManager.getCaseInsensitiveSubList(getApplicationLocale(), "staticlistlist", input,
                             limit);

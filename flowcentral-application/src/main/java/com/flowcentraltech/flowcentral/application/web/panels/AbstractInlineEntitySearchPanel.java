@@ -15,6 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
@@ -32,12 +35,18 @@ public abstract class AbstractInlineEntitySearchPanel extends AbstractStandalone
         setVisible("entitySearchPanel.reportBtn", false);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
 
         EntitySearch entitySearch = getValue(EntitySearch.class);
-        setRequestAttribute(getEditActionKey(), entitySearch.getEditAction());
+        String editActionKey = getEditActionKey();
+        List<String> pushFormIds = (List<String>) getRequestAttribute(List.class,
+                AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS);
+        entitySearch.setPushFormIds(pushFormIds);
+        entitySearch.setEditActionKey(editActionKey);
+        setRequestAttribute(editActionKey, entitySearch.getEditAction());
     }
 
     protected abstract String getEditActionKey();

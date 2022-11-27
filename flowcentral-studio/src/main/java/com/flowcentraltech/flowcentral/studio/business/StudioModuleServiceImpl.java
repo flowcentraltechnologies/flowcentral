@@ -139,9 +139,10 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             final String entity = applicationModuleService.getFormDef(form).getEntityDef()
                                     .getLongName();
                             final String assignDescField = null;
+                            final String pseudoDeleteField = null;
                             AppletDef.Builder adb = AppletDef.newBuilder(type.appletType(), entity, label, type.icon(),
-                                    assignDescField, 0, true, descriptiveButtons, appletName, description,
-                                    np.getInstId(), 0L);
+                                    assignDescField, pseudoDeleteField, 0, true, descriptiveButtons, appletName,
+                                    description, np.getInstId(), 0L);
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM, form);
                             adb.addPropDef(StudioAppletPropertyConstants.ENTITY_FORM, form);
                             adb.addPropDef(StudioAppletPropertyConstants.ENTITY_TYPE, type.code());
@@ -166,11 +167,11 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION,
                                     "studioentity-deletecondition");
 
-                            FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-updatecondition", "",
-                                    null, entityFormUpdateCondition);
+                            FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities,
+                                    "studioentity-updatecondition", "", null, entityFormUpdateCondition);
                             adb.addFilterDef(new AppletFilterDef(filterDef, null, null, null));
-                            filterDef = InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-deletecondition", "",
-                                    null, entityFormDeleteCondition);
+                            filterDef = InputWidgetUtils.getFilterDef(appletUtilities, "studioentity-deletecondition",
+                                    "", null, entityFormDeleteCondition);
                             adb.addFilterDef(new AppletFilterDef(filterDef, null, null, null));
 
                             adb.openPath(
@@ -205,7 +206,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public boolean isInstallDefaultDeveloperRoles() throws UnifyException {
-        return getContainerSetting(boolean.class, FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALL_DEVELOPER_ROLES, true);
+        return getContainerSetting(boolean.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALL_DEVELOPER_ROLES, true);
     }
 
     @Override
