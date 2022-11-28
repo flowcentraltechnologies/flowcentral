@@ -445,6 +445,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mfannot .info {background-color: #eff1fe; border: 1px solid #cce4ff; color:#2164b0;}
 .fc-miniform .mfannot .warning {background-color: #ffffe6; border: 1px solid #ffefc6; color:#b06421;}
 .fc-miniform .mfannot .error {background-color: #ffe0da; border: 1px solid #fbd6d1; color:#c3847f;}
+.fc-miniform .mwarn {border: 1px solid #ff823b;font-size: 8pt;color: #ff823b;font-weight: bold;background-color: #ffe6d7;padding: 10px 0px;}
 
 /* Parameter values */
 .fc-paramvalues {padding:4px;}

@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormSection;
@@ -49,6 +50,13 @@ public class MiniFormWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, miniFormWidget);
         writer.write(">");
+        String errMsg = (String) getRequestAttribute(
+                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
+        if (!StringUtils.isBlank(errMsg)) {
+            writer.write("<div class=\"mwarn\"><span style=\"display:block;text-align:center;\">");
+            writer.write(errMsg);
+            writer.write("</span></div>");
+        }
 
         FormContext ctx = miniFormWidget.getCtx();
         ctx.clearVisibleSections();
