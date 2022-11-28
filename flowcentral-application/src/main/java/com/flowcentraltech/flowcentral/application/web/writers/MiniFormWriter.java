@@ -110,31 +110,35 @@ public class MiniFormWriter extends AbstractControlWriter {
         final FormContext ctx = miniFormWidget.getCtx();
         final List<EventHandler> switchOnChangeHandlers = ctx.getFormSwitchOnChangeHandlers();
         for (FormSection formSection : miniFormWidget.getFormSectionList()) {
-            final int columns = formSection.getColumns();
-            for (int col = 0; col < columns; col++) {
-                for (FormWidget formWidget : formSection.getFormWidgetList(col)) {
-                    Widget chWidget = formWidget.getResolvedWidget();
-                    if (chWidget.isVisible()) {
-                        final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId() : chWidget.getId();
-                        final boolean refreshesContainer = chWidget.isRefreshesContainer();
-                        if (refreshesContainer) {
-                            writer.setKeepPostCommandRefs();
-                        } else {
-                            writer.writeBehavior(chWidget);
-                        }
-                        
-                        if (switchOnChangeHandlers != null && (refreshesContainer || formWidget.isSwitchOnChange())) {
-                            for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                writer.writeBehavior(eventHandler, cId, formWidget.getFieldName());
+            if (formSection.isVisible()) {
+                final int columns = formSection.getColumns();
+                for (int col = 0; col < columns; col++) {
+                    for (FormWidget formWidget : formSection.getFormWidgetList(col)) {
+                        Widget chWidget = formWidget.getResolvedWidget();
+                        if (chWidget.isVisible()) {
+                            final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId()
+                                    : chWidget.getId();
+                            final boolean refreshesContainer = chWidget.isRefreshesContainer();
+                            if (refreshesContainer) {
+                                writer.setKeepPostCommandRefs();
+                            } else {
+                                writer.writeBehavior(chWidget);
                             }
-                        }
 
-                        if (refreshesContainer) {
-                            writer.writeBehavior(chWidget);
-                            writer.clearKeepPostCommandRefs();
-                        }
+                            if (switchOnChangeHandlers != null
+                                    && (refreshesContainer || formWidget.isSwitchOnChange())) {
+                                for (EventHandler eventHandler : switchOnChangeHandlers) {
+                                    writer.writeBehavior(eventHandler, cId, formWidget.getFieldName());
+                                }
+                            }
 
-                        addPageAlias(miniFormWidget.getId(), chWidget);
+                            if (refreshesContainer) {
+                                writer.writeBehavior(chWidget);
+                                writer.clearKeepPostCommandRefs();
+                            }
+
+                            addPageAlias(miniFormWidget.getId(), chWidget);
+                        }
                     }
                 }
             }
