@@ -409,6 +409,10 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             }
         }
 
+        public String getName() {
+            return formSectionDef.getName();
+        }
+        
         public String getLabel() {
             return formSectionDef.getLabel();
         }
@@ -549,6 +553,11 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             this.widget = widget;
             this._widget = widget;
             this.altWidgets = DataUtils.unmodifiableMap(altWidgets);
+        }
+
+        @Override
+        public String getSectionName() {
+            return sectionName;
         }
 
         @Override

@@ -51,11 +51,13 @@ public class MiniFormWriter extends AbstractControlWriter {
         writer.write(">");
 
         FormContext ctx = miniFormWidget.getCtx();
+        ctx.clearVisibleSections();
         miniFormWidget.evaluateWidgetStates();
         boolean isPreGap = false;
         if (miniFormWidget.isStrictRows()) {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
+                    ctx.addVisibleSection(formSection.getName());
                     writeSectionLabel(writer, formSection, isPreGap);
                     writer.write("<div class=\"mftable\">");
                     RowRegulator rowRegulator = formSection.getRowRegulator();
@@ -80,6 +82,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         } else {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
+                    ctx.addVisibleSection(formSection.getName());
                     writeSectionLabel(writer, formSection, isPreGap);
                     writer.write("<div class=\"mftable\">");
                     writer.write("<div class=\"mfrow\">");
