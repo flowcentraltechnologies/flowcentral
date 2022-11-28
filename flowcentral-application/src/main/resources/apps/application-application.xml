@@ -337,11 +337,11 @@
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
 		<widgetType name="datetime" listOption="true"
 			description="$m{application.widgettype.datetime}"
-			dataType="timestamp_utc" inputType="datetime" editor="!ui-datetime clearable:true"
+			dataType="timestamp" inputType="datetime" editor="!ui-datetime clearable:true"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}}" />
 		<widgetType name="datetimetext"
 			description="$m{application.widgettype.datetimetext}"
-			dataType="timestamp_utc" inputType="datetime"
+			dataType="timestamp" inputType="datetime"
 			editor="!ui-text formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}}"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}}" />
 		<widgetType name="time" listOption="true"
