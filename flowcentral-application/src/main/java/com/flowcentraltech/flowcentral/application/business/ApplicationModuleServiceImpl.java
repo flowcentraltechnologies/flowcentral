@@ -22,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1834,10 +1835,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<? extends Listable> getRelatedWidgetTypes(String applicationName) throws UnifyException {
+        Collection<String> applicationNames = new HashSet<String>();
+        applicationNames.add("application");
+        applicationNames.add(applicationName);
+        List<AppWidgetType> widgets = environment().listAll(new AppWidgetTypeQuery().applicationNameIn(applicationNames)
+                .addSelect("applicationName", "name", "description").addOrder("description"));
         List<ListData> list = new ArrayList<ListData>();
-        fetchWidgetTypeList(list, "application");
-        if (!"application".equals(applicationName)) {
-            fetchWidgetTypeList(list, applicationName);
+        for (AppWidgetType widget : widgets) {
+            String longName = ApplicationNameUtils.getApplicationEntityLongName(widget.getApplicationName(),
+                    widget.getName());
+            list.add(new ListData(longName, widget.getDescription()));
         }
 
         return list;
@@ -2692,15 +2699,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return Collections.emptyList();
-    }
-
-    private void fetchWidgetTypeList(final List<ListData> list, final String applicationName) throws UnifyException {
-        Map<String, String> map = environment().valueMap(String.class, "name", String.class, "description",
-                new AppWidgetTypeQuery().applicationName("application"));
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            list.add(new ListData(ApplicationNameUtils.getApplicationEntityLongName("application", entry.getKey()),
-                    entry.getValue()));
-        }
     }
 
     private void resolveListOnlyFieldTypes(final EntityDef entityDef) throws UnifyException {

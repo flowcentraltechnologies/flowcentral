@@ -46,7 +46,7 @@ public class SuggestionTextSearchWidget extends EntityTextSearchWidget {
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
         String suggestionType = getUplAttribute(String.class, "type");
         if (!StringUtils.isBlank(suggestionType)) {
-            SuggestionTypeDef suggestionTypeDef = applicationService().getSuggestionTypeDef(suggestionType);
+            SuggestionTypeDef suggestionTypeDef = application().getSuggestionTypeDef(suggestionType);
             ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(suggestionType);
             if (suggestionTypeDef.isWithParent()) {
                 ApplicationEntityNameParts pparts = ApplicationNameUtils

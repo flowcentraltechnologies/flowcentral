@@ -683,7 +683,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             policy = _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
         }
 
-        EntityActionResult entityActionResult = au().getWorkItemUtilities().submitToWorkflowChannel(_entityDef, channel,
+        EntityActionResult entityActionResult = au().workItemUtilities().submitToWorkflowChannel(_entityDef, channel,
                 (WorkEntity) inst, policy);
         if (actionMode.isWithNext()) {
             enterNextForm();
@@ -1214,7 +1214,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (!ctx.isStudioComponent() && isSaveHeaderFormOnTabAction()) {
             FormContext ctx = getResolvedForm().getCtx();
             if (ctx.getFormDef().isInputForm()) {
-                au().getFormContextEvaluator().evaluateFormContext(ctx, EvaluationMode.UPDATE_TABACTION);
+                au().formContextEvaluator().evaluateFormContext(ctx, EvaluationMode.UPDATE_TABACTION);
             } else {
                 ctx.clearValidationErrors();
             }

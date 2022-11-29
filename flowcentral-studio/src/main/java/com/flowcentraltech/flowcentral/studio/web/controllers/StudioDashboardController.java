@@ -153,7 +153,7 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
                     .setPaginationLabel(appletUtils.resolveSessionMessage("$m{entitysearch.display.label}"));
             _switchApplicationSearch.setEntitySubTitle("Application");
             _switchApplicationSearch.setBaseRestriction(new Equals("developable", Boolean.TRUE),
-                    appletUtils.getSpecialParamProvider());
+                    appletUtils.specialParamProvider());
             _switchApplicationSearch.applyFilterToSearch();
             pageBean.setSwitchApplicationSearch(_switchApplicationSearch);
         }

@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
+import java.util.Collection;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 
 /**
@@ -44,6 +46,10 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
 
     public BaseApplicationEntityQuery<T> applicationNameNot(String applicationName) {
         return (BaseApplicationEntityQuery<T>) addNotEquals("applicationName", applicationName);
+    }
+
+    public BaseApplicationEntityQuery<T> applicationNameIn(Collection<String> applicationNames) {
+        return (BaseApplicationEntityQuery<T>) addAmongst("applicationName", applicationNames);
     }
 
 }

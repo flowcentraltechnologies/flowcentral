@@ -58,6 +58,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApp
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
+import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
@@ -65,6 +66,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -187,33 +189,6 @@ public interface AppletUtilities extends UnifyComponent {
      *                        conversion error occurs
      */
     <T> T getSysParameterValue(Class<T> clazz, String code) throws UnifyException;
-
-    /**
-     * Gets special parameter provider.
-     * 
-     * @return the special parameter provider
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    SpecialParamProvider getSpecialParamProvider() throws UnifyException;
-
-    /**
-     * Gets form context evaluator.
-     * 
-     * @return the evaluator
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    FormContextEvaluator getFormContextEvaluator() throws UnifyException;
-
-    /**
-     * Gets the sequence code generator
-     * 
-     * @return the sequence code generator
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    SequenceCodeGenerator getSequenceCodeGenerator() throws UnifyException;
 
     /**
      * Gets the next sequence code for the supplied sequence definition and current
@@ -377,14 +352,56 @@ public interface AppletUtilities extends UnifyComponent {
      * 
      * @return the application work item utilities
      */
-    ApplicationWorkItemUtilities getWorkItemUtilities();
+    ApplicationWorkItemUtilities workItemUtilities();
 
+    /**
+     * Gets the application service.
+     * 
+     * @return the application service.
+     */
+    ApplicationModuleService application();
+
+    /**
+     * Gets the system service.
+     * 
+     * @return the system service.
+     */
+    SystemModuleService system();
+    
     /**
      * Gets the environment service.
      * 
-     * @return the entity service.
+     * @return the environment service.
      */
     EnvironmentService environment();
+
+    /**
+     * Gets special parameter provider.
+     * 
+     * @return the special parameter provider
+     */
+    SpecialParamProvider specialParamProvider();
+
+    /**
+     * Gets collaboration provider.
+     * 
+     * @return the special parameter provider
+     */
+    CollaborationProvider collaborationProvider();
+    
+    /**
+     * Gets form context evaluator.
+     * 
+     * @return the evaluator
+     */
+    FormContextEvaluator formContextEvaluator();
+
+    /**
+     * Gets the sequence code generator
+     * 
+     * @return the sequence code generator
+     */
+    SequenceCodeGenerator sequenceCodeGenerator();
 
     /**
      * Gets a application applet definition.

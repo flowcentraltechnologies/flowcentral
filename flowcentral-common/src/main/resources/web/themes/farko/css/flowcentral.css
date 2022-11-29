@@ -99,6 +99,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-text-popup .tplbutton {height:32px; background-color: #ffffff !important;font-weight:bold; font-size: 16px; color: #525e6d;/*border-radius: 0px 4px 4px 0px;*/border-color: #b0b0b0;}
 .ui-text-popup .tplbutton:disabled {background: #f4f4f4 !important;}
 
+.ui-text-popup-win {max-height:280px;overflow-y:auto;box-sizing: border-box;border: solid 1px #A0A0A0;}
+
 /* Title Bar */
 .ui-titlebar .base {background-color: #24303f;color: #FFF;}
 
@@ -241,13 +243,16 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-dashboardslate .sectioncell {display:table-cell;padding: 8px 4px; vertical-align: top;}
 .fc-dashboardslate .tile {box-shadow: 0px 1px 22px -12px #607D8b; padding: 4px;}
 
+/** Entity CSV Text */
+.fc-entitycsvtext {word-wrap:break-word;}
+
 /** Entity List */
 .fc-entitylist {}
 .fc-entitylist .tread {background: transparent;}
 
 /** Entity Search */
 .fc-entitysearch {width: 160px;}
-.fc-entitysearch .elborder {padding:2px; border: solid 1px #A0A0A0; background-color: #FFF;}
+.fc-entitysearch .elborder {padding:2px; background-color: #FFF;}
 .fc-entitysearch .elfilterrow {display:flex; width:100%;font-size:7pt !important;}
 .fc-entitysearch .elfilterrow span {margin-right: 4px; font-weight: normal;}
 .fc-entitysearch .elfilterrow input {width:160px; height:18px;}
@@ -268,7 +273,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Entity Text Search */
 .fc-entitytextsearch {width: 160px;}
-.fc-entitytextsearch .elborder {padding:2px; border: solid 1px #A0A0A0; background-color: #FFF;}
+.fc-entitytextsearch .elborder {padding:2px;  background-color: #FFF;}
 .fc-entitytextsearch .elfilterrow {display:flex; width:100%;font-size:7pt !important;}
 .fc-entitytextsearch .elfilterrow span {margin-right: 4px; font-weight: normal;}
 .fc-entitytextsearch .elfilterrow input {width:160px; height:18px;}
@@ -541,9 +546,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .pnt {cursor:pointer;}
 .fc-table .table .sort {cursor:pointer;}
 .fc-table .table .sorted {color:#0066cc;cursor:pointer;}
-.fc-table .table th {text-align:left; font-weight: bold; padding: 8px 6px;}
+.fc-table .table th {text-align:left;font-weight: bold;padding:8px 6px;}
 .fc-table .table th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
-.fc-table .table td {height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
+.fc-table .table td {vertical-align:top;height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
 .fc-table .table .minfo td {padding: 0px 0px;}
 .fc-table .table .cselh {width: 32px;}
 .fc-table .table .cserialh {width: 32px;}

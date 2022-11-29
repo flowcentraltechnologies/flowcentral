@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractDetailsPanel;
@@ -30,25 +31,18 @@ import com.tcdng.unify.core.database.Entity;
 public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<Entity> {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities au;
 
-    @Configurable
-    private EnvironmentService environmentService;
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     protected ApplicationModuleService application() {
-        return applicationModuleService;
+        return au.application();
     }
 
     protected EnvironmentService environment() {
-        return environmentService;
+        return au.environment();
     }
 
 }

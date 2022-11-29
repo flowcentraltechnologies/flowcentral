@@ -63,7 +63,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         loadingSearch = au.constructLoadingSearch(ctx, LoadingSearch.ENABLE_ALL);
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);
-            loadingSearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()), au.getSpecialParamProvider());
+            loadingSearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()), au.specialParamProvider());
         }
 
         loadingSearch.applySearchEntriesToSearch();

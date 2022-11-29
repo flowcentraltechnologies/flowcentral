@@ -94,7 +94,7 @@ public class AppletContext extends AbstractContext {
     }
 
     public SpecialParamProvider specialParamProvider() throws UnifyException {
-        return au.getSpecialParamProvider();
+        return au.specialParamProvider();
     }
 
     public void extractReference(EntityDef entityDef, Object inst) throws UnifyException {

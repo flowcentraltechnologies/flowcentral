@@ -60,42 +60,21 @@ import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 public class EntitySelectWidget extends AbstractPopupTextField {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities au;
 
-    @Configurable
-    private AppletUtilities appletUtilities;
-
-    @Configurable
-    private EnvironmentService environmentService;
-
-    @Configurable
-    private SpecialParamProvider specialParamProvider;
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
-    }
-
-    public final void setSpecialParamProvider(SpecialParamProvider specialParamProvider) {
-        this.specialParamProvider = specialParamProvider;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @Action
     public final void search() throws UnifyException {
         String input = getRequestTarget(String.class);
         RefDef refDef = getRefDef();
-        TableDef tableDef = applicationModuleService.getTableDef(refDef.getSearchTable());
+        TableDef tableDef = application().getTableDef(refDef.getSearchTable());
         int limit = getUplAttribute(int.class, "limit");
         String fieldA = getUplAttribute(String.class, "fieldA");
         String fieldB = getUplAttribute(String.class, "fieldB");
-        EntitySelect entitySelect = new EntitySelect(appletUtilities, tableDef, refDef.getSearchField(), fieldA, fieldB,
+        EntitySelect entitySelect = new EntitySelect(au, tableDef, refDef.getSearchField(), fieldA, fieldB,
                 getValueStore(), refDef.getSelectHandler(), limit);
         entitySelect.setEnableFilter(true);
         String label = tableDef.getEntityDef().getFieldDef(refDef.getSearchField()).getFieldLabel() + ":";
@@ -178,11 +157,11 @@ public class EntitySelectWidget extends AbstractPopupTextField {
     private Listable doCurrentSelect(Object keyVal) throws UnifyException {
         logDebug("Decoding reference value [{0}]...", keyVal);
         RefDef refDef = getRefDef();
-        final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(refDef.getEntity());
+        final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         Query<? extends Entity> query = null;
         Restriction br = refDef.isWithFilter()
                 ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                        getValueStore().getReader(), applicationModuleService.getNow())
+                        getValueStore().getReader(), application().getNow())
                 : null;
 
         if (br != null) {
@@ -198,11 +177,11 @@ public class EntitySelectWidget extends AbstractPopupTextField {
             query.addEquals(listKey, keyVal);
         }
 
-        Listable result = environmentService.listLean(query);
+        Listable result = environment().listLean(query);
         if (result != null) {
-            String formatDesc = refDef.isWithListFormat() ? specialParamProvider
+            String formatDesc = refDef.isWithListFormat() ? specialParamProvider()
                     .getStringGenerator(new BeanValueStore(result), getValueStore(), refDef.getListFormat()).generate()
-                    : applicationModuleService.getEntityDescription(entityClassDef, (Entity) result,
+                    : application().getEntityDescription(entityClassDef, (Entity) result,
                             refDef.getSearchField());
             return new ListData(result.getListKey(), formatDesc);
         }
@@ -211,6 +190,18 @@ public class EntitySelectWidget extends AbstractPopupTextField {
     }
 
     private RefDef getRefDef() throws UnifyException {
-        return applicationModuleService.getRefDef(getRef());
+        return application().getRefDef(getRef());
+    }
+
+    protected ApplicationModuleService application() {
+        return au.application();
+    }
+
+    protected EnvironmentService environment() {
+        return au.environment();
+    }
+
+    protected SpecialParamProvider specialParamProvider() {
+        return au.specialParamProvider();
     }
 }

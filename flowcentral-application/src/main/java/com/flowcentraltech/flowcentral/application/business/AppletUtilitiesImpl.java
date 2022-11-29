@@ -291,17 +291,17 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public SpecialParamProvider getSpecialParamProvider() {
+    public SpecialParamProvider specialParamProvider() {
         return specialParamProvider;
     }
 
     @Override
-    public FormContextEvaluator getFormContextEvaluator() throws UnifyException {
+    public FormContextEvaluator formContextEvaluator() {
         return formContextEvaluator;
     }
 
     @Override
-    public SequenceCodeGenerator getSequenceCodeGenerator() throws UnifyException {
+    public SequenceCodeGenerator sequenceCodeGenerator() {
         return sequenceCodeGenerator;
     }
 
@@ -366,13 +366,28 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public ApplicationModuleService application() {
+        return applicationModuleService;
+    }
+
+    @Override
+    public SystemModuleService system() {
+        return systemModuleService;
+    }
+
+    @Override
     public EnvironmentService environment() {
         return environmentService;
     }
 
     @Override
-    public ApplicationWorkItemUtilities getWorkItemUtilities() {
+    public ApplicationWorkItemUtilities workItemUtilities() {
         return applicationWorkItemUtil;
+    }
+
+    @Override
+    public CollaborationProvider collaborationProvider() {
+        return collaborationProvider;
     }
 
     @Override
@@ -1481,7 +1496,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public void populateAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
-        SequenceCodeGenerator gen = getSequenceCodeGenerator();
+        SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
             ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
@@ -1498,7 +1513,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public void revertAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
-        SequenceCodeGenerator gen = getSequenceCodeGenerator();
+        SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                 if (entityFieldDef.isStringAutoFormat()) {
@@ -1591,7 +1606,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             EntityDef _entityDef = formDef.getEntityDef();
             if (_entityDef.isWithAutoFormatFields()) {
                 logDebug("Populating auto-format fields for form [{0}]...", inst.getId());
-                final SequenceCodeGenerator gen = getSequenceCodeGenerator();
+                final SequenceCodeGenerator gen = sequenceCodeGenerator();
                 for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                     if (entityFieldDef.isStringAutoFormat()) {
                         DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(),

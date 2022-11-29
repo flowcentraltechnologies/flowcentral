@@ -57,7 +57,7 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     @Override
     protected void evaluateFormContext(FormContext formContext, EvaluationMode evaluationMode) throws UnifyException {
-        au().getFormContextEvaluator().evaluateFormContext(formContext, evaluationMode);
+        au().formContextEvaluator().evaluateFormContext(formContext, evaluationMode);
     }
 
     @Override

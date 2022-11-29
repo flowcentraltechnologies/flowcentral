@@ -16,11 +16,13 @@
 
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -42,25 +44,18 @@ import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler {
 
     @Configurable
-    private ApplicationModuleService applicationService;
+    private AppletUtilities au;
 
-    @Configurable
-    private EnvironmentService environmentService;
-
-    public final void setApplicationService(ApplicationModuleService applicationService) {
-        this.applicationService = applicationService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Object save(Object id, String category, FileAttachmentType type, String filename, byte[] attachment)
             throws UnifyException {
-        final RefDef refDef = applicationService.getRefDef(category);
-        final EntityClassDef entityClassDef = applicationService.getEntityClassDef(refDef.getEntity());
+        final RefDef refDef = application().getRefDef(category);
+        final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         final EntityDef entityDef = entityClassDef.getEntityDef();
         final String blobFieldName = entityDef.getBlobFieldName();
         final String blobDescFieldName = entityDef.getBlobDescFieldName();
@@ -71,26 +66,26 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
                 DataUtils.setBeanProperty(inst, blobDescFieldName, filename);
             }
 
-            return environmentService.create(inst);
+            return environment().create(inst);
         }
 
         Update update = new Update().add(blobFieldName, attachment);
         if (!StringUtils.isBlank(blobDescFieldName)) {
             update.add(blobDescFieldName, filename);
         }
-        environmentService.updateById((Class<? extends Entity>) entityClassDef.getEntityClass(), id, update);
+        environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(), id, update);
         return id;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public FileAttachmentInfo retrive(Object id, String category, FileAttachmentType type) throws UnifyException {
-        final RefDef refDef = applicationService.getRefDef(category);
-        final EntityClassDef entityClassDef = applicationService.getEntityClassDef(refDef.getEntity());
+        final RefDef refDef = application().getRefDef(category);
+        final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         final EntityDef entityDef = entityClassDef.getEntityDef();
         final String blobFieldName = entityDef.getBlobFieldName();
         final String blobDescFieldName = entityDef.getBlobDescFieldName();
-        Entity inst = environmentService.find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+        Entity inst = environment().find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
         byte[] attachment = DataUtils.getBeanProperty(byte[].class, inst, blobFieldName);
         String filename = !StringUtils.isBlank(blobDescFieldName)
                 ? DataUtils.getBeanProperty(String.class, inst, blobDescFieldName)
@@ -106,14 +101,26 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
     @Override
     public void delete(Object id, String category, Object parentId, String parentCategory, String parentFieldName)
             throws UnifyException {
-        final RefDef refDef = applicationService.getRefDef(category);
-        final EntityClassDef entityClassDef = applicationService.getEntityClassDef(refDef.getEntity());
+        final RefDef refDef = application().getRefDef(category);
+        final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         if (parentId != null && !StringUtils.isBlank(parentCategory) || !StringUtils.isBlank(parentFieldName)) {
-            final EntityClassDef _parentEntityClassDef = applicationService.getEntityClassDef(parentCategory);
-            environmentService.updateById((Class<? extends Entity>) _parentEntityClassDef.getEntityClass(), parentId,
+            final EntityClassDef _parentEntityClassDef = application().getEntityClassDef(parentCategory);
+            environment().updateById((Class<? extends Entity>) _parentEntityClassDef.getEntityClass(), parentId,
                     new Update().add(parentFieldName, null));
         }
-        environmentService.delete((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+        environment().delete((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+    }
+
+    protected ApplicationModuleService application() {
+        return au.application();
+    }
+
+    protected EnvironmentService environment() {
+        return au.environment();
+    }
+
+    protected SpecialParamProvider specialParamProvider() {
+        return au.specialParamProvider();
     }
 
 }

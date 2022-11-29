@@ -87,7 +87,7 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
             ab.equals("ownerId", userLoginId);
         }
 
-        this.entitySearch.setBaseRestriction(ab.build(), au.getSpecialParamProvider());
+        this.entitySearch.setBaseRestriction(ab.build(), au.specialParamProvider());
         this.wfWizardDef = wms.getWfWizardDef(wfWizardName);
         this.priEntityDef = au().getEntityDef(wfWizardDef.getEntity());
         this.wms = wms;
@@ -117,7 +117,7 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     public EntityActionResult submitInst() throws UnifyException {
         WorkEntity inst = au().environment().find(priEntityInst.getClass(), priEntityInst.getId());
         FormContext ctx = form.getCtx();
-        EntityActionResult entityActionResult = au().getWorkItemUtilities().submitToWorkflowChannel(
+        EntityActionResult entityActionResult = au().workItemUtilities().submitToWorkflowChannel(
                 form.getFormDef().getEntityDef(),
                 ctx.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
                 (WorkEntity) inst, ctx.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY));

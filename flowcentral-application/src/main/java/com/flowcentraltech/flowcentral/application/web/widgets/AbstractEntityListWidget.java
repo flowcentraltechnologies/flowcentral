@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
@@ -59,24 +60,10 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
     public static final String WORK_KEYS = "keys";
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities au;
 
-    @Configurable
-    private EnvironmentService environmentService;
-
-    @Configurable
-    private SpecialParamProvider specialParamProvider;
-
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
-    public void setSpecialParamProvider(SpecialParamProvider specialParamProvider) {
-        this.specialParamProvider = specialParamProvider;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @Override
@@ -163,7 +150,7 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
             }
         }
 
-        final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entityName);
+        final EntityClassDef entityClassDef = application().getEntityClassDef(entityName);
         Query<? extends Entity> query = null;
         if (br != null) {
             query = Query.ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), br);
@@ -189,11 +176,11 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
             }
         }
 
-        Listable result = environmentService.listLean(query);
+        Listable result = environment().listLean(query);
         if (result != null && refDef != null) {
-            String formatDesc = refDef.isWithListFormat() ? specialParamProvider
+            String formatDesc = refDef.isWithListFormat() ? specialParamProvider()
                     .getStringGenerator(new BeanValueStore(result), getValueStore(), refDef.getListFormat()).generate()
-                    : applicationModuleService.getEntityDescription(entityClassDef, (Entity) result,
+                    : application().getEntityDescription(entityClassDef, (Entity) result,
                             refDef.getSearchField());
             String key = decodedKey.isLongNameRef()
                     ? RefEncodingUtils.encodeRefValue(decodedKey.getIndex(), decodedKey.getRefLongName(),
@@ -210,7 +197,7 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
         if (ref != null) {
             RefDef[] refDefs = new RefDef[ref.length];
             for (int i = 0; i < ref.length; i++) {
-                refDefs[i] = applicationModuleService.getRefDef(ref[i]);
+                refDefs[i] = application().getRefDef(ref[i]);
             }
 
             return refDefs;
@@ -222,22 +209,22 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
     protected RefDef getRefDef(int index) throws UnifyException {
         String[] ref = getRef();
         if (ref != null && index >= 0 && index < ref.length) {
-            return applicationModuleService.getRefDef(ref[index]);
+            return application().getRefDef(ref[index]);
         }
 
         return null;
     }
 
     protected ApplicationModuleService application() {
-        return applicationModuleService;
+        return au.application();
     }
 
     protected EnvironmentService environment() {
-        return environmentService;
+        return au.environment();
     }
 
     protected SpecialParamProvider specialParamProvider() {
-        return specialParamProvider;
+        return au.specialParamProvider();
     }
 
 }
