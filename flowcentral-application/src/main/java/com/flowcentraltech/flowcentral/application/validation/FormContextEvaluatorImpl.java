@@ -99,7 +99,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
             // Pull fields in scope and check required fields and lengths
             for (FormWidgetState formWidgetState : ctx.getFormWidgetStateList()) {
                 if (formWidgetState.isVisible() && !formWidgetState.isDisabled()
-                        && ctx.isVisibleSection(formWidgetState.getSectionName())) {
+                        && ctx.isVisibleMainSection(formWidgetState.getSectionName())) {
                     String fieldName = formWidgetState.getFieldName();
                     Object val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
                     fieldsInScope.put(fieldName, val);

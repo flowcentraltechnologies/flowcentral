@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.application.data.FormStatePolicyDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.SetStateDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.FormTriggerEvaluator;
+import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormSection;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
@@ -97,6 +98,8 @@ public class FormContext extends AbstractContext {
 
     private List<TargetFormMessage> reviewErrors;
 
+    private Map<String, FormSection> mainFormSections;
+
     private Map<String, List<FormMessage>> reviewErrorsByTab;
 
     private List<FormWidgetState> formWidgetStateList;
@@ -104,8 +107,6 @@ public class FormContext extends AbstractContext {
     private FormValidationErrors formValidationErrors;
 
     private Set<String> visibleAnnotations;
-
-    private Set<String> visibleSections;
 
     private String altFormTitle;
 
@@ -171,7 +172,6 @@ public class FormContext extends AbstractContext {
         }
 
         this.visibleAnnotations = new HashSet<String>();
-        this.visibleSections = new HashSet<String>();
         this.formValidationErrors = new FormValidationErrors();
         this.mode = Mode.NORMAL;
     }
@@ -246,6 +246,10 @@ public class FormContext extends AbstractContext {
 
     public void removeFormWidgetStateList(Collection<? extends FormWidgetState> list) {
         formWidgetStateList.removeAll(list);
+    }
+
+    public void setMainFormSections(Map<String, FormSection> mainFormSections) {
+        this.mainFormSections = mainFormSections;
     }
 
     public List<EventHandler> getFormSwitchOnChangeHandlers() {
@@ -587,16 +591,13 @@ public class FormContext extends AbstractContext {
         formFocused = false;
     }
 
-    public void clearVisibleSections() throws UnifyException {
-        visibleSections.clear();
-    }
+    public boolean isVisibleMainSection(String sectionName) {
+        if (mainFormSections != null) {
+            FormSection formSection = mainFormSections.get(sectionName);
+            return formSection != null && formSection.isVisible();
+        }
 
-    public void addVisibleSection(String sectionName) {
-        visibleSections.add(sectionName);
-    }
-
-    public boolean isVisibleSection(String sectionName) {
-        return visibleSections.contains(sectionName);
+        return false;
     }
     
     public Collection<String> getFormTabNames() {
