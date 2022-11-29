@@ -159,6 +159,14 @@ public class FormValidationErrors {
         return !DataUtils.isBlank(validationErrors);
     }
 
+    public Map<String, String> getInvalidFields() {
+        return invalidFields;
+    }
+
+    public int getHiddenErrors() {
+        return hiddenErrors;
+    }
+
     public List<FormMessage> getValidationErrors() {
         return validationErrors;
     }
