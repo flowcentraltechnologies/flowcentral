@@ -54,7 +54,7 @@ import com.tcdng.unify.web.ui.widget.data.RefreshSection;
  */
 @Component("fc-entitysearch")
 @LongName("application.entitysearch")
-@UplAttributes({ @UplAttribute(name = "limit", type = int.class, defaultVal = "20"),
+@UplAttributes({ @UplAttribute(name = "limit", type = int.class, defaultVal = "32"),
         @UplAttribute(name = "queryLabel", type = String.class, defaultVal = "$m{search.filter}"),
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "search"),
