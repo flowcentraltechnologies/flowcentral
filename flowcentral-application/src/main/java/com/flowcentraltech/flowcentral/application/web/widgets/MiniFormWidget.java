@@ -148,9 +148,14 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                     formSections.put(formSectionDef.getName(),
                             new FormSection(formSectionDef, formWidgetLists, rows, isStrictRows));
                 }
-
-                miniForm.getCtx().addFormWidgetStateList(formWidgets.values());
+                
                 formSections = DataUtils.unmodifiableMap(formSections);
+
+                FormContext ctx = miniForm.getCtx();
+                ctx.addFormWidgetStateList(formWidgets.values());
+                if (miniForm.isMainForm()) {
+                    ctx.setMainFormSections(formSections);
+                }
             }
 
             oldMiniForm = miniForm;
