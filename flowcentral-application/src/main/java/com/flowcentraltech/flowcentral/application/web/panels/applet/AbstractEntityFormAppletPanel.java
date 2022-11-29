@@ -990,7 +990,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     private FormContext evaluateCurrentFormContext(final FormContext ctx, EvaluationMode evaluationMode)
             throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        applet.au().getFormContextEvaluator().evaluateFormContext(ctx, evaluationMode);
+        applet.au().formContextEvaluator().evaluateFormContext(ctx, evaluationMode);
 
         // Detect tab error
         final boolean isWithFieldErrors = ctx.isWithFieldErrors();

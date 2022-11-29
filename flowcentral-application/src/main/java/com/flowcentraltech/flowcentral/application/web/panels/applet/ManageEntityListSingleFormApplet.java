@@ -37,7 +37,7 @@ public class ManageEntityListSingleFormApplet extends AbstractEntitySingleFormAp
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             entitySearch.setBaseFilter(
                     new FilterDef(getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION).getFilterDef()),
-                    au.getSpecialParamProvider());
+                    au.specialParamProvider());
         }
 
         setAltSubCaption(entitySearch.getEntityDef().getDescription());

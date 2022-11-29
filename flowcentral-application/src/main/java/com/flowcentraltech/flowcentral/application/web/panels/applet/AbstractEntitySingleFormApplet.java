@@ -388,7 +388,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         EntityActionResult entityActionResult = null;;
         try {
             if (viewMode.isMaintainForm()) {
-                entityActionResult = au().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
+                entityActionResult = au().workItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
                         getRootAppletProp(
                                 String.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst,
@@ -396,7 +396,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
                                 AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY));
             } else {
                 au.populateAutoFormatFields(_entityDef, inst);
-                entityActionResult = au().getWorkItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
+                entityActionResult = au().workItemUtilities().submitToWorkflowChannel(form.getEntityDef(),
                         getRootAppletProp(String.class,
                                 AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL),
                         (WorkEntity) inst, getRootAppletProp(String.class,

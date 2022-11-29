@@ -111,7 +111,7 @@ public class FilterDef implements Listable {
                     .generate(valueStoreReader, null);
         }
         
-        return InputWidgetUtils.getRestriction(entityDef, this, au.getSpecialParamProvider(), now);
+        return InputWidgetUtils.getRestriction(entityDef, this, au.specialParamProvider(), now);
     }
 
     public ObjectFilter getObjectFilter(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now) throws UnifyException {
