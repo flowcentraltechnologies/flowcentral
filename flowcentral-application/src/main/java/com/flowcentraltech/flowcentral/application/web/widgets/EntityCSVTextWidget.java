@@ -24,6 +24,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.StringUtils;
@@ -39,6 +40,7 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
 @UplAttributes({
     @UplAttribute(name = "key", type = String.class, defaultVal = "id"),
     @UplAttribute(name = "property", type = String.class, defaultVal = "description"),
+    @UplAttribute(name = "distinct", type = boolean.class, defaultVal = "true"),
     @UplAttribute(name = "entity", type = String.class, mandatory = true) })
 public class EntityCSVTextWidget extends AbstractControl {
 
@@ -56,17 +58,21 @@ public class EntityCSVTextWidget extends AbstractControl {
             EntityClassDef entityClassDef = au.getEntityClassDef(getUplAttribute(String.class, "entity"));
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                     .addEquals(getUplAttribute(String.class, "key"), val);
-            addMoreCriteria(query);
+            Restriction restriction = getMoreRestriction();
+            if (restriction != null) {
+                query.addRestriction(restriction);
+            }
+            
             String property = getUplAttribute(String.class, "property");
             List<String> descriptions = au.environment().valueList(String.class, property,
-                    query.addOrder(property).setDistinct(true));
+                    query.addOrder(property).setDistinct(getUplAttribute(boolean.class, "distinct")));
             return StringUtils.buildSpacedCommaSeparatedString(descriptions);
         }
 
         return null;
     }
     
-    protected void addMoreCriteria(Query<? extends Entity> query) throws UnifyException {
-        
+    protected Restriction getMoreRestriction() throws UnifyException {
+        return null;
     }
 }
