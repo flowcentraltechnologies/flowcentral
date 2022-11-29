@@ -98,7 +98,8 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
             Map<String, Object> fieldsInScope = new HashMap<String, Object>();
             // Pull fields in scope and check required fields and lengths
             for (FormWidgetState formWidgetState : ctx.getFormWidgetStateList()) {
-                if (formWidgetState.isVisible() && !formWidgetState.isDisabled()) {
+                if (formWidgetState.isVisible() && !formWidgetState.isDisabled()
+                        && ctx.isVisibleSection(formWidgetState.getSectionName())) {
                     String fieldName = formWidgetState.getFieldName();
                     Object val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
                     fieldsInScope.put(fieldName, val);
@@ -236,8 +237,8 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                                 }
                             }
 
-                            if (policyDef.isErrorCondition()
-                                    && policyDef.getErrorCondition().getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
+                            if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
+                                    .getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
@@ -277,8 +278,8 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                     }
                 }
 
-                if (policyDef.isErrorCondition()
-                        && policyDef.getErrorCondition().getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
+                if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
+                        .getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
                     ctx.addReviewError(rrb, policyDef);
                 }
             }

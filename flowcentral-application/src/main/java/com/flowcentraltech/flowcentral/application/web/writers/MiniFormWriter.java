@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormSection;
@@ -49,13 +50,22 @@ public class MiniFormWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, miniFormWidget);
         writer.write(">");
+        String errMsg = (String) getRequestAttribute(
+                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
+        if (!StringUtils.isBlank(errMsg)) {
+            writer.write("<div class=\"mwarn\"><span style=\"display:block;text-align:center;\">");
+            writer.write(errMsg);
+            writer.write("</span></div>");
+        }
 
         FormContext ctx = miniFormWidget.getCtx();
+        ctx.clearVisibleSections();
         miniFormWidget.evaluateWidgetStates();
         boolean isPreGap = false;
         if (miniFormWidget.isStrictRows()) {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
+                    ctx.addVisibleSection(formSection.getName());
                     writeSectionLabel(writer, formSection, isPreGap);
                     writer.write("<div class=\"mftable\">");
                     RowRegulator rowRegulator = formSection.getRowRegulator();
@@ -80,6 +90,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         } else {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
+                    ctx.addVisibleSection(formSection.getName());
                     writeSectionLabel(writer, formSection, isPreGap);
                     writer.write("<div class=\"mftable\">");
                     writer.write("<div class=\"mfrow\">");
@@ -110,31 +121,35 @@ public class MiniFormWriter extends AbstractControlWriter {
         final FormContext ctx = miniFormWidget.getCtx();
         final List<EventHandler> switchOnChangeHandlers = ctx.getFormSwitchOnChangeHandlers();
         for (FormSection formSection : miniFormWidget.getFormSectionList()) {
-            final int columns = formSection.getColumns();
-            for (int col = 0; col < columns; col++) {
-                for (FormWidget formWidget : formSection.getFormWidgetList(col)) {
-                    Widget chWidget = formWidget.getResolvedWidget();
-                    if (chWidget.isVisible()) {
-                        final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId() : chWidget.getId();
-                        final boolean refreshesContainer = chWidget.isRefreshesContainer();
-                        if (refreshesContainer) {
-                            writer.setKeepPostCommandRefs();
-                        } else {
-                            writer.writeBehavior(chWidget);
-                        }
-                        
-                        if (switchOnChangeHandlers != null && (refreshesContainer || formWidget.isSwitchOnChange())) {
-                            for (EventHandler eventHandler : switchOnChangeHandlers) {
-                                writer.writeBehavior(eventHandler, cId, formWidget.getFieldName());
+            if (formSection.isVisible()) {
+                final int columns = formSection.getColumns();
+                for (int col = 0; col < columns; col++) {
+                    for (FormWidget formWidget : formSection.getFormWidgetList(col)) {
+                        Widget chWidget = formWidget.getResolvedWidget();
+                        if (chWidget.isVisible()) {
+                            final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId()
+                                    : chWidget.getId();
+                            final boolean refreshesContainer = chWidget.isRefreshesContainer();
+                            if (refreshesContainer) {
+                                writer.setKeepPostCommandRefs();
+                            } else {
+                                writer.writeBehavior(chWidget);
                             }
-                        }
 
-                        if (refreshesContainer) {
-                            writer.writeBehavior(chWidget);
-                            writer.clearKeepPostCommandRefs();
-                        }
+                            if (switchOnChangeHandlers != null
+                                    && (refreshesContainer || formWidget.isSwitchOnChange())) {
+                                for (EventHandler eventHandler : switchOnChangeHandlers) {
+                                    writer.writeBehavior(eventHandler, cId, formWidget.getFieldName());
+                                }
+                            }
 
-                        addPageAlias(miniFormWidget.getId(), chWidget);
+                            if (refreshesContainer) {
+                                writer.writeBehavior(chWidget);
+                                writer.clearKeepPostCommandRefs();
+                            }
+
+                            addPageAlias(miniFormWidget.getId(), chWidget);
+                        }
                     }
                 }
             }

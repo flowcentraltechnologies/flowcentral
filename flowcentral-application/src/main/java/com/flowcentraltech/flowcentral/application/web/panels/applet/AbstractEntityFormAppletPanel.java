@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -879,9 +880,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     }
 
     private void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
-        String successHint = entityActionResult.getSuccessHint();
-        if (!StringUtils.isBlank(successHint)) {
-            formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
+        String errMsg = (String) getRequestAttribute(
+                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
+        if (!StringUtils.isBlank(errMsg)) {
+            hintUser(MODE.ERROR, "$m{entityformapplet.formdelegation.error.hint}");
+        } else {
+            String successHint = entityActionResult.getSuccessHint();
+            if (!StringUtils.isBlank(successHint)) {
+                formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
+            }
         }
     }
 

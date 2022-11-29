@@ -31,6 +31,7 @@ public interface SpringBootInterconnectEntityDataSourceHandler {
 	 * @param implClass the entity type
 	 * @param req       the data source request
 	 * @return the processing result
+	 * @throws Exception if an error occurs
 	 */
-	Object[] process(Class<?> implClass, DataSourceRequest req);
+	Object[] process(Class<?> implClass, DataSourceRequest req) throws Exception;
 }

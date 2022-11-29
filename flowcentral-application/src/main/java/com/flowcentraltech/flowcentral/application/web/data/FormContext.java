@@ -105,6 +105,8 @@ public class FormContext extends AbstractContext {
 
     private Set<String> visibleAnnotations;
 
+    private Set<String> visibleSections;
+
     private String altFormTitle;
 
     private String fixedReference;
@@ -169,6 +171,7 @@ public class FormContext extends AbstractContext {
         }
 
         this.visibleAnnotations = new HashSet<String>();
+        this.visibleSections = new HashSet<String>();
         this.formValidationErrors = new FormValidationErrors();
         this.mode = Mode.NORMAL;
     }
@@ -584,6 +587,18 @@ public class FormContext extends AbstractContext {
         formFocused = false;
     }
 
+    public void clearVisibleSections() throws UnifyException {
+        visibleSections.clear();
+    }
+
+    public void addVisibleSection(String sectionName) {
+        visibleSections.add(sectionName);
+    }
+
+    public boolean isVisibleSection(String sectionName) {
+        return visibleSections.contains(sectionName);
+    }
+    
     public Collection<String> getFormTabNames() {
         return formTabs.keySet();
     }
@@ -622,6 +637,8 @@ public class FormContext extends AbstractContext {
     }
 
     public interface FormWidgetState {
+
+        String getSectionName();
 
         String getFieldName();
 
