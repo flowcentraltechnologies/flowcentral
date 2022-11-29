@@ -21,19 +21,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.AppletMenuWidget;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.WorkspacePrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -56,10 +54,7 @@ import com.tcdng.unify.web.ui.widget.WriteWork;
 public class AppletMenuWriter extends AbstractMenuWriter {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private SystemModuleService systemModuleService;
+    private AppletUtilities au;
 
     @Configurable
     private ApplicationPrivilegeManager appPrivilegeManager;
@@ -69,18 +64,11 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
     @Configurable
     private LicenseProvider licenseProvider;
-
-    @Configurable
-    private CollaborationProvider collaborationProvider;
-
+    
     private List<ApplicationAppletDefProvider> applicationAppletDefProviderList;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     public final void setAppPrivilegeManager(ApplicationPrivilegeManager appPrivilegeManager) {
@@ -93,10 +81,6 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
     public final void setLicenseProvider(LicenseProvider licenseProvider) {
         this.licenseProvider = licenseProvider;
-    }
-
-    public final void setCollaborationProvider(CollaborationProvider collaborationProvider) {
-        this.collaborationProvider = collaborationProvider;
     }
 
     @Override
@@ -170,15 +154,15 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             final String roleCode = userToken.getRoleCode();
             final String workspaceCode = (String) getSessionAttribute(
                     FlowCentralSessionAttributeConstants.WORKSPACE_CODE);
-            final String studioApplicationName = systemModuleService.getSysParameterValue(String.class,
+            final String studioApplicationName = au.system().getSysParameterValue(String.class,
                     ApplicationModuleSysParamConstants.STUDIO_APPLICATION_NAME);
-            final boolean indicateSectors = systemModuleService.getSysParameterValue(boolean.class,
+            final boolean indicateSectors = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
-            final boolean studioMenuEnabled = systemModuleService.getSysParameterValue(boolean.class,
+            final boolean studioMenuEnabled = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.STUDIO_MENU_ENABLED);
-            final boolean sectionWithItemsOnly = systemModuleService.getSysParameterValue(boolean.class,
+            final boolean sectionWithItemsOnly = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_MENU_SECTIONS_ITEMS_ONLY);
-            final boolean enterprise = collaborationProvider != null;
+            final boolean enterprise = au.collaborationProvider() != null;
 
             final StringBuilder msb = new StringBuilder();
             final StringBuilder misb = new StringBuilder();
@@ -188,7 +172,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             boolean appendSym = false;
             boolean appendISym = false;
             final String searchInput = appletMenuWidget.isSearchable() ? appletMenuWidget.getSearchInput() : null;
-            List<ApplicationMenuDef> applicationDefList = applicationModuleService.getApplicationMenuDefs(searchInput);
+            List<ApplicationMenuDef> applicationDefList = au.application().getApplicationMenuDefs(searchInput);
             for (ApplicationMenuDef applicationMenuDef : applicationDefList) {
                 final String appPrivilegeCode = applicationMenuDef.getPrivilege();
                 if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appPrivilegeCode) && (wkspPrivilegeManager == null

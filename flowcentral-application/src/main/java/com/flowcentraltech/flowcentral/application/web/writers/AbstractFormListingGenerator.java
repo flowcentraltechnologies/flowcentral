@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
@@ -57,10 +58,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Configurable
-    private EnvironmentService environmentService;
-
-    @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities au;
 
     private final LocaleFactoryMap<Formatter<?>> dateFormatterMap;
 
@@ -103,12 +101,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             };
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @Override
@@ -164,11 +158,11 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     protected EnvironmentService environment() {
-        return environmentService;
+        return au.environment();
     }
 
     protected ApplicationModuleService application() {
-        return applicationModuleService;
+        return au.application();
     }
 
     protected synchronized String retrieveFormattedDate(ValueStore valueStore, String propertyName)

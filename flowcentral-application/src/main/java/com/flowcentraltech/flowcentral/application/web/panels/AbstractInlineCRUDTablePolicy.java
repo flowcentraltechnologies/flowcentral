@@ -38,15 +38,8 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
     @Configurable
     private AppletUtilities appletUtilities;
 
-    @Configurable
-    private ApplicationModuleService applicationModuleService;
-
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
     }
 
     @Override
@@ -94,7 +87,7 @@ public abstract class AbstractInlineCRUDTablePolicy<T extends InlineCRUDEntry> e
     }
 
     protected ApplicationModuleService application() {
-        return applicationModuleService;
+        return appletUtilities.application();
     }
 
 }

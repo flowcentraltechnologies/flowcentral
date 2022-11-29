@@ -371,6 +371,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public SystemModuleService system() {
+        return systemModuleService;
+    }
+
+    @Override
     public EnvironmentService environment() {
         return environmentService;
     }
@@ -378,6 +383,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public ApplicationWorkItemUtilities workItemUtilities() {
         return applicationWorkItemUtil;
+    }
+
+    @Override
+    public CollaborationProvider collaborationProvider() {
+        return collaborationProvider;
     }
 
     @Override

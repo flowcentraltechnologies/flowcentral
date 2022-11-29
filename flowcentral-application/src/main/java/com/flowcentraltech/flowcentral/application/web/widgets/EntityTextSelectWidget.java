@@ -17,11 +17,9 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.TextType;
 import com.tcdng.unify.core.UnifyException;
@@ -61,21 +59,7 @@ import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 public class EntityTextSelectWidget extends AbstractPopupTextField {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
     private AppletUtilities appletUtilities;
-
-    @Configurable
-    private EnvironmentService environmentService;
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
 
     public void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
@@ -176,6 +160,6 @@ public class EntityTextSelectWidget extends AbstractPopupTextField {
     }
 
     private RefDef getRefDef() throws UnifyException {
-        return applicationModuleService.getRefDef(getRef());
+        return appletUtilities.application().getRefDef(getRef());
     }
 }
