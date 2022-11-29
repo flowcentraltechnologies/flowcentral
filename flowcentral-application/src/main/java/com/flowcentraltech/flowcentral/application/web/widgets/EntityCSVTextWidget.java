@@ -50,7 +50,7 @@ public class EntityCSVTextWidget extends AbstractControl {
     }
 
     @SuppressWarnings("unchecked")
-    public String getCommaSeparatedText() throws UnifyException {
+    public final String getCommaSeparatedText() throws UnifyException {
         Object val = getValue();
         if (val != null) {
             EntityClassDef entityClassDef = au.getEntityClassDef(getUplAttribute(String.class, "entity"));
@@ -59,7 +59,7 @@ public class EntityCSVTextWidget extends AbstractControl {
             addMoreCriteria(query);
             List<String> descriptions = au.environment().valueList(String.class,
                     getUplAttribute(String.class, "property"), query);
-            return StringUtils.buildCommaSeparatedString(descriptions);
+            return StringUtils.buildSpacedCommaSeparatedString(descriptions);
         }
 
         return null;

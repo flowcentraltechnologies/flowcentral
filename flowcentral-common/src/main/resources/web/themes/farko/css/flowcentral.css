@@ -242,7 +242,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-dashboardslate .tile {box-shadow: 0px 1px 22px -12px #607D8b; padding: 4px;}
 
 /** Entity CSV Text */
-.fc-entitycsvtext {}
+.fc-entitycsvtext {word-wrap:break-word;}
 
 /** Entity List */
 .fc-entitylist {}
@@ -544,9 +544,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .pnt {cursor:pointer;}
 .fc-table .table .sort {cursor:pointer;}
 .fc-table .table .sorted {color:#0066cc;cursor:pointer;}
-.fc-table .table th {text-align:left; font-weight: bold; padding: 8px 6px;}
+.fc-table .table th {text-align:left;font-weight: bold;padding:8px 6px;}
 .fc-table .table th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
-.fc-table .table td {height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
+.fc-table .table td {vertical-align:top;height:24px; padding: 8px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;}
 .fc-table .table .minfo td {padding: 0px 0px;}
 .fc-table .table .cselh {width: 32px;}
 .fc-table .table .cserialh {width: 32px;}
