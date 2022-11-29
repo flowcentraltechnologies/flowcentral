@@ -54,13 +54,18 @@ public class EntityCSVTextWidget extends AbstractControl {
         Object val = getValue();
         if (val != null) {
             EntityClassDef entityClassDef = au.getEntityClassDef(getUplAttribute(String.class, "entity"));
+            Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
+                    .addEquals(getUplAttribute(String.class, "key"), val);
+            addMoreCriteria(query);
             List<String> descriptions = au.environment().valueList(String.class,
-                    getUplAttribute(String.class, "property"),
-                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
-                            .addEquals(getUplAttribute(String.class, "key"), val));
+                    getUplAttribute(String.class, "property"), query);
             return StringUtils.buildCommaSeparatedString(descriptions);
         }
 
         return null;
+    }
+    
+    protected void addMoreCriteria(Query<? extends Entity> query) throws UnifyException {
+        
     }
 }
