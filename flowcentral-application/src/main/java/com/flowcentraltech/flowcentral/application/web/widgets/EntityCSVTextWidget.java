@@ -57,8 +57,9 @@ public class EntityCSVTextWidget extends AbstractControl {
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                     .addEquals(getUplAttribute(String.class, "key"), val);
             addMoreCriteria(query);
-            List<String> descriptions = au.environment().valueList(String.class,
-                    getUplAttribute(String.class, "property"), query);
+            String property = getUplAttribute(String.class, "property");
+            List<String> descriptions = au.environment().valueList(String.class, property,
+                    query.addOrder(property).setDistinct(true));
             return StringUtils.buildSpacedCommaSeparatedString(descriptions);
         }
 
