@@ -76,6 +76,7 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
                         list = new ArrayList<ListData>();
                         list.add(new ListData("!fixeddatetimeformat pattern:$s{dd/MM/yyyy}", "dd/MM/yyyy"));
                         list.add(new ListData("!fixeddatetimeformat pattern:$s{MM/dd/yyyy}", "MM/dd/yyyy"));
+                        list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy/MM/dd}", "yyyy/MM/dd"));
                         list.add(new ListData("!fixeddatetimeformat pattern:$s{dd-MM-yyyy}", "dd-MM-yyyy"));
                         list.add(new ListData("!fixeddatetimeformat pattern:$s{MM-dd-yyyy}", "MM-dd-yyyy"));
                         list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy-MM-dd}", "yyyy-MM-dd"));
@@ -83,6 +84,11 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
                     case TIMESTAMP:
                     case TIMESTAMP_UTC:
                         list = new ArrayList<ListData>();
+                        list.add(new ListData("!fixeddatetimeformat pattern:$s{dd/MM/yyyy HH:mm:ss}", "dd/MM/yyyy HH:mm:ss"));
+                        list.add(new ListData("!fixeddatetimeformat pattern:$s{MM/dd/yyyy HH:mm:ss}", "MM/dd/yyyy HH:mm:ss"));
+                        list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy/MM/dd HH:mm:ss}", "yyyy/MM/dd HH:mm:ss"));
+                        list.add(new ListData("!fixeddatetimeformat pattern:$s{dd-MM-yyyy HH:mm:ss}", "dd-MM-yyyy HH:mm:ss"));
+                        list.add(new ListData("!fixeddatetimeformat pattern:$s{MM-dd-yyyy HH:mm:ss}", "MM-dd-yyyy HH:mm:ss"));
                         list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}", "yyyy-MM-dd HH:mm:ss"));
                         break;
                     default:
