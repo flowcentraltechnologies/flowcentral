@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.lists;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +26,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.LocaleFactoryMaps;
+import com.tcdng.unify.core.format.StandardFormatType;
 import com.tcdng.unify.core.list.AbstractListCommand;
 
 /**
@@ -42,64 +42,74 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
 
     public EntityFieldDefFormatterListCommand() {
         super(EntityFieldDefListParams.class);
-        listMap = new LocaleFactoryMaps<EntityFieldDataType, List<? extends Listable>>() {
+        listMap = new LocaleFactoryMaps<EntityFieldDataType, List<? extends Listable>>()
+            {
 
-            @Override
-            protected List<? extends Listable> createObject(Locale locale, EntityFieldDataType fieldType, Object... params)
-                    throws Exception {
-                List<ListData> list = Collections.emptyList();
-                switch(fieldType) {
-                    case BLOB:
-                    case BOOLEAN:
-                    case CATEGORY_COLUMN:
-                    case CHAR:
-                    case CHILD:
-                    case CHILD_LIST:
-                    case REF_FILEUPLOAD:
-                    case CLOB:
-                    case DECIMAL:
-                    case DOUBLE:
-                    case ENUM:
-                    case ENUM_REF:
-                    case FLOAT:
-                    case FOSTER_PARENT_ID:
-                    case FOSTER_PARENT_TYPE:
-                    case INTEGER:
-                    case LIST_ONLY:
-                    case LONG:
-                    case REF:
-                    case REF_UNLINKABLE:
-                    case SCRATCH:
-                    case SHORT:
-                    case STRING:
-                        break;
-                    case DATE:
-                        list = Arrays.asList(new ListData("!fixeddatetimeformat pattern:$s{dd/MM/yyyy}", "dd/MM/yyyy"),
-                        new ListData("!fixeddatetimeformat pattern:$s{MM/dd/yyyy}", "MM/dd/yyyy"),
-                        new ListData("!fixeddatetimeformat pattern:$s{yyyy/MM/dd}", "yyyy/MM/dd"),
-                        new ListData("!fixeddatetimeformat pattern:$s{dd-MM-yyyy}", "dd-MM-yyyy"),
-                        new ListData("!fixeddatetimeformat pattern:$s{MM-dd-yyyy}", "MM-dd-yyyy"),
-                        new ListData("!fixeddatetimeformat pattern:$s{yyyy-MM-dd}", "yyyy-MM-dd"));
-                        break;
-                    case TIMESTAMP:
-                    case TIMESTAMP_UTC:
-                        list = new ArrayList<ListData>();
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{dd/MM/yyyy HH:mm:ss}", "dd/MM/yyyy HH:mm:ss"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{MM/dd/yyyy HH:mm:ss}", "MM/dd/yyyy HH:mm:ss"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy/MM/dd HH:mm:ss}", "yyyy/MM/dd HH:mm:ss"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{dd-MM-yyyy HH:mm:ss}", "dd-MM-yyyy HH:mm:ss"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{MM-dd-yyyy HH:mm:ss}", "MM-dd-yyyy HH:mm:ss"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}", "yyyy-MM-dd HH:mm:ss"));
-                        break;
-                    default:
-                        break;                    
+                @Override
+                protected List<? extends Listable> createObject(Locale locale, EntityFieldDataType fieldType,
+                        Object... params) throws Exception {
+                    List<ListData> list = Collections.emptyList();
+                    switch (fieldType) {
+                        case BLOB:
+                        case BOOLEAN:
+                        case CATEGORY_COLUMN:
+                        case CHAR:
+                        case CHILD:
+                        case CHILD_LIST:
+                        case REF_FILEUPLOAD:
+                        case CLOB:
+                        case DECIMAL:
+                        case DOUBLE:
+                        case FLOAT:
+                            list = getListables(
+                                    StandardFormatType.DECIMAL,
+                                    StandardFormatType.DECIMAL_GROUPED);
+                            break;
+                        case ENUM:
+                        case ENUM_REF:
+                        case FOSTER_PARENT_ID:
+                        case FOSTER_PARENT_TYPE:
+                        case INTEGER:
+                        case LONG:
+                        case SHORT:
+                            list = getListables(
+                                    StandardFormatType.INTEGER,
+                                    StandardFormatType.INTEGER_GROUPED);
+                            break;
+                        case LIST_ONLY:
+                        case REF:
+                        case REF_UNLINKABLE:
+                        case SCRATCH:
+                        case STRING:
+                            break;
+                        case DATE:
+                            list = getListables(
+                                    StandardFormatType.DATE_DDMMYYYY_SLASH,
+                                    StandardFormatType.DATE_MMDDYYYY_SLASH,
+                                    StandardFormatType.DATE_YYYYMMDD_SLASH,
+                                    StandardFormatType.DATE_DDMMYYYY_DASH,
+                                    StandardFormatType.DATE_MMDDYYYY_DASH,
+                                    StandardFormatType.DATE_YYYYMMDD_DASH);
+                            break;
+                        case TIMESTAMP:
+                        case TIMESTAMP_UTC:
+                            list = getListables(
+                                    StandardFormatType.DATETIME_DDMMYYYY_SLASH,
+                                    StandardFormatType.DATETIME_MMDDYYYY_SLASH,
+                                    StandardFormatType.DATETIME_YYYYMMDD_SLASH,
+                                    StandardFormatType.DATETIME_DDMMYYYY_DASH,
+                                    StandardFormatType.DATETIME_MMDDYYYY_DASH,
+                                    StandardFormatType.DATETIME_YYYYMMDD_DASH);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    return list;
                 }
-                
-                return list;
-            }
-            
-        };
-        
+
+            };
+
     }
 
     @Override
@@ -110,6 +120,15 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
         }
 
         return Collections.emptyList();
+    }
+
+    private List<ListData> getListables(StandardFormatType... formatTypes) {
+        List<ListData> list = new ArrayList<ListData>();
+        for (StandardFormatType formatType: formatTypes) {
+            list.add(new ListData(formatType.code(), formatType.label()));
+        }
+        
+        return list;
     }
 
 }

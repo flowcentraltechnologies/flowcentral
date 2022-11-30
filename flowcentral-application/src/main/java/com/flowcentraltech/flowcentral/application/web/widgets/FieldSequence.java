@@ -150,7 +150,8 @@ public class FieldSequence {
         if (fieldSequenceDef != null) {
             for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceDef.getFieldSequenceList()) {
                 FieldSequenceEntry fso = new FieldSequenceEntry(entityDef, editable.isTrue());
-                setFieldAndInputParams(fso, fieldSequenceEntryDef.getFieldName(), fieldSequenceEntryDef.getFormatter());
+                setFieldAndInputParams(fso, fieldSequenceEntryDef.getFieldName(),
+                        fieldSequenceEntryDef.getStandardFormatCode());
                 entryList.add(fso);
             }
         }

@@ -78,6 +78,7 @@ import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -420,6 +421,13 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the special parameter provider
      */
     CollaborationProvider collaborationProvider();
+    
+    /**
+     * Gets format helper
+     * 
+     * @return the format helper
+     */
+    FormatHelper formatHelper();
     
     /**
      * Gets form context evaluator.

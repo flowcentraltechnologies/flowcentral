@@ -121,6 +121,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
+import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -173,6 +174,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Configurable
     private PageRequestContextUtil pageRequestContextUtil;
 
+    @Configurable
+    private FormatHelper formatHelper;
+    
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
     public AppletUtilitiesImpl() {
@@ -234,6 +238,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     public final void setPageRequestContextUtil(PageRequestContextUtil pageRequestContextUtil) {
         this.pageRequestContextUtil = pageRequestContextUtil;
+    }
+
+    public final void setFormatHelper(FormatHelper formatHelper) {
+        this.formatHelper = formatHelper;
     }
 
     @Override
@@ -402,6 +410,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public CollaborationProvider collaborationProvider() {
         return collaborationProvider;
+    }
+
+    @Override
+    public FormatHelper formatHelper() {
+        return formatHelper;
     }
 
     @Override

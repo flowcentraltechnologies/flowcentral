@@ -70,8 +70,8 @@ public class FieldSequenceDef {
 
         for (int i = 0; i < line.length; i++) {
             FieldSequenceEntryDef fieldSequenceEntryDef = fieldSequenceList.get(i);
-            Formatter<?> formatter = fieldSequenceEntryDef.isWithFormatter()
-                    ? au.getUplComponent(Formatter.class, fieldSequenceEntryDef.getFormatter())
+            Formatter<?> formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                    ? au.formatHelper().newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
                     : null;
             DataUtils.setBeanProperty(inst, fieldSequenceEntryDef.getFieldName(), line[i], formatter);
         }
@@ -103,8 +103,8 @@ public class FieldSequenceDef {
             return this;
         }
 
-        public Builder addFieldSequenceEntryDef(String fieldName, String formatter) {
-            fieldSequenceList.add(new FieldSequenceEntryDef(fieldName, formatter));
+        public Builder addFieldSequenceEntryDef(String fieldName, String standardFormatCode) {
+            fieldSequenceList.add(new FieldSequenceEntryDef(fieldName, standardFormatCode));
             return this;
         }
 
