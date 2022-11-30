@@ -82,9 +82,4 @@ public class FieldSequenceEntry {
         }
     }
 
-    @Override
-    public String toString() {
-        return "FieldSequenceEntry [fieldName=" + fieldName + ", param=" + param + ", editable=" + editable + "]";
-    }
-
 }
