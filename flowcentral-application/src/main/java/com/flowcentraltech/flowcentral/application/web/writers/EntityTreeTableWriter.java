@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -25,12 +26,11 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.E
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.EntityTreeLevel;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.TableColumnInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTableWidget;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
-import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.PushType;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -48,10 +48,10 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 public class EntityTreeTableWriter extends AbstractControlWriter {
 
     @Configurable
-    private SystemModuleService systemModuleService;
+    private AppletUtilities au;
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
                 writeHiddenPush(writer, tableWidget.getSelectCtrl(), PushType.CHECKBOX);
             }
 
-            final boolean classicMode = systemModuleService.getSysParameterValue(boolean.class,
+            final boolean classicMode = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ALL_TABLE_IN_CLASSIC_MODE);
             final String tableClass = classicMode ? "table classic" : "table";
             table.setTableClass(tableClass);
@@ -115,7 +115,7 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
                 writer.writeParam("pMultiSel", true);
                 writer.writeParam("pMultiSelDepList", new String[] {});
-                /*writer.writeParam("pLvlChain", table.getItemLevelChain());*/
+                /* writer.writeParam("pLvlChain", table.getItemLevelChain()); */
             }
             writer.endFunction();
         }
@@ -133,9 +133,9 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
         if (table != null) {
             writeHeaderMultiSelect(writer, tableWidget, level);
 
-            final boolean sysHeaderUppercase = systemModuleService.getSysParameterValue(boolean.class,
+            final boolean sysHeaderUppercase = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ALL_TABLE_HEADER_TO_UPPERCASE);
-            final boolean sysHeaderCenterAlign = systemModuleService.getSysParameterValue(boolean.class,
+            final boolean sysHeaderCenterAlign = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.ALL_TABLE_HEADER_CENTER_ALIGNED);
             TableDef _tableDef = table.getLevel(level).getTableDef();
             for (TableColumnInfo tabelColumnInfo : table.getLevel(level).getColumnInfoList()) {
@@ -278,8 +278,9 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
                         writer.write(filler + 1);
                     }
                     writer.write("\"><span>");
-                    String line = StringUtils.buildParameterizedString(treeLevel.getLineFormat(),
-                            item.getInstValueStore());
+                    ParameterizedStringGenerator generator = au.getStringGenerator(item.getInstValueStore(),
+                            treeLevel.getLineFormat());
+                    String line = generator.generate();
                     writer.writeWithHtmlEscape(line);
                     writer.write("</span></td>");
                     writer.write("</tr>");

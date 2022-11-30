@@ -36,6 +36,20 @@ public interface SpecialParamProvider extends UnifyComponent {
      * Gets a generator instance.
      * 
      * @param paramValueStore
+     *                        the parameter value store
+     * @param tokenList
+     *                        the token list
+     * @return the generator instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+            throws UnifyException;
+    
+    /**
+     * Gets a generator instance.
+     * 
+     * @param paramValueStore
      *                            the parameter value store
      * @param generatorValueStore
      *                            the generator value store

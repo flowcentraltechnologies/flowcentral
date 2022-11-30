@@ -22,7 +22,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.AbstractParamGeneratorManager;
 import com.tcdng.unify.core.data.ParamGenerator;
-import com.tcdng.unify.core.data.StringToken;
+import com.tcdng.unify.core.data.ParamToken;
 
 /**
  * Flowcentral parameter generator manager.
@@ -41,8 +41,8 @@ public class FlowCentralParamGeneratorManager extends AbstractParamGeneratorMana
     }
 
     @Override
-    protected ParamGenerator resolveParamGenerator(StringToken token) throws UnifyException {
-        if ("p".equals(token.getGenType())) {
+    protected ParamGenerator resolveParamGenerator(ParamToken token) throws UnifyException {
+        if ("p".equals(token.getComponent())) {
             return generator;
         }
         

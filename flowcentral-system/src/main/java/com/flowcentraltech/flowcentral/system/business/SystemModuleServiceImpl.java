@@ -323,6 +323,12 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+            throws UnifyException {
+        return paramGeneratorManager.getParameterizedStringGenerator(paramValueStore, tokenList);
+    }
+
+    @Override
     public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
             List<StringToken> tokenList) throws UnifyException {
         return paramGeneratorManager.getParameterizedStringGenerator(paramValueStore, generatorValueStore, tokenList);

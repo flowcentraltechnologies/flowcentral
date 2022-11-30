@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.lists;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -73,13 +74,12 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
                     case STRING:
                         break;
                     case DATE:
-                        list = new ArrayList<ListData>();
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{dd/MM/yyyy}", "dd/MM/yyyy"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{MM/dd/yyyy}", "MM/dd/yyyy"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy/MM/dd}", "yyyy/MM/dd"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{dd-MM-yyyy}", "dd-MM-yyyy"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{MM-dd-yyyy}", "MM-dd-yyyy"));
-                        list.add(new ListData("!fixeddatetimeformat pattern:$s{yyyy-MM-dd}", "yyyy-MM-dd"));
+                        list = Arrays.asList(new ListData("!fixeddatetimeformat pattern:$s{dd/MM/yyyy}", "dd/MM/yyyy"),
+                        new ListData("!fixeddatetimeformat pattern:$s{MM/dd/yyyy}", "MM/dd/yyyy"),
+                        new ListData("!fixeddatetimeformat pattern:$s{yyyy/MM/dd}", "yyyy/MM/dd"),
+                        new ListData("!fixeddatetimeformat pattern:$s{dd-MM-yyyy}", "dd-MM-yyyy"),
+                        new ListData("!fixeddatetimeformat pattern:$s{MM-dd-yyyy}", "MM-dd-yyyy"),
+                        new ListData("!fixeddatetimeformat pattern:$s{yyyy-MM-dd}", "yyyy-MM-dd"));
                         break;
                     case TIMESTAMP:
                     case TIMESTAMP_UTC:

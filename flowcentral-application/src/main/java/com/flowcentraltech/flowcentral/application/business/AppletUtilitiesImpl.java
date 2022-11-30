@@ -114,6 +114,8 @@ import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
@@ -252,6 +254,18 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+            throws UnifyException {
+        return specialParamProvider.getStringGenerator(paramValueStore, tokenList);
+    }
+
+    @Override
+    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+            List<StringToken> tokenList) throws UnifyException {
+        return specialParamProvider.getStringGenerator(paramValueStore, generatorValueStore, tokenList);
     }
 
     @Override

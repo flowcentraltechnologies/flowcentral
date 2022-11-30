@@ -73,6 +73,8 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
@@ -87,6 +89,36 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 public interface AppletUtilities extends UnifyComponent {
+    
+    /**
+     * Gets a generator instance.
+     * 
+     * @param paramValueStore
+     *                        the parameter value store
+     * @param tokenList
+     *                        the token list
+     * @return the generator instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+            throws UnifyException;
+    
+    /**
+     * Gets a generator instance.
+     * 
+     * @param paramValueStore
+     *                            the parameter value store
+     * @param generatorValueStore
+     *                            the generator value store
+     * @param tokenList
+     *                            the token list
+     * @return the generator instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+            List<StringToken> tokenList) throws UnifyException;
 
     /**
      * Checks if request is low latency
