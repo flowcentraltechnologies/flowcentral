@@ -129,6 +129,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-inlabel {display:inline-block !important;font-size:11px;font-weight:bold; color:#525e6d;}
 
 /****** OVERRIDE END **********/
+.fc-tiny {font-size:8pt;}
+.fc-tiny .tread {font-size:8pt;}
 
 .fc-formfield {width:196px;}
 
@@ -471,7 +473,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-fieldsequence .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
 
 /* Token sequence */
-.fc-tokensequence {padding:4px;width:820px;}
+.fc-tokensequence {padding:4px;width:820px;font-size:8pt;}
 .fc-tokensequence .line {display:flex;vertical-align:top;padding-bottom:2px;}
 .fc-tokensequence .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
@@ -484,7 +486,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tokensequence .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
 
 .fc-tokensequence .previewfrm {width:30%;padding:2px;border:solid 1px #a0a0a0;}
-.fc-tokensequence .previewbdy {display:block;white-space: pre-wrap;}
+.fc-tokensequence .previewbdy {display:block;white-space: pre-wrap;word-wrap: anywhere;}
 .fc-tokensequence .editorfrm {width:70%;padding:2px;}
 
 /* Ref

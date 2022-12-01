@@ -52,14 +52,14 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
     @Override
     protected void doOnPageConstruct() throws UnifyException {
         tokenSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:stringtokentypelist binding:tokenType");
-        textCtrl = (Control) addInternalChildWidget("!ui-textarea rows:2 binding:param");
+                "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:stringtokentypelist binding:tokenType");
+        textCtrl = (Control) addInternalChildWidget("!ui-textarea styleClass:$e{fc-tiny} rows:2 binding:param");
         fieldSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
+                "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
         paramCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfielddefformatterlist listParams:$l{entityDef fieldName} binding:param");
+                "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:entityfielddefformatterlist listParams:$l{entityDef fieldName} binding:param");
         generatorSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:paramgeneratorlist listParams:$s{entityDef} binding:param");
+                "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:paramgeneratorlist listParams:$s{entityDef} binding:param");
         moveUpCtrl = (Control) addInternalChildWidget(
                 "!ui-button styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(
