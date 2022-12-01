@@ -59,7 +59,7 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
         paramCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:entityfielddefformatterlist listParams:$l{entityDef fieldName} binding:param");
         generatorSelectCtrl = (Control) addInternalChildWidget(
-                "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:param");
+                "!ui-select blankOption:$s{} list:paramgeneratorlist listParams:$s{entityDef} binding:param");
         moveUpCtrl = (Control) addInternalChildWidget(
                 "!ui-button styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(
