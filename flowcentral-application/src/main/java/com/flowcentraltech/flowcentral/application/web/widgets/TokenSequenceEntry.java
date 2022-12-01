@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.StringTokenType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Token sequence entry.
@@ -47,9 +48,39 @@ public class TokenSequenceEntry extends FieldSequenceEntry {
 
     public void normalize() throws UnifyException {
         if (tokenType == null) {
-            this.setFieldName(null);
+            setFieldName(null);
+            setParam(null);
+        } else {
+            switch(tokenType) {
+                case FORMATTED_PARAM:
+                    if (getFieldName() == null) {
+                        setParam(null);;
+                    }
+                    break;
+                case GENERATOR_PARAM:
+                    setFieldName(null);
+                    break;
+                case NEWLINE:
+                    setFieldName(null);
+                    setParam(null);
+                    break;
+                case PARAM:
+                    setParam(null);
+                    break;
+                case TEXT:
+                    setFieldName(null);
+                    break;
+                default:
+                    break;
+                
+            }
         }
-        super.normalize();
+        
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

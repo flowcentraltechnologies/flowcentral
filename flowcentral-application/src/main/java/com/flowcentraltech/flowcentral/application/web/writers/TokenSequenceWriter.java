@@ -167,6 +167,7 @@ public class TokenSequenceWriter extends AbstractControlWriter {
                             csb.add(fieldSelectCtrl.getId());
                             break;
                         case TEXT:
+                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, textCtrl);
                             csb.add(textCtrl.getId());
                             break;
                         default:

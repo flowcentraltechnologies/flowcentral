@@ -79,12 +79,14 @@ public class TokenSequence {
 
     public void clear() throws UnifyException {
         entryList.clear();
+        preview();
     }
 
     public void moveUpEntry(int index) throws UnifyException {
         if (index > 0) {
             TokenSequenceEntry svo = entryList.remove(index);
             entryList.add(index - 1, svo);
+            preview();
         }
     }
 
@@ -92,11 +94,13 @@ public class TokenSequence {
         if (index < entryList.size() - 2) {
             TokenSequenceEntry svo = entryList.remove(index);
             entryList.add(index + 1, svo);
+            preview();
         }
     }
 
     public void removeEntry(int index) throws UnifyException {
         entryList.remove(index);
+        preview();
     }
 
     public EntityDef getEntityDef() {
@@ -154,6 +158,7 @@ public class TokenSequence {
                 TokenSequenceEntry fso = entryList.get(i);
                 if (fso.isWithTokenType()) {
                     StringToken token = null;
+                    System.out.println("@prime: fso = " + fso);
                     switch (fso.getTokenType()) {
                         case FORMATTED_PARAM:
                             if (fso.isWithFieldName() && fso.isWithParam()) {
