@@ -47,12 +47,16 @@ public class TokenSequenceWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, tokenSequenceWidget);
         writer.write(">");
-        
-        writer.write("<div style=\"display:table;width:100%;\">");
-        writer.write("<div style=\"display:table-row;\">");
-        
-        //Preview
-        writer.write("<div class=\"previewfrm\" style=\"display:table-cell;\">");
+
+        writer.write("<table style=\"width:100%;height:100%;table-layout:fixed;\">");
+        writer.write("<tr style=\"height:100%;\">");
+
+        // Preview
+        writer.write("<td class=\"previewfrm\">");
+        writer.write("<span class=\"caption\">");
+        writer.write(resolveSessionMessage("$m{tokensequence.template}"));
+        writer.write("</span>");
+        writer.write("<div class=\"previewbox\" style=\"display:block;width:100%;overflow-y:auto;\">");
         writer.write("<span class=\"previewbdy\">");
         String preview = tokenSequenceWidget.getPreview();
         if (!StringUtils.isBlank(preview)) {
@@ -60,9 +64,10 @@ public class TokenSequenceWriter extends AbstractControlWriter {
         }
         writer.write("</span>");
         writer.write("</div>");
-        
-        //Editor
-        writer.write("<div class=\"editorfrm\" style=\"display:table-cell;\">");
+        writer.write("</td>");
+
+        // Editor
+        writer.write("<td class=\"editorfrm\">");
         List<ValueStore> valueStoreList = tokenSequenceWidget.getValueList();
         if (valueStoreList != null) {
             Control tokenSelectCtrl = tokenSequenceWidget.getTokenSelectCtrl();
@@ -73,58 +78,79 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             Control moveUpCtrl = tokenSequenceWidget.getMoveUpCtrl();
             Control moveDownCtrl = tokenSequenceWidget.getMoveDownCtrl();
             Control deleteCtrl = tokenSequenceWidget.getDeleteCtrl();
-            int len = valueStoreList.size();
+            final int len = valueStoreList.size();
+            final int last = len - 1;
 
             final String typeLabel = resolveSessionMessage("$m{tokensequence.type}");
             final String textLabel = resolveSessionMessage("$m{tokensequence.text}");
             final String fieldLabel = resolveSessionMessage("$m{tokensequence.field}");
             final String usesLabel = resolveSessionMessage("$m{tokensequence.usesformatter}");
             final String generatorLabel = resolveSessionMessage("$m{tokensequence.usesgenerator}");
+            writer.write("<span class=\"caption\">");
+            writer.write(resolveSessionMessage("$m{tokensequence.editor}"));
+            writer.write("</span>");
+            writer.write("<div class=\"editorbox\" style=\"display:block;width:100%;overflow-y:auto;\">");
+            writer.write("<table class=\"editor\" style=\"display: block;width:100%;table-layout:fixed;\">");
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
                 TokenSequenceEntry fso = (TokenSequenceEntry) lineValueStore.getValueObject();
-                writer.write("<div class=\"line\">");
+                writer.write("<tr class=\"line\">");
                 writeValuesItem(writer, lineValueStore, tokenSelectCtrl, typeLabel);
                 if (fso.isWithTokenType()) {
-                    switch(fso.getTokenType()) {
+                    switch (fso.getTokenType()) {
                         case FORMATTED_PARAM:
                             writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
                             if (fso.isWithFieldName()) {
                                 writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel);
+                            } else {
+                                writeBlankValuesItem(writer);
                             }
                             break;
                         case GENERATOR_PARAM:
                             writeValuesItem(writer, lineValueStore, generatorSelectCtrl, generatorLabel);
+                            writeBlankValuesItem(writer);
                             break;
                         case NEWLINE:
+                            writeBlankValuesItem(writer);
+                            writeBlankValuesItem(writer);
                             break;
                         case PARAM:
                             writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
+                            writeBlankValuesItem(writer);
                             break;
                         case TEXT:
                             writeValuesItem(writer, lineValueStore, textCtrl, textLabel);
+                            writeBlankValuesItem(writer);
                             break;
                         default:
                             break;
-                        
+
                     }
-                                       
-                    writer.write("<div class=\"atab\">");
-                    moveUpCtrl.setDisabled(i == 0);
-                    moveDownCtrl.setDisabled(i >= (len - 2));
-                    writeActionItem(writer, lineValueStore, moveUpCtrl);
-                    writeActionItem(writer, lineValueStore, moveDownCtrl);
+                } else {
+                    writeBlankValuesItem(writer);
+                    writeBlankValuesItem(writer);
+                }               
+
+                writer.write("<td class=\"atab\">");
+                moveUpCtrl.setDisabled(i == 0);
+                moveDownCtrl.setDisabled(i >= (len - 2));
+                writeActionItem(writer, lineValueStore, moveUpCtrl);
+                writeActionItem(writer, lineValueStore, moveDownCtrl);
+                if (i < last) {
                     writeActionItem(writer, lineValueStore, deleteCtrl);
-                    writer.write("</div>");
                 }
-                writer.write("</div>");
+                writer.write("</td>");
+                writer.write("</tr>");
             }
+
+            writer.write("</table>");
+            writer.write("</div>");
         }
-        writer.write("</div>");
-        writer.write("</div>");
-        writer.write("</div>");
+        writer.write("</td>");
         
-        
+        writer.write("</tr>");
+        writer.write("</table>");
+
         writer.write("</div>");
     }
 
@@ -147,7 +173,7 @@ public class TokenSequenceWriter extends AbstractControlWriter {
                 writeBehavior(writer, tokenSequenceWidget, lineValueStore, tokenSelectCtrl);
                 csb.add(tokenSelectCtrl.getId());
                 if (fso.isWithTokenType()) {
-                    switch(fso.getTokenType()) {
+                    switch (fso.getTokenType()) {
                         case FORMATTED_PARAM:
                             writeBehavior(writer, tokenSequenceWidget, lineValueStore, fieldSelectCtrl);
                             csb.add(fieldSelectCtrl.getId());
@@ -172,7 +198,7 @@ public class TokenSequenceWriter extends AbstractControlWriter {
                             break;
                         default:
                             break;
-                        
+
                     }
                 }
             }
@@ -191,13 +217,26 @@ public class TokenSequenceWriter extends AbstractControlWriter {
 
     private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
             throws UnifyException {
+        writer.write("<td class=\"vitem\">");
+        writer.write("<div style=\"display:table;width:100%;\">");
+        writer.write("<div style=\"display:table-row;\">");
+        writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
         writer.write("<span class=\"label\">");
         writer.write(label);
         writer.write("</span>");
-        writer.write("<span class=\"item\">");
+        writer.write("</div>");
+        writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
         ctrl.setValueStore(lineValueStore);
         writer.writeStructureAndContent(ctrl);
-        writer.write("</span>");
+        writer.write("</div>");
+        writer.write("</div>");
+        writer.write("</div>");
+        writer.write("</td>");
+    }
+
+    private void writeBlankValuesItem(ResponseWriter writer) throws UnifyException {
+        writer.write("<td class=\"vitem\">");
+        writer.write("</td>");
     }
 
     private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
