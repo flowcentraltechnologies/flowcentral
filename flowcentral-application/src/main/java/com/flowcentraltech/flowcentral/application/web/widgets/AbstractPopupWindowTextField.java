@@ -18,7 +18,9 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.constant.ExtensionType;
 import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 
 /**
@@ -44,7 +46,22 @@ public abstract class AbstractPopupWindowTextField extends AbstractPopupTextFiel
     }
 
     @Override
+    public ExtensionType getExtensionType() {
+        return ExtensionType.EXTENDED;
+    }
+
+    @Override
     public boolean isPopupOnEditableOnly() {
+        return false;
+    }
+
+    @Override
+    public boolean isUseFacade() throws UnifyException {
+        return true;
+    }
+
+    @Override
+    public boolean isBindEventsToFacade() throws UnifyException {
         return false;
     }
 
@@ -78,6 +95,11 @@ public abstract class AbstractPopupWindowTextField extends AbstractPopupTextFiel
 
         public Object getItem() {
             return item;
+        }
+
+        @Override
+        public String toString() {
+            return StringUtils.toXmlString(this);
         }
     }
 }

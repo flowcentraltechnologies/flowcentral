@@ -68,7 +68,8 @@
 !ui-contentpanel:content styleClassBinding:$s{contentStyleClass} path:$s{/application/dashboard/openPage}
 	tabbedBinding:enableMultipleTabs documentPath:$s{/application}
 
-
+// TODO
+// Put all popups in a single dynamic panel so that they are created as needed
 //Select user role popup
 !fc-selectrolepanel:userRoleOptionsPopup dialogCaption:$m{application.switch.role}
     roleListBinding:userRoleList selectRolePath:$n{/switchUserRole}
@@ -89,6 +90,10 @@
 // Entity tree multiselect pop up
 !fc-entitytreemultiselectpanel:entityTreeMultiselectPopup
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.ENTITYTREESELECT}
+
+// Text template pop up
+!fc-texttemplatepanel:textTemplatePopup
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR}
 
 //Actions 
 !ui-post:wkspChangeAct path:$n{/changeWorkspace} components:$c{currentWkspSel}

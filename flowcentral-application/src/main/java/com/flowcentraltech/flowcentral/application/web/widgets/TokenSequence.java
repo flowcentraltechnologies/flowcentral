@@ -39,12 +39,14 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class TokenSequence {
 
-    private EntityDef entityDef;
+    private final EntityDef entityDef;
 
     private List<TokenSequenceEntry> entryList;
 
     private List<TokenSequenceEntry> viewEntryList;
 
+    private final Editable editable;
+    
     private String preview;
     
     public TokenSequence(EntityDef entityDef) {
@@ -56,6 +58,7 @@ public class TokenSequence {
         this.entryList = new ArrayList<TokenSequenceEntry>();
         this.entryList.add(new TokenSequenceEntry(entityDef, rootEditable.isTrue()));
         this.viewEntryList = Collections.unmodifiableList(entryList);
+        this.editable = rootEditable;
     }
 
     public TokenSequence(EntityDef entityDef, String parameterizedString) throws UnifyException {
@@ -66,6 +69,7 @@ public class TokenSequence {
         this.entityDef = entityDef;
         this.entryList = new ArrayList<TokenSequenceEntry>();
         this.viewEntryList = Collections.unmodifiableList(entryList);
+        this.editable = editable;
         loadEntryList(parameterizedString, editable);
     }
 
@@ -79,6 +83,7 @@ public class TokenSequence {
 
     public void clear() throws UnifyException {
         entryList.clear();
+        entryList.add(new TokenSequenceEntry(entityDef, editable.isTrue()));
         preview();
     }
 
@@ -158,7 +163,6 @@ public class TokenSequence {
                 TokenSequenceEntry fso = entryList.get(i);
                 if (fso.isWithTokenType()) {
                     StringToken token = null;
-                    System.out.println("@prime: fso = " + fso);
                     switch (fso.getTokenType()) {
                         case FORMATTED_PARAM:
                             if (fso.isWithFieldName() && fso.isWithParam()) {

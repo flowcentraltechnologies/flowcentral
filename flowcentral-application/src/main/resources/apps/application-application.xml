@@ -439,6 +439,11 @@
 			dataType="string" inputType="string"
 			editor="!fc-suggestiontextsearch styleClass:$e{fc-entitysearch} type:$s{%s}"
 			renderer="!ui-label" />
+		<widgetType name="texttemplate"
+			description="$m{application.widgettype.texttemplate}"
+			dataType="string" inputType="string"
+			editor="!fc-texttemplate entityBinding:$s{entity}"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>

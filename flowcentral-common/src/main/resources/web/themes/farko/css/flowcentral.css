@@ -473,7 +473,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-fieldsequence .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
 
 /* Token sequence */
-.fc-tokensequence {padding:4px;width:820px;}
+.fc-tokensequence {padding:4px;width:100%;min-width:820px;}
 .fc-tokensequence .line {vertical-align:top;padding-bottom:2px;}
 .fc-tokensequence .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
@@ -859,6 +859,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Select role user panel */
 .fc-selectrolepanel {width: 380px;}
+
+/* Text template panel */
+.fc-texttemplatepanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-texttemplatepanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;}
 
 /* Manage entity applet panel */
 .fc-manageentityappletpanel {}

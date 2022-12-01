@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.web.panels.TextTemplate;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -31,17 +32,19 @@ import com.tcdng.unify.core.constant.Editable;
  * @since 1.0
  */
 @Component("fc-texttemplate")
-@UplAttributes({ @UplAttribute(name = "entity", type = String.class, mandatory = true) })
+@UplAttributes({ @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "text"),
+        @UplAttribute(name = "entity", type = String.class),
+        @UplAttribute(name = "entityBinding", type = String.class) })
 public class TextTemplateWIdget extends AbstractPopupWindowTextField {
 
     @Override
     protected Popup preparePopup() throws UnifyException {
-        final EntityDef entityDef = au().getEntityDef(getUplAttribute(String.class, "entity"));
+        final EntityDef entityDef = au().getEntityDef(getUplAttribute(String.class, "entity", "entityBinding"));
         final String template = getValue(String.class);
         TokenSequence tokenSequence = new TokenSequence(entityDef, template,
                 Editable.fromBoolean(isContainerEditable()));
         return new Popup(ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
-                FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR, tokenSequence);
+                FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR,
+                new TextTemplate(tokenSequence, getValueStore(), getBinding()));
     }
-
 }

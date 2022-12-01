@@ -45,10 +45,12 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
 @Component("/applicationstudio")
 @UplBinding("web/studio/upl/applicationstudio.upl")
 @ResultMappings({
-    @ResultMapping(name = "showuserdetails", response = { "!showpopupresponse popup:$s{userDetailsPopup}" }),
-    @ResultMapping(name = "forwardtohome", response = { "!forwardresponse path:$x{application.web.home}" }),
-    @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
-    response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" })})
+        @ResultMapping(name = "showuserdetails", response = { "!showpopupresponse popup:$s{userDetailsPopup}" }),
+        @ResultMapping(name = "forwardtohome", response = { "!forwardresponse path:$x{application.web.home}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
+                response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
+                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationStudioController extends AbstractFlowCentralPageController<ApplicationStudioPageBean> {
 
     @Configurable
