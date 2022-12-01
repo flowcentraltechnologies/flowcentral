@@ -45,6 +45,8 @@ public class TokenSequence {
 
     private List<TokenSequenceEntry> viewEntryList;
 
+    private String preview;
+    
     public TokenSequence(EntityDef entityDef) {
         this(entityDef, Editable.TRUE);
     }
@@ -132,9 +134,19 @@ public class TokenSequence {
         if (last.isWithFieldName()) {
             entryList.add(new TokenSequenceEntry(entityDef, true));
         }
+        
+        preview();
     }
 
-    public String getParameterizedString() throws UnifyException {
+    public void preview() throws UnifyException {
+        preview = getParameterizedString();
+    }
+        
+    public String getPreview() {
+        return preview;
+    }
+
+    private String getParameterizedString() throws UnifyException {
         int lim = entryList.size() - 1;
         if (lim > 0) {
             List<StringToken> tokens = new ArrayList<StringToken>();
@@ -185,6 +197,7 @@ public class TokenSequence {
 
     private void loadEntryList(String parameterizedString, Editable editable) throws UnifyException {
         if (parameterizedString != null) {
+            preview = parameterizedString;
             for (StringToken token : StringUtils.breakdownParameterizedString(parameterizedString)) {
                 TokenSequenceEntry fso = new TokenSequenceEntry(entityDef, editable.isTrue());
                 String fieldName = null;

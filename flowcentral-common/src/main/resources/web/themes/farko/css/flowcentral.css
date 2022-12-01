@@ -470,6 +470,23 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-fieldsequence .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
 .fc-fieldsequence .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
 
+/* Token sequence */
+.fc-tokensequence {padding:4px;width:820px;}
+.fc-tokensequence .line {padding-bottom: 2px;}
+.fc-tokensequence .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
+	font-weight:bold; vertical-align: middle;}
+.fc-tokensequence .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}
+.fc-tokensequence .item {display:inline-block; margin-right:6px;}
+.fc-tokensequence .atab {display:inline-block;vertical-align: middle;height:24px;width:140px;}
+.fc-tokensequence .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
+								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
+.fc-tokensequence .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
+.fc-tokensequence .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
+
+.fc-tokensequence .previewfrm {width:30%;}
+.fc-tokensequence .previewbdy {display:block;}
+.fc-tokensequence .editorfrm {width:70%;}
+
 /* Ref
 /* Search */
 .fc-search {}
