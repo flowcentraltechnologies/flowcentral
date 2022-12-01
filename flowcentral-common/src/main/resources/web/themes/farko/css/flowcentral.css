@@ -129,7 +129,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-inlabel {display:inline-block !important;font-size:11px;font-weight:bold; color:#525e6d;}
 
 /****** OVERRIDE END **********/
-.fc-tiny {font-size:8pt;width:140px;}
+.fc-tiny {font-size:8pt;width:152px;}
 .fc-tiny .tread {font-size:8pt;}
 
 .fc-formfield {width:196px;}
@@ -487,10 +487,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tokensequence .abutton:disabled {background: #f4f4f4 !important;cursor: default;}
 
 .fc-tokensequence .previewfrm {width:20%;padding:2px;}
-.fc-tokensequence .previewbox {border:1px solid #e8e8e8;height:264px;max-height:264px;}
+.fc-tokensequence .previewbox {border:1px solid #e8e8e8;height:240px;max-height:240px;}
 .fc-tokensequence .previewbdy {display:block;padding:2px;white-space: pre-wrap;word-wrap: anywhere;font-size:8pt;}
 .fc-tokensequence .editorfrm {width:80%;padding:2px;}
-.fc-tokensequence .editorbox {border:1px solid #e8e8e8;height:264px;max-height:264px;}
+.fc-tokensequence .editorbox {border:1px solid #e8e8e8;height:240px;max-height:240px;}
 .fc-tokensequence .editor {}
 
 /* Ref
