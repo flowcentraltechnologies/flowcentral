@@ -138,6 +138,7 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             Control tokenSelectCtrl = tokenSequenceWidget.getTokenSelectCtrl();
             Control fieldSelectCtrl = tokenSequenceWidget.getFieldSelectCtrl();
             Control paramCtrl = tokenSequenceWidget.getParamCtrl();
+            Control textCtrl = tokenSequenceWidget.getTextCtrl();
             Control generatorSelectCtrl = tokenSequenceWidget.getGeneratorSelectCtrl();
             final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
@@ -152,17 +153,21 @@ public class TokenSequenceWriter extends AbstractControlWriter {
                             csb.add(fieldSelectCtrl.getId());
                             if (fso.isWithFieldName()) {
                                 writeBehavior(writer, tokenSequenceWidget, lineValueStore, paramCtrl);
+                                csb.add(paramCtrl.getId());
                             }
                             break;
                         case GENERATOR_PARAM:
                             writeBehavior(writer, tokenSequenceWidget, lineValueStore, generatorSelectCtrl);
+                            csb.add(generatorSelectCtrl.getId());
                             break;
                         case NEWLINE:
                             break;
                         case PARAM:
                             writeBehavior(writer, tokenSequenceWidget, lineValueStore, fieldSelectCtrl);
+                            csb.add(fieldSelectCtrl.getId());
                             break;
                         case TEXT:
+                            csb.add(textCtrl.getId());
                             break;
                         default:
                             break;

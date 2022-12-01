@@ -472,7 +472,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Token sequence */
 .fc-tokensequence {padding:4px;width:820px;}
-.fc-tokensequence .line {padding-bottom: 2px;}
+.fc-tokensequence .line {display:inline-flex;vertical-align:top;padding-bottom:2px;}
 .fc-tokensequence .tab {display:inline-block; width:32px !important; text-align:right;padding-right:2px; border-right:4px solid #f0f0f0;
 	font-weight:bold; vertical-align: middle;}
 .fc-tokensequence .label {display:inline-block; margin-right:6px;color:#808080;font-style: italic;font-size: 7pt;}

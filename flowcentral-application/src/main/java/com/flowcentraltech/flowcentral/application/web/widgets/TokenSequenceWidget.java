@@ -53,7 +53,7 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
     protected void doOnPageConstruct() throws UnifyException {
         tokenSelectCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:stringtokentypelist binding:tokenType");
-        textCtrl = (Control) addInternalChildWidget("!ui-textarea rows:3 binding:param");
+        textCtrl = (Control) addInternalChildWidget("!ui-textarea rows:2 binding:param");
         fieldSelectCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
         paramCtrl = (Control) addInternalChildWidget(

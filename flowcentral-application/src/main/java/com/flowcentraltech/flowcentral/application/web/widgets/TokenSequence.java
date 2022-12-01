@@ -131,7 +131,7 @@ public class TokenSequence {
         }
 
         TokenSequenceEntry last = entryList.get(entryList.size() - 1);
-        if (last.isWithFieldName()) {
+        if (last.isWithTokenType()) {
             entryList.add(new TokenSequenceEntry(entityDef, true));
         }
         
