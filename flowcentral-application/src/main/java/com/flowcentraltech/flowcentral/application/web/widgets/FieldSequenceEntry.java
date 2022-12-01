@@ -61,7 +61,7 @@ public class FieldSequenceEntry {
     }
 
     public EntityFieldDef getEntityFieldDef(String fieldName) {
-        return entityDef.getFieldDef(fieldName);
+        return entityDef != null ? entityDef.getFieldDef(fieldName) : null;
     }
 
     public boolean isWithFieldName() {

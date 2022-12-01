@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -245,7 +244,6 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.tcdng.unify.core.UnifyComponentConfig;
@@ -304,9 +302,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             AppletPropertyConstants.PROPERTY_LIST_RULE, AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME)));
 
     private static final int MAX_LIST_DEPTH = 8;
-
-    @Configurable
-    private SystemModuleService systemModuleService;
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
@@ -395,7 +390,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 protected AppletDef create(String longName, Object... arg1) throws Exception {
                     String _actLongName = ApplicationNameUtils.removeVestigialNamePart(longName);
                     AppApplet appApplet = getApplicationEntity(AppApplet.class, _actLongName);
-                    final boolean descriptiveButtons = systemModuleService.getSysParameterValue(boolean.class,
+                    final boolean descriptiveButtons = appletUtilities.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     AppletDef.Builder adb = AppletDef.newBuilder(appApplet.getType(), appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
@@ -860,7 +855,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected FormDef create(String longName, Object... arg1) throws Exception {
                     AppForm appForm = getApplicationEntity(AppForm.class, longName);
-                    final boolean useFormColorScheme = systemModuleService.getSysParameterValue(boolean.class,
+                    final boolean useFormColorScheme = appletUtilities.system().getSysParameterValue(boolean.class,
                             ApplicationModuleSysParamConstants.USE_APPLICATION_FORM_COLOR_SCHEME);
                     final EntityDef entityDef = getEntityDef(appForm.getEntity());
                     FormDef.Builder fdb = FormDef.newBuilder(appForm.getType(), entityDef,
@@ -1134,10 +1129,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             };
     }
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
     }
@@ -1213,7 +1204,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public void saveSuggestions(Object entityDef, Entity inst) throws UnifyException {
         EntityDef _entityDef = (EntityDef) entityDef;
         if (_entityDef.isWithSuggestionFields()) {
-            if (systemModuleService.getSysParameterValue(boolean.class,
+            if (appletUtilities.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.AUTOSAVE_SUGGESTIONS)) {
                 for (EntityFieldDef entityFieldDef : _entityDef.getSuggestionFieldDefList()) {
                     String suggestion = DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName());
@@ -1289,7 +1280,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public Long createApplication(Application application, Module module) throws UnifyException {
         logDebug("Creating application [{0}]...", application.getDescription());
         if (module != null) {
-            Long moduleId = systemModuleService.createModule(module);
+            Long moduleId = appletUtilities.system().createModule(module);
             application.setModuleId(moduleId);
         }
 
@@ -1299,7 +1290,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE, applicationPrivilegeCode,
                 application.getDescription());
         UserToken userToken = getUserToken();
-        if (!userToken.isReservedUser() && systemModuleService.getSysParameterValue(boolean.class,
+        if (!userToken.isReservedUser() && appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
             applicationPrivilegeManager.assignPrivilegeToRole(userToken.getRoleCode(), applicationPrivilegeCode);
         }
@@ -1725,7 +1716,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
-        final boolean indicateMenuSectors = systemModuleService.getSysParameterValue(boolean.class,
+        final boolean indicateMenuSectors = appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
         List<Application> applicationList = indicateMenuSectors
                 ? environment().listAll(
@@ -1733,7 +1724,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 : environment().listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
         if (!DataUtils.isBlank(applicationList)) {
             List<ApplicationMenuDef> resultList = new ArrayList<ApplicationMenuDef>();
-            final String importApplicationName = systemModuleService.getSysParameterValue(String.class,
+            final String importApplicationName = appletUtilities.system().getSysParameterValue(String.class,
                     ApplicationModuleSysParamConstants.IMPORT_APPLICATION_NAME);
             for (Application application : applicationList) {
                 List<AppletDef> appletDefList = importApplicationName.equals(application.getName())
@@ -2464,13 +2455,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             csvFileParser = new CSVParser(reader, csvFormat);
-            Locale locale = getApplicationLocale();
             Map<String, RecLoadInfo> recMap = new LinkedHashMap<String, RecLoadInfo>();
             for (CSVRecord csvRecord : csvFileParser) {
                 recMap.clear();
                 for (FieldSequenceEntryDef fieldSequenceEntryDef : fieldSequenceList) {
-                    Formatter<?> formatter = fieldSequenceEntryDef.isWithFormatter()
-                            ? (Formatter<?>) getUplComponent(locale, fieldSequenceEntryDef.getFormatter(), true)
+                    Formatter<?> formatter = fieldSequenceEntryDef.isWithStandardFormatCode()
+                            ? appletUtilities.formatHelper().newFormatter(fieldSequenceEntryDef.getStandardFormatCode())
                             : null;
                     String fieldName = fieldSequenceEntryDef.getFieldName();
                     String listVal = csvRecord.get(fieldName);
@@ -2737,7 +2727,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private boolean installApplication(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
             throws UnifyException {
         final AppConfig applicationConfig = applicationInstall.getApplicationConfig();
-        final Long moduleId = systemModuleService.getModuleId(applicationConfig.getModule());
+        final Long moduleId = appletUtilities.system().getModuleId(applicationConfig.getModule());
         String description = resolveApplicationMessage(applicationConfig.getDescription());
 
         // Applications

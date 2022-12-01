@@ -542,6 +542,18 @@ fux.miniFormTabout = function(uEv) {
 	}
 }
 
+/** Popup window text  */
+fux.rigPopupWinText = function(rgp) {
+	const elem = _id(rgp.pTrgId);
+	if (elem) {
+		const id = rgp.pId;
+		const evp = ux.newEvPrm(rgp);
+		evp.uId = id;
+		evp.uCmd = id + "->popup";
+		ux.addHdl(elem, rgp.pEvt, ux.post, evp);
+	}
+}
+
 /** Input array */
 fux.rigInputArray = function(rgp) {
 
@@ -901,6 +913,7 @@ fux.init = function() {
 	ux.setfn(fux.rigChart,"fux10");
 	ux.setfn(fux.rigWidgetRules,"fux11");
 	ux.setfn(fux.rigInputArray,"fux12");  
+	ux.setfn(fux.rigPopupWinText,"fux13");  
 }
 
 fux.init();

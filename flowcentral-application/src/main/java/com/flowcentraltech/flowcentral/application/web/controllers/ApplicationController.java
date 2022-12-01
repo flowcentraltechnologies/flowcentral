@@ -63,6 +63,8 @@ import com.tcdng.unify.web.ui.widget.control.Table;
                 response = { "!showpopupresponse popup:$s{entityMultiselectPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
                 response = { "!showpopupresponse popup:$s{entityTreeMultiselectPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
+            response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.FORWARD_TO_HOME,
                 response = { "!forwardresponse path:$x{application.web.home}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_WORKSPACE,

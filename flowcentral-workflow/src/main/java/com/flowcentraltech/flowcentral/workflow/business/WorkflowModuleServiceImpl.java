@@ -27,7 +27,6 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
@@ -72,7 +71,6 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
@@ -140,6 +138,7 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -170,9 +169,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private static final String WORK_CATEGORY = "work";
 
     @Configurable
-    private SystemModuleService systemModuleService;
-
-    @Configurable
     private OrganizationModuleService organizationModuleService;
 
     @Configurable
@@ -180,9 +176,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private ApplicationPrivilegeManager appPrivilegeManager;
-
-    @Configurable
-    private ApplicationModuleService appService;
 
     @Configurable
     private AppletUtilities appletUtil;
@@ -209,7 +202,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 protected boolean stale(String wfName, WfDef wfDef) throws Exception {
                     return (environment().value(long.class, "versionNo", new WorkflowQuery().id(wfDef.getId())) > wfDef
                             .getVersion())
-                            || (wfDef.getEntityDef().getVersion() < appService.getEntityDef(wfDef.getEntity())
+                            || (wfDef.getEntityDef().getVersion() < appletUtil.application().getEntityDef(wfDef.getEntity())
                                     .getVersion());
                 }
 
@@ -223,7 +216,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 longName);
                     }
 
-                    EntityClassDef entityClassDef = appService.getEntityClassDef(workflow.getEntity());
+                    EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(workflow.getEntity());
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
@@ -250,13 +243,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         wdb.addWfSetValuesDef(wfSetValuesDef);
                     }
 
-                    final boolean descriptiveButtons = systemModuleService.getSysParameterValue(boolean.class,
+                    final boolean descriptiveButtons = appletUtil.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     for (WfStep wfStep : workflow.getStepList()) {
                         AppletDef appletDef = null;
                         if (wfStep.getType().isInteractive() && !StringUtils.isBlank(wfStep.getAppletName())) {
                             final boolean useraction = wfStep.getType().isUserAction();
-                            AppletDef _stepAppletDef = appService.getAppletDef(wfStep.getAppletName());
+                            AppletDef _stepAppletDef = appletUtil.application().getAppletDef(wfStep.getAppletName());
                             AppletType _reviewAppletType = _stepAppletDef.getType().isSingleForm()
                                     ? AppletType.REVIEW_SINGLEFORMWORKITEMS
                                     : AppletType.REVIEW_WORKITEMS;
@@ -367,7 +360,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             wfWizard.getVersionNo());
                     final String appletName = WorkflowNameUtils.getWfWizardAppletName(longName);
                     final String label = getApplicationMessage("workflow.wizardapplet.label", wfWizard.getLabel());
-                    final boolean descriptiveButtons = systemModuleService.getSysParameterValue(boolean.class,
+                    final boolean descriptiveButtons = appletUtil.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     final String assignDescField = null;
                     final String pseudoDeleteField = null;
@@ -422,10 +415,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     public void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
         this.organizationModuleService = organizationModuleService;
     }
@@ -436,10 +425,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     public void setAppPrivilegeManager(ApplicationPrivilegeManager appPrivilegeManager) {
         this.appPrivilegeManager = appPrivilegeManager;
-    }
-
-    public void setAppService(ApplicationModuleService appService) {
-        this.appService = appService;
     }
 
     public void setAppletUtil(AppletUtilities appletUtil) {
@@ -620,7 +605,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (isEmails && wfDef.getEntityDef().emailProducerConsumer()) {
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
                     wfDef.getEntityDef().getEmailProducerConsumer());
-            WidgetTypeDef widgetTypeDef = appService.getWidgetTypeDef("application.email");
+            WidgetTypeDef widgetTypeDef = appletUtil.application().getWidgetTypeDef("application.email");
             Validator validator = (Validator) getComponent("fc-emailvalidator");
             InputArrayEntries.Builder ieb = InputArrayEntries.newBuilder(widgetTypeDef);
             ieb.columns(3); // TODO Get from system parameter
@@ -728,7 +713,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void graduateWfWizardItem(String wfWizardName, Long workEntityId) throws UnifyException {
         WfWizardDef wfWizardDef = getWfWizardDef(wfWizardName);
-        EntityClassDef entityClassDef = appService.getEntityClassDef(wfWizardDef.getEntity());
+        EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfWizardDef.getEntity());
         WorkEntity we = environment().findLean((Class<? extends WorkEntity>) entityClassDef.getEntityClass(),
                 workEntityId);
         we.setInWorkflow(false);
@@ -845,7 +830,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (grabClusterLock(WFTRANSITION_QUEUE_LOCK)) {
             try {
                 logDebug("Lock acquired for transition queue processing...");
-                int batchSize = systemModuleService.getSysParameterValue(int.class,
+                int batchSize = appletUtil.system().getSysParameterValue(int.class,
 
                         WorkflowModuleSysParamConstants.WFTRANSITION_PROCESSING_BATCH_SIZE);
                 pendingList = environment()
@@ -888,7 +873,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             try {
                 logDebug("Lock acquired for workflow auto loading...");
                 final Date now = getNow();
-                int batchSize = systemModuleService.getSysParameterValue(int.class,
+                int batchSize = appletUtil.system().getSysParameterValue(int.class,
                         WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
                 List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().supportsAutoload()
                         .addSelect("applicationName", "workflowName", "autoLoadConditionName"));
@@ -897,7 +882,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             wfStep.getWorkflowName());
                     logDebug("Performing workflow auto loading for [{0}]...", workflowName);
                     WfDef wfDef = getWfDef(workflowName);
-                    EntityClassDef entityClassDef = appService.getEntityClassDef(wfDef.getEntity());
+                    EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
                     Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName()).getFilterDef()
                             .getRestriction(entityClassDef.getEntityDef(), null, now);
                     List<? extends WorkEntity> entityList = environment().listAll(Query
@@ -989,9 +974,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             final String userLoginId = getUserToken() == null ? DefaultApplicationConstants.SYSTEM_LOGINID
                     : getUserToken().getUserLoginId();
-            final String itemDesc = wfDef.isWithDescFormat()
-                    ? StringUtils.buildParameterizedString(wfDef.getDescFormat(), new BeanValueStore(inst))
-                    : inst.getWorkflowItemDesc();
+            String itemDesc = inst.getWorkflowItemDesc();
+            if (wfDef.isWithDescFormat()) {
+                ParameterizedStringGenerator generator = appletUtil.getStringGenerator(new BeanValueStore(inst),
+                        wfDef.getDescFormat());
+                itemDesc = generator.generate();
+            }
+
 
             WfItemHist wfItemHist = new WfItemHist();
             wfItemHist.setApplicationName(wfDef.getApplicationName());

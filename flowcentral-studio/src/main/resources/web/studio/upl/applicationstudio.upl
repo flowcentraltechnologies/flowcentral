@@ -60,10 +60,15 @@
 
 // Content
 !ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed} path:$s{/applicationstudio/dashboard/openPage} tabbed:true
-	documentPath:$s{/applicationstudio}    
+	documentPath:$s{/applicationstudio}   
+	 
 // Show user details popup
 !fc-userdetailspanel:userDetailsPopup dialogCaption:$m{application.user.details}
     imageGenBinding:userPhotoGenerator
+
+// Text template pop up
+!fc-texttemplatepanel:textTemplatePopup
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR}
 
 //Actions 
 !ui-post:userDetailsAct path:$n{/showUserDetails}

@@ -21,7 +21,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.AbstractParamGenerator;
-import com.tcdng.unify.core.data.StringToken;
+import com.tcdng.unify.core.data.ParamToken;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
@@ -41,9 +41,9 @@ public class SysParamParamGenerator extends AbstractParamGenerator {
     }
 
     @Override
-    public Object generate(ValueStoreReader itemReader, ValueStoreReader parentReader, StringToken token)
+    public Object generate(ValueStoreReader itemReader, ValueStoreReader parentReader, ParamToken token)
             throws UnifyException {
-        return systemModuleService.getSysParameterValue(String.class, token.getGenKey());
+        return systemModuleService.getSysParameterValue(String.class, token.getParam());
     }
 
 }

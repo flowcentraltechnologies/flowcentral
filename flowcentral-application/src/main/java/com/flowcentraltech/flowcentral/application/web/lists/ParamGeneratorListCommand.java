@@ -13,39 +13,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.application.web.lists;
 
-package com.flowcentraltech.flowcentral.common.data;
-
-import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.AbstractParamGeneratorManager;
 import com.tcdng.unify.core.data.ParamGenerator;
-import com.tcdng.unify.core.data.ParamToken;
 
 /**
- * Flowcentral parameter generator manager.
+ * Param generator list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(CommonModuleNameConstants.PARAMGENERATORMANAGER)
-public class FlowCentralParamGeneratorManager extends AbstractParamGeneratorManager {
+@Component("paramgeneratorlist")
+public class ParamGeneratorListCommand extends AbstractEntityTypeListCommand<ParamGenerator, EntityDefListParams> {
 
-    @Configurable(CommonModuleNameConstants.SYSPARAMGENERATOR)
-    private ParamGenerator generator;
-    
-    public final void setGenerator(ParamGenerator generator) {
-        this.generator = generator;
+    public ParamGeneratorListCommand() {
+        super(ParamGenerator.class, EntityDefListParams.class);
     }
 
     @Override
-    protected ParamGenerator resolveParamGenerator(ParamToken token) throws UnifyException {
-        if ("p".equals(token.getComponent())) {
-            return generator;
+    protected String getEntityName(EntityDefListParams param) throws UnifyException {
+        if (param.isPresent()) {
+            return param.getEntityDef().getLongName();
         }
-        
+
         return null;
     }
 

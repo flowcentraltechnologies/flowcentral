@@ -37,6 +37,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
@@ -52,7 +53,7 @@ import com.tcdng.unify.core.util.StringUtils;
 public class SetValuesDef {
 
     private final List<SetValueDef> setValueList;
-    
+
     private final String valueGenerator;
 
     private final String name;
@@ -82,15 +83,15 @@ public class SetValuesDef {
 
     public Set<String> getFields() {
         if (fields == null) {
-            synchronized(this) {
+            synchronized (this) {
                 if (fields == null) {
                     fields = new HashSet<String>();
                     if (setValueList != null) {
-                        for (SetValueDef setValueDef: setValueList) {
+                        for (SetValueDef setValueDef : setValueList) {
                             fields.add(setValueDef.getFieldName());
                         }
                     }
-                    
+
                     fields = Collections.unmodifiableSet(fields);
                 }
             }
@@ -160,7 +161,7 @@ public class SetValuesDef {
                         break;
                     case IMMEDIATE_FIELD:
                         valueStore.store(setValueDef.getFieldName(),
-                                evaluateImmediateField(valueStore, setValueDef.getParam()));
+                                evaluateImmediateField(au, valueStore, setValueDef.getParam()));
                         break;
                     case IMMEDIATE:
                     default:
@@ -171,20 +172,16 @@ public class SetValuesDef {
         }
     }
 
-    private Object evaluateImmediateField(ValueStore valueStore, String fieldName) throws UnifyException {
+    private Object evaluateImmediateField(AppletUtilities au, ValueStore valueStore, String fieldName)
+            throws UnifyException {
         Object val = valueStore.retrieve(fieldName);
         if ((val instanceof String) && ((String) val).indexOf('{') >= 0) {
             List<StringToken> tokenList = StringUtils.breakdownParameterizedString((String) val);
-            return StringUtils.buildParameterizedString(tokenList, valueStore);
+            ParameterizedStringGenerator generator = au.getStringGenerator(valueStore, tokenList);
+            return generator.generate();
         }
 
         return val;
-    }
-
-    @Override
-    public String toString() {
-        return "SetValuesDef [setValueList=" + setValueList + ", valueGenerator=" + valueGenerator + ", name=" + name
-                + ", description=" + description + "]";
     }
 
     public static Builder newBuilder() {

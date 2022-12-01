@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
@@ -53,7 +54,6 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxQ
 import com.flowcentraltech.flowcentral.notification.entities.NotificationRecipient;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -63,12 +63,13 @@ import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.data.MapValueStore;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Default notification business service implementation.
@@ -86,7 +87,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             NotificationType.SMS);
 
     @Configurable
-    private SystemModuleService systemModuleService;
+    private AppletUtilities au;
 
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
@@ -192,8 +193,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             };
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
@@ -234,11 +235,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
         NotificationChannelMessage.Builder ncmb = NotificationChannelMessage
                 .newBuilder(notificationTemplateDef.getNotificationType(), null);
-        ncmb.toRecipients(recipients)
-                .withSubject(StringUtils.buildParameterizedString(notificationTemplateDef.getSubjectTokenList(),
-                        dictionary.getValueMap()))
-                .withBody(StringUtils.buildParameterizedString(notificationTemplateDef.getTemplateTokenList(),
-                        dictionary.getValueMap()));
+        ValueStore valueStore = new MapValueStore(dictionary.getValueMap());
+        ParameterizedStringGenerator sgenerator = au.getStringGenerator(valueStore,
+                notificationTemplateDef.getSubjectTokenList());
+        ParameterizedStringGenerator bgenerator = au.getStringGenerator(valueStore,
+                notificationTemplateDef.getTemplateTokenList());
+        ncmb.toRecipients(recipients).withSubject(sgenerator.generate()).withBody(bgenerator.generate());
         if (notificationTemplateDef.isWithAttachmentGenerator()) {
             ncmb.withAttachments(
                     ((NotificationAttachmentGenerator) getComponent(notificationTemplateDef.getAttachmentGenerator()))
@@ -265,11 +267,11 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         NotificationTemplateDef notificationTemplateDef = templates.get(notifTemplateName);
         NotificationChannelMessage.Builder ncmb = NotificationChannelMessage
                 .newBuilder(notificationTemplateDef.getNotificationType(), null);
-        ncmb.toRecipients(recipients)
-                .withSubject(
-                        StringUtils.buildParameterizedString(notificationTemplateDef.getSubjectTokenList(), valueStore))
-                .withBody(StringUtils.buildParameterizedString(notificationTemplateDef.getTemplateTokenList(),
-                        valueStore));
+        ParameterizedStringGenerator sgenerator = au.getStringGenerator(valueStore,
+                notificationTemplateDef.getSubjectTokenList());
+        ParameterizedStringGenerator bgenerator = au.getStringGenerator(valueStore,
+                notificationTemplateDef.getTemplateTokenList());
+        ncmb.toRecipients(recipients).withSubject(sgenerator.generate()).withBody(bgenerator.generate());
         if (notificationTemplateDef.isWithAttachmentGenerator()) {
             ncmb.withAttachments(
                     ((NotificationAttachmentGenerator) getComponent(notificationTemplateDef.getAttachmentGenerator()))
@@ -341,15 +343,15 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public void sendNotifications(TaskMonitor taskMonitor) throws UnifyException {
         if (grabClusterLock(SEND_NOTIFICATION_LOCK)) {
             try {
-                if (systemModuleService.getSysParameterValue(boolean.class,
+                if (au.system().getSysParameterValue(boolean.class,
                         NotificationModuleSysParamConstants.NOTIFICATION_ENABLED)) {
-                    int maxBatchSize = systemModuleService.getSysParameterValue(int.class,
+                    int maxBatchSize = au.system().getSysParameterValue(int.class,
 
                             NotificationModuleSysParamConstants.NOTIFICATION_MAX_BATCH_SIZE);
-                    int maxAttempts = systemModuleService.getSysParameterValue(int.class,
+                    int maxAttempts = au.system().getSysParameterValue(int.class,
 
                             NotificationModuleSysParamConstants.NOTIFICATION_MAXIMUM_TRIES);
-                    int retryMinutes = systemModuleService.getSysParameterValue(int.class,
+                    int retryMinutes = au.system().getSysParameterValue(int.class,
 
                             NotificationModuleSysParamConstants.NOTIFICATION_RETRY_MINUTES);
 

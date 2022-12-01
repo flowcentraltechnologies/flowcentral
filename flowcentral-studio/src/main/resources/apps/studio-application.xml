@@ -1683,7 +1683,8 @@
 					<field name="assignDescField"
 						inputWidget="studio.entityrefdesclist" column="1" visible="false" />
 					<field name="pseudoDeleteField"
-						inputWidget="studio.entitybooleanfieldlist" column="1" visible="false" />
+						inputWidget="studio.entitybooleanfieldlist" column="1"
+						visible="false" />
 					<field name="routeToApplet"
 						inputWidget="studio.facadeappletroutetoappletlist" column="1"
 						required="true" visible="false" />
@@ -1808,7 +1809,8 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="baseField,assignField,assignDescField,pseudoDeleteField" visible="true" />
+						target="baseField,assignField,assignDescField,pseudoDeleteField"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch" name="facadePolicy"
@@ -2104,8 +2106,8 @@
 						column="1" required="true" disabled="true" />
 					<field name="columnName" inputWidget="application.columnname"
 						column="1" required="false" />
-					<field name="inputLabel" inputWidget="application.text" column="1"
-						required="false" />
+					<field name="inputLabel" inputWidget="application.text"
+						column="1" required="false" />
 					<field name="inputWidget" inputWidget="entityfieldwidgetlist"
 						column="1" switchOnChange="true" />
 					<field name="suggestionType" inputWidget="suggestiontypelist"
@@ -2545,8 +2547,8 @@
 						inputWidget="studio.entitysearchtablelist" column="1" />
 					<field name="selectHandler"
 						inputWidget="studio.entityselecthandlerlist" column="1" />
-					<field name="listFormat" inputWidget="application.text"
-						column="1" />
+					<field name="listFormat"
+						inputWidget="application.texttemplate" column="1"/>
 					<field name="filterGenerator"
 						inputWidget="application.reffiltergeneratorsearch"
 						switchOnChange="true" column="1" />
@@ -2571,6 +2573,7 @@
 				<setStates>
 					<setState type="annotation" target="staticAnnotation"
 						visible="true" />
+					<setState type="field" target="listFormat" visible="true" />
 					<setState type="tab" target="refFormDetails"
 						editable="false" />
 				</setStates>
@@ -3353,9 +3356,7 @@
 				<setStates>
 					<setState type="field" target="listingGenerator"
 						visible="true" />
-					<setState type="tab"
-						target="actions"
-						visible="true" />
+					<setState type="tab" target="actions" visible="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -3851,8 +3852,8 @@
 					<field name="entity"
 						inputWidget="studio.workentitybynamelist" column="1"
 						required="true" saveAs="true" />
-					<field name="descFormat" inputWidget="application.text"
-						column="1" />
+					<field name="descFormat"
+						inputWidget="application.texttemplate" column="1" />
 					<field name="filterGenerator"
 						inputWidget="studio.workflowfiltergeneratorlist"
 						switchOnChange="true" column="1" />

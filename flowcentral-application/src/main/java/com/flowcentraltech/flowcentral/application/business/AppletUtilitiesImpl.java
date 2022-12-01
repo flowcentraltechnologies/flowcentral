@@ -114,11 +114,14 @@ import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
+import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -171,6 +174,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Configurable
     private PageRequestContextUtil pageRequestContextUtil;
 
+    @Configurable
+    private FormatHelper formatHelper;
+    
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
     public AppletUtilitiesImpl() {
@@ -234,6 +240,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         this.pageRequestContextUtil = pageRequestContextUtil;
     }
 
+    public final void setFormatHelper(FormatHelper formatHelper) {
+        this.formatHelper = formatHelper;
+    }
+
     @Override
     public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
         return applicationModuleService.getFilterGroupDef(appletName, tabFilter);
@@ -252,6 +262,18 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+            throws UnifyException {
+        return specialParamProvider.getStringGenerator(paramValueStore, tokenList);
+    }
+
+    @Override
+    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+            List<StringToken> tokenList) throws UnifyException {
+        return specialParamProvider.getStringGenerator(paramValueStore, generatorValueStore, tokenList);
     }
 
     @Override
@@ -388,6 +410,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public CollaborationProvider collaborationProvider() {
         return collaborationProvider;
+    }
+
+    @Override
+    public FormatHelper formatHelper() {
+        return formatHelper;
     }
 
     @Override
