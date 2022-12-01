@@ -2548,7 +2548,7 @@
 					<field name="selectHandler"
 						inputWidget="studio.entityselecthandlerlist" column="1" />
 					<field name="listFormat"
-						inputWidget="application.texttemplate" column="1" visible="false"/>
+						inputWidget="application.texttemplate" column="1"/>
 					<field name="filterGenerator"
 						inputWidget="application.reffiltergeneratorsearch"
 						switchOnChange="true" column="1" />
