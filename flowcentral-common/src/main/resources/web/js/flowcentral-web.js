@@ -550,6 +550,8 @@ fux.rigPopupWinText = function(rgp) {
 		const evp = ux.newEvPrm(rgp);
 		evp.uId = id;
 		evp.uCmd = id + "->popup";
+		evp.uRef = rgp.pRef;
+		evp.uIsDebounce = true;
 		ux.addHdl(elem, rgp.pEvt, ux.post, evp);
 	}
 }
