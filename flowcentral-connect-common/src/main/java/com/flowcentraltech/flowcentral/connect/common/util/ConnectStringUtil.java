@@ -27,6 +27,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 import com.tcdng.unify.common.constants.StandardFormatType;
 import com.tcdng.unify.common.util.ParamToken;
 import com.tcdng.unify.common.util.StringToken;
+import com.tcdng.unify.common.util.StringTokenUtils;
 
 /**
  * Connect string utilities.
@@ -38,6 +39,11 @@ public final class ConnectStringUtil {
 
     private ConnectStringUtil() {
 
+    }
+    
+    public static String applyBeanToTemplate(String template, Object bean) throws Exception {
+        List<StringToken> _template = StringTokenUtils.breakdownParameterizedString(template);
+        return ConnectStringUtil.applyBeanToTemplate(_template, bean);
     }
     
     public static String applyBeanToTemplate(List<StringToken> template, Object bean) throws Exception {
