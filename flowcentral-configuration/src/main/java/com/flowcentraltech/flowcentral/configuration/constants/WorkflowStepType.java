@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.constants;
 import java.util.Arrays;
 import java.util.List;
 
-import com.tcdng.unify.convert.constants.EnumConst;
-import com.tcdng.unify.core.annotation.StaticList;
+import com.tcdng.unify.common.annotation.StaticList;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.util.EnumUtils;
 

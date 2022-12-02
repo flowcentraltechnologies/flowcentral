@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.ListIterator;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.tcdng.unify.common.constants.StandardFormatType;
+import com.tcdng.unify.common.util.NewlineToken;
+import com.tcdng.unify.common.util.ParamToken;
+import com.tcdng.unify.common.util.StringToken;
+import com.tcdng.unify.common.util.StringTokenType;
+import com.tcdng.unify.common.util.TextToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.Editable;
-import com.tcdng.unify.core.data.NewlineToken;
-import com.tcdng.unify.core.data.ParamToken;
-import com.tcdng.unify.core.data.StringToken;
-import com.tcdng.unify.core.data.StringTokenType;
-import com.tcdng.unify.core.data.TextToken;
-import com.tcdng.unify.core.format.StandardFormatType;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**

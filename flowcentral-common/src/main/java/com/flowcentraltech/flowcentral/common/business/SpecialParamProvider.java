@@ -18,10 +18,10 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
-import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 
 /**

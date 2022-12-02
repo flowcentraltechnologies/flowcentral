@@ -17,12 +17,12 @@
 package com.flowcentraltech.flowcentral.common.data;
 
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.tcdng.unify.common.util.ParamToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.AbstractParamGeneratorManager;
 import com.tcdng.unify.core.data.ParamGenerator;
-import com.tcdng.unify.core.data.ParamToken;
 
 /**
  * Flowcentral parameter generator manager.

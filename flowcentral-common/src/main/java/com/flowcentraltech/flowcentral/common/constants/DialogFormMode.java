@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.constants;
 
-import com.tcdng.unify.convert.constants.EnumConst;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**

@@ -99,7 +99,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCatego
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.convert.constants.EnumConst;
+import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -115,7 +116,6 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
-import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;

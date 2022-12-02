@@ -17,11 +17,11 @@
 package com.flowcentraltech.flowcentral.system.business;
 
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.tcdng.unify.common.util.ParamToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.AbstractParamGenerator;
-import com.tcdng.unify.core.data.ParamToken;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**

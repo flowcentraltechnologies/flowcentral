@@ -31,8 +31,8 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
