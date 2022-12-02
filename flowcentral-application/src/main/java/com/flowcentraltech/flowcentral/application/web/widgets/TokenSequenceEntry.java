@@ -16,8 +16,8 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.tcdng.unify.common.util.StringTokenType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.StringTokenType;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**

@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.StringToken;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**

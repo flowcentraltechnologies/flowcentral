@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.studio.constants;
 import java.util.Arrays;
 import java.util.List;
 
-import com.tcdng.unify.convert.constants.EnumConst;
+import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
