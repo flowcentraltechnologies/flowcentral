@@ -56,4 +56,8 @@ public class EnvironmentDelegateInfo {
         return environmentDelegate.getDataSourceName(entityLongName);
     }
 
+    public boolean isDirect() {
+        return environmentDelegate.isDirect();
+    }
+
 }

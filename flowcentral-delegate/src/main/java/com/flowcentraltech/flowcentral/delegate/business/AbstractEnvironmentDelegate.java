@@ -73,6 +73,11 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     @Configurable
     private EnvironmentDelegateUtilities utilities;
 
+    @Override
+    public boolean isDirect() {
+        return false;
+    }
+
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
@@ -92,7 +97,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     }
 
     @Override
-    public final String getDataSourceName() throws UnifyException {
+    public String getDataSourceName() throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
