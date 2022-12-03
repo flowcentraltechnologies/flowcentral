@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.delegate.business;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
@@ -63,7 +64,12 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmen
         }
 
         if (resp.error()) {
-            setRequestAttribute(AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG, resp.getErrorMsg());
+            DataSourceOperation dso = req.getOperation();
+            if (dso.formResult()) {
+                setRequestAttribute(AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG, resp.getErrorMsg());
+            } else {
+                setRequestAttribute(AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG, resp.getErrorMsg());
+            }
         }
         
         return resp;

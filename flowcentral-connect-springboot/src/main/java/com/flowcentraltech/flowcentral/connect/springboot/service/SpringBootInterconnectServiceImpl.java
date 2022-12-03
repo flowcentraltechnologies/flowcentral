@@ -84,7 +84,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     private Map<String, PlatformInfo> platforms;
 
     private PlatformInfo defaultPlatform;
-    
+
     private boolean logging;
 
     @Autowired
@@ -103,7 +103,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         logInfo("Initializing spring boot interconnect [{0}]...", interconectConfigFile);
         interconnect.init(interconectConfigFile, this);
     }
-    
+
     @Override
     public String getRedirect() {
         return interconnect.getRedirect();
@@ -112,7 +112,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     @SuppressWarnings("unchecked")
     @Override
     public <T> T findById(EntityInfo entityInfo, Object id) throws Exception {
-        logInfo("Finding entity [{0}] by ID [{1}]...", new Object[] {entityInfo.getName(), id});
+        logInfo("Finding entity [{0}] by ID [{1}]...", new Object[] { entityInfo.getName(), id });
         PlatformInfo platform = getPlatform(entityInfo);
         T result = null;
         EntityManager em = null;
@@ -157,15 +157,16 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         String errorMsg = null;
 
         Object[] result = null;
-        if (entityInfo.isWithHandler()) {
-            SpringBootInterconnectEntityDataSourceHandler handler = context.getBean(entityInfo.getHandler(),
-                    SpringBootInterconnectEntityDataSourceHandler.class);
+        SpringBootInterconnectEntityDataSourceHandler handler = null;
+        if (entityInfo.isWithHandler() && (handler = context.getBean(entityInfo.getHandler(),
+                SpringBootInterconnectEntityDataSourceHandler.class)).supports(req)) {
             result = handler.process(entityInfo.getImplClass(), req);
         } else {
             EntityManager em = null;
             EntityTransaction tx = null;
-            EntityActionPolicy entityActionPolicy = entityInfo.isWithActionPolicy() ? context.getBean(entityInfo.getActionPolicy(),
-                    EntityActionPolicy.class) : null;        
+            EntityActionPolicy entityActionPolicy = entityInfo.isWithActionPolicy()
+                    ? context.getBean(entityInfo.getActionPolicy(), EntityActionPolicy.class)
+                    : null;
             try {
                 em = platform.emf.createEntityManager();
                 tx = em.getTransaction();
@@ -183,13 +184,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         if (entityActionPolicy != null) {
                             entityActionPolicy.executePreAction(reqBean);
                         }
-                        
+
                         em.persist(reqBean);
                         em.flush();
                         if (entityActionPolicy != null) {
                             entityActionPolicy.executePostAction(reqBean);
                         }
-                        
+
                         Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
                         result = new Object[] { id };
                     }
@@ -202,12 +203,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                             List<?> results = query.getResultList();
                             reqBean = results != null && results.size() == 1 ? results.get(0) : null;
                         }
-                        
+
                         if (reqBean == null) {
                             errorMsg = "Could not find entity to delete.";
                         } else {
                             if (req.version() && entityInfo.isWithVersionNo()) {
-                                PropertyUtils.setProperty(reqBean, entityInfo.getVersionNoFieldName(), req.getVersionNo());
+                                PropertyUtils.setProperty(reqBean, entityInfo.getVersionNoFieldName(),
+                                        req.getVersionNo());
                             }
 
                             em.remove(reqBean);
@@ -231,11 +233,11 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         if (req.getOffset() >= 0) {
                             query.setFirstResult(req.getOffset());
                         }
-                        
+
                         if (req.getLimit() > 0) {
                             query.setMaxResults(req.getLimit());
                         }
-                        
+
                         List<?> results = query.getResultList();
                         if (!req.getOperation().isMultipleResult()) {
                             if (results.size() > 1) {
@@ -274,12 +276,12 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         if (entityActionPolicy != null) {
                             entityActionPolicy.executePreAction(saveBean);
                         }
-                        
+
                         em.merge(saveBean);
                         if (entityActionPolicy != null) {
                             entityActionPolicy.executePostAction(saveBean);
                         }
-                        
+
                         result = new Object[] { 1L };
                     }
                         break;
@@ -523,13 +525,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.between(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Long.class, paramA), ConverterUtils.convert(Long.class, paramB));
+                    return cb.between(index.getRoot().get(fieldName), ConverterUtils.convert(Long.class, paramA),
+                            ConverterUtils.convert(Long.class, paramB));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.between(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Double.class, paramA), ConverterUtils.convert(Double.class, paramB));
+                    return cb.between(index.getRoot().get(fieldName), ConverterUtils.convert(Double.class, paramA),
+                            ConverterUtils.convert(Double.class, paramB));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
@@ -590,13 +592,11 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.greaterThan(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Long.class, paramA));
+                    return cb.greaterThan(index.getRoot().get(fieldName), ConverterUtils.convert(Long.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.greaterThan(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Double.class, paramA));
+                    return cb.greaterThan(index.getRoot().get(fieldName), ConverterUtils.convert(Double.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
@@ -677,13 +677,11 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.lessThan(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Long.class, paramA));
+                    return cb.lessThan(index.getRoot().get(fieldName), ConverterUtils.convert(Long.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.lessThan(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Double.class, paramA));
+                    return cb.lessThan(index.getRoot().get(fieldName), ConverterUtils.convert(Double.class, paramA));
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
@@ -719,20 +717,17 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                 }
 
                 if (_entityFieldInfo.isInteger()) {
-                    return cb.between(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Long.class, paramA), ConverterUtils.convert(Long.class, paramB))
-                            .not();
+                    return cb.between(index.getRoot().get(fieldName), ConverterUtils.convert(Long.class, paramA),
+                            ConverterUtils.convert(Long.class, paramB)).not();
                 }
 
                 if (_entityFieldInfo.isDouble()) {
-                    return cb.between(index.getRoot().get(fieldName),
-                            ConverterUtils.convert(Double.class, paramA), ConverterUtils.convert(Double.class, paramB))
-                            .not();
+                    return cb.between(index.getRoot().get(fieldName), ConverterUtils.convert(Double.class, paramA),
+                            ConverterUtils.convert(Double.class, paramB)).not();
                 }
 
                 if (_entityFieldInfo.isDecimal()) {
-                    return cb.between(index.getRoot().get(fieldName), (BigDecimal) paramA, (BigDecimal) paramB)
-                            .not();
+                    return cb.between(index.getRoot().get(fieldName), (BigDecimal) paramA, (BigDecimal) paramB).not();
                 }
                 break;
             case NOT_BETWEEN_FIELD:

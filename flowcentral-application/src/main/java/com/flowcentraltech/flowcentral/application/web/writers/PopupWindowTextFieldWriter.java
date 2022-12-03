@@ -15,10 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractPopupWindowTextField;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
@@ -34,6 +38,7 @@ import com.tcdng.unify.web.ui.widget.writer.control.AbstractPopupTextFieldWriter
 @Component("popupwindowtextfield-writer")
 public class PopupWindowTextFieldWriter extends AbstractPopupTextFieldWriter {
 
+    @SuppressWarnings("unchecked")
     @Override
     protected final void writeOpenPopupJS(ResponseWriter writer, Widget widget, String event, String pageName,
             String cmdTag, String frameId, String popupId, long stayOpenForMillSec, String onShowAction,
@@ -44,6 +49,10 @@ public class PopupWindowTextFieldWriter extends AbstractPopupTextFieldWriter {
         writer.writeParam("pTrgId", pageName);
         writer.writeParam("pEvt", event.substring(2));
         writer.writeCommandURLParam("pCmdURL");
+        List<String> pushList = getRequestAttribute(List.class, AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS);
+        if (!DataUtils.isBlank(pushList)) {
+            writer.writeParam("pRef", DataUtils.toArray(String.class, pushList));            
+        }
         writer.endFunction();
     }
 
