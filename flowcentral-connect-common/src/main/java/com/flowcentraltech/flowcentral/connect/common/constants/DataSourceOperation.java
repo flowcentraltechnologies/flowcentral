@@ -22,26 +22,29 @@ package com.flowcentraltech.flowcentral.connect.common.constants;
  * @since 1.0
  */
 public enum DataSourceOperation {
-    CREATE(false),
-    FIND(true),
-    FIND_LEAN(true),
-    FIND_ALL(true),
-    LIST(true),
-    LIST_LEAN(true),
-    LIST_ALL(true),
-    UPDATE(false),
-    UPDATE_LEAN(false),
-    UPDATE_ALL(false),
-    DELETE(false),
-    DELETE_ALL(false),
-    COUNT_ALL(false),
-    VALUE(false),
-    VALUE_LIST(false);
+    CREATE(false, true),
+    FIND(true, true),
+    FIND_LEAN(true, true),
+    FIND_ALL(true, false),
+    LIST(true, true),
+    LIST_LEAN(true, true),
+    LIST_ALL(true, false),
+    UPDATE(false, true),
+    UPDATE_LEAN(false, true),
+    UPDATE_ALL(false, false),
+    DELETE(false, true),
+    DELETE_ALL(false, false),
+    COUNT_ALL(false, false),
+    VALUE(false, false),
+    VALUE_LIST(false, false);
 
     private final boolean entityResult;
+
+    private final boolean formResult;
     
-    private DataSourceOperation(boolean entityResult) {
+    private DataSourceOperation(boolean entityResult, boolean formResult) {
         this.entityResult = entityResult;
+        this.formResult = formResult;
     }
     
     public boolean isFind() {
@@ -66,6 +69,10 @@ public enum DataSourceOperation {
     
     public boolean entityResult() {
         return entityResult;
+    }
+    
+    public boolean formResult() {
+        return formResult;
     }
     
     public String toJson() {

@@ -50,12 +50,14 @@ public class MiniFormWriter extends AbstractControlWriter {
         writer.write("<div");
         writeTagAttributes(writer, miniFormWidget);
         writer.write(">");
-        String errMsg = (String) getRequestAttribute(
-                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
-        if (!StringUtils.isBlank(errMsg)) {
-            writer.write("<div class=\"mwarn\"><span style=\"display:block;text-align:center;\">");
-            writer.write(errMsg);
-            writer.write("</span></div>");
+        if (miniFormWidget.isMainForm()) {
+            String errMsg = (String) getRequestAttribute(
+                    AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG);
+            if (!StringUtils.isBlank(errMsg)) {
+                writer.write("<div class=\"mwarn\"><span style=\"display:block;text-align:center;\">");
+                writer.write(errMsg);
+                writer.write("</span></div>");
+            }
         }
 
         FormContext ctx = miniFormWidget.getCtx();
