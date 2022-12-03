@@ -18,13 +18,22 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 
 /**
- * Flow central spring boot interconnect datasource entity handler.
+ * Flow central spring boot interconnect data source entity handler.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
 public interface SpringBootInterconnectEntityDataSourceHandler {
 
+    /**
+     * Checks if handler supports request.
+     * 
+     * @param req
+     *            the data source request
+     * @return true if supported otherwise false
+     */
+    boolean supports(DataSourceRequest req);
+    
 	/**
 	 * Processes a data source request for an entity
 	 * 

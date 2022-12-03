@@ -15,6 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.connect.springboot.service;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
+import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.springboot.SpringBootInterconnect;
 
 /**
@@ -24,16 +30,36 @@ import com.flowcentraltech.flowcentral.connect.springboot.SpringBootInterconnect
  * @since 1.0
  */
 public abstract class AbstractSpringBootInterconnectEntityDataSourceHandler
-		implements SpringBootInterconnectEntityDataSourceHandler {
+        implements SpringBootInterconnectEntityDataSourceHandler {
 
-	private final SpringBootInterconnect interconnect;
+    private final SpringBootInterconnect interconnect;
 
-	public AbstractSpringBootInterconnectEntityDataSourceHandler(SpringBootInterconnect interconnect) {
-		this.interconnect = interconnect;
-	}
+    private final Set<DataSourceOperation> supportsOnly;
 
-	protected SpringBootInterconnect getInterconnect() {
-		return interconnect;
-	}
+    public AbstractSpringBootInterconnectEntityDataSourceHandler(SpringBootInterconnect interconnect,
+            DataSourceOperation... supportsOnly) {
+        this.interconnect = interconnect;
+        this.supportsOnly = new HashSet<DataSourceOperation>(Arrays.asList(supportsOnly));
+    }
+
+    @Override
+    public final boolean supports(DataSourceRequest req) {
+        return supportsOnly.isEmpty() || supportsOnly.contains(req.getOperation());
+    }
+
+    @Override
+    public final Object[] process(Class<?> implClass, DataSourceRequest req) throws Exception {
+        if (!supports(req)) {
+            throw new Exception("Operation " + req.getOperation() + " not supported by this handler");
+        }
+
+        return this.doProcess(implClass, req);
+    }
+
+    protected abstract Object[] doProcess(Class<?> implClass, DataSourceRequest req) throws Exception;
+
+    protected SpringBootInterconnect getInterconnect() {
+        return interconnect;
+    }
 
 }
