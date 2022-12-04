@@ -2335,6 +2335,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return "";
     }
 
+    @Override
+    public String getEntityDelegate(String entityName) throws UnifyException {
+        ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entityName);
+        return environment().value(String.class, "delegate",
+                new AppEntityQuery().applicationName(parts.getApplicationName()).name(parts.getEntityName()));
+    }
+
     private String buildEntityDescription(EntityDef entityDef, Entity inst) throws UnifyException {
         StringBuilder sb = new StringBuilder();
         boolean appendSym = false;

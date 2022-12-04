@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidget;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -28,6 +30,9 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -109,7 +114,7 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
         EntityFieldDataType type = getEntityFieldDataType();
         if (type != null) {
             switch (type) {
-                case ENUM: 
+                case ENUM:
                 case ENUM_REF:
                     return listManager.getCaseInsensitiveSubList(getApplicationLocale(), "staticlistlist", input,
                             limit);
@@ -130,8 +135,16 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                     return Collections.emptyList();
                 }
                 case REF:
-                case REF_UNLINKABLE:
+                case REF_UNLINKABLE: {
+                    String entityName = ApplicationNameUtils.getApplicationEntityLongName(
+                            getValue(String.class, getUplAttribute(String.class, "appName")),
+                            getValue(String.class, getUplAttribute(String.class, "entityName")));
+                    String delegate = au().getEntityDelegate(entityName);
+                    Restriction restriction = StringUtils.isBlank(delegate) ? new IsNull("delegate")
+                            : new Equals("delegate", delegate);
+                    getWriteWork().set("ref.restriction", restriction);
                     return getResultByRef(input, limit);
+                }
                 case LIST_ONLY:
                 case BLOB:
                 case BOOLEAN:
@@ -167,6 +180,11 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
         Set<String> childEntityList = (Set<String>) getWriteWork().get(Set.class, "ref.childentitylist");
         if (childEntityList != null) {
             query.addAmongst("entity", childEntityList);
+        }
+        
+        Restriction restriction = getWriteWork().get(Restriction.class, "ref.restriction");
+        if (restriction != null) {
+            query.addRestriction(restriction);
         }
     }
 

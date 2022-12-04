@@ -215,6 +215,10 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
         return null;
     }
 
+    protected AppletUtilities au() {
+        return au;
+    }
+
     protected ApplicationModuleService application() {
         return au.application();
     }
