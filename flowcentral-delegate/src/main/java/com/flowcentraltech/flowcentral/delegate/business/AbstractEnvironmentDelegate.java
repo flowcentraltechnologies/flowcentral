@@ -32,7 +32,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
-import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
@@ -334,7 +334,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public int updateByIdVersion(Entity record) throws UnifyException {
-        long versionNo = ((BaseEntity) record).getVersionNo();
+        long versionNo = record instanceof BaseVersionEntity ? ((BaseVersionEntity) record).getVersionNo() : 0;
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.UPDATE,
                 utilities.encodeDelegateObjectId(record.getId()), versionNo);
         setUpdateAuditInformation(record);
@@ -353,7 +353,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public int updateLeanByIdVersion(Entity record) throws UnifyException {
-        long versionNo = ((BaseEntity) record).getVersionNo();
+        long versionNo = record instanceof BaseVersionEntity ? ((BaseVersionEntity) record).getVersionNo() : 0;
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.UPDATE_LEAN,
                 utilities.encodeDelegateObjectId(record.getId()), versionNo);
         setUpdateAuditInformation(record);
@@ -388,7 +388,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
 
     @Override
     public int deleteByIdVersion(Entity record) throws UnifyException {
-        long versionNo = ((BaseEntity) record).getVersionNo();
+        long versionNo = record instanceof BaseVersionEntity ? ((BaseVersionEntity) record).getVersionNo() : 0;
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.DELETE,
                 utilities.encodeDelegateObjectId(record.getId()), versionNo);
         return singleValueResultOperation(int.class, record.getClass(), req);

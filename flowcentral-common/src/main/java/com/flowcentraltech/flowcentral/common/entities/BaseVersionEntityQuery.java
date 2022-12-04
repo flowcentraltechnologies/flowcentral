@@ -15,35 +15,25 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
-import java.util.Date;
-
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.system.entities.SequencedEntityPolicy;
+import com.tcdng.unify.core.criterion.CompoundRestriction;
 
 /**
- * Base entity policy.
+ * Base query object for base version entity sub-classes.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("base-entitypolicy")
-public class BaseEntityPolicy extends SequencedEntityPolicy {
+public abstract class BaseVersionEntityQuery<T extends BaseVersionEntity> extends BaseEntityQuery<T> {
 
-    public BaseEntityPolicy() {
-        super(true); // Set now
+    public BaseVersionEntityQuery(Class<T> entityClass) {
+        super(entityClass);
     }
 
-    @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        BaseEntity baseEntity = ((BaseEntity) record);
-        Long id = baseEntity.getId();
-        if (id == null || id >= 0) {
-            return super.preCreate(record, now);
-        }
-
-        return id;
+    public BaseVersionEntityQuery(Class<T> entityClass, boolean applyAppQueryLimit) {
+        super(entityClass, applyAppQueryLimit);
     }
 
+    public BaseVersionEntityQuery(Class<T> entityClass, CompoundRestriction restrictions, boolean applyAppQueryLimit) {
+        super(entityClass, restrictions, applyAppQueryLimit);
+    }
 }
