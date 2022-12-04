@@ -1268,6 +1268,26 @@ public interface ApplicationModuleService extends FlowCentralService {
     String getEntityDelegate(String entityName) throws UnifyException;
 
     /**
+     * Gets all entities by delegate.
+     * 
+     * @param delegate
+     *                 the delegate
+     * @return the entity long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getEntitiesByDelegate(String delegate) throws UnifyException;
+
+    /**
+     * Gets all entities that have a delegate.
+     * 
+     * @return the entity long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getEntitiesWithDelegate() throws UnifyException;
+
+    /**
      * Find foreign entity string fields including list-only strings.
      * 
      * @param entityName

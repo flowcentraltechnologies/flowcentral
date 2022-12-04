@@ -30,8 +30,8 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.core.criterion.Equals;
-import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Amongst;
+import com.tcdng.unify.core.criterion.NotAmongst;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.database.Entity;
@@ -135,13 +135,14 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                     return Collections.emptyList();
                 }
                 case REF:
-                case REF_UNLINKABLE: {
+                case REF_UNLINKABLE: {// TODO Change this implementation
                     String entityName = ApplicationNameUtils.getApplicationEntityLongName(
                             getValue(String.class, getUplAttribute(String.class, "appName")),
                             getValue(String.class, getUplAttribute(String.class, "entityName")));
                     String delegate = au().getEntityDelegate(entityName);
-                    Restriction restriction = StringUtils.isBlank(delegate) ? new IsNull("delegate")
-                            : new Equals("delegate", delegate);
+                    Restriction restriction = !StringUtils.isBlank(delegate)
+                            ? new Amongst("entity", au().getEntitiesByDelegate(delegate))
+                            : new NotAmongst("entity", au().getEntitiesWithDelegate());
                     getWriteWork().set("ref.restriction", restriction);
                     return getResultByRef(input, limit);
                 }
@@ -181,7 +182,7 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
         if (childEntityList != null) {
             query.addAmongst("entity", childEntityList);
         }
-        
+
         Restriction restriction = getWriteWork().get(Restriction.class, "ref.restriction");
         if (restriction != null) {
             query.addRestriction(restriction);
