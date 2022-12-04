@@ -20,30 +20,34 @@ import java.util.Date;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.system.entities.SequencedEntityPolicy;
 
 /**
- * Base entity policy.
+ * Base version entity policy.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("base-entitypolicy")
-public class BaseEntityPolicy extends SequencedEntityPolicy {
-
-    public BaseEntityPolicy() {
-        super(true); // Set now
-    }
+@Component("baseversion-entitypolicy")
+public class BaseVersionEntityPolicy extends BaseEntityPolicy {
 
     @Override
     public Object preCreate(Entity record, Date now) throws UnifyException {
-        BaseEntity baseEntity = ((BaseEntity) record);
-        Long id = baseEntity.getId();
-        if (id == null || id >= 0) {
-            return super.preCreate(record, now);
-        }
+        BaseVersionEntity baseVersionEntity = ((BaseVersionEntity) record);
+        baseVersionEntity.setVersionNo(1L);
+        return super.preCreate(record, now);
+    }
 
-        return id;
+    @Override
+    public void preUpdate(Entity record, Date now) throws UnifyException {
+        super.preUpdate(record, now);
+        final BaseVersionEntity baseVersionEntity = ((BaseVersionEntity) record);
+        baseVersionEntity.setVersionNo(baseVersionEntity.getVersionNo() + 1L);
+    }
+
+    @Override
+    public void onUpdateError(final Entity record) {
+        final BaseVersionEntity baseVersionEntity = (BaseVersionEntity) record;
+        baseVersionEntity.setVersionNo(baseVersionEntity.getVersionNo() - 1L);
     }
 
 }

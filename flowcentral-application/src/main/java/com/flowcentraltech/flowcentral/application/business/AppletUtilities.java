@@ -1309,6 +1309,37 @@ public interface AppletUtilities extends UnifyComponent {
     String getEntityDescription(EntityClassDef entityClassDef, Entity inst, String fieldName) throws UnifyException;
 
     /**
+     * Gets an entity delegate.
+     * 
+     * @param entityName
+     *                   the entity name
+     * @return the entity delegate
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getEntityDelegate(String entityName) throws UnifyException;
+
+    /**
+     * Gets all entities by delegate.
+     * 
+     * @param delegate
+     *                 the delegate
+     * @return the entity long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getEntitiesByDelegate(String delegate) throws UnifyException;
+
+    /**
+     * Gets all entities that have a delegate.
+     * 
+     * @return the entity long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getEntitiesWithDelegate() throws UnifyException;
+    
+    /**
      * Creates an entity by form context.
      * 
      * @param formAppletDef

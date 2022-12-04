@@ -15,35 +15,26 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
-import java.util.Date;
-
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.system.entities.SequencedEntityPolicy;
+import com.tcdng.unify.core.annotation.Policy;
+import com.tcdng.unify.core.annotation.Version;
 
 /**
- * Base entity policy.
+ * Base class for entities with version number.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("base-entitypolicy")
-public class BaseEntityPolicy extends SequencedEntityPolicy {
+@Policy("baseversion-entitypolicy")
+public abstract class BaseVersionEntity extends BaseEntity {
 
-    public BaseEntityPolicy() {
-        super(true); // Set now
+    @Version
+    private long versionNo;
+
+    public final long getVersionNo() {
+        return versionNo;
     }
 
-    @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        BaseEntity baseEntity = ((BaseEntity) record);
-        Long id = baseEntity.getId();
-        if (id == null || id >= 0) {
-            return super.preCreate(record, now);
-        }
-
-        return id;
+    public final void setVersionNo(long versionNo) {
+        this.versionNo = versionNo;
     }
-
 }

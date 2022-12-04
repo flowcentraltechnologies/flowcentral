@@ -30,7 +30,7 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component("baseaudit-entitypolicy")
-public class BaseAuditEntityPolicy extends BaseEntityPolicy {
+public class BaseAuditEntityPolicy extends BaseVersionEntityPolicy {
 
     @Override
     public Object preCreate(final Entity record, Date now) throws UnifyException {

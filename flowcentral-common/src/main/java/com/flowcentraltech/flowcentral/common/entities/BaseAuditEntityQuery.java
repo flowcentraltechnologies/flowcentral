@@ -26,7 +26,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BaseAuditEntityQuery<T extends BaseAuditEntity> extends BaseEntityQuery<T> {
+public abstract class BaseAuditEntityQuery<T extends BaseAuditEntity> extends BaseVersionEntityQuery<T> {
 
     public BaseAuditEntityQuery(Class<T> entityClass) {
         super(entityClass);

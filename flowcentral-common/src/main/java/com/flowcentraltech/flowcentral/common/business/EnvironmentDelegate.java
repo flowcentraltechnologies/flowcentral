@@ -28,6 +28,11 @@ import com.tcdng.unify.core.database.Database;
 public interface EnvironmentDelegate extends Database {
 
     /**
+     * Returns true if delegate is direct.
+     */
+    boolean isDirect();
+    
+    /**
      * Executes a procedure.
      * 
      * @param operation

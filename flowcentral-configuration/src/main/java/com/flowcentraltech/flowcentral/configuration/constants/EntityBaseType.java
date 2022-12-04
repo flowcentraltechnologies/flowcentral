@@ -32,6 +32,8 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum EntityBaseType implements EnumConst {
 
     BASE_ENTITY(
+            "ENI"),
+    BASE_VERSION_ENTITY(
             "ENT"),
     BASE_AUDIT_ENTITY(
             "ADE"),
@@ -67,7 +69,7 @@ public enum EntityBaseType implements EnumConst {
     }
 
     public boolean isAuditType() {
-        return !BASE_ENTITY.equals(this) && !BASE_CONFIG_ENTITY.equals(this);
+        return !BASE_ENTITY.equals(this) && !BASE_VERSION_ENTITY.equals(this);
     }
 
     public boolean isWorkEntityType() {

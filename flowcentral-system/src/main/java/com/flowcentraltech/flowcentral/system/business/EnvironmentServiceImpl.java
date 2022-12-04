@@ -593,7 +593,8 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     private Database db(Class<? extends Entity> entityClass) throws UnifyException {
         EnvironmentDelegateInfo delegateInfo = delegateInfoByEntityClass.get(entityClass);
-        return delegateInfo != null ? delegateInfo.getEnvironmentDelegate() : db();
+        return delegateInfo != null ? (delegateInfo.isDirect() ? db(delegateInfo.getDataSourceName())
+                : delegateInfo.getEnvironmentDelegate()) : db();
     }
 
     private void executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {

@@ -41,6 +41,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -79,6 +80,7 @@ public final class ApplicationEntityUtils {
         map.put(EntityBaseType.BASE_APPLICATION_ENTITY, BaseApplicationEntity.class);
         map.put(EntityBaseType.BASE_AUDIT_ENTITY, BaseAuditEntity.class);
         map.put(EntityBaseType.BASE_ENTITY, BaseEntity.class);
+        map.put(EntityBaseType.BASE_VERSION_ENTITY, BaseVersionEntity.class);
         map.put(EntityBaseType.BASE_NAMED_ENTITY, BaseNamedEntity.class);
         map.put(EntityBaseType.BASE_STATUS_ENTITY, BaseStatusEntity.class);
         map.put(EntityBaseType.BASE_STATUS_WORK_ENTITY, BaseStatusWorkEntity.class);
@@ -118,6 +120,7 @@ public final class ApplicationEntityUtils {
     }
 
     public static EntityBaseType getEntityBaseType(Class<? extends BaseEntity> entityClass) {
+        // This order is important!
         if (BaseApplicationEntity.class.isAssignableFrom(entityClass)) {
             return EntityBaseType.BASE_APPLICATION_ENTITY;
         }
@@ -150,6 +153,10 @@ public final class ApplicationEntityUtils {
             return EntityBaseType.BASE_AUDIT_ENTITY;
         }
 
+        if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
+            return EntityBaseType.BASE_VERSION_ENTITY;
+        }
+
         return EntityBaseType.BASE_ENTITY;
     }
 
@@ -158,27 +165,29 @@ public final class ApplicationEntityUtils {
         Map<EntityBaseType, List<EntityBaseType>> map = new EnumMap<EntityBaseType, List<EntityBaseType>>(
                 EntityBaseType.class);
         map.put(EntityBaseType.BASE_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY)));
+        map.put(EntityBaseType.BASE_VERSION_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY)));
         map.put(EntityBaseType.BASE_AUDIT_ENTITY, Collections
-                .unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY)));
+                .unmodifiableList(Arrays.asList(
+                        EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY)));
         map.put(EntityBaseType.BASE_STATUS_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
+                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
                         EntityBaseType.BASE_STATUS_ENTITY)));
-        map.put(EntityBaseType.BASE_WORK_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
+        map.put(EntityBaseType.BASE_WORK_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY,
                 EntityBaseType.BASE_AUDIT_ENTITY, EntityBaseType.BASE_WORK_ENTITY)));
         map.put(EntityBaseType.BASE_STATUS_WORK_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
+                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
                         EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY)));
-        map.put(EntityBaseType.BASE_NAMED_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY,
+        map.put(EntityBaseType.BASE_NAMED_ENTITY, Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY,
                 EntityBaseType.BASE_AUDIT_ENTITY, EntityBaseType.BASE_NAMED_ENTITY)));
         map.put(EntityBaseType.BASE_APPLICATION_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_NAMED_ENTITY,
+                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_NAMED_ENTITY,
                         EntityBaseType.BASE_CONFIG_NAMED_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
                         EntityBaseType.BASE_APPLICATION_ENTITY)));
         map.put(EntityBaseType.BASE_CONFIG_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
+                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY,
                         EntityBaseType.BASE_CONFIG_ENTITY)));
         map.put(EntityBaseType.BASE_CONFIG_NAMED_ENTITY,
-                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_NAMED_ENTITY,
+                Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_ENTITY, EntityBaseType.BASE_VERSION_ENTITY, EntityBaseType.BASE_NAMED_ENTITY,
                         EntityBaseType.BASE_CONFIG_NAMED_ENTITY, EntityBaseType.BASE_AUDIT_ENTITY)));
         typeInheritMap = Collections.unmodifiableMap(map);
     }
@@ -321,6 +330,8 @@ public final class ApplicationEntityUtils {
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "id",
                         msgResolver.resolveApplicationMessage("$m{baseentity.field.label.id}"), null, null, null, null,
                         null, null, null, null, configType));
+                break;
+            case BASE_VERSION_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "versionNo",
                         msgResolver.resolveApplicationMessage("$m{baseentity.field.label.versionno}"), null, null, null,
                         null, null, null, null, null, configType));

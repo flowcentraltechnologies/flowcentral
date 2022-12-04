@@ -1490,6 +1490,21 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public String getEntityDelegate(String entityName) throws UnifyException {
+        return applicationModuleService.getEntityDelegate(entityName);
+    }
+
+    @Override
+    public List<String> getEntitiesByDelegate(String delegate) throws UnifyException {
+        return applicationModuleService.getEntitiesByDelegate(delegate);
+    }
+
+    @Override
+    public List<String> getEntitiesWithDelegate() throws UnifyException {
+        return applicationModuleService.getEntitiesWithDelegate();
+    }
+
+    @Override
     public EntityActionResult createEntityInstByFormContext(final AppletDef formAppletDef,
             final FormContext formContext, final SweepingCommitPolicy scp) throws UnifyException {
         final Entity inst = (Entity) formContext.getInst();

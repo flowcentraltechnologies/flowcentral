@@ -72,6 +72,7 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
@@ -1240,11 +1241,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     private void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {
         if (inst != null) {
             final EntityClassDef entityClassDef = au().getEntityClassDef(entityDef.getLongName());
-            Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id",
-                    inst.getId());
-            long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
-            db.updateAll(query, new Update().add("versionNo", bumpedVersionNo));
-            ((BaseEntity) inst).setVersionNo(bumpedVersionNo);
+            if (BaseVersionEntity.class.isAssignableFrom(entityClassDef.getEntityClass())) {
+                Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id",
+                        inst.getId());
+                long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
+                db.updateAll(query, new Update().add("versionNo", bumpedVersionNo));
+                ((BaseVersionEntity) inst).setVersionNo(bumpedVersionNo);
+            }
         }
     }
 

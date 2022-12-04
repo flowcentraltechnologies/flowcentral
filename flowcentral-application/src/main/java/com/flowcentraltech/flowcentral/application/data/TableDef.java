@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.WidgetCalculationUtils;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Select;
@@ -134,7 +135,11 @@ public class TableDef extends BaseApplicationEntityDef {
         }
 
         if (this.limitSelectToColumns) {
-            this.select = new Select().add("id").add("versionNo");
+            this.select = new Select().add("id");
+            if (!EntityBaseType.BASE_ENTITY.equals(entityDef.getBaseType())) {
+                select.add("versionNo");
+            }
+            
             for (TableColumnDef tableColumnDef : columnDefList) {
                 this.select.add(tableColumnDef.getFieldName());
             }

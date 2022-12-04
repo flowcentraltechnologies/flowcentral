@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.Policy;
  * @since 1.0
  */
 @Policy("baseaudit-entitypolicy")
-public abstract class BaseAuditEntity extends BaseEntity {
+public abstract class BaseAuditEntity extends BaseVersionEntity {
 
     @Column(type = ColumnType.TIMESTAMP_UTC)
     private Date createDt;
