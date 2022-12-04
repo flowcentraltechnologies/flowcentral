@@ -64,7 +64,9 @@ import com.tcdng.unify.web.ui.widget.control.Table;
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
                 response = { "!showpopupresponse popup:$s{entityTreeMultiselectPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
-            response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
+                response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
+                response = { "!showpopupresponse popup:$s{quickEditPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.FORWARD_TO_HOME,
                 response = { "!forwardresponse path:$x{application.web.home}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_WORKSPACE,
@@ -224,7 +226,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-        
+
     }
 
     private void setSessionWorkspace() throws UnifyException {

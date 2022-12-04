@@ -56,6 +56,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
@@ -1204,7 +1205,36 @@ public interface AppletUtilities extends UnifyComponent {
     EntityParamValues constructEntityParamValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityParamValuesMode, boolean isIgnoreParentCondition)
             throws UnifyException;
+    
+    /**
+     * Constructs an entry bean table,
+     * 
+     * @param tableName
+     *                        the entry table name
+     * @param entryEditPolicy
+     *                        the entry edit policy
+     * @return the entry bean table
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    BeanTable constructEntryBeanTable(String tableName, String entryEditPolicy) throws UnifyException;
 
+    /**
+     * Constructs an entry bean table,
+     * 
+     * @param tableName
+     *                        the entry table name
+     * @param filterGroupDef
+     *                        optional filter group definition
+     * @param entryEditPolicy
+     *                        the entry edit policy
+     * @return the entry bean table
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    BeanTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
+            throws UnifyException;
+    
     /**
      * Matches a form bean with applet condition property
      * 

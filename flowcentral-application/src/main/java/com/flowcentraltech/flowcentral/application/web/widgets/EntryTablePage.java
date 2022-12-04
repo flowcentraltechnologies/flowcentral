@@ -36,7 +36,6 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 
 /**
@@ -183,12 +182,7 @@ public class EntryTablePage {
 
     public BeanTable getEntryBeanTable() throws UnifyException {
         if (entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), filterGroupDef,
-                    BeanTable.ENTRY_ENABLED);
-            if (!StringUtils.isBlank(entryEditPolicy)) {
-                ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
-                entryBeanTable.setPolicy(policy);
-            }
+            entryBeanTable = ctx.au().constructEntryBeanTable(entryTable, filterGroupDef, entryEditPolicy);
         }
 
         return entryBeanTable;

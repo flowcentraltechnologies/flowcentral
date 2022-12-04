@@ -75,6 +75,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.SingleFormBean;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
@@ -86,6 +87,7 @@ import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormStatePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
@@ -176,7 +178,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Configurable
     private FormatHelper formatHelper;
-    
+
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
     public AppletUtilitiesImpl() {
@@ -497,8 +499,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId, String filterGenerator)
-            throws UnifyException {
+    public FilterDef retrieveFilterDef(String category, String ownerEntityName, Long ownerInstId,
+            String filterGenerator) throws UnifyException {
         return applicationModuleService.retrieveFilterDef(category, ownerEntityName, ownerInstId, filterGenerator);
     }
 
@@ -715,12 +717,18 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
                         final boolean newButtonVisible = !hideAddActionButton(form, applet.getFormAppletDef(),
                                 formTabDef.getApplet());
+                        final boolean quickEdit = _appletDef.getPropValue(boolean.class,
+                                AppletPropertyConstants.QUICK_EDIT_ENABLED);
                         final String editAction = formTabDef.getEditAction() == null ? "/assignToChildItem"
                                 : formTabDef.getEditAction();
+                        int mode = formTabDef.isShowSearch() ? EntitySearch.ENABLE_ALL
+                                : EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH;
+                        if (quickEdit) {
+                            mode |= EntitySearch.SHOW_QUICK_EDIT;
+                        }
+
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), rootTitle, _appletDef, editAction,
-                                formTabDef.isShowSearch() ? EntitySearch.ENABLE_ALL
-                                        : EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH,
+                                formTabDef.getName(), rootTitle, _appletDef, editAction, mode,
                                 formTabDef.isIgnoreParentCondition());
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
@@ -731,7 +739,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         }
 
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
-                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, form.getFormValueStore(), now);
+                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, form.getFormValueStore(),
+                                now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setChildTabIndex(tabIndex);
@@ -908,8 +917,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             EntitySearch _entitySearch = constructEntitySearch(new FormContext(appletContext), sweepingCommitPolicy,
                     _appletDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL, false);
             if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
-                AppletFilterDef appletFilterDef = _appletDef.getFilterDef(
-                        _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION));
+                AppletFilterDef appletFilterDef = _appletDef
+                        .getFilterDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION));
                 _entitySearch.setBaseFilter(appletFilterDef != null ? appletFilterDef.getFilterDef() : null,
                         specialParamProvider);
             }
@@ -928,8 +937,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle,
-            String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
+    public EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle, String beanTitle,
+            Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException {
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
         final FormContext formContext = new FormContext(appletContext, applet.getEntityDef(), inst);
         final SectorIcon sectorIcon = applet != null
@@ -1027,7 +1036,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 formTabDef.getApplet());
                         EntitySearch _entitySearch = (EntitySearch) tabSheetItem.getValObject();
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
-                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, formContext.getFormValueStore(), now);
+                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB,
+                                formContext.getFormValueStore(), now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setNewButtonVisible(newButtonVisible);
@@ -1277,7 +1287,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 searchEntryColumns, loadingSearchMode);
-        
+
         loadingSearch.setEntitySubTitle(_rootAppletDef.getDescription());
         return loadingSearch;
     }
@@ -1371,6 +1381,23 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 ownerEntityDef.getLongName());
         return new EntityParamValues(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entityParamValuesMode,
                 isIgnoreParentCondition);
+    }
+
+    @Override
+    public BeanTable constructEntryBeanTable(String tableName, String entryEditPolicy) throws UnifyException {
+        return constructEntryBeanTable(tableName, null, entryEditPolicy);
+    }
+
+    @Override
+    public BeanTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
+            throws UnifyException {
+        BeanTable entryBeanTable = new BeanTable(this, getTableDef(tableName), filterGroupDef, BeanTable.ENTRY_ENABLED);
+        if (!StringUtils.isBlank(entryEditPolicy)) {
+            ChildListEditPolicy policy = getComponent(ChildListEditPolicy.class, entryEditPolicy);
+            entryBeanTable.setPolicy(policy);
+        }
+
+        return entryBeanTable;
     }
 
     @Override

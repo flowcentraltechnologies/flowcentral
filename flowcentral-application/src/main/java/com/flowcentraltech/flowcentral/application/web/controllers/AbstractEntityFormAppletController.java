@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityTreeSelect;
+import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
@@ -72,7 +73,23 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             applet.newChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
         }
-        
+
+        return "refreshapplet";
+    }
+
+    @Action
+    public String quickEdit() throws UnifyException {
+        AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
+        AbstractEntityFormApplet applet = pageBean.getApplet();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            QuickTableEdit quickTableEdit = applet.quickEdit(childTabIndex);
+            if (quickTableEdit != null) {
+                return showPopup(ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
+                        FlowCentralSessionAttributeConstants.QUICK_TABLE_EDIT, quickTableEdit);
+            }
+        }
+
         return "refreshapplet";
     }
 
@@ -88,23 +105,23 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                 switch (showPopupInfo.getType()) {
                     case SHOW_MULTISELECT: {
                         RefDef refDef = getAu().getRefDef(showPopupInfo.getReference());
-                        EntitySelect entitySelect = applet.au().constructEntitySelect(refDef, formValueStore, null, null,
-                                null, 0);
+                        EntitySelect entitySelect = applet.au().constructEntitySelect(refDef, formValueStore, null,
+                                null, null, 0);
                         entitySelect.setEnableFilter(false);
                         entitySelect.applyFilterToSearch();
                         String title = resolveSessionMessage("$m{entitymultiselectpanel.select.entity}",
                                 entitySelect.getEntityTable().getEntityDef().getLabel());
                         entitySelect.setTitle(title);
-                        setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYSELECT, entitySelect);
-                        return ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT;
+                        return showPopup(ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT,
+                                FlowCentralSessionAttributeConstants.ENTITYSELECT, entitySelect);
                     }
                     case SHOW_TREEMULTISELECT: {
                         EntityTreeSelectGenerator generator = getAu().getComponent(EntityTreeSelectGenerator.class,
                                 showPopupInfo.getReference());
                         EntityTreeSelect entityTreeSelect = generator.generate(getAu(), formValueStore);
                         entityTreeSelect.setTitle(entityTreeSelect.getEntityTreeTable().getTitle());
-                        setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYTREESELECT, entityTreeSelect);
-                        return ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT;
+                        return showPopup(ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
+                                FlowCentralSessionAttributeConstants.ENTITYTREESELECT, entityTreeSelect);
                     }
                     default:
                         break;
@@ -114,7 +131,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             applet.newChildListItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
         }
-        
+
         return "refreshapplet";
     }
 
@@ -127,7 +144,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             applet.editChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
         }
-        
+
         return "refreshapplet";
     }
 
@@ -140,7 +157,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             applet.assignToChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
         }
-        
+
         return "refreshapplet";
     }
 
@@ -257,9 +274,8 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         EventHandler[] saveAsSwitchOnChangeHandlers = getPageWidgetByShortName(Widget.class,
                 "appletPanel.entitySaveAsPanel.switchOnChangeHolder").getUplAttribute(EventHandler[].class,
                         "eventHandler");
-        EventHandler[] maintainActHandlers = getPageWidgetByShortName(Widget.class,
-                "appletPanel.maintainActHolder").getUplAttribute(EventHandler[].class,
-                        "eventHandler");
+        EventHandler[] maintainActHandlers = getPageWidgetByShortName(Widget.class, "appletPanel.maintainActHolder")
+                .getUplAttribute(EventHandler[].class, "eventHandler");
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
                 entrySwitchOnChangeHandlers, crudActionHandlers, crudSwitchOnChangeHandlers,
                 saveAsSwitchOnChangeHandlers, maintainActHandlers);
@@ -268,7 +284,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     protected SystemModuleService system() {
         return systemModuleService;
     }
-    
+
     private boolean saveFormState(AbstractEntityFormApplet applet) throws UnifyException {
         // TODO
         return true;

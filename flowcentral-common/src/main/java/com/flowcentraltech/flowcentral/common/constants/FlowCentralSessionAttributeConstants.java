@@ -40,7 +40,10 @@ public interface FlowCentralSessionAttributeConstants {
 
     /** Text template editor */
     String TEXT_TEMPLATE_EDITOR = "fc.texttemplateeditor";
-    
+
+    /** Quick edit table */
+    String QUICK_TABLE_EDIT = "fc.quickedittable";
+   
     /** User name */
     String USERNAME = "fc.username";
 

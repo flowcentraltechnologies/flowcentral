@@ -54,4 +54,9 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
             setPageTitle(applet.getAppletDescription());
         }
     }
+
+    protected String showPopup(String resultMapping, String backingBeanKey, Object backingBean) throws UnifyException {
+        setSessionAttribute(backingBeanKey, backingBean);
+        return resultMapping;
+    }
 }

@@ -4498,6 +4498,18 @@
 					inputWidget="studio.propertyappletbeantablepolicylist" />
 			</propertySet>
 			<propertySet
+				label="$m{studio.appappletprop.manageentity.quickeditsettings}">
+				<property name="quickEdit.enabled"
+					description="$m{studio.appappletprop.manageentity.quickeditenabled}"
+					inputWidget="application.checkbox" />
+				<property name="quickEdit.table"
+					description="$m{studio.appappletprop.manageentity.quickedittable}"
+					inputWidget="studio.propertyapplettablelist" />
+				<property name="quickEdit.policy"
+					description="$m{studio.appappletprop.manageentity.quickeditpolicy}"
+					inputWidget="studio.propertyappletbeantablepolicylist" />
+			</propertySet>
+			<propertySet
 				label="$m{studio.appappletprop.manageentity.workflowproperties}">
 				<property name="createForm.submit.caption"
 					description="$m{studio.appappletprop.manageentity.createform.submitcaption}"

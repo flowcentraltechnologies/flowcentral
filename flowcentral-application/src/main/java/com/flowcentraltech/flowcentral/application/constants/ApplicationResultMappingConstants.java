@@ -36,6 +36,8 @@ public interface ApplicationResultMappingConstants {
     
     String SHOW_TEXT_TEMPLATE_EDITOR = "showtexttemplateeditor";
     
+    String SHOW_QUICK_EDIT = "showquickedit";
+    
     String FORWARD_TO_HOME = "forwardtohome";
     
     String REFRESH_WORKSPACE = "refreshworkspace";

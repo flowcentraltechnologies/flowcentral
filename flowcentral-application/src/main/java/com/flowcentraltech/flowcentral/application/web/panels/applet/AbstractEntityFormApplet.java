@@ -24,6 +24,7 @@ import java.util.Stack;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -53,6 +54,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
+import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
@@ -349,6 +351,34 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void newChildListItem(int childTabIndex) throws UnifyException {
         newChildItem(childTabIndex, true);
+    }
+
+    public QuickTableEdit quickEdit(int childTabIndex) throws UnifyException {
+        if (ensureSaveOnTabAction()) {
+            FormTabDef quickEditFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
+            final AppletDef _appletDef = getAppletDef(quickEditFormTabDef.getApplet());
+            final String quickEditTable = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.QUICK_EDIT_TABLE);
+            final String quickEditTablePolicy = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.QUICK_EDIT_POLICY);
+            if (StringUtils.isBlank(quickEditTable)) {
+                throw new UnifyException(
+                        ApplicationModuleErrorConstants.NO_ENTRY_TABLE_CONFIGURED_FOR_APPLET_QUICK_EDIT,
+                        _appletDef.getLongName());
+            }
+
+            final String baseField = au().getChildFkFieldName(form.getFormDef().getEntityDef(),
+                    quickEditFormTabDef.getReference());
+            final Object id = ((Entity) form.getFormBean()).getId();
+            QuickTableEdit quickTableEdit = constructQuickTableEdit(_appletDef.getEntity(), quickEditTable,
+                    quickEditTablePolicy, null, baseField, id);
+            String caption = _appletDef.getLabel() != null ? _appletDef.getLabel().toUpperCase() : null;
+            quickTableEdit.setEntryCaption(caption);
+            quickTableEdit.loadEntryList();
+            return quickTableEdit;
+        }
+
+        return null;
     }
 
     public ShowPopupInfo newChildShowPopup(int childTabIndex) throws UnifyException {
@@ -912,6 +942,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return new AssignmentPage(getCtx(), formEventHandlers.getAssnSwitchOnChangeHandlers(), this, assignPageDef,
                 entityClassDef, id, sectorIcon, breadCrumbs, entryTable, assnEditPolicy, pseudoDeleteField,
                 filterGroupDef, fixedAssignment);
+    }
+
+    protected QuickTableEdit constructQuickTableEdit(String entity, String entryTable, String entryTablePolicy,
+            FilterGroupDef filterGroupDef, String baseField, Object baseId) throws UnifyException {
+        EntityClassDef entityClassDef = getEntityClassDef(entity);
+        return new QuickTableEdit(getCtx(), this, entityClassDef, baseField, baseId, entryTable, entryTablePolicy);
     }
 
     protected EntryTablePage constructNewEntryPage(String entity, String entryTable, String entryTablePolicy,

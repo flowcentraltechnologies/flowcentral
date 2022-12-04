@@ -59,4 +59,9 @@ public interface ApplicationModuleErrorConstants {
      */
     String INVALID_LIST_ONLY_FIELD = "APPLICATION_0008";
 
+    /**
+     * No entry table configured for applet [{0}] quick edit.
+     */
+    String NO_ENTRY_TABLE_CONFIGURED_FOR_APPLET_QUICK_EDIT = "APPLICATION_0009";
+
 }
