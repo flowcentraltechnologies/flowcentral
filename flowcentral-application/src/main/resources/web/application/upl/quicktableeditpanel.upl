@@ -1,0 +1,36 @@
+// UPL template for entry table panel
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-quicktableeditpanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{titleBar entryBodyPanel}
+
+// Header
+!ui-titlebar:titleBar caption:$m{quicktableeditpanel.title} captionBinding:title
+	components:$c{closeBtn} draggable:true
+!ui-image:closeBtn src:$t{images/cross_white.png} styleClass:$e{tbbutton}
+     eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
+
+// Entry table panel
+!ui-panel:entryBodyPanel styleClass:$s{entries} style:$s{overflow-y:scroll;}
+	components:$c{entryPanelCaption entryErrors entryTableEntryTbl}
+!ui-label:entryPanelCaption styleClass:$e{caption} binding:entryCaption
+!fc-formmessages:entryErrors binding:validationErrors
+!fc-beantable:entryTableEntryTbl style:$s{width:100%;}
+	binding:entryBeanTable
+
+
+// Actions
+!ui-postcommand:saveEntriesAct command:saveEntries components:$c{entryTableEntryTbl}
+!ui-postcommand:closeAct command:close

@@ -862,7 +862,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Text template panel */
 .fc-texttemplatepanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}
-.fc-texttemplatepanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;}
+.fc-texttemplatepanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;float:right;}
+
+/* Quick table edit panel */
+.fc-quicktableeditpanel {width:980px; background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-quicktableeditpanel .entries {width:100%;height:520px;}
+.fc-quicktableeditpanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;float:right;}
 
 /* Manage entity applet panel */
 .fc-manageentityappletpanel {}

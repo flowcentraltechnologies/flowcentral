@@ -70,6 +70,10 @@
 !fc-texttemplatepanel:textTemplatePopup
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR}
 
+// Quick edit
+!fc-quicktableeditpanel:quickEditPopup
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.QUICK_TABLE_EDIT}
+
 //Actions 
 !ui-post:userDetailsAct path:$n{/showUserDetails}
 !ui-post:switchAppAct path:$s{/applicationstudio/dashboard/showSwitchApplication}

@@ -95,6 +95,10 @@
 !fc-texttemplatepanel:textTemplatePopup
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR}
 
+// Quick edit
+!fc-quicktableeditpanel:quickEditPopup
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.QUICK_TABLE_EDIT}
+
 //Actions 
 !ui-post:wkspChangeAct path:$n{/changeWorkspace} components:$c{currentWkspSel}
 !ui-post:logoutAct path:$n{/logOut} confirm:$m{application.logout.confirm}
