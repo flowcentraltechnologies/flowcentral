@@ -3556,13 +3556,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                     appEntityField.setPrecision(entityFieldConfig.getPrecision());
                     appEntityField.setScale(entityFieldConfig.getScale());
-                    appEntityField.setAllowNegative(entityFieldConfig.isAllowNegative());
-                    appEntityField.setNullable(entityFieldConfig.isNullable());
-                    appEntityField.setAuditable(entityFieldConfig.isAuditable());
-                    appEntityField.setReportable(entityFieldConfig.isReportable());
-                    appEntityField.setDescriptive(entityFieldConfig.isDescriptive());
-                    appEntityField.setMaintainLink(entityFieldConfig.isMaintainLink());
-                    appEntityField.setBasicSearch(entityFieldConfig.isBasicSearch());
+                    appEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
+                    appEntityField.setNullable(entityFieldConfig.getNullable());
+                    appEntityField.setAuditable(entityFieldConfig.getAuditable());
+                    appEntityField.setReportable(entityFieldConfig.getReportable());
+                    appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
+                    appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
+                    appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
                     appEntityField.setConfigType(ConfigType.STATIC_INSTALL);
                     fieldList.add(appEntityField);
                 } else {
@@ -3601,13 +3601,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                         oldAppEntityField.setPrecision(entityFieldConfig.getPrecision());
                         oldAppEntityField.setScale(entityFieldConfig.getScale());
-                        oldAppEntityField.setAllowNegative(entityFieldConfig.isAllowNegative());
-                        oldAppEntityField.setNullable(entityFieldConfig.isNullable());
-                        oldAppEntityField.setAuditable(entityFieldConfig.isAuditable());
-                        oldAppEntityField.setReportable(entityFieldConfig.isReportable());
-                        oldAppEntityField.setDescriptive(entityFieldConfig.isDescriptive());
-                        oldAppEntityField.setMaintainLink(entityFieldConfig.isMaintainLink());
-                        oldAppEntityField.setBasicSearch(entityFieldConfig.isBasicSearch());
+                        oldAppEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
+                        oldAppEntityField.setNullable(entityFieldConfig.getNullable());
+                        oldAppEntityField.setAuditable(entityFieldConfig.getAuditable());
+                        oldAppEntityField.setReportable(entityFieldConfig.getReportable());
+                        oldAppEntityField.setDescriptive(entityFieldConfig.getDescriptive());
+                        oldAppEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
+                        oldAppEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
                     }
 
                     fieldList.add(oldAppEntityField);
@@ -4092,13 +4092,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appFormElement.setInputReference(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, formFieldConfig.getReference()));
                             appFormElement.setFieldColumn(formFieldConfig.getColumn());
-                            appFormElement.setSwitchOnChange(formFieldConfig.isSwitchOnChange());
-                            appFormElement.setSaveAs(formFieldConfig.isSaveAs());
-                            appFormElement.setRequired(formFieldConfig.isRequired());
-                            appFormElement.setVisible(formFieldConfig.isVisible());
+                            appFormElement.setSwitchOnChange(formFieldConfig.getSwitchOnChange());
+                            appFormElement.setSaveAs(formFieldConfig.getSaveAs());
+                            appFormElement.setRequired(formFieldConfig.getRequired());
+                            appFormElement.setVisible(formFieldConfig.getVisible());
                             appFormElement.setColor(formFieldConfig.getColor());
-                            appFormElement.setEditable(formFieldConfig.isEditable());
-                            appFormElement.setDisabled(formFieldConfig.isDisabled());
+                            appFormElement.setEditable(formFieldConfig.getEditable());
+                            appFormElement.setDisabled(formFieldConfig.getDisabled());
                             appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
                             elementList.add(appFormElement);
                         }

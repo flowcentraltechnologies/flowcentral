@@ -205,7 +205,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 .classForName(appEntityConfig.getType());
         if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
             for (EntityFieldConfig rfd : appEntityConfig.getEntityFieldList()) {
-                if (rfd.isReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
+                if (rfd.getReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
                     ReportableField reportableField = new ReportableField();
                     String description = null;
                     Field field = ReflectUtils.getField(entityClass, rfd.getName());
