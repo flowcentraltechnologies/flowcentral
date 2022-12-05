@@ -19,6 +19,9 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Entity configuration.
@@ -36,9 +39,9 @@ public class AppEntityConfig extends BaseNameConfig {
 
     private String table;
     
-    private boolean auditable;
+    private Boolean auditable;
 
-    private boolean reportable;
+    private Boolean reportable;
 
     private List<EntityFieldConfig> entityFieldList;
 
@@ -52,6 +55,11 @@ public class AppEntityConfig extends BaseNameConfig {
 
     private List<EntityUploadConfig> uploadList;
 
+    public AppEntityConfig() {
+        this.auditable = Boolean.FALSE;
+        this.reportable = Boolean.FALSE;
+    }
+    
     public String getType() {
         return type;
     }
@@ -88,21 +96,23 @@ public class AppEntityConfig extends BaseNameConfig {
         this.table = table;
     }
 
-    public boolean isAuditable() {
+    public Boolean getAuditable() {
         return auditable;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setAuditable(boolean auditable) {
+    public void setAuditable(Boolean auditable) {
         this.auditable = auditable;
     }
 
-    public boolean isReportable() {
+    public Boolean getReportable() {
         return reportable;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setReportable(boolean reportable) {
+    public void setReportable(Boolean reportable) {
         this.reportable = reportable;
     }
 

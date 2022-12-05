@@ -2984,8 +2984,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setDelegate(appEntityConfig.getDelegate());
                     appEntity.setEntityClass(appEntityConfig.getType());
                     appEntity.setTableName(tableName);
-                    appEntity.setAuditable(appEntityConfig.isAuditable());
-                    appEntity.setReportable(appEntityConfig.isReportable());
+                    appEntity.setAuditable(appEntityConfig.getAuditable());
+                    appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appEntity, entityBaseTypeFieldSet, applicationName, appEntityConfig);
                     entityId = (Long) environment().create(appEntity);
@@ -3003,8 +3003,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntity.setDelegate(appEntityConfig.getDelegate());
                         oldAppEntity.setEntityClass(appEntityConfig.getType());
                         oldAppEntity.setTableName(tableName);
-                        oldAppEntity.setAuditable(appEntityConfig.isAuditable());
-                        oldAppEntity.setReportable(appEntityConfig.isReportable());
+                        oldAppEntity.setAuditable(appEntityConfig.getAuditable());
+                        oldAppEntity.setReportable(appEntityConfig.getReportable());
                     }
 
                     populateChildList(oldAppEntity, entityBaseTypeFieldSet, applicationName, appEntityConfig);
@@ -3061,17 +3061,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                     appTable.setSortHistory(appTableConfig.getSortHistory());
                     appTable.setItemsPerPage(appTableConfig.getItemsPerPage());
-                    appTable.setSerialNo(appTableConfig.isSerialNo());
-                    appTable.setSortable(appTableConfig.isSortable());
-                    appTable.setHeaderToUpperCase(appTableConfig.isHeaderToUpperCase());
-                    appTable.setHeaderCenterAlign(appTableConfig.isHeaderCenterAlign());
-                    appTable.setBasicSearch(appTableConfig.isBasicSearch());
-                    appTable.setTotalSummary(appTableConfig.isTotalSummary());
-                    appTable.setHeaderless(appTableConfig.isHeaderless());
-                    appTable.setMultiSelect(appTableConfig.isMultiSelect());
-                    appTable.setNonConforming(appTableConfig.isNonConforming());
-                    appTable.setFixedRows(appTableConfig.isFixedRows());
-                    appTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
+                    appTable.setSerialNo(appTableConfig.getSerialNo());
+                    appTable.setSortable(appTableConfig.getSortable());
+                    appTable.setHeaderToUpperCase(appTableConfig.getHeaderToUpperCase());
+                    appTable.setHeaderCenterAlign(appTableConfig.getHeaderCenterAlign());
+                    appTable.setBasicSearch(appTableConfig.getBasicSearch());
+                    appTable.setTotalSummary(appTableConfig.getTotalSummary());
+                    appTable.setHeaderless(appTableConfig.getHeaderless());
+                    appTable.setMultiSelect(appTableConfig.getMultiSelect());
+                    appTable.setNonConforming(appTableConfig.getNonConforming());
+                    appTable.setFixedRows(appTableConfig.getFixedRows());
+                    appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(appTable, applicationName, appTableConfig);
                     environment().create(appTable);
@@ -3085,17 +3085,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                         oldAppTable.setSortHistory(appTableConfig.getSortHistory());
                         oldAppTable.setItemsPerPage(appTableConfig.getItemsPerPage());
-                        oldAppTable.setSerialNo(appTableConfig.isSerialNo());
-                        oldAppTable.setSortable(appTableConfig.isSortable());
-                        oldAppTable.setHeaderToUpperCase(appTableConfig.isHeaderToUpperCase());
-                        oldAppTable.setHeaderCenterAlign(appTableConfig.isHeaderCenterAlign());
-                        oldAppTable.setBasicSearch(appTableConfig.isBasicSearch());
-                        oldAppTable.setTotalSummary(appTableConfig.isTotalSummary());
-                        oldAppTable.setHeaderless(appTableConfig.isHeaderless());
-                        oldAppTable.setMultiSelect(appTableConfig.isMultiSelect());
-                        oldAppTable.setNonConforming(appTableConfig.isNonConforming());
-                        oldAppTable.setFixedRows(appTableConfig.isFixedRows());
-                        oldAppTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
+                        oldAppTable.setSerialNo(appTableConfig.getSerialNo());
+                        oldAppTable.setSortable(appTableConfig.getSortable());
+                        oldAppTable.setHeaderToUpperCase(appTableConfig.getHeaderToUpperCase());
+                        oldAppTable.setHeaderCenterAlign(appTableConfig.getHeaderCenterAlign());
+                        oldAppTable.setBasicSearch(appTableConfig.getBasicSearch());
+                        oldAppTable.setTotalSummary(appTableConfig.getTotalSummary());
+                        oldAppTable.setHeaderless(appTableConfig.getHeaderless());
+                        oldAppTable.setMultiSelect(appTableConfig.getMultiSelect());
+                        oldAppTable.setNonConforming(appTableConfig.getNonConforming());
+                        oldAppTable.setFixedRows(appTableConfig.getFixedRows());
+                        oldAppTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     }
 
                     populateChildList(oldAppTable, applicationName, appTableConfig);

@@ -92,7 +92,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         if (applicationConfig.getEntitiesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
             for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
-                if (appEntityConfig.isReportable()) {
+                if (appEntityConfig.getReportable()) {
                     String description = resolveApplicationMessage("$m{report.managedreport.description}",
                             resolveApplicationMessage(appEntityConfig.getDescription()));
                     String entity = ApplicationNameUtils.ensureLongNameReference(applicationName,
