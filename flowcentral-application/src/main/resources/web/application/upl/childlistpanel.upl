@@ -26,6 +26,7 @@
 	quickEditEventHandler:$d{!ui-event event:onclick action:$c{quickEditAct}}
 	newBtnBinding:$s{childTabIndex}
 	editBtnBinding:$s{childTabIndex}
+	quickEditBtnBinding:$s{childTabIndex}
 	searchResultMarker:$j{com.flowcentraltech.flowcentral.application.web.panels.EntitySearchValueMarkerConstants.CHILD_LIST}
 
 // Actions

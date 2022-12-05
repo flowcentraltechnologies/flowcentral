@@ -33,15 +33,20 @@ public interface ChildListEditPolicy extends EntryTablePolicy {
 
     /**
      * Gets on load details.
-     * @param entityClass the entity class
-     * @param baseFieldName the base field name
-     * @param baseId the base ID
+     * 
+     * @param entityClass
+     *                      the entity class
+     * @param baseFieldName
+     *                      the base field name
+     * @param baseId
+     *                      the base ID
      * @return the page load details
-     * @throws UnifyException if an error occurs
+     * @throws UnifyException
+     *                        if an error occurs
      */
     PageLoadDetails getOnLoadDetails(Class<? extends Entity> entityClass, String baseFieldName, Object baseId)
             throws UnifyException;
-    
+
     /**
      * Executes at the end of an assignment update.
      * 

@@ -492,6 +492,9 @@
 				value="studioondeleteappentityfield-policy" />
 			<property name="maintainForm.delete.condition"
 				value="appEntityFieldDeletable" />
+			<property name="quickEdit.enabled" value="true" />
+			<property name="quickEdit.table" value="appEntityFieldQuickEditTable" />
+			<property name="quickEdit.policy" value="studioappentityfield-tablepolicy" />
 			<filter name="appEntityFieldEditable"
 				description="$m{application.appentityfield.filter.editable}">
 				<restriction type="not_equals" field="type" paramA="STC" />
@@ -1136,6 +1139,25 @@
 				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{application.appentityfield.type}" widthRatio="1" />
+		</table>
+		<table name="appEntityFieldQuickEditTable"
+			description="$m{studio.appentityfield.table.quickedit}"
+			label="$m{studio.appentityfield.table.quickedit.label}"
+			entity="application.appEntityField" itemsPerPage="-1" serialNo="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1"/>
+			<column field="label" renderWidget="application.text"
+				widthRatio="1"/>
+			<column field="dataTypeDesc" renderWidget="application.text"
+				label="$m{application.appentityfield.datatype}" widthRatio="1" />
+			<column field="columnName" renderWidget="application.text"
+				widthRatio="1" editable="true"/>
+			<column field="nullable" renderWidget="application.text"
+				widthRatio="1" editable="true"/>
+			<column field="minLen" renderWidget="application.integer"
+				widthRatio="1" editable="true"/>
+			<column field="maxLen" renderWidget="application.integer"
+				widthRatio="1" editable="true"/>
 		</table>
 		<table name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"

@@ -248,4 +248,9 @@ public class FormTabDef {
         return disabled;
     }
 
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
+
 }

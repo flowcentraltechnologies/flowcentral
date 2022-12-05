@@ -44,7 +44,7 @@
 !ui-button:reportBtn styleClass:$e{fc-greenbutton} caption:$m{button.report}
 	eventHandler:$f{reportEventHandler}
 !ui-button:quickEditBtn styleClass:$e{fc-orangebutton} caption:$m{button.quickedit}
-	eventHandler:$f{quickEditEventHandler}
+	eventHandler:$f{quickEditEventHandler} binding:$f{quickEditBtnBinding}
 !ui-button:refreshBtn caption:$m{button.refresh}
 	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
 !ui-symbol:fastBackBtn symbol:$s{backward-fast} hint:$m{pagination.firstpage}
