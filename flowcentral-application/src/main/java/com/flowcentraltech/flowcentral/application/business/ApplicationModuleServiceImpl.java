@@ -3789,12 +3789,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
             appTableColumn.setOrder(tableColumnConfig.getOrder());
             appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
-            appTableColumn.setSwitchOnChange(tableColumnConfig.isSwitchOnChange());
-            appTableColumn.setEditable(tableColumnConfig.isEditable());
-            appTableColumn.setHidden(tableColumnConfig.isHidden());
-            appTableColumn.setDisabled(tableColumnConfig.isDisabled());
-            appTableColumn.setSortable(tableColumnConfig.isSortable());
-            appTableColumn.setSummary(tableColumnConfig.isSummary());
+            appTableColumn.setSwitchOnChange(tableColumnConfig.getSwitchOnChange());
+            appTableColumn.setEditable(tableColumnConfig.getEditable());
+            appTableColumn.setHidden(tableColumnConfig.getHidden());
+            appTableColumn.setDisabled(tableColumnConfig.getDisabled());
+            appTableColumn.setSortable(tableColumnConfig.getSortable());
+            appTableColumn.setSummary(tableColumnConfig.getSummary());
             appTableColumn.setConfigType(ConfigType.MUTABLE_INSTALL);
             columnList.add(appTableColumn);
         }
@@ -4058,11 +4058,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setEditAction(formTabConfig.getEditAction());
             appFormElement.setEditFormless(formTabConfig.getEditFormless());
             appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
-            appFormElement.setIgnoreParentCondition(formTabConfig.isIgnoreParentCondition());
-            appFormElement.setShowSearch(formTabConfig.isShowSearch());
-            appFormElement.setVisible(formTabConfig.isVisible());
-            appFormElement.setEditable(formTabConfig.isEditable());
-            appFormElement.setDisabled(formTabConfig.isDisabled());
+            appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
+            appFormElement.setShowSearch(formTabConfig.getShowSearch());
+            appFormElement.setVisible(formTabConfig.getVisible());
+            appFormElement.setEditable(formTabConfig.getEditable());
+            appFormElement.setDisabled(formTabConfig.getDisabled());
             appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
             elementList.add(appFormElement);
 
@@ -4074,9 +4074,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormElement.setElementName(formSectionConfig.getName());
                     appFormElement.setSectionColumns(formSectionConfig.getColumns());
                     appFormElement.setLabel(resolveApplicationMessage(formSectionConfig.getLabel()));
-                    appFormElement.setVisible(formSectionConfig.isVisible());
-                    appFormElement.setEditable(formSectionConfig.isEditable());
-                    appFormElement.setDisabled(formSectionConfig.isDisabled());
+                    appFormElement.setVisible(formSectionConfig.getVisible());
+                    appFormElement.setEditable(formSectionConfig.getEditable());
+                    appFormElement.setDisabled(formSectionConfig.getDisabled());
                     appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
                     elementList.add(appFormElement);
 

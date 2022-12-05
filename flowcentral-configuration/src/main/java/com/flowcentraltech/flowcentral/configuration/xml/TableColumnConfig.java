@@ -16,6 +16,10 @@
 package com.flowcentraltech.flowcentral.configuration.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Table column configuration.
@@ -37,20 +41,25 @@ public class TableColumnConfig {
 
     private int widthRatio;
 
-    private boolean switchOnChange;
+    private Boolean switchOnChange;
 
-    private boolean hidden;
+    private Boolean hidden;
 
-    private boolean disabled;
+    private Boolean disabled;
 
-    private boolean editable;
+    private Boolean editable;
 
-    private boolean sortable;
+    private Boolean sortable;
 
-    private boolean summary;
+    private Boolean summary;
 
     public TableColumnConfig() {
-        this.sortable = true;
+        this.switchOnChange = Boolean.FALSE;
+        this.hidden = Boolean.FALSE;
+        this.disabled = Boolean.FALSE;
+        this.editable = Boolean.FALSE;
+        this.sortable = Boolean.TRUE;
+        this.summary = Boolean.FALSE;
     }
 
     public String getField() {
@@ -107,57 +116,63 @@ public class TableColumnConfig {
         this.widthRatio = widthRatio;
     }
 
-    public boolean isSwitchOnChange() {
+    public Boolean getSwitchOnChange() {
         return switchOnChange;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setSwitchOnChange(boolean switchOnChange) {
+    public void setSwitchOnChange(Boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
     }
 
-    public boolean isHidden() {
+    public Boolean getHidden() {
         return hidden;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setHidden(boolean hidden) {
+    public void setHidden(Boolean hidden) {
         this.hidden = hidden;
     }
 
-    public boolean isDisabled() {
+    public Boolean getDisabled() {
         return disabled;
     }
 
-    @XmlAttribute
-    public void setDisabled(boolean disabled) {
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+   @XmlAttribute
+    public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
     }
 
-    public boolean isEditable() {
+    public Boolean getEditable() {
         return editable;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setEditable(boolean editable) {
+    public void setEditable(Boolean editable) {
         this.editable = editable;
     }
 
-    public boolean isSortable() {
+    public Boolean getSortable() {
         return sortable;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setSortable(boolean sortable) {
+    public void setSortable(Boolean sortable) {
         this.sortable = sortable;
     }
 
-    public boolean isSummary() {
+    public Boolean getSummary() {
         return summary;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setSummary(boolean summary) {
+    public void setSummary(Boolean summary) {
         this.summary = summary;
     }
 

@@ -23,6 +23,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.TabContentTypeXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Form tab configuration.
@@ -50,22 +52,24 @@ public class FormTabConfig {
 
     private String editFixedRows;
     
-    private boolean ignoreParentCondition;
+    private Boolean ignoreParentCondition;
 
-    private boolean showSearch;
+    private Boolean showSearch;
 
-    private boolean visible;
+    private Boolean visible;
 
-    private boolean editable;
+    private Boolean editable;
 
-    private boolean disabled;
+    private Boolean disabled;
 
     private List<FormSectionConfig> sectionList;
 
     public FormTabConfig() {
-        this.visible = true;
-        this.editable = true;
-        this.disabled = false;
+        this.ignoreParentCondition = Boolean.FALSE;
+        this.showSearch = Boolean.FALSE;
+        this.visible = Boolean.TRUE;
+        this.editable = Boolean.TRUE;
+        this.disabled = Boolean.FALSE;
     }
 
     public TabContentType getContentType() {
@@ -150,48 +154,53 @@ public class FormTabConfig {
         this.editFixedRows = editFixedRows;
     }
 
-    public boolean isIgnoreParentCondition() {
+    public Boolean getIgnoreParentCondition() {
         return ignoreParentCondition;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setIgnoreParentCondition(boolean ignoreParentCondition) {
+    public void setIgnoreParentCondition(Boolean ignoreParentCondition) {
         this.ignoreParentCondition = ignoreParentCondition;
     }
 
-    public boolean isShowSearch() {
+    public Boolean getShowSearch() {
         return showSearch;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setShowSearch(boolean showSearch) {
+    public void setShowSearch(Boolean showSearch) {
         this.showSearch = showSearch;
     }
 
-    public boolean isVisible() {
+    public Boolean getVisible() {
         return visible;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setVisible(boolean visible) {
+    public void setVisible(Boolean visible) {
         this.visible = visible;
     }
 
-    public boolean isEditable() {
+    public Boolean getEditable() {
         return editable;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setEditable(boolean editable) {
+    public void setEditable(Boolean editable) {
         this.editable = editable;
     }
 
-    public boolean isDisabled() {
+    public Boolean getDisabled() {
         return disabled;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setDisabled(boolean disabled) {
+    public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
     }
 
