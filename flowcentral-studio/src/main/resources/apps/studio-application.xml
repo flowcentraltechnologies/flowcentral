@@ -1145,19 +1145,27 @@
 			label="$m{studio.appentityfield.table.quickedit.label}"
 			entity="application.appEntityField" itemsPerPage="-1" serialNo="false">
 			<column field="name" renderWidget="application.name"
-				widthRatio="1"/>
-			<column field="label" renderWidget="application.text"
-				widthRatio="1"/>
+				widthRatio="2"/>
 			<column field="dataTypeDesc" renderWidget="application.text"
-				label="$m{application.appentityfield.datatype}" widthRatio="1" />
+				label="$m{application.appentityfield.datatype}" widthRatio="2" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="2" editable="true"/>
 			<column field="columnName" renderWidget="application.text"
-				widthRatio="1" editable="true"/>
-			<column field="nullable" renderWidget="application.text"
-				widthRatio="1" editable="true"/>
+				widthRatio="2" editable="true"/>
 			<column field="minLen" renderWidget="application.integer"
-				widthRatio="1" editable="true"/>
+				widthRatio="2" editable="true"/>
 			<column field="maxLen" renderWidget="application.integer"
-				widthRatio="1" editable="true"/>
+				widthRatio="2" editable="true"/>
+			<column field="precision" renderWidget="application.integer"
+				widthRatio="2" editable="true"/>
+			<column field="scale" renderWidget="application.integer"
+				widthRatio="2" editable="true"/>
+			<column field="nullable" renderWidget="application.checkbox"
+				widthRatio="2" editable="true"/>
+			<column field="reportable" renderWidget="application.checkbox"
+				widthRatio="2" editable="true"/>
+			<column field="auditable" renderWidget="application.checkbox"
+				widthRatio="2" editable="true"/>
 		</table>
 		<table name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"
