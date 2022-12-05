@@ -493,7 +493,7 @@
 			<property name="maintainForm.delete.condition"
 				value="appEntityFieldDeletable" />
 			<property name="quickEdit.enabled" value="true" />
-			<property name="quickEdit.table" value="appEntityFieldQuickEditTable" />
+			<property name="quickEdit.table" value="studio.appEntityFieldQuickEditTable" />
 			<property name="quickEdit.policy" value="studioappentityfield-tablepolicy" />
 			<filter name="appEntityFieldEditable"
 				description="$m{application.appentityfield.filter.editable}">
@@ -1143,7 +1143,7 @@
 		<table name="appEntityFieldQuickEditTable"
 			description="$m{studio.appentityfield.table.quickedit}"
 			label="$m{studio.appentityfield.table.quickedit.label}"
-			entity="application.appEntityField" itemsPerPage="-1" serialNo="true">
+			entity="application.appEntityField" itemsPerPage="-1" serialNo="false">
 			<column field="name" renderWidget="application.name"
 				widthRatio="1"/>
 			<column field="label" renderWidget="application.text"

@@ -14,7 +14,7 @@
 // the License.
 
 !fc-quicktableeditpanel layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{titleBar entryBodyPanel}
+	components:$c{titleBar entryBodyPanel footerActionPanel}
 
 // Header
 !ui-titlebar:titleBar caption:$m{quicktableeditpanel.title} captionBinding:title
@@ -30,6 +30,14 @@
 !fc-beantable:entryTableEntryTbl style:$s{width:100%;}
 	binding:entryBeanTable
 
+
+// Footer action panel
+!ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal}
+	components:$c{saveBtn cancelBtn}
+!ui-button:saveBtn styleClass:$e{fc-bluebutton} caption:$m{button.save}
+    eventHandler:$d{!ui-event event:onclick action:$c{saveEntriesAct}}
+!ui-button:cancelBtn caption:$m{button.close}
+    eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 
 // Actions
 !ui-postcommand:saveEntriesAct command:saveEntries components:$c{entryTableEntryTbl}
