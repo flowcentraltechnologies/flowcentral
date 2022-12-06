@@ -25,24 +25,6 @@ public interface FlowCentralSessionAttributeConstants {
 
     /** Shortcut deck */
     String SHORTCUTDECK = "fc.shortcutdeck";
-
-    /** Report options */
-    String REPORTOPTIONS = "fc.reportoptions";
-
-    /** User role options */
-    String USERROLEOPTIONS = "fc.userroleoptions";
-
-    /** Entity select */
-    String ENTITYSELECT = "fc.entityselect";
-
-    /** Entity tree select */
-    String ENTITYTREESELECT = "fc.entitytreeselect";
-
-    /** Text template editor */
-    String TEXT_TEMPLATE_EDITOR = "fc.texttemplateeditor";
-
-    /** Quick edit table */
-    String QUICK_TABLE_EDIT = "fc.quickedittable";
    
     /** User name */
     String USERNAME = "fc.username";

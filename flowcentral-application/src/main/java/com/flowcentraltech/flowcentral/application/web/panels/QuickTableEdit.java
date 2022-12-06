@@ -57,6 +57,10 @@ public class QuickTableEdit {
 
     private List<FormMessage> validationErrors;
 
+    private int width;
+    
+    private int height;
+    
     public QuickTableEdit(AppletContext ctx, SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef,
             String baseField, Object baseId, String entryTable, String entryEditPolicy) {
         this.ctx = ctx;
@@ -86,6 +90,22 @@ public class QuickTableEdit {
 
     public List<FormMessage> getValidationErrors() {
         return validationErrors;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     @SuppressWarnings("unchecked")

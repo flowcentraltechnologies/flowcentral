@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -40,6 +39,7 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Abstract base class for entity form applet controllers.
@@ -85,8 +85,8 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             int childTabIndex = getRequestTarget(int.class);
             QuickTableEdit quickTableEdit = applet.quickEdit(childTabIndex);
             if (quickTableEdit != null) {
-                return showPopup(ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
-                        FlowCentralSessionAttributeConstants.QUICK_TABLE_EDIT, quickTableEdit);
+                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
+                        quickTableEdit, quickTableEdit.getWidth(), quickTableEdit.getHeight()));
             }
         }
 
@@ -112,16 +112,16 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                         String title = resolveSessionMessage("$m{entitymultiselectpanel.select.entity}",
                                 entitySelect.getEntityTable().getEntityDef().getLabel());
                         entitySelect.setTitle(title);
-                        return showPopup(ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT,
-                                FlowCentralSessionAttributeConstants.ENTITYSELECT, entitySelect);
+                        return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT,
+                                entitySelect));
                     }
                     case SHOW_TREEMULTISELECT: {
                         EntityTreeSelectGenerator generator = getAu().getComponent(EntityTreeSelectGenerator.class,
                                 showPopupInfo.getReference());
                         EntityTreeSelect entityTreeSelect = generator.generate(getAu(), formValueStore);
                         entityTreeSelect.setTitle(entityTreeSelect.getEntityTreeTable().getTitle());
-                        return showPopup(ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
-                                FlowCentralSessionAttributeConstants.ENTITYTREESELECT, entityTreeSelect);
+                        return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
+                                entityTreeSelect));
                     }
                     default:
                         break;

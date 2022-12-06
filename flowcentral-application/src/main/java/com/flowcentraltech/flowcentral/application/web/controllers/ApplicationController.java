@@ -43,6 +43,7 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.widget.ContentPanel;
 import com.tcdng.unify.web.ui.widget.control.Table;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Application controller.
@@ -160,10 +161,9 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     @Action
     public String prepareUserRoleOptions() throws UnifyException {
         UserToken userToken = getUserToken();
-        setSessionAttribute(FlowCentralSessionAttributeConstants.USERROLEOPTIONS,
+        return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_USERROLE_OPTIONS,
                 new UserRoleOptions(userLoginActivityProvider.getAvailableUserRolesActiveNow(userToken.getUserLoginId(),
-                        userToken.getRoleCode())));
-        return ApplicationResultMappingConstants.SHOW_USERROLE_OPTIONS;
+                        userToken.getRoleCode()))));
     }
 
     @Action
@@ -173,12 +173,13 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     @Action
     public String switchUserRole() throws UnifyException {
-        UserRoleOptions userRoleOptions = (UserRoleOptions) getSessionAttribute(
-                FlowCentralSessionAttributeConstants.USERROLEOPTIONS);
+        Popup popup = getCurrentPopup();
+        UserRoleOptions userRoleOptions = (UserRoleOptions) popup.getBackingBean();
         UserRoleInfo userRoleInfo = userRoleOptions.getUserRoleList().get(
                 getPageWidgetByShortName(Table.class, "userRoleOptionsPopup.roleTablePanel.contentTbl").getViewIndex());
         ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
         contentPanel.clearPages();
+        removeCurrentPopup();
         return forwardToApplication(userRoleInfo);
     }
 

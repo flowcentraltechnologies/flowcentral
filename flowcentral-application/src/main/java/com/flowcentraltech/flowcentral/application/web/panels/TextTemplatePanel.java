@@ -17,12 +17,12 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Text template panel.
@@ -36,9 +36,10 @@ public class TextTemplatePanel extends AbstractPanel {
 
     @Action
     public void set() throws UnifyException {
-        TextTemplate textTemplate = (TextTemplate) removeSessionAttribute(
-                FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR);
+        Popup popup = getCurrentPopup();
+        TextTemplate textTemplate = (TextTemplate) popup.getBackingBean();
         textTemplate.set();
+        removeCurrentPopup();
         setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
@@ -51,7 +52,6 @@ public class TextTemplatePanel extends AbstractPanel {
 
     @Action
     public void close() throws UnifyException {
-        removeSessionAttribute(FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR);
         commandHidePopup();
     }
 

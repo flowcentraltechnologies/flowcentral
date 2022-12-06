@@ -210,8 +210,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPERVISORFLAG, user.getSupervisor());
-        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERROLEOPTIONS, null);
-        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.REPORTOPTIONS, null);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SHORTCUTDECK, null);
         return user;
     }

@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -37,15 +36,13 @@ public class QuickTableEditPanel extends AbstractPanel {
     public void saveEntries() throws UnifyException {
         QuickTableEdit quickTableEdit = getValue(QuickTableEdit.class);
         if (quickTableEdit.commitEntryList()); {
-            removeSessionAttribute(
-                    FlowCentralSessionAttributeConstants.QUICK_TABLE_EDIT);
+            removeCurrentPopup();
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
     }
 
     @Action
     public void close() throws UnifyException {
-        removeSessionAttribute(FlowCentralSessionAttributeConstants.QUICK_TABLE_EDIT);
         commandHidePopup();
     }
 }

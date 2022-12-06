@@ -34,7 +34,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-checkbox {width: 18px; height: 18px;} 
 
 /** Date field */
-.ui-date {}
 .ui-date .ctable {width:100%;}
 .ui-date .ctable th {text-align:center;font-weight: normal;}
 .ui-date .ctable td {width:14%;}
@@ -75,7 +74,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .ui-picture {border:solid 1px #b0b0b0;}
 
 /* Select */
-.ui-select .sslist .norm {}
 .ui-select .sslist .norm:hover {background-color: #d5e7fb; color: #000;}
 
 /* Text */
@@ -188,7 +186,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-licenseoptions .label {font-size:16px; padding:8px 0px; border-top:solid 1px #d0d0d0;}
 .fc-licenseoptions .txt {width:320px;}
 
-.fc-tablepanel {}
 .fc-tablepanel .ui-table .todd {background-color:#ffffff;}
 .fc-tablepanel .ui-table .todd:hover {background-color: #d5e7fb;}
 .fc-tablepanel .ui-table .teven {background-color:#f8f8f8;}
@@ -221,7 +218,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tinybutton {font-size: 7pt; min-height: 24px;}
 
 /** Chart */
-.fc-chart {}
 
 /** Comment Listing */
 .fc-commentlisting {overflow-y:scroll;padding:2px;height:196px;border:solid 1px #b0b0b0;}
@@ -247,7 +243,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitycsvtext {word-wrap:break-word;}
 
 /** Entity List */
-.fc-entitylist {}
 .fc-entitylist .tread {background: transparent;}
 
 /** Entity Search */
@@ -257,10 +252,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearch .elfilterrow span {margin-right: 4px; font-weight: normal;}
 .fc-entitysearch .elfilterrow input {width:160px; height:18px;}
 .fc-entitysearch .elresultrow {margin:4px 0px;}
-.fc-entitysearch .ellist {}
 .fc-entitysearch .ellist a {display:block; padding:6px 4px; color:#2C2C2C;white-space:nowrap;
 	background-color: transparent; border: 0px; text-decoration: none;}
-.fc-entitysearch .ellist .norm {}
 .fc-entitysearch .ellist .norm:hover {background-color: #d5e7fb; color: #000;}
 .fc-entitysearch .ellist .sel {background-color: #5970B2; color: #FFF;}
 .fc-entitysearch .elactionrow {height: 24px;}
@@ -278,10 +271,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytextsearch .elfilterrow span {margin-right: 4px; font-weight: normal;}
 .fc-entitytextsearch .elfilterrow input {width:160px; height:18px;}
 .fc-entitytextsearch .elresultrow {margin:4px 0px;}
-.fc-entitytextsearch .ellist {}
 .fc-entitytextsearch .ellist a {display:block; padding:6px 4px; color:#2C2C2C;white-space:nowrap;
 	background-color: transparent; border: 0px; text-decoration: none;}
-.fc-entitytextsearch .ellist .norm {}
 .fc-entitytextsearch .ellist .norm:hover {background-color: #d5e7fb; color: #000;}
 .fc-entitytextsearch .ellist .sel {background-color: #5970B2; color: #FFF;}
 .fc-entitytextsearch .elactionrow {height: 24px;}
@@ -293,10 +284,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytextsearch .tpbutton {background-color: transparent !important;}
 
 /** Entity Field Reference Search */
-.fc-entityfieldrefsearch {}
 
 /** Entity field widget list */
-.fc-entityfieldwidgetlist {}
 
 /* File attachment image */
 .fc-fileattachmentimage {width:180px; height:180px; padding: 2px;border: 1px solid #C8C8C8;}
@@ -308,19 +297,14 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	font-weight:bold; vertical-align: middle;}
 .fc-filter .item {display:inline-block; margin-right:6px;}
 .fc-filter .atab1 {display:inline-block;vertical-align: middle;height:24px;width:140px;}
-.fc-filter .atab1:hover {}
 .fc-filter .atab2 {display:inline-block;vertical-align: middle;height:24px;width:40px;}
-.fc-filter .atab2:hover {}
 .fc-filter .abutton {padding:0px 4px; min-height:22px; min-width:22px; margin-left:2px; font-size:10px; background-color: #ffffff !important;color:#4c4c4c;
 								border: 1px solid #c8c8c8; /*border-radius: 6px;*/ cursor: pointer;}
 .fc-filter .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
 
 /* Filter generator search */
-.fc-filtergeneratorsearch {}
 
 /** Form */
-.fc-form {}
-.fc-form .fcaption {}
 .fc-form .fcaption span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
 	background-color:#6e819d; color: #ffffff; /*border-radius: 4px;*/}
 .fc-form .ftable {display:table;width:100%;table-layout:fixed;}
@@ -335,7 +319,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-form .flabel {margin-top:2px; text-align:right;}
 .fc-form .flabel span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
 .fc-form .flabel .freq {width:9px; padding-right:4px;}
-.fc-form .fcontent {}
 .fc-form .fcontent .errmsg {font-size: 10px; font-weight:bold; padding: 0px 4px; background-color: #feefef; border: 1px solid #ffcccc; color: #b02121;}
 .fc-form .fpost {display:table-cell;width:12px;}
 .fc-form .fannot {display:table-caption;}
@@ -346,8 +329,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /** Form Listing */
 .fc-formlisting {max-width:1240px;}
-.fc-formlisting .flbody {}
-.fc-formlisting .flsection {}
 .fc-formlisting .flsectionheader {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
 	background-color:#6e819d; color: #ffffff;}
 .fc-formlisting .flsectionbody {display:table;padding-bottom:8px;box-sizing: border-box;}
@@ -356,10 +337,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formlisting .flgray {background-color:#f4f4f4;}
 .fc-formlisting .fltable {display:table;width:100%;}
 .fc-formlisting .flrow {display:table-row;}
-.fc-formlisting .flbtop {}
-.fc-formlisting .flbright {}
-.fc-formlisting .flbbottom {}
-.fc-formlisting .flbleft {}
 .fc-formlisting .flcell {display:table-cell;box-sizing: border-box;padding: 4px 2px;}
 .fc-formlisting .flcontent {display:block;}
 .fc-formlisting .flimage {display:block;width:100%;}
@@ -376,18 +353,15 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formactionbuttons .fabcell {display:table-cell; padding-left: 8px; vertical-align: middle;}
 
 /* Form annotation */
-.fc-formannotation {}
 .fc-formannotation span {display:block; padding:8px 6px; margin: 0px 20px 4px 20px;}
 .fc-formannotation .info {background-color: #eff1fe; border: 1px solid #cce4ff; color:#2164b0;}
 .fc-formannotation .warning {background-color: #ffffe6; border: 1px solid #ffefc6; color:#b06421;}
 .fc-formannotation .error {background-color: #feefef; border: 1px solid #ffcccc; color: #b02121;}
 
 /* Form bread crumbs */
-.fc-formbreadcrumbs {}
 .fc-formbreadcrumbs .base {list-style: none; display: table; margin: 0px; padding: 0px;}
 .fc-formbreadcrumbs .base li {display: table-cell;vertical-align: middle;}
 .fc-formbreadcrumbs .hist {color:#666E79 !important;}
-.fc-formbreadcrumbs .last {}
 .fc-formbreadcrumbs .hdstep {display: inline-block; padding: 2px;margin-right: 6px; vertical-align: top; background-color: #a2a2a2; color: #fff;
 	font-size: 8pt; font-weight: bold;}
 .fc-formbreadcrumbs .last .hdstep {background-color: #000;}
@@ -402,7 +376,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formbreadcrumbs .chev:after {left:0; border-width:10px 0 10px 10px; border-color:transparent transparent transparent #e3e7ea;}
 
 /* Form errors */
-.fc-formmessages {}
 .fc-formmessages .bdy {display:block; padding:4px 2px; margin-bottom: 2px;  list-style-position: inside;list-style-type: square;}
 .fc-formmessages .info {padding:8px 4px;background-color: #efeffe;
 	border: 1px solid #ccccff; color: #2020b0;}
@@ -412,8 +385,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	border: 1px solid #ffcccc; color: #b02020;}
 
 /* Input array */
-.fc-inputarray {}
-.fc-inputarray .line {}
 .fc-inputarray .section  {vertical-align:top;padding:3px 6px 3px 2px;}
 .fc-inputarray .iatable {display:table;width:100%;}
 .fc-inputarray .iarow {display:table-row;}
@@ -421,13 +392,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-inputarray .iapre span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
 .fc-inputarray .iamid {display:table-cell;}
 .fc-inputarray .iapost {display:table-cell;width:42px;vertical-align:top;}
-.fc-inputarray .iacaption {}
 .fc-inputarray .iacaption span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
 	background-color:#6e819d; color: #ffffff; /*border-radius: 4px;*/}
 
 /* Mini form */
-.fc-miniform {}
-.fc-miniform .mfsection {}
 .fc-miniform .mfsection span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
 	background-color:#6e819d; color: #ffffff; /*border-radius: 4px;*/}
 .fc-miniform .mftable {display:table;width:100%;table-layout:fixed;}
@@ -442,7 +410,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mflabel {margin-top:2px; text-align:right;}
 .fc-miniform .mflabel span {display:inline-block; padding-right:6px;font-size: 11px;font-weight: bold;color: #262c33;}
 .fc-miniform .mflabel .mfreq {width:9px; padding-right:4px;}
-.fc-miniform .mfcontent {}
 .fc-miniform .mfcontent .errmsg {font-size: 10px; font-weight:bold; padding: 0px 4px; background-color: #feefef; border: 1px solid #ffcccc; color: #b02121;}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
 .fc-miniform .mfannot {display:table-caption;}
@@ -491,11 +458,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tokensequence .previewbdy {display:block;padding:2px;white-space: pre-wrap;word-wrap: anywhere;font-size:8pt;}
 .fc-tokensequence .editorfrm {width:80%;padding:2px;}
 .fc-tokensequence .editorbox {border:1px solid #e8e8e8;height:240px;max-height:240px;}
-.fc-tokensequence .editor {}
+
 
 /* Ref
 /* Search */
-.fc-search {}
 .fc-search .sftable {display:table;width:100%;table-layout:fixed;}
 .fc-search .sfrow {display:table-row;}
 .fc-search .sfcol {display:table-cell; vertical-align: top;}
@@ -503,11 +469,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sffieldrow {display:table-row;}
 .fc-search .sfpre {display:table-cell;width:72px;vertical-align:top;}
 .fc-search .sfmid {display:table-cell;}
-.fc-search .sfcon {}
 .fc-search .sflabel {margin-top:2px; text-align:right;}
 .fc-search .sflabel span {display:inline-block; padding-right:3px;font-size: 7pt;font-weight: bold;color: #262c33;}
 .fc-search .sflabel .mfreq {width:9px; padding-right:4px;}
-.fc-search .sfcontent {}
+
 
 /** Sector Icon */
 .fc-sectoricon {display:inline-block;width:28px;height:28px;padding-top:9px;border-radius:4px;box-sizing: border-box;
@@ -525,14 +490,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-setvalues .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
 
 /* Single form */
-.fc-singleform {}
 .fc-singleform .sfbody {margin-top:-4px;}
 
 /** Suggestion Text Search */
-.fc-suggestiontextsearch {}
 
 /* Tab sheet */
-.fc-tabsheet {}
 .fc-tabsheet .ttab {list-style: none; display: inline-table; margin: 0px; padding: 0px;}
 .fc-tabsheet .ttab li {float: left; color: #24292e; padding: 4px 8px;}
 .fc-tabsheet .tactive {margin-bottom: -1px; background-color: #fff;
@@ -553,13 +515,11 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 
 /* Table */
-.fc-table {}
 .fc-table .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-table .table tr {vertical-align: middle;}
 .fc-table .table .sheader {text-align:center;padding:0px 6px;font-weight: bold;font-size:8pt;background:#a5b7cc;}
 .fc-table .table .odd {background-color:#f1f4f5;}
 .fc-table .table .odd:hover {background-color:#d5e7fb;}
-.fc-table .table .even {}
 .fc-table .table .even:hover {background-color:#d5e7fb;}
 .fc-table .table .info {border-left: solid 2px #a7ccf6; background-color: #e9f3fd;}
 .fc-table .table .warning {border-left: solid 2px #f6dea7; background-color: #fdf6e9;}
@@ -585,7 +545,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mactionh {width: 20px;}
 .fc-table .table .mfixedh {width: 48px;}
 .fc-table .table .mcrudh {width: 64px;}
-.fc-table .table .mseriald {}
 .fc-table .table .mact {color:#525252;}
 .fc-table .table .mbtn {min-width:52px; min-height:22px;font-size: 7pt;padding: 0px 6px;}
 .fc-table .table .mblue {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
@@ -598,24 +557,19 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .classic .mselh {width: 22px;background-color: #e3e7ea;}
 .fc-table .link-right {display:block;text-align:right;}
 
-.fc-beantable {}
 .fc-beantable .table .mseld {background-color: transparent;}
 .fc-beantable .total {font-weight:bold;}
 .fc-beantable .total .blank {border-right: none;border-left: none;}
 
-.fc-entitytable {}
 .fc-entitytable .total {font-weight:bold;}
 .fc-entitytable .total .blank {border-right: none;border-left: none;}
 
-.fc-loadingtable {}
 .fc-loadingtable .total {font-weight:bold;}
 .fc-loadingtable .total .blank {border-right: none;border-left: none;}
 
-.fc-entitytreetable {}
 .fc-entitytreetable .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-entitytreetable .table .odd {background-color:#f1f4f5;}
 .fc-entitytreetable .table .odd:hover {background-color:#d5e7fb;}
-.fc-entitytreetable .table .even {}
 .fc-entitytreetable .table .even:hover {background-color:#d5e7fb;}
 .fc-entitytreetable .table .info {border-left: solid 2px #a7ccf6; background-color: #e9f3fd;}
 .fc-entitytreetable .table .warning {border-left: solid 2px #f6dea7; background-color: #fdf6e9;}
@@ -624,7 +578,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .table th {text-align:left; font-weight: bold; padding: 4px 6px;font-size: 8pt;}
 .fc-entitytreetable .table th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
 .fc-entitytreetable .table .inner {padding: 0px; padding-left: 44px;}
-.fc-entitytreetable .table .small {}
 .fc-entitytreetable .table .small th {text-align:left; font-weight: bold; padding: 8px 6px;}
 .fc-entitytreetable .table .small th span {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;font-size:7pt;}
 .fc-entitytreetable .table td {height:24px; padding: 4px 6px; border-left:none;border-top: 1px solid #e8e8e8;border-bottom: 1px solid #e8e8e8;font-size:8pt;}
@@ -633,19 +586,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreetable .table .mselh input {display:none;}
 .fc-entitytreetable .table .cpre {width:32px;}
 .fc-entitytreetable .table .clabel {width:64px;}
-.fc-entitytreetable .table .cline {}
 .fc-entitytreetable .table .pmsel {text-align:right;}
-.fc-entitytreetable .table .msel {}
 .fc-entitytreetable .table .msel span {width:16px; height:16px;}
 .fc-entitytreetable .table .msel input {display:none;}
-.fc-entitytreetable .table .mpre {}
-.fc-entitytreetable .table .mlabel {}
-.fc-entitytreetable .table .mline {}
 .fc-entitytreetable .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-entitytreetable .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
 .fc-entitytreetable .classic .mselh {width: 22px;background-color: #e3e7ea;}
-
-.fc-loadingtable {}
 
 .fc-dispcounter {display:inline-block; background-color:#a6aeb9; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
@@ -665,8 +611,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-appletmenu .menu {background-color:#3c4e63;padding:6px 12px;margin-bottom:2px;font-weight:bold;cursor:pointer;}
 .fc-appletmenu .menu .ind {display:inline-block;width:28px;border-radius:4px;font-size:7px;padding-top:2px;padding-bottom:2px;margin-right:6px;text-align:center;}
 .fc-appletmenu .menu .lab {display:inline-block;padding: 2px 0px;}
-.fc-appletmenu .submenu {}
-.fc-appletmenu .submenu ul {}
 .fc-appletmenu .submenu li {padding:8px 20px;cursor:pointer;}
 .fc-appletmenu .submenu .icon {display:inline-block;width:20px;font-size:12px;vertical-align:top;}
 .fc-appletmenu .submenu .acl {display:inline-block;width: calc(100% - 20px);}
@@ -708,7 +652,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 .fc-topbannercontrol {float: right; font-family: arial; font-size: 7pt;
     font-weight: bold; text-align: right;}
-.fc-topnavcontrol {display:inline-block; float: right; font-family: arial; font-size: 7pt;
+.fc-topnavcontrol {display:inline-block; font-family: arial; font-size: 7pt;
     font-weight: bold; text-align: right;}
 .fc-topnavcontrol button {height:14px; font-size:10px; font-weight:bold; border:0px; background-color:#000;}
 .fc-topnavcontrol button:hover:enabled {background-color:#000;}
@@ -725,7 +669,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-logout:hover:enabled {color: #DE5050;}
 
 .fc-content {overflow-y: scroll; max-height: calc(100vh - 40px) !important;}
-.fc-content-tabbed {}
 
 /*** COMMON ***/
 .hdbar {background-color: #e3e7ea;}
@@ -738,66 +681,40 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /*** PANELS ***/
 .ui-panel legend {border: 1px solid #C0C0C0; margin-left: 0px; background-color: #f8f8f8; padding: 2px 8px;}
 
-.fc-altactionbar {display:inline-block; margin-top:8px; padding:6px 0px; float:left; /*background-color: #e3e7ea;*/}
+.fc-altactionbar {display:inline-block; margin-top:8px; padding:6px 0px;}
 
 /** Assignment page panel */
-.fc-assignmentpagepanel {}
 .fc-assignmentpagepanel .ui-assignmentbox .abmselect {height: 472px;}
 
 /** Comments panel */
 .fc-commentspanel {max-width:1240px;}
 
-/* Child panel */
-.fc-childpanel {}
-.fc-childpanel .fc-miniform {}
-
-/** Edit property list panel */
-.fc-editpropertylistpanel {}
-
-/** Errors panel */
-.fc-errorspanel {}
-
 .fc-editpropertylistpanel .mflgap1 {width:24%;}
 .fc-editpropertylistpanel .mfagap1 {width:16%;}
 
 /* Form panel */
-.fc-tabsonlyformpanel {}
-
-.fc-headlesstabsformpanel {}
 .fc-headlesstabsformpanel .tabsection {width:100%;border-top: 1px solid #e8e8e8; box-sizing: border-box;}
 
-.fc-headerwithtabsformpanel {}
 .fc-headerwithtabsformpanel .cltabsection {width:100%;margin-top:10px; padding:10px 0px; box-sizing: border-box;}
 .fc-headerwithtabsformpanel .rltabsection {width:100%;margin-top:20px; padding:10px 0px;border-top: 1px solid #e8e8e8; box-sizing: border-box;}
 .fc-headerwithtabsformpanel .reltitle {font-size: 16px;}
 .fc-headerwithtabsformpanel .attachbtn {font-size: 20px; color: #707070; cursor: pointer; padding: 0px 0px;}
 .fc-headerwithtabsformpanel .formbase {padding:0px 16px;}
 
-.fc-listingformpanel {}
-
-.fc-entitysingleformpanel {}
 .fc-entitysingleformpanel .formbase {padding:0px 0px;}
 
 /* Entity filter panel */
-.fc-entityfilterpanel {}
-.fc-entityfilterpanel .fc-filter {}
 .fc-entityfilterpanel .filall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
 
 /* Entity field sequence panel */
-.fc-entityfieldsequencepanel {}
-.fc-entityfieldsequencepanel .fc-fieldsequence {}
 .fc-entityfieldsequencepanel .fieldseqall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
 
 /* Entity set values panel */
-.fc-entitysetvaluespanel {}
-.fc-entitysetvaluespanel .fc-setvalues {}
 .fc-entitysetvaluespanel .setvalall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
 
 /* Entity search panel */
-.fc-entitysearchpanel {}
 .fc-entitysearchpanel .pgbtn {font-size: 16px; color: #202020; cursor: pointer; padding: 2px 4px;}
 .fc-entitysearchpanel .pgbtn:disabled {color: #c0c0c0;}
-.fc-entitysearchpanel .fc-filter {}
 .fc-entitysearchpanel .filall {border-top:1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
 .fc-entitysearchpanel .filbody {border:1px solid #b8b8b8;}
 .fc-entitysearchpanel .filbtn {font-size: 16px; color: #0366d6; cursor: pointer; padding: 2px 4px;}
@@ -832,27 +749,19 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitytreemultiselectpanel .footer {display: inline-block;padding-left:4px;padding-bottom:8px;padding-top:8px;box-sizing: border-box;}
 
 /* Entity file attachments panel*/
-.fc-entityfileattachmentspanel {}
 .fc-entityfileattachmentspanel .abody{width:560px; height:220px; padding:1px; overflow-y:scroll;}
 
 /* Entity widget rules panel */
-.fc-entitywidgetrulespanel {}
-.fc-entitywidgetrulespanel .fc-widgetrules {}
 .fc-entitywidgetrulespanel .widgetrulesall {border-top: 1px solid #b8b8b8;border-bottom: 1px solid #b8b8b8;}
 
-.fc-entrytablepagepanel {}
 .fc-entrytablepagepanel .caption {font-size: 8pt; font-weight:bold; margin-bottom:2px; padding: 2px 4px; color:#454545;}
 
-.fc-entrytablepagepanel {}
 
 /* Inline CRUD panel */
-.fc-inlinecrudpanel {}
 
 /* Record order panel */
-.fc-recordorderpanel {}
 	
 /* Report runner panel */
-.fc-reportrunnerpanel {}
 .fc-reportrunnerpanel .paramList {margin-top:2px; width:300px; height:252px; overflow:auto; background-color:#F0F0F0;}
 .fc-reportrunnerpanel .title {display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; background-color:#F0F0F0;
     font-size:14px; font-weight:bold; padding:2px; text-align:center;}
@@ -862,40 +771,16 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /* Text template panel */
 .fc-texttemplatepanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}
-.fc-texttemplatepanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;float:right;}
+.fc-texttemplatepanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;}
 
 /* Quick table edit panel */
 .fc-quicktableeditpanel {width:1024px; background-color:#ffffff;border: 1px solid #b8b8b8;}
 .fc-quicktableeditpanel .entries {width:100%;height:520px;}
-.fc-quicktableeditpanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;float:right;}
-
-/* Manage entity applet panel */
-.fc-manageentityappletpanel {}
-
-/* Manage entity list applet panel */
-.fc-manageentitylistappletpanel {}
-
-/* Manage loading list applet panel */
-.fc-manageloadinglistappletpanel {}
-
-/* Headless tabs for applet panel */
-.fc-headlesstabsformappletpanel {}
+.fc-quicktableeditpanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;}
 
 /* Entity save-as dialog panel */
 .fc-entitysaveasdialogpanel {width:560px;}
 .fc-entitysaveasdialogpanel .mflgap1 {width: 20%;}
-
-/* Task execution panel */
-.fc-taskexecutionappletpanel {}
-
-/* Load data panel */
-.fc-loaddataappletpanel {}
-
-/* Generate license request panel */
-.fc-generatelicenserequestpanel {}
-
-/* Load license panel */
-.fc-loadlicensepanel {}
 
 	
 /* locked resource panel */

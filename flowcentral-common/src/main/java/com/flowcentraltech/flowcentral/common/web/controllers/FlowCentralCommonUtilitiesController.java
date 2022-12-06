@@ -30,6 +30,7 @@ import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.ui.AbstractCommonUtilitiesPageController;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Flow central common utilities controller.
@@ -79,8 +80,8 @@ public class FlowCentralCommonUtilitiesController
 
     @Action
     public String generateReport() throws UnifyException {
-        ReportOptions reportOptions = (ReportOptions) getSessionAttribute(
-                FlowCentralSessionAttributeConstants.REPORTOPTIONS);
+        Popup popup = removeCurrentPopup();
+        ReportOptions reportOptions = (ReportOptions) popup.getBackingBean();
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
         getEventLogger().logUserEvent(CommonModuleAuditConstants.GENERATE_REPORT, reportOptions.getTitle());
         return "viewreport";
@@ -88,7 +89,6 @@ public class FlowCentralCommonUtilitiesController
 
     @Action
     public String closeReport() throws UnifyException {
-        removeSessionAttribute(FlowCentralSessionAttributeConstants.REPORTOPTIONS);
         return hidePopup();
     }
 

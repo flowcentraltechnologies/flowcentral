@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.web.panels.TextTemplate;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.constant.Editable;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Text template widget.
@@ -44,7 +44,6 @@ public class TextTemplateWIdget extends AbstractPopupWindowTextField {
         TokenSequence tokenSequence = new TokenSequence(entityDef, template,
                 Editable.fromBoolean(isContainerEditable()));
         return new Popup(ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
-                FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR,
                 new TextTemplate(tokenSequence, getValueStore(), getBinding()));
     }
 }

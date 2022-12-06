@@ -17,12 +17,12 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Entity tree multi-select panel.
@@ -36,17 +36,16 @@ public class EntityTreeMultiSelectPanel extends AbstractPanel {
 
     @Action
     public void select() throws UnifyException {
-        EntityTreeSelect entityTreeSelect = (EntityTreeSelect) removeSessionAttribute(
-                FlowCentralSessionAttributeConstants.ENTITYTREESELECT);
+        Popup popup = getCurrentPopup();
+        EntityTreeSelect entityTreeSelect = (EntityTreeSelect) popup.getBackingBean();
         entityTreeSelect.applySelect();
-        removeSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYTREESELECT);
+        removeCurrentPopup();
         setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
 
     @Action
     public void close() throws UnifyException {
-        removeSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYTREESELECT);
         commandHidePopup();
     }
 
