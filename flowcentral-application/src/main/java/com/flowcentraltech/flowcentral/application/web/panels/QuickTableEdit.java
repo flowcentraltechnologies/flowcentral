@@ -143,13 +143,13 @@ public class QuickTableEdit {
                 validationErrors = messages != null ? messages.getMessages() : null;
             }
 
-            if (validationErrors == null) {
+            if (DataUtils.isBlank(validationErrors)) {
                 ctx.environment().updateEntryList(sweepingCommitPolicy, entryEditPolicy,
                         (Class<? extends Entity>) entityClassDef.getEntityClass(), baseField, baseId, entryList);
             }
         }
 
-        return validationErrors == null;
+        return DataUtils.isBlank(validationErrors);
     }
 
 }

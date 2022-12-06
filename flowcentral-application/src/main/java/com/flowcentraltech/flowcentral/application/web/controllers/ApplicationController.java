@@ -155,6 +155,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     @Action
     public String refreshContent() throws UnifyException {
+        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 

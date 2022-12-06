@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -37,6 +38,7 @@ public class QuickTableEditPanel extends AbstractPanel {
         QuickTableEdit quickTableEdit = getValue(QuickTableEdit.class);
         if (quickTableEdit.commitEntryList()); {
             removeCurrentPopup();
+            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
     }
