@@ -23,7 +23,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTableWidge
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -51,17 +50,10 @@ public class LoadingSearchPanel extends AbstractPanel {
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
-    private SystemModuleService systemModuleService;
-
-    @Configurable
     private TaskLauncher taskLauncher;
 
     public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
     }
 
     public final void setTaskLauncher(TaskLauncher taskLauncher) {
@@ -74,17 +66,18 @@ public class LoadingSearchPanel extends AbstractPanel {
 
         LoadingSearch loadingSearch = getLoadingSearch();
         setVisible("sectorIcon", loadingSearch.isWithSectorIcon());
-        
+
         loadingSearch.ensureTableStruct();
         if (Boolean.TRUE.equals(getRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
-            loadingSearch.applySearchEntriesToSearch();;
+            loadingSearch.applySearchEntriesToSearch();
+            ;
         }
 
         final LoadingTable loadingTable = loadingSearch.getLoadingTable();
         final TableDef tableDef = loadingTable.getTableDef();
         setVisible("footerActionPanel", loadingSearch.isShowActionFooter());
         if (loadingSearch.isShowActionFooter()) {
-            boolean buttonsForFooterAction = systemModuleService.getSysParameterValue(boolean.class,
+            boolean buttonsForFooterAction = loadingSearch.au().system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
             if (buttonsForFooterAction) {
                 ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
@@ -104,9 +97,9 @@ public class LoadingSearchPanel extends AbstractPanel {
     public void commitChange() throws UnifyException {
         LoadingSearch loadingSearch = getLoadingSearch();
         loadingSearch.commitChange();
-        reload();
+        search();
     }
-    
+
     @Action
     public void details() throws UnifyException {
         String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
@@ -114,14 +107,7 @@ public class LoadingSearchPanel extends AbstractPanel {
             int mIndex = Integer.parseInt(po[1]);
             LoadingSearch loadingSearch = getLoadingSearch();
             loadingSearch.getLoadingTable().setDetailsIndex(mIndex);
-         }
-    }
-
-    @Action
-    public void reload() throws UnifyException {
-        LoadingSearch loadingSearch = getLoadingSearch();
-        loadingSearch.applySearchEntriesToSearch();;
-        getRequestContextUtil().setContentScrollReset();
+        }
     }
 
     @Action
@@ -160,7 +146,7 @@ public class LoadingSearchPanel extends AbstractPanel {
             EntityListActionResult entityActionResult = loadingSearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
         }
-        
+
         tableWidget.clearSelected();
     }
 

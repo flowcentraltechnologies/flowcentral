@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.policies;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EditEntityItem;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
@@ -39,10 +40,7 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
     implements LoadingTableProvider {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private EnvironmentService environmentService;
+    private AppletUtilities au;
 
     private final String sourceEntity;
     
@@ -50,12 +48,8 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
         this.sourceEntity = sourceEntity;
     }
 
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @Override
@@ -84,11 +78,11 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
     }
 
     protected EnvironmentService environment() {
-        return environmentService;
+        return au.environment();
     }
 
     protected ApplicationModuleService application() {
-        return applicationModuleService;
+        return au.application();
     }
 
     protected String getSourceEntity() {
