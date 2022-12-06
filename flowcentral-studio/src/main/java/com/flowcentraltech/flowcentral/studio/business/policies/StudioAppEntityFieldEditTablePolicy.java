@@ -7,6 +7,7 @@
 
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,6 +22,8 @@ import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
@@ -64,9 +67,42 @@ public class StudioAppEntityFieldEditTablePolicy extends AbstractChildListEditPo
     }
 
     @Override
-    public void applyTableStateOverride(ValueStoreReader parentReader, ValueStore valueStore,
+    public void applyTableStateOverride(ValueStoreReader parentReader, ValueStore rowValueStore,
             TableStateOverride tableStateOverride) throws UnifyException {
+        EntityFieldType type = rowValueStore.retrieve(EntityFieldType.class, "type");
+        if (type.isBase() || type.isStatic()) {
+            tableStateOverride.setColumnDisabled("label", true);
+            tableStateOverride.setColumnDisabled("columnName", type.isStatic());
+            tableStateOverride.setColumnDisabled("minLen", true);
+            tableStateOverride.setColumnDisabled("maxLen", true);
+            tableStateOverride.setColumnDisabled("precision", true);
+            tableStateOverride.setColumnDisabled("scale", true);
+            tableStateOverride.setColumnDisabled("nullable", true);
+            tableStateOverride.setColumnDisabled("reportable", true);
+            tableStateOverride.setColumnDisabled("auditable", true);
+        } else {
+            EntityFieldDataType dataType =  rowValueStore.retrieve(EntityFieldDataType.class, "dataType");            
+            tableStateOverride.setColumnDisabled("minLen", !dataType.isString());
+            tableStateOverride.setColumnDisabled("maxLen", !dataType.isString());
+            tableStateOverride.setColumnDisabled("precision", !dataType.isNumber());
+            tableStateOverride.setColumnDisabled("scale", !dataType.isDecimal());
+        }
+    }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> List<? extends T> commitList(Class<T> dataType, ValueStore tableValueStore) throws UnifyException {
+        List<T> resultList = new ArrayList<>();
+        final int len = tableValueStore.size();
+        for (int i = 0; i < len; i++) {
+            tableValueStore.setDataIndex(i);
+            EntityFieldType type = tableValueStore.retrieve(EntityFieldType.class, "type");
+            if (!type.isStatic()) {
+                resultList.add((T) tableValueStore.getValueObjectAtDataIndex());
+            }
+        }
+
+        return resultList;
     }
 
     @Override

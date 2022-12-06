@@ -128,4 +128,9 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
 
     }
 
+    @Override
+    public <T> List<? extends T> commitList(Class<T> dataType, ValueStore tableValueStore) throws UnifyException {
+        return null;
+    }
+
 }

@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -96,4 +97,17 @@ public interface ChildListEditPolicy extends EntryTablePolicy {
      */
     FormMessages validateEntries(Class<? extends Entity> entityClass, String baseFieldName, Object baseId,
             List<?> instList) throws UnifyException;
+    
+    /**
+     * Gets commit list
+     * 
+     * @param dataType
+     *                        the table item data type
+     * @param tableValueStore
+     *                        table value store
+     * @return the commit list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T> List<? extends T> commitList(Class<T> dataType, ValueStore tableValueStore) throws UnifyException;
 }
