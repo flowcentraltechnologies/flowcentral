@@ -4417,6 +4417,9 @@
 				<property name="loadingTable.actionFooter"
 					description="$m{studio.appappletprop.manageloading.loadingtable.actionfooter}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.searchColumns"
+					description="$m{studio.appappletprop.manageloading.loadingtable.searchcolumns}"
+					inputWidget="application.propertyappletsingledigit" />
 			</propertySet>
 		</propertyList>
 		<propertyList name="melAppAppletPropList"
