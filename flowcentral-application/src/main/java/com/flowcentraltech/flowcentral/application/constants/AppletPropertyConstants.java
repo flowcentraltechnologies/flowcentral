@@ -146,6 +146,10 @@ public interface AppletPropertyConstants {
 
     String QUICK_EDIT_POLICY = "quickEdit.policy";
 
+    String QUICK_EDIT_WIDTH = "quickEdit.width";
+
+    String QUICK_EDIT_HEIGHT = "quickEdit.height";
+
     String BASE_RESTRICTION = "baseRestriction";
 
     String PROPERTY_LIST_RULE = "propertyList.rule";

@@ -372,7 +372,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final Object id = ((Entity) form.getFormBean()).getId();
             QuickTableEdit quickTableEdit = constructQuickTableEdit(_appletDef.getEntity(), quickEditTable,
                     quickEditTablePolicy, null, baseField, id);
-            String caption = _appletDef.getLabel() != null ? _appletDef.getLabel().toUpperCase() : null;
+            final int width = _appletDef.getPropValue(int.class, AppletPropertyConstants.QUICK_EDIT_WIDTH);
+            final int height = _appletDef.getPropValue(int.class, AppletPropertyConstants.QUICK_EDIT_HEIGHT);
+            quickTableEdit.setWidth(width);
+            quickTableEdit.setHeight(height);
+            String caption = _appletDef.getLabel() != null
+                    ? au.resolveSessionMessage("$m{quickedit.caption.param}", _appletDef.getLabel())
+                    : au.resolveSessionMessage("$m{quickedit.caption}");
             quickTableEdit.setEntryCaption(caption);
             quickTableEdit.loadEntryList();
             return quickTableEdit;

@@ -774,9 +774,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-texttemplatepanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;}
 
 /* Quick table edit panel */
-.fc-quicktableeditpanel {width:1024px; background-color:#ffffff;border: 1px solid #b8b8b8;}
-.fc-quicktableeditpanel .entries {width:100%;height:520px;}
-.fc-quicktableeditpanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;}
+.fc-quicktableeditpanel {width:100%;min-width:840px;background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-quicktableeditpanel .entries {width:100%;height:420px;}
+.fc-quicktableeditpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
 
 /* Entity save-as dialog panel */
 .fc-entitysaveasdialogpanel {width:560px;}
