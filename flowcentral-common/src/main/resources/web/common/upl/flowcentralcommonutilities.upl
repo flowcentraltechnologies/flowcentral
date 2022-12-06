@@ -16,12 +16,10 @@
 !ui-page caption:$s{}
 
 //Report runner popup
-!fc-reportrunnerpanel:reportRunnerPopup generateReportPath:$n{/generateReport} closeDialogPath:$n{/closeReport}
-    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.REPORTOPTIONS}
+!fc-reportrunnerpanel:reportRunnerPopup generateReportPath:$n{/generateReport} closeDialogPath:$n{/closeReport} binding:$w{}
 
 // Locked resource popup
-!fc-collaborationlockedresourcepanel:lockedResourcePopup 
-    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.LOCKED_RESOURCEOPTIONS}
+!fc-collaborationlockedresourcepanel:lockedResourcePopup binding:$w{}
 	grabLockEventHandler:$d{!ui-event event:onclick action:$c{grabLockAct}} 
 	
      

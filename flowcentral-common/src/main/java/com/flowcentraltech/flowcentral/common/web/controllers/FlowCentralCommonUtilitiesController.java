@@ -53,7 +53,7 @@ public class FlowCentralCommonUtilitiesController
 
     @Configurable
     private CollaborationProvider collaborationProvider;
-    
+
     public FlowCentralCommonUtilitiesController() {
         super(FlowCentralCommonUtilitiesPageBean.class);
     }
@@ -64,15 +64,18 @@ public class FlowCentralCommonUtilitiesController
 
     @Action
     public String showLockedResource() throws UnifyException {
-        return "showlockedresource";
+        CollaborationLockedResourceInfo collaborationLockedResourceInfo = (CollaborationLockedResourceInfo) removeSessionAttribute(
+                FlowCentralSessionAttributeConstants.LOCKED_RESOURCEOPTIONS);
+        return showPopup(new Popup("showlockedresource", collaborationLockedResourceInfo));
     }
 
     @Action
     public String grabResourceLock() throws UnifyException {
         if (collaborationProvider != null) {
-            CollaborationLockedResourceInfo info = (CollaborationLockedResourceInfo) getSessionAttribute(
-                    FlowCentralSessionAttributeConstants.LOCKED_RESOURCEOPTIONS);
+            Popup popup = getCurrentPopup();
+            CollaborationLockedResourceInfo info = (CollaborationLockedResourceInfo) popup.getBackingBean();
             collaborationProvider.grabLock(info.getType(), info.getResourceName(), getUserToken().getUserLoginId());
+            removeCurrentPopup();
         }
 
         return "grablocksuccess";

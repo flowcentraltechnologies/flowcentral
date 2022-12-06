@@ -67,12 +67,10 @@
     imageGenBinding:userPhotoGenerator
 
 // Text template pop up
-!fc-texttemplatepanel:textTemplatePopup
-    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.TEXT_TEMPLATE_EDITOR}
+!fc-texttemplatepanel:textTemplatePopup binding:$w{}
 
 // Quick edit
-!fc-quicktableeditpanel:quickEditPopup
-    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.QUICK_TABLE_EDIT}
+!fc-quicktableeditpanel:quickEditPopup binding:$w{}
 
 //Actions 
 !ui-post:userDetailsAct path:$n{/showUserDetails}
