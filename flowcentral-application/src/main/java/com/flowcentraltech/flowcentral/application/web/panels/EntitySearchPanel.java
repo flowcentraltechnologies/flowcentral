@@ -84,7 +84,6 @@ public class EntitySearchPanel extends AbstractPanel {
 
         EntitySearch entitySearch = getEntitySearch();
         setVisible("sectorIcon", entitySearch.isWithSectorIcon());
-        setVisible("quickEditBtn", entitySearch.isShowQuickEdit());
 
         entitySearch.ensureTableStruct();
         if (getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH)) {
@@ -99,8 +98,10 @@ public class EntitySearchPanel extends AbstractPanel {
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
         setVisible("editBtn", entitySearch.isEditButtonVisible()
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
-        setVisible("quickEditBtn", (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
-                && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+        setVisible("quickEditBtn",
+                entitySearch.isShowQuickEdit()
+                        && (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
+                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("viewBtn", entitySearch.isViewButtonVisible()
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
