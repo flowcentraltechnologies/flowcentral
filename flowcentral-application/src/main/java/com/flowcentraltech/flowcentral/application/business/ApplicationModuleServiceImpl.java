@@ -2984,8 +2984,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setDelegate(appEntityConfig.getDelegate());
                     appEntity.setEntityClass(appEntityConfig.getType());
                     appEntity.setTableName(tableName);
-                    appEntity.setAuditable(appEntityConfig.isAuditable());
-                    appEntity.setReportable(appEntityConfig.isReportable());
+                    appEntity.setAuditable(appEntityConfig.getAuditable());
+                    appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setConfigType(ConfigType.STATIC_INSTALL);
                     populateChildList(appEntity, entityBaseTypeFieldSet, applicationName, appEntityConfig);
                     entityId = (Long) environment().create(appEntity);
@@ -3003,8 +3003,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntity.setDelegate(appEntityConfig.getDelegate());
                         oldAppEntity.setEntityClass(appEntityConfig.getType());
                         oldAppEntity.setTableName(tableName);
-                        oldAppEntity.setAuditable(appEntityConfig.isAuditable());
-                        oldAppEntity.setReportable(appEntityConfig.isReportable());
+                        oldAppEntity.setAuditable(appEntityConfig.getAuditable());
+                        oldAppEntity.setReportable(appEntityConfig.getReportable());
                     }
 
                     populateChildList(oldAppEntity, entityBaseTypeFieldSet, applicationName, appEntityConfig);
@@ -3061,17 +3061,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                     appTable.setSortHistory(appTableConfig.getSortHistory());
                     appTable.setItemsPerPage(appTableConfig.getItemsPerPage());
-                    appTable.setSerialNo(appTableConfig.isSerialNo());
-                    appTable.setSortable(appTableConfig.isSortable());
-                    appTable.setHeaderToUpperCase(appTableConfig.isHeaderToUpperCase());
-                    appTable.setHeaderCenterAlign(appTableConfig.isHeaderCenterAlign());
-                    appTable.setBasicSearch(appTableConfig.isBasicSearch());
-                    appTable.setTotalSummary(appTableConfig.isTotalSummary());
-                    appTable.setHeaderless(appTableConfig.isHeaderless());
-                    appTable.setMultiSelect(appTableConfig.isMultiSelect());
-                    appTable.setNonConforming(appTableConfig.isNonConforming());
-                    appTable.setFixedRows(appTableConfig.isFixedRows());
-                    appTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
+                    appTable.setSerialNo(appTableConfig.getSerialNo());
+                    appTable.setSortable(appTableConfig.getSortable());
+                    appTable.setHeaderToUpperCase(appTableConfig.getHeaderToUpperCase());
+                    appTable.setHeaderCenterAlign(appTableConfig.getHeaderCenterAlign());
+                    appTable.setBasicSearch(appTableConfig.getBasicSearch());
+                    appTable.setTotalSummary(appTableConfig.getTotalSummary());
+                    appTable.setHeaderless(appTableConfig.getHeaderless());
+                    appTable.setMultiSelect(appTableConfig.getMultiSelect());
+                    appTable.setNonConforming(appTableConfig.getNonConforming());
+                    appTable.setFixedRows(appTableConfig.getFixedRows());
+                    appTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     appTable.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(appTable, applicationName, appTableConfig);
                     environment().create(appTable);
@@ -3085,17 +3085,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                         oldAppTable.setSortHistory(appTableConfig.getSortHistory());
                         oldAppTable.setItemsPerPage(appTableConfig.getItemsPerPage());
-                        oldAppTable.setSerialNo(appTableConfig.isSerialNo());
-                        oldAppTable.setSortable(appTableConfig.isSortable());
-                        oldAppTable.setHeaderToUpperCase(appTableConfig.isHeaderToUpperCase());
-                        oldAppTable.setHeaderCenterAlign(appTableConfig.isHeaderCenterAlign());
-                        oldAppTable.setBasicSearch(appTableConfig.isBasicSearch());
-                        oldAppTable.setTotalSummary(appTableConfig.isTotalSummary());
-                        oldAppTable.setHeaderless(appTableConfig.isHeaderless());
-                        oldAppTable.setMultiSelect(appTableConfig.isMultiSelect());
-                        oldAppTable.setNonConforming(appTableConfig.isNonConforming());
-                        oldAppTable.setFixedRows(appTableConfig.isFixedRows());
-                        oldAppTable.setLimitSelectToColumns(appTableConfig.isLimitSelectToColumns());
+                        oldAppTable.setSerialNo(appTableConfig.getSerialNo());
+                        oldAppTable.setSortable(appTableConfig.getSortable());
+                        oldAppTable.setHeaderToUpperCase(appTableConfig.getHeaderToUpperCase());
+                        oldAppTable.setHeaderCenterAlign(appTableConfig.getHeaderCenterAlign());
+                        oldAppTable.setBasicSearch(appTableConfig.getBasicSearch());
+                        oldAppTable.setTotalSummary(appTableConfig.getTotalSummary());
+                        oldAppTable.setHeaderless(appTableConfig.getHeaderless());
+                        oldAppTable.setMultiSelect(appTableConfig.getMultiSelect());
+                        oldAppTable.setNonConforming(appTableConfig.getNonConforming());
+                        oldAppTable.setFixedRows(appTableConfig.getFixedRows());
+                        oldAppTable.setLimitSelectToColumns(appTableConfig.getLimitSelectToColumns());
                     }
 
                     populateChildList(oldAppTable, applicationName, appTableConfig);
@@ -3556,13 +3556,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                     appEntityField.setPrecision(entityFieldConfig.getPrecision());
                     appEntityField.setScale(entityFieldConfig.getScale());
-                    appEntityField.setAllowNegative(entityFieldConfig.isAllowNegative());
-                    appEntityField.setNullable(entityFieldConfig.isNullable());
-                    appEntityField.setAuditable(entityFieldConfig.isAuditable());
-                    appEntityField.setReportable(entityFieldConfig.isReportable());
-                    appEntityField.setDescriptive(entityFieldConfig.isDescriptive());
-                    appEntityField.setMaintainLink(entityFieldConfig.isMaintainLink());
-                    appEntityField.setBasicSearch(entityFieldConfig.isBasicSearch());
+                    appEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
+                    appEntityField.setNullable(entityFieldConfig.getNullable());
+                    appEntityField.setAuditable(entityFieldConfig.getAuditable());
+                    appEntityField.setReportable(entityFieldConfig.getReportable());
+                    appEntityField.setDescriptive(entityFieldConfig.getDescriptive());
+                    appEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
+                    appEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
                     appEntityField.setConfigType(ConfigType.STATIC_INSTALL);
                     fieldList.add(appEntityField);
                 } else {
@@ -3601,13 +3601,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntityField.setMaxLen(entityFieldConfig.getMaxLen());
                         oldAppEntityField.setPrecision(entityFieldConfig.getPrecision());
                         oldAppEntityField.setScale(entityFieldConfig.getScale());
-                        oldAppEntityField.setAllowNegative(entityFieldConfig.isAllowNegative());
-                        oldAppEntityField.setNullable(entityFieldConfig.isNullable());
-                        oldAppEntityField.setAuditable(entityFieldConfig.isAuditable());
-                        oldAppEntityField.setReportable(entityFieldConfig.isReportable());
-                        oldAppEntityField.setDescriptive(entityFieldConfig.isDescriptive());
-                        oldAppEntityField.setMaintainLink(entityFieldConfig.isMaintainLink());
-                        oldAppEntityField.setBasicSearch(entityFieldConfig.isBasicSearch());
+                        oldAppEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
+                        oldAppEntityField.setNullable(entityFieldConfig.getNullable());
+                        oldAppEntityField.setAuditable(entityFieldConfig.getAuditable());
+                        oldAppEntityField.setReportable(entityFieldConfig.getReportable());
+                        oldAppEntityField.setDescriptive(entityFieldConfig.getDescriptive());
+                        oldAppEntityField.setMaintainLink(entityFieldConfig.getMaintainLink());
+                        oldAppEntityField.setBasicSearch(entityFieldConfig.getBasicSearch());
                     }
 
                     fieldList.add(oldAppEntityField);
@@ -3789,12 +3789,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
             appTableColumn.setOrder(tableColumnConfig.getOrder());
             appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
-            appTableColumn.setSwitchOnChange(tableColumnConfig.isSwitchOnChange());
-            appTableColumn.setEditable(tableColumnConfig.isEditable());
-            appTableColumn.setHidden(tableColumnConfig.isHidden());
-            appTableColumn.setDisabled(tableColumnConfig.isDisabled());
-            appTableColumn.setSortable(tableColumnConfig.isSortable());
-            appTableColumn.setSummary(tableColumnConfig.isSummary());
+            appTableColumn.setSwitchOnChange(tableColumnConfig.getSwitchOnChange());
+            appTableColumn.setEditable(tableColumnConfig.getEditable());
+            appTableColumn.setHidden(tableColumnConfig.getHidden());
+            appTableColumn.setDisabled(tableColumnConfig.getDisabled());
+            appTableColumn.setSortable(tableColumnConfig.getSortable());
+            appTableColumn.setSummary(tableColumnConfig.getSummary());
             appTableColumn.setConfigType(ConfigType.MUTABLE_INSTALL);
             columnList.add(appTableColumn);
         }
@@ -4058,11 +4058,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setEditAction(formTabConfig.getEditAction());
             appFormElement.setEditFormless(formTabConfig.getEditFormless());
             appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
-            appFormElement.setIgnoreParentCondition(formTabConfig.isIgnoreParentCondition());
-            appFormElement.setShowSearch(formTabConfig.isShowSearch());
-            appFormElement.setVisible(formTabConfig.isVisible());
-            appFormElement.setEditable(formTabConfig.isEditable());
-            appFormElement.setDisabled(formTabConfig.isDisabled());
+            appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
+            appFormElement.setShowSearch(formTabConfig.getShowSearch());
+            appFormElement.setVisible(formTabConfig.getVisible());
+            appFormElement.setEditable(formTabConfig.getEditable());
+            appFormElement.setDisabled(formTabConfig.getDisabled());
             appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
             elementList.add(appFormElement);
 
@@ -4074,9 +4074,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appFormElement.setElementName(formSectionConfig.getName());
                     appFormElement.setSectionColumns(formSectionConfig.getColumns());
                     appFormElement.setLabel(resolveApplicationMessage(formSectionConfig.getLabel()));
-                    appFormElement.setVisible(formSectionConfig.isVisible());
-                    appFormElement.setEditable(formSectionConfig.isEditable());
-                    appFormElement.setDisabled(formSectionConfig.isDisabled());
+                    appFormElement.setVisible(formSectionConfig.getVisible());
+                    appFormElement.setEditable(formSectionConfig.getEditable());
+                    appFormElement.setDisabled(formSectionConfig.getDisabled());
                     appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
                     elementList.add(appFormElement);
 
@@ -4092,13 +4092,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             appFormElement.setInputReference(ApplicationNameUtils
                                     .ensureLongNameReference(applicationName, formFieldConfig.getReference()));
                             appFormElement.setFieldColumn(formFieldConfig.getColumn());
-                            appFormElement.setSwitchOnChange(formFieldConfig.isSwitchOnChange());
-                            appFormElement.setSaveAs(formFieldConfig.isSaveAs());
-                            appFormElement.setRequired(formFieldConfig.isRequired());
-                            appFormElement.setVisible(formFieldConfig.isVisible());
+                            appFormElement.setSwitchOnChange(formFieldConfig.getSwitchOnChange());
+                            appFormElement.setSaveAs(formFieldConfig.getSaveAs());
+                            appFormElement.setRequired(formFieldConfig.getRequired());
+                            appFormElement.setVisible(formFieldConfig.getVisible());
                             appFormElement.setColor(formFieldConfig.getColor());
-                            appFormElement.setEditable(formFieldConfig.isEditable());
-                            appFormElement.setDisabled(formFieldConfig.isDisabled());
+                            appFormElement.setEditable(formFieldConfig.getEditable());
+                            appFormElement.setDisabled(formFieldConfig.getDisabled());
                             appFormElement.setConfigType(ConfigType.MUTABLE_INSTALL);
                             elementList.add(appFormElement);
                         }

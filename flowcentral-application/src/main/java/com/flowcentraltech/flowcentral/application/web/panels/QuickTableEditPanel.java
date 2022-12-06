@@ -22,41 +22,29 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
-import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
- * Text template panel.
+ * Quick table edit panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-texttemplatepanel")
-@UplBinding("web/application/upl/texttemplatepanel.upl")
-public class TextTemplatePanel extends AbstractPanel {
+@Component("fc-quicktableeditpanel")
+@UplBinding("web/application/upl/quicktableeditpanel.upl")
+public class QuickTableEditPanel extends AbstractPanel {
 
     @Action
-    public void set() throws UnifyException {
-        Popup popup = getCurrentPopup();
-        TextTemplate textTemplate = (TextTemplate) popup.getBackingBean();
-        textTemplate.set();
-        removeCurrentPopup();
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
-        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
-    }
-
-    @Action
-    public void clear() throws UnifyException {
-        TextTemplate textTemplate = getTextTemplate();
-        textTemplate.clear();
+    public void saveEntries() throws UnifyException {
+        QuickTableEdit quickTableEdit = getValue(QuickTableEdit.class);
+        if (quickTableEdit.commitEntryList()); {
+            removeCurrentPopup();
+            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+            setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+        }
     }
 
     @Action
     public void close() throws UnifyException {
         commandHidePopup();
     }
-
-    private TextTemplate getTextTemplate() throws UnifyException {
-        return getValue(TextTemplate.class);
-    }
-
 }

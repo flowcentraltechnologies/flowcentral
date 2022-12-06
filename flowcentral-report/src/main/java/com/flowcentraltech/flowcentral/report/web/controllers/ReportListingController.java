@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.report.web.controllers;
 
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
@@ -29,6 +28,7 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.AbstractPageController;
 import com.tcdng.unify.web.ui.widget.data.LinkGridInfo;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Report listing controller.
@@ -64,8 +64,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
         ReportOptions reportOptions = reportModuleService.getReportOptionsForConfiguration(reportConfigName);
         reportOptions.setReportResourcePath(reportResourcePath);
         reportOptions.setUserInputOnly(true);
-        setSessionAttribute(FlowCentralSessionAttributeConstants.REPORTOPTIONS, reportOptions);
-        return "showapplicationreportoptions";
+        return showPopup(new Popup("showapplicationreportoptions", reportOptions));
     }
 
     @Override

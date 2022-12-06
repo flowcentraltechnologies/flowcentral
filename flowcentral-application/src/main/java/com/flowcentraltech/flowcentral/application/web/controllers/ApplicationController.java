@@ -43,6 +43,7 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.widget.ContentPanel;
 import com.tcdng.unify.web.ui.widget.control.Table;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Application controller.
@@ -64,7 +65,9 @@ import com.tcdng.unify.web.ui.widget.control.Table;
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
                 response = { "!showpopupresponse popup:$s{entityTreeMultiselectPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
-            response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
+                response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
+                response = { "!showpopupresponse popup:$s{quickEditPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.FORWARD_TO_HOME,
                 response = { "!forwardresponse path:$x{application.web.home}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_WORKSPACE,
@@ -152,16 +155,16 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     @Action
     public String refreshContent() throws UnifyException {
+        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
     @Action
     public String prepareUserRoleOptions() throws UnifyException {
         UserToken userToken = getUserToken();
-        setSessionAttribute(FlowCentralSessionAttributeConstants.USERROLEOPTIONS,
+        return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_USERROLE_OPTIONS,
                 new UserRoleOptions(userLoginActivityProvider.getAvailableUserRolesActiveNow(userToken.getUserLoginId(),
-                        userToken.getRoleCode())));
-        return ApplicationResultMappingConstants.SHOW_USERROLE_OPTIONS;
+                        userToken.getRoleCode()))));
     }
 
     @Action
@@ -171,12 +174,13 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     @Action
     public String switchUserRole() throws UnifyException {
-        UserRoleOptions userRoleOptions = (UserRoleOptions) getSessionAttribute(
-                FlowCentralSessionAttributeConstants.USERROLEOPTIONS);
+        Popup popup = getCurrentPopup();
+        UserRoleOptions userRoleOptions = (UserRoleOptions) popup.getBackingBean();
         UserRoleInfo userRoleInfo = userRoleOptions.getUserRoleList().get(
                 getPageWidgetByShortName(Table.class, "userRoleOptionsPopup.roleTablePanel.contentTbl").getViewIndex());
         ContentPanel contentPanel = getPageWidgetByShortName(ContentPanel.class, "content");
         contentPanel.clearPages();
+        removeCurrentPopup();
         return forwardToApplication(userRoleInfo);
     }
 
@@ -224,7 +228,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-        
+
     }
 
     private void setSessionWorkspace() throws UnifyException {

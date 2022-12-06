@@ -18,10 +18,10 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
 import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Convenient abstract base class for popup window text widget.
@@ -41,8 +41,7 @@ public abstract class AbstractPopupWindowTextField extends AbstractPopupTextFiel
     @Action
     public final void popup() throws UnifyException {
         Popup popup = preparePopup();
-        setSessionAttribute(popup.getItemSessionAttribute(), popup.getItem());
-        setCommandResultMapping(popup.getShowPopupResultMapping());
+        commandShowPopup(popup);
     }
 
     @Override
@@ -70,36 +69,5 @@ public abstract class AbstractPopupWindowTextField extends AbstractPopupTextFiel
     }
 
     protected abstract Popup preparePopup() throws UnifyException;
-    
-    protected class Popup {
-        
-        private final String showPopupResultMapping;
-        
-        private final String itemSessionAttribute;
-        
-        private final Object item;
 
-        public Popup(String showPopupResultMapping, String itemSessionAttribute, Object item) {
-            this.showPopupResultMapping = showPopupResultMapping;
-            this.itemSessionAttribute = itemSessionAttribute;
-            this.item = item;
-        }
-
-        public String getShowPopupResultMapping() {
-            return showPopupResultMapping;
-        }
-
-        public String getItemSessionAttribute() {
-            return itemSessionAttribute;
-        }
-
-        public Object getItem() {
-            return item;
-        }
-
-        @Override
-        public String toString() {
-            return StringUtils.toXmlString(this);
-        }
-    }
 }

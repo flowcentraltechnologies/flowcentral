@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.WidgetColorXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Form field configuration.
@@ -41,24 +43,25 @@ public class FormFieldConfig {
     
     private int column;
 
-    private boolean switchOnChange;
+    private Boolean switchOnChange;
 
-    private boolean saveAs;
+    private Boolean saveAs;
 
-    private boolean required;
+    private Boolean required;
 
-    private boolean visible;
+    private Boolean visible;
 
-    private boolean editable;
+    private Boolean editable;
 
-    private boolean disabled;
+    private Boolean disabled;
 
     public FormFieldConfig() {
-        this.switchOnChange = false;
-        this.required = false;
-        this.visible = true;
-        this.editable = true;
-        this.disabled = false;
+        this.switchOnChange = Boolean.FALSE;
+        this.saveAs = Boolean.FALSE;
+        this.required = Boolean.FALSE;
+        this.visible = Boolean.TRUE;
+        this.editable = Boolean.TRUE;
+        this.disabled = Boolean.FALSE;
     }
 
     public String getName() {
@@ -116,57 +119,63 @@ public class FormFieldConfig {
         this.column = column;
     }
 
-    public boolean isSwitchOnChange() {
+    public Boolean getSwitchOnChange() {
         return switchOnChange;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setSwitchOnChange(boolean switchOnChange) {
+    public void setSwitchOnChange(Boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
     }
 
-    public boolean isSaveAs() {
+    public Boolean getSaveAs() {
         return saveAs;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setSaveAs(boolean saveAs) {
+    public void setSaveAs(Boolean saveAs) {
         this.saveAs = saveAs;
     }
 
-    public boolean isRequired() {
+    public Boolean getRequired() {
         return required;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setRequired(boolean required) {
+    public void setRequired(Boolean required) {
         this.required = required;
     }
 
-    public boolean isVisible() {
+    public Boolean getVisible() {
         return visible;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setVisible(boolean visible) {
+    public void setVisible(Boolean visible) {
         this.visible = visible;
     }
 
-    public boolean isEditable() {
+    public Boolean getEditable() {
         return editable;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setEditable(boolean editable) {
+    public void setEditable(Boolean editable) {
         this.editable = editable;
     }
 
-    public boolean isDisabled() {
+    public Boolean getDisabled() {
         return disabled;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setDisabled(boolean disabled) {
+    public void setDisabled(Boolean disabled) {
         this.disabled = disabled;
     }
 

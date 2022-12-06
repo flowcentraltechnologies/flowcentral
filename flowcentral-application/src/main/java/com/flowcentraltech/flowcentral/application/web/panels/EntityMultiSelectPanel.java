@@ -17,12 +17,12 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Entity multi-select panel.
@@ -51,16 +51,16 @@ public class EntityMultiSelectPanel extends AbstractPanel {
 
     @Action
     public void select() throws UnifyException {
-        EntitySelect entitySelect = (EntitySelect) removeSessionAttribute(
-                FlowCentralSessionAttributeConstants.ENTITYSELECT);
+        Popup popup = getCurrentPopup();
+        EntitySelect entitySelect = (EntitySelect) popup.getBackingBean();
         entitySelect.applySelect();
+        removeCurrentPopup();
         setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE); // TODO Get from entity select flag
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
 
     @Action
     public void close() throws UnifyException {
-        removeSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYSELECT);
         commandHidePopup();
     }
 

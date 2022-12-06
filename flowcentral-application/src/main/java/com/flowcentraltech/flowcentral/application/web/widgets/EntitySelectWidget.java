@@ -25,7 +25,6 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -41,6 +40,7 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
 import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Entity select widget.
@@ -95,8 +95,7 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         entitySelect.setTitle(title);
         entitySelect.setSpace(isSpace());
         entitySelect.setSpecial(isSpecial());
-        setSessionAttribute(FlowCentralSessionAttributeConstants.ENTITYSELECT, entitySelect);
-        setCommandResultMapping(ApplicationResultMappingConstants.SHOW_ENTITY_SELECT);
+        commandShowPopup(new Popup(ApplicationResultMappingConstants.SHOW_ENTITY_SELECT, entitySelect));
     }
 
     @Override
@@ -138,7 +137,7 @@ public class EntitySelectWidget extends AbstractPopupTextField {
     public String getFormPanelId() throws UnifyException {
         return getPageAttribute(String.class, "formPanel.id");
     }
-    
+
     public Listable getCurrentSelect() throws UnifyException {
         Object keyVal = getValue(Object.class);
         if (keyVal != null) {
@@ -159,10 +158,8 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         RefDef refDef = getRefDef();
         final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         Query<? extends Entity> query = null;
-        Restriction br = refDef.isWithFilter()
-                ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                        getValueStore().getReader(), application().getNow())
-                : null;
+        Restriction br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
+                getValueStore().getReader(), application().getNow()) : null;
 
         if (br != null) {
             query = Query.ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), br);
@@ -181,8 +178,7 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         if (result != null) {
             String formatDesc = refDef.isWithListFormat() ? specialParamProvider()
                     .getStringGenerator(new BeanValueStore(result), getValueStore(), refDef.getListFormat()).generate()
-                    : application().getEntityDescription(entityClassDef, (Entity) result,
-                            refDef.getSearchField());
+                    : application().getEntityDescription(entityClassDef, (Entity) result, refDef.getSearchField());
             return new ListData(result.getListKey(), formatDesc);
         }
 

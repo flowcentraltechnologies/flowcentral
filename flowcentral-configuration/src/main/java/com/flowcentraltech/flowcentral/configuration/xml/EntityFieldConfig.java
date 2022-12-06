@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.EntityFieldDataTypeXmlAdapter;
 import com.tcdng.unify.core.constant.TextCase;
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 import com.tcdng.unify.core.util.xml.adapter.TextCaseXmlAdapter;
 
 /**
@@ -77,23 +79,28 @@ public class EntityFieldConfig {
 
     private Integer scale;
 
-    private boolean allowNegative;
+    private Boolean allowNegative;
 
-    private boolean nullable;
+    private Boolean nullable;
 
-    private boolean auditable;
+    private Boolean auditable;
 
-    private boolean reportable;
+    private Boolean reportable;
 
-    private boolean descriptive;
+    private Boolean descriptive;
 
-    private boolean maintainLink;
+    private Boolean maintainLink;
 
-    private boolean basicSearch;
+    private Boolean basicSearch;
 
     public EntityFieldConfig() {
-        this.auditable = true;
-        this.reportable = true;
+        this.allowNegative = Boolean.FALSE;
+        this.nullable = Boolean.FALSE;
+        this.auditable = Boolean.TRUE;
+        this.reportable = Boolean.TRUE;
+        this.descriptive = Boolean.FALSE;
+        this.maintainLink = Boolean.FALSE;
+        this.basicSearch = Boolean.FALSE;
     }
 
     public EntityFieldDataType getType() {
@@ -305,66 +312,73 @@ public class EntityFieldConfig {
         this.scale = scale;
     }
 
-    public boolean isAllowNegative() {
+    public Boolean getAllowNegative() {
         return allowNegative;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setAllowNegative(boolean allowNegative) {
+    public void setAllowNegative(Boolean allowNegative) {
         this.allowNegative = allowNegative;
     }
 
-    public boolean isNullable() {
+    public Boolean getNullable() {
         return nullable;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setNullable(boolean nullable) {
+    public void setNullable(Boolean nullable) {
         this.nullable = nullable;
     }
 
-    public boolean isAuditable() {
+    public Boolean getAuditable() {
         return auditable;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setAuditable(boolean auditable) {
+    public void setAuditable(Boolean auditable) {
         this.auditable = auditable;
     }
 
-    public boolean isReportable() {
+    public Boolean getReportable() {
         return reportable;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setReportable(boolean reportable) {
+    public void setReportable(Boolean reportable) {
         this.reportable = reportable;
     }
 
-    public boolean isDescriptive() {
+    public Boolean getDescriptive() {
         return descriptive;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setDescriptive(boolean descriptive) {
+    public void setDescriptive(Boolean descriptive) {
         this.descriptive = descriptive;
     }
 
-    public boolean isMaintainLink() {
+    public Boolean getMaintainLink() {
         return maintainLink;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute(name = "maintainAction")
-    public void setMaintainLink(boolean maintainLink) {
+    public void setMaintainLink(Boolean maintainLink) {
         this.maintainLink = maintainLink;
     }
 
-    public boolean isBasicSearch() {
+    public Boolean getBasicSearch() {
         return basicSearch;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setBasicSearch(boolean basicSearch) {
+    public void setBasicSearch(Boolean basicSearch) {
         this.basicSearch = basicSearch;
     }
 

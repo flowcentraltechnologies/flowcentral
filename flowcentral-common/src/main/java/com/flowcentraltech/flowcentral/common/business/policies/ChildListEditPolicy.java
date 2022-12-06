@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.data.FormMessages;
 import com.flowcentraltech.flowcentral.common.data.PageLoadDetails;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -33,15 +34,20 @@ public interface ChildListEditPolicy extends EntryTablePolicy {
 
     /**
      * Gets on load details.
-     * @param entityClass the entity class
-     * @param baseFieldName the base field name
-     * @param baseId the base ID
+     * 
+     * @param entityClass
+     *                      the entity class
+     * @param baseFieldName
+     *                      the base field name
+     * @param baseId
+     *                      the base ID
      * @return the page load details
-     * @throws UnifyException if an error occurs
+     * @throws UnifyException
+     *                        if an error occurs
      */
     PageLoadDetails getOnLoadDetails(Class<? extends Entity> entityClass, String baseFieldName, Object baseId)
             throws UnifyException;
-    
+
     /**
      * Executes at the end of an assignment update.
      * 
@@ -91,4 +97,17 @@ public interface ChildListEditPolicy extends EntryTablePolicy {
      */
     FormMessages validateEntries(Class<? extends Entity> entityClass, String baseFieldName, Object baseId,
             List<?> instList) throws UnifyException;
+    
+    /**
+     * Gets commit list
+     * 
+     * @param dataType
+     *                        the table item data type
+     * @param tableValueStore
+     *                        table value store
+     * @return the commit list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T> List<? extends T> commitList(Class<T> dataType, ValueStore tableValueStore) throws UnifyException;
 }

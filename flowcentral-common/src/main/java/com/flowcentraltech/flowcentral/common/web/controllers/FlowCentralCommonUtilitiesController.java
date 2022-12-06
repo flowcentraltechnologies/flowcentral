@@ -30,6 +30,7 @@ import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.ui.AbstractCommonUtilitiesPageController;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Flow central common utilities controller.
@@ -52,7 +53,7 @@ public class FlowCentralCommonUtilitiesController
 
     @Configurable
     private CollaborationProvider collaborationProvider;
-    
+
     public FlowCentralCommonUtilitiesController() {
         super(FlowCentralCommonUtilitiesPageBean.class);
     }
@@ -63,15 +64,18 @@ public class FlowCentralCommonUtilitiesController
 
     @Action
     public String showLockedResource() throws UnifyException {
-        return "showlockedresource";
+        CollaborationLockedResourceInfo collaborationLockedResourceInfo = (CollaborationLockedResourceInfo) removeSessionAttribute(
+                FlowCentralSessionAttributeConstants.LOCKED_RESOURCEOPTIONS);
+        return showPopup(new Popup("showlockedresource", collaborationLockedResourceInfo));
     }
 
     @Action
     public String grabResourceLock() throws UnifyException {
         if (collaborationProvider != null) {
-            CollaborationLockedResourceInfo info = (CollaborationLockedResourceInfo) getSessionAttribute(
-                    FlowCentralSessionAttributeConstants.LOCKED_RESOURCEOPTIONS);
+            Popup popup = getCurrentPopup();
+            CollaborationLockedResourceInfo info = (CollaborationLockedResourceInfo) popup.getBackingBean();
             collaborationProvider.grabLock(info.getType(), info.getResourceName(), getUserToken().getUserLoginId());
+            removeCurrentPopup();
         }
 
         return "grablocksuccess";
@@ -79,8 +83,8 @@ public class FlowCentralCommonUtilitiesController
 
     @Action
     public String generateReport() throws UnifyException {
-        ReportOptions reportOptions = (ReportOptions) getSessionAttribute(
-                FlowCentralSessionAttributeConstants.REPORTOPTIONS);
+        Popup popup = removeCurrentPopup();
+        ReportOptions reportOptions = (ReportOptions) popup.getBackingBean();
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
         getEventLogger().logUserEvent(CommonModuleAuditConstants.GENERATE_REPORT, reportOptions.getTitle());
         return "viewreport";
@@ -88,7 +92,6 @@ public class FlowCentralCommonUtilitiesController
 
     @Action
     public String closeReport() throws UnifyException {
-        removeSessionAttribute(FlowCentralSessionAttributeConstants.REPORTOPTIONS);
         return hidePopup();
     }
 

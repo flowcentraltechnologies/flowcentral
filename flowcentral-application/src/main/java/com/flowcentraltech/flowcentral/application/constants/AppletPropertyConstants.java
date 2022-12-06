@@ -139,6 +139,16 @@ public interface AppletPropertyConstants {
     String ENTRY_TABLE = "entryTable";
 
     String ENTRY_TABLE_POLICY = "entryTable.policy";
+    
+    String QUICK_EDIT_ENABLED = "quickEdit.enabled";
+
+    String QUICK_EDIT_TABLE = "quickEdit.table";
+
+    String QUICK_EDIT_POLICY = "quickEdit.policy";
+
+    String QUICK_EDIT_WIDTH = "quickEdit.width";
+
+    String QUICK_EDIT_HEIGHT = "quickEdit.height";
 
     String BASE_RESTRICTION = "baseRestriction";
 

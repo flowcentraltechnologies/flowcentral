@@ -19,6 +19,10 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Table configuration
@@ -36,27 +40,27 @@ public class AppTableConfig extends BaseNameConfig {
 
     private int itemsPerPage;
 
-    private boolean serialNo;
+    private Boolean serialNo;
 
-    private boolean sortable;
+    private Boolean sortable;
 
-    private boolean headerToUpperCase;
+    private Boolean headerToUpperCase;
 
-    private boolean headerCenterAlign;
+    private Boolean headerCenterAlign;
 
-    private boolean basicSearch;
+    private Boolean basicSearch;
 
-    private boolean totalSummary;
+    private Boolean totalSummary;
 
-    private boolean headerless;
+    private Boolean headerless;
 
-    private boolean multiSelect;
+    private Boolean multiSelect;
 
-    private boolean nonConforming;
+    private Boolean nonConforming;
 
-    private boolean fixedRows;
+    private Boolean fixedRows;
 
-    private boolean limitSelectToColumns;
+    private Boolean limitSelectToColumns;
 
     private List<TableLoadingConfig> loadingList;
 
@@ -69,8 +73,17 @@ public class AppTableConfig extends BaseNameConfig {
     private List<TableFilterConfig> filterList;
 
     public AppTableConfig() {
-        this.sortable = true;
-        this.limitSelectToColumns = true;
+        this.serialNo = Boolean.FALSE;
+        this.sortable = Boolean.TRUE;
+        this.headerToUpperCase = Boolean.FALSE;
+        this.headerCenterAlign = Boolean.FALSE;
+        this.basicSearch = Boolean.FALSE;
+        this.totalSummary = Boolean.FALSE;
+        this.headerless = Boolean.FALSE;
+        this.multiSelect = Boolean.FALSE;
+        this.nonConforming = Boolean.FALSE;
+        this.fixedRows = Boolean.FALSE;
+        this.limitSelectToColumns = Boolean.TRUE;
         this.sortHistory = -1;
     }
 
@@ -110,102 +123,113 @@ public class AppTableConfig extends BaseNameConfig {
         this.itemsPerPage = itemsPerPage;
     }
 
-    public boolean isSortable() {
+    public Boolean getSortable() {
         return sortable;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setSortable(boolean sortable) {
+    public void setSortable(Boolean sortable) {
         this.sortable = sortable;
     }
 
-    public boolean isSerialNo() {
+    public Boolean getSerialNo() {
         return serialNo;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setSerialNo(boolean serialNo) {
+    public void setSerialNo(Boolean serialNo) {
         this.serialNo = serialNo;
     }
 
-    public boolean isHeaderToUpperCase() {
+    public Boolean getHeaderToUpperCase() {
         return headerToUpperCase;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setHeaderToUpperCase(boolean headerToUpperCase) {
+    public void setHeaderToUpperCase(Boolean headerToUpperCase) {
         this.headerToUpperCase = headerToUpperCase;
     }
 
-    public boolean isHeaderCenterAlign() {
+    public Boolean getHeaderCenterAlign() {
         return headerCenterAlign;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setHeaderCenterAlign(boolean headerCenterAlign) {
+    public void setHeaderCenterAlign(Boolean headerCenterAlign) {
         this.headerCenterAlign = headerCenterAlign;
     }
 
-    public boolean isBasicSearch() {
+    public Boolean getBasicSearch() {
         return basicSearch;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setBasicSearch(boolean basicSearch) {
+    public void setBasicSearch(Boolean basicSearch) {
         this.basicSearch = basicSearch;
     }
 
-    public boolean isTotalSummary() {
+    public Boolean getTotalSummary() {
         return totalSummary;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setTotalSummary(boolean totalSummary) {
+    public void setTotalSummary(Boolean totalSummary) {
         this.totalSummary = totalSummary;
     }
 
-    public boolean isHeaderless() {
+    public Boolean getHeaderless() {
         return headerless;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setHeaderless(boolean headerless) {
+    public void setHeaderless(Boolean headerless) {
         this.headerless = headerless;
     }
 
-    public boolean isMultiSelect() {
+    public Boolean getMultiSelect() {
         return multiSelect;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setMultiSelect(boolean multiSelect) {
+    public void setMultiSelect(Boolean multiSelect) {
         this.multiSelect = multiSelect;
     }
 
-    public boolean isNonConforming() {
+    public Boolean getNonConforming() {
         return nonConforming;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setNonConforming(boolean nonConforming) {
+    public void setNonConforming(Boolean nonConforming) {
         this.nonConforming = nonConforming;
     }
 
-    public boolean isFixedRows() {
+    public Boolean getFixedRows() {
         return fixedRows;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setFixedRows(boolean fixedRows) {
+    public void setFixedRows(Boolean fixedRows) {
         this.fixedRows = fixedRows;
     }
 
-    public boolean isLimitSelectToColumns() {
+    public Boolean getLimitSelectToColumns() {
         return limitSelectToColumns;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setLimitSelectToColumns(boolean limitSelectToColumns) {
+    public void setLimitSelectToColumns(Boolean limitSelectToColumns) {
         this.limitSelectToColumns = limitSelectToColumns;
     }
 

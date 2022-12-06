@@ -92,7 +92,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
         if (applicationConfig.getEntitiesConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
             for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
-                if (appEntityConfig.isReportable()) {
+                if (appEntityConfig.getReportable()) {
                     String description = resolveApplicationMessage("$m{report.managedreport.description}",
                             resolveApplicationMessage(appEntityConfig.getDescription()));
                     String entity = ApplicationNameUtils.ensureLongNameReference(applicationName,
@@ -205,7 +205,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 .classForName(appEntityConfig.getType());
         if (!DataUtils.isBlank(appEntityConfig.getEntityFieldList())) {
             for (EntityFieldConfig rfd : appEntityConfig.getEntityFieldList()) {
-                if (rfd.isReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
+                if (rfd.getReportable() && !EntityFieldDataType.SCRATCH.equals(rfd.getType())) {
                     ReportableField reportableField = new ReportableField();
                     String description = null;
                     Field field = ReflectUtils.getField(entityClass, rfd.getName());

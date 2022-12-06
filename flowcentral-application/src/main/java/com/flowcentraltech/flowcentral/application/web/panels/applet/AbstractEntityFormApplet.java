@@ -24,6 +24,7 @@ import java.util.Stack;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -50,15 +51,16 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFileAttachments;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySaveAs;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
+import com.flowcentraltech.flowcentral.application.web.panels.EntryTablePage;
 import com.flowcentraltech.flowcentral.application.web.panels.HeaderWithTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.HeadlessTabsForm;
 import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
+import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs.BreadCrumb;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCRUDPage;
-import com.flowcentraltech.flowcentral.application.web.widgets.EntryTablePage;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.common.business.policies.ActionMode;
@@ -349,6 +351,40 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public void newChildListItem(int childTabIndex) throws UnifyException {
         newChildItem(childTabIndex, true);
+    }
+
+    public QuickTableEdit quickEdit(int childTabIndex) throws UnifyException {
+        if (ensureSaveOnTabAction()) {
+            FormTabDef quickEditFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
+            final AppletDef _appletDef = getAppletDef(quickEditFormTabDef.getApplet());
+            final String quickEditTable = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.QUICK_EDIT_TABLE);
+            final String quickEditTablePolicy = _appletDef.getPropValue(String.class,
+                    AppletPropertyConstants.QUICK_EDIT_POLICY);
+            if (StringUtils.isBlank(quickEditTable)) {
+                throw new UnifyException(
+                        ApplicationModuleErrorConstants.NO_ENTRY_TABLE_CONFIGURED_FOR_APPLET_QUICK_EDIT,
+                        _appletDef.getLongName());
+            }
+
+            final String baseField = au().getChildFkFieldName(form.getFormDef().getEntityDef(),
+                    quickEditFormTabDef.getReference());
+            final Object id = ((Entity) form.getFormBean()).getId();
+            QuickTableEdit quickTableEdit = constructQuickTableEdit(_appletDef.getEntity(), quickEditTable,
+                    quickEditTablePolicy, null, baseField, id);
+            final int width = _appletDef.getPropValue(int.class, AppletPropertyConstants.QUICK_EDIT_WIDTH);
+            final int height = _appletDef.getPropValue(int.class, AppletPropertyConstants.QUICK_EDIT_HEIGHT);
+            quickTableEdit.setWidth(width);
+            quickTableEdit.setHeight(height);
+            String caption = _appletDef.getLabel() != null
+                    ? au.resolveSessionMessage("$m{quickedit.caption.param}", _appletDef.getLabel())
+                    : au.resolveSessionMessage("$m{quickedit.caption}");
+            quickTableEdit.setEntryCaption(caption);
+            quickTableEdit.loadEntryList();
+            return quickTableEdit;
+        }
+
+        return null;
     }
 
     public ShowPopupInfo newChildShowPopup(int childTabIndex) throws UnifyException {
@@ -721,9 +757,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public EntityActionResult formActionOnInst(String actionPolicyName, String formActionName) throws UnifyException {
         AbstractForm _form = getResolvedForm();
+        final FormContext formContext = _form.getCtx();
         Entity _inst = (Entity) _form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(_form.getFormDef().getEntityDef(), _inst, actionPolicyName);
-        efCtx.setAll(_form.getCtx());
+        efCtx.setAll(formContext);
         efCtx.setListingOptions(new FormListingOptions(formActionName));
         if (isListingView()) {
             final String listingGenerator = listingForm.getFormListing().getListingGenerator();
@@ -733,6 +770,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
         EntityActionResult entityActionResult = au().environment().performEntityAction(efCtx);
         updateForm(HeaderWithTabsForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst, false));
+        if (viewMode.isCreateForm() && ((Entity) formContext.getInst()).getId() != null) {
+            enterMaintainForm(formContext, (Long) ((Entity) formContext.getInst()).getId());
+        }
+
         return entityActionResult;
     }
 
@@ -912,6 +953,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return new AssignmentPage(getCtx(), formEventHandlers.getAssnSwitchOnChangeHandlers(), this, assignPageDef,
                 entityClassDef, id, sectorIcon, breadCrumbs, entryTable, assnEditPolicy, pseudoDeleteField,
                 filterGroupDef, fixedAssignment);
+    }
+
+    protected QuickTableEdit constructQuickTableEdit(String entity, String entryTable, String entryTablePolicy,
+            FilterGroupDef filterGroupDef, String baseField, Object baseId) throws UnifyException {
+        EntityClassDef entityClassDef = getEntityClassDef(entity);
+        return new QuickTableEdit(getCtx(), this, entityClassDef, baseField, baseId, entryTable, entryTablePolicy);
     }
 
     protected EntryTablePage constructNewEntryPage(String entity, String entryTable, String entryTablePolicy,

@@ -84,6 +84,7 @@ public class EntitySearchPanel extends AbstractPanel {
 
         EntitySearch entitySearch = getEntitySearch();
         setVisible("sectorIcon", entitySearch.isWithSectorIcon());
+        setVisible("quickEditBtn", entitySearch.isShowQuickEdit());
 
         entitySearch.ensureTableStruct();
         if (getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH)) {

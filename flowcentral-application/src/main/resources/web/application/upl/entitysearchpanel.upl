@@ -40,9 +40,11 @@
     eventHandler:$d{!ui-event event:onchange action:$c{quickFilterAct}}
 
 !ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle}
-	components:$c{reportBtn refreshBtn fastBackBtn backBtn displayStart paginationLabel forwardBtn fastForwardBtn}
+	components:$c{reportBtn quickEditBtn refreshBtn fastBackBtn backBtn displayStart paginationLabel forwardBtn fastForwardBtn}
 !ui-button:reportBtn styleClass:$e{fc-greenbutton} caption:$m{button.report}
 	eventHandler:$f{reportEventHandler}
+!ui-button:quickEditBtn styleClass:$e{fc-orangebutton} caption:$m{button.quickedit}
+	eventHandler:$f{quickEditEventHandler} binding:$f{quickEditBtnBinding}
 !ui-button:refreshBtn caption:$m{button.refresh}
 	eventHandler:$d{!ui-event event:onclick action:$c{refreshAct}}
 !ui-symbol:fastBackBtn symbol:$s{backward-fast} hint:$m{pagination.firstpage}

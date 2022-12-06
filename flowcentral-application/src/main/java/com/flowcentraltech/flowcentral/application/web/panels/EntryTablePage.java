@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.widgets;
+package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
@@ -36,7 +39,6 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 
 /**
@@ -183,12 +185,7 @@ public class EntryTablePage {
 
     public BeanTable getEntryBeanTable() throws UnifyException {
         if (entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), filterGroupDef,
-                    BeanTable.ENTRY_ENABLED);
-            if (!StringUtils.isBlank(entryEditPolicy)) {
-                ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
-                entryBeanTable.setPolicy(policy);
-            }
+            entryBeanTable = ctx.au().constructEntryBeanTable(entryTable, filterGroupDef, entryEditPolicy);
         }
 
         return entryBeanTable;

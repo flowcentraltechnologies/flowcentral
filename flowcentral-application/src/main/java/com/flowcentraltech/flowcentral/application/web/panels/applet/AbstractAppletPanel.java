@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -25,6 +24,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 import com.tcdng.unify.web.ui.widget.Panel;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
 
@@ -57,8 +57,7 @@ public abstract class AbstractAppletPanel extends SwitchPanel {
     }
 
     protected void showReportOptionsBox(ReportOptions reportOptions) throws UnifyException {
-        setSessionAttribute(FlowCentralSessionAttributeConstants.REPORTOPTIONS, reportOptions);
-        setCommandResultMapping("showapplicationreportoptions");
+        commandShowPopup(new Popup("showapplicationreportoptions", reportOptions));
     }
 
     protected void addPanelToPushComponents(String panelName, boolean editable) throws UnifyException {
