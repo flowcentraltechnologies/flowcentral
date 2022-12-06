@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.business.ReportProvider;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
@@ -443,7 +444,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the sequence code generator
      */
     SequenceCodeGenerator sequenceCodeGenerator();
-
+    
+    /**
+     * Gets the report provider.
+     * 
+     * @return the report provider
+     */
+    ReportProvider reportProvider();
+    
     /**
      * Gets a application applet definition.
      * 

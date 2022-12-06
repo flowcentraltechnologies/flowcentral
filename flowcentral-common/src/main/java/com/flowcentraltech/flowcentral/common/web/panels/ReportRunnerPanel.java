@@ -21,6 +21,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
  * Basic panel for presenting and capturing report options.
@@ -36,7 +37,8 @@ public class ReportRunnerPanel extends BaseDialogPanel {
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-        ReportOptions reportOptions = (ReportOptions) getValue();
+        Popup popup = getCurrentPopup();
+        ReportOptions reportOptions = (ReportOptions) popup.getBackingBean();
         setVisible("runnerTitlePanel", StringUtils.isNotBlank(reportOptions.getReportDescription()));
         setVisible("rptColumnOptionsPanel", !reportOptions.isUserInputOnly() && reportOptions.isWithColumnOptions());
         setVisible("rptParamsPanel", reportOptions.isWithUserInput());

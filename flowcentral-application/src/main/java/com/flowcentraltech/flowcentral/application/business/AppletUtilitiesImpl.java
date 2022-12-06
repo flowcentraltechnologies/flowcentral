@@ -85,6 +85,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheet
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.business.ReportProvider;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
@@ -179,6 +180,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Configurable
     private FormatHelper formatHelper;
 
+    @Configurable
+    private ReportProvider reportProvider;
+
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
     public AppletUtilitiesImpl() {
@@ -244,6 +248,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     public final void setFormatHelper(FormatHelper formatHelper) {
         this.formatHelper = formatHelper;
+    }
+
+    public final void setReportProvider(ReportProvider reportProvider) {
+        this.reportProvider = reportProvider;
     }
 
     @Override
@@ -327,6 +335,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public SequenceCodeGenerator sequenceCodeGenerator() {
         return sequenceCodeGenerator;
+    }
+
+    @Override
+    public ReportProvider reportProvider() {
+        return reportProvider;
     }
 
     @Override
@@ -1238,6 +1251,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         if (!_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_ACTIONFOOTER, false)) {
             entitySearchMode = entitySearchMode & ~EntitySearch.SHOW_ACTIONFOOTER;
+        }
+
+        if (_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)) {
+            entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
 
         final boolean basicSearchOnly = _appletDef.getPropValue(boolean.class,

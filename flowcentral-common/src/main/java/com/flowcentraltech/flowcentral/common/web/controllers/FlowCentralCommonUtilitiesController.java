@@ -83,7 +83,7 @@ public class FlowCentralCommonUtilitiesController
 
     @Action
     public String generateReport() throws UnifyException {
-        Popup popup = removeCurrentPopup();
+        Popup popup = getCurrentPopup();
         ReportOptions reportOptions = (ReportOptions) popup.getBackingBean();
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
         getEventLogger().logUserEvent(CommonModuleAuditConstants.GENERATE_REPORT, reportOptions.getTitle());

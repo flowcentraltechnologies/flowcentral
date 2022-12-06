@@ -84,7 +84,6 @@ public class EntitySearchPanel extends AbstractPanel {
 
         EntitySearch entitySearch = getEntitySearch();
         setVisible("sectorIcon", entitySearch.isWithSectorIcon());
-        setVisible("quickEditBtn", entitySearch.isShowQuickEdit());
 
         entitySearch.ensureTableStruct();
         if (getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH)) {
@@ -99,9 +98,20 @@ public class EntitySearchPanel extends AbstractPanel {
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
         setVisible("editBtn", entitySearch.isEditButtonVisible()
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+        setVisible("quickEditBtn",
+                entitySearch.isShowQuickEdit()
+                        && (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
+                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("viewBtn", entitySearch.isViewButtonVisible()
                 && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
+
+        final boolean reportBtnVisible = entityTable.getTotalItemCount() > 0 && entitySearch.isShowReport()
+                && entitySearch.au().reportProvider().isReportable(entityTable.getEntityDef().getLongName())
+                && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                        entityTable.getEntityDef().getReportPrivilege());
+        setVisible("reportBtn", reportBtnVisible);
+
         setVisible("colorLegend", entityTable.isWithColorLegendInfo());
         if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
             setVisible("searchEntriesPanel", entitySearch.isShowSearch());
@@ -235,8 +245,7 @@ public class EntitySearchPanel extends AbstractPanel {
 
         PageRequestContextUtil rcUtil = getRequestContextUtil();
         if (entitySearch.isWithPushFormIds()) {
-            rcUtil.addListItem(AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS,
-                    entitySearch.getPushFormIds());
+            rcUtil.addListItem(AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS, entitySearch.getPushFormIds());
         }
 
         if (entitySearch.isWithEditActionKey()) {
@@ -308,7 +317,7 @@ public class EntitySearchPanel extends AbstractPanel {
             entitySearch.applyFilterToSearch();
             getRequestContextUtil().setContentScrollReset();
         }
-        
+
         tableWidget.clearSelected();
     }
 

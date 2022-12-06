@@ -36,11 +36,15 @@ public class QuickTableEditPanel extends AbstractPanel {
     @Action
     public void saveEntries() throws UnifyException {
         QuickTableEdit quickTableEdit = getValue(QuickTableEdit.class);
-        if (quickTableEdit.commitEntryList()); {
+        if (quickTableEdit.commitEntryList()) {
             removeCurrentPopup();
+            hintUser(resolveSessionMessage("$m{quickedit.hint.success}"));
             setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
-        }
+            return;
+        } 
+        
+        hintUser(resolveSessionMessage("$m{quickedit.hint.failure}"));
     }
 
     @Action
