@@ -54,6 +54,8 @@ public interface AppletPropertyConstants {
 
     String SEARCH_TABLE_BASICSEARCHONLY = "searchTable.basicSearchOnly";
     
+    String SEARCH_TABLE_SEARCH_COLUMNS = "searchTable.searchColumns";
+    
     String ENTITY_FORM = "entityForm";
 
     String CREATE_FORM = "createForm";

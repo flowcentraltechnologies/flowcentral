@@ -410,6 +410,11 @@
 			dataType="integer" inputType="integer"
 			editor="!ui-integer precision:4"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletsingledigit"
+			description="$m{studio.widgettype.propertyappletsingledigit}"
+			dataType="integer" inputType="integer"
+			editor="!ui-integer precision:1"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
@@ -4412,6 +4417,9 @@
 				<property name="loadingTable.actionFooter"
 					description="$m{studio.appappletprop.manageloading.loadingtable.actionfooter}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.searchColumns"
+					description="$m{studio.appappletprop.manageloading.loadingtable.searchcolumns}"
+					inputWidget="studio.propertyappletsingledigit" />
 			</propertySet>
 		</propertyList>
 		<propertyList name="melAppAppletPropList"
@@ -4456,10 +4464,13 @@
 					inputWidget="application.checkbox" />
 				<property name="searchTable.report"
 					description="$m{studio.appappletprop.manageentity.searchtable.report}"
-					inputWidget="application.checkbox" />
+					inputWidget="application.checkbox" />searchTable.entryColumns
 				<property name="searchTable.basicSearchOnly"
 					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.searchColumns"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
+					inputWidget="studio.propertyappletsingledigit" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">
@@ -4645,6 +4656,9 @@
 				<property name="searchTable.basicSearchOnly"
 					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.searchColumns"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
+					inputWidget="studio.propertyappletsingledigit" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentitysingleform.formproperties}">
