@@ -4419,7 +4419,7 @@
 					inputWidget="application.checkbox" />
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageloading.loadingtable.searchcolumns}"
-					inputWidget="application.propertyappletsingledigit" />
+					inputWidget="studio.propertyappletsingledigit" />
 			</propertySet>
 		</propertyList>
 		<propertyList name="melAppAppletPropList"
@@ -4470,7 +4470,7 @@
 					inputWidget="application.checkbox" />
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
-					inputWidget="application.propertyappletsingledigit" />
+					inputWidget="studio.propertyappletsingledigit" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">
@@ -4658,7 +4658,7 @@
 					inputWidget="application.checkbox" />
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
-					inputWidget="application.propertyappletsingledigit" />
+					inputWidget="studio.propertyappletsingledigit" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentitysingleform.formproperties}">
