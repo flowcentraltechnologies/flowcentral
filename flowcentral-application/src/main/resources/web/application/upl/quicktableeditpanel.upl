@@ -27,7 +27,7 @@
 	components:$c{entryErrors entryTableEntryTbl}
 !fc-formmessages:entryErrors binding:validationErrors
 !fc-beantable:entryTableEntryTbl style:$s{width:100%;}
-	binding:entryBeanTable serialNo:true
+	binding:entryBeanTable
 
 
 // Footer action panel

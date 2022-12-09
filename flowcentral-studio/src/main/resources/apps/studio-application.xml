@@ -1153,7 +1153,7 @@
 		<table name="appEntityFieldQuickEditTable"
 			description="$m{studio.appentityfield.table.quickedit}"
 			label="$m{studio.appentityfield.table.quickedit.label}"
-			entity="application.appEntityField" itemsPerPage="-1" serialNo="false">
+			entity="application.appEntityField" itemsPerPage="-1" serialNo="true">
 			<column field="name" renderWidget="application.name"
 				widthRatio="3"/>
 			<column field="dataTypeDesc" renderWidget="application.text"
