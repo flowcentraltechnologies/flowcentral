@@ -98,6 +98,9 @@ public class AppFormElement extends BaseConfigEntity {
     private boolean showSearch;
 
     @Column
+    private boolean quickEdit;
+
+    @Column
     private boolean visible;
 
     @Column
@@ -286,6 +289,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setShowSearch(boolean showSearch) {
         this.showSearch = showSearch;
+    }
+
+    public boolean isQuickEdit() {
+        return quickEdit;
+    }
+
+    public void setQuickEdit(boolean quickEdit) {
+        this.quickEdit = quickEdit;
     }
 
     public boolean isVisible() {

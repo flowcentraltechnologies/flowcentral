@@ -598,23 +598,23 @@ public class FormDef extends BaseApplicationEntityDef {
         }
 
         public Builder addFormTab(TabContentType contentType, String name, String tabLabel,
-                boolean isIgnoreParentCondition, boolean showSearch, boolean visible, boolean editable,
-                boolean disabled) {
+                boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible,
+                boolean editable, boolean disabled) {
             return addFormTab(contentType, null, name, tabLabel, null, null, null, null, null, isIgnoreParentCondition,
-                    showSearch, visible, editable, disabled);
+                    showSearch, quickEdit, visible, editable, disabled);
         }
 
         public Builder addFormTab(TabContentType contentType, FilterGroupDef filterGroupDef, String name,
                 String tabLabel, String tabApplet, String tabReference, String editAction, String editFormless,
-                String editFixedRows, boolean isIgnoreParentCondition, boolean showSearch, boolean visible,
-                boolean editable, boolean disabled) {
+                String editFixedRows, boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit,
+                boolean visible, boolean editable, boolean disabled) {
             if (tabLabels.contains(name)) {
                 throw new RuntimeException("Tab with name [" + name + "] already exists on this form.");
             }
 
             formTabDefList.add(new TempFormTabDef(contentType, filterGroupDef, name, tabLabel, tabApplet, tabReference,
-                    editAction, editFormless, editFixedRows, isIgnoreParentCondition, showSearch, visible, editable,
-                    disabled));
+                    editAction, editFormless, editFixedRows, isIgnoreParentCondition, showSearch, quickEdit, visible,
+                    editable, disabled));
             tabLabels.add(tabLabel);
             return this;
         }
@@ -835,8 +835,8 @@ public class FormDef extends BaseApplicationEntityDef {
                         tempFormTabDef.getTabReference(), tempFormTabDef.getEditAction(),
                         tempFormTabDef.getEditFormless(), tempFormTabDef.getEditFixedRows(),
                         DataUtils.unmodifiableList(formSectionDefList), tempFormTabDef.isIgnoreParentCondition(),
-                        tempFormTabDef.isShowSearch(), tempFormTabDef.isVisible(), tempFormTabDef.isEditable(),
-                        tempFormTabDef.isDisabled()));
+                        tempFormTabDef.isShowSearch(), tempFormTabDef.isQuickEdit(), tempFormTabDef.isVisible(),
+                        tempFormTabDef.isEditable(), tempFormTabDef.isDisabled()));
             }
 
             if (formActionList != null) {
@@ -886,6 +886,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
             private boolean showSearch;
 
+            private boolean quickEdit;
+
             private boolean visible;
 
             private boolean editable;
@@ -896,8 +898,8 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public TempFormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name,
                     String tabLabel, String tabApplet, String tabReference, String editAction, String editFormless,
-                    String editFixedRows, boolean ignoreParentCondition, boolean showSearch, boolean visible,
-                    boolean editable, boolean disabled) {
+                    String editFixedRows, boolean ignoreParentCondition, boolean showSearch, boolean quickEdit,
+                    boolean visible, boolean editable, boolean disabled) {
                 this.contentType = contentType;
                 this.filterGroupDef = filterGroupDef;
                 this.name = name;
@@ -909,6 +911,7 @@ public class FormDef extends BaseApplicationEntityDef {
                 this.editFixedRows = editFixedRows;
                 this.ignoreParentCondition = ignoreParentCondition;
                 this.showSearch = showSearch;
+                this.quickEdit = quickEdit;
                 this.visible = visible;
                 this.editable = editable;
                 this.disabled = disabled;
@@ -967,6 +970,10 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public boolean isShowSearch() {
                 return showSearch;
+            }
+
+            public boolean isQuickEdit() {
+                return quickEdit;
             }
 
             public boolean isVisible() {

@@ -238,10 +238,10 @@ public class FormEditor {
 
         public Builder addTab(String contentType, String name, String label, String applet, String reference,
                 String filter, String editAction, String editFormless, String editFixedRows,
-                boolean ignoreParentCondition, boolean showSearch, boolean visible, boolean editable,
+                boolean ignoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible, boolean editable,
                 boolean disabled) {
             currentTab = new FormTab(contentType, name, label, applet, reference, filter, editAction, editFormless,
-                    editFixedRows, ignoreParentCondition, showSearch, visible, editable, disabled);
+                    editFixedRows, ignoreParentCondition, showSearch, quickEdit, visible, editable, disabled);
             tabs.add(currentTab);
             return this;
         }
@@ -391,6 +391,8 @@ public class FormEditor {
 
         private boolean showSearch;
 
+        private boolean quickEdit;
+
         private boolean visible;
 
         private boolean editable;
@@ -401,7 +403,7 @@ public class FormEditor {
 
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
                 String editAction, String editFormless, String editFixedRows, boolean ignoreParentCondition,
-                boolean showSearch, boolean visible, boolean editable, boolean disabled) {
+                boolean showSearch, boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
             this();
             this.contentType = contentType;
             this.name = name;
@@ -414,6 +416,7 @@ public class FormEditor {
             this.editFixedRows = editFixedRows;
             this.ignoreParentCondition = ignoreParentCondition;
             this.showSearch = showSearch;
+            this.quickEdit = quickEdit;
             this.visible = visible;
             this.editable = editable;
             this.disabled = disabled;
@@ -543,6 +546,14 @@ public class FormEditor {
             this.showSearch = showSearch;
         }
 
+        public boolean isQuickEdit() {
+            return quickEdit;
+        }
+
+        public void setQuickEdit(boolean quickEdit) {
+            this.quickEdit = quickEdit;
+        }
+
         public boolean isVisible() {
             return visible;
         }
@@ -598,13 +609,6 @@ public class FormEditor {
             if (index >= 0) {
                 sections.remove(index);
             }
-        }
-
-        @Override
-        public String toString() {
-            return "FormTab [contentType=" + contentType + ", name=" + name + ", label=" + label + ", applet=" + applet
-                    + ", reference=" + reference + ", editAction=" + editAction + ", visible=" + visible + ", editable="
-                    + editable + ", disabled=" + disabled + ", sections=" + sections + "]";
         }
 
         private int getFormSectionIndex(String name) {

@@ -502,7 +502,6 @@
 				value="studioondeleteappentityfield-policy" />
 			<property name="maintainForm.delete.condition"
 				value="appEntityFieldDeletable" />
-			<property name="quickEdit.enabled" value="true" />
 			<property name="quickEdit.table" value="studio.appEntityFieldQuickEditTable" />
 			<property name="quickEdit.policy" value="studioappentityfield-tablepolicy" />
 			<property name="quickEdit.width" value="1124" />
@@ -1992,7 +1991,7 @@
 			</tab>
 			<tab name="fields" label="$m{studio.appentity.form.fields}"
 				contentType="child_list" applet="manageAppEntityField"
-				reference="fieldList" />
+				reference="fieldList" quickEdit="true"/>
 			<tab name="expressions"
 				label="$m{studio.appentity.form.expressions}"
 				contentType="child_list" applet="manageAppEntityExpression"
@@ -4546,9 +4545,6 @@
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.quickeditsettings}">
-				<property name="quickEdit.enabled"
-					description="$m{studio.appappletprop.manageentity.quickeditenabled}"
-					inputWidget="application.checkbox" />
 				<property name="quickEdit.table"
 					description="$m{studio.appappletprop.manageentity.quickedittable}"
 					inputWidget="studio.propertyapplettablelist" />

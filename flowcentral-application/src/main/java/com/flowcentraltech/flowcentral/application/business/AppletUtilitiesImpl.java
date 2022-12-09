@@ -730,13 +730,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
                         final boolean newButtonVisible = !hideAddActionButton(form, applet.getFormAppletDef(),
                                 formTabDef.getApplet());
-                        final boolean quickEdit = _appletDef.getPropValue(boolean.class,
-                                AppletPropertyConstants.QUICK_EDIT_ENABLED);
                         final String editAction = formTabDef.getEditAction() == null ? "/assignToChildItem"
                                 : formTabDef.getEditAction();
                         int mode = formTabDef.isShowSearch() ? EntitySearch.ENABLE_ALL
                                 : EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH;
-                        if (quickEdit) {
+                        if (formTabDef.isQuickEdit()) {
                             mode |= EntitySearch.SHOW_QUICK_EDIT;
                         }
 

@@ -876,8 +876,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appFormElement.getTabApplet(), appFormElement.getTabReference(),
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditFixedRows(), appFormElement.isIgnoreParentCondition(),
-                                    appFormElement.isShowSearch(), appFormElement.isVisible(),
-                                    appFormElement.isEditable(), appFormElement.isDisabled());
+                                    appFormElement.isShowSearch(), appFormElement.isQuickEdit(),
+                                    appFormElement.isVisible(), appFormElement.isEditable(),
+                                    appFormElement.isDisabled());
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
@@ -4060,6 +4061,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
             appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
             appFormElement.setShowSearch(formTabConfig.getShowSearch());
+            appFormElement.setQuickEdit(formTabConfig.getQuickEdit());
             appFormElement.setVisible(formTabConfig.getVisible());
             appFormElement.setEditable(formTabConfig.getEditable());
             appFormElement.setDisabled(formTabConfig.getDisabled());

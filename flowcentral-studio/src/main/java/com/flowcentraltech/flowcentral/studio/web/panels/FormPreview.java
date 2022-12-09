@@ -89,7 +89,8 @@ public class FormPreview {
                     fdb.addFormTab(TabContentType.fromName(formTab.getContentType()), filterGroupDef, formTab.getName(),
                             formTab.getLabel(), formTab.getApplet(), formTab.getReference(), formTab.getEditAction(),
                             formTab.getEditFormless(), formTab.getEditFixedRows(), formTab.isIgnoreParentCondition(),
-                            formTab.isShowSearch(), formTab.isVisible(), formTab.isEditable(), formTab.isDisabled());
+                            formTab.isShowSearch(), formTab.isQuickEdit(), formTab.isVisible(), formTab.isEditable(),
+                            formTab.isDisabled());
                     int sectionIndex = -1;
                     for (FormSection formSection : formTab.getSections()) {
                         sectionIndex++;
