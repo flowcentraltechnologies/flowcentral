@@ -70,11 +70,11 @@ public class LoadingSearchPanel extends AbstractPanel {
         loadingSearch.ensureTableStruct();
         if (Boolean.TRUE.equals(getRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
             loadingSearch.applySearchEntriesToSearch();
-            ;
         }
 
         final LoadingTable loadingTable = loadingSearch.getLoadingTable();
         final TableDef tableDef = loadingTable.getTableDef();
+        setVisible("colorLegend", loadingTable.isWithColorLegendInfo());
         setVisible("footerActionPanel", loadingSearch.isShowActionFooter());
         if (loadingSearch.isShowActionFooter()) {
             boolean buttonsForFooterAction = loadingSearch.au().system().getSysParameterValue(boolean.class,

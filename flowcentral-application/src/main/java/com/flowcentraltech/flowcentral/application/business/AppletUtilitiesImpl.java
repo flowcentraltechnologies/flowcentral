@@ -710,7 +710,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 formTabDef.getApplet());
                         AppletDef _appletDef = getAppletDef(formTabDef.getApplet());
                         EntityChild _entityChild = constructEntityChild(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), rootTitle, _appletDef, formTabDef.isIgnoreParentCondition());
+                                formTabDef.getName(), rootTitle, _appletDef, formTabDef.isQuickEdit(),
+                                formTabDef.isIgnoreParentCondition());
                         final boolean canCreate = _appletDef.getPropValue(boolean.class,
                                 AppletPropertyConstants.SEARCH_TABLE_NEW);
                         _entityChild.setCanCreate(canCreate);
@@ -1350,11 +1351,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public EntityChild constructEntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            String rootTitle, AppletDef _appletDef, boolean isIgnoreParentCondition) throws UnifyException {
+            String rootTitle, AppletDef _appletDef, boolean quickEdit, boolean isIgnoreParentCondition)
+            throws UnifyException {
         logDebug("Constructing entity child for [{0}] using applet definition [{1}]...", rootTitle,
                 _appletDef.getLongName());
         FormDef childFormDef = getFormDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM));
-        EntityChild _entityChild = new EntityChild(ctx, sweepingCommitPolicy, tabName, childFormDef,
+        EntityChild _entityChild = new EntityChild(ctx, sweepingCommitPolicy, tabName, childFormDef, quickEdit,
                 isIgnoreParentCondition);
         _entityChild.setEntitySubTitle(rootTitle);
         return _entityChild;

@@ -78,7 +78,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     }
 
     @Action
-    public String quickEdit() throws UnifyException {
+    public String quickTableEdit() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
@@ -88,6 +88,18 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                 return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
                         quickTableEdit, quickTableEdit.getWidth(), quickTableEdit.getHeight()));
             }
+        }
+
+        return "refreshapplet";
+    }
+
+    @Action
+    public String quickFormEdit() throws UnifyException {
+        AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
+        AbstractEntityFormApplet applet = pageBean.getApplet();
+        if (saveFormState(applet)) {
+            int childTabIndex = getRequestTarget(int.class);
+            // TODO
         }
 
         return "refreshapplet";

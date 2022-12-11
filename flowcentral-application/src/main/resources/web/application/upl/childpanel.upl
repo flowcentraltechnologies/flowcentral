@@ -20,8 +20,8 @@
 !fc-formmessages:formMessages binding:messages
 
 // Header Bar
-!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
-	components:$c{headerLeftPanel}
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{50% 50%}}
+	components:$c{headerLeftPanel headerRightPanel}
 
 !ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;} layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
 	components:$c{titleBlock createBtn editBtn viewBtn}
@@ -35,6 +35,11 @@
 !ui-button:viewBtn styleClass:$e{fc-bluebutton} caption:$m{button.view.ellipsis}
 	eventHandler:$d{!ui-event event:onclick action:$c{editAct}} binding:$s{childTabIndex}
 
+!ui-panel:headerRightPanel style:$s{display:inline-block;} layout:$d{!ui-horizontal cellType:middle}
+	components:$c{quickEditBtn}
+!ui-button:quickEditBtn styleClass:$e{fc-orangebutton} caption:$m{button.quickedit}
+	eventHandler:$d{!ui-event event:onclick action:$c{quickEditAct}} binding:$s{childTabIndex}
+
 // Form
 !ui-panel:childFormPanel components:$c{childMiniForm}
 !fc-miniform:childMiniForm binding:childForm
@@ -42,4 +47,5 @@
 // Actions
 !ui-post:createAct path:$p{/newChildItem} pushComponents:$r{mainform.push.components}
 !ui-post:editAct path:$p{/editChildItem} pushComponents:$r{mainform.push.components}
+!ui-post:quickEditAct path:$p{/quickFormEdit} pushComponents:$r{mainform.push.components}
 	

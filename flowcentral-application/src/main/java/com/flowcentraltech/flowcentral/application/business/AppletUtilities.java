@@ -92,7 +92,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 public interface AppletUtilities extends UnifyComponent {
-    
+
     /**
      * Gets a generator instance.
      * 
@@ -106,7 +106,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
             throws UnifyException;
-    
+
     /**
      * Gets a generator instance.
      * 
@@ -140,7 +140,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     int getSearchMinimumItemsPerPage() throws UnifyException;
-    
+
     /**
      * Gets filter group definition for applet.
      * 
@@ -402,7 +402,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the system service.
      */
     SystemModuleService system();
-    
+
     /**
      * Gets the environment service.
      * 
@@ -423,14 +423,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the special parameter provider
      */
     CollaborationProvider collaborationProvider();
-    
+
     /**
      * Gets format helper
      * 
      * @return the format helper
      */
     FormatHelper formatHelper();
-    
+
     /**
      * Gets form context evaluator.
      * 
@@ -444,14 +444,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the sequence code generator
      */
     SequenceCodeGenerator sequenceCodeGenerator();
-    
+
     /**
      * Gets the report provider.
      * 
      * @return the report provider
      */
     ReportProvider reportProvider();
-    
+
     /**
      * Gets a application applet definition.
      * 
@@ -967,8 +967,8 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle,
-            String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException;
+    EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle, String beanTitle, Entity inst,
+            FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException;
 
     /**
      * Updates a header with tabs form.
@@ -994,8 +994,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void updateEntitySingleForm(AbstractApplet applet, EntitySingleForm form, Entity inst)
-            throws UnifyException;
+    void updateEntitySingleForm(AbstractApplet applet, EntitySingleForm form, Entity inst) throws UnifyException;
 
     /**
      * Constructs property search.
@@ -1049,9 +1048,10 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Constructs loading search.
      * 
-     * @param ctx applet context
+     * @param ctx
+     *                          applet context
      * @param loadingSearchMode
-     *                             the loading search mode
+     *                          the loading search mode
      * @return the loading search
      * @throws UnifyException
      *                        if an error occurs
@@ -1093,6 +1093,8 @@ public interface AppletUtilities extends UnifyComponent {
      *                                the root applet title
      * @param _appletDef
      *                                the applet definition
+     * @param quickEdit
+     *                                enable quick edit flag
      * @param isIgnoreParentCondition
      *                                ignore parent condition flag
      * @return the entity child
@@ -1100,7 +1102,8 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     EntityChild constructEntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            String rootTitle, AppletDef _appletDef, boolean isIgnoreParentCondition) throws UnifyException;
+            String rootTitle, AppletDef _appletDef, boolean quickEdit, boolean isIgnoreParentCondition)
+            throws UnifyException;
 
     /**
      * Constructs entity filter.
@@ -1213,7 +1216,7 @@ public interface AppletUtilities extends UnifyComponent {
     EntityParamValues constructEntityParamValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityParamValuesMode, boolean isIgnoreParentCondition)
             throws UnifyException;
-    
+
     /**
      * Constructs an entry bean table,
      * 
@@ -1242,7 +1245,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     BeanTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
             throws UnifyException;
-    
+
     /**
      * Matches a form bean with applet condition property
      * 
@@ -1376,7 +1379,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     List<String> getEntitiesWithDelegate() throws UnifyException;
-    
+
     /**
      * Creates an entity by form context.
      * 

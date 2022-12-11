@@ -69,7 +69,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     }
     
     public boolean isWithColorLegendInfo() {
-        return getTableDef().getColorLegendInfo() != null;
+        return getTableDef().getColorLegendInfo() != null && !getTableDef().getColorLegendInfo().isEmpty();
     }
 
     public int getLimit() {
