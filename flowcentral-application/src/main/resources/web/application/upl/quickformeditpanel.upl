@@ -28,7 +28,8 @@
 !fc-formmessages:formErrors binding:validationErrors
 !fc-miniform:quickEditForm style:$s{width:100%;}
 	binding:form
-
+!ui-hidden:switchOnChangeHolder
+	eventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}
 
 // Footer action panel
 !ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal style:$s{float:right;}}
@@ -41,3 +42,5 @@
 // Actions
 !ui-postcommand:saveFormAct command:saveForm components:$c{quickEditForm}
 !ui-postcommand:closeAct command:close
+!ui-postcommand:switchOnChangeAct command:formSwitchOnChange components:$c{quickEditForm}
+	refresh:$c{formBodyPanel}

@@ -1472,6 +1472,23 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         return false;
     }
 
+    @Override
+    public void onMiniformSwitchOnChange(MiniForm form) throws UnifyException {
+        form.getCtx().resetTabIndex();
+
+        final EntityDef entityDef = form.getCtx().getEntityDef();
+        final Entity inst = (Entity) form.getFormBean();
+        final FormTabDef formTabDef = form.getFormTabDef();
+        // Clear unsatisfactory foreign key fields
+        if (formTabDef.isWithCondRefDefFormFields()) {
+            clearUnsatisfactoryRefs(formTabDef, entityDef,
+                    form.getCtx().getFormValueStore().getReader(), inst);
+        }
+
+        // Populate entity list-only fields
+        populateListOnlyFields(entityDef, inst);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void clearUnsatisfactoryRefs(FormTabDef _formTabDef, EntityDef entityDef, ValueStoreReader _reader,

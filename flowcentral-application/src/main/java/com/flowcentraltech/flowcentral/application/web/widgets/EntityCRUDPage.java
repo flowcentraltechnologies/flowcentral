@@ -23,7 +23,6 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
-import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -182,19 +181,7 @@ public class EntityCRUDPage {
 	}
 
 	public void switchOnChange() throws UnifyException {
-		MiniForm form = getCrud().getForm();
-		form.getCtx().resetTabIndex();
-
-		Entity inst = (Entity) form.getFormBean();
-		FormTabDef formTabDef = form.getFormTabDef();
-		// Clear unsatisfactory foreign key fields
-		if (formTabDef.isWithCondRefDefFormFields()) {
-			ctx.au().clearUnsatisfactoryRefs(formTabDef, entityClassDef.getEntityDef(),
-					form.getCtx().getFormValueStore().getReader(), inst);
-		}
-
-		// Populate entity list-only fields
-		ctx.au().populateListOnlyFields(entityClassDef.getEntityDef(), inst);
+	    ctx.au().onMiniformSwitchOnChange(getCrud().getForm());
 	}
 
 	public EntityCRUD getCrud() throws UnifyException {

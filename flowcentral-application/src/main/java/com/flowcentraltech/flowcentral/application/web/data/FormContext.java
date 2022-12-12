@@ -89,6 +89,8 @@ public class FormContext extends AbstractContext {
 
     private FormTriggerEvaluator triggerEvaluator;
 
+    private List<EventHandler> quickEditFormEventHandlers;
+    
     private ValueStore formValueStore;
 
     private Object oldInst;
@@ -256,7 +258,8 @@ public class FormContext extends AbstractContext {
     public List<EventHandler> getFormSwitchOnChangeHandlers() {
         return isCrudMode() ? formEventHandlers.getCrudSwitchOnChangeHandlers()
                 : (isSaveAsMode() ? formEventHandlers.getSaveAsSwitchOnChangeHandlers()
-                        : formEventHandlers.getFormSwitchOnChangeHandlers());
+                        : (isQuickEditMode() ? quickEditFormEventHandlers
+                                : formEventHandlers.getFormSwitchOnChangeHandlers()));
     }
 
     public EntityFormEventHandlers getFormEventHandlers() {
@@ -302,7 +305,8 @@ public class FormContext extends AbstractContext {
         this.mode = Mode.CRUD;
     }
 
-    public void setQuickEditMode() {
+    public void setQuickEditMode(List<EventHandler> quickEditFormEventHandlers) {
+        this.quickEditFormEventHandlers = quickEditFormEventHandlers;
         this.mode = Mode.QUICK_EDIT;
     }
 

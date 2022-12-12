@@ -15,13 +15,19 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
+import com.tcdng.unify.web.ui.widget.EventHandler;
+import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
  * Quick form edit panel.
@@ -33,6 +39,25 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
 @UplBinding("web/application/upl/quickformeditpanel.upl")
 public class QuickFormEditPanel extends AbstractPanel {
 
+    @Override
+    public void switchState() throws UnifyException {
+        super.switchState();
+        QuickFormEdit quickFormEdit = getValue(QuickFormEdit.class);
+        FormContext formContext = quickFormEdit.getFormContext();
+        if (!formContext.isQuickEditMode()) {
+            EventHandler[] handlers = getWidgetByShortName(Widget.class, "switchOnChangeHolder")
+                    .getUplAttribute(EventHandler[].class, "eventHandler");
+            formContext.setQuickEditMode(
+                    handlers != null ? Collections.unmodifiableList(Arrays.asList(handlers)) : Collections.emptyList());
+        }
+    }
+
+    @Action
+    public void formSwitchOnChange() throws UnifyException {
+        QuickFormEdit quickFormEdit = getValue(QuickFormEdit.class);
+        quickFormEdit.formSwitchOnChange();
+    }
+
     @Action
     public void saveForm() throws UnifyException {
         QuickFormEdit quickFormEdit = getValue(QuickFormEdit.class);
@@ -42,8 +67,8 @@ public class QuickFormEditPanel extends AbstractPanel {
             setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
             return;
-        } 
-        
+        }
+
         hintUser(resolveSessionMessage("$m{quickedit.hint.failure}"));
     }
 

@@ -1008,7 +1008,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 FormContext _ctx = new FormContext(mCtx.getAppletContext(), mFormDef, mCtx.getFormEventHandlers(),
                         childInst);
                 _ctx.revertTabStates();
-                _ctx.setQuickEditMode();
                 MiniForm miniForm = new MiniForm(MiniFormScope.CHILD_FORM, _ctx, mFormDef.getFormTabDef(0));
                 return new QuickFormEdit(ctx, this, formAppletDef, miniForm);
             }

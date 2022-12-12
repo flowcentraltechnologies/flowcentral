@@ -55,8 +55,16 @@ public class QuickFormEdit {
         this.form = form;
     }
 
+    public void formSwitchOnChange() throws UnifyException {
+        ctx.au().onMiniformSwitchOnChange(form);
+    }
+
     public MiniForm getForm() throws UnifyException {
         return form;
+    }
+
+    public FormContext getFormContext() {
+        return form.getCtx();
     }
 
     public List<FormMessage> getMessages() {

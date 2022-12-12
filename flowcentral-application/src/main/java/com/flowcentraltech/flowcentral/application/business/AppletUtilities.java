@@ -58,6 +58,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApp
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -1485,4 +1486,14 @@ public interface AppletUtilities extends UnifyComponent {
      */
     void clearUnsatisfactoryRefs(FormTabDef formTabDef, EntityDef entityDef, ValueStoreReader reader, Entity inst)
             throws UnifyException;
+
+    /**
+     * Performs operations on mini-form switch on-change
+     * 
+     * @param form
+     *             the mini-form
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void onMiniformSwitchOnChange(MiniForm form) throws UnifyException;
 }
