@@ -214,7 +214,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
         Set<String> activatedAltRules = Collections.emptySet();
         List<FormStateRule> fieldRules = new ArrayList<FormStateRule>();
         String trigger = getTrigger();
-        if (form.getScope().isMainForm()) {
+        if (form.getScope().isMainForm() || ctx.isQuickEditMode()) {
             final FormDef formDef = ctx.getFormDef();
             boolean setValuesExecuted = false;
 

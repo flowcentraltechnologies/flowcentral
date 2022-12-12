@@ -28,6 +28,7 @@ import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Quick form edit panel.
@@ -63,13 +64,13 @@ public class QuickFormEditPanel extends AbstractPanel {
         QuickFormEdit quickFormEdit = getValue(QuickFormEdit.class);
         if (quickFormEdit.commit()) {
             removeCurrentPopup();
-            hintUser(resolveSessionMessage("$m{quickedit.hint.success}"));
+            hintUser("$m{quickedit.hint.success}");
             setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
             return;
         }
 
-        hintUser(resolveSessionMessage("$m{quickedit.hint.failure}"));
+        hintUser(MODE.ERROR, "$m{quickedit.hint.failure}");
     }
 
     @Action
