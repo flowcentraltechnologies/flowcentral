@@ -859,11 +859,16 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
     font-size:14px; font-weight:bold; padding:2px; text-align:center;}
 
 /* Select role user panel */
-.fc-selectrolepanel {width: 380px;}
+.fc-selectrolepanel {width:380px;}
 
 /* Text template panel */
 .fc-texttemplatepanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}
 .fc-texttemplatepanel .footer {display:inline-block;padding-left:4px;box-sizing: border-box;float:right;}
+
+/* Quick form edit panel */
+.fc-quickformeditpanel {width:100%;min-width:840px;background-color:#ffffff;border: 1px solid #b8b8b8;}
+.fc-quickformeditpanel .forms {width:100%;height:420px;}
+.fc-quickformeditpanel .footer {display:block;padding-left:4px;box-sizing: border-box;}
 
 /* Quick table edit panel */
 .fc-quicktableeditpanel {width:100%;min-width:840px;background-color:#ffffff;border: 1px solid #b8b8b8;}

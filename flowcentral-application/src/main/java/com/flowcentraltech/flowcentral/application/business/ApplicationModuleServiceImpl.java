@@ -299,7 +299,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
             AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.MAINTAIN_FORM,
             AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.ASSIGNMENT_PAGE,
-            AppletPropertyConstants.PROPERTY_LIST_RULE, AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME)));
+            AppletPropertyConstants.PROPERTY_LIST_RULE, AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME,
+            AppletPropertyConstants.QUICK_EDIT_TABLE, AppletPropertyConstants.QUICK_EDIT_FORM)));
 
     private static final int MAX_LIST_DEPTH = 8;
 
