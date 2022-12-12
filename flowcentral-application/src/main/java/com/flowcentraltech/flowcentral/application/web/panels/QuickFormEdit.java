@@ -17,10 +17,14 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
+import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Quick form edit object.
@@ -29,18 +33,25 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 public class QuickFormEdit {
-   
+
+    private final AppletContext ctx;
+
+    private final SweepingCommitPolicy scp;
+
+    private final AppletDef formAppletDef;
+
     private final MiniForm form;
 
-    private List<FormMessage> validationErrors;
-
     private String formCaption;
-    
+
     private int width;
 
     private int height;
 
-    public QuickFormEdit(MiniForm form) {
+    public QuickFormEdit(AppletContext ctx, SweepingCommitPolicy scp, AppletDef formAppletDef, MiniForm form) {
+        this.ctx = ctx;
+        this.scp = scp;
+        this.formAppletDef = formAppletDef;
         this.form = form;
     }
 
@@ -49,7 +60,7 @@ public class QuickFormEdit {
     }
 
     public List<FormMessage> getMessages() {
-        return validationErrors;
+        return form.getCtx().getValidationErrors();
     }
 
     public String getFormCaption() {
@@ -77,8 +88,14 @@ public class QuickFormEdit {
     }
 
     public boolean commit() throws UnifyException {
-        validationErrors = null;
-        return DataUtils.isBlank(validationErrors);
+        FormContext formContext = getForm().getCtx();
+        ctx.au().formContextEvaluator().evaluateFormContext(formContext, EvaluationMode.UPDATE);
+        if (!form.getCtx().isWithFormErrors()) {
+            ctx.au().updateEntityInstByFormContext(formAppletDef, formContext, scp);
+            return true;
+        }
+
+        return false;
     }
 
 }

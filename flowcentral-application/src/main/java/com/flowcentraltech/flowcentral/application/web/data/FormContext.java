@@ -71,7 +71,8 @@ public class FormContext extends AbstractContext {
     public enum Mode {
         NORMAL,
         SAVE_AS,
-        CRUD
+        CRUD,
+        QUICK_EDIT
     }
 
     private AppletContext appletContext;
@@ -285,6 +286,10 @@ public class FormContext extends AbstractContext {
         return Mode.CRUD.equals(mode);
     }
 
+    public boolean isQuickEditMode() {
+        return Mode.QUICK_EDIT.equals(mode);
+    }
+
     public void setNormalMode() {
         this.mode = Mode.NORMAL;
     }
@@ -295,6 +300,10 @@ public class FormContext extends AbstractContext {
 
     public void setCrudMode() {
         this.mode = Mode.CRUD;
+    }
+
+    public void setQuickEditMode() {
+        this.mode = Mode.QUICK_EDIT;
     }
 
     public ValueStore getFormValueStore() {
@@ -592,6 +601,10 @@ public class FormContext extends AbstractContext {
     }
 
     public boolean isVisibleMainSection(String sectionName) {
+        if (isQuickEditMode()) {
+            return true;
+        }
+
         if (mainFormSections != null) {
             FormSection formSection = mainFormSections.get(sectionName);
             return formSection != null && formSection.isVisible();

@@ -402,7 +402,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             }
 
             EntityChild entityChild = (EntityChild) form.getTabSheet().getCurrentItem().getValObject();
-            QuickFormEdit quickFormEdit = constructQuickFormEdit(_appletDef.getEntity(), quickEditForm, entityChild);
+            QuickFormEdit quickFormEdit = constructQuickFormEdit(_appletDef.getEntity(), quickEditForm, _appletDef,
+                    entityChild);
             if (quickFormEdit != null) {
                 final int width = _appletDef.getPropValue(int.class, AppletPropertyConstants.QUICK_EDIT_WIDTH);
                 final int height = _appletDef.getPropValue(int.class, AppletPropertyConstants.QUICK_EDIT_HEIGHT);
@@ -994,8 +995,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     @SuppressWarnings("unchecked")
-    protected QuickFormEdit constructQuickFormEdit(String entity, String formName, EntityChild entityChild)
-            throws UnifyException {
+    protected QuickFormEdit constructQuickFormEdit(String entity, String formName, AppletDef formAppletDef,
+            EntityChild entityChild) throws UnifyException {
         Restriction mRestriction = entityChild.getMRestriction();
         if (mRestriction != null) {
             final EntityClassDef entityClassDef = getEntityClassDef(entity);
@@ -1007,8 +1008,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 FormContext _ctx = new FormContext(mCtx.getAppletContext(), mFormDef, mCtx.getFormEventHandlers(),
                         childInst);
                 _ctx.revertTabStates();
+                _ctx.setQuickEditMode();
                 MiniForm miniForm = new MiniForm(MiniFormScope.CHILD_FORM, _ctx, mFormDef.getFormTabDef(0));
-                return new QuickFormEdit(miniForm);
+                return new QuickFormEdit(ctx, this, formAppletDef, miniForm);
             }
         }
 
