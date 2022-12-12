@@ -4545,6 +4545,9 @@
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.quickeditsettings}">
+				<property name="quickEdit.form"
+					description="$m{studio.appappletprop.manageentity.quickeditform}"
+					inputWidget="studio.propertyappletformlist" />
 				<property name="quickEdit.table"
 					description="$m{studio.appappletprop.manageentity.quickedittable}"
 					inputWidget="studio.propertyapplettablelist" />

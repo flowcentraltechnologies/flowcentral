@@ -36,7 +36,9 @@ public interface ApplicationResultMappingConstants {
     
     String SHOW_TEXT_TEMPLATE_EDITOR = "showtexttemplateeditor";
     
-    String SHOW_QUICK_EDIT = "showquickedit";
+    String SHOW_QUICK_TABLE_EDIT = "showquicktableedit";
+    
+    String SHOW_QUICK_FORM_EDIT = "showquickformedit";
     
     String FORWARD_TO_HOME = "forwardtohome";
     

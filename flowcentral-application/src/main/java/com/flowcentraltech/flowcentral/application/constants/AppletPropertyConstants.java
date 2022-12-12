@@ -142,6 +142,8 @@ public interface AppletPropertyConstants {
 
     String ENTRY_TABLE_POLICY = "entryTable.policy";
 
+    String QUICK_EDIT_FORM = "quickEdit.form";
+
     String QUICK_EDIT_TABLE = "quickEdit.table";
 
     String QUICK_EDIT_POLICY = "quickEdit.policy";

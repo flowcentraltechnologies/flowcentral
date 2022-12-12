@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityTreeSelect;
+import com.flowcentraltech.flowcentral.application.web.panels.QuickFormEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
@@ -83,9 +84,9 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
             int childTabIndex = getRequestTarget(int.class);
-            QuickTableEdit quickTableEdit = applet.quickEdit(childTabIndex);
+            QuickTableEdit quickTableEdit = applet.quickTableEdit(childTabIndex);
             if (quickTableEdit != null) {
-                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
+                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_TABLE_EDIT,
                         quickTableEdit, quickTableEdit.getWidth(), quickTableEdit.getHeight()));
             }
         }
@@ -99,7 +100,11 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
             int childTabIndex = getRequestTarget(int.class);
-            // TODO
+            QuickFormEdit quickFormEdit = applet.quickFormEdit(childTabIndex);
+            if (quickFormEdit != null) {
+                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_FORM_EDIT,
+                        quickFormEdit, quickFormEdit.getWidth(), quickFormEdit.getHeight()));
+            }
         }
 
         return "refreshapplet";

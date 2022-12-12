@@ -64,4 +64,9 @@ public interface ApplicationModuleErrorConstants {
      */
     String NO_ENTRY_TABLE_CONFIGURED_FOR_APPLET_QUICK_EDIT = "APPLICATION_0009";
 
+    /**
+     * No form configured for applet [{0}] quick edit.
+     */
+    String NO_FORM_CONFIGURED_FOR_APPLET_QUICK_EDIT = "APPLICATION_000A";
+
 }

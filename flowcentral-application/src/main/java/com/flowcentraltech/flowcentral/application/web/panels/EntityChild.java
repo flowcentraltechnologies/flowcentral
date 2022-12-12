@@ -115,6 +115,14 @@ public class EntityChild extends AbstractPanelFormBinding {
         return !getAppletCtx().isContextEditable() || !isTabEditable();
     }
 
+    public FormContext getMCtx() {
+        return mCtx;
+    }
+
+    public Restriction getMRestriction() {
+        return mRestriction;
+    }
+
     public void reload() throws UnifyException {
         if (mCtx != null && mRestriction != null) {
             load(mCtx, mRestriction);
