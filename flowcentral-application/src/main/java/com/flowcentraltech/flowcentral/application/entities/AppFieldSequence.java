@@ -42,7 +42,7 @@ public class AppFieldSequence extends BaseAuditEntity {
     @CategoryColumn(name = "FIELDSEQUENCE_CAT")
     private String category;
 
-    @Column(name = "FIELDSEQUENCE_DEF", length = 2048)
+    @Column(name = "FIELDSEQUENCE_DEF", length = 4000)
     private String definition;
 
     public AppFieldSequence(String definition) {

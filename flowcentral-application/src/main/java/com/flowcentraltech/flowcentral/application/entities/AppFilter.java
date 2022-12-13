@@ -41,7 +41,7 @@ public class AppFilter extends BaseAuditEntity {
     @CategoryColumn(name = "FILTER_CAT")
     private String category;
 
-    @Column(name = "FILTER_DEF", length = 2048)
+    @Column(name = "FILTER_DEF", length = 4000)
     private String definition;
 
     public AppFilter(String definition) {

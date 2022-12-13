@@ -41,7 +41,7 @@ public class ChartSnapshotSeries extends BaseEntity {
     @Column(name = "CHARTSNAPSHOTSERIES_NM", length = 64)
     private String name;
 
-    @Column(length = 2048)
+    @Column(length = 4000)
     private String series;
 
     @ListOnly(key = "seriesDataType", property = "description")

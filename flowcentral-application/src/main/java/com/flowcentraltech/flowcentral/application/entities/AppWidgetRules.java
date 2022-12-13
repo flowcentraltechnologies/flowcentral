@@ -42,7 +42,7 @@ public class AppWidgetRules extends BaseAuditEntity {
     @CategoryColumn(name = "WIDGETRULES_CAT")
     private String category;
 
-    @Column(name = "WIDGETRULES_DEF", length = 2048)
+    @Column(name = "WIDGETRULES_DEF", length = 4000)
     private String definition;
 
     public AppWidgetRules(String definition) {
