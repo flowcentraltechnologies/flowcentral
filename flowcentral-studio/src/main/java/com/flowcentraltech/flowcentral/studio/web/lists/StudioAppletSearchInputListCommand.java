@@ -24,25 +24,25 @@ import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplication
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.StringParam;
+import com.tcdng.unify.core.list.LongParam;
 
 /**
- * Studio form applet filter list command
+ * Studio applet search input list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studioformappletfilterlist")
-public class StudioFormAppletFilterListCommand extends AbstractApplicationListCommand<StringParam> {
+@Component("studioappletsearchinputlist")
+public class StudioAppletSearchInputListCommand extends AbstractApplicationListCommand<LongParam> {
 
-    public StudioFormAppletFilterListCommand() {
-        super(StringParam.class);
+    public StudioAppletSearchInputListCommand() {
+        super(LongParam.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
-        if (param.isPresent()) {
-            return application().findAppAppletFiltersListable(param.getValue());
+    public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
+        if (longParam.isPresent()) {
+            return application().findAppAppletSearchInputsListable(longParam.getValue());
         }
 
         return Collections.emptyList();

@@ -375,6 +375,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletfilterlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletsearchinputlist"
+			description="$m{studio.widgettype.propertyappletsearchinputlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletsearchinputlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyappletquickfilterlist"
 			description="$m{studio.widgettype.propertyappletquickfilterlist}"
 			dataType="string" inputType="string"
@@ -658,6 +663,23 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
+		<applet name="manageAppEntitySearchInput"
+			description="$m{studio.appentitysearchinput.manage}"
+			label="$m{studio.appentitysearchinput.manage.label}"
+			type="manage_entitylist" entity="application.appEntitySearchInput"
+			menuAccess="false">
+			<property name="searchTable" value="appEntitySearchInputTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appEntitySearchInputForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appEntitySearchInputForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageAppAppletProp"
 			description="$m{studio.appappletprop.manage}"
 			label="$m{studio.appappletprop.manage.label}"
@@ -782,23 +804,6 @@
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="appTableFilterForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
-		</applet>
-		<applet name="manageAppTableSearchInput"
-			description="$m{studio.apptablesearchinput.manage}"
-			label="$m{studio.apptablesearchinput.manage.label}"
-			type="manage_entitylist" entity="application.appTableSearchInput"
-			menuAccess="false">
-			<property name="searchTable" value="appTableSearchInputable" />
-			<property name="searchTable.new" value="true" />
-			<property name="searchTable.edit" value="false" />
-			<property name="searchTable.report" value="false" />
-			<property name="createForm" value="appTableSearchInputForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="appTableSearchInputForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -1253,6 +1258,19 @@
 				label="$m{application.appentityupload.constraintaction}"
 				widthRatio="1" />
 		</table>
+		<table name="appEntitySearchInputTable"
+			description="$m{studio.appentitysearchinput.table}"
+			label="$m{studio.appentitysearchinput.table.label}"
+			entity="application.appEntitySearchInput">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
 		<table name="appAppletFilterTable"
 			description="$m{studio.appappletfilter.table}"
 			label="$m{studio.appappletfilter.table.label}"
@@ -1331,19 +1349,6 @@
 				label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
 			<column field="legendLabel" renderWidget="application.text"
 				label="$m{application.apptablefilter.legendlabel}" widthRatio="1" />
-			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="1" />
-			<column field="updateDt" renderWidget="application.datetime"
-				widthRatio="1" />
-		</table>
-		<table name="appTableSearchInputTable"
-			description="$m{studio.apptablesearchinput.table}"
-			label="$m{studio.apptablesearchinput.table.label}"
-			entity="application.appTableSearchInput">
-			<column field="name" renderWidget="application.name"
-				widthRatio="1" linkAct="maintainAct" />
-			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -2037,6 +2042,9 @@
 			<tab name="indexes" label="$m{studio.appentity.form.indexes}"
 				contentType="child_list" applet="manageAppEntityIndex"
 				reference="indexList" />
+			<tab name="searchInputs" label="$m{studio.appentity.form.searchinputs}"
+				contentType="child_list" applet="manageAppEntitySearchInput"
+				reference="searchInputList" />
 			<tab name="uploads" label="$m{studio.appentity.form.uploads}"
 				contentType="child_list" applet="manageAppEntityUpload"
 				reference="uploadList" />
@@ -2580,6 +2588,25 @@
 						visible="true" />
 				</setStates>
 			</formStatePolicy>
+		</form>
+		<form name="appEntitySearchInputForm"
+			description="$m{studio.appentitysearchinput.form}"
+			entity="application.appEntitySearchInput">
+			<tab name="basicDetails"
+				label="$m{studio.appentitysearchinput.form.basicdetails}"
+				contentType="miniform">
+				<section name="searchInputDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="inputs"
+				label="$m{studio.appentitysearchinput.form.inputs}"
+				reference="app_table" contentType="search_input" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="appRefForm" description="$m{studio.appref.form}"
 			entity="application.appRef">
@@ -3138,9 +3165,6 @@
 			<tab name="filters" label="$m{studio.apptable.form.filters}"
 				contentType="child_list" applet="manageAppTableFilter"
 				reference="filterList" />
-			<tab name="searchInputs" label="$m{studio.apptable.form.searchinputs}"
-				contentType="child_list" applet="manageAppTableSearchInput"
-				reference="searchInputList" />
 			<tab name="actions" label="$m{studio.apptable.form.actions}"
 				contentType="child_list" applet="manageAppTableAction"
 				reference="actionList" />
@@ -3282,25 +3306,6 @@
 			<tab name="condition"
 				label="$m{studio.apptablefilter.form.condition}"
 				reference="app_table" contentType="filter_condition" />
-			<tab name="changeLog" label="$m{application.form.audit}"
-				contentType="miniform_changelog" />
-		</form>
-		<form name="appTableSearchInputForm"
-			description="$m{studio.apptablesearchinput.form}"
-			entity="application.appTableSearchInput">
-			<tab name="basicDetails"
-				label="$m{studio.apptablesearchinput.form.basicdetails}"
-				contentType="miniform">
-				<section name="searchInputDetails" columns="type_2">
-					<field name="name" inputWidget="application.name" column="0"
-						required="true" />
-					<field name="description" inputWidget="application.text"
-						column="1" required="true" />
-				</section>
-			</tab>
-			<tab name="inputs"
-				label="$m{studio.apptablefilter.form.inputs}"
-				reference="app_table" contentType="search_input" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
@@ -4468,6 +4473,9 @@
 				<property name="loadingTable.actionFooter"
 					description="$m{studio.appappletprop.manageloading.loadingtable.actionfooter}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.searchInput"
+					description="$m{studio.appappletprop.manageloading.loadingtable.searchinput}"
+					inputWidget="studio.propertyappletsearchinputlist" />
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageloading.loadingtable.searchcolumns}"
 					inputWidget="studio.propertyappletsingledigit" />
@@ -4515,10 +4523,13 @@
 					inputWidget="application.checkbox" />
 				<property name="searchTable.report"
 					description="$m{studio.appappletprop.manageentity.searchtable.report}"
-					inputWidget="application.checkbox" />searchTable.entryColumns
+					inputWidget="application.checkbox" />
 				<property name="searchTable.basicSearchOnly"
 					description="$m{studio.appappletprop.manageentity.searchtable.basicsearchonly}"
 					inputWidget="application.checkbox" />
+				<property name="searchTable.searchInput"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchinput}"
+					inputWidget="studio.propertyappletsearchinputlist" />
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
 					inputWidget="studio.propertyappletsingledigit" />

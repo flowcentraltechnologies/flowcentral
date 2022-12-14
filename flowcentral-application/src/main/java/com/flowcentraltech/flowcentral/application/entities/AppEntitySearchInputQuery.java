@@ -13,15 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.application.entities;
 
-package com.flowcentraltech.flowcentral.configuration.xml;
+import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 
 /**
- * Table search input configuration.
+ * Application entity search input query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class TableSearchInputConfig extends SearchInputsConfig {
+public class AppEntitySearchInputQuery extends BaseConfigNamedEntityQuery<AppEntitySearchInput> {
+
+    public AppEntitySearchInputQuery() {
+        super(AppEntitySearchInput.class);
+    }
+
+    public AppEntitySearchInputQuery appEntityId(Long appEntityId) {
+        return (AppEntitySearchInputQuery) addEquals("appEntityId", appEntityId);
+    }
 
 }

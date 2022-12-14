@@ -79,6 +79,9 @@ public class AppEntity extends BaseApplicationEntity {
     @ChildList
     private List<AppEntityUpload> uploadList;
 
+    @ChildList
+    private List<AppEntitySearchInput> searchInputList;
+
     public EntityBaseType getBaseType() {
         return baseType;
     }
@@ -197,6 +200,14 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setUploadList(List<AppEntityUpload> uploadList) {
         this.uploadList = uploadList;
+    }
+
+    public List<AppEntitySearchInput> getSearchInputList() {
+        return searchInputList;
+    }
+
+    public void setSearchInputList(List<AppEntitySearchInput> searchInputList) {
+        this.searchInputList = searchInputList;
     }
 
 }

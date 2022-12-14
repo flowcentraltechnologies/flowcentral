@@ -22,37 +22,37 @@ import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
 /**
- * Application table search input entity.
+ * Application entity search input entity.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_TABLESEARCHINPUT", uniqueConstraints = { @UniqueConstraint({ "appTableId", "name" }),
-        @UniqueConstraint({ "appTableId", "description" }) })
-public class AppTableSearchInput extends BaseConfigNamedEntity {
+@Table(name = "FC_ENTITYSEARCHINPUT", uniqueConstraints = { @UniqueConstraint({ "appEntityId", "name" }),
+        @UniqueConstraint({ "appEntityId", "description" }) })
+public class AppEntitySearchInput extends BaseConfigNamedEntity {
 
-    @ForeignKey(AppTable.class)
-    private Long appTableId;
+    @ForeignKey(AppEntity.class)
+    private Long appEntityId;
     
-    @Child(category = "table")
+    @Child(category = "entity")
     private AppSearchInput searchInput;
 
-    public AppTableSearchInput(String name, String description, String definition) {
+    public AppEntitySearchInput(String name, String description, String definition) {
         this.setName(name);
         this.setDescription(description);
         this.searchInput = new AppSearchInput(definition);
     }
 
-    public AppTableSearchInput() {
+    public AppEntitySearchInput() {
         
     }
 
-    public Long getAppTableId() {
-        return appTableId;
+    public Long getAppEntityId() {
+        return appEntityId;
     }
 
-    public void setAppTableId(Long appTableId) {
-        this.appTableId = appTableId;
+    public void setAppEntityId(Long appEntityId) {
+        this.appEntityId = appEntityId;
     }
 
     public AppSearchInput getSearchInput() {

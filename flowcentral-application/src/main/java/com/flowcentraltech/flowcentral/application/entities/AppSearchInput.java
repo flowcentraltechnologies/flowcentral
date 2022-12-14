@@ -38,7 +38,7 @@ public class AppSearchInput extends BaseAuditEntity {
     @FosterParentType(length = 128)
     private String entity;
 
-    @CategoryColumn(name = "FILTER_CAT")
+    @CategoryColumn(name = "SEARCHINPUT_CAT")
     private String category;
 
     @Column(name = "SEARCHINPUT_DEF", length = 4000)

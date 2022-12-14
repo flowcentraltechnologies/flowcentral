@@ -513,6 +513,9 @@
 		<reference name="appEntityUploadRef"
 			description="$m{application.appentityupload.reference}"
 			entity="appEntityUpload" searchField="description" />
+		<reference name="appEntitySearchInputRef"
+			description="$m{application.appentitysearchinput.reference}"
+			entity="appEntitySearchInput" searchField="description" />
 		<reference name="appRefRef"
 			description="$m{application.appref.reference}" entity="appRef"
 			searchField="description" />
@@ -540,9 +543,6 @@
 		<reference name="appTableFilterRef"
 			description="$m{application.apptablefilter.reference}"
 			entity="appTableFilter" searchField="description" />
-		<reference name="appTableSearchInputRef"
-			description="$m{application.apptablesearchinput.reference}"
-			entity="appTableSearchInput" searchField="description" />
 		<reference name="appTableActionRef"
 			description="$m{application.apptableaction.reference}"
 			entity="appTableAction" searchField="label" />
@@ -817,6 +817,9 @@
 			<field name="uploadList"
 				label="$m{application.appentity.uploads}" type="child_list"
 				references="appEntityUploadRef" />
+			<field name="searchInputList"
+				label="$m{application.appentity.searchinputs}" type="child_list"
+				references="appEntitySearchInputRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appentity.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
@@ -982,6 +985,23 @@
 				label="$m{application.appentityupload.fieldsequence}" type="child"
 				category="table" references="appFieldSequenceRef" />
 		</entity>
+		<entity name="appEntitySearchInput"
+			description="$m{application.appentitysearchinput}"
+			label="$m{application.appentitysearchinput.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput">
+			<field name="appEntityId"
+				label="$m{application.appentitysearchinput.appentityid}" type="ref"
+				references="appEntityRef" inputWidget="application.entitylist" />
+			<field name="searchInput"
+				label="$m{application.appentitysearchinput.searchinput}" type="child"
+				category="table" references="appSearchInputRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appentitysearchinput.uc.name}"
+				fieldList="appEntityId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{application.appentitysearchinput.uc.description}"
+				fieldList="appEntityId,description" />
+		</entity>
 		<entity name="appRef" description="$m{application.appref}"
 			label="$m{application.appref.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppRef">
@@ -1134,9 +1154,6 @@
 			<field name="filterList"
 				label="$m{application.apptable.filters}" type="child_list"
 				references="appTableFilterRef" />
-			<field name="searchInputList"
-				label="$m{application.apptable.searchinputs}" type="child_list"
-				references="appTableSearchInputRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.apptable.uc.name}"
 				fieldList="applicationId,name" />
@@ -1240,23 +1257,6 @@
 				fieldList="appTableId,name" />
 			<uniqueConstraint name="descUc"
 				description="$m{application.apptablefilter.uc.description}"
-				fieldList="appTableId,description" />
-		</entity>
-		<entity name="appTableSearchInput"
-			description="$m{application.apptablesearchinput}"
-			label="$m{application.apptablesearchinput.label}"
-			type="com.flowcentraltech.flowcentral.application.entities.AppTableSearchInput">
-			<field name="appTableId"
-				label="$m{application.apptablesearchinput.apptableid}" type="ref"
-				references="appTableRef" inputWidget="application.entitylist" />
-			<field name="searchInput"
-				label="$m{application.apptablesearchinput.searchinput}" type="child"
-				category="table" references="appSearchInputRef" />
-			<uniqueConstraint name="nameUc"
-				description="$m{application.apptablesearchinput.uc.name}"
-				fieldList="appTableId,name" />
-			<uniqueConstraint name="descUc"
-				description="$m{application.apptablesearchinput.uc.description}"
 				fieldList="appTableId,description" />
 		</entity>
 		<entity name="appForm" description="$m{application.appform}"

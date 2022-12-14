@@ -52,7 +52,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
-import com.flowcentraltech.flowcentral.application.entities.AppTableSearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.data.DateRange;
@@ -76,7 +76,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.TableSearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -792,13 +792,13 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static TableSearchInputConfig getSearchInputConfig(AppletUtilities au,
-            AppTableSearchInput appTableSearchInput) throws UnifyException {
-        if (appTableSearchInput != null) {
-            TableSearchInputConfig tableSearchInputConfig = new TableSearchInputConfig();
-            InputWidgetUtils.getSearchInputsConfig(au, tableSearchInputConfig, appTableSearchInput.getName(),
-                    appTableSearchInput.getDescription(), appTableSearchInput.getSearchInput());
-            return tableSearchInputConfig;
+    public static EntitySearchInputConfig getSearchInputConfig(AppletUtilities au,
+            AppEntitySearchInput appEntitySearchInput) throws UnifyException {
+        if (appEntitySearchInput != null) {
+            EntitySearchInputConfig entitySearchInputConfig = new EntitySearchInputConfig();
+            InputWidgetUtils.getSearchInputsConfig(au, entitySearchInputConfig, appEntitySearchInput.getName(),
+                    appEntitySearchInput.getDescription(), appEntitySearchInput.getSearchInput());
+            return entitySearchInputConfig;
         }
 
         return null;

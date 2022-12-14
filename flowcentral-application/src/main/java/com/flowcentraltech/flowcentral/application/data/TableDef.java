@@ -46,8 +46,6 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private EntityDef entityDef;
 
-    private Map<String, TableSearchInputDef> searchInputDefs;
-
     private List<TableLoadingDef> loadingDefList;
 
     private List<TableColumnDef> columnDefList;
@@ -100,7 +98,7 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private Set<String> summaryFields;
 
-    private TableDef(EntityDef entityDef, Map<String, TableSearchInputDef> searchInputDefs,
+    private TableDef(EntityDef entityDef, 
             List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
             List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
             Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
@@ -110,7 +108,6 @@ public class TableDef extends BaseApplicationEntityDef {
             Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
-        this.searchInputDefs = searchInputDefs;
         this.loadingDefList = loadingDefList;
         this.columnDefList = columnDefList;
         this.visibleColumnDefList = visibleColumnDefList;
@@ -166,16 +163,6 @@ public class TableDef extends BaseApplicationEntityDef {
 
     public EntityDef getEntityDef() {
         return entityDef;
-    }
-
-    public TableSearchInputDef getTableSearchInputDef(String name) {
-        TableSearchInputDef tableSearchInputDef = searchInputDefs.get(name);
-        if (tableSearchInputDef == null) {
-            throw new RuntimeException(
-                    "Table [" + getLongName() + "] has no search input definition with name [" + name + "].");
-        }
-
-        return tableSearchInputDef;
     }
 
     public List<TableLoadingDef> getLoadingDefList() {
@@ -401,8 +388,6 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private Map<String, TableFilterDef> filterDefMap;
 
-        private Map<String, TableSearchInputDef> searchInputDefs;
-
         private List<TableLoadingDef> loadingDefList;
 
         private List<TableColumnDef> columnDefList;
@@ -463,7 +448,6 @@ public class TableDef extends BaseApplicationEntityDef {
             this.version = version;
             this.widthRatios = new ArrayList<Integer>();
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
-            this.searchInputDefs = new HashMap<String, TableSearchInputDef>();
             this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
@@ -474,7 +458,6 @@ public class TableDef extends BaseApplicationEntityDef {
             this.entityDef = entityDef;
             this.widthRatios = new ArrayList<Integer>();
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
-            this.searchInputDefs = new HashMap<String, TableSearchInputDef>();
             this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
@@ -611,19 +594,6 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addTableSearchInputDef(TableSearchInputDef tableSearchInputDef) {
-            if (tableSearchInputDef != null) {
-                if (searchInputDefs.containsKey(tableSearchInputDef.getName())) {
-                    throw new RuntimeException(
-                            "Search input definition with name [" + tableSearchInputDef.getName() + "] already exists in this definition.");
-                }
-
-                searchInputDefs.put(tableSearchInputDef.getName(), tableSearchInputDef);
-            }
-
-            return this;
-        }
-
         public Builder addFilterDef(TableFilterDef filterDef) {
             if (filterDef != null) {
                 if (filterDefMap.containsKey(filterDef.getName())) {
@@ -687,7 +657,7 @@ public class TableDef extends BaseApplicationEntityDef {
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new TableDef(entityDef, DataUtils.unmodifiableMap(searchInputDefs),
+            return new TableDef(entityDef,
                     DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
                     DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
                     DataUtils.unmodifiableMap(filterDefMap), label, detailsPanelName, sortHistory, itemsPerPage,

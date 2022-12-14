@@ -18,16 +18,16 @@ package com.flowcentraltech.flowcentral.application.data;
 import com.tcdng.unify.core.data.Listable;
 
 /**
- * Table search input definition.
+ * Entity search input definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class TableSearchInputDef implements Listable {
+public class EntitySearchInputDef implements Listable {
 
     private SearchInputsDef searchInputsDef;
 
-    public TableSearchInputDef(SearchInputsDef searchInputsDef) {
+    public EntitySearchInputDef(SearchInputsDef searchInputsDef) {
         this.searchInputsDef = searchInputsDef;
     }
 
