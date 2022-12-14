@@ -46,6 +46,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private EntityDef entityDef;
 
+    private Map<String, TableSearchInputDef> searchInputDefs;
+
     private List<TableLoadingDef> loadingDefList;
 
     private List<TableColumnDef> columnDefList;
@@ -98,7 +100,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private Set<String> summaryFields;
 
-    private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
+    private TableDef(EntityDef entityDef, Map<String, TableSearchInputDef> searchInputDefs,
+            List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
             List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
             Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
             int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
@@ -107,6 +110,7 @@ public class TableDef extends BaseApplicationEntityDef {
             Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
+        this.searchInputDefs = searchInputDefs;
         this.loadingDefList = loadingDefList;
         this.columnDefList = columnDefList;
         this.visibleColumnDefList = visibleColumnDefList;
@@ -139,7 +143,7 @@ public class TableDef extends BaseApplicationEntityDef {
             if (!EntityBaseType.BASE_ENTITY.equals(entityDef.getBaseType())) {
                 select.add("versionNo");
             }
-            
+
             for (TableColumnDef tableColumnDef : columnDefList) {
                 this.select.add(tableColumnDef.getFieldName());
             }
@@ -164,6 +168,16 @@ public class TableDef extends BaseApplicationEntityDef {
         return entityDef;
     }
 
+    public TableSearchInputDef getTableSearchInputDef(String name) {
+        TableSearchInputDef tableSearchInputDef = searchInputDefs.get(name);
+        if (tableSearchInputDef == null) {
+            throw new RuntimeException(
+                    "Table [" + getLongName() + "] has no search input definition with name [" + name + "].");
+        }
+
+        return tableSearchInputDef;
+    }
+
     public List<TableLoadingDef> getLoadingDefList() {
         return loadingDefList;
     }
@@ -175,7 +189,7 @@ public class TableDef extends BaseApplicationEntityDef {
     public TableLoadingDef getTableLoadingDef(int index) {
         return loadingDefList.get(index);
     }
-    
+
     public int getLoadingDefCount() {
         return loadingDefList.size();
     }
@@ -387,6 +401,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private Map<String, TableFilterDef> filterDefMap;
 
+        private Map<String, TableSearchInputDef> searchInputDefs;
+
         private List<TableLoadingDef> loadingDefList;
 
         private List<TableColumnDef> columnDefList;
@@ -447,6 +463,7 @@ public class TableDef extends BaseApplicationEntityDef {
             this.version = version;
             this.widthRatios = new ArrayList<Integer>();
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
+            this.searchInputDefs = new HashMap<String, TableSearchInputDef>();
             this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
@@ -457,6 +474,7 @@ public class TableDef extends BaseApplicationEntityDef {
             this.entityDef = entityDef;
             this.widthRatios = new ArrayList<Integer>();
             this.filterDefMap = new LinkedHashMap<String, TableFilterDef>();
+            this.searchInputDefs = new HashMap<String, TableSearchInputDef>();
             this.loadingDefList = new ArrayList<TableLoadingDef>();
             this.columnDefList = new ArrayList<TableColumnDef>();
             this.visibleColumnDefList = new ArrayList<TableColumnDef>();
@@ -593,6 +611,19 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addTableSearchInputDef(TableSearchInputDef tableSearchInputDef) {
+            if (tableSearchInputDef != null) {
+                if (searchInputDefs.containsKey(tableSearchInputDef.getName())) {
+                    throw new RuntimeException(
+                            "Search input definition with name [" + tableSearchInputDef.getName() + "] already exists in this definition.");
+                }
+
+                searchInputDefs.put(tableSearchInputDef.getName(), tableSearchInputDef);
+            }
+
+            return this;
+        }
+
         public Builder addFilterDef(TableFilterDef filterDef) {
             if (filterDef != null) {
                 if (filterDefMap.containsKey(filterDef.getName())) {
@@ -644,19 +675,20 @@ public class TableDef extends BaseApplicationEntityDef {
                     renderer = renderer + " binding:" + fieldName;
                 }
 
-                tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName,
-                        "width:" + widths[i] + "%;", renderer, editor, tempColumnDef.getRenderer(),
-                        tempColumnDef.getEditor(), tempColumnDef.getLinkAct(), tempColumnDef.getOrder(),
-                        tempColumnDef.getWidthRatio(), (100 - usedPercent), tempColumnDef.isSwitchOnChange(),
-                        tempColumnDef.isHidden(), tempColumnDef.isDisabled(), tempColumnDef.isEditable(),
-                        tempColumnDef.isSortable(), tempColumnDef.isSummary());
+                tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + widths[i] + "%;",
+                        renderer, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(),
+                        tempColumnDef.getLinkAct(), tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(),
+                        (100 - usedPercent), tempColumnDef.isSwitchOnChange(), tempColumnDef.isHidden(),
+                        tempColumnDef.isDisabled(), tempColumnDef.isEditable(), tempColumnDef.isSortable(),
+                        tempColumnDef.isSummary());
 
                 _visibleColumnDefList.add(tableColumnDef);
                 columnDefList.add(tableColumnDef);
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
+            return new TableDef(entityDef, DataUtils.unmodifiableMap(searchInputDefs),
+                    DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
                     DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
                     DataUtils.unmodifiableMap(filterDefMap), label, detailsPanelName, sortHistory, itemsPerPage,
                     serialNo, sortable, headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless,

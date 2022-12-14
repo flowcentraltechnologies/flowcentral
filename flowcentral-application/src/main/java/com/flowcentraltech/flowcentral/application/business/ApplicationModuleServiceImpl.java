@@ -64,12 +64,14 @@ import com.flowcentraltech.flowcentral.application.data.PropertyListItemDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RecLoadInfo;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetStatesDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
+import com.flowcentraltech.flowcentral.application.data.TableSearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
@@ -798,6 +800,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (_filterDef != null) {
                             tdb.addFilterDef(new TableFilterDef(_filterDef, appTableFilter.getRowColor(),
                                     appTableFilter.getLegendLabel()));
+                        }
+                    }
+
+                    for (AppTableSearchInput appTableSearchInput : appTable.getSearchInputList()) {
+                        SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(appletUtilities,
+                                appTableSearchInput.getName(), appTableSearchInput.getDescription(),
+                                appTableSearchInput.getSearchInput());
+                        if (searchInputsDef != null) {
+                            tdb.addTableSearchInputDef(new TableSearchInputDef(searchInputsDef));
                         }
                     }
 
