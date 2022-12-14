@@ -519,6 +519,9 @@
 		<reference name="appFilterRef"
 			description="$m{application.appfilter.reference}" entity="appFilter"
 			searchField="description" />
+		<reference name="appSearchInputRef"
+			description="$m{application.appsearchinput.reference}" entity="appSearchInput"
+			searchField="description" />
 		<reference name="appFieldSequenceRef"
 			description="$m{application.appfieldsequence.reference}"
 			entity="appFieldSequence" searchField="description" />
@@ -537,6 +540,9 @@
 		<reference name="appTableFilterRef"
 			description="$m{application.apptablefilter.reference}"
 			entity="appTableFilter" searchField="description" />
+		<reference name="appTableSearchInputRef"
+			description="$m{application.apptablesearchinput.reference}"
+			entity="appTableSearchInput" searchField="description" />
 		<reference name="appTableActionRef"
 			description="$m{application.apptableaction.reference}"
 			entity="appTableAction" searchField="label" />
@@ -1022,6 +1028,20 @@
 			<field name="definition"
 				label="$m{application.appfilter.definition}" type="string" />
 		</entity>
+		<entity name="appSearchInput"
+			description="$m{application.appsearchinput}"
+			label="$m{application.appsearchinputlabel}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppSearchInput">
+			<field name="entityInstId"
+				label="$m{application.appsearchinput.entityinstid}"
+				type="foster_parent_id" />
+			<field name="entity" label="$m{application.appsearchinput.entity}"
+				type="foster_parent_type" />
+			<field name="category"
+				label="$m{application.appsearchinput.category}" type="category_column" />
+			<field name="definition"
+				label="$m{application.appsearchinput.definition}" type="string" />
+		</entity>
 		<entity name="appFieldSequence"
 			description="$m{application.appfieldsequence}"
 			label="$m{application.appfieldsequence.label}"
@@ -1114,6 +1134,9 @@
 			<field name="filterList"
 				label="$m{application.apptable.filters}" type="child_list"
 				references="appTableFilterRef" />
+			<field name="searchInputList"
+				label="$m{application.apptable.searchinputs}" type="child_list"
+				references="appTableSearchInputRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.apptable.uc.name}"
 				fieldList="applicationId,name" />
@@ -1217,6 +1240,23 @@
 				fieldList="appTableId,name" />
 			<uniqueConstraint name="descUc"
 				description="$m{application.apptablefilter.uc.description}"
+				fieldList="appTableId,description" />
+		</entity>
+		<entity name="appTableSearchInput"
+			description="$m{application.apptablesearchinput}"
+			label="$m{application.apptablesearchinput.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppTableSearchInput">
+			<field name="appTableId"
+				label="$m{application.apptablesearchinput.apptableid}" type="ref"
+				references="appTableRef" inputWidget="application.entitylist" />
+			<field name="searchInput"
+				label="$m{application.apptablesearchinput.searchinput}" type="child"
+				category="table" references="appSearchInputRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.apptablesearchinput.uc.name}"
+				fieldList="appTableId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{application.apptablesearchinput.uc.description}"
 				fieldList="appTableId,description" />
 		</entity>
 		<entity name="appForm" description="$m{application.appform}"
