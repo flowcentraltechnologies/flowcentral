@@ -63,6 +63,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequenc
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchInput;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
@@ -788,6 +789,27 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                         !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
                     }
                         break;
+                    case SEARCH_INPUT: {
+                        logDebug("Constructing search input tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
+                        EntityChildCategoryType categoryType = EntityChildCategoryType
+                                .fromName(formTabDef.getReference());
+                        EntityDef _entityDef = getEntityDef(appletContext.getReference(categoryType));
+                        EntitySearchInput _entitySearchInput = constructEntitySearchInput(formContext,
+                                sweepingCommitPolicy, formTabDef.getName(), formDef.getEntityDef(),
+                                EntitySearchInput.ENABLE_ALL, formTabDef.isIgnoreParentCondition());
+                        _entitySearchInput.setListType(categoryType.listType());
+                        _entitySearchInput.setParamList(categoryType.paramList());
+                        _entitySearchInput.setCategory(categoryType.category());
+                        _entitySearchInput.setOwnerInstId((Long) inst.getId());
+                        _entitySearchInput.load(_entityDef);
+                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-entitysearchinputpanel",
+                                RendererType.STANDALONE_PANEL);
+                        tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
+                                _entitySearchInput, tabIndex,
+                                !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
+                    }
+                        break;
                     case PARAM_VALUES: {
                         logDebug("Constructing parameter values tab [{0}] using reference [{1}]...",
                                 formTabDef.getName(), formTabDef.getReference());
@@ -1071,6 +1093,22 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         _entityFilter.setCategory(categoryType.category());
                         _entityFilter.setOwnerInstId((Long) inst.getId());
                         _entityFilter.load(_entityDef);
+                        tabSheetItem.setVisible(
+                                !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
+                    }
+                        break;
+                    case SEARCH_INPUT: {
+                        logDebug("Updating search input tab [{0}] using reference [{1}]...", formTabDef.getName(),
+                                formTabDef.getReference());
+                        EntityChildCategoryType categoryType = EntityChildCategoryType
+                                .fromName(formTabDef.getReference());
+                        EntityDef _entityDef = getEntityDef(formContext.getAppletContext().getReference(categoryType));
+                        EntitySearchInput _entitySearchInput = (EntitySearchInput) tabSheetItem.getValObject();
+                        _entitySearchInput.setListType(categoryType.listType());
+                        _entitySearchInput.setParamList(categoryType.paramList());
+                        _entitySearchInput.setCategory(categoryType.category());
+                        _entitySearchInput.setOwnerInstId((Long) inst.getId());
+                        _entitySearchInput.load(_entityDef);
                         tabSheetItem.setVisible(
                                 !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
                     }
@@ -1373,6 +1411,16 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public EntitySearchInput constructEntitySearchInput(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int entitySearchInputMode, boolean isIgnoreParentCondition)
+            throws UnifyException {
+        logDebug("Constructing entity search input for [{0}] using entity definition [{1}]...", tabName,
+                ownerEntityDef.getLongName());
+        return new EntitySearchInput(ctx, sweepingCommitPolicy, tabName, ownerEntityDef, entitySearchInputMode,
+                isIgnoreParentCondition);
+    }
+
+    @Override
     public EntityFieldSequence constructEntityFieldSequence(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityFieldSequenceMode, boolean isIgnoreParentCondition)
             throws UnifyException {
@@ -1481,8 +1529,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final FormTabDef formTabDef = form.getFormTabDef();
         // Clear unsatisfactory foreign key fields
         if (formTabDef.isWithCondRefDefFormFields()) {
-            clearUnsatisfactoryRefs(formTabDef, entityDef,
-                    form.getCtx().getFormValueStore().getReader(), inst);
+            clearUnsatisfactoryRefs(formTabDef, entityDef, form.getCtx().getFormValueStore().getReader(), inst);
         }
 
         // Populate entity list-only fields

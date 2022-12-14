@@ -45,6 +45,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequenc
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchInput;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
@@ -1128,6 +1129,29 @@ public interface AppletUtilities extends UnifyComponent {
     EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition) throws UnifyException;
 
+    /**
+     * Constructs entity search input.
+     * 
+     * @param ctx
+     *                                the form context
+     * @param sweepingCommitPolicy
+     *                                the sweepingCommitPolicy (optional)
+     * @param tabName
+     *                                the tab name (optional)
+     * @param ownerEntityDef
+     *                                the owner entity definition
+     * @param entitySearchInputMode
+     *                                the entity search input mode
+     * @param isIgnoreParentCondition
+     *                                ignore parent condition flag
+     * @return the entity filter
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntitySearchInput constructEntitySearchInput(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int entitySearchInputMode, boolean isIgnoreParentCondition)
+            throws UnifyException;
+    
     /**
      * Constructs entity field sequence.
      * 

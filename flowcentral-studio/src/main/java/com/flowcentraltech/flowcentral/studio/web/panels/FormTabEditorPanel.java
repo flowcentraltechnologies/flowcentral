@@ -61,6 +61,8 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
                     break;
                 case FILTER_CONDITION:
                     break;
+                case SEARCH_INPUT:
+                    break;
                 case MINIFORM:
                     break;
                 case MINIFORM_CHANGELOG:
