@@ -57,6 +57,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableAction;
 import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
+import com.flowcentraltech.flowcentral.application.entities.AppTableSearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -114,6 +115,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableSearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -598,6 +600,24 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                     }
 
                     appTableConfig.setLoadingList(loadingList);
+                }
+
+                // Search Inputs
+                if (!DataUtils.isBlank(appTable.getSearchInputList())) {
+                    List<TableSearchInputConfig> searchInputList = new ArrayList<TableSearchInputConfig>();
+                    for (AppTableSearchInput appTableSearchInput : appTable.getSearchInputList()) {
+                        TableSearchInputConfig tableSearchInputConfig = InputWidgetUtils.getSearchInputConfig(au(),
+                                appTableSearchInput);
+                        String searchInputKey = getDescriptionKey(descKey, "tablesearchinput",
+                                appTableSearchInput.getName());
+                        ctx.addMessage(StaticMessageCategoryType.TABLE, searchInputKey,
+                                appTableSearchInput.getDescription());
+                        tableSearchInputConfig.setName(appTableSearchInput.getName());
+                        tableSearchInputConfig.setDescription("$m{" + searchInputKey + "}");
+                        searchInputList.add(tableSearchInputConfig);
+                    }
+
+                    appTableConfig.setSearchInputList(searchInputList);
                 }
 
                 tableConfigList.add(appTableConfig);

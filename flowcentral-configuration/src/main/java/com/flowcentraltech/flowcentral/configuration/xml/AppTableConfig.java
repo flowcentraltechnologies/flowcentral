@@ -72,6 +72,8 @@ public class AppTableConfig extends BaseNameConfig {
 
     private List<TableFilterConfig> filterList;
 
+    private List<TableSearchInputConfig> searchInputList;
+
     public AppTableConfig() {
         this.serialNo = Boolean.FALSE;
         this.sortable = Boolean.TRUE;
@@ -276,6 +278,15 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlElement(name = "filter", required = true)
     public void setFilterList(List<TableFilterConfig> filterList) {
         this.filterList = filterList;
+    }
+
+    public List<TableSearchInputConfig> getSearchInputList() {
+        return searchInputList;
+    }
+
+    @XmlElement(name = "searchInput")
+    public void setSearchInputList(List<TableSearchInputConfig> searchInputList) {
+        this.searchInputList = searchInputList;
     }
 
 }

@@ -90,6 +90,9 @@ public class AppTable extends BaseApplicationEntity {
     @ChildList
     private List<AppTableFilter> filterList;
 
+    @ChildList
+    private List<AppTableSearchInput> searchInputList;
+
     public String getLabel() {
         return label;
     }
@@ -248,6 +251,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setFilterList(List<AppTableFilter> filterList) {
         this.filterList = filterList;
+    }
+
+    public List<AppTableSearchInput> getSearchInputList() {
+        return searchInputList;
+    }
+
+    public void setSearchInputList(List<AppTableSearchInput> searchInputList) {
+        this.searchInputList = searchInputList;
     }
 
 }

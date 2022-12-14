@@ -150,6 +150,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoadingQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppTableSearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppTableSearchInputQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRulesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
@@ -242,6 +244,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.TableSearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
@@ -3908,8 +3911,41 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
         }
-
         appTable.setLoadingList(loadingList);
+
+        List<AppTableSearchInput> searchInputList = null;
+        if (!DataUtils.isBlank(appTableConfig.getSearchInputList())) {
+            searchInputList = new ArrayList<AppTableSearchInput>();
+            Map<String, AppTableSearchInput> map = appTable.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppTableSearchInputQuery().appTableId(appTable.getId()));
+            for (TableSearchInputConfig searchInputConfig : appTableConfig.getSearchInputList()) {
+                if (!DataUtils.isBlank(searchInputConfig.getInputList())) {
+                    AppTableSearchInput oldAppTableSearchInput = map.get(searchInputConfig.getName());
+                    if (oldAppTableSearchInput == null) {
+                        AppTableSearchInput appTableSearchInput = new AppTableSearchInput();
+                        appTableSearchInput.setName(searchInputConfig.getName());
+                        appTableSearchInput
+                                .setDescription(resolveApplicationMessage(searchInputConfig.getDescription()));
+                        appTableSearchInput.setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputConfig));
+                        appTableSearchInput.setConfigType(ConfigType.MUTABLE_INSTALL);
+                        searchInputList.add(appTableSearchInput);
+                    } else {
+                        if (ConfigUtils.isSetInstall(oldAppTableSearchInput)) {
+                            oldAppTableSearchInput
+                                    .setDescription(resolveApplicationMessage(searchInputConfig.getDescription()));
+                            oldAppTableSearchInput
+                                    .setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputConfig));
+                        } else {
+                            environment().findChildren(oldAppTableSearchInput);
+                        }
+
+                        searchInputList.add(oldAppTableSearchInput);
+                    }
+                }
+            }
+        }
+        appTable.setSearchInputList(searchInputList);
     }
 
     private void populateChildList(final AppForm appForm, AppFormConfig appFormConfig, final Long applicationId,
