@@ -116,7 +116,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     private Map<String, String> preferedColumnNames;
 
     private List<ListData> searchInputFields;
-    
+
     private String blobFieldName;
 
     private String originClassName;
@@ -311,16 +311,20 @@ public class EntityDef extends BaseApplicationEntityDef {
                 if (searchInputFields == null) {
                     searchInputFields = new ArrayList<>();
                     // Fields
-                    for (Listable listable : fieldDefList) {
-                        searchInputFields
-                                .add(new ListData("f:" + listable.getListKey(), "F:" + listable.getListDescription()));
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        EntityFieldDataType dataType = entityFieldDef.getDataType();
+                        if (dataType.isBoolean() || dataType.isNumber() || dataType.isDate() || dataType.isTimestamp()
+                                || dataType.isString()) {
+                            searchInputFields.add(new ListData("f:" + entityFieldDef.getListKey(),
+                                    "[F] " + entityFieldDef.getListDescription()));
+                        }
                     }
 
                     // Generators
                     for (Listable listable : au.getEntityComponents(SearchInputRestrictionGenerator.class,
                             getLongName(), false)) {
-                        searchInputFields
-                                .add(new ListData("g:" + listable.getListKey(), "G:" + listable.getListDescription()));
+                        searchInputFields.add(
+                                new ListData("g:" + listable.getListKey(), "[G] " + listable.getListDescription()));
                     }
 
                     searchInputFields = DataUtils.unmodifiableList(searchInputFields);
@@ -328,7 +332,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             }
         }
 
-        return fieldDefList;
+        return searchInputFields;
     }
 
     public EntitySearchInputDef getEntitySearchInputDef(String name) {

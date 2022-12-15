@@ -106,15 +106,19 @@ public class SearchInputEntry {
         return fieldName != null && fieldName.startsWith("f:");
     }
 
+    public boolean isValidEntry() {
+        return fieldName != null && label != null && widget != null && (!isFieldInput() || condition != null);
+    }
+
     public void normalize() throws UnifyException {
         if (fieldName == null) {
             label = null;
         }
-        
+
         if (label == null) {
             widget = null;
         }
-        
+
         if (widget == null) {
             condition = null;
         }

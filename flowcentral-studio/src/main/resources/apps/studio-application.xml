@@ -2042,12 +2042,12 @@
 			<tab name="indexes" label="$m{studio.appentity.form.indexes}"
 				contentType="child_list" applet="manageAppEntityIndex"
 				reference="indexList" />
-			<tab name="searchInputs" label="$m{studio.appentity.form.searchinputs}"
-				contentType="child_list" applet="manageAppEntitySearchInput"
-				reference="searchInputList" />
 			<tab name="uploads" label="$m{studio.appentity.form.uploads}"
 				contentType="child_list" applet="manageAppEntityUpload"
 				reference="uploadList" />
+			<tab name="searchInputs" label="$m{studio.appentity.form.searchinputs}"
+				contentType="child_list" applet="manageAppEntitySearchInput"
+				reference="searchInputList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"

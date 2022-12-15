@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.Editable;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Search inputs object.
@@ -115,7 +114,7 @@ public class SearchInputs {
         }
 
         SearchInputEntry last = entryList.get(entryList.size() - 1);
-        if (last.isWithLabel()) {
+        if (last.isWithFieldName()) {
             entryList.add(new SearchInputEntry(entityDef, true));
         }
     }
@@ -126,7 +125,7 @@ public class SearchInputs {
             SearchInputsDef.Builder sidb = SearchInputsDef.newBuilder();
             for (int i = 0; i < lim; i++) {
                 SearchInputEntry sie = entryList.get(i);
-                if (!StringUtils.isBlank(sie.getFieldName())) {
+                if (sie.isValidEntry()) {
                     sidb.addSearchInputDef(sie.getCondition(), sie.getFieldName(), sie.getWidget(), sie.getLabel());
                 }
             }
