@@ -102,12 +102,16 @@ public class SearchInputEntry {
         return editable;
     }
 
+    public boolean isFieldInput() {
+        return fieldName != null && fieldName.startsWith("f:");
+    }
+
     public void normalize() throws UnifyException {
-        if (label == null) {
-            fieldName = null;
+        if (fieldName == null) {
+            label = null;
         }
         
-        if (fieldName == null) {
+        if (label == null) {
             widget = null;
         }
         

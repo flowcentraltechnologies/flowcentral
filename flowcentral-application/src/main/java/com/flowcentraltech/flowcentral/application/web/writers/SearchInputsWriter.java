@@ -68,12 +68,12 @@ public class SearchInputsWriter extends AbstractControlWriter {
                 ValueStore lineValueStore = valueStoreList.get(i);
                 SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
                 writer.write("<tr class=\"line\">");
-                writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
-                if (sie.isWithLabel()) {
-                    writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
-                    if (sie.isWithFieldName()) {
+                writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
+                if (sie.isWithFieldName()) {
+                    writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
+                    if (sie.isWithLabel()) {
                         writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
-                        if (sie.isWithWidget()) {
+                        if (sie.isWithWidget() && sie.isFieldInput()) {
                             writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
                         } else {
                             writeBlankValuesItem(writer);
@@ -121,15 +121,15 @@ public class SearchInputsWriter extends AbstractControlWriter {
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
                 SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
-                writeBehavior(writer, searchInputsWidget, lineValueStore, labelCtrl);
-                csb.add(labelCtrl.getId());
-                if (sie.isWithLabel()) {
-                    writeBehavior(writer, searchInputsWidget, lineValueStore, fieldSelectCtrl);
-                    csb.add(fieldSelectCtrl.getId());
-                    if (sie.isWithFieldName()) {
+                writeBehavior(writer, searchInputsWidget, lineValueStore, fieldSelectCtrl);
+                csb.add(fieldSelectCtrl.getId());
+                if (sie.isWithFieldName()) {
+                    writeBehavior(writer, searchInputsWidget, lineValueStore, labelCtrl);
+                    csb.add(labelCtrl.getId());
+                    if (sie.isWithLabel()) {
                         writeBehavior(writer, searchInputsWidget, lineValueStore, widgetCtrl);
                         csb.add(widgetCtrl.getId());
-                        if (sie.isWithWidget()) {
+                        if (sie.isWithWidget() && sie.isFieldInput()) {
                             writeBehavior(writer, searchInputsWidget, lineValueStore, conditionTypeCtrl);
                             csb.add(conditionTypeCtrl.getId());
                         }
