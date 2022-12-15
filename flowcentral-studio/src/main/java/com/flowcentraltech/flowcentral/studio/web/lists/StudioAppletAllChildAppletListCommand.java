@@ -24,7 +24,6 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -58,8 +57,7 @@ public class StudioAppletAllChildAppletListCommand extends AbstractApplicationLi
                         entityNames.add(entityFieldDef.getRefDef().getEntity());
                     }
 
-                    return ApplicationNameUtils.getListableList(
-                            application().findAppApplets(new AppAppletQuery().entityIn(entityNames)));
+                    return au().getApplicationEntities(new AppAppletQuery().entityIn(entityNames));
                 }
             }
         }

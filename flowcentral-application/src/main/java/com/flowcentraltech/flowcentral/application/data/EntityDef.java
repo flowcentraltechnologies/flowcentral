@@ -25,12 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.GeneratorNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
+import com.flowcentraltech.flowcentral.common.business.SearchInputRestrictionGenerator;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -113,6 +115,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private Map<String, String> preferedColumnNames;
 
+    private List<ListData> searchInputFields;
+    
     private String blobFieldName;
 
     private String originClassName;
@@ -298,6 +302,32 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     public List<EntityFieldDef> getFieldDefList() {
+        return fieldDefList;
+    }
+
+    public List<? extends Listable> getSearchInputFieldDefList(AppletUtilities au) throws UnifyException {
+        if (searchInputFields == null) {
+            synchronized (this) {
+                if (searchInputFields == null) {
+                    searchInputFields = new ArrayList<>();
+                    // Fields
+                    for (Listable listable : fieldDefList) {
+                        searchInputFields
+                                .add(new ListData("f:" + listable.getListKey(), "F:" + listable.getListDescription()));
+                    }
+
+                    // Generators
+                    for (Listable listable : au.getEntityComponents(SearchInputRestrictionGenerator.class,
+                            getLongName(), false)) {
+                        searchInputFields
+                                .add(new ListData("g:" + listable.getListKey(), "G:" + listable.getListDescription()));
+                    }
+
+                    searchInputFields = DataUtils.unmodifiableList(searchInputFields);
+                }
+            }
+        }
+
         return fieldDefList;
     }
 

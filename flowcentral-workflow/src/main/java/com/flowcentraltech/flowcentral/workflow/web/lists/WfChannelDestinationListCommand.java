@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.ChannelDirectionType;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -44,9 +43,7 @@ public class WfChannelDestinationListCommand extends AbstractWorkflowListCommand
     public List<? extends Listable> execute(Locale locale, WfChannelDestinationParams params) throws UnifyException {
         if (params.isPresent()) {
             if (ChannelDirectionType.INWARD.equals(params.getDirection())) {
-                return ApplicationNameUtils
-                        .getListableList(getWorkflowModuleService().findWorkflows((WorkflowQuery) new WorkflowQuery()
-                                .entity(params.getEntity()).addSelect("applicationName", "name", "description")));
+                return au().getApplicationEntities(new WorkflowQuery().entity(params.getEntity()));
             }
         }
 

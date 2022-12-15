@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
@@ -63,9 +62,7 @@ public class StudioWfStepNotifTemplateListCommand extends AbstractApplicationLis
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
             WfStep wfStep = workflowModuleService.findLeanWorkflowStepById(longParam.getValue());
-            return ApplicationNameUtils.getListableList(notificationModuleService
-                    .findNotificationTemplates((NotificationTemplateQuery) new NotificationTemplateQuery()
-                            .entity(wfStep.getEntityName()).addSelect("name", "description", "applicationName")));
+            return au().getApplicationEntities(new NotificationTemplateQuery().entity(wfStep.getEntityName()));
         }
 
         return Collections.emptyList();

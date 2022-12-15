@@ -117,8 +117,8 @@ public class FieldSequenceWidget extends AbstractValueListWidget<FieldSequenceEn
     }
 
     @Override
-    protected ValueStore newValue(FieldSequenceEntry setValueEntry, int index) throws UnifyException {
-        return createValueStore(setValueEntry, index);
+    protected ValueStore newValue(FieldSequenceEntry fieldSequenceEntry, int index) throws UnifyException {
+        return createValueStore(fieldSequenceEntry, index);
     }
 
 }

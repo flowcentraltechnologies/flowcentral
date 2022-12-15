@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -82,6 +83,7 @@ import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
@@ -95,6 +97,33 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 public interface AppletUtilities extends UnifyComponent {
 
+    /**
+     * Gets application entities based on supplied query.
+     * 
+     * @param query
+     *              the query to search with
+     * @return list of application entities
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getApplicationEntities(Query<? extends BaseApplicationEntity> query) throws UnifyException;
+    
+    /**
+     * Gets entity components list
+     * 
+     * @param componentType
+     *                            the component type
+     * @param entity
+     *                            the entity name
+     * @param acceptNonReferenced
+     *                            accept non-reference components
+     * @return the list of components
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getEntityComponents(Class<? extends UnifyComponent> componentType, String entity,
+            boolean acceptNonReferenced) throws UnifyException;
+    
     /**
      * Gets a generator instance.
      * 

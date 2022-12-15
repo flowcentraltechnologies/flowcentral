@@ -99,6 +99,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
+import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
@@ -107,6 +108,7 @@ import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyComponent;
+import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -126,6 +128,7 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.format.FormatHelper;
+import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -183,6 +186,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Configurable
     private ReportProvider reportProvider;
+
+    @Configurable
+    private MessageResolver messageResolver;
 
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
@@ -255,6 +261,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         this.reportProvider = reportProvider;
     }
 
+    public final void setMessageResolver(MessageResolver messageResolver) {
+        this.messageResolver = messageResolver;
+    }
+
     @Override
     public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
         return applicationModuleService.getFilterGroupDef(appletName, tabFilter);
@@ -273,6 +283,33 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
+    }
+
+    @Override
+    public List<? extends Listable> getApplicationEntities(final Query<? extends BaseApplicationEntity> query)
+            throws UnifyException {
+        if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
+            final Query<? extends BaseApplicationEntity> _query = query.copy();
+            _query.addSelect("applicationName", "name", "description");
+            List<? extends BaseApplicationEntity> list = environment().listAll(_query);
+            return ApplicationNameUtils.getListableList(list);
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<? extends Listable> getEntityComponents(Class<? extends UnifyComponent> componentType, String entity,
+            boolean acceptNonReferenced) throws UnifyException {
+        List<UnifyComponentConfig> components = DataUtils.unmodifiableList(getComponentConfigs(componentType));
+        if (!DataUtils.isBlank(components)) {
+            return acceptNonReferenced
+                    ? EntityConfigurationUtils.getConfigListableByEntityAcceptNonReferenced(components, entity,
+                            messageResolver)
+                    : EntityConfigurationUtils.getConfigListableByEntity(components, entity, messageResolver);
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
