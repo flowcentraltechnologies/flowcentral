@@ -23,9 +23,9 @@ import java.util.ListIterator;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.Editable;
-import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -64,10 +64,10 @@ public class SearchInputs {
         loadEntryList(searchInputsDef, editable);
     }
 
-    public int addSearchInputEntry(FilterConditionType type, String fieldName, String widget, String label,
+    public int addSearchInputEntry(SearchConditionType condition, String fieldName, String widget, String label,
             Editable editable) throws UnifyException {
         SearchInputEntry sie = new SearchInputEntry(entityDef, editable.isTrue());
-        setFieldAndInputParams(sie, type, fieldName, widget, label);
+        setFieldAndInputParams(sie, condition, fieldName, widget, label);
         entryList.add(sie);
         return entryList.size() - 1;
     }
@@ -138,7 +138,7 @@ public class SearchInputs {
             for (int i = 0; i < lim; i++) {
                 SearchInputEntry sie = entryList.get(i);
                 if (!StringUtils.isBlank(sie.getFieldName())) {
-                    sidb.addSearchInputDef(sie.getType(), sie.getFieldName(), sie.getWidget(), sie.getLabel());
+                    sidb.addSearchInputDef(sie.getCondition(), sie.getFieldName(), sie.getWidget(), sie.getLabel());
                 }
             }
             return sidb.build();
@@ -160,9 +160,9 @@ public class SearchInputs {
         entryList.add(new SearchInputEntry(entityDef, editable.isTrue()));
     }
 
-    private void setFieldAndInputParams(SearchInputEntry sie, FilterConditionType type, String fieldName, String widget,
+    private void setFieldAndInputParams(SearchInputEntry sie, SearchConditionType type, String fieldName, String widget,
             String label) throws UnifyException {
-        sie.setType(type);
+        sie.setCondition(type);
         sie.setFieldName(fieldName);
         sie.setLabel(label);
         sie.setWidget(widget);

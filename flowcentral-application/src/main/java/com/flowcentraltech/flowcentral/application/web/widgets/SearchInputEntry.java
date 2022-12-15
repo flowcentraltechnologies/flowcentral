@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.criterion.FilterConditionType;
 
 /**
  * Search input entry.
@@ -30,7 +30,7 @@ public class SearchInputEntry {
 
     private EntityDef entityDef;
 
-    private FilterConditionType condition;
+    private SearchConditionType condition;
 
     private String fieldName;
 
@@ -53,11 +53,11 @@ public class SearchInputEntry {
         this.fieldName = fieldName;
     }
 
-    public FilterConditionType getCondition() {
+    public SearchConditionType getCondition() {
         return condition;
     }
 
-    public void setCondition(FilterConditionType condition) {
+    public void setCondition(SearchConditionType condition) {
         this.condition = condition;
     }
 

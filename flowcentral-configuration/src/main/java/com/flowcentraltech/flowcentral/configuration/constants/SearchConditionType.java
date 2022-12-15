@@ -32,40 +32,94 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum SearchConditionType implements EnumConst {
 
     EQUALS(
-            FilterConditionType.EQUALS.code()),
+            FilterConditionType.EQUALS.code(),
+            true,
+            true,
+            true),
     LESS_THAN(
-            FilterConditionType.LESS_THAN.code()),
+            FilterConditionType.LESS_THAN.code(),
+            false,
+            true,
+            false),
     LESS_OR_EQUAL(
-            FilterConditionType.LESS_OR_EQUAL.code()),
+            FilterConditionType.LESS_OR_EQUAL.code(),
+            false,
+            true,
+            false),
     GREATER_THAN(
-            FilterConditionType.GREATER_THAN.code()),
+            FilterConditionType.GREATER_THAN.code(),
+            false,
+            true,
+            false),
     GREATER_OR_EQUAL(
-            FilterConditionType.GREATER_OR_EQUAL.code()),
+            FilterConditionType.GREATER_OR_EQUAL.code(),
+            false,
+            true,
+            false),
     BEGINS_WITH(
-            FilterConditionType.BEGINS_WITH.code()),
+            FilterConditionType.BEGINS_WITH.code(),
+            false,
+            false,
+            true),
     ENDS_WITH(
-            FilterConditionType.ENDS_WITH.code()),
+            FilterConditionType.ENDS_WITH.code(),
+            false,
+            false,
+            true),
     LIKE(
-            FilterConditionType.LIKE.code()),
+            FilterConditionType.LIKE.code(),
+            false,
+            false,
+            true),
     ILIKE(
-            FilterConditionType.ILIKE.code()),
+            FilterConditionType.ILIKE.code(),
+            false,
+            false,
+            true),
     NOT_EQUALS(
-            FilterConditionType.NOT_EQUALS.code()),
+            FilterConditionType.NOT_EQUALS.code(),
+            true,
+            true,
+            true),
     NOT_LIKE(
-            FilterConditionType.NOT_LIKE.code()),
+            FilterConditionType.NOT_LIKE.code(),
+            false,
+            false,
+            true),
     NOT_BEGIN_WITH(
-            FilterConditionType.NOT_BEGIN_WITH.code()),
+            FilterConditionType.NOT_BEGIN_WITH.code(),
+            false,
+            false,
+            true),
     NOT_END_WITH(
-            FilterConditionType.NOT_END_WITH.code()),
+            FilterConditionType.NOT_END_WITH.code(),
+            false,
+            false,
+            true),
     IS_NULL(
-            FilterConditionType.IS_NULL.code()),
+            FilterConditionType.IS_NULL.code(),
+            true,
+            true,
+            true),
     IS_NOT_NULL(
-            FilterConditionType.IS_NOT_NULL.code());
+            FilterConditionType.IS_NOT_NULL.code(),
+            true,
+            true,
+            true);
 
     private final String code;
 
-    private SearchConditionType(String code) {
+    private final boolean supportsBoolean;
+
+    private final boolean supportsNumber;
+
+    private final boolean supportsString;
+
+    private SearchConditionType(String code, boolean supportsBoolean, boolean supportsNumber, boolean supportsString) {
         this.code = code;
+        this.supportsBoolean = supportsBoolean;
+        this.supportsNumber = supportsNumber;
+        this.supportsString = supportsString;
     }
 
     @Override
@@ -80,6 +134,18 @@ public enum SearchConditionType implements EnumConst {
     @Override
     public String defaultCode() {
         return EQUALS.code;
+    }
+
+    public boolean supportsBoolean() {
+        return supportsBoolean;
+    }
+
+    public boolean supportsNumber() {
+        return supportsNumber;
+    }
+
+    public boolean supportsString() {
+        return supportsString;
     }
 
     public static SearchConditionType fromCode(String code) {

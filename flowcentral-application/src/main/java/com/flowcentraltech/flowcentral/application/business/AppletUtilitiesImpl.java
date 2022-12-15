@@ -1336,6 +1336,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         final String defaultQuickFilter = _appletDef.getPropValue(String.class,
                 AppletPropertyConstants.SEARCH_TABLE_QUICKFILTER_DEFAULT);
+        
+        final String searchConfigName = _appletDef.getPropValue(String.class,
+                AppletPropertyConstants.SEARCH_TABLE_SEARCHINPUT);
 
         final boolean showBaseRestriction = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SHOW_RESOLVED_BASE_RESTRICTION);
@@ -1349,7 +1352,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
-                _appletDef.getId(), editAction, defaultQuickFilter, searchColumns, entitySearchMode,
+                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
                 isIgnoreParentCondition);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
@@ -1378,6 +1381,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             loadingSearchMode = loadingSearchMode & ~LoadingSearch.SHOW_ACTIONFOOTER;
         }
 
+        final String searchConfigName = _rootAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.SEARCH_TABLE_SEARCHINPUT);
         final int appletSearchColumns = _rootAppletDef.getPropValue(int.class,
                 AppletPropertyConstants.SEARCH_TABLE_SEARCH_COLUMNS);
 
@@ -1387,7 +1392,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
         SectorIcon sectorIcon = getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
-                searchColumns, loadingSearchMode);
+                searchConfigName, searchColumns, loadingSearchMode);
 
         loadingSearch.setEntitySubTitle(_rootAppletDef.getDescription());
         return loadingSearch;

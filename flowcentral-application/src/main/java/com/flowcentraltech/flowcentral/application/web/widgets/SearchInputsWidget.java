@@ -54,6 +54,8 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
                 "!ui-select blankOption:$s{} list:searchinputfieldlist listParams:$l{entityDef} binding:fieldName");
         widgetCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:searchinputfieldwidgetlist listParams:$l{entityDef fieldName} binding:widget");
+        conditionTypeCtrl = (Control) addInternalChildWidget(
+                "!ui-select blankOption:$s{} list:searchinputconditionlist listParams:$l{entityDef fieldName} binding:condition");
         moveUpCtrl = (Control) addInternalChildWidget(
                 "!ui-button styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(

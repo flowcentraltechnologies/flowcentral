@@ -34,7 +34,7 @@ public interface AppletPropertyConstants {
 
     String SEARCH_TABLE = "searchTable";
 
-    String SEARCH_TABLE_INPUT = "searchTable.searchInput";
+    String SEARCH_TABLE_SEARCHINPUT = "searchTable.searchInput";
 
     String SEARCH_TABLE_NEW = "searchTable.new";
 
