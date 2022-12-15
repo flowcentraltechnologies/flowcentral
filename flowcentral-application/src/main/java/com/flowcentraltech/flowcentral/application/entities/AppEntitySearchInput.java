@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -33,8 +34,17 @@ public class AppEntitySearchInput extends BaseConfigNamedEntity {
 
     @ForeignKey(AppEntity.class)
     private Long appEntityId;
+
+    @ListOnly(key = "appEntityId", property = "applicationId")
+    private Long applicationId;
+
+    @ListOnly(key = "appEntityId", property = "applicationName")
+    private String applicationName;
+
+    @ListOnly(key = "appEntityId", property = "name")
+    private String entityName;
     
-    @Child(category = "entity")
+    @Child(category = "entity-searchinput")
     private AppSearchInput searchInput;
 
     public AppEntitySearchInput(String name, String description, String definition) {
@@ -53,6 +63,30 @@ public class AppEntitySearchInput extends BaseConfigNamedEntity {
 
     public void setAppEntityId(Long appEntityId) {
         this.appEntityId = appEntityId;
+    }
+
+    public Long getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(Long applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public AppSearchInput getSearchInput() {

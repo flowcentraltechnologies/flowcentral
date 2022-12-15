@@ -2596,15 +2596,21 @@
 				label="$m{studio.appentitysearchinput.form.basicdetails}"
 				contentType="miniform">
 				<section name="searchInputDetails" columns="type_2">
+					<field name="appEntityId"
+						inputWidget="application.entitysearch"
+						label="$m{application.appentitysearchinput.appentity}" column="0"
+						required="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
+					<field name="configType" inputWidget="application.enumlist"
+						column="1" disabled="true" required="true" />
 					<field name="description" inputWidget="application.text"
 						column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="inputs"
 				label="$m{studio.appentitysearchinput.form.inputs}"
-				reference="app_table" contentType="search_input" />
+				reference="app_entitysearchinput" contentType="search_input" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
