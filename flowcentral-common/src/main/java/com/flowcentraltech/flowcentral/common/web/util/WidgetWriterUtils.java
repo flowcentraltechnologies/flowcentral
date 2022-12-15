@@ -79,7 +79,7 @@ public final class WidgetWriterUtils {
         WriterUtils.registerJSAlias("fux.rigEntitySelect","fux06");  
         WriterUtils.registerJSAlias("fux.rigEntitySearch","fux07");     
         WriterUtils.registerJSAlias("fux.rigEntityTreeTable","fux08");  
-        WriterUtils.registerJSAlias("fux.rigFieldSequence","fux09");  
+        WriterUtils.registerJSAlias("fux.rigLineEntries","fux09");  
         WriterUtils.registerJSAlias("fux.rigFilter","fux0a");  
         WriterUtils.registerJSAlias("fux.rigMiniForm","fux0b");  
         WriterUtils.registerJSAlias("fux.rigSearch","fux0c");  

@@ -102,7 +102,7 @@ public class FieldSequenceWriter extends AbstractControlWriter {
             }
         }
 
-        writer.beginFunction("fux.rigFieldSequence");
+        writer.beginFunction("fux.rigLineEntries");
         writer.writeParam("pId", fieldSequenceWidget.getId());
         writer.writeCommandURLParam("pCmdURL");
         writer.writeParam("pContId", fieldSequenceWidget.getContainerId());

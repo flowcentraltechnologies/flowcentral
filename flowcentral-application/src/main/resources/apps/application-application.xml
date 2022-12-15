@@ -1050,7 +1050,7 @@
 		</entity>
 		<entity name="appSearchInput"
 			description="$m{application.appsearchinput}"
-			label="$m{application.appsearchinputlabel}"
+			label="$m{application.appsearchinput.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppSearchInput">
 			<field name="entityInstId"
 				label="$m{application.appsearchinput.entityinstid}"
