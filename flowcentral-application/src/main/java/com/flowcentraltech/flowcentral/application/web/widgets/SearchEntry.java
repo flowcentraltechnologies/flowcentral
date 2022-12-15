@@ -19,7 +19,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Search entry.
@@ -31,19 +33,33 @@ public class SearchEntry {
 
     private EntityDef entityDef;
 
+    private SearchConditionType conditionType;
+
+    private String label;
+
     private String fieldName;
 
     private String paramField;
 
     private AbstractInput<?> paramInput;
 
-    public SearchEntry(EntityDef entityDef, String fieldName) {
+    public SearchEntry(EntityDef entityDef, String label, String fieldName, SearchConditionType conditionType) {
         this.entityDef = entityDef;
+        this.label = label;
         this.fieldName = fieldName;
+        this.conditionType = conditionType;
+    }
+
+    public String getLabel() {
+        return label;
     }
 
     public String getFieldName() {
         return fieldName;
+    }
+
+    public SearchConditionType getConditionType() {
+        return conditionType;
     }
 
     public EntityDef getEntityDef() {
@@ -66,13 +82,21 @@ public class SearchEntry {
         return paramInput != null;
     }
 
+    public boolean isField() {
+        return !StringUtils.isBlank(fieldName);
+    }
+    
     public void normalize() throws UnifyException {
+        normalize(null);
+    }
+    
+    public void normalize(String widget) throws UnifyException {
+        // TODO Handle when widget is not null
         EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
         paramInput = evalInput(entityFieldDef);
     }
 
-    private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef)
-            throws UnifyException {
+    private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef) throws UnifyException {
         return InputWidgetUtils.newInput(entityFieldDef, false, true);
     }
 

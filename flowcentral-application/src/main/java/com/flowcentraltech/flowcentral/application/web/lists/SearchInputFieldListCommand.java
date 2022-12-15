@@ -19,12 +19,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.AbstractListCommand;
 
 /**
  * Search input field definition list command.
@@ -33,23 +30,16 @@ import com.tcdng.unify.core.list.AbstractListCommand;
  * @since 1.0
  */
 @Component("searchinputfieldlist")
-public class SearchInputFieldListCommand extends AbstractListCommand<EntityDefListParams> {
-
-    @Configurable
-    private AppletUtilities au;
+public class SearchInputFieldListCommand extends AbstractApplicationListCommand<EntityDefListParams> {
 
     public SearchInputFieldListCommand() {
         super(EntityDefListParams.class);
     }
 
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
-    }
-
     @Override
     public List<? extends Listable> execute(Locale locale, EntityDefListParams params) throws UnifyException {
         if (params.isPresent()) {
-            return params.getEntityDef().getSearchInputFieldDefList(au);
+            return params.getEntityDef().getSearchInputFieldDefList(au());
         }
 
         return Collections.emptyList();

@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.criterion.FilterConditionType;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -91,7 +91,7 @@ public class SearchInputsDef implements Listable {
             return this;
         }
 
-        public Builder addSearchInputDef(FilterConditionType type, String fieldName, String widget, String label) {
+        public Builder addSearchInputDef(SearchConditionType type, String fieldName, String widget, String label) {
             searchInputDefList.add(new SearchInputDef(type, fieldName, widget, label));
             return this;
         }

@@ -1,6 +1,6 @@
 package com.flowcentraltech.flowcentral.common.business;
 
-import com.flowcentraltech.flowcentral.common.constants.SearchFieldDataType;
+import com.flowcentraltech.flowcentral.common.constants.SearchInputRestrictionDataType;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
@@ -13,14 +13,14 @@ import com.tcdng.unify.core.UnifyException;
 public abstract class AbstractSearchInputRestrictionGenerator extends AbstractUnifyComponent
         implements SearchInputRestrictionGenerator {
 
-    private final SearchFieldDataType inputType;
+    private final SearchInputRestrictionDataType inputType;
     
-    public AbstractSearchInputRestrictionGenerator(SearchFieldDataType inputType) {
+    public AbstractSearchInputRestrictionGenerator(SearchInputRestrictionDataType inputType) {
         this.inputType = inputType;
     }
 
     @Override
-    public SearchFieldDataType getInputType() {
+    public SearchInputRestrictionDataType getInputType() {
         return inputType;
     }
 

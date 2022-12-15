@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.tcdng.unify.core.criterion.FilterConditionType;
-import com.tcdng.unify.core.util.xml.adapter.FilterConditionTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.SearchConditionTypeXmlAdapter;
 
 /**
  * Search input configuration.
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.util.xml.adapter.FilterConditionTypeXmlAdapter;
  */
 public class SearchInputConfig {
 
-    private FilterConditionType type;
+    private SearchConditionType type;
 
     private String field;
 
@@ -37,13 +37,13 @@ public class SearchInputConfig {
 
     private String label;
 
-    public FilterConditionType getType() {
+    public SearchConditionType getType() {
         return type;
     }
 
-    @XmlJavaTypeAdapter(FilterConditionTypeXmlAdapter.class)
+    @XmlJavaTypeAdapter(SearchConditionTypeXmlAdapter.class)
     @XmlAttribute
-    public void setType(FilterConditionType type) {
+    public void setType(SearchConditionType type) {
         this.type = type;
     }
 

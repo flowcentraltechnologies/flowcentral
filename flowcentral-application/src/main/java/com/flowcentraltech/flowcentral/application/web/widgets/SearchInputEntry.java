@@ -30,7 +30,7 @@ public class SearchInputEntry {
 
     private EntityDef entityDef;
 
-    private FilterConditionType type;
+    private FilterConditionType condition;
 
     private String fieldName;
 
@@ -53,12 +53,12 @@ public class SearchInputEntry {
         this.fieldName = fieldName;
     }
 
-    public FilterConditionType getType() {
-        return type;
+    public FilterConditionType getCondition() {
+        return condition;
     }
 
-    public void setType(FilterConditionType type) {
-        this.type = type;
+    public void setCondition(FilterConditionType condition) {
+        this.condition = condition;
     }
 
     public String getWidget() {
@@ -111,7 +111,7 @@ public class SearchInputEntry {
         }
         
         if (widget == null) {
-            type = null;
+            condition = null;
         }
     }
 

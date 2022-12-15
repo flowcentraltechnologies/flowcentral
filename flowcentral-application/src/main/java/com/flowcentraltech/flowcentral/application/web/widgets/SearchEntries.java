@@ -18,10 +18,15 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.LabelSuggestionDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
@@ -36,26 +41,33 @@ import com.tcdng.unify.core.criterion.Restriction;
  */
 public class SearchEntries {
 
-    private EntityDef entityDef;
+    private final EntityDef entityDef;
 
-    private LabelSuggestionDef labelSuggestion;
+    private final LabelSuggestionDef labelSuggestion;
 
-    private List<SearchEntry> entryList;
+    private final String searchConfigName;
 
     private final int columns;
 
-    public SearchEntries(EntityDef entityDef, LabelSuggestionDef labelSuggestion, int columns) {
+    private List<SearchEntry> entryList;
+
+    public SearchEntries(EntityDef entityDef, LabelSuggestionDef labelSuggestion, String searchConfigName,
+            int columns) {
         this.entityDef = entityDef;
         this.labelSuggestion = labelSuggestion;
+        this.searchConfigName = searchConfigName;
+        this.columns = columns;
+    }
+
+    public SearchEntries(EntityDef entityDef, String searchConfigName, int columns) {
+        this.entityDef = entityDef;
+        this.labelSuggestion = null;
+        this.searchConfigName = searchConfigName;
         this.columns = columns;
     }
 
     public EntityDef getEntityDef() {
         return entityDef;
-    }
-
-    public String getLabelSuggestion(String fieldName) {
-        return labelSuggestion != null ? labelSuggestion.getSuggestedLabel(fieldName) : null;
     }
 
     public List<SearchEntry> getEntryList() {
@@ -88,6 +100,7 @@ public class SearchEntries {
             for (SearchEntry searchEntry : entryList) {
                 Object val = searchEntry.getParamInput().getValue();
                 if (val != null) {
+                    // TODO
                     EntityFieldDef entityFieldDef = searchEntry.getEntityFieldDef();
                     EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
                             ? entityFieldDef.getResolvedTypeFieldDef().getDataType()
@@ -111,12 +124,44 @@ public class SearchEntries {
     public void normalize() throws UnifyException {
         if (entryList == null) {
             entryList = new ArrayList<SearchEntry>();
-            for (EntityFieldDef entityFieldDef : entityDef.getBasicSearchFieldDefList()) {
-                SearchEntry searchEntry = new SearchEntry(entityDef, entityFieldDef.getFieldName());
-                searchEntry.normalize();
-                entryList.add(searchEntry);
+            if (!StringUtils.isBlank(searchConfigName)) {
+                EntitySearchInputDef entitySearchInputDef = entityDef.getEntitySearchInputDef(searchConfigName);
+                for (SearchInputDef searchInputDef : entitySearchInputDef.getSearchInputsDef()
+                        .getSearchInputDefList()) {
+                    if (searchInputDef.getFieldName().startsWith("f:")) {
+                        // Field
+                        final String fieldName = searchInputDef.getFieldName().substring(2);
+                        SearchEntry searchEntry = new SearchEntry(entityDef, searchInputDef.getLabel(), fieldName,
+                                searchInputDef.getType());
+                        searchEntry.normalize(searchInputDef.getWidget());
+                        entryList.add(searchEntry);
+                    } else {
+                        // Generator
+                    }
+                }
+            } else {
+                for (EntityFieldDef entityFieldDef : entityDef.getBasicSearchFieldDefList()) {
+                    String label = getLabelSuggestion(entityFieldDef.getFieldName());
+                    label = label != null ? label
+                            : (entityFieldDef.isWithInputLabel() ? entityFieldDef.getInputLabel()
+                                    : entityFieldDef.getFieldLabel());
+                    EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
+                            ? entityFieldDef.getResolvedTypeFieldDef().getDataType()
+                            : entityFieldDef.getDataType();
+                    SearchConditionType conditionType = EntityFieldDataType.STRING.equals(dataType)
+                            ? SearchConditionType.ILIKE
+                            : SearchConditionType.EQUALS;
+                    SearchEntry searchEntry = new SearchEntry(entityDef, label, entityFieldDef.getFieldName(),
+                            conditionType);
+                    searchEntry.normalize();
+                    entryList.add(searchEntry);
+                }
             }
         }
+    }
+
+    private String getLabelSuggestion(String fieldName) {
+        return labelSuggestion != null ? labelSuggestion.getSuggestedLabel(fieldName) : null;
     }
 
 }

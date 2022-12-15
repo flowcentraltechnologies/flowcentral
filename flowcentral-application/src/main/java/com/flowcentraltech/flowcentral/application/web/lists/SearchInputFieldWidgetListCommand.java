@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -28,10 +27,8 @@ import com.flowcentraltech.flowcentral.common.business.SearchInputRestrictionGen
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.database.Query;
-import com.tcdng.unify.core.list.AbstractListCommand;
 
 /**
  * Search input field widget definition list command.
@@ -40,17 +37,10 @@ import com.tcdng.unify.core.list.AbstractListCommand;
  * @since 1.0
  */
 @Component("searchinputfieldwidgetlist")
-public class SearchInputFieldWidgetListCommand extends AbstractListCommand<EntityDefFieldListParams> {
-
-    @Configurable
-    private AppletUtilities au;
+public class SearchInputFieldWidgetListCommand extends AbstractApplicationListCommand<EntityDefFieldListParams> {
 
     public SearchInputFieldWidgetListCommand() {
         super(EntityDefFieldListParams.class);
-    }
-
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
     }
 
     @SuppressWarnings("unchecked")
@@ -71,11 +61,11 @@ public class SearchInputFieldWidgetListCommand extends AbstractListCommand<Entit
                 type = generator.getInputType().dataType();
             }
 
-            EntityClassDef entityClassDef = au.getEntityClassDef("application.appWidgetType");
+            EntityClassDef entityClassDef = au().getEntityClassDef("application.appWidgetType");
             Query<? extends BaseApplicationEntity> query = Query
                     .of((Class<? extends BaseApplicationEntity>) entityClassDef.getEntityClass());
             ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
-            return au.getApplicationEntities(query);
+            return au().getApplicationEntities(query);
         }
 
         return Collections.emptyList();

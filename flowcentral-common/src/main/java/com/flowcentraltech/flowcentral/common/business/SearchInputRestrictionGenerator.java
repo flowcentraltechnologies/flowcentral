@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.business;
 
-import com.flowcentraltech.flowcentral.common.constants.SearchFieldDataType;
+import com.flowcentraltech.flowcentral.common.constants.SearchInputRestrictionDataType;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -31,7 +31,7 @@ public interface SearchInputRestrictionGenerator extends UnifyComponent {
     /**
      * Gets the search input type for this generator
      */
-    SearchFieldDataType getInputType();
+    SearchInputRestrictionDataType getInputType();
 
     /**
      * Generate restriction for input value

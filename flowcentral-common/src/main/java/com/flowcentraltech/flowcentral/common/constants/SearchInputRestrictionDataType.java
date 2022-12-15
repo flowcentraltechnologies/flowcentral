@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.common.constants;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 
 /**
- * Search field data type.
+ * Search input restriction data type.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum SearchFieldDataType {
+public enum SearchInputRestrictionDataType {
 
     BOOLEAN(
             EntityFieldDataType.BOOLEAN),
@@ -46,7 +46,7 @@ public enum SearchFieldDataType {
 
     private final EntityFieldDataType dataType;
 
-    private SearchFieldDataType(EntityFieldDataType dataType) {
+    private SearchInputRestrictionDataType(EntityFieldDataType dataType) {
         this.dataType = dataType;
     }
 

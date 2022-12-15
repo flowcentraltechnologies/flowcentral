@@ -63,6 +63,7 @@ import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType;
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
@@ -838,9 +839,9 @@ public final class InputWidgetUtils {
                         String label = p[0];
                         String field = p[1];
                         String widget = p[2];
-                        FilterConditionType type = null;
+                        SearchConditionType type = null;
                         if (p.length > 3) {
-                            type = FilterConditionType.fromCode(p[3]);
+                            type = SearchConditionType.fromCode(p[3]);
                         }
                         sidb.addSearchInputDef(type, field, widget, label);
                     }

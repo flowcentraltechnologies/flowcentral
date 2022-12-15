@@ -13,47 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.data;
+package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
- * Search input definition.
+ * Search condition type XML adapter.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SearchInputDef {
+public class SearchConditionTypeXmlAdapter extends AbstractEnumConstXmlAdapter<SearchConditionType> {
 
-    private SearchConditionType type;
-
-    private String fieldName;
-
-    private String widget;
-
-    private String label;
-
-    public SearchInputDef(SearchConditionType type, String fieldName, String widget, String label) {
-        this.type = type;
-        this.fieldName = fieldName;
-        this.widget = widget;
-        this.label = label;
+    public SearchConditionTypeXmlAdapter() {
+        super(SearchConditionType.class);
     }
-
-    public SearchConditionType getType() {
-        return type;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public String getWidget() {
-        return widget;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
 }

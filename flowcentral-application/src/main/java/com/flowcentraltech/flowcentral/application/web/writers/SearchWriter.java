@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchWidget;
@@ -116,11 +115,7 @@ public class SearchWriter extends AbstractControlWriter {
         writer.write("<div class=\"sfpre").write("\">");
         writer.write("<div class=\"sflabel\">");
         writer.write("<span>");
-        EntityFieldDef entityFieldDef = searchEntry.getEntityFieldDef();
-        String suggestedLabel = searchEntries.getLabelSuggestion(entityFieldDef.getFieldName());
-        suggestedLabel = suggestedLabel != null ? suggestedLabel
-                : (entityFieldDef.isWithInputLabel() ? entityFieldDef.getInputLabel() : entityFieldDef.getFieldLabel());
-        writer.writeWithHtmlEscape(suggestedLabel);
+        writer.writeWithHtmlEscape(searchEntry.getLabel());
         if (captionSuffix != null) {
             writer.write(captionSuffix);
         }
