@@ -204,7 +204,7 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             }
         }
 
-        writer.beginFunction("fux.rigFieldSequence");
+        writer.beginFunction("fux.rigLineEntries");
         writer.writeParam("pId", tokenSequenceWidget.getId());
         writer.writeCommandURLParam("pCmdURL");
         writer.writeParam("pContId", tokenSequenceWidget.getContainerId());

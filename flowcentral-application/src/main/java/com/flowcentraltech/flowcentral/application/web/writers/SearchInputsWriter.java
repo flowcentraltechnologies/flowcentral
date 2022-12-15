@@ -19,14 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchInputEntry;
-import com.flowcentraltech.flowcentral.application.web.widgets.SearchInputsEntry;
 import com.flowcentraltech.flowcentral.application.web.widgets.SearchInputsWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
@@ -49,9 +47,6 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writeTagAttributes(writer, searchInputsWidget);
         writer.write(">");
 
-        writer.write("<table style=\"width:100%;height:100%;table-layout:fixed;\">");
-        writer.write("<tr style=\"height:100%;\">");
-
         List<ValueStore> valueStoreList = searchInputsWidget.getValueList();
         if (valueStoreList != null) {
             Control labelCtrl = searchInputsWidget.getLabelCtrl();
@@ -64,52 +59,31 @@ public class SearchInputsWriter extends AbstractControlWriter {
             final int len = valueStoreList.size();
             final int last = len - 1;
 
-            final String typeLabel = resolveSessionMessage("$m{tokensequence.type}");
-            final String textLabel = resolveSessionMessage("$m{tokensequence.text}");
-            final String fieldLabel = resolveSessionMessage("$m{tokensequence.field}");
-            final String usesLabel = resolveSessionMessage("$m{tokensequence.usesformatter}");
-            final String generatorLabel = resolveSessionMessage("$m{tokensequence.usesgenerator}");
-            writer.write("<span class=\"caption\">");
-            writer.write(resolveSessionMessage("$m{tokensequence.editor}"));
-            writer.write("</span>");
-            writer.write("<div class=\"editorbox\" style=\"display:block;width:100%;overflow-y:auto;\">");
+            final String labelLabel = resolveSessionMessage("$m{searchinputs.label}");
+            final String fieldLabel = resolveSessionMessage("$m{searchinputs.field}");
+            final String widgetLabel = resolveSessionMessage("$m{searchinputs.widget}");
+            final String conditionLabel = resolveSessionMessage("$m{searchinputs.condition}");
             writer.write("<table class=\"editor\" style=\"display: block;width:100%;table-layout:fixed;\">");
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
-                SearchInputEntry fso = (SearchInputEntry) lineValueStore.getValueObject();
+                SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
                 writer.write("<tr class=\"line\">");
-                writeValuesItem(writer, lineValueStore, tokenSelectCtrl, typeLabel);
-                if (fso.isWithTokenType()) {
-                    switch (fso.getTokenType()) {
-                        case FORMATTED_PARAM:
-                            writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
-                            if (fso.isWithFieldName()) {
-                                writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel);
-                            } else {
-                                writeBlankValuesItem(writer);
-                            }
-                            break;
-                        case GENERATOR_PARAM:
-                            writeValuesItem(writer, lineValueStore, generatorSelectCtrl, generatorLabel);
+                writeValuesItem(writer, lineValueStore, labelCtrl, labelLabel);
+                if (sie.isWithLabel()) {
+                    writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
+                    if (sie.isWithFieldName()) {
+                        writeValuesItem(writer, lineValueStore, widgetCtrl, widgetLabel);
+                        if (sie.isWithWidget()) {
+                            writeValuesItem(writer, lineValueStore, conditionTypeCtrl, conditionLabel);
+                        } else {
                             writeBlankValuesItem(writer);
-                            break;
-                        case NEWLINE:
-                            writeBlankValuesItem(writer);
-                            writeBlankValuesItem(writer);
-                            break;
-                        case PARAM:
-                            writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
-                            writeBlankValuesItem(writer);
-                            break;
-                        case TEXT:
-                            writeValuesItem(writer, lineValueStore, textCtrl, textLabel);
-                            writeBlankValuesItem(writer);
-                            break;
-                        default:
-                            break;
-
+                        }
+                    } else {
+                        writeBlankValuesItem(writer);
+                        writeBlankValuesItem(writer);
                     }
                 } else {
+                    writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
                 }               
@@ -127,7 +101,6 @@ public class SearchInputsWriter extends AbstractControlWriter {
             }
 
             writer.write("</table>");
-            writer.write("</div>");
         }
 
         writer.write("</div>");
@@ -136,60 +109,42 @@ public class SearchInputsWriter extends AbstractControlWriter {
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
         super.doWriteBehavior(writer, widget);
-        SearchInputsWidget tokenSequenceWidget = (SearchInputsWidget) widget;
-        List<ValueStore> valueStoreList = tokenSequenceWidget.getValueList();
+        SearchInputsWidget searchInputsWidget = (SearchInputsWidget) widget;
+        List<ValueStore> valueStoreList = searchInputsWidget.getValueList();
         List<String> csb = new ArrayList<String>();
         if (valueStoreList != null) {
-            Control tokenSelectCtrl = tokenSequenceWidget.getTokenSelectCtrl();
-            Control fieldSelectCtrl = tokenSequenceWidget.getFieldSelectCtrl();
-            Control paramCtrl = tokenSequenceWidget.getParamCtrl();
-            Control textCtrl = tokenSequenceWidget.getTextCtrl();
-            Control generatorSelectCtrl = tokenSequenceWidget.getGeneratorSelectCtrl();
+            Control labelCtrl = searchInputsWidget.getLabelCtrl();
+            Control fieldSelectCtrl = searchInputsWidget.getFieldSelectCtrl();
+            Control widgetCtrl = searchInputsWidget.getWidgetCtrl();
+            Control conditionTypeCtrl = searchInputsWidget.getConditionTypeCtrl();
             final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
                 ValueStore lineValueStore = valueStoreList.get(i);
-                SearchInputsEntry fso = (SearchInputsEntry) lineValueStore.getValueObject();
-                writeBehavior(writer, tokenSequenceWidget, lineValueStore, tokenSelectCtrl);
-                csb.add(tokenSelectCtrl.getId());
-                if (fso.isWithTokenType()) {
-                    switch (fso.getTokenType()) {
-                        case FORMATTED_PARAM:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, fieldSelectCtrl);
-                            csb.add(fieldSelectCtrl.getId());
-                            if (fso.isWithFieldName()) {
-                                writeBehavior(writer, tokenSequenceWidget, lineValueStore, paramCtrl);
-                                csb.add(paramCtrl.getId());
-                            }
-                            break;
-                        case GENERATOR_PARAM:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, generatorSelectCtrl);
-                            csb.add(generatorSelectCtrl.getId());
-                            break;
-                        case NEWLINE:
-                            break;
-                        case PARAM:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, fieldSelectCtrl);
-                            csb.add(fieldSelectCtrl.getId());
-                            break;
-                        case TEXT:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, textCtrl);
-                            csb.add(textCtrl.getId());
-                            break;
-                        default:
-                            break;
-
+                SearchInputEntry sie = (SearchInputEntry) lineValueStore.getValueObject();
+                writeBehavior(writer, searchInputsWidget, lineValueStore, labelCtrl);
+                csb.add(labelCtrl.getId());
+                if (sie.isWithLabel()) {
+                    writeBehavior(writer, searchInputsWidget, lineValueStore, fieldSelectCtrl);
+                    csb.add(fieldSelectCtrl.getId());
+                    if (sie.isWithFieldName()) {
+                        writeBehavior(writer, searchInputsWidget, lineValueStore, widgetCtrl);
+                        csb.add(widgetCtrl.getId());
+                        if (sie.isWithWidget()) {
+                            writeBehavior(writer, searchInputsWidget, lineValueStore, conditionTypeCtrl);
+                            csb.add(conditionTypeCtrl.getId());
+                        }
                     }
-                }
+                }               
             }
         }
 
-        writer.beginFunction("fux.rigFieldSequence");
-        writer.writeParam("pId", tokenSequenceWidget.getId());
+        writer.beginFunction("fux.rigLineEntries");
+        writer.writeParam("pId", searchInputsWidget.getId());
         writer.writeCommandURLParam("pCmdURL");
-        writer.writeParam("pContId", tokenSequenceWidget.getContainerId());
-        writer.writeParam("pMoveUpId", tokenSequenceWidget.getMoveUpCtrl().getBaseId());
-        writer.writeParam("pMoveDownId", tokenSequenceWidget.getMoveDownCtrl().getBaseId());
-        writer.writeParam("pDelId", tokenSequenceWidget.getDeleteCtrl().getBaseId());
+        writer.writeParam("pContId", searchInputsWidget.getContainerId());
+        writer.writeParam("pMoveUpId", searchInputsWidget.getMoveUpCtrl().getBaseId());
+        writer.writeParam("pMoveDownId", searchInputsWidget.getMoveDownCtrl().getBaseId());
+        writer.writeParam("pDelId", searchInputsWidget.getDeleteCtrl().getBaseId());
         writer.writeParam("pOnChgId", DataUtils.toArray(String.class, csb));
         writer.endFunction();
     }

@@ -450,8 +450,8 @@ fux.rigFilter = function(rgp) {
 	}
 }
 
-/** Field sequence */
-fux.rigFieldSequence = function(rgp) {
+/** Line entries*/
+fux.rigLineEntries = function(rgp) {
 	var id = rgp.pId;
 
 	// Handle on change

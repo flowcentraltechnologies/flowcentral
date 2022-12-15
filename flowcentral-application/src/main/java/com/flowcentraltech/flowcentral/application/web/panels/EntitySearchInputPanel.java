@@ -22,35 +22,35 @@ import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
- * Entity field sequence panel.
+ * Entity search input panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-entityfieldsequencepanel")
-@UplBinding("web/application/upl/entityfieldsequencepanel.upl")
-public class EntityFieldSequencePanel extends AbstractStandalonePanel {
+@Component("fc-entitysearchinputpanel")
+@UplBinding("web/application/upl/entitysearchinputpanel.upl")
+public class EntitySearchInputPanel extends AbstractStandalonePanel {
 
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
 
-        EntityFieldSequence entityFieldSequence = getEntityFieldSequence();
-        setVisible("clearBtn", entityFieldSequence.isClearButtonVisible());
-        setVisible("applyBtn", entityFieldSequence.isApplyButtonVisible());
+        EntitySearchInput entitySearchInput = getEntitySearchInput();
+        setVisible("clearBtn", entitySearchInput.isClearButtonVisible());
+        setVisible("applyBtn", entitySearchInput.isApplyButtonVisible());
     }
 
     @Action
     public void clear() throws UnifyException {
-        getEntityFieldSequence().clear();
+        getEntitySearchInput().clear();
     }
 
     @Action
     public void apply() throws UnifyException {
-        getEntityFieldSequence().save();
+        getEntitySearchInput().save();
     }
 
-    private EntityFieldSequence getEntityFieldSequence() throws UnifyException {
-        return getValue(EntityFieldSequence.class);
+    private EntitySearchInput getEntitySearchInput() throws UnifyException {
+        return getValue(EntitySearchInput.class);
     }
 }
