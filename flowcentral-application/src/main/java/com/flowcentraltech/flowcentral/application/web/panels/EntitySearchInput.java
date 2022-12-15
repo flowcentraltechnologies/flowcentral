@@ -16,13 +16,12 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
-import com.flowcentraltech.flowcentral.application.web.widgets.Filter;
+import com.flowcentraltech.flowcentral.application.web.widgets.SearchInputs;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.Editable;
-import com.tcdng.unify.core.criterion.FilterConditionListType;
 
 /**
  * Entity search input object.
@@ -41,15 +40,11 @@ public class EntitySearchInput extends AbstractPanelFormBinding {
 
     private final EntityDef ownerEntityDef;
 
-    private Filter filter;
+    private SearchInputs searchInputs;
 
     private String category;
 
     private Long ownerInstId;
-
-    private String paramList;
-
-    private FilterConditionListType listType;
 
     public EntitySearchInput(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             EntityDef ownerEntityDef, int mode, boolean ignoreConditionalDisabled) {
@@ -58,8 +53,8 @@ public class EntitySearchInput extends AbstractPanelFormBinding {
         this.mode = mode;
     }
 
-    public Filter getFilter() {
-        return filter;
+    public SearchInputs getSearchInputs() {
+        return searchInputs;
     }
 
     public void setCategory(String category) {
@@ -70,31 +65,22 @@ public class EntitySearchInput extends AbstractPanelFormBinding {
         this.ownerInstId = ownerInstId;
     }
 
-    public void setListType(FilterConditionListType listType) {
-        this.listType = listType;
-    }
-
-    public void setParamList(String paramList) {
-        this.paramList = paramList;
-    }
-
     public void load(EntityDef entityDef) throws UnifyException {
-        FilterDef filterDef = getAppletCtx().au().retrieveFilterDef(category, ownerEntityDef.getLongName(),
-                ownerInstId, null);
-        filter = new Filter(ownerInstId, paramList, entityDef, filterDef, listType,
-                Editable.fromBoolean(isApplyButtonVisible()));
+        SearchInputsDef searchInputsDef = getAppletCtx().au().retrieveSearchInputsDef(category,
+                ownerEntityDef.getLongName(), ownerInstId);
+        searchInputs = new SearchInputs(entityDef, searchInputsDef, Editable.fromBoolean(isApplyButtonVisible()));
     }
 
     public void save() throws UnifyException {
-        if (filter != null) {
-            getAppletCtx().au().saveFilterDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
-                    ownerInstId, filter.getFilterDef(getAppletCtx().au()));
+        if (searchInputs != null) {
+            getAppletCtx().au().saveSearchInputsDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(),
+                    ownerInstId, searchInputs.getSearchInputsDef());
         }
     }
 
     public void clear() throws UnifyException {
-        if (filter != null) {
-            filter.clear();
+        if (searchInputs != null) {
+            searchInputs.clear();
         }
     }
 

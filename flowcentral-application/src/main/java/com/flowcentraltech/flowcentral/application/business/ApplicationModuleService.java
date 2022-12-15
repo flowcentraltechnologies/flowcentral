@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -1226,6 +1227,42 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     void saveParamValuesDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, ParamValuesDef paramValuesDef) throws UnifyException;
+
+
+    /**
+     * Retrieves application search inputs definition for an entity instance.
+     * 
+     * @param category
+     *                        the search inputs category
+     * @param ownerEntityName
+     *                        the entity type long name
+     * @param ownerInstId
+     *                        the entity instance ID
+     * @return the search inputs definition if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SearchInputsDef retrieveSearchInputsDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException;
+
+    /**
+     * Saves application search inputs definition for an entity instance.
+     * 
+     * @param sweepingCommitPolicy
+     *                             sweeping commit policy
+     * @param category
+     *                             the search inputs category
+     * @param ownerEntityName
+     *                             the entity type long name
+     * @param ownerInstId
+     *                             the entity instance ID
+     * @param searchInputsDef
+     *                             the search inputs definition to save
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveSearchInputsDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, SearchInputsDef searchInputsDef) throws UnifyException;
 
     /**
      * Gets an entity description.

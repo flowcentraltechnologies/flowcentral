@@ -137,6 +137,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppPropertyRuleQuery
 import com.flowcentraltech.flowcentral.application.entities.AppPropertySet;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.entities.AppRefQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppSearchInputQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValuesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppSuggestion;
@@ -705,7 +707,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     for (AppEntitySearchInput appEntitySearchInput : appEntity.getSearchInputList()) {
-                        SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(appletUtilities,
+                        SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(
                                 appEntitySearchInput.getName(), appEntitySearchInput.getDescription(),
                                 appEntitySearchInput.getSearchInput());
                         if (searchInputsDef != null) {
@@ -2327,6 +2329,34 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             paramValues.setCategory(category);
             paramValues.setDefinition(CommonInputUtils.getParamValuesDefinition(paramValuesDef));
             environment().create(paramValues);
+        }
+
+        if (sweepingCommitPolicy != null) {
+            sweepingCommitPolicy.bumpAllParentVersions(db(), RecordActionType.UPDATE);
+        }
+    }
+
+    @Override
+    public SearchInputsDef retrieveSearchInputsDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException {
+        final EntityDef entityDef = getEntityDef(ownerEntityName);
+        return InputWidgetUtils.getSearchInputsDef(null, null, environment().find(new AppSearchInputQuery()
+                .category(category).entity(entityDef.getTableName()).entityInstId(ownerInstId)));
+    }
+
+    @Override
+    public void saveSearchInputsDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, SearchInputsDef searchInputsDef) throws UnifyException {
+        final EntityDef entityDef = getEntityDef(ownerEntityName);
+        environment().deleteAll(new AppSearchInputQuery().category(category).entity(entityDef.getTableName())
+                .entityInstId(ownerInstId));
+        if (searchInputsDef != null && !searchInputsDef.isBlank()) {
+            AppSearchInput appSearchInput = new AppSearchInput();
+            appSearchInput.setEntityInstId(ownerInstId);
+            appSearchInput.setEntity(entityDef.getTableName());
+            appSearchInput.setCategory(category);
+            appSearchInput.setDefinition(InputWidgetUtils.getSearchInputDefinition(searchInputsDef));
+            environment().create(appSearchInput);
         }
 
         if (sweepingCommitPolicy != null) {

@@ -42,17 +42,6 @@ public class SearchInputs {
 
     private List<SearchInputEntry> viewEntryList;
 
-    public SearchInputs(EntityDef entityDef) {
-        this(entityDef, Editable.TRUE);
-    }
-
-    public SearchInputs(EntityDef entityDef, Editable rootEditable) {
-        this.entityDef = entityDef;
-        this.entryList = new ArrayList<SearchInputEntry>();
-        this.entryList.add(new SearchInputEntry(entityDef, rootEditable.isTrue()));
-        this.viewEntryList = Collections.unmodifiableList(entryList);
-    }
-
     public SearchInputs(EntityDef entityDef, SearchInputsDef searchInputsDef) throws UnifyException {
         this(entityDef, searchInputsDef, Editable.TRUE);
     }

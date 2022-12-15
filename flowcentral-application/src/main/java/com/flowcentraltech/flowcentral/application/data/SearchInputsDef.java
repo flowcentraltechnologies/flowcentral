@@ -65,6 +65,10 @@ public class SearchInputsDef implements Listable {
         return searchInputDefList;
     }
 
+    public boolean isBlank() {
+        return searchInputDefList == null || searchInputDefList.isEmpty();
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }

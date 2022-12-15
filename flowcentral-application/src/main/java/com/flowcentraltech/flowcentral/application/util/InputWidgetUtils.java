@@ -793,11 +793,11 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static EntitySearchInputConfig getSearchInputConfig(AppletUtilities au,
+    public static EntitySearchInputConfig getSearchInputConfig(
             AppEntitySearchInput appEntitySearchInput) throws UnifyException {
         if (appEntitySearchInput != null) {
             EntitySearchInputConfig entitySearchInputConfig = new EntitySearchInputConfig();
-            InputWidgetUtils.getSearchInputsConfig(au, entitySearchInputConfig, appEntitySearchInput.getName(),
+            InputWidgetUtils.getSearchInputsConfig(entitySearchInputConfig, appEntitySearchInput.getName(),
                     appEntitySearchInput.getDescription(), appEntitySearchInput.getSearchInput());
             return entitySearchInputConfig;
         }
@@ -805,10 +805,10 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static void getSearchInputsConfig(AppletUtilities au, SearchInputsConfig searchInputsConfig, String name,
+    public static void getSearchInputsConfig(SearchInputsConfig searchInputsConfig, String name,
             String description, AppSearchInput appSearchInput) throws UnifyException {
         if (appSearchInput != null) {
-            SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(au, name, description,
+            SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(name, description,
                     appSearchInput);
             searchInputsConfig.setName(name);
             searchInputsConfig.setDescription(description);
@@ -826,8 +826,8 @@ public final class InputWidgetUtils {
         }
     }
 
-    public static SearchInputsDef getSearchInputsDef(AppletUtilities au, String name, String description,
-            AppSearchInput appSearchInput) throws UnifyException {
+    public static SearchInputsDef getSearchInputsDef(String name, String description, AppSearchInput appSearchInput)
+            throws UnifyException {
         if (appSearchInput != null) {
             SearchInputsDef.Builder sidb = SearchInputsDef.newBuilder();
             sidb.name(name).description(description);
@@ -1151,6 +1151,34 @@ public final class InputWidgetUtils {
                     bw.write(']');
                     if (searchInputConfig.getType() != null) {
                         bw.write(searchInputConfig.getType().code());
+                        bw.write(']');
+                    }
+                    bw.newLine();
+                }
+            }
+
+            bw.flush();
+            result = sw.toString();
+        } catch (IOException e) {
+            throw new UnifyOperationException(e);
+        }
+
+        return result;
+    }
+
+    public static String getSearchInputDefinition(SearchInputsDef searchInputsDef) throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
+            if (!searchInputsDef.isBlank()) {
+                for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
+                    bw.write(searchInputDef.getLabel());
+                    bw.write(']');
+                    bw.write(searchInputDef.getFieldName());
+                    bw.write(']');
+                    bw.write(searchInputDef.getWidget());
+                    bw.write(']');
+                    if (searchInputDef.getType() != null) {
+                        bw.write(searchInputDef.getType().code());
                         bw.write(']');
                     }
                     bw.newLine();

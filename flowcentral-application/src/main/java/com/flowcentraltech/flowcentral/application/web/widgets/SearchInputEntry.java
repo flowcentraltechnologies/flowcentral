@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Search input entry.
@@ -113,6 +114,11 @@ public class SearchInputEntry {
         if (widget == null) {
             condition = null;
         }
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

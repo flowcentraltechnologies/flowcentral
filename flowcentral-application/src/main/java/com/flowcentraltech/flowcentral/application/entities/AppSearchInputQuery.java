@@ -23,10 +23,10 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class AppSearchInputQuery extends BaseAuditEntityQuery<AppFilter> {
+public class AppSearchInputQuery extends BaseAuditEntityQuery<AppSearchInput> {
 
     public AppSearchInputQuery() {
-        super(AppFilter.class);
+        super(AppSearchInput.class);
     }
 
     public AppSearchInputQuery entityInstId(Long entityInstId) {

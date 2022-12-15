@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
@@ -107,7 +108,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     List<? extends Listable> getApplicationEntities(Query<? extends BaseApplicationEntity> query) throws UnifyException;
-    
+
     /**
      * Gets entity components list
      * 
@@ -123,7 +124,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     List<? extends Listable> getEntityComponents(Class<? extends UnifyComponent> componentType, String entity,
             boolean acceptNonReferenced) throws UnifyException;
-    
+
     /**
      * Gets a generator instance.
      * 
@@ -913,6 +914,41 @@ public interface AppletUtilities extends UnifyComponent {
             Long ownerInstId, ParamValuesDef paramValuesDef) throws UnifyException;
 
     /**
+     * Retrieves application search inputs definition for an entity instance.
+     * 
+     * @param category
+     *                        the search inputs category
+     * @param ownerEntityName
+     *                        the entity type long name
+     * @param ownerInstId
+     *                        the entity instance ID
+     * @return the search inputs definition if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SearchInputsDef retrieveSearchInputsDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException;
+
+    /**
+     * Saves application search inputs definition for an entity instance.
+     * 
+     * @param sweepingCommitPolicy
+     *                             sweeping commit policy
+     * @param category
+     *                             the search inputs category
+     * @param ownerEntityName
+     *                             the entity type long name
+     * @param ownerInstId
+     *                             the entity instance ID
+     * @param searchInputsDef
+     *                             the search inputs definition to save
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveSearchInputsDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, SearchInputsDef searchInputsDef) throws UnifyException;
+
+    /**
      * Constructs a listing form.
      * 
      * @param applet
@@ -1180,7 +1216,7 @@ public interface AppletUtilities extends UnifyComponent {
     EntitySearchInput constructEntitySearchInput(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entitySearchInputMode, boolean isIgnoreParentCondition)
             throws UnifyException;
-    
+
     /**
      * Constructs entity field sequence.
      * 
