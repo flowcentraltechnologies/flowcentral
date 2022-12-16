@@ -86,7 +86,7 @@
 		<sysParameter code="APP-0019" defaultVal="false"
 			description="$m{application.sysparam.showresolvedbaserestriction}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
-		<sysParameter code="APP-001A" defaultVal="false"
+		<sysParameter code="APP-001A" defaultVal="true"
 			description="$m{application.sysparam.searchentryshowconditions}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>

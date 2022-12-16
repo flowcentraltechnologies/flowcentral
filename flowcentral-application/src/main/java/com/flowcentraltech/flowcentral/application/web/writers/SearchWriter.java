@@ -114,13 +114,21 @@ public class SearchWriter extends AbstractControlWriter {
         // Label
         writer.write("<div class=\"sfpre").write("\">");
         writer.write("<div class=\"sflabel\">");
-        writer.write("<span>");
+        writer.write("<span class=\"sfbasetxt\">");
         writer.writeWithHtmlEscape(searchEntry.getLabel());
         if (captionSuffix != null) {
             writer.write(captionSuffix);
         }
 
         writer.write("</span>");
+        if (searchEntries.isShowConditions()) {
+            writer.write("<span class=\"sfcondtxt\">");
+            String symbol = searchEntry.isFieldEntry()
+                    ? getSessionMessage(searchEntry.getConditionType().filterType().labelKey())
+                    : getSessionMessage("searchwriter.generated");
+            writer.writeWithHtmlEscape(symbol);
+            writer.write("</span>");
+        }
         writer.write("</div>");
         writer.write("</div>");
 
@@ -143,7 +151,7 @@ public class SearchWriter extends AbstractControlWriter {
         ctrl.setValueStore(lineValueStore);
         writer.writeBehavior(ctrl);
         addPageAlias(searchWidget.getId(), ctrl);
-        
+
         if (!getRequestContextUtil().isFocusOnWidget()) {
             ChildWidgetInfo info = new ArrayList<ChildWidgetInfo>(ctrl.getChildWidgetInfos()).get(0);
             final String cId = info.getWidget().isUseFacadeFocus() ? info.getWidget().getFacadeId()
