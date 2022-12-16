@@ -49,7 +49,7 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
-        labelCtrl = (Control) addInternalChildWidget("!ui-alphanumeric maxLen:64 space:true binding:label");
+        labelCtrl = (Control) addInternalChildWidget("!ui-alphanumeric maxLen:64 space:true special:true binding:label");
         fieldSelectCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:searchinputfieldlist listParams:$l{entityDef} binding:fieldName");
         widgetCtrl = (Control) addInternalChildWidget(
