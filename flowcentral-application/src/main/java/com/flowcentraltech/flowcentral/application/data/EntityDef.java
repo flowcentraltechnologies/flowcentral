@@ -312,7 +312,9 @@ public class EntityDef extends BaseApplicationEntityDef {
                     searchInputFields = new ArrayList<>();
                     // Fields
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
-                        EntityFieldDataType dataType = entityFieldDef.getDataType();
+                        EntityFieldDataType dataType = entityFieldDef.isWithResolvedTypeFieldDef()
+                                ? entityFieldDef.getResolvedTypeFieldDef().getDataType()
+                                : entityFieldDef.getDataType();
                         if (dataType.isBoolean() || dataType.isNumber() || dataType.isDate() || dataType.isTimestamp()
                                 || dataType.isString()) {
                             searchInputFields.add(new ListData("f:" + entityFieldDef.getListKey(),
