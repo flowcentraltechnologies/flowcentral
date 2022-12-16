@@ -95,16 +95,6 @@ public enum SearchConditionType implements EnumConst {
             FilterConditionType.NOT_END_WITH.code(),
             false,
             false,
-            true),
-    IS_NULL(
-            FilterConditionType.IS_NULL.code(),
-            true,
-            true,
-            true),
-    IS_NOT_NULL(
-            FilterConditionType.IS_NOT_NULL.code(),
-            true,
-            true,
             true);
 
     private final String code;

@@ -72,4 +72,6 @@ public interface ApplicationModuleSysParamConstants {
     String ENABLE_HIGH_LATENCY_INDICATION = "APP-0018";
 
     String SHOW_RESOLVED_BASE_RESTRICTION = "APP-0019";
+    
+    String SEARCH_ENTRY_SHOW_CONDITIONS = "APP-001A";
 }

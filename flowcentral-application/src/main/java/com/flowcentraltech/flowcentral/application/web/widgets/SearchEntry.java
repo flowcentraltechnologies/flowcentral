@@ -16,7 +16,9 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
@@ -29,7 +31,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SearchEntry {
+public class SearchEntry implements EntityFieldAttributes {
 
     private EntityDef entityDef;
 
@@ -38,6 +40,8 @@ public class SearchEntry {
     private String label;
 
     private String fieldName;
+
+    private String generator;
 
     private String paramField;
 
@@ -50,12 +54,57 @@ public class SearchEntry {
         this.conditionType = conditionType;
     }
 
+    public SearchEntry(EntityDef entityDef, String label, String generator) {
+        this.entityDef = entityDef;
+        this.label = label;
+        this.generator = generator;
+    }
+
+    @Override
+    public String getSuggestionType() {
+        return null;
+    }
+
+    @Override
+    public String getReferences() {
+        return null;
+    }
+
+    @Override
+    public int getMinLen() {
+        return 0;
+    }
+
+    @Override
+    public int getMaxLen() {
+        return 0;
+    }
+
+    @Override
+    public int getPrecision() {
+        return 0;
+    }
+
+    @Override
+    public int getScale() {
+        return 0;
+    }
+
+    @Override
+    public boolean isAllowNegative() {
+        return false;
+    }
+
     public String getLabel() {
         return label;
     }
 
     public String getFieldName() {
         return fieldName;
+    }
+
+    public String getGenerator() {
+        return generator;
     }
 
     public SearchConditionType getConditionType() {
@@ -82,18 +131,25 @@ public class SearchEntry {
         return paramInput != null;
     }
 
-    public boolean isField() {
+    public boolean isFieldEntry() {
         return !StringUtils.isBlank(fieldName);
+    }
+
+    public boolean isGeneratorEntry() {
+        return !StringUtils.isBlank(generator);
     }
     
     public void normalize() throws UnifyException {
         normalize(null);
     }
     
-    public void normalize(String widget) throws UnifyException {
-        // TODO Handle when widget is not null
-        EntityFieldDef entityFieldDef = entityDef.getFieldDef(fieldName);
-        paramInput = evalInput(entityFieldDef);
+    public void normalize(WidgetTypeDef widgetTypeDef) throws UnifyException {
+        if (widgetTypeDef != null) {
+            EntityFieldAttributes efa = isFieldEntry() ? getEntityFieldDef() : this;
+            paramInput = InputWidgetUtils.newInput(widgetTypeDef, efa);
+        } else {
+            paramInput = evalInput(getEntityFieldDef());
+        }
     }
 
     private AbstractInput<?> evalInput(EntityFieldDef entityFieldDef) throws UnifyException {
