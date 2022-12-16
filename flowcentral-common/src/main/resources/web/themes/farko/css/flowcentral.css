@@ -515,12 +515,12 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-search .sfcol {display:table-cell; vertical-align: top;}
 .fc-search .sffield {display:table;width:100%;padding:2px 2px;border-collapse:initial;}
 .fc-search .sffieldrow {display:table-row;}
-.fc-search .sfpre {display:table-cell;width:72px;vertical-align:top;}
+.fc-search .sfpre {display:table-cell;width:78px;vertical-align:top;}
 .fc-search .sfmid {display:table-cell;}
 .fc-search .sfcon {}
 .fc-search .sflabel {text-align:right;}
 .fc-search .sfbasetxt {display:inline-block; padding-right:3px;font-size: 7pt;font-weight: bold;color: #262c33;}
-.fc-search .sfcondtxt {display:block; color:#808080;font-style: italic;font-size: 7pt;}
+.fc-search .sfcondtxt {display:block; padding-right:2px;color:#808080;font-style: italic;font-size: 7pt;}
 .fc-search .sflabel .mfreq {width:9px; padding-right:4px;}
 .fc-search .sfcontent {}
 
