@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.application.data.PropertyListDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -266,7 +267,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     String getApplicationName(Long applicationId) throws UnifyException;
-    
+
     /**
      * Gets an application applet entity.
      * 
@@ -282,7 +283,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Gets an application table entity.
      * 
      * @param appTableId
-     *                    the application table ID
+     *                   the application table ID
      * @return the entity name
      * @throws UnifyException
      *                        if an error occurs
@@ -314,6 +315,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppAppletSetValues> findAppAppletSetValues(Long appAppletId) throws UnifyException;
 
     /**
+     * Finds application applet search inputs.
+     * 
+     * @param appAppletId
+     *                    the application applet ID
+     * @return list of applet search inputs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findAppAppletSearchInputsListable(Long appAppletId) throws UnifyException;
+
+    /**
      * Finds application applet filters.
      * 
      * @param appAppletId
@@ -322,7 +334,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<AppAppletFilter> findAppAppletFilters(Long appAppletId) throws UnifyException;
+    List<? extends Listable> findAppAppletFiltersListable(Long appAppletId) throws UnifyException;
 
     /**
      * Finds application applet quick filters.
@@ -339,12 +351,12 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Finds application applet filters.
      * 
      * @param appAppletName
-     *                    the application applet name
+     *                      the application applet name
      * @return list of applet filters
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<AppAppletFilter> findAppAppletFilters(String appAppletName) throws UnifyException;
+    List<? extends Listable> findAppAppletFiltersListable(String appAppletName) throws UnifyException;
 
     /**
      * Finds application applet filters.
@@ -458,24 +470,24 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppEntityField> findFormAppEntityFields(Long formId) throws UnifyException;
 
     /**
-      * Finds a set of child application entities.
-      * 
-      * @param entityName
-      *                   the entity name
-      * @return set of child application entity long names
-      * @throws UnifyException
-      *                        if an error occurs
-      */
-     Set<String> findChildAppEntities(String entityName) throws UnifyException;
+     * Finds a set of child application entities.
+     * 
+     * @param entityName
+     *                   the entity name
+     * @return set of child application entity long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Set<String> findChildAppEntities(String entityName) throws UnifyException;
 
-     /**
-       * Finds a set of BLOB application entities.
-       * 
-       * @return set of BLOB application entity long names
-       * @throws UnifyException
-       *                        if an error occurs
-       */
-      Set<String> findBlobEntities(String entityName) throws UnifyException;
+    /**
+     * Finds a set of BLOB application entities.
+     * 
+     * @return set of BLOB application entity long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Set<String> findBlobEntities(String entityName) throws UnifyException;
 
     /**
      * Resolves entity references.
@@ -570,9 +582,9 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Finds related application form elements by form ID
      * 
      * @param appFormId
-     *               the application form ID
+     *                  the application form ID
      * @param type
-     *               the element type
+     *                  the element type
      * @return list of application form elements
      * @throws UnifyException
      *                        if an error occurs
@@ -582,12 +594,14 @@ public interface ApplicationModuleService extends FlowCentralService {
     /**
      * Finds application form entity name.
      * 
-     * @param appFormId the application form ID
+     * @param appFormId
+     *                  the application form ID
      * @return the entity long name
-     * @throws UnifyException if an error occurs
+     * @throws UnifyException
+     *                        if an error occurs
      */
     String findAppFormEntityLongName(Long appFormId) throws UnifyException;
-    
+
     /**
      * Finds related application form elements for specified application form state
      * policy.
@@ -683,8 +697,8 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends BaseApplicationEntity> List<Long> findCustomAppComponentIdList(String applicationName, Class<T> componentClazz)
-            throws UnifyException;
+    <T extends BaseApplicationEntity> List<Long> findCustomAppComponentIdList(String applicationName,
+            Class<T> componentClazz) throws UnifyException;
 
     /**
      * Gets application definition.
@@ -700,7 +714,8 @@ public interface ApplicationModuleService extends FlowCentralService {
     /**
      * Gets application menu definitions.
      * 
-     * @param appletFilter optional applet filter
+     * @param appletFilter
+     *                     optional applet filter
      * @return the application menu definition list
      * @throws UnifyException
      *                        if an error occurs
@@ -733,7 +748,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Gets a application applet definition.
      * 
      * @param appAppletId
-     *                   the applet ID
+     *                    the applet ID
      * @return the applet definition
      * @throws UnifyException
      *                        if an error occurs
@@ -778,7 +793,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Gets a application suggestion type.
      * 
      * @param suggestionTypeName
-     *                   the suggestion type long name
+     *                           the suggestion type long name
      * @return the suggestion types definition
      * @throws UnifyException
      *                        if an error occurs
@@ -789,7 +804,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Finds a suggestion type by ID.
      * 
      * @param suggestionTypeId
-     *                     the suggestion type ID
+     *                         the suggestion type ID
      * @return the application suggestion type record
      * @throws UnifyException
      *                        if suggestion type with ID is not found. If an error
@@ -851,7 +866,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<Class<?>> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException;
-    
+
     /**
      * Gets a application entity class definition.
      * 
@@ -1106,7 +1121,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     void saveFieldSequenceDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, FieldSequenceDef fieldSequenceDef) throws UnifyException;
-    
+
     /**
      * Retrieves application widget rules definition for an entity instance.
      * 
@@ -1213,13 +1228,49 @@ public interface ApplicationModuleService extends FlowCentralService {
     void saveParamValuesDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, ParamValuesDef paramValuesDef) throws UnifyException;
 
+
+    /**
+     * Retrieves application search inputs definition for an entity instance.
+     * 
+     * @param category
+     *                        the search inputs category
+     * @param ownerEntityName
+     *                        the entity type long name
+     * @param ownerInstId
+     *                        the entity instance ID
+     * @return the search inputs definition if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SearchInputsDef retrieveSearchInputsDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException;
+
+    /**
+     * Saves application search inputs definition for an entity instance.
+     * 
+     * @param sweepingCommitPolicy
+     *                             sweeping commit policy
+     * @param category
+     *                             the search inputs category
+     * @param ownerEntityName
+     *                             the entity type long name
+     * @param ownerInstId
+     *                             the entity instance ID
+     * @param searchInputsDef
+     *                             the search inputs definition to save
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveSearchInputsDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, SearchInputsDef searchInputsDef) throws UnifyException;
+
     /**
      * Gets an entity description.
      * 
      * @param refLongName
-     *                       the entity reference long name
+     *                    the entity reference long name
      * @param entityId
-     *                       the entity ID
+     *                    the entity ID
      * @return the entity description
      * @throws UnifyException
      *                        if an error occurs

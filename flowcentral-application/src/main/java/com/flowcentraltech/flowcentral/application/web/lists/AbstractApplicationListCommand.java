@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.lists;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.tcdng.unify.core.UnifyException;
@@ -37,18 +38,22 @@ import com.tcdng.unify.core.util.DataUtils;
 public abstract class AbstractApplicationListCommand<T extends ListParam> extends AbstractFlowCentralListCommand<T> {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities au;
 
     public AbstractApplicationListCommand(Class<T> paramType) {
         super(paramType);
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
+    }
+
+    protected AppletUtilities au() {
+        return au;
     }
 
     protected ApplicationModuleService application() {
-        return applicationModuleService;
+        return au.application();
     }
 
     protected List<? extends Listable> getListables(List<? extends Entity> srcList, String descField)

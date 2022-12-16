@@ -41,17 +41,6 @@ public class FieldSequence {
 
     private List<FieldSequenceEntry> viewEntryList;
 
-    public FieldSequence(EntityDef entityDef) {
-        this(entityDef, Editable.TRUE);
-    }
-
-    public FieldSequence(EntityDef entityDef, Editable rootEditable) {
-        this.entityDef = entityDef;
-        this.entryList = new ArrayList<FieldSequenceEntry>();
-        this.entryList.add(new FieldSequenceEntry(entityDef, rootEditable.isTrue()));
-        this.viewEntryList = Collections.unmodifiableList(entryList);
-    }
-
     public FieldSequence(EntityDef entityDef, FieldSequenceDef fieldSequenceDef) throws UnifyException {
         this(entityDef, fieldSequenceDef, Editable.TRUE);
     }
@@ -65,9 +54,9 @@ public class FieldSequence {
     }
 
     public int addFieldSequenceEntry(String fieldName, String param, Editable editable) throws UnifyException {
-        FieldSequenceEntry svo = new FieldSequenceEntry(entityDef, editable.isTrue());
-        setFieldAndInputParams(svo, fieldName, param);
-        entryList.add(svo);
+        FieldSequenceEntry fse = new FieldSequenceEntry(entityDef, editable.isTrue());
+        setFieldAndInputParams(fse, fieldName, param);
+        entryList.add(fse);
         return entryList.size() - 1;
     }
 
@@ -77,15 +66,15 @@ public class FieldSequence {
 
     public void moveUpEntry(int index) throws UnifyException {
         if (index > 0) {
-            FieldSequenceEntry svo = entryList.remove(index);
-            entryList.add(index - 1, svo);
+            FieldSequenceEntry fse = entryList.remove(index);
+            entryList.add(index - 1, fse);
         }
     }
 
     public void moveDownEntry(int index) throws UnifyException {
         if (index < entryList.size() - 2) {
-            FieldSequenceEntry svo = entryList.remove(index);
-            entryList.add(index + 1, svo);
+            FieldSequenceEntry fse = entryList.remove(index);
+            entryList.add(index + 1, fse);
         }
     }
 

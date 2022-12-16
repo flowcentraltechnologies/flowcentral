@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
@@ -53,9 +52,7 @@ public class WfEditNotifTemplateListCommand extends AbstractApplicationListComma
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
-            return ApplicationNameUtils.getListableList(notificationModuleService
-                    .findNotificationTemplates((NotificationTemplateQuery) new NotificationTemplateQuery()
-                            .entity(param.getValue()).addSelect("name", "description", "applicationName")));
+            return au().getApplicationEntities(new NotificationTemplateQuery().entity(param.getValue()));
         }
 
         return Collections.emptyList();

@@ -49,8 +49,10 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
         @ResultMapping(name = "forwardtohome", response = { "!forwardresponse path:$x{application.web.home}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
                 response = { "!showpopupresponse popup:$s{textTemplatePopup}" }),
-        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_EDIT,
-                response = { "!showpopupresponse popup:$s{quickEditPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_FORM_EDIT,
+                response = { "!showpopupresponse popup:$s{quickFormEditPopup}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_TABLE_EDIT,
+                response = { "!showpopupresponse popup:$s{quickTableEditPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
                 response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
 public class ApplicationStudioController extends AbstractFlowCentralPageController<ApplicationStudioPageBean> {

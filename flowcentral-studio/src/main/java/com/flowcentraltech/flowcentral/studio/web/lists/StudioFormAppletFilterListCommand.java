@@ -16,19 +16,15 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.StringParam;
-import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Studio form applet filter list command
@@ -46,14 +42,7 @@ public class StudioFormAppletFilterListCommand extends AbstractApplicationListCo
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
         if (param.isPresent()) {
-            List<AppAppletFilter> filterList = application().findAppAppletFilters(param.getValue());
-            if (!DataUtils.isBlank(filterList)) {
-                List<ListData> list = new ArrayList<ListData>();
-                for (AppAppletFilter filter : filterList) {
-                    list.add(new ListData(filter.getName(), filter.getDescription()));
-                }
-                return list;
-            }
+            return application().findAppAppletFiltersListable(param.getValue());
         }
 
         return Collections.emptyList();

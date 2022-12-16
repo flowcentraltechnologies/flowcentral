@@ -103,7 +103,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private String appTableActionPolicy;
 
     private ButtonGroupInfo appTableActionButtonInfo;
-    
+
     private OwnershipType saveFilterScope;
 
     private String appAppletFilterName;
@@ -124,12 +124,14 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, TableDef tableDef, Long appAppletId, String editAction, String appAppletFilterName,
-            int columns, int mode, boolean ignoreConditionalDisabled) throws UnifyException {
+            String appAppletSearchConfigName, int columns, int mode, boolean showConditions,
+            boolean ignoreConditionalDisabled) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
         this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 FilterConditionListType.IMMEDIATE_FIELD);
-        this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), columns);
+        this.searchEntries = new SearchEntries(ctx.au(), tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
+                appAppletSearchConfigName, columns, showConditions);
         this.entityTable = new EntityTable(ctx.au(), tableDef, null);
         this.appAppletFilterName = appAppletFilterName;
         this.appAppletId = appAppletId;
@@ -244,7 +246,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public void setAppAppletFilterName(String appAppletFilterName) {
-        this.appAppletFilterName= appAppletFilterName;
+        this.appAppletFilterName = appAppletFilterName;
     }
 
     public String getEditAction() {
@@ -369,8 +371,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
         if (baseFilterDef != null || restriction != null) {
             And and = new And();
             if (baseFilterDef != null) {
-                and.add(baseFilterDef.getRestriction(entityFilter.getEntityDef(),
-                        null, getAppletCtx().au().getNow()));
+                and.add(baseFilterDef.getRestriction(entityFilter.getEntityDef(), null, getAppletCtx().au().getNow()));
             }
 
             if (restriction != null) {
@@ -399,7 +400,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public boolean isShowBaseFilter() {
         return showBaseRestriction && isWithBaseFilter();
     }
-    
+
     public void applyQuickFilter() throws UnifyException {
         localApplyQuickFilter();
         applyFilterToSearch();

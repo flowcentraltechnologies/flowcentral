@@ -450,8 +450,8 @@ fux.rigFilter = function(rgp) {
 	}
 }
 
-/** Field sequence */
-fux.rigFieldSequence = function(rgp) {
+/** Line entries*/
+fux.rigLineEntries = function(rgp) {
 	var id = rgp.pId;
 
 	// Handle on change
@@ -905,7 +905,7 @@ fux.init = function() {
 	ux.setfn(fux.rigEntitySelect,"fux06");  
 	ux.setfn(fux.rigEntitySearch,"fux07");     
 	ux.setfn(fux.rigEntityTreeTable,"fux08");  
-	ux.setfn(fux.rigFieldSequence,"fux09");  
+	ux.setfn(fux.rigLineEntries,"fux09");  
 	ux.setfn(fux.rigFilter,"fux0a");  
 	ux.setfn(fux.rigMiniForm,"fux0b");  
 	ux.setfn(fux.rigSearch,"fux0c");  

@@ -46,6 +46,8 @@ public enum TabContentType implements EnumConst {
             "PMV"),
     PROPERTY_LIST(
             "PRL"),
+    SEARCH_INPUT(
+            "SCH"),
     SET_VALUES(
             "STV"),
     WIDGET_RULES(
@@ -70,7 +72,7 @@ public enum TabContentType implements EnumConst {
     public boolean isChildOrChildList() {
         return this.equals(CHILD) || this.equals(CHILD_LIST);
     }
-    
+
     public boolean isMiniForm() {
         return this.equals(MINIFORM) || this.equals(MINIFORM_CHANGELOG);
     }

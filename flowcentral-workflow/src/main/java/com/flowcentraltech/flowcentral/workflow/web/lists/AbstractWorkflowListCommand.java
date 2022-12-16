@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.web.lists;
 
-import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
+import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.list.ListParam;
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.list.ListParam;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractWorkflowListCommand<T extends ListParam> extends AbstractFlowCentralListCommand<T> {
+public abstract class AbstractWorkflowListCommand<T extends ListParam> extends AbstractApplicationListCommand<T> {
 
     @Configurable
     private WorkflowModuleService workflowModuleService;

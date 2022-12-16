@@ -513,11 +513,17 @@
 		<reference name="appEntityUploadRef"
 			description="$m{application.appentityupload.reference}"
 			entity="appEntityUpload" searchField="description" />
+		<reference name="appEntitySearchInputRef"
+			description="$m{application.appentitysearchinput.reference}"
+			entity="appEntitySearchInput" searchField="description" />
 		<reference name="appRefRef"
 			description="$m{application.appref.reference}" entity="appRef"
 			searchField="description" />
 		<reference name="appFilterRef"
 			description="$m{application.appfilter.reference}" entity="appFilter"
+			searchField="description" />
+		<reference name="appSearchInputRef"
+			description="$m{application.appsearchinput.reference}" entity="appSearchInput"
 			searchField="description" />
 		<reference name="appFieldSequenceRef"
 			description="$m{application.appfieldsequence.reference}"
@@ -811,6 +817,9 @@
 			<field name="uploadList"
 				label="$m{application.appentity.uploads}" type="child_list"
 				references="appEntityUploadRef" />
+			<field name="searchInputList"
+				label="$m{application.appentity.searchinputs}" type="child_list"
+				references="appEntitySearchInputRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appentity.uc.name}" fieldList="name" />
 			<uniqueConstraint name="descUc"
@@ -976,6 +985,23 @@
 				label="$m{application.appentityupload.fieldsequence}" type="child"
 				category="table" references="appFieldSequenceRef" />
 		</entity>
+		<entity name="appEntitySearchInput"
+			description="$m{application.appentitysearchinput}"
+			label="$m{application.appentitysearchinput.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput">
+			<field name="appEntityId"
+				label="$m{application.appentitysearchinput.appentityid}" type="ref"
+				references="appEntityRef" inputWidget="application.entitylist" />
+			<field name="searchInput"
+				label="$m{application.appentitysearchinput.searchinput}" type="child"
+				category="table" references="appSearchInputRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appentitysearchinput.uc.name}"
+				fieldList="appEntityId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{application.appentitysearchinput.uc.description}"
+				fieldList="appEntityId,description" />
+		</entity>
 		<entity name="appRef" description="$m{application.appref}"
 			label="$m{application.appref.label}"
 			type="com.flowcentraltech.flowcentral.application.entities.AppRef">
@@ -1021,6 +1047,20 @@
 				label="$m{application.appfilter.category}" type="category_column" />
 			<field name="definition"
 				label="$m{application.appfilter.definition}" type="string" />
+		</entity>
+		<entity name="appSearchInput"
+			description="$m{application.appsearchinput}"
+			label="$m{application.appsearchinput.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppSearchInput">
+			<field name="entityInstId"
+				label="$m{application.appsearchinput.entityinstid}"
+				type="foster_parent_id" />
+			<field name="entity" label="$m{application.appsearchinput.entity}"
+				type="foster_parent_type" />
+			<field name="category"
+				label="$m{application.appsearchinput.category}" type="category_column" />
+			<field name="definition"
+				label="$m{application.appsearchinput.definition}" type="string" />
 		</entity>
 		<entity name="appFieldSequence"
 			description="$m{application.appfieldsequence}"

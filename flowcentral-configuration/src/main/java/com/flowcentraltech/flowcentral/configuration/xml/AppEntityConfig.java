@@ -55,6 +55,8 @@ public class AppEntityConfig extends BaseNameConfig {
 
     private List<EntityUploadConfig> uploadList;
 
+    private List<EntitySearchInputConfig> searchInputList;
+
     public AppEntityConfig() {
         this.auditable = Boolean.FALSE;
         this.reportable = Boolean.FALSE;
@@ -168,6 +170,15 @@ public class AppEntityConfig extends BaseNameConfig {
     @XmlElement(name = "upload")
     public void setUploadList(List<EntityUploadConfig> uploadList) {
         this.uploadList = uploadList;
+    }
+
+    public List<EntitySearchInputConfig> getSearchInputList() {
+        return searchInputList;
+    }
+
+    @XmlElement(name = "searchInput")
+    public void setSearchInputList(List<EntitySearchInputConfig> searchInputList) {
+        this.searchInputList = searchInputList;
     }
 
 }

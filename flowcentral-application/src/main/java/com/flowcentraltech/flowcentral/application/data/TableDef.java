@@ -98,7 +98,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private Set<String> summaryFields;
 
-    private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
+    private TableDef(EntityDef entityDef, 
+            List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
             List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
             Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
             int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
@@ -139,7 +140,7 @@ public class TableDef extends BaseApplicationEntityDef {
             if (!EntityBaseType.BASE_ENTITY.equals(entityDef.getBaseType())) {
                 select.add("versionNo");
             }
-            
+
             for (TableColumnDef tableColumnDef : columnDefList) {
                 this.select.add(tableColumnDef.getFieldName());
             }
@@ -175,7 +176,7 @@ public class TableDef extends BaseApplicationEntityDef {
     public TableLoadingDef getTableLoadingDef(int index) {
         return loadingDefList.get(index);
     }
-    
+
     public int getLoadingDefCount() {
         return loadingDefList.size();
     }
@@ -644,19 +645,20 @@ public class TableDef extends BaseApplicationEntityDef {
                     renderer = renderer + " binding:" + fieldName;
                 }
 
-                tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName,
-                        "width:" + widths[i] + "%;", renderer, editor, tempColumnDef.getRenderer(),
-                        tempColumnDef.getEditor(), tempColumnDef.getLinkAct(), tempColumnDef.getOrder(),
-                        tempColumnDef.getWidthRatio(), (100 - usedPercent), tempColumnDef.isSwitchOnChange(),
-                        tempColumnDef.isHidden(), tempColumnDef.isDisabled(), tempColumnDef.isEditable(),
-                        tempColumnDef.isSortable(), tempColumnDef.isSummary());
+                tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + widths[i] + "%;",
+                        renderer, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(),
+                        tempColumnDef.getLinkAct(), tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(),
+                        (100 - usedPercent), tempColumnDef.isSwitchOnChange(), tempColumnDef.isHidden(),
+                        tempColumnDef.isDisabled(), tempColumnDef.isEditable(), tempColumnDef.isSortable(),
+                        tempColumnDef.isSummary());
 
                 _visibleColumnDefList.add(tableColumnDef);
                 columnDefList.add(tableColumnDef);
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
+            return new TableDef(entityDef,
+                    DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
                     DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
                     DataUtils.unmodifiableMap(filterDefMap), label, detailsPanelName, sortHistory, itemsPerPage,
                     serialNo, sortable, headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless,

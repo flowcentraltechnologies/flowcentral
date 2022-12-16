@@ -42,7 +42,7 @@ public class AppSetValues extends BaseAuditEntity {
     @CategoryColumn(name = "SETVALUES_CAT")
     private String category;
 
-    @Column(name = "SETVALUES_DEF", length = 2048)
+    @Column(name = "SETVALUES_DEF", length = 4000)
     private String definition;
 
     public AppSetValues(String definition) {

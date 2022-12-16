@@ -90,8 +90,11 @@
 // Text template pop up
 !fc-texttemplatepanel:textTemplatePopup binding:$w{}
 
-// Quick edit
-!fc-quicktableeditpanel:quickEditPopup binding:$w{}
+// Quick table edit
+!fc-quicktableeditpanel:quickTableEditPopup binding:$w{}
+
+// Quick form edit
+!fc-quickformeditpanel:quickFormEditPopup binding:$w{}
 
 //Actions 
 !ui-post:wkspChangeAct path:$n{/changeWorkspace} components:$c{currentWkspSel}

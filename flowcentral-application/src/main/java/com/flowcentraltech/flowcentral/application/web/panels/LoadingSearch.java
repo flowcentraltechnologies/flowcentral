@@ -80,10 +80,11 @@ public class LoadingSearch {
     private int mode;
 
     public LoadingSearch(AppletContext appletContext, SectorIcon sectorIcon, TableDef tableDef, Long appAppletId,
-            int columns, int mode) throws UnifyException {
+            String appAppletSearchConfigName, int columns, int mode, boolean showConditions) throws UnifyException {
         this.appletContext = appletContext;
         this.sectorIcon = sectorIcon;
-        this.searchEntries = new SearchEntries(tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(), columns);
+        this.searchEntries = new SearchEntries(appletContext.au(), tableDef.getEntityDef(),
+                tableDef.getLabelSuggestionDef(), appAppletSearchConfigName, columns, showConditions);
         this.loadingTable = new LoadingTable(appletContext.au(), tableDef, null);
         this.loadingTable.setCrudMode(true);
         this.loadingTable.setView(true);

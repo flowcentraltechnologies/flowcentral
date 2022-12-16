@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppAssignmentPageQuery;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -47,8 +46,7 @@ public class StudioAppletAssignPageListCommand extends AbstractApplicationListCo
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return ApplicationNameUtils.getListableList(application()
-                        .findAppAssignmentPages(new AppAssignmentPageQuery().entity(entity)));
+                return au().getApplicationEntities(new AppAssignmentPageQuery().entity(entity));
             }
         }
 

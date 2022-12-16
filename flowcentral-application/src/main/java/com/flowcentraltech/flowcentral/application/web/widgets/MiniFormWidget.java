@@ -163,10 +163,12 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
 
         Object formBean = miniForm != null ? miniForm.getFormBean() : null;
         if (formBean != oldFormBean) {
-            ValueStore formValueStore = miniForm.getCtx().getFormValueStore();
-            if (formWidgets != null) {
-                for (FormWidget formWidget : formWidgets.values()) {
-                    formWidget.setValueStore(formValueStore);
+            if (miniForm != null) {
+                ValueStore formValueStore = miniForm.getCtx().getFormValueStore();
+                if (formWidgets != null) {
+                    for (FormWidget formWidget : formWidgets.values()) {
+                        formWidget.setValueStore(formValueStore);
+                    }
                 }
             }
 
@@ -212,7 +214,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
         Set<String> activatedAltRules = Collections.emptySet();
         List<FormStateRule> fieldRules = new ArrayList<FormStateRule>();
         String trigger = getTrigger();
-        if (form.getScope().isMainForm()) {
+        if (form.getScope().isMainForm() || ctx.isQuickEditMode()) {
             final FormDef formDef = ctx.getFormDef();
             boolean setValuesExecuted = false;
 

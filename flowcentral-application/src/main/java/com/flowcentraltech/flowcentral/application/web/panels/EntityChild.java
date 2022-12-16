@@ -50,9 +50,12 @@ public class EntityChild extends AbstractPanelFormBinding {
 
     private boolean canCreate;
 
+    private boolean quickEdit;
+
     public EntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, FormDef childFormDef,
-            boolean ignoreConditionalDisabled) {
+            boolean quickEdit, boolean ignoreConditionalDisabled) {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
+        this.quickEdit = quickEdit;
         this.childFormDef = childFormDef;
     }
 
@@ -62,6 +65,10 @@ public class EntityChild extends AbstractPanelFormBinding {
 
     public boolean isWithChild() {
         return childForm != null;
+    }
+
+    public boolean isQuickEdit() {
+        return quickEdit;
     }
 
     public String getEntityTitle() {
@@ -106,6 +113,14 @@ public class EntityChild extends AbstractPanelFormBinding {
 
     public boolean isViewButtonVisible() {
         return !getAppletCtx().isContextEditable() || !isTabEditable();
+    }
+
+    public FormContext getMCtx() {
+        return mCtx;
+    }
+
+    public Restriction getMRestriction() {
+        return mRestriction;
     }
 
     public void reload() throws UnifyException {

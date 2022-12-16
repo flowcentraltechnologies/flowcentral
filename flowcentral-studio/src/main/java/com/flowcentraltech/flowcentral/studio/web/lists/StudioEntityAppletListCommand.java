@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -43,9 +42,7 @@ public class StudioEntityAppletListCommand extends AbstractApplicationListComman
     @Override
     public List<? extends Listable> execute(Locale locale, StudioEntityFormParams params) throws UnifyException {
         if (params.isPresent()) {
-            return ApplicationNameUtils
-                    .getListableList(application().findAppApplets((AppAppletQuery) new AppAppletQuery()
-                            .entity(params.getEntity()).addSelect("applicationName", "name", "description")));
+            return au().getApplicationEntities(new AppAppletQuery().entity(params.getEntity()));
         }
 
         return Collections.emptyList();

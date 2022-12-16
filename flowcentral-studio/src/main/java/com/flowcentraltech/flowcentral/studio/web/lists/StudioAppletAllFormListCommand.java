@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -47,8 +46,7 @@ public class StudioAppletAllFormListCommand extends AbstractApplicationListComma
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return ApplicationNameUtils.getListableList(
-                        application().findAppForms(new AppFormQuery().entity(entity)));
+                return au().getApplicationEntities(new AppFormQuery().entity(entity));
             }
         }
 

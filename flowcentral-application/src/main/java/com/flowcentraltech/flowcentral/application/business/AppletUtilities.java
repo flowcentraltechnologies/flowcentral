@@ -31,10 +31,12 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -45,6 +47,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequenc
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityParamValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
+import com.flowcentraltech.flowcentral.application.web.panels.EntitySearchInput;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySetValues;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
@@ -58,6 +61,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApp
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -80,6 +84,7 @@ import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
@@ -92,7 +97,34 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 public interface AppletUtilities extends UnifyComponent {
-    
+
+    /**
+     * Gets application entities based on supplied query.
+     * 
+     * @param query
+     *              the query to search with
+     * @return list of application entities
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getApplicationEntities(Query<? extends BaseApplicationEntity> query) throws UnifyException;
+
+    /**
+     * Gets entity components list
+     * 
+     * @param componentType
+     *                            the component type
+     * @param entity
+     *                            the entity name
+     * @param acceptNonReferenced
+     *                            accept non-reference components
+     * @return the list of components
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getEntityComponents(Class<? extends UnifyComponent> componentType, String entity,
+            boolean acceptNonReferenced) throws UnifyException;
+
     /**
      * Gets a generator instance.
      * 
@@ -106,7 +138,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
             throws UnifyException;
-    
+
     /**
      * Gets a generator instance.
      * 
@@ -140,7 +172,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     int getSearchMinimumItemsPerPage() throws UnifyException;
-    
+
     /**
      * Gets filter group definition for applet.
      * 
@@ -402,7 +434,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the system service.
      */
     SystemModuleService system();
-    
+
     /**
      * Gets the environment service.
      * 
@@ -423,14 +455,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the special parameter provider
      */
     CollaborationProvider collaborationProvider();
-    
+
     /**
      * Gets format helper
      * 
      * @return the format helper
      */
     FormatHelper formatHelper();
-    
+
     /**
      * Gets form context evaluator.
      * 
@@ -444,14 +476,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the sequence code generator
      */
     SequenceCodeGenerator sequenceCodeGenerator();
-    
+
     /**
      * Gets the report provider.
      * 
      * @return the report provider
      */
     ReportProvider reportProvider();
-    
+
     /**
      * Gets a application applet definition.
      * 
@@ -882,6 +914,41 @@ public interface AppletUtilities extends UnifyComponent {
             Long ownerInstId, ParamValuesDef paramValuesDef) throws UnifyException;
 
     /**
+     * Retrieves application search inputs definition for an entity instance.
+     * 
+     * @param category
+     *                        the search inputs category
+     * @param ownerEntityName
+     *                        the entity type long name
+     * @param ownerInstId
+     *                        the entity instance ID
+     * @return the search inputs definition if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    SearchInputsDef retrieveSearchInputsDef(String category, String ownerEntityName, Long ownerInstId)
+            throws UnifyException;
+
+    /**
+     * Saves application search inputs definition for an entity instance.
+     * 
+     * @param sweepingCommitPolicy
+     *                             sweeping commit policy
+     * @param category
+     *                             the search inputs category
+     * @param ownerEntityName
+     *                             the entity type long name
+     * @param ownerInstId
+     *                             the entity instance ID
+     * @param searchInputsDef
+     *                             the search inputs definition to save
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void saveSearchInputsDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
+            Long ownerInstId, SearchInputsDef searchInputsDef) throws UnifyException;
+
+    /**
      * Constructs a listing form.
      * 
      * @param applet
@@ -967,8 +1034,8 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle,
-            String beanTitle, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException;
+    EntitySingleForm constructEntitySingleForm(AbstractApplet applet, String rootTitle, String beanTitle, Entity inst,
+            FormMode formMode, BreadCrumbs breadCrumbs) throws UnifyException;
 
     /**
      * Updates a header with tabs form.
@@ -994,8 +1061,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void updateEntitySingleForm(AbstractApplet applet, EntitySingleForm form, Entity inst)
-            throws UnifyException;
+    void updateEntitySingleForm(AbstractApplet applet, EntitySingleForm form, Entity inst) throws UnifyException;
 
     /**
      * Constructs property search.
@@ -1049,9 +1115,10 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Constructs loading search.
      * 
-     * @param ctx applet context
+     * @param ctx
+     *                          applet context
      * @param loadingSearchMode
-     *                             the loading search mode
+     *                          the loading search mode
      * @return the loading search
      * @throws UnifyException
      *                        if an error occurs
@@ -1093,6 +1160,8 @@ public interface AppletUtilities extends UnifyComponent {
      *                                the root applet title
      * @param _appletDef
      *                                the applet definition
+     * @param quickEdit
+     *                                enable quick edit flag
      * @param isIgnoreParentCondition
      *                                ignore parent condition flag
      * @return the entity child
@@ -1100,7 +1169,8 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     EntityChild constructEntityChild(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            String rootTitle, AppletDef _appletDef, boolean isIgnoreParentCondition) throws UnifyException;
+            String rootTitle, AppletDef _appletDef, boolean quickEdit, boolean isIgnoreParentCondition)
+            throws UnifyException;
 
     /**
      * Constructs entity filter.
@@ -1123,6 +1193,29 @@ public interface AppletUtilities extends UnifyComponent {
      */
     EntityFilter constructEntityFilter(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             EntityDef ownerEntityDef, int entityFilterMode, boolean isIgnoreParentCondition) throws UnifyException;
+
+    /**
+     * Constructs entity search input.
+     * 
+     * @param ctx
+     *                                the form context
+     * @param sweepingCommitPolicy
+     *                                the sweepingCommitPolicy (optional)
+     * @param tabName
+     *                                the tab name (optional)
+     * @param ownerEntityDef
+     *                                the owner entity definition
+     * @param entitySearchInputMode
+     *                                the entity search input mode
+     * @param isIgnoreParentCondition
+     *                                ignore parent condition flag
+     * @return the entity filter
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntitySearchInput constructEntitySearchInput(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
+            String tabName, EntityDef ownerEntityDef, int entitySearchInputMode, boolean isIgnoreParentCondition)
+            throws UnifyException;
 
     /**
      * Constructs entity field sequence.
@@ -1213,7 +1306,7 @@ public interface AppletUtilities extends UnifyComponent {
     EntityParamValues constructEntityParamValues(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, EntityDef ownerEntityDef, int entityParamValuesMode, boolean isIgnoreParentCondition)
             throws UnifyException;
-    
+
     /**
      * Constructs an entry bean table,
      * 
@@ -1242,7 +1335,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     BeanTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
             throws UnifyException;
-    
+
     /**
      * Matches a form bean with applet condition property
      * 
@@ -1376,7 +1469,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     List<String> getEntitiesWithDelegate() throws UnifyException;
-    
+
     /**
      * Creates an entity by form context.
      * 
@@ -1482,4 +1575,14 @@ public interface AppletUtilities extends UnifyComponent {
      */
     void clearUnsatisfactoryRefs(FormTabDef formTabDef, EntityDef entityDef, ValueStoreReader reader, Entity inst)
             throws UnifyException;
+
+    /**
+     * Performs operations on mini-form switch on-change
+     * 
+     * @param form
+     *             the mini-form
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void onMiniformSwitchOnChange(MiniForm form) throws UnifyException;
 }

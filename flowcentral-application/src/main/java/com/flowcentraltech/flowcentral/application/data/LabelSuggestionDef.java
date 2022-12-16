@@ -36,8 +36,4 @@ public class LabelSuggestionDef {
         return labelByFieldNames.get(fieldName);
     }
 
-    @Override
-    public String toString() {
-        return "LabelSuggestionDef [labelByFieldNames=" + labelByFieldNames + "]";
-    }
 }

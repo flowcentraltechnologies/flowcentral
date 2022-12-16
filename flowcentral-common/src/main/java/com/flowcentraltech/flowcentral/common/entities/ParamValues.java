@@ -41,7 +41,7 @@ public class ParamValues extends BaseAuditEntity {
     @CategoryColumn(name = "PARAMVALUES_CAT")
     private String category;
 
-    @Column(name = "PARAMVALUES_DEF", length = 2048)
+    @Column(name = "PARAMVALUES_DEF", length = 4000)
     private String definition;
 
     public ParamValues(String definition) {

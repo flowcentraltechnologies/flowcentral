@@ -60,8 +60,7 @@ public class StudioEntityFieldWidgetListCommand extends AbstractApplicationListC
 
             AppWidgetTypeQuery query = new AppWidgetTypeQuery();
             ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
-            query.addSelect("applicationName", "name", "description");
-            return ApplicationNameUtils.getListableList(application().findAppWidgetTypes(query));
+            return au().getApplicationEntities(query);
         }
 
         return Collections.emptyList();

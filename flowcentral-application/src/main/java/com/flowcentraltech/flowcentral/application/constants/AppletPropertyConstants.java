@@ -34,6 +34,8 @@ public interface AppletPropertyConstants {
 
     String SEARCH_TABLE = "searchTable";
 
+    String SEARCH_TABLE_SEARCHINPUT = "searchTable.searchInput";
+
     String SEARCH_TABLE_NEW = "searchTable.new";
 
     String SEARCH_TABLE_NEW_CAPTION= "searchTable.new.caption";
@@ -141,8 +143,8 @@ public interface AppletPropertyConstants {
     String ENTRY_TABLE = "entryTable";
 
     String ENTRY_TABLE_POLICY = "entryTable.policy";
-    
-    String QUICK_EDIT_ENABLED = "quickEdit.enabled";
+
+    String QUICK_EDIT_FORM = "quickEdit.form";
 
     String QUICK_EDIT_TABLE = "quickEdit.table";
 

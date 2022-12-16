@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -47,8 +46,7 @@ public class StudioEntityTableListCommand extends AbstractApplicationListCommand
         if (stringParam.isPresent()) {
             String entity = stringParam.getValue();
             if (!StringUtils.isBlank(entity)) {
-                return ApplicationNameUtils.getListableList(
-                        application().findAppTables(new AppTableQuery().entity(entity)));
+                return au().getApplicationEntities(new AppTableQuery().entity(entity));
             }
         }
 

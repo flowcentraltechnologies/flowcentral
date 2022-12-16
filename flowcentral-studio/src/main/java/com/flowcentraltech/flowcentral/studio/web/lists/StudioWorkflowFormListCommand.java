@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
@@ -55,8 +54,7 @@ public class StudioWorkflowFormListCommand extends AbstractApplicationListComman
     public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
         if (longParam.isPresent()) {
             Workflow workflow = workflowModuleService.findLeanWorkflowById(longParam.getValue());
-            return ApplicationNameUtils.getListableList(
-                    application().findAppForms(new AppFormQuery().entity(workflow.getEntity())));
+            return au().getApplicationEntities(new AppFormQuery().entity(workflow.getEntity()));
         }
 
         return Collections.emptyList();

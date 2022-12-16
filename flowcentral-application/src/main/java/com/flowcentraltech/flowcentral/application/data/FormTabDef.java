@@ -63,6 +63,8 @@ public class FormTabDef {
 
     private boolean showSearch;
 
+    private boolean quickEdit;
+
     private boolean visible;
 
     private boolean editable;
@@ -73,8 +75,8 @@ public class FormTabDef {
 
     public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label,
             String applet, String reference, String editAction, String editFormless, String editFixedRows,
-            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch, boolean visible,
-            boolean editable, boolean disabled) {
+            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch,
+            boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
         this.contentType = contentType;
         this.filterGroupDef = filterGroupDef;
         this.name = name;
@@ -87,6 +89,7 @@ public class FormTabDef {
         this.formSectionDefList = formSectionDefList;
         this.ignoreParentCondition = ignoreParentCondition;
         this.showSearch = showSearch;
+        this.quickEdit = quickEdit;
         this.visible = visible;
         this.editable = editable;
         this.disabled = disabled;
@@ -106,6 +109,7 @@ public class FormTabDef {
         this.editFixedRows = srcFormTabDef.editFixedRows;
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
         this.showSearch = srcFormTabDef.showSearch;
+        this.quickEdit = srcFormTabDef.quickEdit;
         this.visible = srcFormTabDef.visible;
         this.editable = srcFormTabDef.editable;
         this.disabled = srcFormTabDef.disabled;
@@ -234,6 +238,10 @@ public class FormTabDef {
 
     public boolean isShowSearch() {
         return showSearch;
+    }
+
+    public boolean isQuickEdit() {
+        return quickEdit;
     }
 
     public boolean isVisible() {

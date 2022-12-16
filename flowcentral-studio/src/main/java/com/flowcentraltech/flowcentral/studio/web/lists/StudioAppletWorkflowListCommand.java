@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
@@ -56,9 +55,7 @@ public class StudioAppletWorkflowListCommand extends AbstractApplicationListComm
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return ApplicationNameUtils
-                        .getListableList(workflowModuleService.findWorkflows((WorkflowQuery) new WorkflowQuery()
-                                .entity(entity).addSelect("applicationName", "name", "description")));
+                return au().getApplicationEntities((WorkflowQuery) new WorkflowQuery().entity(entity));
             }
         }
 

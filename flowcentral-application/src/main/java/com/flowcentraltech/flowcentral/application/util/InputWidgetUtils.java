@@ -38,6 +38,8 @@ import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterRestrictionDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputDef;
+import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetValueDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
@@ -47,8 +49,10 @@ import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppFormFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppSearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.data.DateRange;
@@ -59,6 +63,7 @@ import com.flowcentraltech.flowcentral.common.util.LingualDateUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualDateType;
 import com.flowcentraltech.flowcentral.configuration.constants.LingualStringType;
+import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
 import com.flowcentraltech.flowcentral.configuration.constants.WidgetColor;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
@@ -67,9 +72,12 @@ import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfi
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -228,7 +236,7 @@ public final class InputWidgetUtils {
             }
 
             esb.append("}");
-           return esb.toString();
+            return esb.toString();
         }
 
         return editor;
@@ -784,7 +792,70 @@ public final class InputWidgetUtils {
 
         return null;
     }
-    
+
+    public static EntitySearchInputConfig getSearchInputConfig(
+            AppEntitySearchInput appEntitySearchInput) throws UnifyException {
+        if (appEntitySearchInput != null) {
+            EntitySearchInputConfig entitySearchInputConfig = new EntitySearchInputConfig();
+            InputWidgetUtils.getSearchInputsConfig(entitySearchInputConfig, appEntitySearchInput.getName(),
+                    appEntitySearchInput.getDescription(), appEntitySearchInput.getSearchInput());
+            return entitySearchInputConfig;
+        }
+
+        return null;
+    }
+
+    public static void getSearchInputsConfig(SearchInputsConfig searchInputsConfig, String name,
+            String description, AppSearchInput appSearchInput) throws UnifyException {
+        if (appSearchInput != null) {
+            SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(name, description,
+                    appSearchInput);
+            searchInputsConfig.setName(name);
+            searchInputsConfig.setDescription(description);
+            List<SearchInputConfig> inputList = new ArrayList<SearchInputConfig>();
+            for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
+                SearchInputConfig searchInputConfig = new SearchInputConfig();
+                searchInputConfig.setType(searchInputDef.getType());
+                searchInputConfig.setField(searchInputDef.getFieldName());
+                searchInputConfig.setLabel(searchInputDef.getLabel());
+                searchInputConfig.setWidget(searchInputDef.getWidget());
+                inputList.add(searchInputConfig);
+            }
+
+            searchInputsConfig.setInputList(inputList);
+        }
+    }
+
+    public static SearchInputsDef getSearchInputsDef(String name, String description, AppSearchInput appSearchInput)
+            throws UnifyException {
+        if (appSearchInput != null) {
+            SearchInputsDef.Builder sidb = SearchInputsDef.newBuilder();
+            sidb.name(name).description(description);
+            if (appSearchInput.getDefinition() != null) {
+                try (BufferedReader reader = new BufferedReader(new StringReader(appSearchInput.getDefinition()));) {
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        String[] p = line.split("]");
+                        String label = p[0];
+                        String field = p[1];
+                        String widget = p[2];
+                        SearchConditionType type = null;
+                        if (p.length > 3) {
+                            type = SearchConditionType.fromCode(p[3]);
+                        }
+                        sidb.addSearchInputDef(type, field, widget, label);
+                    }
+                } catch (IOException e) {
+                    throw new UnifyOperationException(e);
+                }
+            }
+
+            return sidb.build();
+        }
+
+        return null;
+    }
+
     public static AppletFilterConfig getFilterConfig(AppletUtilities au, AppAppletFilter appAppletFilter)
             throws UnifyException {
         if (appAppletFilter != null) {
@@ -832,12 +903,13 @@ public final class InputWidgetUtils {
 
         return null;
     }
-    
+
     public static FilterConfig getFilterConfig(AppletUtilities au, AppFilter appFilter) throws UnifyException {
         return InputWidgetUtils.getFilterConfig(au, null, null, appFilter);
     }
 
-    public static FilterConfig getFilterConfig(AppletUtilities au, String name, String description, AppFilter appFilter) throws UnifyException {
+    public static FilterConfig getFilterConfig(AppletUtilities au, String name, String description, AppFilter appFilter)
+            throws UnifyException {
         if (appFilter != null) {
             FilterConfig filterConfig = new FilterConfig();
             getFilterConfig(au, filterConfig, name, description, appFilter);
@@ -1058,6 +1130,70 @@ public final class InputWidgetUtils {
         return result;
     }
 
+    public static AppSearchInput newAppSearchInput(SearchInputsConfig searchInputsConfig) throws UnifyException {
+        if (searchInputsConfig != null) {
+            return new AppSearchInput(InputWidgetUtils.getSearchInputDefinition(searchInputsConfig));
+        }
+
+        return null;
+    }
+
+    public static String getSearchInputDefinition(SearchInputsConfig searchInputsConfig) throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
+            if (!DataUtils.isBlank(searchInputsConfig.getInputList())) {
+                for (SearchInputConfig searchInputConfig : searchInputsConfig.getInputList()) {
+                    bw.write(searchInputConfig.getLabel());
+                    bw.write(']');
+                    bw.write(searchInputConfig.getField());
+                    bw.write(']');
+                    bw.write(searchInputConfig.getWidget());
+                    bw.write(']');
+                    if (searchInputConfig.getType() != null) {
+                        bw.write(searchInputConfig.getType().code());
+                        bw.write(']');
+                    }
+                    bw.newLine();
+                }
+            }
+
+            bw.flush();
+            result = sw.toString();
+        } catch (IOException e) {
+            throw new UnifyOperationException(e);
+        }
+
+        return result;
+    }
+
+    public static String getSearchInputDefinition(SearchInputsDef searchInputsDef) throws UnifyException {
+        String result = null;
+        try (StringWriter sw = new StringWriter(); BufferedWriter bw = new BufferedWriter(sw);) {
+            if (!searchInputsDef.isBlank()) {
+                for (SearchInputDef searchInputDef : searchInputsDef.getSearchInputDefList()) {
+                    bw.write(searchInputDef.getLabel());
+                    bw.write(']');
+                    bw.write(searchInputDef.getFieldName());
+                    bw.write(']');
+                    bw.write(searchInputDef.getWidget());
+                    bw.write(']');
+                    if (searchInputDef.getType() != null) {
+                        bw.write(searchInputDef.getType().code());
+                        bw.write(']');
+                    }
+                    bw.newLine();
+                }
+            }
+
+            bw.flush();
+            result = sw.toString();
+        } catch (IOException e) {
+            throw new UnifyOperationException(e);
+        }
+
+        return result;
+    }
+
     public static AppFilter newAppFilter(FilterConfig filterConfig) throws UnifyException {
         if (filterConfig != null) {
             return new AppFilter(InputWidgetUtils.getFilterDefinition(filterConfig));
@@ -1187,14 +1323,14 @@ public final class InputWidgetUtils {
 
         return new ResolvedCondition(type, paramA, paramB);
     }
-    
+
     public static ResolvedCondition resolveDateCondition(EntityFieldDef entityFieldDef, Date now,
             FilterConditionType type, Object paramA, Object paramB) throws UnifyException {
         return InputWidgetUtils.resolveDateCondition(now, type, paramA, paramB, entityFieldDef.isTimestamp());
     }
 
-    public static ResolvedCondition resolveDateCondition(Date now,
-            FilterConditionType type, Object paramA, Object paramB, boolean timestamp) throws UnifyException {
+    public static ResolvedCondition resolveDateCondition(Date now, FilterConditionType type, Object paramA,
+            Object paramB, boolean timestamp) throws UnifyException {
         if (type.isLingual()) {
             if (type.isRange()) {
                 paramA = LingualDateUtils.getDateFromNow(now, (String) paramA);
