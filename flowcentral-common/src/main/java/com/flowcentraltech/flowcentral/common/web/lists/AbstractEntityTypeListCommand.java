@@ -38,7 +38,7 @@ public abstract class AbstractEntityTypeListCommand<T extends UnifyComponent, U 
     }
 
     @Override
-    final protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U param)
+    protected List<? extends Listable> filterList(List<UnifyComponentConfig> baseConfigList, U param)
             throws UnifyException {
         final String entityName = getEntityName(param);
         final boolean accept = acceptNonReferenced();

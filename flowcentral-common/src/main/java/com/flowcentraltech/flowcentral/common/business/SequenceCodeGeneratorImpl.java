@@ -229,12 +229,6 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
             }
         }
 
-//        if (!exist.contains(SequencePartType.SEQUENCE_NUMBER)
-//                && !exist.contains(SequencePartType.SEQUENCE_NUMBER_BY_DATE)) {
-//            throwOperationErrorException(new RuntimeException(
-//                    "Invalid sequence code definition. No sequence number placeholder found [" + definition + "]."));
-//        }
-
         // Build skeleton
         StringBuilder sb = new StringBuilder();
         for (SequencePartDef part : partList) {
