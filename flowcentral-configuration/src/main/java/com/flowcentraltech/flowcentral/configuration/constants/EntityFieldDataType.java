@@ -71,6 +71,14 @@ public enum EntityFieldDataType implements EnumConst {
             true,
             true,
             true),
+    TENANT_ID(
+            "TD",
+            DataType.LONG,
+            true,
+            false,
+            false,
+            true,
+            false),
     FLOAT(
             "FL",
             DataType.FLOAT,
@@ -335,6 +343,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     public boolean isString() {
         return STRING.equals(this);
+    }
+
+    public boolean isTenantId() {
+        return TENANT_ID.equals(this);
     }
 
     public boolean isScratch() {

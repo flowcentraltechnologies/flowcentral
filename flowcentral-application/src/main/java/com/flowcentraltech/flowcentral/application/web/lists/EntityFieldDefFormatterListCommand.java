@@ -58,6 +58,7 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
                         case CHILD_LIST:
                         case REF_FILEUPLOAD:
                         case CLOB:
+                            break;
                         case DECIMAL:
                         case DOUBLE:
                         case FLOAT:
@@ -76,6 +77,7 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
                                     StandardFormatType.INTEGER,
                                     StandardFormatType.INTEGER_GROUPED);
                             break;
+                        case TENANT_ID:
                         case LIST_ONLY:
                         case REF:
                         case REF_UNLINKABLE:
