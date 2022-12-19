@@ -32,30 +32,99 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum EntityBaseType implements EnumConst {
 
     BASE_ENTITY(
-            "ENI"),
+            "ENI",
+            false,
+            false,
+            false),
     BASE_VERSION_ENTITY(
-            "ENT"),
+            "ENT",
+            false,
+            false,
+            false),
     BASE_AUDIT_ENTITY(
-            "ADE"),
+            "ADE",
+            true,
+            false,
+            false),
     BASE_STATUS_ENTITY(
-            "STA"),
+            "STA",
+            true,
+            false,
+            false),
     BASE_WORK_ENTITY(
-            "WKE"),
+            "WKE",
+            true,
+            true,
+            false),
     BASE_STATUS_WORK_ENTITY(
-            "SWK"),
+            "SWK",
+            true,
+            true,
+            false),
     BASE_NAMED_ENTITY(
-            "NME"),
+            "NME",
+            true,
+            false,
+            false),
     BASE_CONFIG_ENTITY(
-            "CGE"),
+            "CGE",
+            true,
+            false,
+            false),
     BASE_CONFIG_NAMED_ENTITY(
-            "CNE"),
+            "CNE",
+            true,
+            false,
+            false),
     BASE_APPLICATION_ENTITY(
-            "APE");
+            "APE",
+            true,
+            false,
+            false),
+    BASE_TENANT_ENTITY(
+            "ENIT",
+            false,
+            false,
+            true),
+    BASE_VERSION_TENANT_ENTITY(
+            "ENTT",
+            false,
+            false,
+            true),
+    BASE_AUDIT_TENANT_ENTITY(
+            "ADET",
+            true,
+            false,
+            true),
+    BASE_STATUS_TENANT_ENTITY(
+            "STAT",
+            true,
+            false,
+            true),
+    BASE_WORK_TENANT_ENTITY(
+            "WKET",
+            true,
+            true,
+            true),
+    BASE_STATUS_WORK_TENANT_ENTITY(
+            "SWKT",
+            true,
+            true,
+            true);
 
     private final String code;
 
-    private EntityBaseType(String code) {
+    private final boolean audit;
+
+    private final boolean work;
+
+    private final boolean tenant;
+
+    private EntityBaseType(String code, boolean audit, boolean work, boolean tenant) {
         this.code = code;
+        this.audit = audit;
+        this.work = work;
+        this.tenant = tenant;
     }
 
     @Override
@@ -68,12 +137,16 @@ public enum EntityBaseType implements EnumConst {
         return BASE_ENTITY.code;
     }
 
+    public boolean isTenantType() {
+        return tenant;
+    }
+
     public boolean isAuditType() {
-        return !BASE_ENTITY.equals(this) && !BASE_VERSION_ENTITY.equals(this);
+        return audit;
     }
 
     public boolean isWorkEntityType() {
-        return BASE_WORK_ENTITY.equals(this) || BASE_STATUS_WORK_ENTITY.equals(this);
+        return work;
     }
 
     public static EntityBaseType fromCode(String code) {
