@@ -4681,15 +4681,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         if (!entityFieldDef.isChildRef()) {
                             if (entityFieldDef.isTenantId()) {
                                 deib.addTenantIdField(type, entityFieldDef.getColumnName(),
-                                        entityFieldDef.getFieldName(), entityFieldDef.getDefaultVal(),
-                                        entityFieldDef.getMaxLen(), entityFieldDef.getPrecision(),
-                                        entityFieldDef.getScale(), entityFieldDef.isNullable());
+                                        entityFieldDef.getFieldName(), entityFieldDef.getPrecision(),
+                                        entityFieldDef.getScale());
                             } else {
-                                deib.addField(type, entityFieldDef.getDataType().dataType(), entityFieldDef.getColumnName(),
-                                        entityFieldDef.getFieldName(), entityFieldDef.getDefaultVal(),
-                                        entityFieldDef.getMaxLen(), entityFieldDef.getPrecision(),
-                                        entityFieldDef.getScale(), entityFieldDef.isNullable(),
-                                        entityFieldDef.isDescriptive());
+                                deib.addField(type, entityFieldDef.getDataType().dataType(),
+                                        entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
+                                        entityFieldDef.getDefaultVal(), entityFieldDef.getMaxLen(),
+                                        entityFieldDef.getPrecision(), entityFieldDef.getScale(),
+                                        entityFieldDef.isNullable(), entityFieldDef.isDescriptive());
                             }
                         }
                     }
