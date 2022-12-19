@@ -13,31 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.organization.entities;
-
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
+package com.flowcentraltech.flowcentral.common.entities;
 
 /**
- * Query class for departments.
+ * Base query object for base status tenant entity sub-classes.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DepartmentQuery extends BaseStatusTenantEntityQuery<Department> {
+public abstract class BaseStatusTenantEntityQuery<T extends BaseStatusTenantEntity> extends BaseStatusEntityQuery<T> {
 
-    public DepartmentQuery() {
-        super(Department.class);
+    public BaseStatusTenantEntityQuery(Class<T> entityClass, boolean applyAppQueryLimit) {
+        super(entityClass, applyAppQueryLimit);
     }
 
-    public DepartmentQuery code(String code) {
-        return (DepartmentQuery) addEquals("code", code);
+    public BaseStatusTenantEntityQuery(Class<T> entityClass) {
+        super(entityClass);
     }
 
-    public DepartmentQuery codeLike(String code) {
-        return (DepartmentQuery) addLike("code", code);
+    public final BaseStatusTenantEntityQuery<T> tenantId(Long tenantId) {
+        return (BaseStatusTenantEntityQuery<T>) addEquals("tenantId", tenantId);
     }
 
-    public DepartmentQuery descriptionLike(String description) {
-        return (DepartmentQuery) addLike("description", description);
-    }
 }

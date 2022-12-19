@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 
 /**
@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationChannelQuery extends BaseStatusEntityQuery<NotificationChannel> {
+public class NotificationChannelQuery extends BaseStatusTenantEntityQuery<NotificationChannel> {
 
     public NotificationChannelQuery() {
         super(NotificationChannel.class);

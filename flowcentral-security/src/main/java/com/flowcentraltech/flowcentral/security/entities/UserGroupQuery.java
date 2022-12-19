@@ -13,31 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.organization.entities;
+package com.flowcentraltech.flowcentral.security.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
 
 /**
- * Query class for departments.
+ * Query class for user group records.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DepartmentQuery extends BaseStatusTenantEntityQuery<Department> {
+public class UserGroupQuery extends BaseStatusTenantEntityQuery<UserGroup> {
 
-    public DepartmentQuery() {
-        super(Department.class);
+    public UserGroupQuery() {
+        super(UserGroup.class);
     }
 
-    public DepartmentQuery code(String code) {
-        return (DepartmentQuery) addEquals("code", code);
+    @Override
+    public UserGroupQuery id(Long id) {
+        return (UserGroupQuery) super.id(id);
     }
 
-    public DepartmentQuery codeLike(String code) {
-        return (DepartmentQuery) addLike("code", code);
+    public UserGroupQuery name(String name) {
+        return (UserGroupQuery) addEquals("name", name);
     }
 
-    public DepartmentQuery descriptionLike(String description) {
-        return (DepartmentQuery) addLike("description", description);
-    }
 }

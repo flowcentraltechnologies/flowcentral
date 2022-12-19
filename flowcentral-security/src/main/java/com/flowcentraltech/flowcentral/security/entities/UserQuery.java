@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 
 import java.util.Collection;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntityQuery;
 
 /**
  * Query class for user records.
@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkEntityQuery
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class UserQuery extends BaseStatusWorkEntityQuery<User> {
+public class UserQuery extends BaseStatusWorkTenantEntityQuery<User> {
 
     public UserQuery() {
         super(User.class);

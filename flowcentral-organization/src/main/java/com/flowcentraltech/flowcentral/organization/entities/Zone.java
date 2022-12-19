@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @version 1.0
  */
 @Table(name = "FC_ZONE", uniqueConstraints = { @UniqueConstraint({ "code" }), @UniqueConstraint({ "description" }) })
-public class Zone extends BaseStatusEntity {
+public class Zone extends BaseStatusTenantEntity {
 
     @Column(name = "ZONE_CD", length = 16)
     private String code;

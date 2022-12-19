@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.notification.entities;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  */
 @Table(name = "FC_NOTIFCHANNEL", uniqueConstraints = { @UniqueConstraint({ "notificationType" }),
         @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
-public class NotificationChannel extends BaseStatusEntity {
+public class NotificationChannel extends BaseStatusTenantEntity {
 
     @ForeignKey
     private NotificationType notificationType;

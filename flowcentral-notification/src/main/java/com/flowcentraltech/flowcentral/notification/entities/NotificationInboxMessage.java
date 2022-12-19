@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.annotation.Table;
  * @since 1.0
  */
 @Table(name = "FC_INBOXMESSAGE")
-public class NotificationInboxMessage extends BaseEntity {
+public class NotificationInboxMessage extends BaseTenantEntity {
 
     @ForeignKey(NotificationInbox.class)
     private Long notificationInboxId;
