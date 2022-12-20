@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.NotificationRecipientType;
 import com.tcdng.unify.core.annotation.Column;

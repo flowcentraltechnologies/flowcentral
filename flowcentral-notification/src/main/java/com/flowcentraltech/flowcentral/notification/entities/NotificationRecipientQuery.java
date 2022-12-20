@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
 import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntityQuery;
 
 /**
