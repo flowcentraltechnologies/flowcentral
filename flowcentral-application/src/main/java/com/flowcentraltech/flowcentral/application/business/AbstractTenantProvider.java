@@ -41,10 +41,7 @@ import com.tcdng.unify.core.util.DataUtils;
 public abstract class AbstractTenantProvider extends AbstractUnifyComponent implements TenantProvider {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private EnvironmentService environmentService;
+    private AppletUtilities au;
 
     private Class<? extends Entity> tenantClass;
 
@@ -63,107 +60,103 @@ public abstract class AbstractTenantProvider extends AbstractUnifyComponent impl
         this.queryFieldMap = Collections.unmodifiableMap(map);
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    public final void setAu(AppletUtilities au) {
+        this.au = au;
     }
 
     @Override
     public Tenant find(Long id) throws UnifyException {
-        Entity record = environmentService.find(tenantClass, id);
+        Entity record = environment().find(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
-    public Tenant find(Long id, Object versionNo) throws UnifyException {
-        Entity record = environmentService.find(tenantClass, id);
+    public Tenant find(Long id, long versionNo) throws UnifyException {
+        Entity record = environment().find(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant find(Query<Tenant> query) throws UnifyException {
-        Entity record = environmentService.find(tenantClass, convertQuery(query));
+        Entity record = environment().find(convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public Tenant findLean(Long id) throws UnifyException {
-        Entity record = environmentService.findLean(tenantClass, id);
+        Entity record = environment().findLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
-    public Tenant findLean(Long id, Object versionNo) throws UnifyException {
-        Entity record = environmentService.findLean(tenantClass, id);
+    public Tenant findLean(Long id, long versionNo) throws UnifyException {
+        Entity record = environment().findLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant findLean(Query<Tenant> query) throws UnifyException {
-        Entity record = environmentService.findLean(tenantClass, convertQuery(query));
+        Entity record = environment().findLean(convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public List<Tenant> findAll(Query<Tenant> query) throws UnifyException {
-        List<? extends Entity> instList = environmentService.findAll(convertQuery(query));
+        List<? extends Entity> instList = environment().findAll(convertQuery(query));
         return createTenantList(instList);
     }
 
     @Override
     public Tenant list(Long id) throws UnifyException {
-        Entity record = environmentService.list(tenantClass, id);
+        Entity record = environment().list(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
-    public Tenant list(Long id, Object versionNo) throws UnifyException {
-        Entity record = environmentService.list(tenantClass, id);
+    public Tenant list(Long id, long versionNo) throws UnifyException {
+        Entity record = environment().list(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant list(Query<Tenant> query) throws UnifyException {
-        Entity record = environmentService.list(tenantClass, convertQuery(query));
+        Entity record = environment().list(convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public Tenant listLean(Long id) throws UnifyException {
-        Entity record = environmentService.listLean(tenantClass, id);
+        Entity record = environment().listLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
-    public Tenant listLean(Long id, Object versionNo) throws UnifyException {
-        Entity record = environmentService.listLean(tenantClass, id);
+    public Tenant listLean(Long id, long versionNo) throws UnifyException {
+        Entity record = environment().listLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant listLean(Query<Tenant> query) throws UnifyException {
-        Entity record = environmentService.listLean(tenantClass, convertQuery(query));
+        Entity record = environment().listLean(convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public List<Tenant> listAll(Query<Tenant> query) throws UnifyException {
-        List<? extends Entity> instList = environmentService.listAll(convertQuery(query));
+        List<? extends Entity> instList = environment().listAll(convertQuery(query));
         return createTenantList(instList);
     }
 
     @Override
     public int countAll(Query<Tenant> query) throws UnifyException {
-        return environmentService.countAll(convertQuery(query));
+        return environment().countAll(convertQuery(query));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected void onInitialize() throws UnifyException {
-        EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(tenantEntityName);
+        EntityClassDef entityClassDef = application().getEntityClassDef(tenantEntityName);
         tenantClass = (Class<? extends Entity>) entityClassDef.getEntityClass();
         if (Tenant.class.equals(tenantClass)) {
             throw new IllegalArgumentException("Can not use tenant class for provider.");
@@ -175,21 +168,26 @@ public abstract class AbstractTenantProvider extends AbstractUnifyComponent impl
 
     }
 
+    protected AppletUtilities au() {
+        return au;
+    }
+
     protected ApplicationModuleService application() {
-        return applicationModuleService;
+        return au.application();
     }
 
     protected EnvironmentService environment() {
-        return environmentService;
+        return au.environment();
     }
 
     private Query<? extends Entity> convertQuery(Query<Tenant> query) throws UnifyException {
-        Query<? extends Entity> _query = Query.of(tenantClass);
+        final Query<? extends Entity> _query = Query.of(tenantClass);
+        _query.ignoreEmptyCriteria(query.isIgnoreEmptyCriteria());
         if (!query.isEmptyCriteria()) {
             Restriction restriction = query.getRestrictions();
             restriction.fieldSwap(queryFieldMap);
             _query.addRestriction(restriction);
-        }
+       }
 
         return _query;
     }

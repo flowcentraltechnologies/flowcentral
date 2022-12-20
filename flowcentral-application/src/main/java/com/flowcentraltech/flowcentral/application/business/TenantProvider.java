@@ -17,13 +17,13 @@ public interface TenantProvider extends UnifyComponent {
 
     Tenant find(Long id) throws UnifyException;
 
-    Tenant find(Long id, Object versionNo) throws UnifyException;
+    Tenant find(Long id, long versionNo) throws UnifyException;
 
     Tenant find(Query<Tenant> query) throws UnifyException;
 
     Tenant findLean(Long id) throws UnifyException;
 
-    Tenant findLean(Long id, Object versionNo) throws UnifyException;
+    Tenant findLean(Long id, long versionNo) throws UnifyException;
 
     Tenant findLean(Query<Tenant> query) throws UnifyException;
 
@@ -31,13 +31,13 @@ public interface TenantProvider extends UnifyComponent {
 
     Tenant list(Long id) throws UnifyException;
 
-    Tenant list(Long id, Object versionNo) throws UnifyException;
+    Tenant list(Long id, long versionNo) throws UnifyException;
 
     Tenant list(Query<Tenant> query) throws UnifyException;
 
     Tenant listLean(Long id) throws UnifyException;
 
-    Tenant listLean(Long id, Object versionNo) throws UnifyException;
+    Tenant listLean(Long id, long versionNo) throws UnifyException;
 
     Tenant listLean(Query<Tenant> query) throws UnifyException;
 

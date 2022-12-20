@@ -57,7 +57,7 @@ public class TenantEnvironmentDelegate extends AbstractEnvironmentDelegate {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T find(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return tenantProvider != null ? (T) tenantProvider.find((Long) id, versionNo) : null;
+        return tenantProvider != null ? (T) tenantProvider.find((Long) id, (long) versionNo) : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -75,7 +75,7 @@ public class TenantEnvironmentDelegate extends AbstractEnvironmentDelegate {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T findLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return tenantProvider != null ? (T) tenantProvider.findLean((Long) id, versionNo) : null;
+        return tenantProvider != null ? (T) tenantProvider.findLean((Long) id, (long) versionNo) : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -127,7 +127,7 @@ public class TenantEnvironmentDelegate extends AbstractEnvironmentDelegate {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return tenantProvider != null ? (T) tenantProvider.list((Long) id, versionNo) : null;
+        return tenantProvider != null ? (T) tenantProvider.list((Long) id, (long) versionNo) : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -145,7 +145,7 @@ public class TenantEnvironmentDelegate extends AbstractEnvironmentDelegate {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T listLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return tenantProvider != null ? (T) tenantProvider.listLean((Long) id, versionNo) : null;
+        return tenantProvider != null ? (T) tenantProvider.listLean((Long) id, (long) versionNo) : null;
     }
 
     @SuppressWarnings("unchecked")
