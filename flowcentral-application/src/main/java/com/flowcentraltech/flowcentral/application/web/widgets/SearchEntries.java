@@ -113,6 +113,10 @@ public class SearchEntries {
         }
     }
 
+    public boolean isEmpty() {
+        return entryList ==  null || entryList.isEmpty();
+    }
+
     public int size() {
         return entryList.size();
     }

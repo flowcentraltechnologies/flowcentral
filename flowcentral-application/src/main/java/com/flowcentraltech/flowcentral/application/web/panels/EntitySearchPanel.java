@@ -114,7 +114,7 @@ public class EntitySearchPanel extends AbstractPanel {
 
         setVisible("colorLegend", entityTable.isWithColorLegendInfo());
         if (entitySearch.isBasicSearchOnly() || entityTable.isBasicSearchMode()) {
-            setVisible("searchEntriesPanel", entitySearch.isShowSearch());
+            setVisible("searchEntriesPanel", entitySearch.isShowSearch() && entitySearch.isWithSearchInput());
             setVisible("searchFilterPanel", false);
             setVisible("quickFilterBlock", entitySearch.isShowQuickFilter());
             setVisible("footerActionPanel", entitySearch.isShowActionFooter());
