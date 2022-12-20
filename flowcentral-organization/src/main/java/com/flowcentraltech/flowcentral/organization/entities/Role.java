@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.organization.entities;
 import java.util.Date;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @since 1.0
  */
 @Table(name = "FC_ROLE", uniqueConstraints = { @UniqueConstraint({ "code" }), @UniqueConstraint({ "description" }) })
-public class Role extends BaseStatusTenantEntity {
+public class Role extends BaseStatusEntity {
 
     @ForeignKey(Department.class)
     private Long departmentId;
