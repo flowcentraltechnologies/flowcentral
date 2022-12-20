@@ -74,4 +74,6 @@ public interface ApplicationModuleSysParamConstants {
     String SHOW_RESOLVED_BASE_RESTRICTION = "APP-0019";
     
     String SEARCH_ENTRY_SHOW_CONDITIONS = "APP-001A";
+
+    String SECTOR_SORT_ON_MENU = "APP-001B";
 }

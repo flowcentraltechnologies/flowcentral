@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.AppletTypeXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Applet configuration.
@@ -52,13 +53,20 @@ public class AppletConfig extends BaseNameConfig {
     
     private int displayIndex;
 
-    private boolean menuAccess;
+    private Boolean menuAccess;
+
+    private Boolean allowSecondaryTenants;
 
     private List<AppletPropConfig> propList;
 
     private List<AppletFilterConfig> filterList;
 
     private List<AppletSetValuesConfig> setValuesList;
+    
+    public AppletConfig() {
+        this.menuAccess = Boolean.FALSE;
+        this.allowSecondaryTenants = Boolean.FALSE;;
+    }
     
     public AppletType getType() {
         return type;
@@ -142,13 +150,24 @@ public class AppletConfig extends BaseNameConfig {
         this.pseudoDeleteField = pseudoDeleteField;
     }
 
-    public boolean isMenuAccess() {
+    public Boolean getMenuAccess() {
         return menuAccess;
     }
 
-    @XmlAttribute(required = true)
-    public void setMenuAccess(boolean menuAccess) {
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setMenuAccess(Boolean menuAccess) {
         this.menuAccess = menuAccess;
+    }
+
+    public Boolean getAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 
     public int getDisplayIndex() {

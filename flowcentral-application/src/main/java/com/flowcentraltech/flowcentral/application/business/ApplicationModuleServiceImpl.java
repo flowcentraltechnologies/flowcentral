@@ -403,8 +403,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     AppletDef.Builder adb = AppletDef.newBuilder(appApplet.getType(), appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
                             appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
-                            descriptiveButtons, _actLongName, appApplet.getDescription(), appApplet.getId(),
-                            appApplet.getVersionNo());
+                            appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
+                            appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
                     }
@@ -1765,7 +1765,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
         final boolean indicateMenuSectors = appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
-        List<Application> applicationList = indicateMenuSectors
+        final boolean sectorSortOnMenu = appletUtilities.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SECTOR_SORT_ON_MENU);
+        List<Application> applicationList = indicateMenuSectors && sectorSortOnMenu
                 ? environment().listAll(
                         new ApplicationQuery().isMenuAccess().addOrder("sectorShortCode", "displayIndex", "label"))
                 : environment().listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
@@ -2725,6 +2727,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private List<AppletDef> getImportDataAppletDefs(String appletFilter) throws UnifyException {
         Query<AppApplet> query = new AppAppletQuery().type(AppletType.DATA_IMPORT).menuAccess(true)
                 .addSelect("applicationName", "name");
+        if (isTenancyEnabled() && !getUserToken().isPrimaryTenant()) {
+            query.addEquals("allowSecondaryTenants", Boolean.TRUE);
+        }
+        
         if (!StringUtils.isBlank(appletFilter)) {
             query.addILike("label", appletFilter);
         }
@@ -2746,6 +2752,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private List<AppletDef> getUnreservedMenuAppletDefs(String applicationName, String appletFilter)
             throws UnifyException {
         Query<AppApplet> query = new AppAppletQuery().menuAccess(true).unreserved().applicationName(applicationName);
+        if (isTenancyEnabled() && !getUserToken().isPrimaryTenant()) {
+            query.addEquals("allowSecondaryTenants", Boolean.TRUE);
+        }
+        
         if (!StringUtils.isBlank(appletFilter)) {
             query.addILike("label", appletFilter);
         }
@@ -2892,7 +2902,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
-                    appApplet.setMenuAccess(appletConfig.isMenuAccess());
+                    appApplet.setMenuAccess(appletConfig.getMenuAccess());
+                    appApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                     appApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                     appApplet.setBaseField(appletConfig.getBaseField());
                     appApplet.setAssignField(appletConfig.getAssignField());
@@ -2911,7 +2922,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppApplet.setIcon(appletConfig.getIcon());
                         oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                         oldAppApplet.setPath(appletConfig.getPath());
-                        oldAppApplet.setMenuAccess(appletConfig.isMenuAccess());
+                        oldAppApplet.setMenuAccess(appletConfig.getMenuAccess());
+                        oldAppApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                         oldAppApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                         oldAppApplet.setBaseField(appletConfig.getBaseField());
                         oldAppApplet.setAssignField(appletConfig.getAssignField());

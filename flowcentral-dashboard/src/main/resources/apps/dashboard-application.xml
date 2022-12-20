@@ -9,7 +9,7 @@
 			description="$m{dashboard.application.appdashboard}"
 			label="$m{dashboard.application.appdashboard.label}" icon="chart-pie"
 			type="path_page" path="/application/dashboard/openPage"
-			menuAccess="true">
+			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 		<applet name="manageDashboard"
 			description="$m{dashboard.dashboard.manage}"

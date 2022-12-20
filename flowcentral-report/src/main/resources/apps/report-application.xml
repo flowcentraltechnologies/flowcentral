@@ -8,7 +8,8 @@
 		<applet name="appReportListing"
 			description="$m{report.application.appreportlisting}"
 			label="$m{report.application.appreportlisting.label}" icon="copy"
-			type="path_page" path="/report/reportlisting/openPage" menuAccess="true">
+			type="path_page" path="/report/reportlisting/openPage"
+			menuAccess="true" allowSecondaryTenants="true">
 		</applet>
 	</applets>
 	<!-- References -->
@@ -17,17 +18,17 @@
 			description="$m{report.reportabledefinition.reference}"
 			entity="reportableDef" searchField="description" />
 		<reference name="reportableFieldRef"
-			description="$m{report.reportablefield.reference}" entity="reportableField"
-			searchField="description" />
+			description="$m{report.reportablefield.reference}"
+			entity="reportableField" searchField="description" />
 		<reference name="reportConfigRef"
-			description="$m{report.reportconfiguration.reference}" entity="reportConfig"
-			searchField="description" />
+			description="$m{report.reportconfiguration.reference}"
+			entity="reportConfig" searchField="description" />
 		<reference name="reportColumnRef"
 			description="$m{report.reportcolumn.reference}" entity="reportColumn"
 			searchField="description" />
 		<reference name="reportParameterRef"
-			description="$m{report.reportparameter.reference}" entity="reportParameter"
-			searchField="description" />
+			description="$m{report.reportparameter.reference}"
+			entity="reportParameter" searchField="description" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -35,12 +36,15 @@
 			description="$m{report.reportabledefinition}"
 			label="$m{report.reportabledefinition.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportableDefinition">
-			<field name="title" label="$m{report.reportabledefinition.title}"
-				type="string" maxLen="96"  />
-			<field name="entity" label="$m{report.reportabledefinition.entity}"
-				type="string" maxLen="128"  />
-			<field name="fieldList" label="$m{report.reportabledefinition.fields}"
-				type="child_list" references="reportableFieldRef" />
+			<field name="title"
+				label="$m{report.reportabledefinition.title}" type="string"
+				maxLen="96" />
+			<field name="entity"
+				label="$m{report.reportabledefinition.entity}" type="string"
+				maxLen="128" />
+			<field name="fieldList"
+				label="$m{report.reportabledefinition.fields}" type="child_list"
+				references="reportableFieldRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{report.reportabledefinition.uc.name}"
 				fieldList="applicationId,name" />
@@ -48,23 +52,26 @@
 				description="$m{report.reportabledefinition.uc.description}"
 				fieldList="applicationId,description" />
 		</entity>
-		<entity name="reportableField" description="$m{report.reportablefield}"
+		<entity name="reportableField"
+			description="$m{report.reportablefield}"
 			label="$m{report.reportablefield.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportableField">
 			<field name="reportableId"
 				label="$m{report.reportablefield.reportableid}" type="ref"
 				references="reportableDefRef" inputWidget="application.entitylist" />
 			<field name="name" label="$m{report.reportablefield.name}"
-				type="string"  maxLen="32" />
+				type="string" maxLen="32" />
 			<field name="description"
-				label="$m{report.reportablefield.description}" type="string"  maxLen="96" nullable="true" />
+				label="$m{report.reportablefield.description}" type="string"
+				maxLen="96" nullable="true" />
 			<field name="type" label="$m{report.reportablefield.type}"
-				type="string" maxLen="128"  nullable="true" />
-			<field name="formatter" label="$m{report.reportablefield.formatter}"
-				type="string" maxLen="128"  nullable="true" />
+				type="string" maxLen="128" nullable="true" />
+			<field name="formatter"
+				label="$m{report.reportablefield.formatter}" type="string"
+				maxLen="128" nullable="true" />
 			<field name="horizontalAlign"
 				label="$m{report.reportablefield.horizontalalign}" type="string"
-				nullable="true" maxLen="32"  />
+				nullable="true" maxLen="32" />
 			<field name="width" label="$m{report.reportablefield.width}"
 				type="integer" nullable="true" />
 			<field name="parameterOnly"
@@ -75,31 +82,39 @@
 			label="$m{report.reportconfiguration.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportConfiguration">
 			<field name="reportable"
-				label="$m{report.reportconfiguration.reportable}" type="string" maxLen="128"  />
-			<field name="title" label="$m{report.reportconfiguration.title}"
-				type="string" maxLen="96"  />
-			<field name="template" label="$m{report.reportconfiguration.template}"
-				type="string" maxLen="64"  nullable="true" />
-			<field name="layout" label="$m{report.reportconfiguration.layout}"
-				type="string" maxLen="64"  nullable="true" />
+				label="$m{report.reportconfiguration.reportable}" type="string"
+				maxLen="128" />
+			<field name="title"
+				label="$m{report.reportconfiguration.title}" type="string"
+				maxLen="96" />
+			<field name="template"
+				label="$m{report.reportconfiguration.template}" type="string"
+				maxLen="64" nullable="true" />
+			<field name="layout"
+				label="$m{report.reportconfiguration.layout}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="processor"
 				label="$m{report.reportconfiguration.processor}" type="string"
-				 maxLen="64" nullable="true" />
+				maxLen="64" nullable="true" />
 			<field name="showGrandFooter"
-				label="$m{report.reportconfiguration.showgrandfooter}" type="boolean" />
+				label="$m{report.reportconfiguration.showgrandfooter}"
+				type="boolean" />
 			<field name="invertGroupColors"
-				label="$m{report.reportconfiguration.invertgroupcolors}" type="boolean" />
+				label="$m{report.reportconfiguration.invertgroupcolors}"
+				type="boolean" />
 			<field name="landscape"
 				label="$m{report.reportconfiguration.landscape}" type="boolean" />
 			<field name="underlineRows"
 				label="$m{report.reportconfiguration.underlinerows}" type="boolean" />
 			<field name="shadeOddRows"
 				label="$m{report.reportconfiguration.shadeoddrows}" type="boolean" />
-			<field name="filter" label="$m{report.reportconfiguration.filter}"
-				type="child" category="report-config" references="application.appFilterRef"
+			<field name="filter"
+				label="$m{report.reportconfiguration.filter}" type="child"
+				category="report-config" references="application.appFilterRef"
 				nullable="true" />
-			<field name="columnList" label="$m{report.reportconfiguration.columns}"
-				type="child_list" references="reportColumnRef" />
+			<field name="columnList"
+				label="$m{report.reportconfiguration.columns}" type="child_list"
+				references="reportColumnRef" />
 			<field name="parameterList"
 				label="$m{report.reportconfiguration.parameters}" type="child_list"
 				references="reportParameterRef" />
@@ -110,33 +125,39 @@
 				description="$m{report.reportconfiguration.uc.description}"
 				fieldList="applicationId,description" />
 		</entity>
-		<entity name="reportColumn" description="$m{report.reportcolumn}"
+		<entity name="reportColumn"
+			description="$m{report.reportcolumn}"
 			label="$m{report.reportcolumn.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportColumn">
 			<field name="reportConfigurationId"
 				label="$m{report.reportcolumn.reportconfigurationid}" type="ref"
 				references="reportConfigRef" inputWidget="application.entitylist" />
-			<field name="columnOrder" label="$m{report.reportcolumn.columnorder}"
-				type="enum_ref" references="orderlist" inputWidget="application.enumlist"
+			<field name="columnOrder"
+				label="$m{report.reportcolumn.columnorder}" type="enum_ref"
+				references="orderlist" inputWidget="application.enumlist"
 				nullable="true" />
 			<field name="horizAlignType"
 				label="$m{report.reportcolumn.horizaligntype}" type="enum_ref"
 				references="horizontalalignlist" inputWidget="application.enumlist"
 				nullable="true" />
-			<field name="fieldName" label="$m{report.reportcolumn.fieldname}" type="string"  maxLen="32" />
-			<field name="description" label="$m{report.reportcolumn.description}"
-				type="string" maxLen="48"  />
-			<field name="type" label="$m{report.reportcolumn.type}" type="string"
-				nullable="true" maxLen="96"  />
-			<field name="formatter" label="$m{report.reportcolumn.formatter}"
-				type="string" maxLen="64"  nullable="true" />
+			<field name="fieldName"
+				label="$m{report.reportcolumn.fieldname}" type="string" maxLen="32" />
+			<field name="description"
+				label="$m{report.reportcolumn.description}" type="string"
+				maxLen="48" />
+			<field name="type" label="$m{report.reportcolumn.type}"
+				type="string" nullable="true" maxLen="96" />
+			<field name="formatter"
+				label="$m{report.reportcolumn.formatter}" type="string" maxLen="64"
+				nullable="true" />
 			<field name="width" label="$m{report.reportcolumn.width}"
 				type="integer" />
 			<field name="group" label="$m{report.reportcolumn.group}"
 				type="boolean" />
 			<field name="groupOnNewPage"
 				label="$m{report.reportcolumn.grouponnewpage}" type="boolean" />
-			<field name="sum" label="$m{report.reportcolumn.sum}" type="boolean" />
+			<field name="sum" label="$m{report.reportcolumn.sum}"
+				type="boolean" />
 			<field name="columnOrderDesc"
 				label="$m{report.reportcolumn.columnorderdesc}" type="list_only"
 				key="columnOrder" property="description" />
@@ -144,29 +165,34 @@
 				label="$m{report.reportcolumn.horizaligntypedesc}" type="list_only"
 				key="horizAlignType" property="description" />
 		</entity>
-		<entity name="reportParameter" description="$m{report.reportparameter}"
+		<entity name="reportParameter"
+			description="$m{report.reportparameter}"
 			label="$m{report.reportparameter.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportParameter">
 			<field name="reportConfigurationId"
 				label="$m{report.reportparameter.reportconfigurationid}" type="ref"
 				references="reportConfigRef" inputWidget="application.entitylist" />
 			<field name="type" label="$m{report.reportparameter.type}"
-				type="enum_ref" references="datatypelist" inputWidget="application.enumlist"
-				/>
+				type="enum_ref" references="datatypelist"
+				inputWidget="application.enumlist" />
 			<field name="name" label="$m{report.reportparameter.name}"
 				type="string" maxLen="32" />
 			<field name="description"
-				label="$m{report.reportparameter.description}" type="string" maxLen="128"  />
-			<field name="label" label="$m{report.reportparameter.labelfield}"
-				type="string" maxLen="128"  />
-			<field name="mandatory" label="$m{report.reportparameter.mandatory}"
-				type="boolean" />
-			<field name="defaultVal" label="$m{report.reportparameter.defaultval}"
-				type="string" maxLen="64"  nullable="true" />
+				label="$m{report.reportparameter.description}" type="string"
+				maxLen="128" />
+			<field name="label"
+				label="$m{report.reportparameter.labelfield}" type="string"
+				maxLen="128" />
+			<field name="mandatory"
+				label="$m{report.reportparameter.mandatory}" type="boolean" />
+			<field name="defaultVal"
+				label="$m{report.reportparameter.defaultval}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="editor" label="$m{report.reportparameter.editor}"
-				type="string" maxLen="64"  nullable="true" />
-			<field name="typeDesc" label="$m{report.reportparameter.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="string" maxLen="64" nullable="true" />
+			<field name="typeDesc"
+				label="$m{report.reportparameter.typedesc}" type="list_only"
+				key="type" property="description" />
 		</entity>
 	</entities>
 </application>

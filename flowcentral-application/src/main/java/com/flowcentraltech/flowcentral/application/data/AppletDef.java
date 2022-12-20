@@ -72,6 +72,8 @@ public class AppletDef extends BaseApplicationEntityDef {
 
     private boolean menuAccess;
 
+    private boolean allowSecondaryTenants;
+
     private boolean descriptiveButtons;
 
     private List<AppletPropDef> propDefList;
@@ -90,8 +92,8 @@ public class AppletDef extends BaseApplicationEntityDef {
             Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
             String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
             String openPath, String originApplicationName, String originName, int displayIndex, boolean openWindow,
-            boolean menuAccess, boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description,
-            Long id, long version) {
+            boolean menuAccess, boolean allowSecondaryTenants, boolean descriptiveButtons,
+            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -107,6 +109,7 @@ public class AppletDef extends BaseApplicationEntityDef {
         this.displayIndex = displayIndex;
         this.openWindow = openWindow;
         this.menuAccess = menuAccess;
+        this.allowSecondaryTenants = allowSecondaryTenants;
         this.descriptiveButtons = descriptiveButtons;
         this.propDefList = propDefList;
         this.propDefMap = propDefMap;
@@ -158,6 +161,7 @@ public class AppletDef extends BaseApplicationEntityDef {
         _facade.displayIndex = _appletDef.displayIndex;
         _facade.openWindow = openWindow;
         _facade.menuAccess = menuAccess;
+        _facade.allowSecondaryTenants = allowSecondaryTenants;
         _facade.descriptiveButtons = descriptiveButtons;
         _facade.propDefList = propDefList;
         _facade.propDefMap = propDefMap;
@@ -263,6 +267,10 @@ public class AppletDef extends BaseApplicationEntityDef {
         return menuAccess;
     }
 
+    public boolean isAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
     public List<AppletFilterDef> getPreferredFormFilterList() {
         return preferredFormFilterList;
     }
@@ -346,17 +354,17 @@ public class AppletDef extends BaseApplicationEntityDef {
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean descriptiveButtons, String longName,
-            String description) {
+            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
+            boolean descriptiveButtons, String longName, String description) {
         return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
-                descriptiveButtons, longName, description, null, 0L);
+                allowSecondaryTenants, descriptiveButtons, longName, description, null, 0L);
     }
 
     public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean descriptiveButtons, String longName,
-            String description, Long id, long version) {
+            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
+            boolean descriptiveButtons, String longName, String description, Long id, long version) {
         return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
-                descriptiveButtons, longName, description, id, version);
+                allowSecondaryTenants, descriptiveButtons, longName, description, id, version);
     }
 
     public static class Builder {
@@ -393,6 +401,8 @@ public class AppletDef extends BaseApplicationEntityDef {
 
         private boolean menuAccess;
 
+        private boolean allowSecondaryTenants;
+
         private boolean descriptiveButtons;
 
         private String longName;
@@ -404,8 +414,8 @@ public class AppletDef extends BaseApplicationEntityDef {
         private long version;
 
         public Builder(AppletType type, String entity, String label, String icon, String assignDescField,
-                String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean descriptiveButtons,
-                String longName, String description, Long id, long version) {
+                String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
+                boolean descriptiveButtons, String longName, String description, Long id, long version) {
             this.type = type;
             this.propDefMap = new HashMap<String, AppletPropDef>();
             this.setValuesDefMap = new HashMap<String, AppletSetValuesDef>();
@@ -417,6 +427,7 @@ public class AppletDef extends BaseApplicationEntityDef {
             this.pseudoDeleteField = pseudoDeleteField;
             this.displayIndex = displayIndex;
             this.menuAccess = menuAccess;
+            this.allowSecondaryTenants = allowSecondaryTenants;
             this.descriptiveButtons = descriptiveButtons;
             this.longName = longName;
             this.description = description;
@@ -489,7 +500,7 @@ public class AppletDef extends BaseApplicationEntityDef {
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
                     DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
                     routeToApplet, openPath, originApplicationName, originName, displayIndex, openWindow, menuAccess,
-                    descriptiveButtons, nameParts, description, id, version);
+                    allowSecondaryTenants, descriptiveButtons, nameParts, description, id, version);
         }
     }
 
