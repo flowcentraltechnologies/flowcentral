@@ -34,6 +34,16 @@ public class Tenant extends BaseEntity {
     @Column
     private Boolean primary;
     
+    public Tenant(Long id, String name, Boolean primary) {
+        super.setId(id);
+        this.name = name;
+        this.primary = primary;
+    }
+    
+    public Tenant() {
+
+    }
+
     @Override
     public String getDescription() {
         return name;

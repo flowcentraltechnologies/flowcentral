@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Convenient abstract base class for tenant providers..
@@ -47,11 +50,17 @@ public abstract class AbstractTenantProvider extends AbstractUnifyComponent impl
 
     private final String tenantEntityName;
 
+    private final ProviderInfo providerInfo;
+
     private final Map<String, String> queryFieldMap;
 
-    protected AbstractTenantProvider(String tenantEntityName, Map<String, String> queryFieldMap) {
+    protected AbstractTenantProvider(String tenantEntityName, ProviderInfo providerInfo) {
         this.tenantEntityName = tenantEntityName;
-        this.queryFieldMap = queryFieldMap;
+        this.providerInfo = providerInfo;
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("name", providerInfo.getNameField());
+        map.put("primary", providerInfo.getPrimaryFlagField());
+        this.queryFieldMap = Collections.unmodifiableMap(map);
     }
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
@@ -166,7 +175,13 @@ public abstract class AbstractTenantProvider extends AbstractUnifyComponent impl
 
     }
 
-    protected abstract Tenant doCreateTenant(Entity inst) throws UnifyException;
+    protected ApplicationModuleService application() {
+        return applicationModuleService;
+    }
+
+    protected EnvironmentService environment() {
+        return environmentService;
+    }
 
     private Query<? extends Entity> convertQuery(Query<Tenant> query) throws UnifyException {
         Query<? extends Entity> _query = Query.of(tenantClass);
@@ -191,11 +206,32 @@ public abstract class AbstractTenantProvider extends AbstractUnifyComponent impl
 
     private Tenant createTenant(Entity inst) throws UnifyException {
         if (inst != null) {
-            Tenant tenant = doCreateTenant(inst);
-            tenant.setId((Long) inst.getId());
-            return tenant;
+            final String name = DataUtils.getBeanProperty(String.class, inst, providerInfo.getNameField());
+            final boolean primary = DataUtils.getBeanProperty(boolean.class, inst, providerInfo.getPrimaryFlagField());
+            return new Tenant((Long) inst.getId(), name, primary);
         }
 
         return null;
     }
+
+    protected static class ProviderInfo {
+
+        private final String nameField;
+
+        private final String primaryFlagField;
+
+        public ProviderInfo(String nameField, String primaryFlagField) {
+            this.nameField = nameField;
+            this.primaryFlagField = primaryFlagField;
+        }
+
+        public String getNameField() {
+            return nameField;
+        }
+
+        public String getPrimaryFlagField() {
+            return primaryFlagField;
+        }
+    }
+
 }
