@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.system.business;
+package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.system.entities.Tenant;
 import com.tcdng.unify.core.AbstractUnifyComponent;
@@ -34,23 +35,27 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractTenantProvider<T extends Entity> extends AbstractUnifyComponent
-        implements TenantProvider {
+public abstract class AbstractTenantProvider extends AbstractUnifyComponent implements TenantProvider {
+
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
 
     @Configurable
     private EnvironmentService environmentService;
 
-    private final Class<T> tenantClass;
-    
-    private final Map<String, String> queryFieldMap;
-    
-    public AbstractTenantProvider(Class<T> tenantClass, Map<String, String> queryFieldMap) {
-        if (Tenant.class.equals(tenantClass)) {
-            throw new IllegalArgumentException("Can use tenant class for provider.");
-        }
+    private Class<? extends Entity> tenantClass;
 
-        this.tenantClass = tenantClass;
+    private final String tenantEntityName;
+
+    private final Map<String, String> queryFieldMap;
+
+    protected AbstractTenantProvider(String tenantEntityName, Map<String, String> queryFieldMap) {
+        this.tenantEntityName = tenantEntityName;
         this.queryFieldMap = queryFieldMap;
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
     }
 
     public final void setEnvironmentService(EnvironmentService environmentService) {
@@ -59,96 +64,101 @@ public abstract class AbstractTenantProvider<T extends Entity> extends AbstractU
 
     @Override
     public Tenant find(Long id) throws UnifyException {
-        T record = environmentService.find(tenantClass, id);
+        Entity record = environmentService.find(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant find(Long id, Object versionNo) throws UnifyException {
-        T record = environmentService.find(tenantClass, id);
+        Entity record = environmentService.find(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant find(Query<Tenant> query) throws UnifyException {
-        T record = environmentService.find(tenantClass, convertQuery(query));
+        Entity record = environmentService.find(tenantClass, convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public Tenant findLean(Long id) throws UnifyException {
-        T record = environmentService.findLean(tenantClass, id);
+        Entity record = environmentService.findLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant findLean(Long id, Object versionNo) throws UnifyException {
-        T record = environmentService.findLean(tenantClass, id);
+        Entity record = environmentService.findLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant findLean(Query<Tenant> query) throws UnifyException {
-        T record = environmentService.findLean(tenantClass, convertQuery(query));
+        Entity record = environmentService.findLean(tenantClass, convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public List<Tenant> findAll(Query<Tenant> query) throws UnifyException {
-        List<T> instList = environmentService.findAll(convertQuery(query));
+        List<? extends Entity> instList = environmentService.findAll(convertQuery(query));
         return createTenantList(instList);
     }
 
     @Override
     public Tenant list(Long id) throws UnifyException {
-        T record = environmentService.list(tenantClass, id);
+        Entity record = environmentService.list(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant list(Long id, Object versionNo) throws UnifyException {
-        T record = environmentService.list(tenantClass, id);
+        Entity record = environmentService.list(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant list(Query<Tenant> query) throws UnifyException {
-        T record = environmentService.list(tenantClass,  convertQuery(query));
+        Entity record = environmentService.list(tenantClass, convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public Tenant listLean(Long id) throws UnifyException {
-        T record = environmentService.listLean(tenantClass, id);
+        Entity record = environmentService.listLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant listLean(Long id, Object versionNo) throws UnifyException {
-        T record = environmentService.listLean(tenantClass, id);
+        Entity record = environmentService.listLean(tenantClass, id);
         return createTenant(record);
     }
 
     @Override
     public Tenant listLean(Query<Tenant> query) throws UnifyException {
-        T record = environmentService.listLean(tenantClass,  convertQuery(query));
+        Entity record = environmentService.listLean(tenantClass, convertQuery(query));
         return createTenant(record);
     }
 
     @Override
     public List<Tenant> listAll(Query<Tenant> query) throws UnifyException {
-        List<T> instList = environmentService.listAll(convertQuery(query));
+        List<? extends Entity> instList = environmentService.listAll(convertQuery(query));
         return createTenantList(instList);
-     }
+    }
 
     @Override
     public int countAll(Query<Tenant> query) throws UnifyException {
         return environmentService.countAll(convertQuery(query));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void onInitialize() throws UnifyException {
-
+        EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(tenantEntityName);
+        tenantClass = (Class<? extends Entity>) entityClassDef.getEntityClass();
+        if (Tenant.class.equals(tenantClass)) {
+            throw new IllegalArgumentException("Can not use tenant class for provider.");
+        }
     }
 
     @Override
@@ -156,36 +166,36 @@ public abstract class AbstractTenantProvider<T extends Entity> extends AbstractU
 
     }
 
-    protected abstract Tenant doCreateTenant(T inst) throws UnifyException;
+    protected abstract Tenant doCreateTenant(Entity inst) throws UnifyException;
 
-    private Query<T> convertQuery(Query<Tenant> query) throws UnifyException {
-        Query<T> _query = Query.of(tenantClass);
+    private Query<? extends Entity> convertQuery(Query<Tenant> query) throws UnifyException {
+        Query<? extends Entity> _query = Query.of(tenantClass);
         if (!query.isEmptyCriteria()) {
             Restriction restriction = query.getRestrictions();
             restriction.fieldSwap(queryFieldMap);
             _query.addRestriction(restriction);
         }
-        
+
         return _query;
     }
-    
-    private List<Tenant> createTenantList(List<T> instList) throws UnifyException {
+
+    private List<Tenant> createTenantList(List<? extends Entity> instList) throws UnifyException {
         List<Tenant> tenantList = new ArrayList<Tenant>();
-        for (T inst: instList) {
+        for (Entity inst : instList) {
             Tenant tenant = createTenant(inst);
             tenantList.add(tenant);
         }
-        
+
         return tenantList;
     }
-    
-    private Tenant createTenant(T inst) throws UnifyException {
+
+    private Tenant createTenant(Entity inst) throws UnifyException {
         if (inst != null) {
             Tenant tenant = doCreateTenant(inst);
             tenant.setId((Long) inst.getId());
             return tenant;
         }
-        
+
         return null;
     }
 }

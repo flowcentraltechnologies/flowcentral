@@ -1,4 +1,4 @@
-package com.flowcentraltech.flowcentral.system.business;
+package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.List;
 
