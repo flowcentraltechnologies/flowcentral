@@ -141,7 +141,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
                             AppletDef.Builder adb = AppletDef.newBuilder(type.appletType(), entity, label, type.icon(),
-                                    assignDescField, pseudoDeleteField, 0, true, descriptiveButtons, appletName,
+                                    assignDescField, pseudoDeleteField, 0, true, false, descriptiveButtons, appletName,
                                     description, np.getInstId(), 0L);
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM, form);
                             adb.addPropDef(StudioAppletPropertyConstants.ENTITY_FORM, form);

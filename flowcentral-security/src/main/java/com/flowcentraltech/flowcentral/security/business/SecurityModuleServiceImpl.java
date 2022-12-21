@@ -129,10 +129,20 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public User loginUser(String loginId, String password, Locale loginLocale) throws UnifyException {
+    public User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId)
+            throws UnifyException {
         User user = environment().list(new UserQuery().loginId(loginId));
         if (user == null) {
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
+        }
+        
+        if (loginTenantId == null && systemModuleService.getTenantCount() > 0) {
+            throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+        }
+        
+        if (!DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(user.getId()) && loginTenantId != null
+                && !loginTenantId.equals(user.getTenantId())) {
+            throw new UnifyException(SecurityModuleErrorConstants.TENANT_WITH_ID_NOT_FOUND);
         }
 
         boolean accountLockingEnabled = systemModuleService.getSysParameterValue(boolean.class,
@@ -179,7 +189,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             userLoginEvent.setRemoteHost(ctx.getRemoteHost());
             environment().create(userLoginEvent);
         }
-
+        
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
         if (loginLocale != null) {
@@ -196,9 +206,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
 
         sessionCtx.setUseDaylightSavings(sessionCtx.getTimeZone().inDaylightTime(now));
-
+        
         // Login to session and set session attributes
-        userSessionManager.login(createUserToken(user));
+        userSessionManager.login(createUserToken(user, loginTenantId));
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERNAME, user.getFullName());
         String branchDesc = user.getBranchDesc();
         if (StringUtils.isBlank(branchDesc)) {
@@ -499,7 +509,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         return userRoleInfoList;
     }
 
-    private UserToken createUserToken(User user) throws UnifyException {
+    private UserToken createUserToken(User user, Long loginTenantId) throws UnifyException {
         boolean allowMultipleLogin = user.isReserved();
         if (!allowMultipleLogin) {
             allowMultipleLogin = Boolean.TRUE.equals(user.getAllowMultipleLogin());
@@ -515,9 +525,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         String colorScheme = ColorUtils.getConformingColorSchemeCode(
                 getContainerSetting(String.class, UnifyCorePropertyConstants.APPLICATION_COLORSCHEME));
         return UserToken.newBuilder().userLoginId(user.getLoginId()).userName(user.getFullName())
-                .ipAddress(getSessionContext().getRemoteAddress()).branchCode(user.getBranchCode())
-                .zoneCode(user.getZoneCode()).colorScheme(colorScheme).globalAccess(globalAccess)
-                .reservedUser(user.isReserved()).allowMultipleLogin(allowMultipleLogin).build();
+                .tenantId(loginTenantId).ipAddress(getSessionContext().getRemoteAddress())
+                .branchCode(user.getBranchCode()).zoneCode(user.getZoneCode()).colorScheme(colorScheme)
+                .globalAccess(globalAccess).reservedUser(user.isReserved()).allowMultipleLogin(allowMultipleLogin)
+                .build();
     }
 
     private String generatePasswordAndSendEmail(User user) throws UnifyException {

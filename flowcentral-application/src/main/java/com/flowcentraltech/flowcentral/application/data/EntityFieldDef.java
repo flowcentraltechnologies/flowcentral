@@ -432,6 +432,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return dataType.isString();
     }
 
+    public boolean isTenantId() {
+        return dataType.isTenantId();
+    }
+
     public boolean isBase() {
         return type.isBase();
     }

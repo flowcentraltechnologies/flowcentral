@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
 
 /**
  * Query class for branches.
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class BranchQuery extends BaseStatusEntityQuery<Branch> {
+public class BranchQuery extends BaseStatusTenantEntityQuery<Branch> {
 
     public BranchQuery() {
         super(Branch.class);

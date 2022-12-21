@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Environment delegate information.
@@ -58,6 +59,11 @@ public class EnvironmentDelegateInfo {
 
     public boolean isDirect() {
         return environmentDelegate.isDirect();
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
 }

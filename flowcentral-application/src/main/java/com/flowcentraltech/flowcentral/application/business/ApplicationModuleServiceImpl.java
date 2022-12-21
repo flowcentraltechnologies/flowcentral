@@ -178,6 +178,7 @@ import com.flowcentraltech.flowcentral.common.business.ApplicationArtifactInstal
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -253,6 +254,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.Module;
+import com.flowcentraltech.flowcentral.system.entities.Tenant;
+import com.flowcentraltech.flowcentral.system.entities.TenantQuery;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -262,6 +265,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.DynamicEntityType;
 import com.tcdng.unify.core.annotation.DynamicFieldType;
 import com.tcdng.unify.core.annotation.Parameter;
+import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.LocaleType;
@@ -299,8 +303,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
-public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
-        implements ApplicationModuleService, FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider {
+public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
+        FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
 
     private final Set<String> refProperties = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
             AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
@@ -403,8 +407,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     AppletDef.Builder adb = AppletDef.newBuilder(appApplet.getType(), appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
                             appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
-                            descriptiveButtons, _actLongName, appApplet.getDescription(), appApplet.getId(),
-                            appApplet.getVersionNo());
+                            appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
+                            appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
                     }
@@ -1765,7 +1769,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
         final boolean indicateMenuSectors = appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
-        List<Application> applicationList = indicateMenuSectors
+        final boolean sectorSortOnMenu = appletUtilities.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SECTOR_SORT_ON_MENU);
+        List<Application> applicationList = indicateMenuSectors && sectorSortOnMenu
                 ? environment().listAll(
                         new ApplicationQuery().isMenuAccess().addOrder("sectorShortCode", "displayIndex", "label"))
                 : environment().listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));
@@ -2639,6 +2645,39 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return 0;
     }
 
+    @Synchronized("app:postbootsetup")
+    @Override
+    public void performPostBootSetup() throws UnifyException {
+        if (isTenancyEnabled()) {
+            // Detect primary tenant and also possible improper primary tenant change
+            final Long actualPrimaryTenantId = appletUtilities.system().getSysParameterValue(Long.class,
+                    SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
+            boolean primaryTenantResolved = false;
+            getEntityClassDef("system.tenant");
+            List<Tenant> tenantList = appletUtilities.system()
+                    .findTenants((TenantQuery) new TenantQuery().ignoreEmptyCriteria(true));
+            for (Tenant tenant : tenantList) {
+                if (Boolean.TRUE.equals(tenant.getPrimary())) {
+                    if (primaryTenantResolved) {
+                        throwOperationErrorException(
+                                new IllegalArgumentException("Multiple primary tenants defined in system."));
+                    }
+
+                    if (actualPrimaryTenantId == null) {
+                        appletUtilities.system().setSysParameterValue(
+                                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID, tenant.getId());
+                    } else if (actualPrimaryTenantId.equals(tenant.getId())) {
+                        throwOperationErrorException(
+                                new IllegalArgumentException("Primary tenant has been improperly changed."));
+                    }
+
+                    primaryTenantResolved = true;
+                }
+            }
+
+        }
+    }
+
     @SuppressWarnings("unchecked")
     private RecLoadInfo resolveListOnlyRecordLoadInformation(EntityDef entityDef, String fieldName, String listVal,
             Formatter<?> formatter) throws UnifyException {
@@ -2725,6 +2764,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private List<AppletDef> getImportDataAppletDefs(String appletFilter) throws UnifyException {
         Query<AppApplet> query = new AppAppletQuery().type(AppletType.DATA_IMPORT).menuAccess(true)
                 .addSelect("applicationName", "name");
+        if (isTenancyEnabled() && !getUserToken().isPrimaryTenant()) {
+            query.addEquals("allowSecondaryTenants", Boolean.TRUE);
+        }
+
         if (!StringUtils.isBlank(appletFilter)) {
             query.addILike("label", appletFilter);
         }
@@ -2746,6 +2789,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private List<AppletDef> getUnreservedMenuAppletDefs(String applicationName, String appletFilter)
             throws UnifyException {
         Query<AppApplet> query = new AppAppletQuery().menuAccess(true).unreserved().applicationName(applicationName);
+        if (isTenancyEnabled() && !getUserToken().isPrimaryTenant()) {
+            query.addEquals("allowSecondaryTenants", Boolean.TRUE);
+        }
+
         if (!StringUtils.isBlank(appletFilter)) {
             query.addILike("label", appletFilter);
         }
@@ -2892,7 +2939,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appApplet.setIcon(appletConfig.getIcon());
                     appApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                     appApplet.setPath(appletConfig.getPath());
-                    appApplet.setMenuAccess(appletConfig.isMenuAccess());
+                    appApplet.setMenuAccess(appletConfig.getMenuAccess());
+                    appApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                     appApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                     appApplet.setBaseField(appletConfig.getBaseField());
                     appApplet.setAssignField(appletConfig.getAssignField());
@@ -2911,7 +2959,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppApplet.setIcon(appletConfig.getIcon());
                         oldAppApplet.setRouteToApplet(appletConfig.getRouteToApplet());
                         oldAppApplet.setPath(appletConfig.getPath());
-                        oldAppApplet.setMenuAccess(appletConfig.isMenuAccess());
+                        oldAppApplet.setMenuAccess(appletConfig.getMenuAccess());
+                        oldAppApplet.setAllowSecondaryTenants(appletConfig.getAllowSecondaryTenants());
                         oldAppApplet.setDisplayIndex(appletConfig.getDisplayIndex());
                         oldAppApplet.setBaseField(appletConfig.getBaseField());
                         oldAppApplet.setAssignField(appletConfig.getAssignField());
@@ -4679,11 +4728,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 entityFieldDef.isDescriptive());
                     } else {
                         if (!entityFieldDef.isChildRef()) {
-                            deib.addField(type, entityFieldDef.getDataType().dataType(), entityFieldDef.getColumnName(),
-                                    entityFieldDef.getFieldName(), entityFieldDef.getDefaultVal(),
-                                    entityFieldDef.getMaxLen(), entityFieldDef.getPrecision(),
-                                    entityFieldDef.getScale(), entityFieldDef.isNullable(),
-                                    entityFieldDef.isDescriptive());
+                            if (entityFieldDef.isTenantId()) {
+                                deib.addTenantIdField(type, entityFieldDef.getColumnName(),
+                                        entityFieldDef.getFieldName(), entityFieldDef.getPrecision(),
+                                        entityFieldDef.getScale());
+                            } else {
+                                deib.addField(type, entityFieldDef.getDataType().dataType(),
+                                        entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
+                                        entityFieldDef.getDefaultVal(), entityFieldDef.getMaxLen(),
+                                        entityFieldDef.getPrecision(), entityFieldDef.getScale(),
+                                        entityFieldDef.isNullable(), entityFieldDef.isDescriptive());
+                            }
                         }
                     }
                 }

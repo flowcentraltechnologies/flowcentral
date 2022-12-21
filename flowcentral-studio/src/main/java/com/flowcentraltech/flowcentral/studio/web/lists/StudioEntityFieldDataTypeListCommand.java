@@ -52,7 +52,7 @@ public class StudioEntityFieldDataTypeListCommand extends AbstractApplicationLis
                     EntityFieldDataType.LONG, EntityFieldDataType.INTEGER, EntityFieldDataType.SHORT,
                     EntityFieldDataType.DECIMAL, EntityFieldDataType.DOUBLE, EntityFieldDataType.FLOAT,
                     EntityFieldDataType.DATE, EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC,
-                    EntityFieldDataType.CLOB, EntityFieldDataType.BLOB));
+                    EntityFieldDataType.CLOB, EntityFieldDataType.BLOB,EntityFieldDataType.TENANT_ID));
 
     private LocaleFactoryMap<List<Listable>> listFactory;
 

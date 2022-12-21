@@ -189,6 +189,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
         }
     }
 
+    public boolean isWithSearchInput() {
+        return searchEntries != null && !searchEntries.isEmpty();
+    }
+    
     public EntityTable getEntityTable() {
         return entityTable;
     }

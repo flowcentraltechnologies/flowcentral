@@ -670,6 +670,8 @@
 				nullable="true" />
 			<field name="menuAccess"
 				label="$m{application.appapplet.menuaccess}" type="boolean" />
+			<field name="allowSecondaryTenants"
+				label="$m{application.appapplet.allowsecondarytenants}" type="boolean" />
 			<field name="displayIndex"
 				label="$m{application.appapplet.displayindex}" type="integer" />
 			<field name="typeDesc"

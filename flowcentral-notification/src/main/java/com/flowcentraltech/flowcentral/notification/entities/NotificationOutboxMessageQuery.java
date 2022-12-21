@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntityQuery;
 
 /**
  * Notification attachment query class;
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationOutboxMessageQuery extends BaseEntityQuery<NotificationOutboxMessage> {
+public class NotificationOutboxMessageQuery extends BaseTenantEntityQuery<NotificationOutboxMessage> {
 
     public NotificationOutboxMessageQuery() {
         super(NotificationOutboxMessage.class);

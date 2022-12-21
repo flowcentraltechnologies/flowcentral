@@ -75,6 +75,8 @@ import com.flowcentraltech.flowcentral.system.entities.Sector;
 import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
+import com.flowcentraltech.flowcentral.system.entities.Tenant;
+import com.flowcentraltech.flowcentral.system.entities.TenantQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.Setting;
@@ -141,15 +143,15 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable(CommonModuleNameConstants.PARAMGENERATORMANAGER)
     private ParamGeneratorManager paramGeneratorManager;
-    
+
     private final FactoryMap<Long, ScheduledTaskDef> scheduledTaskDefs;
 
     private final FactoryMap<String, CredentialDef> authDefFactoryMap;
 
     private final FactoryMap<String, LicenseDef> licenseDefFactoryMap;
 
-    private final List<String> featureList = Collections.unmodifiableList(Arrays.asList(
-            LicenseFeatureCodeConstants.APPLICATION_AUDIT, LicenseFeatureCodeConstants.APPLICATION_ARCHIVING));
+    private final List<String> featureList = Collections.unmodifiableList(Arrays
+            .asList(LicenseFeatureCodeConstants.APPLICATION_AUDIT, LicenseFeatureCodeConstants.APPLICATION_ARCHIVING));
 
     public SystemModuleServiceImpl() {
         this.authDefFactoryMap = new FactoryMap<String, CredentialDef>(true)
@@ -383,13 +385,23 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public int getTenantCount() throws UnifyException {
+        return environment().countAll(new TenantQuery().ignoreEmptyCriteria(true));
+    }
+
+    @Override
+    public List<Tenant> findTenants(TenantQuery query) throws UnifyException {
+        return environment().findAll(query);
+    }
+
+    @Override
     public LicenseDef getInstanceLicensing() throws UnifyException {
         return licenseDefFactoryMap.get(LICENSE);
     }
 
     @Override
     public boolean isLicensed(String featureCode) throws UnifyException {
-        return true; //licenseDefFactoryMap.get(LICENSE).isLicensed(featureCode);
+        return true; // licenseDefFactoryMap.get(LICENSE).isLicensed(featureCode);
     }
 
     @Override

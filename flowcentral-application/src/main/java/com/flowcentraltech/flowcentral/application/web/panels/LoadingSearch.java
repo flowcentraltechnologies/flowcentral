@@ -110,6 +110,10 @@ public class LoadingSearch {
         }
     }
 
+    public boolean isWithSearchInput() {
+        return searchEntries != null && !searchEntries.isEmpty();
+    }
+
     public String getCommitCaption() {
         return commitCaption;
     }

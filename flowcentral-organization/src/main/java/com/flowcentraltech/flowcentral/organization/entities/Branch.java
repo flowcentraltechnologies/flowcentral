@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  */
 @Table(name = "FC_BRANCH", uniqueConstraints = { @UniqueConstraint({ "code" }), @UniqueConstraint({ "description" }),
         @UniqueConstraint({ "sortCode" }) })
-public class Branch extends BaseStatusEntity {
+public class Branch extends BaseStatusTenantEntity {
 
     @ForeignKey(Zone.class)
     private Long zoneId;

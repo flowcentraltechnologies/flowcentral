@@ -46,13 +46,16 @@
 
 // Login
 !ui-panel:loginPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
-	components:$c{frmUserName frmUserPassword frmLoginMsg frmLoginBtn}	
+	components:$c{frmUserName frmUserPassword frmLoginTenantId frmLoginMsg frmLoginBtn}	
 !ui-name:frmUserName caption:$m{security.application.loginid}
 	styleClass:$e{fc-logintxt} binding:userName case:upper focus:true
     eventHandler:$d{!ui-event event:onenter action:$c{loginAct}}
 !ui-password:frmUserPassword caption:$m{security.application.password}
 	styleClass:$e{fc-logintxt} binding:password
     eventHandler:$d{!ui-event event:onenter action:$c{loginAct}}
+!ui-select:frmLoginTenantId list:logintenantlist blankOption:$m{blank.none}
+	styleClass:$e{fc-logintxt} binding:loginTenantId
+	caption:$m{security.application.tenancy}
 !ui-label:frmLoginMsg styleClass:$e{ui-loginmsg} binding:loginMessage
 !ui-button:frmLoginBtn caption:$m{security.application.signin} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{loginAct}}

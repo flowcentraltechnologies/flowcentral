@@ -67,6 +67,9 @@ public class AppApplet extends BaseApplicationEntity {
     private boolean menuAccess;
 
     @Column
+    private boolean allowSecondaryTenants;
+
+    @Column
     private int displayIndex;
 
     @ListOnly(key = "type", property = "description")
@@ -167,6 +170,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setMenuAccess(boolean menuAccess) {
         this.menuAccess = menuAccess;
+    }
+
+    public boolean isAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    public void setAllowSecondaryTenants(boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 
     public int getDisplayIndex() {

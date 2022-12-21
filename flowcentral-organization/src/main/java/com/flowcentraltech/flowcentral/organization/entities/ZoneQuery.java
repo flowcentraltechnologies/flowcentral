@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
 
 /**
  * Query class for zones.
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ZoneQuery extends BaseStatusEntityQuery<Zone> {
+public class ZoneQuery extends BaseStatusTenantEntityQuery<Zone> {
 
     public ZoneQuery() {
         super(Zone.class);

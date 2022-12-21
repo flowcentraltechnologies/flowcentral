@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntityQuery;
 
 /**
  * Query class for departments.
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DepartmentQuery extends BaseStatusEntityQuery<Department> {
+public class DepartmentQuery extends BaseStatusTenantEntityQuery<Department> {
 
     public DepartmentQuery() {
         super(Department.class);

@@ -1769,6 +1769,8 @@
 						column="1" />
 					<field name="menuAccess" inputWidget="application.checkbox"
 						column="1" />
+					<field name="allowSecondaryTenants" inputWidget="application.checkbox"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="properties"

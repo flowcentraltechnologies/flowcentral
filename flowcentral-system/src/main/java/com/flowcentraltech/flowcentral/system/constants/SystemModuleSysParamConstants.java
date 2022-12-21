@@ -44,4 +44,6 @@ public interface SystemModuleSysParamConstants {
     String SYSTEM_DOWNLOADPATH_LOG_ENABLED = "SYS-000A";
     
     String SYSTEM_GLOBAL_ACCOUNTING_INPUT_ENABLED = "SYS-000B";
+    
+    String SYSTEM_ACTUAL_PRIMARY_TENANT_ID = "SYS-000C";
 }

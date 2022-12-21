@@ -72,7 +72,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     @Configurable
     private WorkspacePrivilegeManager workspacePrivilegeManager;
-    
+
     public UserLoginController() {
         super(UserLoginPageBean.class, Secured.FALSE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
@@ -98,9 +98,11 @@ public class UserLoginController extends AbstractApplicationForwarderController<
                 loginLocale = Locale.forLanguageTag(pageBean.getLanguageTag());
             }
 
-            User user = securityModuleService.loginUser(pageBean.getUserName(), pageBean.getPassword(), loginLocale);
+            User user = securityModuleService.loginUser(pageBean.getUserName(), pageBean.getPassword(), loginLocale,
+                    pageBean.getLoginTenantId());
             pageBean.setUserName(null);
             pageBean.setPassword(null);
+            pageBean.setLoginTenantId(null);
 
             if (!user.isReserved() && pageBean.isIs2FA()) {
                 TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) this
@@ -176,7 +178,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         if (DataUtils.isBlank(pageBean.getUserRoleList())) {
             return noResult();
         }
-        
+
         UserRoleInfo userRoleInfo = pageBean.getUserRoleList().get(getRoleTable().getViewIndex());
         pageBean.setUserRoleList(null);
         try {
@@ -209,7 +211,9 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     @Override
     protected void onInitPage() throws UnifyException {
-//        UserLoginPageBean pageBean = getPageBean();
+        UserLoginPageBean pageBean = getPageBean();
+        pageBean.setLoginTenantId(null);
+        setPageWidgetVisible("frmLoginTenantId", isTenancyEnabled());
 //        boolean isLanguage = getSystemModuleService().getSysParameterValue(boolean.class,
 //                SecurityModuleSysParamConstants.USE_LOGIN_LOCALE);
 //        setPageWidgetVisible("loginPanel.languageField", isLanguage);
@@ -235,6 +239,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     @Override
     protected void onOpenPage() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
+        pageBean.setLoginTenantId(null);
         pageBean.setUserName(null);
         pageBean.setPassword(null);
         pageBean.setToken(null);
@@ -248,10 +253,10 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     private void loadUIOptions() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
-        pageBean.setLoginTitle(system().getSysParameterValue(String.class,
-                SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE));
-        pageBean.setLoginSubtitle(system().getSysParameterValue(String.class,
-                SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE));
+        pageBean.setLoginTitle(
+                system().getSysParameterValue(String.class, SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_TITLE));
+        pageBean.setLoginSubtitle(
+                system().getSysParameterValue(String.class, SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE));
     }
 
     private String selectRole() throws UnifyException {
@@ -290,7 +295,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
         return forwardToApplication(userRole);
     }
-    
+
     private Table getRoleTable() throws UnifyException {
         return getPageWidgetByShortName(Table.class, "selectRolePanel.roleTablePanel.contentTbl");
     }
