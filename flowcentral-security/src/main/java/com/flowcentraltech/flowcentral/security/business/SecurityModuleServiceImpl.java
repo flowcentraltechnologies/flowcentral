@@ -136,8 +136,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
         
-        if (loginTenantId == null && systemModuleService.getTenantCount() > 0) {
-            throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+        if (isTenancyEnabled()) {
+            if (loginTenantId == null && systemModuleService.getTenantCount() > 0) {
+                throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+            }
         }
         
         if (!DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(user.getId()) && loginTenantId != null
