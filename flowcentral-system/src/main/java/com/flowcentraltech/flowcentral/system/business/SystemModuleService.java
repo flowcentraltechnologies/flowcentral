@@ -40,6 +40,15 @@ import com.tcdng.unify.core.task.TaskStatus;
 public interface SystemModuleService extends FlowCentralService {
 
     /**
+     * Gets a count of tenants defined in the system.
+     * 
+     * @return the tenant count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int getTenantCount() throws UnifyException;
+    
+    /**
      * Find tenants by supplied query.
      * 
      * @param query

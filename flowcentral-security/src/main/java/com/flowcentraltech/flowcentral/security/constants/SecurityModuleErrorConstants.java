@@ -52,4 +52,10 @@ public interface SecurityModuleErrorConstants {
 
     /** User account is not approved */
     String USER_ACCOUNT_NOT_APPROVED = "SECURITY_000A";
+
+    /** Tenancy is required */
+    String TENANCY_IS_REQUIRED = "SECURITY_000B";
+
+    /** Tenant with ID not found */
+    String TENANT_WITH_ID_NOT_FOUND = "SECURITY_000C";
 }

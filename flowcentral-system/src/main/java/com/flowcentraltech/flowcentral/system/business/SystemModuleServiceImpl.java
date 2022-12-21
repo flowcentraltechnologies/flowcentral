@@ -386,6 +386,11 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public int getTenantCount() throws UnifyException {
+        return environment().countAll(new TenantQuery().ignoreEmptyCriteria(true));
+    }
+
+    @Override
     public List<Tenant> findTenants(TenantQuery query) throws UnifyException {
         return environment().findAll(query);
     }

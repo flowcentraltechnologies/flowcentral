@@ -129,10 +129,16 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public User loginUser(String loginId, String password, Locale loginLocale) throws UnifyException {
+    public User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId)
+            throws UnifyException {
         User user = environment().list(new UserQuery().loginId(loginId));
         if (user == null) {
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
+        }
+
+        if (!DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(user.getId()) && loginTenantId != null
+                && !loginTenantId.equals(user.getTenantId())) {
+            throw new UnifyException(SecurityModuleErrorConstants.TENANT_WITH_ID_NOT_FOUND);
         }
 
         boolean accountLockingEnabled = systemModuleService.getSysParameterValue(boolean.class,
@@ -179,7 +185,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             userLoginEvent.setRemoteHost(ctx.getRemoteHost());
             environment().create(userLoginEvent);
         }
-
+        
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
         if (loginLocale != null) {
@@ -195,6 +201,11 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             sessionCtx.setTimeZone(getApplicationTimeZone());
         }
 
+        // Set session tenant ID
+        if (loginTenantId != null) {
+            sessionCtx.setAltTenantUserToken(loginTenantId);
+        }
+        
         sessionCtx.setUseDaylightSavings(sessionCtx.getTimeZone().inDaylightTime(now));
 
         // Login to session and set session attributes

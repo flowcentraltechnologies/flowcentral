@@ -51,16 +51,18 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
      * Login user to application with login ID and password.
      * 
      * @param loginId
-     *                    the login ID
+     *                      the login ID
      * @param password
-     *                    the password
+     *                      the password
      * @param loginLocale
-     *                    optional login locale
+     *                      optional login locale
+     * @param loginTenantId
+     *                      login tenant ID
      * @return the user record
      * @throws UnifyException
      *                        if login ID or password is invalid
      */
-    User loginUser(String loginId, String password, Locale loginLocale) throws UnifyException;
+    User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId) throws UnifyException;
 
     /**
      * Changes a user password for current session user.

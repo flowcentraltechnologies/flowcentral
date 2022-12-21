@@ -52,6 +52,8 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
     
     private String loginSubtitle;
     
+    private Long loginTenantId;
+    
     private List<UserRoleInfo> userRoleList;
 
     private Locale origLocale;
@@ -146,6 +148,14 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     public void setLoginSubtitle(String loginSubtitle) {
         this.loginSubtitle = loginSubtitle;
+    }
+
+    public Long getLoginTenantId() {
+        return loginTenantId;
+    }
+
+    public void setLoginTenantId(Long loginTenantId) {
+        this.loginTenantId = loginTenantId;
     }
 
     public List<UserRoleInfo> getUserRoleList() {
