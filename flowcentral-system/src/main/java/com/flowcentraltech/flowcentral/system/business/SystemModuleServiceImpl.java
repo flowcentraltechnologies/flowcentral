@@ -33,7 +33,6 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
-import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemParameterProvider;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
@@ -123,7 +122,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(SystemModuleNameConstants.SYSTEM_MODULE_SERVICE)
 public class SystemModuleServiceImpl extends AbstractFlowCentralService
-        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider, PostBootSetup {
+        implements SystemModuleService, LicenseProvider, SpecialParamProvider, SystemParameterProvider {
 
     private static final String LICENSE = "license";
 
@@ -641,36 +640,6 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             if (triggered >= maxScheduledTaskTrigger) {
                 break;
             }
-        }
-    }
-
-    @Synchronized("sys:postbootsetup")
-    @Override
-    public void performPostBootSetup() throws UnifyException {
-        if (isTenancyEnabled()) {
-            // Detect primary tenant and also possible improper primary tenant change
-            final Long actualPrimaryTenantId = getSysParameterValue(Long.class,
-                    SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
-            boolean primaryTenantResolved = false;
-            List<Tenant> tenantList = findTenants((TenantQuery) new TenantQuery().ignoreEmptyCriteria(true));
-            for (Tenant tenant : tenantList) {
-                if (Boolean.TRUE.equals(tenant.getPrimary())) {
-                    if (primaryTenantResolved) {
-                        throwOperationErrorException(
-                                new IllegalArgumentException("Multiple primary tenants defined in system."));
-                    }
-                    
-                    if (actualPrimaryTenantId == null) {
-                        setSysParameterValue(SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID, tenant.getId());
-                    } else if (actualPrimaryTenantId.equals(tenant.getId())) {
-                        throwOperationErrorException(
-                                new IllegalArgumentException("Primary tenant has been improperly changed."));
-                    }
-                    
-                    primaryTenantResolved = true;
-                }
-            }
-
         }
     }
 

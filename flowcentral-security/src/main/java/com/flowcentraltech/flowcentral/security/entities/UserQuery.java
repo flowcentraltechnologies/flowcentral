@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 import java.util.Collection;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntityQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 
 /**
  * Query class for user records.
@@ -51,6 +52,7 @@ public class UserQuery extends BaseStatusWorkTenantEntityQuery<User> {
     }
 
     public UserQuery loginId(String loginId) {
+        ignoreTenancy(DefaultApplicationConstants.SYSTEM_LOGINID.equals(loginId));
         return (UserQuery) addEquals("loginId", loginId);
     }
 

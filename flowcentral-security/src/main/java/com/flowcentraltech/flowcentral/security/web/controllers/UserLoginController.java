@@ -93,10 +93,6 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     public String login() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
         try {
-            if (pageBean.getLoginTenantId() == null && (system().getTenantCount() > 0)) {
-                throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
-            }
-            
             Locale loginLocale = null;
             if (pageBean.isLanguage() && StringUtils.isNotBlank(pageBean.getLanguageTag())) {
                 loginLocale = Locale.forLanguageTag(pageBean.getLanguageTag());
@@ -106,6 +102,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
                     pageBean.getLoginTenantId());
             pageBean.setUserName(null);
             pageBean.setPassword(null);
+            pageBean.setLoginTenantId(null);
 
             if (!user.isReserved() && pageBean.isIs2FA()) {
                 TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) this
@@ -216,7 +213,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     protected void onInitPage() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
         pageBean.setLoginTenantId(null);
-        setPageWidgetVisible("loginPanel.tenantField", isTenancyEnabled());
+        setPageWidgetVisible("frmLoginTenantId", isTenancyEnabled());
 //        boolean isLanguage = getSystemModuleService().getSysParameterValue(boolean.class,
 //                SecurityModuleSysParamConstants.USE_LOGIN_LOCALE);
 //        setPageWidgetVisible("loginPanel.languageField", isLanguage);
