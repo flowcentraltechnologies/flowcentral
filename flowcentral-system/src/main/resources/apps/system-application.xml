@@ -34,6 +34,11 @@
 			inputType="string"
 			editor="!ui-select list:systemcolorlist blankOption:$m{blank.none} colors:true"
 			renderer="!ui-label" />
+		<widgetType name="tenantlist"
+			description="$m{system.widgettype.tenantlist}" dataType="long"
+			inputType="long"
+			editor="!ui-select list:stenantlist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>

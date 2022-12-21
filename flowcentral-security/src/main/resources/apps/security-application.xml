@@ -612,6 +612,8 @@
 						column="1" required="true" />
 					<field name="branchId" inputWidget="application.entitylist"
 						column="1" />
+					<field name="tenantId" inputWidget="system.tenantlist"
+						column="1" />
 					<field name="passwordExpires"
 						inputWidget="application.checkbox" column="1" />
 					<field name="allowMultipleLogin"
