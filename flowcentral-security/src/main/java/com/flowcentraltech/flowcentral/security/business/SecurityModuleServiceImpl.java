@@ -69,6 +69,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordGenerator;
 import com.tcdng.unify.core.system.UserSessionManager;
@@ -136,13 +137,18 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
         
+        final boolean isSystem = DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(user.getId());
         if (isTenancyEnabled()) {
             if (loginTenantId == null && systemModuleService.getTenantCount() > 0) {
-                throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+                if (isSystem) {
+                    loginTenantId = Entity.PRIMARY_TENANT_ID;
+                } else {
+                    throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+                }
             }
         }
         
-        if (!DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(user.getId()) && loginTenantId != null
+        if (!isSystem && loginTenantId != null
                 && !loginTenantId.equals(user.getTenantId())) {
             throw new UnifyException(SecurityModuleErrorConstants.TENANT_WITH_ID_NOT_FOUND);
         }

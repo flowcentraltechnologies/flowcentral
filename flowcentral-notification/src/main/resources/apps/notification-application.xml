@@ -8,7 +8,8 @@
 		<applet name="manageNotifOutbox"
 			description="$m{notification.notificationoutbox.manage}"
 			label="$m{notification.notificationoutbox.manage.label}" icon="mail-bulk"
-			entity="notifOutbox" type="manage_entitylist" menuAccess="true">
+			entity="notifOutbox" type="manage_entitylist" menuAccess="true"
+			allowSecondaryTenants="true">
 			<property name="searchTable" value="notifOutboxTable" />
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
@@ -26,7 +27,7 @@
 			description="$m{notification.notificationchannel.manage}"
 			label="$m{notification.notificationchannel.manage.label}"
 			icon="satellite-disk" entity="notifChannel" type="manage_entitylist"
-			menuAccess="true">
+			menuAccess="true" allowSecondaryTenants="true">
 			<property name="searchTable" value="notifChannelTable" />
 			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="searchTable.new" value="true" />
