@@ -224,7 +224,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public <T extends Entity> T find(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).find(Query.of(clazz).addEquals("id", id).ignoreTenancy(true));
+        return (T) db(clazz).find(Query.of(clazz).addEquals("id", id));
     }
 
     @Override
@@ -234,7 +234,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public <T extends Entity> T findLean(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).findLean(Query.of(clazz).addEquals("id", id).ignoreTenancy(true));
+        return (T) db(clazz).findLean(Query.of(clazz).addEquals("id", id));
     }
 
     @Override
@@ -271,7 +271,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public <T extends Entity> T list(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).list(Query.of(clazz).addEquals("id", id).ignoreTenancy(true));
+        return (T) db(clazz).list(Query.of(clazz).addEquals("id", id));
     }
 
     @Override
@@ -281,7 +281,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public <T extends Entity> T listLean(Class<T> clazz, Object id) throws UnifyException {
-        return (T) db(clazz).listLean(Query.of(clazz).addEquals("id", id).ignoreTenancy(true));
+        return (T) db(clazz).listLean(Query.of(clazz).addEquals("id", id));
     }
 
     @Override
