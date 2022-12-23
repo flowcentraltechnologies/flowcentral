@@ -66,6 +66,9 @@ public class UserRole extends BaseAuditEntity implements Describable {
     @ListOnly(name = "SUPERVISOR_FG", key = "userId", property = "supervisor")
     private Boolean supervisor;
 
+    @ListOnly(key = "userId", property = "tenantId")
+    private Long tenantId;
+
     @ListOnly(key = "roleId", property = "code")
     private String roleCode;
 
@@ -165,6 +168,14 @@ public class UserRole extends BaseAuditEntity implements Describable {
 
     public void setSupervisor(Boolean supervisor) {
         this.supervisor = supervisor;
+    }
+
+    public Long getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
     }
 
     public String getRoleDesc() {

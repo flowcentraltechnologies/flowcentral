@@ -48,6 +48,10 @@ public class UserGroupRoleQuery extends BaseAuditEntityQuery<UserGroupRole> {
         return (UserGroupRoleQuery) addEquals("roleId", roleId);
     }
 
+    public UserGroupRoleQuery tenantId(Long tenantId) {
+        return (UserGroupRoleQuery) addEquals("tenantId", tenantId);
+    }
+
     public UserGroupRoleQuery roleIdNot(Long roleId) {
         return (UserGroupRoleQuery) addNotEquals("roleId", roleId);
     }

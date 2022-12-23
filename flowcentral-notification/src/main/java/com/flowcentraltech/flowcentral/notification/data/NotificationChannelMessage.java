@@ -44,6 +44,8 @@ public class NotificationChannelMessage {
 
     private Long id;
 
+    private Long tenantId;
+
     private NotificationMessageFormat format;
 
     private List<Recipient> recipients;
@@ -53,12 +55,14 @@ public class NotificationChannelMessage {
     private boolean sent;
 
     private NotificationChannelMessage(NotificationType notificationType, String subject, String reference, String body,
-            Long id, NotificationMessageFormat format, List<Recipient> recipients, List<Attachment> attachments) {
+            Long id, Long tenantId, NotificationMessageFormat format, List<Recipient> recipients,
+            List<Attachment> attachments) {
         this.notificationType = notificationType;
         this.subject = subject;
         this.reference = reference;
         this.body = body;
         this.id = id;
+        this.tenantId = tenantId;
         this.format = format;
         this.recipients = recipients;
         this.attachments = attachments;
@@ -84,6 +88,10 @@ public class NotificationChannelMessage {
         return id;
     }
 
+    public Long getTenantId() {
+        return tenantId;
+    }
+
     public void setSent(boolean sent) {
         this.sent = sent;
     }
@@ -104,8 +112,8 @@ public class NotificationChannelMessage {
         return attachments;
     }
 
-    public static Builder newBuilder(NotificationType notificationType, Long id) {
-        return new Builder(notificationType, id);
+    public static Builder newBuilder(NotificationType notificationType, Long id, Long tenantId) {
+        return new Builder(notificationType, id, tenantId);
     }
 
     public static class Builder {
@@ -120,15 +128,18 @@ public class NotificationChannelMessage {
 
         private Long id;
 
+        private Long tenantId;
+
         private List<Recipient> recipients;
 
         private List<Attachment> attachments;
 
         private NotificationMessageFormat format;
 
-        private Builder(NotificationType notificationType, Long id) {
+        private Builder(NotificationType notificationType, Long id, Long tenantId) {
             this.notificationType = notificationType;
             this.id = id;
+            this.tenantId = tenantId;
             recipients = new ArrayList<Recipient>();
             format = NotificationMessageFormat.PLAIN_TEXT;
         }
@@ -207,7 +218,7 @@ public class NotificationChannelMessage {
         }
 
         public NotificationChannelMessage build() {
-            return new NotificationChannelMessage(notificationType, subject, reference, body, id, format,
+            return new NotificationChannelMessage(notificationType, subject, reference, body, id, tenantId, format,
                     DataUtils.unmodifiableList(recipients), DataUtils.unmodifiableList(attachments));
         }
 

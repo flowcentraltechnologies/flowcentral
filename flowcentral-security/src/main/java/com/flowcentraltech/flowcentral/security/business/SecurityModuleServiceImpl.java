@@ -29,7 +29,6 @@ import java.util.TimeZone;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
-import com.flowcentraltech.flowcentral.common.business.RoleParticipatingUserProvider;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
@@ -87,7 +86,7 @@ import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 @Transactional
 @Component(SecurityModuleNameConstants.SECURITY_MODULE_SERVICE)
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
-        implements SecurityModuleService, NotificationRecipientProvider, RoleParticipatingUserProvider {
+        implements SecurityModuleService, NotificationRecipientProvider {
 
     @Configurable
     private UserSessionManager userSessionManager;
@@ -132,12 +131,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId)
             throws UnifyException {
-        User user = environment().list(new UserQuery().loginId(loginId));
-        if (user == null) {
-            throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
-        }
-        
-        final boolean isSystem = DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(user.getId());
+        final boolean isSystem = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(loginId);
         if (isTenancyEnabled()) {
             if (loginTenantId == null && systemModuleService.getTenantCount() > 0) {
                 if (isSystem) {
@@ -146,11 +140,14 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                     throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
                 }
             }
+        } else {
+            loginTenantId = Entity.PRIMARY_TENANT_ID;
         }
         
-        if (!isSystem && loginTenantId != null
-                && !loginTenantId.equals(user.getTenantId())) {
-            throw new UnifyException(SecurityModuleErrorConstants.TENANT_WITH_ID_NOT_FOUND);
+        User user = isSystem ? environment().list(new UserQuery().loginId(loginId).ignoreTenancy(true))
+                :  environment().list(new UserQuery().loginId(loginId).tenantId(loginTenantId));
+        if (user == null) {
+            throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
 
         boolean accountLockingEnabled = systemModuleService.getSysParameterValue(boolean.class,
@@ -197,7 +194,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             userLoginEvent.setRemoteHost(ctx.getRemoteHost());
             environment().create(userLoginEvent);
         }
-        
+
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
         if (loginLocale != null) {
@@ -214,7 +211,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
 
         sessionCtx.setUseDaylightSavings(sessionCtx.getTimeZone().inDaylightTime(now));
-        
+
         // Login to session and set session attributes
         userSessionManager.login(createUserToken(user, loginTenantId));
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERNAME, user.getFullName());
@@ -342,8 +339,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Recipient getRecipientByLoginId(NotificationType type, String userLoginId) throws UnifyException {
-        User user = environment().find(new UserQuery().loginId(userLoginId));
+    public Recipient getRecipientByLoginId(Long tenantId, NotificationType type, String userLoginId)
+            throws UnifyException {
+        User user = environment().find(new UserQuery().loginId(userLoginId).tenantId(tenantId));
         switch (type) {
             case EMAIL:
                 return new Recipient(userLoginId, user.getEmail());
@@ -356,13 +354,15 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(NotificationType type, String roleCode) throws UnifyException {
-        return getRecipientsByRole(type, Arrays.asList(roleCode));
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, String roleCode)
+            throws UnifyException {
+        return getRecipientsByRole(tenantId, type, Arrays.asList(roleCode));
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(NotificationType type, Collection<String> roles) throws UnifyException {
-        Set<Long> userIdSet = findIdsOfAllUsersWithRole(roles);
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, Collection<String> roles)
+            throws UnifyException {
+        Set<Long> userIdSet = findIdsOfAllUsersWithRole(tenantId, roles);
         if (!userIdSet.isEmpty()) {
             List<User> userList = environment().findAll(new UserQuery().idIn(userIdSet));
             List<Recipient> recipientList = new ArrayList<Recipient>();
@@ -383,26 +383,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             }
 
             return recipientList;
-        }
-
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<String> getParticipatingUsersByRole(String branchCode, String roleCode) throws UnifyException {
-        return getParticipatingUsersByRole(branchCode, Arrays.asList(roleCode));
-    }
-
-    @Override
-    public List<String> getParticipatingUsersByRole(String branchCode, Collection<String> roles) throws UnifyException {
-        Set<Long> userIdSet = findIdsOfAllUsersWithRole(roles);
-        if (!userIdSet.isEmpty()) {
-            UserQuery userQuery = new UserQuery().idIn(userIdSet);
-            if (branchCode != null) {
-                userQuery.branchCode(branchCode);
-            }
-
-            return environment().valueList(String.class, "loginId", userQuery);
         }
 
         return Collections.emptyList();
@@ -450,14 +430,16 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private Set<Long> findIdsOfAllUsersWithRole(final Collection<String> roleCodes) throws UnifyException {
+    private Set<Long> findIdsOfAllUsersWithRole(final Long tenantId, final Collection<String> roleCodes)
+            throws UnifyException {
         Set<Long> userIds = new HashSet<Long>();
         if (!DataUtils.isBlank(roleCodes)) {
-            userIds.addAll(environment().valueSet(Long.class, "userId", new UserRoleQuery().roleCodeIn(roleCodes)));
+            userIds.addAll(environment().valueSet(Long.class, "userId",
+                    new UserRoleQuery().tenantId(tenantId).roleCodeIn(roleCodes)));
         }
 
         Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
-                new UserGroupRoleQuery().roleCodeIn(roleCodes));
+                new UserGroupRoleQuery().tenantId(tenantId).roleCodeIn(roleCodes));
         if (!DataUtils.isBlank(userGroupIds)) {
             userIds.addAll(environment().valueSet(Long.class, "userId",
                     new UserGroupMemberQuery().userGroupIdIn(userGroupIds)));
@@ -555,7 +537,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             dictionary.setValue("loginId", user.getLoginId());
             dictionary.setValue("plainPassword", password);
             NotificationChannelMessage msg = notificationModuleService.constructNotificationChannelMessage(
-                    "security.userPasswordReset", dictionary, new Recipient(user.getFullName(), user.getEmail()));
+                    user.getTenantId(), "security.userPasswordReset", dictionary,
+                    new Recipient(user.getFullName(), user.getEmail()));
             notificationModuleService.sendNotification(msg);
         }
 

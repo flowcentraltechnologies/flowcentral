@@ -51,6 +51,9 @@ public class UserGroupRole extends BaseAuditEntity implements Describable {
     @ListOnly(key = "userGroupId", property = "email")
     private String userGroupEmail;
 
+    @ListOnly(key = "userGroupId", property = "tenantId")
+    private Long tenantId;
+
     @ListOnly(key = "roleId", property = "code")
     private String roleCode;
 
@@ -118,6 +121,14 @@ public class UserGroupRole extends BaseAuditEntity implements Describable {
 
     public void setUserGroupEmail(String userGroupEmail) {
         this.userGroupEmail = userGroupEmail;
+    }
+
+    public Long getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
     }
 
     public String getRoleCode() {

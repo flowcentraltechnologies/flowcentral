@@ -64,6 +64,10 @@ public class UserRoleQuery extends BaseAuditEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("supervisor", Boolean.FALSE);
     }
 
+    public UserRoleQuery tenantId(Long tenantId) {
+        return (UserRoleQuery) addEquals("tenantId", tenantId);
+    }
+
     public UserRoleQuery roleId(Long roleId) {
         return (UserRoleQuery) addEquals("roleId", roleId);
     }

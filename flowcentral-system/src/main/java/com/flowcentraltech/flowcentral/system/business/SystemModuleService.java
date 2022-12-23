@@ -40,6 +40,15 @@ import com.tcdng.unify.core.task.TaskStatus;
 public interface SystemModuleService extends FlowCentralService {
 
     /**
+     * Gets tenant IDs with primary tenant ID mapped.
+     * 
+     * @return the list of tenant IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> getPrimaryMappedTenantIds() throws UnifyException;
+    
+    /**
      * Gets a count of tenants defined in the system.
      * 
      * @return the tenant count

@@ -385,6 +385,18 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public List<Long> getPrimaryMappedTenantIds() throws UnifyException {
+        List<Long> tenantIds = environment().valueList(Long.class, "id", new TenantQuery().ignoreEmptyCriteria(true));
+        Long actualPrimaryTenantId = getSysParameterValue(Long.class,
+                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
+        if (actualPrimaryTenantId != null) {
+            tenantIds.replaceAll(id -> id == actualPrimaryTenantId ? actualPrimaryTenantId : id);
+        }
+
+        return tenantIds;
+    }
+
+    @Override
     public int getTenantCount() throws UnifyException {
         return environment().countAll(new TenantQuery().ignoreEmptyCriteria(true));
     }

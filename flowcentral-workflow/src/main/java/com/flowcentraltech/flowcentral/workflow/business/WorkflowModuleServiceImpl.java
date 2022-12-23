@@ -53,7 +53,6 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
-import com.flowcentraltech.flowcentral.common.business.RoleParticipatingUserProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.WfBinaryPolicy;
@@ -143,7 +142,10 @@ import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.data.ValueStoreWriter;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
+import com.tcdng.unify.core.database.sql.SqlEntityInfo;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
@@ -182,10 +184,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private NotificationRecipientProvider notifRecipientProvider;
-
-    @Configurable
-    private RoleParticipatingUserProvider rolePartUserProvider;
-
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
@@ -202,8 +200,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 protected boolean stale(String wfName, WfDef wfDef) throws Exception {
                     return (environment().value(long.class, "versionNo", new WorkflowQuery().id(wfDef.getId())) > wfDef
                             .getVersion())
-                            || (wfDef.getEntityDef().getVersion() < appletUtil.application().getEntityDef(wfDef.getEntity())
-                                    .getVersion());
+                            || (wfDef.getEntityDef().getVersion() < appletUtil.application()
+                                    .getEntityDef(wfDef.getEntity()).getVersion());
                 }
 
                 @Override
@@ -259,7 +257,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
                             AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
-                                    assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons, appletName, label);
+                                    assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons, appletName,
+                                    label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -433,10 +432,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     public void setNotifRecipientProvider(NotificationRecipientProvider notifRecipientProvider) {
         this.notifRecipientProvider = notifRecipientProvider;
-    }
-
-    public void setRolePartUserProvider(RoleParticipatingUserProvider rolePartUserProvider) {
-        this.rolePartUserProvider = rolePartUserProvider;
     }
 
     public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
@@ -981,7 +976,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 itemDesc = generator.generate();
             }
 
-
             WfItemHist wfItemHist = new WfItemHist();
             wfItemHist.setApplicationName(wfDef.getApplicationName());
             wfItemHist.setWorkflowName(wfDef.getLongName());
@@ -1263,6 +1257,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             }
         }
 
+        final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
         List<Recipient> recipientList = null;
         if (wfAlertDef.isWithRecipientPolicy()) {
             recipientList = ((WfRecipientPolicy) getComponent(wfAlertDef.getRecipientPolicy())).getRecipients(
@@ -1270,19 +1265,32 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfAlertDef.getRecipientContactRule());
         } else {
             if (!StringUtils.isBlank(wfItem.getHeldBy())) {
-                recipientList = Arrays.asList(notifRecipientProvider
-                        .getRecipientByLoginId(wfAlertDef.getNotificationType(), wfItem.getHeldBy()));
+                recipientList = Arrays.asList(notifRecipientProvider.getRecipientByLoginId(tenantId,
+                        wfAlertDef.getNotificationType(), wfItem.getHeldBy()));
             } else if (wfStepDef.isWithParticipatingRoles()) {
-                recipientList = notifRecipientProvider.getRecipientsByRole(wfAlertDef.getNotificationType(),
+                recipientList = notifRecipientProvider.getRecipientsByRole(tenantId, wfAlertDef.getNotificationType(),
                         wfStepDef.getRoleSet());
             }
         }
 
         if (!DataUtils.isBlank(recipientList)) {
-            NotificationChannelMessage ncm = notificationModuleService.constructNotificationChannelMessage(
+            NotificationChannelMessage ncm = notificationModuleService.constructNotificationChannelMessage(tenantId,
                     wfAlertDef.getTemplate(), transitionItem.getWfInstValueStore(), recipientList);
             notificationModuleService.sendNotification(ncm);
         }
+    }
+
+    private Long getTenantIdFromTransitionItem(TransitionItem transitionItem) throws UnifyException {
+        if (isTenancyEnabled()) {
+            SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db().getDataSource().getDialect())
+                    .findSqlEntityInfo(transitionItem.getWfDef().getEntityClassDef().getEntityClass());
+            if (sqlEntityInfo.isWithTenantId()) {
+                return transitionItem.getValueStoreReader().read(Long.class,
+                        sqlEntityInfo.getTenantIdFieldInfo().getName());
+            }
+        }
+
+        return Entity.PRIMARY_TENANT_ID;
     }
 
     private Long createWfItemEvent(final WfStepDef wfStepDef, final Long wfItemHistId) throws UnifyException {
