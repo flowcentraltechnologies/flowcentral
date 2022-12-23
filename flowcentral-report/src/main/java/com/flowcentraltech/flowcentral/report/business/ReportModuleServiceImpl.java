@@ -369,7 +369,13 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         } else if (reportOptions.isReportEntityList()) {
             rb.table(sqlEntityInfo.getPreferredViewName());
             if (reportOptions.isWithRestriction()) {
-                Restriction restriction = reportOptions.getRestriction().isSimple()
+                Restriction restriction = reportOptions.getRestriction();
+                if (isTenancyEnabled() && sqlEntityInfo.isWithTenantId() && !restriction.isIdEqualsRestricted()) {
+                    restriction = new And().add(restriction)
+                            .add(new Equals(sqlEntityInfo.getTenantIdFieldInfo().getName(), getUserTenantId()));
+                }
+                
+                restriction = restriction.isSimple()
                         ? new And().add(reportOptions.getRestriction())
                         : reportOptions.getRestriction();
                 buildReportFilter(rb, sqlEntityInfo, restriction);
