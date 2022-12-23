@@ -59,6 +59,22 @@ public class ReportFilterOptions {
         this(op, null, null, null, null);
     }
 
+    public boolean isIdEqualsRestricted(String idColumnName) {
+        if (RestrictionType.EQUALS.equals(op) && columnName.equals(idColumnName)) {
+            return true;
+        }
+
+        if (subFilterOptionList != null) {
+            for (ReportFilterOptions reportFilterOptions : subFilterOptionList) {
+                if (reportFilterOptions.isIdEqualsRestricted(idColumnName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public RestrictionType getOp() {
         return op;
     }
@@ -83,13 +99,13 @@ public class ReportFilterOptions {
         return param2;
     }
 
+    public ReportFilterOptions addReportFilterOptions(ReportFilterOptions reportFilterOptions) {
+        subFilterOptionList.add(reportFilterOptions);
+        return this;
+    }
+
     public List<ReportFilterOptions> getSubFilterOptionList() {
         return subFilterOptionList;
     }
 
-    @Override
-    public String toString() {
-        return "ReportFilterOptions [op=" + op + ", tableName=" + tableName + ", columnName=" + columnName + ", param1="
-                + param1 + ", param2=" + param2 + ", subFilterOptionList=" + subFilterOptionList + "]";
-    }
 }
