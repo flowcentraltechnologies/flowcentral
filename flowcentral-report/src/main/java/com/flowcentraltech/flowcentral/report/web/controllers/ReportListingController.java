@@ -79,7 +79,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
         LinkGridInfo.Builder lb = LinkGridInfo.newBuilder();
         final UserToken userToken = getUserToken();
         final String roleCode = !userToken.isReservedUser() ? userToken.getRoleCode() : null;
-        final boolean isPrimaryTenant = !userToken.isPrimaryTenant();
+        final boolean isPrimaryTenant = userToken.isPrimaryTenant();
         String applicationName = null;
         for (ReportListing listing : reportModuleService.getRoleReportListing(roleCode)) {
             if (isPrimaryTenant || listing.isAllowSecondaryTenants()) {
