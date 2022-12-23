@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.tcdng.unify.core.criterion.RestrictionType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Report filter option.
@@ -108,4 +109,7 @@ public class ReportFilterOptions {
         return subFilterOptionList;
     }
 
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
 }

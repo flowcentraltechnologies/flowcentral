@@ -325,7 +325,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         SqlDataSourceDialect sqlDialect = (SqlDataSourceDialect) db.getDataSource().getDialect();
         Class<?> dataClass = ReflectUtils.classForName(reportOptions.getRecordName());
         SqlEntityInfo sqlEntityInfo = null;
-        if (reportOptions.isReportEntityList()) {
+        if (!reportOptions.isBeanCollection()) {
             sqlEntityInfo = sqlDialect.findSqlEntityInfo(dataClass);
         }
 
