@@ -2666,9 +2666,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     if (actualPrimaryTenantId == null) {
                         appletUtilities.system().setSysParameterValue(
                                 SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID, tenant.getId());
-                    } else if (actualPrimaryTenantId.equals(tenant.getId())) {
+                    } else if (!actualPrimaryTenantId.equals(tenant.getId())) {
                         throwOperationErrorException(
-                                new IllegalArgumentException("Primary tenant has been improperly changed."));
+                                new IllegalArgumentException("Primary tenant has been improperly changed from ["
+                                        + actualPrimaryTenantId + "]  to [" + tenant.getId() + "]"));
                     }
 
                     primaryTenantResolved = true;
