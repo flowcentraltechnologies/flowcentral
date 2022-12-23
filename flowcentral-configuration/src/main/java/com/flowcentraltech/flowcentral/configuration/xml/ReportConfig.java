@@ -22,6 +22,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportLayoutTypeXmlAdapter;
 import com.tcdng.unify.core.report.ReportLayoutType;
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Report configuration.
@@ -48,15 +49,26 @@ public class ReportConfig extends BaseNameConfig {
 
     private FilterConfig filter;
 
-    private boolean showGrandFooter;
+    private Boolean showGrandFooter;
 
-    private boolean invertGroupColors;
+    private Boolean invertGroupColors;
 
-    private boolean landscape;
+    private Boolean landscape;
 
-    private boolean underlineRows;
+    private Boolean underlineRows;
 
-    private boolean shadeOddRows;
+    private Boolean shadeOddRows;
+
+    private Boolean allowSecondaryTenants;
+
+    public ReportConfig() {
+        this.showGrandFooter = Boolean.FALSE;
+        this.invertGroupColors = Boolean.FALSE;
+        this.landscape = Boolean.FALSE;
+        this.underlineRows = Boolean.FALSE;
+        this.shadeOddRows = Boolean.FALSE;
+        this.allowSecondaryTenants = Boolean.FALSE;
+    }
 
     public String getTitle() {
         return title;
@@ -131,48 +143,63 @@ public class ReportConfig extends BaseNameConfig {
         this.layout = layout;
     }
 
-    public boolean isShowGrandFooter() {
+    public boolean getShowGrandFooter() {
         return showGrandFooter;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setShowGrandFooter(boolean showGrandFooter) {
+    public void setShowGrandFooter(Boolean showGrandFooter) {
         this.showGrandFooter = showGrandFooter;
     }
 
-    public boolean isInvertGroupColors() {
+    public Boolean getInvertGroupColors() {
         return invertGroupColors;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setInvertGroupColors(boolean invertGroupColors) {
+    public void setInvertGroupColors(Boolean invertGroupColors) {
         this.invertGroupColors = invertGroupColors;
     }
 
-    public boolean isLandscape() {
+    public Boolean getLandscape() {
         return landscape;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setLandscape(boolean landscape) {
+    public void setLandscape(Boolean landscape) {
         this.landscape = landscape;
     }
 
-    public boolean isUnderlineRows() {
+    public boolean getUnderlineRows() {
         return underlineRows;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setUnderlineRows(boolean underlineRows) {
+    public void setUnderlineRows(Boolean underlineRows) {
         this.underlineRows = underlineRows;
     }
 
-    public boolean isShadeOddRows() {
+    public Boolean getShadeOddRows() {
         return shadeOddRows;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setShadeOddRows(boolean shadeOddRows) {
+    public void setShadeOddRows(Boolean shadeOddRows) {
         this.shadeOddRows = shadeOddRows;
+    }
+
+    public Boolean getAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 }

@@ -64,6 +64,9 @@ public class ReportConfiguration extends BaseApplicationEntity {
     @Column
     private boolean shadeOddRows;
 
+    @Column
+    private boolean allowSecondaryTenants;
+
     @ChildList
     private List<ReportColumn> columnList;
 
@@ -151,6 +154,14 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setShadeOddRows(boolean shadeOddRows) {
         this.shadeOddRows = shadeOddRows;
+    }
+
+    public boolean isAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    public void setAllowSecondaryTenants(boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 
     public List<ReportColumn> getColumnList() {

@@ -32,11 +32,15 @@ public class ReportListing {
 
     private String description;
 
-    public ReportListing(String applicationName, String applicationDesc, String longName, String description) {
+    private boolean allowSecondaryTenants;
+
+    public ReportListing(String applicationName, String applicationDesc, String longName, String description,
+            boolean allowSecondaryTenants) {
         this.applicationName = applicationName;
         this.applicationDesc = applicationDesc;
         this.longName = longName;
         this.description = description;
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 
     public String getApplicationName() {
@@ -53,5 +57,9 @@ public class ReportListing {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isAllowSecondaryTenants() {
+        return allowSecondaryTenants;
     }
 }

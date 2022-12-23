@@ -453,7 +453,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             for (ReportConfiguration rc : rcList) {
                 resultList.add(new ReportListing(rc.getApplicationName(), rc.getApplicationDesc(),
                         ApplicationNameUtils.getApplicationEntityLongName(rc.getApplicationName(), rc.getName()),
-                        rc.getDescription()));
+                        rc.getDescription(), rc.isAllowSecondaryTenants()));
             }
 
             return resultList;
