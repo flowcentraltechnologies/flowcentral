@@ -368,16 +368,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             rb.beanCollection(content);
         } else if (reportOptions.isReportEntityList()) {
             rb.table(sqlEntityInfo.getPreferredViewName());
-            if (reportOptions.isWithRestriction()) {
-                Restriction restriction = reportOptions.getRestriction();
-                if (isTenancyEnabled() && sqlEntityInfo.isWithTenantId() && !restriction.isIdEqualsRestricted()) {
+            Restriction restriction = reportOptions.getRestriction();
+            if (isTenancyEnabled() && sqlEntityInfo.isWithTenantId()) {
+                if (restriction == null) {
+                    restriction = new Equals(sqlEntityInfo.getTenantIdFieldInfo().getName(), getUserTenantId());
+                } else if (!restriction.isIdEqualsRestricted()) {
                     restriction = new And().add(restriction)
                             .add(new Equals(sqlEntityInfo.getTenantIdFieldInfo().getName(), getUserTenantId()));
                 }
-                
-                restriction = restriction.isSimple()
-                        ? new And().add(reportOptions.getRestriction())
-                        : reportOptions.getRestriction();
+            }
+
+            if (restriction != null) {
+                restriction = restriction.isSimple() ? new And().add(restriction) : restriction;
                 buildReportFilter(rb, sqlEntityInfo, restriction);
             }
         } else {
@@ -605,7 +607,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             List<FilterRestrictionDef> filterRestrictionDefList, IndexInfo indexInfo) throws UnifyException {
         Date now = getNow();
         ReportFilterOptions reportFilterOptions = null;
-         while (indexInfo.index < filterRestrictionDefList.size()) {
+        while (indexInfo.index < filterRestrictionDefList.size()) {
             FilterRestrictionDef restrictionDef = filterRestrictionDefList.get(indexInfo.index++);
             if (restrictionDef.getDepth() == indexInfo.subCompoundIndex) {
                 if (restrictionDef.isCompound()) {
@@ -617,7 +619,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                         parentFilterOptions.getSubFilterOptionList().add(reportFilterOptions);
                     }
                     indexInfo.subCompoundIndex--;
-               } else {
+                } else {
                     Object param1 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamA());
                     Object param2 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamB());
                     if (restrictionDef.isParameterVal()) {
