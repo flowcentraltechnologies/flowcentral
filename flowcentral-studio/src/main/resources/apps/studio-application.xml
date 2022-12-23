@@ -2149,7 +2149,7 @@
 				description="$m{studio.appentity.form.formstatepolicy.attachment}">
 				<onCondition>
 					<restriction type="amongst" field="baseType"
-						paramA="WKE|SWK" />
+						paramA="WKE|SWK|WKET|SWKT" />
 				</onCondition>
 				<setStates>
 					<setState type="tab" target="attachments" visible="true" />
