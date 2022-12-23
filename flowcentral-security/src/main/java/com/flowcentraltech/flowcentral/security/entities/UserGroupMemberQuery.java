@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 
 import java.util.Collection;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
 
 /**
  * Query class for user group members.
@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class UserGroupMemberQuery extends BaseAuditEntityQuery<UserGroupMember> {
+public class UserGroupMemberQuery extends BaseAuditTenantEntityQuery<UserGroupMember> {
 
     public UserGroupMemberQuery() {
         super(UserGroupMember.class);

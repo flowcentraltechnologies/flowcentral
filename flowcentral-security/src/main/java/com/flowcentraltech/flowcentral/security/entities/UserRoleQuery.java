@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.OrBuilder;
 import com.tcdng.unify.core.util.CalendarUtils;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class UserRoleQuery extends BaseAuditEntityQuery<UserRole> {
+public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
 
     public UserRoleQuery() {
         super(UserRole.class);
@@ -62,10 +62,6 @@ public class UserRoleQuery extends BaseAuditEntityQuery<UserRole> {
 
     public UserRoleQuery isNotSupervisor() {
         return (UserRoleQuery) addEquals("supervisor", Boolean.FALSE);
-    }
-
-    public UserRoleQuery tenantId(Long tenantId) {
-        return (UserRoleQuery) addEquals("tenantId", tenantId);
     }
 
     public UserRoleQuery roleId(Long roleId) {

@@ -44,7 +44,8 @@
 		<applet name="manageRole"
 			description="$m{organization.role.manage}"
 			label="$m{organization.role.manage.label}" icon="user-tag"
-			type="manage_entitylist" entity="role" menuAccess="true">
+			type="manage_entitylist" entity="role" menuAccess="true"
+			allowSecondaryTenants="true">
 			<property name="searchTable" value="roleTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />

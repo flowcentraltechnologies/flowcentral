@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.organization.entities;
 import java.util.Collection;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
 
 /**
  * Role privilege query.
@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class RolePrivilegeQuery extends BaseAuditEntityQuery<RolePrivilege> {
+public class RolePrivilegeQuery extends BaseAuditTenantEntityQuery<RolePrivilege> {
 
     public RolePrivilegeQuery() {
         super(RolePrivilege.class);

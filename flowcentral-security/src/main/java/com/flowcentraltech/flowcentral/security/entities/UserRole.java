@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Table(name = "FC_USERROLE", uniqueConstraints = { @UniqueConstraint({ "userId", "roleId" }) })
-public class UserRole extends BaseAuditEntity implements Describable {
+public class UserRole extends BaseAuditTenantEntity implements Describable {
 
     @ForeignKey(User.class)
     private Long userId;
@@ -65,9 +65,6 @@ public class UserRole extends BaseAuditEntity implements Describable {
 
     @ListOnly(name = "SUPERVISOR_FG", key = "userId", property = "supervisor")
     private Boolean supervisor;
-
-    @ListOnly(key = "userId", property = "tenantId")
-    private Long tenantId;
 
     @ListOnly(key = "roleId", property = "code")
     private String roleCode;
@@ -168,14 +165,6 @@ public class UserRole extends BaseAuditEntity implements Describable {
 
     public void setSupervisor(Boolean supervisor) {
         this.supervisor = supervisor;
-    }
-
-    public Long getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
     }
 
     public String getRoleDesc() {
