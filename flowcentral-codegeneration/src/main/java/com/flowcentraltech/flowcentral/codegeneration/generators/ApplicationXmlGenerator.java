@@ -166,6 +166,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
         appConfig.setDisplayIndex(application.getDisplayIndex());
         appConfig.setDevelopable(application.isDevelopable());
         appConfig.setMenuAccess(application.isMenuAccess());
+        appConfig.setAllowSecondaryTenants(application.isAllowSecondaryTenants());
 
         // Module application configuration
         ModuleAppConfig moduleAppConfig = new ModuleAppConfig();

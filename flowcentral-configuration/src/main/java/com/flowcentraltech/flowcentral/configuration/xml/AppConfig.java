@@ -18,6 +18,10 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
+import com.tcdng.unify.core.util.xml.MarshalTrueToNullXmlAdapter;
 
 /**
  * Application configuration.
@@ -32,9 +36,11 @@ public class AppConfig extends BaseNameConfig {
 
     private int displayIndex;
 
-    private boolean developable;
+    private Boolean developable;
 
-    private boolean menuAccess;
+    private Boolean menuAccess;
+
+    private Boolean allowSecondaryTenants;
 
     private AppReportsConfig reportsConfig;
 
@@ -71,8 +77,10 @@ public class AppConfig extends BaseNameConfig {
     private SuggestionTypesConfig suggestionTypesConfig;
 
     public AppConfig() {
-        menuAccess = true;
-    }
+        this.menuAccess = Boolean.TRUE;
+        this.developable = Boolean.FALSE;
+        this.allowSecondaryTenants = Boolean.FALSE;
+   }
     
     public String getModule() {
         return module;
@@ -92,22 +100,34 @@ public class AppConfig extends BaseNameConfig {
         this.displayIndex = displayIndex;
     }
 
-    public boolean isDevelopable() {
+    public Boolean getDevelopable() {
         return developable;
     }
 
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
     @XmlAttribute
-    public void setDevelopable(boolean developable) {
+    public void setDevelopable(Boolean developable) {
         this.developable = developable;
     }
 
-    public boolean isMenuAccess() {
+    public Boolean getMenuAccess() {
         return menuAccess;
     }
 
+    @XmlJavaTypeAdapter(MarshalTrueToNullXmlAdapter.class)
     @XmlAttribute
-    public void setMenuAccess(boolean menuAccess) {
+    public void setMenuAccess(Boolean menuAccess) {
         this.menuAccess = menuAccess;
+    }
+
+    public Boolean getAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 
     public AppReportsConfig getReportsConfig() {

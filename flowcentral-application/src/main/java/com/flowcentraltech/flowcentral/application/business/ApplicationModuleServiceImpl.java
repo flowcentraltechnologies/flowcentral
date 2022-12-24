@@ -2886,8 +2886,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             application.setDescription(description);
             application.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
             application.setDisplayIndex(applicationConfig.getDisplayIndex());
-            application.setDevelopable(applicationConfig.isDevelopable());
-            application.setMenuAccess(applicationConfig.isMenuAccess());
+            application.setDevelopable(applicationConfig.getDevelopable());
+            application.setMenuAccess(applicationConfig.getMenuAccess());
+            application.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
             application.setConfigType(ConfigType.STATIC_INSTALL);
             applicationId = (Long) environment().create(application);
         } else {
@@ -2896,8 +2897,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             if (ConfigUtils.isSetInstall(oldApplication)) {
                 oldApplication.setDescription(description);
                 oldApplication.setLabel(resolveApplicationMessage(applicationConfig.getLabel()));
-                oldApplication.setDevelopable(applicationConfig.isDevelopable());
-                oldApplication.setMenuAccess(applicationConfig.isMenuAccess());
+                oldApplication.setDevelopable(applicationConfig.getDevelopable());
+                oldApplication.setMenuAccess(applicationConfig.getMenuAccess());
+                oldApplication.setAllowSecondaryTenants(applicationConfig.getAllowSecondaryTenants());
                 oldApplication.setDisplayIndex(applicationConfig.getDisplayIndex());
             }
 

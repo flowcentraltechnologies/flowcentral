@@ -610,6 +610,8 @@
 				label="$m{application.application.displayindex}" type="integer" />
 			<field name="developable"
 				label="$m{application.application.developable}" type="boolean" />
+			<field name="allowSecondaryTenants"
+				label="$m{application.application.allowsecondarytenants}" type="boolean" />
 			<field name="moduleName"
 				label="$m{application.application.modulename}" type="list_only"
 				key="moduleId" property="name" />

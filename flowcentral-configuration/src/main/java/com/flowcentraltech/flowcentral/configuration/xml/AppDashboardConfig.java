@@ -19,6 +19,9 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
  * Application dashboard configuration.
@@ -28,9 +31,25 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class AppDashboardConfig extends BaseNameConfig {
 
+    private Boolean allowSecondaryTenants;
+
     private int sections;
 
     private List<DashboardTileConfig> tileList;
+
+    public AppDashboardConfig() {
+        this.allowSecondaryTenants = Boolean.FALSE;
+    }
+    
+    public Boolean getAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setAllowSecondaryTenants(Boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
+    }
 
     public int getSections() {
         return sections;

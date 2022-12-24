@@ -65,6 +65,7 @@ public class DashboardsXmlGenerator extends AbstractStaticArtifactGenerator {
                 appDashboardConfig.setName(dashboard.getName());
                 appDashboardConfig.setDescription("$m{" + descKey + "}");
                 appDashboardConfig.setSections(dashboard.getSections());
+                appDashboardConfig.setAllowSecondaryTenants(dashboard.isAllowSecondaryTenants());
 
                 // Tiles
                 if (!DataUtils.isBlank(dashboard.getTileList())) {

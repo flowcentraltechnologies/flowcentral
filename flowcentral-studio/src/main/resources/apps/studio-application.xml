@@ -1699,6 +1699,8 @@
 						column="1" required="true" />
 					<field name="label" inputWidget="application.text" column="1"
 						required="true" />
+					<field name="allowSecondaryTenants" inputWidget="application.checkbox"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -2809,6 +2811,8 @@
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="sections" column="1" />
+					<field name="allowSecondaryTenants" inputWidget="application.checkbox"
+						column="1" />
 				</section>
 			</tab>
 			<tab name="tiles" label="$m{studio.dashboard.form.tiles}"

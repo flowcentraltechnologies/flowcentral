@@ -608,8 +608,6 @@
 					<field name="workflowStatus"
 						inputWidget="application.enumlist" column="1" disabled="true"
 						required="true" />
-					<field name="tenantId" inputWidget="system.tenantlist"
-						column="1" disabled="true" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
 					<field name="branchId" inputWidget="application.entitylist"
