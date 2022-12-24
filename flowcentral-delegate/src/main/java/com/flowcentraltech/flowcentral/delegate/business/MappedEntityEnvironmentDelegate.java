@@ -41,11 +41,28 @@ import com.tcdng.unify.core.database.Query;
 public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate {
 
     private final Map<Class<? extends Entity>, MappedEntityProvider<? extends Entity>> providers;
-    
+
     public MappedEntityEnvironmentDelegate() {
-       this.providers = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends Entity>>();       
+        this.providers = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends Entity>>();
     }
-    
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Override
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
+        for (MappedEntityProvider _provider : _providers) {
+            if (isProviderPresent(_provider.getDestEntityClass())) {
+                throwOperationErrorException(
+                        new IllegalArgumentException("Multiple mapped entity providers found entity class ["
+                                + _provider.getDestEntityClass() + "]. Found [" + _provider.getName() + "] and ["
+                                + getProvider(_provider.getDestEntityClass()) + "]"));
+            }
+            
+            providers.put(_provider.getDestEntityClass(), _provider);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T find(Class<T> entityClass, Object id) throws UnifyException {
@@ -58,7 +75,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
         return isProviderPresent(entityClass) ? (T) getProvider(entityClass).find((Long) id, (long) versionNo) : null;
     }
 
-     @Override
+    @Override
     public <T extends Entity> T find(Query<T> query) throws UnifyException {
         return isProviderPresent(query) ? (T) getProvider(query).find(query) : null;
     }
@@ -72,10 +89,11 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T findLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return isProviderPresent(entityClass) ? (T) getProvider(entityClass).findLean((Long) id, (long) versionNo) : null;
+        return isProviderPresent(entityClass) ? (T) getProvider(entityClass).findLean((Long) id, (long) versionNo)
+                : null;
     }
 
-     @Override
+    @Override
     public <T extends Entity> T findLean(Query<T> query) throws UnifyException {
         return isProviderPresent(query) ? (T) getProvider(query).findLean(query) : null;
     }
@@ -87,8 +105,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public <T extends Entity> List<T> findAll(Query<T> query) throws UnifyException {
-        return isProviderPresent(query) ? (List<T>) getProvider(query).findAll(query)
-                : Collections.emptyList();
+        return isProviderPresent(query) ? (List<T>) getProvider(query).findAll(query) : Collections.emptyList();
     }
 
     @Override
@@ -139,7 +156,8 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T listLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return isProviderPresent(entityClass) ? (T) getProvider(entityClass).listLean((Long) id, (long) versionNo) : null;
+        return isProviderPresent(entityClass) ? (T) getProvider(entityClass).listLean((Long) id, (long) versionNo)
+                : null;
     }
 
     @Override
@@ -149,8 +167,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public <T extends Entity> List<T> listAll(Query<T> query) throws UnifyException {
-        return isProviderPresent(query) ? (List<T>) getProvider(query).listAll(query)
-                : Collections.emptyList();
+        return isProviderPresent(query) ? (List<T>) getProvider(query).listAll(query) : Collections.emptyList();
     }
 
     @Override
@@ -275,7 +292,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
-    public <T extends Entity>  int countAll(Query<T> query) throws UnifyException {
+    public <T extends Entity> int countAll(Query<T> query) throws UnifyException {
         return isProviderPresent(query) ? getProvider(query).countAll(query) : 0;
     }
 
@@ -297,7 +314,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     private boolean isProviderPresent(Query<? extends Entity> query) {
         return providers.containsKey(query.getEntityClass());
     }
-    
+
     @SuppressWarnings("unchecked")
     private <T extends Entity> MappedEntityProvider<T> getProvider(Query<T> query) {
         return (MappedEntityProvider<T>) providers.get(query.getEntityClass());
@@ -306,7 +323,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     private boolean isProviderPresent(Class<? extends Entity> entityClass) {
         return providers.containsKey(entityClass);
     }
-    
+
     private MappedEntityProvider<? extends Entity> getProvider(Class<? extends Entity> entityClass) {
         return providers.get(entityClass);
     }

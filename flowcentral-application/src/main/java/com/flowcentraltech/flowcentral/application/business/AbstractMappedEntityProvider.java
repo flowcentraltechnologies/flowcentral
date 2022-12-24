@@ -41,17 +41,25 @@ public abstract class AbstractMappedEntityProvider<T extends Entity> extends Abs
     @Configurable
     private AppletUtilities au;
 
+    private Class<T> destEntityClass;
+    
     private final String srcEntityName;
 
     private final Map<String, String> queryFieldMap;
 
-    protected AbstractMappedEntityProvider(String srcEntityName, Map<String, String> queryFieldMap) {
+    protected AbstractMappedEntityProvider(Class<T> destEntityClass, String srcEntityName, Map<String, String> queryFieldMap) {
+        this.destEntityClass = destEntityClass;
         this.srcEntityName = srcEntityName;
         this.queryFieldMap = Collections.unmodifiableMap(new HashMap<String, String>(queryFieldMap));
     }
 
     public final void setAu(AppletUtilities au) {
         this.au = au;
+    }
+
+    @Override
+    public Class<T> getDestEntityClass() {
+        return destEntityClass;
     }
 
     @Override

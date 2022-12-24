@@ -15,6 +15,8 @@ import com.tcdng.unify.core.database.Query;
  */
 public interface MappedEntityProvider<T extends Entity> extends UnifyComponent {
 
+    Class<T> getDestEntityClass();
+    
     String srcEntity();
     
     T find(Long id) throws UnifyException;

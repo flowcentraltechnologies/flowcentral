@@ -33,8 +33,8 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
     private final ProviderInfo providerInfo;
 
     @SuppressWarnings("serial")
-    protected AbstractTenantProvider(String tenantEntityName, ProviderInfo providerInfo) {
-        super(tenantEntityName, new HashMap<String, String>(){{
+    protected AbstractTenantProvider(String srcTenantEntityName, ProviderInfo providerInfo) {
+        super(Tenant.class, srcTenantEntityName, new HashMap<String, String>(){{
             put("name", providerInfo.getNameField());
             put("primary", providerInfo.getPrimaryFlagField());
             }});
