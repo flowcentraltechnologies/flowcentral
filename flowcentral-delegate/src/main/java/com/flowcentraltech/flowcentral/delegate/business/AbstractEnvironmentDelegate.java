@@ -409,7 +409,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     }
 
     @Override
-    public int countAll(Query<? extends Entity> query) throws UnifyException {
+    public <T extends Entity> int countAll(Query<T> query) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.COUNT_ALL);
         setQueryDetails(req, query);
         return singleValueResultOperation(int.class, query.getEntityClass(), req);

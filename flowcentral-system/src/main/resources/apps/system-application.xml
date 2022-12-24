@@ -565,11 +565,10 @@
 		<entity name="tenant" description="$m{system.tenant}"
 			label="$m{system.tenant.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.Tenant"
-			delegate="tenant-environmentdelegate"
-			table = "FC_TENANT"
+			delegate="mappedentity-environmentdelegate" table="FC_TENANT"
 			auditable="true" reportable="true">
 			<field name="name" label="$m{system.tenant.name}" type="string"
-				inputWidget="application.text" maxLen="64"/>
+				inputWidget="application.text" maxLen="64" />
 			<field name="primary" label="$m{system.tenant.primary}"
 				type="boolean" inputWidget="application.booleanlist" />
 			<uniqueConstraint name="nameUc"
