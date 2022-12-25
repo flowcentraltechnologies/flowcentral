@@ -254,8 +254,8 @@ import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.Module;
-import com.flowcentraltech.flowcentral.system.entities.Tenant;
-import com.flowcentraltech.flowcentral.system.entities.TenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -2654,10 +2654,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
             boolean primaryTenantResolved = false;
             getEntityClassDef("system.tenant");
-            List<Tenant> tenantList = appletUtilities.system()
-                    .findTenants((TenantQuery) new TenantQuery().ignoreEmptyCriteria(true));
-            for (Tenant tenant : tenantList) {
-                if (Boolean.TRUE.equals(tenant.getPrimary())) {
+            List<MappedTenant> tenantList = appletUtilities.system()
+                    .findTenants((MappedTenantQuery) new MappedTenantQuery().ignoreEmptyCriteria(true));
+            for (MappedTenant mappedTenant : tenantList) {
+                if (Boolean.TRUE.equals(mappedTenant.getPrimary())) {
                     if (primaryTenantResolved) {
                         throwOperationErrorException(
                                 new IllegalArgumentException("Multiple primary tenants defined in system."));
@@ -2665,11 +2665,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                     if (actualPrimaryTenantId == null) {
                         appletUtilities.system().setSysParameterValue(
-                                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID, tenant.getId());
-                    } else if (!actualPrimaryTenantId.equals(tenant.getId())) {
+                                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID, mappedTenant.getId());
+                    } else if (!actualPrimaryTenantId.equals(mappedTenant.getId())) {
                         throwOperationErrorException(
                                 new IllegalArgumentException("Primary tenant has been improperly changed from ["
-                                        + actualPrimaryTenantId + "]  to [" + tenant.getId() + "]"));
+                                        + actualPrimaryTenantId + "]  to [" + mappedTenant.getId() + "]"));
                     }
 
                     primaryTenantResolved = true;

@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.system.entities.Tenant;
-import com.flowcentraltech.flowcentral.system.entities.TenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
@@ -47,19 +47,19 @@ public class TenantListCommand extends AbstractSystemListCommand<ZeroParams> {
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        List<Tenant> tenantList = system().findTenants((TenantQuery) new TenantQuery().ignoreEmptyCriteria(true));
+        List<MappedTenant> tenantList = system().findTenants((MappedTenantQuery) new MappedTenantQuery().ignoreEmptyCriteria(true));
         if (!DataUtils.isBlank(tenantList)) {
             List<Listable> resultList = new ArrayList<Listable>();
             Long actualPrimaryTenantId = system().getSysParameterValue(Long.class,
                     SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
-            for (Tenant tenant : tenantList) {
-                Long tenantId = tenant.getId();
+            for (MappedTenant mappedTenant : tenantList) {
+                Long tenantId = mappedTenant.getId();
                 String label = null;
-                if (tenant.getId().equals(actualPrimaryTenantId) && Boolean.TRUE.equals(tenant.getPrimary())) {
+                if (mappedTenant.getId().equals(actualPrimaryTenantId) && Boolean.TRUE.equals(mappedTenant.getPrimary())) {
                     tenantId = Entity.PRIMARY_TENANT_ID;
-                    label = "[P] " + tenant.getName();
+                    label = "[P] " + mappedTenant.getName();
                 } else {
-                    label = "[S] " + tenant.getName();
+                    label = "[S] " + mappedTenant.getName();
                 }
 
                 resultList.add(new ListData(String.valueOf(tenantId), label));

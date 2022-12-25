@@ -564,7 +564,7 @@
 		</entity>
 		<entity name="tenant" description="$m{system.tenant}"
 			label="$m{system.tenant.label}"
-			type="com.flowcentraltech.flowcentral.system.entities.Tenant"
+			type="com.flowcentraltech.flowcentral.system.entities.MappedTenant"
 			delegate="mappedentity-environmentdelegate" table="FC_TENANT"
 			auditable="true" reportable="true">
 			<field name="name" label="$m{system.tenant.name}" type="string"

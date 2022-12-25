@@ -75,8 +75,8 @@ import com.flowcentraltech.flowcentral.system.entities.Sector;
 import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
-import com.flowcentraltech.flowcentral.system.entities.Tenant;
-import com.flowcentraltech.flowcentral.system.entities.TenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.Setting;
@@ -386,7 +386,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<Long> getPrimaryMappedTenantIds() throws UnifyException {
-        List<Long> tenantIds = environment().valueList(Long.class, "id", new TenantQuery().ignoreEmptyCriteria(true));
+        List<Long> tenantIds = environment().valueList(Long.class, "id", new MappedTenantQuery().ignoreEmptyCriteria(true));
         Long actualPrimaryTenantId = getSysParameterValue(Long.class,
                 SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
         if (actualPrimaryTenantId != null) {
@@ -398,11 +398,11 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public int getTenantCount() throws UnifyException {
-        return environment().countAll(new TenantQuery().ignoreEmptyCriteria(true));
+        return environment().countAll(new MappedTenantQuery().ignoreEmptyCriteria(true));
     }
 
     @Override
-    public List<Tenant> findTenants(TenantQuery query) throws UnifyException {
+    public List<MappedTenant> findTenants(MappedTenantQuery query) throws UnifyException {
         return environment().findAll(query);
     }
 

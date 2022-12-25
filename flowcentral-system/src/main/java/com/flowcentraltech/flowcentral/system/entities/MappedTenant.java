@@ -20,13 +20,13 @@ import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.TableName;
 
 /**
- * Tenant entity.
+ * Mapped tenant entity.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@TableName("FC_TENANT")
-public class Tenant extends BaseEntity {
+@TableName("FC_MAPPEDTENANT")
+public class MappedTenant extends BaseEntity {
 
     @Column(length = 64)
     private String name;
@@ -34,13 +34,13 @@ public class Tenant extends BaseEntity {
     @Column
     private Boolean primary;
     
-    public Tenant(Long id, String name, Boolean primary) {
+    public MappedTenant(Long id, String name, Boolean primary) {
         super.setId(id);
         this.name = name;
         this.primary = primary;
     }
     
-    public Tenant() {
+    public MappedTenant() {
 
     }
 

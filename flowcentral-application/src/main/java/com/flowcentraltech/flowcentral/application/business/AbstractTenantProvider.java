@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.HashMap;
 
-import com.flowcentraltech.flowcentral.system.entities.Tenant;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
@@ -28,13 +28,13 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractTenantProvider extends AbstractMappedEntityProvider<Tenant>{
+public abstract class AbstractTenantProvider extends AbstractMappedEntityProvider<MappedTenant>{
 
     private final ProviderInfo providerInfo;
 
     @SuppressWarnings("serial")
     protected AbstractTenantProvider(String srcTenantEntityName, ProviderInfo providerInfo) {
-        super(Tenant.class, srcTenantEntityName, new HashMap<String, String>(){{
+        super(MappedTenant.class, srcTenantEntityName, new HashMap<String, String>(){{
             put("name", providerInfo.getNameField());
             put("primary", providerInfo.getPrimaryFlagField());
             }});
@@ -42,10 +42,10 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
     }
 
     @Override
-    protected Tenant doCreate(Entity inst) throws UnifyException {
+    protected MappedTenant doCreate(Entity inst) throws UnifyException {
         final String name = DataUtils.getBeanProperty(String.class, inst, providerInfo.getNameField());
         final boolean primary = DataUtils.getBeanProperty(boolean.class, inst, providerInfo.getPrimaryFlagField());
-        return new Tenant((Long) inst.getId(), name, primary);
+        return new MappedTenant((Long) inst.getId(), name, primary);
     }
 
     protected static class ProviderInfo {

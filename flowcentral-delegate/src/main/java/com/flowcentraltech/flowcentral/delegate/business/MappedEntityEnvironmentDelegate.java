@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Preferred;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -53,11 +54,20 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
         List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
         for (MappedEntityProvider _provider : _providers) {
             if (isProviderPresent(_provider.getDestEntityClass())) {
-                throwOperationErrorException(
-                        new IllegalArgumentException("Multiple mapped entity providers found entity class ["
-                                + _provider.getDestEntityClass() + "]. Found [" + _provider.getName() + "] and ["
-                                + getProvider(_provider.getDestEntityClass()) + "]"));
-            }
+                final MappedEntityProvider existingMappedEntityProvider = getProvider(_provider.getDestEntityClass());
+                final boolean currentPreferred = _provider.getClass().isAnnotationPresent(Preferred.class);
+                final boolean existingPreferred = existingMappedEntityProvider.getClass().isAnnotationPresent(Preferred.class);
+                if (existingPreferred == currentPreferred) {
+                    throwOperationErrorException(
+                            new IllegalArgumentException("Multiple mapped entity providers found entity class ["
+                                    + _provider.getDestEntityClass() + "]. Found [" + _provider.getName() + "] and ["
+                                    + existingMappedEntityProvider.getName() + "]"));
+                }
+                
+                if (existingPreferred && !currentPreferred) {
+                    continue;
+                }                
+              }
             
             providers.put(_provider.getDestEntityClass(), _provider);
         }

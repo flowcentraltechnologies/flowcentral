@@ -25,8 +25,8 @@ import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
 import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.system.entities.ModuleQuery;
-import com.flowcentraltech.flowcentral.system.entities.Tenant;
-import com.flowcentraltech.flowcentral.system.entities.TenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.task.TaskStatus;
@@ -66,7 +66,7 @@ public interface SystemModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Tenant> findTenants(TenantQuery query) throws UnifyException;
+    List<MappedTenant> findTenants(MappedTenantQuery query) throws UnifyException;
 
     /**
      * Gets instance licensing.

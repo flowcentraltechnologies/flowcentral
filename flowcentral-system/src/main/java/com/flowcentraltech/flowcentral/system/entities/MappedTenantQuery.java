@@ -18,19 +18,19 @@ package com.flowcentraltech.flowcentral.system.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
 
 /**
- * Tenant query.
+ * Mapped tenant query.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class TenantQuery extends BaseEntityQuery<Tenant> {
+public class MappedTenantQuery extends BaseEntityQuery<MappedTenant> {
 
-    public TenantQuery() {
-        super(Tenant.class);
+    public MappedTenantQuery() {
+        super(MappedTenant.class);
     }
 
-    public TenantQuery name(String name) {
-        return (TenantQuery) addEquals("name", name);
+    public MappedTenantQuery name(String name) {
+        return (MappedTenantQuery) addEquals("name", name);
     }
 
 }
