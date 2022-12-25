@@ -19,9 +19,11 @@ import java.util.Collections;
 
 import com.flowcentraltech.flowcentral.application.business.AbstractMappedEntityProvider;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.Zone;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -31,16 +33,42 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component("default-mappedbranchprovider")
-public class DefaultMappedBranchProvider extends AbstractMappedEntityProvider<MappedBranch> {
+public class DefaultMappedBranchProvider
+        extends AbstractMappedEntityProvider<MappedBranch, DefaultMappedBranchProviderContext> {
 
     protected DefaultMappedBranchProvider() {
-        super(MappedBranch.class, "organization.branch", Collections.emptyMap());
+        super(MappedBranch.class, DefaultMappedBranchProviderContext.class, "organization.branch",
+                Collections.emptyMap());
     }
 
     @Override
-    protected MappedBranch doCreate(Entity inst) throws UnifyException {
+    protected MappedBranch doCreate(DefaultMappedBranchProviderContext context, Entity inst) throws UnifyException {
         MappedBranch mappedBranch = new MappedBranch();
-        new BeanValueStore(mappedBranch).copy(new BeanValueStore(inst));
+        ValueStore mappedBranchValueStore = new BeanValueStore(mappedBranch);
+        mappedBranchValueStore.copy(new BeanValueStore(inst));
+
+        final Long zoneId = mappedBranchValueStore.retrieve(Long.class, "zoneId");
+        if (zoneId != null) {
+            ValueStore zoneValueStore = null;
+            if (context.isMultiple()) {
+                if (context.isZonePresent(zoneId)) {
+                    zoneValueStore = context.getZone(zoneId);
+                } else {
+                    Zone zone = environment().list(Zone.class, zoneId);
+                    zoneValueStore = new BeanValueStore(zone);
+                    context.saveZone(zoneId, zoneValueStore);
+                }
+            } else {
+                Zone zone = environment().list(Zone.class, zoneId);
+                zoneValueStore = new BeanValueStore(zone);
+            }
+
+            mappedBranchValueStore.store("zoneCode", zoneValueStore.retrieve("code"));
+            mappedBranchValueStore.store("zoneDesc", zoneValueStore.retrieve("description"));
+            mappedBranchValueStore.store("languageTag", zoneValueStore.retrieve("languageTag"));
+            mappedBranchValueStore.store("timeZone", zoneValueStore.retrieve("timeZone"));
+        }
+
         return mappedBranch;
     }
 

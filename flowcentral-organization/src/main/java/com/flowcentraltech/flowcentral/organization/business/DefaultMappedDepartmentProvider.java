@@ -31,14 +31,17 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component("default-mappeddepartmentprovider")
-public class DefaultMappedDepartmentProvider extends AbstractMappedEntityProvider<MappedDepartment> {
+public class DefaultMappedDepartmentProvider
+        extends AbstractMappedEntityProvider<MappedDepartment, DefaultMappedDepartmentProviderContext> {
 
     protected DefaultMappedDepartmentProvider() {
-        super(MappedDepartment.class, "organization.department", Collections.emptyMap());
+        super(MappedDepartment.class, DefaultMappedDepartmentProviderContext.class, "organization.department",
+                Collections.emptyMap());
     }
 
     @Override
-    protected MappedDepartment doCreate(Entity inst) throws UnifyException {
+    protected MappedDepartment doCreate(DefaultMappedDepartmentProviderContext context, Entity inst)
+            throws UnifyException {
         MappedDepartment mappedDepartment = new MappedDepartment();
         new BeanValueStore(mappedDepartment).copy(new BeanValueStore(inst));
         return mappedDepartment;

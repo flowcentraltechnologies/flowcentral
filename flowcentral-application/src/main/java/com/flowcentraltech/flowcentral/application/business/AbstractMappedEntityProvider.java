@@ -28,6 +28,8 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
  * Convenient abstract base class for mapped entity providers..
@@ -35,20 +37,24 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractMappedEntityProvider<T extends Entity> extends AbstractUnifyComponent
-        implements MappedEntityProvider<T> {
+public abstract class AbstractMappedEntityProvider<T extends Entity, U extends MappedEntityProviderContext>
+        extends AbstractUnifyComponent implements MappedEntityProvider<T, U> {
 
     @Configurable
     private AppletUtilities au;
 
-    private Class<T> destEntityClass;
-    
+    private final Class<T> destEntityClass;
+
+    private final Class<U> contextClass;
+
     private final String srcEntityName;
 
     private final Map<String, String> queryFieldMap;
 
-    protected AbstractMappedEntityProvider(Class<T> destEntityClass, String srcEntityName, Map<String, String> queryFieldMap) {
+    protected AbstractMappedEntityProvider(Class<T> destEntityClass, Class<U> contextClass, String srcEntityName,
+            Map<String, String> queryFieldMap) {
         this.destEntityClass = destEntityClass;
+        this.contextClass = contextClass;
         this.srcEntityName = srcEntityName;
         this.queryFieldMap = Collections.unmodifiableMap(new HashMap<String, String>(queryFieldMap));
     }
@@ -178,7 +184,7 @@ public abstract class AbstractMappedEntityProvider<T extends Entity> extends Abs
         return au.environment();
     }
 
-    protected abstract T doCreate(Entity inst) throws UnifyException;
+    protected abstract T doCreate(U context, Entity inst) throws UnifyException;
 
     @SuppressWarnings("unchecked")
     private Class<T> getSrcEntityClass() throws UnifyException {
@@ -199,18 +205,25 @@ public abstract class AbstractMappedEntityProvider<T extends Entity> extends Abs
     }
 
     private List<T> createList(List<? extends Entity> instList) throws UnifyException {
-        List<T> resultList = new ArrayList<>();
-        for (Entity inst : instList) {
-            T _inst = create(inst);
-            resultList.add(_inst);
-        }
+        if (!DataUtils.isBlank(instList)) {
+            U context = ReflectUtils.newInstance(contextClass);
+            context.setMultiple(true);
+            List<T> resultList = new ArrayList<>();
+            for (Entity inst : instList) {
+                T _inst = doCreate(context, inst);
+                resultList.add(_inst);
+            }
 
-        return resultList;
+            return resultList;
+        }
+        
+        return Collections.emptyList();
     }
 
     private T create(Entity inst) throws UnifyException {
         if (inst != null) {
-            return doCreate(inst);
+            U context = ReflectUtils.newInstance(contextClass);
+            return doCreate(context, inst);
         }
 
         return null;

@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.MappedEntityProvider;
+import com.flowcentraltech.flowcentral.application.business.MappedEntityProviderContext;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.tcdng.unify.core.UnifyException;
@@ -41,10 +42,10 @@ import com.tcdng.unify.core.database.Query;
 @Component(name = "mappedentity-environmentdelegate", description = "Mapped Entity Environment Delegate")
 public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate {
 
-    private final Map<Class<? extends Entity>, MappedEntityProvider<? extends Entity>> providers;
+    private final Map<Class<? extends Entity>, MappedEntityProvider<? extends Entity, ? extends MappedEntityProviderContext>> providers;
 
     public MappedEntityEnvironmentDelegate() {
-        this.providers = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends Entity>>();
+        this.providers = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends Entity, ? extends MappedEntityProviderContext>>();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -56,19 +57,20 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
             if (isProviderPresent(_provider.getDestEntityClass())) {
                 final MappedEntityProvider existingMappedEntityProvider = getProvider(_provider.getDestEntityClass());
                 final boolean currentPreferred = _provider.getClass().isAnnotationPresent(Preferred.class);
-                final boolean existingPreferred = existingMappedEntityProvider.getClass().isAnnotationPresent(Preferred.class);
+                final boolean existingPreferred = existingMappedEntityProvider.getClass()
+                        .isAnnotationPresent(Preferred.class);
                 if (existingPreferred == currentPreferred) {
                     throwOperationErrorException(
                             new IllegalArgumentException("Multiple mapped entity providers found entity class ["
                                     + _provider.getDestEntityClass() + "]. Found [" + _provider.getName() + "] and ["
                                     + existingMappedEntityProvider.getName() + "]"));
                 }
-                
+
                 if (existingPreferred && !currentPreferred) {
                     continue;
-                }                
-              }
-            
+                }
+            }
+
             providers.put(_provider.getDestEntityClass(), _provider);
         }
     }
@@ -326,15 +328,17 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends Entity> MappedEntityProvider<T> getProvider(Query<T> query) {
-        return (MappedEntityProvider<T>) providers.get(query.getEntityClass());
+    private <T extends Entity, U extends MappedEntityProviderContext> MappedEntityProvider<T, U> getProvider(
+            Query<T> query) {
+        return (MappedEntityProvider<T, U>) providers.get(query.getEntityClass());
     }
 
     private boolean isProviderPresent(Class<? extends Entity> entityClass) {
         return providers.containsKey(entityClass);
     }
 
-    private MappedEntityProvider<? extends Entity> getProvider(Class<? extends Entity> entityClass) {
+    private MappedEntityProvider<? extends Entity, ? extends MappedEntityProviderContext> getProvider(
+            Class<? extends Entity> entityClass) {
         return providers.get(entityClass);
     }
 }

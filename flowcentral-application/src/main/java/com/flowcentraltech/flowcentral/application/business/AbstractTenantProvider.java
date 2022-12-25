@@ -28,21 +28,25 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractTenantProvider extends AbstractMappedEntityProvider<MappedTenant>{
+public abstract class AbstractTenantProvider
+        extends AbstractMappedEntityProvider<MappedTenant, MappedTenantProviderContext> {
 
     private final ProviderInfo providerInfo;
 
     @SuppressWarnings("serial")
     protected AbstractTenantProvider(String srcTenantEntityName, ProviderInfo providerInfo) {
-        super(MappedTenant.class, srcTenantEntityName, new HashMap<String, String>(){{
-            put("name", providerInfo.getNameField());
-            put("primary", providerInfo.getPrimaryFlagField());
-            }});
+        super(MappedTenant.class, MappedTenantProviderContext.class, srcTenantEntityName, new HashMap<String, String>()
+            {
+                {
+                    put("name", providerInfo.getNameField());
+                    put("primary", providerInfo.getPrimaryFlagField());
+                }
+            });
         this.providerInfo = providerInfo;
     }
 
     @Override
-    protected MappedTenant doCreate(Entity inst) throws UnifyException {
+    protected MappedTenant doCreate(MappedTenantProviderContext context, Entity inst) throws UnifyException {
         final String name = DataUtils.getBeanProperty(String.class, inst, providerInfo.getNameField());
         final boolean primary = DataUtils.getBeanProperty(boolean.class, inst, providerInfo.getPrimaryFlagField());
         return new MappedTenant((Long) inst.getId(), name, primary);

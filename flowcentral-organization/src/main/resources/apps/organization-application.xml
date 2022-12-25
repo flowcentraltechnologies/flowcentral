@@ -347,10 +347,9 @@
 			type="com.flowcentraltech.flowcentral.organization.entities.Role"
 			auditable="true" reportable="true">
 			<field name="departmentId"
-				label="$m{organization.role.departmentid}" type="ref"
-				references="departmentRef"
+				label="$m{organization.role.departmentid}" type="long"
 				inputLabel="$m{organization.role.department}"
-				inputWidget="application.entitylist" basicSearch="true" />
+				inputWidget="otganization.departmentlist" basicSearch="true" />
 			<field name="code" label="$m{organization.role.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" />
@@ -368,12 +367,6 @@
 			<field name="dashboardCode"
 				label="$m{organization.role.dashboard}" type="string" maxLen="64"
 				nullable="true" />
-			<field name="departmentCode"
-				label="$m{organization.role.department.code}" type="list_only"
-				key="departmentId" property="code" />
-			<field name="departmentDesc"
-				label="$m{organization.role.department.description}"
-				type="list_only" key="departmentId" property="description" />
 			<field name="privilegeList"
 				label="$m{organization.role.privileges}" type="child_list"
 				references="rolePrivilegeRef" />
@@ -477,8 +470,6 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="sortCode" renderWidget="application.text"
 				widthRatio="1" />
-			<column field="zoneDesc" renderWidget="application.text"
-				label="$m{organization.branch.zone}" widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
 				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
