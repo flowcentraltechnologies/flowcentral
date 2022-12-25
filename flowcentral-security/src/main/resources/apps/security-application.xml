@@ -600,7 +600,7 @@
 						required="true" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
-					<field name="branchId" inputWidget="application.entitylist"
+					<field name="branchId" inputWidget="organization.branchlist"
 						column="1" />
 					<field name="passwordExpires"
 						inputWidget="application.checkbox" column="1" />
@@ -617,16 +617,16 @@
 				label="$m{security.user.form.loginevents}" contentType="child_list"
 				applet="manageUserLoginEvent" reference="userLoginEventList" />
 			<tab name="branchDetails"
-				label="$m{security.user.form.branchdetails}" contentType="miniform"
+				label="$m{security.user.form.branchdetails}" contentType="miniform_mapped"
 				disabled="true">
 				<section name="branchDetails" columns="type_2">
-					<field name="branchCode" inputWidget="application.name"
+					<field name="code" inputWidget="application.name"
 						column="0" />
-					<field name="branchDesc" inputWidget="application.text"
+					<field name="description" inputWidget="application.text"
 						label="$m{security.user.branch}" column="0" />
-					<field name="branchLanguageTag"
+					<field name="languageTag"
 						inputWidget="application.languagetag" column="0" />
-					<field name="branchTimeZone"
+					<field name="timeZone"
 						inputWidget="application.timezone" column="0" />
 					<field name="zoneCode" inputWidget="application.name"
 						column="1" />
