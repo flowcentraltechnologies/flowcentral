@@ -4214,6 +4214,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             appFormElement.setTabApplet(
                     ApplicationNameUtils.ensureLongNameReference(applicationName, formTabConfig.getApplet()));
             appFormElement.setTabReference(formTabConfig.getReference());
+            appFormElement.setTabMappedForm(formTabConfig.getMappedForm());
+            appFormElement.setMappedFieldName(formTabConfig.getMappedFieldName());
             appFormElement.setFilter(formTabConfig.getFilter());
             appFormElement.setEditAction(formTabConfig.getEditAction());
             appFormElement.setEditFormless(formTabConfig.getEditFormless());

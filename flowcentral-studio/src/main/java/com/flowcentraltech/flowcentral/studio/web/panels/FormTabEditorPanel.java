@@ -67,6 +67,8 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
                     break;
                 case MINIFORM_CHANGELOG:
                     break;
+                case MINIFORM_MAPPED:
+                    break;
                 case PARAM_VALUES:
                     break;
                 case PROPERTY_LIST:

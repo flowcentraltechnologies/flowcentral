@@ -744,6 +744,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formTabConfig.setVisible(appFormElement.isVisible());
                         formTabConfig.setEditable(appFormElement.isEditable());
                         formTabConfig.setDisabled(appFormElement.isDisabled());
+                        formTabConfig.setMappedForm(appFormElement.getTabMappedForm());
+                        formTabConfig.setMappedFieldName(appFormElement.getMappedFieldName());
 
                         final boolean isChangeLog = TabContentType.MINIFORM_CHANGELOG
                                 .equals(appFormElement.getTabContentType());
