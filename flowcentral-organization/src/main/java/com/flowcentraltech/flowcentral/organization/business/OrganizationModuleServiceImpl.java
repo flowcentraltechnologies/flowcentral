@@ -29,6 +29,10 @@ import com.flowcentraltech.flowcentral.organization.constants.OrganizationModule
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranchQuery;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Privilege;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategory;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategoryQuery;
@@ -79,6 +83,16 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     public final void setStudioProvider(StudioProvider studioProvider) {
         this.studioProvider = studioProvider;
+    }
+
+    @Override
+    public List<MappedDepartment> findMappedDepartments(MappedDepartmentQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
+    public List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException {
+        return environment().listAll(query);
     }
 
     @Override

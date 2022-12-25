@@ -22,8 +22,6 @@ import com.flowcentraltech.flowcentral.common.entities.BaseStatusTenantEntity;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
-import com.tcdng.unify.core.annotation.ForeignKey;
-import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -36,7 +34,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
 @Table(name = "FC_ROLE", uniqueConstraints = { @UniqueConstraint({ "code" }), @UniqueConstraint({ "description" }) })
 public class Role extends BaseStatusTenantEntity {
 
-    @ForeignKey(Department.class)
+    @Column(nullable = false)
     private Long departmentId;
 
     @Column(name = "ROLE_CD", length = 16)
@@ -56,12 +54,6 @@ public class Role extends BaseStatusTenantEntity {
 
     @Column(name = "DASHBOARD_CD", length = 64, nullable = true)
     private String dashboardCode;
-
-    @ListOnly(key = "departmentId", property = "code")
-    private String departmentCode;
-
-    @ListOnly(key = "departmentId", property = "description")
-    private String departmentDesc;
 
     @ChildList
     private List<RolePrivilege> privilegeList;
@@ -112,22 +104,6 @@ public class Role extends BaseStatusTenantEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getDepartmentCode() {
-        return departmentCode;
-    }
-
-    public void setDepartmentCode(String departmentCode) {
-        this.departmentCode = departmentCode;
-    }
-
-    public String getDepartmentDesc() {
-        return departmentDesc;
-    }
-
-    public void setDepartmentDesc(String departmentDesc) {
-        this.departmentDesc = departmentDesc;
     }
 
     public String getDashboardCode() {

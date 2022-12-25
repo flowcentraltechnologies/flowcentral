@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
@@ -197,15 +198,18 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
 
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
+        final MappedBranch userBranch = user.getBranchId() != null
+                ? environment().find(MappedBranch.class, user.getBranchId())
+                : null;
         if (loginLocale != null) {
             sessionCtx.setLocale(loginLocale);
-        } else if (StringUtils.isNotBlank(user.getBranchLanguageTag())) {
-            sessionCtx.setLocale(Locale.forLanguageTag(user.getBranchLanguageTag()));
+        } else if (userBranch != null && StringUtils.isNotBlank(userBranch.getLanguageTag())) {
+            sessionCtx.setLocale(Locale.forLanguageTag(userBranch.getLanguageTag()));
         }
 
         // Set session time zone
-        if (StringUtils.isNotBlank(user.getBranchTimeZone())) {
-            sessionCtx.setTimeZone(TimeZone.getTimeZone(user.getBranchTimeZone()));
+        if (userBranch != null && StringUtils.isNotBlank(userBranch.getTimeZone())) {
+            sessionCtx.setTimeZone(TimeZone.getTimeZone(userBranch.getTimeZone()));
         } else {
             sessionCtx.setTimeZone(getApplicationTimeZone());
         }
@@ -213,9 +217,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         sessionCtx.setUseDaylightSavings(sessionCtx.getTimeZone().inDaylightTime(now));
 
         // Login to session and set session attributes
-        userSessionManager.login(createUserToken(user, loginTenantId));
+        userSessionManager.login(createUserToken(user, userBranch, loginTenantId));
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERNAME, user.getFullName());
-        String branchDesc = user.getBranchDesc();
+        String branchDesc = userBranch != null ? userBranch.getDescription() : null;
         if (StringUtils.isBlank(branchDesc)) {
             branchDesc = getApplicationMessage("application.no.branch");
         }
@@ -499,7 +503,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         return userRoleInfoList;
     }
 
-    private UserToken createUserToken(User user, Long loginTenantId) throws UnifyException {
+    private UserToken createUserToken(User user, MappedBranch userBranch, Long loginTenantId) throws UnifyException {
         boolean allowMultipleLogin = user.isReserved();
         if (!allowMultipleLogin) {
             allowMultipleLogin = Boolean.TRUE.equals(user.getAllowMultipleLogin());
@@ -516,7 +520,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 getContainerSetting(String.class, UnifyCorePropertyConstants.APPLICATION_COLORSCHEME));
         return UserToken.newBuilder().userLoginId(user.getLoginId()).userName(user.getFullName())
                 .tenantId(loginTenantId).ipAddress(getSessionContext().getRemoteAddress())
-                .branchCode(user.getBranchCode()).zoneCode(user.getZoneCode()).colorScheme(colorScheme)
+                .branchCode(userBranch != null ? userBranch.getCode() : null)
+                .zoneCode(userBranch != null ? userBranch.getZoneCode() : null).colorScheme(colorScheme)
                 .globalAccess(globalAccess).reservedUser(user.isReserved()).allowMultipleLogin(allowMultipleLogin)
                 .build();
     }

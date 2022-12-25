@@ -3,6 +3,21 @@
 <application name="organization"
 	description="$m{organization.short.description}"
 	label="$m{organization.label}" module="organization" developable="true">
+	<!-- Widget Types -->
+	<widgetTypes>
+		<widgetType name="branchlist"
+			description="$m{organization.widgettype.branchlist}" dataType="long"
+			inputType="long"
+			editor="!ui-select list:branchlist blankOption:$m{blank.none}"
+			renderer="!ui-listlabel list:branchlist" />
+	</widgetTypes>
+	<widgetTypes>
+		<widgetType name="departmentlist"
+			description="$m{organization.widgettype.departmentlist}"
+			dataType="long" inputType="long"
+			editor="!ui-select list:departmentlist blankOption:$m{blank.none}"
+			renderer="!ui-listlabel list:departmentlist" />
+	</widgetTypes>
 	<!-- Applets -->
 	<applets>
 		<applet name="manageBranch"
@@ -117,6 +132,12 @@
 		<reference name="branchRef"
 			description="$m{organization.branch.reference}" entity="branch"
 			searchField="description" />
+		<reference name="mappedDepartmentRef"
+			description="$m{organization.mappeddepartment.reference}"
+			entity="mappedDepartment" searchField="description" />
+		<reference name="mappedBranchRef"
+			description="$m{organization.mappedbranch.reference}"
+			entity="mappedBranch" searchField="description" />
 		<reference name="roleRef"
 			description="$m{organization.role.reference}" entity="role"
 			searchField="description" />
@@ -186,6 +207,50 @@
 				</fieldSequence>
 			</upload>
 		</entity>
+		<entity name="mappedBranch"
+			description="$m{organization.mappedbranch}"
+			label="$m{organization.mappedbranch.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.MappedBranch"
+			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDBRANCH"
+			auditable="true" reportable="true">
+			<field name="zoneId"
+				label="$m{organization.mappedbranch.zoneid}" type="long" />
+			<field name="tenantId"
+				label="$m{organization.mappedbranch.tenantid}" type="long"
+				inputWidget="tenantlist" />
+			<field name="code" label="$m{organization.mappedbranch.code}"
+				type="string" inputWidget="application.name" maxLen="16"
+				basicSearch="true" />
+			<field name="description"
+				label="$m{organization.mappedbranch.description}" type="string"
+				inputWidget="application.text" maxLen="64" basicSearch="true" />
+			<field name="sortCode"
+				label="$m{organization.mappedbranch.sortcode}" type="string"
+				inputWidget="application.text" maxLen="32" nullable="true"
+				basicSearch="true" />
+			<field name="address"
+				label="$m{organization.mappedbranch.address}" type="string"
+				inputWidget="application.textarea" maxLen="512" nullable="true" />
+			<field name="headOffice"
+				label="$m{organization.mappedbranch.headoffice}" type="boolean"
+				inputWidget="application.checkbox" />
+			<field name="zoneCode"
+				label="$m{organization.mappedbranch.zone.code}" type="string" />
+			<field name="zoneDesc"
+				label="$m{organization.mappedbranch.zone.description}" type="string" />
+			<field name="languageTag"
+				label="$m{organization.mappedbranch.zone.languagetag}" type="string" />
+			<field name="timeZone"
+				label="$m{organization.mappedbranch.zone.timezone}" type="string" />
+			<uniqueConstraint name="codeUc"
+				description="$m{organization.mappedbranch.uc.code}" fieldList="code" />
+			<uniqueConstraint name="descUc"
+				description="$m{organization.mappedbranch.uc.description}"
+				fieldList="description" />
+			<uniqueConstraint name="sortCodeUc"
+				description="$m{organization.mappedbranch.uc.sortcode}"
+				fieldList="sortCode" />
+		</entity>
 		<entity name="department"
 			description="$m{organization.department}"
 			label="$m{organization.department.label}"
@@ -201,6 +266,28 @@
 				description="$m{organization.department.uc.code}" fieldList="code" />
 			<uniqueConstraint name="descUc"
 				description="$m{organization.department.uc.description}"
+				fieldList="description" />
+		</entity>
+		<entity name="mappedDepartment"
+			description="$m{organization.mappeddepartment}"
+			label="$m{organization.mappeddepartment.label}"
+			type="com.flowcentraltech.flowcentral.organization.entities.MappedDepartment"
+			delegate="mappedentity-environmentdelegate"
+			table="FC_MAPPEDDEPARTMENT" auditable="true" reportable="true">
+			<field name="code"
+				label="$m{organization.mappeddepartment.code}" type="string"
+				inputWidget="application.name" maxLen="16" basicSearch="true" />
+			<field name="description"
+				label="$m{organization.mappeddepartment.description}" type="string"
+				inputWidget="application.text" maxLen="64" basicSearch="true" />
+			<field name="tenantId"
+				label="$m{organization.mappeddepartment.tenantid}" type="long"
+				inputWidget="tenantlist" />
+			<uniqueConstraint name="codeUc"
+				description="$m{organization.mappeddepartment.uc.code}"
+				fieldList="code" />
+			<uniqueConstraint name="descUc"
+				description="$m{organization.mappeddepartment.uc.description}"
 				fieldList="description" />
 		</entity>
 		<entity name="privilegeCategory"

@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseStatusWorkTenantEntity;
-import com.flowcentraltech.flowcentral.organization.entities.Branch;
 import com.flowcentraltech.flowcentral.security.constants.UserWorkflowStatus;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
@@ -43,7 +42,7 @@ public class User extends BaseStatusWorkTenantEntity {
     @ForeignKey(name = "WORKFLOW_STATUS")
     private UserWorkflowStatus workflowStatus;
     
-    @ForeignKey(type = Branch.class, nullable = true)
+    @Column(nullable = true)
     private Long branchId;
 
     @Column(length = 96)
@@ -84,27 +83,6 @@ public class User extends BaseStatusWorkTenantEntity {
 
     @Column(name = "SUPERVISOR_FG")
     private Boolean supervisor;
-
-    @ListOnly(key = "branchId", property = "code")
-    private String branchCode;
-
-    @ListOnly(key = "branchId", property = "description")
-    private String branchDesc;
-
-    @ListOnly(key = "branchId", property = "languageTag")
-    private String branchLanguageTag;
-
-    @ListOnly(key = "branchId", property = "timeZone")
-    private String branchTimeZone;
-
-    @ListOnly(key = "branchId", property = "zoneId")
-    private Long zoneId;
-
-    @ListOnly(key = "branchId", property = "zoneCode")
-    private String zoneCode;
-
-    @ListOnly(key = "branchId", property = "zoneDesc")
-    private String zoneDesc;
 
     @ListOnly(key = "workflowStatus", property = "description")
     private String workflowStatusDesc;
@@ -237,38 +215,6 @@ public class User extends BaseStatusWorkTenantEntity {
         this.lastLoginDt = lastLoginDt;
     }
 
-    public String getBranchCode() {
-        return branchCode;
-    }
-
-    public void setBranchCode(String branchCode) {
-        this.branchCode = branchCode;
-    }
-
-    public String getBranchDesc() {
-        return branchDesc;
-    }
-
-    public void setBranchDesc(String branchDesc) {
-        this.branchDesc = branchDesc;
-    }
-
-    public String getBranchLanguageTag() {
-        return branchLanguageTag;
-    }
-
-    public void setBranchLanguageTag(String branchLanguageTag) {
-        this.branchLanguageTag = branchLanguageTag;
-    }
-
-    public String getBranchTimeZone() {
-        return branchTimeZone;
-    }
-
-    public void setBranchTimeZone(String branchTimeZone) {
-        this.branchTimeZone = branchTimeZone;
-    }
-
     public boolean isChangeUserPassword() {
         return Boolean.TRUE.equals(this.changePassword);
     }
@@ -287,30 +233,6 @@ public class User extends BaseStatusWorkTenantEntity {
 
     public void setSupervisor(Boolean supervisor) {
         this.supervisor = supervisor;
-    }
-
-    public Long getZoneId() {
-        return zoneId;
-    }
-
-    public void setZoneId(Long zoneId) {
-        this.zoneId = zoneId;
-    }
-
-    public String getZoneCode() {
-        return zoneCode;
-    }
-
-    public void setZoneCode(String zoneCode) {
-        this.zoneCode = zoneCode;
-    }
-
-    public String getZoneDesc() {
-        return zoneDesc;
-    }
-
-    public void setZoneDesc(String zoneDesc) {
-        this.zoneDesc = zoneDesc;
     }
 
     public String getWorkflowStatusDesc() {

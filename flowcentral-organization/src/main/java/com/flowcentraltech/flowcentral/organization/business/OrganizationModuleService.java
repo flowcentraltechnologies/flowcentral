@@ -18,6 +18,10 @@ package com.flowcentraltech.flowcentral.organization.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranchQuery;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Privilege;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategory;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategoryQuery;
@@ -33,6 +37,28 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface OrganizationModuleService extends FlowCentralService {
+
+    /**
+     * Finds mapped departments using supplied query.
+     * 
+     * @param query
+     *              the query to use
+     * @return list of mapped departments
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<MappedDepartment> findMappedDepartments(MappedDepartmentQuery query) throws UnifyException;
+
+    /**
+     * Finds mapped departments using supplied query.
+     * 
+     * @param query
+     *              the query to use
+     * @return list of mapped branches
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException;
 
     /**
      * Finds roles using supplied query.
