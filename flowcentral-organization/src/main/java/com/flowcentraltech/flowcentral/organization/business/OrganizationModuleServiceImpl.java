@@ -86,6 +86,36 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public FactoryMap<Long, String> getMappedBranchCodeFactoryMap() throws UnifyException {
+        return new FactoryMap<Long, String>() {
+            @Override
+            protected String create(Long branchId, Object... arg2) throws Exception {
+                return environment().value(String.class, "code", new MappedBranchQuery().id(branchId));
+            }
+        };
+    }
+
+    @Override
+    public FactoryMap<Long, String> getMappedDepartmentCodeFactoryMap() throws UnifyException {
+        return new FactoryMap<Long, String>() {
+                @Override
+                protected String create(Long departmentId, Object... arg2) throws Exception {
+                    return environment().value(String.class, "code", new MappedDepartmentQuery().id(departmentId));
+                }
+            };
+    }
+
+    @Override
+    public String getMappedDepartmentCode(Long departmentId) throws UnifyException {
+        return environment().value(String.class, "code", new MappedDepartmentQuery().id(departmentId));
+    }
+
+    @Override
+    public String getMappedBranchCode(Long branchId) throws UnifyException {
+        return environment().value(String.class, "code", new MappedBranchQuery().id(branchId));
+    }
+
+    @Override
     public List<MappedDepartment> findMappedDepartments(MappedDepartmentQuery query) throws UnifyException {
         return environment().listAll(query);
     }
@@ -162,8 +192,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                     new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode));
         }
 
-        return environment().valueList(String.class, "privilegeCode", new RolePrivilegeQuery()
-                .privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
+        return environment().valueList(String.class, "privilegeCode",
+                new RolePrivilegeQuery().privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
     }
 
     @Synchronized("org:assignprivtorole")

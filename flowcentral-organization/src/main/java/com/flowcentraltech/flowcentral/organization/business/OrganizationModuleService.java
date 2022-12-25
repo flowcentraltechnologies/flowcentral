@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.organization.entities.PrivilegeQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.FactoryMap;
 
 /**
  * Organization module service.
@@ -37,28 +38,6 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface OrganizationModuleService extends FlowCentralService {
-
-    /**
-     * Finds mapped departments using supplied query.
-     * 
-     * @param query
-     *              the query to use
-     * @return list of mapped departments
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<MappedDepartment> findMappedDepartments(MappedDepartmentQuery query) throws UnifyException;
-
-    /**
-     * Finds mapped departments using supplied query.
-     * 
-     * @param query
-     *              the query to use
-     * @return list of mapped branches
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException;
 
     /**
      * Finds roles using supplied query.
@@ -135,4 +114,66 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void invalidateRolePrivilegesCache(String... roleCodes) throws UnifyException;
+
+    /**
+     * Retrieves a new instance of a mapped branch code factory map.
+     * 
+     * @return the factory map
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FactoryMap<Long, String> getMappedBranchCodeFactoryMap() throws UnifyException;
+
+    /**
+     * Retrieves a new instance of a mapped department code factory map.
+     * 
+     * @return the factory map
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FactoryMap<Long, String> getMappedDepartmentCodeFactoryMap() throws UnifyException;
+    
+    /**
+     * Gets mapped department code.
+     * 
+     * @param departmentId
+     *                     the department ID
+     * @return the department code
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getMappedDepartmentCode(Long departmentId) throws UnifyException;
+
+    /**
+     * Gets mapped branch code.
+     * 
+     * @param branchId
+     *                     the branch ID
+     * @return the branch code
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getMappedBranchCode(Long branchId) throws UnifyException;
+    
+    /**
+     * Finds mapped departments using supplied query.
+     * 
+     * @param query
+     *              the query to use
+     * @return list of mapped departments
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<MappedDepartment> findMappedDepartments(MappedDepartmentQuery query) throws UnifyException;
+
+    /**
+     * Finds mapped departments using supplied query.
+     * 
+     * @param query
+     *              the query to use
+     * @return list of mapped branches
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException;
 }

@@ -21,6 +21,6 @@ package com.flowcentraltech.flowcentral.application.business;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MappedTenantProviderContext extends MappedEntityProviderContext {
+public class MappedTenantProviderContext extends BaseMappedEntityProviderContext {
 
 }

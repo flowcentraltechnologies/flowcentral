@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.organization.business;
 
-import com.flowcentraltech.flowcentral.application.business.MappedEntityProviderContext;
+import com.flowcentraltech.flowcentral.application.business.BaseMappedEntityProviderContext;
 
 /**
  * Default mapped department provider context.
@@ -23,6 +23,6 @@ import com.flowcentraltech.flowcentral.application.business.MappedEntityProvider
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DefaultMappedDepartmentProviderContext extends MappedEntityProviderContext {
+public class DefaultMappedDepartmentProviderContext extends BaseMappedEntityProviderContext {
 
 }

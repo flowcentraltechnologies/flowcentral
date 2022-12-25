@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
@@ -69,6 +70,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordGenerator;
@@ -96,6 +98,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     private SystemModuleService systemModuleService;
 
     @Configurable
+    private OrganizationModuleService organizationModuleService;
+
+    @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
     @Configurable
@@ -104,23 +109,27 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Configurable("oneway-stringcryptograph")
     private OneWayStringCryptograph passwordCryptograph;
 
-    public void setUserSessionManager(UserSessionManager userSessionManager) {
+    public final void setUserSessionManager(UserSessionManager userSessionManager) {
         this.userSessionManager = userSessionManager;
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
+    public final void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
+        this.organizationModuleService = organizationModuleService;
+    }
+
+    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
         this.fileAttachmentProvider = fileAttachmentProvider;
     }
 
-    public void setNotificationModuleService(NotificationModuleService notificationModuleService) {
+    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
 
-    public void setPasswordCryptograph(OneWayStringCryptograph passwordCryptograph) {
+    public final void setPasswordCryptograph(OneWayStringCryptograph passwordCryptograph) {
         this.passwordCryptograph = passwordCryptograph;
     }
 
@@ -468,9 +477,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             userRoleQuery.roleActiveTime(activeAt);
         }
 
+        final FactoryMap<Long, String> departmentCodes = organizationModuleService.getMappedDepartmentCodeFactoryMap();
         for (UserRole userRole : environment().listAll(userRoleQuery)) {
-            userRoleInfoList.add(
-                    new UserRoleInfo(userRole.getRoleCode(), userRole.getRoleDesc(), userRole.getDepartmentCode()));
+            userRoleInfoList.add(new UserRoleInfo(userRole.getRoleCode(), userRole.getRoleDesc(),
+                    departmentCodes.get(userRole.getDepartmentId())));
             roleSet.add(userRole.getRoleCode());
         }
 
@@ -496,7 +506,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             for (UserGroupRole userGroupRole : environment().listAll(userGroupRoleQuery)) {
                 userRoleInfoList.add(new UserRoleInfo(userGroupRole.getRoleCode(), userGroupRole.getRoleDesc(),
                         userGroupRole.getUserGroupName(), userGroupRole.getUserGroupDesc(),
-                        userGroupRole.getDepartmentCode()));
+                        departmentCodes.get(userGroupRole.getDepartmentId())));
             }
         }
 

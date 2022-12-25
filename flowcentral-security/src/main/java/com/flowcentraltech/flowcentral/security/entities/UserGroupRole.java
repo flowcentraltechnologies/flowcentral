@@ -69,12 +69,6 @@ public class UserGroupRole extends BaseAuditTenantEntity implements Describable 
     @ListOnly(key = "roleId", property = "departmentId")
     private Long departmentId;
 
-    @ListOnly(key = "roleId", property = "departmentCode")
-    private String departmentCode;
-
-    @ListOnly(key = "roleId", property = "departmentDesc")
-    private String departmentDesc;
-
     @Override
     public String getDescription() {
         return StringUtils.concatenate(userGroupDesc, " - ", roleDesc);
@@ -166,22 +160,6 @@ public class UserGroupRole extends BaseAuditTenantEntity implements Describable 
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
-    }
-
-    public String getDepartmentCode() {
-        return departmentCode;
-    }
-
-    public void setDepartmentCode(String departmentCode) {
-        this.departmentCode = departmentCode;
-    }
-
-    public String getDepartmentDesc() {
-        return departmentDesc;
-    }
-
-    public void setDepartmentDesc(String departmentDesc) {
-        this.departmentDesc = departmentDesc;
     }
 
 }

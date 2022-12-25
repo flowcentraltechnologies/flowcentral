@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.organization.business;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.business.MappedEntityProviderContext;
+import com.flowcentraltech.flowcentral.application.business.BaseMappedEntityProviderContext;
 import com.tcdng.unify.core.data.ValueStore;
 
 /**
@@ -27,7 +27,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DefaultMappedBranchProviderContext extends MappedEntityProviderContext {
+public class DefaultMappedBranchProviderContext extends BaseMappedEntityProviderContext {
 
     private Map<Long, ValueStore> zones;
 

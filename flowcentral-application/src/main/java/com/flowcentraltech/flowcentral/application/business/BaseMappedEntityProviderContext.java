@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 /**
- * Mapped entity provider context.
+ * Base mapped entity provider context.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class MappedEntityProviderContext {
+public abstract class BaseMappedEntityProviderContext {
 
     private boolean multiple;
 

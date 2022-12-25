@@ -84,12 +84,6 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
     @ListOnly(key = "roleId", property = "departmentId")
     private Long departmentId;
 
-    @ListOnly(key = "roleId", property = "departmentCode")
-    private String departmentCode;
-
-    @ListOnly(key = "roleId", property = "departmentDesc")
-    private String departmentDesc;
-
     @Override
     public String getDescription() {
         return StringUtils.concatenate(userName, " - ", roleDesc);
@@ -207,22 +201,6 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
         this.departmentId = departmentId;
     }
 
-    public String getDepartmentCode() {
-        return departmentCode;
-    }
-
-    public void setDepartmentName(String departmentCode) {
-        this.departmentCode = departmentCode;
-    }
-
-    public String getDepartmentDesc() {
-        return departmentDesc;
-    }
-
-    public void setDepartmentDesc(String departmentDesc) {
-        this.departmentDesc = departmentDesc;
-    }
-
     public String getBranchDesc() {
         return branchDesc;
     }
@@ -237,9 +215,5 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
 
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
-    }
-
-    public void setDepartmentCode(String departmentCode) {
-        this.departmentCode = departmentCode;
     }
 }

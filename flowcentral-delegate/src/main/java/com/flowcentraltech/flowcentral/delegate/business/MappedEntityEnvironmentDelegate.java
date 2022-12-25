@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.MappedEntityProvider;
-import com.flowcentraltech.flowcentral.application.business.MappedEntityProviderContext;
+import com.flowcentraltech.flowcentral.application.business.BaseMappedEntityProviderContext;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.tcdng.unify.core.UnifyException;
@@ -42,10 +42,10 @@ import com.tcdng.unify.core.database.Query;
 @Component(name = "mappedentity-environmentdelegate", description = "Mapped Entity Environment Delegate")
 public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate {
 
-    private final Map<Class<? extends Entity>, MappedEntityProvider<? extends Entity, ? extends MappedEntityProviderContext>> providers;
+    private final Map<Class<? extends Entity>, MappedEntityProvider<? extends Entity, ? extends BaseMappedEntityProviderContext>> providers;
 
     public MappedEntityEnvironmentDelegate() {
-        this.providers = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends Entity, ? extends MappedEntityProviderContext>>();
+        this.providers = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends Entity, ? extends BaseMappedEntityProviderContext>>();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -328,7 +328,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends Entity, U extends MappedEntityProviderContext> MappedEntityProvider<T, U> getProvider(
+    private <T extends Entity, U extends BaseMappedEntityProviderContext> MappedEntityProvider<T, U> getProvider(
             Query<T> query) {
         return (MappedEntityProvider<T, U>) providers.get(query.getEntityClass());
     }
@@ -337,7 +337,7 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
         return providers.containsKey(entityClass);
     }
 
-    private MappedEntityProvider<? extends Entity, ? extends MappedEntityProviderContext> getProvider(
+    private MappedEntityProvider<? extends Entity, ? extends BaseMappedEntityProviderContext> getProvider(
             Class<? extends Entity> entityClass) {
         return providers.get(entityClass);
     }

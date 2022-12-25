@@ -240,18 +240,15 @@
 			<field name="roleDesc"
 				label="$m{security.usergrouprole.roledesc}" type="list_only"
 				key="roleId" property="description" />
-			<field name="departmentCode"
-				label="$m{security.usergrouprole.departmentcode}" type="list_only"
-				key="roleId" property="departmentCode" />
-			<field name="departmentDesc"
-				label="$m{security.usergrouprole.departmentdesc}" type="list_only"
-				key="roleId" property="departmentDesc" />
 			<field name="activeBefore"
 				label="$m{security.usergrouprole.roleactivebefore}" type="list_only"
 				key="roleId" property="activeBefore" />
 			<field name="activeAfter"
 				label="$m{security.usergrouprole.roleactiveafter}" type="list_only"
 				key="roleId" property="activeAfter" />
+			<field name="departmentId"
+				label="$m{security.usergrouprole.departmentid}" type="list_only"
+				key="roleId" property="departmentId" />
 			<uniqueConstraint name="roleUc"
 				description="$m{security.usergrouprole.uc.role}"
 				fieldList="userGroupId,roleId" />
@@ -405,12 +402,9 @@
 				type="list_only" key="roleId" property="code" />
 			<field name="roleDesc" label="$m{security.userrole.roledesc}"
 				type="list_only" key="roleId" property="description" />
-			<field name="departmentCode"
-				label="$m{security.userrole.departmentcode}" type="list_only"
-				key="roleId" property="departmentCode" />
-			<field name="departmentDesc"
-				label="$m{security.userrole.departmentdesc}" type="list_only"
-				key="roleId" property="departmentDesc" />
+			<field name="departmentId"
+				label="$m{security.userrole.departmentid}" type="list_only"
+				key="roleId" property="departmentId" />
 			<field name="activeBefore"
 				label="$m{security.userrole.roleactivebefore}" type="list_only"
 				key="roleId" property="activeBefore" />
@@ -474,8 +468,6 @@
 			description="$m{security.usergrouprole.table}"
 			label="$m{security.usergrouprole.table.label}" entity="userGroupRole"
 			itemsPerPage="20" serialNo="true">
-			<column field="departmentDesc" renderWidget="application.text"
-				label="$m{security.usergrouprole.department}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"
 				label="$m{security.usergrouprole.role}" widthRatio="1" />
 			<column field="activeBefore" renderWidget="application.time"
@@ -529,8 +521,6 @@
 			description="$m{security.userrole.table}"
 			label="$m{security.userrole.table.label}" entity="userRole"
 			itemsPerPage="20" serialNo="true">
-			<column field="departmentDesc" renderWidget="application.text"
-				label="$m{security.userrole.department}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"
 				label="$m{security.userrole.role}" widthRatio="1" />
 			<column field="branchDesc" renderWidget="application.text"

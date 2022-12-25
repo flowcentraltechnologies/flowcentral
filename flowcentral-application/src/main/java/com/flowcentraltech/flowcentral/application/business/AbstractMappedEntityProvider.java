@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractMappedEntityProvider<T extends Entity, U extends MappedEntityProviderContext>
+public abstract class AbstractMappedEntityProvider<T extends Entity, U extends BaseMappedEntityProviderContext>
         extends AbstractUnifyComponent implements MappedEntityProvider<T, U> {
 
     @Configurable

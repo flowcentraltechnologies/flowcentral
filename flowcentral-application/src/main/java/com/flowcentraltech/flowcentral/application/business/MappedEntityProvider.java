@@ -28,7 +28,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MappedEntityProvider<T extends Entity, U extends MappedEntityProviderContext> extends UnifyComponent {
+public interface MappedEntityProvider<T extends Entity, U extends BaseMappedEntityProviderContext> extends UnifyComponent {
 
     Class<T> getDestEntityClass();
 
