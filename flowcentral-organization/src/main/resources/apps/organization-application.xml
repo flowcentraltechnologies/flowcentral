@@ -500,8 +500,6 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
-			<column field="departmentDesc" renderWidget="application.text"
-				label="$m{organization.role.department}" widthRatio="1" />
 			<column field="activeAfter" renderWidget="application.time"
 				widthRatio="1" />
 			<column field="activeBefore" renderWidget="application.time"
@@ -635,6 +633,19 @@
 				label="$m{organization.department.form.related.role.label}"
 				applet="manageRole" />
 		</form>
+		<form name="mappedDepartmentForm"
+			description="$m{organization.mappeddepartment.form}" entity="mappedDepartment">
+			<tab name="basicDetails"
+				label="$m{organization.mappeddepartment.form.basicdetails}"
+				contentType="miniform">
+				<section name="departmentDetails" columns="type_2">
+					<field name="code" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+				</section>
+			</tab>
+		</form>
 		<form name="roleForm" description="$m{organization.role.form}"
 			entity="role">
 			<tab name="basicDetails"
@@ -665,14 +676,8 @@
 				reference="privilegeList" />
 			<tab name="departmentDetails"
 				label="$m{organization.role.form.departmentdetails}"
-				contentType="miniform" disabled="true">
-				<section name="departmentDetails" columns="type_2">
-					<field name="departmentCode" inputWidget="application.name"
-						column="0" />
-					<field name="departmentDesc" inputWidget="application.text"
-						label="$m{organization.role.department}" column="1" />
-				</section>
-			</tab>
+				mappedFieldName="departmentId" mappedForm="organization.mappedDepartmentForm"
+				contentType="miniform_mapped" disabled="true"/>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<fieldValidationPolicy name="emailValidation"

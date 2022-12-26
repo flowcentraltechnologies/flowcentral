@@ -491,7 +491,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             List<WorkEntity> entityList) throws UnifyException {
         if (!StringUtils.isBlank(branchCode)) {
             try {
-                organizationModuleService.getBranchID(branchCode);
+                organizationModuleService.getBranchId(branchCode);
             } catch (UnifyException e) {
                 return WfChannelErrorConstants.WORKFLOW_UNKNOWN_BRANCH;
             }
@@ -499,7 +499,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         if (!StringUtils.isBlank(departmentCode)) {
             try {
-                organizationModuleService.getDepartmentID(departmentCode);
+                organizationModuleService.getDepartmentId(departmentCode);
             } catch (UnifyException e) {
                 return WfChannelErrorConstants.WORKFLOW_UNKNOWN_DEPARTMENT;
             }

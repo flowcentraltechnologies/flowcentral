@@ -57,11 +57,8 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
     @ListOnly(key = "userId", property = "status")
     private RecordStatus userStatus;
 
-    @ListOnly(name = "BRANCH_CD", key = "userId", property = "branchCode")
-    private String branchCode;
-
-    @ListOnly(key = "userId", property = "branchDesc")
-    private String branchDesc;
+    @ListOnly(key = "userId", property = "branchId")
+    private Long branchId;
 
     @ListOnly(name = "SUPERVISOR_FG", key = "userId", property = "supervisor")
     private Boolean supervisor;
@@ -145,12 +142,12 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
         this.userStatus = userStatus;
     }
 
-    public String getBranchCode() {
-        return branchCode;
+    public Long getBranchId() {
+        return branchId;
     }
 
-    public void setBranchCode(String branchCode) {
-        this.branchCode = branchCode;
+    public void setBranchId(Long branchId) {
+        this.branchId = branchId;
     }
 
     public Boolean getSupervisor() {
@@ -199,14 +196,6 @@ public class UserRole extends BaseAuditTenantEntity implements Describable {
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
-    }
-
-    public String getBranchDesc() {
-        return branchDesc;
-    }
-
-    public void setBranchDesc(String branchDesc) {
-        this.branchDesc = branchDesc;
     }
 
     public String getRoleCode() {

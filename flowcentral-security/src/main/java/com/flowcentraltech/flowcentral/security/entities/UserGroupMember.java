@@ -59,9 +59,6 @@ public class UserGroupMember extends BaseAuditTenantEntity implements Describabl
     @ListOnly(key = "userId", property = "branchId")
     private Long userBranchId;
 
-    @ListOnly(key = "userId", property = "branchDesc")
-    private String userBranchDesc;
-
     @Override
     public String getDescription() {
         return StringUtils.concatenate(userGroupDesc, " - ", userFullName);
@@ -137,14 +134,6 @@ public class UserGroupMember extends BaseAuditTenantEntity implements Describabl
 
     public void setUserBranchId(Long userBranchId) {
         this.userBranchId = userBranchId;
-    }
-
-    public String getUserBranchDesc() {
-        return userBranchDesc;
-    }
-
-    public void setUserBranchDesc(String userBranchDesc) {
-        this.userBranchDesc = userBranchDesc;
     }
 
 }

@@ -92,7 +92,7 @@ public interface OrganizationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Long getBranchID(String branchCode) throws UnifyException;
+    Long getBranchId(String branchCode) throws UnifyException;
 
     /**
      * Get department ID..
@@ -103,7 +103,7 @@ public interface OrganizationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Long getDepartmentID(String departmentCode) throws UnifyException;
+    Long getDepartmentId(String departmentCode) throws UnifyException;
 
     /**
      * Invalidates role privileges cache.

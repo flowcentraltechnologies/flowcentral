@@ -48,8 +48,8 @@ public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("userLoginId", userLoginId);
     }
 
-    public UserRoleQuery branchCode(String branchCode) {
-        return (UserRoleQuery) addEquals("branchCode", branchCode);
+    public UserRoleQuery branchId(Long branchId) {
+        return (UserRoleQuery) addEquals("branchId", branchId);
     }
 
     public UserRoleQuery userStatus(RecordStatus userStatus) {
@@ -92,8 +92,8 @@ public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("roleStatus", roleStatus);
     }
 
-    public UserRoleQuery departmentName(String departmentName) {
-        return (UserRoleQuery) addEquals("departmentName", departmentName);
+    public UserRoleQuery departmentId(Long departmentId) {
+        return (UserRoleQuery) addEquals("departmentId", departmentId);
     }
 
     public UserRoleQuery roleActiveTime(Date date) throws UnifyException {
