@@ -52,7 +52,7 @@ public class AppFormElement extends BaseConfigEntity {
     @Column(name = "ELEMENT_NM", length = 64)
     private String elementName;
 
-    @Column(name = "MAPPED_FIELD_NM", length = 64)
+    @Column(name = "MAPPED_FIELD_NM", length = 64, nullable = true)
     private String mappedFieldName;
 
     @Column(length = 128, nullable = true)

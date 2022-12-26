@@ -34,7 +34,7 @@ import com.tcdng.unify.core.database.Entity;
 public class DefaultMappedDepartmentProvider
         extends AbstractMappedEntityProvider<MappedDepartment, DefaultMappedDepartmentProviderContext> {
 
-    protected DefaultMappedDepartmentProvider() {
+    public DefaultMappedDepartmentProvider() {
         super(MappedDepartment.class, DefaultMappedDepartmentProviderContext.class, "organization.department",
                 Collections.emptyMap());
     }

@@ -32,7 +32,7 @@ public class DefaultMappedBranchProviderContext extends BaseMappedEntityProvider
     private Map<Long, ValueStore> zones;
 
     public boolean isZonePresent(Long zoneId) {
-        return zones.containsKey(zoneId);
+        return zones != null && zones.containsKey(zoneId);
     }
 
     public void saveZone(Long zoneId, ValueStore valueStore) {

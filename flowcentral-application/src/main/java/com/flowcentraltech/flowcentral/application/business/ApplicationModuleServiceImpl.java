@@ -1907,6 +1907,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             for (AppEntity entity : entityList) {
                 String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(entity.getApplicationName(),
                         entity.getName());
+                logDebug("Resolving delegate entities for [{0}]...", entityLongName);
                 EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
                 if (dataSourceName.equals(environment().getEntityDataSourceName(entityLongName))) {
                     delegateList.add(entityClassDef.getEntityClass());

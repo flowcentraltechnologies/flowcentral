@@ -10,8 +10,6 @@
 			inputType="long"
 			editor="!ui-select list:branchlist blankOption:$m{blank.none}"
 			renderer="!ui-listlabel list:branchlist" />
-	</widgetTypes>
-	<widgetTypes>
 		<widgetType name="departmentlist"
 			description="$m{organization.widgettype.departmentlist}"
 			dataType="long" inputType="long"
@@ -217,7 +215,7 @@
 				label="$m{organization.mappedbranch.zoneid}" type="long" />
 			<field name="tenantId"
 				label="$m{organization.mappedbranch.tenantid}" type="long"
-				inputWidget="tenantlist" />
+				inputWidget="system.tenantlist" />
 			<field name="code" label="$m{organization.mappedbranch.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" />
@@ -282,7 +280,7 @@
 				inputWidget="application.text" maxLen="64" basicSearch="true" />
 			<field name="tenantId"
 				label="$m{organization.mappeddepartment.tenantid}" type="long"
-				inputWidget="tenantlist" />
+				inputWidget="system.tenantlist" />
 			<uniqueConstraint name="codeUc"
 				description="$m{organization.mappeddepartment.uc.code}"
 				fieldList="code" />
@@ -349,7 +347,7 @@
 			<field name="departmentId"
 				label="$m{organization.role.departmentid}" type="long"
 				inputLabel="$m{organization.role.department}"
-				inputWidget="otganization.departmentlist" basicSearch="true" />
+				inputWidget="organization.departmentlist" basicSearch="true" />
 			<field name="code" label="$m{organization.role.code}"
 				type="string" inputWidget="application.name" maxLen="16"
 				basicSearch="true" />

@@ -36,7 +36,7 @@ import com.tcdng.unify.core.database.Entity;
 public class DefaultMappedBranchProvider
         extends AbstractMappedEntityProvider<MappedBranch, DefaultMappedBranchProviderContext> {
 
-    protected DefaultMappedBranchProvider() {
+    public DefaultMappedBranchProvider() {
         super(MappedBranch.class, DefaultMappedBranchProviderContext.class, "organization.branch",
                 Collections.emptyMap());
     }
