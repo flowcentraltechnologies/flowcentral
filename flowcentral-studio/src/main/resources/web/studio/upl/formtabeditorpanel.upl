@@ -23,7 +23,7 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmContType frmName frmLabel
-		frmReference frmApplet frmFilter frmEditAction frmEditFixedRows frmEditFormless frmIgnoreParentCondition frmShowSearch
+		frmReference frmApplet frmFilter frmMappedField frmMappedForm frmEditAction frmEditFixedRows frmEditFormless frmIgnoreParentCondition frmShowSearch
 		frmQuickEdit frmVisible frmEditable frmDisabled}}
 
 !ui-select:frmContType styleClass:$e{fc-formfield} caption:$m{formeditor.tab.contenttype}
@@ -39,6 +39,11 @@
 	eventHandler:$d{!ui-event event:onchange action:$c{typeChangeAct}}
 !ui-select:frmFilter styleClass:$e{fc-formfield} caption:$m{formeditor.tab.filter}
 	list:studioformappletfilterlist listParams:$l{applet} blankOption:$s{} binding:filter
+!ui-select:frmMappedField styleClass:$e{fc-formfield} caption:$m{formeditor.tab.mappedfield}
+	list:studioformmappedfieldlist listParams:$l{entity} blankOption:$s{} binding:mappedFieldName
+	eventHandler:$d{!ui-event event:onchange action:$c{typeChangeAct}}
+!ui-select:frmMappedForm styleClass:$e{fc-formfield} caption:$m{formeditor.tab.mappedform}
+	list:studiotabmappedformlist listParams:$l{entity mappedFieldName} blankOption:$s{} binding:mappedForm
 !ui-select:frmEditAction styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editaction}
 	list:childlisteditactionlist blankOption:$s{} binding:editAction
 !ui-select:frmEditFormless styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editformless}

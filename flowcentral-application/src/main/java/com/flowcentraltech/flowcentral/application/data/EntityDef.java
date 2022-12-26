@@ -85,6 +85,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> suggestionFieldDefList;
 
+    private List<EntityFieldDef> mappedFieldDefList;
+
     private Map<String, EntityFieldDef> fieldDefMap;
 
     private Map<String, String> fieldLabelMap;
@@ -461,6 +463,25 @@ public class EntityDef extends BaseApplicationEntityDef {
         return suggestionFieldDefList;
     }
 
+    public List<EntityFieldDef> getMappedFieldDefList() {
+        if (mappedFieldDefList == null) {
+            synchronized (this) {
+                if (mappedFieldDefList == null) {
+                    List<EntityFieldDef> list = new ArrayList<EntityFieldDef>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isWithMapping()) {
+                            list.add(entityFieldDef);
+                        }
+                    }
+
+                    mappedFieldDefList = DataUtils.unmodifiableList(list);
+                }
+            }
+        }
+        
+        return mappedFieldDefList;
+    }
+    
     private static final Set<String> RESERVED_SETVALUE_FIELDS = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("inWorkflow")));
 

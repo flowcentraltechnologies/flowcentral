@@ -618,22 +618,8 @@
 				applet="manageUserLoginEvent" reference="userLoginEventList" />
 			<tab name="branchDetails"
 				label="$m{security.user.form.branchdetails}" contentType="miniform_mapped"
-				disabled="true">
-				<section name="branchDetails" columns="type_2">
-					<field name="code" inputWidget="application.name"
-						column="0" />
-					<field name="description" inputWidget="application.text"
-						label="$m{security.user.branch}" column="0" />
-					<field name="languageTag"
-						inputWidget="application.languagetag" column="0" />
-					<field name="timeZone"
-						inputWidget="application.timezone" column="0" />
-					<field name="zoneCode" inputWidget="application.name"
-						column="1" />
-					<field name="zoneDesc" inputWidget="application.text"
-						column="1" label="$m{security.user.zone}" />
-				</section>
-			</tab>
+				mappedFieldName="branchId" mappedForm="organization.mappedBranchForm"
+				disabled="true"/>
 			<tab name="accountDetails"
 				label="$m{security.user.form.accountdetails}" contentType="miniform"
 				disabled="true">

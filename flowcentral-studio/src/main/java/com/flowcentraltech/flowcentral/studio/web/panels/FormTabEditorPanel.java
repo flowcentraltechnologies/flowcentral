@@ -49,6 +49,7 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
         boolean referenceVisible = false;
         boolean appletVisible = false;
         boolean editActionVisible = false;
+        boolean mapped = false;
         if (type != null) {
             switch (type) {
                 case CHILD:
@@ -68,6 +69,11 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
                 case MINIFORM_CHANGELOG:
                     break;
                 case MINIFORM_MAPPED:
+                    mapped = true;
+                    formTab.setEditable(false);
+                    formTab.setDisabled(true);
+                    setDisabled("frmEditable", true);
+                    setDisabled("frmDisabled", true);
                     break;
                 case PARAM_VALUES:
                     break;
@@ -85,7 +91,10 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
         setVisible("frmReference", referenceVisible);
         setVisible("frmApplet", appletVisible);
         setVisible("frmEditAction", editActionVisible);
-    }
+
+        setVisible("frmMappedField", mapped);
+        setVisible("frmMappedForm", mapped);
+   }
 
     @Action
     public void add() throws UnifyException {

@@ -21,31 +21,30 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.list.StringParam;
 
 /**
- * Studio tab applet list command
+ * Studio form mapped field list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studiotabappletlist")
-public class StudioTabAppletListCommand extends AbstractApplicationListCommand<AppletParams> {
+@Component("studioformmappedfieldlist")
+public class StudioFormMappedFieldListCommand extends AbstractApplicationListCommand<StringParam> {
 
-    public StudioTabAppletListCommand() {
-        super(AppletParams.class);
+    public StudioFormMappedFieldListCommand() {
+        super(StringParam.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, AppletParams params) throws UnifyException {
-        if (params.isPresent()) {
-            EntityDef entityDef = application().getEntityDef(params.getEntity());
-            String childEntity = entityDef.getFieldDef(params.getReference()).getRefDef().getEntity();
-            return ApplicationNameUtils.getListableList(application().findManageEntityListApplets(childEntity));
+    public List<? extends Listable> execute(Locale locale, StringParam param) throws UnifyException {
+        if (param.isPresent()) {
+            final EntityDef entityDef = application().getEntityDef(param.getValue());
+            return entityDef.getMappedFieldDefList();
         }
 
         return Collections.emptyList();

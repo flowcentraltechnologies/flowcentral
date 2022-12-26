@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.entities.AppFormQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
@@ -28,24 +30,25 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
 
 /**
- * Studio tab applet list command
+ * Studio tab mapped form list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studiotabappletlist")
-public class StudioTabAppletListCommand extends AbstractApplicationListCommand<AppletParams> {
+@Component("studiotabmappedformlist")
+public class StudioTabMappedFormListCommand extends AbstractApplicationListCommand<EntityFieldParams> {
 
-    public StudioTabAppletListCommand() {
-        super(AppletParams.class);
+    public StudioTabMappedFormListCommand() {
+        super(EntityFieldParams.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, AppletParams params) throws UnifyException {
+    public List<? extends Listable> execute(Locale locale, EntityFieldParams params) throws UnifyException {
         if (params.isPresent()) {
-            EntityDef entityDef = application().getEntityDef(params.getEntity());
-            String childEntity = entityDef.getFieldDef(params.getReference()).getRefDef().getEntity();
-            return ApplicationNameUtils.getListableList(application().findManageEntityListApplets(childEntity));
+            final EntityDef entityDef = application().getEntityDef(params.getEntity());
+            final EntityFieldDef entityFieldDef = entityDef.getFieldDef(params.getField());
+            return ApplicationNameUtils.getListableList(application().findAppForms((AppFormQuery) new AppFormQuery()
+                    .entity(entityFieldDef.getMapping()).addSelect("applicationName", "name", "description")));
         }
 
         return Collections.emptyList();
