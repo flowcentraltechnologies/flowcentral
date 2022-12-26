@@ -898,6 +898,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             fdb.addFormTab(appFormElement.getTabContentType(), filterGroupDef,
                                     appFormElement.getElementName(), appFormElement.getLabel(),
                                     appFormElement.getTabApplet(), appFormElement.getTabReference(),
+                                    appFormElement.getMappedFieldName(), appFormElement.getTabMappedForm(),
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
                                     appFormElement.getEditFixedRows(), appFormElement.isIgnoreParentCondition(),
                                     appFormElement.isShowSearch(), appFormElement.isQuickEdit(),

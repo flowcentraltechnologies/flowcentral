@@ -692,6 +692,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         return form;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,
             String beanTitle, FormDef formDef, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs,
@@ -738,6 +739,29 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
                                 new MiniForm(MiniFormScope.CHILD_FORM, formContext, formTabDef), tabIndex,
                                 formContext.getFormTab(formTabDef.getName()).isVisible()));
+                    }
+                        break;
+                    case MINIFORM_MAPPED: {
+                        logDebug("Constructing mini form for tab [{0}]...", formTabDef.getName());
+                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "!fc-miniform",
+                                RendererType.SIMPLE_WIDGET);
+                        final String _mappedFieldName = formTabDef.getMappedFieldName();
+                        final FormDef _mappedFormDef = getFormDef(formTabDef.getMappedForm());
+                        final Long _mappedInstId = DataUtils.getBeanProperty(Long.class, inst, _mappedFieldName);
+                        Entity _mappedInst = null;
+                        if (_mappedInstId != null) {
+                            EntityClassDef mappedEntityClassDef = getEntityClassDef(
+                                    _mappedFormDef.getEntityDef().getLongName());
+                            _mappedInst = environment().list(
+                                    (Class<? extends Entity>) mappedEntityClassDef.getEntityClass(), _mappedInstId);
+                        }
+
+                        FormContext _mappedFormContext = new FormContext(appletContext, _mappedFormDef,
+                                formEventHandlers, _mappedInst);
+                        tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
+                                new MiniForm(MiniFormScope.CHILD_FORM, _mappedFormContext,
+                                        _mappedFormDef.getFormTabDef(0)),
+                                tabIndex, formContext.getFormTab(formTabDef.getName()).isVisible()));
                     }
                         break;
                     case PROPERTY_LIST: {
@@ -1088,7 +1112,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 FormTabDef formTabDef = formDef.getFormTabDef(tabSheetItem.getIndex());
                 switch (formTabDef.getContentType()) {
                     case MINIFORM:
-                    case MINIFORM_CHANGELOG: {
+                    case MINIFORM_CHANGELOG:
+                    case MINIFORM_MAPPED: {
                         tabSheetItem.setVisible(formContext.getFormTab(tabSheetItem.getName()).isVisible());
                     }
                         break;
@@ -1358,15 +1383,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         final boolean showConditions = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_SHOW_CONDITIONS);
-        
+
         final int systemSearchColumns = systemModuleService.getSysParameterValue(int.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
-                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode, showConditions,
-                isIgnoreParentCondition);
+                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
+                showConditions, isIgnoreParentCondition);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         _entitySearch.setShowBaseRestriction(showBaseRestriction);
@@ -1398,10 +1423,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 AppletPropertyConstants.SEARCH_TABLE_SEARCHINPUT);
         final int appletSearchColumns = _rootAppletDef.getPropValue(int.class,
                 AppletPropertyConstants.SEARCH_TABLE_SEARCH_COLUMNS);
-        
+
         final boolean showConditions = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_SHOW_CONDITIONS);
-        
+
         final int systemSearchColumns = systemModuleService.getSysParameterValue(int.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
