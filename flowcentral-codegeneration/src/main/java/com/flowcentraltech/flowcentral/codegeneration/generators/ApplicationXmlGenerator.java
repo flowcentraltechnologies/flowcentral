@@ -342,8 +342,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appEntityConfig.setEmailProducerConsumer(appEntity.getEmailProducerConsumer());
                 appEntityConfig.setDelegate(appEntity.getDelegate());
                 appEntityConfig.setTable(appEntity.getTableName());
-                appEntityConfig.setAuditable(appEntity.getAuditable());
-                appEntityConfig.setReportable(appEntity.getReportable());
+                appEntityConfig.setMapped(appEntity.isMapped());
+                appEntityConfig.setAuditable(appEntity.isAuditable());
+                appEntityConfig.setReportable(appEntity.isReportable());
 
                 // Fields
                 if (!DataUtils.isBlank(appEntity.getFieldList())) {
@@ -376,6 +377,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                             entityFieldConfig.setLingualListKey(appEntityField.getLingualListKey());
                             entityFieldConfig.setAutoFormat(appEntityField.getAutoFormat());
                             entityFieldConfig.setDefaultVal(appEntityField.getDefaultVal());
+                            entityFieldConfig.setMapped(appEntityField.getMapped());
                             entityFieldConfig.setTextCase(appEntityField.getTextCase());
                             entityFieldConfig.setColumns(appEntityField.getColumns());
                             entityFieldConfig.setRows(appEntityField.getRows());

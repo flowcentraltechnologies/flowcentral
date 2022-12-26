@@ -606,7 +606,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
                                 getApplicationMessage("application.propertyitem.label"), null, null, false, false,
-                                "application.propertyItem", getApplicationMessage("application.propertyitem"), 0L, 1L);
+                                false, "application.propertyItem", getApplicationMessage("application.propertyitem"),
+                                0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.propertyitem.name"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
@@ -624,9 +625,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     AppEntity appEntity = getApplicationEntity(AppEntity.class, longName);
                     EntityDef.Builder edb = EntityDef.newBuilder(appEntity.getBaseType(), appEntity.getConfigType(),
                             appEntity.getEntityClass(), appEntity.getTableName(), appEntity.getLabel(),
-                            appEntity.getEmailProducerConsumer(), appEntity.getDelegate(), appEntity.getAuditable(),
-                            appEntity.getReportable(), longName, appEntity.getDescription(), appEntity.getId(),
-                            appEntity.getVersionNo());
+                            appEntity.getEmailProducerConsumer(), appEntity.getDelegate(), appEntity.isMapped(),
+                            appEntity.isAuditable(), appEntity.isReportable(), longName, appEntity.getDescription(),
+                            appEntity.getId(), appEntity.getVersionNo());
 
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
                         WidgetTypeDef inputWidgetTypeDef = null;
@@ -651,13 +652,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 && !StringUtils.isBlank(references))) {
                             edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
                                     getRefDef(references), appEntityField.getDataType(), appEntityField.getType(),
-                                    appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getLabel(),
-                                    appEntityField.getColumnName(), appEntityField.getCategory(),
-                                    appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
-                                    appEntityField.getInputListKey(), appEntityField.getLingualListKey(),
-                                    appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references,
-                                    appEntityField.getKey(), appEntityField.getProperty(), appEntityField.getRows(),
-                                    appEntityField.getColumns(), appEntityField.getMinLen(), appEntityField.getMaxLen(),
+                                    appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getMapped(),
+                                    appEntityField.getLabel(), appEntityField.getColumnName(),
+                                    appEntityField.getCategory(), appEntityField.getSuggestionType(),
+                                    appEntityField.getInputLabel(), appEntityField.getInputListKey(),
+                                    appEntityField.getLingualListKey(), appEntityField.getAutoFormat(),
+                                    appEntityField.getDefaultVal(), references, appEntityField.getKey(),
+                                    appEntityField.getProperty(), appEntityField.getRows(), appEntityField.getColumns(),
+                                    appEntityField.getMinLen(), appEntityField.getMaxLen(),
                                     appEntityField.getPrecision(), appEntityField.getScale(),
                                     appEntityField.isAllowNegative(), appEntityField.isNullable(),
                                     appEntityField.isAuditable(), appEntityField.isReportable(),
@@ -666,13 +668,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         } else {
                             edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
                                     appEntityField.getDataType(), appEntityField.getType(),
-                                    appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getLabel(),
-                                    appEntityField.getColumnName(), appEntityField.getCategory(),
-                                    appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
-                                    appEntityField.getInputListKey(), appEntityField.getLingualListKey(),
-                                    appEntityField.getAutoFormat(), appEntityField.getDefaultVal(), references,
-                                    appEntityField.getKey(), appEntityField.getProperty(), appEntityField.getRows(),
-                                    appEntityField.getColumns(), appEntityField.getMinLen(), appEntityField.getMaxLen(),
+                                    appEntityField.getTextCase(), appEntityField.getName(), appEntityField.getMapped(),
+                                    appEntityField.getLabel(), appEntityField.getColumnName(),
+                                    appEntityField.getCategory(), appEntityField.getSuggestionType(),
+                                    appEntityField.getInputLabel(), appEntityField.getInputListKey(),
+                                    appEntityField.getLingualListKey(), appEntityField.getAutoFormat(),
+                                    appEntityField.getDefaultVal(), references, appEntityField.getKey(),
+                                    appEntityField.getProperty(), appEntityField.getRows(), appEntityField.getColumns(),
+                                    appEntityField.getMinLen(), appEntityField.getMaxLen(),
                                     appEntityField.getPrecision(), appEntityField.getScale(),
                                     appEntityField.isAllowNegative(), appEntityField.isNullable(),
                                     appEntityField.isAuditable(), appEntityField.isReportable(),
@@ -1104,7 +1107,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             RefDef refDef = null; // TODO
                             String filterListKey = null; // TODO
                             EntityFieldDef entityFieldDef = new EntityFieldDef(textWidgetTypeDef, widgetTypeDef, refDef,
-                                    longName, listItem.getName(), listItem.getReferences(), filterListKey);
+                                    longName, listItem.getName(), null, listItem.getReferences(), filterListKey);
                             String renderer = InputWidgetUtils.constructEditorWithBinding(widgetTypeDef,
                                     entityFieldDef);
                             pldb.addItemDef(entityFieldDef, widgetTypeDef, set.getLabel(), listItem.getDescription(),
@@ -3111,6 +3114,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntity.setDelegate(appEntityConfig.getDelegate());
                     appEntity.setEntityClass(appEntityConfig.getType());
                     appEntity.setTableName(tableName);
+                    appEntity.setMapped(appEntityConfig.getMapped());
                     appEntity.setAuditable(appEntityConfig.getAuditable());
                     appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setConfigType(ConfigType.STATIC_INSTALL);
@@ -3130,6 +3134,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntity.setDelegate(appEntityConfig.getDelegate());
                         oldAppEntity.setEntityClass(appEntityConfig.getType());
                         oldAppEntity.setTableName(tableName);
+                        oldAppEntity.setMapped(appEntityConfig.getMapped());
                         oldAppEntity.setAuditable(appEntityConfig.getAuditable());
                         oldAppEntity.setReportable(appEntityConfig.getReportable());
                     }
@@ -3676,6 +3681,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntityField.setLingualListKey(entityFieldConfig.getLingualListKey());
                     appEntityField.setAutoFormat(entityFieldConfig.getAutoFormat());
                     appEntityField.setDefaultVal(entityFieldConfig.getDefaultVal());
+                    appEntityField.setMapped(entityFieldConfig.getMapped());
                     appEntityField.setTextCase(entityFieldConfig.getTextCase());
                     appEntityField.setColumns(entityFieldConfig.getColumns());
                     appEntityField.setRows(entityFieldConfig.getRows());
@@ -3721,6 +3727,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntityField.setLingualListKey(entityFieldConfig.getLingualListKey());
                         oldAppEntityField.setAutoFormat(entityFieldConfig.getAutoFormat());
                         oldAppEntityField.setDefaultVal(entityFieldConfig.getDefaultVal());
+                        oldAppEntityField.setMapped(entityFieldConfig.getMapped());
                         oldAppEntityField.setTextCase(entityFieldConfig.getTextCase());
                         oldAppEntityField.setColumns(entityFieldConfig.getColumns());
                         oldAppEntityField.setRows(entityFieldConfig.getRows());
@@ -4729,20 +4736,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     if (entityFieldDef.isEnumDataType()) {
                         deib.addField(type, listManager.getStaticListEnumType(entityFieldDef.getReferences()).getName(),
                                 entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
-                                entityFieldDef.getDefaultVal(), entityFieldDef.isNullable(),
-                                entityFieldDef.isDescriptive());
+                                entityFieldDef.getMapping(), entityFieldDef.getDefaultVal(),
+                                entityFieldDef.isNullable(), entityFieldDef.isDescriptive());
                     } else {
                         if (!entityFieldDef.isChildRef()) {
                             if (entityFieldDef.isTenantId()) {
                                 deib.addTenantIdField(type, entityFieldDef.getColumnName(),
-                                        entityFieldDef.getFieldName(), entityFieldDef.getPrecision(),
-                                        entityFieldDef.getScale());
+                                        entityFieldDef.getFieldName(), entityFieldDef.getMapping(),
+                                        entityFieldDef.getPrecision(), entityFieldDef.getScale());
                             } else {
                                 deib.addField(type, entityFieldDef.getDataType().dataType(),
                                         entityFieldDef.getColumnName(), entityFieldDef.getFieldName(),
-                                        entityFieldDef.getDefaultVal(), entityFieldDef.getMaxLen(),
-                                        entityFieldDef.getPrecision(), entityFieldDef.getScale(),
-                                        entityFieldDef.isNullable(), entityFieldDef.isDescriptive());
+                                        entityFieldDef.getMapping(), entityFieldDef.getDefaultVal(),
+                                        entityFieldDef.getMaxLen(), entityFieldDef.getPrecision(),
+                                        entityFieldDef.getScale(), entityFieldDef.isNullable(),
+                                        entityFieldDef.isDescriptive());
                             }
                         }
                     }

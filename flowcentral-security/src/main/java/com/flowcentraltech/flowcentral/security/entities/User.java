@@ -25,6 +25,7 @@ import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
+import com.tcdng.unify.core.annotation.Mapped;
 import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
@@ -42,6 +43,7 @@ public class User extends BaseStatusWorkTenantEntity {
     @ForeignKey(name = "WORKFLOW_STATUS")
     private UserWorkflowStatus workflowStatus;
     
+    @Mapped("organization.mappedBranch")
     @Column(nullable = true)
     private Long branchId;
 

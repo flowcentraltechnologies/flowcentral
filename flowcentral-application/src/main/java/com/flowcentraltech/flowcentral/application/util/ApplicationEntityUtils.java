@@ -305,10 +305,11 @@ public final class ApplicationEntityUtils {
 
         return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, refDef,
                 appEntityField.getDataType(), appEntityField.getType(), appEntityField.getTextCase(), entityLongName,
-                appEntityField.getName(), appEntityField.getLabel(), appEntityField.getColumnName(), references,
-                appEntityField.getCategory(), appEntityField.getSuggestionType(), appEntityField.getInputLabel(),
-                appEntityField.getInputListKey(), appEntityField.getLingualListKey(), appEntityField.getAutoFormat(),
-                appEntityField.getDefaultVal(), appEntityField.getKey(), appEntityField.getProperty(),
+                appEntityField.getName(), appEntityField.getMapped(), appEntityField.getLabel(),
+                appEntityField.getColumnName(), references, appEntityField.getCategory(),
+                appEntityField.getSuggestionType(), appEntityField.getInputLabel(), appEntityField.getInputListKey(),
+                appEntityField.getLingualListKey(), appEntityField.getAutoFormat(), appEntityField.getDefaultVal(),
+                appEntityField.getKey(), appEntityField.getProperty(),
                 DataUtils.convert(int.class, appEntityField.getRows()),
                 DataUtils.convert(int.class, appEntityField.getColumns()),
                 DataUtils.convert(int.class, appEntityField.getMinLen()),
@@ -463,11 +464,11 @@ public final class ApplicationEntityUtils {
             default:
                 break;
         }
-        
+
         if (type.isTenantType()) {
             list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TENANT_ID, "tenantId",
-                    msgResolver.resolveApplicationMessage("$m{baseentity.field.label.tenantid}"), null, null, null, null,
-                    null, null, null, null, configType));
+                    msgResolver.resolveApplicationMessage("$m{baseentity.field.label.tenantid}"), null, null, null,
+                    null, null, null, null, null, configType));
         }
     }
 

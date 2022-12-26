@@ -79,6 +79,14 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             true,
             false),
+    MAPPED(
+            "MD",
+            DataType.LONG,
+            true,
+            false,
+            false,
+            true,
+            false),
     FLOAT(
             "FL",
             DataType.FLOAT,
@@ -347,6 +355,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     public boolean isTenantId() {
         return TENANT_ID.equals(this);
+    }
+
+    public boolean isMapped() {
+        return MAPPED.equals(this);
     }
 
     public boolean isScratch() {

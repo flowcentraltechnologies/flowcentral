@@ -110,6 +110,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioentitybynamelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="mappedentitybynamelist"
+			description="$m{studio.widgettype.mappedentitybynamelist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studiomappedentitybynamelist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="workentitybynamelist"
 			description="$m{studio.widgettype.workentitybynamelist}"
 			dataType="string" inputType="string"
@@ -413,13 +418,11 @@
 		<widgetType name="propertyappletintegerdimension"
 			description="$m{studio.widgettype.propertyappletintegerdimension}"
 			dataType="integer" inputType="integer"
-			editor="!ui-integer precision:4"
-			renderer="!ui-label" />
+			editor="!ui-integer precision:4" renderer="!ui-label" />
 		<widgetType name="propertyappletsingledigit"
 			description="$m{studio.widgettype.propertyappletsingledigit}"
 			dataType="integer" inputType="integer"
-			editor="!ui-integer precision:1"
-			renderer="!ui-label" />
+			editor="!ui-integer precision:1" renderer="!ui-label" />
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
@@ -507,8 +510,10 @@
 				value="studioondeleteappentityfield-policy" />
 			<property name="maintainForm.delete.condition"
 				value="appEntityFieldDeletable" />
-			<property name="quickEdit.table" value="studio.appEntityFieldQuickEditTable" />
-			<property name="quickEdit.policy" value="studioappentityfield-tablepolicy" />
+			<property name="quickEdit.table"
+				value="studio.appEntityFieldQuickEditTable" />
+			<property name="quickEdit.policy"
+				value="studioappentityfield-tablepolicy" />
 			<property name="quickEdit.width" value="1124" />
 			<filter name="appEntityFieldEditable"
 				description="$m{application.appentityfield.filter.editable}">
@@ -668,7 +673,8 @@
 			label="$m{studio.appentitysearchinput.manage.label}"
 			type="manage_entitylist" entity="application.appEntitySearchInput"
 			menuAccess="false">
-			<property name="searchTable" value="appEntitySearchInputTable" />
+			<property name="searchTable"
+				value="appEntitySearchInputTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.edit" value="false" />
 			<property name="searchTable.report" value="false" />
@@ -676,7 +682,8 @@
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
-			<property name="maintainForm" value="appEntitySearchInputForm" />
+			<property name="maintainForm"
+				value="appEntitySearchInputForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -1177,27 +1184,27 @@
 			label="$m{studio.appentityfield.table.quickedit.label}"
 			entity="application.appEntityField" itemsPerPage="-1" serialNo="true">
 			<column field="name" renderWidget="application.name"
-				widthRatio="3"/>
+				widthRatio="3" />
 			<column field="dataTypeDesc" renderWidget="application.text"
 				label="$m{application.appentityfield.datatype}" widthRatio="3" />
 			<column field="label" renderWidget="application.text"
-				widthRatio="3" editable="true"/>
+				widthRatio="3" editable="true" />
 			<column field="columnName" renderWidget="application.text"
-				widthRatio="3" editable="true"/>
+				widthRatio="3" editable="true" />
 			<column field="minLen" renderWidget="application.integer"
-				widthRatio="2" editable="true"/>
+				widthRatio="2" editable="true" />
 			<column field="maxLen" renderWidget="application.integer"
-				widthRatio="2" editable="true"/>
+				widthRatio="2" editable="true" />
 			<column field="precision" renderWidget="application.integer"
-				widthRatio="2" editable="true"/>
+				widthRatio="2" editable="true" />
 			<column field="scale" renderWidget="application.integer"
-				widthRatio="2" editable="true"/>
+				widthRatio="2" editable="true" />
 			<column field="nullable" renderWidget="application.checkbox"
-				widthRatio="2" editable="true"/>
+				widthRatio="2" editable="true" />
 			<column field="reportable" renderWidget="application.checkbox"
-				widthRatio="2" editable="true"/>
+				widthRatio="2" editable="true" />
 			<column field="auditable" renderWidget="application.checkbox"
-				widthRatio="2" editable="true"/>
+				widthRatio="2" editable="true" />
 		</table>
 		<table name="appEntityAttachmentTable"
 			description="$m{studio.appentityattachment.table}"
@@ -1699,8 +1706,8 @@
 						column="1" required="true" />
 					<field name="label" inputWidget="application.text" column="1"
 						required="true" />
-					<field name="allowSecondaryTenants" inputWidget="application.checkbox"
-						column="1" />
+					<field name="allowSecondaryTenants"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -1771,8 +1778,8 @@
 						column="1" />
 					<field name="menuAccess" inputWidget="application.checkbox"
 						column="1" />
-					<field name="allowSecondaryTenants" inputWidget="application.checkbox"
-						column="1" />
+					<field name="allowSecondaryTenants"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
 			<tab name="properties"
@@ -2030,7 +2037,7 @@
 			</tab>
 			<tab name="fields" label="$m{studio.appentity.form.fields}"
 				contentType="child_list" applet="manageAppEntityField"
-				reference="fieldList" quickEdit="true"/>
+				reference="fieldList" quickEdit="true" />
 			<tab name="expressions"
 				label="$m{studio.appentity.form.expressions}"
 				contentType="child_list" applet="manageAppEntityExpression"
@@ -2049,7 +2056,8 @@
 			<tab name="uploads" label="$m{studio.appentity.form.uploads}"
 				contentType="child_list" applet="manageAppEntityUpload"
 				reference="uploadList" />
-			<tab name="searchInputs" label="$m{studio.appentity.form.searchinputs}"
+			<tab name="searchInputs"
+				label="$m{studio.appentity.form.searchinputs}"
 				contentType="child_list" applet="manageAppEntitySearchInput"
 				reference="searchInputList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -2196,6 +2204,9 @@
 						column="1" visible="false" />
 					<field name="inputListKey" inputWidget="application.text"
 						column="1" visible="false" />
+					<field name="mappedEntity"
+						inputWidget="studio.mappedentitybynamelist" column="1"
+						required="true" visible="false" />
 					<field name="minLen" inputWidget="application.integer"
 						column="1" visible="false" />
 					<field name="maxLen" inputWidget="application.integer"
@@ -2279,6 +2290,7 @@
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
+			visible="false"
 			<formStatePolicy type="on_switch"
 				name="refFieldPolicy"
 				description="$m{studio.appentityfield.form.formstatepolicy.reffield}">
@@ -2289,6 +2301,17 @@
 				<setStates>
 					<setState type="field"
 						target="references,defaultVal,nullable,basicSearch" visible="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="mappedFieldPolicy"
+				description="$m{studio.appentityfield.form.formstatepolicy.mappedfield}">
+				<onCondition>
+					<restriction type="equals" field="dataType" paramA="MD" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="mappedEntity"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
@@ -2655,7 +2678,7 @@
 					<field name="selectHandler"
 						inputWidget="studio.entityselecthandlerlist" column="1" />
 					<field name="listFormat"
-						inputWidget="application.texttemplate" column="1"/>
+						inputWidget="application.texttemplate" column="1" />
 					<field name="filterGenerator"
 						inputWidget="application.reffiltergeneratorsearch"
 						switchOnChange="true" column="1" />
@@ -2811,8 +2834,8 @@
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="sections" column="1" />
-					<field name="allowSecondaryTenants" inputWidget="application.checkbox"
-						column="1" />
+					<field name="allowSecondaryTenants"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
 			<tab name="tiles" label="$m{studio.dashboard.form.tiles}"

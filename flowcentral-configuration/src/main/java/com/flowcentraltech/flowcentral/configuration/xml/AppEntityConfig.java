@@ -39,6 +39,8 @@ public class AppEntityConfig extends BaseNameConfig {
 
     private String table;
     
+    private Boolean mapped;
+    
     private Boolean auditable;
 
     private Boolean reportable;
@@ -58,6 +60,7 @@ public class AppEntityConfig extends BaseNameConfig {
     private List<EntitySearchInputConfig> searchInputList;
 
     public AppEntityConfig() {
+        this.mapped = Boolean.FALSE;
         this.auditable = Boolean.FALSE;
         this.reportable = Boolean.FALSE;
     }
@@ -96,6 +99,16 @@ public class AppEntityConfig extends BaseNameConfig {
     @XmlAttribute
     public void setTable(String table) {
         this.table = table;
+    }
+
+    public Boolean getMapped() {
+        return mapped;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setMapped(Boolean mapped) {
+        this.mapped = mapped;
     }
 
     public Boolean getAuditable() {

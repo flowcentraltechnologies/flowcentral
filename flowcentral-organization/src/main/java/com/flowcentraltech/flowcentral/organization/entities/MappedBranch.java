@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.organization.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.Mapped;
 import com.tcdng.unify.core.annotation.TableName;
 import com.tcdng.unify.core.annotation.TenantId;
 
@@ -26,6 +27,7 @@ import com.tcdng.unify.core.annotation.TenantId;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Mapped
 @TableName("FC_MAPPEDBRANCH")
 public class MappedBranch extends BaseEntity {
 

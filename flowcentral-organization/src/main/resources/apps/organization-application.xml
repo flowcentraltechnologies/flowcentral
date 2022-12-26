@@ -212,7 +212,7 @@
 			label="$m{organization.mappedbranch.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.MappedBranch"
 			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDBRANCH"
-			auditable="true" reportable="true">
+			mapped="true" auditable="true" reportable="true">
 			<field name="zoneId"
 				label="$m{organization.mappedbranch.zoneid}" type="long" />
 			<field name="tenantId"
@@ -273,7 +273,7 @@
 			label="$m{organization.mappeddepartment.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.MappedDepartment"
 			delegate="mappedentity-environmentdelegate"
-			table="FC_MAPPEDDEPARTMENT" auditable="true" reportable="true">
+			table="FC_MAPPEDDEPARTMENT" mapped="true" auditable="true" reportable="true">
 			<field name="code"
 				label="$m{organization.mappeddepartment.code}" type="string"
 				inputWidget="application.name" maxLen="16" basicSearch="true" />

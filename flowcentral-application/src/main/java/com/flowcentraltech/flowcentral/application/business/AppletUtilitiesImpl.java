@@ -1964,6 +1964,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 case INTEGER:
                 case LONG:
                 case TENANT_ID:
+                case MAPPED:
                 case SCRATCH:
                 case SHORT:
                 case STRING:

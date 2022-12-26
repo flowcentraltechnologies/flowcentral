@@ -566,7 +566,7 @@
 			label="$m{system.tenant.label}"
 			type="com.flowcentraltech.flowcentral.system.entities.MappedTenant"
 			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDTENANT"
-			auditable="true" reportable="true">
+			mapped="true" auditable="true" reportable="true">
 			<field name="name" label="$m{system.tenant.name}" type="string"
 				inputWidget="application.text" maxLen="64" />
 			<field name="primary" label="$m{system.tenant.primary}"
