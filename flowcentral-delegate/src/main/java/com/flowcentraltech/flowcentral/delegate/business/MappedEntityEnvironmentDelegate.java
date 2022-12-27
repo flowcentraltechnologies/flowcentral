@@ -28,6 +28,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Mapped entity environment delegate.
@@ -47,7 +48,8 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T find(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return au().isProviderPresent(entityClass) ? (T) au().getProvider(entityClass).find((Long) id, (long) versionNo) : null;
+        return au().isProviderPresent(entityClass) ? (T) au().getProvider(entityClass).find((Long) id, (long) versionNo)
+                : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -65,7 +67,8 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T findLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return au().isProviderPresent(entityClass) ? (T) au().getProvider(entityClass).findLean((Long) id, (long) versionNo)
+        return au().isProviderPresent(entityClass)
+                ? (T) au().getProvider(entityClass).findLean((Long) id, (long) versionNo)
                 : null;
     }
 
@@ -83,7 +86,8 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> List<T> findAll(Query<T> query) throws UnifyException {
-        return au().isProviderPresent(query) ? (List<T>) au().getProvider(query).findAll(query) : Collections.emptyList();
+        return au().isProviderPresent(query) ? (List<T>) au().getProvider(query).findAll(query)
+                : Collections.emptyList();
     }
 
     @Override
@@ -117,7 +121,8 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return au().isProviderPresent(entityClass) ? (T) au().getProvider(entityClass).list((Long) id, (long) versionNo) : null;
+        return au().isProviderPresent(entityClass) ? (T) au().getProvider(entityClass).list((Long) id, (long) versionNo)
+                : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -135,7 +140,8 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T listLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        return au().isProviderPresent(entityClass) ? (T) au().getProvider(entityClass).listLean((Long) id, (long) versionNo)
+        return au().isProviderPresent(entityClass)
+                ? (T) au().getProvider(entityClass).listLean((Long) id, (long) versionNo)
                 : null;
     }
 
@@ -148,7 +154,8 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> List<T> listAll(Query<T> query) throws UnifyException {
-        return au().isProviderPresent(query) ? (List<T>) au().getProvider(query).listAll(query) : Collections.emptyList();
+        return au().isProviderPresent(query) ? (List<T>) au().getProvider(query).listAll(query)
+                : Collections.emptyList();
     }
 
     @Override
@@ -176,12 +183,14 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @Override
     public <T, U extends Entity> List<T> valueList(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return au().isProviderPresent(query) ? (List<T>) au().getProvider(query).valueList(fieldClass, fieldName, query)
+                : Collections.emptyList();
     }
 
     @Override
     public <T, U extends Entity> T value(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return au().isProviderPresent(query) ? (T) au().getProvider(query).value(fieldClass, fieldName, query)
+                : DataUtils.convert(fieldClass, null);
     }
 
     @Override
@@ -197,19 +206,24 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @Override
     public <T, U extends Entity> Set<T> valueSet(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
-        throw new UnsupportedOperationException();
+        return au().isProviderPresent(query) ? (Set<T>) au().getProvider(query).valueSet(fieldClass, fieldName, query)
+                : Collections.emptySet();
     }
 
     @Override
     public <T, U, V extends Entity> Map<T, U> valueMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return au().isProviderPresent(query)
+                ? (Map<T, U>) au().getProvider(query).valueMap(keyClass, keyName, valueClass, valueName, query)
+                : Collections.emptyMap();
     }
 
     @Override
     public <T, U, V extends Entity> Map<T, List<U>> valueListMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException {
-        throw new UnsupportedOperationException();
+        return au().isProviderPresent(query)
+                ? (Map<T, List<U>>) au().getProvider(query).valueListMap(keyClass, keyName, valueClass, valueName, query)
+                : Collections.emptyMap();
     }
 
     @Override

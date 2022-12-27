@@ -647,7 +647,7 @@
 						column="0" />
 					<field name="id" label="$m{security.user.form.photo}"
 						inputWidget="userphoto" column="0" />
-					<field name="branchId" inputWidget="application.entitylist"
+					<field name="branchId" inputWidget="organization.branchlist"
 						column="1" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />

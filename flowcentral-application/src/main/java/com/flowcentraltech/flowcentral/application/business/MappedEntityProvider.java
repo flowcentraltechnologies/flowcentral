@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -63,4 +65,17 @@ public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext>
     List<? extends Entity> listAll(Query<? extends Entity> query) throws UnifyException;
 
     int countAll(Query<? extends Entity> query) throws UnifyException;
+
+    <U> List<U> valueList(Class<U> fieldClass, String fieldName, Query<? extends Entity> query) throws UnifyException;
+
+    <U> U value(Class<U> fieldClass, String fieldName, Query<? extends Entity> query) throws UnifyException;
+
+    <U> Set<U> valueSet(Class<U> fieldClass, String fieldName, Query<? extends Entity> query) throws UnifyException;
+
+    <U, V> Map<U, V> valueMap(Class<U> keyClass, String keyName, Class<V> valueClass, String valueName,
+            Query<? extends Entity> query) throws UnifyException;
+
+    <U, V> Map<U, List<V>> valueListMap(Class<U> keyClass, String keyName, Class<V> valueClass, String valueName,
+            Query<? extends Entity> query) throws UnifyException;
+
 }

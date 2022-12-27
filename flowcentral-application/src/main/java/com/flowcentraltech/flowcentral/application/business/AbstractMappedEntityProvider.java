@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
@@ -160,6 +161,35 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     @Override
     public int countAll(Query<? extends Entity> query) throws UnifyException {
         return environment().countAll(convertQuery(query));
+    }
+
+    @Override
+    public <T> List<T> valueList(Class<T> fieldClass, String fieldName, Query<? extends Entity> query)
+            throws UnifyException {
+        return environment().valueList(fieldClass, fieldName, convertQuery(query));
+    }
+
+    @Override
+    public <T> T value(Class<T> fieldClass, String fieldName, Query<? extends Entity> query) throws UnifyException {
+        return environment().value(fieldClass, fieldName, convertQuery(query));
+    }
+
+    @Override
+    public <T> Set<T> valueSet(Class<T> fieldClass, String fieldName, Query<? extends Entity> query)
+            throws UnifyException {
+        return environment().valueSet(fieldClass, fieldName, convertQuery(query));
+    }
+
+    @Override
+    public <T, V> Map<T, V> valueMap(Class<T> keyClass, String keyName, Class<V> valueClass, String valueName,
+            Query<? extends Entity> query) throws UnifyException {
+        return environment().valueMap(keyClass, keyName, valueClass, valueName, convertQuery(query));
+    }
+
+    @Override
+    public <T, V> Map<T, List<V>> valueListMap(Class<T> keyClass, String keyName, Class<V> valueClass, String valueName,
+            Query<? extends Entity> query) throws UnifyException {
+        return environment().valueListMap(keyClass, keyName, valueClass, valueName, convertQuery(query));
     }
 
     @Override

@@ -52,16 +52,22 @@ public class LoginTenantListCommand extends AbstractSystemListCommand<ZeroParams
             List<Listable> resultList = new ArrayList<Listable>();
             Long actualPrimaryTenantId = system().getSysParameterValue(Long.class,
                     SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
+            ListData primary = null;
             for (MappedTenant mappedTenant : tenantList) {
                 Long tenantId = mappedTenant.getId();
                 if (mappedTenant.getId().equals(actualPrimaryTenantId) && Boolean.TRUE.equals(mappedTenant.getPrimary())) {
                     tenantId = Entity.PRIMARY_TENANT_ID;
+                    primary = new ListData(String.valueOf(tenantId), mappedTenant.getName());
+                } else {
+                    resultList.add(new ListData(String.valueOf(tenantId), mappedTenant.getName()));
                 }
-
-                resultList.add(new ListData(String.valueOf(tenantId), mappedTenant.getName()));
             }
 
             DataUtils.sortAscending(resultList, Listable.class, "listDescription");
+            if (primary != null) {
+                resultList.add(0, primary);
+            }
+            
             return resultList;
         }
 
