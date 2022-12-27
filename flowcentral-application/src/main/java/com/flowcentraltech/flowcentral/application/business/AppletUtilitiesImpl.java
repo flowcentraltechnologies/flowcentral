@@ -279,25 +279,25 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException  {
+    public boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException {
         return mappedEntityProviderInfo.isProviderPresent(query.getEntityClass());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(
-            Query<? extends Entity> query) throws UnifyException  {
+            Query<? extends Entity> query) throws UnifyException {
         return (MappedEntityProvider<T>) mappedEntityProviderInfo.getProvider(query.getEntityClass());
     }
 
     @Override
-    public boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException  {
+    public boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException {
         return mappedEntityProviderInfo.isProviderPresent(entityClass);
     }
 
     @Override
     public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
-            Class<? extends Entity> entityClass) throws UnifyException  {
+            Class<? extends Entity> entityClass) throws UnifyException {
         return mappedEntityProviderInfo.getProvider(entityClass);
     }
 
@@ -862,7 +862,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef, editAction, mode,
-                                formTabDef.isIgnoreParentCondition());
+                                false, formTabDef.isIgnoreParentCondition());
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                             AppletFilterDef appletFilterDef = _appletDef.getFilterDef(
@@ -1024,7 +1024,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         : formRelatedListDef.getEditAction();
                 EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                         formRelatedListDef.getName(), rootTitle, _appletDef, editAction,
-                        EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH, false);
+                        EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON
+                                | EntitySearch.SHOW_SEARCH),
+                        true, false);
                 if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                     AppletFilterDef appletFilterDef = _appletDef.getFilterDef(
                             _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION));
@@ -1067,7 +1069,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             AppletDef _appletDef = getAppletDef(appletName);
             final String editAction = null;
             EntitySearch _entitySearch = constructEntitySearch(new FormContext(appletContext), sweepingCommitPolicy,
-                    _appletDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL, false);
+                    _appletDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL, false, false);
             if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                 AppletFilterDef appletFilterDef = _appletDef
                         .getFilterDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION));
@@ -1409,7 +1411,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public EntitySearch constructEntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode,
-            boolean isIgnoreParentCondition) throws UnifyException {
+            boolean isIgnoreReport, boolean isIgnoreParentCondition) throws UnifyException {
         logDebug("Constructing entity search for [{0}] using applet definition [{1}]...", rootTitle,
                 _appletDef.getLongName());
         TableDef _tableDef = getTableDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE));
@@ -1429,7 +1431,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entitySearchMode = entitySearchMode & ~EntitySearch.SHOW_ACTIONFOOTER;
         }
 
-        if (_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)) {
+        if (!isIgnoreReport
+                && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)) {
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
 

@@ -1110,6 +1110,8 @@ public interface AppletUtilities extends UnifyComponent {
      *                                the edit action
      * @param entitySearchMode
      *                                the entity search mode
+     * @param isIgnoreReport
+     *                                ignore report flag
      * @param isIgnoreParentCondition
      *                                ignore parent condition flag
      * @return the entity search
@@ -1117,7 +1119,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     EntitySearch constructEntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode,
+            String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode, boolean isIgnoreReport,
             boolean isIgnoreParentCondition) throws UnifyException;
 
     /**
