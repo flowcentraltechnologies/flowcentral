@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.organization.business;
 import java.util.Collections;
 
 import com.flowcentraltech.flowcentral.application.business.AbstractMappedEntityProvider;
-import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -32,19 +31,17 @@ import com.tcdng.unify.core.database.Entity;
  */
 @Component("default-mappeddepartmentprovider")
 public class DefaultMappedDepartmentProvider
-        extends AbstractMappedEntityProvider<MappedDepartment, DefaultMappedDepartmentProviderContext> {
+        extends AbstractMappedEntityProvider<DefaultMappedDepartmentProviderContext> {
 
     public DefaultMappedDepartmentProvider() {
-        super(MappedDepartment.class, DefaultMappedDepartmentProviderContext.class, "organization.department",
+        super(DefaultMappedDepartmentProviderContext.class, "organization.mappedDepartment", "organization.department",
                 Collections.emptyMap());
     }
 
     @Override
-    protected MappedDepartment doCreate(DefaultMappedDepartmentProviderContext context, Entity inst)
+    protected void doMappingCopy(DefaultMappedDepartmentProviderContext context, Entity destInst, Entity srcInst)
             throws UnifyException {
-        MappedDepartment mappedDepartment = new MappedDepartment();
-        new BeanValueStore(mappedDepartment).copy(new BeanValueStore(inst));
-        return mappedDepartment;
+        new BeanValueStore(destInst).copy(new BeanValueStore(srcInst));
     }
 
 }

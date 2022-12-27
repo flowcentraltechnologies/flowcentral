@@ -37,24 +37,24 @@ import com.tcdng.unify.core.util.ReflectUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractMappedEntityProvider<T extends Entity, U extends BaseMappedEntityProviderContext>
-        extends AbstractUnifyComponent implements MappedEntityProvider<T, U> {
+public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityProviderContext>
+        extends AbstractUnifyComponent implements MappedEntityProvider<U> {
 
     @Configurable
     private AppletUtilities au;
 
-    private final Class<T> destEntityClass;
-
     private final Class<U> contextClass;
+
+    private final String destEntityName;
 
     private final String srcEntityName;
 
     private final Map<String, String> queryFieldMap;
 
-    protected AbstractMappedEntityProvider(Class<T> destEntityClass, Class<U> contextClass, String srcEntityName,
+    protected AbstractMappedEntityProvider(Class<U> contextClass, String destEntityName, String srcEntityName,
             Map<String, String> queryFieldMap) {
-        this.destEntityClass = destEntityClass;
         this.contextClass = contextClass;
+        this.destEntityName = destEntityName;
         this.srcEntityName = srcEntityName;
         this.queryFieldMap = Collections.unmodifiableMap(new HashMap<String, String>(queryFieldMap));
     }
@@ -64,8 +64,8 @@ public abstract class AbstractMappedEntityProvider<T extends Entity, U extends B
     }
 
     @Override
-    public Class<T> getDestEntityClass() {
-        return destEntityClass;
+    public String destEntity() {
+        return destEntityName;
     }
 
     @Override
@@ -74,91 +74,91 @@ public abstract class AbstractMappedEntityProvider<T extends Entity, U extends B
     }
 
     @Override
-    public T find(Long id) throws UnifyException {
+    public Entity find(Long id) throws UnifyException {
         Entity record = environment().find(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T find(Long id, long versionNo) throws UnifyException {
+    public Entity find(Long id, long versionNo) throws UnifyException {
         Entity record = environment().find(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T find(Query<T> query) throws UnifyException {
+    public Entity find(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().find(convertQuery(query));
         return create(record);
     }
 
     @Override
-    public T findLean(Long id) throws UnifyException {
+    public Entity findLean(Long id) throws UnifyException {
         Entity record = environment().findLean(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T findLean(Long id, long versionNo) throws UnifyException {
+    public Entity findLean(Long id, long versionNo) throws UnifyException {
         Entity record = environment().findLean(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T findLean(Query<T> query) throws UnifyException {
+    public Entity findLean(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().findLean(convertQuery(query));
         return create(record);
     }
 
     @Override
-    public List<T> findAll(Query<T> query) throws UnifyException {
+    public List<? extends Entity> findAll(Query<? extends Entity> query) throws UnifyException {
         List<? extends Entity> instList = environment().findAll(convertQuery(query));
         return createList(instList);
     }
 
     @Override
-    public T list(Long id) throws UnifyException {
+    public Entity list(Long id) throws UnifyException {
         Entity record = environment().list(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T list(Long id, long versionNo) throws UnifyException {
+    public Entity list(Long id, long versionNo) throws UnifyException {
         Entity record = environment().list(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T list(Query<T> query) throws UnifyException {
+    public Entity list(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().list(convertQuery(query));
         return create(record);
     }
 
     @Override
-    public T listLean(Long id) throws UnifyException {
+    public Entity listLean(Long id) throws UnifyException {
         Entity record = environment().listLean(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T listLean(Long id, long versionNo) throws UnifyException {
+    public Entity listLean(Long id, long versionNo) throws UnifyException {
         Entity record = environment().listLean(getSrcEntityClass(), id);
         return create(record);
     }
 
     @Override
-    public T listLean(Query<T> query) throws UnifyException {
+    public Entity listLean(Query<? extends Entity> query) throws UnifyException {
         Entity record = environment().listLean(convertQuery(query));
         return create(record);
     }
 
     @Override
-    public List<T> listAll(Query<T> query) throws UnifyException {
+    public List<? extends Entity> listAll(Query<? extends Entity> query) throws UnifyException {
         List<? extends Entity> instList = environment().listAll(convertQuery(query));
         return createList(instList);
     }
 
     @Override
-    public int countAll(Query<T> query) throws UnifyException {
+    public int countAll(Query<? extends Entity> query) throws UnifyException {
         return environment().countAll(convertQuery(query));
     }
 
@@ -184,14 +184,14 @@ public abstract class AbstractMappedEntityProvider<T extends Entity, U extends B
         return au.environment();
     }
 
-    protected abstract T doCreate(U context, Entity inst) throws UnifyException;
+    protected abstract void doMappingCopy(U context, Entity destInst, Entity srcInst) throws UnifyException;
 
     @SuppressWarnings("unchecked")
-    private Class<T> getSrcEntityClass() throws UnifyException {
-        return (Class<T>) au.getEntityClassDef(srcEntityName).getEntityClass();
+    private Class<? extends Entity> getSrcEntityClass() throws UnifyException {
+        return (Class<? extends Entity>) au.getEntityClassDef(srcEntityName).getEntityClass();
     }
 
-    private Query<? extends Entity> convertQuery(Query<T> query) throws UnifyException {
+    private Query<? extends Entity> convertQuery(Query<? extends Entity> query) throws UnifyException {
         final Query<? extends Entity> _query = Query.of(getSrcEntityClass());
         _query.ignoreEmptyCriteria(query.isIgnoreEmptyCriteria());
         _query.ignoreTenancy(query.isIgnoreTenancy());
@@ -204,26 +204,33 @@ public abstract class AbstractMappedEntityProvider<T extends Entity, U extends B
         return _query;
     }
 
-    private List<T> createList(List<? extends Entity> instList) throws UnifyException {
-        if (!DataUtils.isBlank(instList)) {
+    @SuppressWarnings("unchecked")
+    private List<? extends Entity> createList(List<? extends Entity> srcInstList) throws UnifyException {
+        if (!DataUtils.isBlank(srcInstList)) {
+            Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(srcEntityName).getEntityClass();
             U context = ReflectUtils.newInstance(contextClass);
             context.setMultiple(true);
-            List<T> resultList = new ArrayList<>();
-            for (Entity inst : instList) {
-                T _inst = doCreate(context, inst);
-                resultList.add(_inst);
+            List<Entity> resultList = new ArrayList<>();
+            for (Entity srcInst : srcInstList) {
+                Entity destInst = ReflectUtils.newInstance(destEntityClass);
+                doMappingCopy(context, destInst, srcInst);
+                resultList.add(destInst);
             }
-
+            
             return resultList;
         }
         
         return Collections.emptyList();
     }
 
-    private T create(Entity inst) throws UnifyException {
+    @SuppressWarnings("unchecked")
+    private Entity create(Entity inst) throws UnifyException {
         if (inst != null) {
-            U context = ReflectUtils.newInstance(contextClass);
-            return doCreate(context, inst);
+            Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(srcEntityName).getEntityClass();
+           U context = ReflectUtils.newInstance(contextClass);
+           Entity destInst = ReflectUtils.newInstance(destEntityClass);
+           doMappingCopy(context, destInst, inst);
+           return destInst;
         }
 
         return null;

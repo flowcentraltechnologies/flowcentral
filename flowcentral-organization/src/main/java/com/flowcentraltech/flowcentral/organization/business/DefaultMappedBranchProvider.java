@@ -18,7 +18,6 @@ package com.flowcentraltech.flowcentral.organization.business;
 import java.util.Collections;
 
 import com.flowcentraltech.flowcentral.application.business.AbstractMappedEntityProvider;
-import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.organization.entities.Zone;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -34,18 +33,17 @@ import com.tcdng.unify.core.database.Entity;
  */
 @Component("default-mappedbranchprovider")
 public class DefaultMappedBranchProvider
-        extends AbstractMappedEntityProvider<MappedBranch, DefaultMappedBranchProviderContext> {
+        extends AbstractMappedEntityProvider<DefaultMappedBranchProviderContext> {
 
     public DefaultMappedBranchProvider() {
-        super(MappedBranch.class, DefaultMappedBranchProviderContext.class, "organization.branch",
+        super(DefaultMappedBranchProviderContext.class,"organization.mappedBranch", "organization.branch",
                 Collections.emptyMap());
     }
 
     @Override
-    protected MappedBranch doCreate(DefaultMappedBranchProviderContext context, Entity inst) throws UnifyException {
-        MappedBranch mappedBranch = new MappedBranch();
-        ValueStore mappedBranchValueStore = new BeanValueStore(mappedBranch);
-        mappedBranchValueStore.copy(new BeanValueStore(inst));
+    protected void doMappingCopy(DefaultMappedBranchProviderContext context, Entity destInst, Entity srcInst) throws UnifyException {
+        ValueStore mappedBranchValueStore = new BeanValueStore(destInst);
+        mappedBranchValueStore.copy(new BeanValueStore(srcInst));
 
         final Long zoneId = mappedBranchValueStore.retrieve(Long.class, "zoneId");
         if (zoneId != null) {
@@ -68,8 +66,6 @@ public class DefaultMappedBranchProvider
             mappedBranchValueStore.store("languageTag", zoneValueStore.retrieve("languageTag"));
             mappedBranchValueStore.store("timeZone", zoneValueStore.retrieve("timeZone"));
         }
-
-        return mappedBranch;
     }
 
 }

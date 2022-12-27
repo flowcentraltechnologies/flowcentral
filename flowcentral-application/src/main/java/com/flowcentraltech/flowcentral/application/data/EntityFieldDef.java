@@ -300,6 +300,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return mapped;
     }
 
+    public boolean isMatchMapping(String mapped) {
+        return this.mapped != null && this.mapped.equals(mapped);
+    }
+
     public boolean isWithMapping() {
         return !StringUtils.isBlank(mapped);
     }
@@ -487,6 +491,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     public boolean isBlob() {
         return EntityFieldDataType.BLOB.equals(dataType);
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 
     public static EntityFieldDef createForString(AppletUtilities au, String fieldName, String fieldLabel,

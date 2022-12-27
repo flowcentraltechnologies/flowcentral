@@ -463,12 +463,27 @@ public class EntityDef extends BaseApplicationEntityDef {
         return suggestionFieldDefList;
     }
 
+    public EntityFieldDef getMappedFieldDefByEntity(AppletUtilities au, String entity) throws UnifyException {
+        System.out.println("@time: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("@time: getLongName() = " + getLongName());
+        System.out.println("@time: entity = " + entity);
+        for (EntityFieldDef entityFieldDef : getMappedFieldDefList()) {
+            System.out.println("@time: entityFieldDef = " + entityFieldDef);
+            if (entityFieldDef.isMatchMapping(entity)) {
+                return entityFieldDef;
+            }
+        }
+
+        return null;
+    }
+
     public List<EntityFieldDef> getMappedFieldDefList() {
         if (mappedFieldDefList == null) {
             synchronized (this) {
                 if (mappedFieldDefList == null) {
                     List<EntityFieldDef> list = new ArrayList<EntityFieldDef>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        System.out.println("@search: entityFieldDef = " + entityFieldDef);
                         if (entityFieldDef.isWithMapping()) {
                             list.add(entityFieldDef);
                         }
@@ -478,10 +493,10 @@ public class EntityDef extends BaseApplicationEntityDef {
                 }
             }
         }
-        
+
         return mappedFieldDefList;
     }
-    
+
     private static final Set<String> RESERVED_SETVALUE_FIELDS = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("inWorkflow")));
 

@@ -301,8 +301,8 @@
 				type="list_only" inputWidget="application.text" key="workflowStatus"
 				property="description" />
 			<field name="branchId" label="$m{security.user.branch}"
-				type="ref" inputWidget="application.entitylist"
-				references="organization.branchRef" basicSearch="true" />
+				type="mapped" inputWidget="organization.branchlist"
+				mapped="organization.mappedBranch" basicSearch="true" />
 			<field name="fullName" label="$m{security.user.fullname}"
 				type="string" inputWidget="application.fullname" maxLen="96"
 				basicSearch="true" />
@@ -371,9 +371,8 @@
 			<field name="supervisor"
 				label="$m{security.userrole.supervisor}" type="list_only"
 				key="userId" property="supervisor" />
-			<field name="branchId"
-				label="$m{security.userrole.branchid}" type="list_only"
-				key="userId" property="branchId" />
+			<field name="branchId" label="$m{security.userrole.branchid}"
+				type="list_only" key="userId" property="branchId" />
 			<field name="roleCode" label="$m{security.userrole.rolecode}"
 				type="list_only" key="roleId" property="code" />
 			<field name="roleDesc" label="$m{security.userrole.roledesc}"
@@ -589,9 +588,9 @@
 				label="$m{security.user.form.loginevents}" contentType="child_list"
 				applet="manageUserLoginEvent" reference="userLoginEventList" />
 			<tab name="branchDetails"
-				label="$m{security.user.form.branchdetails}" contentType="miniform_mapped"
-				mappedFieldName="branchId" mappedForm="organization.mappedBranchForm"
-				disabled="true"/>
+				label="$m{security.user.form.branchdetails}"
+				contentType="miniform_mapped" mappedFieldName="branchId"
+				mappedForm="organization.mappedBranchForm" disabled="true" />
 			<tab name="accountDetails"
 				label="$m{security.user.form.accountdetails}" contentType="miniform"
 				disabled="true">

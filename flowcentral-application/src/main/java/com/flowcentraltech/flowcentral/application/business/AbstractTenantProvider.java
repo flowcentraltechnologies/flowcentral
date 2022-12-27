@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.HashMap;
 
-import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
@@ -28,28 +27,31 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractTenantProvider
-        extends AbstractMappedEntityProvider<MappedTenant, MappedTenantProviderContext> {
+public abstract class AbstractTenantProvider extends AbstractMappedEntityProvider<MappedTenantProviderContext> {
 
     private final ProviderInfo providerInfo;
 
     @SuppressWarnings("serial")
-    protected AbstractTenantProvider(String srcTenantEntityName, ProviderInfo providerInfo) {
-        super(MappedTenant.class, MappedTenantProviderContext.class, srcTenantEntityName, new HashMap<String, String>()
-            {
-                {
-                    put("name", providerInfo.getNameField());
-                    put("primary", providerInfo.getPrimaryFlagField());
-                }
-            });
+    protected AbstractTenantProvider(String destTenantEntityName, String srcTenantEntityName,
+            ProviderInfo providerInfo) {
+        super(MappedTenantProviderContext.class, destTenantEntityName, srcTenantEntityName,
+                new HashMap<String, String>()
+                    {
+                        {
+                            put("name", providerInfo.getNameField());
+                            put("primary", providerInfo.getPrimaryFlagField());
+                        }
+                    });
         this.providerInfo = providerInfo;
     }
 
     @Override
-    protected MappedTenant doCreate(MappedTenantProviderContext context, Entity inst) throws UnifyException {
-        final String name = DataUtils.getBeanProperty(String.class, inst, providerInfo.getNameField());
-        final boolean primary = DataUtils.getBeanProperty(boolean.class, inst, providerInfo.getPrimaryFlagField());
-        return new MappedTenant((Long) inst.getId(), name, primary);
+    protected void doMappingCopy(MappedTenantProviderContext context, Entity destInst, Entity srcInst)
+            throws UnifyException {
+        final String name = DataUtils.getBeanProperty(String.class, srcInst, providerInfo.getNameField());
+        final boolean primary = DataUtils.getBeanProperty(boolean.class, srcInst, providerInfo.getPrimaryFlagField());
+        DataUtils.setBeanProperty(destInst, "name", name);
+        DataUtils.setBeanProperty(destInst, "primary", primary);
     }
 
     protected static class ProviderInfo {

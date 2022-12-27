@@ -271,7 +271,8 @@
 			label="$m{organization.mappeddepartment.label}"
 			type="com.flowcentraltech.flowcentral.organization.entities.MappedDepartment"
 			delegate="mappedentity-environmentdelegate"
-			table="FC_MAPPEDDEPARTMENT" mapped="true" auditable="true" reportable="true">
+			table="FC_MAPPEDDEPARTMENT" mapped="true" auditable="true"
+			reportable="true">
 			<field name="code"
 				label="$m{organization.mappeddepartment.code}" type="string"
 				inputWidget="application.name" maxLen="16" basicSearch="true" />
@@ -345,8 +346,9 @@
 			type="com.flowcentraltech.flowcentral.organization.entities.Role"
 			auditable="true" reportable="true">
 			<field name="departmentId"
-				label="$m{organization.role.departmentid}" type="long"
+				label="$m{organization.role.departmentid}" type="mapped"
 				inputLabel="$m{organization.role.department}"
+				mapped="organization.mappedDepartment"
 				inputWidget="organization.departmentlist" basicSearch="true" />
 			<field name="code" label="$m{organization.role.code}"
 				type="string" inputWidget="application.name" maxLen="16"
@@ -590,19 +592,20 @@
 				contentType="miniform_changelog" />
 		</form>
 		<form name="mappedBranchForm"
-			description="$m{organization.mappedbranch.form}" entity="mappedBranch">
+			description="$m{organization.mappedbranch.form}"
+			entity="mappedBranch">
 			<tab name="basicDetails"
 				label="$m{organization.mappedbranch.form.basicdetails}"
-				contentType="miniform">
-				<section name="branchDetails" columns="type_2">
-					<field name="code" inputWidget="application.name"
-						column="0" />
+				contentType="miniform" disabled="true">
+				<section name="branchDetails" columns="type_2"
+					disabled="true">
+					<field name="code" inputWidget="application.name" column="0" />
 					<field name="description" inputWidget="application.text"
 						label="$m{security.user.branch}" column="0" />
 					<field name="languageTag"
 						inputWidget="application.languagetag" column="0" />
-					<field name="timeZone"
-						inputWidget="application.timezone" column="0" />
+					<field name="timeZone" inputWidget="application.timezone"
+						column="0" />
 					<field name="zoneCode" inputWidget="application.name"
 						column="1" />
 					<field name="zoneDesc" inputWidget="application.text"
@@ -632,7 +635,8 @@
 				applet="manageRole" />
 		</form>
 		<form name="mappedDepartmentForm"
-			description="$m{organization.mappeddepartment.form}" entity="mappedDepartment">
+			description="$m{organization.mappeddepartment.form}"
+			entity="mappedDepartment">
 			<tab name="basicDetails"
 				label="$m{organization.mappeddepartment.form.basicdetails}"
 				contentType="miniform">
@@ -652,7 +656,7 @@
 				<section name="roleDetails" columns="type_2">
 					<field name="departmentId"
 						label="$m{organization.role.department}" column="0"
-						required="true" inputWidget="organization.departmentlist"/>
+						required="true" inputWidget="organization.departmentlist" />
 					<field name="code" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
@@ -674,8 +678,9 @@
 				reference="privilegeList" />
 			<tab name="departmentDetails"
 				label="$m{organization.role.form.departmentdetails}"
-				mappedFieldName="departmentId" mappedForm="organization.mappedDepartmentForm"
-				contentType="miniform_mapped" disabled="true"/>
+				mappedFieldName="departmentId"
+				mappedForm="organization.mappedDepartmentForm"
+				contentType="miniform_mapped" disabled="true" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<fieldValidationPolicy name="emailValidation"

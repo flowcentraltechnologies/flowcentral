@@ -28,39 +28,39 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MappedEntityProvider<T extends Entity, U extends BaseMappedEntityProviderContext> extends UnifyComponent {
+public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext> extends UnifyComponent {
 
-    Class<T> getDestEntityClass();
+    String destEntity();
 
     String srcEntity();
 
-    T find(Long id) throws UnifyException;
+    Entity find(Long id) throws UnifyException;
 
-    T find(Long id, long versionNo) throws UnifyException;
+    Entity find(Long id, long versionNo) throws UnifyException;
 
-    T find(Query<T> query) throws UnifyException;
+    Entity find(Query<? extends Entity> query) throws UnifyException;
 
-    T findLean(Long id) throws UnifyException;
+    Entity findLean(Long id) throws UnifyException;
 
-    T findLean(Long id, long versionNo) throws UnifyException;
+    Entity findLean(Long id, long versionNo) throws UnifyException;
 
-    T findLean(Query<T> query) throws UnifyException;
+    Entity findLean(Query<? extends Entity> query) throws UnifyException;
 
-    List<T> findAll(Query<T> query) throws UnifyException;
+    List<? extends Entity> findAll(Query<? extends Entity> query) throws UnifyException;
 
-    T list(Long id) throws UnifyException;
+    Entity list(Long id) throws UnifyException;
 
-    T list(Long id, long versionNo) throws UnifyException;
+    Entity list(Long id, long versionNo) throws UnifyException;
 
-    T list(Query<T> query) throws UnifyException;
+    Entity list(Query<? extends Entity> query) throws UnifyException;
 
-    T listLean(Long id) throws UnifyException;
+    Entity listLean(Long id) throws UnifyException;
 
-    T listLean(Long id, long versionNo) throws UnifyException;
+    Entity listLean(Long id, long versionNo) throws UnifyException;
 
-    T listLean(Query<T> query) throws UnifyException;
+    Entity listLean(Query<? extends Entity> query) throws UnifyException;
 
-    List<T> listAll(Query<T> query) throws UnifyException;
+    List<? extends Entity> listAll(Query<? extends Entity> query) throws UnifyException;
 
-    int countAll(Query<T> query) throws UnifyException;
+    int countAll(Query<? extends Entity> query) throws UnifyException;
 }
