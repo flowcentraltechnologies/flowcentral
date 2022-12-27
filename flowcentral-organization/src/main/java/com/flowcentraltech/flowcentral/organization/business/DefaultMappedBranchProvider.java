@@ -41,7 +41,7 @@ public class DefaultMappedBranchProvider
     }
 
     @Override
-    protected void doMappingCopy(DefaultMappedBranchProviderContext context, Entity destInst, Entity srcInst) throws UnifyException {
+    protected void doMappedCopy(DefaultMappedBranchProviderContext context, Entity destInst, Entity srcInst) throws UnifyException {
         ValueStore mappedBranchValueStore = new BeanValueStore(destInst);
         mappedBranchValueStore.copy(new BeanValueStore(srcInst));
 

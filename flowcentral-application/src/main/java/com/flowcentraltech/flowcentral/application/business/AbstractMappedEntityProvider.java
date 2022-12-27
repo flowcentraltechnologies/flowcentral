@@ -184,7 +184,7 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
         return au.environment();
     }
 
-    protected abstract void doMappingCopy(U context, Entity destInst, Entity srcInst) throws UnifyException;
+    protected abstract void doMappedCopy(U context, Entity destInst, Entity srcInst) throws UnifyException;
 
     @SuppressWarnings("unchecked")
     private Class<? extends Entity> getSrcEntityClass() throws UnifyException {
@@ -207,30 +207,32 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     @SuppressWarnings("unchecked")
     private List<? extends Entity> createList(List<? extends Entity> srcInstList) throws UnifyException {
         if (!DataUtils.isBlank(srcInstList)) {
-            Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(srcEntityName).getEntityClass();
+            Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(destEntityName)
+                    .getEntityClass();
             U context = ReflectUtils.newInstance(contextClass);
             context.setMultiple(true);
             List<Entity> resultList = new ArrayList<>();
             for (Entity srcInst : srcInstList) {
                 Entity destInst = ReflectUtils.newInstance(destEntityClass);
-                doMappingCopy(context, destInst, srcInst);
+                doMappedCopy(context, destInst, srcInst);
                 resultList.add(destInst);
             }
-            
+
             return resultList;
         }
-        
+
         return Collections.emptyList();
     }
 
     @SuppressWarnings("unchecked")
     private Entity create(Entity inst) throws UnifyException {
         if (inst != null) {
-            Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(srcEntityName).getEntityClass();
-           U context = ReflectUtils.newInstance(contextClass);
-           Entity destInst = ReflectUtils.newInstance(destEntityClass);
-           doMappingCopy(context, destInst, inst);
-           return destInst;
+            Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(destEntityName)
+                    .getEntityClass();
+            U context = ReflectUtils.newInstance(contextClass);
+            Entity destInst = ReflectUtils.newInstance(destEntityClass);
+            doMappedCopy(context, destInst, inst);
+            return destInst;
         }
 
         return null;

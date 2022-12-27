@@ -39,7 +39,7 @@ public class DefaultMappedDepartmentProvider
     }
 
     @Override
-    protected void doMappingCopy(DefaultMappedDepartmentProviderContext context, Entity destInst, Entity srcInst)
+    protected void doMappedCopy(DefaultMappedDepartmentProviderContext context, Entity destInst, Entity srcInst)
             throws UnifyException {
         new BeanValueStore(destInst).copy(new BeanValueStore(srcInst));
     }
