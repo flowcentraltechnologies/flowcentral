@@ -186,59 +186,71 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                     }
 
                     final Long applicationId = applicationMenuDef.getId();
-                    writer.write("<div id=\"menu_").write(applicationId).write("\" class=\"menu\">");
-                    if (indicateSectors) {
-                        writer.write("<span class=\"ind\" style=\"background-color:");
-                        String color = applicationMenuDef.isWithSectionColor() ? applicationMenuDef.getSectionColor()
-                                : SystemColorType.GRAY.code();
-                        writer.write(color);
-                        writer.write(";\">");
-                        if (applicationMenuDef.isWithSectionShortCode()) {
-                            writer.writeWithHtmlEscape(applicationMenuDef.getSectionShortCode());
-                        } else {
-                            writer.writeHtmlFixedSpace();
-                        }
-                        writer.write("</span>");
-                    }
-
-                    writer.write("<span class=\"lab\">");
-                    writer.writeWithHtmlEscape(applicationMenuDef.getLabel());
-                    writer.write("</span></div>");
-                    writer.write("<div id=\"submenu_").write(applicationId)
-                            .write("\" class=\"submenu\" style=\"display:").write(submenuStyle).write("\">");
-                    writer.write("<ul>");
-
-                    if (appendSym) {
-                        msb.append(',');
-                    } else {
-                        appendSym = true;
-                    }
-                    msb.append('"').append(applicationId).append('"');
-
-                    for (AppletDef appletDef : applicationMenuDef.getAppletDefList()) {
-                        if (!enterprise && STANDARD_EXCLUSION.contains(appletDef.getName())) {
-                            continue;
+                    boolean isWithSubMenus = false;
+                    writer.useSecondary();
+                    try {
+                        writer.write("<div id=\"menu_").write(applicationId).write("\" class=\"menu\">");
+                        if (indicateSectors) {
+                            writer.write("<span class=\"ind\" style=\"background-color:");
+                            String color = applicationMenuDef.isWithSectionColor() ? applicationMenuDef.getSectionColor()
+                                    : SystemColorType.GRAY.code();
+                            writer.write(color);
+                            writer.write(";\">");
+                            if (applicationMenuDef.isWithSectionShortCode()) {
+                                writer.writeWithHtmlEscape(applicationMenuDef.getSectionShortCode());
+                            } else {
+                                writer.writeHtmlFixedSpace();
+                            }
+                            writer.write("</span>");
                         }
 
-                        final String appletPrivilegeCode = appletDef.getPrivilege();
-                        if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
-                                && (wkspPrivilegeManager == null || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode,
-                                        appletPrivilegeCode))) {
-                            writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
-                            appendISym = true;
-                        }
-                    }
+                        writer.write("<span class=\"lab\">");
+                        writer.writeWithHtmlEscape(applicationMenuDef.getLabel());
+                        writer.write("</span></div>");
+                        writer.write("<div id=\"submenu_").write(applicationId)
+                                .write("\" class=\"submenu\" style=\"display:").write(submenuStyle).write("\">");
+                        writer.write("<ul>");
 
-                    for (ApplicationAppletDefProvider appletDefProvider : applicationAppletDefProviderList) {
-                        for (AppletDef appletDef : appletDefProvider.getAppletDefsByRole(applicationMenuDef.getName(),
-                                roleCode, searchInput)) {
-                            if (appletDef.isMenuAccess()) {
+                        for (AppletDef appletDef : applicationMenuDef.getAppletDefList()) {
+                            if (!enterprise && STANDARD_EXCLUSION.contains(appletDef.getName())) {
+                                continue;
+                            }
+
+                            final String appletPrivilegeCode = appletDef.getPrivilege();
+                            if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
+                                    && (wkspPrivilegeManager == null || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode,
+                                            appletPrivilegeCode))) {
                                 writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
+                                isWithSubMenus = true;
                                 appendISym = true;
                             }
                         }
+
+                        for (ApplicationAppletDefProvider appletDefProvider : applicationAppletDefProviderList) {
+                            for (AppletDef appletDef : appletDefProvider.getAppletDefsByRole(applicationMenuDef.getName(),
+                                    roleCode, searchInput)) {
+                                if (appletDef.isMenuAccess()) {
+                                    writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
+                                    isWithSubMenus = true;
+                                   appendISym = true;
+                                }
+                            }
+                        }
+                        writer.write("</ul></div>");
+                    } finally {
+                        if (isWithSubMenus) {
+                            if (appendSym) {
+                                msb.append(',');
+                            } else {
+                                appendSym = true;
+                            }
+                            
+                            msb.append('"').append(applicationId).append('"');
+                            writer.discardMergeSecondary(); 
+                        } else {
+                            writer.discardSecondary();
+                        }
                     }
-                    writer.write("</ul></div>");
                 }
             }
             msb.append(']');

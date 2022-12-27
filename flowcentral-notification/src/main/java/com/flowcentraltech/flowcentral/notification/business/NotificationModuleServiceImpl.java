@@ -99,9 +99,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
     private final FactoryMap<String, NotificationTemplateDef> templates;
 
-    private final FactoryMap<NotificationType, NotificationChannelDef> channelDefsByType;
-
-    private final FactoryMap<String, NotificationChannelDef> channelDefsByName;
+    private final FactoryMap<Long, TenantChannelInfo> tenantChannelInfos;
 
     public NotificationModuleServiceImpl() {
         this.messagingChannels = new HashMap<NotificationType, NotificationMessagingChannel>();
@@ -110,9 +108,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             {
                 @Override
                 protected boolean stale(String name, NotificationTemplateDef notifTemplateDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new NotificationTemplateQuery().id(notifTemplateDef.getId())) > notifTemplateDef
-                                    .getVersion());
+                    return (environment().value(long.class, "versionNo", new NotificationTemplateQuery()
+                            .id(notifTemplateDef.getId())) > notifTemplateDef.getVersion());
                 }
 
                 @Override
@@ -134,60 +131,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
             };
 
-        channelDefsByType = new FactoryMap<NotificationType, NotificationChannelDef>(true)
+        this.tenantChannelInfos = new FactoryMap<Long, TenantChannelInfo>()
             {
 
                 @Override
-                protected boolean stale(NotificationType type, NotificationChannelDef notificationChannelDef)
-                        throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new NotificationChannelQuery().id(notificationChannelDef.getId())) > notificationChannelDef
-                                    .getVersion());
-                }
-
-                @Override
-                protected NotificationChannelDef create(NotificationType type, Object... params) throws Exception {
-                    String name = environment().value(String.class, "name",
-                            new NotificationChannelQuery().notificationType(type));
-                    return channelDefsByName.get(name);
-                }
-
-            };
-
-        channelDefsByName = new FactoryMap<String, NotificationChannelDef>(true)
-            {
-
-                @Override
-                protected boolean stale(String name, NotificationChannelDef notificationChannelDef) throws Exception {
-                    return (environment().value(long.class, "versionNo",
-                            new NotificationChannelQuery().id(notificationChannelDef.getId())) > notificationChannelDef
-                                    .getVersion());
-                }
-
-                @Override
-                protected NotificationChannelDef create(String name, Object... params) throws Exception {
-                    NotificationChannel notificationChannel = environment()
-                            .list(new NotificationChannelQuery().name(name));
-                    if (notificationChannel == null) {
-                        throw new UnifyException(
-                                NotificationModuleErrorConstants.NOTIFICATION_CHANNEL_WITH_NAME_UNKNOWN, name);
-                    }
-
-                    NotificationChannelDef.Builder ncdb = NotificationChannelDef.newBuilder(
-                            notificationChannel.getNotificationType(), notificationChannel.getSenderName(),
-                            notificationChannel.getSenderContact(), name, notificationChannel.getDescription(),
-                            notificationChannel.getId(), notificationChannel.getVersionNo());
-                    for (NotificationChannelProp notifChannelProp : notificationChannel
-                            .getNotificationChannelPropList()) {
-                        String val = notifChannelProp.getValue();
-                        if (NotificationHostServerConstants.PASSWORD_PROPERTY.equals(notifChannelProp.getName())) {
-                            val = twoWayStringCryptograph.decrypt(val);
-                        }
-
-                        ncdb.addPropDef(notifChannelProp.getName(), val);
-                    }
-
-                    return ncdb.build();
+                protected TenantChannelInfo create(Long tenantId, Object... params) throws Exception {
+                    return new TenantChannelInfo(tenantId);
                 }
 
             };
@@ -222,19 +171,19 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
-    public NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName,
+    public NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName,
             Dictionary dictionary, List<Recipient> recipients) throws UnifyException {
-        return constructNotificationChannelMessage(notifTemplateName, dictionary,
+        return constructNotificationChannelMessage(tenantId, notifTemplateName, dictionary,
                 DataUtils.toArray(Recipient.class, recipients));
     }
 
     @Override
-    public NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName,
+    public NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName,
             Dictionary dictionary, Recipient... recipients) throws UnifyException {
         NotificationTemplateDef notificationTemplateDef = templates.get(notifTemplateName);
 
         NotificationChannelMessage.Builder ncmb = NotificationChannelMessage
-                .newBuilder(notificationTemplateDef.getNotificationType(), null);
+                .newBuilder(notificationTemplateDef.getNotificationType(), null, tenantId);
         ValueStore valueStore = new MapValueStore(dictionary.getValueMap());
         ParameterizedStringGenerator sgenerator = au.getStringGenerator(valueStore,
                 notificationTemplateDef.getSubjectTokenList());
@@ -251,14 +200,14 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
-    public NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName,
+    public NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName,
             ValueStore valueStore, List<Recipient> recipients) throws UnifyException {
-        return constructNotificationChannelMessage(notifTemplateName, valueStore,
+        return constructNotificationChannelMessage(tenantId, notifTemplateName, valueStore,
                 DataUtils.toArray(Recipient.class, recipients));
     }
 
     @Override
-    public NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName,
+    public NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName,
             ValueStore valueStore, Recipient... recipients) throws UnifyException {
         if (recipients.length == 0) {
             // TODO Throw exception
@@ -266,7 +215,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
         NotificationTemplateDef notificationTemplateDef = templates.get(notifTemplateName);
         NotificationChannelMessage.Builder ncmb = NotificationChannelMessage
-                .newBuilder(notificationTemplateDef.getNotificationType(), null);
+                .newBuilder(notificationTemplateDef.getNotificationType(), null, tenantId);
         ParameterizedStringGenerator sgenerator = au.getStringGenerator(valueStore,
                 notificationTemplateDef.getSubjectTokenList());
         ParameterizedStringGenerator bgenerator = au.getStringGenerator(valueStore,
@@ -290,6 +239,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         } else {
             // Put notification in external communication system
             NotificationOutbox notification = new NotificationOutbox();
+            notification.setTenantId(notifChannelMessage.getTenantId());
             notification.setType(type);
             notification.setExpiryDt(null);
             notification.setNextAttemptDt(getNow());
@@ -327,6 +277,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         }
 
         NotificationInbox notificationInbox = new NotificationInbox();
+        notificationInbox.setTenantId(notifChannelMessage.getTenantId());
         notificationInbox.setSubject(notifChannelMessage.getSubject());
         notificationInbox.setActionLink(null);
         notificationInbox.setActionTarget(null);
@@ -357,63 +308,67 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
                     final Date now = environment().getNow();
                     for (NotificationType notificationType : NOTIFICATION_TYPE_LIST) {
-                        if (environment().countAll(new NotificationChannelQuery().notificationType(notificationType)
-                                .status(RecordStatus.ACTIVE)) > 0) {
-                            final NotificationChannelDef notificationChannelDef = channelDefsByType
-                                    .get(notificationType);
-                            final int localMaxBatchSize = notificationChannelDef
-                                    .isProp(NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
-                                            ? notificationChannelDef.getPropValue(int.class,
-                                                    NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
-                                            : maxBatchSize;
-                            final int localMaxAttempts = notificationChannelDef
-                                    .isProp(NotificationChannelPropertyConstants.MAX_TRIES)
-                                            ? notificationChannelDef.getPropValue(int.class,
-                                                    NotificationChannelPropertyConstants.MAX_TRIES)
-                                            : maxAttempts;
-                            final int localRetryMinutes = notificationChannelDef
-                                    .isProp(NotificationChannelPropertyConstants.RETRY_MINUTES)
-                                            ? notificationChannelDef.getPropValue(int.class,
-                                                    NotificationChannelPropertyConstants.RETRY_MINUTES)
-                                            : retryMinutes;
-                            List<NotificationOutbox> notificationList = environment()
-                                    .findAllWithChildren(new NotificationOutboxQuery().type(notificationType).due(now)
-                                            .status(NotificationOutboxStatus.NOT_SENT).orderById()
-                                            .addSelect("type", "status", "subject", "attempts", "expiryDt",
-                                                    "nextAttemptDt", "sentDt", "notificationMessage",
-                                                    "notificationRecipientList")
-                                            .setLimit(localMaxBatchSize));
-                            logDebug("Sending [{0}] notifications via channel [{1}]...", notificationList.size(),
-                                    notificationChannelDef.getDescription());
-                            if (!DataUtils.isBlank(notificationList)) {
-                                NotificationMessagingChannel channel = getNotificationMessagingChannel(
-                                        notificationType);
-                                NotificationChannelMessage[] messages = getNotificationChannelMessages(
-                                        notificationList);
-                                channel.sendMessages(notificationChannelDef, messages);
-                                for (int i = 0; i < messages.length; i++) {
-                                    NotificationOutbox notification = notificationList.get(i);
-                                    int attempts = notification.getAttempts() + 1;
-                                    Update update = new Update().add("attempts", attempts);
-                                    if (messages[i].isSent()) {
-                                        update.add("sentDt", now);
-                                        update.add("status", NotificationOutboxStatus.SENT);
-                                    } else {
-                                        if (attempts >= localMaxAttempts) {
-                                            update.add("status", NotificationOutboxStatus.ABORTED);
+                        for (Long tenantId : au.system().getPrimaryMappedTenantIds()) {
+                            if (environment().countAll(new NotificationChannelQuery().notificationType(notificationType)
+                                    .tenantId(tenantId).status(RecordStatus.ACTIVE)) > 0) {
+                                TenantChannelInfo tenantChannelInfo = tenantChannelInfos.get(tenantId);
+                                final NotificationChannelDef notificationChannelDef = tenantChannelInfo
+                                        .getNotificationChannelDef(notificationType);
+                                final int localMaxBatchSize = notificationChannelDef
+                                        .isProp(NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
+                                                ? notificationChannelDef.getPropValue(int.class,
+                                                        NotificationChannelPropertyConstants.MAX_BATCH_SIZE)
+                                                : maxBatchSize;
+                                final int localMaxAttempts = notificationChannelDef
+                                        .isProp(NotificationChannelPropertyConstants.MAX_TRIES)
+                                                ? notificationChannelDef.getPropValue(int.class,
+                                                        NotificationChannelPropertyConstants.MAX_TRIES)
+                                                : maxAttempts;
+                                final int localRetryMinutes = notificationChannelDef
+                                        .isProp(NotificationChannelPropertyConstants.RETRY_MINUTES)
+                                                ? notificationChannelDef.getPropValue(int.class,
+                                                        NotificationChannelPropertyConstants.RETRY_MINUTES)
+                                                : retryMinutes;
+                                List<NotificationOutbox> notificationList = environment()
+                                        .findAllWithChildren(new NotificationOutboxQuery().type(notificationType)
+                                                .due(now).status(NotificationOutboxStatus.NOT_SENT).orderById()
+                                                .addSelect("type", "status", "subject", "attempts", "expiryDt",
+                                                        "nextAttemptDt", "sentDt", "notificationMessage",
+                                                        "notificationRecipientList")
+                                                .setLimit(localMaxBatchSize));
+                                logDebug("Sending [{0}] notifications via channel [{1}]...", notificationList.size(),
+                                        notificationChannelDef.getDescription());
+                                if (!DataUtils.isBlank(notificationList)) {
+                                    NotificationMessagingChannel channel = getNotificationMessagingChannel(
+                                            notificationType);
+                                    NotificationChannelMessage[] messages = getNotificationChannelMessages(tenantId,
+                                            notificationList);
+                                    channel.sendMessages(notificationChannelDef, messages);
+                                    for (int i = 0; i < messages.length; i++) {
+                                        NotificationOutbox notification = notificationList.get(i);
+                                        int attempts = notification.getAttempts() + 1;
+                                        Update update = new Update().add("attempts", attempts);
+                                        if (messages[i].isSent()) {
+                                            update.add("sentDt", now);
+                                            update.add("status", NotificationOutboxStatus.SENT);
                                         } else {
-                                            Date nextAttemptDt = CalendarUtils.getNowWithFrequencyOffset(now,
-                                                    FrequencyUnit.MINUTE, localRetryMinutes);
-                                            update.add("nextAttemptDt", nextAttemptDt);
+                                            if (attempts >= localMaxAttempts) {
+                                                update.add("status", NotificationOutboxStatus.ABORTED);
+                                            } else {
+                                                Date nextAttemptDt = CalendarUtils.getNowWithFrequencyOffset(now,
+                                                        FrequencyUnit.MINUTE, localRetryMinutes);
+                                                update.add("nextAttemptDt", nextAttemptDt);
+                                            }
                                         }
+
+                                        environment().updateById(NotificationOutbox.class, notification.getId(),
+                                                update);
                                     }
-
-                                    environment().updateById(NotificationOutbox.class, notification.getId(), update);
                                 }
+                                commitTransactions();
                             }
-                            commitTransactions();
-                        }
 
+                        }
                     }
                 }
             } finally {
@@ -454,14 +409,14 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         return channel;
     }
 
-    private NotificationChannelMessage[] getNotificationChannelMessages(List<NotificationOutbox> notificationList)
-            throws UnifyException {
+    private NotificationChannelMessage[] getNotificationChannelMessages(Long tenantId,
+            List<NotificationOutbox> notificationList) throws UnifyException {
         int len = notificationList.size();
         NotificationChannelMessage[] messages = new NotificationChannelMessage[len];
         for (int i = 0; i < len; i++) {
             NotificationOutbox notification = notificationList.get(i);
             NotificationChannelMessage.Builder ncmb = NotificationChannelMessage.newBuilder(notification.getType(),
-                    notification.getId());
+                    notification.getId(), tenantId);
             ncmb.withSubject(notification.getSubject()).withBody(notification.getNotificationMessage().getMessage())
                     .usingBodyFormat(notification.getNotificationMessage().getFormat());
 
@@ -476,6 +431,81 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         }
 
         return messages;
+    }
+
+    private class TenantChannelInfo {
+
+        private final FactoryMap<NotificationType, NotificationChannelDef> channelDefsByType;
+
+        private final FactoryMap<String, NotificationChannelDef> channelDefsByName;
+
+        private final Long tenantId;
+
+        public TenantChannelInfo(Long _tenantId) {
+            this.tenantId = _tenantId;
+            channelDefsByType = new FactoryMap<NotificationType, NotificationChannelDef>(true)
+                {
+
+                    @Override
+                    protected boolean stale(NotificationType type, NotificationChannelDef notificationChannelDef)
+                            throws Exception {
+                        return (environment().value(long.class, "versionNo",
+                                new NotificationChannelQuery().tenantId(tenantId)
+                                        .id(notificationChannelDef.getId())) > notificationChannelDef.getVersion());
+                    }
+
+                    @Override
+                    protected NotificationChannelDef create(NotificationType type, Object... params) throws Exception {
+                        String name = environment().value(String.class, "name",
+                                new NotificationChannelQuery().notificationType(type).tenantId(tenantId));
+                        return channelDefsByName.get(name);
+                    }
+
+                };
+
+            channelDefsByName = new FactoryMap<String, NotificationChannelDef>(true)
+                {
+
+                    @Override
+                    protected boolean stale(String name, NotificationChannelDef notificationChannelDef)
+                            throws Exception {
+                        return (environment().value(long.class, "versionNo",
+                                new NotificationChannelQuery().tenantId(tenantId)
+                                        .id(notificationChannelDef.getId())) > notificationChannelDef.getVersion());
+                    }
+
+                    @Override
+                    protected NotificationChannelDef create(String name, Object... params) throws Exception {
+                        NotificationChannel notificationChannel = environment()
+                                .list(new NotificationChannelQuery().name(name).tenantId(tenantId));
+                        if (notificationChannel == null) {
+                            throw new UnifyException(
+                                    NotificationModuleErrorConstants.NOTIFICATION_CHANNEL_WITH_NAME_UNKNOWN, name);
+                        }
+
+                        NotificationChannelDef.Builder ncdb = NotificationChannelDef.newBuilder(
+                                notificationChannel.getNotificationType(), notificationChannel.getSenderName(),
+                                notificationChannel.getSenderContact(), name, notificationChannel.getDescription(),
+                                notificationChannel.getId(), notificationChannel.getVersionNo());
+                        for (NotificationChannelProp notifChannelProp : notificationChannel
+                                .getNotificationChannelPropList()) {
+                            String val = notifChannelProp.getValue();
+                            if (NotificationHostServerConstants.PASSWORD_PROPERTY.equals(notifChannelProp.getName())) {
+                                val = twoWayStringCryptograph.decrypt(val);
+                            }
+
+                            ncdb.addPropDef(notifChannelProp.getName(), val);
+                        }
+
+                        return ncdb.build();
+                    }
+
+                };
+        }
+
+        public NotificationChannelDef getNotificationChannelDef(NotificationType type) throws UnifyException {
+            return channelDefsByType.get(type);
+        }
     }
 
 }

@@ -240,18 +240,15 @@
 			<field name="roleDesc"
 				label="$m{security.usergrouprole.roledesc}" type="list_only"
 				key="roleId" property="description" />
-			<field name="departmentCode"
-				label="$m{security.usergrouprole.departmentcode}" type="list_only"
-				key="roleId" property="departmentCode" />
-			<field name="departmentDesc"
-				label="$m{security.usergrouprole.departmentdesc}" type="list_only"
-				key="roleId" property="departmentDesc" />
 			<field name="activeBefore"
 				label="$m{security.usergrouprole.roleactivebefore}" type="list_only"
 				key="roleId" property="activeBefore" />
 			<field name="activeAfter"
 				label="$m{security.usergrouprole.roleactiveafter}" type="list_only"
 				key="roleId" property="activeAfter" />
+			<field name="departmentId"
+				label="$m{security.usergrouprole.departmentid}" type="list_only"
+				key="roleId" property="departmentId" />
 			<uniqueConstraint name="roleUc"
 				description="$m{security.usergrouprole.uc.role}"
 				fieldList="userGroupId,roleId" />
@@ -287,9 +284,6 @@
 			<field name="userBranchId"
 				label="$m{security.usergroupmember.branchid}" type="list_only"
 				key="userId" property="branchId" />
-			<field name="userBranchDesc"
-				label="$m{security.usergroupmember.branchdesc}" type="list_only"
-				key="userId" property="branchDesc" />
 			<uniqueConstraint name="userUc"
 				description="$m{security.usergroupmember.uc.user}"
 				fieldList="userGroupId,userId" />
@@ -307,8 +301,8 @@
 				type="list_only" inputWidget="application.text" key="workflowStatus"
 				property="description" />
 			<field name="branchId" label="$m{security.user.branch}"
-				type="ref" inputWidget="application.entitylist"
-				references="organization.branchRef" basicSearch="true" />
+				type="mapped" inputWidget="organization.branchlist"
+				mapped="organization.mappedBranch" basicSearch="true" />
 			<field name="fullName" label="$m{security.user.fullname}"
 				type="string" inputWidget="application.fullname" maxLen="96"
 				basicSearch="true" />
@@ -344,24 +338,6 @@
 				inputWidget="application.date" />
 			<field name="lastLoginDt" label="$m{security.user.lastlogindt}"
 				type="timestamp_utc" inputWidget="application.datetime" />
-			<field name="branchCode" label="$m{security.user.branch.code}"
-				type="list_only" inputWidget="application.text" key="branchId"
-				property="code" />
-			<field name="branchDesc"
-				label="$m{security.user.branch.description}" type="list_only"
-				inputWidget="application.text" key="branchId" property="description" />
-			<field name="branchLanguageTag"
-				label="$m{security.user.branch.languagetag}" type="list_only"
-				inputWidget="application.text" key="branchId" property="languageTag" />
-			<field name="branchTimeZone"
-				label="$m{security.user.branch.timezone}" type="list_only"
-				inputWidget="application.text" key="branchId" property="timeZone" />
-			<field name="zoneCode" label="$m{security.user.zone.code}"
-				type="list_only" inputWidget="application.text" key="branchId"
-				property="code" />
-			<field name="zoneDesc"
-				label="$m{security.user.zone.description}" type="list_only"
-				inputWidget="application.text" key="branchId" property="description" />
 			<field name="plainPassword"
 				label="$m{security.user.plainpassword}" type="scratch" />
 			<field name="userRoleList" label="$m{security.user.rolelist}"
@@ -392,25 +368,18 @@
 			<field name="userMobileNo"
 				label="$m{security.userrole.usermobileno}" type="list_only"
 				key="userId" property="mobileNo" />
-			<field name="branchCode"
-				label="$m{security.userrole.branchcode}" type="list_only"
-				key="userId" property="branchCode" />
-			<field name="branchDesc"
-				label="$m{security.userrole.branchdesc}" type="list_only"
-				key="userId" property="branchDesc" />
 			<field name="supervisor"
 				label="$m{security.userrole.supervisor}" type="list_only"
 				key="userId" property="supervisor" />
+			<field name="branchId" label="$m{security.userrole.branchid}"
+				type="list_only" key="userId" property="branchId" />
 			<field name="roleCode" label="$m{security.userrole.rolecode}"
 				type="list_only" key="roleId" property="code" />
 			<field name="roleDesc" label="$m{security.userrole.roledesc}"
 				type="list_only" key="roleId" property="description" />
-			<field name="departmentCode"
-				label="$m{security.userrole.departmentcode}" type="list_only"
-				key="roleId" property="departmentCode" />
-			<field name="departmentDesc"
-				label="$m{security.userrole.departmentdesc}" type="list_only"
-				key="roleId" property="departmentDesc" />
+			<field name="departmentId"
+				label="$m{security.userrole.departmentid}" type="list_only"
+				key="roleId" property="departmentId" />
 			<field name="activeBefore"
 				label="$m{security.userrole.roleactivebefore}" type="list_only"
 				key="roleId" property="activeBefore" />
@@ -474,8 +443,6 @@
 			description="$m{security.usergrouprole.table}"
 			label="$m{security.usergrouprole.table.label}" entity="userGroupRole"
 			itemsPerPage="20" serialNo="true">
-			<column field="departmentDesc" renderWidget="application.text"
-				label="$m{security.usergrouprole.department}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"
 				label="$m{security.usergrouprole.role}" widthRatio="1" />
 			<column field="activeBefore" renderWidget="application.time"
@@ -511,8 +478,6 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="email" renderWidget="application.text"
 				widthRatio="2" />
-			<column field="branchDesc" renderWidget="application.text"
-				label="$m{security.user.branch}" widthRatio="1" />
 			<column field="lastLoginDt"
 				renderWidget="application.datetime" widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
@@ -529,12 +494,8 @@
 			description="$m{security.userrole.table}"
 			label="$m{security.userrole.table.label}" entity="userRole"
 			itemsPerPage="20" serialNo="true">
-			<column field="departmentDesc" renderWidget="application.text"
-				label="$m{security.userrole.department}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"
 				label="$m{security.userrole.role}" widthRatio="1" />
-			<column field="branchDesc" renderWidget="application.text"
-				label="$m{security.user.branch}" widthRatio="1" />
 			<column field="activeBefore" renderWidget="application.time"
 				widthRatio="1" />
 			<column field="activeAfter" renderWidget="application.time"
@@ -610,9 +571,7 @@
 						required="true" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />
-					<field name="branchId" inputWidget="application.entitylist"
-						column="1" />
-					<field name="tenantId" inputWidget="system.tenantlist"
+					<field name="branchId" inputWidget="organization.branchlist"
 						column="1" />
 					<field name="passwordExpires"
 						inputWidget="application.checkbox" column="1" />
@@ -629,23 +588,9 @@
 				label="$m{security.user.form.loginevents}" contentType="child_list"
 				applet="manageUserLoginEvent" reference="userLoginEventList" />
 			<tab name="branchDetails"
-				label="$m{security.user.form.branchdetails}" contentType="miniform"
-				disabled="true">
-				<section name="branchDetails" columns="type_2">
-					<field name="branchCode" inputWidget="application.name"
-						column="0" />
-					<field name="branchDesc" inputWidget="application.text"
-						label="$m{security.user.branch}" column="0" />
-					<field name="branchLanguageTag"
-						inputWidget="application.languagetag" column="0" />
-					<field name="branchTimeZone"
-						inputWidget="application.timezone" column="0" />
-					<field name="zoneCode" inputWidget="application.name"
-						column="1" />
-					<field name="zoneDesc" inputWidget="application.text"
-						column="1" label="$m{security.user.zone}" />
-				</section>
-			</tab>
+				label="$m{security.user.form.branchdetails}"
+				contentType="miniform_mapped" mappedFieldName="branchId"
+				mappedForm="organization.mappedBranchForm" disabled="true" />
 			<tab name="accountDetails"
 				label="$m{security.user.form.accountdetails}" contentType="miniform"
 				disabled="true">
@@ -702,7 +647,7 @@
 						column="0" />
 					<field name="id" label="$m{security.user.form.photo}"
 						inputWidget="userphoto" column="0" />
-					<field name="branchId" inputWidget="application.entitylist"
+					<field name="branchId" inputWidget="organization.branchlist"
 						column="1" />
 					<field name="status" inputWidget="application.enumlist"
 						column="1" required="true" />

@@ -49,6 +49,9 @@ public class Application extends BaseConfigNamedEntity {
     @Column(defaultVal = "'Y'")
     private boolean menuAccess;
 
+    @Column
+    private boolean allowSecondaryTenants;
+
     @ListOnly(key = "moduleId", property = "name")
     private String moduleName;
 
@@ -114,6 +117,14 @@ public class Application extends BaseConfigNamedEntity {
 
     public void setMenuAccess(boolean menuAccess) {
         this.menuAccess = menuAccess;
+    }
+
+    public boolean isAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    public void setAllowSecondaryTenants(boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 
     public String getModuleName() {

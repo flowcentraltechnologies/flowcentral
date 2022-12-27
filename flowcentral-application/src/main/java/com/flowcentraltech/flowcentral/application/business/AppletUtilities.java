@@ -64,6 +64,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.ReportProvider;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
@@ -420,6 +421,13 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the application work item utilities
      */
     ApplicationWorkItemUtilities workItemUtilities();
+
+    /**
+     * Gets the environment delegate utilities.
+     * 
+     * @return the environment delegate utilities
+     */
+    EnvironmentDelegateUtilities delegateUtilities();
 
     /**
      * Gets the application service.
@@ -1102,6 +1110,8 @@ public interface AppletUtilities extends UnifyComponent {
      *                                the edit action
      * @param entitySearchMode
      *                                the entity search mode
+     * @param isIgnoreReport
+     *                                ignore report flag
      * @param isIgnoreParentCondition
      *                                ignore parent condition flag
      * @return the entity search
@@ -1109,7 +1119,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     EntitySearch constructEntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
-            String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode,
+            String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode, boolean isIgnoreReport,
             boolean isIgnoreParentCondition) throws UnifyException;
 
     /**
@@ -1585,4 +1595,16 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     void onMiniformSwitchOnChange(MiniForm form) throws UnifyException;
+
+    boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException;
+
+    boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException;
+
+    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(Query<? extends Entity> query)
+            throws UnifyException;
+
+    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(Class<? extends Entity> entityClass)
+            throws UnifyException;
+
+    String getProviderSrcEntity(String destEntity);
 }

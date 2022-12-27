@@ -325,7 +325,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         SqlDataSourceDialect sqlDialect = (SqlDataSourceDialect) db.getDataSource().getDialect();
         Class<?> dataClass = ReflectUtils.classForName(reportOptions.getRecordName());
         SqlEntityInfo sqlEntityInfo = null;
-        if (reportOptions.isReportEntityList()) {
+        if (!reportOptions.isBeanCollection()) {
             sqlEntityInfo = sqlDialect.findSqlEntityInfo(dataClass);
         }
 
@@ -368,10 +368,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             rb.beanCollection(content);
         } else if (reportOptions.isReportEntityList()) {
             rb.table(sqlEntityInfo.getPreferredViewName());
-            if (reportOptions.isWithRestriction()) {
-                Restriction restriction = reportOptions.getRestriction().isSimple()
-                        ? new And().add(reportOptions.getRestriction())
-                        : reportOptions.getRestriction();
+            Restriction restriction = reportOptions.getRestriction();
+            if (isTenancyEnabled() && sqlEntityInfo.isWithTenantId()) {
+                if (restriction == null) {
+                    restriction = new Equals(sqlEntityInfo.getTenantIdFieldInfo().getName(), getUserTenantId());
+                } else if (!restriction.isIdEqualsRestricted()) {
+                    restriction = new And().add(restriction)
+                            .add(new Equals(sqlEntityInfo.getTenantIdFieldInfo().getName(), getUserTenantId()));
+                }
+            }
+
+            if (restriction != null) {
+                restriction = restriction.isSimple() ? new And().add(restriction) : restriction;
                 buildReportFilter(rb, sqlEntityInfo, restriction);
             }
         } else {
@@ -384,8 +392,29 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 }
             }
 
-            if (reportOptions.isWithFilterOptions()) {
-                buildReportFilter(rb, reportOptions.getFilterOptions());
+            ReportFilterOptions reportFilterOptions = reportOptions.getFilterOptions();
+            if (isTenancyEnabled() && sqlEntityInfo.isWithTenantId()) {
+                final String idColumnName = sqlEntityInfo.getListFieldInfo(sqlEntityInfo.getIdFieldInfo().getName())
+                        .getPreferredColumnName();
+                if (reportFilterOptions == null) {
+                    reportFilterOptions = new ReportFilterOptions(RestrictionType.EQUALS,
+                            sqlEntityInfo.getPreferredViewName(),
+                            sqlEntityInfo.getListFieldInfo(sqlEntityInfo.getTenantIdFieldInfo().getName())
+                                    .getPreferredColumnName(),
+                            getUserTenantId(), null);
+                } else if (!reportFilterOptions.isIdEqualsRestricted(idColumnName)) {
+                    reportFilterOptions = new ReportFilterOptions(RestrictionType.AND)
+                            .addReportFilterOptions(reportFilterOptions)
+                            .addReportFilterOptions(new ReportFilterOptions(RestrictionType.EQUALS,
+                                    sqlEntityInfo.getPreferredViewName(),
+                                    sqlEntityInfo.getListFieldInfo(sqlEntityInfo.getTenantIdFieldInfo().getName())
+                                            .getPreferredColumnName(),
+                                    getUserTenantId(), null));
+                }
+            }
+
+            if (reportFilterOptions != null) {
+                buildReportFilter(rb, reportFilterOptions);
             }
         }
 
@@ -424,7 +453,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             for (ReportConfiguration rc : rcList) {
                 resultList.add(new ReportListing(rc.getApplicationName(), rc.getApplicationDesc(),
                         ApplicationNameUtils.getApplicationEntityLongName(rc.getApplicationName(), rc.getName()),
-                        rc.getDescription()));
+                        rc.getDescription(), rc.isAllowSecondaryTenants()));
             }
 
             return resultList;
@@ -599,7 +628,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             List<FilterRestrictionDef> filterRestrictionDefList, IndexInfo indexInfo) throws UnifyException {
         Date now = getNow();
         ReportFilterOptions reportFilterOptions = null;
-         while (indexInfo.index < filterRestrictionDefList.size()) {
+        while (indexInfo.index < filterRestrictionDefList.size()) {
             FilterRestrictionDef restrictionDef = filterRestrictionDefList.get(indexInfo.index++);
             if (restrictionDef.getDepth() == indexInfo.subCompoundIndex) {
                 if (restrictionDef.isCompound()) {
@@ -608,10 +637,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     createReportFilterOptions(sqlEntityInfo, reportFilterOptions, parameters, filterRestrictionDefList,
                             indexInfo);
                     if (parentFilterOptions != null) {
-                        parentFilterOptions.getSubFilterOptionList().add(reportFilterOptions);
+                        parentFilterOptions.addReportFilterOptions(reportFilterOptions);
                     }
                     indexInfo.subCompoundIndex--;
-               } else {
+                } else {
                     Object param1 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamA());
                     Object param2 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamB());
                     if (restrictionDef.isParameterVal()) {
@@ -646,7 +675,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                             sqlEntityInfo.getListFieldInfo(restrictionDef.getFieldName()).getPreferredColumnName(),
                             param1, param2);
                     if (parentFilterOptions != null) {
-                        parentFilterOptions.getSubFilterOptionList().add(reportFilterOptions);
+                        parentFilterOptions.addReportFilterOptions(reportFilterOptions);
                     }
                 }
             } else {

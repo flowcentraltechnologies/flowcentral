@@ -18,6 +18,10 @@ package com.flowcentraltech.flowcentral.organization.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranchQuery;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Privilege;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategory;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategoryQuery;
@@ -25,6 +29,7 @@ import com.flowcentraltech.flowcentral.organization.entities.PrivilegeQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.flowcentraltech.flowcentral.organization.entities.RoleQuery;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.FactoryMap;
 
 /**
  * Organization module service.
@@ -87,7 +92,7 @@ public interface OrganizationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Long getBranchID(String branchCode) throws UnifyException;
+    Long getBranchId(String branchCode) throws UnifyException;
 
     /**
      * Get department ID..
@@ -98,7 +103,7 @@ public interface OrganizationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Long getDepartmentID(String departmentCode) throws UnifyException;
+    Long getDepartmentId(String departmentCode) throws UnifyException;
 
     /**
      * Invalidates role privileges cache.
@@ -109,4 +114,66 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     void invalidateRolePrivilegesCache(String... roleCodes) throws UnifyException;
+
+    /**
+     * Retrieves a new instance of a mapped branch code factory map.
+     * 
+     * @return the factory map
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FactoryMap<Long, String> getMappedBranchCodeFactoryMap() throws UnifyException;
+
+    /**
+     * Retrieves a new instance of a mapped department code factory map.
+     * 
+     * @return the factory map
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FactoryMap<Long, String> getMappedDepartmentCodeFactoryMap() throws UnifyException;
+    
+    /**
+     * Gets mapped department code.
+     * 
+     * @param departmentId
+     *                     the department ID
+     * @return the department code
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getMappedDepartmentCode(Long departmentId) throws UnifyException;
+
+    /**
+     * Gets mapped branch code.
+     * 
+     * @param branchId
+     *                     the branch ID
+     * @return the branch code
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getMappedBranchCode(Long branchId) throws UnifyException;
+    
+    /**
+     * Finds mapped departments using supplied query.
+     * 
+     * @param query
+     *              the query to use
+     * @return list of mapped departments
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<MappedDepartment> findMappedDepartments(MappedDepartmentQuery query) throws UnifyException;
+
+    /**
+     * Finds mapped departments using supplied query.
+     * 
+     * @param query
+     *              the query to use
+     * @return list of mapped branches
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException;
 }

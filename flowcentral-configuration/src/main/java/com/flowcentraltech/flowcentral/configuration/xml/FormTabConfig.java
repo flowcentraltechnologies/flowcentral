@@ -42,6 +42,10 @@ public class FormTabConfig {
 
     private String applet;
 
+    private String mappedFieldName;
+
+    private String mappedForm;
+
     private String reference;
 
     private String filter;
@@ -51,7 +55,7 @@ public class FormTabConfig {
     private String editFormless;
 
     private String editFixedRows;
-    
+
     private Boolean ignoreParentCondition;
 
     private Boolean showSearch;
@@ -110,6 +114,24 @@ public class FormTabConfig {
     @XmlAttribute
     public void setApplet(String applet) {
         this.applet = applet;
+    }
+
+    public String getMappedFieldName() {
+        return mappedFieldName;
+    }
+
+    @XmlAttribute
+    public void setMappedFieldName(String mappedFieldName) {
+        this.mappedFieldName = mappedFieldName;
+    }
+
+    public String getMappedForm() {
+        return mappedForm;
+    }
+
+    @XmlAttribute
+    public void setMappedForm(String mappedForm) {
+        this.mappedForm = mappedForm;
     }
 
     public String getReference() {

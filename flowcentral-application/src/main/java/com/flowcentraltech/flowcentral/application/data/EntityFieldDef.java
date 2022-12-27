@@ -76,6 +76,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     private String defaultVal;
 
+    private String mapped;
+
     private int rows;
 
     private int columns;
@@ -103,23 +105,25 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     private boolean basicSearch;
 
     public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef, RefDef refDef,
-            String entityLongName, String fieldName, String references, String inputListKey) {
+            String entityLongName, String fieldName, String mapped, String references, String inputListKey) {
         this.textWidgetTypeDef = textWidgetTypeDef;
         this.inputWidgetTypeDef = inputWidgetTypeDef;
         this.refDef = refDef;
         this.entityLongName = entityLongName;
         this.fieldName = fieldName;
+        this.mapped = mapped;
         this.references = references;
         this.inputListKey = inputListKey;
     }
 
     public EntityFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
             WidgetTypeDef ligualWidgetTypeDef, RefDef refDef, EntityFieldDataType dataType, EntityFieldType type,
-            TextCase textCase, String entityLongName, String fieldName, String fieldLabel, String columnName,
-            String references, String category, String suggestionType, String inputLabel, String inputListKey,
-            String lingualListKey, String autoFormat, String defaultVal, String key, String property, int rows,
-            int columns, int minLen, int maxLen, int precision, int scale, boolean allowNegative, boolean nullable, boolean auditable,
-            boolean reportable, boolean maintainLink, boolean basicSearch, boolean descriptive) {
+            TextCase textCase, String entityLongName, String fieldName, String mapped, String fieldLabel,
+            String columnName, String references, String category, String suggestionType, String inputLabel,
+            String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String key,
+            String property, int rows, int columns, int minLen, int maxLen, int precision, int scale,
+            boolean allowNegative, boolean nullable, boolean auditable, boolean reportable, boolean maintainLink,
+            boolean basicSearch, boolean descriptive) {
         this.textWidgetTypeDef = textWidgetTypeDef;
         this.inputWidgetTypeDef = inputWidgetTypeDef;
         this.ligualWidgetTypeDef = ligualWidgetTypeDef;
@@ -129,6 +133,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.textCase = textCase;
         this.entityLongName = entityLongName;
         this.fieldName = fieldName;
+        this.mapped = mapped;
         this.fieldLabel = fieldLabel;
         this.columnName = columnName;
         this.references = references;
@@ -291,6 +296,14 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return !StringUtils.isBlank(defaultVal);
     }
 
+    public String getMapping() {
+        return mapped;
+    }
+
+    public boolean isWithMapping() {
+        return !StringUtils.isBlank(mapped);
+    }
+
     public boolean isWithUnresolvedInputWidget() {
         return inputWidgetTypeDef != null;
     }
@@ -298,7 +311,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     public boolean isWithInputWidget() {
         return inputWidgetTypeDef != null || (resolvedTypeFieldDef != null && resolvedTypeFieldDef.isWithInputWidget());
     }
-    
+
     public String getFieldLongName() {
         return StringUtils.dotify(entityLongName, fieldName);
     }
@@ -476,6 +489,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return EntityFieldDataType.BLOB.equals(dataType);
     }
 
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
+    }
+
     public static EntityFieldDef createForString(AppletUtilities au, String fieldName, String fieldLabel,
             Integer minLen, Integer maxLen, boolean nullable) throws UnifyException {
         return EntityFieldDef.newBuilderForString(au, fieldName, fieldLabel).minLen(minLen).maxLen(maxLen)
@@ -585,6 +603,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         private String fieldName;
 
+        private String mapped;
+
         private String fieldLabel;
 
         private String columnName;
@@ -622,7 +642,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         private int scale;
 
         private boolean allowNegative;
-        
+
         private boolean nullable;
 
         private boolean auditable;
@@ -676,6 +696,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         public Builder columnName(String columnName) throws UnifyException {
             this.columnName = columnName;
+            return this;
+        }
+
+        public Builder mapped(String mapped) throws UnifyException {
+            this.mapped = mapped;
             return this;
         }
 
@@ -808,10 +833,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             }
 
             return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, ligualWidgetTypeDef, refDef, dataType,
-                    type, textCase, entityLongName, fieldName, fieldLabel, columnName, references, category,
+                    type, textCase, entityLongName, fieldName, mapped, fieldLabel, columnName, references, category,
                     suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
-                    rows, columns, minLen, maxLen, precision, scale, allowNegative, nullable, auditable, reportable, maintainLink,
-                    basicSearch, descriptive);
+                    rows, columns, minLen, maxLen, precision, scale, allowNegative, nullable, auditable, reportable,
+                    maintainLink, basicSearch, descriptive);
         }
     }
 

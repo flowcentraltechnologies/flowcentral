@@ -16,18 +16,15 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 
 /**
@@ -48,13 +45,7 @@ public class StudioTabAppletListCommand extends AbstractApplicationListCommand<A
         if (params.isPresent()) {
             EntityDef entityDef = application().getEntityDef(params.getEntity());
             String childEntity = entityDef.getFieldDef(params.getReference()).getRefDef().getEntity();
-            List<ListData> list = new ArrayList<ListData>();
-            for (AppApplet appApplet : application().findManageEntityListApplets(childEntity)) {
-                list.add(new ListData(ApplicationNameUtils.getApplicationEntityLongName(appApplet.getApplicationName(),
-                        appApplet.getName()), appApplet.getDescription()));
-            }
-
-            return list;
+            return ApplicationNameUtils.getListableList(application().findManageEntityListApplets(childEntity));
         }
 
         return Collections.emptyList();

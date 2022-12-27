@@ -75,8 +75,8 @@ import com.flowcentraltech.flowcentral.system.entities.Sector;
 import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
-import com.flowcentraltech.flowcentral.system.entities.Tenant;
-import com.flowcentraltech.flowcentral.system.entities.TenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.Setting;
@@ -101,6 +101,7 @@ import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -385,12 +386,34 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public int getTenantCount() throws UnifyException {
-        return environment().countAll(new TenantQuery().ignoreEmptyCriteria(true));
+    public List<Long> getPrimaryMappedTenantIds() throws UnifyException {
+        List<Long> tenantIds = environment().valueList(Long.class, "id",
+                new MappedTenantQuery().ignoreEmptyCriteria(true));
+        Long actualPrimaryTenantId = getSysParameterValue(Long.class,
+                SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
+        if (actualPrimaryTenantId != null) {
+            tenantIds.replaceAll(id -> id == actualPrimaryTenantId ? Entity.PRIMARY_TENANT_ID : id);
+        }
+
+        return tenantIds;
     }
 
     @Override
-    public List<Tenant> findTenants(TenantQuery query) throws UnifyException {
+    public MappedTenant findPrimaryMappedTenant(Long tenantId) throws UnifyException {
+        if (Entity.PRIMARY_TENANT_ID.equals(tenantId)) {
+            tenantId = getSysParameterValue(Long.class, SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
+        }
+
+        return tenantId != null ? environment().list(new MappedTenantQuery().id(tenantId)) : null;
+    }
+
+    @Override
+    public int getTenantCount() throws UnifyException {
+        return environment().countAll(new MappedTenantQuery().ignoreEmptyCriteria(true));
+    }
+
+    @Override
+    public List<MappedTenant> findTenants(MappedTenantQuery query) throws UnifyException {
         return environment().findAll(query);
     }
 

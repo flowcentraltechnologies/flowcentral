@@ -64,7 +64,7 @@ public class UserQuery extends BaseStatusWorkTenantEntityQuery<User> {
         return (UserQuery) addEquals("password", password);
     }
 
-    public UserQuery branchCode(String branchCode) {
-        return (UserQuery) addEquals("branchCode", branchCode);
+    public UserQuery branchId(Long branchId) {
+        return (UserQuery) addEquals("branchId", branchId);
     }
 }

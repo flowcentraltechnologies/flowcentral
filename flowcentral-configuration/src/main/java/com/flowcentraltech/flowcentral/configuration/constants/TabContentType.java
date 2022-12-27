@@ -34,6 +34,8 @@ public enum TabContentType implements EnumConst {
             "MNF"),
     MINIFORM_CHANGELOG(
             "MNC"),
+    MINIFORM_MAPPED(
+            "MNM"),
     CHILD(
             "CHD"),
     CHILD_LIST(
@@ -73,8 +75,12 @@ public enum TabContentType implements EnumConst {
         return this.equals(CHILD) || this.equals(CHILD_LIST);
     }
 
+    public boolean isMappped() {
+        return this.equals(MINIFORM_MAPPED);
+    }
+
     public boolean isMiniForm() {
-        return this.equals(MINIFORM) || this.equals(MINIFORM_CHANGELOG);
+        return this.equals(MINIFORM) || this.equals(MINIFORM_CHANGELOG) || this.equals(MINIFORM_MAPPED);
     }
 
     public static TabContentType fromCode(String code) {

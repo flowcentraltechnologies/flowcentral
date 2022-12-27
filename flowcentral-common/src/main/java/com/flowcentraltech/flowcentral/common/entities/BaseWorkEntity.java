@@ -57,6 +57,11 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
     }
 
     @Override
+    public Long getTenantId() {
+        return null;
+    }
+
+    @Override
     public final ProcessingStatus getProcessingStatus() {
         return processingStatus;
     }

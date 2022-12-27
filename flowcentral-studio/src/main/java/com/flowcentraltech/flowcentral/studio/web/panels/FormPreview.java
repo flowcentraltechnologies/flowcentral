@@ -87,7 +87,8 @@ public class FormPreview {
                     tabIndex++;
                     FilterGroupDef filterGroupDef = au.getFilterGroupDef(formTab.getApplet(), formTab.getFilter());
                     fdb.addFormTab(TabContentType.fromName(formTab.getContentType()), filterGroupDef, formTab.getName(),
-                            formTab.getLabel(), formTab.getApplet(), formTab.getReference(), formTab.getEditAction(),
+                            formTab.getLabel(), formTab.getApplet(), formTab.getReference(),
+                            formTab.getMappedFieldName(), formTab.getMappedForm(), formTab.getEditAction(),
                             formTab.getEditFormless(), formTab.getEditFixedRows(), formTab.isIgnoreParentCondition(),
                             formTab.isShowSearch(), formTab.isQuickEdit(), formTab.isVisible(), formTab.isEditable(),
                             formTab.isDisabled());

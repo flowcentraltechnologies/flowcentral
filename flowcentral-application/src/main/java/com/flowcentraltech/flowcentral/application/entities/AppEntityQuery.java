@@ -29,8 +29,9 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
  */
 public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
 
-    private static final List<EntityBaseType> BASE_WORK_TYPES = Collections.unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY));
-    
+    private static final List<EntityBaseType> BASE_WORK_TYPES = Collections
+            .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY));
+
     public AppEntityQuery() {
         super(AppEntity.class);
     }
@@ -45,5 +46,9 @@ public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
 
     public AppEntityQuery isDelegated() {
         return (AppEntityQuery) addIsNotNull("delegate");
+    }
+
+    public AppEntityQuery isMapped() {
+        return (AppEntityQuery) addEquals("mapped", Boolean.TRUE);
     }
 }

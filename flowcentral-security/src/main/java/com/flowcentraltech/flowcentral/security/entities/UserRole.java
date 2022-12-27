@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Table(name = "FC_USERROLE", uniqueConstraints = { @UniqueConstraint({ "userId", "roleId" }) })
-public class UserRole extends BaseAuditEntity implements Describable {
+public class UserRole extends BaseAuditTenantEntity implements Describable {
 
     @ForeignKey(User.class)
     private Long userId;
@@ -57,11 +57,8 @@ public class UserRole extends BaseAuditEntity implements Describable {
     @ListOnly(key = "userId", property = "status")
     private RecordStatus userStatus;
 
-    @ListOnly(name = "BRANCH_CD", key = "userId", property = "branchCode")
-    private String branchCode;
-
-    @ListOnly(key = "userId", property = "branchDesc")
-    private String branchDesc;
+    @ListOnly(key = "userId", property = "branchId")
+    private Long branchId;
 
     @ListOnly(name = "SUPERVISOR_FG", key = "userId", property = "supervisor")
     private Boolean supervisor;
@@ -83,12 +80,6 @@ public class UserRole extends BaseAuditEntity implements Describable {
 
     @ListOnly(key = "roleId", property = "departmentId")
     private Long departmentId;
-
-    @ListOnly(key = "roleId", property = "departmentCode")
-    private String departmentCode;
-
-    @ListOnly(key = "roleId", property = "departmentDesc")
-    private String departmentDesc;
 
     @Override
     public String getDescription() {
@@ -151,12 +142,12 @@ public class UserRole extends BaseAuditEntity implements Describable {
         this.userStatus = userStatus;
     }
 
-    public String getBranchCode() {
-        return branchCode;
+    public Long getBranchId() {
+        return branchId;
     }
 
-    public void setBranchCode(String branchCode) {
-        this.branchCode = branchCode;
+    public void setBranchId(Long branchId) {
+        this.branchId = branchId;
     }
 
     public Boolean getSupervisor() {
@@ -207,39 +198,11 @@ public class UserRole extends BaseAuditEntity implements Describable {
         this.departmentId = departmentId;
     }
 
-    public String getDepartmentCode() {
-        return departmentCode;
-    }
-
-    public void setDepartmentName(String departmentCode) {
-        this.departmentCode = departmentCode;
-    }
-
-    public String getDepartmentDesc() {
-        return departmentDesc;
-    }
-
-    public void setDepartmentDesc(String departmentDesc) {
-        this.departmentDesc = departmentDesc;
-    }
-
-    public String getBranchDesc() {
-        return branchDesc;
-    }
-
-    public void setBranchDesc(String branchDesc) {
-        this.branchDesc = branchDesc;
-    }
-
     public String getRoleCode() {
         return roleCode;
     }
 
     public void setRoleCode(String roleCode) {
         this.roleCode = roleCode;
-    }
-
-    public void setDepartmentCode(String departmentCode) {
-        this.departmentCode = departmentCode;
     }
 }

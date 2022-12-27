@@ -99,6 +99,8 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
         super.onInitPage();
         ApplicationStudioPageBean pageBean = getPageBean();
         pageBean.setUserPhotoGenerator(userPhotoGenerator);
+
+        setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
     }
 
     @Override

@@ -52,11 +52,17 @@ public class AppFormElement extends BaseConfigEntity {
     @Column(name = "ELEMENT_NM", length = 64)
     private String elementName;
 
+    @Column(name = "MAPPED_FIELD_NM", length = 64, nullable = true)
+    private String mappedFieldName;
+
     @Column(length = 128, nullable = true)
     private String tabApplet;
 
     @Column(length = 128, nullable = true)
     private String tabReference;
+
+    @Column(length = 128, nullable = true)
+    private String tabMappedForm;
 
     @Column(length = 64, nullable = true)
     private String filter;
@@ -161,6 +167,22 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setElementName(String elementName) {
         this.elementName = elementName;
+    }
+
+    public String getMappedFieldName() {
+        return mappedFieldName;
+    }
+
+    public void setMappedFieldName(String mappedFieldName) {
+        this.mappedFieldName = mappedFieldName;
+    }
+
+    public String getTabMappedForm() {
+        return tabMappedForm;
+    }
+
+    public void setTabMappedForm(String tabMappedForm) {
+        this.tabMappedForm = tabMappedForm;
     }
 
     public String getLabel() {

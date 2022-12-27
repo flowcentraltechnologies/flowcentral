@@ -721,8 +721,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-topbell {width:20px;height:20px;cursor:pointer;}
 .fc-topbell span {height:14px;min-width:14px;border-radius:8px;font-size:10px;}
 
-.fc-topbannercontrol {float: right; font-family: arial; font-size: 7pt;
+.fc-topbannercontrol {float: right; font-family: arial; font-size: 9px;
     font-weight: bold; text-align: right;}
+.fc-topbannercontrol .ui-tabular .lcelltp {padding: 1px;}
 .fc-topnavcontrol {display:inline-block; float: right; font-family: arial; font-size: 7pt;
     font-weight: bold; text-align: right;}
 .fc-topnavcontrol button {height:14px; font-size:10px; font-weight:bold; border:0px; background-color:#000;}

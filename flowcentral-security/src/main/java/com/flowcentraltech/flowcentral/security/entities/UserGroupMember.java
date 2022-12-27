@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.security.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Table(name = "FC_USERGROUPMEMBER", uniqueConstraints = { @UniqueConstraint({ "userGroupId", "userId" }) })
-public class UserGroupMember extends BaseAuditEntity implements Describable {
+public class UserGroupMember extends BaseAuditTenantEntity implements Describable {
 
     @ForeignKey(UserGroup.class)
     private Long userGroupId;
@@ -58,9 +58,6 @@ public class UserGroupMember extends BaseAuditEntity implements Describable {
 
     @ListOnly(key = "userId", property = "branchId")
     private Long userBranchId;
-
-    @ListOnly(key = "userId", property = "branchDesc")
-    private String userBranchDesc;
 
     @Override
     public String getDescription() {
@@ -137,14 +134,6 @@ public class UserGroupMember extends BaseAuditEntity implements Describable {
 
     public void setUserBranchId(Long userBranchId) {
         this.userBranchId = userBranchId;
-    }
-
-    public String getUserBranchDesc() {
-        return userBranchDesc;
-    }
-
-    public void setUserBranchDesc(String userBranchDesc) {
-        this.userBranchDesc = userBranchDesc;
     }
 
 }

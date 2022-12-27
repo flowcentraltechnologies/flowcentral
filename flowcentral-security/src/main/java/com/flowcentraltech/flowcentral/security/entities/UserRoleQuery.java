@@ -19,7 +19,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.OrBuilder;
 import com.tcdng.unify.core.util.CalendarUtils;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.CalendarUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class UserRoleQuery extends BaseAuditEntityQuery<UserRole> {
+public class UserRoleQuery extends BaseAuditTenantEntityQuery<UserRole> {
 
     public UserRoleQuery() {
         super(UserRole.class);
@@ -48,8 +48,8 @@ public class UserRoleQuery extends BaseAuditEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("userLoginId", userLoginId);
     }
 
-    public UserRoleQuery branchCode(String branchCode) {
-        return (UserRoleQuery) addEquals("branchCode", branchCode);
+    public UserRoleQuery branchId(Long branchId) {
+        return (UserRoleQuery) addEquals("branchId", branchId);
     }
 
     public UserRoleQuery userStatus(RecordStatus userStatus) {
@@ -92,8 +92,8 @@ public class UserRoleQuery extends BaseAuditEntityQuery<UserRole> {
         return (UserRoleQuery) addEquals("roleStatus", roleStatus);
     }
 
-    public UserRoleQuery departmentName(String departmentName) {
-        return (UserRoleQuery) addEquals("departmentName", departmentName);
+    public UserRoleQuery departmentId(Long departmentId) {
+        return (UserRoleQuery) addEquals("departmentId", departmentId);
     }
 
     public UserRoleQuery roleActiveTime(Date date) throws UnifyException {

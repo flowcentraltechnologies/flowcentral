@@ -35,6 +35,8 @@ public interface NotificationRecipientProvider extends UnifyComponent {
     /**
      * Gets recipient by user login ID.
      * 
+     * @param tenantId
+     *                    the tenant ID
      * @param type
      *                    the notification type
      * @param userLoginId
@@ -43,11 +45,13 @@ public interface NotificationRecipientProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Recipient getRecipientByLoginId(NotificationType type, String userLoginId) throws UnifyException;
+    Recipient getRecipientByLoginId(Long tenantId, NotificationType type, String userLoginId) throws UnifyException;
 
     /**
      * Gets notification recipients by role.
      * 
+     * @param tenantId
+     *                 the tenant ID
      * @param type
      *                 the notification type
      * @param roleCode
@@ -56,18 +60,21 @@ public interface NotificationRecipientProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Recipient> getRecipientsByRole(NotificationType type, String roleCode) throws UnifyException;
+    List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, String roleCode) throws UnifyException;
 
     /**
      * Gets notification recipients by roles.
      * 
+     * @param tenantId
+     *                 the tenant ID
      * @param type
-     *              the notification type
+     *                 the notification type
      * @param roles
-     *              the role codes
+     *                 the role codes
      * @return a list of recipients
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Recipient> getRecipientsByRole(NotificationType type, Collection<String> roles) throws UnifyException;
+    List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, Collection<String> roles)
+            throws UnifyException;
 }

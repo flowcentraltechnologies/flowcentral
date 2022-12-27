@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,6 +87,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.ReportProvider;
 import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
@@ -113,6 +115,7 @@ import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.annotation.Preferred;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.criterion.AbstractRestrictionTranslatorMapper;
 import com.tcdng.unify.core.criterion.Equals;
@@ -171,7 +174,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     private SystemModuleService systemModuleService;
 
     @Configurable
-    private ApplicationWorkItemUtilities applicationWorkItemUtil;
+    private ApplicationWorkItemUtilities applicationWorkItemUtilies;
+
+    @Configurable
+    private EnvironmentDelegateUtilities environmentDeledateUtilities;
 
     @Configurable
     private FontSymbolManager fontSymbolManager;
@@ -192,6 +198,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     private MessageResolver messageResolver;
 
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
+
+    private MappedEntityProviderInfo mappedEntityProviderInfo;
 
     public AppletUtilitiesImpl() {
         this.singleFormBeanClassByPanelName = new FactoryMap<String, Class<? extends SingleFormBean>>()
@@ -242,8 +250,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         this.systemModuleService = systemModuleService;
     }
 
-    public final void setApplicationWorkItemUtil(ApplicationWorkItemUtilities applicationWorkItemUtil) {
-        this.applicationWorkItemUtil = applicationWorkItemUtil;
+    public final void setApplicationWorkItemUtilies(ApplicationWorkItemUtilities applicationWorkItemUtilies) {
+        this.applicationWorkItemUtilies = applicationWorkItemUtilies;
+    }
+
+    public final void setEnvironmentDeledateUtilities(EnvironmentDelegateUtilities environmentDeledateUtilities) {
+        this.environmentDeledateUtilities = environmentDeledateUtilities;
     }
 
     public final void setFontSymbolManager(FontSymbolManager fontSymbolManager) {
@@ -264,6 +276,36 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     public final void setMessageResolver(MessageResolver messageResolver) {
         this.messageResolver = messageResolver;
+    }
+
+    @Override
+    public boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException {
+        return mappedEntityProviderInfo.isProviderPresent(query.getEntityClass());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(
+            Query<? extends Entity> query) throws UnifyException {
+        return (MappedEntityProvider<T>) mappedEntityProviderInfo.getProvider(query.getEntityClass());
+    }
+
+    @Override
+    public boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException {
+        return mappedEntityProviderInfo.isProviderPresent(entityClass);
+    }
+
+    @Override
+    public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
+            Class<? extends Entity> entityClass) throws UnifyException {
+        return mappedEntityProviderInfo.getProvider(entityClass);
+    }
+
+    @Override
+    public String getProviderSrcEntity(String destEntity) {
+        return mappedEntityProviderInfo.isProviderPresent(destEntity)
+                ? mappedEntityProviderInfo.getProvider(destEntity).srcEntity()
+                : null;
     }
 
     @Override
@@ -458,7 +500,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public ApplicationWorkItemUtilities workItemUtilities() {
-        return applicationWorkItemUtil;
+        return applicationWorkItemUtilies;
+    }
+
+    @Override
+    public EnvironmentDelegateUtilities delegateUtilities() {
+        return environmentDeledateUtilities;
     }
 
     @Override
@@ -692,6 +739,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         return form;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public HeaderWithTabsForm constructHeaderWithTabsForm(AbstractEntityFormApplet applet, String rootTitle,
             String beanTitle, FormDef formDef, Entity inst, FormMode formMode, BreadCrumbs breadCrumbs,
@@ -738,6 +786,27 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
                                 new MiniForm(MiniFormScope.CHILD_FORM, formContext, formTabDef), tabIndex,
                                 formContext.getFormTab(formTabDef.getName()).isVisible()));
+                    }
+                        break;
+                    case MINIFORM_MAPPED: {
+                        logDebug("Constructing mini form for tab [{0}]...", formTabDef.getName());
+                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "!fc-miniform",
+                                RendererType.SIMPLE_WIDGET);
+                        final String _mappedFieldName = formTabDef.getMappedFieldName();
+                        final FormDef _mappedFormDef = getFormDef(formTabDef.getMappedForm());
+                        final Long _mappedInstId = DataUtils.getBeanProperty(Long.class, inst, _mappedFieldName);
+                        EntityClassDef mappedEntityClassDef = getEntityClassDef(
+                                _mappedFormDef.getEntityDef().getLongName());
+                        Entity _mappedInst = _mappedInstId != null
+                                ? environment().list((Class<? extends Entity>) mappedEntityClassDef.getEntityClass(),
+                                        _mappedInstId)
+                                : (Entity) ReflectUtils.newInstance(mappedEntityClassDef.getEntityClass());
+                        FormContext _mappedFormContext = new FormContext(appletContext, _mappedFormDef,
+                                formEventHandlers, _mappedInst);
+                        tabSheetItemList.add(new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(),
+                                new MiniForm(MiniFormScope.CHILD_FORM, _mappedFormContext,
+                                        _mappedFormDef.getFormTabDef(0)),
+                                tabIndex, formContext.getFormTab(formTabDef.getName()).isVisible()));
                     }
                         break;
                     case PROPERTY_LIST: {
@@ -793,7 +862,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                                 formTabDef.getName(), rootTitle, _appletDef, editAction, mode,
-                                formTabDef.isIgnoreParentCondition());
+                                false, formTabDef.isIgnoreParentCondition());
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                             AppletFilterDef appletFilterDef = _appletDef.getFilterDef(
@@ -955,7 +1024,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         : formRelatedListDef.getEditAction();
                 EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
                         formRelatedListDef.getName(), rootTitle, _appletDef, editAction,
-                        EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_SEARCH, false);
+                        EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON
+                                | EntitySearch.SHOW_SEARCH),
+                        true, false);
                 if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                     AppletFilterDef appletFilterDef = _appletDef.getFilterDef(
                             _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION));
@@ -998,7 +1069,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             AppletDef _appletDef = getAppletDef(appletName);
             final String editAction = null;
             EntitySearch _entitySearch = constructEntitySearch(new FormContext(appletContext), sweepingCommitPolicy,
-                    _appletDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL, false);
+                    _appletDef.getName(), rootTitle, _appletDef, editAction, EntitySearch.ENABLE_ALL, false, false);
             if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                 AppletFilterDef appletFilterDef = _appletDef
                         .getFilterDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION));
@@ -1043,6 +1114,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         return form;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void updateHeaderWithTabsForm(HeaderWithTabsForm form, Entity inst) throws UnifyException {
         final FormDef formDef = form.getFormDef();
@@ -1090,6 +1162,22 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     case MINIFORM:
                     case MINIFORM_CHANGELOG: {
                         tabSheetItem.setVisible(formContext.getFormTab(tabSheetItem.getName()).isVisible());
+                    }
+                        break;
+                    case MINIFORM_MAPPED: {
+                        logDebug("Updating mini form for tab [{0}]...", formTabDef.getName());
+                        final String _mappedFieldName = formTabDef.getMappedFieldName();
+                        final FormDef _mappedFormDef = getFormDef(formTabDef.getMappedForm());
+                        final Long _mappedInstId = DataUtils.getBeanProperty(Long.class, inst, _mappedFieldName);
+                        EntityClassDef mappedEntityClassDef = getEntityClassDef(
+                                _mappedFormDef.getEntityDef().getLongName());
+                        Entity _mappedInst = _mappedInstId != null
+                                ? environment().list((Class<? extends Entity>) mappedEntityClassDef.getEntityClass(),
+                                        _mappedInstId)
+                                : (Entity) ReflectUtils.newInstance(mappedEntityClassDef.getEntityClass());
+                        MiniForm miniForm = (MiniForm) tabSheetItem.getValObject();
+                        miniForm.getCtx().setInst(_mappedInst);
+                        tabSheetItem.setVisible(formContext.getFormTab(formTabDef.getName()).isVisible());
                     }
                         break;
                     case PROPERTY_LIST: {
@@ -1261,7 +1349,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public String getChildFkFieldName(String entity, String childEntity) throws UnifyException {
-        return getEntityDef(childEntity).getRefEntityFieldDef(entity).getFieldName();
+        final EntityDef entityDef = getEntityDef(childEntity);
+        EntityFieldDef entityFieldDef = entityDef.getRefEntityFieldDef(entity);
+        if (entityFieldDef != null) {
+            return entityFieldDef.getFieldName();
+        }
+
+        return entityDef.getMappedFieldDefByEntity(this, entity).getFieldName();
     }
 
     @Override
@@ -1317,7 +1411,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public EntitySearch constructEntitySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, String rootTitle, AppletDef _appletDef, String editAction, int entitySearchMode,
-            boolean isIgnoreParentCondition) throws UnifyException {
+            boolean isIgnoreReport, boolean isIgnoreParentCondition) throws UnifyException {
         logDebug("Constructing entity search for [{0}] using applet definition [{1}]...", rootTitle,
                 _appletDef.getLongName());
         TableDef _tableDef = getTableDef(_appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE));
@@ -1337,7 +1431,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entitySearchMode = entitySearchMode & ~EntitySearch.SHOW_ACTIONFOOTER;
         }
 
-        if (_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)) {
+        if (!isIgnoreReport
+                && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)) {
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
 
@@ -1358,15 +1453,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         final boolean showConditions = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_SHOW_CONDITIONS);
-        
+
         final int systemSearchColumns = systemModuleService.getSysParameterValue(int.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
                 : (systemSearchColumns > 0 ? systemSearchColumns : 1);
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
-                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode, showConditions,
-                isIgnoreParentCondition);
+                _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
+                showConditions, isIgnoreParentCondition);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         _entitySearch.setShowBaseRestriction(showBaseRestriction);
@@ -1398,10 +1493,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 AppletPropertyConstants.SEARCH_TABLE_SEARCHINPUT);
         final int appletSearchColumns = _rootAppletDef.getPropValue(int.class,
                 AppletPropertyConstants.SEARCH_TABLE_SEARCH_COLUMNS);
-        
+
         final boolean showConditions = systemModuleService.getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_SHOW_CONDITIONS);
-        
+
         final int systemSearchColumns = systemModuleService.getSysParameterValue(int.class,
                 ApplicationModuleSysParamConstants.SEARCH_ENTRY_COLUMNS);
         final int searchColumns = appletSearchColumns > 0 ? appletSearchColumns
@@ -1547,9 +1642,33 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         return true;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void onInitialize() throws UnifyException {
+        Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
+        List<MappedEntityProvider> _providers = getComponents(MappedEntityProvider.class);
+        for (MappedEntityProvider _provider : _providers) {
+            if (providers.containsKey(_provider.destEntity())) {
+                final MappedEntityProvider existingMappedEntityProvider = providers.get(_provider.destEntity());
+                final boolean currentPreferred = _provider.getClass().isAnnotationPresent(Preferred.class);
+                final boolean existingPreferred = existingMappedEntityProvider.getClass()
+                        .isAnnotationPresent(Preferred.class);
+                if (existingPreferred == currentPreferred) {
+                    throwOperationErrorException(
+                            new IllegalArgumentException("Multiple mapped entity providers found entity class ["
+                                    + _provider.destEntity() + "]. Found [" + _provider.getName() + "] and ["
+                                    + existingMappedEntityProvider.getName() + "]"));
+                }
 
+                if (existingPreferred && !currentPreferred) {
+                    continue;
+                }
+            }
+
+            providers.put(_provider.destEntity(), _provider);
+        }
+
+        mappedEntityProviderInfo = new MappedEntityProviderInfo(providers);
     }
 
     @Override
@@ -1913,6 +2032,57 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         form.getCtx().getAppletContext().setReadOnly(enterReadOnlyMode);
     }
 
+    private class MappedEntityProviderInfo {
+
+        private Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providersByName;
+
+        private Map<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providersByType;
+
+        public MappedEntityProviderInfo(
+                Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers)
+                throws UnifyException {
+            this.providersByName = providers;
+        }
+
+        public boolean isProviderPresent(String destEntity) {
+            return providersByName.containsKey(destEntity);
+        }
+
+        public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(String destEntity) {
+            return providersByName.get(destEntity);
+        }
+
+        public boolean isProviderPresent(Class<? extends Entity> destEntityClass) throws UnifyException {
+            return getProvidersbyType().containsKey(destEntityClass);
+        }
+
+        public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
+                Class<? extends Entity> destEntityClass) throws UnifyException {
+            return getProvidersbyType().get(destEntityClass);
+        }
+
+        @SuppressWarnings("unchecked")
+        private Map<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> getProvidersbyType()
+                throws UnifyException {
+            if (providersByType == null) {
+                synchronized (this) {
+                    if (providersByType == null) {
+                        providersByType = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
+                        for (String destEntity : providersByName.keySet()) {
+                            EntityClassDef entityClassDef = getEntityClassDef(destEntity);
+                            providersByType.put((Class<? extends Entity>) entityClassDef.getEntityClass(),
+                                    providersByName.get(destEntity));
+                        }
+
+                        providersByType = Collections.unmodifiableMap(providersByType);
+                    }
+                }
+            }
+
+            return providersByType;
+        }
+    }
+
     private class AuRestrictionTranslatorMapper extends AbstractRestrictionTranslatorMapper {
 
         private EntityDef entityDef;
@@ -1964,6 +2134,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 case INTEGER:
                 case LONG:
                 case TENANT_ID:
+                case MAPPED:
                 case SCRATCH:
                 case SHORT:
                 case STRING:

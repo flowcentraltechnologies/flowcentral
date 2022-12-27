@@ -29,7 +29,6 @@ import java.util.TimeZone;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
-import com.flowcentraltech.flowcentral.common.business.RoleParticipatingUserProvider;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
@@ -41,6 +40,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAttachmentConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleEntityConstants;
@@ -60,6 +61,7 @@ import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.tcdng.unify.core.SessionContext;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -69,6 +71,8 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
 import com.tcdng.unify.core.security.PasswordGenerator;
 import com.tcdng.unify.core.system.UserSessionManager;
@@ -86,13 +90,16 @@ import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 @Transactional
 @Component(SecurityModuleNameConstants.SECURITY_MODULE_SERVICE)
 public class SecurityModuleServiceImpl extends AbstractFlowCentralService
-        implements SecurityModuleService, NotificationRecipientProvider, RoleParticipatingUserProvider {
+        implements SecurityModuleService, NotificationRecipientProvider {
 
     @Configurable
     private UserSessionManager userSessionManager;
 
     @Configurable
     private SystemModuleService systemModuleService;
+
+    @Configurable
+    private OrganizationModuleService organizationModuleService;
 
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
@@ -103,23 +110,27 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Configurable("oneway-stringcryptograph")
     private OneWayStringCryptograph passwordCryptograph;
 
-    public void setUserSessionManager(UserSessionManager userSessionManager) {
+    public final void setUserSessionManager(UserSessionManager userSessionManager) {
         this.userSessionManager = userSessionManager;
     }
 
-    public void setSystemModuleService(SystemModuleService systemModuleService) {
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
     }
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
+    public final void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
+        this.organizationModuleService = organizationModuleService;
+    }
+
+    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
         this.fileAttachmentProvider = fileAttachmentProvider;
     }
 
-    public void setNotificationModuleService(NotificationModuleService notificationModuleService) {
+    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
 
-    public void setPasswordCryptograph(OneWayStringCryptograph passwordCryptograph) {
+    public final void setPasswordCryptograph(OneWayStringCryptograph passwordCryptograph) {
         this.passwordCryptograph = passwordCryptograph;
     }
 
@@ -131,20 +142,23 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public User loginUser(String loginId, String password, Locale loginLocale, Long loginTenantId)
             throws UnifyException {
-        User user = environment().list(new UserQuery().loginId(loginId));
-        if (user == null) {
-            throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
-        }
-        
+        final boolean isSystem = DefaultApplicationConstants.SYSTEM_LOGINID.equalsIgnoreCase(loginId);
         if (isTenancyEnabled()) {
             if (loginTenantId == null && systemModuleService.getTenantCount() > 0) {
-                throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+                if (isSystem) {
+                    loginTenantId = Entity.PRIMARY_TENANT_ID;
+                } else {
+                    throw new UnifyException(SecurityModuleErrorConstants.TENANCY_IS_REQUIRED);
+                }
             }
+        } else {
+            loginTenantId = Entity.PRIMARY_TENANT_ID;
         }
-        
-        if (!DefaultApplicationConstants.SYSTEM_ENTITY_ID.equals(user.getId()) && loginTenantId != null
-                && !loginTenantId.equals(user.getTenantId())) {
-            throw new UnifyException(SecurityModuleErrorConstants.TENANT_WITH_ID_NOT_FOUND);
+
+        User user = isSystem ? environment().list(new UserQuery().id(DefaultApplicationConstants.SYSTEM_ENTITY_ID))
+                : environment().list(new UserQuery().loginId(loginId).tenantId(loginTenantId));
+        if (user == null) {
+            throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
         }
 
         boolean accountLockingEnabled = systemModuleService.getSysParameterValue(boolean.class,
@@ -191,28 +205,37 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             userLoginEvent.setRemoteHost(ctx.getRemoteHost());
             environment().create(userLoginEvent);
         }
+
+        MappedTenant mappedTenant = systemModuleService.findPrimaryMappedTenant(loginTenantId);
+        String businessUnitDesc = mappedTenant != null ? mappedTenant.getDescription() : null;
+        if (StringUtils.isBlank(businessUnitDesc)) {
+            businessUnitDesc = getApplicationMessage("application.no.businessunit");
+        }
         
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
+        final MappedBranch userBranch = user.getBranchId() != null
+                ? environment().find(MappedBranch.class, user.getBranchId())
+                : null;
         if (loginLocale != null) {
             sessionCtx.setLocale(loginLocale);
-        } else if (StringUtils.isNotBlank(user.getBranchLanguageTag())) {
-            sessionCtx.setLocale(Locale.forLanguageTag(user.getBranchLanguageTag()));
+        } else if (userBranch != null && StringUtils.isNotBlank(userBranch.getLanguageTag())) {
+            sessionCtx.setLocale(Locale.forLanguageTag(userBranch.getLanguageTag()));
         }
 
         // Set session time zone
-        if (StringUtils.isNotBlank(user.getBranchTimeZone())) {
-            sessionCtx.setTimeZone(TimeZone.getTimeZone(user.getBranchTimeZone()));
+        if (userBranch != null && StringUtils.isNotBlank(userBranch.getTimeZone())) {
+            sessionCtx.setTimeZone(TimeZone.getTimeZone(userBranch.getTimeZone()));
         } else {
             sessionCtx.setTimeZone(getApplicationTimeZone());
         }
 
         sessionCtx.setUseDaylightSavings(sessionCtx.getTimeZone().inDaylightTime(now));
-        
+
         // Login to session and set session attributes
-        userSessionManager.login(createUserToken(user, loginTenantId));
+        userSessionManager.login(createUserToken(user, userBranch, loginTenantId));
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.USERNAME, user.getFullName());
-        String branchDesc = user.getBranchDesc();
+        String branchDesc = userBranch != null ? userBranch.getDescription() : null;
         if (StringUtils.isBlank(branchDesc)) {
             branchDesc = getApplicationMessage("application.no.branch");
         }
@@ -220,6 +243,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.MESSAGEBOX, null);
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, null);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPERVISORFLAG, user.getSupervisor());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SHORTCUTDECK, null);
@@ -336,8 +360,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Recipient getRecipientByLoginId(NotificationType type, String userLoginId) throws UnifyException {
-        User user = environment().find(new UserQuery().loginId(userLoginId));
+    public Recipient getRecipientByLoginId(Long tenantId, NotificationType type, String userLoginId)
+            throws UnifyException {
+        User user = environment().find(new UserQuery().loginId(userLoginId).tenantId(tenantId));
         switch (type) {
             case EMAIL:
                 return new Recipient(userLoginId, user.getEmail());
@@ -350,13 +375,15 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(NotificationType type, String roleCode) throws UnifyException {
-        return getRecipientsByRole(type, Arrays.asList(roleCode));
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, String roleCode)
+            throws UnifyException {
+        return getRecipientsByRole(tenantId, type, Arrays.asList(roleCode));
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(NotificationType type, Collection<String> roles) throws UnifyException {
-        Set<Long> userIdSet = findIdsOfAllUsersWithRole(roles);
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, Collection<String> roles)
+            throws UnifyException {
+        Set<Long> userIdSet = findIdsOfAllUsersWithRole(tenantId, roles);
         if (!userIdSet.isEmpty()) {
             List<User> userList = environment().findAll(new UserQuery().idIn(userIdSet));
             List<Recipient> recipientList = new ArrayList<Recipient>();
@@ -377,26 +404,6 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             }
 
             return recipientList;
-        }
-
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<String> getParticipatingUsersByRole(String branchCode, String roleCode) throws UnifyException {
-        return getParticipatingUsersByRole(branchCode, Arrays.asList(roleCode));
-    }
-
-    @Override
-    public List<String> getParticipatingUsersByRole(String branchCode, Collection<String> roles) throws UnifyException {
-        Set<Long> userIdSet = findIdsOfAllUsersWithRole(roles);
-        if (!userIdSet.isEmpty()) {
-            UserQuery userQuery = new UserQuery().idIn(userIdSet);
-            if (branchCode != null) {
-                userQuery.branchCode(branchCode);
-            }
-
-            return environment().valueList(String.class, "loginId", userQuery);
         }
 
         return Collections.emptyList();
@@ -444,14 +451,16 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         }
     }
 
-    private Set<Long> findIdsOfAllUsersWithRole(final Collection<String> roleCodes) throws UnifyException {
+    private Set<Long> findIdsOfAllUsersWithRole(final Long tenantId, final Collection<String> roleCodes)
+            throws UnifyException {
         Set<Long> userIds = new HashSet<Long>();
         if (!DataUtils.isBlank(roleCodes)) {
-            userIds.addAll(environment().valueSet(Long.class, "userId", new UserRoleQuery().roleCodeIn(roleCodes)));
+            userIds.addAll(environment().valueSet(Long.class, "userId",
+                    new UserRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId)));
         }
 
         Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
-                new UserGroupRoleQuery().roleCodeIn(roleCodes));
+                new UserGroupRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId));
         if (!DataUtils.isBlank(userGroupIds)) {
             userIds.addAll(environment().valueSet(Long.class, "userId",
                     new UserGroupMemberQuery().userGroupIdIn(userGroupIds)));
@@ -476,9 +485,10 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             userRoleQuery.roleActiveTime(activeAt);
         }
 
+        final FactoryMap<Long, String> departmentCodes = organizationModuleService.getMappedDepartmentCodeFactoryMap();
         for (UserRole userRole : environment().listAll(userRoleQuery)) {
-            userRoleInfoList.add(
-                    new UserRoleInfo(userRole.getRoleCode(), userRole.getRoleDesc(), userRole.getDepartmentCode()));
+            userRoleInfoList.add(new UserRoleInfo(userRole.getRoleCode(), userRole.getRoleDesc(),
+                    departmentCodes.get(userRole.getDepartmentId())));
             roleSet.add(userRole.getRoleCode());
         }
 
@@ -504,14 +514,14 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             for (UserGroupRole userGroupRole : environment().listAll(userGroupRoleQuery)) {
                 userRoleInfoList.add(new UserRoleInfo(userGroupRole.getRoleCode(), userGroupRole.getRoleDesc(),
                         userGroupRole.getUserGroupName(), userGroupRole.getUserGroupDesc(),
-                        userGroupRole.getDepartmentCode()));
+                        departmentCodes.get(userGroupRole.getDepartmentId())));
             }
         }
 
         return userRoleInfoList;
     }
 
-    private UserToken createUserToken(User user, Long loginTenantId) throws UnifyException {
+    private UserToken createUserToken(User user, MappedBranch userBranch, Long loginTenantId) throws UnifyException {
         boolean allowMultipleLogin = user.isReserved();
         if (!allowMultipleLogin) {
             allowMultipleLogin = Boolean.TRUE.equals(user.getAllowMultipleLogin());
@@ -528,7 +538,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                 getContainerSetting(String.class, UnifyCorePropertyConstants.APPLICATION_COLORSCHEME));
         return UserToken.newBuilder().userLoginId(user.getLoginId()).userName(user.getFullName())
                 .tenantId(loginTenantId).ipAddress(getSessionContext().getRemoteAddress())
-                .branchCode(user.getBranchCode()).zoneCode(user.getZoneCode()).colorScheme(colorScheme)
+                .branchCode(userBranch != null ? userBranch.getCode() : null)
+                .zoneCode(userBranch != null ? userBranch.getZoneCode() : null).colorScheme(colorScheme)
                 .globalAccess(globalAccess).reservedUser(user.isReserved()).allowMultipleLogin(allowMultipleLogin)
                 .build();
     }
@@ -549,7 +560,8 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             dictionary.setValue("loginId", user.getLoginId());
             dictionary.setValue("plainPassword", password);
             NotificationChannelMessage msg = notificationModuleService.constructNotificationChannelMessage(
-                    "security.userPasswordReset", dictionary, new Recipient(user.getFullName(), user.getEmail()));
+                    user.getTenantId(), "security.userPasswordReset", dictionary,
+                    new Recipient(user.getFullName(), user.getEmail()));
             notificationModuleService.sendNotification(msg);
         }
 

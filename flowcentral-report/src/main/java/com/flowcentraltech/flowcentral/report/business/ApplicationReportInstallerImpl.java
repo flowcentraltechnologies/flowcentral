@@ -160,11 +160,12 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportConfiguration.setTemplate(reportConfig.getTemplate());
                     reportConfiguration.setLayout(reportConfig.getLayout());
                     reportConfiguration.setProcessor(reportConfig.getProcessor());
-                    reportConfiguration.setShowGrandFooter(reportConfig.isShowGrandFooter());
-                    reportConfiguration.setInvertGroupColors(reportConfig.isInvertGroupColors());
-                    reportConfiguration.setLandscape(reportConfig.isLandscape());
-                    reportConfiguration.setShadeOddRows(reportConfig.isShadeOddRows());
-                    reportConfiguration.setUnderlineRows(reportConfig.isUnderlineRows());
+                    reportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
+                    reportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
+                    reportConfiguration.setLandscape(reportConfig.getLandscape());
+                    reportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                    reportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
+                    reportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                     reportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                     reportConfiguration.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(reportConfig, reportConfiguration);
@@ -177,11 +178,12 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         oldReportConfiguration.setTemplate(reportConfig.getTemplate());
                         oldReportConfiguration.setLayout(reportConfig.getLayout());
                         oldReportConfiguration.setProcessor(reportConfig.getProcessor());
-                        oldReportConfiguration.setShowGrandFooter(reportConfig.isShowGrandFooter());
-                        oldReportConfiguration.setInvertGroupColors(reportConfig.isInvertGroupColors());
-                        oldReportConfiguration.setLandscape(reportConfig.isLandscape());
-                        oldReportConfiguration.setShadeOddRows(reportConfig.isShadeOddRows());
-                        oldReportConfiguration.setUnderlineRows(reportConfig.isUnderlineRows());
+                        oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
+                        oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
+                        oldReportConfiguration.setLandscape(reportConfig.getLandscape());
+                        oldReportConfiguration.setShadeOddRows(reportConfig.getShadeOddRows());
+                        oldReportConfiguration.setUnderlineRows(reportConfig.getUnderlineRows());
+                        oldReportConfiguration.setAllowSecondaryTenants(reportConfig.getAllowSecondaryTenants());
                         oldReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(reportConfig.getFilter()));
                     }
 

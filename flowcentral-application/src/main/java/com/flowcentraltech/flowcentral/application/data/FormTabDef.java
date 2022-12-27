@@ -47,6 +47,10 @@ public class FormTabDef {
 
     private String reference;
 
+    private String mappedFieldName;
+
+    private String mappedForm;
+
     private String editAction;
 
     private String editFormless;
@@ -74,7 +78,7 @@ public class FormTabDef {
     private int listOnlyCheck;
 
     public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label,
-            String applet, String reference, String editAction, String editFormless, String editFixedRows,
+            String applet, String reference, String mappedFieldName, String mappedForm, String editAction, String editFormless, String editFixedRows,
             List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch,
             boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
         this.contentType = contentType;
@@ -83,6 +87,8 @@ public class FormTabDef {
         this.label = label;
         this.applet = applet;
         this.reference = reference;
+        this.mappedFieldName = mappedFieldName;
+        this.mappedForm = mappedForm;
         this.editAction = editAction;
         this.editFormless = editFormless;
         this.editFixedRows = editFixedRows;
@@ -104,7 +110,9 @@ public class FormTabDef {
         this.label = srcFormTabDef.label;
         this.applet = srcFormTabDef.applet;
         this.reference = srcFormTabDef.reference;
-        this.editAction = srcFormTabDef.editAction;
+        this.mappedFieldName = srcFormTabDef.mappedFieldName;
+        this.mappedForm = srcFormTabDef.mappedForm;
+         this.editAction = srcFormTabDef.editAction;
         this.editFormless = srcFormTabDef.editFormless;
         this.editFixedRows = srcFormTabDef.editFixedRows;
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
@@ -146,6 +154,14 @@ public class FormTabDef {
 
     public String getReference() {
         return reference;
+    }
+
+    public String getMappedFieldName() {
+        return mappedFieldName;
+    }
+
+    public String getMappedForm() {
+        return mappedForm;
     }
 
     public String getEditAction() {

@@ -96,7 +96,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
         application().createAppRef(appRef);
 
         // Create reportable if necessary
-        if (appEntity.getReportable()) {
+        if (appEntity.isReportable()) {
             String description = resolveApplicationMessage("$m{report.managedreport.description}",
                     nameDesc);
             ReportableDefinition reportableDefinition = new ReportableDefinition();

@@ -78,6 +78,7 @@ public class EntityFieldDefFormatterListCommand extends AbstractListCommand<Enti
                                     StandardFormatType.INTEGER_GROUPED);
                             break;
                         case TENANT_ID:
+                        case MAPPED:
                         case LIST_ONLY:
                         case REF:
                         case REF_UNLINKABLE:

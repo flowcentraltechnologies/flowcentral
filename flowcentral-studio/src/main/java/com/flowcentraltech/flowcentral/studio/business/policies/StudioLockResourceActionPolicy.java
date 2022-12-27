@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockInfo;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockedResourceInfo;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.tcdng.unify.core.UnifyException;
@@ -88,8 +89,11 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
             CollaborationLockInfo collaborationLockInfo = getCollaborationProvider().getLockInfo(type, resourceName);
             if (collaborationLockInfo != null) {
                 User user = securityModuleService.findUser(collaborationLockInfo.getLockedBy());
-                String branchDesc = user.getBranchDesc() == null ? getSessionMessage("application.no.branch")
-                        : user.getBranchDesc();
+                final MappedBranch userBranch = user.getBranchId() != null
+                        ? environment().find(MappedBranch.class, user.getBranchId())
+                        : null;
+                String branchDesc = userBranch != null ? userBranch.getDescription() : null;
+                branchDesc = branchDesc == null ? getSessionMessage("application.no.branch") : branchDesc;
                 CollaborationLockedResourceInfo collaborationLockedResourceInfo = new CollaborationLockedResourceInfo(
                         requestUserPhotoGenerator, type, resourceName, collaborationLockInfo.getLockedBy(),
                         user.getFullName(), branchDesc, collaborationLockInfo.getLockDate());

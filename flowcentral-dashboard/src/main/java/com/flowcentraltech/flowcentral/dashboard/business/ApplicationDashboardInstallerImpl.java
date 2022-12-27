@@ -81,6 +81,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     dashboard.setName(dashboardConfig.getName());
                     dashboard.setDescription(description);
                     dashboard.setSections(dashboardConfig.getSections());
+                    dashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
                     dashboard.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(dashboardConfig, dashboard, applicationName);
                     environment().create(dashboard);
@@ -88,6 +89,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                     if (ConfigUtils.isSetInstall(oldDashboard)) {
                         oldDashboard.setDescription(description);
                         oldDashboard.setSections(dashboardConfig.getSections());
+                        oldDashboard.setAllowSecondaryTenants(dashboardConfig.getAllowSecondaryTenants());
                     }
 
                     populateChildList(dashboardConfig, oldDashboard, applicationName);

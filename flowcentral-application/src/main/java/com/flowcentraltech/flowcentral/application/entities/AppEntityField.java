@@ -93,6 +93,9 @@ public class AppEntityField extends BaseConfigEntity {
     @Column(length = 64, nullable = true)
     private String autoFormat;
 
+    @Column(length = 64, nullable = true)
+    private String mapped;   
+
     @Column(length = 32, nullable = true)
     private String defaultVal;
     
@@ -313,6 +316,14 @@ public class AppEntityField extends BaseConfigEntity {
 
     public void setAutoFormat(String autoFormat) {
         this.autoFormat = autoFormat;
+    }
+
+    public String getMapped() {
+        return mapped;
+    }
+
+    public void setMapped(String mapped) {
+        this.mapped = mapped;
     }
 
     public String getDefaultVal() {

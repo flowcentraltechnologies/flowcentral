@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.security.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
-import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Table(name = "FC_USERGROUPROLE", uniqueConstraints = { @UniqueConstraint({ "userGroupId", "roleId" }) })
-public class UserGroupRole extends BaseAuditEntity implements Describable {
+public class UserGroupRole extends BaseAuditTenantEntity implements Describable {
 
     @ForeignKey(UserGroup.class)
     private Long userGroupId;
@@ -68,12 +68,6 @@ public class UserGroupRole extends BaseAuditEntity implements Describable {
 
     @ListOnly(key = "roleId", property = "departmentId")
     private Long departmentId;
-
-    @ListOnly(key = "roleId", property = "departmentCode")
-    private String departmentCode;
-
-    @ListOnly(key = "roleId", property = "departmentDesc")
-    private String departmentDesc;
 
     @Override
     public String getDescription() {
@@ -166,22 +160,6 @@ public class UserGroupRole extends BaseAuditEntity implements Describable {
 
     public void setDepartmentId(Long departmentId) {
         this.departmentId = departmentId;
-    }
-
-    public String getDepartmentCode() {
-        return departmentCode;
-    }
-
-    public void setDepartmentCode(String departmentCode) {
-        this.departmentCode = departmentCode;
-    }
-
-    public String getDepartmentDesc() {
-        return departmentDesc;
-    }
-
-    public void setDepartmentDesc(String departmentDesc) {
-        this.departmentDesc = departmentDesc;
     }
 
 }

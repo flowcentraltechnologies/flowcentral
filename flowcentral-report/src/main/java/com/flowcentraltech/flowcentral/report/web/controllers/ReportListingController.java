@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -76,16 +77,20 @@ public class ReportListingController extends AbstractPageController<ReportListin
     protected void onOpenPage() throws UnifyException {
         // Load link grid information
         LinkGridInfo.Builder lb = LinkGridInfo.newBuilder();
-        final String roleCode = !getUserToken().isReservedUser() ? getUserToken().getRoleCode() : null;
+        final UserToken userToken = getUserToken();
+        final String roleCode = !userToken.isReservedUser() ? userToken.getRoleCode() : null;
+        final boolean isPrimaryTenant = userToken.isPrimaryTenant();
         String applicationName = null;
         for (ReportListing listing : reportModuleService.getRoleReportListing(roleCode)) {
-            if (!listing.getApplicationName().equals(applicationName)) {
-                applicationName = listing.getApplicationName();
-                lb.addCategory(applicationName, listing.getApplicationDesc(),
-                        "/report/reportlisting/prepareGenerateReport");
-            }
+            if (isPrimaryTenant || listing.isAllowSecondaryTenants()) {
+                if (!listing.getApplicationName().equals(applicationName)) {
+                    applicationName = listing.getApplicationName();
+                    lb.addCategory(applicationName, listing.getApplicationDesc(),
+                            "/report/reportlisting/prepareGenerateReport");
+                }
 
-            lb.addLink(applicationName, listing.getLongName(), listing.getDescription());
+                lb.addLink(applicationName, listing.getLongName(), listing.getDescription());
+            }
         }
 
         ReportListingPageBean pageBean = getPageBean();

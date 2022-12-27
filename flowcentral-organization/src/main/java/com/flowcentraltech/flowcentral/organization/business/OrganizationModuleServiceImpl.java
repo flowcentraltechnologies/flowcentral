@@ -29,6 +29,10 @@ import com.flowcentraltech.flowcentral.organization.constants.OrganizationModule
 import com.flowcentraltech.flowcentral.organization.entities.BranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Department;
 import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
+import com.flowcentraltech.flowcentral.organization.entities.MappedBranchQuery;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
+import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.Privilege;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategory;
 import com.flowcentraltech.flowcentral.organization.entities.PrivilegeCategoryQuery;
@@ -62,32 +66,63 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final String DEVOPS_JUNIOR_DEVELOPER_CODE = "JDEVELOPER";
 
-    private FactoryMap<String, RolePrivileges> privilegesByRole;
+    private final FactoryMap<Long, TenantRolePrivileges> tenantRolePrivileges;
 
     @Configurable
     private StudioProvider studioProvider;
-    
+
     public OrganizationModuleServiceImpl() {
-        privilegesByRole = new FactoryMap<String, RolePrivileges>(true)
+        tenantRolePrivileges = new FactoryMap<Long, TenantRolePrivileges>()
             {
                 @Override
-                protected boolean stale(String roleCode, RolePrivileges rolePrivileges) throws Exception {
-                    return rolePrivileges.getVersion() < environment().value(Long.class, "versionNo",
-                            new RoleQuery().code(roleCode));
-                }
-
-                @Override
-                protected RolePrivileges create(String roleCode, Object... arg2) throws Exception {
-                    Set<String> privileges = environment().valueSet(String.class, "privilegeCode",
-                            new RolePrivilegeQuery().roleCode(roleCode));
-                    long version = environment().value(Long.class, "versionNo", new RoleQuery().code(roleCode));
-                    return new RolePrivileges(privileges, version);
+                protected TenantRolePrivileges create(Long tenantId, Object... arg2) throws Exception {
+                    return new TenantRolePrivileges(tenantId);
                 }
             };
     }
 
     public final void setStudioProvider(StudioProvider studioProvider) {
         this.studioProvider = studioProvider;
+    }
+
+    @Override
+    public FactoryMap<Long, String> getMappedBranchCodeFactoryMap() throws UnifyException {
+        return new FactoryMap<Long, String>() {
+            @Override
+            protected String create(Long branchId, Object... arg2) throws Exception {
+                return environment().value(String.class, "code", new MappedBranchQuery().id(branchId));
+            }
+        };
+    }
+
+    @Override
+    public FactoryMap<Long, String> getMappedDepartmentCodeFactoryMap() throws UnifyException {
+        return new FactoryMap<Long, String>() {
+                @Override
+                protected String create(Long departmentId, Object... arg2) throws Exception {
+                    return environment().value(String.class, "code", new MappedDepartmentQuery().id(departmentId));
+                }
+            };
+    }
+
+    @Override
+    public String getMappedDepartmentCode(Long departmentId) throws UnifyException {
+        return environment().value(String.class, "code", new MappedDepartmentQuery().id(departmentId));
+    }
+
+    @Override
+    public String getMappedBranchCode(Long branchId) throws UnifyException {
+        return environment().value(String.class, "code", new MappedBranchQuery().id(branchId));
+    }
+
+    @Override
+    public List<MappedDepartment> findMappedDepartments(MappedDepartmentQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
+    public List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException {
+        return environment().listAll(query);
     }
 
     @Override
@@ -146,8 +181,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
-        return environment().countAll(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode)
-                .code(privilegeCode)) > 0;
+        return environment()
+                .countAll(new PrivilegeQuery().privilegeCatCode(privilegeCategoryCode).code(privilegeCode)) > 0;
     }
 
     @Override
@@ -182,25 +217,23 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean isRoleWithPrivilege(String roleCode, String privilegeCode) throws UnifyException {
         return (roleCode == null && getUserToken().isReservedUser())
-                || privilegesByRole.get(roleCode).isPrivilege(privilegeCode);
+                || tenantRolePrivileges.get(getUserTenantId()).getRolePrivileges(roleCode).isPrivilege(privilegeCode);
     }
 
     @Override
-    public Long getBranchID(String branchCode) throws UnifyException {
+    public Long getBranchId(String branchCode) throws UnifyException {
         return environment().value(Long.class, "id", new BranchQuery().code(branchCode));
     }
 
     @Override
-    public Long getDepartmentID(String departmentCode) throws UnifyException {
+    public Long getDepartmentId(String departmentCode) throws UnifyException {
         return environment().value(Long.class, "id", new DepartmentQuery().code(departmentCode));
     }
 
     @Broadcast
     public synchronized void invalidateRolePrivilegesCache(String... roleCodes) throws UnifyException {
-        for (String roleCode : roleCodes) {
-            if (privilegesByRole.isKey(roleCode)) {
-                privilegesByRole.get(roleCode).invalidate();
-            }
+        for (TenantRolePrivileges tenantRolePrivileges : tenantRolePrivileges.values()) {
+            tenantRolePrivileges.invalidate(roleCodes);
         }
     }
 
@@ -242,11 +275,13 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                 role = new Role();
                 role.setDepartmentId(department.getId());
                 role.setCode(DEVOPS_JUNIOR_DEVELOPER_CODE);
-                role.setDescription(resolveApplicationMessage("$m{organization.default.department.juniordeveloper.desc}"));
+                role.setDescription(
+                        resolveApplicationMessage("$m{organization.default.department.juniordeveloper.desc}"));
                 Long roleId = (Long) environment().create(role);
 
                 List<String> privilegeCodeList = ConfigurationUtils.readStringList(
-                        "data/organization-privileges-juniordeveloper.dat", getUnifyComponentContext().getWorkingPath());
+                        "data/organization-privileges-juniordeveloper.dat",
+                        getUnifyComponentContext().getWorkingPath());
                 RolePrivilege rolePrivilege = new RolePrivilege();
                 rolePrivilege.setRoleId(roleId);
                 for (Long privilegeId : environment().valueList(Long.class, "id",
@@ -255,7 +290,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                     environment().create(rolePrivilege);
                 }
             }
-        }        
+        }
     }
 
     @Override
@@ -302,6 +337,47 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             oldPrivilegeCategory.setDescription(description);
             environment().updateByIdVersion(oldPrivilegeCategory);
         }
+    }
+
+    private class TenantRolePrivileges {
+
+        private final FactoryMap<String, RolePrivileges> privilegesByRole;
+
+        private final Long tenantId;
+
+        public TenantRolePrivileges(Long _tenantId) {
+            this.tenantId = _tenantId;
+            this.privilegesByRole = new FactoryMap<String, RolePrivileges>(true)
+                {
+                    @Override
+                    protected boolean stale(String roleCode, RolePrivileges rolePrivileges) throws Exception {
+                        return rolePrivileges.getVersion() < environment().value(Long.class, "versionNo",
+                                new RoleQuery().code(roleCode).tenantId(tenantId));
+                    }
+
+                    @Override
+                    protected RolePrivileges create(String roleCode, Object... arg2) throws Exception {
+                        Set<String> privileges = environment().valueSet(String.class, "privilegeCode",
+                                new RolePrivilegeQuery().roleCode(roleCode).tenantId(tenantId));
+                        long version = environment().value(Long.class, "versionNo",
+                                new RoleQuery().code(roleCode).tenantId(tenantId));
+                        return new RolePrivileges(privileges, version);
+                    }
+                };
+        }
+
+        public RolePrivileges getRolePrivileges(String roleCode) throws UnifyException {
+            return privilegesByRole.get(roleCode);
+        }
+
+        public void invalidate(String... roleCodes) throws UnifyException {
+            for (String roleCode : roleCodes) {
+                if (privilegesByRole.isKey(roleCode)) {
+                    privilegesByRole.get(roleCode).invalidate();
+                }
+            }
+        }
+
     }
 
     private class RolePrivileges {

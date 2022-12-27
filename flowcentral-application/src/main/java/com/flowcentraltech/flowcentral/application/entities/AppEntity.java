@@ -55,6 +55,9 @@ public class AppEntity extends BaseApplicationEntity {
     @Column(name = "AUDITABLE_FG")
     private boolean auditable;
 
+    @Column(name = "MAPPED_FG")
+    private boolean mapped;
+
     @Column(name = "REPORTABLE_FG")
     private boolean reportable;
 
@@ -130,7 +133,7 @@ public class AppEntity extends BaseApplicationEntity {
         this.tableName = tableName;
     }
 
-    public boolean getAuditable() {
+    public boolean isAuditable() {
         return auditable;
     }
 
@@ -138,12 +141,20 @@ public class AppEntity extends BaseApplicationEntity {
         this.auditable = auditable;
     }
 
-    public boolean getReportable() {
+    public boolean isReportable() {
         return reportable;
     }
 
     public void setReportable(boolean reportable) {
         this.reportable = reportable;
+    }
+
+    public boolean isMapped() {
+        return mapped;
+    }
+
+    public void setMapped(boolean mapped) {
+        this.mapped = mapped;
     }
 
     public String getBaseTypeDesc() {

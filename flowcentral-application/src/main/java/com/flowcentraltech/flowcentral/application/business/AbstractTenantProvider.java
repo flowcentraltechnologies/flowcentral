@@ -15,21 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.flowcentraltech.flowcentral.system.entities.Tenant;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -38,178 +27,33 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractTenantProvider extends AbstractUnifyComponent implements TenantProvider {
-
-    @Configurable
-    private AppletUtilities au;
-
-    private Class<? extends Entity> tenantClass;
-
-    private final String tenantEntityName;
+public abstract class AbstractTenantProvider extends AbstractMappedEntityProvider<MappedTenantProviderContext> {
 
     private final ProviderInfo providerInfo;
 
-    private final Map<String, String> queryFieldMap;
-
-    protected AbstractTenantProvider(String tenantEntityName, ProviderInfo providerInfo) {
-        this.tenantEntityName = tenantEntityName;
+    @SuppressWarnings("serial")
+    protected AbstractTenantProvider(String destTenantEntityName, String srcTenantEntityName,
+            ProviderInfo providerInfo) {
+        super(MappedTenantProviderContext.class, destTenantEntityName, srcTenantEntityName,
+                new HashMap<String, String>()
+                    {
+                        {
+                            put("name", providerInfo.getNameField());
+                            put("primary", providerInfo.getPrimaryFlagField());
+                        }
+                    });
         this.providerInfo = providerInfo;
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("name", providerInfo.getNameField());
-        map.put("primary", providerInfo.getPrimaryFlagField());
-        this.queryFieldMap = Collections.unmodifiableMap(map);
-    }
-
-    public final void setAu(AppletUtilities au) {
-        this.au = au;
     }
 
     @Override
-    public Tenant find(Long id) throws UnifyException {
-        Entity record = environment().find(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant find(Long id, long versionNo) throws UnifyException {
-        Entity record = environment().find(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant find(Query<Tenant> query) throws UnifyException {
-        Entity record = environment().find(convertQuery(query));
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant findLean(Long id) throws UnifyException {
-        Entity record = environment().findLean(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant findLean(Long id, long versionNo) throws UnifyException {
-        Entity record = environment().findLean(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant findLean(Query<Tenant> query) throws UnifyException {
-        Entity record = environment().findLean(convertQuery(query));
-        return createTenant(record);
-    }
-
-    @Override
-    public List<Tenant> findAll(Query<Tenant> query) throws UnifyException {
-        List<? extends Entity> instList = environment().findAll(convertQuery(query));
-        return createTenantList(instList);
-    }
-
-    @Override
-    public Tenant list(Long id) throws UnifyException {
-        Entity record = environment().list(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant list(Long id, long versionNo) throws UnifyException {
-        Entity record = environment().list(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant list(Query<Tenant> query) throws UnifyException {
-        Entity record = environment().list(convertQuery(query));
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant listLean(Long id) throws UnifyException {
-        Entity record = environment().listLean(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant listLean(Long id, long versionNo) throws UnifyException {
-        Entity record = environment().listLean(tenantClass, id);
-        return createTenant(record);
-    }
-
-    @Override
-    public Tenant listLean(Query<Tenant> query) throws UnifyException {
-        Entity record = environment().listLean(convertQuery(query));
-        return createTenant(record);
-    }
-
-    @Override
-    public List<Tenant> listAll(Query<Tenant> query) throws UnifyException {
-        List<? extends Entity> instList = environment().listAll(convertQuery(query));
-        return createTenantList(instList);
-    }
-
-    @Override
-    public int countAll(Query<Tenant> query) throws UnifyException {
-        return environment().countAll(convertQuery(query));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected void onInitialize() throws UnifyException {
-        EntityClassDef entityClassDef = application().getEntityClassDef(tenantEntityName);
-        tenantClass = (Class<? extends Entity>) entityClassDef.getEntityClass();
-        if (Tenant.class.equals(tenantClass)) {
-            throw new IllegalArgumentException("Can not use tenant class for provider.");
-        }
-    }
-
-    @Override
-    protected void onTerminate() throws UnifyException {
-
-    }
-
-    protected AppletUtilities au() {
-        return au;
-    }
-
-    protected ApplicationModuleService application() {
-        return au.application();
-    }
-
-    protected EnvironmentService environment() {
-        return au.environment();
-    }
-
-    private Query<? extends Entity> convertQuery(Query<Tenant> query) throws UnifyException {
-        final Query<? extends Entity> _query = Query.of(tenantClass);
-        _query.ignoreEmptyCriteria(query.isIgnoreEmptyCriteria());
-        if (!query.isEmptyCriteria()) {
-            Restriction restriction = query.getRestrictions();
-            restriction.fieldSwap(queryFieldMap);
-            _query.addRestriction(restriction);
-       }
-
-        return _query;
-    }
-
-    private List<Tenant> createTenantList(List<? extends Entity> instList) throws UnifyException {
-        List<Tenant> tenantList = new ArrayList<Tenant>();
-        for (Entity inst : instList) {
-            Tenant tenant = createTenant(inst);
-            tenantList.add(tenant);
-        }
-
-        return tenantList;
-    }
-
-    private Tenant createTenant(Entity inst) throws UnifyException {
-        if (inst != null) {
-            final String name = DataUtils.getBeanProperty(String.class, inst, providerInfo.getNameField());
-            final boolean primary = DataUtils.getBeanProperty(boolean.class, inst, providerInfo.getPrimaryFlagField());
-            return new Tenant((Long) inst.getId(), name, primary);
-        }
-
-        return null;
+    protected void doMappedCopy(MappedTenantProviderContext context, Entity destInst, Entity srcInst)
+            throws UnifyException {
+        final Long id = DataUtils.getBeanProperty(Long.class, srcInst, "id");
+        final String name = DataUtils.getBeanProperty(String.class, srcInst, providerInfo.getNameField());
+        final boolean primary = DataUtils.getBeanProperty(boolean.class, srcInst, providerInfo.getPrimaryFlagField());
+        DataUtils.setBeanProperty(destInst, "id", id);
+        DataUtils.setBeanProperty(destInst, "name", name);
+        DataUtils.setBeanProperty(destInst, "primary", primary);
     }
 
     protected static class ProviderInfo {

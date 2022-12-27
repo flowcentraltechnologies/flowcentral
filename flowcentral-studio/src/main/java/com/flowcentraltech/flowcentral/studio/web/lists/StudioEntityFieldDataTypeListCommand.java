@@ -44,15 +44,15 @@ public class StudioEntityFieldDataTypeListCommand extends AbstractApplicationLis
     @Configurable
     private ListManager listManager;
 
-    private List<EntityFieldDataType> supportedTypeList = Collections
-            .unmodifiableList(Arrays.asList(EntityFieldDataType.REF, EntityFieldDataType.REF_UNLINKABLE, EntityFieldDataType.REF_FILEUPLOAD,
-                    EntityFieldDataType.ENUM_REF, EntityFieldDataType.ENUM, EntityFieldDataType.LIST_ONLY,
-                    EntityFieldDataType.CHILD, EntityFieldDataType.CHILD_LIST,
-                    EntityFieldDataType.STRING, EntityFieldDataType.CHAR, EntityFieldDataType.BOOLEAN,
-                    EntityFieldDataType.LONG, EntityFieldDataType.INTEGER, EntityFieldDataType.SHORT,
-                    EntityFieldDataType.DECIMAL, EntityFieldDataType.DOUBLE, EntityFieldDataType.FLOAT,
-                    EntityFieldDataType.DATE, EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC,
-                    EntityFieldDataType.CLOB, EntityFieldDataType.BLOB,EntityFieldDataType.TENANT_ID));
+    private List<EntityFieldDataType> supportedTypeList = Collections.unmodifiableList(Arrays.asList(
+            EntityFieldDataType.REF, EntityFieldDataType.REF_UNLINKABLE, EntityFieldDataType.REF_FILEUPLOAD,
+            EntityFieldDataType.ENUM_REF, EntityFieldDataType.ENUM, EntityFieldDataType.LIST_ONLY,
+            EntityFieldDataType.CHILD, EntityFieldDataType.CHILD_LIST, EntityFieldDataType.STRING,
+            EntityFieldDataType.CHAR, EntityFieldDataType.BOOLEAN, EntityFieldDataType.LONG,
+            EntityFieldDataType.INTEGER, EntityFieldDataType.SHORT, EntityFieldDataType.DECIMAL,
+            EntityFieldDataType.DOUBLE, EntityFieldDataType.FLOAT, EntityFieldDataType.DATE,
+            EntityFieldDataType.TIMESTAMP, EntityFieldDataType.TIMESTAMP_UTC, EntityFieldDataType.CLOB,
+            EntityFieldDataType.BLOB, EntityFieldDataType.MAPPED, EntityFieldDataType.TENANT_ID));
 
     private LocaleFactoryMap<List<Listable>> listFactory;
 

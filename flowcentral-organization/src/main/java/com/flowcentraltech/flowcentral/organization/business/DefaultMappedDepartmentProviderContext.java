@@ -13,24 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.system.entities;
+package com.flowcentraltech.flowcentral.organization.business;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+import com.flowcentraltech.flowcentral.application.business.BaseMappedEntityProviderContext;
 
 /**
- * Tenant query.
+ * Default mapped department provider context.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class TenantQuery extends BaseEntityQuery<Tenant> {
-
-    public TenantQuery() {
-        super(Tenant.class);
-    }
-
-    public TenantQuery name(String name) {
-        return (TenantQuery) addEquals("name", name);
-    }
+public class DefaultMappedDepartmentProviderContext extends BaseMappedEntityProviderContext {
 
 }

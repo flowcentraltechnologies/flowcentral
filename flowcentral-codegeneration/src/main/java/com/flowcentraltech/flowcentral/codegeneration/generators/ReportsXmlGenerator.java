@@ -96,6 +96,7 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                 reportConfig.setLandscape(reportConfiguration.isLandscape());
                 reportConfig.setShadeOddRows(reportConfiguration.isShadeOddRows());
                 reportConfig.setUnderlineRows(reportConfiguration.isUnderlineRows());
+                reportConfig.setAllowSecondaryTenants(reportConfiguration.isAllowSecondaryTenants());
                 FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(au(), reportConfiguration.getFilter());
                 reportConfig.setFilter(filterConfig);
 

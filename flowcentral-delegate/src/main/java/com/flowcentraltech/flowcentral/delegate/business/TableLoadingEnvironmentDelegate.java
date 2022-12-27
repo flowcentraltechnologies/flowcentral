@@ -256,7 +256,7 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
-    public int countAll(Query<? extends Entity> query) throws UnifyException {
+    public <T extends Entity>  int countAll(Query<T> query) throws UnifyException {
         // TODO
         return 0;
     }

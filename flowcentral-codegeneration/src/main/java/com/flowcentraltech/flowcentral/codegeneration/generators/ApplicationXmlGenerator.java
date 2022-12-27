@@ -166,6 +166,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
         appConfig.setDisplayIndex(application.getDisplayIndex());
         appConfig.setDevelopable(application.isDevelopable());
         appConfig.setMenuAccess(application.isMenuAccess());
+        appConfig.setAllowSecondaryTenants(application.isAllowSecondaryTenants());
 
         // Module application configuration
         ModuleAppConfig moduleAppConfig = new ModuleAppConfig();
@@ -341,8 +342,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appEntityConfig.setEmailProducerConsumer(appEntity.getEmailProducerConsumer());
                 appEntityConfig.setDelegate(appEntity.getDelegate());
                 appEntityConfig.setTable(appEntity.getTableName());
-                appEntityConfig.setAuditable(appEntity.getAuditable());
-                appEntityConfig.setReportable(appEntity.getReportable());
+                appEntityConfig.setMapped(appEntity.isMapped());
+                appEntityConfig.setAuditable(appEntity.isAuditable());
+                appEntityConfig.setReportable(appEntity.isReportable());
 
                 // Fields
                 if (!DataUtils.isBlank(appEntity.getFieldList())) {
@@ -375,6 +377,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                             entityFieldConfig.setLingualListKey(appEntityField.getLingualListKey());
                             entityFieldConfig.setAutoFormat(appEntityField.getAutoFormat());
                             entityFieldConfig.setDefaultVal(appEntityField.getDefaultVal());
+                            entityFieldConfig.setMapped(appEntityField.getMapped());
                             entityFieldConfig.setTextCase(appEntityField.getTextCase());
                             entityFieldConfig.setColumns(appEntityField.getColumns());
                             entityFieldConfig.setRows(appEntityField.getRows());
@@ -743,6 +746,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         formTabConfig.setVisible(appFormElement.isVisible());
                         formTabConfig.setEditable(appFormElement.isEditable());
                         formTabConfig.setDisabled(appFormElement.isDisabled());
+                        formTabConfig.setMappedForm(appFormElement.getTabMappedForm());
+                        formTabConfig.setMappedFieldName(appFormElement.getMappedFieldName());
 
                         final boolean isChangeLog = TabContentType.MINIFORM_CHANGELOG
                                 .equals(appFormElement.getTabContentType());

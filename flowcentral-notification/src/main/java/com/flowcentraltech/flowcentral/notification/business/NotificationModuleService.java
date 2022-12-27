@@ -70,6 +70,7 @@ public interface NotificationModuleService extends FlowCentralService {
     /**
      * Constructs a notification channel message.
      * 
+     * @param tenantId the tenant ID
      * @param notifTemplateName
      *                          the long name of the template to use
      * @param dictionary
@@ -80,12 +81,13 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if template if unknown. If an error occurs
      */
-    NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName, Dictionary dictionary,
+    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, Dictionary dictionary,
             Recipient... recipients) throws UnifyException;
 
     /**
      * Constructs a notification channel message.
      * 
+     * @param tenantId the tenant ID
      * @param notifTemplateName
      *                          the long name of the template to use
      * @param dictionary
@@ -96,12 +98,13 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if template if unknown. If an error occurs
      */
-    NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName, Dictionary dictionary,
+    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, Dictionary dictionary,
             List<Recipient> recipients) throws UnifyException;
 
     /**
      * Constructs a notification channel message.
      * 
+     * @param tenantId the tenant ID
      * @param notifTemplateName
      *                          the long name of the template to use
      * @param valueStore
@@ -112,12 +115,13 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if template if unknown. If an error occurs
      */
-    NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName, ValueStore valueStore,
+    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, ValueStore valueStore,
             Recipient... recipients) throws UnifyException;
 
     /**
      * Constructs a notification channel message.
      * 
+     * @param tenantId the tenant ID
      * @param notifTemplateName
      *                          the long name of the template to use
      * @param valueStore
@@ -128,7 +132,7 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if template if unknown. If an error occurs
      */
-    NotificationChannelMessage constructNotificationChannelMessage(String notifTemplateName, ValueStore valueStore,
+    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, ValueStore valueStore,
             List<Recipient> recipients) throws UnifyException;
 
     /**

@@ -564,12 +564,11 @@
 		</entity>
 		<entity name="tenant" description="$m{system.tenant}"
 			label="$m{system.tenant.label}"
-			type="com.flowcentraltech.flowcentral.system.entities.Tenant"
-			delegate="tenant-environmentdelegate"
-			table = "FC_TENANT"
-			auditable="true" reportable="true">
+			type="com.flowcentraltech.flowcentral.system.entities.MappedTenant"
+			delegate="mappedentity-environmentdelegate" table="FC_MAPPEDTENANT"
+			mapped="true" auditable="true" reportable="true">
 			<field name="name" label="$m{system.tenant.name}" type="string"
-				inputWidget="application.text" maxLen="64"/>
+				inputWidget="application.text" maxLen="64" />
 			<field name="primary" label="$m{system.tenant.primary}"
 				type="boolean" inputWidget="application.booleanlist" />
 			<uniqueConstraint name="nameUc"
@@ -637,8 +636,6 @@
 			description="$m{system.systemparameter.table}"
 			label="$m{system.systemparameter.table.label}" entity="sysParam"
 			itemsPerPage="20" serialNo="true" sortHistory="2" basicSearch="true">
-			<column field="moduleLabel" renderWidget="application.text"
-				label="$m{system.systemparameter.module}" widthRatio="1" />
 			<column field="code" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -647,6 +644,8 @@
 				label="$m{system.systemparameter.type}" widthRatio="1" />
 			<column field="value" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="moduleLabel" renderWidget="application.text"
+				label="$m{system.systemparameter.module}" widthRatio="1" />
 			<column field="updatedBy" renderWidget="application.name"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"

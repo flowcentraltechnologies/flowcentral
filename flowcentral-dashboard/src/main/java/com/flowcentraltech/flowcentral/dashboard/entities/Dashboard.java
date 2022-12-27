@@ -41,6 +41,9 @@ public class Dashboard extends BaseApplicationEntity {
     @Column
     private int sections;
 
+    @Column
+    private boolean allowSecondaryTenants;
+
     @ListOnly(key = "status", property = "description")
     private String statusDesc;
     
@@ -57,6 +60,14 @@ public class Dashboard extends BaseApplicationEntity {
 
     public void setSections(int sections) {
         this.sections = sections;
+    }
+
+    public boolean isAllowSecondaryTenants() {
+        return allowSecondaryTenants;
+    }
+
+    public void setAllowSecondaryTenants(boolean allowSecondaryTenants) {
+        this.allowSecondaryTenants = allowSecondaryTenants;
     }
 
     public RecordStatus getStatus() {

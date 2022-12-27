@@ -108,6 +108,8 @@
 			auditable="true" reportable="true">
 			<field name="sections" label="$m{dashboard.dashboard.sections}"
 				type="integer" inputWidget="application.integer" />
+			<field name="allowSecondaryTenants"
+				label="$m{dashboard.dashboard.allowsecondarytenants}" type="boolean" />
 			<field name="status" label="$m{dashboard.dashboard.status}"
 				type="enum_ref" references="statuslist"
 				inputWidget="application.enumlist" />

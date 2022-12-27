@@ -67,6 +67,8 @@ public class EntityFieldConfig {
 
     private String defaultVal;
 
+    private String mapped;
+
     private Integer columns;
 
     private Integer rows;
@@ -237,6 +239,15 @@ public class EntityFieldConfig {
     @XmlAttribute
     public void setAutoFormat(String autoFormat) {
         this.autoFormat = autoFormat;
+    }
+
+    public String getMapped() {
+        return mapped;
+    }
+
+    @XmlAttribute
+    public void setMapped(String mapped) {
+        this.mapped = mapped;
     }
 
     public String getDefaultVal() {

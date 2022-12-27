@@ -24,8 +24,8 @@ import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 /**
  * Represents freeze and unfreeze pseudo entity.
  * 
- * @author Lateef
- *
+ * @author FlowCentral Technologies Limited
+ * @since 1.0
  */
 public class FreezeUnfreeze extends BaseEntity {
 
