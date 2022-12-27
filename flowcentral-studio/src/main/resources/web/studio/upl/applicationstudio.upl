@@ -25,7 +25,7 @@
 	components:$c{topBannerImg navigationBand topBannerControl userImg topBannerSwitch}
 !ui-image:topBannerImg src:$s{web/images/applicationstudiobanner.png} styleClass:$e{fc-topbannerimg}
 !ui-panel:topBannerControl layout:$d{!ui-vertical style:$s{width:100%;}} styleClass:$e{fc-topbannercontrol}
-    components:$c{upperInfoBand lowerInfoBand}
+    components:$c{businessUnitLabel upperInfoBand lowerInfoBand}
     
 !ui-panel:lowerInfoBand styleClass:$e{fc-userinfoband} components:$c{roleLabel clock}
 !ui-textclock:clock
@@ -36,6 +36,8 @@
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.ROLEDESCRIPTION}
 !ui-labeledtext:branchLabel caption:$m{application.login.branch}
     binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BRANCHDESC}
+!ui-labeledtext:businessUnitLabel style:$s{float:left;} caption:$m{security.application.businessunit}
+    binding:$j{com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants.BUSINESSUNITDESC}
 
 !ui-image:userImg  src:$t{/images/user_large.png} styleClass:$e{fc-topuserimg}
     binding:userPhotoGenerator

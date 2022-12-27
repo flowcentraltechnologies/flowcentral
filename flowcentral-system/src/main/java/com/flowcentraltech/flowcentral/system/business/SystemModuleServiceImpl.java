@@ -101,6 +101,7 @@ import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskExecLimit;
@@ -386,14 +387,24 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<Long> getPrimaryMappedTenantIds() throws UnifyException {
-        List<Long> tenantIds = environment().valueList(Long.class, "id", new MappedTenantQuery().ignoreEmptyCriteria(true));
+        List<Long> tenantIds = environment().valueList(Long.class, "id",
+                new MappedTenantQuery().ignoreEmptyCriteria(true));
         Long actualPrimaryTenantId = getSysParameterValue(Long.class,
                 SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
         if (actualPrimaryTenantId != null) {
-            tenantIds.replaceAll(id -> id == actualPrimaryTenantId ? actualPrimaryTenantId : id);
+            tenantIds.replaceAll(id -> id == actualPrimaryTenantId ? Entity.PRIMARY_TENANT_ID : id);
         }
 
         return tenantIds;
+    }
+
+    @Override
+    public MappedTenant findPrimaryMappedTenant(Long tenantId) throws UnifyException {
+        if (Entity.PRIMARY_TENANT_ID.equals(tenantId)) {
+            tenantId = getSysParameterValue(Long.class, SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
+        }
+
+        return tenantId != null ? environment().list(new MappedTenantQuery().id(tenantId)) : null;
     }
 
     @Override

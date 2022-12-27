@@ -202,6 +202,8 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
         pageBean.setIndicateHighLatency(indicateHighLatency);
         pageBean.setContentStyleClass(contentStyleClass);
+
+        setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
     }
 
     @Override

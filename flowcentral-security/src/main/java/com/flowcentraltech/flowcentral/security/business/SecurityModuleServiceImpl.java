@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.tcdng.unify.core.SessionContext;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -205,6 +206,12 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             environment().create(userLoginEvent);
         }
 
+        MappedTenant mappedTenant = systemModuleService.findPrimaryMappedTenant(loginTenantId);
+        String businessUnitDesc = mappedTenant != null ? mappedTenant.getDescription() : null;
+        if (StringUtils.isBlank(businessUnitDesc)) {
+            businessUnitDesc = getApplicationMessage("application.no.businessunit");
+        }
+        
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
         final MappedBranch userBranch = user.getBranchId() != null
@@ -236,6 +243,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.MESSAGEBOX, null);
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, null);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
+        setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SUPERVISORFLAG, user.getSupervisor());
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.SHORTCUTDECK, null);

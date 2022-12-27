@@ -54,7 +54,7 @@
 	styleClass:$e{fc-logintxt} binding:password
     eventHandler:$d{!ui-event event:onenter action:$c{loginAct}}
 !ui-select:frmLoginTenantId list:logintenantlist styleClass:$e{fc-logintxt} binding:loginTenantId
-	caption:$m{security.application.tenancy}
+	caption:$m{security.application.businessunit}
 !ui-label:frmLoginMsg styleClass:$e{ui-loginmsg} binding:loginMessage
 !ui-button:frmLoginBtn caption:$m{security.application.signin} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{loginAct}}
