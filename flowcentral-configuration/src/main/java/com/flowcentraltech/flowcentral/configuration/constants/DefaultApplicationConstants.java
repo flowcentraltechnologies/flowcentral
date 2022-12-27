@@ -36,4 +36,6 @@ public interface DefaultApplicationConstants {
     String SYSTEM_FULLNAME = "System";
 
     Long SYSTEM_ENTITY_ID = -99L;
+
+    Long DEVOPS_DEPARTMENT_ID = -99L;
 }
