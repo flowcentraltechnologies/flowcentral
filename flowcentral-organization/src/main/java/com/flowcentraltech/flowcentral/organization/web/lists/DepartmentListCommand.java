@@ -30,7 +30,7 @@ import com.tcdng.unify.core.list.ZeroParams;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("departmentist")
+@Component("departmentlist")
 public class DepartmentListCommand extends AbstractOrganizationListCommand<ZeroParams> {
 
     public DepartmentListCommand() {

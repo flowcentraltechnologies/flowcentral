@@ -639,8 +639,8 @@
 			entity="mappedDepartment">
 			<tab name="basicDetails"
 				label="$m{organization.mappeddepartment.form.basicdetails}"
-				contentType="miniform">
-				<section name="departmentDetails" columns="type_2">
+				contentType="miniform" disabled="true">
+				<section name="departmentDetails" columns="type_2" disabled="true">
 					<field name="code" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"

@@ -300,10 +300,6 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return mapped;
     }
 
-    public boolean isMatchMapping(String mapped) {
-        return this.mapped != null && this.mapped.equals(mapped);
-    }
-
     public boolean isWithMapping() {
         return !StringUtils.isBlank(mapped);
     }

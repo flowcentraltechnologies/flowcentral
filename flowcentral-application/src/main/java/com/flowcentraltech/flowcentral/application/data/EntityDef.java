@@ -464,12 +464,8 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     public EntityFieldDef getMappedFieldDefByEntity(AppletUtilities au, String entity) throws UnifyException {
-        System.out.println("@time: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("@time: getLongName() = " + getLongName());
-        System.out.println("@time: entity = " + entity);
         for (EntityFieldDef entityFieldDef : getMappedFieldDefList()) {
-            System.out.println("@time: entityFieldDef = " + entityFieldDef);
-            if (entityFieldDef.isMatchMapping(entity)) {
+            if (entity.equals(au.getProviderSrcEntity(entityFieldDef.getMapping()))) {
                 return entityFieldDef;
             }
         }

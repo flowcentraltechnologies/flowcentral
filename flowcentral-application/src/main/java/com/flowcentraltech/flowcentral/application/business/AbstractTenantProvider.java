@@ -48,8 +48,10 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
     @Override
     protected void doMappedCopy(MappedTenantProviderContext context, Entity destInst, Entity srcInst)
             throws UnifyException {
+        final Long id = DataUtils.getBeanProperty(Long.class, srcInst, "id");
         final String name = DataUtils.getBeanProperty(String.class, srcInst, providerInfo.getNameField());
         final boolean primary = DataUtils.getBeanProperty(boolean.class, srcInst, providerInfo.getPrimaryFlagField());
+        DataUtils.setBeanProperty(destInst, "id", id);
         DataUtils.setBeanProperty(destInst, "name", name);
         DataUtils.setBeanProperty(destInst, "primary", primary);
     }
