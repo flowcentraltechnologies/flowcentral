@@ -27,6 +27,8 @@ import com.tcdng.unify.core.database.Entity;
  */
 public interface WorkEntity extends Entity {
 
+    Long getTenantId();
+    
     ProcessingStatus getProcessingStatus();
     
     void setProcessingStatus(ProcessingStatus processingStatus);

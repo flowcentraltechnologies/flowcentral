@@ -30,6 +30,7 @@ public abstract class BaseWorkTenantEntity extends BaseWorkEntity {
     @Column
     private Long tenantId;
 
+    @Override
     public final Long getTenantId() {
         return tenantId;
     }
