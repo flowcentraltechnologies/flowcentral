@@ -636,8 +636,6 @@
 			description="$m{system.systemparameter.table}"
 			label="$m{system.systemparameter.table.label}" entity="sysParam"
 			itemsPerPage="20" serialNo="true" sortHistory="2" basicSearch="true">
-			<column field="moduleLabel" renderWidget="application.text"
-				label="$m{system.systemparameter.module}" widthRatio="1" />
 			<column field="code" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
@@ -646,6 +644,8 @@
 				label="$m{system.systemparameter.type}" widthRatio="1" />
 			<column field="value" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="moduleLabel" renderWidget="application.text"
+				label="$m{system.systemparameter.module}" widthRatio="1" />
 			<column field="updatedBy" renderWidget="application.name"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"

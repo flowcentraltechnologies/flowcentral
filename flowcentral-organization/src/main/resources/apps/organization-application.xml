@@ -157,7 +157,7 @@
 			auditable="true" reportable="true">
 			<field name="zoneId" label="$m{organization.branch.zoneid}"
 				type="ref" inputLabel="$m{organization.branch.zone}"
-				inputWidget="application.entitysearch" references="zoneRef"
+				inputWidget="application.entitylist" references="zoneRef"
 				basicSearch="true" />
 			<field name="code" label="$m{organization.branch.code}"
 				type="string" inputWidget="application.name" maxLen="16"
@@ -469,7 +469,9 @@
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="sortCode" renderWidget="application.text"
-				widthRatio="1" />
+				widthRatio="1" />zoneDesc
+			<column field="zoneDesc" renderWidget="application.text"
+				label="$m{organization.branch.zone}" widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
 				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
