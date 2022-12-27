@@ -15,9 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.organization.web.lists;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
+import com.flowcentraltech.flowcentral.organization.entities.Department;
+import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedDepartmentQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -39,8 +43,18 @@ public class DepartmentListCommand extends AbstractOrganizationListCommand<ZeroP
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return getOrganizationModuleService().findMappedDepartments((MappedDepartmentQuery) new MappedDepartmentQuery()
-                .addSelect("id", "description").addOrder("description").ignoreEmptyCriteria(true));
+        List<Listable> listables = new ArrayList<Listable>();
+        listables.addAll(
+                getOrganizationModuleService().findMappedDepartments((MappedDepartmentQuery) new MappedDepartmentQuery()
+                        .addNotEquals("id", DefaultApplicationConstants.DEVOPS_DEPARTMENT_ID)
+                        .addSelect("id", "description").addOrder("description").ignoreEmptyCriteria(true)));
+        Department devOpDepartment = getOrganizationModuleService().findDepartment(
+                (DepartmentQuery) new DepartmentQuery().id(DefaultApplicationConstants.DEVOPS_DEPARTMENT_ID));
+        if (devOpDepartment != null) {
+            listables.add(devOpDepartment);
+        }
+
+        return listables;
     }
 
 }

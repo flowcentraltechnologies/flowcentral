@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
+import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.organization.constants.OrganizationModuleNameConstants;
@@ -123,6 +124,11 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public Department findDepartment(DepartmentQuery query) throws UnifyException {
+        return environment().find(query);
     }
 
     @Override
@@ -244,6 +250,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             Department department = environment().find(new DepartmentQuery().code(DEVOPS_DEPARTMENT_CODE));
             if (department == null) {
                 department = new Department();
+                department.setId(DefaultApplicationConstants.DEVOPS_DEPARTMENT_ID);
                 department.setCode(DEVOPS_DEPARTMENT_CODE);
                 department.setDescription(resolveApplicationMessage("$m{organization.default.department.devops.desc}"));
                 environment().create(department);

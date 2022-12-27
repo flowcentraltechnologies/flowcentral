@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.organization.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.organization.entities.Department;
+import com.flowcentraltech.flowcentral.organization.entities.DepartmentQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranchQuery;
 import com.flowcentraltech.flowcentral.organization.entities.MappedDepartment;
@@ -132,7 +134,7 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     FactoryMap<Long, String> getMappedDepartmentCodeFactoryMap() throws UnifyException;
-    
+
     /**
      * Gets mapped department code.
      * 
@@ -148,13 +150,13 @@ public interface OrganizationModuleService extends FlowCentralService {
      * Gets mapped branch code.
      * 
      * @param branchId
-     *                     the branch ID
+     *                 the branch ID
      * @return the branch code
      * @throws UnifyException
      *                        if an error occurs
      */
     String getMappedBranchCode(Long branchId) throws UnifyException;
-    
+
     /**
      * Finds mapped departments using supplied query.
      * 
@@ -176,4 +178,16 @@ public interface OrganizationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<MappedBranch> findMappedBranches(MappedBranchQuery query) throws UnifyException;
+
+    /**
+     * Finds department by criteria.
+     * 
+     * @param query
+     *              the department query
+     * @return the department
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Department findDepartment(DepartmentQuery query) throws UnifyException;
+
 }

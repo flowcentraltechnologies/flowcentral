@@ -1868,9 +1868,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         String updatePolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-        EntityActionContext eCtx = new EntityActionContext(formContext.getFormDef().getEntityDef(), inst,
+        final EntityDef entityDef = formContext.getFormDef().getEntityDef();
+        EntityActionContext eCtx = new EntityActionContext(entityDef, inst,
                 RecordActionType.UPDATE, scp, updatePolicy);
         eCtx.setAll(formContext);
+
+        // Ensure values for auto-format fields
+        ensureAutoFormatFields(entityDef, inst);
 
         applyDelayedSetValues(formContext);
 
@@ -1966,6 +1970,23 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             if (formStatePolicyDef.isSetValues()) {
                 formStatePolicyDef.getSetValuesDef().apply(this, formDef.getEntityDef(), getNow(), formValueStore,
                         variables, null);
+            }
+        }
+    }
+    
+    private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
+        SequenceCodeGenerator gen = sequenceCodeGenerator();
+        if (_entityDef.isWithAutoFormatFields()) {
+            ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
+            for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
+                if (entityFieldDef.isStringAutoFormat()) {
+                    final String val = DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName());
+                    String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
+                    if (val == null || skeleton.equals(val)) {
+                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen.getNextSequenceCode(
+                                _entityDef.getLongName(), entityFieldDef.getAutoFormat(), valueStoreReader));
+                    }
+                }
             }
         }
     }
