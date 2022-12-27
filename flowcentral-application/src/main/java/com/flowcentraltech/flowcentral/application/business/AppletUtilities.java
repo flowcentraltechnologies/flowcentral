@@ -1594,13 +1594,15 @@ public interface AppletUtilities extends UnifyComponent {
      */
     void onMiniformSwitchOnChange(MiniForm form) throws UnifyException;
 
-    boolean isProviderPresent(Query<? extends Entity> query);
+    boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException;
 
-    boolean isProviderPresent(Class<? extends Entity> entityClass);;
+    boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException;
 
-    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(Query<? extends Entity> query);
+    <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(Query<? extends Entity> query)
+            throws UnifyException;
 
-    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(Class<? extends Entity> entityClass);
+    MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(Class<? extends Entity> entityClass)
+            throws UnifyException;
 
     String getProviderSrcEntity(String destEntity);
 }

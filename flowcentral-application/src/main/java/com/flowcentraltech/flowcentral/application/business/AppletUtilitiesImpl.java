@@ -279,25 +279,25 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public boolean isProviderPresent(Query<? extends Entity> query) {
+    public boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException  {
         return mappedEntityProviderInfo.isProviderPresent(query.getEntityClass());
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(
-            Query<? extends Entity> query) {
+            Query<? extends Entity> query) throws UnifyException  {
         return (MappedEntityProvider<T>) mappedEntityProviderInfo.getProvider(query.getEntityClass());
     }
 
     @Override
-    public boolean isProviderPresent(Class<? extends Entity> entityClass) {
+    public boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException  {
         return mappedEntityProviderInfo.isProviderPresent(entityClass);
     }
 
     @Override
     public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
-            Class<? extends Entity> entityClass) {
+            Class<? extends Entity> entityClass) throws UnifyException  {
         return mappedEntityProviderInfo.getProvider(entityClass);
     }
 
@@ -2035,34 +2035,48 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         private Map<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providersByType;
 
-        @SuppressWarnings("unchecked")
         public MappedEntityProviderInfo(
                 Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers)
                 throws UnifyException {
             this.providersByName = providers;
-            this.providersByType = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
-            for (String destEntity : providers.keySet()) {
-                EntityClassDef entityClassDef = getEntityClassDef(destEntity);
-                providersByType.put((Class<? extends Entity>) entityClassDef.getEntityClass(),
-                        providers.get(destEntity));
-            }
         }
 
         public boolean isProviderPresent(String destEntity) {
             return providersByName.containsKey(destEntity);
         }
 
-        public boolean isProviderPresent(Class<? extends Entity> destEntityClass) {
-            return providersByType.containsKey(destEntityClass);
-        }
-
         public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(String destEntity) {
             return providersByName.get(destEntity);
         }
 
+        public boolean isProviderPresent(Class<? extends Entity> destEntityClass) throws UnifyException {
+            return getProvidersbyType().containsKey(destEntityClass);
+        }
+
         public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
-                Class<? extends Entity> destEntityClass) {
-            return providersByType.get(destEntityClass);
+                Class<? extends Entity> destEntityClass) throws UnifyException {
+            return getProvidersbyType().get(destEntityClass);
+        }
+
+        @SuppressWarnings("unchecked")
+        private Map<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> getProvidersbyType()
+                throws UnifyException {
+            if (providersByType == null) {
+                synchronized (this) {
+                    if (providersByType == null) {
+                        providersByType = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
+                        for (String destEntity : providersByName.keySet()) {
+                            EntityClassDef entityClassDef = getEntityClassDef(destEntity);
+                            providersByType.put((Class<? extends Entity>) entityClassDef.getEntityClass(),
+                                    providersByName.get(destEntity));
+                        }
+
+                        providersByType = Collections.unmodifiableMap(providersByType);
+                    }
+                }
+            }
+
+            return providersByType;
         }
     }
 

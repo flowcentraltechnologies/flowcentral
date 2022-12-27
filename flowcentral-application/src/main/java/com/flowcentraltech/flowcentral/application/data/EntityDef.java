@@ -483,8 +483,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 if (mappedFieldDefList == null) {
                     List<EntityFieldDef> list = new ArrayList<EntityFieldDef>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
-                        System.out.println("@search: entityFieldDef = " + entityFieldDef);
-                        if (entityFieldDef.isWithMapping()) {
+                         if (entityFieldDef.isWithMapping()) {
                             list.add(entityFieldDef);
                         }
                     }
