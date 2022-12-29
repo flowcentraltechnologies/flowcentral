@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -60,16 +59,7 @@ public class ListingGeneratorWriter {
     private List<ItemColorRule> itemColorRules;
     
     private Set<ListingColorType> pauseRowPrintColors;
-    
-    public ListingGeneratorWriter(String listingType, ResponseWriter writer) {
-        this.listingType = listingType;
-        this.writer = writer;
-        this.highlighting = true;
-        this.pauseRowPrinting = false;
-        this.pauseRowPrintColors = Collections.emptySet();
-        this.itemColorRules = new ArrayList<ItemColorRule>();
-    }
-
+ 
     public ListingGeneratorWriter(String listingType, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) {
         this.listingType = listingType;
