@@ -67,7 +67,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     private final LocaleFactoryMap<Formatter<?>> wholeAmountFormatterMap;
 
     private static String defaultListingReportStyle;
-    
+
     public AbstractFormListingGenerator() {
         this.dateFormatterMap = new LocaleFactoryMap<Formatter<?>>()
             {
@@ -120,7 +120,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             generateReportHeader(formBeanValueStore, listingReportProperties,
                     new ListingGeneratorWriter(listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateListing(formBeanValueStore, listingReportProperties, writer, pausePrintColors, false);
+            generateListing(listingReportProperties.getName(), formBeanValueStore, listingReportProperties, writer,
+                    pausePrintColors, false);
             generateReportAddendum(formBeanValueStore, listingReportProperties,
                     new ListingGeneratorWriter(listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
@@ -142,7 +143,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     @Override
     public final void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        generateListing(formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
+        generateListing("", formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
     }
 
     protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;
@@ -228,13 +229,13 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return ConfigurationUtils.readString(resourceName, getUnifyComponentContext().getWorkingPath());
     }
 
-    private void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
-            ResponseWriter writer, Set<ListingColorType> pausePrintColors, boolean highlighting)
-            throws UnifyException {
+    private void generateListing(final String listingType, ValueStore formBeanValueStore,
+            ListingProperties listingProperties, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
+            boolean highlighting) throws UnifyException {
         doGenerate(formBeanValueStore, listingProperties,
-                new ListingGeneratorWriter("", writer, pausePrintColors, highlighting));
+                new ListingGeneratorWriter(listingType, writer, pausePrintColors, highlighting));
     }
-    
+
     private String getDefaultListingStyle() throws UnifyException {
         if (defaultListingReportStyle == null) {
             synchronized (AbstractFormListingGenerator.class) {
@@ -246,7 +247,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
         return defaultListingReportStyle;
     }
-    
+
     protected abstract void doGenerate(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException;
 }
