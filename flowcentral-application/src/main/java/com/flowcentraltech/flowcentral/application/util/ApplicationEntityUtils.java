@@ -468,7 +468,7 @@ public final class ApplicationEntityUtils {
         if (type.isTenantType()) {
             list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TENANT_ID, "tenantId",
                     msgResolver.resolveApplicationMessage("$m{baseentity.field.label.tenantid}"), null, null, null,
-                    null, null, null, null, null, configType));
+                    null, null, "application.integer", null, null, configType));
         }
     }
 

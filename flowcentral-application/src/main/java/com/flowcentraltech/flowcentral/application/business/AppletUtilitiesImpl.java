@@ -279,7 +279,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException {
+    public Long getMappedDestTenantId(Long srcTenantId) throws UnifyException {
+        return systemModuleService.getMappedDestTenantId(srcTenantId);
+    }
+
+    @Override
+    public boolean isMappingProviderPresent(Query<? extends Entity> query) throws UnifyException {
         return mappedEntityProviderInfo.isProviderPresent(query.getEntityClass());
     }
 
@@ -291,7 +296,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException {
+    public boolean isMappingProviderPresent(Class<? extends Entity> entityClass) throws UnifyException {
         return mappedEntityProviderInfo.isProviderPresent(entityClass);
     }
 

@@ -1596,15 +1596,71 @@ public interface AppletUtilities extends UnifyComponent {
      */
     void onMiniformSwitchOnChange(MiniForm form) throws UnifyException;
 
-    boolean isProviderPresent(Query<? extends Entity> query) throws UnifyException;
+    /**
+     * Get mapped tenant ID.
+     * 
+     * @param srcTenantId
+     *                 the source tenant ID
+     * @return the mapped tenant ID if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Long getMappedDestTenantId(Long srcTenantId) throws UnifyException;
 
-    boolean isProviderPresent(Class<? extends Entity> entityClass) throws UnifyException;
+    /**
+     * Check if mapping provider is available for query entity type
+     * 
+     * @param query
+     *              the query
+     * @return true if present otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isMappingProviderPresent(Query<? extends Entity> query) throws UnifyException;
 
+    /**
+     * Check if mapping provider is available for entity type.
+     * 
+     * @param entityClass
+     *                    the entity type
+     * @return true if present otherwise false
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isMappingProviderPresent(Class<? extends Entity> entityClass) throws UnifyException;
+
+    /**
+     * Gets mapping provider for query entity type.
+     * 
+     * @param query
+     *              the query
+     * @return the mapping provider
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     <T extends BaseMappedEntityProviderContext> MappedEntityProvider<T> getProvider(Query<? extends Entity> query)
             throws UnifyException;
 
+    /**
+     * Gets mapping provider for entity type.
+     * 
+     * @param entityClass
+     *                    the entity type
+     * @return the mapping provider
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(Class<? extends Entity> entityClass)
             throws UnifyException;
 
+    /**
+     * Gets mapping provider source entity.
+     * 
+     * @param entityClass
+     *                    the entity type
+     * @return the source entity long name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     String getProviderSrcEntity(String destEntity);
 }
