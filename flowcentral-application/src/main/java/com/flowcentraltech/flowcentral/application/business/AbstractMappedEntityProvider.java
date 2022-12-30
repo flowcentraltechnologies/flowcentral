@@ -27,6 +27,9 @@ import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueListStore;
+import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
@@ -214,7 +217,8 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
         return au.environment();
     }
 
-    protected abstract void doMappedCopy(U context, Entity destInst, Entity srcInst) throws UnifyException;
+    protected abstract void doMappedCopy(U context, ValueStore destValueStore, ValueStore srcValueStore)
+            throws UnifyException;
 
     @SuppressWarnings("unchecked")
     private Class<? extends Entity> getSrcEntityClass() throws UnifyException {
@@ -242,9 +246,12 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
             U context = ReflectUtils.newInstance(contextClass);
             context.setMultiple(true);
             List<Entity> resultList = new ArrayList<>();
-            for (Entity srcInst : srcInstList) {
+            ValueStore srcValueStore = new BeanValueListStore(srcInstList);
+            final int len = srcValueStore.size();
+            for (int i = 0; i < len; i++) {
+                srcValueStore.setDataIndex(i);
                 Entity destInst = ReflectUtils.newInstance(destEntityClass);
-                doMappedCopy(context, destInst, srcInst);
+                doMappedCopy(context, new BeanValueStore(destInst), srcValueStore);
                 resultList.add(destInst);
             }
 
@@ -255,13 +262,13 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     @SuppressWarnings("unchecked")
-    private Entity create(Entity inst) throws UnifyException {
-        if (inst != null) {
+    private Entity create(Entity srcInst) throws UnifyException {
+        if (srcInst != null) {
             Class<? extends Entity> destEntityClass = (Class<? extends Entity>) au.getEntityClassDef(destEntityName)
                     .getEntityClass();
             U context = ReflectUtils.newInstance(contextClass);
             Entity destInst = ReflectUtils.newInstance(destEntityClass);
-            doMappedCopy(context, destInst, inst);
+            doMappedCopy(context, new BeanValueStore(destInst), new BeanValueStore(srcInst));
             return destInst;
         }
 

@@ -18,8 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.HashMap;
 
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Convenient abstract base class for tenant providers..
@@ -46,14 +45,11 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
     }
 
     @Override
-    protected void doMappedCopy(MappedTenantProviderContext context, Entity destInst, Entity srcInst)
+    protected void doMappedCopy(MappedTenantProviderContext context, ValueStore destValueStore, ValueStore srcValueStore)
             throws UnifyException {
-        final Long id = DataUtils.getBeanProperty(Long.class, srcInst, "id");
-        final String name = DataUtils.getBeanProperty(String.class, srcInst, providerInfo.getNameField());
-        final boolean primary = DataUtils.getBeanProperty(boolean.class, srcInst, providerInfo.getPrimaryFlagField());
-        DataUtils.setBeanProperty(destInst, "id", id);
-        DataUtils.setBeanProperty(destInst, "name", name);
-        DataUtils.setBeanProperty(destInst, "primary", primary);
+        destValueStore.store("id", srcValueStore.retrieve("id"));
+        destValueStore.store("name", srcValueStore.retrieve(providerInfo.getNameField()));
+        destValueStore.store("primary", srcValueStore.retrieve(providerInfo.getPrimaryFlagField()));
     }
 
     protected static class ProviderInfo {

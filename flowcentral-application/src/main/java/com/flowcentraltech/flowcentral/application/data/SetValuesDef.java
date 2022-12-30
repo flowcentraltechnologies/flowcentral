@@ -121,15 +121,15 @@ public class SetValuesDef {
         }
 
         for (SetValueDef setValueDef : setValueList) {
-            EntityFieldDef entityFieldDef = entityDef.getFieldDef(setValueDef.getFieldName());
-            EntityFieldDataType fieldType = entityFieldDef.getDataType();
+            final EntityFieldDef entityFieldDef = entityDef.getFieldDef(setValueDef.getFieldName());
             if (entityFieldDef.isSupportSetValue()) {
+                final EntityFieldDataType fieldType = entityFieldDef.getDataType();
+                Object val = null;
                 switch (setValueDef.getType()) {
                     case PROCESS_VARIABLE:
                         ProcessVariable variable = DataUtils.convert(ProcessVariable.class, setValueDef.getParam());
                         if (variable != null) {
-                            Object val = variables.get(variable.variableKey());
-                            valueStore.store(setValueDef.getFieldName(), val);
+                            val = variables.get(variable.variableKey());
                         }
                         break;
                     case GENERATOR:
@@ -142,32 +142,43 @@ public class SetValuesDef {
                         }
 
                         FieldSetValueGenerator gen = au.getComponent(FieldSetValueGenerator.class, generatorName);
-                        valueStore.store(setValueDef.getFieldName(), gen.generate(entityDef, valueStore, rule));
+                        val = gen.generate(entityDef, valueStore, rule);
                         break;
                     case NULL:
-                        valueStore.store(setValueDef.getFieldName(), null);
+                        val = null;
                         break;
                     case IMMEDIATE_LINGUAL:
                         if (EntityFieldDataType.STRING.equals(fieldType)) {
                             LingualStringType lingType = DataUtils.convert(LingualStringType.class,
                                     setValueDef.getParam());
                             if (lingType != null) {
-                                valueStore.store(setValueDef.getFieldName(), lingType.value());
+                                val = lingType.value();
                             }
                         } else if (fieldType.isDate() || fieldType.isTimestamp()) {
-                            valueStore.store(setValueDef.getFieldName(), LingualDateUtils.getDateFromNow(now,
-                                    DataUtils.convert(LingualDateType.class, setValueDef.getParam())));
+                            val = LingualDateUtils.getDateFromNow(now,
+                                    DataUtils.convert(LingualDateType.class, setValueDef.getParam()));
                         }
                         break;
                     case IMMEDIATE_FIELD:
-                        valueStore.store(setValueDef.getFieldName(),
-                                evaluateImmediateField(au, valueStore, setValueDef.getParam()));
+                        val = evaluateImmediateField(au, valueStore, setValueDef.getParam());
                         break;
                     case IMMEDIATE:
                     default:
-                        valueStore.store(setValueDef.getFieldName(), setValueDef.getParam());
+                        val = setValueDef.getParam();
                         break;
                 }
+
+                // Make sure it is impossible to set a tenant ID field with an invalid value
+                if (entityFieldDef.isTenantId()) {
+                    val = au.getMappedDestTenantId((Long) val);
+                    if (val == null) {
+                        throw new IllegalArgumentException(
+                                "Attempting to set tenant ID field with an invalid value. Definition [{" + name
+                                        + "}].");
+                    }
+                }
+
+                valueStore.store(setValueDef.getFieldName(), val);
             }
         }
     }

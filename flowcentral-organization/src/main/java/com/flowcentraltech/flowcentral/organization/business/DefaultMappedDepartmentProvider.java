@@ -20,8 +20,7 @@ import java.util.Collections;
 import com.flowcentraltech.flowcentral.application.business.AbstractMappedEntityProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Default mapped department provider
@@ -39,9 +38,9 @@ public class DefaultMappedDepartmentProvider
     }
 
     @Override
-    protected void doMappedCopy(DefaultMappedDepartmentProviderContext context, Entity destInst, Entity srcInst)
-            throws UnifyException {
-        new BeanValueStore(destInst).copy(new BeanValueStore(srcInst));
+    protected void doMappedCopy(DefaultMappedDepartmentProviderContext context, ValueStore destValueStore,
+            ValueStore srcValueStore) throws UnifyException {
+        destValueStore.copy(srcValueStore);
     }
 
 }

@@ -49,6 +49,17 @@ public interface SystemModuleService extends FlowCentralService {
     List<Long> getPrimaryMappedTenantIds() throws UnifyException;
 
     /**
+     * Get mapped tenant ID.
+     * 
+     * @param srcTenantId
+     *                 the source tenant ID
+     * @return the mapped tenant ID otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Long getMappedDestTenantId(Long srcTenantId) throws UnifyException;
+
+    /**
      * Get mapped tenant.
      * 
      * @param tenantId
