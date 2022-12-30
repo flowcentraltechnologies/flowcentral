@@ -78,7 +78,7 @@ public enum EntityFieldDataType implements EnumConst {
             false,
             false,
             true,
-            false),
+            true),
     MAPPED(
             "MD",
             DataType.LONG,

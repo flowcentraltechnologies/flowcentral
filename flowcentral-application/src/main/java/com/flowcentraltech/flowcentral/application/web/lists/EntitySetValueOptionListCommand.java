@@ -40,7 +40,6 @@ public class EntitySetValueOptionListCommand extends AbstractListCommand<EntityD
 
     private final LocaleFactoryMap<OptionsInfo> map = new LocaleFactoryMap<OptionsInfo>()
         {
-
             @Override
             protected OptionsInfo create(Locale locale, Object... arg1) throws Exception {
                 List<ListData> list = new ArrayList<ListData>();
