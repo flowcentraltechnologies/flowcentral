@@ -23,7 +23,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Default mapped branch provider
@@ -32,20 +31,19 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component("default-mappedbranchprovider")
-public class DefaultMappedBranchProvider
-        extends AbstractMappedEntityProvider<DefaultMappedBranchProviderContext> {
+public class DefaultMappedBranchProvider extends AbstractMappedEntityProvider<DefaultMappedBranchProviderContext> {
 
     public DefaultMappedBranchProvider() {
-        super(DefaultMappedBranchProviderContext.class,"organization.mappedBranch", "organization.branch",
+        super(DefaultMappedBranchProviderContext.class, "organization.mappedBranch", "organization.branch",
                 Collections.emptyMap());
     }
 
     @Override
-    protected void doMappedCopy(DefaultMappedBranchProviderContext context, Entity destInst, Entity srcInst) throws UnifyException {
-        ValueStore mappedBranchValueStore = new BeanValueStore(destInst);
-        mappedBranchValueStore.copy(new BeanValueStore(srcInst));
+    protected void doMappedCopy(DefaultMappedBranchProviderContext context, ValueStore destValueStore,
+            ValueStore srcValueStore) throws UnifyException {
+        destValueStore.copy(srcValueStore);
 
-        final Long zoneId = mappedBranchValueStore.retrieve(Long.class, "zoneId");
+        final Long zoneId = destValueStore.retrieve(Long.class, "zoneId");
         if (zoneId != null) {
             ValueStore zoneValueStore = null;
             if (context.isMultiple()) {
@@ -61,10 +59,10 @@ public class DefaultMappedBranchProvider
                 zoneValueStore = new BeanValueStore(zone);
             }
 
-            mappedBranchValueStore.store("zoneCode", zoneValueStore.retrieve("code"));
-            mappedBranchValueStore.store("zoneDesc", zoneValueStore.retrieve("description"));
-            mappedBranchValueStore.store("languageTag", zoneValueStore.retrieve("languageTag"));
-            mappedBranchValueStore.store("timeZone", zoneValueStore.retrieve("timeZone"));
+            destValueStore.store("zoneCode", zoneValueStore.retrieve("code"));
+            destValueStore.store("zoneDesc", zoneValueStore.retrieve("description"));
+            destValueStore.store("languageTag", zoneValueStore.retrieve("languageTag"));
+            destValueStore.store("timeZone", zoneValueStore.retrieve("timeZone"));
         }
     }
 
