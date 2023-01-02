@@ -32,13 +32,17 @@ public class MappedTenant extends BaseEntity {
 
     @Column(length = 64)
     private String name;
+
+    @Column(length = 32, nullable = true)
+    private String dateFormat;
     
     @Column
     private Boolean primary;
     
-    public MappedTenant(Long id, String name, Boolean primary) {
+    public MappedTenant(Long id, String name, String dateFormat, Boolean primary) {
         super.setId(id);
         this.name = name;
+        this.dateFormat = dateFormat;
         this.primary = primary;
     }
     
@@ -57,6 +61,14 @@ public class MappedTenant extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(String dateFormat) {
+        this.dateFormat = dateFormat;
     }
 
     public Boolean getPrimary() {

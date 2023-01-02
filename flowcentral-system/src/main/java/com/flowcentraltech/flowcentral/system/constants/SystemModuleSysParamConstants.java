@@ -46,4 +46,6 @@ public interface SystemModuleSysParamConstants {
     String SYSTEM_GLOBAL_ACCOUNTING_INPUT_ENABLED = "SYS-000B";
     
     String SYSTEM_ACTUAL_PRIMARY_TENANT_ID = "SYS-000C";
+    
+    String SYSTEM_USE_TENANT_DATEFORMAT = "SYS-000D";
 }

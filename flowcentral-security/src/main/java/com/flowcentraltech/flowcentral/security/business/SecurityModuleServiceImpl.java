@@ -64,6 +64,7 @@ import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamCons
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.tcdng.unify.core.SessionContext;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
+import com.tcdng.unify.core.UnifyCoreSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -211,7 +212,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (StringUtils.isBlank(businessUnitDesc)) {
             businessUnitDesc = getApplicationMessage("application.no.businessunit");
         }
-        
+
         // Set session locale
         SessionContext sessionCtx = getSessionContext();
         final MappedBranch userBranch = user.getBranchId() != null
@@ -240,8 +241,14 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             branchDesc = getApplicationMessage("application.no.branch");
         }
 
+        String dateFormatUpl = null;
+        if (!StringUtils.isBlank(mappedTenant.getDateFormat())) {
+            dateFormatUpl = "!fixeddatetimeformat pattern:$s{" + mappedTenant.getDateFormat() + "}";
+        }
+
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.MESSAGEBOX, null);
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, null);
+        setSessionStickyAttribute(UnifyCoreSessionAttributeConstants.WIDGET_DATEFORMAT_OVERRIDE, dateFormatUpl);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.RESERVEDFLAG, user.isReserved());

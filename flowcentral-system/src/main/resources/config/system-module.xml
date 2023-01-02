@@ -55,5 +55,8 @@
 		<sysParameter code="SYS-000C"
 			description="$m{system.sysparam.actualprimarytenantid}"
 			editor="!ui-integer" type="number" editable="false" />
+		<sysParameter code="SYS-000D" defaultVal="false"
+			description="$m{system.sysparam.usetenantdateformat}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>
