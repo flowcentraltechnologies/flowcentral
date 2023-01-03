@@ -50,10 +50,12 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
             throws UnifyException {
         destValueStore.store("id", srcValueStore.retrieve("id"));
         destValueStore.store("name", srcValueStore.retrieve(providerInfo.getNameField()));
-        destValueStore.store("dateFormat", srcValueStore.retrieve(providerInfo.getDateFormatField()));
+        destValueStore.store("dateFormat", resolveDateFormat(srcValueStore, providerInfo.getDateFormatField()));
         destValueStore.store("primary", srcValueStore.retrieve(providerInfo.getPrimaryFlagField()));
     }
 
+    protected abstract String resolveDateFormat(ValueStore srcValueStore, String dateFormatField) throws UnifyException;
+    
     protected static class ProviderInfo {
 
         private final String nameField;
