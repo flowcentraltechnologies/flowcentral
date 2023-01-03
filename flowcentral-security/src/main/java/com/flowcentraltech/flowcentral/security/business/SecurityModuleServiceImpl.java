@@ -246,8 +246,16 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             dateFormatUpl = "!fixeddatetimeformat pattern:$s{" + mappedTenant.getDateFormat() + "}";
         }
 
+        final boolean globalAccounting = systemModuleService.getSysParameterValue(boolean.class,
+                SystemModuleSysParamConstants.SYSTEM_GLOBAL_ACCOUNTING_INPUT_ENABLED);
+        final boolean useTenantDateFormat = systemModuleService.getSysParameterValue(boolean.class,
+                SystemModuleSysParamConstants.SYSTEM_USE_TENANT_DATEFORMAT);
+
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.MESSAGEBOX, null);
         setSessionStickyAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, null);
+        setSessionStickyAttribute(UnifyCoreSessionAttributeConstants.INPUT_GLOBAL_ACCOUNTING_FLAG, globalAccounting);
+        setSessionStickyAttribute(UnifyCoreSessionAttributeConstants.OVERRIDE_WIDGET_DATEFORMAT_FLAG,
+                useTenantDateFormat);
         setSessionStickyAttribute(UnifyCoreSessionAttributeConstants.WIDGET_DATEFORMAT_OVERRIDE, dateFormatUpl);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BRANCHDESC, branchDesc);
         setSessionStickyAttribute(FlowCentralSessionAttributeConstants.BUSINESSUNITDESC, businessUnitDesc);

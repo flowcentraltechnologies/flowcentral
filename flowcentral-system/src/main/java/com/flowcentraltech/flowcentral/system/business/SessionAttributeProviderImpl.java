@@ -18,9 +18,7 @@ package com.flowcentraltech.flowcentral.system.business;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
-import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.tcdng.unify.core.AbstractSessionAttributeProvider;
-import com.tcdng.unify.core.UnifyCoreSessionAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -43,12 +41,7 @@ public class SessionAttributeProviderImpl extends AbstractSessionAttributeProvid
 
     @Override
     protected void load(Map<String, Object> attributes) throws UnifyException {
-        final boolean globalAccounting = systemModuleService.getSysParameterValue(boolean.class,
-                SystemModuleSysParamConstants.SYSTEM_GLOBAL_ACCOUNTING_INPUT_ENABLED);
-        final boolean useTenantDateFormat = systemModuleService.getSysParameterValue(boolean.class,
-                SystemModuleSysParamConstants.SYSTEM_USE_TENANT_DATEFORMAT);
-        setApplicationAttribute(UnifyCoreSessionAttributeConstants.INPUT_GLOBAL_ACCOUNTING_FLAG, globalAccounting);
-        setSessionAttribute(UnifyCoreSessionAttributeConstants.OVERRIDE_WIDGET_DATEFORMAT_FLAG, useTenantDateFormat);
+
     }
 
 }
