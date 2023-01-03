@@ -38,6 +38,7 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
                     {
                         {
                             put("name", providerInfo.getNameField());
+                            put("dateFormat", providerInfo.getDateFormatField());
                             put("primary", providerInfo.getPrimaryFlagField());
                         }
                     });
@@ -49,6 +50,7 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
             throws UnifyException {
         destValueStore.store("id", srcValueStore.retrieve("id"));
         destValueStore.store("name", srcValueStore.retrieve(providerInfo.getNameField()));
+        destValueStore.store("dateFormat", srcValueStore.retrieve(providerInfo.getDateFormatField()));
         destValueStore.store("primary", srcValueStore.retrieve(providerInfo.getPrimaryFlagField()));
     }
 
@@ -56,15 +58,22 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
 
         private final String nameField;
 
+        private final String dateFormatField;
+
         private final String primaryFlagField;
 
-        public ProviderInfo(String nameField, String primaryFlagField) {
+        public ProviderInfo(String nameField, String dateFormatField, String primaryFlagField) {
             this.nameField = nameField;
+            this.dateFormatField = dateFormatField;
             this.primaryFlagField = primaryFlagField;
         }
 
         public String getNameField() {
             return nameField;
+        }
+
+        public String getDateFormatField() {
+            return dateFormatField;
         }
 
         public String getPrimaryFlagField() {

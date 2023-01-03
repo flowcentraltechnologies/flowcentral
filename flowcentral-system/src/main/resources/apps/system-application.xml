@@ -569,6 +569,8 @@
 			mapped="true" auditable="true" reportable="true">
 			<field name="name" label="$m{system.tenant.name}" type="string"
 				inputWidget="application.text" maxLen="64" />
+			<field name="dateFormat" label="$m{system.tenant.dateformat}" type="string"
+				inputWidget="application.text" maxLen="32" />
 			<field name="primary" label="$m{system.tenant.primary}"
 				type="boolean" inputWidget="application.booleanlist" />
 			<uniqueConstraint name="nameUc"

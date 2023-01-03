@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 FlowCentral Technologies Limited.
+ * Copyright 2018-2022 The Code Department.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -18,26 +18,20 @@ package com.flowcentraltech.flowcentral.system.business;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
-import com.tcdng.unify.core.AbstractSessionAttributeProvider;
+import com.tcdng.unify.core.AbstractApplicationAttributeProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.annotation.Preferred;
 
 /**
- * Session attribute provider implementation.
+  * Application attribute provider implementation.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(SystemModuleNameConstants.SESSION_ATTRIBUTE_PROVIDER)
-public class SessionAttributeProviderImpl extends AbstractSessionAttributeProvider {
-
-    @Configurable
-    private SystemModuleService systemModuleService;
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
+@Preferred
+@Component(SystemModuleNameConstants.APPLICATION_ATTRIBUTE_PROVIDER)
+public class ApplicationAttributeProviderImpl extends AbstractApplicationAttributeProvider {
 
     @Override
     protected void load(Map<String, Object> attributes) throws UnifyException {
