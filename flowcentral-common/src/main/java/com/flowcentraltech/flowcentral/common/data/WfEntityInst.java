@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreWriter;
  * @since 1.0
  */
 public class WfEntityInst {
-    
+
     private ValueStore valueStore;
 
     private ValueStoreReader valueStoreReader;
@@ -46,7 +46,11 @@ public class WfEntityInst {
 
     public ValueStoreReader getValueStoreReader() {
         if (valueStoreReader == null) {
-            valueStoreReader = new ValueStoreReader(valueStore);
+            synchronized (this) {
+                if (valueStoreReader == null) {
+                    valueStoreReader = new ValueStoreReader(valueStore);
+                }
+            }
         }
 
         return valueStoreReader;
@@ -54,7 +58,11 @@ public class WfEntityInst {
 
     public ValueStoreWriter getValueStoreWriter() {
         if (valueStoreWriter == null) {
-            valueStoreWriter = new ValueStoreWriter(valueStore);
+            synchronized (this) {
+                if (valueStoreWriter == null) {
+                    valueStoreWriter = new ValueStoreWriter(valueStore);
+                }
+            }
         }
 
         return valueStoreWriter;

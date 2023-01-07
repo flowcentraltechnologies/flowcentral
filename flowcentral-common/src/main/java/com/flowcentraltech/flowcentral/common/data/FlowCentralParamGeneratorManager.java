@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
+import com.flowcentraltech.flowcentral.common.constants.CommonGeneratorComponentConstants;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.tcdng.unify.common.util.ParamToken;
 import com.tcdng.unify.core.UnifyException;
@@ -25,7 +26,7 @@ import com.tcdng.unify.core.data.AbstractParamGeneratorManager;
 import com.tcdng.unify.core.data.ParamGenerator;
 
 /**
- * Flowcentral parameter generator manager.
+ * FlowCentral parameter generator manager.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -33,17 +34,28 @@ import com.tcdng.unify.core.data.ParamGenerator;
 @Component(CommonModuleNameConstants.PARAMGENERATORMANAGER)
 public class FlowCentralParamGeneratorManager extends AbstractParamGeneratorManager {
 
-    @Configurable(CommonModuleNameConstants.SYSPARAMGENERATOR)
-    private ParamGenerator generator;
-    
-    public final void setGenerator(ParamGenerator generator) {
-        this.generator = generator;
+    @Configurable(CommonModuleNameConstants.SYS_PARAM_GENERATOR)
+    private ParamGenerator sysParamGenerator;
+
+    @Configurable(CommonModuleNameConstants.PROCESS_VARIABLE_GENERATOR)
+    private ParamGenerator processVariableGenerator;
+
+    public final void setSysParamGenerator(ParamGenerator sysParamGenerator) {
+        this.sysParamGenerator = sysParamGenerator;
+    }
+
+    public final void setProcessVariableGenerator(ParamGenerator processVariableGenerator) {
+        this.processVariableGenerator = processVariableGenerator;
     }
 
     @Override
     protected ParamGenerator resolveParamGenerator(ParamToken token) throws UnifyException {
-        if ("p".equals(token.getComponent())) {
-            return generator;
+        if (CommonGeneratorComponentConstants.SYSTEM_PARAMETER.equals(token.getComponent())) {
+            return sysParamGenerator;
+        }
+
+        if (CommonGeneratorComponentConstants.PROCESS_VARIABLE.equals(token.getComponent())) {
+            return processVariableGenerator;
         }
         
         return null;

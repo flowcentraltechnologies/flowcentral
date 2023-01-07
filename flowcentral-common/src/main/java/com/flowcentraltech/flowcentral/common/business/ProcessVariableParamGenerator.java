@@ -14,36 +14,34 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.system.business;
+package com.flowcentraltech.flowcentral.common.business;
+
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.tcdng.unify.common.util.ParamToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.AbstractParamGenerator;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
- * System parameter param generator.
+ * Process variable generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(CommonModuleNameConstants.SYS_PARAM_GENERATOR)
-public class SysParamParamGenerator extends AbstractParamGenerator {
+@Component(CommonModuleNameConstants.PROCESS_VARIABLE_GENERATOR)
+public class ProcessVariableParamGenerator extends AbstractParamGenerator {
 
-    @Configurable
-    private SystemModuleService systemModuleService;
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
+    @SuppressWarnings("unchecked")
     @Override
     public Object generate(ValueStoreReader itemReader, ValueStoreReader parentReader, ParamToken token)
             throws UnifyException {
-        return systemModuleService.getSysParameterValue(String.class, token.getParam());
+        Map<String, Object> variables = (Map<String, Object>) itemReader
+                .getTempValue(CommonTempValueNameConstants.PROCESS_VARIABLES);
+        return variables != null ? variables.get(token.getParam()) : null;
     }
 
 }

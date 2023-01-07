@@ -46,12 +46,12 @@ import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.tcdng.unify.core.criterion.Restriction;
 
 /**
- * Application module service master tests.
+ * Application module service tests.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ApplicationModuleServiceMasterTest extends AbstractFlowCentralTest {
+public class ApplicationModuleServiceTest extends AbstractFlowCentralTest {
 
     private ApplicationModuleService ams;
 
