@@ -60,6 +60,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPoli
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
+import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -184,6 +185,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private NotificationRecipientProvider notifRecipientProvider;
+
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
@@ -925,7 +927,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity workInst) throws UnifyException {
-        logDebug("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(), workInst);
+        logDebug("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(),
+                workInst.getWorkflowItemDesc());
         if (!wfDef.isCompatible(workInst)) {
             Class<?> clazz = workInst != null ? workInst.getClass() : null;
             throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_SUBMIT_INST_TO_INCOMPATIBLE_WORKFLOW, clazz,
@@ -944,8 +947,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 for (WfSetValuesDef wfSetValuesDef : wfDef.getOnEntrySetValuesList()) {
                     if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
                             .getObjectFilter(entityDef, instValueStore.getReader(), now).match(instValueStore)) {
-                        wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst, Collections.emptyMap(),
-                                null);
+                        wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst,
+                                Collections.emptyMap(), null);
                     }
                 }
             }
@@ -1339,11 +1342,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         private boolean deleted;
 
-        public TransitionItem(WfItem wfItem, WfDef wfDef, WorkEntity wfInst) {
+        public TransitionItem(WfItem wfItem, WfDef wfDef, WorkEntity wfInst) throws UnifyException {
             this.wfItem = wfItem;
             this.wfDef = wfDef;
-            this.wfEntityInst = new WfEntityInst(wfInst);
             this.variables = new HashMap<String, Object>();
+            this.wfEntityInst = new WfEntityInst(wfInst);
+            this.wfEntityInst.getWfInstValueStore().setTempValue(CommonTempValueNameConstants.PROCESS_VARIABLES,
+                    this.variables);
         }
 
         public WfItem getWfItem() {

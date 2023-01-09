@@ -16,18 +16,14 @@
 package com.flowcentraltech.flowcentral.common.constants;
 
 /**
- * Common module name constants.
+ * Common generator component constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface CommonModuleNameConstants {
+public interface CommonGeneratorComponentConstants {
 
-    String APPLICATION_BOOTSERVICE = "common-bootservice";
+    String SYSTEM_PARAMETER = "sysprm";
 
-    String PARAMGENERATORMANAGER = "common-paramgeneratormanager";
-
-    String SYS_PARAM_GENERATOR = "common-sysparamgenerator";
-
-    String PROCESS_VARIABLE_GENERATOR = "common-processvariablegenerator";
+    String PROCESS_VARIABLE = "prcvar";
 }

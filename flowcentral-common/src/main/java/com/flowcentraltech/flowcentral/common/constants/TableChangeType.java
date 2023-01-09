@@ -21,7 +21,6 @@ package com.flowcentraltech.flowcentral.common.constants;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
- 
 public enum TableChangeType {
     ADD_ENTRY,
     DELETE_ENTRY,

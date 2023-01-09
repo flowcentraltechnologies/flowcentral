@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.application.entities;
+
+import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
 
 /**
- * Common module name constants.
+ * Test leave item
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface CommonModuleNameConstants {
+public class Leave extends BaseWorkEntity {
 
-    String APPLICATION_BOOTSERVICE = "common-bootservice";
+    @Override
+    public String getDescription() {
+         return null;
+    }
 
-    String PARAMGENERATORMANAGER = "common-paramgeneratormanager";
-
-    String SYS_PARAM_GENERATOR = "common-sysparamgenerator";
-
-    String PROCESS_VARIABLE_GENERATOR = "common-processvariablegenerator";
 }

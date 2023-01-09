@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 1.0
  */
 @Component("test-applicationprivilegemanager")
-public class ApplicationPrivilegeManagerTestImpl extends AbstractUnifyComponent implements ApplicationPrivilegeManager {
+public class TestApplicationPrivilegeManagerImpl extends AbstractUnifyComponent implements ApplicationPrivilegeManager {
 
     @Override
     public void registerPrivilege(Long applicationId, String privilegeCategoryCode, String privilegeCode,
@@ -40,7 +40,6 @@ public class ApplicationPrivilegeManagerTestImpl extends AbstractUnifyComponent 
 
     @Override
     public boolean isRegisteredPrivilege(String privilegeCategoryCode, String privilegeCode) throws UnifyException {
-        // TODO Auto-generated method stub
         return false;
     }
 
