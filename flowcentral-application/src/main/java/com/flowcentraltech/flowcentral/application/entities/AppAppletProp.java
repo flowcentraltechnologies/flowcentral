@@ -46,7 +46,7 @@ public class AppAppletProp extends BaseConfigEntity {
     @ListOnly(key = "appAppletId", property = "applicationName")
     private String applicationName;
 
-    @ListOnly(key = "applicationId", property = "applicationDesc")
+    @ListOnly(key = "appAppletId", property = "applicationDesc")
     private String applicationDesc;
 
 
