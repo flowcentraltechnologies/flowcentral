@@ -73,6 +73,9 @@ import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
+import com.flowcentraltech.flowcentral.application.data.Usage;
+import com.flowcentraltech.flowcentral.application.data.UsageProvider;
+import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
@@ -304,7 +307,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-        FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
+        UsageProvider, FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
 
     private final Set<String> refProperties = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
             AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
@@ -2522,6 +2525,44 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         return new Equals(_childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName(),
                 parentInst.getId());
+    }
+
+    @Override
+    public List<Usage> findApplicationUsagesByOtherApplications(String applicationName) throws UnifyException {
+        final String applicationNameBase = applicationName + '.';
+        List<Usage> usageList = new ArrayList<Usage>();
+        // App applet
+        List<AppApplet> appletList = environment().listAll(new AppAppletQuery().applicationNameNot(applicationName)
+                .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+        for (AppApplet appApplet : appletList) {
+            Usage usage = new Usage(UsageType.ENTITY, "AppApplet", ApplicationNameUtils.getApplicationEntityLongName(
+                    appApplet.getApplicationName(), appApplet.getName()), "entity", appApplet.getEntity());
+            usageList.add(usage);
+        }
+
+        // App applet property
+        List<AppAppletProp> appletPropList = environment().listAll(
+                new AppAppletPropQuery().applicationNameNot(applicationName).valueBeginsWith(applicationNameBase)
+                        .addSelect("applicationName", "appletName", "name", "value"));
+        for (AppAppletProp appAppletProp : appletPropList) {
+            Usage usage = new Usage(UsageType.PROPERTY, "AppAppletProp", ApplicationNameUtils
+                    .getApplicationEntityLongName(appAppletProp.getApplicationName(), appAppletProp.getAppletName()),
+                    appAppletProp.getName(), appAppletProp.getValue());
+            usageList.add(usage);
+        }
+
+        // App assignment page
+        List<AppAssignmentPage> appAssignmentPageList = environment()
+                .listAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
+                        .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+        for (AppAssignmentPage appAssignmentPage : appAssignmentPageList) {
+            Usage usage = new Usage(UsageType.ENTITY, "AppAssignmentPage", ApplicationNameUtils
+                    .getApplicationEntityLongName(appAssignmentPage.getApplicationName(), appAssignmentPage.getName()),
+                    "entity", appAssignmentPage.getEntity());
+            usageList.add(usage);
+        }
+
+        return usageList;
     }
 
     @SuppressWarnings("unchecked")

@@ -33,4 +33,12 @@ public class AppAppletPropQuery extends BaseConfigEntityQuery<AppAppletProp> {
     public AppAppletPropQuery appAppletId(Long appAppletId) {
         return (AppAppletPropQuery) addEquals("appAppletId", appAppletId);
     }
+
+    public AppAppletPropQuery applicationNameNot(String applicationName) {
+        return (AppAppletPropQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public AppAppletPropQuery valueBeginsWith(String value) {
+        return (AppAppletPropQuery) addBeginsWith("value", value);
+    }
 }
