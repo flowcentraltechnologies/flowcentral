@@ -30,4 +30,12 @@ public class AppRefQuery extends BaseApplicationEntityQuery<AppRef> {
     public AppRefQuery entity(String entity) {
         return (AppRefQuery) addEquals("entity", entity);
     }
+
+    public AppRefQuery applicationNameNot(String applicationName) {
+        return (AppRefQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public AppRefQuery entityBeginsWith(String entity) {
+        return (AppRefQuery) addBeginsWith("entity", entity);
+    }
 }

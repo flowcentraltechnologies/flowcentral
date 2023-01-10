@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
@@ -71,10 +72,8 @@ import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
-import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.data.Usage;
-import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
@@ -98,6 +97,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityIndex;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityIndexQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInputQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraintQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
@@ -156,8 +157,6 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoadingQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInputQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRulesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
@@ -222,6 +221,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityAttachmentConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
@@ -251,13 +251,12 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -306,7 +305,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-        UsageProvider, FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
+       FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
 
     private final Set<String> refProperties = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
             AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
@@ -644,9 +643,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 EntityFieldType.STATIC, "usedByType",
                                 getApplicationMessage("application.usage.usedbytype"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
-                                EntityFieldType.STATIC, "usedByApplication",
-                                getApplicationMessage("application.usage.usedbyapplication"));
-                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usedBy", getApplicationMessage("application.usage.usedby"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usedFor", getApplicationMessage("application.usage.usedfor"));
@@ -846,7 +842,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         String renderer = widgetTypeDef.getRenderer();
                         tdb.addColumnDef("type", renderer);
                         tdb.addColumnDef("usedByType", renderer);
-                        tdb.addColumnDef("usedByApplication", renderer);
                         tdb.addColumnDef("usedBy", renderer);
                         tdb.addColumnDef("usedFor", renderer);
                         tdb.addColumnDef("usage", renderer);
@@ -2571,153 +2566,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         return new Equals(_childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName(),
                 parentInst.getId());
-    }
-
-    @Override
-    public List<Usage> findApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
-            throws UnifyException {
-        final String applicationNameBase = applicationName + '.';
-        List<Usage> usageList = new ArrayList<Usage>();
-        // App applet
-        if (UsageType.isQualifiesApplet(usageType)) {
-            List<AppApplet> appletList = environment().listAll(new AppAppletQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
-            for (AppApplet appApplet : appletList) {
-                Usage usage = new Usage(UsageType.APPLET, "AppApplet", appApplet.getApplicationName(),
-                        appApplet.getName(), "entity", appApplet.getEntity());
-                usageList.add(usage);
-            }
-        }
-
-        // App applet property
-        if (UsageType.isQualifiesApplet(usageType)) {
-            List<AppAppletProp> appletPropList = environment().listAll(
-                    new AppAppletPropQuery().applicationNameNot(applicationName).valueBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "appletName", "name", "value"));
-            for (AppAppletProp appAppletProp : appletPropList) {
-                Usage usage = new Usage(UsageType.APPLET, "AppAppletProp", appAppletProp.getApplicationName(),
-                        appAppletProp.getAppletName(), appAppletProp.getName(), appAppletProp.getValue());
-                usageList.add(usage);
-            }
-        }
-
-        // App assignment page
-        if (UsageType.isQualifiesApplet(usageType)) {
-            List<AppAssignmentPage> appAssignmentPageList = environment()
-                    .listAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
-                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
-            for (AppAssignmentPage appAssignmentPage : appAssignmentPageList) {
-                Usage usage = new Usage(UsageType.APPLET, "AppAssignmentPage", appAssignmentPage.getApplicationName(),
-                        appAssignmentPage.getName(), "entity", appAssignmentPage.getEntity());
-                usageList.add(usage);
-            }
-        }
-
-        // App entity field
-        if (UsageType.isQualifiesEntity(usageType)) {
-            List<AppEntityField> appEntityFieldList = environment().listAll(new AppEntityFieldQuery()
-                    .applicationNameNot(applicationName).referencesBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appEntityName", "name", "references"));
-            for (AppEntityField appEntityField : appEntityFieldList) {
-                Usage usage = new Usage(UsageType.ENTITY, "AppEntityField", appEntityField.getApplicationName(),
-                        appEntityField.getAppEntityName() + "." + appEntityField.getName(), "references",
-                        appEntityField.getReferences());
-                usageList.add(usage);
-            }
-
-            appEntityFieldList = environment().listAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
-                    .inputWidgetBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appEntityName", "name", "inputWidget"));
-            for (AppEntityField appEntityField : appEntityFieldList) {
-                Usage usage = new Usage(UsageType.ENTITY, "AppEntityField", appEntityField.getApplicationName(),
-                        appEntityField.getAppEntityName() + "." + appEntityField.getName(), "inputWidget",
-                        appEntityField.getInputWidget());
-                usageList.add(usage);
-            }
-
-            appEntityFieldList = environment().listAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
-                    .suggestionTypeBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appEntityName", "name", "suggestionType"));
-            for (AppEntityField appEntityField : appEntityFieldList) {
-                Usage usage = new Usage(UsageType.ENTITY, "AppEntityField", appEntityField.getApplicationName(),
-                        appEntityField.getAppEntityName() + "." + appEntityField.getName(), "suggestionType",
-                        appEntityField.getSuggestionType());
-                usageList.add(usage);
-            }
-
-            appEntityFieldList = environment().listAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
-                    .lingualWidgetBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appEntityName", "name", "lingualWidget"));
-            for (AppEntityField appEntityField : appEntityFieldList) {
-                Usage usage = new Usage(UsageType.ENTITY, "AppEntityField", appEntityField.getApplicationName(),
-                        appEntityField.getAppEntityName() + "." + appEntityField.getName(), "lingualWidget",
-                        appEntityField.getLingualWidget());
-                usageList.add(usage);
-            }
-        }
-
-        // App form
-        if (UsageType.isQualifiesForm(usageType)) {
-            List<AppForm> appFormList = environment().listAll(new AppFormQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
-            for (AppForm appForm : appFormList) {
-                Usage usage = new Usage(UsageType.FORM, "AppForm", appForm.getApplicationName(), appForm.getName(),
-                        "entity", appForm.getEntity());
-                usageList.add(usage);
-            }
-
-            List<AppFormElement> appFormElementList = environment().listAll(new AppFormElementQuery()
-                    .applicationNameNot(applicationName).tabAppletBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appFormName", "elementName", "tabApplet"));
-            for (AppFormElement appFormElement : appFormElementList) {
-                Usage usage = new Usage(UsageType.FORM, "AppFormElement", appFormElement.getApplicationName(),
-                        appFormElement.getAppFormName() + "." + appFormElement.getElementName(), "tabApplet",
-                        appFormElement.getTabApplet());
-                usageList.add(usage);
-            }
-
-            appFormElementList = environment().listAll(new AppFormElementQuery().applicationNameNot(applicationName)
-                    .tabReferenceBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appFormName", "elementName", "tabReference"));
-            for (AppFormElement appFormElement : appFormElementList) {
-                Usage usage = new Usage(UsageType.FORM, "AppFormElement", appFormElement.getApplicationName(),
-                        appFormElement.getAppFormName() + "." + appFormElement.getElementName(), "tabReference",
-                        appFormElement.getTabReference());
-                usageList.add(usage);
-            }
-
-            appFormElementList = environment().listAll(new AppFormElementQuery().applicationNameNot(applicationName)
-                    .tabMappedFormBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appFormName", "elementName", "tabMappedForm"));
-            for (AppFormElement appFormElement : appFormElementList) {
-                Usage usage = new Usage(UsageType.FORM, "AppFormElement", appFormElement.getApplicationName(),
-                        appFormElement.getAppFormName() + "." + appFormElement.getElementName(), "tabMappedForm",
-                        appFormElement.getTabMappedForm());
-                usageList.add(usage);
-            }
-
-            appFormElementList = environment().listAll(new AppFormElementQuery().applicationNameNot(applicationName)
-                    .inputReferenceBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appFormName", "elementName", "inputReference"));
-            for (AppFormElement appFormElement : appFormElementList) {
-                Usage usage = new Usage(UsageType.FORM, "AppFormElement", appFormElement.getApplicationName(),
-                        appFormElement.getAppFormName() + "." + appFormElement.getElementName(), "inputReference",
-                        appFormElement.getInputReference());
-                usageList.add(usage);
-            }
-
-            appFormElementList = environment().listAll(new AppFormElementQuery().applicationNameNot(applicationName)
-                    .inputWidgetBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "appFormName", "elementName", "inputWidget"));
-            for (AppFormElement appFormElement : appFormElementList) {
-                Usage usage = new Usage(UsageType.FORM, "AppFormElement", appFormElement.getApplicationName(),
-                        appFormElement.getAppFormName() + "." + appFormElement.getElementName(), "inputWidget",
-                        appFormElement.getInputWidget());
-                usageList.add(usage);
-            }
-        }
-
-        return usageList;
     }
 
     @SuppressWarnings("unchecked")

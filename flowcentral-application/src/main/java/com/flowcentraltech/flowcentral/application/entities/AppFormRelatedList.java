@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -43,6 +44,12 @@ public class AppFormRelatedList extends BaseConfigNamedEntity {
 
     @Column(length = 64, nullable = true)
     private String editAction;
+
+    @ListOnly(key = "appFormId", property = "name")
+    private String appFormName;
+
+    @ListOnly(key = "appFormId", property = "applicationName")
+    private String applicationName;
 
     public Long getAppFormId() {
         return appFormId;
@@ -82,6 +89,22 @@ public class AppFormRelatedList extends BaseConfigNamedEntity {
 
     public void setEditAction(String editAction) {
         this.editAction = editAction;
+    }
+
+    public String getAppFormName() {
+        return appFormName;
+    }
+
+    public void setAppFormName(String appFormName) {
+        this.appFormName = appFormName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
 }

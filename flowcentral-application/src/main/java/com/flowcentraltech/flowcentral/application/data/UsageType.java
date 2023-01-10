@@ -26,7 +26,9 @@ public enum UsageType {
 
     APPLET,
     ENTITY,
-    FORM;
+    FORM,
+    REF,
+    TABLE;
 
     public boolean isEntity() {
         return ENTITY.equals(this);
@@ -40,6 +42,14 @@ public enum UsageType {
         return FORM.equals(this);
     }
 
+    public boolean isRef() {
+        return REF.equals(this);
+    }
+
+    public boolean isTable() {
+        return TABLE.equals(this);
+    }
+
     public static boolean isQualifiesEntity(UsageType type) {
         return type == null || ENTITY.equals(type);
     }
@@ -50,5 +60,13 @@ public enum UsageType {
 
     public static boolean isQualifiesForm(UsageType type) {
         return type == null || FORM.equals(type);
+    }
+
+    public static boolean isQualifiesRef(UsageType type) {
+        return type == null || REF.equals(type);
+    }
+
+    public static boolean isQualifiesTable(UsageType type) {
+        return type == null || TABLE.equals(type);
     }
 }
