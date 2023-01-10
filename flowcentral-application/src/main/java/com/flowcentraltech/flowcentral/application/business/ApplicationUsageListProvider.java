@@ -36,9 +36,11 @@ public class ApplicationUsageListProvider extends AbstractUsageListProvider {
     @Override
     public List<Usage> findUsages(ValueStoreReader instReader, UsageType usageType) throws UnifyException {
         final String applicationName = instReader.read(String.class, "name");
+        logDebug("Finding usages of application [{0}]...", applicationName);
         List<Usage> usageList = new ArrayList<Usage>();
         for (UsageProvider provider : getProviders()) {
-            usageList.addAll(provider.findApplicationUsagesByOtherApplications(applicationName, usageType));
+            List<Usage> _usageList = provider.findApplicationUsagesByOtherApplications(applicationName, usageType);
+            usageList.addAll(_usageList);
         }
 
         return usageList;

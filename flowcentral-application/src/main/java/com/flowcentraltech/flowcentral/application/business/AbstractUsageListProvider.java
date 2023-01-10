@@ -15,12 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Configurable;
 
 /**
  * Convenient abstract base class for usage list providers.
@@ -30,16 +31,17 @@ import com.tcdng.unify.core.annotation.Configurable;
  */
 public abstract class AbstractUsageListProvider extends AbstractUnifyComponent implements UsageListProvider {
 
-    @Configurable
     private List<UsageProvider> providers;
-    
-    public final void setProviders(List<UsageProvider> providers) {
-        this.providers = providers;
-    }
 
     @Override
     protected void onInitialize() throws UnifyException {
-
+        providers = new ArrayList<UsageProvider>();
+        for (UnifyComponentConfig config : getComponentConfigs(UsageProvider.class)) {
+            UsageProvider provider = (UsageProvider) getComponent(config.getName());
+            providers.add(provider);
+        }
+        
+        providers = Collections.unmodifiableList(providers);
     }
 
     @Override
