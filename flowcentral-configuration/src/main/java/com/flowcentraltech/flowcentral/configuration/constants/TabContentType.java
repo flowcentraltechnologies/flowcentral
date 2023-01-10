@@ -48,6 +48,8 @@ public enum TabContentType implements EnumConst {
             "PMV"),
     PROPERTY_LIST(
             "PRL"),
+    USAGE_LIST(
+            "USL"),
     SEARCH_INPUT(
             "SCH"),
     SET_VALUES(

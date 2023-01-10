@@ -74,7 +74,6 @@ import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.data.Usage;
-import com.flowcentraltech.flowcentral.application.data.UsageProvider;
 import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
@@ -316,6 +315,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppletPropertyConstants.PROPERTY_LIST_RULE, AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME,
             AppletPropertyConstants.QUICK_EDIT_TABLE, AppletPropertyConstants.QUICK_EDIT_FORM)));
 
+    private final Set<String> RESERVED_TABLES = Collections.unmodifiableSet(
+            new HashSet<String>(Arrays.asList("application.propertyItemTable", "application.usageTable")));
+
+    private final Set<String> RESERVED_ENTITIES = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("application.propertyItem", "application.usage")));
+
     private static final int MAX_LIST_DEPTH = 8;
 
     @Configurable
@@ -498,7 +503,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
-                    if (!"application.propertyItem".equals(longName)) {
+                    if (!RESERVED_ENTITIES.contains(longName)) {
                         return environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityClassDef.getId())) > entityClassDef.getVersion();
                     }
@@ -512,6 +517,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     final EntityDef entityDef = getEntityDef(longName);
                     if ("application.propertyItem".equals(longName)) {
                         return new EntityClassDef(entityDef, PropertyListItem.class);
+                    }
+
+                    if ("application.usage".equals(longName)) {
+                        return new EntityClassDef(entityDef, Usage.class);
                     }
 
                     logDebug("Building dynamic entity information...");
@@ -593,7 +602,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
                 @Override
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
-                    if (!"application.propertyItem".equals(longName)) {
+                    if (!RESERVED_ENTITIES.equals(longName)) {
                         return environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion();
                     }
@@ -622,6 +631,27 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "displayValue",
                                 getApplicationMessage("application.propertyitem.displayvalue"));
+                        return edb.build();
+                    }
+
+                    if ("application.usage".equals(longName)) {
+                        EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, Usage.class.getName(),
+                                getApplicationMessage("application.usage.label"), null, null, false, false, false,
+                                "application.usage", getApplicationMessage("application.usage"), 0L, 1L);
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "type", getApplicationMessage("application.usage.type"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usedByType",
+                                getApplicationMessage("application.usage.usedbytype"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usedByApplication",
+                                getApplicationMessage("application.usage.usedbyapplication"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usedBy", getApplicationMessage("application.usage.usedby"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usedFor", getApplicationMessage("application.usage.usedfor"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usage", getApplicationMessage("application.usage.usage"));
                         return edb.build();
                     }
 
@@ -779,7 +809,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected boolean stale(String longName, TableDef tableDef) throws Exception {
-                    if (!"application.propertyItemTable".equals(longName)) {
+                    if (!RESERVED_TABLES.contains(longName)) {
                         return (environment().value(long.class, "versionNo",
                                 new AppTableQuery().id(tableDef.getId())) > tableDef.getVersion())
                                 || (tableDef.getEntityDef()
@@ -799,11 +829,27 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 getApplicationMessage("application.propertyitem.table.description"), 0L, 1L);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
-                        tdb.addColumnDef("name", renderer, null, 2, false, false, false, true, false, false);
-                        tdb.addColumnDef("description", renderer, null, 2, false, false, false, true, false, false);
+                        tdb.addColumnDef("name", renderer);
+                        tdb.addColumnDef("description", renderer);
                         tdb.addColumnDef(getApplicationMessage("application.propertyitem.value"), "displayValue",
-                                renderer, null, null, 2, false, false, false, true, false, false);
+                                renderer);
+                        tdb.itemsPerPage(-1);
+                        return tdb.build();
+                    }
 
+                    if ("application.usageTable".equals(longName)) {
+                        TableDef.Builder tdb = TableDef.newBuilder(getEntityDef("application.usage"),
+                                getApplicationMessage("application.usage.table.label"), false, false,
+                                "application.usageTable", getApplicationMessage("application.usage.table.description"),
+                                0L, 1L);
+                        WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
+                        String renderer = widgetTypeDef.getRenderer();
+                        tdb.addColumnDef("type", renderer);
+                        tdb.addColumnDef("usedByType", renderer);
+                        tdb.addColumnDef("usedByApplication", renderer);
+                        tdb.addColumnDef("usedBy", renderer);
+                        tdb.addColumnDef("usedFor", renderer);
+                        tdb.addColumnDef("usage", renderer);
                         tdb.itemsPerPage(-1);
                         return tdb.build();
                     }
@@ -2528,40 +2574,44 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public List<Usage> findApplicationUsagesByOtherApplications(String applicationName) throws UnifyException {
+    public List<Usage> findApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
+            throws UnifyException {
         final String applicationNameBase = applicationName + '.';
         List<Usage> usageList = new ArrayList<Usage>();
         // App applet
-        List<AppApplet> appletList = environment().listAll(new AppAppletQuery().applicationNameNot(applicationName)
-                .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
-        for (AppApplet appApplet : appletList) {
-            Usage usage = new Usage(UsageType.ENTITY, "AppApplet", ApplicationNameUtils.getApplicationEntityLongName(
-                    appApplet.getApplicationName(), appApplet.getName()), "entity", appApplet.getEntity());
-            usageList.add(usage);
+        if (UsageType.isQualifiesEntity(usageType)) {
+            List<AppApplet> appletList = environment().listAll(new AppAppletQuery().applicationNameNot(applicationName)
+                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            for (AppApplet appApplet : appletList) {
+                Usage usage = new Usage(UsageType.ENTITY, "AppApplet", appApplet.getApplicationName(),
+                        appApplet.getName(), "entity", appApplet.getEntity());
+                usageList.add(usage);
+            }
         }
 
         // App applet property
-        List<AppAppletProp> appletPropList = environment().listAll(
-                new AppAppletPropQuery().applicationNameNot(applicationName).valueBeginsWith(applicationNameBase)
-                        .addSelect("applicationName", "appletName", "name", "value"));
-        for (AppAppletProp appAppletProp : appletPropList) {
-            Usage usage = new Usage(UsageType.PROPERTY, "AppAppletProp", ApplicationNameUtils
-                    .getApplicationEntityLongName(appAppletProp.getApplicationName(), appAppletProp.getAppletName()),
-                    appAppletProp.getName(), appAppletProp.getValue());
-            usageList.add(usage);
+        if (UsageType.isQualifiesProperty(usageType)) {
+            List<AppAppletProp> appletPropList = environment().listAll(
+                    new AppAppletPropQuery().applicationNameNot(applicationName).valueBeginsWith(applicationNameBase)
+                            .addSelect("applicationName", "appletName", "name", "value"));
+            for (AppAppletProp appAppletProp : appletPropList) {
+                Usage usage = new Usage(UsageType.PROPERTY, "AppAppletProp", appAppletProp.getApplicationName(),
+                        appAppletProp.getAppletName(), appAppletProp.getName(), appAppletProp.getValue());
+                usageList.add(usage);
+            }
         }
 
         // App assignment page
-        List<AppAssignmentPage> appAssignmentPageList = environment()
-                .listAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
-                        .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
-        for (AppAssignmentPage appAssignmentPage : appAssignmentPageList) {
-            Usage usage = new Usage(UsageType.ENTITY, "AppAssignmentPage", ApplicationNameUtils
-                    .getApplicationEntityLongName(appAssignmentPage.getApplicationName(), appAssignmentPage.getName()),
-                    "entity", appAssignmentPage.getEntity());
-            usageList.add(usage);
+        if (UsageType.isQualifiesEntity(usageType)) {
+            List<AppAssignmentPage> appAssignmentPageList = environment()
+                    .listAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
+                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            for (AppAssignmentPage appAssignmentPage : appAssignmentPageList) {
+                Usage usage = new Usage(UsageType.ENTITY, "AppAssignmentPage", appAssignmentPage.getApplicationName(),
+                        appAssignmentPage.getName(), "entity", appAssignmentPage.getEntity());
+                usageList.add(usage);
+            }
         }
-
         return usageList;
     }
 

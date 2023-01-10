@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 /**
- * Studio usage object.
+ * Usage object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -24,18 +24,22 @@ package com.flowcentraltech.flowcentral.application.data;
 public class Usage {
 
     private UsageType type;
-    
+
     private String usedByType;
-    
+
+    private String usedByApplication;
+
     private String usedBy;
-    
+
     private String usedFor;
-    
+
     private String usage;
 
-    public Usage(UsageType type, String usedByType, String usedBy, String usedFor, String usage) {
+    public Usage(UsageType type, String usedByType, String usedByApplication, String usedBy, String usedFor,
+            String usage) {
         this.type = type;
         this.usedByType = usedByType;
+        this.usedByApplication = usedByApplication;
         this.usedBy = usedBy;
         this.usedFor = usedFor;
         this.usage = usage;
@@ -47,6 +51,10 @@ public class Usage {
 
     public String getUsedByType() {
         return usedByType;
+    }
+
+    public String getUsedByApplication() {
+        return usedByApplication;
     }
 
     public String getUsedBy() {

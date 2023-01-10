@@ -13,29 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.data;
+package com.flowcentraltech.flowcentral.application.web.panels;
 
-import java.util.List;
-
-import com.tcdng.unify.core.UnifyComponent;
-import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
- * Usage provider.
+ * Usage search panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface UsageProvider extends UnifyComponent {
+@Component("fc-usagesearchpanel")
+@UplBinding("web/application/upl/usagesearchpanel.upl")
+public class UsageSearchPanel extends AbstractPanel {
 
-    /**
-     * Finds application usages by other applications.
-     * 
-     * @param applicationName
-     *                        the application name
-     * @return list of usages
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    List<Usage> findApplicationUsagesByOtherApplications(String applicationName) throws UnifyException;
 }

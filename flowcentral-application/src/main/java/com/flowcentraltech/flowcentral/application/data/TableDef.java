@@ -98,8 +98,7 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private Set<String> summaryFields;
 
-    private TableDef(EntityDef entityDef, 
-            List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
+    private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
             List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
             Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
             int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
@@ -554,11 +553,19 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder addColumnDef(String fieldName, String renderer) throws UnifyException {
+            return addColumnDef(fieldName, renderer, null, 2, false, false, false, true, false, false);
+        }
+
         public Builder addColumnDef(String fieldName, String renderer, OrderType order, int widthRatio,
                 boolean switchOnChange, boolean hidden, boolean disabled, boolean editable, boolean sortable,
                 boolean summary) throws UnifyException {
             return addColumnDef(null, fieldName, renderer, null, order, widthRatio, switchOnChange, hidden, disabled,
                     editable, sortable, summary);
+        }
+
+        public Builder addColumnDef(String label, String fieldName, String renderer) throws UnifyException {
+            return addColumnDef(label, fieldName, renderer, null, null, 2, false, false, false, true, false, false);
         }
 
         public Builder addColumnDef(String label, String fieldName, String renderer, String editor, OrderType order,
@@ -657,12 +664,12 @@ public class TableDef extends BaseApplicationEntityDef {
             }
 
             ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            return new TableDef(entityDef,
-                    DataUtils.unmodifiableList(loadingDefList), DataUtils.unmodifiableList(columnDefList),
-                    DataUtils.unmodifiableList(_visibleColumnDefList), DataUtils.unmodifiableList(actionBtnInfos),
-                    DataUtils.unmodifiableMap(filterDefMap), label, detailsPanelName, sortHistory, itemsPerPage,
-                    serialNo, sortable, headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless,
-                    multiSelect, nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
+            return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList),
+                    DataUtils.unmodifiableList(columnDefList), DataUtils.unmodifiableList(_visibleColumnDefList),
+                    DataUtils.unmodifiableList(actionBtnInfos), DataUtils.unmodifiableMap(filterDefMap), label,
+                    detailsPanelName, sortHistory, itemsPerPage, serialNo, sortable, headerToUpperCase,
+                    headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect, nonConforming, fixedRows,
+                    limitSelectToColumns, nameParts, description, id, version);
         }
     }
 

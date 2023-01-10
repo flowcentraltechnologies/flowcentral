@@ -13,33 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.application.web.panels;
 
-package com.flowcentraltech.flowcentral.application.data;
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
- * Usage type.
+ * Usage list panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum UsageType {
+@Component("fc-usagelistpanel")
+@UplBinding("web/application/upl/usagelistpanel.upl")
+public class UsageListPanel extends AbstractStandalonePanel {
 
-    ENTITY,
-    PROPERTY;
-
-    public boolean isEntity() {
-        return ENTITY.equals(this);
-    }
-
-    public boolean isProperty() {
-        return PROPERTY.equals(this);
-    }
-
-    public static boolean isQualifiesEntity(UsageType type) {
-        return type == null || ENTITY.equals(type);
-    }
-
-    public static boolean isQualifiesProperty(UsageType type) {
-        return type == null || PROPERTY.equals(type);
-    }
 }

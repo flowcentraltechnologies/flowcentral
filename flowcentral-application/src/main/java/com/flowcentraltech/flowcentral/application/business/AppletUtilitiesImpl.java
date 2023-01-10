@@ -76,6 +76,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.ListingForm;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.PropertySearch;
 import com.flowcentraltech.flowcentral.application.web.panels.SingleFormBean;
+import com.flowcentraltech.flowcentral.application.web.panels.UsageSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
@@ -831,6 +832,22 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
                     }
                         break;
+                    case USAGE_LIST: {
+                        logDebug("Constructing usage list tab [{0}] using applet [{1}]...", formTabDef.getName(),
+                                formTabDef.getApplet());
+                        final String usageListProvider = formTabDef.getReference();
+                        UsageSearch _usageSearch = new UsageSearch(formContext, sweepingCommitPolicy,
+                                formTabDef.getName(), usageListProvider, 0, formTabDef.isIgnoreParentCondition());
+                        _usageSearch.setChildTabIndex(tabIndex);
+                        _usageSearch.applyEntityToSearch(inst);
+
+                        tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-usagelistpanel",
+                                RendererType.STANDALONE_PANEL);
+                        tabSheetItemList.add(
+                                new TabSheetItem(formTabDef.getName(), formTabDef.getApplet(), _usageSearch, tabIndex,
+                                        !isCreateMode && formContext.getFormTab(formTabDef.getName()).isVisible()));
+                    }
+                        break;
                     case CHILD: {
                         logDebug("Constructing child tab [{0}] using applet [{1}]...", formTabDef.getName(),
                                 formTabDef.getApplet());
@@ -866,8 +883,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         }
 
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), rootTitle, _appletDef, editAction, mode,
-                                false, formTabDef.isIgnoreParentCondition());
+                                formTabDef.getName(), rootTitle, _appletDef, editAction, mode, false,
+                                formTabDef.isIgnoreParentCondition());
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
                             AppletFilterDef appletFilterDef = _appletDef.getFilterDef(
@@ -1191,6 +1208,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         String childFkFieldName = getChildFkFieldName(entityDef, formTabDef.getReference());
                         PropertySearch _propertySearch = (PropertySearch) tabSheetItem.getValObject();
                         _propertySearch.applyEntityToSearch(inst, childFkFieldName);
+                        tabSheetItem.setVisible(
+                                !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
+                    }
+                        break;
+                    case USAGE_LIST: {
+                        logDebug("Updating usage list tab [{0}] using applet [{1}]...", formTabDef.getName(),
+                                formTabDef.getApplet());
+                         UsageSearch _usageSearch = (UsageSearch) tabSheetItem.getValObject();
+                        _usageSearch.applyEntityToSearch(inst);
                         tabSheetItem.setVisible(
                                 !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
                     }
@@ -1874,8 +1900,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
         final EntityDef entityDef = formContext.getFormDef().getEntityDef();
-        EntityActionContext eCtx = new EntityActionContext(entityDef, inst,
-                RecordActionType.UPDATE, scp, updatePolicy);
+        EntityActionContext eCtx = new EntityActionContext(entityDef, inst, RecordActionType.UPDATE, scp, updatePolicy);
         eCtx.setAll(formContext);
 
         // Ensure values for auto-format fields
@@ -1978,7 +2003,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             }
         }
     }
-    
+
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
         SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
