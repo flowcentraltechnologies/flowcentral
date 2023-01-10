@@ -24,22 +24,31 @@ package com.flowcentraltech.flowcentral.application.data;
  */
 public enum UsageType {
 
+    APPLET,
     ENTITY,
-    PROPERTY;
+    FORM;
 
     public boolean isEntity() {
         return ENTITY.equals(this);
     }
 
-    public boolean isProperty() {
-        return PROPERTY.equals(this);
+    public boolean isApplet() {
+        return APPLET.equals(this);
+    }
+
+    public boolean isForm() {
+        return FORM.equals(this);
     }
 
     public static boolean isQualifiesEntity(UsageType type) {
         return type == null || ENTITY.equals(type);
     }
 
-    public static boolean isQualifiesProperty(UsageType type) {
-        return type == null || PROPERTY.equals(type);
+    public static boolean isQualifiesApplet(UsageType type) {
+        return type == null || APPLET.equals(type);
+    }
+
+    public static boolean isQualifiesForm(UsageType type) {
+        return type == null || FORM.equals(type);
     }
 }

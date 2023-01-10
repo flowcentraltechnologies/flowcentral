@@ -37,4 +37,12 @@ public class AppFormQuery extends BaseApplicationEntityQuery<AppForm> {
         return (AppFormQuery) addEquals("type", type);
     }
 
+    public AppFormQuery applicationNameNot(String applicationName) {
+        return (AppFormQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public AppFormQuery entityBeginsWith(String entity) {
+        return (AppFormQuery) addBeginsWith("entity", entity);
+    }
+
 }

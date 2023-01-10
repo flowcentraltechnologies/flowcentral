@@ -124,6 +124,12 @@ public class AppFormElement extends BaseConfigEntity {
     @ListOnly(key = "color", property = "description")
     private String colorDesc;
 
+    @ListOnly(key = "appFormId", property = "name")
+    private String appFormName;
+
+    @ListOnly(key = "appFormId", property = "applicationName")
+    private String applicationName;
+
     @Override
     public String getDescription() {
         return null;
@@ -367,6 +373,22 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setColorDesc(String colorDesc) {
         this.colorDesc = colorDesc;
+    }
+
+    public String getAppFormName() {
+        return appFormName;
+    }
+
+    public void setAppFormName(String appFormName) {
+        this.appFormName = appFormName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
 }
