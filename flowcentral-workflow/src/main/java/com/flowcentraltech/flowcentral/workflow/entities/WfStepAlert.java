@@ -62,8 +62,17 @@ public class WfStepAlert extends BaseNamedEntity {
     @Column(name = "FIRE_ON_CONDITION_NM", length = 64, nullable = true)
     private String fireOnConditionName;
 
+    @ListOnly(key = "wfStepId", property = "workflowName")
+    private String workflowName;
+
     @ListOnly(key = "wfStepId", property = "description")
     private String wfStepDesc;
+
+    @ListOnly(key = "wfStepId", property = "name")
+    private String wfStepName;
+
+    @ListOnly(key = "wfStepId", property = "applicationName")
+    private String applicationName;
 
     @ListOnly(key = "notificationType", property = "description")
     private String notificationTypeDesc;
@@ -165,6 +174,30 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setNotificationTypeDesc(String notificationTypeDesc) {
         this.notificationTypeDesc = notificationTypeDesc;
+    }
+
+    public String getWfStepName() {
+        return wfStepName;
+    }
+
+    public void setWfStepName(String wfStepName) {
+        this.wfStepName = wfStepName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getWorkflowName() {
+        return workflowName;
+    }
+
+    public void setWorkflowName(String workflowName) {
+        this.workflowName = workflowName;
     }
 
 }

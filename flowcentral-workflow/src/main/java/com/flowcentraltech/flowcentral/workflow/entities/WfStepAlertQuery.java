@@ -13,32 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package com.flowcentraltech.flowcentral.workflow.entities;
 
-import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntityQuery;
 
 /**
- * Workflow query.
+ * Workflow step alert query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @version 1.0
  */
-public class WorkflowQuery extends BaseApplicationEntityQuery<Workflow> {
+public class WfStepAlertQuery extends BaseNamedEntityQuery<WfStepAlert> {
 
-    public WorkflowQuery() {
-        super(Workflow.class);
+    public WfStepAlertQuery() {
+        super(WfStepAlert.class);
     }
 
-    public WorkflowQuery entity(String entity) {
-        return (WorkflowQuery) addEquals("entity", entity);
+    public WfStepAlertQuery applicationNameNot(String applicationName) {
+        return (WfStepAlertQuery) addNotEquals("applicationName", applicationName);
     }
 
-    public WorkflowQuery applicationNameNot(String applicationName) {
-        return (WorkflowQuery) addNotEquals("applicationName", applicationName);
+    public WfStepAlertQuery templateBeginsWith(String template) {
+        return (WfStepAlertQuery) addBeginsWith("template", template);
     }
-
-    public WorkflowQuery entityBeginsWith(String entity) {
-        return (WorkflowQuery) addBeginsWith("entity", entity);
-    }
-
 }

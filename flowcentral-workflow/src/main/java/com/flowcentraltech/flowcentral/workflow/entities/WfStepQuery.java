@@ -53,4 +53,12 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
         return (WfStepQuery) addRestriction(
                 new And().add(new Equals("type", WorkflowStepType.START)).add(new IsNotNull("autoLoadConditionName")));
     }
+
+    public WfStepQuery applicationNameNot(String applicationName) {
+        return (WfStepQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public WfStepQuery appletNameBeginsWith(String appletName) {
+        return (WfStepQuery) addBeginsWith("appletName", appletName);
+    }
 }
