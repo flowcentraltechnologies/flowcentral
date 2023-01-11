@@ -156,7 +156,14 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
                     tableLoadingDef.getProvider());
             String label = loadingTableProvider.getLoadingLabel();
             List<? extends Entity> _items = loadingTableProvider.getLoadingItems(restriction);
-            DataUtils.sortAscending(_items, Entity.class, "id");
+            Order order = getOrder();
+            if (order == null) {
+                DataUtils.sortAscending(_items, Entity.class, "id");
+            } else {
+                DataUtils.sort(_items, au().getEntityClassDef(tableDef.getEntityDef().getLongName()).getEntityClass(),
+                        order);
+            }
+
             if (!DataUtils.isBlank(_items)) {
                 int endItemIndex = startItemIndex + _items.size() - 1;
                 sectionList.add(new Section(startItemIndex, endItemIndex, label));

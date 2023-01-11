@@ -102,16 +102,17 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
         return 0;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked") 
     @Override
     protected List<Object> getDisplayItems(List<?> sourceObject, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
         if (sourceObject != null) {
-            if (dispStartIndex == 0 && dispEndIndex == sourceObject.size()) {
-                return (List<Object>) sourceObject;
-            }
-
-            return (List<Object>) sourceObject.subList(dispStartIndex, dispEndIndex);
+            List<Object> resultList = dispStartIndex == 0 && dispEndIndex == sourceObject.size()
+                    ? (List<Object>) sourceObject
+                    : (List<Object>) sourceObject.subList(dispStartIndex, dispEndIndex);
+            DataUtils.sort(resultList, au().getEntityClassDef(getEntityDef().getLongName()).getEntityClass(),
+                    getOrder());
+            return resultList;
         }
 
         return Collections.emptyList();
