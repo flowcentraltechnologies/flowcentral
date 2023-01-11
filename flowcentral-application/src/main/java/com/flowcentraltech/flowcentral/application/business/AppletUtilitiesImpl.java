@@ -841,6 +841,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 formTabDef.getName(), usageListProvider, 0, true);
                         _usageSearch.setChildTabIndex(tabIndex);
                         _usageSearch.setSearchUsageType(UsageType.ENTITY);
+                        _usageSearch.setPaginationLabel(resolveSessionMessage("$m{usagesearch.display.label}"));
                         _usageSearch.applyEntityToSearch(inst);
 
                         tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-usagelistpanel",
