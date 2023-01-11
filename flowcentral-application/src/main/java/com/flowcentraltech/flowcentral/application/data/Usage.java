@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.tcdng.unify.core.util.StringUtils;
+
 /**
  * Usage object.
  * 
@@ -60,5 +62,10 @@ public class Usage {
 
     public String getUsage() {
         return usage;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 }

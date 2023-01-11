@@ -18,7 +18,7 @@
 
 // Header Bar
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
-	components:$c{headerLeftPanel}
+	components:$c{headerLeftPanel headerRightPanel}
 	
 !ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;}
 	layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
@@ -29,10 +29,31 @@
 !ui-select:searchUsageType caption:$m{usagesearchpanel.type} list:$s{usagetypelist} ignoreParentState:true
 	eventHandler:$d{!ui-event event:onchange action:$c{searchAct}} binding:searchUsageType
 
+!ui-panel:headerRightPanel style:$s{display:inline-block; float:right;} layout:$d{!ui-horizontal cellType:middle}
+	components:$c{fastBackBtn backBtn displayStart paginationLabel forwardBtn fastForwardBtn}
+!ui-symbol:fastBackBtn symbol:$s{backward-fast} hint:$m{pagination.firstpage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{fastBackAct}}
+!ui-symbol:backBtn symbol:$s{backward} hint:$m{pagination.previouspage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{backAct}}
+!ui-integer:displayStart binding:displayStart size:5 readOnly:true
+!ui-label:paginationLabel binding:paginationLabel
+!ui-symbol:forwardBtn symbol:$s{forward} hint:$m{pagination.nextpage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{forwardAct}}
+!ui-symbol:fastForwardBtn symbol:$s{forward-fast} hint:$m{pagination.lastpage}
+	ignoreParentState:true
+    eventHandler:$d{!ui-event event:onclick action:$c{fastForwardAct}}
+
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
 !fc-beantable:searchResultTbl binding:beanTable
 
 // Actions
 !ui-postcommand:searchAct command:search components:$c{searchUsageType}
+!ui-postcommand:fastBackAct command:fastBack
+!ui-postcommand:backAct command:back
+!ui-postcommand:forwardAct command:forward
+!ui-postcommand:fastForwardAct command:fastForward
 

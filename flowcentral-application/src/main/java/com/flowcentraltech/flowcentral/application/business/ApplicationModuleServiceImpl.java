@@ -601,7 +601,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
                 @Override
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
-                    if (!RESERVED_ENTITIES.equals(longName)) {
+                    if (!RESERVED_ENTITIES.contains(longName)) {
                         return environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion();
                     }
@@ -845,7 +845,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         tdb.addColumnDef("usedBy", renderer, 3, true);
                         tdb.addColumnDef("usedFor", renderer, 3, true);
                         tdb.addColumnDef("usage", renderer, 3, true);
-                        tdb.itemsPerPage(-1);
+                        tdb.itemsPerPage(25); // TODO
                         return tdb.build();
                     }
 

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.UsageListProvider;
@@ -41,6 +42,8 @@ public class UsageSearch extends AbstractPanelFormBinding {
     private ValueStoreReader instReader;
 
     private UsageType searchUsageType;
+
+    private String paginationLabel;
 
     private String entitySubTitle;
 
@@ -86,16 +89,36 @@ public class UsageSearch extends AbstractPanelFormBinding {
         this.searchUsageType = searchUsageType;
     }
 
+    public String getPaginationLabel() {
+        return MessageFormat.format(paginationLabel, beanTable.getDispEndIndex(), beanTable.getTotalItemCount());
+    }
+
+    public void setPaginationLabel(String paginationLabel) {
+        this.paginationLabel = paginationLabel;
+    }
+
+    public int getDisplayStart() {
+        if (beanTable.getTotalItemCount() == 0) {
+            return 0;
+        }
+
+        return beanTable.getDispStartIndex() + 1;
+    }
+
+    public void setDisplayStart(int dispStartIndex) {
+
+    }
+
+    public int getTotalItemCount() {
+        return beanTable.getTotalItemCount();
+    }
+
     public int getChildTabIndex() {
         return childTabIndex;
     }
 
     public void setChildTabIndex(int childTabIndex) {
         this.childTabIndex = childTabIndex;
-    }
-
-    public int getTotalItemCount() {
-        return beanTable.getTotalItemCount();
     }
 
     public void applyEntityToSearch(Entity inst) throws UnifyException {
