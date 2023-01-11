@@ -16,19 +16,42 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.tcdng.unify.common.annotation.StaticList;
+import com.tcdng.unify.common.constants.EnumConst;
+import com.tcdng.unify.core.annotation.Table;
+import com.tcdng.unify.core.util.EnumUtils;
+
 /**
  * Usage type.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum UsageType {
+@Table("FC_USAGETYPE")
+@StaticList(name = "usagetypelist", description = "$m{staticlist.usagetypelist}")
+public enum UsageType implements EnumConst {
 
-    APPLET,
-    ENTITY,
-    FORM,
-    REF,
-    TABLE;
+    APPLET("APL"),
+    ENTITY("ENT"),
+    FORM("FRM"),
+    REF("REF"),
+    TABLE("TBL");
+
+    private final String code;
+
+    private UsageType(String code) {
+        this.code = code;
+     }
+
+    @Override
+    public String code() {
+        return this.code;
+    }
+
+    @Override
+    public String defaultCode() {
+        return ENTITY.code;
+    }
 
     public boolean isEntity() {
         return ENTITY.equals(this);
@@ -68,5 +91,13 @@ public enum UsageType {
 
     public static boolean isQualifiesTable(UsageType type) {
         return type == null || TABLE.equals(type);
+    }
+    
+    public static UsageType fromCode(String code) {
+        return EnumUtils.fromCode(UsageType.class, code);
+    }
+
+    public static UsageType fromName(String name) {
+        return EnumUtils.fromName(UsageType.class, name);
     }
 }

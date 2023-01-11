@@ -553,8 +553,9 @@ public class TableDef extends BaseApplicationEntityDef {
             return this;
         }
 
-        public Builder addColumnDef(String fieldName, String renderer) throws UnifyException {
-            return addColumnDef(fieldName, renderer, null, 2, false, false, false, true, false, false);
+        public Builder addColumnDef(String fieldName, String renderer, int widthRatio, boolean sortable)
+                throws UnifyException {
+            return addColumnDef(fieldName, renderer, null, widthRatio, false, false, false, true, sortable, false);
         }
 
         public Builder addColumnDef(String fieldName, String renderer, OrderType order, int widthRatio,
@@ -564,8 +565,10 @@ public class TableDef extends BaseApplicationEntityDef {
                     editable, sortable, summary);
         }
 
-        public Builder addColumnDef(String label, String fieldName, String renderer) throws UnifyException {
-            return addColumnDef(label, fieldName, renderer, null, null, 2, false, false, false, true, false, false);
+        public Builder addColumnDef(String label, String fieldName, String renderer, int widthRatio, boolean sortable)
+                throws UnifyException {
+            return addColumnDef(label, fieldName, renderer, null, null, widthRatio, false, false, false, true, sortable,
+                    false);
         }
 
         public Builder addColumnDef(String label, String fieldName, String renderer, String editor, OrderType order,

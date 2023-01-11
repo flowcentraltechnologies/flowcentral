@@ -27,6 +27,8 @@ public interface NotificationModuleNameConstants {
 
     String NOTIFICATION_MODULE_SERVICE = "notification-moduleservice";
 
+    String NOTIFICATION_USAGE_SERVICE = "notification-usageservice";
+
     String APPLICATION_NOTIFICATION_INSTALLER = "application-notificationinstaller";
 
     String EMAILMESSAGINGCHANNEL = "email-messagingchannel";

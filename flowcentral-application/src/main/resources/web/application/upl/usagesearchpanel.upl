@@ -22,14 +22,17 @@
 	
 !ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;}
 	layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
-	components:$c{titleBlock}
+	components:$c{titleBlock searchUsageType}
 !ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
 !ui-label:title styleClass:$s{hdtitle} binding:entityTitle
 !ui-label:subTitle styleClass:$s{hdsubtitle} binding:entitySubTitle
+!ui-select:searchUsageType caption:$m{usagesearchpanel.type} list:$s{usagetypelist} ignoreParentState:true
+	eventHandler:$d{!ui-event event:onchange action:$c{searchAct}} binding:searchUsageType
 
 // Search result panel
 !ui-panel:searchResultPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{searchResultTbl}
 !fc-beantable:searchResultTbl binding:beanTable
 
 // Actions
+!ui-postcommand:searchAct command:search components:$c{searchUsageType}
 

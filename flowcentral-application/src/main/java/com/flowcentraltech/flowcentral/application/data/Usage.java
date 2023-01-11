@@ -23,7 +23,7 @@ package com.flowcentraltech.flowcentral.application.data;
  */
 public class Usage {
 
-    private UsageType type;
+    private String type;
 
     private String usedByType;
 
@@ -35,14 +35,14 @@ public class Usage {
 
     public Usage(UsageType type, String usedByType, String usedBy, String usedFor,
             String usage) {
-        this.type = type;
+        this.type = type.toString();
         this.usedByType = usedByType;
         this.usedBy = usedBy;
         this.usedFor = usedFor;
         this.usage = usage;
     }
 
-    public UsageType getType() {
+    public String getType() {
         return type;
     }
 

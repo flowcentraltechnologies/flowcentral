@@ -34,4 +34,12 @@ public class DashboardTileQuery extends BaseConfigNamedEntityQuery<DashboardTile
         return (DashboardTileQuery) addEquals("dashboardId", dashboardId);
     }
 
+    public DashboardTileQuery applicationNameNot(String applicationName) {
+        return (DashboardTileQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public DashboardTileQuery chartBeginsWith(String chart) {
+        return (DashboardTileQuery) addBeginsWith("chart", chart);
+    }
+
 }

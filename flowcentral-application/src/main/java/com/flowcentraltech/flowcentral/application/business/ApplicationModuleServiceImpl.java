@@ -825,26 +825,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 getApplicationMessage("application.propertyitem.table.description"), 0L, 1L);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
-                        tdb.addColumnDef("name", renderer);
-                        tdb.addColumnDef("description", renderer);
+                        tdb.addColumnDef("name", renderer, 2, false);
+                        tdb.addColumnDef("description", renderer, 2, false);
                         tdb.addColumnDef(getApplicationMessage("application.propertyitem.value"), "displayValue",
-                                renderer);
+                                renderer, 2, false);
                         tdb.itemsPerPage(-1);
                         return tdb.build();
                     }
 
                     if ("application.usageTable".equals(longName)) {
                         TableDef.Builder tdb = TableDef.newBuilder(getEntityDef("application.usage"),
-                                getApplicationMessage("application.usage.table.label"), false, false,
+                                getApplicationMessage("application.usage.table.label"), true, true,
                                 "application.usageTable", getApplicationMessage("application.usage.table.description"),
                                 0L, 1L);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
-                        tdb.addColumnDef("type", renderer);
-                        tdb.addColumnDef("usedByType", renderer);
-                        tdb.addColumnDef("usedBy", renderer);
-                        tdb.addColumnDef("usedFor", renderer);
-                        tdb.addColumnDef("usage", renderer);
+                        tdb.addColumnDef("type", renderer, 2, false);
+                        tdb.addColumnDef("usedByType", renderer, 2, true);
+                        tdb.addColumnDef("usedBy", renderer, 3, true);
+                        tdb.addColumnDef("usedFor", renderer, 3, true);
+                        tdb.addColumnDef("usage", renderer, 3, true);
                         tdb.itemsPerPage(-1);
                         return tdb.build();
                     }

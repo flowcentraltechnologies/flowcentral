@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
@@ -28,5 +30,11 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
 @Component("fc-usagesearchpanel")
 @UplBinding("web/application/upl/usagesearchpanel.upl")
 public class UsageSearchPanel extends AbstractPanel {
+
+    @Action
+    public void search() throws UnifyException {
+        UsageSearch usageSearch = getValue(UsageSearch.class);
+        usageSearch.applyEntityToSearch();
+    }
 
 }

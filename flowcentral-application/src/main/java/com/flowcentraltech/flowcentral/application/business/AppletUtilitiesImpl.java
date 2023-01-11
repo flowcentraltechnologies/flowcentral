@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
@@ -837,8 +838,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                                 formTabDef.getApplet());
                         final String usageListProvider = formTabDef.getReference();
                         UsageSearch _usageSearch = new UsageSearch(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), usageListProvider, 0, formTabDef.isIgnoreParentCondition());
+                                formTabDef.getName(), usageListProvider, 0, true);
                         _usageSearch.setChildTabIndex(tabIndex);
+                        _usageSearch.setSearchUsageType(UsageType.ENTITY);
                         _usageSearch.applyEntityToSearch(inst);
 
                         tsdb.addTabDef(formTabDef.getName(), formTabDef.getLabel(), "fc-usagelistpanel",

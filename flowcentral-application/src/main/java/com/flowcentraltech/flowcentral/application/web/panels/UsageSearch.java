@@ -100,6 +100,10 @@ public class UsageSearch extends AbstractPanelFormBinding {
 
     public void applyEntityToSearch(Entity inst) throws UnifyException {
         instReader = new BeanValueStore(inst).getReader();
+        applyEntityToSearch();
+    }
+
+    public void applyEntityToSearch() throws UnifyException {
         List<Usage> usageList = beanTable.au().getComponent(UsageListProvider.class, provider).findUsages(instReader,
                 searchUsageType);
         beanTable.setSourceObject(usageList);
