@@ -15,6 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.delegate.business.policy;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -39,13 +42,22 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
     @Configurable
     private EnvironmentDelegateUtilities utilities;
 
+    private final Collection<String> copyExclusions;
+
     private final String operation;
 
     private final boolean skipUpdate;
-    
+
     public AbstractDelegateFormActionPolicy(String operation, boolean skipUpdate) {
         this.operation = operation;
         this.skipUpdate = skipUpdate;
+        this.copyExclusions = Collections.emptyList();
+    }
+
+    public AbstractDelegateFormActionPolicy(String operation, Collection<String> copyExclusions, boolean skipUpdate) {
+        this.operation = operation;
+        this.skipUpdate = skipUpdate;
+        this.copyExclusions = copyExclusions;
     }
 
     public final void setUtilities(EnvironmentDelegateUtilities utilities) {
@@ -58,7 +70,7 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         ProcedureRequest req = new ProcedureRequest(operation);
         req.setEntity(utilities.resolveLongName(inst.getClass()));
         req.setPayload(utilities.encodeDelegateEntity(inst));
-        JsonProcedureResponse resp =  sendToDelegateProcedureService(req);
+        JsonProcedureResponse resp = sendToDelegateProcedureService(req);
         Object[] payload = resp.getPayload();
         Entity respInst = null;
         if (payload != null && payload.length == 1) {
@@ -70,7 +82,7 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         }
 
         if (respInst != null) {
-            new BeanValueStore(inst).copy(new BeanValueStore(respInst));
+            new BeanValueStore(inst).copyWithExclusions(new BeanValueStore(respInst), copyExclusions);
         }
     }
 
