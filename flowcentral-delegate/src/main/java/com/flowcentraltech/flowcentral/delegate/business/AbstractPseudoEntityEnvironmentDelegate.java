@@ -50,9 +50,9 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
     }
 
     @Override
-    public void executeProcedure(String operation, String... payload) throws UnifyException {
+    public String[] executeProcedure(String operation, String... payload) throws UnifyException {
         // TODO Auto-generated method stub
-        
+        return null;
     }
 
     protected final EnvironmentService environment() {

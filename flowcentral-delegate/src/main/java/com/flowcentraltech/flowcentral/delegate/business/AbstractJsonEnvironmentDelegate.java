@@ -38,11 +38,12 @@ import com.tcdng.unify.core.util.DataUtils;
 public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmentDelegate {
 
     @Override
-    public void executeProcedure(String operation, String... payload) throws UnifyException {
+    public String[] executeProcedure(String operation, String... payload) throws UnifyException {
         ProcedureRequest req = new ProcedureRequest(operation);
         req.setPayload(payload);
         req.setUseRawPayload(true);
-        sendToDelegateProcedureService(req);
+        JsonProcedureResponse resp = sendToDelegateProcedureService(req);
+        return resp.getPayload();
     }
 
     protected BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException {
