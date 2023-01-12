@@ -50,7 +50,7 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected final void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         Entity inst = ctx.getInst();
         ProcedureRequest req = new ProcedureRequest(operation);
         req.setEntity(utilities.resolveLongName(inst.getClass()));
@@ -76,7 +76,7 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         return new EntityActionResult(ctx);
     }
 
-    protected JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req) throws UnifyException {
+    private JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req) throws UnifyException {
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
         String respJSON = sendToDelegateProcedureService(reqJSON);
         JsonProcedureResponse resp = DataUtils.fromJsonString(JsonProcedureResponse.class, respJSON);
