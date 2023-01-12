@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.delegate.business;
 
+import java.util.Collection;
+
 import com.flowcentraltech.flowcentral.delegate.business.policy.AbstractDelegateFormActionPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
@@ -29,6 +31,10 @@ public abstract class AbstractHttpPostDelegateFormActionPolicy extends AbstractD
 
     public AbstractHttpPostDelegateFormActionPolicy(String operation, boolean skipUpdate) {
         super(operation, skipUpdate);
+    }
+
+    public AbstractHttpPostDelegateFormActionPolicy(String operation, Collection<String> copyExclusions, boolean skipUpdate) {
+        super(operation, copyExclusions, skipUpdate);
     }
 
     @Override
