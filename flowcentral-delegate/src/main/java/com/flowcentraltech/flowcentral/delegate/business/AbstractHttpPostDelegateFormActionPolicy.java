@@ -13,28 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.delegate.business;
 
-
-package com.flowcentraltech.flowcentral.delegate.business.policy;
-
+import com.flowcentraltech.flowcentral.delegate.business.policy.AbstractDelegateFormActionPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
 
 /**
- * Convenient abstract base class for HTTP post delegate workflow process policy.
+ * Convenient abstract base class for HTTP post delegate form action policy.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractHttpPostDelegateWfProcessPolicy extends AbstractDelegateWfProcessPolicy {
+public abstract class AbstractHttpPostDelegateFormActionPolicy extends AbstractDelegateFormActionPolicy {
 
-    public AbstractHttpPostDelegateWfProcessPolicy(String operation) {
+    public AbstractHttpPostDelegateFormActionPolicy(String operation) {
         super(operation);
     }
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(getEndpoint() + "/procedure", jsonReq);
+        return IOUtils.postJsonToEndpoint( getEndpoint() + "/procedure", jsonReq);
     }
 
     protected abstract String getEndpoint() throws UnifyException;
