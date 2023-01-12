@@ -39,10 +39,13 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
     @Configurable
     private EnvironmentDelegateUtilities utilities;
 
-    private String operation;
+    private final String operation;
+
+    private final boolean skipUpdate;
     
-    public AbstractDelegateFormActionPolicy(String operation) {
+    public AbstractDelegateFormActionPolicy(String operation, boolean skipUpdate) {
         this.operation = operation;
+        this.skipUpdate = skipUpdate;
     }
 
     public final void setUtilities(EnvironmentDelegateUtilities utilities) {
@@ -72,8 +75,10 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
     }
 
     @Override
-    protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
-        return new EntityActionResult(ctx);
+    protected final EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
+        EntityActionResult result = new EntityActionResult(ctx);
+        result.setSkipUpdate(skipUpdate);
+        return result;
     }
 
     private JsonProcedureResponse sendToDelegateProcedureService(ProcedureRequest req) throws UnifyException {

@@ -802,9 +802,11 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         EntityActionResult entityActionResult = au().environment().performEntityAction(efCtx);
-        updateForm(HeaderWithTabsForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst, false));
-        if (viewMode.isCreateForm() && ((Entity) formContext.getInst()).getId() != null) {
-            enterMaintainForm(formContext, (Long) ((Entity) formContext.getInst()).getId());
+        if (!entityActionResult.isSkipUpdate()) {
+            updateForm(HeaderWithTabsForm.UpdateType.FORMACTION_ON_INST, form, reloadEntity(_inst, false));
+            if (viewMode.isCreateForm() && ((Entity) formContext.getInst()).getId() != null) {
+                enterMaintainForm(formContext, (Long) ((Entity) formContext.getInst()).getId());
+            }
         }
 
         return entityActionResult;

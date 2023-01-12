@@ -27,8 +27,8 @@ import com.tcdng.unify.core.util.IOUtils;
  */
 public abstract class AbstractHttpPostDelegateFormActionPolicy extends AbstractDelegateFormActionPolicy {
 
-    public AbstractHttpPostDelegateFormActionPolicy(String operation) {
-        super(operation);
+    public AbstractHttpPostDelegateFormActionPolicy(String operation, boolean skipUpdate) {
+        super(operation, skipUpdate);
     }
 
     @Override

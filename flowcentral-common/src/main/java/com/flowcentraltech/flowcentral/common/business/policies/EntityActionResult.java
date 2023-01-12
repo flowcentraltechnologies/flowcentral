@@ -43,6 +43,8 @@ public class EntityActionResult {
     
     private ActionMode actionMode;
     
+    private boolean skipUpdate;
+    
     private boolean submitToWorkflow;
     
     private boolean applyUserAction;
@@ -90,6 +92,14 @@ public class EntityActionResult {
 
     public void setActionMode(ActionMode actionMode) {
         this.actionMode = actionMode;
+    }
+
+    public boolean isSkipUpdate() {
+        return skipUpdate;
+    }
+
+    public void setSkipUpdate(boolean skipUpdate) {
+        this.skipUpdate = skipUpdate;
     }
 
     public boolean isSubmitToWorkflow() {
