@@ -143,7 +143,8 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         Object reqBean = req.isUseRawPayload() ? req.getPayload() : interconnect.getBeanFromJsonPayload(req);
         SpringBootInterconnectProcedure procedure = context.getBean(req.getOperation(),
                 SpringBootInterconnectProcedure.class);
-        Object[] result = procedure.execute(reqBean, req.isReadOnly());
+        procedure.execute(reqBean, req.isReadOnly());
+        Object[] result = req.isReadOnly() ? null : new Object[] { reqBean };
         return interconnect.createProcedureResponse(result, req);
     }
 

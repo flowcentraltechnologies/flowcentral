@@ -23,14 +23,11 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
  */
 public interface SpringBootInterconnectProcedure {
 
-    /**
-     * Executes this procedure using supplied value instance
-     * 
-     * @param inst
-     *                 the instance
-     * @param readonly
-     *                 the read-only mode
-     * @return result
-     */
-    Object[] execute(Object inst, boolean readonly);
+	/**
+	 * Executes this procedure using supplied value instance
+	 * 
+	 * @param inst     the instance
+	 * @param readonly the read-only mode
+	 */
+	void execute(Object inst, boolean readonly);
 }
