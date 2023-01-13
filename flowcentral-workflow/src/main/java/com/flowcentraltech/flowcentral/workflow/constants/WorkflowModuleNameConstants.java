@@ -27,6 +27,8 @@ public interface WorkflowModuleNameConstants {
 
     String WORKFLOW_MODULE_SERVICE = "workflow-moduleservice";
 
+    String WORKFLOW_USAGE_SERVICE = "workflow-usageservice";
+
     String APPLICATION_WORKFLOW_INSTALLER = "application-workflowinstaller";
 
     String REVIEW_WIZARD_CREATE_ACTION_POLICY = "reviewwizard-createactionpolicy";

@@ -705,6 +705,15 @@
 				type="string" />
 			<field name="value" label="$m{application.appappletprop.value}"
 				type="string" />
+			<field name="appletName"
+				label="$m{application.appappletprop.appletname}" type="list_only"
+				key="appAppletId" property="name" />
+			<field name="applicationName"
+				label="$m{application.appappletprop.applicationname}" type="list_only"
+				key="appAppletId" property="applicationName" />
+			<field name="applicationDesc"
+				label="$m{application.appappletprop.applicationdesc}" type="list_only"
+				key="appAppletId" property="applicationDesc" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appappletprop.uc.name}"
 				fieldList="appAppletId,name" />

@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
@@ -71,8 +72,8 @@ import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
-import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
+import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
@@ -96,6 +97,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityFieldQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityIndex;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityIndexQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInputQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraintQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
@@ -154,8 +157,6 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoadingQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppTableQuery;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
-import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInputQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRulesQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
@@ -220,6 +221,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityAttachmentConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
@@ -249,13 +251,12 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
+import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -304,7 +305,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-        FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
+       FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
 
     private final Set<String> refProperties = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
             AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
@@ -312,6 +313,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.ASSIGNMENT_PAGE,
             AppletPropertyConstants.PROPERTY_LIST_RULE, AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME,
             AppletPropertyConstants.QUICK_EDIT_TABLE, AppletPropertyConstants.QUICK_EDIT_FORM)));
+
+    private final Set<String> RESERVED_TABLES = Collections.unmodifiableSet(
+            new HashSet<String>(Arrays.asList("application.propertyItemTable", "application.usageTable")));
+
+    private final Set<String> RESERVED_ENTITIES = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("application.propertyItem", "application.usage")));
 
     private static final int MAX_LIST_DEPTH = 8;
 
@@ -495,7 +502,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
                 @Override
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
-                    if (!"application.propertyItem".equals(longName)) {
+                    if (!RESERVED_ENTITIES.contains(longName)) {
                         return environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityClassDef.getId())) > entityClassDef.getVersion();
                     }
@@ -509,6 +516,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     final EntityDef entityDef = getEntityDef(longName);
                     if ("application.propertyItem".equals(longName)) {
                         return new EntityClassDef(entityDef, PropertyListItem.class);
+                    }
+
+                    if ("application.usage".equals(longName)) {
+                        return new EntityClassDef(entityDef, Usage.class);
                     }
 
                     logDebug("Building dynamic entity information...");
@@ -590,7 +601,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
                 @Override
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
-                    if (!"application.propertyItem".equals(longName)) {
+                    if (!RESERVED_ENTITIES.contains(longName)) {
                         return environment().value(long.class, "versionNo",
                                 new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion();
                     }
@@ -619,6 +630,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "displayValue",
                                 getApplicationMessage("application.propertyitem.displayvalue"));
+                        return edb.build();
+                    }
+
+                    if ("application.usage".equals(longName)) {
+                        EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, Usage.class.getName(),
+                                getApplicationMessage("application.usage.label"), null, null, false, false, false,
+                                "application.usage", getApplicationMessage("application.usage"), 0L, 1L);
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "type", getApplicationMessage("application.usage.type"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usedByType",
+                                getApplicationMessage("application.usage.usedbytype"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usedBy", getApplicationMessage("application.usage.usedby"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usedFor", getApplicationMessage("application.usage.usedfor"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "usage", getApplicationMessage("application.usage.usage"));
                         return edb.build();
                     }
 
@@ -776,7 +805,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected boolean stale(String longName, TableDef tableDef) throws Exception {
-                    if (!"application.propertyItemTable".equals(longName)) {
+                    if (!RESERVED_TABLES.contains(longName)) {
                         return (environment().value(long.class, "versionNo",
                                 new AppTableQuery().id(tableDef.getId())) > tableDef.getVersion())
                                 || (tableDef.getEntityDef()
@@ -796,12 +825,27 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 getApplicationMessage("application.propertyitem.table.description"), 0L, 1L);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
-                        tdb.addColumnDef("name", renderer, null, 2, false, false, false, true, false, false);
-                        tdb.addColumnDef("description", renderer, null, 2, false, false, false, true, false, false);
+                        tdb.addColumnDef("name", renderer, 2, false);
+                        tdb.addColumnDef("description", renderer, 2, false);
                         tdb.addColumnDef(getApplicationMessage("application.propertyitem.value"), "displayValue",
-                                renderer, null, null, 2, false, false, false, true, false, false);
-
+                                renderer, 2, false);
                         tdb.itemsPerPage(-1);
+                        return tdb.build();
+                    }
+
+                    if ("application.usageTable".equals(longName)) {
+                        TableDef.Builder tdb = TableDef.newBuilder(getEntityDef("application.usage"),
+                                getApplicationMessage("application.usage.table.label"), true, true,
+                                "application.usageTable", getApplicationMessage("application.usage.table.description"),
+                                0L, 1L);
+                        WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
+                        String renderer = widgetTypeDef.getRenderer();
+                        tdb.addColumnDef("type", renderer, 2, false);
+                        tdb.addColumnDef("usedByType", renderer, 2, true);
+                        tdb.addColumnDef("usedBy", renderer, 3, true);
+                        tdb.addColumnDef("usedFor", renderer, 3, true);
+                        tdb.addColumnDef("usage", renderer, 3, true);
+                        tdb.itemsPerPage(25); // TODO
                         return tdb.build();
                     }
 

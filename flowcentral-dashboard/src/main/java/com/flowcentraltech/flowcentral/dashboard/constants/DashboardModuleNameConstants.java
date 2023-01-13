@@ -27,5 +27,7 @@ public interface DashboardModuleNameConstants {
 
     String DASHBOARD_MODULE_SERVICE = "dashboard-moduleservice";
 
+    String DASHBOARD_USAGE_SERVICE = "dashboard-usageservice";
+
     String APPLICATION_DASHBOARD_INSTALLER = "application-dashboardinstaller";
 }

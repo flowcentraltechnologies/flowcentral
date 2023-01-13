@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -107,11 +108,19 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     protected List<Object> getDisplayItems(List<?> sourceObject, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
         if (sourceObject != null) {
-            if (dispStartIndex == 0 && dispEndIndex == sourceObject.size()) {
-                return (List<Object>) sourceObject;
+            List<Object> resultList = dispStartIndex == 0 && dispEndIndex == sourceObject.size()
+                    ? (List<Object>) sourceObject
+                    : (List<Object>) sourceObject.subList(dispStartIndex, dispEndIndex);
+            if (resultList.size() > 1) {
+                Order order = getOrder();
+                if (order != null) {
+                    DataUtils.sort(resultList, au().getEntityClassDef(getEntityDef().getLongName()).getEntityClass(),
+                            order);
+                    return new ArrayList<>(resultList);
+                }
             }
 
-            return (List<Object>) sourceObject.subList(dispStartIndex, dispEndIndex);
+            return resultList;
         }
 
         return Collections.emptyList();

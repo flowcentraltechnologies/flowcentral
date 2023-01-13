@@ -29,6 +29,8 @@ public interface ApplicationModuleNameConstants {
 
     String APPLICATION_FILE_RESOURCE_PROVIDER = "application-fileresourceprovider";
 
+    String APPLICATION_USAGE_SERVICE = "application-usageservice";
+
     String APPLICATION_MODULE_NAME = "application";
 
     String APPLICATION_APPLICATION_NAME = "application";

@@ -37,4 +37,28 @@ public class AppFormElementQuery extends BaseConfigEntityQuery<AppFormElement> {
     public AppFormElementQuery type(FormElementType type) {
         return (AppFormElementQuery) addEquals("type", type);
     }
+
+    public AppFormElementQuery applicationNameNot(String applicationName) {
+        return (AppFormElementQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public AppFormElementQuery tabAppletBeginsWith(String tabApplet) {
+        return (AppFormElementQuery) addBeginsWith("tabApplet", tabApplet);
+    }
+
+    public AppFormElementQuery tabReferenceBeginsWith(String tabReference) {
+        return (AppFormElementQuery) addBeginsWith("tabReference", tabReference);
+    }
+
+    public AppFormElementQuery tabMappedFormBeginsWith(String tabMappedForm) {
+        return (AppFormElementQuery) addBeginsWith("tabMappedForm", tabMappedForm);
+    }
+
+    public AppFormElementQuery inputReferenceBeginsWith(String inputReference) {
+        return (AppFormElementQuery) addBeginsWith("inputReference", inputReference);
+    }
+
+    public AppFormElementQuery inputWidgetBeginsWith(String inputWidget) {
+        return (AppFormElementQuery) addBeginsWith("inputWidget", inputWidget);
+    }
 }

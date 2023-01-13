@@ -13,25 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.notification.constants;
+
+package com.flowcentraltech.flowcentral.workflow.entities;
+
+import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntityQuery;
 
 /**
- * Notification module name constants.
+ * Workflow step alert query.
  * 
  * @author FlowCentral Technologies Limited
- * @since 1.0
+ * @version 1.0
  */
-public interface NotificationModuleNameConstants {
+public class WfStepAlertQuery extends BaseNamedEntityQuery<WfStepAlert> {
 
-    String NOTIFICATION_MODULE_NAME = "notification";
+    public WfStepAlertQuery() {
+        super(WfStepAlert.class);
+    }
 
-    String NOTIFICATION_MODULE_SERVICE = "notification-moduleservice";
+    public WfStepAlertQuery applicationNameNot(String applicationName) {
+        return (WfStepAlertQuery) addNotEquals("applicationName", applicationName);
+    }
 
-    String NOTIFICATION_USAGE_SERVICE = "notification-usageservice";
-
-    String APPLICATION_NOTIFICATION_INSTALLER = "application-notificationinstaller";
-
-    String EMAILMESSAGINGCHANNEL = "email-messagingchannel";
-
-    String SMSMESSAGINGCHANNEL = "sms-messagingchannel";
+    public WfStepAlertQuery templateBeginsWith(String template) {
+        return (WfStepAlertQuery) addBeginsWith("template", template);
+    }
 }

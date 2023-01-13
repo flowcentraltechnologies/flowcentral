@@ -39,10 +39,11 @@ public interface EnvironmentDelegate extends Database {
      *                  the operation name
      * @param payload
      *                  the payload
+     * @return the procedure result
      * @throws UnifyException
      *                        if an error occurs
      */
-    void executeProcedure(String operation, String... payload) throws UnifyException;
+    String[] executeProcedure(String operation, String... payload) throws UnifyException;
     
     /**
      * Gets the datasource name for entity

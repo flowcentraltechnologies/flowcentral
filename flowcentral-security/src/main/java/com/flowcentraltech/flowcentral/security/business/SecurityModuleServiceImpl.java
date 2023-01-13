@@ -241,10 +241,9 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             branchDesc = getApplicationMessage("application.no.branch");
         }
 
-        String dateFormatUpl = null;
-        if (!StringUtils.isBlank(mappedTenant.getDateFormat())) {
-            dateFormatUpl = "!fixeddatetimeformat pattern:$s{" + mappedTenant.getDateFormat() + "}";
-        }
+        String dateFormatUpl = mappedTenant != null && !StringUtils.isBlank(mappedTenant.getDateFormat())
+                ? "!fixeddatetimeformat pattern:$s{" + mappedTenant.getDateFormat() + "}"
+                : null;
 
         final boolean globalAccounting = systemModuleService.getSysParameterValue(boolean.class,
                 SystemModuleSysParamConstants.SYSTEM_GLOBAL_ACCOUNTING_INPUT_ENABLED);

@@ -50,6 +50,10 @@ public class AppEntityFieldQuery extends BaseConfigEntityQuery<AppEntityField> {
         return (AppEntityFieldQuery) addEquals("applicationName", applicationName);
     }
 
+    public AppEntityFieldQuery applicationNameNot(String applicationName) {
+        return (AppEntityFieldQuery) addNotEquals("applicationName", applicationName);
+    }
+
     public AppEntityFieldQuery dataType(EntityFieldDataType type) {
         return (AppEntityFieldQuery) addEquals("dataType", type);
     }
@@ -68,6 +72,22 @@ public class AppEntityFieldQuery extends BaseConfigEntityQuery<AppEntityField> {
 
     public AppEntityFieldQuery referencesIn(Collection<String> references) {
         return (AppEntityFieldQuery) addAmongst("references", references);
+    }
+
+    public AppEntityFieldQuery referencesBeginsWith(String references) {
+        return (AppEntityFieldQuery) addBeginsWith("references", references);
+    }
+
+    public AppEntityFieldQuery inputWidgetBeginsWith(String inputWidget) {
+        return (AppEntityFieldQuery) addBeginsWith("inputWidget", inputWidget);
+    }
+
+    public AppEntityFieldQuery suggestionTypeBeginsWith(String suggestionType) {
+        return (AppEntityFieldQuery) addBeginsWith("suggestionType", suggestionType);
+    }
+
+    public AppEntityFieldQuery lingualWidgetBeginsWith(String lingualWidget) {
+        return (AppEntityFieldQuery) addBeginsWith("lingualWidget", lingualWidget);
     }
 
     public AppEntityFieldQuery isEntityField() {

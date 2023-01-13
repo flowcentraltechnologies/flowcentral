@@ -52,6 +52,12 @@ public class DashboardTile extends BaseConfigNamedEntity {
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
+    @ListOnly(key = "dashboardId", property = "name")
+    private String dashboardName;
+
+    @ListOnly(key = "dashboardId", property = "applicationName")
+    private String applicationName;
+
     public DashboardTile() {
 
     }
@@ -102,6 +108,22 @@ public class DashboardTile extends BaseConfigNamedEntity {
 
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
+    }
+
+    public String getDashboardName() {
+        return dashboardName;
+    }
+
+    public void setDashboardName(String dashboardName) {
+        this.dashboardName = dashboardName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
 }

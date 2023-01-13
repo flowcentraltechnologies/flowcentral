@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 
@@ -38,6 +39,16 @@ public class AppAppletProp extends BaseConfigEntity {
 
     @Column(name = "APPLETPROP_VAL", length = 1024, nullable = true)
     private String value;
+
+    @ListOnly(key = "appAppletId", property = "name")
+    private String appletName;
+
+    @ListOnly(key = "appAppletId", property = "applicationName")
+    private String applicationName;
+
+    @ListOnly(key = "appAppletId", property = "applicationDesc")
+    private String applicationDesc;
+
 
     public AppAppletProp(String name, String value) {
         this.name = name;
@@ -75,6 +86,30 @@ public class AppAppletProp extends BaseConfigEntity {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getAppletName() {
+        return appletName;
+    }
+
+    public void setAppletName(String appletName) {
+        this.appletName = appletName;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getApplicationDesc() {
+        return applicationDesc;
+    }
+
+    public void setApplicationDesc(String applicationDesc) {
+        this.applicationDesc = applicationDesc;
     }
 
 }

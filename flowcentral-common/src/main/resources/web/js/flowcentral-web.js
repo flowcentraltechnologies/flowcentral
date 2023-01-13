@@ -605,6 +605,7 @@ fux.rigTabSheet = function(rgp) {
 			if (elem) {
 				var evp = fux.newCmdEvPrm(rgp, "choose");
 				evp.uReqTrg = i;
+				evp.uIsDebounce=true;
 				ux.addHdl(elem, "click", ux.post, evp);
 			}
 		}

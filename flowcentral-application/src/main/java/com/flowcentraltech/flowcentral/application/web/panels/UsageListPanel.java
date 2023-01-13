@@ -13,25 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.notification.constants;
+package com.flowcentraltech.flowcentral.application.web.panels;
+
+import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
- * Notification module name constants.
+ * Usage list panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface NotificationModuleNameConstants {
+@Component("fc-usagelistpanel")
+@UplBinding("web/application/upl/usagelistpanel.upl")
+public class UsageListPanel extends AbstractStandalonePanel {
 
-    String NOTIFICATION_MODULE_NAME = "notification";
-
-    String NOTIFICATION_MODULE_SERVICE = "notification-moduleservice";
-
-    String NOTIFICATION_USAGE_SERVICE = "notification-usageservice";
-
-    String APPLICATION_NOTIFICATION_INSTALLER = "application-notificationinstaller";
-
-    String EMAILMESSAGINGCHANNEL = "email-messagingchannel";
-
-    String SMSMESSAGINGCHANNEL = "sms-messagingchannel";
 }

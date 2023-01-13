@@ -31,8 +31,16 @@ public class AppAppletQuery extends BaseApplicationEntityQuery<AppApplet> {
         super(AppApplet.class);
     }
 
+    public AppAppletQuery applicationNameNot(String applicationName) {
+        return (AppAppletQuery) addNotEquals("applicationName", applicationName);
+    }
+
     public AppAppletQuery entity(String entity) {
         return (AppAppletQuery) addEquals("entity", entity);
+    }
+
+    public AppAppletQuery entityBeginsWith(String entity) {
+        return (AppAppletQuery) addBeginsWith("entity", entity);
     }
 
     public AppAppletQuery entityIn(Collection<String> entity) {

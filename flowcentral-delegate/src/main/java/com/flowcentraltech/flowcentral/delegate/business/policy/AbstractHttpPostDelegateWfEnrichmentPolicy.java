@@ -17,13 +17,8 @@
 
 package com.flowcentraltech.flowcentral.delegate.business.policy;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.IOUtils;
 
 /**
  * Convenient abstract base class for HTTP post delegate workflow enrichment policy.
@@ -39,32 +34,7 @@ public abstract class AbstractHttpPostDelegateWfEnrichmentPolicy extends Abstrac
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-        String endpoint = getEndpoint() + "/procedure";
-        StringBuilder response = new StringBuilder();
-        try {
-            URL url = new URL(endpoint);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setDoOutput(true);
-
-            try (OutputStream out = conn.getOutputStream()) {
-                out.write(jsonReq.getBytes("utf-8"));
-                out.flush();
-            }
-
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-            }
-        } catch (Exception e) {
-            this.throwOperationErrorException(e);
-        }
-
-        return response.toString();
+        return IOUtils.postJsonToEndpoint(getEndpoint() + "/procedure", jsonReq);
     }
 
     protected abstract String getEndpoint() throws UnifyException;

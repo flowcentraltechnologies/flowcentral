@@ -27,5 +27,7 @@ public interface ReportModuleNameConstants {
 
     String REPORT_MODULE_SERVICE = "report-moduleservice";
 
+    String REPORT_USAGE_SERVICE = "report-usageservice";
+
     String APPLICATION_REPORT_INSTALLER = "application-reportinstaller";
 }

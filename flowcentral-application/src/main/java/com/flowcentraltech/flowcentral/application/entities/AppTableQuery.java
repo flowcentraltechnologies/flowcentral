@@ -31,4 +31,12 @@ public class AppTableQuery extends BaseApplicationEntityQuery<AppTable> {
         return (AppTableQuery) addEquals("entity", entity);
     }
 
+    public AppTableQuery applicationNameNot(String applicationName) {
+        return (AppTableQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public AppTableQuery entityBeginsWith(String entity) {
+        return (AppTableQuery) addBeginsWith("entity", entity);
+    }
+
 }

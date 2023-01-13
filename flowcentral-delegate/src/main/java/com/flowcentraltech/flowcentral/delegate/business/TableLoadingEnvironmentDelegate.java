@@ -262,7 +262,7 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
-    public void executeProcedure(String operation, String... payload) throws UnifyException {
+    public String[] executeProcedure(String operation, String... payload) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 

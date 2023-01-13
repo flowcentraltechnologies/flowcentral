@@ -33,4 +33,12 @@ public class WorkflowQuery extends BaseApplicationEntityQuery<Workflow> {
         return (WorkflowQuery) addEquals("entity", entity);
     }
 
+    public WorkflowQuery applicationNameNot(String applicationName) {
+        return (WorkflowQuery) addNotEquals("applicationName", applicationName);
+    }
+
+    public WorkflowQuery entityBeginsWith(String entity) {
+        return (WorkflowQuery) addBeginsWith("entity", entity);
+    }
+
 }
