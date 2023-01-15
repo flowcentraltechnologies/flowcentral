@@ -95,6 +95,31 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
     }
 
     @Override
+    public long countApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
+            throws UnifyException {
+        final String applicationNameBase = applicationName + '.';
+        long usages = 0L;
+        if (UsageType.isQualifiesEntity(usageType)) {
+            usages += environment()
+                    .countAll(new WfChannelQuery().applicationNameNot(applicationName)
+                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+
+            usages += environment().countAll(new WorkflowQuery().applicationNameNot(applicationName)
+                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+
+            usages += environment().countAll(
+                    new WfStepQuery().applicationNameNot(applicationName).appletNameBeginsWith(applicationNameBase)
+                            .addSelect("applicationName", "workflowName", "name", "appletName"));
+
+            usages += environment().countAll(
+                    new WfStepAlertQuery().applicationNameNot(applicationName).templateBeginsWith(applicationNameBase)
+                            .addSelect("applicationName", "workflowName", "wfStepName", "name", "template"));
+        }
+
+        return usages;
+    }
+
+    @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }

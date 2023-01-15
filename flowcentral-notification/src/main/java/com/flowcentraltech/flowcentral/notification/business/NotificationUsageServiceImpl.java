@@ -63,6 +63,21 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public long countApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
+            throws UnifyException {
+        final String applicationNameBase = applicationName + '.';
+        long usages = 0L;
+        // Notification template
+        if (UsageType.isQualifiesEntity(usageType)) {
+            usages += environment().countAll(
+                    new NotificationTemplateQuery().applicationNameNot(applicationName).entityBeginsWith(applicationNameBase)
+                            .addSelect("applicationName", "name", "entity"));
+        }
+
+        return usages;
+    }
+
+    @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }

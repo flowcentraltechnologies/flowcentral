@@ -1691,7 +1691,7 @@
 				</setStates>
 			</formStatePolicy>
 		</form>
-		<form name="appApplicationForm"
+		<form name="appApplicationForm" consolidatedReview="studioapplication-consolidatedformreview"
 			description="$m{studio.application.form}"
 			entity="application.application">
 			<tab name="basicDetails"
