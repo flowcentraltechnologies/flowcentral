@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.chart.data;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -82,7 +83,15 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
         return new SimpleDateFormat("yyyy-MM-dd");
     }
     
-    protected final String format(SimpleDateFormat sdf, Date val) {
+    protected final String formatInteger(double val) {
+        return new DecimalFormat("###,###,###").format(val);
+    }
+    
+    protected final String formatDecimal(double val) {
+        return new DecimalFormat("###,###,###.##").format(val);
+    }
+    
+    protected final String formatDate(SimpleDateFormat sdf, Date val) {
         return val != null ? sdf.format(val) : "(null)";
     }
     

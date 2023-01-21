@@ -67,9 +67,9 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
     public final ChartData provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
-        Map<String, List<Object>> series = new HashMap<String, List<Object>>();
+        Map<String, List<Number>> series = new HashMap<String, List<Number>>();
         for (String seriesName : seriesValuePropertyByNameMap.keySet()) {
-            series.put(seriesName, new ArrayList<Object>());
+            series.put(seriesName, new ArrayList<Number>());
         }
 
         EntityClassDef entityClassDef = application().getEntityClassDef(entity);
@@ -81,7 +81,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
             valueStore.setDataIndex(i);
             Object categoryValue = valueStore.retrieve(Object.class, categoryValueProperty);
             if ((categoryValue instanceof Date) && ChartCategoryDataType.STRING.equals(categoryType)) {
-                categoryValue = format(format, (Date) categoryValue);
+                categoryValue = formatDate(format, (Date) categoryValue);
             } else {
                 categoryValue = DataUtils.convert(categoryType.dataType(), categoryValue);
             }
@@ -91,18 +91,21 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
             }
 
             for (Map.Entry<String, String> entry : seriesValuePropertyByNameMap.entrySet()) {
-                Object seriesValue = valueStore.retrieve(seriesType.dataType(), entry.getValue());
+                Number seriesValue = valueStore.retrieve(seriesType.dataType(), entry.getValue());
                 series.get(entry.getKey()).add(seriesValue);
             }
         }
 
         ChartData.Builder cdb = ChartData.newBuilder();
+        setAdditionalProperties(cdb, series);
         cdb.categories(categoryType, categories);
-        for (Map.Entry<String, List<Object>> entry : series.entrySet()) {
+        for (Map.Entry<String, List<Number>> entry : series.entrySet()) {
             cdb.addSeries(seriesType, entry.getKey(), entry.getValue());
         }
 
         return cdb.build();
     }
 
+    protected abstract void setAdditionalProperties(ChartData.Builder cdb, Map<String, List<Number>> series)
+            throws UnifyException;
 }

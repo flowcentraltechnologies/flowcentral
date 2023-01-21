@@ -72,9 +72,9 @@ public abstract class AbstractCategorySeriesChartDataProvider extends AbstractCh
     public final ChartData provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
-        Map<String, List<Object>> series = new HashMap<String, List<Object>>();
+        Map<String, List<Number>> series = new HashMap<String, List<Number>>();
         for (String seriesName : seriesNames) {
-            series.put(seriesName, new ArrayList<Object>());
+            series.put(seriesName, new ArrayList<Number>());
         }
 
         EntityClassDef entityClassDef = application().getEntityClassDef(entity);
@@ -88,7 +88,7 @@ public abstract class AbstractCategorySeriesChartDataProvider extends AbstractCh
             if (series.containsKey(_seriesNameProperty)) {
                 Object categoryValue = valueStore.retrieve(Object.class, categoryValueProperty);
                 if ((categoryValue instanceof Date) && ChartCategoryDataType.STRING.equals(categoryType)) {
-                    categoryValue = format(format, (Date) categoryValue);
+                    categoryValue = formatDate(format, (Date) categoryValue);
                 } else {
                     categoryValue = DataUtils.convert(categoryType.dataType(), categoryValue);
                 }
@@ -97,14 +97,14 @@ public abstract class AbstractCategorySeriesChartDataProvider extends AbstractCh
                     categories.add(categoryValue);
                 }
 
-                Object seriesValue = valueStore.retrieve(seriesType.dataType(), seriesValueProperty);
+                Number seriesValue = valueStore.retrieve(seriesType.dataType(), seriesValueProperty);
                 series.get(_seriesNameProperty).add(seriesValue);
             }
         }
 
         ChartData.Builder cdb = ChartData.newBuilder();
         cdb.categories(categoryType, categories);
-        for (Map.Entry<String, List<Object>> entry : series.entrySet()) {
+        for (Map.Entry<String, List<Number>> entry : series.entrySet()) {
             cdb.addSeries(seriesType, entry.getKey(), entry.getValue());
         }
 

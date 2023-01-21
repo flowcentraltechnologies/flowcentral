@@ -72,7 +72,7 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
         List<Object> _categories = new ArrayList<Object>();
         for (Object categoryValue: categories) {
             if ((categoryValue instanceof Date) && ChartCategoryDataType.STRING.equals(categoryType)) {
-                categoryValue = format(format, (Date) categoryValue);
+                categoryValue = formatDate(format, (Date) categoryValue);
             } else {
                 categoryValue = DataUtils.convert(categoryType.dataType(), categoryValue);
             }
@@ -101,7 +101,7 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
              }
          }
 
-        List<Object> series = new ArrayList<Object>(summary.values());
+        List<Number> series = new ArrayList<Number>(summary.values());
 
         ChartData.Builder cdb = ChartData.newBuilder();
         cdb.categories(categoryType, _categories);
