@@ -16,7 +16,9 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -32,7 +34,21 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
     @Configurable
     private ChartModuleService chartModuleService;
 
-    public void setChartModuleService(ChartModuleService chartModuleService) {
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
+
+    @Configurable
+    private EnvironmentService environmentService;
+    
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
+    }
+
+    public final void setEnvironmentService(EnvironmentService environmentService) {
+        this.environmentService = environmentService;
+    }
+
+    public final void setChartModuleService(ChartModuleService chartModuleService) {
         this.chartModuleService = chartModuleService;
     }
 
@@ -46,7 +62,15 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
 
     }
 
-    protected ChartModuleService getChartModuleService() {
+    public ApplicationModuleService application() {
+        return applicationModuleService;
+    }
+
+    protected EnvironmentService environment() {
+        return environmentService;
+    }
+
+    protected ChartModuleService chart() {
         return chartModuleService;
     }
 

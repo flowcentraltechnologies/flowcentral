@@ -31,16 +31,19 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum ChartSeriesDataType implements EnumConst {
 
     INTEGER(
-            "INT"),
+            "INT", Integer.class),
     LONG(
-            "LGN"),
+            "LGN", Long.class),
     DOUBLE(
-            "DBL");
+            "DBL", Double.class);
 
     private final String code;
 
-    private ChartSeriesDataType(String code) {
+    private final Class<?> dataType;
+
+    private ChartSeriesDataType(String code, Class<?> dataType) {
         this.code = code;
+        this.dataType = dataType;
     }
 
     @Override
@@ -51,6 +54,10 @@ public enum ChartSeriesDataType implements EnumConst {
     @Override
     public String defaultCode() {
         return INTEGER.code;
+    }
+
+    public Class<?> dataType() {
+        return dataType;
     }
 
     public static ChartSeriesDataType fromCode(String code) {

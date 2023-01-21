@@ -38,12 +38,12 @@ public class ChartSnapshotChartDataProvider extends AbstractChartDataProvider {
 
     @Override
     public ChartData provide(String rule) throws UnifyException {
-        return getChartModuleService().getChartSnapshotDef(rule).getChartData();
+        return chart().getChartSnapshotDef(rule).getChartData();
     }
 
     @Override
     public List<? extends Listable> getRuleList(Locale locale) throws UnifyException {
-        return getChartModuleService().findChartSnapshots((ChartSnapshotQuery) new ChartSnapshotQuery()
+        return chart().findChartSnapshots((ChartSnapshotQuery) new ChartSnapshotQuery()
                 .addSelect("name", "description").ignoreEmptyCriteria(true));
     }
 
