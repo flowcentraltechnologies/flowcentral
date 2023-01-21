@@ -16,6 +16,10 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -62,16 +66,24 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
 
     }
 
-    public ApplicationModuleService application() {
+    protected final ApplicationModuleService application() {
         return applicationModuleService;
     }
 
-    protected EnvironmentService environment() {
+    protected final EnvironmentService environment() {
         return environmentService;
     }
 
-    protected ChartModuleService chart() {
+    protected final ChartModuleService chart() {
         return chartModuleService;
+    }
+    
+    protected final String format(SimpleDateFormat sdf, Date val) {
+        return val != null ? sdf.format(val) : "(null)";
+    }
+    
+    protected final double doubleValue(BigDecimal val) {
+        return val != null ? val.doubleValue() : 0;
     }
 
 }
