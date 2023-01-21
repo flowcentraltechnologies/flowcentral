@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
+import java.util.Date;
+
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
@@ -32,24 +34,31 @@ public enum ChartCategoryDataType implements EnumConst {
 
     INTEGER(
             "INT",
-            "numeric"),
+            "numeric",
+            Integer.class),
     LONG(
             "LGN",
-            "numeric"),
+            "numeric",
+            Long.class),
     DATE(
             "DTE",
-            "datetime"),
+            "datetime",
+            Date.class),
     STRING(
             "STR",
-            "category");
+            "category",
+            String.class);
 
     private final String code;
 
     private final String optionsType;
 
-    private ChartCategoryDataType(String code, String optionsType) {
+    private final Class<?> dataType;
+
+    private ChartCategoryDataType(String code, String optionsType, Class<?> dataType) {
         this.code = code;
         this.optionsType = optionsType;
+        this.dataType = dataType;
     }
 
     @Override
@@ -60,6 +69,10 @@ public enum ChartCategoryDataType implements EnumConst {
     @Override
     public String defaultCode() {
         return INTEGER.code;
+    }
+
+    public Class<?> dataType() {
+        return dataType;
     }
 
     public String optionsType() {

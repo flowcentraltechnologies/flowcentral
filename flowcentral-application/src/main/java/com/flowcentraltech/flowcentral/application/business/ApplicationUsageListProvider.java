@@ -46,4 +46,16 @@ public class ApplicationUsageListProvider extends AbstractUsageListProvider {
         return usageList;
     }
 
+    @Override
+    public long countUsages(ValueStoreReader instReader, UsageType usageType) throws UnifyException {
+        final String applicationName = instReader.read(String.class, "name");
+        logDebug("Count usages of application [{0}]...", applicationName);
+        long usages = 0;
+        for (UsageProvider provider : getProviders()) {
+            usages += provider.countApplicationUsagesByOtherApplications(applicationName, usageType);
+        }
+
+        return usages;
+    }
+
 }

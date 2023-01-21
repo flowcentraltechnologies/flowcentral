@@ -63,6 +63,21 @@ public class DashboardUsageServiceImpl extends AbstractFlowCentralService implem
     }
 
     @Override
+    public long countApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
+            throws UnifyException {
+        final String applicationNameBase = applicationName + '.';
+        long usages = 0L;
+        // Dashboard tile
+        if (UsageType.isQualifiesEntity(usageType)) {
+            usages += environment().countAll(
+                    new DashboardTileQuery().applicationNameNot(applicationName).chartBeginsWith(applicationNameBase)
+                            .addSelect("applicationName", "dashboardName", "name", "chart"));
+        }
+
+        return usages;
+    }
+
+    @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }

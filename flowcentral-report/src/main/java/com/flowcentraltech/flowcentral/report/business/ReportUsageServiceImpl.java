@@ -74,6 +74,24 @@ public class ReportUsageServiceImpl extends AbstractFlowCentralService implement
     }
 
     @Override
+    public long countApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
+            throws UnifyException {
+        final String applicationNameBase = applicationName + '.';
+        long usages = 0L;
+        if (UsageType.isQualifiesEntity(usageType)) {
+            usages += environment()
+                    .countAll(new ReportableDefinitionQuery().applicationNameNot(applicationName)
+                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+
+            usages += environment().countAll(new ReportConfigurationQuery()
+                    .applicationNameNot(applicationName).reportableBeginsWith(applicationNameBase)
+                    .addSelect("applicationName", "name", "reportable"));
+        }
+
+        return usages;
+    }
+
+    @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }

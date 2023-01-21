@@ -35,12 +35,25 @@ public interface UsageListProvider extends UnifyComponent {
      * Finds usages.
      * 
      * @param instReader
-     *                  entity instance reader
+     *                   entity instance reader
      * @param usageType
-     *                  optional usage type restriction
+     *                   optional usage type restriction
      * @return list of usages
      * @throws UnifyException
      *                        if an error occurs
      */
     List<Usage> findUsages(ValueStoreReader instReader, UsageType usageType) throws UnifyException;
+
+    /**
+     * Count usages.
+     * 
+     * @param instReader
+     *                   entity instance reader
+     * @param usageType
+     *                   optional usage type restriction
+     * @return the usage count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    long countUsages(ValueStoreReader instReader, UsageType usageType) throws UnifyException;
 }

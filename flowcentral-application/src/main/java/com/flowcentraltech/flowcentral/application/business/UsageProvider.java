@@ -43,4 +43,18 @@ public interface UsageProvider extends UnifyComponent {
      */
     List<Usage> findApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
             throws UnifyException;
+
+    /**
+     * Count application usages by other applications.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @param usageType
+     *                        optional usage type
+     * @return count of usages
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    long countApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
+            throws UnifyException;
 }

@@ -149,6 +149,32 @@ public class ChartData {
             return this;
         }
         
+        @SuppressWarnings("unchecked")
+        public Builder categories(ChartCategoryDataType type, List<?> categories) throws UnifyException {
+            switch (type) {
+                case DATE:
+                    categories(type,
+                            DataUtils.asJsonArrayString(DataUtils.toArray(Date.class, (List<Date>) categories)));
+                    break;
+                case INTEGER:
+                    categories(type,
+                            DataUtils.asJsonArrayString(DataUtils.toArray(Integer.class, (List<Integer>) categories)));
+                    break;
+                case LONG:
+                    categories(type,
+                            DataUtils.asJsonArrayString(DataUtils.toArray(Long.class, (List<Long>) categories)));
+                    break;
+                case STRING:
+                    categories(type,
+                            DataUtils.asJsonArrayString(DataUtils.toArray(Date.class, (List<Date>) categories)));
+                    break;
+                default:
+                    break;
+            }
+            
+            return this;
+        }
+        
         public Builder categories(ChartCategoryDataType type, String categoriesJson) throws UnifyException {
             switch (type) {
                 case DATE:
@@ -166,6 +192,28 @@ public class ChartData {
                     break;
                 default:
                     break;
+            }
+            return this;
+        }
+
+        @SuppressWarnings("unchecked")
+        public Builder addSeries(ChartSeriesDataType type, String name, List<?> series) throws UnifyException {
+            switch (type) {
+                case DOUBLE:
+                    addSeries(type, name,
+                            DataUtils.asJsonArrayString(DataUtils.toArray(Double.class, (List<Double>) series)));
+                    break;
+                case INTEGER:
+                    addSeries(type, name,
+                            DataUtils.asJsonArrayString(DataUtils.toArray(Integer.class, (List<Integer>) series)));
+                    break;
+                case LONG:
+                    addSeries(type, name,
+                            DataUtils.asJsonArrayString(DataUtils.toArray(Long.class, (List<Long>) series)));
+                    break;
+                default:
+                    break;
+
             }
             return this;
         }

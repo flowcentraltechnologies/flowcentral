@@ -16,7 +16,14 @@
 
 package com.flowcentraltech.flowcentral.chart.data;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -32,7 +39,21 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
     @Configurable
     private ChartModuleService chartModuleService;
 
-    public void setChartModuleService(ChartModuleService chartModuleService) {
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
+
+    @Configurable
+    private EnvironmentService environmentService;
+    
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
+    }
+
+    public final void setEnvironmentService(EnvironmentService environmentService) {
+        this.environmentService = environmentService;
+    }
+
+    public final void setChartModuleService(ChartModuleService chartModuleService) {
         this.chartModuleService = chartModuleService;
     }
 
@@ -46,8 +67,36 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
 
     }
 
-    protected ChartModuleService getChartModuleService() {
+    protected final ApplicationModuleService application() {
+        return applicationModuleService;
+    }
+
+    protected final EnvironmentService environment() {
+        return environmentService;
+    }
+
+    protected final ChartModuleService chart() {
         return chartModuleService;
+    }
+    
+    protected SimpleDateFormat getDateFormat() {
+        return new SimpleDateFormat("yyyy-MM-dd");
+    }
+    
+    protected final String formatInteger(double val) {
+        return new DecimalFormat("###,###,###").format(val);
+    }
+    
+    protected final String formatDecimal(double val) {
+        return new DecimalFormat("###,###,###.##").format(val);
+    }
+    
+    protected final String formatDate(SimpleDateFormat sdf, Date val) {
+        return val != null ? sdf.format(val) : "(null)";
+    }
+    
+    protected final double doubleValue(BigDecimal val) {
+        return val != null ? val.doubleValue() : 0;
     }
 
 }
