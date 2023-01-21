@@ -34,12 +34,13 @@ import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Convenient abstract base class for chart data providers.
+ * Convenient abstract base class for category mapped series chart data
+ * providers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractCategorySeriesChartDataProvider extends AbstractChartDataProvider {
+public abstract class AbstractCategoryMappedSeriesChartDataProvider extends AbstractChartDataProvider {
 
     private final ChartCategoryDataType categoryType;
 
@@ -47,24 +48,18 @@ public abstract class AbstractCategorySeriesChartDataProvider extends AbstractCh
 
     private final String entity;
 
-    private final String[] seriesNames;
-
     private final String categoryValueProperty;
 
-    private final String seriesNameProperty;
+    private final Map<String, String> seriesValuePropertyByNameMap;
 
-    private final String seriesValueProperty;
-
-    protected AbstractCategorySeriesChartDataProvider(ChartCategoryDataType categoryType,
+    protected AbstractCategoryMappedSeriesChartDataProvider(ChartCategoryDataType categoryType,
             ChartSeriesDataType seriesType, String entity, String categoryValueProperty,
-            String[] seriesNames, String seriesNameProperty, String seriesValueProperty) {
+            Map<String, String> seriesValuePropertyByNameMap) {
         this.categoryType = categoryType;
         this.seriesType = seriesType;
         this.entity = entity;
-        this.seriesNames = seriesNames;
         this.categoryValueProperty = categoryValueProperty;
-        this.seriesNameProperty = seriesNameProperty;
-        this.seriesValueProperty = seriesValueProperty;
+        this.seriesValuePropertyByNameMap = seriesValuePropertyByNameMap;
     }
 
     @SuppressWarnings("unchecked")
@@ -73,7 +68,7 @@ public abstract class AbstractCategorySeriesChartDataProvider extends AbstractCh
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
         Map<String, List<Object>> series = new HashMap<String, List<Object>>();
-        for (String seriesName : seriesNames) {
+        for (String seriesName : seriesValuePropertyByNameMap.keySet()) {
             series.put(seriesName, new ArrayList<Object>());
         }
 
@@ -84,21 +79,20 @@ public abstract class AbstractCategorySeriesChartDataProvider extends AbstractCh
         final int len = valueStore.size();
         for (int i = 0; i < len; i++) {
             valueStore.setDataIndex(i);
-            String _seriesNameProperty = valueStore.retrieve(String.class, seriesNameProperty);
-            if (series.containsKey(_seriesNameProperty)) {
-                Object categoryValue = valueStore.retrieve(Object.class, categoryValueProperty);
-                if ((categoryValue instanceof Date) && ChartCategoryDataType.STRING.equals(categoryType)) {
-                    categoryValue = format(format, (Date) categoryValue);
-                } else {
-                    categoryValue = DataUtils.convert(categoryType.dataType(), categoryValue);
-                }
+            Object categoryValue = valueStore.retrieve(Object.class, categoryValueProperty);
+            if ((categoryValue instanceof Date) && ChartCategoryDataType.STRING.equals(categoryType)) {
+                categoryValue = format(format, (Date) categoryValue);
+            } else {
+                categoryValue = DataUtils.convert(categoryType.dataType(), categoryValue);
+            }
 
-                if (!categories.contains(categoryValue)) {
-                    categories.add(categoryValue);
-                }
+            if (!categories.contains(categoryValue)) {
+                categories.add(categoryValue);
+            }
 
-                Object seriesValue = valueStore.retrieve(seriesType.dataType(), seriesValueProperty);
-                series.get(_seriesNameProperty).add(seriesValue);
+            for (Map.Entry<String, String> entry : seriesValuePropertyByNameMap.entrySet()) {
+                Object seriesValue = valueStore.retrieve(seriesType.dataType(), entry.getValue());
+                series.get(entry.getKey()).add(seriesValue);
             }
         }
 

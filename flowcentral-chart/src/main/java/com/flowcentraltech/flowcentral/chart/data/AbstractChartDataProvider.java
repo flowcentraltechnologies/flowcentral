@@ -78,6 +78,10 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
         return chartModuleService;
     }
     
+    protected SimpleDateFormat getDateFormat() {
+        return new SimpleDateFormat("yyyy-MM-dd");
+    }
+    
     protected final String format(SimpleDateFormat sdf, Date val) {
         return val != null ? sdf.format(val) : "(null)";
     }
