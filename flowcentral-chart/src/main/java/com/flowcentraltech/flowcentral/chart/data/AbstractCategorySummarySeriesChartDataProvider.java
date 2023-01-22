@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -55,8 +56,8 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
     private final String[] seriesValueProperties;
 
     protected AbstractCategorySummarySeriesChartDataProvider(ChartCategoryDataType categoryType,
-            ChartSeriesDataType seriesType, String entity, Object[] categories,
-            String seriesName, String[] seriesValueProperties) {
+            ChartSeriesDataType seriesType, String entity, Object[] categories, String seriesName,
+            String[] seriesValueProperties) {
         this.categoryType = categoryType;
         this.seriesType = seriesType;
         this.entity = entity;
@@ -70,21 +71,21 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
     public final ChartData provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> _categories = new ArrayList<Object>();
-        for (Object categoryValue: categories) {
+        for (Object categoryValue : categories) {
             if ((categoryValue instanceof Date) && ChartCategoryDataType.STRING.equals(categoryType)) {
                 categoryValue = formatDate(format, (Date) categoryValue);
             } else {
                 categoryValue = DataUtils.convert(categoryType.dataType(), categoryValue);
             }
-            
+
             _categories.add(categoryValue);
         }
-        
+
         Map<String, Number> summary = new LinkedHashMap<String, Number>();
-        for(String seriesValueProperty: seriesValueProperties) {
+        for (String seriesValueProperty : seriesValueProperties) {
             summary.put(seriesValueProperty, seriesType.zero());
         }
-        
+
         EntityClassDef entityClassDef = application().getEntityClassDef(entity);
         List<? extends Entity> statistics = environment()
                 .findAll(Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()));
@@ -92,22 +93,26 @@ public abstract class AbstractCategorySummarySeriesChartDataProvider extends Abs
         final int len = valueStore.size();
         for (int i = 0; i < len; i++) {
             valueStore.setDataIndex(i);
-            for(String seriesValueProperty: seriesValueProperties) {
+            for (String seriesValueProperty : seriesValueProperties) {
                 Number val = valueStore.retrieve(seriesType.dataType(), seriesValueProperty);
                 if (val != null) {
                     val = seriesType.add(summary.get(seriesValueProperty), val);
                     summary.put(seriesValueProperty, val);
                 }
-             }
-         }
+            }
+        }
 
         List<Number> series = new ArrayList<Number>(summary.values());
 
         ChartData.Builder cdb = ChartData.newBuilder();
+        setAdditionalProperties(cdb, Collections.unmodifiableList(_categories), Collections.unmodifiableList(series));
         cdb.categories(categoryType, _categories);
         cdb.addSeries(seriesType, seriesName, series);
 
         return cdb.build();
     }
+
+    protected abstract void setAdditionalProperties(ChartData.Builder cdb, List<Object> categories, List<Number> series)
+            throws UnifyException;
 
 }
