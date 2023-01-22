@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.chart.data;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +67,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
     public final ChartData provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
-        Map<String, List<Number>> series = new HashMap<String, List<Number>>();
+        Map<String, List<Number>> series = new LinkedHashMap<String, List<Number>>();
         for (String seriesName : seriesValuePropertyByNameMap.keySet()) {
             series.put(seriesName, new ArrayList<Number>());
         }
