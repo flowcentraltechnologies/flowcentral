@@ -133,6 +133,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tiny {font-size:8pt;width:152px;}
 .fc-tiny .tread {font-size:8pt;}
 
+.fc-reportlist td {padding:16px 4px;}
+
 .fc-formfield {width:196px;}
 
 .fc-userdtlimg {width: 220px; height: 220px;padding:1px;border:solid 1px #A0A0A0;margin:2px;}

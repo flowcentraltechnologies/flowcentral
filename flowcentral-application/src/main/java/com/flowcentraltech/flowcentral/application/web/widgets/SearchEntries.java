@@ -213,12 +213,6 @@ public class SearchEntries {
                                 break;
                         }
 
-                        if (EntityFieldDataType.STRING.equals(dataType)) {
-                            and.add(new ILike(fieldName, val));
-                        } else {
-                            and.add(new Equals(fieldName, val));
-                        }
-
                     } else if (searchEntry.isGeneratorEntry()) {
                         SearchInputRestrictionGenerator generator = au
                                 .getComponent(SearchInputRestrictionGenerator.class, searchEntry.getGenerator());

@@ -18,8 +18,9 @@ package com.flowcentraltech.flowcentral.chart.data;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
     public final ChartData provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
         List<Object> categories = new ArrayList<Object>();
-        Map<String, List<Number>> series = new HashMap<String, List<Number>>();
+        Map<String, List<Number>> series = new LinkedHashMap<String, List<Number>>();
         for (String seriesName : seriesValuePropertyByNameMap.keySet()) {
             series.put(seriesName, new ArrayList<Number>());
         }
@@ -97,7 +98,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
         }
 
         ChartData.Builder cdb = ChartData.newBuilder();
-        setAdditionalProperties(cdb, series);
+        setAdditionalProperties(cdb, Collections.unmodifiableList(categories), Collections.unmodifiableMap(series));
         cdb.categories(categoryType, categories);
         for (Map.Entry<String, List<Number>> entry : series.entrySet()) {
             cdb.addSeries(seriesType, entry.getKey(), entry.getValue());
@@ -106,6 +107,6 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
         return cdb.build();
     }
 
-    protected abstract void setAdditionalProperties(ChartData.Builder cdb, Map<String, List<Number>> series)
-            throws UnifyException;
+    protected abstract void setAdditionalProperties(ChartData.Builder cdb, List<Object> categories,
+            Map<String, List<Number>> series) throws UnifyException;
 }
