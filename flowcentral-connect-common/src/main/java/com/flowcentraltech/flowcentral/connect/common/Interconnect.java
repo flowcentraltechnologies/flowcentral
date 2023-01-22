@@ -233,6 +233,8 @@ public class Interconnect {
                 type = null;
             }
         } else {
+            paramA = ConverterUtils.convert(Date.class, paramA);
+            paramB = ConverterUtils.convert(Date.class, paramB);
             if (entityFieldInfo.isTimestamp()) {
                 switch (type) {
                     case EQUALS:
