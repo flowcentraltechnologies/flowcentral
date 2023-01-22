@@ -166,7 +166,7 @@ public class ChartData {
                     break;
                 case STRING:
                     categories(type,
-                            DataUtils.asJsonArrayString(DataUtils.toArray(Date.class, (List<Date>) categories)));
+                            DataUtils.asJsonArrayString(DataUtils.toArray(String.class, (List<String>) categories)));
                     break;
                 default:
                     break;
