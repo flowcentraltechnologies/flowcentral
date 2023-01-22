@@ -87,6 +87,7 @@ public class RoleDashboardsListCommand extends AbstractDashboardListCommand<Zero
                 }
             }
 
+            DataUtils.sortAscending(resultList, Listable.class, "listDescription");
             return resultList;
         }
 
