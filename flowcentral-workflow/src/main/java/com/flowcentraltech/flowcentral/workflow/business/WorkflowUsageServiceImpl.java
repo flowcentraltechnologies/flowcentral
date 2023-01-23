@@ -120,6 +120,46 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
     }
 
     @Override
+    public List<Usage> findEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        List<Usage> usageList = new ArrayList<Usage>();
+        if (UsageType.isQualifiesEntity(usageType)) {
+            List<WfChannel> wfChannelList = environment()
+                    .listAll(new WfChannelQuery()
+                            .entity(entity).addSelect("applicationName", "name", "entity"));
+            for (WfChannel wfChannel : wfChannelList) {
+                Usage usage = new Usage(UsageType.ENTITY, "WfChannel",
+                        wfChannel.getApplicationName() + "." + wfChannel.getName(), "entity", wfChannel.getEntity());
+                usageList.add(usage);
+            }
+
+            List<Workflow> workflowList = environment().listAll(new WorkflowQuery()
+                    .entity(entity).addSelect("applicationName", "name", "entity"));
+            for (Workflow workflow : workflowList) {
+                Usage usage = new Usage(UsageType.ENTITY, "Workflow",
+                        workflow.getApplicationName() + "." + workflow.getName(), "entity", workflow.getEntity());
+                usageList.add(usage);
+            }
+        }
+
+        return usageList;
+    }
+
+    @Override
+    public long countEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        long usages = 0L;
+        if (UsageType.isQualifiesEntity(usageType)) {
+            usages += environment()
+                    .countAll(new WfChannelQuery()
+                            .entity(entity).addSelect("applicationName", "name", "entity"));
+ 
+            usages += environment().countAll(new WorkflowQuery()
+                    .entity(entity).addSelect("applicationName", "name", "entity"));
+         }
+        
+        return usages;
+    }
+
+    @Override
     protected void doInstallModuleFeatures(ModuleInstall moduleInstall) throws UnifyException {
 
     }

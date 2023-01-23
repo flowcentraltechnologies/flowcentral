@@ -47,14 +47,13 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         List<Usage> usageList = new ArrayList<Usage>();
         // Notification template
         if (UsageType.isQualifiesEntity(usageType)) {
-            List<NotificationTemplate> notificationTemplateList = environment().listAll(
-                    new NotificationTemplateQuery().applicationNameNot(applicationName).entityBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "name", "entity"));
+            List<NotificationTemplate> notificationTemplateList = environment()
+                    .listAll(new NotificationTemplateQuery().applicationNameNot(applicationName)
+                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
             for (NotificationTemplate notificationTemplate : notificationTemplateList) {
-                Usage usage = new Usage(
-                        UsageType.ENTITY, "NotificationTemplate", notificationTemplate.getApplicationName() + "."
-                                +  notificationTemplate.getName(),
-                        "entity", notificationTemplate.getEntity());
+                Usage usage = new Usage(UsageType.ENTITY, "NotificationTemplate",
+                        notificationTemplate.getApplicationName() + "." + notificationTemplate.getName(), "entity",
+                        notificationTemplate.getEntity());
                 usageList.add(usage);
             }
         }
@@ -69,9 +68,38 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         long usages = 0L;
         // Notification template
         if (UsageType.isQualifiesEntity(usageType)) {
+            usages += environment().countAll(new NotificationTemplateQuery().applicationNameNot(applicationName)
+                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+        }
+
+        return usages;
+    }
+
+    @Override
+    public List<Usage> findEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        List<Usage> usageList = new ArrayList<Usage>();
+        // Notification template
+        if (UsageType.isQualifiesEntity(usageType)) {
+            List<NotificationTemplate> notificationTemplateList = environment().listAll(
+                    new NotificationTemplateQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+            for (NotificationTemplate notificationTemplate : notificationTemplateList) {
+                Usage usage = new Usage(UsageType.ENTITY, "NotificationTemplate",
+                        notificationTemplate.getApplicationName() + "." + notificationTemplate.getName(), "entity",
+                        notificationTemplate.getEntity());
+                usageList.add(usage);
+            }
+        }
+
+        return usageList;
+    }
+
+    @Override
+    public long countEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        long usages = 0L;
+        // Notification template
+        if (UsageType.isQualifiesEntity(usageType)) {
             usages += environment().countAll(
-                    new NotificationTemplateQuery().applicationNameNot(applicationName).entityBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "name", "entity"));
+                    new NotificationTemplateQuery().entity(entity).addSelect("applicationName", "name", "entity"));
         }
 
         return usages;

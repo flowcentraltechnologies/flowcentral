@@ -79,13 +79,39 @@ public class ReportUsageServiceImpl extends AbstractFlowCentralService implement
         final String applicationNameBase = applicationName + '.';
         long usages = 0L;
         if (UsageType.isQualifiesEntity(usageType)) {
-            usages += environment()
-                    .countAll(new ReportableDefinitionQuery().applicationNameNot(applicationName)
-                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new ReportableDefinitionQuery().applicationNameNot(applicationName)
+                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
 
-            usages += environment().countAll(new ReportConfigurationQuery()
-                    .applicationNameNot(applicationName).reportableBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "name", "reportable"));
+            usages += environment().countAll(new ReportConfigurationQuery().applicationNameNot(applicationName)
+                    .reportableBeginsWith(applicationNameBase).addSelect("applicationName", "name", "reportable"));
+        }
+
+        return usages;
+    }
+
+    @Override
+    public List<Usage> findEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        List<Usage> usageList = new ArrayList<Usage>();
+        if (UsageType.isQualifiesEntity(usageType)) {
+            List<ReportableDefinition> reportableDefinitionList = environment().listAll(
+                    new ReportableDefinitionQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+            for (ReportableDefinition reportableDefinition : reportableDefinitionList) {
+                Usage usage = new Usage(UsageType.ENTITY, "ReportableDefinition",
+                        reportableDefinition.getApplicationName() + "." + reportableDefinition.getName(), "entity",
+                        reportableDefinition.getEntity());
+                usageList.add(usage);
+            }
+        }
+
+        return usageList;
+    }
+
+    @Override
+    public long countEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        long usages = 0L;
+        if (UsageType.isQualifiesEntity(usageType)) {
+            usages += environment().countAll(
+                    new ReportableDefinitionQuery().entity(entity).addSelect("applicationName", "name", "entity"));
         }
 
         return usages;

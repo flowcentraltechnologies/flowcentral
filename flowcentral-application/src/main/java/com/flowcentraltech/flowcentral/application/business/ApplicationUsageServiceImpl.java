@@ -249,75 +249,165 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
         if (UsageType.isQualifiesApplet(usageType)) {
             usages += environment().countAll(new AppAppletQuery().applicationNameNot(applicationName)
                     .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
- 
-            usages += environment().countAll(
-                    new AppAppletPropQuery().applicationNameNot(applicationName).valueBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "appletName", "name", "value"));
- 
-            usages += environment()
-                    .countAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
-                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+
+            usages += environment().countAll(new AppAppletPropQuery().applicationNameNot(applicationName)
+                    .valueBeginsWith(applicationNameBase).addSelect("applicationName", "appletName", "name", "value"));
+
+            usages += environment().countAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
+                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
         }
 
         // App entity field
         if (UsageType.isQualifiesEntity(usageType)) {
-            usages +=  environment().countAll(new AppEntityFieldQuery()
-                    .applicationNameNot(applicationName).referencesBeginsWith(applicationNameBase)
+            usages += environment().countAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
+                    .referencesBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appEntityName", "name", "references"));
- 
-            usages +=  environment().countAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
+
+            usages += environment().countAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
                     .inputWidgetBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appEntityName", "name", "inputWidget"));
- 
-            usages +=  environment().countAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
+
+            usages += environment().countAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
                     .suggestionTypeBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appEntityName", "name", "suggestionType"));
- 
+
             usages += environment().countAll(new AppEntityFieldQuery().applicationNameNot(applicationName)
                     .lingualWidgetBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appEntityName", "name", "lingualWidget"));
-         }
+        }
 
         // App form
         if (UsageType.isQualifiesForm(usageType)) {
-            usages +=  environment().countAll(new AppFormQuery().applicationNameNot(applicationName)
+            usages += environment().countAll(new AppFormQuery().applicationNameNot(applicationName)
                     .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
 
-            usages +=   environment().countAll(new AppFormElementQuery()
-                    .applicationNameNot(applicationName).tabAppletBeginsWith(applicationNameBase)
+            usages += environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
+                    .tabAppletBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appFormName", "elementName", "tabApplet"));
 
-            usages +=   environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
+            usages += environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
                     .tabReferenceBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appFormName", "elementName", "tabReference"));
 
-            usages +=   environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
+            usages += environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
                     .tabMappedFormBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appFormName", "elementName", "tabMappedForm"));
 
-            usages +=   environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
+            usages += environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
                     .inputReferenceBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appFormName", "elementName", "inputReference"));
 
-            usages +=  environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
+            usages += environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
                     .inputWidgetBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appFormName", "elementName", "inputWidget"));
 
-            usages +=   environment().countAll(new AppFormRelatedListQuery()
-                    .applicationNameNot(applicationName).appletBeginsWith(applicationNameBase)
+            usages += environment().countAll(new AppFormRelatedListQuery().applicationNameNot(applicationName)
+                    .appletBeginsWith(applicationNameBase)
                     .addSelect("applicationName", "appFormName", "name", "applet"));
         }
 
         // App ref
         if (UsageType.isQualifiesRef(usageType)) {
-            usages +=  environment().countAll(new AppRefQuery().applicationNameNot(applicationName)
+            usages += environment().countAll(new AppRefQuery().applicationNameNot(applicationName)
                     .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
         }
 
         // App table
         if (UsageType.isQualifiesTable(usageType)) {
-            usages +=  environment().countAll(new AppTableQuery().applicationNameNot(applicationName)
+            usages += environment().countAll(new AppTableQuery().applicationNameNot(applicationName)
                     .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+        }
+
+        return usages;
+    }
+
+    @Override
+    public List<Usage> findEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        List<Usage> usageList = new ArrayList<Usage>();
+        // App applet
+        if (UsageType.isQualifiesApplet(usageType)) {
+            List<AppApplet> appletList = environment()
+                    .listAll(new AppAppletQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+            for (AppApplet appApplet : appletList) {
+                Usage usage = new Usage(UsageType.APPLET, "AppApplet",
+                        appApplet.getApplicationName() + "." + appApplet.getName(), "entity", appApplet.getEntity());
+                usageList.add(usage);
+            }
+
+            List<AppAssignmentPage> appAssignmentPageList = environment().listAll(
+                    new AppAssignmentPageQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+            for (AppAssignmentPage appAssignmentPage : appAssignmentPageList) {
+                Usage usage = new Usage(UsageType.APPLET, "AppAssignmentPage",
+                        appAssignmentPage.getApplicationName() + "." + appAssignmentPage.getName(), "entity",
+                        appAssignmentPage.getEntity());
+                usageList.add(usage);
+            }
+        }
+
+        // App form
+        if (UsageType.isQualifiesForm(usageType)) {
+            List<AppForm> appFormList = environment()
+                    .listAll(new AppFormQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+            for (AppForm appForm : appFormList) {
+                Usage usage = new Usage(UsageType.FORM, "AppForm", appForm.getApplicationName(),
+                        appForm.getName() + "." + "entity", appForm.getEntity());
+                usageList.add(usage);
+            }
+        }
+
+        // App ref
+        if (UsageType.isQualifiesRef(usageType)) {
+            List<AppRef> appRefList = environment()
+                    .listAll(new AppRefQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+            for (AppRef appRef : appRefList) {
+                Usage usage = new Usage(UsageType.REF, "AppRef", appRef.getApplicationName(),
+                        appRef.getName() + "." + "entity", appRef.getEntity());
+                usageList.add(usage);
+            }
+        }
+
+        // App table
+        if (UsageType.isQualifiesTable(usageType)) {
+            List<AppTable> appTableList = environment()
+                    .listAll(new AppTableQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+            for (AppTable appTable : appTableList) {
+                Usage usage = new Usage(UsageType.TABLE, "AppTable", appTable.getApplicationName(),
+                        appTable.getName() + "." + "entity", appTable.getEntity());
+                usageList.add(usage);
+            }
+        }
+
+        return usageList;
+    }
+
+    @Override
+    public long countEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        long usages = 0L;
+        // App applet
+        if (UsageType.isQualifiesApplet(usageType)) {
+            usages += environment()
+                    .countAll(new AppAppletQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+
+            usages += environment().countAll(
+                    new AppAssignmentPageQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+        }
+
+        // App form
+        if (UsageType.isQualifiesForm(usageType)) {
+            usages += environment()
+                    .countAll(new AppFormQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+        }
+
+        // App ref
+        if (UsageType.isQualifiesRef(usageType)) {
+            usages += environment()
+                    .countAll(new AppRefQuery().entity(entity).addSelect("applicationName", "name", "entity"));
+        }
+
+        // App table
+        if (UsageType.isQualifiesTable(usageType)) {
+            usages += environment()
+                    .countAll(new AppTableQuery().entity(entity).addSelect("applicationName", "name", "entity"));
         }
 
         return usages;

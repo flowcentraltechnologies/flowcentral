@@ -1990,7 +1990,7 @@
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
-		<form name="appEntityForm"
+		<form name="appEntityForm" consolidatedReview="studioentity-consolidatedformreview"
 			description="$m{studio.appentity.form}"
 			entity="application.appEntity">
 			<action type="button" name="lockResource" symbol="lock"
@@ -2063,6 +2063,9 @@
 				label="$m{studio.appentity.form.searchinputs}"
 				contentType="child_list" applet="manageAppEntitySearchInput"
 				reference="searchInputList" />
+			<tab name="usages"
+				label="$m{studio.appentity.form.usages}"
+				contentType="usage_list" reference="entity-usagelistprovider" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
