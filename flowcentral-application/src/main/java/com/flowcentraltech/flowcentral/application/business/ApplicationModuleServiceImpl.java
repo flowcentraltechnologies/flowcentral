@@ -1319,6 +1319,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public boolean isApplicationDevelopable(String applicationName) throws UnifyException {
+        return environment().value(boolean.class, "developable", new ApplicationQuery().name(applicationName));
+    }
+
+    @Override
     public String getApplicationName(Long applicationId) throws UnifyException {
         return environment().value(String.class, "name", new ApplicationQuery().id(applicationId));
     }

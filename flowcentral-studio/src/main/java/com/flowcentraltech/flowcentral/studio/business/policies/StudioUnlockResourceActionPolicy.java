@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.AbstractCollabor
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.database.Entity;
@@ -40,12 +41,15 @@ public class StudioUnlockResourceActionPolicy extends AbstractCollaborationFormA
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         final BaseApplicationEntity _appInst = (BaseApplicationEntity) inst;
         if (isCollaboration()) {
-            final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
-            if (type != null) {
-                final String resourceName = ApplicationNameUtils
-                        .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
-                return !getCollaborationProvider().isFrozen(type, resourceName)
-                        && getCollaborationProvider().isLockedBy(type, resourceName, getUserToken().getUserLoginId());
+            final ConfigType configType = _appInst.getConfigType();
+            if (!configType.isStatic()) {
+                final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
+                if (type != null) {
+                    final String resourceName = ApplicationNameUtils
+                            .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
+                    return !getCollaborationProvider().isFrozen(type, resourceName) && getCollaborationProvider()
+                            .isLockedBy(type, resourceName, getUserToken().getUserLoginId());
+                }
             }
         }
 
@@ -61,8 +65,8 @@ public class StudioUnlockResourceActionPolicy extends AbstractCollaborationFormA
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         final BaseApplicationEntity _appInst = (BaseApplicationEntity) ctx.getInst();
         final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
-        final String resourceName = ApplicationNameUtils
-                .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
+        final String resourceName = ApplicationNameUtils.getApplicationEntityLongName(_appInst.getApplicationName(),
+                _appInst.getName());
         getCollaborationProvider().unlock(type, resourceName, getUserToken().getUserLoginId());
         return null;
     }

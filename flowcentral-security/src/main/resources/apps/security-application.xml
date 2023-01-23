@@ -2,7 +2,7 @@
 <!-- Security application -->
 <application name="security"
 	description="$m{security.short.description}" label="$m{security.label}"
-	module="security" developable="true">
+	module="security" >
 	<!-- Notification Templates -->
 	<notifTemplates>
 		<notifTemplate

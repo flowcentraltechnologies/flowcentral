@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.AbstractCollabor
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockInfo;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockedResourceInfo;
@@ -62,12 +63,15 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
     public boolean checkAppliesTo(Entity inst) throws UnifyException {
         final BaseApplicationEntity _appInst = (BaseApplicationEntity) inst;
         if (isCollaboration()) {
-            final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
-            if (type != null) {
-                final String resourceName = ApplicationNameUtils
-                        .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
-                return !getCollaborationProvider().isFrozen(type, resourceName)
-                        && !getCollaborationProvider().isLockedBy(type, resourceName, getUserToken().getUserLoginId());
+            final ConfigType configType = _appInst.getConfigType();
+            if (!configType.isStatic()) {
+                final CollaborationType type = ApplicationCollaborationUtils.getCollaborationType(_appInst.getClass());
+                if (type != null) {
+                    final String resourceName = ApplicationNameUtils
+                            .getApplicationEntityLongName(_appInst.getApplicationName(), _appInst.getName());
+                    return !getCollaborationProvider().isFrozen(type, resourceName)
+                            && !getCollaborationProvider().isLockedBy(type, resourceName, getUserToken().getUserLoginId());
+                }
             }
         }
 
