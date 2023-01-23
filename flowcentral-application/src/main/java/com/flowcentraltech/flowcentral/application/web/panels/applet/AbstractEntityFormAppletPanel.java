@@ -725,7 +725,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         FormContext ctx = evaluateCurrentFormContext(EvaluationMode.DELETE);
         if (!ctx.isWithFormErrors()) {
             EntityActionResult entityActionResult = getEntityFormApplet().deleteInst();
-            entityActionResult.setSuccessHint("$m{entityformapplet.delete.success.hint}");
+            if (!entityActionResult.isWithReviewResult()) {
+                entityActionResult.setSuccessHint("$m{entityformapplet.delete.success.hint}");
+            }
+
             handleEntityActionResult(entityActionResult, ctx);
         }
     }
@@ -770,7 +773,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
                     setCommandResultMapping("viewlistingreport");
                 }
-            }            
+            }
         } else {
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
@@ -848,12 +851,20 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         // Show message box
         ReviewResult reviewResult = entityActionResult.getReviewResult();
-        if (reviewResult != null && reviewResult.isSkippableOnly()) {
-            getEntityFormApplet().getCtx().setOriginalEntityActionResult(entityActionResult);
-            final String message = getReviewSkippableMessage(reviewResult);
-            final String commandPath = getCommandFullPath("reviewConfirm");
-            showMessageBox(MessageIcon.WARNING, MessageMode.YES_NO, "$m{entityformapplet.formreview}", message,
-                    commandPath);
+        if (reviewResult != null) {
+            if (reviewResult.isSkippableOnly()) {
+                getEntityFormApplet().getCtx().setOriginalEntityActionResult(entityActionResult);
+                final String message = concatenateMessages("$m{entityformapplet.formreview.skippable}",
+                        reviewResult.getSkippableMessages());
+                final String commandPath = getCommandFullPath("reviewConfirm");
+                showMessageBox(MessageIcon.WARNING, MessageMode.YES_NO, "$m{entityformapplet.formreview}", message,
+                        commandPath);
+            } else {
+                final String message = concatenateMessages("$m{entityformapplet.formreview.nonskippable}",
+                        reviewResult.getRequiredMessages());
+                showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}", message,
+                        "/application/refreshContent");
+            }
         } else {
             showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
                     "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
@@ -916,10 +927,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
-    private String getReviewSkippableMessage(ReviewResult reviewResult) throws UnifyException {
+    private String concatenateMessages(String base, List<String> messages) throws UnifyException {
         StringBuilder sb = new StringBuilder();
         boolean appendSym = false;
-        for (String msg : reviewResult.getSkippableMessages()) {
+        for (String msg : messages) {
             if (appendSym) {
                 sb.append(' ');
             } else {
@@ -930,7 +941,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         String msg = sb.toString();
-        return resolveSessionMessage("$m{entityformapplet.formreview.skippable}", msg);
+        return resolveSessionMessage(base, msg);
     }
 
     private void fireEntityActionResultTask(EntityActionResult entityActionResult) throws UnifyException {

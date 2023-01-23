@@ -50,6 +50,10 @@ public class ReviewResult {
         return !skippableMessages.isEmpty();
     }
 
+    public boolean isWithMessages() {
+        return !skippableMessages.isEmpty() || !requiredMessages.isEmpty();
+    }
+
     public boolean isSkippableOnly() {
         return !skippableMessages.isEmpty() && requiredMessages.isEmpty();
     }
