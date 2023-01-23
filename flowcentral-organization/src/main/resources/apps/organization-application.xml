@@ -2,7 +2,7 @@
 <!-- Organization application -->
 <application name="organization"
 	description="$m{organization.short.description}"
-	label="$m{organization.label}" module="organization" developable="true">
+	label="$m{organization.label}" module="organization">
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="branchlist"

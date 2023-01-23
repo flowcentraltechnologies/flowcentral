@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.dashboard.business;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.UsageProvider;
@@ -75,6 +76,16 @@ public class DashboardUsageServiceImpl extends AbstractFlowCentralService implem
         }
 
         return usages;
+    }
+
+    @Override
+    public List<Usage> findEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public long countEntityUsages(String entity, UsageType usageType) throws UnifyException {
+        return 0;
     }
 
     @Override

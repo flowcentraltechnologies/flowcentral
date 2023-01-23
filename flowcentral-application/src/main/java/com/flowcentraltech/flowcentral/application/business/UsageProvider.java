@@ -55,6 +55,31 @@ public interface UsageProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    long countApplicationUsagesByOtherApplications(String applicationName, UsageType usageType)
-            throws UnifyException;
+    long countApplicationUsagesByOtherApplications(String applicationName, UsageType usageType) throws UnifyException;
+
+    /**
+     * Finds entity usages.
+     * 
+     * @param entity
+     *                  the entity long name
+     * @param usageType
+     *                  optional usage type
+     * @return list of usages
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Usage> findEntityUsages(String entity, UsageType usageType) throws UnifyException;
+
+    /**
+     * Count entity usages.
+     * 
+     * @param entity
+     *                  the entity name
+     * @param usageType
+     *                  optional usage type
+     * @return count of usages
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    long countEntityUsages(String entity, UsageType usageType) throws UnifyException;
 }

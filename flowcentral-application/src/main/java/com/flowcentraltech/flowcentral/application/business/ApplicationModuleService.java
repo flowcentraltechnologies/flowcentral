@@ -132,6 +132,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     boolean isApplicationDevelopable(Long applicationId) throws UnifyException;
 
     /**
+     * Checks if application is developable.
+     * 
+     * @param applicationName
+     *                      the application name
+     * @return true if application is developable
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isApplicationDevelopable(String applicationName) throws UnifyException;
+
+    /**
      * Gets an application entity entity.
      * 
      * @param appEntityId
