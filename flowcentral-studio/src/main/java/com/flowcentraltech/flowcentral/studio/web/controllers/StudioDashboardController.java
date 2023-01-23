@@ -30,6 +30,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.util.QueryUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
@@ -151,8 +152,8 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
             _switchApplicationSearch
                     .setPaginationLabel(appletUtils.resolveSessionMessage("$m{entitysearch.display.label}"));
             _switchApplicationSearch.setEntitySubTitle("Application");
-//            _switchApplicationSearch.setBaseRestriction(new Equals("developable", Boolean.TRUE),
-//                    appletUtils.specialParamProvider());
+            _switchApplicationSearch.setBaseRestriction(new Equals("developable", Boolean.TRUE),
+                    appletUtils.specialParamProvider());
             _switchApplicationSearch.applyFilterToSearch();
             pageBean.setSwitchApplicationSearch(_switchApplicationSearch);
         }
