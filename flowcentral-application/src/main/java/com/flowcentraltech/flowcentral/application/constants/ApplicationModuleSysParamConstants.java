@@ -76,4 +76,6 @@ public interface ApplicationModuleSysParamConstants {
     String SEARCH_ENTRY_SHOW_CONDITIONS = "APP-001A";
 
     String SECTOR_SORT_ON_MENU = "APP-001B";
+
+    String FORM_SECTION_CLASSIC_MODE = "APP-001C";
 }

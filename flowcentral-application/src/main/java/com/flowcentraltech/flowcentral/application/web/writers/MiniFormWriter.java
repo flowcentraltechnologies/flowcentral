@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormSection;
@@ -25,8 +26,10 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.Fo
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget.FormWidget;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils;
 import com.flowcentraltech.flowcentral.common.web.util.WidgetWriterUtils.ColumnRenderInfo;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.EventHandler;
@@ -44,6 +47,13 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 @Component("fc-miniform-writer")
 public class MiniFormWriter extends AbstractControlWriter {
 
+    @Configurable
+    private SystemModuleService systemModuleService;
+
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
+        this.systemModuleService = systemModuleService;
+    }
+
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
         MiniFormWidget miniFormWidget = (MiniFormWidget) widget;
@@ -51,8 +61,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         writeTagAttributes(writer, miniFormWidget);
         writer.write(">");
         if (miniFormWidget.isMainForm()) {
-            String errMsg = (String) getRequestAttribute(
-                    AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG);
+            String errMsg = (String) getRequestAttribute(AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG);
             if (!StringUtils.isBlank(errMsg)) {
                 writer.write("<div class=\"mwarn\"><span style=\"display:block;text-align:center;\">");
                 writer.write(errMsg);
@@ -62,11 +71,13 @@ public class MiniFormWriter extends AbstractControlWriter {
 
         FormContext ctx = miniFormWidget.getCtx();
         miniFormWidget.evaluateWidgetStates();
+        final boolean isClassicFormSection = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.FORM_SECTION_CLASSIC_MODE);
         boolean isPreGap = false;
         if (miniFormWidget.isStrictRows()) {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
-                    writeSectionLabel(writer, formSection, isPreGap);
+                    writeSectionLabel(writer, formSection, isPreGap, isClassicFormSection);
                     writer.write("<div class=\"mftable\">");
                     RowRegulator rowRegulator = formSection.getRowRegulator();
                     rowRegulator.resetRows();
@@ -90,7 +101,7 @@ public class MiniFormWriter extends AbstractControlWriter {
         } else {
             for (FormSection formSection : miniFormWidget.getFormSectionList()) {
                 if (formSection.isVisible()) {
-                    writeSectionLabel(writer, formSection, isPreGap);
+                    writeSectionLabel(writer, formSection, isPreGap, isClassicFormSection);
                     writer.write("<div class=\"mftable\">");
                     writer.write("<div class=\"mfrow\">");
                     final int columns = formSection.getColumns();
@@ -168,14 +179,15 @@ public class MiniFormWriter extends AbstractControlWriter {
 
     }
 
-    private boolean writeSectionLabel(ResponseWriter writer, FormSection formSection, boolean isPreGap) {
+    private boolean writeSectionLabel(ResponseWriter writer, FormSection formSection, boolean isPreGap,
+            boolean isClassicFormSection) {
         if (formSection.isWithLabel()) {
             if (isPreGap) {
                 writer.write("<div class=\"mfgap\"></div>");
             }
 
-            writer.write("<div class=\"mfsection\"><span>").writeWithHtmlEscape(formSection.getLabel())
-                    .write("</span></div>");
+            writer.write(isClassicFormSection ? "<div class=\"mfsectionl\"><span>" : "<div class=\"mfsection\"><span>")
+                    .writeWithHtmlEscape(formSection.getLabel()).write("</span></div>");
             return true;
         }
 
@@ -210,8 +222,7 @@ public class MiniFormWriter extends AbstractControlWriter {
             writer.writeStructureAndContent(formWidget.getResolvedWidget());
             if (ctx.isWithFieldError(formWidget.getFieldName())) {
                 writer.write("<span class=\"errmsg\">")
-                        .write(resolveSessionMessage(ctx.getFieldError(formWidget.getFieldName())))
-                        .write("</span>");
+                        .write(resolveSessionMessage(ctx.getFieldError(formWidget.getFieldName()))).write("</span>");
             }
 
             writer.write("</div>");

@@ -1379,32 +1379,40 @@ public final class InputWidgetUtils {
             if (timestamp) {
                 switch (type) {
                     case EQUALS:
+                    case EQUALS_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         paramB = CalendarUtils.getLastSecondDate((Date) paramA);
                         type = FilterConditionType.BETWEEN;
                         break;
                     case BETWEEN:
+                    case BETWEEN_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         paramB = CalendarUtils.getLastSecondDate((Date) paramB);
                         break;
                     case GREATER_OR_EQUAL:
+                    case GREATER_OR_EQUAL_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         break;
                     case GREATER_THAN:
+                    case GREATER_THAN_PARAM:
                         paramA = CalendarUtils.getLastSecondDate((Date) paramA);
                         break;
                     case LESS_OR_EQUAL:
+                    case LESS_OR_EQUAL_PARAM:
                         paramA = CalendarUtils.getLastSecondDate((Date) paramA);
                         break;
                     case LESS_THAN:
+                    case LESS_THAN_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         break;
                     case NOT_EQUALS:
+                    case NOT_EQUALS_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         paramB = CalendarUtils.getLastSecondDate((Date) paramA);
                         type = FilterConditionType.NOT_BETWEEN;
                         break;
                     case NOT_BETWEEN:
+                    case NOT_BETWEEN_PARAM:
                         paramA = CalendarUtils.getMidnightDate((Date) paramA);
                         paramB = CalendarUtils.getLastSecondDate((Date) paramB);
                         break;
