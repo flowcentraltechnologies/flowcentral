@@ -17,14 +17,15 @@
 package com.flowcentraltech.flowcentral.dashboard.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
-import com.flowcentraltech.flowcentral.common.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
@@ -103,6 +104,11 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                         description);
             }
         }
+    }
+
+    @Override
+    protected List<DeletionParams> getDeletionParams() throws UnifyException {
+        return Arrays.asList(new DeletionParams("dashboards", new DashboardQuery()));
     }
 
     private void populateChildList(AppDashboardConfig dashboardConfig, Dashboard dashboard, String applicationName)

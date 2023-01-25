@@ -17,16 +17,17 @@
 package com.flowcentraltech.flowcentral.workflow.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
-import com.flowcentraltech.flowcentral.common.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
@@ -213,7 +214,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName());
                         environment().create(wfWizard);
                     } else {
-                        logDebug("Upgrading application form wizard [{0}]...", wfWizardConfig.getName());
+                        logDebug("Upgrading application workflow wizard [{0}]...", wfWizardConfig.getName());
                         if (ConfigUtils.isSetInstall(oldAppFormWizard)) {
                             oldAppFormWizard.setDescription(description);
                             oldAppFormWizard.setLabel(label);
@@ -233,10 +234,17 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                             description);
                 }
 
-                logDebug(taskMonitor, "Installed [{0}] application form wizards...",
+                logDebug(taskMonitor, "Installed [{0}] application workflow wizards...",
                         applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList().size());
             }
         }
+    }
+
+    @Override
+    protected List<DeletionParams> getDeletionParams() throws UnifyException {
+        return Arrays.asList(new DeletionParams("workflow wizards", new WfWizardQuery()),
+                new DeletionParams("workflow channels", new WfChannelQuery()),
+                new DeletionParams("workflows", new WorkflowQuery()));
     }
 
     private void populateChildList(final WfWizard wfWizard, WfWizardConfig wfWizardConfig, final Long applicationId,

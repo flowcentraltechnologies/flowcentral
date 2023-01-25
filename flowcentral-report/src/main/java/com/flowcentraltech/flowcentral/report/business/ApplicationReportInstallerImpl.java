@@ -18,15 +18,16 @@ package com.flowcentraltech.flowcentral.report.business;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.annotation.Format;
-import com.flowcentraltech.flowcentral.common.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
@@ -98,8 +99,9 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     String entity = ApplicationNameUtils.ensureLongNameReference(applicationName,
                             appEntityConfig.getName());
                     logDebug(taskMonitor, "Installing managed reportable [{0}]...", description);
-                    ReportableDefinition oldReportableDefinition = environment().findLean(new ReportableDefinitionQuery()
-                            .applicationId(applicationId).name(appEntityConfig.getName()));
+                    ReportableDefinition oldReportableDefinition = environment()
+                            .findLean(new ReportableDefinitionQuery().applicationId(applicationId)
+                                    .name(appEntityConfig.getName()));
                     if (oldReportableDefinition == null) {
                         ReportableDefinition reportableDefinition = new ReportableDefinition();
                         reportableDefinition.setApplicationId(applicationId);
@@ -197,6 +199,12 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         description);
             }
         }
+    }
+
+    @Override
+    protected List<DeletionParams> getDeletionParams() throws UnifyException {
+        return Arrays.asList(new DeletionParams("report configurations", new ReportConfigurationQuery()),
+                new DeletionParams("reportables", new ReportableDefinitionQuery()));
     }
 
     @SuppressWarnings("unchecked")

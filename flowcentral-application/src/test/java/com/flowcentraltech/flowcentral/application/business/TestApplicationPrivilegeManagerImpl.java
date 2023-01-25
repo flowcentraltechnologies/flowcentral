@@ -50,6 +50,11 @@ public class TestApplicationPrivilegeManagerImpl extends AbstractUnifyComponent 
     }
 
     @Override
+    public void unregisterApplicationPrivileges(Long applicationId) throws UnifyException {
+        
+    }
+
+    @Override
     public List<String> findRolePrivileges(String privilegeCategoryCode, String roleCode) throws UnifyException {
         return Collections.emptyList();
     }

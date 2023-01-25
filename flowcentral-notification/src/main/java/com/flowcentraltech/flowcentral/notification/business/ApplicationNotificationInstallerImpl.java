@@ -16,8 +16,11 @@
 
 package com.flowcentraltech.flowcentral.notification.business;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.common.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
@@ -94,6 +97,11 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 }
             }
         }
+    }
+
+    @Override
+    protected List<DeletionParams> getDeletionParams() throws UnifyException {
+        return Arrays.asList(new DeletionParams("notification templates", new NotificationTemplateQuery()));
     }
 
 }

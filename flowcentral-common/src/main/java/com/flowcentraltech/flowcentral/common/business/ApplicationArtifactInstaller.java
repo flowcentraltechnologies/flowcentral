@@ -41,4 +41,17 @@ public interface ApplicationArtifactInstaller extends UnifyComponent {
      */
     void installApplicationArtifacts(TaskMonitor taskMonitor, ApplicationInstall applicationInstall)
             throws UnifyException;
+    
+    /**
+     * Deletes all application artifact.
+     * 
+     * @param taskMonitor
+     *                      the task monitor
+     * @param applicationId
+     *                      the application ID
+     * @return the deletion count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException;
 }

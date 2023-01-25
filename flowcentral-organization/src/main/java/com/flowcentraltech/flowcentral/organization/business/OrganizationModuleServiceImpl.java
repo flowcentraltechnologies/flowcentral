@@ -88,17 +88,19 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public FactoryMap<Long, String> getMappedBranchCodeFactoryMap() throws UnifyException {
-        return new FactoryMap<Long, String>() {
-            @Override
-            protected String create(Long branchId, Object... arg2) throws Exception {
-                return environment().value(String.class, "code", new MappedBranchQuery().id(branchId));
-            }
-        };
+        return new FactoryMap<Long, String>()
+            {
+                @Override
+                protected String create(Long branchId, Object... arg2) throws Exception {
+                    return environment().value(String.class, "code", new MappedBranchQuery().id(branchId));
+                }
+            };
     }
 
     @Override
     public FactoryMap<Long, String> getMappedDepartmentCodeFactoryMap() throws UnifyException {
-        return new FactoryMap<Long, String>() {
+        return new FactoryMap<Long, String>()
+            {
                 @Override
                 protected String create(Long departmentId, Object... arg2) throws Exception {
                     return environment().value(String.class, "code", new MappedDepartmentQuery().id(departmentId));
@@ -183,6 +185,14 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return false;
+    }
+
+    @Override
+    public void unregisterApplicationPrivileges(Long applicationId) throws UnifyException {
+        List<Long> privilegeIdList = environment().valueList(Long.class, "id",
+                new PrivilegeQuery().applicationId(applicationId));
+        environment().deleteAll(new RolePrivilegeQuery().privilegeIdIn(privilegeIdList));
+        environment().deleteAll(new PrivilegeQuery().applicationId(applicationId));
     }
 
     @Override

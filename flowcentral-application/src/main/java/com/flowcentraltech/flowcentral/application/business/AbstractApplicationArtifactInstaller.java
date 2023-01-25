@@ -14,12 +14,19 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.common.business;
+package com.flowcentraltech.flowcentral.application.business;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.flowcentraltech.flowcentral.common.business.ApplicationArtifactInstaller;
+import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.task.TaskMonitor;
 
 /**
  * Convenient abstract base class for application artifact installer.
@@ -52,6 +59,15 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractUnify
     }
 
     @Override
+    public int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException {
+        int deletion = 0;
+        for (DeletionParams params : getDeletionParams()) {
+            deletion += deleteApplicationArtifacts(taskMonitor, params, applicationId);
+        }
+        return deletion;
+    }
+
+    @Override
     protected void onInitialize() throws UnifyException {
 
     }
@@ -73,6 +89,35 @@ public abstract class AbstractApplicationArtifactInstaller extends AbstractUnify
 
     protected EnvironmentService environment() {
         return environmentService;
+    }
+
+    protected class DeletionParams {
+        private final String name;
+
+        private final BaseApplicationEntityQuery<?> query;
+
+        public DeletionParams(String name, BaseApplicationEntityQuery<?> query) {
+            this.name = name;
+            this.query = query;
+        }
+
+        public final String getName() {
+            return name;
+        }
+
+        public final BaseApplicationEntityQuery<?> getQuery() {
+            return query;
+        }
+    }
+
+    protected abstract List<DeletionParams> getDeletionParams() throws UnifyException;
+
+    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, DeletionParams deletionParams, Long applicationId)
+            throws UnifyException {
+        logDebug(taskMonitor, "Deleting application {0}...", deletionParams.getName());
+        int deletion = environment().deleteAll(deletionParams.getQuery().applicationId(applicationId));
+        logDebug(taskMonitor, "[{1}] application {0} deleted.", deletionParams.getName(), deletion);
+        return deletion;
     }
 
 }

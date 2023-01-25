@@ -36,6 +36,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationDeletionTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationImportDataTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
@@ -164,6 +165,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
@@ -274,6 +276,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
@@ -305,7 +308,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-       FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
+        FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
 
     private final Set<String> refProperties = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
             AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
@@ -342,6 +345,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Configurable
     private TwoWayStringCryptograph twoWayStringCryptograph;
+
+    @Configurable("application-usagelistprovider")
+    private UsageListProvider usageListProvider;
 
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
 
@@ -1225,6 +1231,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
         this.twoWayStringCryptograph = twoWayStringCryptograph;
+    }
+
+    public final void setUsageListProvider(UsageListProvider usageListProvider) {
+        this.usageListProvider = usageListProvider;
     }
 
     @Override
@@ -2571,6 +2581,72 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         return new Equals(_childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName(),
                 parentInst.getId());
+    }
+
+    @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
+            description = "Application Deletion Task",
+            parameters = { @Parameter(name = ApplicationDeletionTaskConstants.APPLICATION_NAME,
+                    description = "$m{applicationdeletiontask.applicationname}", type = String.class,
+                    mandatory = true) },
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
+    public int executeApplicationDeletionTask(TaskMonitor taskMonitor, String applicationName) throws UnifyException {
+        logDebug(taskMonitor, "Executing deletion on application [{0}] ...", applicationName);
+        logDebug(taskMonitor, "Checking if application developable...");
+        int deletionCount = 0;
+        final Application application = environment().list(new ApplicationQuery().name(applicationName));
+        if (application.isDevelopable()) {
+            logDebug(taskMonitor, "Application is developable.");
+            logDebug(taskMonitor, "Checking for application dependants...");
+            if (usageListProvider.countUsages(new BeanValueStore(application).getReader(), null) == 0L) {
+                logDebug(taskMonitor, "No application dependants found. Proceeding with deletion...");
+                final Long applicationId = application.getId();
+                if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
+                    for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                        deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
+                    }
+                }
+
+                applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types",
+                        new AppSuggestionTypeQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages",
+                        new AppAssignmentPageQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules",
+                        new AppPropertyRuleQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists",
+                        new AppPropertyListQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "forms",
+                        new AppFormQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "tables",
+                        new AppTableQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "entities",
+                        new AppEntityQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "references",
+                        new AppRefQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types",
+                        new AppWidgetTypeQuery(), applicationId);
+                deletionCount += deleteApplicationArtifacts(taskMonitor, "applets",
+                        new AppAppletQuery(), applicationId);
+
+                environment().delete(application);
+                logDebug(taskMonitor, "Application successfully deleted.");
+           } else {
+                logDebug(taskMonitor,
+                        "Application is in use or referenced by one or more components belonging to some other application. Deletion terminated.");
+            }
+        } else {
+            logDebug(taskMonitor, "Application is non-developable. Deletion terminated.");
+        }
+
+        return deletionCount;
+    }
+
+    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, String name, BaseApplicationEntityQuery<?> query,
+            Long applicationId) throws UnifyException {
+        logDebug(taskMonitor, "Deleting application {0}...", name);
+        int deletion = environment().deleteAll(query.applicationId(applicationId));
+        logDebug(taskMonitor, "[{1}] application {0} deleted.", name, deletion);
+        return deletion;
     }
 
     @SuppressWarnings("unchecked")

@@ -16,10 +16,13 @@
 
 package com.flowcentraltech.flowcentral.chart.business;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
-import com.flowcentraltech.flowcentral.common.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
@@ -96,6 +99,11 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 }
             }
         }
+    }
+
+    @Override
+    protected List<DeletionParams> getDeletionParams() throws UnifyException {
+        return Arrays.asList(new DeletionParams("charts", new ChartQuery()));
     }
 
 }
