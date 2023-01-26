@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
-import com.flowcentraltech.flowcentral.common.business.ApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;

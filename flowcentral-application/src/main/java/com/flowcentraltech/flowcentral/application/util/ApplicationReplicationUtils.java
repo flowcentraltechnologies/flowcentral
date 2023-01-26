@@ -43,6 +43,7 @@ public final class ApplicationReplicationUtils {
 
     public static ApplicationReplicationContext createApplicationReplicationContext(AppletUtilities au,
             String srcApplicationName, String destApplicationName, byte[] replicationRulesFile) throws UnifyException {
+        // TODO
         ApplicationReplicationRule.Builder narrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         ApplicationReplicationRule.Builder carrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         ApplicationReplicationRule.Builder marrb = new ApplicationReplicationRule.Builder(
@@ -51,12 +52,12 @@ public final class ApplicationReplicationUtils {
         ApplicationReplicationRule.Builder tarrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         ApplicationReplicationRule.Builder afarrb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.WILD_PREFIX);
-        
+
         ApplicationReplicationRule.Builder earrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         carrb.replace(srcApplicationName + ".", destApplicationName + ".");
-        
-        return new ApplicationReplicationContext(au, narrb.build(), carrb.build(), marrb.build(), clarrb.build(),
-                tarrb.build(), afarrb.build(), earrb.build());
+
+        return new ApplicationReplicationContext(au, srcApplicationName, destApplicationName, narrb.build(),
+                carrb.build(), marrb.build(), clarrb.build(), tarrb.build(), afarrb.build(), earrb.build());
     }
 
     public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
@@ -91,11 +92,11 @@ public final class ApplicationReplicationUtils {
             AppWidgetRules widgetRules) throws UnifyException {
         WidgetRulesConfig widgetRulesConfig = InputWidgetUtils.getWidgetRulesConfig(widgetRules);
         if (widgetRulesConfig != null && widgetRulesConfig.getEntryList() != null) {
-            for (WidgetRuleEntryConfig widgetRuleEntryConfig: widgetRulesConfig.getEntryList()) {
+            for (WidgetRuleEntryConfig widgetRuleEntryConfig : widgetRulesConfig.getEntryList()) {
                 widgetRuleEntryConfig.setWidget(ctx.componentSwap(widgetRuleEntryConfig.getWidget()));
             }
         }
-        
+
         return widgetRulesConfig;
     }
 }

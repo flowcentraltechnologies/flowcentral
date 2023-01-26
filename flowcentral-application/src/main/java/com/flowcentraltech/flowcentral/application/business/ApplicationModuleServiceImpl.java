@@ -180,7 +180,6 @@ import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidget;
 import com.flowcentraltech.flowcentral.common.annotation.LongName;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.business.ApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
@@ -2995,6 +2994,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             logDebug(taskMonitor, "Suggestion type [{0}] -> [{1}]...", oldDescription,
                     srcAppSuggestionType.getDescription());
         }
+
+        logDebug(taskMonitor, "Replicating other application artifacts...");
+        if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
+            for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                applicationArtifactInstaller.replicateApplicationArtifacts(taskMonitor, srcApplicationId,
+                        destApplicationId, ctx);
+            }
+        }
+
+        logDebug(taskMonitor, "Application successfully replicated.");
 
         taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
         return 0;

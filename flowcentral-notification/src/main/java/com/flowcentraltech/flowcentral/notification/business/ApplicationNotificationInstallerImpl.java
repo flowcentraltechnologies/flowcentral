@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
@@ -96,6 +97,26 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void replicateApplicationArtifacts(TaskMonitor taskMonitor, Long srcApplicationId, Long destApplicationId,
+            ApplicationReplicationContext ctx) throws UnifyException {
+        // Notification Templates
+        logDebug(taskMonitor, "Replicating notification templates...");
+        List<Long> templateIdList = environment().valueList(Long.class, "id",
+                new NotificationTemplateQuery().applicationId(srcApplicationId));
+        for (Long templateId : templateIdList) {
+            NotificationTemplate srcNotificationTemplate = environment().find(NotificationTemplate.class, templateId);
+            String oldDescription = srcNotificationTemplate.getDescription();
+            srcNotificationTemplate.setApplicationId(destApplicationId);
+            srcNotificationTemplate.setDescription(ctx.messageSwap(srcNotificationTemplate.getDescription()));
+            srcNotificationTemplate.setEntity(ctx.entitySwap(srcNotificationTemplate.getEntity()));
+            srcNotificationTemplate.setAttachmentGenerator(ctx.componentSwap(srcNotificationTemplate.getAttachmentGenerator()));
+
+            environment().create(srcNotificationTemplate);
+            logDebug(taskMonitor, "Notification template [{0}] -> [{1}]...", oldDescription, srcNotificationTemplate.getDescription());
         }
     }
 

@@ -27,6 +27,10 @@ public class ApplicationReplicationContext {
 
     private final AppletUtilities au;
 
+    private final String srcApplicationName;
+
+    private final String destApplicationName;
+
     private final ApplicationReplicationRule nameRule;
 
     private final ApplicationReplicationRule componentRule;
@@ -41,11 +45,14 @@ public class ApplicationReplicationContext {
 
     private final ApplicationReplicationRule entityRule;
 
-    public ApplicationReplicationContext(AppletUtilities au, ApplicationReplicationRule nameRule,
-            ApplicationReplicationRule componentRule, ApplicationReplicationRule messageRule,
-            ApplicationReplicationRule classRule, ApplicationReplicationRule tableRule,
-            ApplicationReplicationRule autoFormatRule, ApplicationReplicationRule entityRule) {
+    public ApplicationReplicationContext(AppletUtilities au, String srcApplicationName, String destApplicationName,
+            ApplicationReplicationRule nameRule, ApplicationReplicationRule componentRule,
+            ApplicationReplicationRule messageRule, ApplicationReplicationRule classRule,
+            ApplicationReplicationRule tableRule, ApplicationReplicationRule autoFormatRule,
+            ApplicationReplicationRule entityRule) {
         this.au = au;
+        this.srcApplicationName = srcApplicationName;
+        this.destApplicationName = destApplicationName;
         this.nameRule = nameRule;
         this.componentRule = componentRule;
         this.messageRule = messageRule;
@@ -57,6 +64,14 @@ public class ApplicationReplicationContext {
 
     public AppletUtilities au() {
         return au;
+    }
+
+    public String getSrcApplicationName() {
+        return srcApplicationName;
+    }
+
+    public String getDestApplicationName() {
+        return destApplicationName;
     }
 
     public String nameSwap(String name) {

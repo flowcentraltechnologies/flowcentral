@@ -25,6 +25,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -103,6 +104,30 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
                                 .getApplicationEntityLongName(applicationName, dashboardConfig.getName())),
                         description);
             }
+        }
+    }
+
+    @Override
+    public void replicateApplicationArtifacts(TaskMonitor taskMonitor, Long srcApplicationId, Long destApplicationId,
+            ApplicationReplicationContext ctx) throws UnifyException {
+        // Dashboards
+        logDebug(taskMonitor, "Replicating dashboards...");
+        List<Long> dashboardIdList = environment().valueList(Long.class, "id",
+                new DashboardQuery().applicationId(srcApplicationId));
+        for (Long dashboardId : dashboardIdList) {
+            Dashboard srcDashboard = environment().find(Dashboard.class, dashboardId);
+            String oldDescription = srcDashboard.getDescription();
+            srcDashboard.setApplicationId(destApplicationId);
+            srcDashboard.setDescription(ctx.messageSwap(srcDashboard.getDescription()));
+
+            // Tiles
+            for (DashboardTile dashboardTile : srcDashboard.getTileList()) {
+                dashboardTile.setDescription(ctx.messageSwap(dashboardTile.getDescription()));
+                dashboardTile.setChart(ctx.entitySwap(dashboardTile.getChart()));
+            }
+
+            environment().create(srcDashboard);
+            logDebug(taskMonitor, "Dashboard [{0}] -> [{1}]...", oldDescription, srcDashboard.getDescription());
         }
     }
 

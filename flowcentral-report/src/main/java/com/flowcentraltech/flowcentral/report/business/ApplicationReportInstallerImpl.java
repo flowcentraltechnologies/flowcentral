@@ -25,6 +25,8 @@ import com.flowcentraltech.flowcentral.application.business.AbstractApplicationA
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.annotation.Format;
@@ -38,6 +40,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ParameterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
@@ -199,6 +202,57 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         description);
             }
         }
+    }
+
+    @Override
+    public void replicateApplicationArtifacts(TaskMonitor taskMonitor, Long srcApplicationId, Long destApplicationId,
+            ApplicationReplicationContext ctx) throws UnifyException {
+        // Reportables
+        logDebug(taskMonitor, "Replicating reportables...");
+        List<Long> reportableIdList = environment().valueList(Long.class, "id",
+                new ReportableDefinitionQuery().applicationId(srcApplicationId));
+        for (Long reportableId : reportableIdList) {
+            ReportableDefinition srcReportableDefinition = environment().find(ReportableDefinition.class, reportableId);
+            String oldDescription = srcReportableDefinition.getDescription();
+            srcReportableDefinition.setApplicationId(destApplicationId);
+            srcReportableDefinition.setDescription(ctx.messageSwap(srcReportableDefinition.getDescription()));
+            srcReportableDefinition.setTitle(ctx.messageSwap(srcReportableDefinition.getTitle()));
+            srcReportableDefinition.setEntity(ctx.entitySwap(srcReportableDefinition.getEntity()));
+
+            environment().create(srcReportableDefinition);
+            registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
+                    PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
+                            .ensureLongNameReference(ctx.getDestApplicationName(), srcReportableDefinition.getName())),
+                    srcReportableDefinition.getDescription());
+            logDebug(taskMonitor, "Reportable [{0}] -> [{1}]...", oldDescription,
+                    srcReportableDefinition.getDescription());
+        }
+
+        // Reports
+        logDebug(taskMonitor, "Replicating report configurations...");
+        List<Long> reportIdList = environment().valueList(Long.class, "id",
+                new ReportConfigurationQuery().applicationId(srcApplicationId));
+        for (Long reportId : reportIdList) {
+            ReportConfiguration srcReportConfiguration = environment().find(ReportConfiguration.class, reportId);
+            String oldDescription = srcReportConfiguration.getDescription();
+            srcReportConfiguration.setApplicationId(destApplicationId);
+            srcReportConfiguration.setDescription(ctx.messageSwap(srcReportConfiguration.getDescription()));
+            srcReportConfiguration.setTitle(ctx.messageSwap(srcReportConfiguration.getTitle()));
+            srcReportConfiguration.setReportable(ctx.entitySwap(srcReportConfiguration.getReportable()));
+
+            FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                    srcReportConfiguration.getFilter());
+            srcReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+
+            environment().create(srcReportConfiguration);
+            registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
+                    PrivilegeNameUtils.getReportConfigPrivilegeName(ApplicationNameUtils
+                            .ensureLongNameReference(ctx.getDestApplicationName(), srcReportConfiguration.getName())),
+                    srcReportConfiguration.getDescription());
+            logDebug(taskMonitor, "Report configuration [{0}] -> [{1}]...", oldDescription,
+                    srcReportConfiguration.getDescription());
+        }
+
     }
 
     @Override
