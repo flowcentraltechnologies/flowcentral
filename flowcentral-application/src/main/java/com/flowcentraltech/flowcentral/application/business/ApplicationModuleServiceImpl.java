@@ -2616,6 +2616,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             return 0;
         }
 
+        if (!srcApplication.isDevelopable()) {
+            logDebug(taskMonitor, "Source application is not developable. Replication terminated.");
+            return 0;
+        }
+        
         logDebug(taskMonitor, "Checking if destination application exists...");
         if (environment().countAll(new ApplicationQuery().name(destApplicationName)) > 0) {
             logDebug(taskMonitor, "Destination application already exists. Replication terminated.");
@@ -2663,13 +2668,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             srcAppApplet.setApplicationId(destApplicationId);
             srcAppApplet.setDescription(ctx.messageSwap(srcAppApplet.getDescription()));
             srcAppApplet.setLabel(ctx.messageSwap(srcAppApplet.getLabel()));
-            srcAppApplet.setEntity(ctx.componentSwap(srcAppApplet.getEntity()));
-            srcAppApplet.setRouteToApplet(ctx.componentSwap(srcAppApplet.getRouteToApplet()));
+            srcAppApplet.setEntity(ctx.entitySwap(srcAppApplet.getEntity()));
+            srcAppApplet.setRouteToApplet(ctx.entitySwap(srcAppApplet.getRouteToApplet()));
 
             // Applet properties
             for (AppAppletProp appAppletProp : srcAppApplet.getPropList()) {
                 if (refProperties.contains(appAppletProp.getName())) {
-                    appAppletProp.setValue(ctx.componentSwap(appAppletProp.getValue()));
+                    appAppletProp.setValue(ctx.entitySwap(appAppletProp.getValue()));
                 } else {
                     appAppletProp.setValue(ctx.messageSwap(appAppletProp.getValue()));
                 }
@@ -2690,9 +2695,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
                         appAppletFilter.getFilter());
                 appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
-                appAppletFilter.setPreferredForm(ctx.componentSwap(appAppletFilter.getPreferredForm()));
+                appAppletFilter.setPreferredForm(ctx.entitySwap(appAppletFilter.getPreferredForm()));
                 appAppletFilter
-                        .setPreferredChildListApplet(ctx.componentSwap(appAppletFilter.getPreferredChildListApplet()));
+                        .setPreferredChildListApplet(ctx.entitySwap(appAppletFilter.getPreferredChildListApplet()));
                 appAppletFilter.setFilterGenerator(ctx.componentSwap(appAppletFilter.getFilterGenerator()));
             }
 
@@ -2728,8 +2733,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             String oldDescription = srcAppRef.getDescription();
             srcAppRef.setApplicationId(destApplicationId);
             srcAppRef.setDescription(ctx.messageSwap(srcAppRef.getDescription()));
-            srcAppRef.setEntity(ctx.componentSwap(srcAppRef.getEntity()));
-            srcAppRef.setSearchTable(ctx.componentSwap(srcAppRef.getSearchTable()));
+            srcAppRef.setEntity(ctx.entitySwap(srcAppRef.getEntity()));
+            srcAppRef.setSearchTable(ctx.entitySwap(srcAppRef.getSearchTable()));
             srcAppRef.setSelectHandler(ctx.componentSwap(srcAppRef.getSelectHandler()));
             srcAppRef.setFilterGenerator(ctx.componentSwap(srcAppRef.getFilterGenerator()));
             FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
@@ -2755,10 +2760,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getLabel()));
 
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
-                appEntityField.setReferences(ctx.componentSwap(appEntityField.getReferences()));
+                appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));
                 appEntityField.setInputWidget(ctx.componentSwap(appEntityField.getInputWidget()));
-                appEntityField.setSuggestionType(ctx.componentSwap(appEntityField.getSuggestionType()));
-                appEntityField.setLingualWidget(ctx.componentSwap(appEntityField.getLingualWidget()));
+                appEntityField.setSuggestionType(ctx.entitySwap(appEntityField.getSuggestionType()));
+                appEntityField.setLingualWidget(ctx.entitySwap(appEntityField.getLingualWidget()));
                 appEntityField.setAutoFormat(ctx.autoFormatSwap(appEntityField.getAutoFormat()));
             }
 
@@ -2790,14 +2795,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppTable srcAppTable = environment().find(AppTable.class, tableId);
             String oldDescription = srcAppTable.getDescription();
             srcAppTable.setApplicationId(destApplicationId);
-            srcAppTable.setEntity(ctx.componentSwap(srcAppTable.getEntity()));
+            srcAppTable.setEntity(ctx.entitySwap(srcAppTable.getEntity()));
             srcAppTable.setDescription(ctx.messageSwap(srcAppTable.getDescription()));
             srcAppTable.setLabel(ctx.messageSwap(srcAppTable.getLabel()));
             srcAppTable.setDetailsPanelName(ctx.componentSwap(srcAppTable.getDetailsPanelName()));
 
             // Columns
             for (AppTableColumn appTableColumn : srcAppTable.getColumnList()) {
-                appTableColumn.setRenderWidget(ctx.componentSwap(appTableColumn.getRenderWidget()));
+                appTableColumn.setRenderWidget(ctx.entitySwap(appTableColumn.getRenderWidget()));
             }
 
             // Filters
@@ -2843,6 +2848,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             // Actions
             for (AppFormAction appFormAction : srcAppForm.getActionList()) {
                 appFormAction.setPolicy(ctx.componentSwap(appFormAction.getPolicy()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormAction.getOnCondition());
+                appFormAction.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
 
                 applicationPrivilegeManager.registerPrivilege(destApplicationId,
                         ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
@@ -2852,16 +2860,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
             // Elements
             for (AppFormElement appFormElement : srcAppForm.getElementList()) {
-                appFormElement.setTabApplet(ctx.componentSwap(appFormElement.getTabApplet()));
-                appFormElement.setTabReference(ctx.componentSwap(appFormElement.getTabReference()));
-                appFormElement.setTabMappedForm(ctx.componentSwap(appFormElement.getTabMappedForm()));
-                appFormElement.setInputWidget(ctx.componentSwap(appFormElement.getInputWidget()));
-                appFormElement.setInputReference(ctx.componentSwap(appFormElement.getInputReference()));
+                appFormElement.setTabApplet(ctx.entitySwap(appFormElement.getTabApplet()));
+                appFormElement.setTabReference(ctx.entitySwap(appFormElement.getTabReference()));
+                appFormElement.setTabMappedForm(ctx.entitySwap(appFormElement.getTabMappedForm()));
+                appFormElement.setInputWidget(ctx.entitySwap(appFormElement.getInputWidget()));
+                appFormElement.setInputReference(ctx.entitySwap(appFormElement.getInputReference()));
             }
 
             // Related Lists
             for (AppFormRelatedList appFormRelatedList : srcAppForm.getRelatedList()) {
-                appFormRelatedList.setApplet(ctx.componentSwap(appFormRelatedList.getApplet()));
+                appFormRelatedList.setApplet(ctx.entitySwap(appFormRelatedList.getApplet()));
             }
 
             // State Policies
@@ -2899,9 +2907,59 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 appFormValidationPolicy.setErrorCondition(InputWidgetUtils.newAppFilter(filterConfig));
             }
 
-            // TODO
+            // Form Review Policies
+            for (AppFormReviewPolicy appFormReviewPolicy : srcAppForm.getFormReviewList()) {
+                appFormReviewPolicy.setErrorMatcher(ctx.componentSwap(appFormReviewPolicy.getErrorMatcher()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormReviewPolicy.getErrorCondition());
+                appFormReviewPolicy.setErrorCondition(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
             environment().create(srcAppForm);
             logDebug(taskMonitor, "Form [{0}] -> [{1}]...", oldDescription, srcAppForm.getDescription());
+        }
+
+        // Property Lists
+        logDebug(taskMonitor, "Replicating property lists...");
+        List<Long> propertyListIdList = environment().valueList(Long.class, "id",
+                new AppPropertyListQuery().applicationId(srcApplicationId));
+        for (Long propertyListId : propertyListIdList) {
+            AppPropertyList srcAppPropertyList = environment().find(AppPropertyList.class, propertyListId);
+            String oldDescription = srcAppPropertyList.getDescription();
+            srcAppPropertyList.setApplicationId(destApplicationId);
+            srcAppPropertyList.setDescription(ctx.messageSwap(srcAppPropertyList.getDescription()));
+
+            for (AppPropertySet appPropertySet : srcAppPropertyList.getItemSet()) {
+                for (AppPropertyListItem appPropertyListItem : appPropertySet.getItemList()) {
+                    appPropertyListItem.setInputWidget(ctx.entitySwap(appPropertyListItem.getInputWidget()));
+                    appPropertyListItem.setReferences(ctx.entitySwap(appPropertyListItem.getReferences()));
+                }
+            }
+
+            environment().create(srcAppPropertyList);
+            logDebug(taskMonitor, "Property list [{0}] -> [{1}]...", oldDescription,
+                    srcAppPropertyList.getDescription());
+        }
+
+        // Property Rules
+        logDebug(taskMonitor, "Replicating property rules...");
+        List<Long> propertyRuleIdList = environment().valueList(Long.class, "id",
+                new AppPropertyRuleQuery().applicationId(srcApplicationId));
+        for (Long propertyRuleId : propertyRuleIdList) {
+            AppPropertyRule srcAppPropertyRule = environment().find(AppPropertyRule.class, propertyRuleId);
+            String oldDescription = srcAppPropertyRule.getDescription();
+            srcAppPropertyRule.setApplicationId(destApplicationId);
+            srcAppPropertyRule.setDescription(ctx.messageSwap(srcAppPropertyRule.getDescription()));
+            srcAppPropertyRule.setEntity(ctx.entitySwap(srcAppPropertyRule.getEntity()));
+            srcAppPropertyRule.setDefaultList(ctx.componentSwap(srcAppPropertyRule.getDefaultList()));
+
+            for (AppPropertyRuleChoice appPropertyRuleChoice : srcAppPropertyRule.getChoiceList()) {
+                appPropertyRuleChoice.setList(ctx.componentSwap(appPropertyRuleChoice.getList()));
+            }
+
+            environment().create(srcAppPropertyRule);
+            logDebug(taskMonitor, "Property rule [{0}] -> [{1}]...", oldDescription,
+                    srcAppPropertyRule.getDescription());
         }
 
         taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);

@@ -39,10 +39,12 @@ public class ApplicationReplicationContext {
 
     private final ApplicationReplicationRule autoFormatRule;
 
+    private final ApplicationReplicationRule entityRule;
+
     public ApplicationReplicationContext(AppletUtilities au, ApplicationReplicationRule nameRule,
             ApplicationReplicationRule componentRule, ApplicationReplicationRule messageRule,
             ApplicationReplicationRule classRule, ApplicationReplicationRule tableRule,
-            ApplicationReplicationRule autoFormatRule) {
+            ApplicationReplicationRule autoFormatRule, ApplicationReplicationRule entityRule) {
         this.au = au;
         this.nameRule = nameRule;
         this.componentRule = componentRule;
@@ -50,6 +52,7 @@ public class ApplicationReplicationContext {
         this.classRule = classRule;
         this.tableRule = tableRule;
         this.autoFormatRule = autoFormatRule;
+        this.entityRule = entityRule;
     }
 
     public AppletUtilities au() {
@@ -78,5 +81,9 @@ public class ApplicationReplicationContext {
 
     public String autoFormatSwap(String autoFormat) {
         return autoFormatRule.apply(autoFormat);
+    }
+
+    public String entitySwap(String entityName) {
+        return entityRule.apply(entityName);
     }
 }

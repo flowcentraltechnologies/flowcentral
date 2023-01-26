@@ -45,15 +45,18 @@ public final class ApplicationReplicationUtils {
             String srcApplicationName, String destApplicationName, byte[] replicationRulesFile) throws UnifyException {
         ApplicationReplicationRule.Builder narrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         ApplicationReplicationRule.Builder carrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
-        carrb.replace(srcApplicationName + ".", destApplicationName + ".");
         ApplicationReplicationRule.Builder marrb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.WILD_SUFFIX);
         ApplicationReplicationRule.Builder clarrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.CLASS);
         ApplicationReplicationRule.Builder tarrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         ApplicationReplicationRule.Builder afarrb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.WILD_PREFIX);
+        
+        ApplicationReplicationRule.Builder earrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
+        carrb.replace(srcApplicationName + ".", destApplicationName + ".");
+        
         return new ApplicationReplicationContext(au, narrb.build(), carrb.build(), marrb.build(), clarrb.build(),
-                tarrb.build(), afarrb.build());
+                tarrb.build(), afarrb.build(), earrb.build());
     }
 
     public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
