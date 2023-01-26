@@ -2659,6 +2659,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 new AppAppletQuery().applicationId(srcApplicationId));
         for (Long appletId : appletIdList) {
             AppApplet srcAppApplet = environment().find(AppApplet.class, appletId);
+            String oldDescription = srcAppApplet.getDescription();
             srcAppApplet.setApplicationId(destApplicationId);
             srcAppApplet.setDescription(ctx.messageSwap(srcAppApplet.getDescription()));
             srcAppApplet.setLabel(ctx.messageSwap(srcAppApplet.getLabel()));
@@ -2696,6 +2697,46 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
 
             environment().create(srcAppApplet);
+            logDebug(taskMonitor, "Applet [{0}] -> [{1}]...", oldDescription, srcAppApplet.getDescription());
+
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,
+                    PrivilegeNameUtils.getAppletPrivilegeName(ApplicationNameUtils
+                            .getApplicationEntityLongName(destApplicationName, srcAppApplet.getName())),
+                    srcAppApplet.getDescription());
+        }
+
+        // Widgets
+        logDebug(taskMonitor, "Replicating widgets...");
+        List<Long> widgetIdList = environment().valueList(Long.class, "id",
+                new AppWidgetTypeQuery().applicationId(srcApplicationId));
+        for (Long widgetId : widgetIdList) {
+            AppWidgetType srcWidgetType = environment().find(AppWidgetType.class, widgetId);
+            String oldDescription = srcWidgetType.getDescription();
+            srcWidgetType.setApplicationId(destApplicationId);
+            srcWidgetType.setDescription(ctx.messageSwap(srcWidgetType.getDescription()));
+            environment().create(srcWidgetType);
+            logDebug(taskMonitor, "Widget [{0}] -> [{1}]...", oldDescription, srcWidgetType.getDescription());
+        }
+
+        // References
+        logDebug(taskMonitor, "Replicating references...");
+        List<Long> referenceIdList = environment().valueList(Long.class, "id",
+                new AppRefQuery().applicationId(srcApplicationId));
+        for (Long referenceId : referenceIdList) {
+            AppRef srcAppRef = environment().find(AppRef.class, referenceId);
+            String oldDescription = srcAppRef.getDescription();
+            srcAppRef.setApplicationId(destApplicationId);
+            srcAppRef.setDescription(ctx.messageSwap(srcAppRef.getDescription()));
+            srcAppRef.setEntity(ctx.componentSwap(srcAppRef.getEntity()));
+            srcAppRef.setSearchTable(ctx.componentSwap(srcAppRef.getSearchTable()));
+            srcAppRef.setSelectHandler(ctx.componentSwap(srcAppRef.getSelectHandler()));
+            srcAppRef.setFilterGenerator(ctx.componentSwap(srcAppRef.getFilterGenerator()));
+            FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                    srcAppRef.getFilter());
+            srcAppRef.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            environment().create(srcAppRef);
+            logDebug(taskMonitor, "Reference [{0}] -> [{1}]...", oldDescription, srcAppRef.getDescription());
         }
 
         taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
