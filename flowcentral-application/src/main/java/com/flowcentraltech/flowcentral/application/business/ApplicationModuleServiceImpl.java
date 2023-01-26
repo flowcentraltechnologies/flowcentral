@@ -2778,8 +2778,130 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
                     PrivilegeNameUtils.getDeletePrivilegeName(entityLongName),
                     getApplicationMessage("application.entity.privilege.delete", srcAppEntity.getDescription()));
-            
+
             logDebug(taskMonitor, "Entity [{0}] -> [{1}]...", oldDescription, srcAppEntity.getDescription());
+        }
+
+        // Tables
+        logDebug(taskMonitor, "Replicating tables...");
+        List<Long> tableIdList = environment().valueList(Long.class, "id",
+                new AppTableQuery().applicationId(srcApplicationId));
+        for (Long tableId : tableIdList) {
+            AppTable srcAppTable = environment().find(AppTable.class, tableId);
+            String oldDescription = srcAppTable.getDescription();
+            srcAppTable.setApplicationId(destApplicationId);
+            srcAppTable.setEntity(ctx.componentSwap(srcAppTable.getEntity()));
+            srcAppTable.setDescription(ctx.messageSwap(srcAppTable.getDescription()));
+            srcAppTable.setLabel(ctx.messageSwap(srcAppTable.getLabel()));
+            srcAppTable.setDetailsPanelName(ctx.componentSwap(srcAppTable.getDetailsPanelName()));
+
+            // Columns
+            for (AppTableColumn appTableColumn : srcAppTable.getColumnList()) {
+                appTableColumn.setRenderWidget(ctx.componentSwap(appTableColumn.getRenderWidget()));
+            }
+
+            // Filters
+            for (AppTableFilter appTableFilter : srcAppTable.getFilterList()) {
+                appTableFilter.setFilterGenerator(ctx.componentSwap(appTableFilter.getFilterGenerator()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appTableFilter.getFilter());
+                appTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            // Table Loading
+            for (AppTableLoading appTableLoading : srcAppTable.getLoadingList()) {
+                appTableLoading.setProvider(ctx.componentSwap(appTableLoading.getProvider()));
+            }
+
+            environment().create(srcAppTable);
+            logDebug(taskMonitor, "Table [{0}] -> [{1}]...", oldDescription, srcAppTable.getDescription());
+        }
+
+        // Forms
+        logDebug(taskMonitor, "Replicating forms...");
+        List<Long> formIdList = environment().valueList(Long.class, "id",
+                new AppFormQuery().applicationId(srcApplicationId));
+        for (Long formId : formIdList) {
+            AppForm srcAppForm = environment().find(AppForm.class, formId);
+            String oldDescription = srcAppForm.getDescription();
+            srcAppForm.setApplicationId(destApplicationId);
+            srcAppForm.setEntity(ctx.componentSwap(srcAppForm.getEntity()));
+            srcAppForm.setDescription(ctx.messageSwap(srcAppForm.getDescription()));
+            srcAppForm.setConsolidatedReview(ctx.messageSwap(srcAppForm.getConsolidatedReview()));
+            srcAppForm.setConsolidatedValidation(ctx.messageSwap(srcAppForm.getConsolidatedValidation()));
+            srcAppForm.setConsolidatedState(ctx.messageSwap(srcAppForm.getConsolidatedState()));
+            srcAppForm.setListingGenerator(ctx.messageSwap(srcAppForm.getListingGenerator()));
+
+            // Filters
+            for (AppFormFilter appFormFilter : srcAppForm.getFilterList()) {
+                appFormFilter.setFilterGenerator(ctx.componentSwap(appFormFilter.getFilterGenerator()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormFilter.getFilter());
+                appFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            // Actions
+            for (AppFormAction appFormAction : srcAppForm.getActionList()) {
+                appFormAction.setPolicy(ctx.componentSwap(appFormAction.getPolicy()));
+
+                applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
+                        PrivilegeNameUtils.getFormActionPrivilegeName(appFormAction.getName()),
+                        appFormAction.getDescription());
+            }
+
+            // Elements
+            for (AppFormElement appFormElement : srcAppForm.getElementList()) {
+                appFormElement.setTabApplet(ctx.componentSwap(appFormElement.getTabApplet()));
+                appFormElement.setTabReference(ctx.componentSwap(appFormElement.getTabReference()));
+                appFormElement.setTabMappedForm(ctx.componentSwap(appFormElement.getTabMappedForm()));
+                appFormElement.setInputWidget(ctx.componentSwap(appFormElement.getInputWidget()));
+                appFormElement.setInputReference(ctx.componentSwap(appFormElement.getInputReference()));
+            }
+
+            // Related Lists
+            for (AppFormRelatedList appFormRelatedList : srcAppForm.getRelatedList()) {
+                appFormRelatedList.setApplet(ctx.componentSwap(appFormRelatedList.getApplet()));
+            }
+
+            // State Policies
+            for (AppFormStatePolicy appFormStatePolicy : srcAppForm.getFieldStateList()) {
+                appFormStatePolicy.setValueGenerator(ctx.componentSwap(appFormStatePolicy.getValueGenerator()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormStatePolicy.getOnCondition());
+                appFormStatePolicy.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx, null,
+                        appFormStatePolicy.getSetValues());
+                appFormStatePolicy.setSetValues(newAppSetValues(setValuesConfig));
+            }
+
+            // Widget Rule Policies
+            for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : srcAppForm.getWidgetRulesList()) {
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormWidgetRulesPolicy.getOnCondition());
+                appFormWidgetRulesPolicy.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                WidgetRulesConfig widgetRulesConfig = ApplicationReplicationUtils.getReplicatedWidgetRulesConfig(ctx,
+                        appFormWidgetRulesPolicy.getWidgetRules());
+                appFormWidgetRulesPolicy.setWidgetRules(newAppWidgetRules(widgetRulesConfig));
+            }
+
+            // Field Validation Policies
+            for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : srcAppForm.getFieldValidationList()) {
+                appFormFieldValidationPolicy
+                        .setValidation(ctx.componentSwap(appFormFieldValidationPolicy.getValidation()));
+            }
+
+            // Form Validation Policies
+            for (AppFormValidationPolicy appFormValidationPolicy : srcAppForm.getFormValidationList()) {
+                appFormValidationPolicy.setErrorMatcher(ctx.componentSwap(appFormValidationPolicy.getErrorMatcher()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormValidationPolicy.getErrorCondition());
+                appFormValidationPolicy.setErrorCondition(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            // TODO
+            environment().create(srcAppForm);
+            logDebug(taskMonitor, "Form [{0}] -> [{1}]...", oldDescription, srcAppForm.getDescription());
         }
 
         taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);

@@ -19,10 +19,13 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ReplicationMatchType;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -79,5 +82,17 @@ public final class ApplicationReplicationUtils {
         }
 
         return setValuesConfig;
+    }
+
+    public static WidgetRulesConfig getReplicatedWidgetRulesConfig(ApplicationReplicationContext ctx,
+            AppWidgetRules widgetRules) throws UnifyException {
+        WidgetRulesConfig widgetRulesConfig = InputWidgetUtils.getWidgetRulesConfig(widgetRules);
+        if (widgetRulesConfig != null && widgetRulesConfig.getEntryList() != null) {
+            for (WidgetRuleEntryConfig widgetRuleEntryConfig: widgetRulesConfig.getEntryList()) {
+                widgetRuleEntryConfig.setWidget(ctx.componentSwap(widgetRuleEntryConfig.getWidget()));
+            }
+        }
+        
+        return widgetRulesConfig;
     }
 }
