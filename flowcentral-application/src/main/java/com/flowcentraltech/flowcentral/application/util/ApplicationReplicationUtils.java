@@ -57,7 +57,8 @@ public final class ApplicationReplicationUtils {
             throws UnifyException {
         FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(ctx.au(), appFilter);
         if (filterConfig != null) {
-
+            filterConfig.setDescription(ctx.messageSwap(filterConfig.getDescription()));
+            filterConfig.setFilterGenerator(ctx.componentSwap(filterConfig.getFilterGenerator()));
         }
 
         return filterConfig;

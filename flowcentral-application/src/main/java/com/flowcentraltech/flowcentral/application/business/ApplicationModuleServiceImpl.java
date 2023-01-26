@@ -2763,6 +2763,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
 
             environment().create(srcAppEntity);
+
+            final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(destApplicationName,
+                    srcAppEntity.getName());
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                    PrivilegeNameUtils.getAddPrivilegeName(entityLongName),
+                    getApplicationMessage("application.entity.privilege.add", srcAppEntity.getDescription()));
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                    PrivilegeNameUtils.getEditPrivilegeName(entityLongName),
+                    getApplicationMessage("application.entity.privilege.edit", srcAppEntity.getDescription()));
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                    PrivilegeNameUtils.getDeletePrivilegeName(entityLongName),
+                    getApplicationMessage("application.entity.privilege.delete", srcAppEntity.getDescription()));
+            
             logDebug(taskMonitor, "Entity [{0}] -> [{1}]...", oldDescription, srcAppEntity.getDescription());
         }
 
