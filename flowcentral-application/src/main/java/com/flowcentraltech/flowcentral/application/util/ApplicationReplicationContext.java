@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.util;
 
-import java.util.Map;
-
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 
 /**
@@ -29,42 +27,41 @@ public class ApplicationReplicationContext {
 
     private final AppletUtilities au;
 
-    private final Map<String, String> messageSwaps;
+    private final ApplicationReplicationRule nameRule;
 
-    private final Map<String, String> componentSwaps;
+    private final ApplicationReplicationRule componentRule;
 
-    public ApplicationReplicationContext(AppletUtilities au, Map<String, String> messageSwaps,
-            Map<String, String> componentSwaps) {
+    private final ApplicationReplicationRule messageRule;
+
+    private final ApplicationReplicationRule classRule;
+
+    public ApplicationReplicationContext(AppletUtilities au, ApplicationReplicationRule nameRule,
+            ApplicationReplicationRule componentRule, ApplicationReplicationRule messageRule,
+            ApplicationReplicationRule classRule) {
         this.au = au;
-        this.messageSwaps = messageSwaps;
-        this.componentSwaps = componentSwaps;
+        this.nameRule = nameRule;
+        this.componentRule = componentRule;
+        this.messageRule = messageRule;
+        this.classRule = classRule;
     }
 
     public AppletUtilities au() {
         return au;
     }
 
-    public String messageSwap(String message) {
-        if (message != null) {
-            for (Map.Entry<String, String> entry : messageSwaps.entrySet()) {
-                message = message.replaceAll(entry.getKey(), entry.getValue());
-            }
-
-            return message;
-        }
-
-        return null;
+    public String nameSwap(String name) {
+        return nameRule.apply(name);
     }
 
     public String componentSwap(String component) {
-        if (component != null) {
-            for (Map.Entry<String, String> entry : componentSwaps.entrySet()) {
-                if (component.startsWith(entry.getKey())) {
-                    return entry.getValue() + component.substring(entry.getKey().length());
-                }
-            }
-        }
+        return componentRule.apply(component);
+    }
 
-        return null;
+    public String messageSwap(String message) {
+        return messageRule.apply(message);
+    }
+
+    public String classSwap(String className) {
+        return classRule.apply(className);
     }
 }

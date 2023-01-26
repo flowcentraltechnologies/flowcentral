@@ -15,11 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.util;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.ReplicationMatchType;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
@@ -43,13 +40,14 @@ public final class ApplicationReplicationUtils {
 
     public static ApplicationReplicationContext createApplicationReplicationContext(AppletUtilities au,
             String srcApplicationName, String destApplicationName, byte[] replicationRulesFile) throws UnifyException {
-        Map<String, String> messageSwaps = new HashMap<String, String>();
-        // TODO Load message swaps
-        Map<String, String> componentSwaps = new HashMap<String, String>();
-        // TODO Load component swaps
-        componentSwaps.put(srcApplicationName + ".", destApplicationName + ".");
-        return new ApplicationReplicationContext(au, Collections.unmodifiableMap(messageSwaps),
-                Collections.unmodifiableMap(componentSwaps));
+        ApplicationReplicationRule.Builder narrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
+        ApplicationReplicationRule.Builder carrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
+        carrb.replace(srcApplicationName + ".", destApplicationName + ".");
+        ApplicationReplicationRule.Builder marrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.WILD_SUFFIX);
+        ApplicationReplicationRule.Builder clarrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.CLASS);        
+        return new ApplicationReplicationContext(au, narrb.build(),
+                carrb.build(), marrb.build(),
+                clarrb.build());
     }
 
     public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
