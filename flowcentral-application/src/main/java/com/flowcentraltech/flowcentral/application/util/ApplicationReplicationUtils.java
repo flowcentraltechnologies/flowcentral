@@ -19,8 +19,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
+import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.tcdng.unify.core.UnifyException;
@@ -38,15 +41,25 @@ public final class ApplicationReplicationUtils {
 
     }
 
-    public static ApplicationReplicationContext createApplicationReplicationContext(String srcApplicationName,
-            String destApplicationName, byte[] replicationRulesFile) throws UnifyException {
+    public static ApplicationReplicationContext createApplicationReplicationContext(AppletUtilities au,
+            String srcApplicationName, String destApplicationName, byte[] replicationRulesFile) throws UnifyException {
         Map<String, String> messageSwaps = new HashMap<String, String>();
         // TODO Load message swaps
         Map<String, String> componentSwaps = new HashMap<String, String>();
         // TODO Load component swaps
         componentSwaps.put(srcApplicationName + ".", destApplicationName + ".");
-        return new ApplicationReplicationContext(Collections.unmodifiableMap(messageSwaps),
+        return new ApplicationReplicationContext(au, Collections.unmodifiableMap(messageSwaps),
                 Collections.unmodifiableMap(componentSwaps));
+    }
+
+    public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
+            throws UnifyException {
+        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(ctx.au(), appFilter);
+        if (filterConfig != null) {
+
+        }
+
+        return filterConfig;
     }
 
     public static SetValuesConfig getReplicatedSetValuesConfig(ApplicationReplicationContext ctx, String valueGenerator,

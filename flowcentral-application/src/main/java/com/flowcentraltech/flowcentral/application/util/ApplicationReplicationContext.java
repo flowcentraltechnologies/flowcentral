@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+
 /**
  * Application replication context.
  * 
@@ -25,37 +27,44 @@ import java.util.Map;
  */
 public class ApplicationReplicationContext {
 
+    private final AppletUtilities au;
+
     private final Map<String, String> messageSwaps;
 
     private final Map<String, String> componentSwaps;
-    
-    public ApplicationReplicationContext(Map<String, String> messageSwaps,
+
+    public ApplicationReplicationContext(AppletUtilities au, Map<String, String> messageSwaps,
             Map<String, String> componentSwaps) {
+        this.au = au;
         this.messageSwaps = messageSwaps;
         this.componentSwaps = componentSwaps;
     }
-    
+
+    public AppletUtilities au() {
+        return au;
+    }
+
     public String messageSwap(String message) {
         if (message != null) {
-            for (Map.Entry<String, String> entry: messageSwaps.entrySet()) {
+            for (Map.Entry<String, String> entry : messageSwaps.entrySet()) {
                 message = message.replaceAll(entry.getKey(), entry.getValue());
             }
-            
+
             return message;
         }
-        
+
         return null;
     }
-    
+
     public String componentSwap(String component) {
         if (component != null) {
-            for (Map.Entry<String, String> entry: componentSwaps.entrySet()) {
+            for (Map.Entry<String, String> entry : componentSwaps.entrySet()) {
                 if (component.startsWith(entry.getKey())) {
                     return entry.getValue() + component.substring(entry.getKey().length());
                 }
             }
         }
-        
+
         return null;
     }
 }

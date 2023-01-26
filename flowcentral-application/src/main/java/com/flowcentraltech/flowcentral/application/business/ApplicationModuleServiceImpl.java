@@ -231,6 +231,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintC
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFieldConfig;
@@ -2633,7 +2634,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         logDebug(taskMonitor, "Creating application replication context...");
         ApplicationReplicationContext ctx = null;
         try {
-            ctx = ApplicationReplicationUtils.createApplicationReplicationContext(srcApplicationName,
+            ctx = ApplicationReplicationUtils.createApplicationReplicationContext(appletUtilities, srcApplicationName,
                     destApplicationName, replicationRulesFile);
         } catch (UnifyException e) {
             logError(taskMonitor, e);
@@ -2680,6 +2681,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
                         appAppletSetValues.getValueGenerator(), appAppletSetValues.getSetValues());
                 appAppletSetValues.setSetValues(newAppSetValues(setValuesConfig));
+            }
+
+            // Applet filters
+            for (AppAppletFilter appAppletFilter : srcAppApplet.getFilterList()) {
+                appAppletFilter.setDescription(ctx.messageSwap(appAppletFilter.getDescription()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appAppletFilter.getFilter());
+                appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                appAppletFilter.setPreferredForm(ctx.componentSwap(appAppletFilter.getPreferredForm()));
+                appAppletFilter
+                        .setPreferredChildListApplet(ctx.componentSwap(appAppletFilter.getPreferredChildListApplet()));
+                appAppletFilter.setFilterGenerator(ctx.componentSwap(appAppletFilter.getFilterGenerator()));
             }
 
             environment().create(srcAppApplet);
