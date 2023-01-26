@@ -43,11 +43,14 @@ public final class ApplicationReplicationUtils {
         ApplicationReplicationRule.Builder narrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         ApplicationReplicationRule.Builder carrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
         carrb.replace(srcApplicationName + ".", destApplicationName + ".");
-        ApplicationReplicationRule.Builder marrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.WILD_SUFFIX);
-        ApplicationReplicationRule.Builder clarrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.CLASS);        
-        return new ApplicationReplicationContext(au, narrb.build(),
-                carrb.build(), marrb.build(),
-                clarrb.build());
+        ApplicationReplicationRule.Builder marrb = new ApplicationReplicationRule.Builder(
+                ReplicationMatchType.WILD_SUFFIX);
+        ApplicationReplicationRule.Builder clarrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.CLASS);
+        ApplicationReplicationRule.Builder tarrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
+        ApplicationReplicationRule.Builder afarrb = new ApplicationReplicationRule.Builder(
+                ReplicationMatchType.WILD_PREFIX);
+        return new ApplicationReplicationContext(au, narrb.build(), carrb.build(), marrb.build(), clarrb.build(),
+                tarrb.build(), afarrb.build());
     }
 
     public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)

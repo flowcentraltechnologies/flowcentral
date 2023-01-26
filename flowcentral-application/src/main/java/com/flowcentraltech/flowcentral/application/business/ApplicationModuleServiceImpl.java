@@ -2739,6 +2739,33 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             logDebug(taskMonitor, "Reference [{0}] -> [{1}]...", oldDescription, srcAppRef.getDescription());
         }
 
+        // Entities
+        logDebug(taskMonitor, "Replicating entities...");
+        List<Long> entityIdList = environment().valueList(Long.class, "id",
+                new AppEntityQuery().applicationId(srcApplicationId));
+        for (Long entityId : entityIdList) {
+            AppEntity srcAppEntity = environment().find(AppEntity.class, entityId);
+            String oldDescription = srcAppEntity.getDescription();
+            srcAppEntity.setApplicationId(destApplicationId);
+            srcAppEntity.setName(ctx.nameSwap(srcAppEntity.getName()));
+            srcAppEntity.setDescription(ctx.messageSwap(srcAppEntity.getDescription()));
+            srcAppEntity.setLabel(ctx.messageSwap(srcAppEntity.getLabel()));
+            srcAppEntity.setEmailProducerConsumer(ctx.componentSwap(srcAppEntity.getEmailProducerConsumer()));
+            srcAppEntity.setEntityClass(ctx.classSwap(srcAppEntity.getEntityClass()));
+            srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getLabel()));
+
+            for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
+                appEntityField.setReferences(ctx.componentSwap(appEntityField.getReferences()));
+                appEntityField.setInputWidget(ctx.componentSwap(appEntityField.getInputWidget()));
+                appEntityField.setSuggestionType(ctx.componentSwap(appEntityField.getSuggestionType()));
+                appEntityField.setLingualWidget(ctx.componentSwap(appEntityField.getLingualWidget()));
+                appEntityField.setAutoFormat(ctx.autoFormatSwap(appEntityField.getAutoFormat()));
+            }
+
+            environment().create(srcAppEntity);
+            logDebug(taskMonitor, "Entity [{0}] -> [{1}]...", oldDescription, srcAppEntity.getDescription());
+        }
+
         taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
         return 0;
     }
