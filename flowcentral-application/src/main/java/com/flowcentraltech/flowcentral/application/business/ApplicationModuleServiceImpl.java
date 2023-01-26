@@ -43,6 +43,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleEr
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
@@ -172,6 +173,8 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils.EntityBaseTypeFieldSet;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidget;
@@ -2583,6 +2586,109 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 parentInst.getId());
     }
 
+    @Taskable(name = ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME,
+            description = "Application Replication Task",
+            parameters = {
+                    @Parameter(name = ApplicationReplicationTaskConstants.SOURCE_APPLICATION_NAME,
+                            description = "$m{applicationreplicationtask.sourceapplicationname}", type = String.class,
+                            mandatory = true),
+                    @Parameter(name = ApplicationReplicationTaskConstants.DESTINATION_APPLICATION_NAME,
+                            description = "$m{applicationreplicationtask.destinationapplicationname}",
+                            type = String.class, mandatory = true),
+                    @Parameter(name = ApplicationReplicationTaskConstants.DESTINATION_MODULE_NAME,
+                            description = "$m{applicationreplicationtask.destinationmodulename}", type = String.class,
+                            mandatory = true),
+                    @Parameter(name = ApplicationReplicationTaskConstants.REPLICATION_RULES_FILE,
+                            description = "$m{applicationreplicationtask.replicationrulesfile}", type = byte[].class,
+                            mandatory = true) },
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
+    public int executeApplicationReplicationTask(TaskMonitor taskMonitor, String srcApplicationName,
+            String destApplicationName, String destModuleName, byte[] replicationRulesFile) throws UnifyException {
+        logDebug(taskMonitor,
+                "Executing application replication from source application [{0}] to destination application [{1}] and module [{2}]...",
+                srcApplicationName, destApplicationName, destModuleName);
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.FALSE);
+        logDebug(taskMonitor, "Checking if source application exists...");
+        final Application srcApplication = environment().list(new ApplicationQuery().name(srcApplicationName));
+        if (srcApplication == null) {
+            logDebug(taskMonitor, "Source application does not exist. Replication terminated.");
+            return 0;
+        }
+
+        logDebug(taskMonitor, "Checking if destination application exists...");
+        if (environment().countAll(new ApplicationQuery().name(destApplicationName)) > 0) {
+            logDebug(taskMonitor, "Destination application already exists. Replication terminated.");
+            return 0;
+        }
+
+        logDebug(taskMonitor, "Checking if destination module exists...");
+        Long destModuleId = null;
+        try {
+            destModuleId = appletUtilities.system().getModuleId(destModuleName);
+        } catch (UnifyException e) {
+            logError(taskMonitor, e);
+            return 0;
+        }
+
+        logDebug(taskMonitor, "Creating application replication context...");
+        ApplicationReplicationContext ctx = null;
+        try {
+            ctx = ApplicationReplicationUtils.createApplicationReplicationContext(srcApplicationName,
+                    destApplicationName, replicationRulesFile);
+        } catch (UnifyException e) {
+            logError(taskMonitor, e);
+            return 0;
+        }
+
+        // Application
+        logDebug(taskMonitor, "Replicating application...");
+        final Long srcApplicationId = srcApplication.getId();
+        srcApplication.setModuleId(destModuleId);
+        srcApplication.setName(destApplicationName);
+        srcApplication.setDescription(ctx.messageSwap(srcApplication.getDescription()));
+        srcApplication.setLabel(ctx.messageSwap(srcApplication.getLabel()));
+        final Long destApplicationId = (Long) environment().create(srcApplication);
+        applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE,
+                PrivilegeNameUtils.getApplicationPrivilegeName(destApplicationName), srcApplication.getDescription());
+
+        // Applets
+        logDebug(taskMonitor, "Replicating applets...");
+        List<Long> appletIdList = environment().valueList(Long.class, "id",
+                new AppAppletQuery().applicationId(srcApplicationId));
+        for (Long appletId : appletIdList) {
+            AppApplet srcAppApplet = environment().find(AppApplet.class, appletId);
+            srcAppApplet.setApplicationId(destApplicationId);
+            srcAppApplet.setDescription(ctx.messageSwap(srcAppApplet.getDescription()));
+            srcAppApplet.setLabel(ctx.messageSwap(srcAppApplet.getLabel()));
+            srcAppApplet.setEntity(ctx.componentSwap(srcAppApplet.getEntity()));
+            srcAppApplet.setRouteToApplet(ctx.componentSwap(srcAppApplet.getRouteToApplet()));
+
+            // Applet properties
+            for (AppAppletProp appAppletProp : srcAppApplet.getPropList()) {
+                if (refProperties.contains(appAppletProp.getName())) {
+                    appAppletProp.setValue(ctx.componentSwap(appAppletProp.getValue()));
+                } else {
+                    appAppletProp.setValue(ctx.messageSwap(appAppletProp.getValue()));
+                }
+            }
+
+            // Applet set values
+            for (AppAppletSetValues appAppletSetValues : srcAppApplet.getSetValuesList()) {
+                appAppletSetValues.setDescription(ctx.messageSwap(appAppletSetValues.getDescription()));
+                appAppletSetValues.setValueGenerator(ctx.componentSwap(appAppletSetValues.getValueGenerator()));
+                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                        appAppletSetValues.getValueGenerator(), appAppletSetValues.getSetValues());
+                appAppletSetValues.setSetValues(newAppSetValues(setValuesConfig));
+            }
+
+            environment().create(srcAppApplet);
+        }
+
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
+        return 0;
+    }
+
     @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
             description = "Application Deletion Task",
             parameters = { @Parameter(name = ApplicationDeletionTaskConstants.APPLICATION_NAME,
@@ -2592,52 +2698,51 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     public int executeApplicationDeletionTask(TaskMonitor taskMonitor, String applicationName) throws UnifyException {
         logDebug(taskMonitor, "Executing deletion on application [{0}] ...", applicationName);
         logDebug(taskMonitor, "Checking if application developable...");
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.FALSE);
         int deletionCount = 0;
         final Application application = environment().list(new ApplicationQuery().name(applicationName));
-        if (application.isDevelopable()) {
-            logDebug(taskMonitor, "Application is developable.");
-            logDebug(taskMonitor, "Checking for application dependants...");
-            if (usageListProvider.countUsages(new BeanValueStore(application).getReader(), null) == 0L) {
-                logDebug(taskMonitor, "No application dependants found. Proceeding with deletion...");
-                final Long applicationId = application.getId();
-                if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
-                    for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
-                        deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
-                    }
-                }
-
-                applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types",
-                        new AppSuggestionTypeQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages",
-                        new AppAssignmentPageQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules",
-                        new AppPropertyRuleQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists",
-                        new AppPropertyListQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "forms",
-                        new AppFormQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "tables",
-                        new AppTableQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "entities",
-                        new AppEntityQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "references",
-                        new AppRefQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types",
-                        new AppWidgetTypeQuery(), applicationId);
-                deletionCount += deleteApplicationArtifacts(taskMonitor, "applets",
-                        new AppAppletQuery(), applicationId);
-
-                environment().delete(application);
-                logDebug(taskMonitor, "Application successfully deleted.");
-           } else {
-                logDebug(taskMonitor,
-                        "Application is in use or referenced by one or more components belonging to some other application. Deletion terminated.");
-            }
-        } else {
+        if (!application.isDevelopable()) {
             logDebug(taskMonitor, "Application is non-developable. Deletion terminated.");
+            return 0;
         }
 
+        logDebug(taskMonitor, "Application is developable.");
+        logDebug(taskMonitor, "Checking for application dependants...");
+        if (usageListProvider.countUsages(new BeanValueStore(application).getReader(), null) != 0L) {
+            logDebug(taskMonitor,
+                    "Application is in use or referenced by one or more components belonging to some other application. Deletion terminated.");
+            return 0;
+        }
+
+        logDebug(taskMonitor, "No application dependants found. Proceeding with deletion...");
+        final Long applicationId = application.getId();
+        if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
+            for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
+            }
+        }
+
+        applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules", new AppPropertyRuleQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists", new AppPropertyListQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
+
+        environment().delete(application);
+        logDebug(taskMonitor, "Application successfully deleted.");
+
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.TRUE);
         return deletionCount;
     }
 

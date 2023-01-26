@@ -17,16 +17,22 @@
 package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Application deletion task constants.
+ * Application replication task constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationDeletionTaskConstants {
+public interface ApplicationReplicationTaskConstants {
 
-    String APPLICATION_DELETION_TASK_NAME = "application.deletion.task";
+    String APPLICATION_REPLICATION_TASK_NAME = "application.replication.task";
 
-    String APPLICATION_NAME = "applicationName";
+    String SOURCE_APPLICATION_NAME = "srcApplicationName";
 
+    String DESTINATION_APPLICATION_NAME = "destApplicationName";
+
+    String DESTINATION_MODULE_NAME = "destModuleName";
+
+    String REPLICATION_RULES_FILE = "replicationRulesFile";
+    
     String TASK_SUCCESS = "taskSuccess";
 }
