@@ -2620,7 +2620,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             logDebug(taskMonitor, "Source application is not developable. Replication terminated.");
             return 0;
         }
-        
+
         logDebug(taskMonitor, "Checking if destination application exists...");
         if (environment().countAll(new ApplicationQuery().name(destApplicationName)) > 0) {
             logDebug(taskMonitor, "Destination application already exists. Replication terminated.");
@@ -2960,6 +2960,40 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             environment().create(srcAppPropertyRule);
             logDebug(taskMonitor, "Property rule [{0}] -> [{1}]...", oldDescription,
                     srcAppPropertyRule.getDescription());
+        }
+
+        // Assignment Pages
+        logDebug(taskMonitor, "Replicating assignment pages...");
+        List<Long> assignmentPageIdList = environment().valueList(Long.class, "id",
+                new AppAssignmentPageQuery().applicationId(srcApplicationId));
+        for (Long assignmentPageId : assignmentPageIdList) {
+            AppAssignmentPage srcAppAssignmentPage = environment().find(AppAssignmentPage.class, assignmentPageId);
+            String oldDescription = srcAppAssignmentPage.getDescription();
+            srcAppAssignmentPage.setApplicationId(destApplicationId);
+            srcAppAssignmentPage.setDescription(ctx.messageSwap(srcAppAssignmentPage.getDescription()));
+            srcAppAssignmentPage.setLabel(ctx.messageSwap(srcAppAssignmentPage.getLabel()));
+            srcAppAssignmentPage.setEntity(ctx.entitySwap(srcAppAssignmentPage.getEntity()));
+            srcAppAssignmentPage.setCommitPolicy(ctx.componentSwap(srcAppAssignmentPage.getCommitPolicy()));
+
+            environment().create(srcAppAssignmentPage);
+            logDebug(taskMonitor, "Assignment page [{0}] -> [{1}]...", oldDescription,
+                    srcAppAssignmentPage.getDescription());
+        }
+
+        // Suggestions
+        logDebug(taskMonitor, "Replicating suggestion types...");
+        List<Long> suggestionTypeIdList = environment().valueList(Long.class, "id",
+                new AppSuggestionTypeQuery().applicationId(srcApplicationId));
+        for (Long suggestionTypeId : suggestionTypeIdList) {
+            AppSuggestionType srcAppSuggestionType = environment().find(AppSuggestionType.class, suggestionTypeId);
+            String oldDescription = srcAppSuggestionType.getDescription();
+            srcAppSuggestionType.setApplicationId(destApplicationId);
+            srcAppSuggestionType.setDescription(ctx.messageSwap(srcAppSuggestionType.getDescription()));
+            srcAppSuggestionType.setParent(ctx.entitySwap(srcAppSuggestionType.getParent()));
+
+            environment().create(srcAppSuggestionType);
+            logDebug(taskMonitor, "Suggestion type [{0}] -> [{1}]...", oldDescription,
+                    srcAppSuggestionType.getDescription());
         }
 
         taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
