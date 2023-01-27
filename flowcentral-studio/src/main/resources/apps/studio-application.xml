@@ -476,6 +476,8 @@
 				value="appEditable" />
 			<property name="maintainForm.delete.condition"
 				value="appEditable" />
+			<property name="maintainForm.delete.policy"
+				value="studioondeleteapplication-policy" />
 			<filter name="appEditable"
 				description="$m{studio.application.filter.editable}">
 				<restriction type="equals" field="developable"
