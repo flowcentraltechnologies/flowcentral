@@ -3061,7 +3061,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         environment().delete(application);
         logDebug(taskMonitor, "Application successfully deleted.");
-
         taskMonitor.getCurrentTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.TRUE);
         return deletionCount;
     }
