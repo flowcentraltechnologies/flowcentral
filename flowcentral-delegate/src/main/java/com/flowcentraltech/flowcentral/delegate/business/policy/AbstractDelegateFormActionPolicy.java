@@ -65,7 +65,7 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
     }
 
     @Override
-    protected final void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected final EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         Entity inst = ctx.getInst();
         ProcedureRequest req = new ProcedureRequest(operation);
         req.setEntity(utilities.resolveLongName(inst.getClass()));
@@ -84,6 +84,8 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         if (respInst != null) {
             new BeanValueStore(inst).copyWithExclusions(new BeanValueStore(respInst), copyExclusions);
         }
+        
+        return null;
     }
 
     @Override

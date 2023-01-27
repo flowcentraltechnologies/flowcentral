@@ -883,6 +883,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         if (ctx != null && ctx.isWithReviewErrors()) {
             onReviewErrors(entityActionResult);
+        } else if (entityActionResult.isWithTaskResult()) {
+            fireEntityActionResultTask(entityActionResult);
         } else {
             setCommandResultMapping(entityActionResult, false);
         }

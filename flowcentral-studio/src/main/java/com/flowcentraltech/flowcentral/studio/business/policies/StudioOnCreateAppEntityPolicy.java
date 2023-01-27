@@ -64,7 +64,7 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         AppEntity appEntity = (AppEntity) ctx.getInst();
         if (DataUtils.isBlank(appEntity.getFieldList())) {
@@ -76,6 +76,8 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
                 }
             }
         }
+        
+        return null;
     }
 
     @Override

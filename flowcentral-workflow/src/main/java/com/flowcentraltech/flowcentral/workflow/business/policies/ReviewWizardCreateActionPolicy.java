@@ -53,11 +53,13 @@ public class ReviewWizardCreateActionPolicy extends AbstractEntityActionPolicy {
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         int wfWizardStepIndex = ctx.getAttribute(int.class, WfWizardAppletPropertyConstants.WIZARD_STEP_INDEX);
         if (wfWizardStepIndex == 0) {
             ((WorkEntity) ctx.getInst()).setInWorkflow(true);
         }
+        
+        return null;
     }
 
     @Override

@@ -56,7 +56,7 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         Workflow workflow = (Workflow) ctx.getInst();
         if (DataUtils.isBlank(workflow.getStepList())) {
@@ -94,6 +94,8 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
 
             workflow.setStepList(stepList);
         }
+        
+        return null;
     }
 
     @Override

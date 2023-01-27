@@ -59,8 +59,8 @@ public class SysParamUpdateActionPolicy extends AbstractAppletActionPolicy {
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
-
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+        return null;
     }
 
     @Override

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.business.policies;
 
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -44,8 +45,8 @@ public abstract class AbstractStudioAppEntityFieldPolicy extends AbstractStudioA
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
-
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+        return null;
     }
 
     protected ReportModuleService getRds() {

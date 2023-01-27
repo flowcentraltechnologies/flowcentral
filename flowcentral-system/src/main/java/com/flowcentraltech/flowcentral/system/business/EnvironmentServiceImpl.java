@@ -59,7 +59,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Default implementation of entity service.
+ * Default implementation of environment service.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -192,8 +192,12 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public EntityActionResult performEntityAction(EntityActionContext ctx) throws UnifyException {
-        executeEntityPreActionPolicy(ctx);
-        return executeEntityPostActionPolicy(db(ctx.getInst().getClass()), ctx);
+        EntityActionResult result = executeEntityPreActionPolicy(ctx);
+        if (result == null) {
+            return executeEntityPostActionPolicy(db(ctx.getInst().getClass()), ctx);
+        }
+
+        return result;
     }
 
     @Override
@@ -212,14 +216,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public EntityActionResult create(EntityActionContext ctx) throws UnifyException {
-        executeEntityPreActionPolicy(ctx);
-        Entity inst = ctx.getInst();
-        ctx.setResult(create(inst));
-        if (suggestionProvider != null) {
-            suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+        EntityActionResult result = executeEntityPreActionPolicy(ctx);
+        if (result == null) {
+            Entity inst = ctx.getInst();
+            ctx.setResult(create(inst));
+            if (suggestionProvider != null) {
+                suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+            }
+
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
-        return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
+        return result;
     }
 
     @Override
@@ -323,46 +331,54 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public EntityActionResult updateByIdVersion(EntityActionContext ctx) throws UnifyException {
-        executeEntityPreActionPolicy(ctx);
-        Entity inst = ctx.getInst();
-        if (entityAuditInfoProvider != null) {
-            EntityAuditInfo entityAuditInfo = entityAuditInfoProvider.getEntityAuditInfo(ctx.getEntityDef());
-            if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
-                Entity _oldInst = findLean(inst.getClass(), inst.getId());
-                Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
-                        entityAuditInfo.getInclusions());
-                ctx.setAudit(audit);
+        EntityActionResult result = executeEntityPreActionPolicy(ctx);
+        if (result == null) {
+            Entity inst = ctx.getInst();
+            if (entityAuditInfoProvider != null) {
+                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider.getEntityAuditInfo(ctx.getEntityDef());
+                if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
+                    Entity _oldInst = findLean(inst.getClass(), inst.getId());
+                    Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
+                            entityAuditInfo.getInclusions());
+                    ctx.setAudit(audit);
+                }
             }
+
+            ctx.setResult(db(inst.getClass()).updateByIdVersion(inst));
+            if (suggestionProvider != null) {
+                suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+            }
+
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
-        ctx.setResult(db(inst.getClass()).updateByIdVersion(inst));
-        if (suggestionProvider != null) {
-            suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
-        }
-
-        return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
+        return result;
     }
 
     @Override
     public EntityActionResult updateLean(EntityActionContext ctx) throws UnifyException {
-        executeEntityPreActionPolicy(ctx);
-        Entity inst = ctx.getInst();
-        if (entityAuditInfoProvider != null) {
-            EntityAuditInfo entityAuditInfo = entityAuditInfoProvider.getEntityAuditInfo(ctx.getEntityDef());
-            if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
-                Entity _oldInst = findLean(inst.getClass(), inst.getId());
-                Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
-                        entityAuditInfo.getInclusions());
-                ctx.setAudit(audit);
+        EntityActionResult result = executeEntityPreActionPolicy(ctx);
+        if (result == null) {
+            Entity inst = ctx.getInst();
+            if (entityAuditInfoProvider != null) {
+                EntityAuditInfo entityAuditInfo = entityAuditInfoProvider.getEntityAuditInfo(ctx.getEntityDef());
+                if (entityAuditInfo.auditable() && entityAuditInfo.inclusions()) {
+                    Entity _oldInst = findLean(inst.getClass(), inst.getId());
+                    Audit audit = new BeanValueStore(inst).diff(new BeanValueStore(_oldInst),
+                            entityAuditInfo.getInclusions());
+                    ctx.setAudit(audit);
+                }
             }
+
+            ctx.setResult(db(inst.getClass()).updateLeanByIdVersion(inst));
+            if (suggestionProvider != null) {
+                suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+            }
+
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
-        ctx.setResult(db(inst.getClass()).updateLeanByIdVersion(inst));
-        if (suggestionProvider != null) {
-            suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
-        }
-
-        return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
+        return result;
     }
 
     @Override
@@ -392,10 +408,14 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public EntityActionResult delete(EntityActionContext ctx) throws UnifyException {
-        executeEntityPreActionPolicy(ctx);
-        Entity inst = ctx.getInst();
-        ctx.setResult(db(inst.getClass()).deleteByIdVersion(inst));
-        return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
+        EntityActionResult result = executeEntityPreActionPolicy(ctx);
+        if (result == null) {
+            Entity inst = ctx.getInst();
+            ctx.setResult(db(inst.getClass()).deleteByIdVersion(inst));
+            return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
+        }
+
+        return result;
     }
 
     @Override
@@ -597,10 +617,12 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
                 : delegateInfo.getEnvironmentDelegate()) : db();
     }
 
-    private void executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {
+    private EntityActionResult executeEntityPreActionPolicy(EntityActionContext ctx) throws UnifyException {
         if (ctx.isWithActionPolicy()) {
-            ((EntityActionPolicy) getComponent(ctx.getActionPolicyName())).executePreAction(ctx);
+            return ((EntityActionPolicy) getComponent(ctx.getActionPolicyName())).executePreAction(ctx);
         }
+
+        return null;
     }
 
     private EntityActionResult executeEntityPostActionPolicy(Database tdb, EntityActionContext ctx)

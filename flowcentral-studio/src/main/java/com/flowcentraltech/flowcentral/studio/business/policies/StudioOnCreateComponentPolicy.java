@@ -42,8 +42,8 @@ public class StudioOnCreateComponentPolicy extends AbstractStudioAppletActionPol
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
-
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+        return null;
     }
 
     @SuppressWarnings("unchecked")
