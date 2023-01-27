@@ -2877,8 +2877,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
                         appFormStatePolicy.getOnCondition());
                 appFormStatePolicy.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
-                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx, null,
-                        appFormStatePolicy.getSetValues());
+                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                        appFormStatePolicy.getValueGenerator(), appFormStatePolicy.getSetValues());
                 appFormStatePolicy.setSetValues(newAppSetValues(setValuesConfig));
             }
 
