@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -41,6 +42,17 @@ public abstract class AbstractAppletPanel extends SwitchPanel {
 
     public void setTaskLauncher(TaskLauncher taskLauncher) {
         this.taskLauncher = taskLauncher;
+    }
+
+    protected void fireEntityActionResultTask(EntityActionResult entityActionResult) throws UnifyException {
+        final String successPath = entityActionResult.getTaskSuccessPath() != null
+                ? entityActionResult.getTaskSuccessPath()
+                : getActionFullPath("/closePage");
+        final String failurePath = entityActionResult.getTaskFailurePath() != null
+                ? entityActionResult.getTaskFailurePath()
+                : getActionFullPath("/content");
+        launchTaskWithMonitorBox(entityActionResult.getResultTaskSetup(), entityActionResult.getResultTaskCaption(),
+                successPath, failurePath);
     }
 
     protected void launchTaskWithMonitorBox(TaskSetup taskSetup, String caption) throws UnifyException {

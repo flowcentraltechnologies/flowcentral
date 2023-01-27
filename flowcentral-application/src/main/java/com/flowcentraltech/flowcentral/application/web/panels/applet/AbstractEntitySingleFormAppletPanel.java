@@ -397,11 +397,6 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         }
     }
 
-    private void fireEntityActionResultTask(EntityActionResult entityActionResult) throws UnifyException {
-        // TODO Set success and failure path
-        launchTaskWithMonitorBox(entityActionResult.getResultTaskSetup(), entityActionResult.getResultTaskCaption());
-    }
-
     protected AbstractEntitySingleFormApplet getEntityFormApplet() throws UnifyException {
         return getValue(AbstractEntitySingleFormApplet.class);
     }

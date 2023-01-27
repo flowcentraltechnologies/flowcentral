@@ -29,6 +29,10 @@ public class EntityActionResult {
 
     private TaskSetup resultTaskSetup;
 
+    private String taskSuccessPath;
+
+    private String taskFailurePath;
+
     private String resultTaskCaption;
 
     private String resultPath;
@@ -80,6 +84,22 @@ public class EntityActionResult {
 
     public TaskSetup getResultTaskSetup() {
         return resultTaskSetup;
+    }
+
+    public String getTaskSuccessPath() {
+        return taskSuccessPath;
+    }
+
+    public void setTaskSuccessPath(String taskSuccessPath) {
+        this.taskSuccessPath = taskSuccessPath;
+    }
+
+    public String getTaskFailurePath() {
+        return taskFailurePath;
+    }
+
+    public void setTaskFailurePath(String taskFailurePath) {
+        this.taskFailurePath = taskFailurePath;
     }
 
     public String getResultTaskCaption() {
