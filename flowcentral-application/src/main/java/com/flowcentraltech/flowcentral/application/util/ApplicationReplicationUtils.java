@@ -82,6 +82,11 @@ public final class ApplicationReplicationUtils {
             String line = null;
             int lineNumber = 1;
             while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty() || line.startsWith("//")) {
+                    continue;
+                }
+                
                 if (line.startsWith(ELEMENT_PREFIX)) {
                     final String body = line.substring(ELEMENT_PREFIX.length());
                     String[] parts = body.split("|");
