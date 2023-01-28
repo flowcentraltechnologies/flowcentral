@@ -34,7 +34,7 @@ import com.tcdng.unify.web.constant.Secured;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/applicationreplication")
+@Component("/studio/applicationreplication")
 @UplBinding("web/studio/upl/applicationreplicationpage.upl")
 @ResultMappings({
     @ResultMapping(name = "refresh",

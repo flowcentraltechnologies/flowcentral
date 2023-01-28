@@ -38,17 +38,17 @@ public class ApplicationReplicationPanel extends AbstractApplicationPanel {
     public void executeReplication() throws UnifyException {
         ApplicationReplication replication = getReplication();
         if (replication.getSourceApplication() == null) {
-            hintUser(MODE.ERROR, "$m{applicationreplicationpanel.replication.source}");
+            hintUser(MODE.ERROR, "$m{applicationreplicationpanel.replication.error.source}");
             return;
         }
 
         if (replication.getTargetModule() == null) {
-            hintUser(MODE.ERROR, "$m{applicationreplicationpanel.replication.module}");
+            hintUser(MODE.ERROR, "$m{applicationreplicationpanel.replication.error.module}");
             return;
         }
 
         if (replication.getTargetApplication() == null) {
-            hintUser(MODE.ERROR, "$m{applicationreplicationpanel.replication.target}");
+            hintUser(MODE.ERROR, "$m{applicationreplicationpanel.replication.error.target}");
             return;
         }
 
