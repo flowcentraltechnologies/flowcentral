@@ -122,6 +122,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
 
             // Tiles
             for (DashboardTile dashboardTile : srcDashboard.getTileList()) {
+                dashboardTile.setName(ctx.nameSwap(dashboardTile.getName()));
                 dashboardTile.setDescription(ctx.messageSwap(dashboardTile.getDescription()));
                 dashboardTile.setChart(ctx.entitySwap(dashboardTile.getChart()));
             }

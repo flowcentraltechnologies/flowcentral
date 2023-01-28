@@ -2747,7 +2747,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             srcAppEntity.setLabel(ctx.messageSwap(srcAppEntity.getLabel()));
             srcAppEntity.setEmailProducerConsumer(ctx.componentSwap(srcAppEntity.getEmailProducerConsumer()));
             srcAppEntity.setEntityClass(ctx.classSwap(srcAppEntity.getEntityClass()));
-            srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getLabel()));
+            srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getTableName()));
 
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
                 appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));
