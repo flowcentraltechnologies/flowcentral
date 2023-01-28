@@ -35,9 +35,9 @@
 	layout:$d{!ui-vertical showCaption:true style:$s{width:100%;}  cellStyle:$s{padding:5px 2px;}}
 	components:$c{frmSource frmModule frmTarget frmReplicationRules}	
 !ui-select:frmSource caption:$m{applicationreplicationpanel.replication.source} binding:sourceApplication
-    list:$s{devapplicationlist} listKey:$s{name} required:true style:$s{width:380px;}
+    list:$s{devapplicationlist} listKey:$s{name} required:true style:$s{width:380px;} blankOption:$s{}
 !ui-select:frmModule caption:$m{applicationreplicationpanel.replication.module} binding:targetModule
-    list:$s{modulelist} listKey:$s{name} required:true style:$s{width:380px;}
+    list:$s{modulelist} listKey:$s{name} required:true style:$s{width:380px;} blankOption:$s{}
 !ui-name:frmTarget caption:$m{applicationreplicationpanel.replication.target} binding:targetApplication
 	required:true
 !ui-fileupload:frmReplicationRules caption:$m{applicationreplicationpanel.replication.selectfile} binding:replicationRuleFile

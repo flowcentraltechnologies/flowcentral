@@ -2612,38 +2612,29 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         final Application srcApplication = environment().list(new ApplicationQuery().name(srcApplicationName));
         if (srcApplication == null) {
             logDebug(taskMonitor, "Source application does not exist. Replication terminated.");
+            taskMonitor.cancel();
             return 0;
         }
 
         if (!srcApplication.isDevelopable()) {
             logDebug(taskMonitor, "Source application is not developable. Replication terminated.");
+            taskMonitor.cancel();
             return 0;
         }
 
         logDebug(taskMonitor, "Checking if destination application exists...");
         if (environment().countAll(new ApplicationQuery().name(destApplicationName)) > 0) {
             logDebug(taskMonitor, "Destination application already exists. Replication terminated.");
+            taskMonitor.cancel();
             return 0;
         }
 
         logDebug(taskMonitor, "Checking if destination module exists...");
-        Long destModuleId = null;
-        try {
-            destModuleId = appletUtilities.system().getModuleId(destModuleName);
-        } catch (UnifyException e) {
-            logError(taskMonitor, e);
-            return 0;
-        }
+        Long destModuleId = appletUtilities.system().getModuleId(destModuleName);
 
         logDebug(taskMonitor, "Creating application replication context...");
-        ApplicationReplicationContext ctx = null;
-        try {
-            ctx = ApplicationReplicationUtils.createApplicationReplicationContext(appletUtilities, srcApplicationName,
+        ApplicationReplicationContext ctx = ApplicationReplicationUtils.createApplicationReplicationContext(appletUtilities, srcApplicationName,
                     destApplicationName, replicationRulesFile);
-        } catch (UnifyException e) {
-            logError(taskMonitor, e);
-            return 0;
-        }
 
         // Application
         logDebug(taskMonitor, "Replicating application...");
@@ -2846,6 +2837,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
             // Actions
             for (AppFormAction appFormAction : srcAppForm.getActionList()) {
+                appFormAction.setName(ctx.nameSwap(appFormAction.getName()));
                 appFormAction.setPolicy(ctx.componentSwap(appFormAction.getPolicy()));
                 FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
                         appFormAction.getOnCondition());

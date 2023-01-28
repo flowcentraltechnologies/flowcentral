@@ -215,6 +215,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             ReportableDefinition srcReportableDefinition = environment().find(ReportableDefinition.class, reportableId);
             String oldDescription = srcReportableDefinition.getDescription();
             srcReportableDefinition.setApplicationId(destApplicationId);
+            srcReportableDefinition.setName(ctx.nameSwap(srcReportableDefinition.getName()));
             srcReportableDefinition.setDescription(ctx.messageSwap(srcReportableDefinition.getDescription()));
             srcReportableDefinition.setTitle(ctx.messageSwap(srcReportableDefinition.getTitle()));
             srcReportableDefinition.setEntity(ctx.entitySwap(srcReportableDefinition.getEntity()));
@@ -236,6 +237,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             ReportConfiguration srcReportConfiguration = environment().find(ReportConfiguration.class, reportId);
             String oldDescription = srcReportConfiguration.getDescription();
             srcReportConfiguration.setApplicationId(destApplicationId);
+            srcReportConfiguration.setName(ctx.nameSwap(srcReportConfiguration.getName()));
             srcReportConfiguration.setDescription(ctx.messageSwap(srcReportConfiguration.getDescription()));
             srcReportConfiguration.setTitle(ctx.messageSwap(srcReportConfiguration.getTitle()));
             srcReportConfiguration.setReportable(ctx.entitySwap(srcReportConfiguration.getReportable()));
