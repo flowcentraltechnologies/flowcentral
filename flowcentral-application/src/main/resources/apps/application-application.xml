@@ -1713,6 +1713,9 @@
 			<field name="parent"
 				label="$m{application.appsuggestiontype.parent}" type="string"
 				nullable="true" inputWidget="application.text" />
+			<field name="suggestionList"
+				label="$m{application.appsuggestiontype.suggestions}"
+				type="child_list" references="appSuggestionRef" />
 		</entity>
 		<entity name="appSuggestion"
 			description="$m{application.appsuggestion}"

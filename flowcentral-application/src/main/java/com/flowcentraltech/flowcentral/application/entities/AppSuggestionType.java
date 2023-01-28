@@ -15,6 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
+import java.util.List;
+
+import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.Table;
 
@@ -30,12 +33,23 @@ public class AppSuggestionType extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String parent;
 
+    @ChildList
+    private List<AppSuggestion> suggestionList;
+    
     public String getParent() {
         return parent;
     }
 
     public void setParent(String parent) {
         this.parent = parent;
+    }
+
+    public List<AppSuggestion> getSuggestionList() {
+        return suggestionList;
+    }
+
+    public void setSuggestionList(List<AppSuggestion> suggestionList) {
+        this.suggestionList = suggestionList;
     }
 
 }
