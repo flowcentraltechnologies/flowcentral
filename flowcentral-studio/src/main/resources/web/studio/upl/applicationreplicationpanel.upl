@@ -1,0 +1,56 @@
+// UPL template for application replication panel
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-applicationreplicationpanel components:$c{replicationPanel}
+
+// Replication panel
+!ui-panel:replicationPanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{headerBar formPanel actionPanel}
+
+// Header Bar
+!ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
+	components:$c{headerLeftPanel}
+
+!ui-panel:headerLeftPanel style:$s{display:inline-block; float:left;}
+	layout:$d{!ui-horizontal cellType:middle cellStyle:$s{padding-right:8px;}}
+	components:$c{titleBlock}
+!ui-panel:titleBlock style:$s{display:inline-block;} components:$c{title subTitle}
+!ui-label:title styleClass:$s{hdtitle} caption:$m{applicationreplicationpanel.replication.title}
+!ui-label:subTitle styleClass:$s{hdsubtitle} caption:$m{applicationreplicationpanel.replication.subtitle}
+
+// Form panel
+!ui-panel:formPanel style:$s{margin-bottom:10px;}
+	layout:$d{!ui-vertical showCaption:true style:$s{width:100%;}  cellStyle:$s{padding:5px 2px;}}
+	components:$c{frmSource frmModule frmTarget frmReplicationRules}	
+!ui-select:frmSource caption:$m{applicationreplicationpanel.replication.source} binding:sourceApplication
+    list:$s{devapplicationlist} listKey:$s{name} required:true style:$s{width:380px;}
+!ui-select:frmModule caption:$m{applicationreplicationpanel.replication.module} binding:targetModule
+    list:$s{modulelist} listKey:$s{name} required:true style:$s{width:380px;}
+!ui-name:frmTarget caption:$m{applicationreplicationpanel.replication.target} binding:targetApplication
+	required:true
+!ui-fileupload:frmReplicationRules caption:$m{applicationreplicationpanel.replication.selectfile} binding:replicationRuleFile
+    selectOnly:true required:true style:$s{width:380px;}
+
+
+// Action panel
+!ui-panel:actionPanel layout:$d{!ui-horizontal style:$s{width:100%;}} components:$c{execBtn}
+!ui-button:execBtn styleClass:$e{fc-bluebutton} caption:$m{button.executereplication}
+	eventHandler:$d{!ui-event event:onclick action:$c{execAct}}
+
+
+// Actions
+!ui-postcommand:execAct command:executeReplication components:$c{formPanel}
+	confirm:$m{applicationreplicationpanel.replication.confirm}
+	

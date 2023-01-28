@@ -484,6 +484,12 @@
 					paramA="Y" />
 			</filter>
 		</applet>
+		<applet name="applicationReplication"
+			description="$m{studio.applicationreplication.manage}"
+			label="$m{studio.applicationreplication.label}" icon="desktop"
+			type="path_page" path="/studio/applicationreplication/openPage"
+			menuAccess="false" allowSecondaryTenants="false">
+		</applet>
 		<applet name="manageAppEntityField"
 			description="$m{studio.appentityfield.manage}"
 			label="$m{studio.appentityfield.manage.label}"

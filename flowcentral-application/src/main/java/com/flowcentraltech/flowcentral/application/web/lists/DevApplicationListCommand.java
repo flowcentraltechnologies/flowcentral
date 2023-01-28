@@ -26,22 +26,22 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**
- * Application list command.
+ * Developable application list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("applicationlist")
-public class ApplicationListCommand extends AbstractApplicationListCommand<ZeroParams> {
+@Component("devapplicationlist")
+public class DevApplicationListCommand extends AbstractApplicationListCommand<ZeroParams> {
 
-    public ApplicationListCommand() {
+    public DevApplicationListCommand() {
         super(ZeroParams.class);
     }
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
-        return application().findApplications(
-                (ApplicationQuery) new ApplicationQuery().addOrder("description").ignoreEmptyCriteria(true));
+        return application()
+                .findApplications((ApplicationQuery) new ApplicationQuery().isDevelopable().addOrder("description"));
     }
 
 }

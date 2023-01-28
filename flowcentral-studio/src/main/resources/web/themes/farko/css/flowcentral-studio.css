@@ -76,6 +76,9 @@
 .tabletabsheet {height: calc(100% - 32px);}
 .tabletabsheet .tbody {height:100%;}
 
+/** Application replication panel */
+.fc-applicationreplicationpanel {}
+
 /** Table preview panel */
 .fc-tablepreviewpanel {}
 .fc-tablepreviewpanel .hdbar {background-color: #e3e7ea;}
