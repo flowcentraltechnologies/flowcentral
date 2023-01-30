@@ -113,6 +113,7 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
             Chart srcChart = environment().find(Chart.class, chartId);
             String oldDescription = srcChart.getDescription();
             srcChart.setApplicationId(destApplicationId);
+            srcChart.setName(ctx.nameSwap(srcChart.getName()));
             srcChart.setDescription(ctx.messageSwap(srcChart.getDescription()));
             srcChart.setTitle(ctx.messageSwap(srcChart.getTitle()));
             srcChart.setSubTitle(ctx.messageSwap(srcChart.getSubTitle()));

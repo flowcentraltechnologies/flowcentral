@@ -118,6 +118,7 @@ public class ApplicationDashboardInstallerImpl extends AbstractApplicationArtifa
             Dashboard srcDashboard = environment().find(Dashboard.class, dashboardId);
             String oldDescription = srcDashboard.getDescription();
             srcDashboard.setApplicationId(destApplicationId);
+            srcDashboard.setName(ctx.nameSwap(srcDashboard.getName()));
             srcDashboard.setDescription(ctx.messageSwap(srcDashboard.getDescription()));
 
             // Tiles

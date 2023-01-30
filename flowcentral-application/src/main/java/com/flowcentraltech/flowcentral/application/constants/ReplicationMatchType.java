@@ -28,6 +28,8 @@ public enum ReplicationMatchType {
     WILD,
     WILD_PREFIX,
     WILD_SUFFIX,
+    NAME,
     CLASS,
+    ENTITY,
     NULL;
 }

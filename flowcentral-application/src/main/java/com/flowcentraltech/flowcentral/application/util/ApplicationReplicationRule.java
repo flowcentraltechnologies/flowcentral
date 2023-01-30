@@ -20,6 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.constants.ReplicationMatchType;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Application replication rule.
@@ -34,6 +36,8 @@ public class ApplicationReplicationRule {
     private final Map<String, String> replace;
 
     private final String concat;
+
+    private ApplicationReplicationRule nameRule;
 
     private ApplicationReplicationRule(ReplicationMatchType type, Map<String, String> replace, String concat) {
         this.type = type;
@@ -53,12 +57,39 @@ public class ApplicationReplicationRule {
         return concat;
     }
 
-    public String apply(String str) {
+    public ApplicationReplicationRule setNameRule(ApplicationReplicationRule nameRule) {
+        this.nameRule = nameRule;
+        return this;
+    }
+
+    public String apply(String str) throws UnifyException {
         if (str == null) {
             return ReplicationMatchType.NULL.equals(type) ? concat : str;
         }
 
         switch (type) {
+            case ENTITY:
+                ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(str);
+                final String entityName = nameRule != null ? nameRule.apply(parts.getEntityName())
+                        : parts.getEntityName();
+                String prefix = null;
+                for (Map.Entry<String, String> entry : replace.entrySet()) {
+                    if (parts.getApplicationName().startsWith(entry.getKey())) {
+                        prefix = entry.getValue() + parts.getApplicationName().substring(entry.getKey().length());
+                        break;
+                    }
+                }
+
+                final String applicationName = prefix != null ? prefix
+                        : (concat != null ? concat + parts.getApplicationName() : parts.getApplicationName());
+                return ApplicationNameUtils.getApplicationEntityLongName(applicationName, entityName);
+            case NAME:
+                for (Map.Entry<String, String> entry : replace.entrySet()) {
+                    if (str.startsWith(entry.getKey())) {
+                        return entry.getValue() + str.substring(entry.getKey().length());
+                    }
+                }
+                return concat != null ? concat + StringUtils.capitalizeFirstLetter(str) : str;
             case CLASS:
                 int index = str.lastIndexOf('.');
                 if (index > 0) {

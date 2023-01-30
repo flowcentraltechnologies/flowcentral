@@ -254,6 +254,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             Workflow srcWorkflow = environment().find(Workflow.class, workflowId);
             String oldDescription = srcWorkflow.getDescription();
             srcWorkflow.setApplicationId(destApplicationId);
+            srcWorkflow.setName(ctx.nameSwap(srcWorkflow.getName()));
             srcWorkflow.setDescription(ctx.messageSwap(srcWorkflow.getDescription()));
             srcWorkflow.setLabel(ctx.messageSwap(srcWorkflow.getLabel()));
             srcWorkflow.setEntity(ctx.entitySwap(srcWorkflow.getEntity()));

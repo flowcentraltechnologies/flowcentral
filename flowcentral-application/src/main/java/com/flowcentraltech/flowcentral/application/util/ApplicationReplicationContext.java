@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.util;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Application replication context.
@@ -74,31 +75,31 @@ public class ApplicationReplicationContext {
         return destApplicationName;
     }
 
-    public String nameSwap(String name) {
+    public String nameSwap(String name) throws UnifyException {
         return nameRule.apply(name);
     }
 
-    public String componentSwap(String component) {
+    public String componentSwap(String component) throws UnifyException {
         return componentRule.apply(component);
     }
 
-    public String messageSwap(String message) {
+    public String messageSwap(String message) throws UnifyException {
         return messageRule.apply(message);
     }
 
-    public String classSwap(String className) {
+    public String classSwap(String className) throws UnifyException {
         return classRule.apply(className);
     }
 
-    public String tableSwap(String tableName) {
+    public String tableSwap(String tableName) throws UnifyException {
         return tableRule.apply(tableName);
     }
 
-    public String autoFormatSwap(String autoFormat) {
+    public String autoFormatSwap(String autoFormat) throws UnifyException {
         return autoFormatRule.apply(autoFormat);
     }
 
-    public String entitySwap(String entityName) {
+    public String entitySwap(String entityName) throws UnifyException {
         return entityRule.apply(entityName);
     }
 }

@@ -111,6 +111,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
             NotificationTemplate srcNotificationTemplate = environment().find(NotificationTemplate.class, templateId);
             String oldDescription = srcNotificationTemplate.getDescription();
             srcNotificationTemplate.setApplicationId(destApplicationId);
+            srcNotificationTemplate.setName(ctx.nameSwap(srcNotificationTemplate.getName()));
             srcNotificationTemplate.setDescription(ctx.messageSwap(srcNotificationTemplate.getDescription()));
             srcNotificationTemplate.setEntity(ctx.entitySwap(srcNotificationTemplate.getEntity()));
             srcNotificationTemplate.setAttachmentGenerator(ctx.componentSwap(srcNotificationTemplate.getAttachmentGenerator()));

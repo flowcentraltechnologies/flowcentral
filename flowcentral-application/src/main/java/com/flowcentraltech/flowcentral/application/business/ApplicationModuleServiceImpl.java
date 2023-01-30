@@ -313,12 +313,14 @@ import com.tcdng.unify.core.util.StringUtils;
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
         FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
 
-    private final Set<String> refProperties = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
-            AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
-            AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.MAINTAIN_FORM,
-            AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.ASSIGNMENT_PAGE,
-            AppletPropertyConstants.PROPERTY_LIST_RULE, AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME,
-            AppletPropertyConstants.QUICK_EDIT_TABLE, AppletPropertyConstants.QUICK_EDIT_FORM)));
+    private final Set<String> refProperties = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList(AppletPropertyConstants.SEARCH_TABLE,
+                    AppletPropertyConstants.CREATE_FORM, AppletPropertyConstants.LOADING_TABLE,
+                    AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.MAINTAIN_FORM,
+                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL,
+                    AppletPropertyConstants.ASSIGNMENT_PAGE, AppletPropertyConstants.PROPERTY_LIST_RULE,
+                    AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME, AppletPropertyConstants.QUICK_EDIT_TABLE,
+                    AppletPropertyConstants.QUICK_EDIT_FORM)));
 
     private final Set<String> RESERVED_TABLES = Collections.unmodifiableSet(
             new HashSet<String>(Arrays.asList("application.propertyItemTable", "application.usageTable")));
@@ -2633,8 +2635,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         Long destModuleId = appletUtilities.system().getModuleId(destModuleName);
 
         logDebug(taskMonitor, "Creating application replication context...");
-        ApplicationReplicationContext ctx = ApplicationReplicationUtils.createApplicationReplicationContext(appletUtilities, srcApplicationName,
-                    destApplicationName, replicationRulesFile);
+        ApplicationReplicationContext ctx = ApplicationReplicationUtils.createApplicationReplicationContext(
+                appletUtilities, srcApplicationName, destApplicationName, replicationRulesFile);
 
         // Application
         logDebug(taskMonitor, "Replicating application...");
@@ -2656,6 +2658,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppApplet srcAppApplet = environment().find(AppApplet.class, appletId);
             String oldDescription = srcAppApplet.getDescription();
             srcAppApplet.setApplicationId(destApplicationId);
+            srcAppApplet.setName(ctx.nameSwap(srcAppApplet.getName()));
             srcAppApplet.setDescription(ctx.messageSwap(srcAppApplet.getDescription()));
             srcAppApplet.setLabel(ctx.messageSwap(srcAppApplet.getLabel()));
             srcAppApplet.setEntity(ctx.entitySwap(srcAppApplet.getEntity()));
@@ -2665,8 +2668,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             for (AppAppletProp appAppletProp : srcAppApplet.getPropList()) {
                 if (refProperties.contains(appAppletProp.getName())) {
                     appAppletProp.setValue(ctx.entitySwap(appAppletProp.getValue()));
-                } else {
-                    appAppletProp.setValue(ctx.messageSwap(appAppletProp.getValue()));
                 }
             }
 
@@ -2709,6 +2710,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppWidgetType srcWidgetType = environment().find(AppWidgetType.class, widgetId);
             String oldDescription = srcWidgetType.getDescription();
             srcWidgetType.setApplicationId(destApplicationId);
+            srcWidgetType.setName(ctx.nameSwap(srcWidgetType.getName()));
             srcWidgetType.setDescription(ctx.messageSwap(srcWidgetType.getDescription()));
             environment().create(srcWidgetType);
             logDebug(taskMonitor, "Widget [{0}] -> [{1}]...", oldDescription, srcWidgetType.getDescription());
@@ -2722,6 +2724,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppRef srcAppRef = environment().find(AppRef.class, referenceId);
             String oldDescription = srcAppRef.getDescription();
             srcAppRef.setApplicationId(destApplicationId);
+            srcAppRef.setName(ctx.nameSwap(srcAppRef.getName()));
             srcAppRef.setDescription(ctx.messageSwap(srcAppRef.getDescription()));
             srcAppRef.setEntity(ctx.entitySwap(srcAppRef.getEntity()));
             srcAppRef.setSearchTable(ctx.entitySwap(srcAppRef.getSearchTable()));
@@ -2785,9 +2788,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppTable srcAppTable = environment().find(AppTable.class, tableId);
             String oldDescription = srcAppTable.getDescription();
             srcAppTable.setApplicationId(destApplicationId);
-            srcAppTable.setEntity(ctx.entitySwap(srcAppTable.getEntity()));
+            srcAppTable.setName(ctx.nameSwap(srcAppTable.getName()));
             srcAppTable.setDescription(ctx.messageSwap(srcAppTable.getDescription()));
             srcAppTable.setLabel(ctx.messageSwap(srcAppTable.getLabel()));
+            srcAppTable.setEntity(ctx.entitySwap(srcAppTable.getEntity()));
             srcAppTable.setDetailsPanelName(ctx.componentSwap(srcAppTable.getDetailsPanelName()));
 
             // Columns
@@ -2821,6 +2825,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             String oldDescription = srcAppForm.getDescription();
             srcAppForm.setApplicationId(destApplicationId);
             srcAppForm.setEntity(ctx.componentSwap(srcAppForm.getEntity()));
+            srcAppForm.setName(ctx.nameSwap(srcAppForm.getName()));
             srcAppForm.setDescription(ctx.messageSwap(srcAppForm.getDescription()));
             srcAppForm.setConsolidatedReview(ctx.messageSwap(srcAppForm.getConsolidatedReview()));
             srcAppForm.setConsolidatedValidation(ctx.messageSwap(srcAppForm.getConsolidatedValidation()));
@@ -2918,6 +2923,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppPropertyList srcAppPropertyList = environment().find(AppPropertyList.class, propertyListId);
             String oldDescription = srcAppPropertyList.getDescription();
             srcAppPropertyList.setApplicationId(destApplicationId);
+            srcAppPropertyList.setName(ctx.nameSwap(srcAppPropertyList.getName()));
             srcAppPropertyList.setDescription(ctx.messageSwap(srcAppPropertyList.getDescription()));
 
             for (AppPropertySet appPropertySet : srcAppPropertyList.getItemSet()) {
@@ -2940,6 +2946,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppPropertyRule srcAppPropertyRule = environment().find(AppPropertyRule.class, propertyRuleId);
             String oldDescription = srcAppPropertyRule.getDescription();
             srcAppPropertyRule.setApplicationId(destApplicationId);
+            srcAppPropertyRule.setName(ctx.nameSwap(srcAppPropertyRule.getName()));
             srcAppPropertyRule.setDescription(ctx.messageSwap(srcAppPropertyRule.getDescription()));
             srcAppPropertyRule.setEntity(ctx.entitySwap(srcAppPropertyRule.getEntity()));
             srcAppPropertyRule.setDefaultList(ctx.componentSwap(srcAppPropertyRule.getDefaultList()));
@@ -2961,6 +2968,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppAssignmentPage srcAppAssignmentPage = environment().find(AppAssignmentPage.class, assignmentPageId);
             String oldDescription = srcAppAssignmentPage.getDescription();
             srcAppAssignmentPage.setApplicationId(destApplicationId);
+            srcAppAssignmentPage.setName(ctx.nameSwap(srcAppAssignmentPage.getName()));
             srcAppAssignmentPage.setDescription(ctx.messageSwap(srcAppAssignmentPage.getDescription()));
             srcAppAssignmentPage.setLabel(ctx.messageSwap(srcAppAssignmentPage.getLabel()));
             srcAppAssignmentPage.setEntity(ctx.entitySwap(srcAppAssignmentPage.getEntity()));
@@ -2979,6 +2987,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppSuggestionType srcAppSuggestionType = environment().find(AppSuggestionType.class, suggestionTypeId);
             String oldDescription = srcAppSuggestionType.getDescription();
             srcAppSuggestionType.setApplicationId(destApplicationId);
+            srcAppSuggestionType.setName(ctx.nameSwap(srcAppSuggestionType.getName()));
             srcAppSuggestionType.setDescription(ctx.messageSwap(srcAppSuggestionType.getDescription()));
             srcAppSuggestionType.setParent(ctx.entitySwap(srcAppSuggestionType.getParent()));
 

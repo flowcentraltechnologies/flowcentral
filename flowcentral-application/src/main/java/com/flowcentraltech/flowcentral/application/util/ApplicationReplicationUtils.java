@@ -57,7 +57,7 @@ public final class ApplicationReplicationUtils {
     public static ApplicationReplicationContext createApplicationReplicationContext(AppletUtilities au,
             String srcApplicationName, String destApplicationName, byte[] replicationRulesFile) throws UnifyException {
         Map<ReplicationElementType, ApplicationReplicationRule.Builder> builders = new HashMap<ReplicationElementType, ApplicationReplicationRule.Builder>();
-        ApplicationReplicationRule.Builder namerb = new ApplicationReplicationRule.Builder(ReplicationMatchType.PREFIX);
+        ApplicationReplicationRule.Builder namerb = new ApplicationReplicationRule.Builder(ReplicationMatchType.NAME);
         ApplicationReplicationRule.Builder componentrb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.PREFIX);
         ApplicationReplicationRule.Builder messagerb = new ApplicationReplicationRule.Builder(
@@ -68,7 +68,7 @@ public final class ApplicationReplicationUtils {
         ApplicationReplicationRule.Builder autoformatrb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.WILD_PREFIX);
         ApplicationReplicationRule.Builder entityrb = new ApplicationReplicationRule.Builder(
-                ReplicationMatchType.PREFIX);
+                ReplicationMatchType.ENTITY);
         builders.put(ReplicationElementType.NAME, namerb);
         builders.put(ReplicationElementType.COMPONENT, componentrb);
         builders.put(ReplicationElementType.MESSAGE, messagerb);
@@ -127,10 +127,11 @@ public final class ApplicationReplicationUtils {
             throw new UnifyOperationException(e, "ApplicationReplicationUtils", e.getMessage());
         }
 
-        componentrb.replace(srcApplicationName + ".", destApplicationName + ".");
-        return new ApplicationReplicationContext(au, srcApplicationName, destApplicationName, namerb.build(),
+        componentrb.replace(srcApplicationName, destApplicationName);
+        ApplicationReplicationRule nameRule = namerb.build();
+        return new ApplicationReplicationContext(au, srcApplicationName, destApplicationName, nameRule,
                 componentrb.build(), messagerb.build(), classrb.build(), tablerb.build(), autoformatrb.build(),
-                entityrb.build());
+                entityrb.build().setNameRule(nameRule));
     }
 
     public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
