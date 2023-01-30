@@ -89,6 +89,11 @@ public final class ApplicationNameUtils {
         return StringUtils.dotify(applicationName, entityName);
     }
 
+    public static boolean isLongName(String longName) throws UnifyException {
+        return longName.indexOf('.') > 0;
+    }
+
+
     public static ApplicationEntityNameParts getApplicationEntityNameParts(String longName) throws UnifyException {
         return applicationNameParts.get(longName);
     }

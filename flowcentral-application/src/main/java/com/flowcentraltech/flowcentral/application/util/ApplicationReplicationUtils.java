@@ -127,7 +127,7 @@ public final class ApplicationReplicationUtils {
             throw new UnifyOperationException(e, "ApplicationReplicationUtils", e.getMessage());
         }
 
-        componentrb.replace(srcApplicationName, destApplicationName);
+        entityrb.replace(srcApplicationName, destApplicationName);
         ApplicationReplicationRule nameRule = namerb.build();
         return new ApplicationReplicationContext(au, srcApplicationName, destApplicationName, nameRule,
                 componentrb.build(), messagerb.build(), classrb.build(), tablerb.build(), autoformatrb.build(),

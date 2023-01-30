@@ -69,20 +69,22 @@ public class ApplicationReplicationRule {
 
         switch (type) {
             case ENTITY:
-                ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(str);
-                final String entityName = nameRule != null ? nameRule.apply(parts.getEntityName())
-                        : parts.getEntityName();
-                String prefix = null;
-                for (Map.Entry<String, String> entry : replace.entrySet()) {
-                    if (parts.getApplicationName().startsWith(entry.getKey())) {
-                        prefix = entry.getValue() + parts.getApplicationName().substring(entry.getKey().length());
-                        break;
+                if (ApplicationNameUtils.isLongName(str)) {
+                    ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(str);
+                    final String entityName = nameRule != null ? nameRule.apply(parts.getEntityName())
+                            : parts.getEntityName();
+                    String prefix = null;
+                    for (Map.Entry<String, String> entry : replace.entrySet()) {
+                        if (parts.getApplicationName().startsWith(entry.getKey())) {
+                            prefix = entry.getValue() + parts.getApplicationName().substring(entry.getKey().length());
+                            break;
+                        }
                     }
-                }
 
-                final String applicationName = prefix != null ? prefix
-                        : (concat != null ? concat + parts.getApplicationName() : parts.getApplicationName());
-                return ApplicationNameUtils.getApplicationEntityLongName(applicationName, entityName);
+                    final String applicationName = prefix != null ? prefix
+                            : (concat != null ? concat + parts.getApplicationName() : parts.getApplicationName());
+                    return ApplicationNameUtils.getApplicationEntityLongName(applicationName, entityName);
+                }
             case NAME:
                 for (Map.Entry<String, String> entry : replace.entrySet()) {
                     if (str.startsWith(entry.getKey())) {
