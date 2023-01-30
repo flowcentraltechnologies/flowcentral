@@ -71,8 +71,6 @@ public class ApplicationReplicationRule {
             case ENTITY:
                 if (ApplicationNameUtils.isLongName(str)) {
                     ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(str);
-                    final String entityName = nameRule != null ? nameRule.apply(parts.getEntityName())
-                            : parts.getEntityName();
                     String prefix = null;
                     for (Map.Entry<String, String> entry : replace.entrySet()) {
                         if (parts.getApplicationName().startsWith(entry.getKey())) {
@@ -81,6 +79,8 @@ public class ApplicationReplicationRule {
                         }
                     }
 
+                    final String entityName = prefix != null && nameRule != null ? nameRule.apply(parts.getEntityName())
+                            : parts.getEntityName();
                     final String applicationName = prefix != null ? prefix
                             : (concat != null ? concat + parts.getApplicationName() : parts.getApplicationName());
                     return ApplicationNameUtils.getApplicationEntityLongName(applicationName, entityName);

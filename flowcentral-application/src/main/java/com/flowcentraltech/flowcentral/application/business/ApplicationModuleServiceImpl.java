@@ -2624,6 +2624,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             return 0;
         }
 
+        if (environment()
+                .countAll(new AppEntityQuery().applicationId(srcApplication.getId()).configTypeIsNotCustom()) > 0) {
+            logDebug(taskMonitor, "Some source application entities are static. Replication terminated.");
+            taskMonitor.cancel();
+            return 0;
+
+        }
+
         logDebug(taskMonitor, "Checking if destination application exists...");
         if (environment().countAll(new ApplicationQuery().name(destApplicationName)) > 0) {
             logDebug(taskMonitor, "Destination application already exists. Replication terminated.");
@@ -2750,7 +2758,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             srcAppEntity.setLabel(ctx.messageSwap(srcAppEntity.getLabel()));
             srcAppEntity.setEmailProducerConsumer(ctx.componentSwap(srcAppEntity.getEmailProducerConsumer()));
             srcAppEntity.setEntityClass(ctx.classSwap(srcAppEntity.getEntityClass()));
-            srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getTableName()));
+            if (StringUtils.isBlank(srcAppEntity.getDelegate())) {
+                srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getTableName()));
+            }
 
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
                 appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));

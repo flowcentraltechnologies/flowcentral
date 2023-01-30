@@ -87,18 +87,19 @@ public final class ApplicationReplicationUtils {
                 if (line.isEmpty() || line.startsWith("//")) {
                     continue;
                 }
-                
+
                 if (line.startsWith(ELEMENT_PREFIX)) {
                     final String body = line.substring(ELEMENT_PREFIX.length());
                     String[] parts = body.split("\\|");
                     if (parts.length > 2) {
-                        throw new RuntimeException("Improper element definition in line " + lineNumber + ". Parts = " +  Arrays.asList(parts));
+                        throw new RuntimeException("Improper element definition in line " + lineNumber + ". Parts = "
+                                + Arrays.asList(parts));
                     }
 
                     ReplicationElementType type = ReplicationElementType.fromName(parts[0]);
                     if (type == null) {
-                        throw new RuntimeException(
-                                "Unknown element type \'" + parts[0] + "\' in line " + lineNumber + ". Parts = " +  Arrays.asList(parts));
+                        throw new RuntimeException("Unknown element type \'" + parts[0] + "\' in line " + lineNumber
+                                + ". Parts = " + Arrays.asList(parts));
                     }
 
                     currentrb = builders.get(type);
@@ -109,13 +110,15 @@ public final class ApplicationReplicationUtils {
                     final String body = line.substring(REPLACE_PREFIX.length());
                     String[] parts = body.split("=");
                     if (parts.length != 2) {
-                        throw new RuntimeException("Improper replace definition in line " + lineNumber + ". Parts = " +  Arrays.asList(parts));
+                        throw new RuntimeException("Improper replace definition in line " + lineNumber + ". Parts = "
+                                + Arrays.asList(parts));
                     }
-                    
+
                     if (currentrb == null) {
-                        throw new RuntimeException("No replication element initialized. Parts = " +  Arrays.asList(parts));
+                        throw new RuntimeException(
+                                "No replication element initialized. Parts = " + Arrays.asList(parts));
                     }
-                    
+
                     currentrb.replace(parts[0], parts[1]);
                 } else {
                     throw new RuntimeException("Unknown replacement rule definition in line " + lineNumber + ".");
