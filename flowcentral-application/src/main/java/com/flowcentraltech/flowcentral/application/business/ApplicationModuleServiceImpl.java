@@ -2751,7 +2751,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
                 appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));
-                appEntityField.setInputWidget(ctx.componentSwap(appEntityField.getInputWidget()));
+                appEntityField.setInputWidget(ctx.entitySwap(appEntityField.getInputWidget()));
                 appEntityField.setSuggestionType(ctx.entitySwap(appEntityField.getSuggestionType()));
                 appEntityField.setLingualWidget(ctx.entitySwap(appEntityField.getLingualWidget()));
                 appEntityField.setAutoFormat(ctx.autoFormatSwap(appEntityField.getAutoFormat()));
