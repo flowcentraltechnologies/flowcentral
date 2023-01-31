@@ -220,6 +220,11 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             srcReportableDefinition.setTitle(ctx.messageSwap(srcReportableDefinition.getTitle()));
             srcReportableDefinition.setEntity(ctx.entitySwap(srcReportableDefinition.getEntity()));
 
+            for (ReportableField reportableField: srcReportableDefinition.getFieldList()) {
+                reportableField.setName(ctx.fieldSwap(reportableField.getName()));
+                reportableField.setDescription(ctx.messageSwap(reportableField.getDescription()));
+            }
+            
             environment().create(srcReportableDefinition);
             registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
@@ -246,6 +251,11 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     srcReportConfiguration.getFilter());
             srcReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
 
+            for (ReportColumn reportColumn: srcReportConfiguration.getColumnList()) {
+                reportColumn.setFieldName(ctx.fieldSwap(reportColumn.getFieldName()));
+                reportColumn.setDescription(ctx.messageSwap(reportColumn.getDescription()));
+            }
+            
             environment().create(srcReportConfiguration);
             registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportConfigPrivilegeName(ApplicationNameUtils

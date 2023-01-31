@@ -25,11 +25,18 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ReplicationElementType;
 import com.flowcentraltech.flowcentral.application.constants.ReplicationMatchType;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
+import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
@@ -69,6 +76,7 @@ public final class ApplicationReplicationUtils {
                 ReplicationMatchType.WILD_PREFIX);
         ApplicationReplicationRule.Builder entityrb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.ENTITY);
+        ApplicationReplicationRule.Builder fieldrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.WILD);
         builders.put(ReplicationElementType.NAME, namerb);
         builders.put(ReplicationElementType.COMPONENT, componentrb);
         builders.put(ReplicationElementType.MESSAGE, messagerb);
@@ -76,6 +84,7 @@ public final class ApplicationReplicationUtils {
         builders.put(ReplicationElementType.TABLE, tablerb);
         builders.put(ReplicationElementType.AUTOFORMAT, autoformatrb);
         builders.put(ReplicationElementType.ENTITY, entityrb);
+        builders.put(ReplicationElementType.FIELD, fieldrb);
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new ByteArrayInputStream(replicationRulesFile)))) {
@@ -134,7 +143,7 @@ public final class ApplicationReplicationUtils {
         ApplicationReplicationRule nameRule = namerb.build();
         return new ApplicationReplicationContext(au, srcApplicationName, destApplicationName, nameRule,
                 componentrb.build(), messagerb.build(), classrb.build(), tablerb.build(), autoformatrb.build(),
-                entityrb.build().setNameRule(nameRule));
+                fieldrb.build(), entityrb.build().setNameRule(nameRule));
     }
 
     public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
@@ -143,6 +152,13 @@ public final class ApplicationReplicationUtils {
         if (filterConfig != null) {
             filterConfig.setDescription(ctx.messageSwap(filterConfig.getDescription()));
             filterConfig.setFilterGenerator(ctx.componentSwap(filterConfig.getFilterGenerator()));
+            for (FilterRestrictionConfig restrictonConfig : filterConfig.getRestrictionList()) {
+                restrictonConfig.setField(ctx.fieldSwap(restrictonConfig.getField()));
+                if (restrictonConfig.getType().isFieldVal()) {
+                    restrictonConfig.setParamA(ctx.fieldSwap(restrictonConfig.getParamA()));
+                    restrictonConfig.setParamB(ctx.fieldSwap(restrictonConfig.getParamB()));
+                }
+            }
         }
 
         return filterConfig;
@@ -155,8 +171,11 @@ public final class ApplicationReplicationUtils {
             setValuesConfig.setDescription(ctx.messageSwap(setValuesConfig.getDescription()));
             if (!DataUtils.isBlank(setValuesConfig.getSetValueList())) {
                 for (SetValueConfig setValueConfig : setValuesConfig.getSetValueList()) {
+                    setValueConfig.setFieldName(ctx.fieldSwap(setValueConfig.getFieldName()));
                     if (SetValueType.GENERATOR.equals(setValueConfig.getType())) {
                         setValueConfig.setValue(ctx.componentSwap(setValueConfig.getValue()));
+                    } else if (SetValueType.IMMEDIATE_FIELD.equals(setValueConfig.getType())) {
+                        setValueConfig.setValue(ctx.fieldSwap(setValueConfig.getValue()));
                     }
                 }
             }
@@ -170,10 +189,37 @@ public final class ApplicationReplicationUtils {
         WidgetRulesConfig widgetRulesConfig = InputWidgetUtils.getWidgetRulesConfig(widgetRules);
         if (widgetRulesConfig != null && widgetRulesConfig.getEntryList() != null) {
             for (WidgetRuleEntryConfig widgetRuleEntryConfig : widgetRulesConfig.getEntryList()) {
+                widgetRuleEntryConfig.setFieldName(ctx.fieldSwap(widgetRuleEntryConfig.getFieldName()));
                 widgetRuleEntryConfig.setWidget(ctx.componentSwap(widgetRuleEntryConfig.getWidget()));
             }
         }
 
         return widgetRulesConfig;
+    }
+
+    public static SearchInputsConfig getReplicatedSearchInputsConfig(ApplicationReplicationContext ctx,
+            AppEntitySearchInput appEntitySearchInput) throws UnifyException {
+        SearchInputsConfig searchInputsConfig = InputWidgetUtils.getSearchInputConfig(appEntitySearchInput);
+        if (searchInputsConfig != null) {
+            searchInputsConfig.setDescription(ctx.messageSwap(searchInputsConfig.getDescription()));
+            for (SearchInputConfig searchInputConfig : searchInputsConfig.getInputList()) {
+                searchInputConfig.setField(ctx.fieldSwap(searchInputConfig.getField()));
+                searchInputConfig.setLabel(ctx.messageSwap(searchInputConfig.getLabel()));
+            }
+        }
+
+        return searchInputsConfig;
+    }
+
+    public static FieldSequenceConfig getReplicatedFieldSequenceConfig(ApplicationReplicationContext ctx,
+            AppFieldSequence appFieldSequence) throws UnifyException {
+        FieldSequenceConfig fieldSequenceConfig = InputWidgetUtils.getFieldSequenceConfig(appFieldSequence);
+        if (fieldSequenceConfig != null) {
+            for (FieldSequenceEntryConfig entryConfig : fieldSequenceConfig.getEntryList()) {
+                entryConfig.setFieldName(ctx.fieldSwap(entryConfig.getFieldName()));
+            }
+        }
+
+        return fieldSequenceConfig;
     }
 }

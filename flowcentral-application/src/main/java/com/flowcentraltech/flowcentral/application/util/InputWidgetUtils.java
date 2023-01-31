@@ -793,13 +793,25 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static EntitySearchInputConfig getSearchInputConfig(
+    public static EntitySearchInputConfig getEntitySearchInputConfig(
             AppEntitySearchInput appEntitySearchInput) throws UnifyException {
         if (appEntitySearchInput != null) {
             EntitySearchInputConfig entitySearchInputConfig = new EntitySearchInputConfig();
             InputWidgetUtils.getSearchInputsConfig(entitySearchInputConfig, appEntitySearchInput.getName(),
                     appEntitySearchInput.getDescription(), appEntitySearchInput.getSearchInput());
             return entitySearchInputConfig;
+        }
+
+        return null;
+    }
+
+    public static SearchInputsConfig getSearchInputConfig(
+            AppEntitySearchInput appEntitySearchInput) throws UnifyException {
+        if (appEntitySearchInput != null && appEntitySearchInput.getSearchInput() != null) {
+            SearchInputsConfig searchInputConfig = new SearchInputsConfig();
+            InputWidgetUtils.getSearchInputsConfig(searchInputConfig, appEntitySearchInput.getName(),
+                    appEntitySearchInput.getDescription(), appEntitySearchInput.getSearchInput());
+            return searchInputConfig;
         }
 
         return null;
