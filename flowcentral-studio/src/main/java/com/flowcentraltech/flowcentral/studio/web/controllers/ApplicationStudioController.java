@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.common.business.LoginUserPhotoGenerator;
 import com.flowcentraltech.flowcentral.common.business.UserLoginActivityProvider;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
@@ -54,7 +55,9 @@ import com.tcdng.unify.web.ui.widget.ContentPanel;
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_QUICK_TABLE_EDIT,
                 response = { "!showpopupresponse popup:$s{quickTableEditPopup}" }),
         @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_CONTENT,
-                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }) })
+                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{content}" }),
+        @ResultMapping(name = ApplicationResultMappingConstants.REFRESH_ON_DELETE,
+                response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{topBanner menuColPanel content}" }) })
 public class ApplicationStudioController extends AbstractFlowCentralPageController<ApplicationStudioPageBean> {
 
     @Configurable
@@ -92,6 +95,21 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
         logUserEvent(ApplicationModuleAuditConstants.LOGOUT);
         userLoginActivityProvider.logoutUser(true);
         return "forwardtohome";
+    }
+
+    @Action
+    public String onDeleteApplication() throws UnifyException {
+        Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+        if (environment().countAll(new ApplicationQuery().id(applicationId)) == 0) {
+            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
+            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
+            removeSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_DESC);
+            removeSessionAttribute(StudioSessionAttributeConstants.CLEAR_PAGES);
+            closeAllPages();
+            return ApplicationResultMappingConstants.REFRESH_ON_DELETE;
+        }
+        
+        return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
     @Override

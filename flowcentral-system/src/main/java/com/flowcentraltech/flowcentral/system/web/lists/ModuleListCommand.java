@@ -40,7 +40,7 @@ public class ModuleListCommand extends AbstractSystemListCommand<ZeroParams> {
 
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        return system().findModules((ModuleQuery) new ModuleQuery().ignoreEmptyCriteria(true));
+        return system().findModules((ModuleQuery) new ModuleQuery().addOrder("description").ignoreEmptyCriteria(true));
     }
 
 }

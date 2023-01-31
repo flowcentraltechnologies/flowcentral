@@ -51,8 +51,8 @@ public class ReviewWizardSubmitActionPolicy extends AbstractEntityActionPolicy {
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
-
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+        return null;
     }
 
     @Override

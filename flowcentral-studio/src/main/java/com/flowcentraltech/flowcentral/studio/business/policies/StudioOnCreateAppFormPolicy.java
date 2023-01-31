@@ -22,6 +22,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.entities.AppForm;
 import com.flowcentraltech.flowcentral.application.entities.AppFormElement;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
@@ -40,7 +41,7 @@ import com.tcdng.unify.core.util.DataUtils;
 public class StudioOnCreateAppFormPolicy extends StudioOnCreateComponentPolicy {
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         final AppForm appForm = (AppForm) ctx.getInst();
         if (DataUtils.isBlank(appForm.getElementList())) {
@@ -70,6 +71,8 @@ public class StudioOnCreateAppFormPolicy extends StudioOnCreateComponentPolicy {
 
             appForm.setElementList(elementList);
         }
+        
+        return null;
     }
 
 }

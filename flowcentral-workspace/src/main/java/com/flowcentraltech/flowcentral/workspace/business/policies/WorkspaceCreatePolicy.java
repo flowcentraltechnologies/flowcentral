@@ -35,8 +35,8 @@ import com.tcdng.unify.core.annotation.Component;
 public class WorkspaceCreatePolicy extends AbstractApplicationAppletActionPolicy {
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
-
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+        return null;
     }
 
     @Override

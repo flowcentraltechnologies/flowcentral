@@ -79,8 +79,8 @@ public class StudioLockResourceActionPolicy extends AbstractCollaborationFormAct
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
-
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+        return null;
     }
 
     @Override

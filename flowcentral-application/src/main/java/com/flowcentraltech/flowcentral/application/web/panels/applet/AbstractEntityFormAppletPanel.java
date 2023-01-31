@@ -883,6 +883,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         if (ctx != null && ctx.isWithReviewErrors()) {
             onReviewErrors(entityActionResult);
+        } else if (entityActionResult.isWithTaskResult()) {
+            fireEntityActionResultTask(entityActionResult);
         } else {
             setCommandResultMapping(entityActionResult, false);
         }
@@ -942,11 +944,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         String msg = sb.toString();
         return resolveSessionMessage(base, msg);
-    }
-
-    private void fireEntityActionResultTask(EntityActionResult entityActionResult) throws UnifyException {
-        // TODO Set success and failure path
-        launchTaskWithMonitorBox(entityActionResult.getResultTaskSetup(), entityActionResult.getResultTaskCaption());
     }
 
     protected AbstractEntityFormApplet getEntityFormApplet() throws UnifyException {

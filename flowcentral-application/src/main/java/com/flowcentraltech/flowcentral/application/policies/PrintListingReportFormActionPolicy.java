@@ -37,8 +37,8 @@ import com.tcdng.unify.core.report.Report;
 public class PrintListingReportFormActionPolicy extends AbstractApplicationFormActionPolicy {
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
-
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+        return null;
     }
 
     @Override

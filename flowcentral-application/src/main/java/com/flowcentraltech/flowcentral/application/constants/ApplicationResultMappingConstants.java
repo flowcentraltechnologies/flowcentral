@@ -43,7 +43,9 @@ public interface ApplicationResultMappingConstants {
     String FORWARD_TO_HOME = "forwardtohome";
     
     String REFRESH_WORKSPACE = "refreshworkspace";
-    
+        
     String REFRESH_CONTENT = "refreshcontent";
+
+    String REFRESH_ON_DELETE = "refreshondelete";
 
 }

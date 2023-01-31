@@ -39,6 +39,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
@@ -69,20 +70,20 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                     "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         final String applicationName = (String) getSessionAttribute(
                 StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME);
         final Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         final AppApplet appApplet = (AppApplet) ctx.getInst();
         if (!appApplet.isIdBlank()) {
-        	return;
+        	return null;
         }
         
         final AppletType type = appApplet.getType();
         if (AppletType.DATA_IMPORT.equals(type)) {
             appApplet.setIcon("file-import");
-            return;
+            return null;
         }
         
         if (type.isCreate() || type.isEntityList()) {
@@ -321,6 +322,8 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
 
             appApplet.setPropList(appletPropList);
         }
+        
+        return null;
     }
 
 }

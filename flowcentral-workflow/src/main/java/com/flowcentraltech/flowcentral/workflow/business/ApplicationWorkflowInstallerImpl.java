@@ -17,16 +17,19 @@
 package com.flowcentraltech.flowcentral.workflow.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
-import com.flowcentraltech.flowcentral.common.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
@@ -36,6 +39,7 @@ import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelConfig;
@@ -213,7 +217,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         populateChildList(wfWizard, wfWizardConfig, applicationId, applicationConfig.getName());
                         environment().create(wfWizard);
                     } else {
-                        logDebug("Upgrading application form wizard [{0}]...", wfWizardConfig.getName());
+                        logDebug("Upgrading application workflow wizard [{0}]...", wfWizardConfig.getName());
                         if (ConfigUtils.isSetInstall(oldAppFormWizard)) {
                             oldAppFormWizard.setDescription(description);
                             oldAppFormWizard.setLabel(label);
@@ -233,10 +237,79 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                             description);
                 }
 
-                logDebug(taskMonitor, "Installed [{0}] application form wizards...",
+                logDebug(taskMonitor, "Installed [{0}] application workflow wizards...",
                         applicationConfig.getWorkflowWizardsConfig().getWorkflowWizardList().size());
             }
         }
+    }
+
+    @Override
+    public void replicateApplicationArtifacts(TaskMonitor taskMonitor, Long srcApplicationId, Long destApplicationId,
+            ApplicationReplicationContext ctx) throws UnifyException {
+        // Workflows
+        logDebug(taskMonitor, "Replicating workflows...");
+        List<Long> workflowIdList = environment().valueList(Long.class, "id",
+                new WorkflowQuery().applicationId(srcApplicationId));
+        for (Long workflowId : workflowIdList) {
+            Workflow srcWorkflow = environment().find(Workflow.class, workflowId);
+            String oldDescription = srcWorkflow.getDescription();
+            srcWorkflow.setApplicationId(destApplicationId);
+            srcWorkflow.setName(ctx.nameSwap(srcWorkflow.getName()));
+            srcWorkflow.setDescription(ctx.messageSwap(srcWorkflow.getDescription()));
+            srcWorkflow.setLabel(ctx.messageSwap(srcWorkflow.getLabel()));
+            srcWorkflow.setEntity(ctx.entitySwap(srcWorkflow.getEntity()));
+
+            // Filters
+            for (WorkflowFilter workflowFilter : srcWorkflow.getFilterList()) {
+                workflowFilter.setFilterGenerator(ctx.componentSwap(workflowFilter.getFilterGenerator()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        workflowFilter.getFilter());
+                workflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            // Set Values
+            for (WorkflowSetValues workflowSetValues : srcWorkflow.getSetValuesList()) {
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        workflowSetValues.getOnCondition());
+                workflowSetValues.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                workflowSetValues.setValueGenerator(ctx.componentSwap(workflowSetValues.getValueGenerator()));
+                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                        workflowSetValues.getValueGenerator(), workflowSetValues.getSetValues());
+                workflowSetValues.setSetValues(newAppSetValues(setValuesConfig));
+            }
+
+            // Steps
+            for (WfStep wfStep : srcWorkflow.getStepList()) {
+                wfStep.setDescription(ctx.messageSwap(wfStep.getDescription()));
+                wfStep.setLabel(ctx.messageSwap(wfStep.getLabel()));
+                wfStep.setAppletName(ctx.entitySwap(wfStep.getAppletName()));
+                wfStep.setPolicy(ctx.componentSwap(wfStep.getPolicy()));
+
+                // Set values
+                if (wfStep.getSetValues() != null) {
+                    SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                            null, wfStep.getSetValues().getSetValues());
+                    wfStep.getSetValues().setSetValues(newAppSetValues(setValuesConfig));
+                }
+
+                // Alerts
+                for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
+                    wfStepAlert.setRecipientPolicy(ctx.componentSwap(wfStepAlert.getRecipientPolicy()));
+                    wfStepAlert.setTemplate(ctx.entitySwap(wfStepAlert.getTemplate()));
+                }
+            }
+
+            environment().create(srcWorkflow);
+            logDebug(taskMonitor, "Workflow [{0}] -> [{1}]...", oldDescription, srcWorkflow.getDescription());
+        }
+
+    }
+
+    @Override
+    protected List<DeletionParams> getDeletionParams() throws UnifyException {
+        return Arrays.asList(new DeletionParams("workflow wizards", new WfWizardQuery()),
+                new DeletionParams("workflow channels", new WfChannelQuery()),
+                new DeletionParams("workflows", new WorkflowQuery()));
     }
 
     private void populateChildList(final WfWizard wfWizard, WfWizardConfig wfWizardConfig, final Long applicationId,
@@ -461,7 +534,6 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
         }
 
         wfStep.setAlertList(alertList);
-
     }
 
 }

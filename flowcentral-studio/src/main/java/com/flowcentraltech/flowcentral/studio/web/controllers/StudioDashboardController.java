@@ -83,6 +83,8 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
 
     @Action
     public String showSwitchApplication() throws UnifyException {
+        StudioDashboardPageBean pageBean = getPageBean();
+        pageBean.getSwitchApplicationSearch().applyFilterToSearch();
         return "showswitchapplication";
     }
 
@@ -154,10 +156,11 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
             _switchApplicationSearch.setEntitySubTitle("Application");
             _switchApplicationSearch.setBaseRestriction(new Equals("developable", Boolean.TRUE),
                     appletUtils.specialParamProvider());
-            _switchApplicationSearch.applyFilterToSearch();
-            pageBean.setSwitchApplicationSearch(_switchApplicationSearch);
+             pageBean.setSwitchApplicationSearch(_switchApplicationSearch);
         }
 
+        pageBean.getSwitchApplicationSearch().applyFilterToSearch();
+        
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         if (!QueryUtils.isValidLongCriteria(applicationId)) {
             getPageRequestContextUtil().setRequestPopupName("switchApplicationPopup");

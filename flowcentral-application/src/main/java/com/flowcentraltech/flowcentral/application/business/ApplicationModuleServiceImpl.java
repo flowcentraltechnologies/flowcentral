@@ -36,12 +36,14 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationDeletionTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationImportDataTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
@@ -164,18 +166,20 @@ import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils.EntityBaseTypeFieldSet;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidget;
 import com.flowcentraltech.flowcentral.common.annotation.LongName;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.business.ApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
@@ -226,6 +230,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintC
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFieldConfig;
@@ -274,6 +279,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
@@ -305,14 +311,16 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(ApplicationModuleNameConstants.APPLICATION_MODULE_SERVICE)
 public class ApplicationModuleServiceImpl extends AbstractFlowCentralService implements ApplicationModuleService,
-       FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
+        FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider, PostBootSetup {
 
-    private final Set<String> refProperties = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(
-            AppletPropertyConstants.SEARCH_TABLE, AppletPropertyConstants.CREATE_FORM,
-            AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.MAINTAIN_FORM,
-            AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.ASSIGNMENT_PAGE,
-            AppletPropertyConstants.PROPERTY_LIST_RULE, AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME,
-            AppletPropertyConstants.QUICK_EDIT_TABLE, AppletPropertyConstants.QUICK_EDIT_FORM)));
+    private final Set<String> refProperties = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList(AppletPropertyConstants.SEARCH_TABLE,
+                    AppletPropertyConstants.CREATE_FORM, AppletPropertyConstants.LOADING_TABLE,
+                    AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL, AppletPropertyConstants.MAINTAIN_FORM,
+                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL,
+                    AppletPropertyConstants.ASSIGNMENT_PAGE, AppletPropertyConstants.PROPERTY_LIST_RULE,
+                    AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME, AppletPropertyConstants.QUICK_EDIT_TABLE,
+                    AppletPropertyConstants.QUICK_EDIT_FORM)));
 
     private final Set<String> RESERVED_TABLES = Collections.unmodifiableSet(
             new HashSet<String>(Arrays.asList("application.propertyItemTable", "application.usageTable")));
@@ -342,6 +350,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Configurable
     private TwoWayStringCryptograph twoWayStringCryptograph;
+
+    @Configurable("application-usagelistprovider")
+    private UsageListProvider usageListProvider;
 
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
 
@@ -1225,6 +1236,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
         this.twoWayStringCryptograph = twoWayStringCryptograph;
+    }
+
+    public final void setUsageListProvider(UsageListProvider usageListProvider) {
+        this.usageListProvider = usageListProvider;
     }
 
     @Override
@@ -2571,6 +2586,502 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         return new Equals(_childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName(),
                 parentInst.getId());
+    }
+
+    @Taskable(name = ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME,
+            description = "Application Replication Task",
+            parameters = {
+                    @Parameter(name = ApplicationReplicationTaskConstants.SOURCE_APPLICATION_NAME,
+                            description = "$m{applicationreplicationtask.sourceapplicationname}", type = String.class,
+                            mandatory = true),
+                    @Parameter(name = ApplicationReplicationTaskConstants.DESTINATION_APPLICATION_NAME,
+                            description = "$m{applicationreplicationtask.destinationapplicationname}",
+                            type = String.class, mandatory = true),
+                    @Parameter(name = ApplicationReplicationTaskConstants.DESTINATION_MODULE_NAME,
+                            description = "$m{applicationreplicationtask.destinationmodulename}", type = String.class,
+                            mandatory = true),
+                    @Parameter(name = ApplicationReplicationTaskConstants.REPLICATION_RULES_FILE,
+                            description = "$m{applicationreplicationtask.replicationrulesfile}", type = byte[].class,
+                            mandatory = true) },
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
+    public int executeApplicationReplicationTask(TaskMonitor taskMonitor, String srcApplicationName,
+            String destApplicationName, String destModuleName, byte[] replicationRulesFile) throws UnifyException {
+        logDebug(taskMonitor,
+                "Executing application replication from source application [{0}] to destination application [{1}] and module [{2}]...",
+                srcApplicationName, destApplicationName, destModuleName);
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.FALSE);
+        logDebug(taskMonitor, "Checking if source application exists...");
+        final Application srcApplication = environment().list(new ApplicationQuery().name(srcApplicationName));
+        if (srcApplication == null) {
+            logDebug(taskMonitor, "Source application does not exist. Replication terminated.");
+            taskMonitor.cancel();
+            return 0;
+        }
+
+        if (!srcApplication.isDevelopable()) {
+            logDebug(taskMonitor, "Source application is not developable. Replication terminated.");
+            taskMonitor.cancel();
+            return 0;
+        }
+
+        if (environment()
+                .countAll(new AppEntityQuery().applicationId(srcApplication.getId()).configTypeIsNotCustom()) > 0) {
+            logDebug(taskMonitor, "Some source application entities are static. Replication terminated.");
+            taskMonitor.cancel();
+            return 0;
+
+        }
+
+        logDebug(taskMonitor, "Checking if destination application exists...");
+        if (environment().countAll(new ApplicationQuery().name(destApplicationName)) > 0) {
+            logDebug(taskMonitor, "Destination application already exists. Replication terminated.");
+            taskMonitor.cancel();
+            return 0;
+        }
+
+        logDebug(taskMonitor, "Checking if destination module exists...");
+        Long destModuleId = appletUtilities.system().getModuleId(destModuleName);
+
+        logDebug(taskMonitor, "Creating application replication context...");
+        ApplicationReplicationContext ctx = ApplicationReplicationUtils.createApplicationReplicationContext(
+                appletUtilities, srcApplicationName, destApplicationName, replicationRulesFile);
+
+        // Application
+        logDebug(taskMonitor, "Replicating application...");
+        final Long srcApplicationId = srcApplication.getId();
+        srcApplication.setModuleId(destModuleId);
+        srcApplication.setName(destApplicationName);
+        srcApplication.setDescription(ctx.messageSwap(srcApplication.getDescription()));
+        srcApplication.setLabel(ctx.messageSwap(srcApplication.getLabel()));
+        final Long destApplicationId = (Long) environment().create(srcApplication);
+        applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                ApplicationPrivilegeConstants.APPLICATION_CATEGORY_CODE,
+                PrivilegeNameUtils.getApplicationPrivilegeName(destApplicationName), srcApplication.getDescription());
+
+        // Applets
+        logDebug(taskMonitor, "Replicating applets...");
+        List<Long> appletIdList = environment().valueList(Long.class, "id",
+                new AppAppletQuery().applicationId(srcApplicationId));
+        for (Long appletId : appletIdList) {
+            AppApplet srcAppApplet = environment().find(AppApplet.class, appletId);
+            String oldDescription = srcAppApplet.getDescription();
+            srcAppApplet.setApplicationId(destApplicationId);
+            srcAppApplet.setName(ctx.nameSwap(srcAppApplet.getName()));
+            srcAppApplet.setDescription(ctx.messageSwap(srcAppApplet.getDescription()));
+            srcAppApplet.setLabel(ctx.messageSwap(srcAppApplet.getLabel()));
+            srcAppApplet.setEntity(ctx.entitySwap(srcAppApplet.getEntity()));
+            srcAppApplet.setRouteToApplet(ctx.entitySwap(srcAppApplet.getRouteToApplet()));
+
+            // Applet properties
+            for (AppAppletProp appAppletProp : srcAppApplet.getPropList()) {
+                if (refProperties.contains(appAppletProp.getName())) {
+                    appAppletProp.setValue(ctx.entitySwap(appAppletProp.getValue()));
+                }
+            }
+
+            // Applet set values
+            for (AppAppletSetValues appAppletSetValues : srcAppApplet.getSetValuesList()) {
+                appAppletSetValues.setDescription(ctx.messageSwap(appAppletSetValues.getDescription()));
+                appAppletSetValues.setValueGenerator(ctx.componentSwap(appAppletSetValues.getValueGenerator()));
+                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                        appAppletSetValues.getValueGenerator(), appAppletSetValues.getSetValues());
+                appAppletSetValues.setSetValues(newAppSetValues(setValuesConfig));
+            }
+
+            // Applet filters
+            for (AppAppletFilter appAppletFilter : srcAppApplet.getFilterList()) {
+                appAppletFilter.setDescription(ctx.messageSwap(appAppletFilter.getDescription()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appAppletFilter.getFilter());
+                appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                appAppletFilter.setPreferredForm(ctx.entitySwap(appAppletFilter.getPreferredForm()));
+                appAppletFilter
+                        .setPreferredChildListApplet(ctx.entitySwap(appAppletFilter.getPreferredChildListApplet()));
+                appAppletFilter.setFilterGenerator(ctx.componentSwap(appAppletFilter.getFilterGenerator()));
+            }
+
+            environment().create(srcAppApplet);
+            logDebug(taskMonitor, "Applet [{0}] -> [{1}]...", oldDescription, srcAppApplet.getDescription());
+
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_APPLET_CATEGORY_CODE,
+                    PrivilegeNameUtils.getAppletPrivilegeName(ApplicationNameUtils
+                            .getApplicationEntityLongName(destApplicationName, srcAppApplet.getName())),
+                    srcAppApplet.getDescription());
+        }
+
+        // Widgets
+        logDebug(taskMonitor, "Replicating widgets...");
+        List<Long> widgetIdList = environment().valueList(Long.class, "id",
+                new AppWidgetTypeQuery().applicationId(srcApplicationId));
+        for (Long widgetId : widgetIdList) {
+            AppWidgetType srcWidgetType = environment().find(AppWidgetType.class, widgetId);
+            String oldDescription = srcWidgetType.getDescription();
+            srcWidgetType.setApplicationId(destApplicationId);
+            srcWidgetType.setName(ctx.nameSwap(srcWidgetType.getName()));
+            srcWidgetType.setDescription(ctx.messageSwap(srcWidgetType.getDescription()));
+            environment().create(srcWidgetType);
+            logDebug(taskMonitor, "Widget [{0}] -> [{1}]...", oldDescription, srcWidgetType.getDescription());
+        }
+
+        // References
+        logDebug(taskMonitor, "Replicating references...");
+        List<Long> referenceIdList = environment().valueList(Long.class, "id",
+                new AppRefQuery().applicationId(srcApplicationId));
+        for (Long referenceId : referenceIdList) {
+            AppRef srcAppRef = environment().find(AppRef.class, referenceId);
+            String oldDescription = srcAppRef.getDescription();
+            srcAppRef.setApplicationId(destApplicationId);
+            srcAppRef.setName(ctx.nameSwap(srcAppRef.getName()));
+            srcAppRef.setDescription(ctx.messageSwap(srcAppRef.getDescription()));
+            srcAppRef.setEntity(ctx.entitySwap(srcAppRef.getEntity()));
+            srcAppRef.setSearchTable(ctx.entitySwap(srcAppRef.getSearchTable()));
+            srcAppRef.setSelectHandler(ctx.componentSwap(srcAppRef.getSelectHandler()));
+            srcAppRef.setFilterGenerator(ctx.componentSwap(srcAppRef.getFilterGenerator()));
+            FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                    srcAppRef.getFilter());
+            srcAppRef.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            environment().create(srcAppRef);
+            logDebug(taskMonitor, "Reference [{0}] -> [{1}]...", oldDescription, srcAppRef.getDescription());
+        }
+
+        // Entities
+        logDebug(taskMonitor, "Replicating entities...");
+        List<Long> entityIdList = environment().valueList(Long.class, "id",
+                new AppEntityQuery().applicationId(srcApplicationId));
+        for (Long entityId : entityIdList) {
+            AppEntity srcAppEntity = environment().find(AppEntity.class, entityId);
+            String oldDescription = srcAppEntity.getDescription();
+            srcAppEntity.setApplicationId(destApplicationId);
+            srcAppEntity.setName(ctx.nameSwap(srcAppEntity.getName()));
+            srcAppEntity.setDescription(ctx.messageSwap(srcAppEntity.getDescription()));
+            srcAppEntity.setLabel(ctx.messageSwap(srcAppEntity.getLabel()));
+            srcAppEntity.setEmailProducerConsumer(ctx.componentSwap(srcAppEntity.getEmailProducerConsumer()));
+            srcAppEntity.setEntityClass(ctx.classSwap(srcAppEntity.getEntityClass()));
+            if (StringUtils.isBlank(srcAppEntity.getDelegate())) {
+                srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getTableName()));
+            }
+
+            for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
+                appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));
+                appEntityField.setInputWidget(ctx.entitySwap(appEntityField.getInputWidget()));
+                appEntityField.setSuggestionType(ctx.entitySwap(appEntityField.getSuggestionType()));
+                appEntityField.setLingualWidget(ctx.entitySwap(appEntityField.getLingualWidget()));
+                appEntityField.setAutoFormat(ctx.autoFormatSwap(appEntityField.getAutoFormat()));
+            }
+
+            environment().create(srcAppEntity);
+
+            final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(destApplicationName,
+                    srcAppEntity.getName());
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                    PrivilegeNameUtils.getAddPrivilegeName(entityLongName),
+                    getApplicationMessage("application.entity.privilege.add", srcAppEntity.getDescription()));
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                    PrivilegeNameUtils.getEditPrivilegeName(entityLongName),
+                    getApplicationMessage("application.entity.privilege.edit", srcAppEntity.getDescription()));
+            applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                    ApplicationPrivilegeConstants.APPLICATION_ENTITY_CATEGORY_CODE,
+                    PrivilegeNameUtils.getDeletePrivilegeName(entityLongName),
+                    getApplicationMessage("application.entity.privilege.delete", srcAppEntity.getDescription()));
+
+            logDebug(taskMonitor, "Entity [{0}] -> [{1}]...", oldDescription, srcAppEntity.getDescription());
+        }
+
+        // Tables
+        logDebug(taskMonitor, "Replicating tables...");
+        List<Long> tableIdList = environment().valueList(Long.class, "id",
+                new AppTableQuery().applicationId(srcApplicationId));
+        for (Long tableId : tableIdList) {
+            AppTable srcAppTable = environment().find(AppTable.class, tableId);
+            String oldDescription = srcAppTable.getDescription();
+            srcAppTable.setApplicationId(destApplicationId);
+            srcAppTable.setName(ctx.nameSwap(srcAppTable.getName()));
+            srcAppTable.setDescription(ctx.messageSwap(srcAppTable.getDescription()));
+            srcAppTable.setLabel(ctx.messageSwap(srcAppTable.getLabel()));
+            srcAppTable.setEntity(ctx.entitySwap(srcAppTable.getEntity()));
+            srcAppTable.setDetailsPanelName(ctx.componentSwap(srcAppTable.getDetailsPanelName()));
+
+            // Columns
+            for (AppTableColumn appTableColumn : srcAppTable.getColumnList()) {
+                appTableColumn.setRenderWidget(ctx.entitySwap(appTableColumn.getRenderWidget()));
+            }
+
+            // Filters
+            for (AppTableFilter appTableFilter : srcAppTable.getFilterList()) {
+                appTableFilter.setFilterGenerator(ctx.componentSwap(appTableFilter.getFilterGenerator()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appTableFilter.getFilter());
+                appTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            // Table Loading
+            for (AppTableLoading appTableLoading : srcAppTable.getLoadingList()) {
+                appTableLoading.setProvider(ctx.componentSwap(appTableLoading.getProvider()));
+            }
+
+            environment().create(srcAppTable);
+            logDebug(taskMonitor, "Table [{0}] -> [{1}]...", oldDescription, srcAppTable.getDescription());
+        }
+
+        // Forms
+        logDebug(taskMonitor, "Replicating forms...");
+        List<Long> formIdList = environment().valueList(Long.class, "id",
+                new AppFormQuery().applicationId(srcApplicationId));
+        for (Long formId : formIdList) {
+            AppForm srcAppForm = environment().find(AppForm.class, formId);
+            String oldDescription = srcAppForm.getDescription();
+            srcAppForm.setApplicationId(destApplicationId);
+            srcAppForm.setEntity(ctx.componentSwap(srcAppForm.getEntity()));
+            srcAppForm.setName(ctx.nameSwap(srcAppForm.getName()));
+            srcAppForm.setDescription(ctx.messageSwap(srcAppForm.getDescription()));
+            srcAppForm.setConsolidatedReview(ctx.messageSwap(srcAppForm.getConsolidatedReview()));
+            srcAppForm.setConsolidatedValidation(ctx.messageSwap(srcAppForm.getConsolidatedValidation()));
+            srcAppForm.setConsolidatedState(ctx.messageSwap(srcAppForm.getConsolidatedState()));
+            srcAppForm.setListingGenerator(ctx.messageSwap(srcAppForm.getListingGenerator()));
+
+            // Filters
+            for (AppFormFilter appFormFilter : srcAppForm.getFilterList()) {
+                appFormFilter.setFilterGenerator(ctx.componentSwap(appFormFilter.getFilterGenerator()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormFilter.getFilter());
+                appFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            // Actions
+            for (AppFormAction appFormAction : srcAppForm.getActionList()) {
+                appFormAction.setName(ctx.nameSwap(appFormAction.getName()));
+                appFormAction.setPolicy(ctx.componentSwap(appFormAction.getPolicy()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormAction.getOnCondition());
+                appFormAction.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
+
+                applicationPrivilegeManager.registerPrivilege(destApplicationId,
+                        ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
+                        PrivilegeNameUtils.getFormActionPrivilegeName(appFormAction.getName()),
+                        appFormAction.getDescription());
+            }
+
+            // Elements
+            for (AppFormElement appFormElement : srcAppForm.getElementList()) {
+                appFormElement.setTabApplet(ctx.entitySwap(appFormElement.getTabApplet()));
+                appFormElement.setTabReference(ctx.entitySwap(appFormElement.getTabReference()));
+                appFormElement.setTabMappedForm(ctx.entitySwap(appFormElement.getTabMappedForm()));
+                appFormElement.setInputWidget(ctx.entitySwap(appFormElement.getInputWidget()));
+                appFormElement.setInputReference(ctx.entitySwap(appFormElement.getInputReference()));
+            }
+
+            // Related Lists
+            for (AppFormRelatedList appFormRelatedList : srcAppForm.getRelatedList()) {
+                appFormRelatedList.setApplet(ctx.entitySwap(appFormRelatedList.getApplet()));
+            }
+
+            // State Policies
+            for (AppFormStatePolicy appFormStatePolicy : srcAppForm.getFieldStateList()) {
+                appFormStatePolicy.setValueGenerator(ctx.componentSwap(appFormStatePolicy.getValueGenerator()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormStatePolicy.getOnCondition());
+                appFormStatePolicy.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                        appFormStatePolicy.getValueGenerator(), appFormStatePolicy.getSetValues());
+                appFormStatePolicy.setSetValues(newAppSetValues(setValuesConfig));
+            }
+
+            // Widget Rule Policies
+            for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : srcAppForm.getWidgetRulesList()) {
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormWidgetRulesPolicy.getOnCondition());
+                appFormWidgetRulesPolicy.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                WidgetRulesConfig widgetRulesConfig = ApplicationReplicationUtils.getReplicatedWidgetRulesConfig(ctx,
+                        appFormWidgetRulesPolicy.getWidgetRules());
+                appFormWidgetRulesPolicy.setWidgetRules(newAppWidgetRules(widgetRulesConfig));
+            }
+
+            // Field Validation Policies
+            for (AppFormFieldValidationPolicy appFormFieldValidationPolicy : srcAppForm.getFieldValidationList()) {
+                appFormFieldValidationPolicy
+                        .setValidation(ctx.componentSwap(appFormFieldValidationPolicy.getValidation()));
+            }
+
+            // Form Validation Policies
+            for (AppFormValidationPolicy appFormValidationPolicy : srcAppForm.getFormValidationList()) {
+                appFormValidationPolicy.setErrorMatcher(ctx.componentSwap(appFormValidationPolicy.getErrorMatcher()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormValidationPolicy.getErrorCondition());
+                appFormValidationPolicy.setErrorCondition(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            // Form Review Policies
+            for (AppFormReviewPolicy appFormReviewPolicy : srcAppForm.getFormReviewList()) {
+                appFormReviewPolicy.setErrorMatcher(ctx.componentSwap(appFormReviewPolicy.getErrorMatcher()));
+                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                        appFormReviewPolicy.getErrorCondition());
+                appFormReviewPolicy.setErrorCondition(InputWidgetUtils.newAppFilter(filterConfig));
+            }
+
+            environment().create(srcAppForm);
+            logDebug(taskMonitor, "Form [{0}] -> [{1}]...", oldDescription, srcAppForm.getDescription());
+        }
+
+        // Property Lists
+        logDebug(taskMonitor, "Replicating property lists...");
+        List<Long> propertyListIdList = environment().valueList(Long.class, "id",
+                new AppPropertyListQuery().applicationId(srcApplicationId));
+        for (Long propertyListId : propertyListIdList) {
+            AppPropertyList srcAppPropertyList = environment().find(AppPropertyList.class, propertyListId);
+            String oldDescription = srcAppPropertyList.getDescription();
+            srcAppPropertyList.setApplicationId(destApplicationId);
+            srcAppPropertyList.setName(ctx.nameSwap(srcAppPropertyList.getName()));
+            srcAppPropertyList.setDescription(ctx.messageSwap(srcAppPropertyList.getDescription()));
+
+            for (AppPropertySet appPropertySet : srcAppPropertyList.getItemSet()) {
+                for (AppPropertyListItem appPropertyListItem : appPropertySet.getItemList()) {
+                    appPropertyListItem.setInputWidget(ctx.entitySwap(appPropertyListItem.getInputWidget()));
+                    appPropertyListItem.setReferences(ctx.entitySwap(appPropertyListItem.getReferences()));
+                }
+            }
+
+            environment().create(srcAppPropertyList);
+            logDebug(taskMonitor, "Property list [{0}] -> [{1}]...", oldDescription,
+                    srcAppPropertyList.getDescription());
+        }
+
+        // Property Rules
+        logDebug(taskMonitor, "Replicating property rules...");
+        List<Long> propertyRuleIdList = environment().valueList(Long.class, "id",
+                new AppPropertyRuleQuery().applicationId(srcApplicationId));
+        for (Long propertyRuleId : propertyRuleIdList) {
+            AppPropertyRule srcAppPropertyRule = environment().find(AppPropertyRule.class, propertyRuleId);
+            String oldDescription = srcAppPropertyRule.getDescription();
+            srcAppPropertyRule.setApplicationId(destApplicationId);
+            srcAppPropertyRule.setName(ctx.nameSwap(srcAppPropertyRule.getName()));
+            srcAppPropertyRule.setDescription(ctx.messageSwap(srcAppPropertyRule.getDescription()));
+            srcAppPropertyRule.setEntity(ctx.entitySwap(srcAppPropertyRule.getEntity()));
+            srcAppPropertyRule.setDefaultList(ctx.componentSwap(srcAppPropertyRule.getDefaultList()));
+
+            for (AppPropertyRuleChoice appPropertyRuleChoice : srcAppPropertyRule.getChoiceList()) {
+                appPropertyRuleChoice.setList(ctx.componentSwap(appPropertyRuleChoice.getList()));
+            }
+
+            environment().create(srcAppPropertyRule);
+            logDebug(taskMonitor, "Property rule [{0}] -> [{1}]...", oldDescription,
+                    srcAppPropertyRule.getDescription());
+        }
+
+        // Assignment Pages
+        logDebug(taskMonitor, "Replicating assignment pages...");
+        List<Long> assignmentPageIdList = environment().valueList(Long.class, "id",
+                new AppAssignmentPageQuery().applicationId(srcApplicationId));
+        for (Long assignmentPageId : assignmentPageIdList) {
+            AppAssignmentPage srcAppAssignmentPage = environment().find(AppAssignmentPage.class, assignmentPageId);
+            String oldDescription = srcAppAssignmentPage.getDescription();
+            srcAppAssignmentPage.setApplicationId(destApplicationId);
+            srcAppAssignmentPage.setName(ctx.nameSwap(srcAppAssignmentPage.getName()));
+            srcAppAssignmentPage.setDescription(ctx.messageSwap(srcAppAssignmentPage.getDescription()));
+            srcAppAssignmentPage.setLabel(ctx.messageSwap(srcAppAssignmentPage.getLabel()));
+            srcAppAssignmentPage.setEntity(ctx.entitySwap(srcAppAssignmentPage.getEntity()));
+            srcAppAssignmentPage.setCommitPolicy(ctx.componentSwap(srcAppAssignmentPage.getCommitPolicy()));
+
+            environment().create(srcAppAssignmentPage);
+            logDebug(taskMonitor, "Assignment page [{0}] -> [{1}]...", oldDescription,
+                    srcAppAssignmentPage.getDescription());
+        }
+
+        // Suggestions
+        logDebug(taskMonitor, "Replicating suggestion types...");
+        List<Long> suggestionTypeIdList = environment().valueList(Long.class, "id",
+                new AppSuggestionTypeQuery().applicationId(srcApplicationId));
+        for (Long suggestionTypeId : suggestionTypeIdList) {
+            AppSuggestionType srcAppSuggestionType = environment().find(AppSuggestionType.class, suggestionTypeId);
+            String oldDescription = srcAppSuggestionType.getDescription();
+            srcAppSuggestionType.setApplicationId(destApplicationId);
+            srcAppSuggestionType.setName(ctx.nameSwap(srcAppSuggestionType.getName()));
+            srcAppSuggestionType.setDescription(ctx.messageSwap(srcAppSuggestionType.getDescription()));
+            srcAppSuggestionType.setParent(ctx.entitySwap(srcAppSuggestionType.getParent()));
+
+            environment().create(srcAppSuggestionType);
+            logDebug(taskMonitor, "Suggestion type [{0}] -> [{1}]...", oldDescription,
+                    srcAppSuggestionType.getDescription());
+        }
+
+        logDebug(taskMonitor, "Replicating other application artifacts...");
+        if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
+            for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                applicationArtifactInstaller.replicateApplicationArtifacts(taskMonitor, srcApplicationId,
+                        destApplicationId, ctx);
+            }
+        }
+
+        logDebug(taskMonitor, "Application successfully replicated.");
+
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationReplicationTaskConstants.TASK_SUCCESS, Boolean.TRUE);
+        return 0;
+    }
+
+    @Taskable(name = ApplicationDeletionTaskConstants.APPLICATION_DELETION_TASK_NAME,
+            description = "Application Deletion Task",
+            parameters = { @Parameter(name = ApplicationDeletionTaskConstants.APPLICATION_NAME,
+                    description = "$m{applicationdeletiontask.applicationname}", type = String.class,
+                    mandatory = true) },
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
+    public int executeApplicationDeletionTask(TaskMonitor taskMonitor, String applicationName) throws UnifyException {
+        logDebug(taskMonitor, "Executing deletion on application [{0}] ...", applicationName);
+        logDebug(taskMonitor, "Checking if application developable...");
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.FALSE);
+        int deletionCount = 0;
+        final Application application = environment().list(new ApplicationQuery().name(applicationName));
+        if (!application.isDevelopable()) {
+            logDebug(taskMonitor, "Application is non-developable. Deletion terminated.");
+            return 0;
+        }
+
+        logDebug(taskMonitor, "Application is developable.");
+        logDebug(taskMonitor, "Checking for application dependants...");
+        if (usageListProvider.countUsages(new BeanValueStore(application).getReader(), null) != 0L) {
+            logDebug(taskMonitor,
+                    "Application is in use or referenced by one or more components belonging to some other application. Deletion terminated.");
+            return 0;
+        }
+
+        logDebug(taskMonitor, "No application dependants found. Proceeding with deletion...");
+        final Long applicationId = application.getId();
+        if (!DataUtils.isBlank(applicationArtifactInstallerList)) {
+            for (ApplicationArtifactInstaller applicationArtifactInstaller : applicationArtifactInstallerList) {
+                deletionCount += applicationArtifactInstaller.deleteApplicationArtifacts(taskMonitor, applicationId);
+            }
+        }
+
+        applicationPrivilegeManager.unregisterApplicationPrivileges(applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "suggestion types", new AppSuggestionTypeQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "assignment pages", new AppAssignmentPageQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property rules", new AppPropertyRuleQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "property lists", new AppPropertyListQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "forms", new AppFormQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "tables", new AppTableQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "entities", new AppEntityQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "references", new AppRefQuery(), applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "widget types", new AppWidgetTypeQuery(),
+                applicationId);
+        deletionCount += deleteApplicationArtifacts(taskMonitor, "applets", new AppAppletQuery(), applicationId);
+
+        environment().delete(application);
+        logDebug(taskMonitor, "Application successfully deleted.");
+        taskMonitor.getCurrentTaskOutput().setResult(ApplicationDeletionTaskConstants.TASK_SUCCESS, Boolean.TRUE);
+        return deletionCount;
+    }
+
+    private int deleteApplicationArtifacts(TaskMonitor taskMonitor, String name, BaseApplicationEntityQuery<?> query,
+            Long applicationId) throws UnifyException {
+        logDebug(taskMonitor, "Deleting application {0}...", name);
+        int deletion = environment().deleteAll(query.applicationId(applicationId));
+        logDebug(taskMonitor, "[{1}] application {0} deleted.", name, deletion);
+        return deletion;
     }
 
     @SuppressWarnings("unchecked")

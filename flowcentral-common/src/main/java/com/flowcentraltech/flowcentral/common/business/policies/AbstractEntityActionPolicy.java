@@ -45,10 +45,12 @@ public abstract class AbstractEntityActionPolicy extends AbstractUnifyComponent 
     }
 
     @Override
-    public final void executePreAction(EntityActionContext ctx) throws UnifyException {
+    public final EntityActionResult executePreAction(EntityActionContext ctx) throws UnifyException {
         if (checkAppliesTo(ctx.getInst())) {
-            doExecutePreAction(ctx);
+            return doExecutePreAction(ctx);
         }
+        
+        return null;
     }
 
     @Override
@@ -97,7 +99,7 @@ public abstract class AbstractEntityActionPolicy extends AbstractUnifyComponent 
         return applicationPrivilegeManager.assignPrivilegeToRole(roleCode, privilegeCode);
     }
 
-    protected abstract void doExecutePreAction(EntityActionContext ctx) throws UnifyException;
+    protected abstract EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException;
 
     protected abstract EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException;
 

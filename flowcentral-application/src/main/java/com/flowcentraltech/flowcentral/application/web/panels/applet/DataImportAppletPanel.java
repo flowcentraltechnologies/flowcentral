@@ -58,7 +58,8 @@ public class DataImportAppletPanel extends AbstractAppletPanel {
                 .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_UPLOADCONFIG,
                         appletDef.getPropDef(AppletPropertyConstants.IMPORTDATA_CONFIGNAME).getValue(String.class))
                 .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_UPLOAD_FILE, applet.getUploadFile())
-                .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_WITH_HEADER_FLAG, applet.isHasHeader()).logMessages()
+                .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_WITH_HEADER_FLAG, applet.isHasHeader())
+                .logMessages()
                 .build();
         String routeToAppletName = appletDef.isProp(AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME)
                 ? appletDef.getPropDef(AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME).getValue(String.class)

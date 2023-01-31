@@ -65,6 +65,16 @@ public interface ApplicationPrivilegeManager extends UnifyComponent {
             throws UnifyException;
 
     /**
+     * Unregisters all privileges associated with an application.
+     * 
+     * @param applicationId
+     *                      the application ID
+     * @throws UnifyException
+     *                        If an error occurs
+     */
+    void unregisterApplicationPrivileges(Long applicationId) throws UnifyException;
+
+    /**
      * Finds role privileges.
      * 
      * @param privilegeCategoryCode

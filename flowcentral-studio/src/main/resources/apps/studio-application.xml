@@ -476,11 +476,19 @@
 				value="appEditable" />
 			<property name="maintainForm.delete.condition"
 				value="appEditable" />
+			<property name="maintainForm.delete.policy"
+				value="studioondeleteapplication-policy" />
 			<filter name="appEditable"
 				description="$m{studio.application.filter.editable}">
 				<restriction type="equals" field="developable"
 					paramA="Y" />
 			</filter>
+		</applet>
+		<applet name="applicationReplication"
+			description="$m{studio.applicationreplication.manage}"
+			label="$m{studio.applicationreplication.label}" icon="desktop"
+			type="path_page" path="/studio/applicationreplication/openPage"
+			menuAccess="false" allowSecondaryTenants="false">
 		</applet>
 		<applet name="manageAppEntityField"
 			description="$m{studio.appentityfield.manage}"
@@ -1162,7 +1170,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" linkAct="maintainAct"  order="ASC" />
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.module}" />
 		</table>

@@ -14,8 +14,9 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.common.business;
+package com.flowcentraltech.flowcentral.application.business;
 
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -41,4 +42,34 @@ public interface ApplicationArtifactInstaller extends UnifyComponent {
      */
     void installApplicationArtifacts(TaskMonitor taskMonitor, ApplicationInstall applicationInstall)
             throws UnifyException;
+
+    /**
+     * Replicates application artifacts
+     * 
+     * @param taskMonitor
+     *                          the task monitor
+     * @param srcApplicationId
+     *                          the source application ID
+     * @param destApplicationId
+     *                          the destination application ID
+     * @param ctx
+     *                          the application replication context
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void replicateApplicationArtifacts(TaskMonitor taskMonitor, Long srcApplicationId, Long destApplicationId,
+            ApplicationReplicationContext ctx) throws UnifyException;
+
+    /**
+     * Deletes all application artifact.
+     * 
+     * @param taskMonitor
+     *                      the task monitor
+     * @param applicationId
+     *                      the application ID
+     * @return the deletion count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int deleteApplicationArtifacts(TaskMonitor taskMonitor, Long applicationId) throws UnifyException;
 }

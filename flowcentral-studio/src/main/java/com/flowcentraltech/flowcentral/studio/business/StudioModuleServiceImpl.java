@@ -54,6 +54,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Default implementation of studio module service.
@@ -228,7 +229,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             DataUtils.sortAscending(appletDefList, AppletDef.class, "label");
         }
 
-        if (type.isSupportsNew() && applicationModuleService.isApplicationDevelopable(applicationName)) {
+        if (type.isSupportsNew() && !StringUtils.isBlank(applicationName)
+                && applicationModuleService.isApplicationDevelopable(applicationName)) {
             if (appletDefList == null) {
                 appletDefList = new ArrayList<AppletDef>();
             }

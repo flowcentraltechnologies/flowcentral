@@ -16,10 +16,14 @@
 
 package com.flowcentraltech.flowcentral.chart.business;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.business.AbstractApplicationArtifactInstaller;
+import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
 import com.flowcentraltech.flowcentral.chart.constants.ChartModuleNameConstants;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.chart.entities.ChartQuery;
-import com.flowcentraltech.flowcentral.common.business.AbstractApplicationArtifactInstaller;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
@@ -96,6 +100,33 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                 }
             }
         }
+    }
+
+    @Override
+    public void replicateApplicationArtifacts(TaskMonitor taskMonitor, Long srcApplicationId, Long destApplicationId,
+            ApplicationReplicationContext ctx) throws UnifyException {
+        // Charts
+        logDebug(taskMonitor, "Replicating charts...");
+        List<Long> chartIdList = environment().valueList(Long.class, "id",
+                new ChartQuery().applicationId(srcApplicationId));
+        for (Long chartId : chartIdList) {
+            Chart srcChart = environment().find(Chart.class, chartId);
+            String oldDescription = srcChart.getDescription();
+            srcChart.setApplicationId(destApplicationId);
+            srcChart.setName(ctx.nameSwap(srcChart.getName()));
+            srcChart.setDescription(ctx.messageSwap(srcChart.getDescription()));
+            srcChart.setTitle(ctx.messageSwap(srcChart.getTitle()));
+            srcChart.setSubTitle(ctx.messageSwap(srcChart.getSubTitle()));
+            srcChart.setProvider(ctx.componentSwap(srcChart.getProvider()));
+
+            environment().create(srcChart);
+            logDebug(taskMonitor, "Chart [{0}] -> [{1}]...", oldDescription, srcChart.getDescription());
+        }
+    }
+
+    @Override
+    protected List<DeletionParams> getDeletionParams() throws UnifyException {
+        return Arrays.asList(new DeletionParams("charts", new ChartQuery()));
     }
 
 }

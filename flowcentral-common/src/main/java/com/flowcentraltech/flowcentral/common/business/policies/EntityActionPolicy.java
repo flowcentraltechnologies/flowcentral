@@ -44,10 +44,12 @@ public interface EntityActionPolicy extends UnifyComponent {
      * 
      * @param ctx
      *            the entity action context
+     * @return an entity action result. if null action proceeds otherwise action is
+     *         not executed
      * @throws UnifyException
      *                        if an error occurs
      */
-    void executePreAction(EntityActionContext ctx) throws UnifyException;
+    EntityActionResult executePreAction(EntityActionContext ctx) throws UnifyException;
 
     /**
      * Executes a post-action operation.

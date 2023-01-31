@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
@@ -38,7 +39,7 @@ import com.tcdng.unify.core.database.Query;
 public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy {
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         super.doExecutePreAction(ctx);
         AppEntity appEntity = (AppEntity) ctx.getInst();
         // Update base fields if necessary
@@ -58,6 +59,8 @@ public class StudioOnUpdateAppEntityPolicy extends StudioOnCreateComponentPolicy
                 environment().create(appEntityField);
             }
         }
+        
+        return null;
     }
 
 }

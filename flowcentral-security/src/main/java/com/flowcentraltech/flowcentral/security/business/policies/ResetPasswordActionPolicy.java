@@ -50,10 +50,11 @@ public class ResetPasswordActionPolicy extends AbstractFormActionPolicy {
     }
 
     @Override
-    protected void doExecutePreAction(EntityActionContext ctx) throws UnifyException {
+    protected EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         User user = (User) ctx.getInst();
         logDebug("Executing reset password pre-action policy for user [{0}] ...", user.getFullName());
         securityModuleService.resetUserPassword(user.getId());
+        return null;
     }
 
     @Override
