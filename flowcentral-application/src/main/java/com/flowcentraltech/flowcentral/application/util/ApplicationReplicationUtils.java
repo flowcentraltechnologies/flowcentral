@@ -30,20 +30,8 @@ import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
-import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
-import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceEntryConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterRestrictionConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SearchInputConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UnifyOperationException;
-import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Application replication utilities.
@@ -146,80 +134,39 @@ public final class ApplicationReplicationUtils {
                 fieldrb.build(), entityrb.build().setNameRule(nameRule));
     }
 
-    public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
+    public static void applyReplicationRules(ApplicationReplicationContext ctx, AppFilter appFilter)
             throws UnifyException {
-        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(ctx.au(), appFilter);
-        if (filterConfig != null) {
-            filterConfig.setDescription(ctx.messageSwap(filterConfig.getDescription()));
-            filterConfig.setFilterGenerator(ctx.componentSwap(filterConfig.getFilterGenerator()));
-            for (FilterRestrictionConfig restrictonConfig : filterConfig.getRestrictionList()) {
-                restrictonConfig.setField(ctx.fieldSwap(restrictonConfig.getField()));
-                if (restrictonConfig.getType().isFieldVal()) {
-                    restrictonConfig.setParamA(ctx.fieldSwap(restrictonConfig.getParamA()));
-                    restrictonConfig.setParamB(ctx.fieldSwap(restrictonConfig.getParamB()));
-                }
-            }
+        if (appFilter != null) {
+            appFilter.setDefinition(ctx.fieldSwap(appFilter.getDefinition()));
         }
-
-        return filterConfig;
     }
 
-    public static SetValuesConfig getReplicatedSetValuesConfig(ApplicationReplicationContext ctx, String valueGenerator,
+    public static void applyReplicationRules(ApplicationReplicationContext ctx, String valueGenerator,
             AppSetValues appSetValues) throws UnifyException {
-        SetValuesConfig setValuesConfig = InputWidgetUtils.getSetValuesConfig(valueGenerator, appSetValues);
-        if (setValuesConfig != null) {
-            setValuesConfig.setDescription(ctx.messageSwap(setValuesConfig.getDescription()));
-            if (!DataUtils.isBlank(setValuesConfig.getSetValueList())) {
-                for (SetValueConfig setValueConfig : setValuesConfig.getSetValueList()) {
-                    setValueConfig.setFieldName(ctx.fieldSwap(setValueConfig.getFieldName()));
-                    if (SetValueType.GENERATOR.equals(setValueConfig.getType())) {
-                        setValueConfig.setValue(ctx.componentSwap(setValueConfig.getValue()));
-                    } else if (SetValueType.IMMEDIATE_FIELD.equals(setValueConfig.getType())) {
-                        setValueConfig.setValue(ctx.fieldSwap(setValueConfig.getValue()));
-                    }
-                }
-            }
+        if (appSetValues != null) {
+            appSetValues.setDefinition(ctx.fieldSwap(appSetValues.getDefinition()));
         }
-
-        return setValuesConfig;
     }
 
-    public static WidgetRulesConfig getReplicatedWidgetRulesConfig(ApplicationReplicationContext ctx,
-            AppWidgetRules widgetRules) throws UnifyException {
-        WidgetRulesConfig widgetRulesConfig = InputWidgetUtils.getWidgetRulesConfig(widgetRules);
-        if (widgetRulesConfig != null && widgetRulesConfig.getEntryList() != null) {
-            for (WidgetRuleEntryConfig widgetRuleEntryConfig : widgetRulesConfig.getEntryList()) {
-                widgetRuleEntryConfig.setFieldName(ctx.fieldSwap(widgetRuleEntryConfig.getFieldName()));
-                widgetRuleEntryConfig.setWidget(ctx.componentSwap(widgetRuleEntryConfig.getWidget()));
-            }
+    public static void applyReplicationRules(ApplicationReplicationContext ctx, AppWidgetRules widgetRules)
+            throws UnifyException {
+        if (widgetRules != null) {
+            widgetRules.setDefinition(ctx.fieldSwap(widgetRules.getDefinition()));
         }
-
-        return widgetRulesConfig;
     }
 
-    public static SearchInputsConfig getReplicatedSearchInputsConfig(ApplicationReplicationContext ctx,
+    public static void applyReplicationRules(ApplicationReplicationContext ctx,
             AppEntitySearchInput appEntitySearchInput) throws UnifyException {
-        SearchInputsConfig searchInputsConfig = InputWidgetUtils.getSearchInputConfig(appEntitySearchInput);
-        if (searchInputsConfig != null) {
-            searchInputsConfig.setDescription(ctx.messageSwap(searchInputsConfig.getDescription()));
-            for (SearchInputConfig searchInputConfig : searchInputsConfig.getInputList()) {
-                searchInputConfig.setField(ctx.fieldSwap(searchInputConfig.getField()));
-                searchInputConfig.setLabel(ctx.messageSwap(searchInputConfig.getLabel()));
-            }
+        if (appEntitySearchInput != null && appEntitySearchInput.getSearchInput() != null) {
+            appEntitySearchInput.getSearchInput()
+                    .setDefinition(ctx.fieldSwap(appEntitySearchInput.getSearchInput().getDefinition()));
         }
-
-        return searchInputsConfig;
     }
 
-    public static FieldSequenceConfig getReplicatedFieldSequenceConfig(ApplicationReplicationContext ctx,
+    public static void applyReplicationRules(ApplicationReplicationContext ctx,
             AppFieldSequence appFieldSequence) throws UnifyException {
-        FieldSequenceConfig fieldSequenceConfig = InputWidgetUtils.getFieldSequenceConfig(appFieldSequence);
-        if (fieldSequenceConfig != null) {
-            for (FieldSequenceEntryConfig entryConfig : fieldSequenceConfig.getEntryList()) {
-                entryConfig.setFieldName(ctx.fieldSwap(entryConfig.getFieldName()));
-            }
+        if (appFieldSequence != null) {
+            appFieldSequence.setDefinition(ctx.fieldSwap(appFieldSequence.getDefinition()));
         }
-
-        return fieldSequenceConfig;
     }
 }

@@ -2697,9 +2697,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 // Applet filters
                 for (AppAppletFilter appAppletFilter : srcAppApplet.getFilterList()) {
                     appAppletFilter.setDescription(ctx.messageSwap(appAppletFilter.getDescription()));
-                    FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                            appAppletFilter.getFilter());
-                    appAppletFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                    appAppletFilter.setFilter(ApplicationReplicationUtils.getReplicatedAppFilter(ctx,
+                            appAppletFilter.getFilter()));
                     appAppletFilter.setPreferredForm(ctx.entitySwap(appAppletFilter.getPreferredForm()));
                     appAppletFilter
                             .setPreferredChildListApplet(ctx.entitySwap(appAppletFilter.getPreferredChildListApplet()));
