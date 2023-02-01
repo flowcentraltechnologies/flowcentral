@@ -37,7 +37,7 @@ public class ReportConfiguration extends BaseApplicationEntity {
     @Column(length = 128)
     private String reportable;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String title;
 
     @Column(length = 64, nullable = true)
