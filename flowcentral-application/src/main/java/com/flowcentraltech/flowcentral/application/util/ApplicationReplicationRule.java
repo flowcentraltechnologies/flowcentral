@@ -84,6 +84,7 @@ public class ApplicationReplicationRule {
                     final String applicationName = prefix != null ? prefix : parts.getApplicationName();
                     return ApplicationNameUtils.getApplicationEntityLongName(applicationName, entityName);
                 }
+                break;
             case NAME:
                 for (Map.Entry<String, String> entry : replace.entrySet()) {
                     if (str.startsWith(entry.getKey())) {

@@ -2772,6 +2772,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
             Map<String, AppEntityField> map = new HashMap<String, AppEntityField>();
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
+                map.put(appEntityField.getName(), appEntityField);
                 appEntityField.setName(ctx.fieldSwap(appEntityField.getName()));
                 appEntityField.setLabel(ctx.fieldSwap(appEntityField.getLabel()));
                 appEntityField.setColumnName(ctx.fieldSwap(appEntityField.getColumnName()));
@@ -2781,7 +2782,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 appEntityField.setAutoFormat(ctx.autoFormatSwap(appEntityField.getAutoFormat()));
                 appEntityField.setInputListKey(ctx.fieldSwap(appEntityField.getInputListKey()));
                 appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));
-                map.put(appEntityField.getName(), appEntityField);
             }
 
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
@@ -2882,7 +2882,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             AppForm srcAppForm = environment().find(AppForm.class, formId);
             String oldDescription = srcAppForm.getDescription();
             srcAppForm.setApplicationId(destApplicationId);
-            srcAppForm.setEntity(ctx.componentSwap(srcAppForm.getEntity()));
+            srcAppForm.setEntity(ctx.entitySwap(srcAppForm.getEntity()));
             srcAppForm.setName(ctx.nameSwap(srcAppForm.getName()));
             srcAppForm.setDescription(ctx.messageSwap(srcAppForm.getDescription()));
             srcAppForm.setConsolidatedReview(ctx.messageSwap(srcAppForm.getConsolidatedReview()));
@@ -3018,10 +3018,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             srcAppPropertyRule.setName(ctx.nameSwap(srcAppPropertyRule.getName()));
             srcAppPropertyRule.setDescription(ctx.messageSwap(srcAppPropertyRule.getDescription()));
             srcAppPropertyRule.setEntity(ctx.entitySwap(srcAppPropertyRule.getEntity()));
-            srcAppPropertyRule.setDefaultList(ctx.componentSwap(srcAppPropertyRule.getDefaultList()));
+            srcAppPropertyRule.setDefaultList(ctx.entitySwap(srcAppPropertyRule.getDefaultList()));
 
             for (AppPropertyRuleChoice appPropertyRuleChoice : srcAppPropertyRule.getChoiceList()) {
-                appPropertyRuleChoice.setList(ctx.componentSwap(appPropertyRuleChoice.getList()));
+                appPropertyRuleChoice.setList(ctx.entitySwap(appPropertyRuleChoice.getList()));
             }
 
             environment().create(srcAppPropertyRule);
