@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Table;
 @Table(name = "FC_ASSIGNPAGE")
 public class AppAssignmentPage extends BaseApplicationEntity {
 
-    @Column(name = "ASSIGNPAGE_LABEL", length = 96)
+    @Column(name = "ASSIGNPAGE_LABEL", length = 128)
     private String label;
 
     @Column(length = 128)
@@ -42,28 +42,28 @@ public class AppAssignmentPage extends BaseApplicationEntity {
     @Column(length = 64)
     private String assignField;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String filterCaption1;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String filterCaption2;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String filterList1;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String filterList2;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String assignCaption;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String unassignCaption;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String assignList;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String unassignList;
 
     @Column(length = 64, nullable = true)

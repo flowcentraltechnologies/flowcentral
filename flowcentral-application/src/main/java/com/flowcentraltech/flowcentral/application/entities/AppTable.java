@@ -30,7 +30,7 @@ import com.tcdng.unify.core.annotation.Table;
 @Table(name = "FC_TABLE")
 public class AppTable extends BaseApplicationEntity {
 
-    @Column(name = "TABLE_LABEL", length = 96)
+    @Column(name = "TABLE_LABEL", length = 128)
     private String label;
 
     @Column(length = 128)

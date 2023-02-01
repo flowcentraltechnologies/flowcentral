@@ -38,7 +38,7 @@ public class AppTableFilter extends BaseConfigNamedEntity {
     @Column(length = 16, nullable = true)
     private String rowColor;
     
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String legendLabel;
     
     @Column(length = 64, nullable = true)

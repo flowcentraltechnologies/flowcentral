@@ -37,7 +37,7 @@ public class Application extends BaseConfigNamedEntity {
     @ForeignKey(Module.class)
     private Long moduleId;
 
-    @Column(name = "APPLICATION_LABEL", length = 96)
+    @Column(name = "APPLICATION_LABEL", length = 128)
     private String label;
 
     @Column

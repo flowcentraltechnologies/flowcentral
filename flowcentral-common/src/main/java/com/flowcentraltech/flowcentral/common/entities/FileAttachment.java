@@ -50,7 +50,7 @@ public class FileAttachment extends BaseAuditEntity {
     @Column(length = 64)
     private String name;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String title;
 
     @Column(name = "FILE_NM", length = 64, nullable = true)

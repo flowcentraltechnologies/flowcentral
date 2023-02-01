@@ -54,7 +54,7 @@ public class AppEntityField extends BaseConfigEntity {
     @Column(name = "ENTITYFIELD_NM", length = 64)
     private String name;
 
-    @Column(name = "ENTITYFIELD_LABEL", length = 96)
+    @Column(name = "ENTITYFIELD_LABEL", length = 128)
     private String label;
 
     @Column(name = "ENTITY_REF", length = 128, nullable = true)
