@@ -26,6 +26,7 @@ public enum ReplicationMatchType {
     PREFIX,
     SUFFIX,
     WILD,
+    WILD_EXCEPT_END_PREFIX,
     WILD_PREFIX,
     WILD_SUFFIX,
     NAME,

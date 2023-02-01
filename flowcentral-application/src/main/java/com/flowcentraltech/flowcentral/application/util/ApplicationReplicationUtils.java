@@ -54,7 +54,7 @@ public final class ApplicationReplicationUtils {
         Map<ReplicationElementType, ApplicationReplicationRule.Builder> builders = new HashMap<ReplicationElementType, ApplicationReplicationRule.Builder>();
         ApplicationReplicationRule.Builder namerb = new ApplicationReplicationRule.Builder(ReplicationMatchType.NAME);
         ApplicationReplicationRule.Builder componentrb = new ApplicationReplicationRule.Builder(
-                ReplicationMatchType.WILD_PREFIX);
+                ReplicationMatchType.WILD_EXCEPT_END_PREFIX);
         ApplicationReplicationRule.Builder messagerb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.WILD_SUFFIX);
         ApplicationReplicationRule.Builder classrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.CLASS);

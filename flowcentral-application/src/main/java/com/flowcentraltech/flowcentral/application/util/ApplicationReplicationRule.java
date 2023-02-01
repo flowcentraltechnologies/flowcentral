@@ -128,6 +128,18 @@ public class ApplicationReplicationRule {
                 }
                 return str;
             }
+            case WILD_EXCEPT_END_PREFIX: {
+                String ostr = str;
+                for (Map.Entry<String, String> entry : replace.entrySet()) {
+                    if (str.endsWith(entry.getKey())) {
+                        str = str.substring(0, str.length() - entry.getKey().length()).replaceAll(entry.getKey(),
+                                entry.getValue()) + entry.getKey();
+                    } else {
+                        str = str.replaceAll(entry.getKey(), entry.getValue());
+                    }
+                }
+                return concat != null && ostr.equals(str) ? concat + str : str;
+            }
             case WILD_PREFIX: {
                 String ostr = str;
                 for (Map.Entry<String, String> entry : replace.entrySet()) {
