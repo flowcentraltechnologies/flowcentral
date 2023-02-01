@@ -37,7 +37,7 @@ public class AppPropertyRuleChoice extends BaseConfigEntity {
     @Column(name = "CHOICE_NM", length = 64)
     private String name;
 
-    @Column(name = "CHOICE_VAL", length = 96)
+    @Column(name = "CHOICE_VAL", length = 128)
     private String list;
 
     @ListOnly(key = "appPropertyRuleId", property = "name")

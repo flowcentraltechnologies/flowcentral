@@ -29,7 +29,7 @@ public abstract class BaseNamedEntity extends BaseAuditEntity {
     @Column(name = "ENTITY_NM", length = 64)
     private String name;
 
-    @Column(name = "ENTITY_DESC", length = 96)
+    @Column(name = "ENTITY_DESC", length = 128)
     private String description;
 
     public final String getName() {

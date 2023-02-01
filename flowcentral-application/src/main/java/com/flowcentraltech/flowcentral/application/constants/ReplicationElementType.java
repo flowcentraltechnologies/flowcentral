@@ -37,6 +37,8 @@ public enum ReplicationElementType implements EnumConst {
             "CLS"),
     ENTITY(
             "ENT"),
+    FIELD(
+            "FLD"),
     TABLE(
             "TBL"),
     AUTOFORMAT(

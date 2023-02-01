@@ -36,10 +36,10 @@ public class AppPropertyListItem extends BaseEntity {
     @Column(name = "PROPLISTITEM_NM", length = 64)
     private String name;
 
-    @Column(name = "PROPLISTITEM_DESC", length = 96)
+    @Column(name = "PROPLISTITEM_DESC", length = 128)
     private String description;
 
-    @Column(name = "ITEM_REFERENCE", length = 96, nullable = true)
+    @Column(name = "ITEM_REFERENCE", length = 128, nullable = true)
     private String references;
 
     @Column(length = 128)

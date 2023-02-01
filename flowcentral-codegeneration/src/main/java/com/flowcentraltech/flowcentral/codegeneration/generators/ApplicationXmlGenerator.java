@@ -487,8 +487,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 if (!DataUtils.isBlank(appEntity.getSearchInputList())) {
                     List<EntitySearchInputConfig> searchInputList = new ArrayList<EntitySearchInputConfig>();
                     for (AppEntitySearchInput appEntitySearchInput : appEntity.getSearchInputList()) {
-                        EntitySearchInputConfig entitySearchInputConfig = InputWidgetUtils.getSearchInputConfig(
-                                appEntitySearchInput);
+                        EntitySearchInputConfig entitySearchInputConfig = InputWidgetUtils
+                                .getEntitySearchInputConfig(appEntitySearchInput);
                         String searchInputKey = getDescriptionKey(descKey, "entitysearchinput",
                                 appEntitySearchInput.getName());
                         ctx.addMessage(StaticMessageCategoryType.ENTITY, searchInputKey,

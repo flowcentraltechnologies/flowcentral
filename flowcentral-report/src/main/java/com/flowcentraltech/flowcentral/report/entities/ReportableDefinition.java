@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
 @Table(name = "FC_REPORTABLEDEF", uniqueConstraints = { @UniqueConstraint({ "name" }) })
 public class ReportableDefinition extends BaseApplicationEntity {
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String title;
 
     @Column(length = 128)

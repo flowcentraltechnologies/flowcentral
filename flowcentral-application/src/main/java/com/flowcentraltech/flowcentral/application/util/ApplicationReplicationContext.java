@@ -44,13 +44,15 @@ public class ApplicationReplicationContext {
 
     private final ApplicationReplicationRule autoFormatRule;
 
+    private final ApplicationReplicationRule fieldRule;
+
     private final ApplicationReplicationRule entityRule;
 
     public ApplicationReplicationContext(AppletUtilities au, String srcApplicationName, String destApplicationName,
             ApplicationReplicationRule nameRule, ApplicationReplicationRule componentRule,
             ApplicationReplicationRule messageRule, ApplicationReplicationRule classRule,
             ApplicationReplicationRule tableRule, ApplicationReplicationRule autoFormatRule,
-            ApplicationReplicationRule entityRule) {
+            ApplicationReplicationRule fieldRule, ApplicationReplicationRule entityRule) {
         this.au = au;
         this.srcApplicationName = srcApplicationName;
         this.destApplicationName = destApplicationName;
@@ -60,6 +62,7 @@ public class ApplicationReplicationContext {
         this.classRule = classRule;
         this.tableRule = tableRule;
         this.autoFormatRule = autoFormatRule;
+        this.fieldRule = fieldRule;
         this.entityRule = entityRule;
     }
 
@@ -93,6 +96,10 @@ public class ApplicationReplicationContext {
 
     public String tableSwap(String tableName) throws UnifyException {
         return tableRule.apply(tableName);
+    }
+
+    public String fieldSwap(String fieldName) throws UnifyException {
+        return fieldRule.apply(fieldName);
     }
 
     public String autoFormatSwap(String autoFormat) throws UnifyException {

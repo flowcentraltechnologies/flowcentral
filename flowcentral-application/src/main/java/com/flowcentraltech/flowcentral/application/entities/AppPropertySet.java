@@ -37,7 +37,7 @@ public class AppPropertySet extends BaseEntity {
     @ForeignKey(AppPropertyList.class)
     private Long appPropertyListId;
 
-    @Column(name = "PROPSETLIST_LABEL", length = 96)
+    @Column(name = "PROPSETLIST_LABEL", length = 128)
     private String label;
 
     @ListOnly(key = "appPropertyListId", property = "name")

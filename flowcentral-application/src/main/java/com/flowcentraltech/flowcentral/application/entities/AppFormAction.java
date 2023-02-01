@@ -43,7 +43,7 @@ public class AppFormAction extends BaseConfigNamedEntity {
     @ForeignKey(name = "HIGHLIGHT_TY", nullable = true)
     private HighlightType highlightType;
     
-    @Column(name = "FORMACTION_LABEL", length = 96)
+    @Column(name = "FORMACTION_LABEL", length = 128)
     private String label;
 
     @Column(name = "FORMACTION_SYMBOL", length = 64, nullable = true)

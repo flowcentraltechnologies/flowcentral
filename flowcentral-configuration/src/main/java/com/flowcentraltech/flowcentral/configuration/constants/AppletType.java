@@ -37,70 +37,87 @@ public enum AppletType implements EnumConst {
     MANAGE_ENTITYLIST(
             "MEL",
             "/manageentitylistapplet",
-            false),
+            false,
+            true),
     MANAGE_ENTITYLIST_ASSIGN(
             "MEA",
             "/manageentitylistapplet",
-            false),
+            false,
+            true),
     MANAGE_ENTITYLIST_SINGLEFORM(
             "MLS",
             "/manageentitylistsingleformapplet",
-            false),
+            false,
+            true),
     MANAGE_LOADINGLIST(
             "MLL",
             "/manageloadinglistapplet",
-            false),
+            false,
+            true),
     HEADLESS_TABS(
             "HDL",
             "/headlesstabsformapplet",
-            false),
+            false,
+            true),
     CREATE_ENTITY(
             "CEN",
             "/createentityapplet",
+            true,
             true),
     CREATE_ENTITY_SINGLEFORM(
             "CNS",
             "/createentitysingleformapplet",
+            true,
             true),
     MANAGE_PROPERTYLIST(
             "MPL",
             null,
-            false),
+            false,
+            true),
     TASK_EXECUTION(
             "TEX",
             "/taskexecutionapplet",
+            true,
             true),
     DATA_IMPORT(
             "DIM",
             "/dataimportapplet",
+            true,
             true),
     FACADE(
             "FAC",
             null,
+            false,
             false),
     PATH_PAGE(
             "PPG",
             null,
-            false),
+            false,
+            true),
     PATH_WINDOW(
             "PWN",
             null,
-            false),
+            false,
+            true),
     REVIEW_WORKITEMS(
             "RWK",
             "/reviewworkitemsapplet",
-            false),
+            false,
+            true),
     REVIEW_SINGLEFORMWORKITEMS(
             "RWS",
             "/reviewsingleformworkitemsapplet",
-            false),
+            false,
+            true),
     REVIEW_WIZARDWORKITEMS(
             "RWZ",
             "/reviewwizardworkitemsapplet",
-            false),
+            false,
+            true),
     STUDIO_FC_COMPONENT(
             "SAC",
             null,
+            true,
             true);
 
     public static final List<AppletType> MANAGE_ENTITY_LIST_TYPES = Collections
@@ -117,10 +134,13 @@ public enum AppletType implements EnumConst {
 
     private final boolean formInitial;
 
-    private AppletType(String code, String path, boolean formInitial) {
+    private final boolean replication;
+
+    private AppletType(String code, String path, boolean formInitial, boolean replication) {
         this.code = code;
         this.path = path;
         this.formInitial = formInitial;
+        this.replication = replication;
     }
 
     @Override
@@ -136,9 +156,13 @@ public enum AppletType implements EnumConst {
     public String path() {
         return path;
     }
-
+    
     public boolean isFormInitial() {
         return formInitial;
+    }
+
+    public boolean isSupportReplication() {
+        return replication;
     }
 
     public boolean reserved() {

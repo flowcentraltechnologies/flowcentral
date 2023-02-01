@@ -35,6 +35,10 @@ public class AppAppletQuery extends BaseApplicationEntityQuery<AppApplet> {
         return (AppAppletQuery) addNotEquals("applicationName", applicationName);
     }
 
+    public AppAppletQuery routeToApplet(String routeToApplet) {
+        return (AppAppletQuery) addEquals("routeToApplet", routeToApplet);
+    }
+
     public AppAppletQuery entity(String entity) {
         return (AppAppletQuery) addEquals("entity", entity);
     }

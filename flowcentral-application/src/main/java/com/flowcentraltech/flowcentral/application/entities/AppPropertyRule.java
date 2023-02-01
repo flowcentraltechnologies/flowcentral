@@ -45,7 +45,7 @@ public class AppPropertyRule extends BaseApplicationEntity {
     @Column(length = 64)
     private String propValField;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String defaultList;
 
     @Column

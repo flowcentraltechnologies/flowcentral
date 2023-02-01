@@ -34,7 +34,7 @@ public class AppAppletProp extends BaseConfigEntity {
     @ForeignKey(AppApplet.class)
     private Long appAppletId;
 
-    @Column(name = "APPLETPROP_NM", length = 96)
+    @Column(name = "APPLETPROP_NM", length = 128)
     private String name;
 
     @Column(name = "APPLETPROP_VAL", length = 1024, nullable = true)

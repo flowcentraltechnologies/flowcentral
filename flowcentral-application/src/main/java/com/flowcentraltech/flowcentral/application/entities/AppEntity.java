@@ -37,7 +37,7 @@ public class AppEntity extends BaseApplicationEntity {
     @ForeignKey(name = "ENTITY_BASE_TY")
     private EntityBaseType baseType;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String label;
 
     @Column(length = 64, nullable = true)

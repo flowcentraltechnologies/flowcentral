@@ -81,10 +81,10 @@ public class ApplicationReplicationRule {
 
                     final String entityName = prefix != null && nameRule != null ? nameRule.apply(parts.getEntityName())
                             : parts.getEntityName();
-                    final String applicationName = prefix != null ? prefix
-                            : (concat != null ? concat + parts.getApplicationName() : parts.getApplicationName());
+                    final String applicationName = prefix != null ? prefix : parts.getApplicationName();
                     return ApplicationNameUtils.getApplicationEntityLongName(applicationName, entityName);
                 }
+                break;
             case NAME:
                 for (Map.Entry<String, String> entry : replace.entrySet()) {
                     if (str.startsWith(entry.getKey())) {
@@ -127,6 +127,18 @@ public class ApplicationReplicationRule {
                     str = str.replaceAll(entry.getKey(), entry.getValue());
                 }
                 return str;
+            }
+            case WILD_EXCEPT_END_PREFIX: {
+                String ostr = str;
+                for (Map.Entry<String, String> entry : replace.entrySet()) {
+                    if (str.endsWith(entry.getKey())) {
+                        str = str.substring(0, str.length() - entry.getKey().length()).replaceAll(entry.getKey(),
+                                entry.getValue()) + entry.getKey();
+                    } else {
+                        str = str.replaceAll(entry.getKey(), entry.getValue());
+                    }
+                }
+                return concat != null && ostr.equals(str) ? concat + str : str;
             }
             case WILD_PREFIX: {
                 String ostr = str;

@@ -39,16 +39,16 @@ public class AppApplet extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String entity;
 
-    @Column(length = 96)
+    @Column(length = 128)
     private String label;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String icon;
 
     @Column(length = 128, nullable = true)
     private String routeToApplet;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String path;
 
     @Column(length = 64, nullable = true)

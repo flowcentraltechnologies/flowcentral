@@ -88,10 +88,4 @@ public class FilterRestrictionConfig {
         this.restrictionList = restrictionList;
     }
 
-    @Override
-    public String toString() {
-        return "FilterRestrictionConfig [type=" + type + ", field=" + field + ", paramA=" + paramA + ", paramB="
-                + paramB + ", restrictionList=" + restrictionList + "]";
-    }
-
 }

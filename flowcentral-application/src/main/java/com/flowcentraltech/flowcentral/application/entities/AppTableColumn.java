@@ -39,7 +39,7 @@ public class AppTableColumn extends BaseConfigEntity {
     @Column(length = 128)
     private String renderWidget;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String label;
 
     @Column(length = 64, nullable = true)

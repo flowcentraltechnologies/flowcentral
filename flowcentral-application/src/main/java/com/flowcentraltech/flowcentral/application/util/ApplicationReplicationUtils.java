@@ -25,18 +25,13 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ReplicationElementType;
 import com.flowcentraltech.flowcentral.application.constants.ReplicationMatchType;
+import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppFieldSequence;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppSetValues;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
-import com.flowcentraltech.flowcentral.configuration.constants.SetValueType;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SetValueConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.WidgetRuleEntryConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.WidgetRulesConfig;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UnifyOperationException;
-import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Application replication utilities.
@@ -59,7 +54,7 @@ public final class ApplicationReplicationUtils {
         Map<ReplicationElementType, ApplicationReplicationRule.Builder> builders = new HashMap<ReplicationElementType, ApplicationReplicationRule.Builder>();
         ApplicationReplicationRule.Builder namerb = new ApplicationReplicationRule.Builder(ReplicationMatchType.NAME);
         ApplicationReplicationRule.Builder componentrb = new ApplicationReplicationRule.Builder(
-                ReplicationMatchType.PREFIX);
+                ReplicationMatchType.WILD_EXCEPT_END_PREFIX);
         ApplicationReplicationRule.Builder messagerb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.WILD_SUFFIX);
         ApplicationReplicationRule.Builder classrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.CLASS);
@@ -69,6 +64,7 @@ public final class ApplicationReplicationUtils {
                 ReplicationMatchType.WILD_PREFIX);
         ApplicationReplicationRule.Builder entityrb = new ApplicationReplicationRule.Builder(
                 ReplicationMatchType.ENTITY);
+        ApplicationReplicationRule.Builder fieldrb = new ApplicationReplicationRule.Builder(ReplicationMatchType.WILD);
         builders.put(ReplicationElementType.NAME, namerb);
         builders.put(ReplicationElementType.COMPONENT, componentrb);
         builders.put(ReplicationElementType.MESSAGE, messagerb);
@@ -76,6 +72,7 @@ public final class ApplicationReplicationUtils {
         builders.put(ReplicationElementType.TABLE, tablerb);
         builders.put(ReplicationElementType.AUTOFORMAT, autoformatrb);
         builders.put(ReplicationElementType.ENTITY, entityrb);
+        builders.put(ReplicationElementType.FIELD, fieldrb);
 
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(new ByteArrayInputStream(replicationRulesFile)))) {
@@ -134,46 +131,42 @@ public final class ApplicationReplicationUtils {
         ApplicationReplicationRule nameRule = namerb.build();
         return new ApplicationReplicationContext(au, srcApplicationName, destApplicationName, nameRule,
                 componentrb.build(), messagerb.build(), classrb.build(), tablerb.build(), autoformatrb.build(),
-                entityrb.build().setNameRule(nameRule));
+                fieldrb.build(), entityrb.build().setNameRule(nameRule));
     }
 
-    public static FilterConfig getReplicatedFilterConfig(ApplicationReplicationContext ctx, AppFilter appFilter)
+    public static void applyReplicationRules(ApplicationReplicationContext ctx, AppFilter appFilter)
             throws UnifyException {
-        FilterConfig filterConfig = InputWidgetUtils.getFilterConfig(ctx.au(), appFilter);
-        if (filterConfig != null) {
-            filterConfig.setDescription(ctx.messageSwap(filterConfig.getDescription()));
-            filterConfig.setFilterGenerator(ctx.componentSwap(filterConfig.getFilterGenerator()));
+        if (appFilter != null) {
+            appFilter.setDefinition(ctx.fieldSwap(appFilter.getDefinition()));
         }
-
-        return filterConfig;
     }
 
-    public static SetValuesConfig getReplicatedSetValuesConfig(ApplicationReplicationContext ctx, String valueGenerator,
+    public static void applyReplicationRules(ApplicationReplicationContext ctx, String valueGenerator,
             AppSetValues appSetValues) throws UnifyException {
-        SetValuesConfig setValuesConfig = InputWidgetUtils.getSetValuesConfig(valueGenerator, appSetValues);
-        if (setValuesConfig != null) {
-            setValuesConfig.setDescription(ctx.messageSwap(setValuesConfig.getDescription()));
-            if (!DataUtils.isBlank(setValuesConfig.getSetValueList())) {
-                for (SetValueConfig setValueConfig : setValuesConfig.getSetValueList()) {
-                    if (SetValueType.GENERATOR.equals(setValueConfig.getType())) {
-                        setValueConfig.setValue(ctx.componentSwap(setValueConfig.getValue()));
-                    }
-                }
-            }
+        if (appSetValues != null) {
+            appSetValues.setDefinition(ctx.fieldSwap(appSetValues.getDefinition()));
         }
-
-        return setValuesConfig;
     }
 
-    public static WidgetRulesConfig getReplicatedWidgetRulesConfig(ApplicationReplicationContext ctx,
-            AppWidgetRules widgetRules) throws UnifyException {
-        WidgetRulesConfig widgetRulesConfig = InputWidgetUtils.getWidgetRulesConfig(widgetRules);
-        if (widgetRulesConfig != null && widgetRulesConfig.getEntryList() != null) {
-            for (WidgetRuleEntryConfig widgetRuleEntryConfig : widgetRulesConfig.getEntryList()) {
-                widgetRuleEntryConfig.setWidget(ctx.componentSwap(widgetRuleEntryConfig.getWidget()));
-            }
+    public static void applyReplicationRules(ApplicationReplicationContext ctx, AppWidgetRules widgetRules)
+            throws UnifyException {
+        if (widgetRules != null) {
+            widgetRules.setDefinition(ctx.fieldSwap(widgetRules.getDefinition()));
         }
+    }
 
-        return widgetRulesConfig;
+    public static void applyReplicationRules(ApplicationReplicationContext ctx,
+            AppEntitySearchInput appEntitySearchInput) throws UnifyException {
+        if (appEntitySearchInput != null && appEntitySearchInput.getSearchInput() != null) {
+            appEntitySearchInput.getSearchInput()
+                    .setDefinition(ctx.fieldSwap(appEntitySearchInput.getSearchInput().getDefinition()));
+        }
+    }
+
+    public static void applyReplicationRules(ApplicationReplicationContext ctx,
+            AppFieldSequence appFieldSequence) throws UnifyException {
+        if (appFieldSequence != null) {
+            appFieldSequence.setDefinition(ctx.fieldSwap(appFieldSequence.getDefinition()));
+        }
     }
 }

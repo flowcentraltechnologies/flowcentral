@@ -39,10 +39,10 @@ public class Chart extends BaseApplicationEntity {
     @ForeignKey(name = "PALETTE_TY")
     private ChartPaletteType paletteType;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String title;
 
-    @Column(length = 96, nullable = true)
+    @Column(length = 128, nullable = true)
     private String subTitle;
 
     @Column(length = 64)
