@@ -2872,10 +2872,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             srcAppForm.setEntity(ctx.entitySwap(srcAppForm.getEntity()));
             srcAppForm.setName(ctx.nameSwap(srcAppForm.getName()));
             srcAppForm.setDescription(ctx.messageSwap(srcAppForm.getDescription()));
-            srcAppForm.setConsolidatedReview(ctx.messageSwap(srcAppForm.getConsolidatedReview()));
-            srcAppForm.setConsolidatedValidation(ctx.messageSwap(srcAppForm.getConsolidatedValidation()));
-            srcAppForm.setConsolidatedState(ctx.messageSwap(srcAppForm.getConsolidatedState()));
-            srcAppForm.setListingGenerator(ctx.messageSwap(srcAppForm.getListingGenerator()));
+            srcAppForm.setConsolidatedReview(ctx.componentSwap(srcAppForm.getConsolidatedReview()));
+            srcAppForm.setConsolidatedValidation(ctx.componentSwap(srcAppForm.getConsolidatedValidation()));
+            srcAppForm.setConsolidatedState(ctx.componentSwap(srcAppForm.getConsolidatedState()));
+            srcAppForm.setListingGenerator(ctx.componentSwap(srcAppForm.getListingGenerator()));
 
             // Filters
             for (AppFormFilter appFormFilter : srcAppForm.getFilterList()) {
