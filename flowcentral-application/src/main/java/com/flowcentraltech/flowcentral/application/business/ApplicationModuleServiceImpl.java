@@ -2770,6 +2770,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 srcAppEntity.setTableName(ctx.tableSwap(srcAppEntity.getTableName()));
             }
 
+            Map<String, AppEntityField> map = new HashMap<String, AppEntityField>();
             for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
                 appEntityField.setName(ctx.fieldSwap(appEntityField.getName()));
                 appEntityField.setLabel(ctx.fieldSwap(appEntityField.getLabel()));
@@ -2780,9 +2781,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 appEntityField.setAutoFormat(ctx.autoFormatSwap(appEntityField.getAutoFormat()));
                 appEntityField.setInputListKey(ctx.fieldSwap(appEntityField.getInputListKey()));
                 appEntityField.setReferences(ctx.entitySwap(appEntityField.getReferences()));
+                map.put(appEntityField.getName(), appEntityField);
+             }
+
+            for (AppEntityField appEntityField : srcAppEntity.getFieldList()) {
                 if (appEntityField.getDataType().isListOnly()) {
-                    if (!ApplicationNameUtils.isLongName(appEntityField.getReferences())
-                            || appEntityField.getReferences().startsWith(destApplicationName)) {
+                    AppEntityField refAppEntityField = map.get(appEntityField.getKey());
+                    if (!ApplicationNameUtils.isLongName(refAppEntityField.getReferences())
+                            || refAppEntityField.getReferences().startsWith(destApplicationName)) {
                         appEntityField.setKey(ctx.fieldSwap(appEntityField.getKey()));
                         appEntityField.setProperty(ctx.fieldSwap(appEntityField.getProperty()));
                     }
