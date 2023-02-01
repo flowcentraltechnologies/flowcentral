@@ -2673,6 +2673,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 srcAppApplet.setLabel(ctx.messageSwap(srcAppApplet.getLabel()));
                 srcAppApplet.setEntity(ctx.entitySwap(srcAppApplet.getEntity()));
                 srcAppApplet.setRouteToApplet(ctx.entitySwap(srcAppApplet.getRouteToApplet()));
+                srcAppApplet.setAssignField(ctx.fieldSwap(srcAppApplet.getAssignField()));
+                srcAppApplet.setAssignDescField(ctx.fieldSwap(srcAppApplet.getAssignDescField()));
+                srcAppApplet.setBaseField(ctx.fieldSwap(srcAppApplet.getBaseField()));
+                srcAppApplet.setPseudoDeleteField(ctx.fieldSwap(srcAppApplet.getPseudoDeleteField()));
 
                 // Applet properties
                 for (AppAppletProp appAppletProp : srcAppApplet.getPropList()) {

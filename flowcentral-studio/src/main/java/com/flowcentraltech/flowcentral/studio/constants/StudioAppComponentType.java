@@ -55,6 +55,7 @@ public enum StudioAppComponentType implements EnumConst {
             null,
             null,
             null,
+            null,
             0,
             AppletType.MANAGE_ENTITYLIST,
             null),
@@ -65,6 +66,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.collaborations}",
             "studio.menu.label.collaboration",
             "users",
+            null,
             null,
             null,
             null,
@@ -81,6 +83,7 @@ public enum StudioAppComponentType implements EnumConst {
             null,
             null,
             null,
+            null,
             0,
             AppletType.MANAGE_ENTITYLIST,
             null),
@@ -93,6 +96,7 @@ public enum StudioAppComponentType implements EnumConst {
             "grid",
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
+            null,
             null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
@@ -108,6 +112,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studioappcomponentapplet",
             "studiooncreateappapplet-policy",
             null,
+            "studioondeleteappapplet-policy",
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
@@ -122,6 +127,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studioappcomponentapplet",
             "studiooncreateappentity-policy",
             "studioonupdateappentity-policy",
+            null,
             StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             AppEntity.class),
@@ -134,6 +140,7 @@ public enum StudioAppComponentType implements EnumConst {
             "newspaper",
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
+            null,
             null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
@@ -149,6 +156,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
             null,
+            null,
             StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             Chart.class),
@@ -162,6 +170,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
             null,
+            null,
             StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             Dashboard.class),
@@ -174,6 +183,7 @@ public enum StudioAppComponentType implements EnumConst {
             "table",
             "/studioapptableapplet",
             "studiooncreatecomponent-policy",
+            null,
             null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
@@ -189,6 +199,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studioappformapplet",
             "studiooncreateappform-policy",
             null,
+            null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
@@ -202,6 +213,7 @@ public enum StudioAppComponentType implements EnumConst {
             "mail",
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
+            null,
             null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
@@ -217,6 +229,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
             null,
+            null,
             StudioAppComponentFlags.SUPPORTS_NEW | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             ReportConfiguration.class),
@@ -230,6 +243,7 @@ public enum StudioAppComponentType implements EnumConst {
             "/studioworkflowapplet",
             "studiooncreateworkflow-policy",
             "studioonupdateworkflow-policy",
+            null,
             StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
@@ -253,6 +267,8 @@ public enum StudioAppComponentType implements EnumConst {
 
     private final String updatePolicy;
 
+    private final String deletePolicy;
+
     private final boolean entityComponent;
 
     private final boolean supportsNew;
@@ -275,8 +291,8 @@ public enum StudioAppComponentType implements EnumConst {
     };
 
     private StudioAppComponentType(String code, String form, String caption, String caption2, String labelKey,
-            String icon, String appletPath, String createPolicy, String updatePolicy, int flags, AppletType appletType,
-            Class<? extends BaseApplicationEntity> componentType) {
+            String icon, String appletPath, String createPolicy, String updatePolicy, String deletePolicy, int flags,
+            AppletType appletType, Class<? extends BaseApplicationEntity> componentType) {
         this.code = code;
         this.form = form;
         this.caption = caption;
@@ -286,6 +302,7 @@ public enum StudioAppComponentType implements EnumConst {
         this.appletPath = appletPath;
         this.createPolicy = createPolicy;
         this.updatePolicy = updatePolicy;
+        this.deletePolicy = deletePolicy;
         this.entityComponent = (StudioAppComponentFlags.ENTITY_COMPONENT & flags) > 0;
         this.supportsNew = (StudioAppComponentFlags.SUPPORTS_NEW & flags) > 0;
         this.supportsSaveAs = (StudioAppComponentFlags.SUPPORTS_SAVEAS & flags) > 0;
@@ -322,13 +339,17 @@ public enum StudioAppComponentType implements EnumConst {
     public String appletPath() {
         return appletPath;
     }
-    
+
     public String createPolicy() {
         return createPolicy;
     }
 
     public String updatePolicy() {
         return updatePolicy;
+    }
+
+    public String deletePolicy() {
+        return deletePolicy;
     }
 
     public boolean isEntityComponent() {

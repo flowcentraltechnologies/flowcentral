@@ -165,6 +165,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION,
                                     "studioentity-updatecondition");
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE, "true");
+                            adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY, type.deletePolicy());
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION,
                                     "studioentity-deletecondition");
 
