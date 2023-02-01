@@ -51,7 +51,7 @@ public class StudioOnDeleteApplicationPolicy extends AbstractStudioAppletActionP
                 .build();
         EntityActionResult entityActionResult = new EntityActionResult(ctx, resultTaskSetup,
                 "Application Deletion Task");
-        entityActionResult.setTaskSuccessPath("applicationstudio/onDeleteApplication");
+        entityActionResult.setTaskSuccessPath("/applicationstudio/onDeleteApplication");
         return entityActionResult;
     }
 
