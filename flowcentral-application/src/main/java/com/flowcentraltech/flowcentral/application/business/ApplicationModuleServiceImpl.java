@@ -230,7 +230,6 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintC
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldValidationPolicyConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormActionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormAnnotationConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FormFieldConfig;
@@ -249,7 +248,6 @@ import com.flowcentraltech.flowcentral.configuration.xml.PropertyRuleConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.PropertySetConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.RefConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.RelatedListConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.SearchInputsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetStateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SuggestionTypeConfig;
@@ -2689,16 +2687,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 for (AppAppletSetValues appAppletSetValues : srcAppApplet.getSetValuesList()) {
                     appAppletSetValues.setDescription(ctx.messageSwap(appAppletSetValues.getDescription()));
                     appAppletSetValues.setValueGenerator(ctx.componentSwap(appAppletSetValues.getValueGenerator()));
-                    SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
-                            appAppletSetValues.getValueGenerator(), appAppletSetValues.getSetValues());
-                    appAppletSetValues.setSetValues(newAppSetValues(setValuesConfig));
+                    ApplicationReplicationUtils.applyReplicationRules(ctx, appAppletSetValues.getValueGenerator(),
+                            appAppletSetValues.getSetValues());
                 }
 
                 // Applet filters
                 for (AppAppletFilter appAppletFilter : srcAppApplet.getFilterList()) {
                     appAppletFilter.setDescription(ctx.messageSwap(appAppletFilter.getDescription()));
-                    appAppletFilter.setFilter(ApplicationReplicationUtils.getReplicatedAppFilter(ctx,
-                            appAppletFilter.getFilter()));
+                    ApplicationReplicationUtils.applyReplicationRules(ctx, appAppletFilter.getFilter());
                     appAppletFilter.setPreferredForm(ctx.entitySwap(appAppletFilter.getPreferredForm()));
                     appAppletFilter
                             .setPreferredChildListApplet(ctx.entitySwap(appAppletFilter.getPreferredChildListApplet()));
@@ -2745,9 +2741,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             srcAppRef.setSearchTable(ctx.entitySwap(srcAppRef.getSearchTable()));
             srcAppRef.setSelectHandler(ctx.componentSwap(srcAppRef.getSelectHandler()));
             srcAppRef.setFilterGenerator(ctx.componentSwap(srcAppRef.getFilterGenerator()));
-            FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                    srcAppRef.getFilter());
-            srcAppRef.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            ApplicationReplicationUtils.applyReplicationRules(ctx, srcAppRef.getFilter());
             environment().create(srcAppRef);
             logDebug(taskMonitor, "Reference [{0}] -> [{1}]...", oldDescription, srcAppRef.getDescription());
         }
@@ -2796,15 +2790,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
 
             for (AppEntitySearchInput appEntitySearchInput : srcAppEntity.getSearchInputList()) {
-                SearchInputsConfig searchInputsConfig = ApplicationReplicationUtils.getReplicatedSearchInputsConfig(ctx,
-                        appEntitySearchInput);
-                appEntitySearchInput.setSearchInput(InputWidgetUtils.newAppSearchInput(searchInputsConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appEntitySearchInput);
             }
 
             for (AppEntityUpload appEntityUpload : srcAppEntity.getUploadList()) {
-                FieldSequenceConfig fieldSequenceConfig = ApplicationReplicationUtils
-                        .getReplicatedFieldSequenceConfig(ctx, appEntityUpload.getFieldSequence());
-                appEntityUpload.setFieldSequence(InputWidgetUtils.newAppFieldSequence(fieldSequenceConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appEntityUpload.getFieldSequence());
             }
 
             for (AppEntityUniqueConstraint constraint : srcAppEntity.getUniqueConstraintList()) {
@@ -2859,9 +2849,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             // Filters
             for (AppTableFilter appTableFilter : srcAppTable.getFilterList()) {
                 appTableFilter.setFilterGenerator(ctx.componentSwap(appTableFilter.getFilterGenerator()));
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                        appTableFilter.getFilter());
-                appTableFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appTableFilter.getFilter());
             }
 
             // Table Loading
@@ -2892,18 +2880,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             // Filters
             for (AppFormFilter appFormFilter : srcAppForm.getFilterList()) {
                 appFormFilter.setFilterGenerator(ctx.componentSwap(appFormFilter.getFilterGenerator()));
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                        appFormFilter.getFilter());
-                appFormFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormFilter.getFilter());
             }
 
             // Actions
             for (AppFormAction appFormAction : srcAppForm.getActionList()) {
                 appFormAction.setName(ctx.nameSwap(appFormAction.getName()));
                 appFormAction.setPolicy(ctx.componentSwap(appFormAction.getPolicy()));
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                        appFormAction.getOnCondition());
-                appFormAction.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormAction.getOnCondition());
 
                 applicationPrivilegeManager.registerPrivilege(destApplicationId,
                         ApplicationPrivilegeConstants.APPLICATION_FORMACTION_CATEGORY_CODE,
@@ -2932,13 +2916,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             // State Policies
             for (AppFormStatePolicy appFormStatePolicy : srcAppForm.getFieldStateList()) {
                 appFormStatePolicy.setValueGenerator(ctx.componentSwap(appFormStatePolicy.getValueGenerator()));
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                        appFormStatePolicy.getOnCondition());
-                appFormStatePolicy.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
-                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
-                        appFormStatePolicy.getValueGenerator(), appFormStatePolicy.getSetValues());
-                appFormStatePolicy.setSetValues(newAppSetValues(setValuesConfig));
-
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormStatePolicy.getOnCondition());
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormStatePolicy.getValueGenerator(),
+                        appFormStatePolicy.getSetValues());
                 for (AppFormSetState appFormSetState : appFormStatePolicy.getSetStateList()) {
                     if (appFormSetState.getType().isFieldType()) {
                         appFormSetState.setTarget(ctx.fieldSwap(appFormSetState.getTarget()));
@@ -2948,12 +2928,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
             // Widget Rule Policies
             for (AppFormWidgetRulesPolicy appFormWidgetRulesPolicy : srcAppForm.getWidgetRulesList()) {
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                        appFormWidgetRulesPolicy.getOnCondition());
-                appFormWidgetRulesPolicy.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
-                WidgetRulesConfig widgetRulesConfig = ApplicationReplicationUtils.getReplicatedWidgetRulesConfig(ctx,
-                        appFormWidgetRulesPolicy.getWidgetRules());
-                appFormWidgetRulesPolicy.setWidgetRules(newAppWidgetRules(widgetRulesConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormWidgetRulesPolicy.getOnCondition());
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormWidgetRulesPolicy.getWidgetRules());
             }
 
             // Field Validation Policies
@@ -2966,17 +2942,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             // Form Validation Policies
             for (AppFormValidationPolicy appFormValidationPolicy : srcAppForm.getFormValidationList()) {
                 appFormValidationPolicy.setErrorMatcher(ctx.componentSwap(appFormValidationPolicy.getErrorMatcher()));
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                        appFormValidationPolicy.getErrorCondition());
-                appFormValidationPolicy.setErrorCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormValidationPolicy.getErrorCondition());
             }
 
             // Form Review Policies
             for (AppFormReviewPolicy appFormReviewPolicy : srcAppForm.getFormReviewList()) {
                 appFormReviewPolicy.setErrorMatcher(ctx.componentSwap(appFormReviewPolicy.getErrorMatcher()));
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                        appFormReviewPolicy.getErrorCondition());
-                appFormReviewPolicy.setErrorCondition(InputWidgetUtils.newAppFilter(filterConfig));
+                ApplicationReplicationUtils.applyReplicationRules(ctx, appFormReviewPolicy.getErrorCondition());
             }
 
             environment().create(srcAppForm);

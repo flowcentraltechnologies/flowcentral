@@ -40,7 +40,6 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ParameterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
@@ -220,11 +219,11 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             srcReportableDefinition.setTitle(ctx.messageSwap(srcReportableDefinition.getTitle()));
             srcReportableDefinition.setEntity(ctx.entitySwap(srcReportableDefinition.getEntity()));
 
-            for (ReportableField reportableField: srcReportableDefinition.getFieldList()) {
+            for (ReportableField reportableField : srcReportableDefinition.getFieldList()) {
                 reportableField.setName(ctx.fieldSwap(reportableField.getName()));
                 reportableField.setDescription(ctx.messageSwap(reportableField.getDescription()));
             }
-            
+
             environment().create(srcReportableDefinition);
             registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportablePrivilegeName(ApplicationNameUtils
@@ -247,15 +246,13 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             srcReportConfiguration.setTitle(ctx.messageSwap(srcReportConfiguration.getTitle()));
             srcReportConfiguration.setReportable(ctx.entitySwap(srcReportConfiguration.getReportable()));
 
-            FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
-                    srcReportConfiguration.getFilter());
-            srcReportConfiguration.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
+            ApplicationReplicationUtils.applyReplicationRules(ctx, srcReportConfiguration.getFilter());
 
-            for (ReportColumn reportColumn: srcReportConfiguration.getColumnList()) {
+            for (ReportColumn reportColumn : srcReportConfiguration.getColumnList()) {
                 reportColumn.setFieldName(ctx.fieldSwap(reportColumn.getFieldName()));
                 reportColumn.setDescription(ctx.messageSwap(reportColumn.getDescription()));
             }
-            
+
             environment().create(srcReportConfiguration);
             registerPrivilege(destApplicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                     PrivilegeNameUtils.getReportConfigPrivilegeName(ApplicationNameUtils

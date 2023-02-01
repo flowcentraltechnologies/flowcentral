@@ -39,7 +39,6 @@ import com.flowcentraltech.flowcentral.configuration.data.WorkflowWizardInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardConfig;
-import com.flowcentraltech.flowcentral.configuration.xml.FilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.SetValuesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfChannelConfig;
@@ -262,20 +261,17 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             // Filters
             for (WorkflowFilter workflowFilter : srcWorkflow.getFilterList()) {
                 workflowFilter.setFilterGenerator(ctx.componentSwap(workflowFilter.getFilterGenerator()));
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                ApplicationReplicationUtils.applyReplicationRules(ctx,
                         workflowFilter.getFilter());
-                workflowFilter.setFilter(InputWidgetUtils.newAppFilter(filterConfig));
             }
 
             // Set Values
             for (WorkflowSetValues workflowSetValues : srcWorkflow.getSetValuesList()) {
-                FilterConfig filterConfig = ApplicationReplicationUtils.getReplicatedFilterConfig(ctx,
+                ApplicationReplicationUtils.applyReplicationRules(ctx,
                         workflowSetValues.getOnCondition());
-                workflowSetValues.setOnCondition(InputWidgetUtils.newAppFilter(filterConfig));
                 workflowSetValues.setValueGenerator(ctx.componentSwap(workflowSetValues.getValueGenerator()));
-                SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                ApplicationReplicationUtils.applyReplicationRules(ctx,
                         workflowSetValues.getValueGenerator(), workflowSetValues.getSetValues());
-                workflowSetValues.setSetValues(newAppSetValues(setValuesConfig));
             }
 
             // Steps
@@ -287,9 +283,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
                 // Set values
                 if (wfStep.getSetValues() != null) {
-                    SetValuesConfig setValuesConfig = ApplicationReplicationUtils.getReplicatedSetValuesConfig(ctx,
+                    ApplicationReplicationUtils.applyReplicationRules(ctx,
                             null, wfStep.getSetValues().getSetValues());
-                    wfStep.getSetValues().setSetValues(newAppSetValues(setValuesConfig));
                 }
 
                 // Alerts
