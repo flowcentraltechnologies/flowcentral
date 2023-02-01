@@ -60,7 +60,7 @@
 .fc-tableeditor .slot {display:inline-block;height:342px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
 .fc-tableeditor .slothdr {border-bottom: solid 1px #909090;background-color:#505965;
 	 font-weight:bold; color:#ffffff; font-size:7pt;}
-.fc-tableeditor .slotcap {display:inline-block; width: 86px; cursor:grab;}
+.fc-tableeditor .slotcap {display:inline-block; width: 84px; cursor:grab;}
 .fc-tableeditor .slotcap span {display:block; text-align:center;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .fc-tableeditor .slotact {display:inline-block; width:30px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
 .fc-tableeditor .actbtn {padding:2px 2px; min-height:14px; min-width:14px; color:#ffffff; font-size:8px;cursor: pointer;}
