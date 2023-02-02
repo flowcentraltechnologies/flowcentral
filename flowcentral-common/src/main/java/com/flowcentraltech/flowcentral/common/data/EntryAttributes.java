@@ -14,9 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.widgets;
-
-import com.flowcentraltech.flowcentral.application.data.EntityFieldAttributes;
+package com.flowcentraltech.flowcentral.common.data;
 
 /**
  * Entry attributes
@@ -56,6 +54,11 @@ public class EntryAttributes implements EntityFieldAttributes {
         this.precision = precision;
         this.scale = scale;
         this.allowNegative = allowNegative;
+    }
+
+    public EntryAttributes(String suggestionType, String references) {
+        this.suggestionType = suggestionType;
+        this.references = references;
     }
 
     public EntryAttributes() {

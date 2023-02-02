@@ -32,7 +32,6 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
@@ -56,6 +55,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.data.DateRange;
+import com.flowcentraltech.flowcentral.common.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.common.input.StringInput;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;

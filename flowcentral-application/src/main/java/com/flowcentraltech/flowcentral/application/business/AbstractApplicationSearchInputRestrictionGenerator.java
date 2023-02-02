@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.application.business;
 import com.flowcentraltech.flowcentral.common.business.AbstractSearchInputRestrictionGenerator;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.constants.SearchInputRestrictionDataType;
+import com.flowcentraltech.flowcentral.common.data.EntryAttributes;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
@@ -29,11 +31,18 @@ import com.tcdng.unify.core.annotation.Configurable;
 public abstract class AbstractApplicationSearchInputRestrictionGenerator
         extends AbstractSearchInputRestrictionGenerator {
 
+    private static final EntryAttributes BLANK_ENTRY_ATTRIBUTES = new EntryAttributes(0, 0, 0, 0, false);
+    
     @Configurable
     private AppletUtilities au;
 
     public AbstractApplicationSearchInputRestrictionGenerator(SearchInputRestrictionDataType inputType) {
         super(inputType);
+    }
+
+    @Override
+    public EntryAttributes getEntryAttributes() throws UnifyException {
+        return BLANK_ENTRY_ATTRIBUTES;
     }
 
     public final void setAu(AppletUtilities au) {

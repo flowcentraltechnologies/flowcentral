@@ -17,11 +17,11 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.common.business.SearchInputRestrictionGenerator;
+import com.flowcentraltech.flowcentral.common.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.configuration.constants.SearchConditionType;
 import com.tcdng.unify.core.UnifyException;
@@ -68,39 +68,54 @@ public class SearchEntry implements EntityFieldAttributes {
     }
 
     @Override
-    public String getSuggestionType() {
-        return null;
-    }
-
-    @Override
-    public String getReferences() throws UnifyException {
-        return isGeneratorEntry() ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getReferences()
+    public String getSuggestionType() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()
+                        .getSuggestionType()
                 : null;
     }
 
     @Override
-    public int getMinLen() {
-        return 0;
+    public String getReferences() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes().getReferences()
+                : null;
     }
 
     @Override
-    public int getMaxLen() {
-        return 0;
+    public int getMinLen() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes().getMinLen()
+                : 0;
     }
 
     @Override
-    public int getPrecision() {
-        return 0;
+    public int getMaxLen() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes().getMaxLen()
+                : 0;
     }
 
     @Override
-    public int getScale() {
-        return 0;
+    public int getPrecision() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes().getPrecision()
+                : 0;
     }
 
     @Override
-    public boolean isAllowNegative() {
-        return false;
+    public int getScale() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes().getScale()
+                : 0;
+    }
+
+    @Override
+    public boolean isAllowNegative() throws UnifyException {
+        return isGeneratorEntry()
+                ? au.getComponent(SearchInputRestrictionGenerator.class, generator).getEntryAttributes()
+                        .isAllowNegative()
+                : false;
     }
 
     public String getLabel() {
