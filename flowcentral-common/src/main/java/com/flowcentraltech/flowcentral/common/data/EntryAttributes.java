@@ -24,6 +24,8 @@ package com.flowcentraltech.flowcentral.common.data;
  */
 public class EntryAttributes implements EntityFieldAttributes {
 
+    public static final EntryAttributes BLANK = new EntryAttributes();
+
     private String suggestionType;
 
     private String references;
@@ -38,7 +40,8 @@ public class EntryAttributes implements EntityFieldAttributes {
 
     private boolean allowNegative;
 
-    public EntryAttributes(String suggestionType, String references, int minLen, int maxLen, int precision, int scale, boolean allowNegative) {
+    private EntryAttributes(String suggestionType, String references, int minLen, int maxLen, int precision, int scale,
+            boolean allowNegative) {
         this.suggestionType = suggestionType;
         this.references = references;
         this.minLen = minLen;
@@ -48,20 +51,7 @@ public class EntryAttributes implements EntityFieldAttributes {
         this.allowNegative = allowNegative;
     }
 
-    public EntryAttributes(int minLen, int maxLen, int precision, int scale, boolean allowNegative) {
-        this.minLen = minLen;
-        this.maxLen = maxLen;
-        this.precision = precision;
-        this.scale = scale;
-        this.allowNegative = allowNegative;
-    }
-
-    public EntryAttributes(String suggestionType, String references) {
-        this.suggestionType = suggestionType;
-        this.references = references;
-    }
-
-    public EntryAttributes() {
+    private EntryAttributes() {
 
     }
 
@@ -100,4 +90,59 @@ public class EntryAttributes implements EntityFieldAttributes {
         return allowNegative;
     }
 
+    public static class Builder {
+
+        private String suggestionType;
+
+        private String references;
+
+        private int minLen;
+
+        private int maxLen;
+
+        private int precision;
+
+        private int scale;
+
+        private boolean allowNegative;
+
+        public Builder suggestionType(String suggestionType) {
+            this.suggestionType = suggestionType;
+            return this;
+        }
+
+        public Builder references(String references) {
+            this.references = references;
+            return this;
+        }
+
+        public Builder minLen(int minLen) {
+            this.minLen = minLen;
+            return this;
+        }
+
+        public Builder maxLen(int maxLen) {
+            this.maxLen = maxLen;
+            return this;
+        }
+
+        public Builder precision(int precision) {
+            this.precision = precision;
+            return this;
+        }
+
+        public Builder scale(int scale) {
+            this.scale = scale;
+            return this;
+        }
+
+        public Builder allowNegative(boolean allowNegative) {
+            this.allowNegative = allowNegative;
+            return this;
+        }
+
+        public EntryAttributes build() {
+            return new EntryAttributes(suggestionType, references, minLen, maxLen, precision, scale, allowNegative);
+        }
+    }
 }

@@ -103,7 +103,7 @@ public class InputArrayEntries {
     }
 
     public static Builder newBuilder(WidgetTypeDef widgetTypeDef) {
-        return new Builder(widgetTypeDef, new EntryAttributes());
+        return new Builder(widgetTypeDef, EntryAttributes.BLANK);
     }
 
     public static Builder newBuilder(WidgetTypeDef widgetTypeDef, EntryAttributes attributes) {

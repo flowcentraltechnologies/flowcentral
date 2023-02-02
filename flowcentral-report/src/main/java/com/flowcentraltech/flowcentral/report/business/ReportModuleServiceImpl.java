@@ -456,6 +456,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                         rc.getDescription(), rc.isAllowSecondaryTenants()));
             }
 
+            DataUtils.sortAscending(resultList, ReportListing.class, "description");
             return resultList;
         }
 

@@ -30,8 +30,6 @@ import com.tcdng.unify.core.annotation.Configurable;
  */
 public abstract class AbstractApplicationSearchInputRestrictionGenerator
         extends AbstractSearchInputRestrictionGenerator {
-
-    private static final EntryAttributes BLANK_ENTRY_ATTRIBUTES = new EntryAttributes(0, 0, 0, 0, false);
     
     @Configurable
     private AppletUtilities au;
@@ -42,7 +40,7 @@ public abstract class AbstractApplicationSearchInputRestrictionGenerator
 
     @Override
     public EntryAttributes getEntryAttributes() throws UnifyException {
-        return BLANK_ENTRY_ATTRIBUTES;
+        return EntryAttributes.BLANK;
     }
 
     public final void setAu(AppletUtilities au) {
