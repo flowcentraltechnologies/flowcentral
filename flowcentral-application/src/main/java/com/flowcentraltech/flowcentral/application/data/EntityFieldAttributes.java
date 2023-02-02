@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
+import com.tcdng.unify.core.UnifyException;
+
 /**
  * Entity field attributes.
  * 
@@ -26,7 +28,7 @@ public interface EntityFieldAttributes {
 
     String getSuggestionType();
     
-    String getReferences();
+    String getReferences() throws UnifyException;
     
     int getMinLen();
 

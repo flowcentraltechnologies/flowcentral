@@ -43,11 +43,11 @@ public abstract class AbstractEntityBasedFilterGenerator extends AbstractUnifyCo
     @Configurable
     private EnvironmentService environmentService;
     
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
 
-    public void setEnvironmentService(EnvironmentService environmentService) {
+    public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
     }
 

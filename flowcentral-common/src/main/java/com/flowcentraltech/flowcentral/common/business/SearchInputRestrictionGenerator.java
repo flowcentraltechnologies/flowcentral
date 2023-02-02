@@ -29,6 +29,13 @@ import com.tcdng.unify.core.criterion.Restriction;
 public interface SearchInputRestrictionGenerator extends UnifyComponent {
 
     /**
+     * Gets references.
+     * 
+     * @return the references
+     */
+    String getReferences();
+
+    /**
      * Gets the search input type for this generator
      */
     SearchInputRestrictionDataType getInputType();
