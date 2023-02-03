@@ -240,9 +240,9 @@ public class SearchEntries {
                 for (SearchInputDef searchInputDef : entitySearchInputDef.getSearchInputsDef()
                         .getSearchInputDefList()) {
                     final SearchEntry searchEntry = searchInputDef.getFieldName().startsWith("f:")
-                            ? new SearchEntry(entityDef, searchInputDef.getLabel(),
+                            ? new SearchEntry(au, entityDef, searchInputDef.getLabel(),
                                     searchInputDef.getFieldName().substring(2), searchInputDef.getType())
-                            : new SearchEntry(entityDef, searchInputDef.getLabel(),
+                            : new SearchEntry(au, entityDef, searchInputDef.getLabel(),
                                     searchInputDef.getFieldName().substring(2));
                     WidgetTypeDef widgetTypeDef = au.getWidgetTypeDef(searchInputDef.getWidget());
                     searchEntry.normalize(widgetTypeDef);
@@ -260,7 +260,7 @@ public class SearchEntries {
                     SearchConditionType conditionType = EntityFieldDataType.STRING.equals(dataType)
                             ? SearchConditionType.ILIKE
                             : SearchConditionType.EQUALS;
-                    SearchEntry searchEntry = new SearchEntry(entityDef, label, entityFieldDef.getFieldName(),
+                    SearchEntry searchEntry = new SearchEntry(au, entityDef, label, entityFieldDef.getFieldName(),
                             conditionType);
                     searchEntry.normalize();
                     entryList.add(searchEntry);

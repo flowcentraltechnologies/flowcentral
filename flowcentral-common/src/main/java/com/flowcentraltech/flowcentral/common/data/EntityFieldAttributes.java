@@ -14,7 +14,9 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.data;
+package com.flowcentraltech.flowcentral.common.data;
+
+import com.tcdng.unify.core.UnifyException;
 
 /**
  * Entity field attributes.
@@ -24,17 +26,17 @@ package com.flowcentraltech.flowcentral.application.data;
  */
 public interface EntityFieldAttributes {
 
-    String getSuggestionType();
+    String getSuggestionType() throws UnifyException;
     
-    String getReferences();
+    String getReferences() throws UnifyException;
     
-    int getMinLen();
+    int getMinLen() throws UnifyException;
 
-    int getMaxLen();
+    int getMaxLen() throws UnifyException;
     
-    int getPrecision();
+    int getPrecision() throws UnifyException;
     
-    int getScale();
+    int getScale() throws UnifyException;
     
-    boolean isAllowNegative();
+    boolean isAllowNegative() throws UnifyException;
 }

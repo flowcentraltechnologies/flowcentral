@@ -32,7 +32,6 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceEntryDef;
@@ -56,6 +55,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetRules;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.data.DateRange;
+import com.flowcentraltech.flowcentral.common.data.EntityFieldAttributes;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.flowcentraltech.flowcentral.common.input.StringInput;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
@@ -203,7 +203,7 @@ public final class InputWidgetUtils {
         return (AbstractInput<?>) ReflectUtils.newInstance(inputClass, NEW_INPUT_PARAMS, editor, renderer);
     }
 
-    public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) {
+    public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) throws UnifyException {
         String editor = InputWidgetUtils.resolveEditor(widgetTypeDef.getEditor(), widgetTypeDef, efa, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
@@ -214,7 +214,7 @@ public final class InputWidgetUtils {
         return editor;
     }
 
-    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) {
+    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) throws UnifyException {
         String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(renderer);
@@ -225,7 +225,7 @@ public final class InputWidgetUtils {
         return renderer;
     }
 
-    public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) {
+    public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) throws UnifyException {
         String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, false);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
@@ -242,12 +242,12 @@ public final class InputWidgetUtils {
         return editor;
     }
 
-    public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) {
+    public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) throws UnifyException {
         return InputWidgetUtils.constructEditorWithBinding(widgetTypeDef, entityFieldDef, null, null);
     }
 
     public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef,
-            String reference, WidgetColor color) {
+            String reference, WidgetColor color) throws UnifyException {
         String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, reference, false);
         StringBuilder esb = new StringBuilder(editor);
         esb.append(" binding:").append(entityFieldDef.getFieldName());
@@ -268,12 +268,12 @@ public final class InputWidgetUtils {
         return esb.toString();
     }
 
-    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) {
+    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) throws UnifyException {
         return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, true);
     }
 
     private static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef, String reference,
-            boolean renderer) {
+            boolean renderer) throws UnifyException {
         final EntityFieldAttributes efa = entityFieldDef.isWithResolvedTypeFieldDef()
                 ? entityFieldDef.getResolvedTypeFieldDef()
                 : entityFieldDef;
@@ -283,7 +283,7 @@ public final class InputWidgetUtils {
     }
 
     private static String resolveEditor(String editor, WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa,
-            EntityFieldDef entityFieldDef, String reference) {
+            EntityFieldDef entityFieldDef, String reference) throws UnifyException {
         switch (widgetTypeDef.getLongName()) {
             case "application.textarea":
             case "application.textareamedium":

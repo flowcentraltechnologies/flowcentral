@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.validation.Validator;
+import com.flowcentraltech.flowcentral.common.data.EntryAttributes;
 import com.flowcentraltech.flowcentral.common.input.AbstractInput;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
@@ -102,7 +103,7 @@ public class InputArrayEntries {
     }
 
     public static Builder newBuilder(WidgetTypeDef widgetTypeDef) {
-        return new Builder(widgetTypeDef, new EntryAttributes());
+        return new Builder(widgetTypeDef, EntryAttributes.BLANK);
     }
 
     public static Builder newBuilder(WidgetTypeDef widgetTypeDef, EntryAttributes attributes) {
