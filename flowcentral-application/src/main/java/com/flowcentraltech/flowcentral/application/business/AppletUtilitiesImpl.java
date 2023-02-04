@@ -1425,18 +1425,18 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final String fkFieldName = _childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName();
         DataUtils.setBeanProperty(childInst, fkFieldName, parentInst.getId());
         copyListOnlyFieldsFromForeignEntity(_childEntityDef, fkFieldName, childInst, parentInst);
-     }
+    }
 
     @Override
-     public Long getOverrideTenantId(EntityDef parentEntityDef, Entity parentInst) throws UnifyException {
-         if (isTenancyEnabled() && parentEntityDef.getLongName().equals(getApplicationAttribute(String.class,
-                 FlowCentralApplicationAttributeConstants.TENANT_SOURCE_ENTITY))) {
-             return getMappedDestTenantId((Long) parentInst.getId());
-         }
+    public Long getOverrideTenantId(EntityDef parentEntityDef, Entity parentInst) throws UnifyException {
+        if (parentEntityDef != null && isTenancyEnabled() && parentEntityDef.getLongName().equals(
+                getApplicationAttribute(String.class, FlowCentralApplicationAttributeConstants.TENANT_SOURCE_ENTITY))) {
+            return getMappedDestTenantId((Long) parentInst.getId());
+        }
 
-         return null;
-     }
-    
+        return null;
+    }
+
     @Override
     public PropertySearch constructPropertySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, Entity inst, AppletDef _appletDef, boolean isIgnoreParentCondition) throws UnifyException {
