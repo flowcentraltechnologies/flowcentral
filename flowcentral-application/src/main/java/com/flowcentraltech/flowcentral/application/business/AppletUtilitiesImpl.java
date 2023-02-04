@@ -101,6 +101,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.ParamConfigListProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
@@ -1218,7 +1219,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     case USAGE_LIST: {
                         logDebug("Updating usage list tab [{0}] using applet [{1}]...", formTabDef.getName(),
                                 formTabDef.getApplet());
-                         UsageSearch _usageSearch = (UsageSearch) tabSheetItem.getValObject();
+                        UsageSearch _usageSearch = (UsageSearch) tabSheetItem.getValObject();
                         _usageSearch.applyEntityToSearch(inst);
                         tabSheetItem.setVisible(
                                 !isCreateMode && formContext.getFormTab(tabSheetItem.getName()).isVisible());
@@ -1424,8 +1425,18 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final String fkFieldName = _childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName();
         DataUtils.setBeanProperty(childInst, fkFieldName, parentInst.getId());
         copyListOnlyFieldsFromForeignEntity(_childEntityDef, fkFieldName, childInst, parentInst);
-    }
+     }
 
+    @Override
+     public Long getOverrideTenantId(EntityDef parentEntityDef, Entity parentInst) throws UnifyException {
+         if (isTenancyEnabled() && parentEntityDef.getLongName().equals(getApplicationAttribute(String.class,
+                 FlowCentralApplicationAttributeConstants.TENANT_SOURCE_ENTITY))) {
+             return getMappedDestTenantId((Long) parentInst.getId());
+         }
+
+         return null;
+     }
+    
     @Override
     public PropertySearch constructPropertySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, Entity inst, AppletDef _appletDef, boolean isIgnoreParentCondition) throws UnifyException {
