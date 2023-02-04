@@ -231,4 +231,13 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
         return au.specialParamProvider();
     }
 
+    protected abstract void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException;
+
+    protected final void addMoreResultRestriction(EntityClassDef entityClassDef, Query<? extends Entity> query) throws UnifyException {
+        addMoreResultRestriction(query);
+        if (entityClassDef.isWithTenantId() && isTenancyEnabled()) {
+            applyOverrideTenantId(query, entityClassDef.getTenantIdDef().getFieldName());
+        }     
+    }
+
 }

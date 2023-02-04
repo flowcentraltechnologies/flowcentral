@@ -401,11 +401,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public Long getMappedDestTenantId(Long srcTenantId) throws UnifyException {
         if (srcTenantId != null && !Entity.PRIMARY_TENANT_ID.equals(srcTenantId)) {
-            if (environment().countAll(new MappedTenantQuery().id(srcTenantId)) == 0) {
-                if (srcTenantId.equals(getSysParameterValue(Long.class,
-                        SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID))) {
-                    return Entity.PRIMARY_TENANT_ID;
-                }
+            if (srcTenantId.equals(getSysParameterValue(Long.class,
+                    SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID))) {
+                return Entity.PRIMARY_TENANT_ID;
             }
         }
 

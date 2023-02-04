@@ -1423,6 +1423,19 @@ public interface AppletUtilities extends UnifyComponent {
             Entity childInst) throws UnifyException;
 
     /**
+     * Gets override tenant ID
+     * 
+     * @param parentEntityDef
+     *                        the parent entity definition
+     * @param parentInst
+     *                        the parent instance
+     * @return the override tenant ID otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Long getOverrideTenantId(EntityDef parentEntityDef, Entity parentInst) throws UnifyException;
+
+    /**
      * Populate entity list-only fields.
      * 
      * @param entityDef

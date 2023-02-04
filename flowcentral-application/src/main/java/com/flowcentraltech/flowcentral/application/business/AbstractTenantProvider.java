@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.HashMap;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 
@@ -52,6 +53,12 @@ public abstract class AbstractTenantProvider extends AbstractMappedEntityProvide
         destValueStore.store("name", srcValueStore.retrieve(providerInfo.getNameField()));
         destValueStore.store("dateFormat", resolveDateFormat(srcValueStore, providerInfo.getDateFormatField()));
         destValueStore.store("primary", srcValueStore.retrieve(providerInfo.getPrimaryFlagField()));
+    }
+
+    @Override
+    protected void onInitialize() throws UnifyException {
+        super.onInitialize();
+        setApplicationAttribute(FlowCentralApplicationAttributeConstants.TENANT_SOURCE_ENTITY, srcEntity());
     }
 
     protected abstract String resolveDateFormat(ValueStore srcValueStore, String dateFormatField) throws UnifyException;

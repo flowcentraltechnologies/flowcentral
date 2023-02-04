@@ -107,6 +107,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<Listable> expressionListableList;
 
+    private EntityFieldDef tenantIdDef;
+
     private EntityFieldDef fosterParentIdDef;
 
     private EntityFieldDef fosterParentTypeDef;
@@ -204,6 +206,10 @@ public class EntityDef extends BaseApplicationEntityDef {
                 this.preferedColumnNames.put(baseColumnName, entityFieldDef.getColumnName());
             }
 
+            if (entityFieldDef.isTenantId()) {
+                tenantIdDef = entityFieldDef;
+            }
+            
             this.withSuggestionFields |= entityFieldDef.isWithSuggestionType();
             this.withListOnly |= entityFieldDef.isListOnly();
             this.withCustomFields |= entityFieldDef.isCustom();
@@ -258,12 +264,20 @@ public class EntityDef extends BaseApplicationEntityDef {
         return preferedColumnNames.get(columnName);
     }
 
+    public EntityFieldDef getTenantIdDef() {
+        return tenantIdDef;
+    }
+
     public boolean isWithPreferedColumnName(String columnName) {
         return preferedColumnNames.containsKey(columnName);
     }
 
     public boolean isWithCustomFields() {
         return withCustomFields;
+    }
+
+    public boolean isWithTenantId() {
+        return tenantIdDef != null;
     }
 
     public boolean isWithListOnly() {

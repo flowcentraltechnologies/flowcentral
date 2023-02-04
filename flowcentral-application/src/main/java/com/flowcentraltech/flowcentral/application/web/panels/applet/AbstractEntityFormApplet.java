@@ -94,6 +94,7 @@ import com.tcdng.unify.core.system.entities.AbstractSequencedEntity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.ui.constant.WidgetTempValueConstants;
 import com.tcdng.unify.web.ui.widget.data.FileAttachmentsInfo;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
@@ -1154,6 +1155,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 beanTitle, formDef, inst, formMode, makeFormBreadCrumbs(), formEventHandlers);
         setFormProperties(_currentFormAppletDef, form);
         au.onFormConstruct(_currentFormAppletDef, form.getCtx(), childFkFieldName, formMode.isCreate());
+        final Long overrideTenantId = au.getOverrideTenantId(currParentEntityDef, currParentInst);
+        form.getCtx().getFormValueStore().setTempValue(WidgetTempValueConstants.OVERRIDE_TENANT_ID, overrideTenantId);
         return form;
     }
 

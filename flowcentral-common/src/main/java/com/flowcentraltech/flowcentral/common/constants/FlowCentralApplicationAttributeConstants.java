@@ -23,4 +23,6 @@ package com.flowcentraltech.flowcentral.common.constants;
  */
 public interface FlowCentralApplicationAttributeConstants {
 
+    /** Tenant source entity. */
+    String TENANT_SOURCE_ENTITY = "fc.tenantsourceentity";
 }

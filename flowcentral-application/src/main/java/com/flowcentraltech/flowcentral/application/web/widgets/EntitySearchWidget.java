@@ -125,7 +125,7 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                     query.addRestriction(like);
                 }
 
-                addMoreResultRestriction(query);
+                addMoreResultRestriction(entityClassDef, query);
                 if (limit > 0) {
                     query.setLimit(limit);
                 }
@@ -160,7 +160,8 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
         return Collections.emptyList();
     }
 
+    @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
-
+        
     }
 }
