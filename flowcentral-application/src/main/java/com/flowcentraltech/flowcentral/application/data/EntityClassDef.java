@@ -83,11 +83,13 @@ public class EntityClassDef {
     public boolean delegated() {
         return entityDef.delegated();
     }
-    
-    @Override
-    public String toString() {
-        return "EntityClassDef [entityDef.getLongName()=" + entityDef.getLongName() + ", entityDef.getVersion()="
-                + entityDef.getVersion() + ", entityClass=" + entityClass + "]";
+
+    public EntityFieldDef getTenantIdDef() {
+        return entityDef.getTenantIdDef();
+    }
+
+    public boolean isWithTenantId() {
+        return entityDef.isWithTenantId();
     }
 
     private List<String> getCopyFields() {

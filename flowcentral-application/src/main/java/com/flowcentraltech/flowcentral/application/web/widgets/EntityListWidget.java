@@ -74,7 +74,7 @@ public class EntityListWidget extends AbstractEntityListWidget {
                 query.ignoreEmptyCriteria(true);
             }
 
-            addMoreResultRestriction(query);
+            addMoreResultRestriction(entityClassDef, query);
             int limit = getUplAttribute(int.class, "limit");
             if (limit > 0) {
                 query.setLimit(limit);
@@ -159,7 +159,8 @@ public class EntityListWidget extends AbstractEntityListWidget {
         return getPrefixedId("lst_");
     }
 
+    @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
-
+        
     }
 }
