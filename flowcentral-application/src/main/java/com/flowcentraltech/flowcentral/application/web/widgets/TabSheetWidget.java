@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
@@ -46,6 +47,7 @@ public class TabSheetWidget extends AbstractValueListMultiControl<ValueStore, Ta
     public void choose() throws UnifyException {
         TabSheet tabSheet = getTabSheet();
         if (tabSheet != null) {
+            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
             tabSheet.setCurrentTabIndex(getRequestTarget(int.class));
             if (tabSheet.isWithEventHandler() && tabSheet.isWithCurrentItem()) {
                 tabSheet.getEventHandler().onChoose(tabSheet.getCurrentItem());
