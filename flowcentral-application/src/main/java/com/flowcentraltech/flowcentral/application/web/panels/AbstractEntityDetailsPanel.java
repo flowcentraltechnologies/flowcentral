@@ -19,7 +19,9 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractDetailsPanel;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -43,6 +45,11 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
 
     protected EnvironmentService environment() {
         return au.environment();
+    }
+
+    @Override
+    protected Entity getDetails(ValueStore valueStore) throws UnifyException {
+        return (Entity) valueStore.getValueObjectAtDataIndex();
     }
 
 }
