@@ -886,8 +886,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                             mode |= EntitySearch.SHOW_QUICK_EDIT;
                         }
 
+                        final boolean isIgnoreReport = true;
                         EntitySearch _entitySearch = constructEntitySearch(formContext, sweepingCommitPolicy,
-                                formTabDef.getName(), rootTitle, _appletDef, editAction, mode, false,
+                                formTabDef.getName(), rootTitle, _appletDef, editAction, mode, isIgnoreReport,
                                 formTabDef.isIgnoreParentCondition());
                         _entitySearch.setNewButtonVisible(newButtonVisible);
                         if (_appletDef.isPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {

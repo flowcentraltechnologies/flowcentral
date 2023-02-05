@@ -87,7 +87,7 @@ public class EntitySearchPanel extends AbstractPanel {
 
         entitySearch.ensureTableStruct();
         if (getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH)) {
-            entitySearch.applyFilterToSearch();
+            entitySearch.applySearchEntriesToSearch();
         }
 
         String roleCode = getUserToken().getRoleCode();
