@@ -1621,6 +1621,17 @@ public interface AppletUtilities extends UnifyComponent {
     Long getMappedDestTenantId(Long srcTenantId) throws UnifyException;
 
     /**
+     * Get unmapped source tenant ID.
+     * 
+     * @param destTenantId
+     *                     the destination tenant ID
+     * @return the unmapped source tenant ID otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Long getUnmappedSrcTenantId(Long destTenantId) throws UnifyException;
+
+    /**
      * Check if mapping provider is available for query entity type
      * 
      * @param query
