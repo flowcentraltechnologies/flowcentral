@@ -83,7 +83,7 @@ public class FormEditorWriter extends AbstractControlWriter {
         writer.write("<div class=\"hdr\">").write(getSessionMessage("formeditor.availablefields")).write("</div>");
         jsonWriter.beginArray("fields");
         int i = 0;
-        for (EntityFieldDef entityFieldDef : formEditor.getFormDef().getEntityDef().getFieldDefList()) {
+        for (EntityFieldDef entityFieldDef : formEditor.getFormDef().getEntityDef().getSortedFieldDefList()) {
             if (entityFieldDef.isFormViewable()) {
                 writer.write("<div class=\"fld\" id=\"").write(formEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");

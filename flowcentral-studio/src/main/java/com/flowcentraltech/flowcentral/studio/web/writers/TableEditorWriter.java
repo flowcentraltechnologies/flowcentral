@@ -75,7 +75,7 @@ public class TableEditorWriter extends AbstractControlWriter {
         writer.write("<div class=\"hdr\">").write(getSessionMessage("tableeditor.availablefields")).write("</div>");
         jsonWriter.beginArray("fields");
         int i = 0;
-        for (EntityFieldDef entityFieldDef : tableEditor.getEntityDef().getFieldDefList()) {
+        for (EntityFieldDef entityFieldDef : tableEditor.getEntityDef().getSortedFieldDefList()) {
             if (entityFieldDef.isTableViewable()) {
                 writer.write("<div class=\"fld\" id=\"").write(tableEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
