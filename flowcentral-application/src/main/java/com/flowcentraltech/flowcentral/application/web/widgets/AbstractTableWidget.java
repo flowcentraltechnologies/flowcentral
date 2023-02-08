@@ -270,6 +270,14 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getUplAttribute(boolean.class, "focusManagement");
     }
 
+    public String getViewButtonCaptionBinding() throws UnifyException {
+        return getUplAttribute(String.class, "viewButtonCaptionBinding");
+    }
+
+    public String getEditButtonCaptionBinding() throws UnifyException {
+        return getUplAttribute(String.class, "editButtonCaptionBinding");
+    }
+    
     public boolean isFixedRows() throws UnifyException {
         T table = getTable();
         return (table != null && table.isFixedRows()) || getUplAttribute(boolean.class, "fixedRows");
@@ -578,6 +586,29 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     @Override
     public void setRowSelected(int rowIndex, boolean selected) throws UnifyException {
         getTable().setSelected(rowIndex, selected);
+    }
+
+    public void setActionBindings() throws UnifyException {
+        final AbstractTable<?, ?> table = getTable();
+        if (table != null) {
+            final String viewCaption = table.getViewButtonCaption();
+            final String editCaption = table.getEditButtonCaption();
+            final boolean view = !StringUtils.isBlank(viewCaption);
+            final boolean edit = !StringUtils.isBlank(editCaption);
+            if (view || edit) {
+                final String viewBinding= getViewButtonCaptionBinding();
+                final String editBinding= getEditButtonCaptionBinding();
+                for (ValueStore valueStore: getValueList()) {
+                    if (view) {
+                        valueStore.setTempValue(viewBinding, viewCaption);
+                    }
+                    
+                    if (edit) {
+                        valueStore.setTempValue(editBinding, editCaption);
+                    }
+                }
+            }
+        }        
     }
 
     @Override

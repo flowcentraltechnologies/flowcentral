@@ -63,6 +63,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<EntityFieldDef> fieldDefList;
 
+    private List<EntityFieldDef> sortedFieldDefList;
+
     private List<EntityFieldDef> filterFieldDefList;
 
     private List<EntityFieldDef> filterStringFieldDefList;
@@ -322,6 +324,20 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public List<EntityFieldDef> getFieldDefList() {
         return fieldDefList;
+    }
+
+    public List<EntityFieldDef> getSortedFieldDefList() throws UnifyException {
+        if (sortedFieldDefList == null) {
+            synchronized (this) {
+                if (sortedFieldDefList == null) {
+                    sortedFieldDefList = new ArrayList<EntityFieldDef>(fieldDefList);
+                    DataUtils.sortAscending(sortedFieldDefList, EntityFieldDef.class, "fieldLabel");
+                    sortedFieldDefList = DataUtils.unmodifiableList(sortedFieldDefList);
+                }                
+            }
+        }
+        
+        return sortedFieldDefList;
     }
 
     public List<? extends Listable> getSearchInputFieldDefList(AppletUtilities au) throws UnifyException {

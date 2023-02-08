@@ -160,6 +160,7 @@ public class TableWriter extends AbstractControlWriter {
                 writeHeaderRow(writer, tableWidget);
             }
 
+            tableWidget.setActionBindings();
             writeBodyRows(writer, tableWidget);
             writer.write("</table></div>");
             if (sortable) {
@@ -501,7 +502,7 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("/>");
         writer.write("</th>");
     }
-
+    
     private void writeBodyRows(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
@@ -855,7 +856,7 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("</tr>");
     }
 
-    public void writeRowMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, Long id, int index)
+    private void writeRowMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, Long id, int index)
             throws UnifyException {
         final Control selectCtrl = tableWidget.getSelectCtrl();
         final boolean selected = tableWidget.getTable().isSelectedRow(index);

@@ -287,6 +287,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public Long getUnmappedSrcTenantId(Long destTenantId) throws UnifyException {
+        return systemModuleService.getUnmappedSrcTenantId(destTenantId);
+    }
+
+    @Override
     public boolean isMappingProviderPresent(Query<? extends Entity> query) throws UnifyException {
         return mappedEntityProviderInfo.isProviderPresent(query.getEntityClass());
     }

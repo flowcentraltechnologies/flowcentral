@@ -77,6 +77,10 @@ public abstract class AbstractTable<T, U> {
 
     private String[] refreshPanelIds;
 
+    private String viewButtonCaption;
+
+    private String editButtonCaption;
+
     private int dispStartIndex;
 
     private int dispEndIndex;
@@ -270,6 +274,22 @@ public abstract class AbstractTable<T, U> {
 
     public boolean isEntryMode() {
         return (entryMode & ENTRY_ENABLED) > 0;
+    }
+
+    public String getViewButtonCaption() {
+        return viewButtonCaption;
+    }
+
+    public void setViewButtonCaption(String viewButtonCaption) {
+        this.viewButtonCaption = viewButtonCaption;
+    }
+
+    public String getEditButtonCaption() {
+        return editButtonCaption;
+    }
+
+    public void setEditButtonCaption(String editButtonCaption) {
+        this.editButtonCaption = editButtonCaption;
     }
 
     public boolean isSortDisabled() {
