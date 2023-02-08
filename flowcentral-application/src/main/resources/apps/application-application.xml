@@ -793,16 +793,16 @@
 			<field name="baseType"
 				label="$m{application.appentity.basetype}" type="enum_ref"
 				references="entitybasetypelist" inputWidget="application.enumlist" />
-			<field name="label"
+			<field name="label"  maxLen="128" 
 				label="$m{application.appentity.labelfield}" type="string" />
 			<field name="entityClass"
 				label="$m{application.appentity.entityclass}" type="string" />
-			<field name="tableName"
+			<field name="tableName"  maxLen="64" 
 				label="$m{application.appentity.tablename}" type="string" />
-			<field name="emailProducerConsumer"
+			<field name="emailProducerConsumer"  maxLen="64" 
 				label="$m{application.appentity.emailproducerconsumer}"
 				type="string" nullable="true" />
-			<field name="delegate"
+			<field name="delegate"  maxLen="64" 
 				label="$m{application.appentity.delegate}" type="string"
 				nullable="true" />
 			<field name="auditable"

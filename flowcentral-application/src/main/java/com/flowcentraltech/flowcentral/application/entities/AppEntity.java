@@ -49,7 +49,7 @@ public class AppEntity extends BaseApplicationEntity {
     @Column(length = 128)
     private String entityClass;
 
-    @Column(name = "TABLE_NM", length = 32)
+    @Column(name = "TABLE_NM", length = 64)
     private String tableName;
 
     @Column(name = "AUDITABLE_FG")
