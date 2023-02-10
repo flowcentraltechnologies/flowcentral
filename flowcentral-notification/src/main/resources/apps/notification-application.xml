@@ -281,9 +281,8 @@
 				label="$m{notification.notificationoutbox.recipients}"
 				contentType="child_list" applet="manageNotifRecipient"
 				reference="notificationRecipientList" />
-			<tab name="attachments"
-				label="$m{notification.notificationoutbox.attachments}"
-				contentType="attachmentlist" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="notifChannelForm"
 			description="$m{notification.notificationchannel.form}" entity="notifChannel">

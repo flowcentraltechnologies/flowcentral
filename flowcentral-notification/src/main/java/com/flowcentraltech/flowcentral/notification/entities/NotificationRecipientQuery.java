@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionTenantEntityQuery;
 
 /**
  * Notification recipient query class;
@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntityQuery;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationRecipientQuery extends BaseTenantEntityQuery<NotificationRecipient> {
+public class NotificationRecipientQuery extends BaseVersionTenantEntityQuery<NotificationRecipient> {
 
     public NotificationRecipientQuery() {
         super(NotificationRecipient.class);
