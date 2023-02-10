@@ -907,8 +907,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public boolean performWfTransition(WfTransitionQueue wfTransitionQueue) throws UnifyException {
         WfItem wfItem = environment().list(WfItem.class, wfTransitionQueue.getWfItemId());
         WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+        EntityClassDef entityClassDef = wfDef.getEntityClassDef();
         WorkEntity wfEntityInst = (WorkEntity) environment()
-                .list((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(), wfItem.getWorkRecId());
+                .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
+        if (entityClassDef.isWithTenantId()) {
+            Long tenantId = DataUtils.getBeanProperty(Long.class, wfEntityInst,
+                    entityClassDef.getTenantIdDef().getFieldName());
+            getSessionContext().setUserTokenTenantId(tenantId);
+        }
+
         return doWfTransition(new TransitionItem(wfItem, wfDef, wfEntityInst));
     }
 
