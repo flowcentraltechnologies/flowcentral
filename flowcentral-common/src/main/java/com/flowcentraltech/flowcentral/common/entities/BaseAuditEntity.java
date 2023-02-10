@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.Policy;
@@ -33,13 +34,13 @@ public abstract class BaseAuditEntity extends BaseVersionEntity {
     @Column(type = ColumnType.TIMESTAMP_UTC)
     private Date createDt;
 
-    @Column(length = 64, defaultVal = "SYSTEM")
+    @Column(length = 64, defaultVal = DefaultApplicationConstants.SYSTEM_LOGINID)
     private String createdBy;
 
     @Column(type = ColumnType.TIMESTAMP_UTC)
     private Date updateDt;
 
-    @Column(length = 64, defaultVal = "SYSTEM")
+    @Column(length = 64, defaultVal = DefaultApplicationConstants.SYSTEM_LOGINID)
     private String updatedBy;
 
     public final Date getCreateDt() {
