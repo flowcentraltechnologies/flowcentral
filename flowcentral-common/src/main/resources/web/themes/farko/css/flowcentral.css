@@ -110,7 +110,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 
 /*** Layout */
 .ui-tabular .llabel {padding-bottom:4px;font-size: 11px;font-weight: bold;color: #525e6d;}
-.ui-tabular .llabelinl {display: inline-block; padding-right:4px; width: 120px;font-size: 11px;font-weight: bold;color: #525e6d;}
+.ui-tabular .llabelinl {display: inline-block; padding-right:4px; text-align:right;
+	width: 120px;font-size: 11px;font-weight: bold;color: #525e6d;}
 .ui-tabular .llabelblank {display: inline-block; width: 120px;}
 
 .ui-user-hint {width: 420px; font-size: 20px; font-weight:normal;}
@@ -205,6 +206,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	background-color: #fff;}
 
 /*** WIDGETS ***/
+.fc-msg {display: inline-block;border-radius: 3px;padding: 4px;font-weight: bold;}
+
 /** Button */ 
 .fc-bluebutton {background-color:#1f6dcc; font-weight:bold; color: #FFF; border: 1px solid #1a5dbc;}
 .fc-bluebutton:hover:enabled {background-color:#005dbc;color: #FFF;}
@@ -345,9 +348,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-form .fpost {display:table-cell;width:12px;}
 .fc-form .fannot {display:table-caption;}
 .fc-form .fannot span {display:block; padding:8px 6px; margin: 0px 20px;}
-.fc-form .fannot .info {background-color: #eff1fe; border: 1px solid #cce4ff; color:#2164b0;}
-.fc-form .fannot .warning {background-color: #ffffe6; border: 1px solid #ffefc6; color:#b06421;}
-.fc-form .fannot .error {background-color: #ffe0da; border: 1px solid #fbd6d1; color:#c3847f;}
 
 /** Form Listing */
 .fc-formlisting {max-width:1240px;}
@@ -383,9 +383,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Form annotation */
 .fc-formannotation {}
 .fc-formannotation span {display:block; padding:8px 6px; margin: 0px 20px 4px 20px;}
-.fc-formannotation .info {background-color: #eff1fe; border: 1px solid #cce4ff; color:#2164b0;}
-.fc-formannotation .warning {background-color: #ffffe6; border: 1px solid #ffefc6; color:#b06421;}
-.fc-formannotation .error {background-color: #feefef; border: 1px solid #ffcccc; color: #b02121;}
 
 /* Form bread crumbs */
 .fc-formbreadcrumbs {}
@@ -409,12 +406,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 /* Form errors */
 .fc-formmessages {}
 .fc-formmessages .bdy {display:block; padding:4px 2px; margin-bottom: 2px;  list-style-position: inside;list-style-type: square;}
-.fc-formmessages .info {padding:8px 4px;background-color: #efeffe;
-	border: 1px solid #ccccff; color: #2020b0;}
-.fc-formmessages .warning {padding:8px 4px; background-color: #fef8ef;
-	border: 1px solid #fff8cc; color: #f6b608; }
-.fc-formmessages .error{padding:8px 4px; background-color: #feefef;
-	border: 1px solid #ffcccc; color: #b02020;}
+.fc-formmessages .msg {padding:8px 4px;}
 
 /* Input array */
 .fc-inputarray {}
@@ -455,9 +447,6 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
 .fc-miniform .mfannot {display:table-caption;}
 .fc-miniform .mfannot span {display:block; padding:8px 6px; margin: 0px 20px;}
-.fc-miniform .mfannot .info {background-color: #eff1fe; border: 1px solid #cce4ff; color:#2164b0;}
-.fc-miniform .mfannot .warning {background-color: #ffffe6; border: 1px solid #ffefc6; color:#b06421;}
-.fc-miniform .mfannot .error {background-color: #ffe0da; border: 1px solid #fbd6d1; color:#c3847f;}
 .fc-miniform .mwarn {border: 1px solid #ff823b;font-size: 8pt;color: #ff823b;font-weight: bold;background-color: #ffe6d7;padding: 10px 0px;}
 
 /* Parameter values */

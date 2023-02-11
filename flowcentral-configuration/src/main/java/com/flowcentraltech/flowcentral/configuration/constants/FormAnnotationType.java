@@ -20,6 +20,7 @@ import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.util.EnumUtils;
+import com.tcdng.unify.web.ui.constant.MessageType;
 
 /**
  * Form annotation type.
@@ -33,13 +34,13 @@ public enum FormAnnotationType implements EnumConst {
 
     INFO(
             "I",
-            "info"),
+            MessageType.INFO.styleClass()),
     WARNING(
             "W",
-            "warning"),
+            MessageType.WARNING.styleClass()),
     ERROR(
             "E",
-            "error");
+            MessageType.ERROR.styleClass());
 
     private final String code;
 
