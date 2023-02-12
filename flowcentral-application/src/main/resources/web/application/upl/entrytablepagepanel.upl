@@ -43,7 +43,7 @@
 !ui-panel:entryBodyPanel style:$s{width:980px; margin: 8px auto;} components:$c{entryPanelCaption entryErrors entryTableEntryTbl}
 !ui-label:entryPanelCaption styleClass:$e{caption} binding:entryCaption
 !fc-formmessages:entryErrors binding:validationErrors
-!fc-beantable:entryTableEntryTbl style:$s{width:100%;}
+!fc-beanlisttable:entryTableEntryTbl style:$s{width:100%;}
 	multiSelect:true binding:entryBeanTable
 	
 // Actions

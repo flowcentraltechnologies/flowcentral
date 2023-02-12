@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
@@ -53,7 +53,7 @@ public class QuickTableEdit {
 
     private final String entryEditPolicy;
 
-    private BeanTable entryBeanTable;
+    private BeanListTable entryBeanTable;
 
     private String entryCaption;
 
@@ -74,7 +74,7 @@ public class QuickTableEdit {
         this.entryEditPolicy = entryEditPolicy;
     }
 
-    public BeanTable getEntryBeanTable() throws UnifyException {
+    public BeanListTable getEntryBeanTable() throws UnifyException {
         if (entryBeanTable == null) {
             entryBeanTable = ctx.au().constructEntryBeanTable(entryTable, entryEditPolicy);
         }
@@ -112,7 +112,7 @@ public class QuickTableEdit {
 
     @SuppressWarnings("unchecked")
     public void loadEntryList() throws UnifyException {
-        final BeanTable _beanTable = getEntryBeanTable();
+        final BeanListTable _beanTable = getEntryBeanTable();
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                 .addEquals(baseField, baseId);
         List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);

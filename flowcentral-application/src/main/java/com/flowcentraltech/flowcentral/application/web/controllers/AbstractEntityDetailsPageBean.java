@@ -13,23 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.widgets;
+package com.flowcentraltech.flowcentral.application.web.controllers;
 
-import java.util.List;
-
-import com.tcdng.unify.core.annotation.Component;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
+import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Bean table widget.
+ * Convenient abstract base class for entity details page beans.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-beantable")
-public class BeanTableWidget extends AbstractTableWidget<BeanTable, Object, List<?>> {
+public abstract class AbstractEntityDetailsPageBean extends AbstractPageBean {
 
-    public BeanTableWidget() {
-        super(BeanTable.class, Object.class);
+    private EntityListTable resultTable;
+
+    public EntityListTable getResultTable() {
+        return resultTable;
     }
 
+    public void setResultTable(EntityListTable resultTable) {
+        this.resultTable = resultTable;
+    }
 }

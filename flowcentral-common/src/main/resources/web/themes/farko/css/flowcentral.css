@@ -609,10 +609,15 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .classic .mselh {width: 22px;background-color: #e3e7ea;}
 .fc-table .link-right {display:block;text-align:right;}
 
-.fc-beantable {}
-.fc-beantable .table .mseld {background-color: transparent;}
-.fc-beantable .total {font-weight:bold;}
-.fc-beantable .total .blank {border-right: none;border-left: none;}
+.fc-beanlisttable {}
+.fc-beanlisttable .table .mseld {background-color: transparent;}
+.fc-beanlisttable .total {font-weight:bold;}
+.fc-beanlisttable .total .blank {border-right: none;border-left: none;}
+
+.fc-entitylisttable {}
+.fc-entitylisttable .table .mseld {background-color: transparent;}
+.fc-entitylisttable .total {font-weight:bold;}
+.fc-entitylisttable .total .blank {border-right: none;border-left: none;}
 
 .fc-entitytable {}
 .fc-entitytable .total {font-weight:bold;}

@@ -44,7 +44,7 @@ public class CreateEntitySingleFormAppletController extends
 
         CreateEntitySingleFormAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            CreateEntitySingleFormApplet applet = new CreateEntitySingleFormApplet(getAu(), getPathVariable());
+            CreateEntitySingleFormApplet applet = new CreateEntitySingleFormApplet(au(), getPathVariable());
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);

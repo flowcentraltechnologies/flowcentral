@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
@@ -75,7 +75,7 @@ public class EntryTablePage {
 
     private String displayItemCounterClass;
 
-    private BeanTable entryBeanTable;
+    private BeanListTable entryBeanTable;
 
     private String entryCaption;
 
@@ -183,7 +183,7 @@ public class EntryTablePage {
         getEntryBeanTable().fireOnRowChange(rowChangeInfo);
     }
 
-    public BeanTable getEntryBeanTable() throws UnifyException {
+    public BeanListTable getEntryBeanTable() throws UnifyException {
         if (entryBeanTable == null) {
             entryBeanTable = ctx.au().constructEntryBeanTable(entryTable, filterGroupDef, entryEditPolicy);
         }
@@ -193,7 +193,7 @@ public class EntryTablePage {
 
     @SuppressWarnings("unchecked")
     public void loadEntryList() throws UnifyException {
-        final BeanTable _beanTable = getEntryBeanTable();
+        final BeanListTable _beanTable = getEntryBeanTable();
         Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
                 .addEquals(baseField, baseId);
         Restriction br = filterGroupDef != null ? filterGroupDef.getRestriction(FilterType.TAB, null, ctx.au().getNow())

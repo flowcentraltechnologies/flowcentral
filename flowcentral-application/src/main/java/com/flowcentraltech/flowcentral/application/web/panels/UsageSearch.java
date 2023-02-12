@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.application.business.UsageListProvider;
 import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -37,7 +37,7 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class UsageSearch extends AbstractPanelFormBinding {
 
-    private BeanTable beanTable;
+    private BeanListTable beanListTable;
 
     private ValueStoreReader instReader;
 
@@ -56,7 +56,7 @@ public class UsageSearch extends AbstractPanelFormBinding {
     public UsageSearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, String provider,
             int mode, boolean ignoreConditionalDisabled) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
-        this.beanTable = new BeanTable(ctx.au(), ctx.au().getTableDef("application.usageTable"), null);
+        this.beanListTable = new BeanListTable(ctx.au(), ctx.au().getTableDef("application.usageTable"), null);
         this.provider = provider;
         this.mode = mode;
     }
@@ -65,12 +65,12 @@ public class UsageSearch extends AbstractPanelFormBinding {
         return mode;
     }
 
-    public BeanTable getBeanTable() {
-        return beanTable;
+    public BeanListTable getBeanTable() {
+        return beanListTable;
     }
 
     public String getEntityTitle() {
-        return beanTable.getTableDef().getLabel();
+        return beanListTable.getTableDef().getLabel();
     }
 
     public String getEntitySubTitle() {
@@ -90,7 +90,7 @@ public class UsageSearch extends AbstractPanelFormBinding {
     }
 
     public String getPaginationLabel() {
-        return MessageFormat.format(paginationLabel, beanTable.getDispEndIndex(), beanTable.getTotalItemCount());
+        return MessageFormat.format(paginationLabel, beanListTable.getDispEndIndex(), beanListTable.getTotalItemCount());
     }
 
     public void setPaginationLabel(String paginationLabel) {
@@ -98,11 +98,11 @@ public class UsageSearch extends AbstractPanelFormBinding {
     }
 
     public int getDisplayStart() {
-        if (beanTable.getTotalItemCount() == 0) {
+        if (beanListTable.getTotalItemCount() == 0) {
             return 0;
         }
 
-        return beanTable.getDispStartIndex() + 1;
+        return beanListTable.getDispStartIndex() + 1;
     }
 
     public void setDisplayStart(int dispStartIndex) {
@@ -110,7 +110,7 @@ public class UsageSearch extends AbstractPanelFormBinding {
     }
 
     public int getTotalItemCount() {
-        return beanTable.getTotalItemCount();
+        return beanListTable.getTotalItemCount();
     }
 
     public int getChildTabIndex() {
@@ -127,8 +127,8 @@ public class UsageSearch extends AbstractPanelFormBinding {
     }
 
     public void applyEntityToSearch() throws UnifyException {
-        List<Usage> usageList = beanTable.au().getComponent(UsageListProvider.class, provider).findUsages(instReader,
+        List<Usage> usageList = beanListTable.au().getComponent(UsageListProvider.class, provider).findUsages(instReader,
                 searchUsageType);
-        beanTable.setSourceObject(usageList);
+        beanListTable.setSourceObject(usageList);
     }
 }

@@ -224,6 +224,13 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     @Action
+    public void multiSelect() throws UnifyException {
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        System.out.println("@prime: target = " + getRequestTarget(String.class));
+        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    }
+
+    @Action
     public void exclude() throws UnifyException {
         applyFixedAction(FixedRowActionType.REMOVE);
     }

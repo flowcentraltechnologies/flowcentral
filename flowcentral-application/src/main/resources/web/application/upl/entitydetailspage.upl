@@ -1,0 +1,22 @@
+// UPL template for entity details page
+// Copyright (c) 2021, 2023, The Code Department.
+// All rights reserved.
+// 
+// PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE TERMS.
+
+!ui-page components:$c{basePanel} detailsMultiSelect:false
+	
+// Base panel
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$f{moreHeaderComponents}
+	components:$c{resultPanel}
+	components:$f{moreFooterComponents}
+
+// Result panel
+!ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{resultTbl} 
+!fc-entitylisttable:resultTbl style:$s{width:100%;}
+	details:$g{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
+
+// Actions
+!ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}

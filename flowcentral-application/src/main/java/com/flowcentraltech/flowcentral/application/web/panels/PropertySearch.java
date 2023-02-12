@@ -20,7 +20,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
@@ -40,7 +40,7 @@ public class PropertySearch extends AbstractPanelFormBinding {
 
     private PropertyRuleDef propertyRuleDef;
 
-    private BeanTable beanTable;
+    private BeanListTable beanListTable;
 
     private String entitySubTitle;
 
@@ -51,7 +51,7 @@ public class PropertySearch extends AbstractPanelFormBinding {
     public PropertySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             PropertyRuleDef propertyRuleDef, int mode, boolean ignoreConditionalDisabled) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
-        this.beanTable = new BeanTable(ctx.au(), ctx.au().getTableDef("application.propertyItemTable"), null);
+        this.beanListTable = new BeanListTable(ctx.au(), ctx.au().getTableDef("application.propertyItemTable"), null);
         this.propertyRuleDef = propertyRuleDef;
         this.mode = mode;
     }
@@ -64,12 +64,12 @@ public class PropertySearch extends AbstractPanelFormBinding {
         return mode;
     }
 
-    public BeanTable getBeanTable() {
-        return beanTable;
+    public BeanListTable getBeanTable() {
+        return beanListTable;
     }
 
     public String getEntityTitle() {
-        return beanTable.getTableDef().getLabel();
+        return beanListTable.getTableDef().getLabel();
     }
 
     public String getEntitySubTitle() {
@@ -89,22 +89,22 @@ public class PropertySearch extends AbstractPanelFormBinding {
     }
 
     public int getTotalItemCount() {
-        return beanTable.getTotalItemCount();
+        return beanListTable.getTotalItemCount();
     }
 
     public void applyEntityToSearch(Entity inst, String childFkFieldName) throws UnifyException {
-        List<PropertyListItem> propertyItemList = beanTable.au().getPropertyListItems(inst, childFkFieldName,
+        List<PropertyListItem> propertyItemList = beanListTable.au().getPropertyListItems(inst, childFkFieldName,
                 propertyRuleDef);
-        beanTable.setSourceObject(propertyItemList);
+        beanListTable.setSourceObject(propertyItemList);
     }
 
     public boolean isEditButtonVisible() {
         return getAppletCtx().isContextEditable() && isTabEditable() && (mode & SHOW_EDIT_BUTTON) > 0
-                && !DataUtils.isBlank(beanTable.getSourceObject());
+                && !DataUtils.isBlank(beanListTable.getSourceObject());
     }
 
     public boolean isViewButtonVisible() {
         return (!getAppletCtx().isContextEditable() || !isTabEditable()) && (mode & SHOW_EDIT_BUTTON) > 0
-                && !DataUtils.isBlank(beanTable.getSourceObject());
+                && !DataUtils.isBlank(beanListTable.getSourceObject());
     }
 }

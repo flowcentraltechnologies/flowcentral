@@ -342,6 +342,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
                 writer.writeParam("pSelCount", table.getSelectedCount());
                 writer.writeParam("pMultiSel", true);
+                writer.writeParam("pMultiSelLink", details && table.isMultiSelectDetailLinked());
                 writer.writeParam("pMultiSelDepList",
                         DataUtils.toArray(String.class, tableWidget.getMultiSelDependentList()));
             }

@@ -26,7 +26,7 @@
 !ui-panel:entryBodyPanel styleClass:$s{entries} style:$s{overflow-y:scroll;}
 	components:$c{entryErrors entryTableEntryTbl}
 !fc-formmessages:entryErrors binding:validationErrors
-!fc-beantable:entryTableEntryTbl style:$s{width:100%;}
+!fc-beanlisttable:entryTableEntryTbl style:$s{width:100%;}
 	binding:entryBeanTable
 
 

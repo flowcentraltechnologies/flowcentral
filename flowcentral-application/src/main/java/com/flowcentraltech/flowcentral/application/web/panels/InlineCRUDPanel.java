@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTableWidget;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
@@ -56,14 +56,14 @@ public class InlineCRUDPanel extends AbstractStandalonePanel {
     public void onRowChange() throws UnifyException {
         int index = getRequestTarget(int.class);
         String focusWidgetId = getRequestContextUtil().getTriggerWidgetId();
-        BeanTableWidget entryTableWidget = getWidgetByShortName(BeanTableWidget.class, "entryTable");
+        BeanListTableWidget entryTableWidget = getWidgetByShortName(BeanListTableWidget.class, "entryTable");
         String trigger = entryTableWidget.resolveChildWidgetName(focusWidgetId);
         getCrud().fireOnRowChange(new RowChangeInfo(trigger, index));
     }
 
     public FormValidationErrors validate(EvaluationMode evaluationMode) throws UnifyException {
         FormValidationErrors errors = getCrud().validate(evaluationMode);
-        BeanTableWidget entryTableWidget = getWidgetByShortName(BeanTableWidget.class, "entryTable");
+        BeanListTableWidget entryTableWidget = getWidgetByShortName(BeanListTableWidget.class, "entryTable");
         entryTableWidget.validate(evaluationMode, errors);
         return errors;
     }

@@ -22,7 +22,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
@@ -41,7 +41,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
  */
 public class InlineCRUD<T extends InlineCRUDEntry> {
 
-    private BeanTable table;
+    private BeanListTable table;
 
     private Class<T> entryClass;
 
@@ -50,12 +50,12 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     private String addCaption;
 
     public InlineCRUD(AppletUtilities au, TableDef tableDef, Class<T> entryClass) {
-        this.table = new BeanTable(au, tableDef, null, BeanTable.ENTRY_ENABLED);
+        this.table = new BeanListTable(au, tableDef, null, BeanListTable.ENTRY_ENABLED);
         this.entryClass = entryClass;
         this.errors = new FormValidationErrors();
     }
 
-    public BeanTable getTable() {
+    public BeanListTable getTable() {
         return table;
     }
 

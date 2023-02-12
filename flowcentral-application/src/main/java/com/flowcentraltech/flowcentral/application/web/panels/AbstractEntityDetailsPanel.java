@@ -39,11 +39,15 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
         this.au = au;
     }
 
-    protected ApplicationModuleService application() {
+    protected final AppletUtilities au() {
+        return au;
+    }
+
+    protected final ApplicationModuleService application() {
         return au.application();
     }
 
-    protected EnvironmentService environment() {
+    protected final EnvironmentService environment() {
         return au.environment();
     }
 

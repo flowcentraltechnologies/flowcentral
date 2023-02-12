@@ -42,7 +42,7 @@
 // Assignment box panel
 !ui-panel:assignmentBodyPanel components:$c{assignmentPage assignmentEntryTbl}
 !fc-assignmentpage:assignmentPage style:$s{width:780px; margin: 8px auto;}
-!fc-beantable:assignmentEntryTbl style:$s{width:920px; margin: 8px auto;}
+!fc-beanlisttable:assignmentEntryTbl style:$s{width:920px; margin: 8px auto;}
 	multiSelect:true binding:entryBeanTable
 	
 // Actions

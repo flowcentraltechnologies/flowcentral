@@ -17,33 +17,53 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
-import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.annotation.ResultMapping;
+import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 
 /**
- * Convenient abstract base class for applet controllers.
+ * Convenient abstract base class for entity details controllers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractAppletController<T extends AbstractAppletPageBean<? extends AbstractApplet>>
+@UplBinding("web/application/upl/entitydetailspage.upl")
+@ResultMappings({
+    @ResultMapping(name = "detailsResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" }) })
+public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractFlowCentralPageController<T> {
 
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public AbstractAppletController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
+    public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
+    }    
+
+    @Action
+    public final String details() throws UnifyException {
+        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
+        if (po.length > 0) {
+            int mIndex = Integer.parseInt(po[0]);
+            AbstractEntityDetailsPageBean pageBean = getPageBean();
+            pageBean.getResultTable().setDetailsIndex(mIndex);
+            return "detailsResult";
+        }
+
+        return noResult();
     }
 
     protected final AppletUtilities au() {
@@ -52,16 +72,6 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
 
     protected final ApplicationModuleService application() {
         return appletUtilities.application();
-    }
+    }    
 
-    protected void setPageTitle(AbstractApplet applet) throws UnifyException {
-        if (applet != null) {
-            setPageTitle(applet.getAppletDescription());
-        }
-    }
-
-    protected String showPopup(String resultMapping, String backingBeanKey, Object backingBean) throws UnifyException {
-        setSessionAttribute(backingBeanKey, backingBean);
-        return resultMapping;
-    }
 }

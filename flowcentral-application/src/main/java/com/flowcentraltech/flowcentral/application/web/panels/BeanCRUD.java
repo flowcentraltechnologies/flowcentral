@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
@@ -34,12 +34,12 @@ import com.tcdng.unify.core.util.ReflectUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class BeanCRUD extends AbstractCRUD<BeanTable> {
+public class BeanCRUD extends AbstractCRUD<BeanListTable> {
 
     private final Class<?> beanClass;
 
     public BeanCRUD(AppletUtilities au, SweepingCommitPolicy scp, Class<?> beanClass, String baseField, Object baseId,
-            BeanTable table, MiniForm createForm, MiniForm maintainForm) {
+            BeanListTable table, MiniForm createForm, MiniForm maintainForm) {
         super(au, scp, baseField, baseId, table, createForm, maintainForm, "$m{button.add}");
         this.beanClass = beanClass;
     }

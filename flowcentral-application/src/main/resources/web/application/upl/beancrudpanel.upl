@@ -16,4 +16,4 @@
 !fc-beancrudpanel crudTable:$c{crudTable}
 
 // Table
-!fc-beantable:crudTable style:$s{width:100%;} binding:table
+!fc-beanlisttable:crudTable style:$s{width:100%;} binding:table
