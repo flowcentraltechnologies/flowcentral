@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -37,7 +39,7 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
 @ResultMappings({
-    @ResultMapping(name = "detailsResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" }) })
+        @ResultMapping(name = "detailsResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" }) })
 public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractFlowCentralPageController<T> {
 
@@ -51,19 +53,29 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
-    }    
+    }
 
     @Action
     public final String details() throws UnifyException {
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
+        final String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
         if (po.length > 0) {
-            int mIndex = Integer.parseInt(po[0]);
-            AbstractEntityDetailsPageBean pageBean = getPageBean();
-            pageBean.getResultTable().setDetailsIndex(mIndex);
+            final int mIndex = Integer.parseInt(po[0]);
+            getEntityListTable().setDetailsIndex(mIndex);
             return "detailsResult";
         }
 
         return noResult();
+    }
+
+    @Override
+    protected void onOpenPage() throws UnifyException {
+        super.onOpenPage();
+
+        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        if (pageBean.getResultTable() == null) {
+            EntityListTable resultTable = new EntityListTable(au(), getTableDef());
+            pageBean.setResultTable(resultTable);
+        }
     }
 
     protected final AppletUtilities au() {
@@ -72,6 +84,11 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final ApplicationModuleService application() {
         return appletUtilities.application();
-    }    
+    }
 
+    protected final EntityListTable getEntityListTable() throws UnifyException {
+        return getPageBean().getResultTable();
+    }
+
+    protected abstract TableDef getTableDef() throws UnifyException;
 }
