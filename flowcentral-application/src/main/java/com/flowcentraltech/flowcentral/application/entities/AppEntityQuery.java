@@ -15,11 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 
 /**
  * Application entity query.
@@ -28,9 +24,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
  * @since 1.0
  */
 public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
-
-    private static final List<EntityBaseType> BASE_WORK_TYPES = Collections
-            .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY));
 
     public AppEntityQuery() {
         super(AppEntity.class);
@@ -41,7 +34,7 @@ public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
     }
 
     public AppEntityQuery isWorkEntity() {
-        return (AppEntityQuery) addAmongst("baseType", BASE_WORK_TYPES);
+        return (AppEntityQuery) addAmongst("baseType", ApplicationEntityUtils.BASE_WORK_TYPES);
     }
 
     public AppEntityQuery isDelegated() {

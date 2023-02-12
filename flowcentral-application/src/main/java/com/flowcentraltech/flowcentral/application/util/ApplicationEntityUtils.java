@@ -55,6 +55,8 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormElementType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Amongst;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -66,6 +68,12 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 public final class ApplicationEntityUtils {
+
+    public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
+            .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
+                    EntityBaseType.BASE_WORK_TENANT_ENTITY, EntityBaseType.BASE_STATUS_WORK_TENANT_ENTITY));
+
+    public static final Restriction WORK_ENTITY_RESTRICTION = new Amongst("type", ApplicationEntityUtils.BASE_WORK_TYPES);
 
     private static final Map<String, String> baseFieldColumns;
 
