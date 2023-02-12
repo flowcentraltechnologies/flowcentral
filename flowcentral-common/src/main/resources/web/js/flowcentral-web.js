@@ -654,7 +654,8 @@ fux.rigTable = function(rgp) {
 		selAllFac.selAll = selAll;
 		ux.addHdl(selAllFac, "change", fux.tableSelAllClick, evp);
 
-		for (var selBox of selBoxes) {
+		for (var i = 0; i < selBoxes.length; i++) {
+			var selBox = selBoxes[i];
 			selBox._active = true;
 			ux.cbWire(selBox);
 			
@@ -662,6 +663,7 @@ fux.rigTable = function(rgp) {
 			var _evp = evp;
 			if (rgp.pMultiSelLink) {
 				_evp = fux.newCmdEvPrm(rgp, "multiSelect");
+				_evp.uSendTrg = i;
 				_evp.uRigTbl = evp.uRigTbl;
 			}
 			

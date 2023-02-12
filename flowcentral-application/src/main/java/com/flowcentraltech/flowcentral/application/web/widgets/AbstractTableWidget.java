@@ -225,9 +225,11 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     @Action
     public void multiSelect() throws UnifyException {
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("@prime: target = " + getRequestTarget(String.class));
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        final int index = getRequestTarget(int.class);
+        T table = getTable();
+        if (table.isMultiSelectDetailLinked()) {
+            table.setDetailsIndex(index);
+        }
     }
 
     @Action
