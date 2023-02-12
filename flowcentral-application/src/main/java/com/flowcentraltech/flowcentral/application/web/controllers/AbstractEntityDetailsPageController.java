@@ -61,7 +61,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         if (po.length > 0) {
             final int mIndex = Integer.parseInt(po[0]);
             getResultTable().setDetailsIndex(mIndex);
-            return refreshDetailsResult();
+            return refreshResult();
         }
 
         return noResult();
@@ -90,7 +90,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return getPageBean().getResultTable();
     }
 
-    protected final String refreshDetailsResult() {
+    protected final String refreshResult() {
         return "detailsResult";
     }
     
