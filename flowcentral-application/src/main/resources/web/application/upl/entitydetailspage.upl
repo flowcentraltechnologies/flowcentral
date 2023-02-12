@@ -16,7 +16,7 @@
 !ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{resultTbl} 
 !fc-entitylisttable:resultTbl style:$s{width:100%;}
-	details:$g{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
+	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
 
 // Actions
 !ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
