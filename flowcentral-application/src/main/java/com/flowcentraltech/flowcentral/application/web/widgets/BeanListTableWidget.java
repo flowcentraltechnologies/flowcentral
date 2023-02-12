@@ -24,7 +24,7 @@ import com.tcdng.unify.core.annotation.Component;
  * @since 1.0
  */
 @Component("fc-beanlisttable")
-public abstract class BeanListTableWidget extends AbstractListTableWidget<BeanListTable, Object> {
+public class BeanListTableWidget extends AbstractListTableWidget<BeanListTable, Object> {
 
     public BeanListTableWidget() {
         super(BeanListTable.class, Object.class);

@@ -25,7 +25,7 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 @Component("fc-entitylisttable")
-public abstract class EntityListTableWidget extends AbstractListTableWidget<EntityListTable, Entity> {
+public class EntityListTableWidget extends AbstractListTableWidget<EntityListTable, Entity> {
 
     public EntityListTableWidget() {
         super(EntityListTable.class, Entity.class);
