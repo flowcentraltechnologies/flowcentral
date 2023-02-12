@@ -60,7 +60,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         final String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
         if (po.length > 0) {
             final int mIndex = Integer.parseInt(po[0]);
-            getEntityListTable().setDetailsIndex(mIndex);
+            getResultTable().setDetailsIndex(mIndex);
             return "detailsResult";
         }
 
@@ -86,7 +86,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return appletUtilities.application();
     }
 
-    protected final EntityListTable getEntityListTable() throws UnifyException {
+    protected final EntityListTable getResultTable() throws UnifyException {
         return getPageBean().getResultTable();
     }
 
