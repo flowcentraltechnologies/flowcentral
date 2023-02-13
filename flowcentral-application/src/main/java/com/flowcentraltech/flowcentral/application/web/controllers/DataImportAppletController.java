@@ -43,7 +43,7 @@ public class DataImportAppletController extends AbstractAppletController<DataImp
 
         DataImportPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            DataImportApplet applet = new DataImportApplet(getAu(), getPathVariable());
+            DataImportApplet applet = new DataImportApplet(au(), getPathVariable());
             pageBean.setApplet(applet);
             setPageTitle(applet);
         }

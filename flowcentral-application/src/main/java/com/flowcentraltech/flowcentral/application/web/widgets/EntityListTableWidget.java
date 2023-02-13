@@ -13,32 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
-import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
-import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.UplAttribute;
-import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.database.Query;
 
 /**
- * Work application entity list widget.
+ * Entity list table widget.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-workappentitylist")
-@UplAttributes({ @UplAttribute(name = "ref", type = String[].class, defaultVal = "application.appEntity"),
-        @UplAttribute(name = "direct", type = boolean.class, defaultVal = "true") })
-public class WorkAppEntityListWidget extends EntityListWidget {
+@Component("fc-entitylisttable")
+public class EntityListTableWidget extends AbstractListTableWidget<EntityListTable, Entity> {
 
-    @Override
-    protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
-        super.addMoreResultRestriction(query);
-        query.addRestriction(ApplicationEntityUtils.WORK_ENTITY_RESTRICTION);
+    public EntityListTableWidget() {
+        super(EntityListTable.class, Entity.class);
     }
 
 }

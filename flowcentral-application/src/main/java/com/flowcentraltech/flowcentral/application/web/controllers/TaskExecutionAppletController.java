@@ -52,7 +52,7 @@ public class TaskExecutionAppletController extends AbstractAppletController<Task
 
         TaskExecutionPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            TaskExecutionApplet applet = new TaskExecutionApplet(getAu(), taskManager, getPathVariable());
+            TaskExecutionApplet applet = new TaskExecutionApplet(au(), taskManager, getPathVariable());
             pageBean.setApplet(applet);
             setPageTitle(applet);
         }

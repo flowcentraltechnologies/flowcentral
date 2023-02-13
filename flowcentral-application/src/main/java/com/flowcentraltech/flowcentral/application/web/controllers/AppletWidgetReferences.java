@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTableWidget;
 
 /**
  * Applet widget references.
@@ -26,20 +26,20 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
  */
 public class AppletWidgetReferences {
 
-    private BeanTableWidget assignmentEntryTableWidget;
+    private BeanListTableWidget assignmentEntryTableWidget;
 
-    private BeanTableWidget entryEntryTableWidget;
+    private BeanListTableWidget entryEntryTableWidget;
 
-    public AppletWidgetReferences(BeanTableWidget assignmentEntryTableWidget, BeanTableWidget entryEntryTableWidget) {
+    public AppletWidgetReferences(BeanListTableWidget assignmentEntryTableWidget, BeanListTableWidget entryEntryTableWidget) {
         this.assignmentEntryTableWidget = assignmentEntryTableWidget;
         this.entryEntryTableWidget = entryEntryTableWidget;
     }
 
-    public BeanTableWidget getAssignmentEntryTableWidget() {
+    public BeanListTableWidget getAssignmentEntryTableWidget() {
         return assignmentEntryTableWidget;
     }
 
-    public BeanTableWidget getEntryEntryTableWidget() {
+    public BeanListTableWidget getEntryEntryTableWidget() {
         return entryEntryTableWidget;
     }
 

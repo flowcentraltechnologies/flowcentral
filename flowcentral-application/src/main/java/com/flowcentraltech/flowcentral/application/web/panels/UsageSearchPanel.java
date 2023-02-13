@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -35,11 +35,11 @@ public class UsageSearchPanel extends AbstractPanel {
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-        final BeanTable beanTable = getUsageSearch().getBeanTable();
-        setDisabled("fastBackBtn", beanTable.isAtFirstPage());
-        setDisabled("backBtn", beanTable.isAtFirstPage());
-        setDisabled("forwardBtn", beanTable.isAtLastPage());
-        setDisabled("fastForwardBtn", beanTable.isAtLastPage());
+        final BeanListTable beanListTable = getUsageSearch().getBeanTable();
+        setDisabled("fastBackBtn", beanListTable.isAtFirstPage());
+        setDisabled("backBtn", beanListTable.isAtFirstPage());
+        setDisabled("forwardBtn", beanListTable.isAtLastPage());
+        setDisabled("fastForwardBtn", beanListTable.isAtLastPage());
     }
 
     @Action

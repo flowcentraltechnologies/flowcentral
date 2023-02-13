@@ -36,28 +36,24 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Bean table object.
+ * Abstract list table object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class BeanTable extends AbstractTable<List<?>, Object> {
+public class AbstractListTable<T> extends AbstractTable<List<? extends T>, T> {
 
-    public BeanTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef) {
-        this(au, tableDef, filterGroupDef, 0);
-    }
-
-    public BeanTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, int entryMode) {
+    protected AbstractListTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, int entryMode) {
         super(au, tableDef, filterGroupDef, null, entryMode);
     }
 
     public int getItemCount() throws UnifyException {
-        List<?> sourceObject = getSourceObject();
+        List<? extends T> sourceObject = getSourceObject();
         return sourceObject != null ? sourceObject.size() : 0;
     }
 
     @Override
-    protected void validate(EvaluationMode evaluationMode, List<?> sourceObject, FormValidationErrors errors)
+    protected void validate(EvaluationMode evaluationMode, List<? extends T> sourceObject, FormValidationErrors errors)
             throws UnifyException {
         if (isWithEntryPolicy()) {
             getEntryPolicy().validateEntries(evaluationMode, getParentReader(), getValueStore(sourceObject), errors);
@@ -65,14 +61,14 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected void onLoadSourceObject(List<?> sourceObject, Set<Integer> selected) throws UnifyException {
+    protected void onLoadSourceObject(List<? extends T> sourceObject, Set<Integer> selected) throws UnifyException {
         if (isWithEntryPolicy()) {
             getEntryPolicy().onEntryTableLoad(getParentReader(), getValueStore(sourceObject), selected);
         }
     }
 
     @Override
-    protected EntryActionType onFireOnTableChange(List<?> sourceObject, Set<Integer> selected,
+    protected EntryActionType onFireOnTableChange(List<? extends T> sourceObject, Set<Integer> selected,
             TableChangeType changeType) throws UnifyException {
         if (isWithEntryPolicy()) {
             return getEntryPolicy().onEntryTableChange(getParentReader(), getValueStore(sourceObject), selected,
@@ -83,7 +79,7 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected EntryActionType onFireOnRowChange(List<?> sourceObject, RowChangeInfo rowChangeInfo)
+    protected EntryActionType onFireOnRowChange(List<? extends T> sourceObject, RowChangeInfo rowChangeInfo)
             throws UnifyException {
         if (isWithEntryPolicy()) {
             ValueStore tableValueStore = getValueStore(sourceObject);
@@ -95,7 +91,7 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
     }
 
     @Override
-    protected int getSourceObjectSize(List<?> sourceObject) throws UnifyException {
+    protected int getSourceObjectSize(List<? extends T> sourceObject) throws UnifyException {
         if (sourceObject != null) {
             return sourceObject.size();
         }
@@ -105,12 +101,12 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected List<Object> getDisplayItems(List<?> sourceObject, int dispStartIndex, int dispEndIndex)
+    protected List<T> getDisplayItems(List<? extends T> sourceObject, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
         if (sourceObject != null) {
-            List<Object> resultList = dispStartIndex == 0 && dispEndIndex == sourceObject.size()
-                    ? (List<Object>) sourceObject
-                    : (List<Object>) sourceObject.subList(dispStartIndex, dispEndIndex);
+            List<T> resultList = dispStartIndex == 0 && dispEndIndex == sourceObject.size()
+                    ? (List<T>) sourceObject
+                    : (List<T>) sourceObject.subList(dispStartIndex, dispEndIndex);
             if (resultList.size() > 1) {
                 Order order = getOrder();
                 if (order != null) {
@@ -128,7 +124,7 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
 
     @Override
     protected void orderOnReset() throws UnifyException {
-        List<?> sourceObject = getSourceObject();
+        List<? extends T> sourceObject = getSourceObject();
         if (sourceObject != null && !sourceObject.isEmpty()) {
             Order order = getOrder();
             if (order != null) {
@@ -146,7 +142,7 @@ public class BeanTable extends AbstractTable<List<?>, Object> {
         }
     }
 
-    private ValueStore getValueStore(List<?> sourceObject) throws UnifyException {
+    private ValueStore getValueStore(List<? extends T> sourceObject) throws UnifyException {
         return new BeanValueListStore(sourceObject);
     }
 }

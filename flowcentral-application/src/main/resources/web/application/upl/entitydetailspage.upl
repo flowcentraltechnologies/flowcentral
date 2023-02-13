@@ -1,0 +1,35 @@
+// UPL template for entity details page.
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!ui-page components:$c{basePanel} detailsMultiSelect:false
+	detailsViewButtonClass:$s{mbtn mblue}
+		
+// Base panel
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$f{moreHeaderComponents}
+	components:$c{resultPanel}
+	components:$f{moreFooterComponents}
+
+!ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
+
+// Result panel
+!ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{resultTbl} 
+!fc-entitylisttable:resultTbl style:$s{width:100%;} viewButtonClass:$f{detailsViewButtonClass}
+	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
+
+// Actions
+!ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
+!ui-post:viewAct  path:$n{/view}

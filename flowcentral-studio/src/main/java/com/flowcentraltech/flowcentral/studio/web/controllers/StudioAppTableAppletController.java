@@ -69,7 +69,7 @@ public class StudioAppTableAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            StudioAppTableApplet applet = new StudioAppTableApplet(studioModuleService, getAu(), getPathVariable(),
+            StudioAppTableApplet applet = new StudioAppTableApplet(studioModuleService, au(), getPathVariable(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);

@@ -224,6 +224,15 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     @Action
+    public void multiSelect() throws UnifyException {
+        final int index = getRequestTarget(int.class);
+        T table = getTable();
+        if (table.isMultiSelectDetailLinked()) {
+            table.setDetailsIndex(index);
+        }
+    }
+
+    @Action
     public void exclude() throws UnifyException {
         applyFixedAction(FixedRowActionType.REMOVE);
     }

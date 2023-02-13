@@ -13,27 +13,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.notification.entities;
+package com.flowcentraltech.flowcentral.application.web.controllers;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseVersionTenantEntityQuery;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
+import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Notification recipient query class;
+ * Convenient abstract base class for entity details page beans.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationRecipientQuery extends BaseVersionTenantEntityQuery<NotificationRecipient> {
+public abstract class AbstractEntityDetailsPageBean extends AbstractPageBean {
 
-    public NotificationRecipientQuery() {
-        super(NotificationRecipient.class);
+    private EntityListTable resultTable;
+
+    public EntityListTable getResultTable() {
+        return resultTable;
     }
 
-    public NotificationRecipientQuery notificationId(Long notificationId) {
-        return (NotificationRecipientQuery) addEquals("notificationId", notificationId);
+    public void setResultTable(EntityListTable resultTable) {
+        this.resultTable = resultTable;
     }
-
-    public NotificationRecipientQuery recipientNameLike(String recipientName) {
-        return (NotificationRecipientQuery) addLike("recipientName", recipientName);
-    }
+    
+    public abstract String getViewActionCaption();
+    
+    public abstract boolean isViewActionMode();
+    
 }

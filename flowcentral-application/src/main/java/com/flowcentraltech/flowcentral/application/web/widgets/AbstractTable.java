@@ -95,6 +95,8 @@ public abstract class AbstractTable<T, U> {
 
     private int entryMode;
 
+    private boolean multiSelectDetailLinked;
+
     private boolean basicSearchMode;
 
     private boolean crudMode;
@@ -256,6 +258,14 @@ public abstract class AbstractTable<T, U> {
         return selected.size();
     }
 
+    public boolean isMultiSelectDetailLinked() {
+        return multiSelectDetailLinked;
+    }
+
+    public void setMultiSelectDetailLinked(boolean multiSelectDetailLinked) {
+        this.multiSelectDetailLinked = multiSelectDetailLinked;
+    }
+
     public boolean isSupportsBasicSearch() {
         return tableDef.isBasicSearch();
     }
@@ -318,6 +328,9 @@ public abstract class AbstractTable<T, U> {
 
     public void setDetailsIndex(int detailsIndex) {
         this.detailsIndex = detailsIndex;
+        if (multiSelectDetailLinked && detailsIndex >= 0) {
+            setSelected(detailsIndex, true);
+        }
     }
 
     public ValueStoreReader getParentReader() {

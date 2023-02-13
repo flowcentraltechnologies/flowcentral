@@ -17,19 +17,16 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.List;
 
-import com.tcdng.unify.core.annotation.Component;
-
 /**
- * Bean table widget.
+ * Abstract base class for list table widgets.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-beantable")
-public class BeanTableWidget extends AbstractTableWidget<BeanTable, Object, List<?>> {
+public abstract class AbstractListTableWidget<T extends AbstractListTable<U>, U> extends AbstractTableWidget<T, U, List<? extends U>> {
 
-    public BeanTableWidget() {
-        super(BeanTable.class, Object.class);
+    public AbstractListTableWidget(Class<T> tableClass, Class<U> itemClass) {
+        super(tableClass, itemClass);
     }
 
 }

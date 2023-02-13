@@ -309,7 +309,7 @@
 		<widgetType name="yearEnd" listOption="true"
 			description="$m{application.widgettype.yearend}" dataType="date"
 			inputType="date" editor="!ui-yearend"
-			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{dd/MM}}" />
+			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{dd/MM} strictFormat:true}" />
 		<widgetType name="date" listOption="true"
 			description="$m{application.widgettype.date}" dataType="date"
 			inputType="date"

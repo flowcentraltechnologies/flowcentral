@@ -80,7 +80,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.SingleFormBean;
 import com.flowcentraltech.flowcentral.application.web.panels.UsageSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
@@ -1663,14 +1663,14 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public BeanTable constructEntryBeanTable(String tableName, String entryEditPolicy) throws UnifyException {
+    public BeanListTable constructEntryBeanTable(String tableName, String entryEditPolicy) throws UnifyException {
         return constructEntryBeanTable(tableName, null, entryEditPolicy);
     }
 
     @Override
-    public BeanTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
+    public BeanListTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
             throws UnifyException {
-        BeanTable entryBeanTable = new BeanTable(this, getTableDef(tableName), filterGroupDef, BeanTable.ENTRY_ENABLED);
+        BeanListTable entryBeanTable = new BeanListTable(this, getTableDef(tableName), filterGroupDef, BeanListTable.ENTRY_ENABLED);
         if (!StringUtils.isBlank(entryEditPolicy)) {
             ChildListEditPolicy policy = getComponent(ChildListEditPolicy.class, entryEditPolicy);
             entryBeanTable.setPolicy(policy);

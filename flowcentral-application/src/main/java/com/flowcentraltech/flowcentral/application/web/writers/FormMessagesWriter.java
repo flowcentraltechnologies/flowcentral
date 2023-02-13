@@ -47,7 +47,7 @@ public class FormMessagesWriter extends AbstractControlWriter {
         if (messagesList != null) {
             writer.write("<ul class=\"bdy\">");
             for (FormMessage message : messagesList) {
-                writer.write("<li class=\"").write(message.getType().styleClass()).write("\">")
+                writer.write("<li class=\"msg ").write(message.getType().styleClass()).write("\">")
                         .writeWithHtmlEscape(resolveSessionMessage(message.getMessage())).write("</li>");
             }
             writer.write("</ul>");

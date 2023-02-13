@@ -47,7 +47,7 @@ public class ManageLoadingListAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            ManageLoadingListApplet applet = new ManageLoadingListApplet(getAu(), getPathVariable(),
+            ManageLoadingListApplet applet = new ManageLoadingListApplet(au(), getPathVariable(),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {

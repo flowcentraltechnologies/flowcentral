@@ -57,7 +57,7 @@ public class ManageEntityListAppletController
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            ManageEntityListApplet applet = new ManageEntityListApplet(getAu(), getPathVariable(),
+            ManageEntityListApplet applet = new ManageEntityListApplet(au(), getPathVariable(),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
             if (pageBean.getAltCaption() == null) {

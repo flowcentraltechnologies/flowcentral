@@ -62,10 +62,7 @@ public class BaseAuditEntityPolicy extends BaseVersionEntityPolicy {
 
     private String getUserLoginId() throws UnifyException {
         UserToken userToken = getUserToken();
-        if (userToken != null) {
-            return userToken.getUserLoginId();
-        }
-
-        return DefaultApplicationConstants.SYSTEM_LOGINID;
+        return userToken != null && userToken.isWithUserLoginId() ? userToken.getUserLoginId()
+                : DefaultApplicationConstants.SYSTEM_LOGINID;
     }
 }

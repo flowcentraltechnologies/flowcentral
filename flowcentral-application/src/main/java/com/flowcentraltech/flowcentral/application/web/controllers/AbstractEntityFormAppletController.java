@@ -27,7 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.QuickFormEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
-import com.flowcentraltech.flowcentral.application.web.widgets.BeanTableWidget;
+import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTableWidget;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -121,7 +121,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                 ValueStore formValueStore = applet.getForm().getCtx().getFormValueStore();
                 switch (showPopupInfo.getType()) {
                     case SHOW_MULTISELECT: {
-                        RefDef refDef = getAu().getRefDef(showPopupInfo.getReference());
+                        RefDef refDef = au().getRefDef(showPopupInfo.getReference());
                         EntitySelect entitySelect = applet.au().constructEntitySelect(refDef, formValueStore, null,
                                 null, null, 0);
                         entitySelect.setEnableFilter(false);
@@ -133,9 +133,9 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                                 entitySelect));
                     }
                     case SHOW_TREEMULTISELECT: {
-                        EntityTreeSelectGenerator generator = getAu().getComponent(EntityTreeSelectGenerator.class,
+                        EntityTreeSelectGenerator generator = au().getComponent(EntityTreeSelectGenerator.class,
                                 showPopupInfo.getReference());
-                        EntityTreeSelect entityTreeSelect = generator.generate(getAu(), formValueStore);
+                        EntityTreeSelect entityTreeSelect = generator.generate(au(), formValueStore);
                         entityTreeSelect.setTitle(entityTreeSelect.getEntityTreeTable().getTitle());
                         return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_ENTITY_TREEMULTISELECT,
                                 entityTreeSelect));
@@ -267,9 +267,9 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     }
 
     protected AppletWidgetReferences getAppletWidgetReferences() throws UnifyException {
-        BeanTableWidget assignmentEntryTableWidget = getPageWidgetByShortName(BeanTableWidget.class,
+        BeanListTableWidget assignmentEntryTableWidget = getPageWidgetByShortName(BeanListTableWidget.class,
                 "appletPanel.assignmentPanel.assignmentEntryTbl");
-        BeanTableWidget entryEntryTableWidget = getPageWidgetByShortName(BeanTableWidget.class,
+        BeanListTableWidget entryEntryTableWidget = getPageWidgetByShortName(BeanListTableWidget.class,
                 "appletPanel.entryTablePanel.entryTableEntryTbl");
         return new AppletWidgetReferences(assignmentEntryTableWidget, entryEntryTableWidget);
     }

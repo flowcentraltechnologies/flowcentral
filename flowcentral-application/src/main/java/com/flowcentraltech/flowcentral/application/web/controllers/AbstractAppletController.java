@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
@@ -41,12 +42,16 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    public void setAppletUtilities(AppletUtilities appletUtilities) {
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
     }
 
-    protected AppletUtilities getAu() {
+    protected final AppletUtilities au() {
         return appletUtilities;
+    }
+
+    protected final ApplicationModuleService application() {
+        return appletUtilities.application();
     }
 
     protected void setPageTitle(AbstractApplet applet) throws UnifyException {

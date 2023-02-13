@@ -19,7 +19,7 @@
 // Table
 !ui-panel:entryTablePanel style:$s{width:100%} components:$c{entryErrors entryTable addEntryBtn}
 !fc-formmessages:entryErrors binding:validationErrors
-!fc-beantable:entryTable style:$s{width:100%;} binding:table alternatingRows:$f{alternatingRows}
+!fc-beanlisttable:entryTable style:$s{width:100%;} binding:table alternatingRows:$f{alternatingRows}
 	actionSymbol:$s{trash} actionHandler:$d{!ui-event event:onclick action:$c{crudDeleteAct}} summary:$f{summary}
 	switchOnChangeHandler:$d{!ui-event event:onchange action:$c{crudSwitchAct}}
 !ui-button:addEntryBtn caption:$m{button.add} captionBinding:$s{addCaption} styleClass:$e{fc-inline-entry-button}

@@ -615,8 +615,8 @@ fux.rigTabSheet = function(rgp) {
 /** Table */
 fux.rigTable = function(rgp) {
 	var id = rgp.pId;
-	var tblToRig = _id(id);
-	if (!tblToRig) {
+	var tbl = _id(id);
+	if (!tbl) {
 		// TODO Show some error
 		return;
 	}
@@ -635,10 +635,11 @@ fux.rigTable = function(rgp) {
     }
     
 	if (rgp.pMultiSel) {
-		tblToRig.uSelAllId = rgp.pSelAllId;
-		tblToRig.uSelCtrlId = rgp.pSelCtrlId;
-		tblToRig.uMultiSelDepList = rgp.pMultiSelDepList;
-		tblToRig.uVisibleSel = 0;
+		tbl.uSelAllId = rgp.pSelAllId;
+		tbl.uSelCtrlId = rgp.pSelCtrlId;
+		tbl.uMultiSelDepList = rgp.pMultiSelDepList;
+		tbl.uMultiSelLink = rgp.pMultiSelLink;
+		tbl.uVisibleSel = 0;
 
 		// Rig select
 		const selAll = _id(rgp.pSelAllId);
@@ -646,20 +647,28 @@ fux.rigTable = function(rgp) {
 		ux.cbWire(selAll);
 
 		const selBoxes = _name(rgp.pSelCtrlId);
-		tblToRig.uSelBoxes = selBoxes;
+		tbl.uSelBoxes = selBoxes;
 
-		const evp = {uRigTbl:tblToRig};
+		const evp = {uRigTbl:tbl};
 		const selAllFac = _id("fac_" + rgp.pSelAllId);
 		selAllFac.selAll = selAll;
 		ux.addHdl(selAllFac, "change", fux.tableSelAllClick, evp);
 
-		for (var selBox of selBoxes) {
+		for (var i = 0; i < selBoxes.length; i++) {
+			var selBox = selBoxes[i];
 			selBox._active = true;
 			ux.cbWire(selBox);
 			
 			const selBoxFac = _id("fac_" + selBox.id);
+			var _evp = evp;
+			if (rgp.pMultiSelLink) {
+				_evp = fux.newCmdEvPrm(rgp, "multiSelect");
+				_evp.uSendTrg = i;
+				_evp.uRigTbl = evp.uRigTbl;
+			}
+			
 			selBoxFac.selBox = selBox;
-			ux.addHdl(selBoxFac, "change", fux.tableMultiSelClick, evp);
+			ux.addHdl(selBoxFac, "change", fux.tableMultiSelClick, _evp);
 		}
 	}
 
@@ -783,7 +792,11 @@ fux.tableMultiSelClick = function(uEv) {
 			}
 		}
 		
-		fux.tableDisableMultiSelElements(rigTbl);
+		if(checked && rigTbl.uMultiSelLink) {
+			ux.post(uEv);
+		} else {
+			fux.tableDisableMultiSelElements(rigTbl);
+		}
 	}
 }
 
@@ -824,18 +837,18 @@ fux.tableDisableMultiSelElements = function(rigTbl) {
 /* Tree Table*/
 fux.rigEntityTreeTable = function(rgp) {
 	var id = rgp.pId;
-	var tblToRig = _id(id);
-	if (!tblToRig) {
+	var tbl = _id(id);
+	if (!tbl) {
 		// TODO Show some error
 		return;
 	}
 
 	if (rgp.pMultiSel) {
-		tblToRig.uSelAllId = rgp.pSelAllId;
-		tblToRig.uSelCtrlId = rgp.pSelCtrlId;
-		tblToRig.uMultiSelDepList = rgp.pMultiSelDepList;
-		tblToRig.uChain = rgp.pLvlChain;
-		tblToRig.uVisibleSel = 0;
+		tbl.uSelAllId = rgp.pSelAllId;
+		tbl.uSelCtrlId = rgp.pSelCtrlId;
+		tbl.uMultiSelDepList = rgp.pMultiSelDepList;
+		tbl.uChain = rgp.pLvlChain;
+		tbl.uVisibleSel = 0;
 
 		// Rig select
 		const selAll = _id(rgp.pSelAllId);
@@ -843,9 +856,9 @@ fux.rigEntityTreeTable = function(rgp) {
 		ux.cbWire(selAll);
 
 		const selBoxes = _name(rgp.pSelCtrlId);
-		tblToRig.uSelBoxes = selBoxes;
+		tbl.uSelBoxes = selBoxes;
 
-		const evp = {uRigTbl:tblToRig};
+		const evp = {uRigTbl:tbl};
 		const selAllFac = _id("fac_" + rgp.pSelAllId);
 		selAllFac.selAll = selAll;
 		ux.addHdl(selAllFac, "change", fux.tableSelAllClick, evp);

@@ -157,7 +157,11 @@ public class FormWriter extends AbstractContainerWriter {
                 }
                 writer.write("\"/>");
             }
-            writer.writeWithHtmlEscape(widget.getCaption());
+            
+            if (widget.isLayoutCaption()) {
+                writer.writeWithHtmlEscape(widget.getCaption());
+            }
+            
             writer.write("</span>");
             writer.write("</div>");
             writer.write("</div>");

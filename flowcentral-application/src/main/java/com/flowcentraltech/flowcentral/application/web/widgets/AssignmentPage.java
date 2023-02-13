@@ -87,7 +87,7 @@ public class AssignmentPage {
     
     private Set<Integer> selectedOnLoad;
 
-    private BeanTable entryBeanTable;
+    private BeanListTable entryBeanTable;
 
     public AssignmentPage(AppletContext ctx, List<EventHandler> assnSwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, AssignmentPageDef assignmentPageDef,
@@ -184,10 +184,10 @@ public class AssignmentPage {
         }
     }
 
-    public BeanTable getEntryBeanTable() throws UnifyException {
+    public BeanListTable getEntryBeanTable() throws UnifyException {
         if (isEntryTableMode() && entryBeanTable == null) {
-            entryBeanTable = new BeanTable(ctx.au(), ctx.au().getTableDef(entryTable), filterGroupDef,
-                    BeanTable.ENTRY_ENABLED | BeanTable.SORT_DISABLED);
+            entryBeanTable = new BeanListTable(ctx.au(), ctx.au().getTableDef(entryTable), filterGroupDef,
+                    BeanListTable.ENTRY_ENABLED | BeanListTable.SORT_DISABLED);
             if (!StringUtils.isBlank(assnEditPolicy)) {
                 ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, assnEditPolicy);
                 entryBeanTable.setPolicy(policy);
@@ -277,7 +277,7 @@ public class AssignmentPage {
                 }
             }
 
-            final BeanTable _beanTable = getEntryBeanTable();
+            final BeanListTable _beanTable = getEntryBeanTable();
             _beanTable.setSwitchOnChangeHandlers(assnSwitchOnChangeHandlers);
             _beanTable.setSelectedRows(selectedOnLoad);
             _beanTable.setSourceObject(resultList);
