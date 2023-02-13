@@ -5,18 +5,22 @@
 // PROPRIETARY AND CONFIDENTIAL. USE IS SUBJECT TO LICENSE TERMS.
 
 !ui-page components:$c{basePanel} detailsMultiSelect:false
-	
+	detailsViewButtonClass:$s{mbtn mblue}
+		
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$f{moreHeaderComponents}
 	components:$c{resultPanel}
 	components:$f{moreFooterComponents}
 
+!ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
+
 // Result panel
 !ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{resultTbl} 
-!fc-entitylisttable:resultTbl style:$s{width:100%;}
+!fc-entitylisttable:resultTbl style:$s{width:100%;} viewButtonClass:$f{detailsViewButtonClass}
 	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
 
 // Actions
 !ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
+!ui-post:viewAct  path:$n{/view}

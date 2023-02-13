@@ -35,4 +35,9 @@ public abstract class AbstractEntityDetailsPageBean extends AbstractPageBean {
     public void setResultTable(EntityListTable resultTable) {
         this.resultTable = resultTable;
     }
+    
+    public abstract String getViewActionCaption();
+    
+    public abstract boolean isViewActionMode();
+    
 }

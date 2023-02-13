@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import java.util.Arrays;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
@@ -23,6 +25,7 @@ import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentra
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
@@ -30,6 +33,8 @@ import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
+import com.tcdng.unify.web.ui.widget.EventHandler;
+import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
  * Convenient abstract base class for entity details controllers.
@@ -67,6 +72,12 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return noResult();
     }
 
+    @Action
+    public final String view() throws UnifyException {
+        final int index = getRequestTarget(int.class);
+        return onView(getResultTable().getDispItemList().get(index));
+    }
+
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
@@ -74,6 +85,16 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         AbstractEntityDetailsPageBean pageBean = getPageBean();
         if (pageBean.getResultTable() == null) {
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
+            if (pageBean.isViewActionMode()) {
+                String viewCaption = resolveSessionMessage(pageBean.getViewActionCaption());
+                resultTable.setViewButtonCaption(viewCaption);
+                EventHandler[] viewActHandlers = getPageWidgetByShortName(Widget.class, "viewActHolder")
+                        .getUplAttribute(EventHandler[].class, "eventHandler");
+                resultTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
+                resultTable.setCrudMode(true);
+                resultTable.setView(true);
+            }
+            
             pageBean.setResultTable(resultTable);
         }
     }
@@ -95,4 +116,6 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     }
     
     protected abstract TableDef getTableDef() throws UnifyException;
+    
+    protected abstract String onView(Entity inst) throws UnifyException;
 }
