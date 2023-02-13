@@ -21,22 +21,39 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractDetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 
 /**
- * Convenient abstract base class for CRUD panels.
+ * Convenient abstract base class for entity details panels.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@UplBinding("web/application/upl/entitydetailspanel.upl")
 public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<Entity> {
+
+    private static final String ERROR_BINDING = "errorMsg";
 
     @Configurable
     private AppletUtilities au;
 
     public final void setAu(AppletUtilities au) {
         this.au = au;
+    }
+
+    @Override
+    public final void switchState() throws UnifyException {
+        super.switchState();
+        removeTempValue(ERROR_BINDING);
+        doSwitchState();
+        setVisible(ERROR_BINDING, isTempValue(ERROR_BINDING));
+    }
+
+    @Override
+    protected final Entity getDetails(ValueStore valueStore) throws UnifyException {
+        return (Entity) valueStore.getValueObjectAtDataIndex();
     }
 
     protected final AppletUtilities au() {
@@ -51,9 +68,10 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
         return au.environment();
     }
 
-    @Override
-    protected Entity getDetails(ValueStore valueStore) throws UnifyException {
-        return (Entity) valueStore.getValueObjectAtDataIndex();
+    protected void setError(String message, Object... params) throws UnifyException {
+        setTempValue(ERROR_BINDING,
+                resolveSessionMessage(message, params));
     }
-
+    
+    protected abstract void doSwitchState() throws UnifyException;
 }
