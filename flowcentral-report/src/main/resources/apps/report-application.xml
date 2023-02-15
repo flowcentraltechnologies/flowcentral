@@ -134,7 +134,7 @@
 			<field name="placementList"
 				label="$m{report.reportconfiguration.placements}" type="child_list"
 				references="reportPlacementRef" />
-			<field name="placementList"
+			<field name="parameterList"
 				label="$m{report.reportconfiguration.parameters}" type="child_list"
 				references="reportParameterRef" />
 			<uniqueConstraint name="nameUc"
@@ -213,7 +213,7 @@
 				nullable="true" />
 			<field name="fieldName"
 				label="$m{report.reportplacement.fieldname}" type="string" maxLen="32" nullable="true" />
-			<field name="description"
+			<field name="text"
 				label="$m{report.reportplacement.text}" type="string"
 				maxLen="512" nullable="true" />
 			<field name="formatter"
