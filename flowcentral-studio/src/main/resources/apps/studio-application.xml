@@ -3255,14 +3255,14 @@
 						column="0" required="true" visible="false" />
 					<field name="formatter" inputWidget="application.text"
 						column="0" visible="false" />
-					<field name="bold" inputWidget="application.checkbox"
-						column="0" visible="false" />
 					<field name="horizAlignType"
-						inputWidget="application.enumlist" column="1" visible="false"
+						inputWidget="application.enumlist" column="0" visible="false"
 						required="true" />
 					<field name="vertAlignType"
-						inputWidget="application.enumlist" column="1" visible="false"
+						inputWidget="application.enumlist" column="0" visible="false"
 						required="true" />
+					<field name="bold" inputWidget="application.checkbox"
+						column="0" visible="false" />
 					<field name="x" inputWidget="application.integer" column="1"
 						required="true" />
 					<field name="y" inputWidget="application.integer" column="1"
