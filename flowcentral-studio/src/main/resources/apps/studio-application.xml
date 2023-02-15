@@ -3178,7 +3178,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="template,processor,showGrandFooter,invertGroupColors,landscape,underlineRows,shadeOddRows"
+						target="template,processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
 						visible="false" />
 					<setState type="tab" target="columns" visible="false" />
 				</setStates>

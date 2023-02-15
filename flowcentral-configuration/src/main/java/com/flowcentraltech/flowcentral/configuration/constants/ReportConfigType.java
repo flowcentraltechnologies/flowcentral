@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.configuration.constants;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
+import com.tcdng.unify.core.report.ReportLayoutType;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -31,14 +32,19 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum ReportConfigType implements EnumConst {
 
     TABULAR(
-            "TBL"),
+            "TBL",
+            ReportLayoutType.TABULAR),
     PLACEMENT(
-            "PLC");
+            "PLC",
+            ReportLayoutType.PLACEMENT_PDF);
 
     private final String code;
 
-    private ReportConfigType(String code) {
+    private final ReportLayoutType layout;
+
+    private ReportConfigType(String code, ReportLayoutType layout) {
         this.code = code;
+        this.layout = layout;
     }
 
     @Override
@@ -51,10 +57,13 @@ public enum ReportConfigType implements EnumConst {
         return TABULAR.code;
     }
 
+    public ReportLayoutType layout() {
+        return layout;
+    }
+
     public boolean isTabular() {
         return TABULAR.equals(this);
     }
-
 
     public boolean isPlacement() {
         return PLACEMENT.equals(this);

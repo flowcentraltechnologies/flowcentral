@@ -19,9 +19,10 @@ package com.flowcentraltech.flowcentral.common.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
+import com.tcdng.unify.core.constant.PageSizeType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Input;
-import com.tcdng.unify.core.report.ReportLayoutType;
 
 /**
  * Report options.
@@ -31,13 +32,15 @@ import com.tcdng.unify.core.report.ReportLayoutType;
  */
 public class ReportOptions {
 
+    private final ReportConfigType type;
+    
+    private PageSizeType sizeType;
+    
     private String reportName;
 
     private String reportDescription;
 
     private String reportFormat;
-
-    private ReportLayoutType reportLayout;
 
     private String reportResourcePath;
 
@@ -58,6 +61,8 @@ public class ReportOptions {
     private String entity;
 
     private List<ReportColumnOptions> columnOptionsList;
+
+    private List<ReportPlacementOptions> placementOptionsList;
 
     private List<ReportJoinOptions> joinOptionsList;
 
@@ -97,13 +102,14 @@ public class ReportOptions {
 
     private boolean reportEntityList;
 
-    public ReportOptions() {
-        reportLayout = ReportLayoutType.TABULAR;
-        columnOptionsList = new ArrayList<ReportColumnOptions>();
-        joinOptionsList = new ArrayList<ReportJoinOptions>();
-        printColumnNames = true;
-        printGroupColumnNames = true;
-        shadeOddRows = true;
+    public ReportOptions(ReportConfigType type) {
+        this.type = type;
+        this.columnOptionsList = new ArrayList<ReportColumnOptions>();
+        this.placementOptionsList = new ArrayList<ReportPlacementOptions>();
+        this.joinOptionsList = new ArrayList<ReportJoinOptions>();
+        this. printColumnNames = true;
+        this.printGroupColumnNames = true;
+        this.shadeOddRows = true;
     }
 
     public void reset() {
@@ -113,6 +119,18 @@ public class ReportOptions {
         underlineRows = false;
         landscape = false;
         download = false;
+    }
+
+    public ReportConfigType getType() {
+        return type;
+    }
+
+    public boolean isTabular() {
+        return type.isTabular();
+    }
+
+    public boolean isPlacement() {
+        return type.isPlacement();
     }
 
     public String getReportName() {
@@ -153,14 +171,6 @@ public class ReportOptions {
 
     public void setReportFormat(String reportFormat) {
         this.reportFormat = reportFormat;
-    }
-
-    public ReportLayoutType getReportLayout() {
-        return reportLayout;
-    }
-
-    public void setReportLayout(ReportLayoutType reportLayout) {
-        this.reportLayout = reportLayout;
     }
 
     public String getRecordName() {
@@ -215,6 +225,14 @@ public class ReportOptions {
         return columnOptionsList;
     }
 
+    public void addPlacementOptions(ReportPlacementOptions reportPlacementOptions) {
+        placementOptionsList.add(reportPlacementOptions);
+    }
+
+    public List<ReportPlacementOptions> getPlacementOptionsList() {
+        return placementOptionsList;
+    }
+
     public void addJoinOptions(ReportJoinOptions reportJoinOptions) {
         joinOptionsList.add(reportJoinOptions);
     }
@@ -253,6 +271,10 @@ public class ReportOptions {
 
     public boolean isWithColumnOptions() {
         return columnOptionsList != null && !columnOptionsList.isEmpty();
+    }
+
+    public boolean isWithPlacementOptions() {
+        return placementOptionsList != null && !placementOptionsList.isEmpty();
     }
 
     public boolean isWithJoinOptions() {
@@ -297,6 +319,14 @@ public class ReportOptions {
 
     public boolean isWithRestriction() {
         return restriction != null;
+    }
+
+    public PageSizeType getSizeType() {
+        return sizeType;
+    }
+
+    public void setSizeType(PageSizeType sizeType) {
+        this.sizeType = sizeType;
     }
 
     public int getPageWidth() {

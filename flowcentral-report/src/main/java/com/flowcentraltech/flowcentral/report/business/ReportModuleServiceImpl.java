@@ -43,6 +43,8 @@ import com.flowcentraltech.flowcentral.common.data.ReportFilterOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportJoinOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
+import com.flowcentraltech.flowcentral.common.data.ReportPlacementOptions;
+import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.report.constants.ReportModuleNameConstants;
 import com.flowcentraltech.flowcentral.report.constants.ReportModuleSysParamConstants;
@@ -88,8 +90,8 @@ import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.Report.Builder;
 import com.tcdng.unify.core.report.ReportColumn;
 import com.tcdng.unify.core.report.ReportFormat;
-import com.tcdng.unify.core.report.ReportLayoutType;
 import com.tcdng.unify.core.report.ReportPageProperties;
+import com.tcdng.unify.core.report.ReportPlacement;
 import com.tcdng.unify.core.report.ReportServer;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.GetterSetterInfo;
@@ -248,7 +250,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entityName);
         ReportableDefinition reportableDefinition = environment()
                 .listLean(new ReportableDefinitionQuery().entity(entityName));
-        ReportOptions reportOptions = new ReportOptions();
+        ReportOptions reportOptions = new ReportOptions(ReportConfigType.TABULAR);
         reportOptions.setEntity(entityName);
         reportOptions.setReportName(ApplicationNameUtils.getApplicationEntityLongName(
                 reportableDefinition.getApplicationName(), reportableDefinition.getName()));
@@ -287,9 +289,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public void generateDynamicReport(ReportOptions reportOptions, OutputStream outputStream) throws UnifyException {
-        ReportPageProperties pageProperties = ReportPageProperties.newBuilder().pageWidth(getPreferredPort())
-                .pageHeight(getPreferredPort()).landscape(isApplicationIgnoreViewDirective()).build();
-        Report.Builder rb = Report.newBuilder(reportOptions.getReportLayout(), pageProperties);
+        ReportPageProperties pageProperties = ReportPageProperties.newBuilder().size(reportOptions.getSizeType())
+                .pageWidth(reportOptions.getPageWidth()).pageHeight(reportOptions.getPageHeight())
+                .landscape(reportOptions.isLandscape()).build();
+        Report.Builder rb = Report.newBuilder(reportOptions.getType().layout(), pageProperties);
         rb.code(reportOptions.getReportName());
         rb.title(reportOptions.getTitle());
         rb.dataSource(reportOptions.getDataSource());
@@ -318,7 +321,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportOptions.getColumnOptionsList());
         DataUtils.sortDescending(reportColumnOptionsList, ReportColumnOptions.class, "group");
 
-        List<ReportColumnOptions> sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
+        List<ReportColumnOptions> sortReportColumnOptionsList = null;
         final Database db = db(reportOptions.getDataSource());
         final EntityDef entityDef = reportOptions.getEntity() != null
                 ? applicationModuleService.getEntityDef(reportOptions.getEntity())
@@ -331,16 +334,37 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         String sqlBlobTypeName = sqlDialect.getSqlBlobType();
-        for (ReportColumnOptions reportColumnOptions : reportColumnOptionsList) {
-            if (reportColumnOptions.isIncluded()) {
-                if (reportColumnOptions.isGroup() || reportColumnOptions.getOrderType() != null) {
-                    sortReportColumnOptionsList.add(reportColumnOptions);
-                }
+        if (reportOptions.isTabular()) {
+            sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
+            for (ReportColumnOptions reportColumnOptions : reportColumnOptionsList) {
+                if (reportColumnOptions.isIncluded()) {
+                    if (reportColumnOptions.isGroup() || reportColumnOptions.getOrderType() != null) {
+                        sortReportColumnOptionsList.add(reportColumnOptions);
+                    }
 
-                String tableName = reportColumnOptions.getTableName();
-                String columnName = reportColumnOptions.getColumnName();
+                    String tableName = reportColumnOptions.getTableName();
+                    String columnName = reportColumnOptions.getColumnName();
+                    if (reportOptions.isReportEntityList()) {
+                        tableName = sqlEntityInfo.getPreferredViewName();
+                        columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
+                    }
+
+                    if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
+                        columnName = entityDef.getPreferedColumnName(columnName);
+                    }
+
+                    rb.addColumn(reportColumnOptions.getDescription(), tableName, columnName,
+                            reportColumnOptions.getType(), sqlBlobTypeName, reportColumnOptions.getFormatter(),
+                            reportColumnOptions.getOrderType(), reportColumnOptions.getHAlignType(),
+                            reportColumnOptions.getVAlignType(), reportColumnOptions.getWidth(),
+                            Bold.fromBoolean(reportColumnOptions.isBold()), reportColumnOptions.isGroup(),
+                            reportColumnOptions.isGroupOnNewPage(), reportColumnOptions.isSum());
+                }
+            }
+        } else if (reportOptions.isPlacement()) {
+            for (ReportPlacementOptions reportPlacementOptions : reportOptions.getPlacementOptionsList()) {
+                String columnName = reportPlacementOptions.getColumnName();
                 if (reportOptions.isReportEntityList()) {
-                    tableName = sqlEntityInfo.getPreferredViewName();
                     columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
                 }
 
@@ -348,25 +372,30 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     columnName = entityDef.getPreferedColumnName(columnName);
                 }
 
-                rb.addColumn(reportColumnOptions.getDescription(), tableName, columnName, reportColumnOptions.getType(),
-                        sqlBlobTypeName, reportColumnOptions.getFormatter(), reportColumnOptions.getOrderType(),
-                        reportColumnOptions.getHAlignType(), reportColumnOptions.getVAlignType(),
-                        reportColumnOptions.getWidth(), Bold.fromBoolean(reportColumnOptions.isBold()),
-                        reportColumnOptions.isGroup(), reportColumnOptions.isGroupOnNewPage(),
-                        reportColumnOptions.isSum());
+                ReportPlacement placement = ReportPlacement.newBuilder(reportPlacementOptions.getType())
+                        .name(columnName).className(reportPlacementOptions.getDataType())
+                        .text(reportPlacementOptions.getText()).formatter(reportPlacementOptions.getFormatter())
+                        .hAlign(reportPlacementOptions.getHAlignType()).vAlign(reportPlacementOptions.getVAlignType())
+                        .bold(Bold.fromBoolean(reportPlacementOptions.isBold()))
+                        .position(reportPlacementOptions.getX(), reportPlacementOptions.getY())
+                        .dimension(reportPlacementOptions.getWidth(), reportPlacementOptions.getHeight()).build();
+                rb.addPlacement(placement);
             }
         }
 
         if (reportOptions.isBeanCollection()) {
             List<?> content = reportOptions.getContent();
-            for (int i = sortReportColumnOptionsList.size() - 1; i >= 0; i--) {
-                ReportColumnOptions reportColumnOptions = sortReportColumnOptionsList.get(i);
-                if (OrderType.ASCENDING.equals(reportColumnOptions.getOrderType())) {
-                    DataUtils.sortAscending(content, dataClass, reportColumnOptions.getColumnName());
-                } else {
-                    DataUtils.sortDescending(content, dataClass, reportColumnOptions.getColumnName());
+            if (reportOptions.isTabular()) {
+                for (int i = sortReportColumnOptionsList.size() - 1; i >= 0; i--) {
+                    ReportColumnOptions reportColumnOptions = sortReportColumnOptionsList.get(i);
+                    if (OrderType.ASCENDING.equals(reportColumnOptions.getOrderType())) {
+                        DataUtils.sortAscending(content, dataClass, reportColumnOptions.getColumnName());
+                    } else {
+                        DataUtils.sortDescending(content, dataClass, reportColumnOptions.getColumnName());
+                    }
                 }
             }
+
             rb.beanCollection(content);
         } else if (reportOptions.isReportEntityList()) {
             rb.table(sqlEntityInfo.getPreferredViewName());
@@ -479,9 +508,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         // Report column options
         EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
-        ReportOptions reportOptions = new ReportOptions();
+        ReportOptions reportOptions = new ReportOptions(reportConfiguration.getType());
         reportOptions.setEntity(entity);
-        reportOptions.setReportLayout(ReportLayoutType.TABULAR);
         reportOptions.setReportName(reportConfigName);
         reportOptions.setReportDescription(reportConfiguration.getDescription().toUpperCase());
         reportOptions.setTitle(resolveSessionMessage(reportConfiguration.getTitle()));
@@ -496,6 +524,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         String dataSourceName = environment().getEntityDataSourceName(entityClass);
         reportOptions.setRecordName(entityClass.getName());
         reportOptions.setDataSource(dataSourceName);
+        reportOptions.setSizeType(reportConfiguration.getSizeType());
+        reportOptions.setPageWidth(reportConfiguration.getWidth());
+        reportOptions.setPageHeight(reportConfiguration.getWidth());
 
         // Report parameters
         List<Input<?>> userInputList = new ArrayList<Input<?>>();
@@ -533,7 +564,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         String entity = environment().value(String.class, "entity",
                 new ReportableDefinitionQuery().applicationName(rnp.getApplicationName()).name(rnp.getEntityName()));
 
-        // Report column options
+        // Datasource
         final Database db = db(reportOptions.getDataSource());
         final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
         SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db.getDataSource().getDialect())
@@ -545,7 +576,9 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 new ReportableFieldQuery().reportableId(reportableDefinitionId));
         reportOptions.setTableName(sqlEntityInfo.getPreferredViewName());
 
-        if (!reportOptions.isWithColumnOptions()) { // Populate column options only on first run
+        // Column options
+        if (reportOptions.isTabular() && !reportOptions.isWithColumnOptions()) { // Populate column options only on
+                                                                                 // first run
             for (com.flowcentraltech.flowcentral.report.entities.ReportColumn reportColumn : reportConfiguration
                     .getColumnList()) {
                 ReportColumnOptions reportColumnOptions = new ReportColumnOptions();
@@ -601,6 +634,50 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportColumnOptions.setWidth(width);
                 reportColumnOptions.setBold(reportColumn.isBold());
                 reportOptions.addColumnOptions(reportColumnOptions);
+            }
+        }
+
+        // Placement options
+        if (reportOptions.isPlacement() && !reportOptions.isWithPlacementOptions()) {
+            for (com.flowcentraltech.flowcentral.report.entities.ReportPlacement reportPlacement : reportConfiguration
+                    .getPlacementList()) {
+                ReportPlacementOptions reportPlacementOptions = new ReportPlacementOptions(reportPlacement.getType());
+                final String fieldName = reportPlacement.getFieldName();
+                String dataType = null;
+                String formatter = reportPlacement.getFormatter();
+                if (sqlEntityInfo != null) {
+                    reportPlacementOptions.setTableName(sqlEntityInfo.getPreferredViewName());
+                    if (!StringUtils.isBlank(fieldName)) {
+                        final String columnName = sqlEntityInfo.getListFieldInfo(fieldName).getPreferredColumnName();
+                        reportPlacementOptions.setColumnName(columnName);
+                        ReportableField reportableField = fieldMap.get(fieldName);
+                        dataType = reportableField.getType();
+
+                        if (formatter == null) {
+                            formatter = reportableField.getFormatter();
+                        }
+                    }
+                } else {
+                    reportPlacementOptions.setColumnName(fieldName);
+                }
+
+                if (dataType == null && !StringUtils.isBlank(fieldName)) {
+                    GetterSetterInfo getterSetterInfo = ReflectUtils.getGetterInfo(entityClassDef.getEntityClass(),
+                            fieldName);
+                    dataType = ConverterUtils.getWrapperClassName(getterSetterInfo.getType());
+                }
+
+                reportPlacementOptions.setDataType(dataType);
+                reportPlacementOptions.setText(entity);
+                reportPlacementOptions.setFormatter(formatter);
+                reportPlacementOptions.setHAlignType(reportPlacement.getHorizAlignType());
+                reportPlacementOptions.setVAlignType(reportPlacement.getVertAlignType());
+                reportPlacementOptions.setX(reportPlacement.getX());
+                reportPlacementOptions.setY(reportPlacement.getY());
+                reportPlacementOptions.setWidth(reportPlacement.getWidth());
+                reportPlacementOptions.setHeight(reportPlacement.getHeight());
+                reportPlacementOptions.setBold(reportPlacement.isBold());
+                reportOptions.addPlacementOptions(reportPlacementOptions);
             }
         }
 
