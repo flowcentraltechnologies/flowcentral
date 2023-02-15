@@ -84,6 +84,12 @@
 			description="$m{report.reportconfiguration}"
 			label="$m{report.reportconfiguration.label}"
 			type="com.flowcentraltech.flowcentral.report.entities.ReportConfiguration">
+			<field name="type"
+				label="$m{report.reportconfiguration.type}" type="enum_ref"
+				references="reportconfigtypelist" inputWidget="application.enumlist"/>
+			<field name="sizeType"
+				label="$m{report.reportconfiguration.sizetype}" type="enum_ref"
+				references="pagesizetypelist" inputWidget="application.enumlist"/>
 			<field name="reportable"
 				label="$m{report.reportconfiguration.reportable}" type="string"
 				maxLen="128" />
@@ -92,9 +98,6 @@
 				maxLen="96" />
 			<field name="template"
 				label="$m{report.reportconfiguration.template}" type="string"
-				maxLen="64" nullable="true" />
-			<field name="layout"
-				label="$m{report.reportconfiguration.layout}" type="string"
 				maxLen="64" nullable="true" />
 			<field name="processor"
 				label="$m{report.reportconfiguration.processor}" type="string"
@@ -105,12 +108,22 @@
 			<field name="invertGroupColors"
 				label="$m{report.reportconfiguration.invertgroupcolors}"
 				type="boolean" />
+			<field name="width"
+				label="$m{report.reportconfiguration.width}" type="integer" />
+			<field name="height"
+				label="$m{report.reportconfiguration.height}" type="integer" />
 			<field name="landscape"
 				label="$m{report.reportconfiguration.landscape}" type="boolean" />
 			<field name="underlineRows"
 				label="$m{report.reportconfiguration.underlinerows}" type="boolean" />
 			<field name="shadeOddRows"
 				label="$m{report.reportconfiguration.shadeoddrows}" type="boolean" />
+			<field name="typeDesc"
+				label="$m{report.reportconfiguration.typedesc}" type="list_only"
+				key="type" property="description" />
+			<field name="sizeTypeDesc"
+				label="$m{report.reportconfiguration.sizetypedesc}" type="list_only"
+				key="sizeType" property="description" />
 			<field name="filter"
 				label="$m{report.reportconfiguration.filter}" type="child"
 				category="report-config" references="application.appFilterRef"

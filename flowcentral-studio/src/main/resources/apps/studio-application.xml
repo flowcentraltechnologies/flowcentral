@@ -3074,6 +3074,8 @@
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
+					<field name="type" inputWidget="application.enumlist"
+						column="0" required="true" switchOnChange="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
@@ -3082,13 +3084,17 @@
 						required="true" />
 					<field name="template" inputWidget="application.text"
 						column="0" />
-					<field name="layout" inputWidget="application.text"
-						column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="reportable"
 						inputWidget="studio.reportablebynamelist" column="1"
 						required="true" />
+					<field name="sizeType" inputWidget="application.enumlist"
+						column="1" required="true" switchOnChange="true" />
+					<field name="width" inputWidget="application.integer"
+						column="1" required="true" visible="false" />
+					<field name="height" inputWidget="application.integer"
+						column="1" required="true" visible="false" />
 					<field name="processor" inputWidget="application.text"
 						column="1" />
 					<field name="showGrandFooter"
@@ -3152,6 +3158,46 @@
 						target="name,description,reportable" disabled="true" />
 				</setStates>
 			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="onTabularPolicy"
+				description="$m{studio.reportconfiguration.form.formstatepolicy.tabular}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="TBL" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="sizeType,width,height"
+						visible="false" />
+					<setState type="tab" target="placements" visible="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="onPlacementPolicy"
+				description="$m{studio.reportconfiguration.form.formstatepolicy.placement}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="PLC" />
+				</onCondition>
+				<setStates>
+					<setState type="field"
+						target="template,processor,showGrandFooter,invertGroupColors,landscape,underlineRows,shadeOddRows"
+						visible="false" />
+					<setState type="tab" target="columns" visible="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="onDimensionPolicy"
+				description="$m{studio.reportconfiguration.form.formstatepolicy.dimension}">
+				<onCondition>
+					<restriction type="and">
+						<restriction type="equals" field="type" paramA="TBL" />
+						<restriction type="equals" field="sizeType"
+							paramA="custom" />
+					</restriction>
+				</onCondition>
+				<setStates>
+					<setState type="field" target="width,height"
+						visible="true" />
+				</setStates>
+			</formStatePolicy>
 		</form>
 		<form name="reportColumnForm"
 			description="$m{studio.reportcolumn.form}"
@@ -3213,12 +3259,14 @@
 						inputWidget="application.enumlist" column="1" />
 					<field name="vertAlignType"
 						inputWidget="application.enumlist" column="1" />
-					<field name="x" inputWidget="application.integer" column="1" required="true"/>
-					<field name="y" inputWidget="application.integer" column="1" required="true"/>
+					<field name="x" inputWidget="application.integer" column="1"
+						required="true" />
+					<field name="y" inputWidget="application.integer" column="1"
+						required="true" />
 					<field name="width" inputWidget="application.integer"
-						column="1" required="true"/>
+						column="1" required="true" />
 					<field name="height" inputWidget="application.integer"
-						column="1" required="true"/>
+						column="1" required="true" />
 					<field name="bold" inputWidget="application.checkbox"
 						column="1" />
 				</section>

@@ -159,12 +159,15 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 if (oldReportConfiguration == null) {
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
                     reportConfiguration.setApplicationId(applicationId);
+                    reportConfiguration.setType(reportConfig.getType());
+                    reportConfiguration.setSizeType(reportConfig.getSizeType());
                     reportConfiguration.setName(reportConfig.getName());
                     reportConfiguration.setDescription(description);
                     reportConfiguration.setReportable(reportable);
                     reportConfiguration.setTitle(title);
                     reportConfiguration.setTemplate(reportConfig.getTemplate());
-                    reportConfiguration.setLayout(reportConfig.getLayout());
+                    reportConfiguration.setWidth(reportConfig.getWidth());
+                    reportConfiguration.setHeight(reportConfig.getHeight());
                     reportConfiguration.setProcessor(reportConfig.getProcessor());
                     reportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
                     reportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
@@ -178,11 +181,14 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     environment().create(reportConfiguration);
                 } else {
                     if (ConfigUtils.isSetInstall(oldReportConfiguration)) {
+                        oldReportConfiguration.setType(reportConfig.getType());
+                        oldReportConfiguration.setSizeType(reportConfig.getSizeType());
                         oldReportConfiguration.setDescription(description);
                         oldReportConfiguration.setReportable(reportable);
                         oldReportConfiguration.setTitle(title);
                         oldReportConfiguration.setTemplate(reportConfig.getTemplate());
-                        oldReportConfiguration.setLayout(reportConfig.getLayout());
+                        oldReportConfiguration.setWidth(reportConfig.getWidth());
+                        oldReportConfiguration.setHeight(reportConfig.getHeight());
                         oldReportConfiguration.setProcessor(reportConfig.getProcessor());
                         oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
                         oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());

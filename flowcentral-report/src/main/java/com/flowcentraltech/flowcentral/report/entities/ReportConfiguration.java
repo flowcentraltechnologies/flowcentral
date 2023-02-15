@@ -19,11 +19,14 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
 import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.report.ReportLayoutType;
+import com.tcdng.unify.core.constant.PageSizeType;
 
 /**
  * Report configuration data. Represents a report setup.
@@ -34,6 +37,12 @@ import com.tcdng.unify.core.report.ReportLayoutType;
 @Table(name = "FC_REPORTCONFIG")
 public class ReportConfiguration extends BaseApplicationEntity {
 
+    @ForeignKey
+    private ReportConfigType type;
+
+    @ForeignKey(nullable = true)
+    private PageSizeType sizeType;
+    
     @Column(length = 128)
     private String reportable;
 
@@ -44,10 +53,13 @@ public class ReportConfiguration extends BaseApplicationEntity {
     private String template;
 
     @Column(length = 64, nullable = true)
-    private ReportLayoutType layout;
-
-    @Column(length = 64, nullable = true)
     private String processor;
+
+    @Column
+    private int width;
+
+    @Column
+    private int height;
 
     @Column
     private boolean showGrandFooter;
@@ -66,7 +78,13 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     @Column
     private boolean allowSecondaryTenants;
-    
+
+    @ListOnly(key = "type", property = "description")
+    private String typeDesc;
+
+    @ListOnly(key = "sizeType", property = "description")
+    private String sizeTypeDesc;
+   
     @ChildList
     private List<ReportColumn> columnList;
 
@@ -78,6 +96,22 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     @Child(category = "report-config")
     private AppFilter filter;
+
+    public ReportConfigType getType() {
+        return type;
+    }
+
+    public void setType(ReportConfigType type) {
+        this.type = type;
+    }
+
+    public String getTypeDesc() {
+        return typeDesc;
+    }
+
+    public void setTypeDesc(String typeDesc) {
+        this.typeDesc = typeDesc;
+    }
 
     public String getReportable() {
         return reportable;
@@ -101,14 +135,6 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setTemplate(String template) {
         this.template = template;
-    }
-
-    public ReportLayoutType getLayout() {
-        return layout;
-    }
-
-    public void setLayout(ReportLayoutType layout) {
-        this.layout = layout;
     }
 
     public String getProcessor() {
@@ -197,6 +223,38 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setFilter(AppFilter filter) {
         this.filter = filter;
+    }
+
+    public PageSizeType getSizeType() {
+        return sizeType;
+    }
+
+    public void setSizeType(PageSizeType sizeType) {
+        this.sizeType = sizeType;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public String getSizeTypeDesc() {
+        return sizeTypeDesc;
+    }
+
+    public void setSizeTypeDesc(String sizeTypeDesc) {
+        this.sizeTypeDesc = sizeTypeDesc;
     }
 
 }

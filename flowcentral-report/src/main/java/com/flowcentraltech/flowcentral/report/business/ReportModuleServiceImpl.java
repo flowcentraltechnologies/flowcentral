@@ -481,8 +481,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
         ReportOptions reportOptions = new ReportOptions();
         reportOptions.setEntity(entity);
-        reportOptions.setReportLayout(
-                reportConfiguration.getLayout() == null ? ReportLayoutType.TABULAR : reportConfiguration.getLayout());
+        reportOptions.setReportLayout(ReportLayoutType.TABULAR);
         reportOptions.setReportName(reportConfigName);
         reportOptions.setReportDescription(reportConfiguration.getDescription().toUpperCase());
         reportOptions.setTitle(resolveSessionMessage(reportConfiguration.getTitle()));
