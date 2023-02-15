@@ -45,6 +45,8 @@ public class ReportConfig extends BaseNameConfig {
 
     private ReportColumnsConfig columns;
 
+    private ReportPlacementsConfig placements;
+    
     private ParametersConfig parameters;
 
     private FilterConfig filter;
@@ -104,6 +106,15 @@ public class ReportConfig extends BaseNameConfig {
     @XmlElement
     public void setColumns(ReportColumnsConfig columns) {
         this.columns = columns;
+    }
+
+    public ReportPlacementsConfig getPlacements() {
+        return placements;
+    }
+
+    @XmlElement
+    public void setPlacements(ReportPlacementsConfig placements) {
+        this.placements = placements;
     }
 
     public ParametersConfig getParameters() {

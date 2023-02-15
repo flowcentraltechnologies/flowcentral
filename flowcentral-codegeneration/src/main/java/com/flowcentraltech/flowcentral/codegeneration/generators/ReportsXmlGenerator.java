@@ -29,11 +29,14 @@ import com.flowcentraltech.flowcentral.configuration.xml.ParametersConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportColumnsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ReportPlacementConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ReportPlacementsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
+import com.flowcentraltech.flowcentral.report.entities.ReportPlacement;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -112,6 +115,7 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                         reportColumnConfig.setType(reportColumn.getType());
                         reportColumnConfig.setFormatter(reportColumn.getFormatter());
                         reportColumnConfig.setHorizAlignType(reportColumn.getHorizAlignType());
+                        reportColumnConfig.setVertAlignType(reportColumn.getVertAlignType());
                         reportColumnConfig.setWidth(reportColumn.getWidth());
                         reportColumnConfig.setGroup(reportColumn.isGroup());
                         reportColumnConfig.setGroupOnNewPage(reportColumn.isGroupOnNewPage());
@@ -121,6 +125,30 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                     
                     columns.setColumnList(columnList);
                     reportConfig.setColumns(columns);
+                }
+
+                // Placement
+                if (!DataUtils.isBlank(reportConfiguration.getPlacementList())) {
+                    ReportPlacementsConfig placements = new ReportPlacementsConfig();
+                    List<ReportPlacementConfig> placementList = new ArrayList<ReportPlacementConfig>();
+                    for (ReportPlacement reportPlacement: reportConfiguration.getPlacementList()) {
+                        ReportPlacementConfig reportPlacementConfig = new ReportPlacementConfig();
+                        reportPlacementConfig.setFieldName(reportPlacement.getFieldName());
+                        reportPlacementConfig.setText(reportPlacement.getText());
+                        reportPlacementConfig.setType(reportPlacement.getType());
+                        reportPlacementConfig.setFormatter(reportPlacement.getFormatter());
+                        reportPlacementConfig.setHorizAlignType(reportPlacement.getHorizAlignType());
+                        reportPlacementConfig.setVertAlignType(reportPlacement.getVertAlignType());
+                        reportPlacementConfig.setX(reportPlacement.getX());
+                        reportPlacementConfig.setY(reportPlacement.getY());
+                        reportPlacementConfig.setWidth(reportPlacement.getWidth());
+                        reportPlacementConfig.setHeight(reportPlacement.getHeight());
+                        reportPlacementConfig.setBold(reportPlacement.isBold());
+                        placementList.add(reportPlacementConfig);
+                    }
+                    
+                    placements.setPlacementList(placementList);
+                    reportConfig.setPlacements(placements);
                 }
 
                 // Parameters

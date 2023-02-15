@@ -66,9 +66,12 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     @Column
     private boolean allowSecondaryTenants;
-
+    
     @ChildList
     private List<ReportColumn> columnList;
+
+    @ChildList
+    private List<ReportPlacement> placementList;
 
     @ChildList
     private List<ReportParameter> parameterList;
@@ -170,6 +173,14 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setColumnList(List<ReportColumn> columnList) {
         this.columnList = columnList;
+    }
+
+    public List<ReportPlacement> getPlacementList() {
+        return placementList;
+    }
+
+    public void setPlacementList(List<ReportPlacement> placementList) {
+        this.placementList = placementList;
     }
 
     public List<ReportParameter> getParameterList() {

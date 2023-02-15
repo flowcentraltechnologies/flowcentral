@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.data;
 
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.OrderType;
+import com.tcdng.unify.core.constant.VAlignType;
 
 /**
  * Report column options.
@@ -41,9 +42,13 @@ public class ReportColumnOptions {
 
     private HAlignType hAlignType;
 
+    private VAlignType vAlignType;
+
     private int width;
 
     private OrderType orderType;
+
+    private boolean bold;
 
     private boolean group;
 
@@ -60,13 +65,16 @@ public class ReportColumnOptions {
         this.type = type;
         this.formatter = formatter;
         this.included = included;
+        this.vAlignType = VAlignType.TOP;
 
-        setHorizontalAlignment(hAlignType);
+        setHAlignType(hAlignType);
         setWidth(width);
     }
 
     public ReportColumnOptions() {
         this.setWidth(0);
+        this.hAlignType = HAlignType.LEFT;
+        this.vAlignType = VAlignType.TOP;
     }
 
     public String getTableName() {
@@ -109,15 +117,34 @@ public class ReportColumnOptions {
         this.formatter = formatter;
     }
 
-    public HAlignType getHorizontalAlignment() {
+    public HAlignType getHAlignType() {
         return hAlignType;
     }
 
-    public void setHorizontalAlignment(HAlignType hAlignType) {
+    public void setHAlignType(HAlignType hAlignType) {
         this.hAlignType = hAlignType;
         if (this.hAlignType == null) {
             this.hAlignType = HAlignType.LEFT;
         }
+    }
+
+    public VAlignType getVAlignType() {
+        return vAlignType;
+    }
+
+    public void setVAlignType(VAlignType vAlignType) {
+        this.vAlignType = vAlignType;
+        if (this.vAlignType == null) {
+            this.vAlignType = VAlignType.TOP;
+        }
+    }
+
+    public boolean isBold() {
+        return bold;
+    }
+
+    public void setBold(boolean bold) {
+        this.bold = bold;
     }
 
     public int getWidth() {

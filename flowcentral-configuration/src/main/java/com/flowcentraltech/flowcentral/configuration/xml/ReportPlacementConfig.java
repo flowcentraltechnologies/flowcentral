@@ -19,70 +19,68 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.HAlignTypeXmlAdapter;
-import com.flowcentraltech.flowcentral.configuration.xml.adapter.OrderTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportPlacementTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.VAlignTypeXmlAdapter;
 import com.tcdng.unify.core.constant.HAlignType;
-import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.constant.VAlignType;
+import com.tcdng.unify.core.report.ReportPlacementType;
 
 /**
- * Column configuration.
+ * Placement configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @version 1.0
  */
-public class ReportColumnConfig {
+public class ReportPlacementConfig {
 
-    private String fieldName;
-
-    private OrderType columnOrder;
+    private ReportPlacementType type;
 
     private HAlignType horizAlignType;
 
     private VAlignType vertAlignType;
 
-    private String description;
+    private String fieldName;
 
-    private String type;
+    private String text;
 
     private String formatter;
 
+    private int x;
+
+    private int y;
+
     private int width;
 
+    private int height;
+
     private boolean bold;
-
-    private boolean group;
-
-    private boolean groupOnNewPage;
-
-    private boolean sum;
 
     public String getFieldName() {
         return fieldName;
     }
 
-    @XmlAttribute(name = "field", required = true)
+    @XmlAttribute(name = "field")
     public void setFieldName(String fieldName) {
         this.fieldName = fieldName;
     }
 
-    public String getType() {
+    public String getText() {
+        return text;
+    }
+
+    @XmlAttribute(name = "text")
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public ReportPlacementType getType() {
         return type;
     }
 
-    @XmlAttribute(name = "type")
-    public void setType(String type) {
+    @XmlJavaTypeAdapter(ReportPlacementTypeXmlAdapter.class)
+    @XmlAttribute(name = "type", required = true)
+    public void setType(ReportPlacementType type) {
         this.type = type;
-    }
-
-    public OrderType getColumnOrder() {
-        return columnOrder;
-    }
-
-    @XmlJavaTypeAdapter(OrderTypeXmlAdapter.class)
-    @XmlAttribute(name = "order")
-    public void setColumnOrder(OrderType columnOrder) {
-        this.columnOrder = columnOrder;
     }
 
     public HAlignType getHorizAlignType() {
@@ -114,13 +112,31 @@ public class ReportColumnConfig {
         this.formatter = formatter;
     }
 
-    public String getDescription() {
-        return description;
+    public int getX() {
+        return x;
     }
 
-    @XmlAttribute(required = true)
-    public void setDescription(String description) {
-        this.description = description;
+    @XmlAttribute
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    @XmlAttribute
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    @XmlAttribute
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public int getWidth() {
@@ -139,33 +155,6 @@ public class ReportColumnConfig {
     @XmlAttribute
     public void setBold(boolean bold) {
         this.bold = bold;
-    }
-
-    public boolean isGroup() {
-        return group;
-    }
-
-    @XmlAttribute
-    public void setGroup(boolean group) {
-        this.group = group;
-    }
-
-    public boolean isGroupOnNewPage() {
-        return groupOnNewPage;
-    }
-
-    @XmlAttribute
-    public void setGroupOnNewPage(boolean groupOnNewPage) {
-        this.groupOnNewPage = groupOnNewPage;
-    }
-
-    public boolean isSum() {
-        return sum;
-    }
-
-    @XmlAttribute
-    public void setSum(boolean sum) {
-        this.sum = sum;
     }
 
 }

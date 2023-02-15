@@ -26,6 +26,9 @@
 		<reference name="reportColumnRef"
 			description="$m{report.reportcolumn.reference}" entity="reportColumn"
 			searchField="description" />
+		<reference name="reportPlacementRef"
+			description="$m{report.reportplacement.reference}" entity="reportPlacement"
+			searchField="fieldName" />
 		<reference name="reportParameterRef"
 			description="$m{report.reportparameter.reference}"
 			entity="reportParameter" searchField="description" />
@@ -115,7 +118,10 @@
 			<field name="columnList"
 				label="$m{report.reportconfiguration.columns}" type="child_list"
 				references="reportColumnRef" />
-			<field name="parameterList"
+			<field name="placementList"
+				label="$m{report.reportconfiguration.placements}" type="child_list"
+				references="reportPlacementRef" />
+			<field name="placementList"
 				label="$m{report.reportconfiguration.parameters}" type="child_list"
 				references="reportParameterRef" />
 			<uniqueConstraint name="nameUc"
@@ -140,6 +146,10 @@
 				label="$m{report.reportcolumn.horizaligntype}" type="enum_ref"
 				references="horizontalalignlist" inputWidget="application.enumlist"
 				nullable="true" />
+			<field name="vertAlignType"
+				label="$m{report.reportcolumn.vertaligntype}" type="enum_ref"
+				references="verticalalignlist" inputWidget="application.enumlist"
+				nullable="true" />
 			<field name="fieldName"
 				label="$m{report.reportcolumn.fieldname}" type="string" maxLen="32" />
 			<field name="description"
@@ -152,6 +162,8 @@
 				nullable="true" />
 			<field name="width" label="$m{report.reportcolumn.width}"
 				type="integer" />
+			<field name="bold" label="$m{report.reportcolumn.bold}"
+				type="boolean" />
 			<field name="group" label="$m{report.reportcolumn.group}"
 				type="boolean" />
 			<field name="groupOnNewPage"
@@ -164,6 +176,55 @@
 			<field name="horizAlignTypeDesc"
 				label="$m{report.reportcolumn.horizaligntypedesc}" type="list_only"
 				key="horizAlignType" property="description" />
+			<field name="vertAlignTypeDesc"
+				label="$m{report.reportcolumn.vertaligntypedesc}" type="list_only"
+				key="vertAlignType" property="description" />
+		</entity>
+		<entity name="reportPlacement"
+			description="$m{report.reportplacement}"
+			label="$m{report.reportplacement.label}"
+			type="com.flowcentraltech.flowcentral.report.entities.ReportPlacement">
+			<field name="reportConfigurationId"
+				label="$m{report.reportplacement.reportconfigurationid}" type="ref"
+				references="reportConfigRef" inputWidget="application.entitylist" />
+			<field name="type"
+				label="$m{report.reportplacement.type}" type="enum_ref"
+				references="reportplacementlist" inputWidget="application.enumlist"/>
+			<field name="horizAlignType"
+				label="$m{report.reportplacement.horizaligntype}" type="enum_ref"
+				references="horizontalalignlist" inputWidget="application.enumlist"
+				nullable="true" />
+			<field name="vertAlignType"
+				label="$m{report.reportplacement.vertaligntype}" type="enum_ref"
+				references="verticalalignlist" inputWidget="application.enumlist"
+				nullable="true" />
+			<field name="fieldName"
+				label="$m{report.reportplacement.fieldname}" type="string" maxLen="32" nullable="true" />
+			<field name="description"
+				label="$m{report.reportplacement.text}" type="string"
+				maxLen="512" nullable="true" />
+			<field name="formatter"
+				label="$m{report.reportplacement.formatter}" type="string" maxLen="64"
+				nullable="true" />
+			<field name="x" label="$m{report.reportplacement.x}"
+				type="integer" />
+			<field name="y" label="$m{report.reportplacement.y}"
+				type="integer" />
+			<field name="width" label="$m{report.reportplacement.width}"
+				type="integer" />
+			<field name="height" label="$m{report.reportplacement.height}"
+				type="integer" />
+			<field name="bold" label="$m{report.reportplacement.bold}"
+				type="boolean" />
+			<field name="typeDesc"
+				label="$m{report.reportplacement.typedesc}" type="list_only"
+				key="type" property="description" />
+			<field name="horizAlignTypeDesc"
+				label="$m{report.reportplacement.horizaligntypedesc}" type="list_only"
+				key="horizAlignType" property="description" />
+			<field name="vertAlignTypeDesc"
+				label="$m{report.reportplacement.vertaligntypedesc}" type="list_only"
+				key="vertAlignType" property="description" />
 		</entity>
 		<entity name="reportParameter"
 			description="$m{report.reportparameter}"

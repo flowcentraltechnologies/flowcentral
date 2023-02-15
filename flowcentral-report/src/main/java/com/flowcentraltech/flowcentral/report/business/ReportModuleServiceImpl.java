@@ -63,6 +63,7 @@ import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
+import com.tcdng.unify.core.constant.Bold;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
@@ -235,7 +236,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             reportColumns[i] = ReportColumn.newBuilder().title(reportableField.getDescription())
                     .name(reportableField.getName()).className(reportableField.getType())
                     .widthRatio(reportableField.getWidth()).formatter(reportableField.getFormatter())
-                    .horizontalAlignment(HAlignType.fromName(reportableField.getHorizontalAlign())).build();
+                    .hAlign(HAlignType.fromName(reportableField.getHorizontalAlign())).build();
         }
         return reportColumns;
     }
@@ -349,7 +350,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
                 rb.addColumn(reportColumnOptions.getDescription(), tableName, columnName, reportColumnOptions.getType(),
                         sqlBlobTypeName, reportColumnOptions.getFormatter(), reportColumnOptions.getOrderType(),
-                        reportColumnOptions.getHorizontalAlignment(), reportColumnOptions.getWidth(),
+                        reportColumnOptions.getHAlignType(), reportColumnOptions.getVAlignType(),
+                        reportColumnOptions.getWidth(), Bold.fromBoolean(reportColumnOptions.isBold()),
                         reportColumnOptions.isGroup(), reportColumnOptions.isGroupOnNewPage(),
                         reportColumnOptions.isSum());
             }
@@ -595,8 +597,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
                 reportColumnOptions.setType(type);
                 reportColumnOptions.setFormatter(formatter);
-                reportColumnOptions.setHorizontalAlignment(hAlignType);
+                reportColumnOptions.setHAlignType(hAlignType);
+                reportColumnOptions.setVAlignType(reportColumn.getVertAlignType());
                 reportColumnOptions.setWidth(width);
+                reportColumnOptions.setBold(reportColumn.isBold());
                 reportOptions.addColumnOptions(reportColumnOptions);
             }
         }

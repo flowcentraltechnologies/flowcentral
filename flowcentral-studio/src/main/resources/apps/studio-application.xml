@@ -1118,6 +1118,23 @@
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
+		<applet name="manageReportPlacement"
+			description="$m{studio.reportplacement.manage}"
+			label="$m{studio.reportplacement.manage.label}"
+			type="manage_entitylist" entity="report.reportPlacement"
+			menuAccess="false">
+			<property name="searchTable" value="reportPlacementTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="reportPlacementForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="reportPlacementForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageReportParameter"
 			description="$m{studio.reportparameter.manage}"
 			label="$m{studio.reportparameter.manage.label}"
@@ -1170,7 +1187,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct"  order="ASC" />
+				widthRatio="1" linkAct="maintainAct" order="ASC" />
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.module}" />
 		</table>
@@ -1666,6 +1683,26 @@
 			<column field="horizAlignTypeDesc"
 				renderWidget="application.text" widthRatio="1"
 				label="$m{report.reportcolumn.horizaligntype}" />
+			<column field="vertAlignTypeDesc"
+				renderWidget="application.text" widthRatio="1"
+				label="$m{report.reportcolumn.vertaligntype}" />
+		</table>
+		<table name="reportPlacementTable"
+			description="$m{studio.reportplacement.table}"
+			label="$m{studio.reportplacement.table.label}"
+			entity="report.reportPlacement">
+			<placement field="fieldName"
+				renderWidget="application.name" widthRatio="1" linkAct="maintainAct" />
+			<placement field="text" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<placement field="typeDesc" renderWidget="application.text"
+				widthRatio="1" label="$m{report.reportplacement.type}" />
+			<placement field="horizAlignTypeDesc"
+				renderWidget="application.text" widthRatio="1"
+				label="$m{report.reportplacement.horizaligntype}" />
+			<placement field="vertAlignTypeDesc"
+				renderWidget="application.text" widthRatio="1"
+				label="$m{report.reportplacement.vertaligntype}" />
 		</table>
 		<table name="reportParameterTable"
 			description="$m{studio.reportparameter.table}"
@@ -1767,7 +1804,8 @@
 				label="$m{studio.appapplet.form.basicdetails}" editable="false"
 				contentType="miniform">
 				<section name="appletDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -2033,7 +2071,8 @@
 				label="$m{studio.appentity.form.basicdetails}" editable="false"
 				contentType="miniform">
 				<section name="entityDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -2687,7 +2726,8 @@
 			<tab name="basicDetails"
 				label="$m{studio.appref.form.basicdetails}" contentType="miniform">
 				<section name="refFormDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -2772,7 +2812,8 @@
 				label="$m{studio.chart.form.basicdetails}" contentType="miniform"
 				editable="true">
 				<section name="chartDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -2851,7 +2892,8 @@
 				label="$m{studio.dashboard.form.basicdetails}"
 				contentType="miniform">
 				<section name="entityDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -2945,7 +2987,8 @@
 				label="$m{studio.notificationtemplate.form.basicdetails}"
 				contentType="miniform" editable="true">
 				<section name="templateDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -3026,7 +3069,8 @@
 				label="$m{studio.reportconfiguration.form.basicdetails}"
 				contentType="miniform">
 				<section name="configDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -3063,6 +3107,10 @@
 				label="$m{studio.reportconfiguration.form.columns}"
 				contentType="child_list" applet="manageReportColumn"
 				reference="columnList" />
+			<tab name="placements"
+				label="$m{studio.reportconfiguration.form.placements}"
+				contentType="child_list" applet="manageReportPlacement"
+				reference="placementList" />
 			<tab name="parameters"
 				label="$m{studio.reportconfiguration.form.parameters}"
 				contentType="child_list" applet="manageReportParameter"
@@ -3127,7 +3175,11 @@
 						column="1" />
 					<field name="horizAlignType"
 						inputWidget="application.enumlist" column="1" />
+					<field name="vertAlignType"
+						inputWidget="application.enumlist" column="1" />
 					<field name="width" inputWidget="application.integer"
+						column="1" />
+					<field name="bold" inputWidget="application.checkbox"
 						column="1" />
 					<field name="group" inputWidget="application.checkbox"
 						column="1" />
@@ -3137,6 +3189,73 @@
 						column="1" />
 				</section>
 			</tab>
+		</form>
+		<form name="reportPlacementForm"
+			description="$m{studio.reportplacement.form}"
+			entity="report.reportPlacement">
+			<tab name="basicDetails"
+				label="$m{studio.reportplacement.form.basicdetails}"
+				contentType="miniform">
+				<section name="basicDetails" columns="type_2">
+					<field name="reportConfigurationId"
+						inputWidget="application.entitysearch" column="0" required="true"
+						label="$m{report.reportplacement.reportconfiguration}" />
+					<field name="type" inputWidget="application.enumlist"
+						column="0" required="true" switchOnChange="true" />
+					<field name="fieldName"
+						inputWidget="studio.reportconfigfieldlist" column="0"
+						required="true" />
+					<field name="text" inputWidget="application.text" column="0"
+						required="true" />
+					<field name="formatter" inputWidget="application.text"
+						column="0" />
+					<field name="horizAlignType"
+						inputWidget="application.enumlist" column="1" />
+					<field name="vertAlignType"
+						inputWidget="application.enumlist" column="1" />
+					<field name="x" inputWidget="application.integer" column="1" required="true"/>
+					<field name="y" inputWidget="application.integer" column="1" required="true"/>
+					<field name="width" inputWidget="application.integer"
+						column="1" required="true"/>
+					<field name="height" inputWidget="application.integer"
+						column="1" required="true"/>
+					<field name="bold" inputWidget="application.checkbox"
+						column="1" />
+				</section>
+			</tab>
+			<formStatePolicy type="on_switch"
+				name="onFieldPolicy"
+				description="$m{studio.reportplacement.form.formstatepolicy.field}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="FLD" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="text" visible="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch" name="onTextPolicy"
+				description="$m{studio.reportplacement.form.formstatepolicy.text}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="TXT" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="fieldName,formatter"
+						visible="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="onOtherPolicy"
+				description="$m{studio.reportplacement.form.formstatepolicy.other}">
+				<onCondition>
+					<restriction type="amongst" field="type"
+						paramA="LNE|REC|IMG" />
+				</onCondition>
+				<setStates>
+					<setState type="field"
+						target="text,fieldName,formatter,horizAlignType,vertAlignType"
+						visible="false" />
+				</setStates>
+			</formStatePolicy>
 		</form>
 		<form name="reportParameterForm"
 			description="$m{studio.reportparameter.form}"
@@ -3179,7 +3298,8 @@
 			<tab name="basicDetails"
 				label="$m{studio.apptable.form.basicdetails}" contentType="miniform">
 				<section name="tableDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -3390,7 +3510,8 @@
 			<tab name="basicDetails"
 				label="$m{studio.appform.form.basicdetails}" contentType="miniform">
 				<section name="formDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -3900,7 +4021,8 @@
 				label="$m{studio.appwidgettype.form.basicdetails}"
 				contentType="miniform">
 				<section name="basicDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
@@ -3997,7 +4119,8 @@
 				label="$m{studio.workflow.form.basicdetails}" contentType="miniform"
 				editable="true">
 				<section name="workflowDetails" columns="type_2">
-					<field name="applicationId" reference="studio.applicationDevelopableRef"
+					<field name="applicationId"
+						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
 						label="$m{studio.application}" disabled="true" required="true"
 						saveAs="true" />
