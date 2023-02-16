@@ -68,6 +68,10 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
         return au.environment();
     }
 
+    protected final void setRefreshResult() throws UnifyException {
+        setCommandResultMapping("detailsResult");
+    }
+
     protected void setError(String message, Object... params) throws UnifyException {
         setTempValue(ERROR_BINDING, resolveSessionMessage(message, params));
     }

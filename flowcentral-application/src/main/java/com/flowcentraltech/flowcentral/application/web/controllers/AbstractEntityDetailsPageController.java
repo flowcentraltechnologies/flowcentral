@@ -43,8 +43,9 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * @since 1.0
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
-@ResultMappings({
-        @ResultMapping(name = "detailsResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" }) })
+@ResultMappings(
+        { @ResultMapping(name = "detailsResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" },
+        reload = true) })
 public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractFlowCentralPageController<T> {
 
@@ -94,7 +95,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
                 resultTable.setCrudMode(true);
                 resultTable.setView(true);
             }
-            
+
             pageBean.setResultTable(resultTable);
         }
     }
@@ -114,8 +115,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected final String refreshResult() {
         return "detailsResult";
     }
-    
+
     protected abstract TableDef getTableDef() throws UnifyException;
-    
+
     protected abstract String onView(Entity inst) throws UnifyException;
 }
