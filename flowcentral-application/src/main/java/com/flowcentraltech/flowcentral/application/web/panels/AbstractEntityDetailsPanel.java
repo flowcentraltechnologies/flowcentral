@@ -48,7 +48,7 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
         super.switchState();
         removeTempValue(ERROR_BINDING);
         doSwitchState();
-        setVisible(ERROR_BINDING, isTempValue(ERROR_BINDING));
+        setVisible(ERROR_BINDING, isWithError());
     }
 
     @Override
@@ -69,9 +69,12 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
     }
 
     protected void setError(String message, Object... params) throws UnifyException {
-        setTempValue(ERROR_BINDING,
-                resolveSessionMessage(message, params));
+        setTempValue(ERROR_BINDING, resolveSessionMessage(message, params));
     }
-    
+
+    protected boolean isWithError() throws UnifyException {
+        return isTempValue(ERROR_BINDING);
+    }
+
     protected abstract void doSwitchState() throws UnifyException;
 }
