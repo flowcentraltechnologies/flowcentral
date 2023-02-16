@@ -64,7 +64,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
     @Configurable
     private LicenseProvider licenseProvider;
-    
+
     private List<ApplicationAppletDefProvider> applicationAppletDefProviderList;
 
     public final void setAu(AppletUtilities au) {
@@ -156,8 +156,10 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                     FlowCentralSessionAttributeConstants.WORKSPACE_CODE);
             final String studioApplicationName = au.system().getSysParameterValue(String.class,
                     ApplicationModuleSysParamConstants.STUDIO_APPLICATION_NAME);
-            final boolean indicateSectors = au.system().getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
+            final boolean indicateSectorLabels = au.system().getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.SECTOR_LABEL_INDICATION_ON_MENU);
+            final boolean indicateSectorColors = au.system().getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.SECTOR_COLOR_INDICATION_ON_MENU);
             final boolean studioMenuEnabled = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.STUDIO_MENU_ENABLED);
             final boolean sectionWithItemsOnly = au.system().getSysParameterValue(boolean.class,
@@ -189,11 +191,19 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                     boolean isWithSubMenus = false;
                     writer.useSecondary();
                     try {
-                        writer.write("<div id=\"menu_").write(applicationId).write("\" class=\"menu\">");
-                        if (indicateSectors) {
+                        final String color = (indicateSectorLabels || indicateSectorColors)
+                                && applicationMenuDef.isWithSectionColor() ? applicationMenuDef.getSectionColor()
+                                        : SystemColorType.GRAY.code();
+                        writer.write("<div id=\"menu_").write(applicationId).write("\" class=\"menu\"");
+                        if (indicateSectorColors) {
+                            writer.write(" style=\"background-color:");
+                            writer.write(color);
+                            writer.write(";\"");
+                        }
+                        writer.write(">");
+                        
+                        if (indicateSectorLabels) {
                             writer.write("<span class=\"ind\" style=\"background-color:");
-                            String color = applicationMenuDef.isWithSectionColor() ? applicationMenuDef.getSectionColor()
-                                    : SystemColorType.GRAY.code();
                             writer.write(color);
                             writer.write(";\">");
                             if (applicationMenuDef.isWithSectionShortCode()) {
@@ -218,8 +228,8 @@ public class AppletMenuWriter extends AbstractMenuWriter {
 
                             final String appletPrivilegeCode = appletDef.getPrivilege();
                             if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
-                                    && (wkspPrivilegeManager == null || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode,
-                                            appletPrivilegeCode))) {
+                                    && (wkspPrivilegeManager == null || wkspPrivilegeManager
+                                            .isWorkspaceWithPrivilege(workspaceCode, appletPrivilegeCode))) {
                                 writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
                                 isWithSubMenus = true;
                                 appendISym = true;
@@ -227,12 +237,12 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                         }
 
                         for (ApplicationAppletDefProvider appletDefProvider : applicationAppletDefProviderList) {
-                            for (AppletDef appletDef : appletDefProvider.getAppletDefsByRole(applicationMenuDef.getName(),
-                                    roleCode, searchInput)) {
+                            for (AppletDef appletDef : appletDefProvider
+                                    .getAppletDefsByRole(applicationMenuDef.getName(), roleCode, searchInput)) {
                                 if (appletDef.isMenuAccess()) {
                                     writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
                                     isWithSubMenus = true;
-                                   appendISym = true;
+                                    appendISym = true;
                                 }
                             }
                         }
@@ -244,9 +254,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                             } else {
                                 appendSym = true;
                             }
-                            
+
                             msb.append('"').append(applicationId).append('"');
-                            writer.discardMergeSecondary(); 
+                            writer.discardMergeSecondary();
                         } else {
                             writer.discardSecondary();
                         }

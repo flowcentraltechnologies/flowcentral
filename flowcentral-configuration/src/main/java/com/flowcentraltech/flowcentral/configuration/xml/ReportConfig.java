@@ -20,8 +20,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportLayoutTypeXmlAdapter;
-import com.tcdng.unify.core.report.ReportLayoutType;
+import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.PageSizeTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportConfigTypeXmlAdapter;
+import com.tcdng.unify.core.constant.PageSizeType;
 import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 
 /**
@@ -33,6 +35,8 @@ import com.tcdng.unify.core.util.xml.MarshalFalseToNullXmlAdapter;
 @XmlRootElement(name = "report")
 public class ReportConfig extends BaseNameConfig {
 
+    private ReportConfigType type;
+    
     private String title;
 
     private String processor;
@@ -41,14 +45,20 @@ public class ReportConfig extends BaseNameConfig {
 
     private String template;
 
-    private ReportLayoutType layout;
-
     private ReportColumnsConfig columns;
 
+    private ReportPlacementsConfig placements;
+    
     private ParametersConfig parameters;
 
     private FilterConfig filter;
 
+    private PageSizeType sizeType;
+    
+    private int width;
+
+    private int height;
+    
     private Boolean showGrandFooter;
 
     private Boolean invertGroupColors;
@@ -62,12 +72,52 @@ public class ReportConfig extends BaseNameConfig {
     private Boolean allowSecondaryTenants;
 
     public ReportConfig() {
+        this.type = ReportConfigType.TABULAR;
+        this.sizeType = PageSizeType.A4;
         this.showGrandFooter = Boolean.FALSE;
         this.invertGroupColors = Boolean.FALSE;
         this.landscape = Boolean.FALSE;
         this.underlineRows = Boolean.FALSE;
         this.shadeOddRows = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;
+    }
+
+    public ReportConfigType getType() {
+        return type;
+    }
+
+    @XmlJavaTypeAdapter(ReportConfigTypeXmlAdapter.class)
+    @XmlAttribute(name = "type", required = true)
+    public void setType(ReportConfigType type) {
+        this.type = type;
+    }
+
+    public PageSizeType getSizeType() {
+        return sizeType;
+    }
+
+    @XmlJavaTypeAdapter(PageSizeTypeXmlAdapter.class)
+    @XmlAttribute(name = "sizeType")
+    public void setSizeType(PageSizeType sizeType) {
+        this.sizeType = sizeType;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    @XmlAttribute(required = true)
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    @XmlAttribute(required = true)
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public String getTitle() {
@@ -106,6 +156,15 @@ public class ReportConfig extends BaseNameConfig {
         this.columns = columns;
     }
 
+    public ReportPlacementsConfig getPlacements() {
+        return placements;
+    }
+
+    @XmlElement
+    public void setPlacements(ReportPlacementsConfig placements) {
+        this.placements = placements;
+    }
+
     public ParametersConfig getParameters() {
         return parameters;
     }
@@ -131,16 +190,6 @@ public class ReportConfig extends BaseNameConfig {
     @XmlAttribute
     public void setTemplate(String template) {
         this.template = template;
-    }
-
-    public ReportLayoutType getLayout() {
-        return layout;
-    }
-
-    @XmlJavaTypeAdapter(ReportLayoutTypeXmlAdapter.class)
-    @XmlAttribute
-    public void setLayout(ReportLayoutType layout) {
-        this.layout = layout;
     }
 
     public boolean getShowGrandFooter() {

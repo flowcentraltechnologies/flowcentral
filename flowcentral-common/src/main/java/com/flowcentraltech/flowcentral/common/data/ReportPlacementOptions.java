@@ -17,26 +17,26 @@
 package com.flowcentraltech.flowcentral.common.data;
 
 import com.tcdng.unify.core.constant.HAlignType;
-import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.constant.VAlignType;
+import com.tcdng.unify.core.report.ReportPlacementType;
 
 /**
- * Report column options.
+ * Report placement options.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReportColumnOptions {
+public class ReportPlacementOptions {
 
-    private static final int DEFAULT_WIDTH = 10;
+    private final ReportPlacementType type;
 
     private String tableName;
 
     private String columnName;
 
-    private String description;
+    private String dataType;
 
-    private String type;
+    private String text;
 
     private String formatter;
 
@@ -44,35 +44,18 @@ public class ReportColumnOptions {
 
     private VAlignType vAlignType;
 
+    private int x;
+
+    private int y;
+
     private int width;
 
-    private OrderType orderType;
+    private int height;
 
     private boolean bold;
 
-    private boolean group;
-
-    private boolean groupOnNewPage;
-
-    private boolean sum;
-
-    private boolean included;
-
-    public ReportColumnOptions(String columnName, String description, String type, String formatter,
-            HAlignType hAlignType, int width, boolean included) {
-        this.columnName = columnName;
-        this.description = description;
+    public ReportPlacementOptions(ReportPlacementType type) {
         this.type = type;
-        this.formatter = formatter;
-        this.included = included;
-        this.vAlignType = VAlignType.TOP;
-
-        setHAlignType(hAlignType);
-        setWidth(width);
-    }
-
-    public ReportColumnOptions() {
-        this.setWidth(0);
         this.hAlignType = HAlignType.LEFT;
         this.vAlignType = VAlignType.TOP;
     }
@@ -93,28 +76,12 @@ public class ReportColumnOptions {
         this.columnName = columnName;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDataType() {
+        return dataType;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getFormatter() {
-        return formatter;
-    }
-
-    public void setFormatter(String formatter) {
-        this.formatter = formatter;
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
     public HAlignType getHAlignType() {
@@ -153,48 +120,50 @@ public class ReportColumnOptions {
 
     public void setWidth(int width) {
         this.width = width;
-        if (this.width <= 0) {
-            this.width = DEFAULT_WIDTH;
-        }
     }
 
-    public OrderType getOrderType() {
-        return orderType;
+    public String getText() {
+        return text;
     }
 
-    public void setOrderType(OrderType orderType) {
-        this.orderType = orderType;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public boolean isGroup() {
-        return group;
+    public String getFormatter() {
+        return formatter;
     }
 
-    public void setGroup(boolean group) {
-        this.group = group;
+    public void setFormatter(String formatter) {
+        this.formatter = formatter;
     }
 
-    public boolean isGroupOnNewPage() {
-        return groupOnNewPage;
+    public int getX() {
+        return x;
     }
 
-    public void setGroupOnNewPage(boolean groupOnNewPage) {
-        this.groupOnNewPage = groupOnNewPage;
+    public void setX(int x) {
+        this.x = x;
     }
 
-    public boolean isSum() {
-        return sum;
+    public int getY() {
+        return y;
     }
 
-    public void setSum(boolean sum) {
-        this.sum = sum;
+    public void setY(int y) {
+        this.y = y;
     }
 
-    public boolean isIncluded() {
-        return included;
+    public int getHeight() {
+        return height;
     }
 
-    public void setIncluded(boolean included) {
-        this.included = included;
+    public void setHeight(int height) {
+        this.height = height;
     }
+
+    public ReportPlacementType getType() {
+        return type;
+    }
+
 }

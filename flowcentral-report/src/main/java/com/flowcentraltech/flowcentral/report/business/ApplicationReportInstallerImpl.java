@@ -43,11 +43,13 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ParameterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ReportPlacementConfig;
 import com.flowcentraltech.flowcentral.report.constants.ReportModuleNameConstants;
 import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfigurationQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
+import com.flowcentraltech.flowcentral.report.entities.ReportPlacement;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinitionQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
@@ -157,12 +159,15 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 if (oldReportConfiguration == null) {
                     ReportConfiguration reportConfiguration = new ReportConfiguration();
                     reportConfiguration.setApplicationId(applicationId);
+                    reportConfiguration.setType(reportConfig.getType());
+                    reportConfiguration.setSizeType(reportConfig.getSizeType());
                     reportConfiguration.setName(reportConfig.getName());
                     reportConfiguration.setDescription(description);
                     reportConfiguration.setReportable(reportable);
                     reportConfiguration.setTitle(title);
                     reportConfiguration.setTemplate(reportConfig.getTemplate());
-                    reportConfiguration.setLayout(reportConfig.getLayout());
+                    reportConfiguration.setWidth(reportConfig.getWidth());
+                    reportConfiguration.setHeight(reportConfig.getHeight());
                     reportConfiguration.setProcessor(reportConfig.getProcessor());
                     reportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
                     reportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
@@ -176,11 +181,14 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     environment().create(reportConfiguration);
                 } else {
                     if (ConfigUtils.isSetInstall(oldReportConfiguration)) {
+                        oldReportConfiguration.setType(reportConfig.getType());
+                        oldReportConfiguration.setSizeType(reportConfig.getSizeType());
                         oldReportConfiguration.setDescription(description);
                         oldReportConfiguration.setReportable(reportable);
                         oldReportConfiguration.setTitle(title);
                         oldReportConfiguration.setTemplate(reportConfig.getTemplate());
-                        oldReportConfiguration.setLayout(reportConfig.getLayout());
+                        oldReportConfiguration.setWidth(reportConfig.getWidth());
+                        oldReportConfiguration.setHeight(reportConfig.getHeight());
                         oldReportConfiguration.setProcessor(reportConfig.getProcessor());
                         oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
                         oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
@@ -251,6 +259,10 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             for (ReportColumn reportColumn : srcReportConfiguration.getColumnList()) {
                 reportColumn.setFieldName(ctx.fieldSwap(reportColumn.getFieldName()));
                 reportColumn.setDescription(ctx.messageSwap(reportColumn.getDescription()));
+            }
+
+            for (ReportPlacement reportPlacement : srcReportConfiguration.getPlacementList()) {
+                reportPlacement.setFieldName(ctx.fieldSwap(reportPlacement.getFieldName()));
             }
 
             environment().create(srcReportConfiguration);
@@ -332,7 +344,9 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportColumn.setType(columnConfig.getType());
                 reportColumn.setFormatter(columnConfig.getFormatter());
                 reportColumn.setHorizAlignType(columnConfig.getHorizAlignType());
+                reportColumn.setVertAlignType(columnConfig.getVertAlignType());
                 reportColumn.setWidth(columnConfig.getWidth());
+                reportColumn.setBold(columnConfig.isBold());
                 reportColumn.setGroup(columnConfig.isGroup());
                 reportColumn.setGroupOnNewPage(columnConfig.isGroupOnNewPage());
                 reportColumn.setSum(columnConfig.isSum());
@@ -340,6 +354,29 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
             }
 
             reportConfiguration.setColumnList(columnList);
+        }
+
+        // Placements
+        if (reportConfig.getPlacements() != null
+                && DataUtils.isNotBlank(reportConfig.getPlacements().getPlacementList())) {
+            List<ReportPlacement> placementList = new ArrayList<ReportPlacement>();
+            for (ReportPlacementConfig placementConfig : reportConfig.getPlacements().getPlacementList()) {
+                ReportPlacement reportPlacement = new ReportPlacement();
+                reportPlacement.setFieldName(placementConfig.getFieldName());
+                reportPlacement.setText(placementConfig.getText());
+                reportPlacement.setType(placementConfig.getType());
+                reportPlacement.setFormatter(placementConfig.getFormatter());
+                reportPlacement.setHorizAlignType(placementConfig.getHorizAlignType());
+                reportPlacement.setVertAlignType(placementConfig.getVertAlignType());
+                reportPlacement.setX(placementConfig.getX());
+                reportPlacement.setY(placementConfig.getY());
+                reportPlacement.setWidth(placementConfig.getWidth());
+                reportPlacement.setHeight(placementConfig.getHeight());
+                reportPlacement.setBold(placementConfig.isBold());
+                placementList.add(reportPlacement);
+            }
+
+            reportConfiguration.setPlacementList(placementList);
         }
 
         // Parameters

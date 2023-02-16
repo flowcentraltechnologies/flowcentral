@@ -1834,11 +1834,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public List<ApplicationMenuDef> getApplicationMenuDefs(String appletFilter) throws UnifyException {
-        final boolean indicateMenuSectors = appletUtilities.system().getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.SECTOR_INDICATION_ON_MENU);
+        final boolean indicateMenuSectorLabels = appletUtilities.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SECTOR_LABEL_INDICATION_ON_MENU);
+        final boolean indicateSectorColors = appletUtilities.system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SECTOR_COLOR_INDICATION_ON_MENU);
         final boolean sectorSortOnMenu = appletUtilities.system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SECTOR_SORT_ON_MENU);
-        List<Application> applicationList = indicateMenuSectors && sectorSortOnMenu
+        List<Application> applicationList = (indicateMenuSectorLabels || indicateSectorColors) && sectorSortOnMenu
                 ? environment().listAll(
                         new ApplicationQuery().isMenuAccess().addOrder("sectorShortCode", "displayIndex", "label"))
                 : environment().listAll(new ApplicationQuery().isMenuAccess().addOrder("displayIndex", "label"));

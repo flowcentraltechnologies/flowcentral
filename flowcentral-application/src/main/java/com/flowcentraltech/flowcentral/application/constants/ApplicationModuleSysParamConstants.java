@@ -55,7 +55,7 @@ public interface ApplicationModuleSysParamConstants {
 
     String APPLICATION_HEADER_TITLE = "APP-0010";
 
-    String SECTOR_INDICATION_ON_MENU = "APP-0011";
+    String SECTOR_LABEL_INDICATION_ON_MENU = "APP-0011";
 
     String SECTOR_INDICATION_ON_TABS = "APP-0012";
 
@@ -78,4 +78,7 @@ public interface ApplicationModuleSysParamConstants {
     String SECTOR_SORT_ON_MENU = "APP-001B";
 
     String FORM_SECTION_CLASSIC_MODE = "APP-001C";
+
+    String SECTOR_COLOR_INDICATION_ON_MENU = "APP-001D";
+
 }

@@ -22,6 +22,7 @@ import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.OrderType;
+import com.tcdng.unify.core.constant.VAlignType;
 
 /**
  * Report column.
@@ -41,6 +42,9 @@ public class ReportColumn extends BaseEntity {
     @ForeignKey(nullable = true)
     private HAlignType horizAlignType;
 
+    @ForeignKey(nullable = true)
+    private VAlignType vertAlignType;
+
     @Column(name = "FIELD_NM")
     private String fieldName;
 
@@ -56,6 +60,9 @@ public class ReportColumn extends BaseEntity {
     @Column(name = "WIDTH_RATIO")
     private int width;
 
+    @Column(name = "BOLD_FG")
+    private boolean bold;
+
     @Column(name = "GROUP_FG")
     private boolean group;
 
@@ -70,6 +77,9 @@ public class ReportColumn extends BaseEntity {
 
     @ListOnly(key = "horizAlignType", property = "description")
     private String horizAlignTypeDesc;
+
+    @ListOnly(key = "vertAlignType", property = "description")
+    private String vertAlignTypeDesc;
 
     public Long getReportConfigurationId() {
         return reportConfigurationId;
@@ -174,5 +184,29 @@ public class ReportColumn extends BaseEntity {
 
     public void setHorizAlignTypeDesc(String horizAlignTypeDesc) {
         this.horizAlignTypeDesc = horizAlignTypeDesc;
+    }
+
+    public VAlignType getVertAlignType() {
+        return vertAlignType;
+    }
+
+    public void setVertAlignType(VAlignType vertAlignType) {
+        this.vertAlignType = vertAlignType;
+    }
+
+    public String getVertAlignTypeDesc() {
+        return vertAlignTypeDesc;
+    }
+
+    public void setVertAlignTypeDesc(String vertAlignTypeDesc) {
+        this.vertAlignTypeDesc = vertAlignTypeDesc;
+    }
+
+    public boolean isBold() {
+        return bold;
+    }
+
+    public void setBold(boolean bold) {
+        this.bold = bold;
     }
 }

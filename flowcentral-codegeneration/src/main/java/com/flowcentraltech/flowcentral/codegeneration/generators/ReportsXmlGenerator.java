@@ -29,11 +29,14 @@ import com.flowcentraltech.flowcentral.configuration.xml.ParametersConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportColumnsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ReportPlacementConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.ReportPlacementsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportColumn;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
+import com.flowcentraltech.flowcentral.report.entities.ReportPlacement;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -75,21 +78,25 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
             for (Long reportConfigId : reportConfigIdList) {
                 AppReportConfig appReportConfig = new AppReportConfig();
                 ReportConfiguration reportConfiguration = reportModuleService.findReportConfiguration(reportConfigId);
-                final String filename = StringUtils.dashen(NameUtils.describeName(reportConfiguration.getName())) + ".xml";
+                final String filename = StringUtils.dashen(NameUtils.describeName(reportConfiguration.getName()))
+                        + ".xml";
                 openEntry(filename, zos);
-                
+
                 ReportConfig reportConfig = new ReportConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "report", reportConfiguration.getName());
                 String titleKey = descKey + ".title";
                 ctx.addMessage(StaticMessageCategoryType.REPORT, descKey, reportConfiguration.getDescription());
                 ctx.addMessage(StaticMessageCategoryType.REPORT, titleKey, reportConfiguration.getTitle());
 
+                reportConfig.setType(reportConfiguration.getType());
+                reportConfig.setSizeType(reportConfiguration.getSizeType());
                 reportConfig.setName(reportConfiguration.getName());
                 reportConfig.setDescription("$m{" + descKey + "}");
                 reportConfig.setReportable(reportConfiguration.getReportable());
                 reportConfig.setTitle("$m{" + titleKey + "}");
                 reportConfig.setTemplate(reportConfiguration.getTemplate());
-                reportConfig.setLayout(reportConfiguration.getLayout());
+                reportConfig.setWidth(reportConfiguration.getWidth());
+                reportConfig.setHeight(reportConfiguration.getHeight());
                 reportConfig.setProcessor(reportConfiguration.getProcessor());
                 reportConfig.setShowGrandFooter(reportConfiguration.isShowGrandFooter());
                 reportConfig.setInvertGroupColors(reportConfiguration.isInvertGroupColors());
@@ -104,7 +111,7 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                 if (!DataUtils.isBlank(reportConfiguration.getColumnList())) {
                     ReportColumnsConfig columns = new ReportColumnsConfig();
                     List<ReportColumnConfig> columnList = new ArrayList<ReportColumnConfig>();
-                    for (ReportColumn reportColumn: reportConfiguration.getColumnList()) {
+                    for (ReportColumn reportColumn : reportConfiguration.getColumnList()) {
                         ReportColumnConfig reportColumnConfig = new ReportColumnConfig();
                         reportColumnConfig.setColumnOrder(reportColumn.getColumnOrder());
                         reportColumnConfig.setFieldName(reportColumn.getFieldName());
@@ -112,30 +119,56 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                         reportColumnConfig.setType(reportColumn.getType());
                         reportColumnConfig.setFormatter(reportColumn.getFormatter());
                         reportColumnConfig.setHorizAlignType(reportColumn.getHorizAlignType());
+                        reportColumnConfig.setVertAlignType(reportColumn.getVertAlignType());
                         reportColumnConfig.setWidth(reportColumn.getWidth());
                         reportColumnConfig.setGroup(reportColumn.isGroup());
                         reportColumnConfig.setGroupOnNewPage(reportColumn.isGroupOnNewPage());
                         reportColumnConfig.setSum(reportColumn.isSum());
                         columnList.add(reportColumnConfig);
                     }
-                    
+
                     columns.setColumnList(columnList);
                     reportConfig.setColumns(columns);
+                }
+
+                // Placement
+                if (!DataUtils.isBlank(reportConfiguration.getPlacementList())) {
+                    ReportPlacementsConfig placements = new ReportPlacementsConfig();
+                    List<ReportPlacementConfig> placementList = new ArrayList<ReportPlacementConfig>();
+                    for (ReportPlacement reportPlacement : reportConfiguration.getPlacementList()) {
+                        ReportPlacementConfig reportPlacementConfig = new ReportPlacementConfig();
+                        reportPlacementConfig.setFieldName(reportPlacement.getFieldName());
+                        reportPlacementConfig.setText(reportPlacement.getText());
+                        reportPlacementConfig.setType(reportPlacement.getType());
+                        reportPlacementConfig.setFormatter(reportPlacement.getFormatter());
+                        reportPlacementConfig.setHorizAlignType(reportPlacement.getHorizAlignType());
+                        reportPlacementConfig.setVertAlignType(reportPlacement.getVertAlignType());
+                        reportPlacementConfig.setX(reportPlacement.getX());
+                        reportPlacementConfig.setY(reportPlacement.getY());
+                        reportPlacementConfig.setWidth(reportPlacement.getWidth());
+                        reportPlacementConfig.setHeight(reportPlacement.getHeight());
+                        reportPlacementConfig.setBold(reportPlacement.isBold());
+                        placementList.add(reportPlacementConfig);
+                    }
+
+                    placements.setPlacementList(placementList);
+                    reportConfig.setPlacements(placements);
                 }
 
                 // Parameters
                 if (!DataUtils.isBlank(reportConfiguration.getParameterList())) {
                     ParametersConfig parameters = new ParametersConfig();
                     List<ParameterConfig> parameterList = new ArrayList<ParameterConfig>();
-                    for (ReportParameter reportParameter: reportConfiguration.getParameterList()) {
+                    for (ReportParameter reportParameter : reportConfiguration.getParameterList()) {
                         ParameterConfig parameterConfig = new ParameterConfig();
                         parameterConfig.setName(reportParameter.getName());
                         if (!StringUtils.isBlank(reportParameter.getDescription())) {
-                            descKey = getDescriptionKey(lowerCaseApplicationName, "reportparameter", reportParameter.getName());
+                            descKey = getDescriptionKey(lowerCaseApplicationName, "reportparameter",
+                                    reportParameter.getName());
                             ctx.addMessage(StaticMessageCategoryType.REPORT, descKey, reportParameter.getDescription());
                             parameterConfig.setDescription("$m{" + descKey + "}");
                         }
-                        
+
                         parameterConfig.setEditor(reportParameter.getEditor());
                         parameterConfig.setLabel(reportParameter.getLabel());
                         parameterConfig.setMandatory(reportParameter.getMandatory());
@@ -143,14 +176,14 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                         parameterConfig.setDefaultVal(reportParameter.getDefaultVal());
                         parameterList.add(parameterConfig);
                     }
-                    
+
                     parameters.setParameterList(parameterList);
                     reportConfig.setParameters(parameters);
                 }
-                
+
                 ConfigurationUtils.writeConfigNoEscape(reportConfig, zos);
                 closeEntry(zos);
-  
+
                 appReportConfig.setConfigFile(REPORT_FOLDER + filename);
                 reportConfigList.add(appReportConfig);
             }
