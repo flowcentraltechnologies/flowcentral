@@ -21,8 +21,12 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.HAlignTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.ReportPlacementTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.VAlignTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.XOffsetTypeXmlAdapter;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.YOffsetTypeXmlAdapter;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.VAlignType;
+import com.tcdng.unify.core.constant.XOffsetType;
+import com.tcdng.unify.core.constant.YOffsetType;
 import com.tcdng.unify.core.report.ReportPlacementType;
 
 /**
@@ -39,6 +43,10 @@ public class ReportPlacementConfig {
 
     private VAlignType vertAlignType;
 
+    private XOffsetType xOffsetType;
+
+    private YOffsetType yOffsetType;
+    
     private String fieldName;
 
     private String text;
@@ -101,6 +109,26 @@ public class ReportPlacementConfig {
     @XmlAttribute(name = "valign")
     public void setVertAlignType(VAlignType vertAlignType) {
         this.vertAlignType = vertAlignType;
+    }
+
+    public XOffsetType getXOffsetType() {
+        return xOffsetType;
+    }
+
+    @XmlJavaTypeAdapter(XOffsetTypeXmlAdapter.class)
+    @XmlAttribute(name = "x-offset")
+    public void setXOffsetType(XOffsetType xOffsetType) {
+        this.xOffsetType = xOffsetType;
+    }
+
+    public YOffsetType getYOffsetType() {
+        return yOffsetType;
+    }
+
+    @XmlJavaTypeAdapter(YOffsetTypeXmlAdapter.class)
+    @XmlAttribute(name = "y-offset")
+    public void setYOffsetType(YOffsetType yOffsetType) {
+        this.yOffsetType = yOffsetType;
     }
 
     public String getFormatter() {

@@ -3277,12 +3277,16 @@
 						required="true" />
 					<field name="bold" inputWidget="application.checkbox"
 						column="0" visible="false" />
+					<field name="xOffsetType" inputWidget="application.enumlist"
+						column="1" required="true" />
 					<field name="x" inputWidget="application.integer" column="1"
-						required="true" />
-					<field name="y" inputWidget="application.integer" column="1"
 						required="true" />
 					<field name="width" inputWidget="application.integer"
 						column="1" required="true" />
+					<field name="yOffsetType" inputWidget="application.enumlist"
+						column="1" required="true" />
+					<field name="y" inputWidget="application.integer" column="1"
+						required="true" />
 					<field name="height" inputWidget="application.integer"
 						column="1" required="true" />
 				</section>

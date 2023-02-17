@@ -376,6 +376,8 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportPlacement.setFormatter(placementConfig.getFormatter());
                 reportPlacement.setHorizAlignType(placementConfig.getHorizAlignType());
                 reportPlacement.setVertAlignType(placementConfig.getVertAlignType());
+                reportPlacement.setXOffsetType(placementConfig.getXOffsetType());
+                reportPlacement.setYOffsetType(placementConfig.getYOffsetType());
                 reportPlacement.setX(placementConfig.getX());
                 reportPlacement.setY(placementConfig.getY());
                 reportPlacement.setWidth(placementConfig.getWidth());
