@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
 import com.tcdng.unify.core.constant.PageSizeType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Input;
+import com.tcdng.unify.core.report.ReportFormat;
 
 /**
  * Report options.
@@ -166,7 +167,7 @@ public class ReportOptions {
     }
 
     public String getReportFormat() {
-        return reportFormat;
+        return reportFormat == null ? String.valueOf(ReportFormat.PDF) : reportFormat;
     }
 
     public void setReportFormat(String reportFormat) {

@@ -245,8 +245,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @SuppressWarnings("unchecked")
     @Override
-    public ReportOptions getReportableEntityDynamicReportOptions(String entityName, List<DefaultReportColumn> defaultReportColumnList)
-            throws UnifyException {
+    public ReportOptions getReportableEntityDynamicReportOptions(String entityName,
+            List<DefaultReportColumn> defaultReportColumnList) throws UnifyException {
         final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entityName);
         ReportableDefinition reportableDefinition = environment()
                 .listLean(new ReportableDefinitionQuery().entity(entityName));
@@ -292,6 +292,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         ReportPageProperties pageProperties = ReportPageProperties.newBuilder().size(reportOptions.getSizeType())
                 .pageWidth(reportOptions.getPageWidth()).pageHeight(reportOptions.getPageHeight())
                 .landscape(reportOptions.isLandscape()).build();
+        logDebug("Generating dynamic report  of type [{0}] using properties {1}...", reportOptions.getType(),
+                pageProperties);
         Report.Builder rb = Report.newBuilder(reportOptions.getType().layout(), pageProperties);
         rb.code(reportOptions.getReportName());
         rb.title(reportOptions.getTitle());
@@ -328,29 +330,29 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 : null;
         SqlDataSourceDialect sqlDialect = (SqlDataSourceDialect) db.getDataSource().getDialect();
         Class<?> dataClass = ReflectUtils.classForName(reportOptions.getRecordName());
-        SqlEntityInfo sqlEntityInfo = null;
-        if (!reportOptions.isBeanCollection()) {
-            sqlEntityInfo = sqlDialect.findSqlEntityInfo(dataClass);
-        }
-
+        final SqlEntityInfo sqlEntityInfo = !reportOptions.isBeanCollection() ? sqlDialect.findSqlEntityInfo(dataClass)
+                : null;
         String sqlBlobTypeName = sqlDialect.getSqlBlobType();
         if (reportOptions.isTabular()) {
             sortReportColumnOptionsList = new ArrayList<ReportColumnOptions>();
             for (ReportColumnOptions reportColumnOptions : reportColumnOptionsList) {
                 if (reportColumnOptions.isIncluded()) {
+                    logDebug("Using report column[{0}]...", reportColumnOptions);
                     if (reportColumnOptions.isGroup() || reportColumnOptions.getOrderType() != null) {
                         sortReportColumnOptionsList.add(reportColumnOptions);
                     }
 
                     String tableName = reportColumnOptions.getTableName();
                     String columnName = reportColumnOptions.getColumnName();
-                    if (reportOptions.isReportEntityList()) {
-                        tableName = sqlEntityInfo.getPreferredViewName();
-                        columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
-                    }
+                    if (!reportOptions.isBeanCollection()) {
+                        if (reportOptions.isReportEntityList()) {
+                            tableName = sqlEntityInfo.getPreferredViewName();
+                            columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
+                        }
 
-                    if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
-                        columnName = entityDef.getPreferedColumnName(columnName);
+                        if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
+                            columnName = entityDef.getPreferedColumnName(columnName);
+                        }
                     }
 
                     rb.addColumn(reportColumnOptions.getDescription(), tableName, columnName,
@@ -363,13 +365,16 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             }
         } else if (reportOptions.isPlacement()) {
             for (ReportPlacementOptions reportPlacementOptions : reportOptions.getPlacementOptionsList()) {
+                logDebug("Using report placement[{0}]...", reportPlacementOptions);
                 String columnName = reportPlacementOptions.getColumnName();
-                if (reportOptions.isReportEntityList()) {
-                    columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
-                }
+                if (!reportOptions.isBeanCollection()) {
+                    if (reportOptions.isReportEntityList()) {
+                        columnName = sqlEntityInfo.getListFieldInfo(columnName).getPreferredColumnName();
+                    }
 
-                if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
-                    columnName = entityDef.getPreferedColumnName(columnName);
+                    if (entityDef != null && entityDef.isWithPreferedColumnName(columnName.toUpperCase())) {
+                        columnName = entityDef.getPreferedColumnName(columnName);
+                    }
                 }
 
                 ReportPlacement placement = ReportPlacement.newBuilder(reportPlacementOptions.getType())
@@ -567,14 +572,17 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         // Datasource
         final Database db = db(reportOptions.getDataSource());
         final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
-        SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db.getDataSource().getDialect())
-                .findSqlEntityInfo(entityClassDef.getEntityClass());
+        SqlEntityInfo sqlEntityInfo = reportOptions.isBeanCollection() ? null
+                : ((SqlDataSourceDialect) db.getDataSource().getDialect())
+                        .findSqlEntityInfo(entityClassDef.getEntityClass());
 
         Long reportableDefinitionId = environment().value(Long.class, "id",
                 new ReportableDefinitionQuery().applicationName(rnp.getApplicationName()).name(rnp.getEntityName()));
         Map<String, ReportableField> fieldMap = environment().listAllMap(String.class, "name",
                 new ReportableFieldQuery().reportableId(reportableDefinitionId));
-        reportOptions.setTableName(sqlEntityInfo.getPreferredViewName());
+        if (sqlEntityInfo != null) {
+            reportOptions.setTableName(sqlEntityInfo.getPreferredViewName());
+        }
 
         // Column options
         if (reportOptions.isTabular() && !reportOptions.isWithColumnOptions()) { // Populate column options only on
@@ -594,7 +602,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 String formatter = reportColumn.getFormatter();
                 HAlignType hAlignType = reportColumn.getHorizAlignType();
                 int width = reportColumn.getWidth();
-                if (sqlEntityInfo != null) {
+                if (!reportOptions.isBeanCollection()) {
                     reportColumnOptions.setTableName(sqlEntityInfo.getPreferredViewName());
                     if (StringUtils.isNotBlank(fieldName)) {
                         final String columnName = sqlEntityInfo.getListFieldInfo(fieldName).getPreferredColumnName();
@@ -645,7 +653,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 final String fieldName = reportPlacement.getFieldName();
                 String dataType = null;
                 String formatter = reportPlacement.getFormatter();
-                if (sqlEntityInfo != null) {
+                if (!reportOptions.isBeanCollection()) {
                     reportPlacementOptions.setTableName(sqlEntityInfo.getPreferredViewName());
                     if (!StringUtils.isBlank(fieldName)) {
                         final String columnName = sqlEntityInfo.getListFieldInfo(fieldName).getPreferredColumnName();
@@ -682,7 +690,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         // Filter options
-        if (reportConfiguration.getFilter() != null) {
+        if (!reportOptions.isBeanCollection() && reportConfiguration.getFilter() != null) {
             Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
@@ -780,16 +788,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         byte[] clientLogo = IOUtils.readFileResourceInputStream(imagePath, getUnifyComponentContext().getWorkingPath());
         report.setParameter(ReportParameterConstants.CLIENT_LOGO, "Client Logo", clientLogo);
 
-        String templatePath = systemModuleService.getSysParameterValue(String.class,
-                ReportModuleSysParamConstants.REPORT_TEMPLATE_PATH);
-        String template = report.getTemplate();
-        if (template == null) {
-            String templateParameter = report.getPageProperties().isLandscape()
-                    ? ReportModuleSysParamConstants.DYNAMIC_REPORT_LANDSCAPE_TEMPLATE
-                    : ReportModuleSysParamConstants.DYNAMIC_REPORT_PORTRAIT_TEMPLATE;
-            template = systemModuleService.getSysParameterValue(String.class, templateParameter);
+        if (!report.isPlacements()) {
+            String templatePath = systemModuleService.getSysParameterValue(String.class,
+                    ReportModuleSysParamConstants.REPORT_TEMPLATE_PATH);
+            String template = report.getTemplate();
+            if (template == null) {
+                String templateParameter = report.getPageProperties().isLandscape()
+                        ? ReportModuleSysParamConstants.DYNAMIC_REPORT_LANDSCAPE_TEMPLATE
+                        : ReportModuleSysParamConstants.DYNAMIC_REPORT_PORTRAIT_TEMPLATE;
+                template = systemModuleService.getSysParameterValue(String.class, templateParameter);
+            }
+            report.setTemplate(IOUtils.buildFilename(templatePath, template));
         }
-        report.setTemplate(IOUtils.buildFilename(templatePath, template));
     }
 
     private void buildReportFilter(Builder rb, SqlEntityInfo sqlEntityInfo, Restriction restriction)

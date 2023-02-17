@@ -166,4 +166,12 @@ public class ReportPlacementOptions {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "[type=" + type + ", tableName=" + tableName + ", columnName=" + columnName
+                + ", dataType=" + dataType + ", text=" + text + ", formatter=" + formatter + ", hAlignType="
+                + hAlignType + ", vAlignType=" + vAlignType + ", x=" + x + ", y=" + y + ", width=" + width + ", height="
+                + height + ", bold=" + bold + "]";
+    }
+
 }
