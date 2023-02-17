@@ -3089,12 +3089,6 @@
 						required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
-					<field name="sizeType" inputWidget="application.enumlist"
-						column="1" required="true" switchOnChange="true" />
-					<field name="width" inputWidget="application.integer"
-						column="1" required="true" visible="false" />
-					<field name="height" inputWidget="application.integer"
-						column="1" required="true" visible="false" />
 					<field name="processor" inputWidget="application.text"
 						column="1" />
 					<field name="showGrandFooter"
@@ -3107,6 +3101,24 @@
 						inputWidget="application.checkbox" column="1" />
 					<field name="shadeOddRows" inputWidget="application.checkbox"
 						column="1" />
+				</section>
+				<section name="pageDetails" columns="type_2"
+					label="$m{studio.reportconfiguration.form.pagedimension}"
+					visible="false">
+					<field name="sizeType" inputWidget="application.enumlist"
+						column="0" required="true" switchOnChange="true" />
+					<field name="width" inputWidget="application.integer"
+						column="0" required="true" visible="false" />
+					<field name="height" inputWidget="application.integer"
+						column="0" required="true" visible="false" />
+					<field name="marginTop" inputWidget="application.integer"
+						column="1" required="true" visible="true" />
+					<field name="marginLeft" inputWidget="application.integer"
+						column="1" required="true" visible="true" />
+					<field name="marginRight" inputWidget="application.integer"
+						column="1" required="true" visible="true" />
+					<field name="marginBottom" inputWidget="application.integer"
+						column="1" required="true" visible="true" />
 				</section>
 			</tab>
 			<tab name="columns"
@@ -3180,6 +3192,8 @@
 					<setState type="field"
 						target="template,processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
 						visible="false" />
+					<setState type="section" target="pageDetails"
+						visible="true" />
 					<setState type="tab" target="columns" visible="false" />
 				</setStates>
 			</formStatePolicy>

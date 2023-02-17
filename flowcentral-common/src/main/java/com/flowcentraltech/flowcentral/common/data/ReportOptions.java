@@ -77,6 +77,14 @@ public class ReportOptions {
 
     private Restriction restriction;
 
+    private int marginTop;
+
+    private int marginBottom;
+
+    private int marginLeft;
+
+    private int marginRight;
+
     private int pageWidth;
 
     private int pageHeight;
@@ -328,6 +336,38 @@ public class ReportOptions {
 
     public void setSizeType(PageSizeType sizeType) {
         this.sizeType = sizeType;
+    }
+
+    public int getMarginTop() {
+        return marginTop;
+    }
+
+    public void setMarginTop(int marginTop) {
+        this.marginTop = marginTop;
+    }
+
+    public int getMarginBottom() {
+        return marginBottom;
+    }
+
+    public void setMarginBottom(int marginBottom) {
+        this.marginBottom = marginBottom;
+    }
+
+    public int getMarginLeft() {
+        return marginLeft;
+    }
+
+    public void setMarginLeft(int marginLeft) {
+        this.marginLeft = marginLeft;
+    }
+
+    public int getMarginRight() {
+        return marginRight;
+    }
+
+    public void setMarginRight(int marginRight) {
+        this.marginRight = marginRight;
     }
 
     public int getPageWidth() {

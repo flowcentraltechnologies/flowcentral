@@ -290,6 +290,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public void generateDynamicReport(ReportOptions reportOptions, OutputStream outputStream) throws UnifyException {
         ReportPageProperties pageProperties = ReportPageProperties.newBuilder().size(reportOptions.getSizeType())
+                .marginBottom(reportOptions.getMarginBottom()).marginLeft(reportOptions.getMarginLeft())
+                .marginRight(reportOptions.getMarginRight()).marginTop(reportOptions.getMarginTop())
                 .pageWidth(reportOptions.getPageWidth()).pageHeight(reportOptions.getPageHeight())
                 .landscape(reportOptions.isLandscape()).build();
         logDebug("Generating dynamic report  of type [{0}] using properties {1}...", reportOptions.getType(),
@@ -531,7 +533,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         reportOptions.setDataSource(dataSourceName);
         reportOptions.setSizeType(reportConfiguration.getSizeType());
         reportOptions.setPageWidth(reportConfiguration.getWidth());
-        reportOptions.setPageHeight(reportConfiguration.getWidth());
+        reportOptions.setPageHeight(reportConfiguration.getHeight());
+        reportOptions.setMarginBottom(reportConfiguration.getMarginBottom());
+        reportOptions.setMarginLeft(reportConfiguration.getMarginLeft());
+        reportOptions.setMarginRight(reportConfiguration.getMarginRight());
+        reportOptions.setMarginTop(reportConfiguration.getMarginTop());
 
         // Report parameters
         List<Input<?>> userInputList = new ArrayList<Input<?>>();

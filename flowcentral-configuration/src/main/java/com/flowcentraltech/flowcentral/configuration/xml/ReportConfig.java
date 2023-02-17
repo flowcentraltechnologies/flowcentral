@@ -58,6 +58,14 @@ public class ReportConfig extends BaseNameConfig {
     private int width;
 
     private int height;
+
+    private int marginTop;
+
+    private int marginBottom;
+
+    private int marginLeft;
+
+    private int marginRight;
     
     private Boolean showGrandFooter;
 
@@ -106,7 +114,7 @@ public class ReportConfig extends BaseNameConfig {
         return width;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public void setWidth(int width) {
         this.width = width;
     }
@@ -115,9 +123,45 @@ public class ReportConfig extends BaseNameConfig {
         return height;
     }
 
-    @XmlAttribute(required = true)
+    @XmlAttribute
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getMarginTop() {
+        return marginTop;
+    }
+
+    @XmlAttribute
+    public void setMarginTop(int marginTop) {
+        this.marginTop = marginTop;
+    }
+
+    public int getMarginBottom() {
+        return marginBottom;
+    }
+
+    @XmlAttribute
+    public void setMarginBottom(int marginBottom) {
+        this.marginBottom = marginBottom;
+    }
+
+    public int getMarginLeft() {
+        return marginLeft;
+    }
+
+    @XmlAttribute
+    public void setMarginLeft(int marginLeft) {
+        this.marginLeft = marginLeft;
+    }
+
+    public int getMarginRight() {
+        return marginRight;
+    }
+
+    @XmlAttribute
+    public void setMarginRight(int marginRight) {
+        this.marginRight = marginRight;
     }
 
     public String getTitle() {

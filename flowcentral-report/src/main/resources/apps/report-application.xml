@@ -112,6 +112,14 @@
 				label="$m{report.reportconfiguration.width}" type="integer" />
 			<field name="height"
 				label="$m{report.reportconfiguration.height}" type="integer" />
+			<field name="marginRight"
+				label="$m{report.reportconfiguration.marginright}" type="integer" />
+			<field name="marginLeft"
+				label="$m{report.reportconfiguration.marginleft}" type="integer" />
+			<field name="marginBottom"
+				label="$m{report.reportconfiguration.marginbottom}" type="integer" />
+			<field name="marginTop"
+				label="$m{report.reportconfiguration.margintop}" type="integer" />
 			<field name="landscape"
 				label="$m{report.reportconfiguration.landscape}" type="boolean" />
 			<field name="underlineRows"
