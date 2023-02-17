@@ -3068,7 +3068,8 @@
 			<tab name="basicDetails"
 				label="$m{studio.reportconfiguration.form.basicdetails}"
 				contentType="miniform">
-				<section name="configDetails" columns="type_2">
+				<section name="configDetails" columns="type_2"
+					label="$m{studio.reportconfiguration.form.basicdetails}">
 					<field name="applicationId"
 						reference="studio.applicationDevelopableRef"
 						inputWidget="application.entitysearch" column="0"
@@ -3256,7 +3257,8 @@
 			<tab name="basicDetails"
 				label="$m{studio.reportplacement.form.basicdetails}"
 				contentType="miniform">
-				<section name="basicDetails" columns="type_2">
+				<section name="basicDetails" columns="type_2"
+					label="$m{studio.reportplacement.form.basicdetails}">
 					<field name="reportConfigurationId"
 						inputWidget="application.entitysearch" column="0" required="true"
 						label="$m{report.reportplacement.reportconfiguration}" />
@@ -3277,16 +3279,19 @@
 						required="true" />
 					<field name="bold" inputWidget="application.checkbox"
 						column="0" visible="false" />
+				</section>
+				<section name="dimensionDetails" columns="type_2"
+					label="$m{studio.reportplacement.form.placementdimension}">
 					<field name="xOffsetType" inputWidget="application.enumlist"
-						column="1" required="true" />
+						column="0" required="true" />
+					<field name="yOffsetType" inputWidget="application.enumlist"
+						column="0" required="true" />
 					<field name="x" inputWidget="application.integer" column="1"
+						required="true" />
+					<field name="y" inputWidget="application.integer" column="1"
 						required="true" />
 					<field name="width" inputWidget="application.integer"
 						column="1" required="true" />
-					<field name="yOffsetType" inputWidget="application.enumlist"
-						column="1" required="true" />
-					<field name="y" inputWidget="application.integer" column="1"
-						required="true" />
 					<field name="height" inputWidget="application.integer"
 						column="1" required="true" />
 				</section>
