@@ -69,7 +69,11 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
     }
 
     protected final void setRefreshResult() throws UnifyException {
-        setCommandResultMapping("detailsResult");
+        setCommandResultMapping("refreshResult");
+    }
+
+    protected final void setReloadResult() throws UnifyException {
+        setCommandResultMapping("reloadResult");
     }
 
     protected void setError(String message, Object... params) throws UnifyException {

@@ -44,8 +44,8 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
 @ResultMappings({
-        @ResultMapping(name = "detailsResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" }),
-        @ResultMapping(name = "detailsResultReload", response = { "!refreshpanelresponse panels:$l{resultPanel}" },
+        @ResultMapping(name = "refreshResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" }),
+        @ResultMapping(name = "reloadResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" },
             reload = true) })
 public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractFlowCentralPageController<T> {
@@ -68,7 +68,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         if (po.length > 0) {
             final int mIndex = Integer.parseInt(po[0]);
             getResultTable().setDetailsIndex(mIndex);
-            return refreshResult(false);
+            return refreshResult();
         }
 
         return noResult();
@@ -113,8 +113,12 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return getPageBean().getResultTable();
     }
 
-    protected final String refreshResult(boolean reload) {
-        return reload ? "detailsResultReload" : "detailsResult";
+    protected final String refreshResult() throws UnifyException {
+        return "refreshResult";
+    }
+
+    protected final String reloadResult() throws UnifyException {
+         return "reloadResult";
     }
 
     protected abstract TableDef getTableDef() throws UnifyException;
