@@ -290,8 +290,7 @@ public class LoadingSearch {
         }
 
         loadingTable.setSourceObject(searchRestriction);
-        loadingTable.setDetailsIndex(-1);
-    }
+     }
 
     public boolean isShowActionFooter() {
         return (mode & SHOW_ACTIONFOOTER) > 0;

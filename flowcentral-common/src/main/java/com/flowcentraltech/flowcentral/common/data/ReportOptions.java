@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.ReportConfigType;
 import com.tcdng.unify.core.constant.PageSizeType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Input;
+import com.tcdng.unify.core.report.ReportFormat;
 
 /**
  * Report options.
@@ -75,6 +76,14 @@ public class ReportOptions {
     private List<Input<?>> systemInputList;
 
     private Restriction restriction;
+
+    private int marginTop;
+
+    private int marginBottom;
+
+    private int marginLeft;
+
+    private int marginRight;
 
     private int pageWidth;
 
@@ -166,7 +175,7 @@ public class ReportOptions {
     }
 
     public String getReportFormat() {
-        return reportFormat;
+        return reportFormat == null ? String.valueOf(ReportFormat.PDF) : reportFormat;
     }
 
     public void setReportFormat(String reportFormat) {
@@ -327,6 +336,38 @@ public class ReportOptions {
 
     public void setSizeType(PageSizeType sizeType) {
         this.sizeType = sizeType;
+    }
+
+    public int getMarginTop() {
+        return marginTop;
+    }
+
+    public void setMarginTop(int marginTop) {
+        this.marginTop = marginTop;
+    }
+
+    public int getMarginBottom() {
+        return marginBottom;
+    }
+
+    public void setMarginBottom(int marginBottom) {
+        this.marginBottom = marginBottom;
+    }
+
+    public int getMarginLeft() {
+        return marginLeft;
+    }
+
+    public void setMarginLeft(int marginLeft) {
+        this.marginLeft = marginLeft;
+    }
+
+    public int getMarginRight() {
+        return marginRight;
+    }
+
+    public void setMarginRight(int marginRight) {
+        this.marginRight = marginRight;
     }
 
     public int getPageWidth() {

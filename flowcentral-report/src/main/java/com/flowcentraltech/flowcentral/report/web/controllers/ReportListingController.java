@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.report.web.controllers;
 
+import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
@@ -41,7 +42,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
 @UplBinding("web/report/upl/reportlisting.upl")
 public class ReportListingController extends AbstractPageController<ReportListingPageBean> {
 
-    @Configurable("/resource/configuredreport")
+    @Configurable(CommonModuleNameConstants.CONFIGURED_REPORT_RESOURCE)
     private String reportResourcePath;
 
     @Configurable

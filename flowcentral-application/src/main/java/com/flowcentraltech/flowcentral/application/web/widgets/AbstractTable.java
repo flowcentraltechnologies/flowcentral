@@ -428,6 +428,7 @@ public abstract class AbstractTable<T, U> {
         this.sourceObject = sourceObject;
         onLoadSourceObject(sourceObject, selected);
         reset();
+        setDetailsIndex(-1);
     }
 
     public EntryActionType fireOnTableChange(TableChangeType changeType) throws UnifyException {

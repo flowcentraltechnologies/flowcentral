@@ -62,6 +62,18 @@ public class ReportConfiguration extends BaseApplicationEntity {
     private int height;
 
     @Column
+    private int marginTop;
+
+    @Column
+    private int marginBottom;
+
+    @Column
+    private int marginLeft;
+
+    @Column
+    private int marginRight;
+
+    @Column
     private boolean showGrandFooter;
 
     @Column
@@ -247,6 +259,38 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getMarginTop() {
+        return marginTop;
+    }
+
+    public void setMarginTop(int marginTop) {
+        this.marginTop = marginTop;
+    }
+
+    public int getMarginBottom() {
+        return marginBottom;
+    }
+
+    public void setMarginBottom(int marginBottom) {
+        this.marginBottom = marginBottom;
+    }
+
+    public int getMarginLeft() {
+        return marginLeft;
+    }
+
+    public void setMarginLeft(int marginLeft) {
+        this.marginLeft = marginLeft;
+    }
+
+    public int getMarginRight() {
+        return marginRight;
+    }
+
+    public void setMarginRight(int marginRight) {
+        this.marginRight = marginRight;
     }
 
     public String getSizeTypeDesc() {

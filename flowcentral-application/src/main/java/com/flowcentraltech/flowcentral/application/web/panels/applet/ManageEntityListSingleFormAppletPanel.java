@@ -61,7 +61,7 @@ public class ManageEntityListSingleFormAppletPanel extends AbstractEntitySingleF
     public void prepareGenerateReport() throws UnifyException {
         final ManageEntityListSingleFormApplet applet = getManageEntityListApplet();
         EntityTable entityTable = applet.getEntitySearch().getEntityTable();
-        ReportOptions reportOptions = applet.au().reportProvider().getDynamicReportOptions(
+        ReportOptions reportOptions = applet.au().reportProvider().getReportableEntityDynamicReportOptions(
                 entityTable.getEntityDef().getLongName(), entityTable.getDefaultReportColumnList());
         reportOptions.setReportResourcePath("/common/resource/report");
         reportOptions.setRestriction(entityTable.getSourceObject());

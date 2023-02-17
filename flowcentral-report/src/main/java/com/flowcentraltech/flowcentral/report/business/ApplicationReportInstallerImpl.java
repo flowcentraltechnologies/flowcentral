@@ -168,6 +168,10 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                     reportConfiguration.setTemplate(reportConfig.getTemplate());
                     reportConfiguration.setWidth(reportConfig.getWidth());
                     reportConfiguration.setHeight(reportConfig.getHeight());
+                    reportConfiguration.setMarginBottom(reportConfig.getMarginBottom());
+                    reportConfiguration.setMarginLeft(reportConfig.getMarginLeft());
+                    reportConfiguration.setMarginRight(reportConfig.getMarginRight());
+                    reportConfiguration.setMarginTop(reportConfig.getMarginTop());
                     reportConfiguration.setProcessor(reportConfig.getProcessor());
                     reportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
                     reportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());
@@ -189,6 +193,10 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                         oldReportConfiguration.setTemplate(reportConfig.getTemplate());
                         oldReportConfiguration.setWidth(reportConfig.getWidth());
                         oldReportConfiguration.setHeight(reportConfig.getHeight());
+                        oldReportConfiguration.setMarginBottom(reportConfig.getMarginBottom());
+                        oldReportConfiguration.setMarginLeft(reportConfig.getMarginLeft());
+                        oldReportConfiguration.setMarginRight(reportConfig.getMarginRight());
+                        oldReportConfiguration.setMarginTop(reportConfig.getMarginTop());
                         oldReportConfiguration.setProcessor(reportConfig.getProcessor());
                         oldReportConfiguration.setShowGrandFooter(reportConfig.getShowGrandFooter());
                         oldReportConfiguration.setInvertGroupColors(reportConfig.getInvertGroupColors());

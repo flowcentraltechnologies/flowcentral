@@ -15,9 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.common.web.panels.AbstractDetailsPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -48,7 +53,7 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
         super.switchState();
         removeTempValue(ERROR_BINDING);
         doSwitchState();
-        setVisible(ERROR_BINDING, isTempValue(ERROR_BINDING));
+        setVisible(ERROR_BINDING, isWithError());
     }
 
     @Override
@@ -68,10 +73,28 @@ public abstract class AbstractEntityDetailsPanel extends AbstractDetailsPanel<En
         return au.environment();
     }
 
-    protected void setError(String message, Object... params) throws UnifyException {
-        setTempValue(ERROR_BINDING,
-                resolveSessionMessage(message, params));
+    protected final void setRefreshResult() throws UnifyException {
+        setCommandResultMapping("refreshResult");
     }
-    
+
+    protected final void setReloadResult() throws UnifyException {
+        setCommandResultMapping("reloadResult");
+    }
+
+    protected final void setReport(String reportConfigName, List<? extends Entity> entityList) throws UnifyException {
+        ReportOptions reportOptions = au().reportProvider().getReportOptionsForConfiguration(reportConfigName);
+        reportOptions.setContent(entityList);
+        reportOptions.setReportResourcePath(CommonModuleNameConstants.CONFIGURED_REPORT_RESOURCE);
+        setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
+    }
+
+    protected void setError(String message, Object... params) throws UnifyException {
+        setTempValue(ERROR_BINDING, resolveSessionMessage(message, params));
+    }
+
+    protected boolean isWithError() throws UnifyException {
+        return isTempValue(ERROR_BINDING);
+    }
+
     protected abstract void doSwitchState() throws UnifyException;
 }
