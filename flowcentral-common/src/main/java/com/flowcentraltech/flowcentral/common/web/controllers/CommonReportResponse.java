@@ -41,18 +41,22 @@ public class CommonReportResponse extends AbstractOpenWindowPageControllerRespon
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {
         ReportOptions reportOptions = (ReportOptions) getRequestAttribute(
                 FlowCentralRequestAttributeConstants.REPORTOPTIONS);
-        String reportFormat = reportOptions.getReportFormat();
-        String resourceName = getTimestampedResourceName(reportOptions.getTitle())
-                + ReportFormat.fromName(reportOptions.getReportFormat()).fileExt();
-        boolean download = reportOptions.isDownload();
+        if (reportOptions != null) {
+            String reportFormat = reportOptions.getReportFormat();
+            String resourceName = getTimestampedResourceName(reportOptions.getTitle())
+                    + ReportFormat.fromName(reportOptions.getReportFormat()).fileExt();
+            boolean download = reportOptions.isDownload();
 
-        MimeType mimeType = MimeType.APPLICATION_OCTETSTREAM;
-        if (!download) {
-            mimeType = ReportFormat.fromName(reportFormat).mimeType();
+            MimeType mimeType = MimeType.APPLICATION_OCTETSTREAM;
+            if (!download) {
+                mimeType = ReportFormat.fromName(reportFormat).mimeType();
+            }
+
+            logDebug("Preparing window resource for report [{0}]...", resourceName);
+            return new WindowResourceInfo(reportOptions, reportOptions.getReportResourcePath(), resourceName,
+                    mimeType.template(), download);
         }
 
-        logDebug("Preparing window resource for report [{0}]...", resourceName);
-        return new WindowResourceInfo(reportOptions, reportOptions.getReportResourcePath(), resourceName,
-                mimeType.template(), download);
+        return new WindowResourceInfo();
     }
 }

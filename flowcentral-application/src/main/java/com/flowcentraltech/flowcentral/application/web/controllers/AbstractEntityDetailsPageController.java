@@ -16,11 +16,15 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
+import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -44,9 +48,11 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
 @ResultMappings({
-        @ResultMapping(name = "refreshResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" }),
-        @ResultMapping(name = "reloadResult", response = { "!refreshpanelresponse panels:$l{resultPanel}" },
-            reload = true) })
+        @ResultMapping(name = "refreshResult",
+                response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" }),
+        @ResultMapping(name = "reloadResult",
+                response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" },
+                reload = true) })
 public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractFlowCentralPageController<T> {
 
@@ -113,12 +119,19 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return getPageBean().getResultTable();
     }
 
+    protected final void setReport(String reportConfigName, List<? extends Entity> entityList) throws UnifyException {
+        ReportOptions reportOptions = au().reportProvider().getReportOptionsForConfiguration(reportConfigName);
+        reportOptions.setContent(entityList);
+        reportOptions.setReportResourcePath(CommonModuleNameConstants.CONFIGURED_REPORT_RESOURCE);
+        setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
+    }
+
     protected final String refreshResult() throws UnifyException {
         return "refreshResult";
     }
 
     protected final String reloadResult() throws UnifyException {
-         return "reloadResult";
+        return "reloadResult";
     }
 
     protected abstract TableDef getTableDef() throws UnifyException;

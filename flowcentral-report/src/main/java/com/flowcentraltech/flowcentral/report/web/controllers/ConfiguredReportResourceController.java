@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.report.web.controllers;
 
 import java.io.OutputStream;
 
+import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -32,7 +33,7 @@ import com.tcdng.unify.web.ui.AbstractPageResourceController;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/resource/configuredreport")
+@Component(CommonModuleNameConstants.CONFIGURED_REPORT_RESOURCE)
 public class ConfiguredReportResourceController extends AbstractPageResourceController {
 
     @Configurable

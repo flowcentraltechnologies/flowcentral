@@ -245,7 +245,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @SuppressWarnings("unchecked")
     @Override
-    public ReportOptions getDynamicReportOptions(String entityName, List<DefaultReportColumn> defaultReportColumnList)
+    public ReportOptions getReportableEntityDynamicReportOptions(String entityName, List<DefaultReportColumn> defaultReportColumnList)
             throws UnifyException {
         final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entityName);
         ReportableDefinition reportableDefinition = environment()

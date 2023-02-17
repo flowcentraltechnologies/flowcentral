@@ -35,7 +35,7 @@ import com.tcdng.unify.core.report.ReportColumn;
 public interface ReportProvider extends UnifyComponent {
 
     /**
-     * Creates a new report option for dynamic reportable associated with supplied
+     * Creates a new report options for dynamic reportable associated with supplied
      * entity name.
      * 
      * @param entityName
@@ -46,8 +46,19 @@ public interface ReportProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    ReportOptions getDynamicReportOptions(String entityName, List<DefaultReportColumn> defaultReportColumnList)
-            throws UnifyException;
+    ReportOptions getReportableEntityDynamicReportOptions(String entityName,
+            List<DefaultReportColumn> defaultReportColumnList) throws UnifyException;
+
+    /**
+     * Get report options for configured report.
+     * 
+     * @param reportConfigName
+     *                         the report configuration long name
+     * @return the report options object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ReportOptions getReportOptionsForConfiguration(String reportConfigName) throws UnifyException;
 
     /**
      * Generates a dynamic report based on supplied report options.
@@ -104,17 +115,6 @@ public interface ReportProvider extends UnifyComponent {
      *                        if an error occurs
      */
     List<ReportListing> getRoleReportListing(String roleCode) throws UnifyException;
-
-    /**
-     * Get report options for configured report.
-     * 
-     * @param reportConfigName
-     *                         the report configuration long name
-     * @return the report options object
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    ReportOptions getReportOptionsForConfiguration(String reportConfigName) throws UnifyException;
 
     /**
      * Populates extra report options data that depend on input parameters.
