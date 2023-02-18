@@ -22,6 +22,8 @@ import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.VAlignType;
+import com.tcdng.unify.core.constant.XOffsetType;
+import com.tcdng.unify.core.constant.YOffsetType;
 import com.tcdng.unify.core.report.ReportPlacementType;
 
 /**
@@ -44,6 +46,12 @@ public class ReportPlacement extends BaseEntity {
 
     @ForeignKey(nullable = true)
     private VAlignType vertAlignType;
+
+    @ForeignKey
+    private XOffsetType xOffsetType;
+
+    @ForeignKey
+    private YOffsetType yOffsetType;
 
     @Column(name = "FIELD_NM", nullable = true)
     private String fieldName;
@@ -77,6 +85,12 @@ public class ReportPlacement extends BaseEntity {
 
     @ListOnly(key = "vertAlignType", property = "description")
     private String vertAlignTypeDesc;
+
+    @ListOnly(key = "xOffsetType", property = "description")
+    private String xOffsetTypeDesc;
+
+    @ListOnly(key = "yOffsetType", property = "description")
+    private String yOffsetTypeDesc;
 
     public Long getReportConfigurationId() {
         return reportConfigurationId;
@@ -113,6 +127,22 @@ public class ReportPlacement extends BaseEntity {
 
     public void setVertAlignType(VAlignType vertAlignType) {
         this.vertAlignType = vertAlignType;
+    }
+
+    public XOffsetType getXOffsetType() {
+        return xOffsetType;
+    }
+
+    public void setXOffsetType(XOffsetType xOffsetType) {
+        this.xOffsetType = xOffsetType;
+    }
+
+    public YOffsetType getYOffsetType() {
+        return yOffsetType;
+    }
+
+    public void setYOffsetType(YOffsetType yOffsetType) {
+        this.yOffsetType = yOffsetType;
     }
 
     public String getFieldName() {
@@ -201,6 +231,22 @@ public class ReportPlacement extends BaseEntity {
 
     public void setVertAlignTypeDesc(String vertAlignTypeDesc) {
         this.vertAlignTypeDesc = vertAlignTypeDesc;
+    }
+
+    public String getXOffsetTypeDesc() {
+        return xOffsetTypeDesc;
+    }
+
+    public void setXOffsetTypeDesc(String xOffsetTypeDesc) {
+        this.xOffsetTypeDesc = xOffsetTypeDesc;
+    }
+
+    public String getYOffsetTypeDesc() {
+        return yOffsetTypeDesc;
+    }
+
+    public void setYOffsetTypeDesc(String yOffsetTypeDesc) {
+        this.yOffsetTypeDesc = yOffsetTypeDesc;
     }
 
 }

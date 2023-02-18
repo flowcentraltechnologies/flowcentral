@@ -384,6 +384,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                         .text(reportPlacementOptions.getText()).formatter(reportPlacementOptions.getFormatter())
                         .hAlign(reportPlacementOptions.getHAlignType()).vAlign(reportPlacementOptions.getVAlignType())
                         .bold(Bold.fromBoolean(reportPlacementOptions.isBold()))
+                        .xOffsetType(reportPlacementOptions.getXOffsetType())
+                        .yOffsetType(reportPlacementOptions.getYOffsetType())
                         .position(reportPlacementOptions.getX(), reportPlacementOptions.getY())
                         .dimension(reportPlacementOptions.getWidth(), reportPlacementOptions.getHeight()).build();
                 rb.addPlacement(placement);
@@ -686,6 +688,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 reportPlacementOptions.setFormatter(formatter);
                 reportPlacementOptions.setHAlignType(reportPlacement.getHorizAlignType());
                 reportPlacementOptions.setVAlignType(reportPlacement.getVertAlignType());
+                reportPlacementOptions.setXOffsetType(reportPlacement.getXOffsetType());
+                reportPlacementOptions.setYOffsetType(reportPlacement.getYOffsetType());
                 reportPlacementOptions.setX(reportPlacement.getX());
                 reportPlacementOptions.setY(reportPlacement.getY());
                 reportPlacementOptions.setWidth(reportPlacement.getWidth());

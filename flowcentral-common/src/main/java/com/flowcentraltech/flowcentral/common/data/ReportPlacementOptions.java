@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.common.data;
 
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.constant.VAlignType;
+import com.tcdng.unify.core.constant.XOffsetType;
+import com.tcdng.unify.core.constant.YOffsetType;
 import com.tcdng.unify.core.report.ReportPlacementType;
 
 /**
@@ -43,6 +45,10 @@ public class ReportPlacementOptions {
     private HAlignType hAlignType;
 
     private VAlignType vAlignType;
+    
+    private XOffsetType xOffsetType;
+
+    private YOffsetType yOffsetType;
 
     private int x;
 
@@ -58,6 +64,8 @@ public class ReportPlacementOptions {
         this.type = type;
         this.hAlignType = HAlignType.LEFT;
         this.vAlignType = VAlignType.TOP;
+        this.xOffsetType = XOffsetType.LEFT;
+        this.yOffsetType = YOffsetType.TOP;
     }
 
     public String getTableName() {
@@ -104,6 +112,22 @@ public class ReportPlacementOptions {
         if (this.vAlignType == null) {
             this.vAlignType = VAlignType.TOP;
         }
+    }
+
+    public XOffsetType getXOffsetType() {
+        return xOffsetType;
+    }
+
+    public void setXOffsetType(XOffsetType xOffsetType) {
+        this.xOffsetType = xOffsetType;
+    }
+
+    public YOffsetType getYOffsetType() {
+        return yOffsetType;
+    }
+
+    public void setYOffsetType(YOffsetType yOffsetType) {
+        this.yOffsetType = yOffsetType;
     }
 
     public boolean isBold() {

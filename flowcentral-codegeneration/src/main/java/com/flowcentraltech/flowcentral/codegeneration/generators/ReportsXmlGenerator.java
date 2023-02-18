@@ -147,6 +147,8 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                         reportPlacementConfig.setFormatter(reportPlacement.getFormatter());
                         reportPlacementConfig.setHorizAlignType(reportPlacement.getHorizAlignType());
                         reportPlacementConfig.setVertAlignType(reportPlacement.getVertAlignType());
+                        reportPlacementConfig.setXOffsetType(reportPlacement.getXOffsetType());
+                        reportPlacementConfig.setYOffsetType(reportPlacement.getYOffsetType());
                         reportPlacementConfig.setX(reportPlacement.getX());
                         reportPlacementConfig.setY(reportPlacement.getY());
                         reportPlacementConfig.setWidth(reportPlacement.getWidth());
