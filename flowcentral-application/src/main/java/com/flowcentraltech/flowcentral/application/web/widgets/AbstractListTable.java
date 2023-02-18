@@ -43,6 +43,12 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class AbstractListTable<T> extends AbstractTable<List<? extends T>, T> {
 
+    @Override
+    public void reset() throws UnifyException {
+        super.reset();
+        setSelectedRows(Collections.emptyList());
+    }
+
     protected AbstractListTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, int entryMode) {
         super(au, tableDef, filterGroupDef, null, entryMode);
     }
