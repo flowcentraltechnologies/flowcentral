@@ -110,8 +110,8 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 final boolean listFormat = refDef.isWithListFormat();
                 EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
                 String searchField = getSearchField(entityClassDef, refDef);
-                Restriction br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
-                        _valueStore.getReader(), application().getNow()) : null;
+                Restriction br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(
+                        entityClassDef.getEntityDef(), _valueStore.getReader(), application().getNow()) : null;
 
                 Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                 query.ignoreEmptyCriteria(true);
@@ -120,8 +120,9 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 }
 
                 if (!StringUtils.isBlank(input)) {
-                    Restriction like = getUplAttribute(boolean.class, "caseInsensitive") ? new ILike(searchField, input)
-                            : new Like(searchField, input);
+                    Restriction like = getUplAttribute(boolean.class, "caseInsensitive")
+                            ? new ILike(searchField, input.trim())
+                            : new Like(searchField, input.trim());
                     query.addRestriction(like);
                 }
 
@@ -162,6 +163,6 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
 
     @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
-        
+
     }
 }

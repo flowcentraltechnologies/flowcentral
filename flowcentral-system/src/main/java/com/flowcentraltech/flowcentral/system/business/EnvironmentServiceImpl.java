@@ -402,6 +402,40 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
+    public <T extends Number, U extends Entity> int add(Class<T> fieldClass, String fieldName, T val, Query<U> query)
+            throws UnifyException {
+        return db(query.getEntityClass()).add(fieldClass, fieldName, val, query);
+    }
+
+    @Override
+    public <T extends Number, U extends Entity> int subtract(Class<T> fieldClass, String fieldName, T val,
+            Query<U> query) throws UnifyException {
+        return db(query.getEntityClass()).subtract(fieldClass, fieldName, val, query);
+    }
+
+    @Override
+    public <T extends Number, U extends Entity> int multiply(Class<T> fieldClass, String fieldName, T val,
+            Query<U> query) throws UnifyException {
+        return db(query.getEntityClass()).multiply(fieldClass, fieldName, val, query);
+    }
+
+    @Override
+    public <T extends Number, U extends Entity> int divide(Class<T> fieldClass, String fieldName, T val, Query<U> query)
+            throws UnifyException {
+        return db(query.getEntityClass()).divide(fieldClass, fieldName, val, query);
+    }
+
+    @Override
+    public <T, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+        return db(query.getEntityClass()).min(fieldClass, fieldName, query);
+    }
+
+    @Override
+    public <T, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+        return db(query.getEntityClass()).max(fieldClass, fieldName, query);
+    }
+
+    @Override
     public int delete(Entity inst) throws UnifyException {
         return db(inst.getClass()).deleteByIdVersion(inst);
     }
