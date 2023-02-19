@@ -374,6 +374,30 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     }
 
     @Override
+    public <T extends Number, U extends Entity> int add(Class<T> arg0, String arg1, T arg2, Query<U> arg3)
+            throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Number, U extends Entity> int divide(Class<T> arg0, String arg1, T arg2, Query<U> arg3)
+            throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Number, U extends Entity> int multiply(Class<T> arg0, String arg1, T arg2, Query<U> arg3)
+            throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Number, U extends Entity> int subtract(Class<T> arg0, String arg1, T arg2, Query<U> arg3)
+            throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public int deleteById(Entity record) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.DELETE,
                 appletUtilities.delegateUtilities().encodeDelegateObjectId(record.getId()), null);

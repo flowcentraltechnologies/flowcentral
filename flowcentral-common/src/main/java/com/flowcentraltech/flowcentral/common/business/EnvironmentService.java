@@ -479,6 +479,78 @@ public interface EnvironmentService extends BusinessService {
     int updateAll(Query<? extends Entity> query, Update update) throws UnifyException;
 
     /**
+     * Adds supplied value to field for all records that match criteria.
+     * 
+     * @param fieldClass
+     *                   the value type
+     * @param fieldName
+     *                   the field name
+     * @param val
+     *                   the value to add
+     * @param query
+     *                   the criteria
+     * @return the number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Number, U extends Entity> int add(Class<T> fieldClass, String fieldName, T val, Query<U> query)
+            throws UnifyException;
+
+    /**
+     * Subtracts supplied value to field for all records that match criteria.
+     * 
+     * @param fieldClass
+     *                   the value type
+     * @param fieldName
+     *                   the field name
+     * @param val
+     *                   the value to add
+     * @param query
+     *                   the criteria
+     * @return the number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Number, U extends Entity> int subtract(Class<T> fieldClass, String fieldName, T val, Query<U> query)
+            throws UnifyException;
+
+    /**
+     * Multiplies supplied value to field for all records that match criteria.
+     * 
+     * @param fieldClass
+     *                   the value type
+     * @param fieldName
+     *                   the field name
+     * @param val
+     *                   the value to add
+     * @param query
+     *                   the criteria
+     * @return the number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Number, U extends Entity> int multiply(Class<T> fieldClass, String fieldName, T val, Query<U> query)
+            throws UnifyException;
+
+    /**
+     * Divides supplied value to field for all records that match criteria.
+     * 
+     * @param fieldClass
+     *                   the value type
+     * @param fieldName
+     *                   the field name
+     * @param val
+     *                   the value to add
+     * @param query
+     *                   the criteria
+     * @return the number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Number, U extends Entity> int divide(Class<T> fieldClass, String fieldName, T val, Query<U> query)
+            throws UnifyException;
+
+    /**
      * Deletes a record
      * 
      * @param inst
@@ -826,18 +898,18 @@ public interface EnvironmentService extends BusinessService {
      */
     <T, U, V extends Entity> Map<T, List<U>> valueListMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException;
-    
+
     /**
      * Gets the datasource that the entity belongs to.
      * 
      * @param entityLongName
-     *                    the entity long name
+     *                       the entity long name
      * @return the datasource name
      * @throws UnifyException
      *                        if an error occurs
      */
     String getEntityDataSourceName(String entityLongName) throws UnifyException;
-    
+
     /**
      * Gets the datasource that the entity class belongs to.
      * 

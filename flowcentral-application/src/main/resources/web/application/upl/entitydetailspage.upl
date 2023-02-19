@@ -29,6 +29,7 @@
 	components:$c{resultTbl} 
 !fc-entitylisttable:resultTbl style:$s{width:100%;} viewButtonClass:$f{detailsViewButtonClass}
 	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
+	multiSelDependentList:$f{detailsMultiSelDependentList}
 
 // Actions
 !ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
