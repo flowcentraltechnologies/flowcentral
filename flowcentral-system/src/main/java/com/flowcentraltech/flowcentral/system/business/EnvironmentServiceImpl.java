@@ -426,6 +426,16 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
+    public <T, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+        return db(query.getEntityClass()).min(fieldClass, fieldName, query);
+    }
+
+    @Override
+    public <T, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+        return db(query.getEntityClass()).max(fieldClass, fieldName, query);
+    }
+
+    @Override
     public int delete(Entity inst) throws UnifyException {
         return db(inst.getClass()).deleteByIdVersion(inst);
     }

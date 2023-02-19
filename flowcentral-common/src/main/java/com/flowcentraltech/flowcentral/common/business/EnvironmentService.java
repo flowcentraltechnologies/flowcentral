@@ -551,6 +551,38 @@ public interface EnvironmentService extends BusinessService {
             throws UnifyException;
 
     /**
+     * Gets minimum value of selected field for record fetched by query.
+     * 
+     * @param fieldClass
+     *            the value class
+     * @param fieldName
+     *            the value field name
+     * @param query
+     *            the query
+     * @return the minimum value
+     * @throws UnifyException
+     *             if no field or multiple fields are selected in criteria. If
+     *             multiple or no record match criteria. If an error occurs
+     */
+    <T, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException;
+
+    /**
+     * Gets maximum value of selected field for record fetched by query.
+     * 
+     * @param fieldClass
+     *            the value class
+     * @param fieldName
+     *            the value field name
+     * @param query
+     *            the query
+     * @return the maximum value
+     * @throws UnifyException
+     *             if no field or multiple fields are selected in criteria. If
+     *             multiple or no record match criteria. If an error occurs
+     */
+    <T, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException;
+
+    /**
      * Deletes a record
      * 
      * @param inst
