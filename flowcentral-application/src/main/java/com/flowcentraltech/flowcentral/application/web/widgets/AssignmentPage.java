@@ -279,8 +279,7 @@ public class AssignmentPage {
 
             final BeanListTable _beanTable = getEntryBeanTable();
             _beanTable.setSwitchOnChangeHandlers(assnSwitchOnChangeHandlers);
-            _beanTable.setSelectedRows(selectedOnLoad);
-            _beanTable.setSourceObject(resultList);
+            _beanTable.setSourceObject(resultList, selectedOnLoad);
             _beanTable.setFixedAssignment(fixedAssignment);
         } else {
             assignedIdList = ctx.environment().getAssignedList(

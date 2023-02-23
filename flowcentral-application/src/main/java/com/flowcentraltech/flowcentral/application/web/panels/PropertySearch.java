@@ -95,7 +95,7 @@ public class PropertySearch extends AbstractPanelFormBinding {
     public void applyEntityToSearch(Entity inst, String childFkFieldName) throws UnifyException {
         List<PropertyListItem> propertyItemList = beanListTable.au().getPropertyListItems(inst, childFkFieldName,
                 propertyRuleDef);
-        beanListTable.setSourceObject(propertyItemList);
+        beanListTable.setSourceObjectKeepSelected(propertyItemList);
     }
 
     public boolean isEditButtonVisible() {

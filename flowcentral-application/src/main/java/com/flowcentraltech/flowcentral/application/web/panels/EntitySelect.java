@@ -234,7 +234,7 @@ public class EntitySelect {
             }
         }
 
-        entityTable.setSourceObject(restriction);
+        entityTable.setSourceObjectClearSelected(restriction);
     }
 
 }

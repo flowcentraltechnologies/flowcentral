@@ -108,10 +108,9 @@ public class TableWriter extends AbstractControlWriter {
             String errMsg = (String) getRequestAttribute(
                     AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
             if (StringUtils.isBlank(errMsg)) {
-                errMsg = (String) getRequestAttribute(
-                        AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG);
+                errMsg = (String) getRequestAttribute(AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG);
             }
-            
+
             if (!StringUtils.isBlank(errMsg)) {
                 writer.write("<div class=\"mwarn\"><span style=\"display:block;text-align:center;\">");
                 writer.write(errMsg);
@@ -503,7 +502,7 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("/>");
         writer.write("</th>");
     }
-    
+
     private void writeBodyRows(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
@@ -561,7 +560,8 @@ public class TableWriter extends AbstractControlWriter {
 
                     // Section header
                     if (sectionHeaders) {
-                        while ((currentSection == null || !currentSection.isIndexWithin(i)) && ((++sectionIndex) < slen)) {
+                        while ((currentSection == null || !currentSection.isIndexWithin(i))
+                                && ((++sectionIndex) < slen)) {
                             currentSection = sections.get(sectionIndex);
                             if (!currentSection.isEmpty()) {
                                 writer.write("<tr><td class=\"sheader\" colspan=\"100%\"><span>");
@@ -570,7 +570,7 @@ public class TableWriter extends AbstractControlWriter {
                             }
                         }
                     }
-                    
+
                     // Normal row
                     String summaryClass = null;
                     String summaryColor = null;
@@ -832,7 +832,8 @@ public class TableWriter extends AbstractControlWriter {
     }
 
     private void writeNonDataRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, boolean entryMode,
-            boolean multiSelect, boolean isSerialNo, String rowClass, String styleClass, String text) throws UnifyException {
+            boolean multiSelect, boolean isSerialNo, String rowClass, String styleClass, String text)
+            throws UnifyException {
         writer.write("<tr class=\"").write(rowClass).write("\">");
         int skip = 0;
         if (!entryMode && multiSelect) {
@@ -857,8 +858,8 @@ public class TableWriter extends AbstractControlWriter {
         writer.write("</tr>");
     }
 
-    private void writeRowMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, Long id, int index)
-            throws UnifyException {
+    private void writeRowMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, Long id,
+            int index) throws UnifyException {
         final Control selectCtrl = tableWidget.getSelectCtrl();
         final boolean selected = tableWidget.getTable().isSelectedRow(index);
         writer.write("<td class=\"mseld\">");

@@ -205,7 +205,7 @@ public class EntryTablePage {
         List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
 
         _beanTable.setSwitchOnChangeHandlers(entrySwitchOnChangeHandlers);
-        _beanTable.setSourceObject(resultList);
+        _beanTable.setSourceObjectKeepSelected(resultList);
         _beanTable.setFixedAssignment(true);
 
         if (entryEditPolicy != null) {

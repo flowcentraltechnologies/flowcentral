@@ -86,4 +86,8 @@ public enum SequencePartType {
                 || DAY_OF_YEAR.equals(this);
     }
 
+    public boolean isDayPart() {
+        return DAY_OF_MONTH.equals(this) || DAY_OF_YEAR.equals(this);
+    }
+
 }

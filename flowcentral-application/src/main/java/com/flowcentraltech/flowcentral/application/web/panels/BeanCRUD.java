@@ -68,7 +68,7 @@ public class BeanCRUD extends AbstractCRUD<BeanListTable> {
         }
 
         list.add(formContext.getInst());
-        getTable().setSourceObject(list);
+        getTable().setSourceObjectKeepSelected(list);
     }
 
     @Override

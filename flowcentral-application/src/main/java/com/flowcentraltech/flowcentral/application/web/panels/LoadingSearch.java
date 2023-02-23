@@ -289,7 +289,7 @@ public class LoadingSearch {
             searchRestriction = restriction;
         }
 
-        loadingTable.setSourceObject(searchRestriction);
+        loadingTable.setSourceObjectClearSelected(searchRestriction);
      }
 
     public boolean isShowActionFooter() {

@@ -32,10 +32,13 @@ public class SequenceDef {
 
     private final boolean withDatePart;
 
-    public SequenceDef(String skeleton, List<SequencePartDef> partList, boolean withDatePart) {
+    private final boolean withDayPart;
+
+    public SequenceDef(String skeleton, List<SequencePartDef> partList, boolean withDatePart, boolean withDayPart) {
         this.skeleton = skeleton;
         this.partList = partList;
         this.withDatePart = withDatePart;
+        this.withDayPart = withDayPart;
     }
 
     public String getSkeleton() {
@@ -50,9 +53,8 @@ public class SequenceDef {
         return withDatePart;
     }
 
-    @Override
-    public String toString() {
-        return "SequenceDef [skeleton=" + skeleton + ", partList=" + partList + ", withDatePart=" + withDatePart + "]";
+    public boolean isWithDayPart() {
+        return withDayPart;
     }
 
 }
