@@ -93,7 +93,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
     public void deleteEntry(int index) throws UnifyException {
         List<T> _entries = (List<T>) table.getSourceObject();
         _entries.remove(index);
-        table.setSourceObject(new ArrayList<T>(_entries));
+        table.setSourceObjectKeepSelected(new ArrayList<T>(_entries));
         EntryActionType actionType = table.fireOnTableChange(TableChangeType.DELETE_ENTRY);
         if (actionType.isAddItem()) {
             addEntry(false);
@@ -120,14 +120,14 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         List<T> _entries = new ArrayList<T>(entries);
         table.setPolicy(tablePolicy);
         table.setParentReader(parentReader);
-        table.setSourceObject(_entries);
+        table.setSourceObjectKeepSelected(_entries);
         if (_entries.isEmpty()) {
             addEntry(false);
         }
     }
 
     public void clearEntries() throws UnifyException {
-        table.setSourceObject(new ArrayList<T>());
+        table.setSourceObjectClearSelected(new ArrayList<T>());
         addEntry(false);
     }
 
@@ -186,7 +186,7 @@ public class InlineCRUD<T extends InlineCRUDEntry> {
         }
 
         _resultEntries.addAll(index, entries);
-        table.setSourceObject(new ArrayList<T>(_resultEntries));
+        table.setSourceObjectKeepSelected(new ArrayList<T>(_resultEntries));
         EntryActionType actionType = table
                 .fireOnTableChange(replace ? TableChangeType.REPLACE_ENTRIES : TableChangeType.INSERT_ENTRIES);
         if (actionType.isAddItem()) {

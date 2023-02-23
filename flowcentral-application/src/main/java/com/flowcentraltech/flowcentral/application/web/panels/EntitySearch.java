@@ -465,7 +465,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             searchRestriction = restriction;
         }
 
-        entityTable.setSourceObject(searchRestriction);
+        entityTable.setSourceObjectClearSelected(searchRestriction);
     }
 
     public void hideFilterEditor() {

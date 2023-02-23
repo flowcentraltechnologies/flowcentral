@@ -423,9 +423,18 @@ public abstract class AbstractTable<T, U> {
 
         return null;
     }
+    
+    public void setSourceObjectKeepSelected(T sourceObject) throws UnifyException {
+        setSourceObject(sourceObject, selected);
+    }
+    
+    public void setSourceObjectClearSelected(T sourceObject) throws UnifyException {
+        setSourceObject(sourceObject, Collections.emptySet());
+    }
 
-    public void setSourceObject(T sourceObject) throws UnifyException {
+    public void setSourceObject(T sourceObject, Set<Integer> selected) throws UnifyException {
         this.sourceObject = sourceObject;
+        setSelectedRows(selected);
         onLoadSourceObject(sourceObject, selected);
         reset();
         setDetailsIndex(-1);

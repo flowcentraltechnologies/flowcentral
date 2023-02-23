@@ -117,7 +117,7 @@ public class QuickTableEdit {
                 .addEquals(baseField, baseId);
         List<Entity> resultList = (List<Entity>) ctx.environment().listAll(query);
 
-        _beanTable.setSourceObject(resultList);
+        _beanTable.setSourceObjectKeepSelected(resultList);
         _beanTable.setFixedAssignment(true);
 
         if (entryEditPolicy != null) {

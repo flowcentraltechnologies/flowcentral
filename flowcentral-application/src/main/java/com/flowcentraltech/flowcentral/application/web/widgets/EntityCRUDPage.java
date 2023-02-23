@@ -230,7 +230,7 @@ public class EntityCRUDPage {
 			restriction = new And().add(restriction).add(baseRestriction);
 		}
 
-		entityTable.setSourceObject(restriction);
+		entityTable.setSourceObjectKeepSelected(restriction);
 		entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
 
 		if (ctx.isContextEditable() && isCreate()) {
