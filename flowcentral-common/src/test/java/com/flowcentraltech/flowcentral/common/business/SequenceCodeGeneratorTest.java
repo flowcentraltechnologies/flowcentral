@@ -140,6 +140,8 @@ public class SequenceCodeGeneratorTest extends AbstractFlowCentralTest {
         cal.set(Calendar.DAY_OF_YEAR, 207);
         cal.set(Calendar.YEAR, 2014);
         Date date2 = cal.getTime();
+        cal.set(Calendar.DAY_OF_YEAR, 208);
+        Date date3 = cal.getTime();
         
         String code = scg.getNextSequenceCode("test", "QT{N:10}", date1, null);
         assertEquals("QT0000000001", code);
@@ -167,6 +169,10 @@ public class SequenceCodeGeneratorTest extends AbstractFlowCentralTest {
         assertEquals("PC1", code);
         code = scg.getNextSequenceCode("test", "PC{N:0}", date2, null);
         assertEquals("PC2", code);
+        code = scg.getNextSequenceCode("test", "PC{N:0}", date3, null);
+        assertEquals("PC3", code);
+        code = scg.getNextSequenceCode("test", "PC{N:0}", date3, null);
+        assertEquals("PC4", code);
 
         code = scg.getNextSequenceCode("test", "GT{dd}/{yyyy}/PC/{ddd}/{N:0}", date1, null);
         assertEquals("GT25/2002/PC/145/1", code);
@@ -176,6 +182,10 @@ public class SequenceCodeGeneratorTest extends AbstractFlowCentralTest {
         assertEquals("GT26/2014/PC/207/1", code);
         code = scg.getNextSequenceCode("test", "GT{dd}/{yyyy}/PC/{ddd}/{N:0}", date2, null);
         assertEquals("GT26/2014/PC/207/2", code);
+        code = scg.getNextSequenceCode("test", "GT{dd}/{yyyy}/PC/{ddd}/{N:0}", date3, null);
+        assertEquals("GT27/2014/PC/208/1", code);
+        code = scg.getNextSequenceCode("test", "GT{dd}/{yyyy}/PC/{ddd}/{N:0}", date3, null);
+        assertEquals("GT27/2014/PC/208/2", code);
     }
     
     @Override

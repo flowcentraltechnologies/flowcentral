@@ -34,6 +34,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.system.SequenceNumberService;
+import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -55,7 +56,7 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
 
     @Configurable
     private SystemParameterProvider systemParameterProvider;
-    
+
     private final FactoryMap<String, SequenceDef> sequenceDefs;
 
     public SequenceCodeGeneratorImpl() {
@@ -105,6 +106,14 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
             cal.setTime(date);
         }
 
+        Date baseYearDate = null;
+        if (!_sequenceDef.isWithDayPart()) {
+            Calendar bcal = Calendar.getInstance();
+            bcal.setTime(CalendarUtils.getMidnightDate(date));
+            bcal.set(Calendar.DAY_OF_YEAR, 1);
+            baseYearDate = bcal.getTime();
+        }
+
         StringBuilder sb = new StringBuilder();
         for (SequencePartDef partDef : _sequenceDef.getPartList()) {
             switch (partDef.getType()) {
@@ -146,7 +155,8 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
                 }
                     break;
                 case SEQUENCE_NUMBER_BY_DATE: {
-                    String num = String.valueOf(seqNumberService.getNextSequenceNumber(seqKey, date));
+                    String num = String.valueOf(seqNumberService.getNextSequenceNumber(seqKey,
+                            _sequenceDef.isWithDayPart() ? date : baseYearDate));
                     if (num.length() < partDef.getNumLen()) {
                         num = StringUtils.padLeft(num, '0', partDef.getNumLen());
                     }
@@ -169,6 +179,7 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
         // Break down definition to parts
         final int len = definition.length();
         boolean withDatePart = false;
+        boolean withDayPart = false;
         int fromIndex = 0;
         int index = 0;
         List<SequencePartDef> partList = new ArrayList<SequencePartDef>();
@@ -195,6 +206,7 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
                 }
                 exist.add(_type);
                 withDatePart |= _type.isDatePart();
+                withDayPart |= _type.isDayPart();
 
                 if (fromIndex < index) {
                     partList.add(new SequencePartDef(definition.substring(fromIndex, index)));
@@ -216,7 +228,7 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
                     } else {
                         partList.add(new SequencePartDef(_type, val));
                     }
-                    
+
                     fromIndex = index + 1;
                 } else {
                     partList.add(new SequencePartDef(_type));
@@ -259,6 +271,6 @@ public class SequenceCodeGeneratorImpl extends AbstractSequenceCodeGenerator {
             }
         }
 
-        return new SequenceDef(sb.toString(), partList, withDatePart);
+        return new SequenceDef(sb.toString(), partList, withDatePart, withDayPart);
     }
 }
