@@ -114,6 +114,7 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
                 writer.writeParam("pSelAllId", tableWidget.getSelectAllId());
                 writer.writeParam("pSelCtrlId", tableWidget.getSelectCtrl().getId());
                 writer.writeParam("pMultiSel", true);
+                writer.writeParam("pDisabled", tableWidget.isContainerDisabled());
                 writer.writeParam("pMultiSelDepList", new String[] {});
                 /* writer.writeParam("pLvlChain", table.getItemLevelChain()); */
             }

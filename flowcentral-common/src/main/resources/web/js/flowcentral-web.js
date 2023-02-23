@@ -849,10 +849,11 @@ fux.rigEntityTreeTable = function(rgp) {
 		tbl.uMultiSelDepList = rgp.pMultiSelDepList;
 		tbl.uChain = rgp.pLvlChain;
 		tbl.uVisibleSel = 0;
+		const active = !rgp.pDisabled;
 
 		// Rig select
 		const selAll = _id(rgp.pSelAllId);
-		selAll._active = true;
+		selAll._active = active;
 		ux.cbWire(selAll);
 
 		const selBoxes = _name(rgp.pSelCtrlId);
@@ -866,7 +867,7 @@ fux.rigEntityTreeTable = function(rgp) {
 		
 		for (var i = 0; i < selBoxes.length; i++) {
 			var selBox = selBoxes[i];
-			selBox._active = true;
+			selBox._active = active;
 			ux.cbWire(selBox);
 			
 			const selBoxFac = _id("fac_" + selBox.id);
