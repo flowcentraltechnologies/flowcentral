@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.Panel;
  */
 public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel {
 
-    private static final int DEFAULT_MAX_TABLE_REPORT_ROWS = 200000;
+    private static final int DEFAULT_MAX_TABLE_REPORT_ROWS = 100000;
 
     private static final int ULTIMATE_MAX_TABLE_REPORT_ROWS = 800000;
 
