@@ -42,7 +42,7 @@ public class LinkActTypeListCommand extends AbstractListCommand<ZeroParams> {
     public LinkActTypeListCommand() {
         super(ZeroParams.class);
     }
-//application.details.action
+
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams zeroParams) throws UnifyException {
         if (list == null) {

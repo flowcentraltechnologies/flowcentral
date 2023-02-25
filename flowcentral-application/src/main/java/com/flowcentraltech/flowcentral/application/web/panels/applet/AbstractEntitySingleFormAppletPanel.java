@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -366,9 +367,10 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Action
     public void maintain() throws UnifyException {
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        int mIndex = Integer.parseInt(po[1]);
-        getEntityFormApplet().maintainInst(mIndex);
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            getEntityFormApplet().maintainInst(target.getIndex());
+        }
     }
 
     private void handleEntityActionResult(EntityActionResult entityActionResult, String entityName)

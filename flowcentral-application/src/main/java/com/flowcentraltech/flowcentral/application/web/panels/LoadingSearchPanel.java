@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
@@ -85,11 +86,10 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
 
     @Action
     public void details() throws UnifyException {
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        if (po.length > 0) {
-            int mIndex = Integer.parseInt(po[1]);
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
             LoadingSearch loadingSearch = getLoadingSearch();
-            loadingSearch.getLoadingTable().setDetailsIndex(mIndex);
+            loadingSearch.getLoadingTable().setDetailsIndex(target.getIndex());
         }
     }
 

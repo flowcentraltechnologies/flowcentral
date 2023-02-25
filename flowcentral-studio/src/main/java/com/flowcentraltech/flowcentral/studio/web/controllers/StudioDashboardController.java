@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
@@ -31,8 +30,8 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.util.QueryUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -66,19 +65,12 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
     @Configurable
     private AppletUtilities appletUtils;
 
-    @Configurable
-    private ApplicationModuleService applicationModuleService;
-
     public StudioDashboardController() {
         super(StudioDashboardPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setAppletUtils(AppletUtilities appletUtils) {
+    public final void setAppletUtils(AppletUtilities appletUtils) {
         this.appletUtils = appletUtils;
-    }
-
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
     }
 
     @Action
@@ -90,11 +82,13 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
 
     @Action
     public String openApplication() throws UnifyException {
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        int mIndex = Integer.parseInt(po[1]);
-        Application _inst = (Application) getPageBean().getSwitchApplicationSearch().getEntityTable().getDispItemList()
-                .get(mIndex);
-        setApplicationSessionAttributes(_inst);
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            Application _inst = (Application) getPageBean().getSwitchApplicationSearch().getEntityTable()
+                    .getDispItemList().get(target.getIndex());
+            setApplicationSessionAttributes(_inst);
+        }
+
         return "reloadapplicationstudio";
     }
 
@@ -119,7 +113,7 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
         application.setLabel(createAppForm.getApplicationLabel());
         application.setDevelopable(true);
         application.setMenuAccess(true);
-        applicationModuleService.createApplication(application, module);
+        appletUtils.application().createApplication(application, module);
         setApplicationSessionAttributes(application);
         return "reloadapplicationstudio";
     }
@@ -156,11 +150,11 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
             _switchApplicationSearch.setEntitySubTitle("Application");
             _switchApplicationSearch.setBaseRestriction(new Equals("developable", Boolean.TRUE),
                     appletUtils.specialParamProvider());
-             pageBean.setSwitchApplicationSearch(_switchApplicationSearch);
+            pageBean.setSwitchApplicationSearch(_switchApplicationSearch);
         }
 
         pageBean.getSwitchApplicationSearch().applyFilterToSearch();
-        
+
         Long applicationId = (Long) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_ID);
         if (!QueryUtils.isValidLongCriteria(applicationId)) {
             getPageRequestContextUtil().setRequestPopupName("switchApplicationPopup");

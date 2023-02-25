@@ -55,6 +55,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -731,27 +732,23 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void maintain() throws UnifyException {
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        if (po.length > 0) {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
             getRequestContextUtil().setContentScrollReset();
-            String valMarker = po[0];
-            int mIndex = Integer.parseInt(po[1]);
-            if (valMarker != null) {
-                switch (valMarker) {
-                    case EntitySearchValueMarkerConstants.CHILD_LIST:
-                        getEntityFormApplet().maintainChildInst(mIndex);
-                        return;
-                    case EntitySearchValueMarkerConstants.RELATED_LIST:
-                        getEntityFormApplet().maintainRelatedInst(mIndex);
-                        return;
-                    case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                        getEntityFormApplet().maintainHeadlessInst(mIndex);
-                        return;
-                    default:
-                }
+            switch (target.getTarget()) {
+                case EntitySearchValueMarkerConstants.CHILD_LIST:
+                    getEntityFormApplet().maintainChildInst(target.getIndex());
+                    return;
+                case EntitySearchValueMarkerConstants.RELATED_LIST:
+                    getEntityFormApplet().maintainRelatedInst(target.getIndex());
+                    return;
+                case EntitySearchValueMarkerConstants.HEADLESS_LIST:
+                    getEntityFormApplet().maintainHeadlessInst(target.getIndex());
+                    return;
+                default:
             }
 
-            TableActionResult result = getEntityFormApplet().maintainInst(mIndex);
+            TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
             if (result != null) {
                 if (result.isDisplayListingReport()) {
                     setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
@@ -766,11 +763,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void listing() throws UnifyException {
         getRequestContextUtil().setContentScrollReset();
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        String valMarker = po[0];
-        int mIndex = Integer.parseInt(po[1]);
-        if (valMarker != null) {
-            switch (valMarker) {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            switch (target.getTarget()) {
                 case EntitySearchValueMarkerConstants.CHILD_LIST:
                     // TODO
 //                    getEntityFormApplet().maintainChildInst(mIndex);
@@ -785,9 +780,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     return;
                 default:
             }
-        }
 
-        getEntityFormApplet().listingInst(mIndex);
+            getEntityFormApplet().listingInst(target.getIndex());
+        }
     }
 
     @Action
