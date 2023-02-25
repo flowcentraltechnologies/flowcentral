@@ -88,6 +88,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
+import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -136,6 +137,7 @@ import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.message.MessageResolver;
+import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -199,6 +201,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Configurable
     private MessageResolver messageResolver;
+
+    @Configurable
+    private TaskLauncher taskLauncher;    
+    
+    @Configurable
+    private ApplicationPrivilegeManager applicationPrivilegeManager;
 
     private final FactoryMap<String, Class<? extends SingleFormBean>> singleFormBeanClassByPanelName;
 
@@ -279,6 +287,14 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     public final void setMessageResolver(MessageResolver messageResolver) {
         this.messageResolver = messageResolver;
+    }
+
+    public final void setTaskLauncher(TaskLauncher taskLauncher) {
+        this.taskLauncher = taskLauncher;
+    }
+
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
+        this.applicationPrivilegeManager = applicationPrivilegeManager;
     }
 
     @Override
@@ -499,6 +515,16 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public ApplicationModuleService application() {
         return applicationModuleService;
+    }
+
+    @Override
+    public ApplicationPrivilegeManager applicationPrivilegeManager() {
+        return applicationPrivilegeManager;
+    }
+
+    @Override
+    public TaskLauncher taskLauncher() {
+        return taskLauncher;
     }
 
     @Override

@@ -28,4 +28,6 @@ public interface FlowCentralContainerPropertyConstants {
 
     String FLOWCENTRAL_INSTALL_DEVELOPER_ROLES = "flowcentral.install.developer.roles";
 
+    String FLOWCENTRAL_REPORTING_TABLE_RECORDS_MAXIMUM = "flowcentral.reporting.table.records.maximum";
+
 }

@@ -371,10 +371,6 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         getEntityFormApplet().maintainInst(mIndex);
     }
 
-    protected SystemModuleService system() {
-        return systemModuleService;
-    }
-
     private void handleEntityActionResult(EntityActionResult entityActionResult, String entityName)
             throws UnifyException {
         if (entityActionResult.isRefreshMenu()) {

@@ -63,6 +63,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
+import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
@@ -87,6 +88,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.FormatHelper;
+import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -436,6 +438,19 @@ public interface AppletUtilities extends UnifyComponent {
      */
     ApplicationModuleService application();
 
+    /**
+     * Gets the application privilege manager.
+     * 
+     * @return the application privilege manager.
+     */
+    ApplicationPrivilegeManager applicationPrivilegeManager();
+    
+    /**
+     * Get the task launcher component.
+     * @return the task launcher
+     */
+    TaskLauncher taskLauncher();
+    
     /**
      * Gets the system service.
      * 

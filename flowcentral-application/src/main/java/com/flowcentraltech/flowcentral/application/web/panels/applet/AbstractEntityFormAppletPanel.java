@@ -43,7 +43,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetWidget;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
@@ -53,7 +52,6 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttrib
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -84,28 +82,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     protected ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
-    private SystemModuleService systemModuleService;
-
-    @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
-
-    @Configurable
-    private CollaborationProvider collaborationProvider;
 
     private String focusMemoryId;
 
     private String tabMemoryId;
 
-    public final void setCollaborationProvider(CollaborationProvider collaborationProvider) {
-        this.collaborationProvider = collaborationProvider;
-    }
-
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {        
         this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
     }
 
     public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
@@ -129,7 +113,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final AppletDef formAppletDef = applet.getFormAppletDef();
         logDebug("Switching form applet panel [{0}]...", formAppletDef != null ? formAppletDef.getLongName() : null);
         final AppletContext appCtx = applet.getCtx();
-        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null;
+        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider() != null;
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
         final String roleCode = getUserToken().getRoleCode();
         final AbstractForm form = applet.getResolvedForm();
@@ -220,7 +204,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         if (viewMode.isInForm()) {
-            boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
+            boolean showAlternateFormActions = au().system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             if (viewMode.isSingleForm()) {
                 setVisible("singleFormPanel.altActionPanel", showAlternateFormActions);
@@ -824,10 +808,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
-    }
-
-    protected SystemModuleService system() {
-        return systemModuleService;
     }
 
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {

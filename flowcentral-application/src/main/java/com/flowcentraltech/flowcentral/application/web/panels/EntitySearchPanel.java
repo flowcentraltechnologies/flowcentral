@@ -21,22 +21,17 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTableWidget;
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.PageRequestContextUtil;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
@@ -49,28 +44,7 @@ import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
  */
 @Component("fc-entitysearchpanel")
 @UplBinding("web/application/upl/entitysearchpanel.upl")
-public class EntitySearchPanel extends AbstractPanel {
-
-    @Configurable
-    private ApplicationPrivilegeManager applicationPrivilegeManager;
-
-    @Configurable
-    private SystemModuleService systemModuleService;
-
-    @Configurable
-    private TaskLauncher taskLauncher;
-
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public final void setTaskLauncher(TaskLauncher taskLauncher) {
-        this.taskLauncher = taskLauncher;
-    }
+public class EntitySearchPanel extends AbstractApplicationPanel {
 
     @Override
     public void onPageConstruct() throws UnifyException {
@@ -95,20 +69,20 @@ public class EntitySearchPanel extends AbstractPanel {
         final TableDef tableDef = entityTable.getTableDef();
         final EntityDef entityDef = tableDef.getEntityDef();
         setVisible("newBtn", entitySearch.isNewButtonVisible()
-                && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
+                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getAddPrivilege()));
         setVisible("editBtn", entitySearch.isEditButtonVisible()
-                && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("quickEditBtn",
                 entitySearch.isShowQuickEdit()
                         && (entitySearch.isNewButtonVisible() || entitySearch.isEditButtonVisible())
-                        && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+                        && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("viewBtn", entitySearch.isViewButtonVisible()
-                && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
+                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
 
         final boolean reportBtnVisible = entityTable.getTotalItemCount() > 0 && entitySearch.isShowReport()
                 && entitySearch.au().reportProvider().isReportable(entityTable.getEntityDef().getLongName())
-                && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                && applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                         entityTable.getEntityDef().getReportPrivilege());
         setVisible("reportBtn", reportBtnVisible);
 
@@ -133,14 +107,14 @@ public class EntitySearchPanel extends AbstractPanel {
                 setDisabled("tackFilterBtn", entitySearch.isFilterEditorPinned());
                 setVisible("openSaveFilterBtn", entitySearch.isShowFilterSave());
                 if (isWidgetVisible("saveFilterPanel")) {
-                    setDisabled("saveFilterScope", !applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
+                    setDisabled("saveFilterScope", !applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
                             entityTable.getSaveGlobalTableQuickFilterPrivilege()));
                 }
             }
         }
 
         if (entitySearch.isShowActionFooter()) {
-            boolean buttonsForFooterAction = systemModuleService.getSysParameterValue(boolean.class,
+            boolean buttonsForFooterAction = system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
             if (buttonsForFooterAction) {
                 ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
@@ -330,7 +304,7 @@ public class EntitySearchPanel extends AbstractPanel {
     }
 
     private void fireEntityActionResultTask(EntityListActionResult entityActionResult) throws UnifyException {
-        TaskMonitor taskMonitor = taskLauncher.launchTask(entityActionResult.getResultTaskSetup());
+        TaskMonitor taskMonitor = taskLauncher().launchTask(entityActionResult.getResultTaskSetup());
         TaskMonitorInfo taskMonitorInfo = new TaskMonitorInfo(taskMonitor,
                 resolveSessionMessage(entityActionResult.getResultTaskCaption()), null, null);
         setSessionAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, taskMonitorInfo);

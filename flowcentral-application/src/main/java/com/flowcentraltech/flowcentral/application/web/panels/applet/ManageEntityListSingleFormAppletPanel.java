@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
-import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -61,13 +60,8 @@ public class ManageEntityListSingleFormAppletPanel extends AbstractEntitySingleF
     public void prepareGenerateReport() throws UnifyException {
         final ManageEntityListSingleFormApplet applet = getManageEntityListApplet();
         EntityTable entityTable = applet.getEntitySearch().getEntityTable();
-        ReportOptions reportOptions = applet.au().reportProvider().getReportableEntityDynamicReportOptions(
-                entityTable.getEntityDef().getLongName(), entityTable.getDefaultReportColumnList());
-        reportOptions.setReportResourcePath("/common/resource/report");
-        reportOptions.setRestriction(entityTable.getSourceObject());
-        reportOptions.setReportEntityList(true);
-        showReportOptionsBox(reportOptions);
-    }
+        prepareGenerateReport(entityTable);
+     }
 
     protected ManageEntityListSingleFormApplet getManageEntityListApplet() throws UnifyException {
         return getValue(ManageEntityListSingleFormApplet.class);

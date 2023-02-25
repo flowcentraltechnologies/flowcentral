@@ -15,8 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.task.TaskLauncher;
@@ -36,10 +41,34 @@ import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 public abstract class AbstractApplicationPanel extends AbstractPanel {
 
     @Configurable
-    private TaskLauncher taskLauncher;
+    private AppletUtilities appletUtilities;
 
-    public void setTaskLauncher(TaskLauncher taskLauncher) {
-        this.taskLauncher = taskLauncher;
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
+    }
+
+    protected final TaskLauncher taskLauncher() {
+        return appletUtilities.taskLauncher();
+    }
+    
+    protected final ApplicationModuleService application() {
+        return appletUtilities.application();
+    }
+
+    protected final ApplicationPrivilegeManager applicationPrivilegeManager() {
+        return appletUtilities.applicationPrivilegeManager();
+    }
+
+    protected final SystemModuleService system() {
+        return appletUtilities.system();
+    }
+
+    protected final CollaborationProvider collaborationProvider() {
+        return appletUtilities.collaborationProvider();
+    }   
+    
+    protected final AppletUtilities au() {
+        return appletUtilities;
     }
 
     protected void fireEntityActionResultTask(EntityActionResult entityActionResult) throws UnifyException {
@@ -59,7 +88,7 @@ public abstract class AbstractApplicationPanel extends AbstractPanel {
 
     protected void launchTaskWithMonitorBox(TaskSetup taskSetup, String caption, String onSuccessPath,
             String onFailurePath) throws UnifyException {
-        TaskMonitor taskMonitor = taskLauncher.launchTask(taskSetup);
+        TaskMonitor taskMonitor = taskLauncher().launchTask(taskSetup);
         TaskMonitorInfo taskMonitorInfo = new TaskMonitorInfo(taskMonitor, resolveSessionMessage(caption),
                 onSuccessPath, onFailurePath);
         setSessionAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, taskMonitorInfo);

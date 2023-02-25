@@ -20,12 +20,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
-import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
@@ -57,16 +55,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     private StudioModuleService studioModuleService;
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private CollaborationProvider collaborationProvider;
+    private AppletUtilities appletUtilities;
 
     @Configurable
     private CodeGenerationProvider codeGenerationProvider;
-
-    @Configurable
-    private ApplicationPrivilegeManager appPrivilegeManager;
 
     private static final List<String> applicationAppletList = Collections.unmodifiableList(
             Arrays.asList("studio.stuManageModule", "studio.manageApplication", "studio.applicationReplication"));
@@ -90,20 +82,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         this.studioModuleService = studioModuleService;
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setCollaborationProvider(CollaborationProvider collaborationProvider) {
-        this.collaborationProvider = collaborationProvider;
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     public final void setCodeGenerationProvider(CodeGenerationProvider codeGenerationProvider) {
         this.codeGenerationProvider = codeGenerationProvider;
-    }
-
-    public final void setAppPrivilegeManager(ApplicationPrivilegeManager appPrivilegeManager) {
-        this.appPrivilegeManager = appPrivilegeManager;
     }
 
     @Override
@@ -140,7 +124,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         writer.writeWithHtmlEscape(getSessionMessage("studio.menu.application.components"));
         writer.write("</span></div><div class=\"mbody\">");
 
-        final boolean isCollaborationEnabled = collaborationProvider != null;
+        final boolean isCollaborationEnabled = appletUtilities.collaborationProvider() != null;
         final List<StudioAppComponentType> selMenuCategoryList = isCollaborationEnabled ? collaborationMenuCategoryList
                 : menuCategoryList;
         StudioAppComponentType currCategory = studioMenuWidget.getCurrentSel();
@@ -238,7 +222,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     }
 
     private List<AppletDef> getCollaborationAppletDefs(String applicationName) throws UnifyException {
-        return getRoleAppletDefs(applicationName, collaborationProvider.getCollaborationApplets());
+        return getRoleAppletDefs(applicationName, appletUtilities.collaborationProvider().getCollaborationApplets());
     }
 
     private List<AppletDef> getCodeGenerationAppletDefs(String applicationName) throws UnifyException {
@@ -249,9 +233,9 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         final String roleCode = getUserToken().getRoleCode();
         List<AppletDef> appletDefList = new ArrayList<AppletDef>();
         for (String appletName : applets) {
-            AppletDef _appletDef = applicationModuleService
+            AppletDef _appletDef = appletUtilities.application()
                     .getAppletDef(ApplicationNameUtils.addVestigialNamePart(appletName, applicationName));
-            if (appPrivilegeManager.isRoleWithPrivilege(roleCode, _appletDef.getPrivilege())) {
+            if (appletUtilities.applicationPrivilegeManager().isRoleWithPrivilege(roleCode, _appletDef.getPrivilege())) {
                 appletDefList.add(_appletDef);
             }
         }
