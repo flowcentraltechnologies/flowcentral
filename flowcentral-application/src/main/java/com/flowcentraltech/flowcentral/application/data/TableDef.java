@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.constants.LinkActConstants;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.WidgetCalculationUtils;
@@ -574,17 +575,17 @@ public class TableDef extends BaseApplicationEntityDef {
         public Builder addColumnDef(String label, String fieldName, String renderer, String editor, OrderType order,
                 int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable,
                 boolean sortable, boolean summary) throws UnifyException {
-            return addColumnDef(label, fieldName, renderer, editor, null, order, widthRatio, switchOnChange, hidden,
-                    disabled, editable, sortable, summary);
+            return addColumnDef(label, fieldName, renderer, editor, null, null, order, widthRatio, switchOnChange,
+                    hidden, disabled, editable, sortable, summary);
         }
 
         public Builder addColumnDef(String label, String fieldName, String renderer, String editor, String linkAct,
-                OrderType order, int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled,
-                boolean editable, boolean sortable, boolean summary) throws UnifyException {
+                String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hidden,
+                boolean disabled, boolean editable, boolean sortable, boolean summary) throws UnifyException {
             TableColumnDef tableColumnDef = TableColumnDef.newBuilder().label(label).fieldName(fieldName)
-                    .renderer(renderer).editor(editor).linkAct(linkAct).order(order).widthRatio(widthRatio)
-                    .switchOnChange(switchOnChange).hidden(hidden).disabled(disabled).editable(editable)
-                    .sortable(sortable).summary(summary).build();
+                    .renderer(renderer).editor(editor).linkAct(linkAct).symbol(symbol).order(order)
+                    .widthRatio(widthRatio).switchOnChange(switchOnChange).hidden(hidden).disabled(disabled)
+                    .editable(editable).sortable(sortable).summary(summary).build();
             return addColumnDef(tableColumnDef);
         }
 
@@ -632,7 +633,8 @@ public class TableDef extends BaseApplicationEntityDef {
                         ? tempColumnDef.getEditor() + " binding:" + fieldName
                         : null;
                 String linkAct = tempColumnDef.getLinkAct();
-                if (!StringUtils.isBlank(linkAct)) {
+                String symbol = tempColumnDef.getSymbol();
+                if (tempColumnDef.isWithLinkAct()) {
                     String formatter = "";
                     int fromIndex = renderer.indexOf("formatter");
                     if (fromIndex > 0) {
@@ -646,21 +648,28 @@ public class TableDef extends BaseApplicationEntityDef {
                     entityFieldDef = entityFieldDef.isWithResolvedTypeFieldDef()
                             ? entityFieldDef.getResolvedTypeFieldDef()
                             : entityFieldDef;
-                    String styleClass = entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "";
-                    renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter + " binding:"
-                            + fieldName + styleClass
-                            + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
-                            + "}}";
+                    if (LinkActConstants.BUTTON_ACTION.equals(linkAct)) {
+                        final String symbolAttr = tempColumnDef.isWithSymbol() ? " symbol:$s{" + symbol + "}" : "";
+                        renderer = "!ui-button" + symbolAttr + " preferredCaptionBinding:" + fieldName + " binding:"
+                                + fieldName
+                                + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
+                                + "}}";
+                    } else {
+                        String styleClass = entityFieldDef.getDataType().isNumber() ? " styleClass:$e{link-right}" : "";
+                        renderer = "!ui-link debounce:true preferredCaptionBinding:" + fieldName + formatter
+                                + " binding:" + fieldName + styleClass
+                                + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
+                                + "}}";
+                    }
                 } else {
                     renderer = renderer + " binding:" + fieldName;
                 }
 
                 tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + widths[i] + "%;",
-                        renderer, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(),
-                        tempColumnDef.getLinkAct(), tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(),
-                        (100 - usedPercent), tempColumnDef.isSwitchOnChange(), tempColumnDef.isHidden(),
-                        tempColumnDef.isDisabled(), tempColumnDef.isEditable(), tempColumnDef.isSortable(),
-                        tempColumnDef.isSummary());
+                        renderer, symbol, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(), linkAct,
+                        tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(), (100 - usedPercent),
+                        tempColumnDef.isSwitchOnChange(), tempColumnDef.isHidden(), tempColumnDef.isDisabled(),
+                        tempColumnDef.isEditable(), tempColumnDef.isSortable(), tempColumnDef.isSummary());
 
                 _visibleColumnDefList.add(tableColumnDef);
                 columnDefList.add(tableColumnDef);

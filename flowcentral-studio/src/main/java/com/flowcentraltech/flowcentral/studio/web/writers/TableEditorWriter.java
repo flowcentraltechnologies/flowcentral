@@ -38,9 +38,9 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 public class TableEditorWriter extends AbstractControlWriter {
 
     private static final String[] COLUMN_PROPERTY_KEYS = { "tableeditor.field", "tableeditor.label", "tableeditor.link",
-            "tableeditor.order", "tableeditor.widget", "tableeditor.widthratio", "tableeditor.switchonchange",
-            "tableeditor.hidden", "tableeditor.disabled", "tableeditor.editable", "tableeditor.sortable",
-            "tableeditor.summary" };
+            "tableeditor.symbol", "tableeditor.order", "tableeditor.widget", "tableeditor.widthratio",
+            "tableeditor.switchonchange", "tableeditor.hidden", "tableeditor.disabled", "tableeditor.editable",
+            "tableeditor.sortable", "tableeditor.summary" };
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {

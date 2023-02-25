@@ -49,6 +49,10 @@ public class TableColumnEditorPanel extends DetachedPanel {
         return getWidgetByShortName("editValLink").getId();
     }
 
+    public String getSymbolId() throws UnifyException {
+        return getWidgetByShortName("editValSymbol").getId();
+    }
+
     public String getOrderId() throws UnifyException {
         return getWidgetByShortName("editValOrder").getId();
     }

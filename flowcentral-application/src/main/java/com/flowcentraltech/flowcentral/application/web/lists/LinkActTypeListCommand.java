@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.application.constants.LinkActConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ListData;
@@ -49,11 +50,18 @@ public class LinkActTypeListCommand extends AbstractListCommand<ZeroParams> {
             synchronized (LinkActTypeListCommand.class) {
                 if (list == null) {
                     list = Collections.unmodifiableList(Arrays.asList(
-                            new ListData("maintainAct", getApplicationMessage("application.maintain.action")),
-                            new ListData("listingAct", getApplicationMessage("application.listing.action")),
-                            new ListData("decisionAct", getApplicationMessage("application.decision.action")),
-                            new ListData("selectAct", getApplicationMessage("application.select.action")),
-                            new ListData("detailsAct", getApplicationMessage("application.details.action"))));
+                            new ListData(LinkActConstants.MAINTAIN_ACTION,
+                                    getApplicationMessage("application.maintain.action")),
+                            new ListData(LinkActConstants.LISTING_ACTION,
+                                    getApplicationMessage("application.listing.action")),
+                            new ListData(LinkActConstants.DECISION_ACTION,
+                                    getApplicationMessage("application.decision.action")),
+                            new ListData(LinkActConstants.SELECT_ACTION,
+                                    getApplicationMessage("application.select.action")),
+                            new ListData(LinkActConstants.DETAILS_ACTION,
+                                    getApplicationMessage("application.details.action")),
+                            new ListData(LinkActConstants.BUTTON_ACTION,
+                                    getApplicationMessage("application.button.action"))));
                 }
             }
         }

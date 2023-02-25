@@ -555,6 +555,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
 
                         tableColumnConfig.setRenderWidget(appTableColumn.getRenderWidget());
                         tableColumnConfig.setLinkAct(appTableColumn.getLinkAct());
+                        tableColumnConfig.setSymbol(appTableColumn.getSymbol());
                         tableColumnConfig.setOrder(appTableColumn.getOrder());
                         tableColumnConfig.setWidthRatio(appTableColumn.getWidthRatio());
                         tableColumnConfig.setSwitchOnChange(appTableColumn.isSwitchOnChange());

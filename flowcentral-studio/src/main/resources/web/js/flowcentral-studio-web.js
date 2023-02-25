@@ -723,6 +723,7 @@ fuxstudio.rigTableColumnEditorPanel = function(rgp) {
 	tce._field = _id(rgp.pFieldId);
 	tce._label = _id(rgp.pLabelId);
 	tce._link = _id(rgp.pLinkId);
+	tce._symbol = _id(rgp.pSymbolId);
 	tce._order = _id(rgp.pOrderId);
 	tce._widget = _id(rgp.pWidgetId);
 	tce._width = _id(rgp.pWidthId);
@@ -739,6 +740,7 @@ fuxstudio.rigTableColumnEditorPanel = function(rgp) {
 		tce._field.setValue(column.fldNm);
 		tce._label.setValue(column.label);
 		tce._link.setValue(column.link);
+		tce._symbol.setValue(column.symbol);
 		tce._order.setValue(column.order);
 		tce._widget.setValue(column.widget);
 		tce._width.setValue(column.width);
@@ -755,6 +757,7 @@ fuxstudio.rigTableColumnEditorPanel = function(rgp) {
 			const column = tce._evp.column;
 			column.label = tce._label.getValue();
 			column.link = tce._link.getValue();
+			column.symbol = tce._symbol.getValue();
 			column.order = tce._order.getValue();
 			column.widget = tce._widget.getValue();
 			column.width = parseInt(tce._width.getValue());
@@ -900,15 +903,16 @@ fuxstudio.tblCreateSlot = function(evp) {
 	html += editor.editSlotFieldHtml(labels[0], column.fldNm);
 	html += editor.editSlotFieldHtml(labels[1], column.label);
 	html += editor.editSlotFieldHtml(labels[2], column.link);
-	html += editor.editSlotFieldHtml(labels[3], column.order);
-	html += editor.editSlotFieldHtml(labels[4], column.widget);
-	html += editor.editSlotFieldHtml(labels[5], column.width);
-	html += editor.editSlotFieldHtml(labels[6], "" + column.switchOnChange);
-	html += editor.editSlotFieldHtml(labels[7], "" + column.hidden);
-	html += editor.editSlotFieldHtml(labels[8], "" + column.disabled);
-	html += editor.editSlotFieldHtml(labels[9], "" + column.editable);
-	html += editor.editSlotFieldHtml(labels[10], "" + column.sort);
-	html += editor.editSlotFieldHtml(labels[11], "" + column.summary);
+	html += editor.editSlotFieldHtml(labels[3], column.symbol);
+	html += editor.editSlotFieldHtml(labels[4], column.order);
+	html += editor.editSlotFieldHtml(labels[5], column.widget);
+	html += editor.editSlotFieldHtml(labels[6], column.width);
+	html += editor.editSlotFieldHtml(labels[7], "" + column.switchOnChange);
+	html += editor.editSlotFieldHtml(labels[8], "" + column.hidden);
+	html += editor.editSlotFieldHtml(labels[9], "" + column.disabled);
+	html += editor.editSlotFieldHtml(labels[10], "" + column.editable);
+	html += editor.editSlotFieldHtml(labels[11], "" + column.sort);
+	html += editor.editSlotFieldHtml(labels[12], "" + column.summary);
 
 	const slot = document.createElement("div");
 	slot.className = "slot";
@@ -1000,6 +1004,7 @@ fuxstudio.tblSlotDragEnd = function(uEv) {
 			column.fldNm = evp.fieldInfo.fldNm;
 			column.label = null;
 			column.link = null;
+			column.symbol = null;
 			column.widget = evp.fieldInfo.fldWidget?  evp.fieldInfo.fldWidget:"application.text";
 			column.width = 1;
 			column.sort = false;
