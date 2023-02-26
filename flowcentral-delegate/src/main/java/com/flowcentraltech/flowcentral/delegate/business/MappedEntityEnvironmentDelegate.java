@@ -194,12 +194,12 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
-    public <T, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
