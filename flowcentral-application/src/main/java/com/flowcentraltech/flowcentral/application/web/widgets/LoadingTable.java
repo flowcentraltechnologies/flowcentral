@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
+import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
 import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
@@ -140,7 +141,7 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
             TableLoadingDef tableLoadingDef = tableDef.getTableLoadingDef(i);
             LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     tableLoadingDef.getProvider());
-            count += loadingTableProvider.countLoadingItems(restriction);
+            count += loadingTableProvider.countLoadingItems(new LoadingParams(restriction));
         }
 
         return count;
@@ -159,7 +160,7 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
             LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     tableLoadingDef.getProvider());
             String label = loadingTableProvider.getLoadingLabel();
-            List<? extends Entity> _items = loadingTableProvider.getLoadingItems(restriction);
+            List<? extends Entity> _items = loadingTableProvider.getLoadingItems(new LoadingParams(restriction));
             Order order = getOrder();
             if (order == null) {
                 DataUtils.sortAscending(_items, Entity.class, "id");
