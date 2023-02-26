@@ -33,4 +33,5 @@
 
 // Actions
 !ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
+!ui-post:buttonAct  path:$n{/buttons} 
 !ui-post:viewAct  path:$n{/view}

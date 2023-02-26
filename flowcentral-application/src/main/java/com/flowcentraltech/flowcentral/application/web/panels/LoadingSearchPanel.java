@@ -26,6 +26,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.IndexedTarget;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
@@ -85,11 +86,20 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
     }
 
     @Action
-    public void details() throws UnifyException {
+    public final void details() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
             LoadingSearch loadingSearch = getLoadingSearch();
             loadingSearch.getLoadingTable().setDetailsIndex(target.getIndex());
+        }
+    }
+
+    @Action
+    public final void buttons() throws UnifyException {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            LoadingSearch loadingSearch = getLoadingSearch();
+            onAction(loadingSearch.getLoadingTable().getDispItemList().get(target.getIndex()), target.getTarget());
         }
     }
 
@@ -120,6 +130,13 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
         applyTableBtnAction(appTableActionPolicy);
     }
 
+    private void onAction(Entity inst, String action) throws UnifyException {
+        LoadingSearch loadingSearch = getLoadingSearch();
+        if (!StringUtils.isBlank(loadingSearch.getAppTableActionPolicy())) {
+            
+        }
+    }
+    
     private void applyTableBtnAction(String appTableActionPolicy) throws UnifyException {
         LoadingTableWidget tableWidget = getWidgetByShortName(LoadingTableWidget.class, "searchResultTbl");
         if (!StringUtils.isBlank(appTableActionPolicy)) {

@@ -650,8 +650,7 @@ public class TableDef extends BaseApplicationEntityDef {
                             : entityFieldDef;
                     if (LinkActConstants.BUTTON_ACTION.equals(linkAct)) {
                         final String symbolAttr = tempColumnDef.isWithSymbol() ? " symbol:$s{" + symbol + "}" : "";
-                        renderer = "!ui-button" + symbolAttr + " preferredCaptionBinding:" + fieldName + " binding:"
-                                + fieldName
+                        renderer = "!ui-button" + symbolAttr + "  binding:" + fieldName
                                 + " alwaysValueIndex:true eventHandler:$d{!ui-event event:onclick action:$c{" + linkAct
                                 + "}}";
                     } else {
