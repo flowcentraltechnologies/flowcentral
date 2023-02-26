@@ -48,6 +48,10 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
 
     private static final Order DEFAULT_TABLE_ORDER = new Order().add("id");
 
+    public LoadingTable(AppletUtilities au, TableDef tableDef) {
+        this(au, tableDef, null);
+    }
+
     public LoadingTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef) {
         super(au, tableDef, filterGroupDef, DEFAULT_TABLE_ORDER, 0);
         this.setFixedRows(tableDef.isFixedRows());
