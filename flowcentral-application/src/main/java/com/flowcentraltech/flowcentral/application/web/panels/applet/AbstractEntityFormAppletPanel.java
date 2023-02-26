@@ -43,7 +43,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheetWidget;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
@@ -53,10 +52,10 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttrib
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
@@ -84,28 +83,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     protected ApplicationPrivilegeManager applicationPrivilegeManager;
 
     @Configurable
-    private SystemModuleService systemModuleService;
-
-    @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
-
-    @Configurable
-    private CollaborationProvider collaborationProvider;
 
     private String focusMemoryId;
 
     private String tabMemoryId;
 
-    public final void setCollaborationProvider(CollaborationProvider collaborationProvider) {
-        this.collaborationProvider = collaborationProvider;
-    }
-
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {        
         this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
     }
 
     public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
@@ -129,7 +114,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final AppletDef formAppletDef = applet.getFormAppletDef();
         logDebug("Switching form applet panel [{0}]...", formAppletDef != null ? formAppletDef.getLongName() : null);
         final AppletContext appCtx = applet.getCtx();
-        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider != null;
+        final boolean isCollaboration = applet.isCollaboration() && collaborationProvider() != null;
         final AbstractEntityFormApplet.ViewMode viewMode = applet.getMode();
         final String roleCode = getUserToken().getRoleCode();
         final AbstractForm form = applet.getResolvedForm();
@@ -220,7 +205,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         if (viewMode.isInForm()) {
-            boolean showAlternateFormActions = systemModuleService.getSysParameterValue(boolean.class,
+            boolean showAlternateFormActions = au().system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             if (viewMode.isSingleForm()) {
                 setVisible("singleFormPanel.altActionPanel", showAlternateFormActions);
@@ -747,27 +732,23 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void maintain() throws UnifyException {
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        if (po.length > 0) {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
             getRequestContextUtil().setContentScrollReset();
-            String valMarker = po[0];
-            int mIndex = Integer.parseInt(po[1]);
-            if (valMarker != null) {
-                switch (valMarker) {
-                    case EntitySearchValueMarkerConstants.CHILD_LIST:
-                        getEntityFormApplet().maintainChildInst(mIndex);
-                        return;
-                    case EntitySearchValueMarkerConstants.RELATED_LIST:
-                        getEntityFormApplet().maintainRelatedInst(mIndex);
-                        return;
-                    case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                        getEntityFormApplet().maintainHeadlessInst(mIndex);
-                        return;
-                    default:
-                }
+            switch (target.getTarget()) {
+                case EntitySearchValueMarkerConstants.CHILD_LIST:
+                    getEntityFormApplet().maintainChildInst(target.getIndex());
+                    return;
+                case EntitySearchValueMarkerConstants.RELATED_LIST:
+                    getEntityFormApplet().maintainRelatedInst(target.getIndex());
+                    return;
+                case EntitySearchValueMarkerConstants.HEADLESS_LIST:
+                    getEntityFormApplet().maintainHeadlessInst(target.getIndex());
+                    return;
+                default:
             }
 
-            TableActionResult result = getEntityFormApplet().maintainInst(mIndex);
+            TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
             if (result != null) {
                 if (result.isDisplayListingReport()) {
                     setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
@@ -782,11 +763,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void listing() throws UnifyException {
         getRequestContextUtil().setContentScrollReset();
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        String valMarker = po[0];
-        int mIndex = Integer.parseInt(po[1]);
-        if (valMarker != null) {
-            switch (valMarker) {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            switch (target.getTarget()) {
                 case EntitySearchValueMarkerConstants.CHILD_LIST:
                     // TODO
 //                    getEntityFormApplet().maintainChildInst(mIndex);
@@ -801,9 +780,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     return;
                 default:
             }
-        }
 
-        getEntityFormApplet().listingInst(mIndex);
+            getEntityFormApplet().listingInst(target.getIndex());
+        }
     }
 
     @Action
@@ -824,10 +803,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         } else {
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         }
-    }
-
-    protected SystemModuleService system() {
-        return systemModuleService;
     }
 
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {

@@ -274,12 +274,12 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     }
 
     @Override
-    public <T, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
@@ -302,6 +302,46 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
             String valueName, Query<V> query) throws UnifyException {
         // TODO
         return null;
+    }
+
+    @Override
+    public <T extends Entity> T findFirst(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> T findLast(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> T findLeanFirst(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> T findLeanLast(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> T listFirst(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> T listLast(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> T listLeanFirst(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> T listLeanLast(Query<T> query) throws UnifyException {
+        throw new UnsupportedOperationException();
     }
 
     @Override

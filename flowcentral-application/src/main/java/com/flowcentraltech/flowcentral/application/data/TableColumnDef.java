@@ -45,6 +45,8 @@ public class TableColumnDef {
 
     private String linkAct;
 
+    private String symbol;
+
     private int widthRatio;
 
     private OrderType order;
@@ -64,7 +66,7 @@ public class TableColumnDef {
     private boolean summary;
 
     public TableColumnDef(String label, String fieldName, String headerStyle, String cellRenderer, String cellEditor,
-            String renderer, String editor, String linkAct, OrderType order, int widthRatio, int width,
+            String renderer, String editor, String linkAct, String symbol, OrderType order, int widthRatio, int width,
             boolean switchOnChange, boolean hidden, boolean disabled, boolean editable, boolean sortable,
             boolean summary) {
         this.label = label;
@@ -75,6 +77,7 @@ public class TableColumnDef {
         this.renderer = renderer;
         this.editor = editor;
         this.linkAct = linkAct;
+        this.symbol = symbol;
         this.order = order;
         this.widthRatio = widthRatio;
         this.width = width;
@@ -87,13 +90,14 @@ public class TableColumnDef {
     }
 
     private TableColumnDef(String label, String fieldName, String renderer, String editor, String linkAct,
-            OrderType order, int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable,
-            boolean sortable, boolean summary) {
+            String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled,
+            boolean editable, boolean sortable, boolean summary) {
         this.label = label;
         this.fieldName = fieldName;
         this.renderer = renderer;
         this.editor = editor;
         this.linkAct = linkAct;
+        this.symbol = symbol;
         this.order = order;
         this.widthRatio = widthRatio;
         this.switchOnChange = switchOnChange;
@@ -138,6 +142,18 @@ public class TableColumnDef {
 
     public String getLinkAct() {
         return linkAct;
+    }
+
+    public boolean isWithLinkAct() {
+        return !StringUtils.isBlank(linkAct);
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public boolean isWithSymbol() {
+        return !StringUtils.isBlank(symbol);
     }
 
     public int getWidthRatio() {
@@ -206,6 +222,8 @@ public class TableColumnDef {
 
         private String linkAct;
 
+        private String symbol;
+
         private OrderType order;
 
         private int widthRatio;
@@ -251,6 +269,11 @@ public class TableColumnDef {
             return this;
         }
 
+        public Builder symbol(String symbol) {
+            this.symbol = symbol;
+            return this;
+        }
+
         public Builder widthRatio(int widthRatio) {
             this.widthRatio = widthRatio > 0 ? widthRatio : 1;
             return this;
@@ -292,8 +315,8 @@ public class TableColumnDef {
         }
 
         public TableColumnDef build() throws UnifyException {
-            return new TableColumnDef(label, fieldName, renderer, editor, linkAct, order, widthRatio, switchOnChange,
-                    hidden, disabled, editable, sortable, summary);
+            return new TableColumnDef(label, fieldName, renderer, editor, linkAct, symbol, order, widthRatio,
+                    switchOnChange, hidden, disabled, editable, sortable, summary);
         }
     }
 

@@ -37,6 +37,8 @@ public class TableColumnConfig {
 
     private String linkAct;
 
+    private String symbol;
+
     private String order;
 
     private int widthRatio;
@@ -96,6 +98,15 @@ public class TableColumnConfig {
     @XmlAttribute
     public void setLinkAct(String linkAct) {
         this.linkAct = linkAct;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    @XmlAttribute
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public String getOrder() {

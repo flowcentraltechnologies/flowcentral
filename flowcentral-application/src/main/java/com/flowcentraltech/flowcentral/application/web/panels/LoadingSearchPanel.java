@@ -20,19 +20,17 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSy
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTableWidget;
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.core.task.TaskLauncher;
+import com.tcdng.unify.core.data.IndexedTarget;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 
@@ -44,21 +42,7 @@ import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
  */
 @Component("fc-loadingsearchpanel")
 @UplBinding("web/application/upl/loadingsearchpanel.upl")
-public class LoadingSearchPanel extends AbstractPanel {
-
-    @Configurable
-    private ApplicationPrivilegeManager applicationPrivilegeManager;
-
-    @Configurable
-    private TaskLauncher taskLauncher;
-
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setTaskLauncher(TaskLauncher taskLauncher) {
-        this.taskLauncher = taskLauncher;
-    }
+public class LoadingSearchPanel extends AbstractApplicationPanel {
 
     @Override
     public void switchState() throws UnifyException {
@@ -102,12 +86,20 @@ public class LoadingSearchPanel extends AbstractPanel {
     }
 
     @Action
-    public void details() throws UnifyException {
-        String[] po = StringUtils.charSplit(getRequestTarget(String.class), ':');
-        if (po.length > 0) {
-            int mIndex = Integer.parseInt(po[1]);
+    public final void details() throws UnifyException {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
             LoadingSearch loadingSearch = getLoadingSearch();
-            loadingSearch.getLoadingTable().setDetailsIndex(mIndex);
+            loadingSearch.getLoadingTable().setDetailsIndex(target.getIndex());
+        }
+    }
+
+    @Action
+    public final void buttons() throws UnifyException {
+        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        if (target.isValidIndex()) {
+            LoadingSearch loadingSearch = getLoadingSearch();
+            onAction(loadingSearch.getLoadingTable().getDispItemList().get(target.getIndex()), target.getTarget());
         }
     }
 
@@ -138,6 +130,13 @@ public class LoadingSearchPanel extends AbstractPanel {
         applyTableBtnAction(appTableActionPolicy);
     }
 
+    private void onAction(Entity inst, String action) throws UnifyException {
+        LoadingSearch loadingSearch = getLoadingSearch();
+        if (!StringUtils.isBlank(loadingSearch.getAppTableActionPolicy())) {
+            
+        }
+    }
+    
     private void applyTableBtnAction(String appTableActionPolicy) throws UnifyException {
         LoadingTableWidget tableWidget = getWidgetByShortName(LoadingTableWidget.class, "searchResultTbl");
         if (!StringUtils.isBlank(appTableActionPolicy)) {
@@ -160,7 +159,7 @@ public class LoadingSearchPanel extends AbstractPanel {
     }
 
     private void fireEntityActionResultTask(EntityListActionResult entityActionResult) throws UnifyException {
-        TaskMonitor taskMonitor = taskLauncher.launchTask(entityActionResult.getResultTaskSetup());
+        TaskMonitor taskMonitor = taskLauncher().launchTask(entityActionResult.getResultTaskSetup());
         TaskMonitorInfo taskMonitorInfo = new TaskMonitorInfo(taskMonitor,
                 resolveSessionMessage(entityActionResult.getResultTaskCaption()), null, null);
         setSessionAttribute(UnifyWebSessionAttributeConstants.TASKMONITORINFO, taskMonitorInfo);

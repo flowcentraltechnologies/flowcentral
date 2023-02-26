@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -53,7 +52,7 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
     }
 
     @Override
-    public int countLoadingItems(Restriction restriction) throws UnifyException {
+    public int countLoadingItems(LoadingParams params) throws UnifyException {
         return 0;
     }
 

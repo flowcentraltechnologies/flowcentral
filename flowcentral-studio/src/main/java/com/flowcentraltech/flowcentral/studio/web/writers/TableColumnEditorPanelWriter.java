@@ -43,6 +43,7 @@ public class TableColumnEditorPanelWriter extends DetachedPanelWriter {
         writer.writeParam("pFieldId", tableColumnEditorPanel.getFieldId());
         writer.writeParam("pLabelId", tableColumnEditorPanel.getLabelId());
         writer.writeParam("pLinkId", tableColumnEditorPanel.getLinkId());
+        writer.writeParam("pSymbolId", tableColumnEditorPanel.getSymbolId());
         writer.writeParam("pOrderId", tableColumnEditorPanel.getOrderId());
         writer.writeParam("pWidgetId", tableColumnEditorPanel.getWidgetId());
         writer.writeParam("pWidthId", tableColumnEditorPanel.getWidthId());

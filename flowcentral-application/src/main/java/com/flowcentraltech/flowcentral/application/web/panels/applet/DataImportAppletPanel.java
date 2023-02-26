@@ -15,13 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationImportDataTaskConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.web.annotation.Action;
@@ -37,13 +35,6 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 @UplBinding("web/application/upl/dataimportappletpanel.upl")
 public class DataImportAppletPanel extends AbstractAppletPanel {
 
-    @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     @Action
     public void executeImport() throws UnifyException {
         DataImportApplet applet = getDataImportApplet();
@@ -52,7 +43,7 @@ public class DataImportAppletPanel extends AbstractAppletPanel {
             return;
         }
 
-        AppletDef appletDef = applicationModuleService.getAppletDef(applet.getAppletName());
+        AppletDef appletDef = application().getAppletDef(applet.getAppletName());
         TaskSetup taskSetup = TaskSetup.newBuilder().addTask(ApplicationImportDataTaskConstants.IMPORTDATA_TASK_NAME)
                 .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_ENTITY, appletDef.getEntity())
                 .setParam(ApplicationImportDataTaskConstants.IMPORTDATA_UPLOADCONFIG,
@@ -65,7 +56,7 @@ public class DataImportAppletPanel extends AbstractAppletPanel {
                 ? appletDef.getPropDef(AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME).getValue(String.class)
                 : null;
         String onSuccessPath = routeToAppletName != null
-                ? applicationModuleService.getAppletDef(routeToAppletName).getOpenPath()
+                ? application().getAppletDef(routeToAppletName).getOpenPath()
                 : null;
         launchTaskWithMonitorBox(taskSetup, appletDef.getDescription(), onSuccessPath, null);
     }

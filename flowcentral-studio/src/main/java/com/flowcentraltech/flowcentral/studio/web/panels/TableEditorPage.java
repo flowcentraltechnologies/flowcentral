@@ -107,6 +107,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
                 appTableColumn.setRenderWidget(tableColumn.getWidget());
                 appTableColumn.setLabel(tableColumn.getLabel());
                 appTableColumn.setLinkAct(tableColumn.getLink());
+                appTableColumn.setSymbol(tableColumn.getSymbol());
                 appTableColumn.setOrder(tableColumn.getOrder());
                 appTableColumn.setWidthRatio(tableColumn.getWidth());
                 appTableColumn.setSwitchOnChange(tableColumn.isSwitchOnChange());
@@ -128,9 +129,10 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
         for (AppTableColumn appTableColumn : getAu().environment()
                 .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
             teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
-                    appTableColumn.getLinkAct(), appTableColumn.getOrder(), appTableColumn.getWidthRatio(),
-                    appTableColumn.isSwitchOnChange(), appTableColumn.isHidden(), appTableColumn.isDisabled(),
-                    appTableColumn.isEditable(), appTableColumn.isSortable(), appTableColumn.isSummary());
+                    appTableColumn.getLinkAct(), appTableColumn.getSymbol(), appTableColumn.getOrder(),
+                    appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(), appTableColumn.isHidden(),
+                    appTableColumn.isDisabled(), appTableColumn.isEditable(), appTableColumn.isSortable(),
+                    appTableColumn.isSummary());
         }
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);

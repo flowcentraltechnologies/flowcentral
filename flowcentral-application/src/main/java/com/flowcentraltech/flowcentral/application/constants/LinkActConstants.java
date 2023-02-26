@@ -13,21 +13,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
-package com.flowcentraltech.flowcentral.common.constants;
+package com.flowcentraltech.flowcentral.application.constants;
 
 /**
- * Flow central container property constants.
+ * Link action constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralContainerPropertyConstants {
-
-    String FLOWCENTRAL_INSTALLATION_TYPE = "flowcentral.installation.type";
-
-    String FLOWCENTRAL_INSTALL_DEVELOPER_ROLES = "flowcentral.install.developer.roles";
-
-    String FLOWCENTRAL_REPORTING_TABLE_RECORDS_MAXIMUM = "flowcentral.reporting.table.records.maximum";
-
+public interface LinkActConstants {
+    
+    String MAINTAIN_ACTION = "maintainAct";
+    
+    String LISTING_ACTION = "listingAct";
+    
+    String DECISION_ACTION = "decisionAct";
+    
+    String SELECT_ACTION = "selectAct";
+    
+    String DETAILS_ACTION = "detailsAct";
+    
+    String BUTTON_ACTION = "buttonAct";
 }

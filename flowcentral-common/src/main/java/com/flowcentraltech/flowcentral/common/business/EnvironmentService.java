@@ -564,7 +564,7 @@ public interface EnvironmentService extends BusinessService {
      *             if no field or multiple fields are selected in criteria. If
      *             multiple or no record match criteria. If an error occurs
      */
-    <T, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException;
+    <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException;
 
     /**
      * Gets maximum value of selected field for record fetched by query.
@@ -580,7 +580,7 @@ public interface EnvironmentService extends BusinessService {
      *             if no field or multiple fields are selected in criteria. If
      *             multiple or no record match criteria. If an error occurs
      */
-    <T, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException;
+    <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException;
 
     /**
      * Deletes a record
@@ -930,6 +930,102 @@ public interface EnvironmentService extends BusinessService {
      */
     <T, U, V extends Entity> Map<T, List<U>> valueListMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException;
+
+    /**
+     * Retrieves first record matched by criteria. List-only properties of returned object are not
+     * populated. Child and child list properties are populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T findFirst(Query<T> query) throws UnifyException;
+
+    /**
+     * Retrieves last record matched by criteria. List-only properties of returned object are not
+     * populated. Child and child list properties are populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T findLast(Query<T> query) throws UnifyException;
+
+    /**
+     * Retrieves first record matched by criteria. List-only properties of returned object are not
+     * populated. Child and child list properties are not populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T findLeanFirst(Query<T> query) throws UnifyException;
+
+    /**
+     * Retrieves last record matched by criteria. List-only properties of returned object are not
+     * populated. Child and child list properties are not populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T findLeanLast(Query<T> query) throws UnifyException;
+
+    /**
+     * Retrieves first record matched by criteria from associated view. List-only properties of
+     * returned object are populated. Child and child list properties are populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T listFirst(Query<T> query) throws UnifyException;
+
+    /**
+     * Retrieves last record matched by criteria from associated view. List-only properties of
+     * returned object are populated. Child and child list properties are populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T listLast(Query<T> query) throws UnifyException;
+
+    /**
+     * Retrieves first record matched by criteria from associated view. List-only properties of
+     * returned object are populated. Child and child list properties are not populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T listLeanFirst(Query<T> query) throws UnifyException;
+
+    /**
+     * Retrieves last record matched by criteria from associated view. List-only properties of
+     * returned object are populated. Child and child list properties are not populated.
+     * 
+     * @param query
+     *            the query
+     * @return the record found otherwise null
+     * @throws UnifyException
+     *             if multiple records are found. If an error occurs
+     */
+    <T extends Entity> T listLeanLast(Query<T> query) throws UnifyException;
 
     /**
      * Gets the datasource that the entity belongs to.

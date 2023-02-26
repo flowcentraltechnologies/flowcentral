@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -35,8 +34,6 @@ import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ResolvedCondition;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
-import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.ReportColumnOptions;
 import com.flowcentraltech.flowcentral.common.data.ReportFilterOptions;
@@ -57,7 +54,6 @@ import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinitionQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
 import com.flowcentraltech.flowcentral.report.entities.ReportableFieldQuery;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.tcdng.unify.convert.util.ConverterUtils;
 import com.tcdng.unify.core.UnifyException;
@@ -114,45 +110,17 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     private ThemeManager themeManager;
 
     @Configurable
-    private SystemModuleService systemModuleService;
-
-    @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
     private AppletUtilities appletUtilities;
 
     @Configurable
     private ReportServer reportServer;
 
-    @Configurable
-    private ApplicationPrivilegeManager applicationPrivilegeManager;
-
-    @Configurable
-    private SpecialParamProvider specialParamProvider;
-
     public void setThemeManager(ThemeManager themeManager) {
         this.themeManager = themeManager;
     }
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
     public final void setReportServer(ReportServer reportServer) {
         this.reportServer = reportServer;
-    }
-
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public final void setSpecialParamProvider(SpecialParamProvider specialParamProvider) {
-        this.specialParamProvider = specialParamProvider;
     }
 
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
@@ -247,7 +215,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public ReportOptions getReportableEntityDynamicReportOptions(String entityName,
             List<DefaultReportColumn> defaultReportColumnList) throws UnifyException {
-        final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entityName);
+        final EntityClassDef entityClassDef = appletUtilities.application().getEntityClassDef(entityName);
         ReportableDefinition reportableDefinition = environment()
                 .listLean(new ReportableDefinitionQuery().entity(entityName));
         ReportOptions reportOptions = new ReportOptions(ReportConfigType.TABULAR);
@@ -328,7 +296,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         List<ReportColumnOptions> sortReportColumnOptionsList = null;
         final Database db = db(reportOptions.getDataSource());
         final EntityDef entityDef = reportOptions.getEntity() != null
-                ? applicationModuleService.getEntityDef(reportOptions.getEntity())
+                ? appletUtilities.application().getEntityDef(reportOptions.getEntity())
                 : null;
         SqlDataSourceDialect sqlDialect = (SqlDataSourceDialect) db.getDataSource().getDialect();
         Class<?> dataClass = ReflectUtils.classForName(reportOptions.getRecordName());
@@ -476,7 +444,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public List<ReportListing> getRoleReportListing(String roleCode) throws UnifyException {
-        List<String> privList = applicationPrivilegeManager
+        List<String> privList = appletUtilities.applicationPrivilegeManager()
                 .findRolePrivileges(ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE, roleCode);
         if (!DataUtils.isBlank(privList)) {
             List<ReportListing> resultList = new ArrayList<ReportListing>();
@@ -516,7 +484,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 new ReportableDefinitionQuery().applicationName(rnp.getApplicationName()).name(rnp.getEntityName()));
 
         // Report column options
-        EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
+        EntityClassDef entityClassDef = appletUtilities.application().getEntityClassDef(entity);
         ReportOptions reportOptions = new ReportOptions(reportConfiguration.getType());
         reportOptions.setEntity(entity);
         reportOptions.setReportName(reportConfigName);
@@ -579,7 +547,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         // Datasource
         final Database db = db(reportOptions.getDataSource());
-        final EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(entity);
+        final EntityClassDef entityClassDef = appletUtilities.application().getEntityClassDef(entity);
         SqlEntityInfo sqlEntityInfo = reportOptions.isBeanCollection() ? null
                 : ((SqlDataSourceDialect) db.getDataSource().getDialect())
                         .findSqlEntityInfo(entityClassDef.getEntityClass());
@@ -740,8 +708,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     }
                     indexInfo.subCompoundIndex--;
                 } else {
-                    Object param1 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamA());
-                    Object param2 = specialParamProvider.resolveSpecialParameter(restrictionDef.getParamB());
+                    Object param1 = appletUtilities.specialParamProvider().resolveSpecialParameter(restrictionDef.getParamA());
+                    Object param2 = appletUtilities.specialParamProvider().resolveSpecialParameter(restrictionDef.getParamB());
                     if (restrictionDef.isParameterVal()) {
                         if (param1 != null) {
                             param1 = parameters.get((String) param1);
@@ -790,23 +758,23 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         report.setParameter(ReportParameterConstants.APPLICATION_TITLE, "Application Title",
                 getUnifyComponentContext().getInstanceName());
         report.setParameter(ReportParameterConstants.CLIENT_TITLE, "Client Title",
-                systemModuleService.getSysParameterValue(String.class, SystemModuleSysParamConstants.CLIENT_TITLE));
+                appletUtilities.system().getSysParameterValue(String.class, SystemModuleSysParamConstants.CLIENT_TITLE));
         report.setParameter(ReportParameterConstants.REPORT_TITLE, "Report Title", report.getTitle());
 
-        String imagePath = themeManager.expandThemeTag(systemModuleService.getSysParameterValue(String.class,
+        String imagePath = themeManager.expandThemeTag(appletUtilities.system().getSysParameterValue(String.class,
                 ReportModuleSysParamConstants.REPORT_CLIENT_LOGO));
         byte[] clientLogo = IOUtils.readFileResourceInputStream(imagePath, getUnifyComponentContext().getWorkingPath());
         report.setParameter(ReportParameterConstants.CLIENT_LOGO, "Client Logo", clientLogo);
 
         if (!report.isPlacements()) {
-            String templatePath = systemModuleService.getSysParameterValue(String.class,
+            String templatePath = appletUtilities.system().getSysParameterValue(String.class,
                     ReportModuleSysParamConstants.REPORT_TEMPLATE_PATH);
             String template = report.getTemplate();
             if (template == null) {
                 String templateParameter = report.getPageProperties().isLandscape()
                         ? ReportModuleSysParamConstants.DYNAMIC_REPORT_LANDSCAPE_TEMPLATE
                         : ReportModuleSysParamConstants.DYNAMIC_REPORT_PORTRAIT_TEMPLATE;
-                template = systemModuleService.getSysParameterValue(String.class, templateParameter);
+                template = appletUtilities.system().getSysParameterValue(String.class, templateParameter);
             }
             report.setTemplate(IOUtils.buildFilename(templatePath, template));
         }

@@ -1,4 +1,4 @@
-// UPL template for entity details page.
+// UPL template for loading details page.
 // Copyright 2021-2022 FlowCentral Technologies Limited.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -13,8 +13,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page components:$c{basePanel} detailsMultiSelect:false
-	detailsViewButtonClass:$s{mbtn mblue}
+!ui-page components:$c{basePanel} loadingMultiSelect:false
+	loadingViewButtonClass:$s{mbtn mblue}
 		
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
@@ -27,10 +27,10 @@
 // Result panel
 !ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{resultTbl} 
-!fc-entitylisttable:resultTbl style:$s{width:100%;} viewButtonClass:$f{detailsViewButtonClass}
-	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
-	multiSelDependentList:$f{detailsMultiSelDependentList}
-
+!fc-loadingtable:resultTbl style:$s{width:100%;} viewButtonClass:$f{loadingViewButtonClass}
+	multiSelect:$f{loadingMultiSelect} multiSelDependentList:$f{loadingMultiSelDependentList}
+	details:$f{detailsPanelName} binding:resultTable
+	
 // Actions
 !ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
 !ui-post:buttonAct  path:$n{/buttons} 

@@ -426,12 +426,12 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
-    public <T, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
         return db(query.getEntityClass()).min(fieldClass, fieldName, query);
     }
 
     @Override
-    public <T, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
         return db(query.getEntityClass()).max(fieldClass, fieldName, query);
     }
 
@@ -631,6 +631,46 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     public <T, U, V extends Entity> Map<T, List<U>> valueListMap(Class<T> keyClass, String keyName, Class<U> valueClass,
             String valueName, Query<V> query) throws UnifyException {
         return db(query.getEntityClass()).valueListMap(keyClass, keyName, valueClass, valueName, query);
+    }
+
+    @Override
+    public <T extends Entity> T findFirst(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).findFirst(query);
+    }
+
+    @Override
+    public <T extends Entity> T findLast(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).findLast(query);
+    }
+
+    @Override
+    public <T extends Entity> T findLeanFirst(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).findLeanFirst(query);
+    }
+
+    @Override
+    public <T extends Entity> T findLeanLast(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).findLeanLast(query);
+    }
+
+    @Override
+    public <T extends Entity> T listFirst(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).listFirst(query);
+    }
+
+    @Override
+    public <T extends Entity> T listLast(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).listLast(query);
+    }
+
+    @Override
+    public <T extends Entity> T listLeanFirst(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).listLeanFirst(query);
+    }
+
+    @Override
+    public <T extends Entity> T listLeanLast(Query<T> query) throws UnifyException {
+        return db(query.getEntityClass()).listLeanLast(query);
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
-import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
+import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
@@ -41,25 +41,25 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
- * Convenient abstract base class for entity details controllers.
+ * Convenient abstract base class for loading details controllers.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@UplBinding("web/application/upl/entitydetailspage.upl")
+@UplBinding("web/application/upl/loadingdetailspage.upl")
 @ResultMappings({
         @ResultMapping(name = "refreshResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" }),
         @ResultMapping(name = "reloadResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" },
                 reload = true) })
-public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
+public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoadingDetailsPageBean>
         extends AbstractFlowCentralPageController<T> {
 
     @Configurable
     private AppletUtilities appletUtilities;
 
-    public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
+    public AbstractLoadingDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
@@ -99,9 +99,9 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
 
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        AbstractLoadingDetailsPageBean pageBean = getPageBean();
         if (pageBean.getResultTable() == null) {
-            EntityListTable resultTable = new EntityListTable(au(), getTableDef());
+            LoadingTable resultTable = new LoadingTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
                 String viewCaption = resolveSessionMessage(pageBean.getViewActionCaption());
                 resultTable.setViewButtonCaption(viewCaption);
@@ -124,7 +124,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return appletUtilities.application();
     }
 
-    protected final EntityListTable getResultTable() throws UnifyException {
+    protected final LoadingTable getResultTable() throws UnifyException {
         return getPageBean().getResultTable();
     }
 

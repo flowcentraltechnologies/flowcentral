@@ -85,7 +85,7 @@ public class LoadingSearch {
         this.sectorIcon = sectorIcon;
         this.searchEntries = new SearchEntries(appletContext.au(), tableDef.getEntityDef(),
                 tableDef.getLabelSuggestionDef(), appAppletSearchConfigName, columns, showConditions);
-        this.loadingTable = new LoadingTable(appletContext.au(), tableDef, null);
+        this.loadingTable = new LoadingTable(appletContext.au(), tableDef);
         this.loadingTable.setCrudMode(true);
         this.loadingTable.setView(true);
         this.appAppletId = appAppletId;
@@ -265,7 +265,7 @@ public class LoadingSearch {
             TableDef _eTableDef = loadingTable.getTableDef();
             TableDef _nTableDef = appletContext.au().getTableDef(_eTableDef.getLongName());
             if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
-                loadingTable = new LoadingTable(appletContext.au(), _nTableDef, null);
+                loadingTable = new LoadingTable(appletContext.au(), _nTableDef);
                 applySearchEntriesToSearch();
             }
         }

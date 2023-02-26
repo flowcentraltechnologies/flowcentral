@@ -885,7 +885,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 : null;
                         OrderType order = OrderType.fromCode(appTableColumn.getOrder());
                         tdb.addColumnDef(appTableColumn.getLabel(), appTableColumn.getField(), renderer, editor,
-                                appTableColumn.getLinkAct(), order, appTableColumn.getWidthRatio(),
+                                appTableColumn.getLinkAct(), appTableColumn.getSymbol(), order, appTableColumn.getWidthRatio(),
                                 appTableColumn.isSwitchOnChange(), appTableColumn.isHidden(),
                                 appTableColumn.isDisabled(), appTableColumn.isEditable(), appTableColumn.isSortable(),
                                 appTableColumn.isSummary());
@@ -4555,6 +4555,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             appTableColumn.setRenderWidget(
                     ApplicationNameUtils.ensureLongNameReference(applicationName, tableColumnConfig.getRenderWidget()));
             appTableColumn.setLinkAct(tableColumnConfig.getLinkAct());
+            appTableColumn.setSymbol(tableColumnConfig.getSymbol());
             appTableColumn.setOrder(tableColumnConfig.getOrder());
             appTableColumn.setWidthRatio(tableColumnConfig.getWidthRatio());
             appTableColumn.setSwitchOnChange(tableColumnConfig.getSwitchOnChange());

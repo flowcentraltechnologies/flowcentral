@@ -23,7 +23,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 
@@ -47,24 +46,24 @@ public interface LoadingTableProvider extends UnifyComponent {
     /**
      * Count items for table loading.
      * 
-     * @param restriction
-     *                    optional restriction
+     * @param params
+     *                    loading parameters
      * @return loading item count
      * @throws UnifyException
      *                        if an error occurs
      */
-    int countLoadingItems(Restriction restriction) throws UnifyException;
+    int countLoadingItems(LoadingParams params) throws UnifyException;
 
     /**
      * Gets items for table loading.
      * 
-     * @param restriction
-     *                    optional restriction
+     * @param params
+     *                    loading parameters
      * @return list of entities
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Entity> getLoadingItems(Restriction restriction) throws UnifyException;
+    List<? extends Entity> getLoadingItems(LoadingParams params) throws UnifyException;
     
     /**
      * Get source item options.

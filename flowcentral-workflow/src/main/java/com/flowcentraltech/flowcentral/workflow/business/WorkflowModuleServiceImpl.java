@@ -50,7 +50,6 @@ import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.application.validation.Validator;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -59,8 +58,8 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfBinaryPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
-import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -176,9 +175,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private NotificationModuleService notificationModuleService;
-
-    @Configurable
-    private ApplicationPrivilegeManager appPrivilegeManager;
 
     @Configurable
     private AppletUtilities appletUtil;
@@ -416,27 +412,23 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     }
 
-    public void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
+    public final void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
         this.organizationModuleService = organizationModuleService;
     }
 
-    public void setNotificationModuleService(NotificationModuleService notificationModuleService) {
+    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
 
-    public void setAppPrivilegeManager(ApplicationPrivilegeManager appPrivilegeManager) {
-        this.appPrivilegeManager = appPrivilegeManager;
-    }
-
-    public void setAppletUtil(AppletUtilities appletUtil) {
+    public final void setAppletUtil(AppletUtilities appletUtil) {
         this.appletUtil = appletUtil;
     }
 
-    public void setNotifRecipientProvider(NotificationRecipientProvider notifRecipientProvider) {
+    public final void setNotifRecipientProvider(NotificationRecipientProvider notifRecipientProvider) {
         this.notifRecipientProvider = notifRecipientProvider;
     }
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
+    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
         this.fileAttachmentProvider = fileAttachmentProvider;
     }
 
@@ -793,7 +785,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 // Workflow for wizard applets
-                List<String> wfWizardPrivList = appPrivilegeManager.findRolePrivileges(
+                List<String> wfWizardPrivList = appletUtil.applicationPrivilegeManager().findRolePrivileges(
                         ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE, roleCode);
                 if (!DataUtils.isBlank(wfWizardPrivList)) {
                     for (String wfWizardPrivName : wfWizardPrivList) {

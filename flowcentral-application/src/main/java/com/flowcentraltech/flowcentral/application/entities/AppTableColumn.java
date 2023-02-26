@@ -45,6 +45,9 @@ public class AppTableColumn extends BaseConfigEntity {
     @Column(length = 64, nullable = true)
     private String linkAct;
 
+    @Column(name = "LINK_SYMBOL", length = 32, nullable = true)
+    private String symbol;
+
     @Column(name = "default_order", length = 32, nullable = true)
     private String order;
 
@@ -112,6 +115,14 @@ public class AppTableColumn extends BaseConfigEntity {
 
     public void setLinkAct(String linkAct) {
         this.linkAct = linkAct;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
     public String getOrder() {

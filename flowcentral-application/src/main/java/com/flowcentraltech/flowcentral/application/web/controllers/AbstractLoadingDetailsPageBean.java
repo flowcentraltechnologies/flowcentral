@@ -13,21 +13,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.application.web.controllers;
 
-package com.flowcentraltech.flowcentral.common.constants;
+import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
+import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Flow central container property constants.
+ * Convenient abstract base class for loading details page beans.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FlowCentralContainerPropertyConstants {
+public abstract class AbstractLoadingDetailsPageBean extends AbstractPageBean {
 
-    String FLOWCENTRAL_INSTALLATION_TYPE = "flowcentral.installation.type";
+    private LoadingTable resultTable;
 
-    String FLOWCENTRAL_INSTALL_DEVELOPER_ROLES = "flowcentral.install.developer.roles";
+    public LoadingTable getResultTable() {
+        return resultTable;
+    }
 
-    String FLOWCENTRAL_REPORTING_TABLE_RECORDS_MAXIMUM = "flowcentral.reporting.table.records.maximum";
-
+    public void setResultTable(LoadingTable resultTable) {
+        this.resultTable = resultTable;
+    }
+    
+    public abstract String getViewActionCaption();
+    
+    public abstract boolean isViewActionMode();
+    
 }

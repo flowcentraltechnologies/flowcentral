@@ -85,13 +85,13 @@ public class TableEditor {
             this.columnList = new ArrayList<TableColumn>();
         }
 
-        public Builder addColumn(String fieldName, String renderWidget, String label, String linkAct, String order,
-                int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable,
-                boolean sortable, boolean summary) {
+        public Builder addColumn(String fieldName, String renderWidget, String label, String linkAct, String symbol,
+                String order, int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled,
+                boolean editable, boolean sortable, boolean summary) {
             if (entityDef.isWithFieldDef(fieldName)) {
                 columnList.add(new TableColumn(entityDef.getFieldDef(fieldName).getFieldLabel(), fieldName,
-                        renderWidget, label, linkAct, order, widthRatio, switchOnChange, hidden, disabled, editable,
-                        sortable, summary));
+                        renderWidget, label, linkAct, symbol, order, widthRatio, switchOnChange, hidden, disabled,
+                        editable, sortable, summary));
             }
 
             return this;
@@ -135,6 +135,8 @@ public class TableEditor {
 
         private String link;
 
+        private String symbol;
+
         private String order;
 
         private int width;
@@ -151,14 +153,15 @@ public class TableEditor {
 
         private boolean summary;
 
-        public TableColumn(String fldLabel, String fldNm, String widget, String label, String link, String order,
-                int width, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable, boolean sort,
-                boolean summary) {
+        public TableColumn(String fldLabel, String fldNm, String widget, String label, String link, String symbol,
+                String order, int width, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable,
+                boolean sort, boolean summary) {
             this.fldLabel = fldLabel;
             this.fldNm = fldNm;
             this.widget = widget;
             this.label = label;
             this.link = link;
+            this.symbol = symbol;
             this.order = order;
             this.width = width;
             this.switchOnChange = switchOnChange;
@@ -211,6 +214,14 @@ public class TableEditor {
 
         public void setLink(String link) {
             this.link = link;
+        }
+
+        public String getSymbol() {
+            return symbol;
+        }
+
+        public void setSymbol(String symbol) {
+            this.symbol = symbol;
         }
 
         public int getWidth() {
