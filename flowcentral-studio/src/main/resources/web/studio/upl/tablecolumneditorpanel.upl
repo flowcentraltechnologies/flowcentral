@@ -23,7 +23,7 @@
 !ui-text:editValField caption:$m{tableeditor.field} maxLen:64 style:$s{width:160px;}
 !ui-text:editValLabel caption:$m{tableeditor.label} maxLen:64 style:$s{width:160px;}
 !ui-select:editValLink caption:$m{tableeditor.link} list:linkacttypelist blankOption:$s{}
-!ui-symbolselect:editValSymbol caption:$s{tableeditor.symbol} blankOption:$s{}
+!ui-symbolselect:editValSymbol caption:$m{tableeditor.symbol} blankOption:$s{}
 !ui-select:editValOrder caption:$m{tableeditor.order} list:orderlist blankOption:$s{}
 !ui-select:editValWidget caption:$m{tableeditor.widget} list:studiowidgetslist
 !ui-integer:editValWidth caption:$m{tableeditor.widthratio} precision:2 style:$s{width:160px;}
