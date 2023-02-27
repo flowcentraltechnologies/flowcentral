@@ -645,10 +645,14 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write("<td");
                             writeTagStyle(writer, chWidget.getColumnStyle());
                             writer.write(">");
-                            writer.writeStructureAndContent(chWidget);
+                            if (!tabelColumnDef.isHiddenOnNull() || chWidget.getValue() != null) {
+                                writer.writeStructureAndContent(chWidget);
+                            }
+
                             if (entryMode) {
                                 writeTargetHidden(writer, chWidget.getId(), i);
                             }
+
                             writer.write("</td>");
 
                             if (totalSummary) {
