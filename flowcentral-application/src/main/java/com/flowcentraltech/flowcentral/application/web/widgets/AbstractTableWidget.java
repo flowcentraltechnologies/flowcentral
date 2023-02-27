@@ -322,7 +322,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             List<Control> controls = new ArrayList<Control>();
             for (FixedRowActionType fixedType : FixedRowActionType.values()) {
                 Control control = (Control) addInternalChildWidget(
-                        "!ui-button styleClass:$e{mbtn} caption:" + fixedType.label());
+                        "!ui-button alwaysValueIndex:true styleClass:$e{mbtn} caption:" + fixedType.label());
                 control.setGroupId(getPrefixedId(fixedType.prefix()));
                 controls.add(control);
             }
@@ -337,7 +337,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public Control getViewCtrl() throws UnifyException {
         if (viewCtrl == null) {
             viewCtrl = (Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{" + getUplAttribute(String.class, "viewButtonClass") + "} caption:"
+                    "!ui-button alwaysValueIndex:true styleClass:$e{" + getUplAttribute(String.class, "viewButtonClass") + "} caption:"
                             + "$m{table.row.view} captionBinding:$s{"
                             + getUplAttribute(String.class, "viewButtonCaptionBinding") + "}");
         }
@@ -348,7 +348,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public Control getEditCtrl() throws UnifyException {
         if (editCtrl == null) {
             editCtrl = (Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{" + getUplAttribute(String.class, "editButtonClass") + "} caption:"
+                    "!ui-button alwaysValueIndex:true styleClass:$e{" + getUplAttribute(String.class, "editButtonClass") + "} caption:"
                             + "$m{table.row.edit} captionBinding:$s{"
                             + getUplAttribute(String.class, "editButtonCaptionBinding") + "}");
         }
