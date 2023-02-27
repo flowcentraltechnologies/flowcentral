@@ -667,7 +667,7 @@ public class TableDef extends BaseApplicationEntityDef {
                 }
 
                 tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + widths[i] + "%;",
-                        renderer, symbol, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(), linkAct,
+                        renderer, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(), linkAct, symbol,
                         tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(), (100 - usedPercent),
                         tempColumnDef.isSwitchOnChange(), tempColumnDef.isHiddenOnNull(), tempColumnDef.isHidden(),
                         tempColumnDef.isDisabled(), tempColumnDef.isEditable(), tempColumnDef.isSortable(),

@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMa
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.Popup;
@@ -66,13 +67,15 @@ public class EntitySelectPanel extends AbstractPanel {
 
     @Action
     public void select() throws UnifyException {
-        int selectIndex = getRequestTarget(int.class);
-        Popup popup = getCurrentPopup();
-        EntitySelect entitySelect = (EntitySelect) popup.getBackingBean();
-        entitySelect.select(selectIndex);
-        removeCurrentPopup();
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
-        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+        IndexedTarget indexedTarget = getRequestTarget(IndexedTarget.class);
+        if (indexedTarget.isValidIndex()) {
+            Popup popup = getCurrentPopup();
+            EntitySelect entitySelect = (EntitySelect) popup.getBackingBean();
+            entitySelect.select(indexedTarget.getIndex());
+            removeCurrentPopup();
+            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+            setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+        }
     }
 
     @Action
