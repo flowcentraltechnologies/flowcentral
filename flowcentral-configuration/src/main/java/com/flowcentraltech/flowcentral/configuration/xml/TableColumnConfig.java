@@ -44,6 +44,8 @@ public class TableColumnConfig {
     private int widthRatio;
 
     private Boolean switchOnChange;
+    
+    private Boolean hiddenOnNull;
 
     private Boolean hidden;
 
@@ -57,6 +59,7 @@ public class TableColumnConfig {
 
     public TableColumnConfig() {
         this.switchOnChange = Boolean.FALSE;
+        this.hiddenOnNull = Boolean.FALSE;
         this.hidden = Boolean.FALSE;
         this.disabled = Boolean.FALSE;
         this.editable = Boolean.FALSE;
@@ -135,6 +138,16 @@ public class TableColumnConfig {
     @XmlAttribute
     public void setSwitchOnChange(Boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
+    }
+
+    public Boolean getHiddenOnNull() {
+        return hiddenOnNull;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setHiddenOnNull(Boolean hiddenOnNull) {
+        this.hiddenOnNull = hiddenOnNull;
     }
 
     public Boolean getHidden() {

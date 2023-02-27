@@ -69,9 +69,9 @@ public class TablePreview {
                             entityDef.getFieldDef(tableColumn.getFldNm()));
                     OrderType order = OrderType.fromCode(tableColumn.getOrder());
                     tdb.addColumnDef(tableColumn.getLabel(), tableColumn.getFldNm(), renderer, tableColumn.getLink(),
-                            order, tableColumn.getWidth(), tableColumn.isSwitchOnChange(), tableColumn.isHidden(),
-                            tableColumn.isDisabled(), tableColumn.isEditable(), tableColumn.isSort(),
-                            tableColumn.isSummary());
+                            order, tableColumn.getWidth(), tableColumn.isSwitchOnChange(), tableColumn.isHiddenOnNull(),
+                            tableColumn.isHidden(), tableColumn.isDisabled(), tableColumn.isEditable(),
+                            tableColumn.isSort(), tableColumn.isSummary());
                 }
             }
 

@@ -556,36 +556,38 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder addColumnDef(String fieldName, String renderer, int widthRatio, boolean sortable)
                 throws UnifyException {
-            return addColumnDef(fieldName, renderer, null, widthRatio, false, false, false, true, sortable, false);
+            return addColumnDef(fieldName, renderer, null, widthRatio, false, false, false, false, true, sortable,
+                    false);
         }
 
         public Builder addColumnDef(String fieldName, String renderer, OrderType order, int widthRatio,
-                boolean switchOnChange, boolean hidden, boolean disabled, boolean editable, boolean sortable,
-                boolean summary) throws UnifyException {
-            return addColumnDef(null, fieldName, renderer, null, order, widthRatio, switchOnChange, hidden, disabled,
-                    editable, sortable, summary);
+                boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled, boolean editable,
+                boolean sortable, boolean summary) throws UnifyException {
+            return addColumnDef(null, fieldName, renderer, null, order, widthRatio, switchOnChange, hiddenOnNull,
+                    hidden, disabled, editable, sortable, summary);
         }
 
         public Builder addColumnDef(String label, String fieldName, String renderer, int widthRatio, boolean sortable)
                 throws UnifyException {
-            return addColumnDef(label, fieldName, renderer, null, null, widthRatio, false, false, false, true, sortable,
-                    false);
+            return addColumnDef(label, fieldName, renderer, null, null, widthRatio, false, false, false, false, true,
+                    sortable, false);
         }
 
         public Builder addColumnDef(String label, String fieldName, String renderer, String editor, OrderType order,
-                int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable,
-                boolean sortable, boolean summary) throws UnifyException {
+                int widthRatio, boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled,
+                boolean editable, boolean sortable, boolean summary) throws UnifyException {
             return addColumnDef(label, fieldName, renderer, editor, null, null, order, widthRatio, switchOnChange,
-                    hidden, disabled, editable, sortable, summary);
+                    hiddenOnNull, hidden, disabled, editable, sortable, summary);
         }
 
         public Builder addColumnDef(String label, String fieldName, String renderer, String editor, String linkAct,
-                String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hidden,
-                boolean disabled, boolean editable, boolean sortable, boolean summary) throws UnifyException {
+                String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hiddenOnNull,
+                boolean hidden, boolean disabled, boolean editable, boolean sortable, boolean summary)
+                throws UnifyException {
             TableColumnDef tableColumnDef = TableColumnDef.newBuilder().label(label).fieldName(fieldName)
                     .renderer(renderer).editor(editor).linkAct(linkAct).symbol(symbol).order(order)
-                    .widthRatio(widthRatio).switchOnChange(switchOnChange).hidden(hidden).disabled(disabled)
-                    .editable(editable).sortable(sortable).summary(summary).build();
+                    .widthRatio(widthRatio).switchOnChange(switchOnChange).hiddenOnNull(hiddenOnNull).hidden(hidden)
+                    .disabled(disabled).editable(editable).sortable(sortable).summary(summary).build();
             return addColumnDef(tableColumnDef);
         }
 
@@ -667,8 +669,9 @@ public class TableDef extends BaseApplicationEntityDef {
                 tableColumnDef = new TableColumnDef(tempColumnDef.getLabel(), fieldName, "width:" + widths[i] + "%;",
                         renderer, symbol, editor, tempColumnDef.getRenderer(), tempColumnDef.getEditor(), linkAct,
                         tempColumnDef.getOrder(), tempColumnDef.getWidthRatio(), (100 - usedPercent),
-                        tempColumnDef.isSwitchOnChange(), tempColumnDef.isHidden(), tempColumnDef.isDisabled(),
-                        tempColumnDef.isEditable(), tempColumnDef.isSortable(), tempColumnDef.isSummary());
+                        tempColumnDef.isSwitchOnChange(), tempColumnDef.isHiddenOnNull(), tempColumnDef.isHidden(),
+                        tempColumnDef.isDisabled(), tempColumnDef.isEditable(), tempColumnDef.isSortable(),
+                        tempColumnDef.isSummary());
 
                 _visibleColumnDefList.add(tableColumnDef);
                 columnDefList.add(tableColumnDef);

@@ -55,6 +55,8 @@ public class TableColumnDef {
 
     private boolean switchOnChange;
 
+    private boolean hiddenOnNull;
+
     private boolean hidden;
 
     private boolean disabled;
@@ -67,7 +69,7 @@ public class TableColumnDef {
 
     public TableColumnDef(String label, String fieldName, String headerStyle, String cellRenderer, String cellEditor,
             String renderer, String editor, String linkAct, String symbol, OrderType order, int widthRatio, int width,
-            boolean switchOnChange, boolean hidden, boolean disabled, boolean editable, boolean sortable,
+            boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled, boolean editable, boolean sortable,
             boolean summary) {
         this.label = label;
         this.fieldName = fieldName;
@@ -82,6 +84,7 @@ public class TableColumnDef {
         this.widthRatio = widthRatio;
         this.width = width;
         this.switchOnChange = switchOnChange;
+        this.hiddenOnNull = hiddenOnNull;
         this.hidden = hidden;
         this.disabled = disabled;
         this.editable = editable;
@@ -90,7 +93,7 @@ public class TableColumnDef {
     }
 
     private TableColumnDef(String label, String fieldName, String renderer, String editor, String linkAct,
-            String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled,
+            String symbol, OrderType order, int widthRatio, boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled,
             boolean editable, boolean sortable, boolean summary) {
         this.label = label;
         this.fieldName = fieldName;
@@ -101,6 +104,7 @@ public class TableColumnDef {
         this.order = order;
         this.widthRatio = widthRatio;
         this.switchOnChange = switchOnChange;
+        this.hiddenOnNull = hiddenOnNull;
         this.hidden = hidden;
         this.disabled = disabled;
         this.editable = editable;
@@ -176,6 +180,10 @@ public class TableColumnDef {
         return switchOnChange;
     }
 
+    public boolean isHiddenOnNull() {
+        return hiddenOnNull;
+    }
+
     public boolean isHidden() {
         return hidden;
     }
@@ -229,6 +237,8 @@ public class TableColumnDef {
         private int widthRatio;
 
         private boolean switchOnChange;
+
+        private boolean hiddenOnNull;
 
         private boolean hidden;
 
@@ -284,6 +294,11 @@ public class TableColumnDef {
             return this;
         }
 
+        public Builder hiddenOnNull(boolean hiddenOnNull) {
+            this.hiddenOnNull = hiddenOnNull;
+            return this;
+        }
+
         public Builder hidden(boolean hidden) {
             this.hidden = hidden;
             return this;
@@ -316,7 +331,7 @@ public class TableColumnDef {
 
         public TableColumnDef build() throws UnifyException {
             return new TableColumnDef(label, fieldName, renderer, editor, linkAct, symbol, order, widthRatio,
-                    switchOnChange, hidden, disabled, editable, sortable, summary);
+                    switchOnChange, hiddenOnNull, hidden, disabled, editable, sortable, summary);
         }
     }
 

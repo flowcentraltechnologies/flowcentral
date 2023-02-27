@@ -39,7 +39,7 @@ public class TableEditorWriter extends AbstractControlWriter {
 
     private static final String[] COLUMN_PROPERTY_KEYS = { "tableeditor.field", "tableeditor.label", "tableeditor.link",
             "tableeditor.symbol", "tableeditor.order", "tableeditor.widget", "tableeditor.widthratio",
-            "tableeditor.switchonchange", "tableeditor.hidden", "tableeditor.disabled", "tableeditor.editable",
+            "tableeditor.switchonchange", "tableeditor.hiddenonnull", "tableeditor.hidden", "tableeditor.disabled", "tableeditor.editable",
             "tableeditor.sortable", "tableeditor.summary" };
 
     @Override
