@@ -69,6 +69,10 @@ public class TableColumnEditorPanel extends DetachedPanel {
         return getWidgetByShortName("editValSwitch").getId();
     }
 
+    public String getHiddenOnNullId() throws UnifyException {
+        return getWidgetByShortName("editValHiddenOnNull").getId();
+    }
+
     public String getHiddenId() throws UnifyException {
         return getWidgetByShortName("editValHidden").getId();
     }

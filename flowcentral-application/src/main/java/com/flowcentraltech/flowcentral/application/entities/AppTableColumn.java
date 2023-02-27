@@ -58,6 +58,9 @@ public class AppTableColumn extends BaseConfigEntity {
     private boolean switchOnChange;
 
     @Column
+    private boolean hiddenOnNull;
+
+    @Column
     private boolean hidden;
 
     @Column
@@ -147,6 +150,14 @@ public class AppTableColumn extends BaseConfigEntity {
 
     public void setSwitchOnChange(boolean switchOnChange) {
         this.switchOnChange = switchOnChange;
+    }
+
+    public boolean isHiddenOnNull() {
+        return hiddenOnNull;
+    }
+
+    public void setHiddenOnNull(boolean hiddenOnNull) {
+        this.hiddenOnNull = hiddenOnNull;
     }
 
     public boolean isHidden() {

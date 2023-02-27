@@ -19,7 +19,7 @@
 !ui-panel:editValuePanel
 	layout:$d{!ui-vertical showCaption:true inlineCaption:true inlineCaptionClass:$s{editcollabel} captionSuffix:$s{:}}
 	components:$c{editValField editValLabel editValLink editValSymbol editValOrder editValWidget editValWidth}
-	components:$c{editValSwitch editValHidden editValDisabled editValEditable editValSortable editValSummary}
+	components:$c{editValSwitch editValHiddenOnNull editValHidden editValDisabled editValEditable editValSortable editValSummary}
 !ui-text:editValField caption:$m{tableeditor.field} maxLen:64 style:$s{width:160px;}
 !ui-text:editValLabel caption:$m{tableeditor.label} maxLen:64 style:$s{width:160px;}
 !ui-select:editValLink caption:$m{tableeditor.link} list:linkacttypelist blankOption:$s{}
@@ -28,6 +28,7 @@
 !ui-select:editValWidget caption:$m{tableeditor.widget} list:studiowidgetslist
 !ui-integer:editValWidth caption:$m{tableeditor.widthratio} precision:2 style:$s{width:160px;}
 !ui-checkbox:editValSwitch caption:$m{tableeditor.switchonchange} layoutCaption:true
+!ui-checkbox:editValHiddenOnNull caption:$m{tableeditor.hiddenonnull} layoutCaption:true
 !ui-checkbox:editValHidden caption:$m{tableeditor.hidden} layoutCaption:true
 !ui-checkbox:editValDisabled caption:$m{tableeditor.disabled} layoutCaption:true
 !ui-checkbox:editValEditable caption:$m{tableeditor.editable} layoutCaption:true

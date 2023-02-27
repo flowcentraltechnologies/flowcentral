@@ -728,6 +728,7 @@ fuxstudio.rigTableColumnEditorPanel = function(rgp) {
 	tce._widget = _id(rgp.pWidgetId);
 	tce._width = _id(rgp.pWidthId);
 	tce._switch = _id(rgp.pSwitchId);
+	tce._hiddenOnNull = _id(rgp.pHiddenOnNullId);
 	tce._hidden = _id(rgp.pHiddenId);
 	tce._editable = _id(rgp.pEditableId);
 	tce._disabled = _id(rgp.pDisabledId);
@@ -745,6 +746,7 @@ fuxstudio.rigTableColumnEditorPanel = function(rgp) {
 		tce._widget.setValue(column.widget);
 		tce._width.setValue(column.width);
 		tce._switch.setValue(column.switchOnChange);
+		tce._hiddenOnNull.setValue(column.hiddenOnNull);
 		tce._hidden.setValue(column.hidden);
 		tce._editable.setValue(column.editable);
 		tce._disabled.setValue(column.disabled);
@@ -762,6 +764,7 @@ fuxstudio.rigTableColumnEditorPanel = function(rgp) {
 			column.widget = tce._widget.getValue();
 			column.width = parseInt(tce._width.getValue());
 			column.switchOnChange = tce._switch.getValue();
+			column.hiddenOnNull = tce._hiddenOnNull.getValue();
 			column.hidden = tce._hidden.getValue();
 			column.editable = tce._editable.getValue();
 			column.disabled = tce._disabled.getValue();
@@ -908,11 +911,12 @@ fuxstudio.tblCreateSlot = function(evp) {
 	html += editor.editSlotFieldHtml(labels[5], column.widget);
 	html += editor.editSlotFieldHtml(labels[6], column.width);
 	html += editor.editSlotFieldHtml(labels[7], "" + column.switchOnChange);
-	html += editor.editSlotFieldHtml(labels[8], "" + column.hidden);
-	html += editor.editSlotFieldHtml(labels[9], "" + column.disabled);
-	html += editor.editSlotFieldHtml(labels[10], "" + column.editable);
-	html += editor.editSlotFieldHtml(labels[11], "" + column.sort);
-	html += editor.editSlotFieldHtml(labels[12], "" + column.summary);
+	html += editor.editSlotFieldHtml(labels[8], "" + column.hiddenOnNull);
+	html += editor.editSlotFieldHtml(labels[9], "" + column.hidden);
+	html += editor.editSlotFieldHtml(labels[10], "" + column.disabled);
+	html += editor.editSlotFieldHtml(labels[11], "" + column.editable);
+	html += editor.editSlotFieldHtml(labels[12], "" + column.sort);
+	html += editor.editSlotFieldHtml(labels[13], "" + column.summary);
 
 	const slot = document.createElement("div");
 	slot.className = "slot";

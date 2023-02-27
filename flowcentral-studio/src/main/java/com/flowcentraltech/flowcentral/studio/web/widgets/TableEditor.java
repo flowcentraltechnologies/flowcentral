@@ -86,12 +86,12 @@ public class TableEditor {
         }
 
         public Builder addColumn(String fieldName, String renderWidget, String label, String linkAct, String symbol,
-                String order, int widthRatio, boolean switchOnChange, boolean hidden, boolean disabled,
-                boolean editable, boolean sortable, boolean summary) {
+                String order, int widthRatio, boolean switchOnChange, boolean hiddenOnNull, boolean hidden,
+                boolean disabled, boolean editable, boolean sortable, boolean summary) {
             if (entityDef.isWithFieldDef(fieldName)) {
                 columnList.add(new TableColumn(entityDef.getFieldDef(fieldName).getFieldLabel(), fieldName,
-                        renderWidget, label, linkAct, symbol, order, widthRatio, switchOnChange, hidden, disabled,
-                        editable, sortable, summary));
+                        renderWidget, label, linkAct, symbol, order, widthRatio, switchOnChange, hiddenOnNull, hidden,
+                        disabled, editable, sortable, summary));
             }
 
             return this;
@@ -143,6 +143,8 @@ public class TableEditor {
 
         private boolean switchOnChange;
 
+        private boolean hiddenOnNull;
+
         private boolean hidden;
 
         private boolean disabled;
@@ -154,8 +156,8 @@ public class TableEditor {
         private boolean summary;
 
         public TableColumn(String fldLabel, String fldNm, String widget, String label, String link, String symbol,
-                String order, int width, boolean switchOnChange, boolean hidden, boolean disabled, boolean editable,
-                boolean sort, boolean summary) {
+                String order, int width, boolean switchOnChange, boolean hiddenOnNull, boolean hidden, boolean disabled,
+                boolean editable, boolean sort, boolean summary) {
             this.fldLabel = fldLabel;
             this.fldNm = fldNm;
             this.widget = widget;
@@ -165,6 +167,7 @@ public class TableEditor {
             this.order = order;
             this.width = width;
             this.switchOnChange = switchOnChange;
+            this.hiddenOnNull = hiddenOnNull;
             this.hidden = hidden;
             this.disabled = disabled;
             this.editable = editable;
@@ -254,6 +257,14 @@ public class TableEditor {
 
         public void setSwitchOnChange(boolean switchOnChange) {
             this.switchOnChange = switchOnChange;
+        }
+
+        public boolean isHiddenOnNull() {
+            return hiddenOnNull;
+        }
+
+        public void setHiddenOnNull(boolean hiddenOnNull) {
+            this.hiddenOnNull = hiddenOnNull;
         }
 
         public boolean isHidden() {

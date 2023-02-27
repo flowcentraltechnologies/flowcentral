@@ -112,6 +112,7 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
                 appTableColumn.setWidthRatio(tableColumn.getWidth());
                 appTableColumn.setSwitchOnChange(tableColumn.isSwitchOnChange());
                 appTableColumn.setEditable(tableColumn.isEditable());
+                appTableColumn.setHiddenOnNull(tableColumn.isHiddenOnNull());
                 appTableColumn.setHidden(tableColumn.isHidden());
                 appTableColumn.setDisabled(tableColumn.isDisabled());
                 appTableColumn.setSortable(tableColumn.isSort());
@@ -130,9 +131,9 @@ public class TableEditorPage extends AbstractStudioEditorPage implements TabShee
                 .findAll(Query.of(AppTableColumn.class).addEquals("appTableId", baseId).addOrder("id"))) {
             teb.addColumn(appTableColumn.getField(), appTableColumn.getRenderWidget(), appTableColumn.getLabel(),
                     appTableColumn.getLinkAct(), appTableColumn.getSymbol(), appTableColumn.getOrder(),
-                    appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(), appTableColumn.isHidden(),
-                    appTableColumn.isDisabled(), appTableColumn.isEditable(), appTableColumn.isSortable(),
-                    appTableColumn.isSummary());
+                    appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(), appTableColumn.isHiddenOnNull(),
+                    appTableColumn.isHidden(), appTableColumn.isDisabled(), appTableColumn.isEditable(),
+                    appTableColumn.isSortable(), appTableColumn.isSummary());
         }
 
         TabSheetDef.Builder tsdb = TabSheetDef.newBuilder(null, 1L);
