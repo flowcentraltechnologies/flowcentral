@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
 import com.flowcentraltech.flowcentral.application.policies.LoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
@@ -289,7 +290,7 @@ public class LoadingSearch {
             searchRestriction = restriction;
         }
 
-        loadingTable.setSourceObjectClearSelected(searchRestriction);
+        loadingTable.setSourceObjectClearSelected(new LoadingParams(searchRestriction));
      }
 
     public boolean isShowActionFooter() {

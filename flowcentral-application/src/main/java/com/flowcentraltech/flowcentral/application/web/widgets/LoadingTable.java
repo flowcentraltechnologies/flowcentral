@@ -32,7 +32,6 @@ import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
-import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
@@ -45,7 +44,7 @@ import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class LoadingTable extends AbstractTable<Restriction, Entity> {
+public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
 
     private static final Order DEFAULT_TABLE_ORDER = new Order().add("id");
 
@@ -105,24 +104,24 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
     }
 
     @Override
-    protected void validate(EvaluationMode evaluationMode, Restriction sourceObject, FormValidationErrors errors)
+    protected void validate(EvaluationMode evaluationMode, LoadingParams sourceObject, FormValidationErrors errors)
             throws UnifyException {
 
     }
 
     @Override
-    protected void onLoadSourceObject(Restriction sourceObject, Set<Integer> selected) throws UnifyException {
+    protected void onLoadSourceObject(LoadingParams sourceObject, Set<Integer> selected) throws UnifyException {
 
     }
 
     @Override
-    protected EntryActionType onFireOnTableChange(Restriction sourceObject, Set<Integer> selected,
+    protected EntryActionType onFireOnTableChange(LoadingParams sourceObject, Set<Integer> selected,
             TableChangeType changeType) throws UnifyException {
         return EntryActionType.NONE;
     }
 
     @Override
-    protected EntryActionType onFireOnRowChange(Restriction sourceObject, RowChangeInfo rowChangeInfo)
+    protected EntryActionType onFireOnRowChange(LoadingParams sourceObject, RowChangeInfo rowChangeInfo)
             throws UnifyException {
         return EntryActionType.NONE;
     }
@@ -133,7 +132,7 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
     }
 
     @Override
-    protected int getSourceObjectSize(Restriction restriction) throws UnifyException {
+    protected int getSourceObjectSize(LoadingParams restriction) throws UnifyException {
         final TableDef tableDef = getTableDef();
         final int len = tableDef.getLoadingDefCount();
         int count = 0;
@@ -141,14 +140,14 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
             TableLoadingDef tableLoadingDef = tableDef.getTableLoadingDef(i);
             LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     tableLoadingDef.getProvider());
-            count += loadingTableProvider.countLoadingItems(new LoadingParams(restriction));
+            count += loadingTableProvider.countLoadingItems(restriction);
         }
 
         return count;
     }
 
     @Override
-    protected List<Entity> getDisplayItems(Restriction restriction, int dispStartIndex, int dispEndIndex)
+    protected List<Entity> getDisplayItems(LoadingParams restriction, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
         final TableDef tableDef = getTableDef();
         final int len = tableDef.getLoadingDefCount();
@@ -160,7 +159,7 @@ public class LoadingTable extends AbstractTable<Restriction, Entity> {
             LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     tableLoadingDef.getProvider());
             String label = loadingTableProvider.getLoadingLabel();
-            List<? extends Entity> _items = loadingTableProvider.getLoadingItems(new LoadingParams(restriction));
+            List<? extends Entity> _items = loadingTableProvider.getLoadingItems(restriction);
             Order order = getOrder();
             if (order == null) {
                 DataUtils.sortAscending(_items, Entity.class, "id");
