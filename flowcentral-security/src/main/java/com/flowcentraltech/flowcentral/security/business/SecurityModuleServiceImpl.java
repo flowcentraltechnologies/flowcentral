@@ -551,7 +551,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         String colorScheme = ColorUtils.getConformingColorSchemeCode(
                 getContainerSetting(String.class, UnifyCorePropertyConstants.APPLICATION_COLORSCHEME));
         return UserToken.newBuilder().userLoginId(user.getLoginId()).userName(user.getFullName())
-                .tenantId(loginTenantId).ipAddress(getSessionContext().getRemoteAddress())
+                .userId((Long) user.getId()).tenantId(loginTenantId).ipAddress(getSessionContext().getRemoteAddress())
                 .branchCode(userBranch != null ? userBranch.getCode() : null)
                 .zoneCode(userBranch != null ? userBranch.getZoneCode() : null).colorScheme(colorScheme)
                 .globalAccess(globalAccess).reservedUser(user.isReserved()).allowMultipleLogin(allowMultipleLogin)
