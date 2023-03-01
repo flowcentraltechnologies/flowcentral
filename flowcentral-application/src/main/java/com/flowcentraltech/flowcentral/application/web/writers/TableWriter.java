@@ -563,11 +563,14 @@ public class TableWriter extends AbstractControlWriter {
                         while ((currentSection == null || !currentSection.isIndexWithin(i))
                                 && ((++sectionIndex) < slen)) {
                             currentSection = sections.get(sectionIndex);
-                            if (!currentSection.isEmpty()) {
-                                writer.write("<tr><td class=\"sheader\" colspan=\"100%\"><span>");
-                                writer.writeWithHtmlEscape(currentSection.getLabel());
+                            if (sectionIndex > 0) {
+                                writer.write("<tr><td class=\"sfooter\" colspan=\"100%\"><span>");
                                 writer.write("</span></td></tr>");
                             }
+                            
+                            writer.write("<tr><td class=\"sheader\" colspan=\"100%\"><span>");
+                            writer.writeWithHtmlEscape(currentSection.getLabel());
+                            writer.write("</span></td></tr>");
                         }
                     }
 
