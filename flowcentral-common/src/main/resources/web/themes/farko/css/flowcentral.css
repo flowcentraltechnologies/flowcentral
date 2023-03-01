@@ -205,6 +205,9 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tablepanel .ui-table .ttable .tth {text-align: left; font-weight: bold; padding: 8px 6px;border: none;
 	background-color: #fff;}
 
+/*** DETAILS ***/
+.details .llabelinl {vertical-align:top;}
+
 /*** WIDGETS ***/
 .fc-msg {display: inline-block;border-radius: 3px;padding: 4px;font-weight: bold;}
 

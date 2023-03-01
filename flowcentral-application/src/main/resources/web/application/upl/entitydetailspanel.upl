@@ -15,7 +15,7 @@
 !fc-entitydetailspanel components:$c{basePanel}
 
 // Base panel
-!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}} styleClass:$e{details}
 	components:$c{errorMsg}
 	components:$g{detailsComponents}
 
