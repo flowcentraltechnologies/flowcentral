@@ -567,8 +567,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table {}
 .fc-table .table {table-layout:fixed; width:100%; border-collapse:collapse;}
 .fc-table .table tr {vertical-align: middle;}
-.fc-table .table .sheader {text-align:center;padding:0px 6px;font-weight: bold;font-size:8pt;background:#a5b7cc;vertical-align: middle;}
-.fc-table .table .sfooter {text-align:center;padding:6px 6px;font-weight: bold;font-size:8pt;background:#ffffff;vertical-align: middle;height:12px;}
+.fc-table .table .sheader {padding:2px 6px;font-weight: bold;font-size:10pt;background:#a5b7cc;vertical-align: middle;}
+.fc-table .table .sfooter {padding:6px 6px;font-weight: bold;font-size:8pt;background:#ffffff;vertical-align: middle;height:12px;}
 .fc-table .table .odd {background-color:#f1f4f5;}
 .fc-table .table .odd:hover {background-color:#d5e7fb;}
 .fc-table .table .even {}
