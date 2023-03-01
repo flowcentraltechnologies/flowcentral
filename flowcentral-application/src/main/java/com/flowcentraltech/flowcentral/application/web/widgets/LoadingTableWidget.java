@@ -20,11 +20,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -37,7 +37,7 @@ import com.tcdng.unify.core.util.DataUtils;
 @Component("fc-loadingtable")
 @UplAttributes({
     @UplAttribute(name = "multiSelect", type = boolean.class, defaultVal = "true") })
-public class LoadingTableWidget extends AbstractTableWidget<LoadingTable, Entity, Restriction> {
+public class LoadingTableWidget extends AbstractTableWidget<LoadingTable, Entity, LoadingParams> {
 
     public LoadingTableWidget() {
         super(LoadingTable.class, Entity.class);
