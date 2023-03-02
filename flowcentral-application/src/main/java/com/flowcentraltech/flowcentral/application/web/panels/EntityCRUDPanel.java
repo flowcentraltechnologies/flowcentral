@@ -27,6 +27,6 @@ import com.tcdng.unify.core.annotation.UplBinding;
  */
 @Component("fc-entitycrudpanel")
 @UplBinding("web/application/upl/entitycrudpanel.upl")
-public class EntityCRUDPanel extends AbstractCRUDPanel<BeanCRUD> {
+public class EntityCRUDPanel extends AbstractCRUDPanel<EntityCRUD> {
 
 }
