@@ -178,7 +178,7 @@ public abstract class AbstractTable<T, U> {
         tableSummaryLines = null;
     }
     
-    public void setTableSummaryLine(List<TableSummaryLine> tableSummaryLines) {
+    public void setTableSummaryLines(List<TableSummaryLine> tableSummaryLines) {
         this.tableSummaryLines = tableSummaryLines;
     }
     
