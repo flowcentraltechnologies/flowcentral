@@ -791,7 +791,7 @@ public class TableWriter extends AbstractControlWriter {
             if (totalSummary) {
                 table.addParentColumnSummary();
                 table.addTotalTableSummaryLine();
-                for (TableSummaryLine summaryLine : table.getSummaryLines()) {
+                for (TableSummaryLine summaryLine : table.getTableSummaryLines()) {
                     writer.write("<tr class=\"total\">");
                     if (!entryMode && multiSelect) {
                         writer.write("<td class=\"mseld\"><span></span></td>");

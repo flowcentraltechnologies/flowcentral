@@ -130,7 +130,7 @@ public abstract class AbstractTable<T, U> {
 
     private List<Section> sections;
     
-    private List<TableSummaryLine> summaryLines;
+    private List<TableSummaryLine> tableSummaryLines;
     
     private int detailsIndex;
 
@@ -172,20 +172,20 @@ public abstract class AbstractTable<T, U> {
         this.switchOnChangeHandlers = switchOnChangeHandlers;
     }
 
-    public synchronized void clearSummaryLines() {
-        summaryLines = null;
+    private synchronized void clearTableSummaryLines() {
+        tableSummaryLines = null;
     }
     
     public synchronized void addSummaryLine(TableSummaryLine summaryLine) {
-        if (summaryLines == null) {
-            summaryLines = new ArrayList<TableSummaryLine>();
+        if (tableSummaryLines == null) {
+            tableSummaryLines = new ArrayList<TableSummaryLine>();
         }
         
-        summaryLines.add(summaryLine);
+        tableSummaryLines.add(summaryLine);
     }
     
-    public List<TableSummaryLine> getSummaryLines() {
-        return summaryLines == null ? Collections.emptyList(): summaryLines;
+    public List<TableSummaryLine> getTableSummaryLines() {
+        return tableSummaryLines == null ? Collections.emptyList(): tableSummaryLines;
     }
 
     public List<EventHandler> getCrudActionHandlers() {
@@ -425,10 +425,10 @@ public abstract class AbstractTable<T, U> {
                 line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
             }
 
-            if (summaryLines == null) {
+            if (tableSummaryLines == null) {
                 addSummaryLine(line);
             } else {
-                summaryLines.add(0, line);
+                tableSummaryLines.add(0, line);
             }
         }
     }
@@ -463,6 +463,7 @@ public abstract class AbstractTable<T, U> {
         setSelectedRows(selected);
         onLoadSourceObject(sourceObject, selected);
         reset();
+        clearTableSummaryLines();
         setDetailsIndex(-1);
     }
 
