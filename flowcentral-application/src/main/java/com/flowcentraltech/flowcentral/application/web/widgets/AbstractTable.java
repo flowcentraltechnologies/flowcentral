@@ -190,6 +190,10 @@ public abstract class AbstractTable<T, U> {
         return tableSummaryLines == null ? Collections.emptyList(): tableSummaryLines;
     }
 
+    public boolean isWithTableSummaryLines() {
+        return tableSummaryLines != null;
+    }
+    
     public List<EventHandler> getCrudActionHandlers() {
         return crudActionHandlers;
     }
@@ -398,15 +402,6 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void addParentColumnSummary() throws UnifyException {
-        if (tableTotalSummary != null && entryPolicy != null) {
-            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
-                summary.add(val);
-            }
-        }
-    }
-
     public void addTableColumnSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
@@ -419,7 +414,17 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
+    private void addParentColumnSummary() throws UnifyException {
+        if (tableTotalSummary != null && entryPolicy != null) {
+            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
+                Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
+                summary.add(val);
+            }
+        }
+    }
+
     public synchronized void addTotalTableSummaryLine() throws UnifyException {
+        addParentColumnSummary();
         if (tableTotalSummary != null) {
             TableSummaryLine line = new TableSummaryLine(getTotalLabel());
             for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {

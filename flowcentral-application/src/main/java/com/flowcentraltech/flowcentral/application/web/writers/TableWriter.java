@@ -789,8 +789,10 @@ public class TableWriter extends AbstractControlWriter {
 
             // Total summary
             if (totalSummary) {
-                table.addParentColumnSummary();
-                table.addTotalTableSummaryLine();
+                if (!table.isWithTableSummaryLines()) {
+                    table.addTotalTableSummaryLine();
+                }
+                
                 for (TableSummaryLine summaryLine : table.getTableSummaryLines()) {
                     writer.write("<tr class=\"total\">");
                     if (!entryMode && multiSelect) {
