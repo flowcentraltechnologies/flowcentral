@@ -82,6 +82,8 @@ public abstract class AbstractTable<T, U> {
 
     private String editButtonCaption;
 
+    private String totalLabel;
+
     private int dispStartIndex;
 
     private int dispEndIndex;
@@ -438,7 +440,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public String getTotalLabel() throws UnifyException {
-        return au.resolveSessionMessage("$m{tablewidget.total}");
+        return totalLabel == null ? au.resolveSessionMessage("$m{tablewidget.total}") : totalLabel;
+    }
+
+    public void setTotalLabel(String totalLabel) {
+        this.totalLabel = totalLabel;
     }
 
     public Widget getSummaryWidget(String fieldName) {
