@@ -817,12 +817,13 @@ public class TableWriter extends AbstractControlWriter {
                                 writer.writeStructureAndContent(chWidget);
                                 writer.write("</td>");
                             } else {
-                                writer.write("<td class=\"blank\">");
                                 if (table.isTotalLabelColumn(tabelColumnDef.getFieldName())) {
+                                    writer.write("<td class=\"blankr\">");
                                     writer.writeWithHtmlEscape(summaryLine.getLabel());
+                                    writer.write("</td>");
+                                } else {
+                                    writer.write("<td class=\"blank\"></td>");
                                 }
-
-                                writer.write("</td>");
                             }
 
                             index++;

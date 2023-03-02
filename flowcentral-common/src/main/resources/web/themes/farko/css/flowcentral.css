@@ -617,19 +617,23 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-beanlisttable .table .mseld {background-color: transparent;}
 .fc-beanlisttable .total {font-weight:bold;}
 .fc-beanlisttable .total .blank {border-right: none;border-left: none;}
+.fc-beanlisttable .total .blankr {border-right: none;border-left: none;text-align:right;}
 
 .fc-entitylisttable {}
 .fc-entitylisttable .table .mseld {background-color: transparent;}
 .fc-entitylisttable .total {font-weight:bold;}
 .fc-entitylisttable .total .blank {border-right: none;border-left: none;}
+.fc-entitylisttable .total .blankr {border-right: none;border-left: none;text-align:right;}
 
 .fc-entitytable {}
 .fc-entitytable .total {font-weight:bold;}
 .fc-entitytable .total .blank {border-right: none;border-left: none;}
+.fc-entitytable .total .blankr {border-right: none;border-left: none;text-align:right;}
 
 .fc-loadingtable {}
 .fc-loadingtable .total {font-weight:bold;}
 .fc-loadingtable .total .blank {border-right: none;border-left: none;}
+.fc-loadingtable .total .blankr {border-right: none;border-left: none;text-align:right;}
 
 .fc-entitytreetable {}
 .fc-entitytreetable .table {table-layout:fixed; width:100%; border-collapse:collapse;}
