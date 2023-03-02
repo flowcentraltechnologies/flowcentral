@@ -41,8 +41,6 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.Order;
-import com.tcdng.unify.core.data.MapValues;
-import com.tcdng.unify.core.data.MapValuesStore;
 import com.tcdng.unify.core.data.UniqueHistory;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
@@ -466,9 +464,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
             if (table != null) {
                 table.setTableSelect(this);
-
                 final boolean totalSummary = table.isTotalSummary();
-                final MapValues totalSummaryValues = totalSummary ? new MapValues() : null;
                 final Map<String, EntityFieldTotalSummary> summaries = totalSummary
                         ? new HashMap<String, EntityFieldTotalSummary>()
                         : Collections.emptyMap();
@@ -485,7 +481,6 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                                 ? entityFieldDef.getResolvedTypeFieldDef().getDataType().dataType()
                                 : entityFieldDef.getDataType().dataType();
                         if (dataType != null) {
-                            totalSummaryValues.addValue(entityFieldDef.getFieldName(), dataType.javaClass());
                             if (entityFieldDef.isNumber()) {
                                 Widget renderer = getRenderer(tableColumnDef.getCellRenderer());
                                 EntityFieldTotalSummary entityFieldTotalSummary = new EntityFieldTotalSummary(
@@ -509,8 +504,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 }
 
                 if (totalSummary) {
-                    TableTotalSummary tableTotalSummary = new TableTotalSummary(totalLabelColumn,
-                            new MapValuesStore(totalSummaryValues), summaries);
+                    TableTotalSummary tableTotalSummary = new TableTotalSummary(totalLabelColumn, summaries);
                     table.setTableTotalSummary(tableTotalSummary);
                 }
             }

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -81,6 +82,8 @@ public abstract class AbstractTable<T, U> {
 
     private String editButtonCaption;
 
+    private String totalLabel;
+
     private int dispStartIndex;
 
     private int dispEndIndex;
@@ -129,6 +132,8 @@ public abstract class AbstractTable<T, U> {
 
     private List<Section> sections;
     
+    private List<TableSummaryLine> tableSummaryLines;
+    
     private int detailsIndex;
 
     public AbstractTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, Order defaultOrder,
@@ -143,7 +148,7 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = -1;
         this.detailsIndex = -1;
         this.sections = Collections.emptyList();
-    }
+   }
 
     public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
         return filterGroupDef != null ? filterGroupDef.match(type, bean, now) : true;
@@ -169,6 +174,22 @@ public abstract class AbstractTable<T, U> {
         this.switchOnChangeHandlers = switchOnChangeHandlers;
     }
 
+    private void clearTableSummaryLines() {
+        tableSummaryLines = null;
+    }
+    
+    public void setTableSummaryLines(List<TableSummaryLine> tableSummaryLines) {
+        this.tableSummaryLines = tableSummaryLines;
+    }
+    
+    public List<TableSummaryLine> getTableSummaryLines() {
+        return tableSummaryLines == null ? Collections.emptyList(): tableSummaryLines;
+    }
+
+    public boolean isWithTableSummaryLines() {
+        return tableSummaryLines != null;
+    }
+    
     public List<EventHandler> getCrudActionHandlers() {
         return crudActionHandlers;
     }
@@ -377,15 +398,6 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void addParentColumnSummary() throws UnifyException {
-        if (tableTotalSummary != null && entryPolicy != null) {
-            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
-                summary.add(val);
-            }
-        }
-    }
-
     public void addTableColumnSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
         if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
             EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
@@ -398,12 +410,25 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void loadTotalSummaryValueStore() throws UnifyException {
-        if (tableTotalSummary != null) {
-            ValueStore totalSummaryValueStore = tableTotalSummary.getTotalSummaryValueStore();
+    private void addParentColumnSummary() throws UnifyException {
+        if (tableTotalSummary != null && entryPolicy != null) {
             for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                totalSummaryValueStore.store(summary.getFieldName(), summary.getTotal());
+                Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
+                summary.add(val);
             }
+        }
+    }
+
+    public void setTotalTableSummaryLine() throws UnifyException {
+        addParentColumnSummary();
+        if (tableTotalSummary != null) {
+            TableSummaryLine line = new TableSummaryLine(getTotalLabel());
+            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
+                Class<?> numberType = tableDef.getFieldDef(summary.getFieldName()).getDataType().dataType().javaClass();
+                line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
+            }
+
+            tableSummaryLines = Arrays.asList(line);
         }
     }
 
@@ -412,7 +437,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public String getTotalLabel() throws UnifyException {
-        return au.resolveSessionMessage("$m{tablewidget.total}");
+        return totalLabel == null ? au.resolveSessionMessage("$m{tablewidget.total}") : totalLabel;
+    }
+
+    public void setTotalLabel(String totalLabel) {
+        this.totalLabel = totalLabel;
     }
 
     public Widget getSummaryWidget(String fieldName) {
@@ -437,6 +466,7 @@ public abstract class AbstractTable<T, U> {
         setSelectedRows(selected);
         onLoadSourceObject(sourceObject, selected);
         reset();
+        clearTableSummaryLines();
         setDetailsIndex(-1);
     }
 

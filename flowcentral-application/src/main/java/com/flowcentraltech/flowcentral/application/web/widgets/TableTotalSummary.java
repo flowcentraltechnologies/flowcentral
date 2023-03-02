@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFieldTotalSummary;
-import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Table total summary.
@@ -31,23 +30,15 @@ public class TableTotalSummary {
 
     private String totalLabelColumn;
 
-    private ValueStore totalSummaryValueStore;
-
     private Map<String, EntityFieldTotalSummary> summaries;
 
-    public TableTotalSummary(String totalLabelColumn, ValueStore totalSummaryValueStore,
-            Map<String, EntityFieldTotalSummary> summaries) {
+    public TableTotalSummary(String totalLabelColumn,  Map<String, EntityFieldTotalSummary> summaries) {
         this.totalLabelColumn = totalLabelColumn;
-        this.totalSummaryValueStore = totalSummaryValueStore;
         this.summaries = summaries;
     }
 
     public String getTotalLabelColumn() {
         return totalLabelColumn;
-    }
-
-    public ValueStore getTotalSummaryValueStore() {
-        return totalSummaryValueStore;
     }
 
     public Map<String, EntityFieldTotalSummary> getSummaries() {
