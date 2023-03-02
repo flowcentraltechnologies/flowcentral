@@ -790,7 +790,7 @@ public class TableWriter extends AbstractControlWriter {
             // Total summary
             if (totalSummary) {
                 if (!table.isWithTableSummaryLines()) {
-                    table.addTotalTableSummaryLine();
+                    table.setTotalTableSummaryLine();
                 }
                 
                 for (TableSummaryLine summaryLine : table.getTableSummaryLines()) {

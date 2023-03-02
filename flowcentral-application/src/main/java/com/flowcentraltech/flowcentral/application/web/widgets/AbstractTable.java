@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -174,16 +174,12 @@ public abstract class AbstractTable<T, U> {
         this.switchOnChangeHandlers = switchOnChangeHandlers;
     }
 
-    private synchronized void clearTableSummaryLines() {
+    private void clearTableSummaryLines() {
         tableSummaryLines = null;
     }
     
-    public synchronized void addSummaryLine(TableSummaryLine summaryLine) {
-        if (tableSummaryLines == null) {
-            tableSummaryLines = new ArrayList<TableSummaryLine>();
-        }
-        
-        tableSummaryLines.add(summaryLine);
+    public void setTableSummaryLine(List<TableSummaryLine> tableSummaryLines) {
+        this.tableSummaryLines = tableSummaryLines;
     }
     
     public List<TableSummaryLine> getTableSummaryLines() {
@@ -423,7 +419,7 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public synchronized void addTotalTableSummaryLine() throws UnifyException {
+    public void setTotalTableSummaryLine() throws UnifyException {
         addParentColumnSummary();
         if (tableTotalSummary != null) {
             TableSummaryLine line = new TableSummaryLine(getTotalLabel());
@@ -432,11 +428,7 @@ public abstract class AbstractTable<T, U> {
                 line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
             }
 
-            if (tableSummaryLines == null) {
-                addSummaryLine(line);
-            } else {
-                tableSummaryLines.add(0, line);
-            }
+            tableSummaryLines = Arrays.asList(line);
         }
     }
 
