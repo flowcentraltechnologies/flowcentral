@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -129,6 +130,8 @@ public abstract class AbstractTable<T, U> {
 
     private List<Section> sections;
     
+    private List<TableSummaryLine> summaryLines;
+    
     private int detailsIndex;
 
     public AbstractTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, Order defaultOrder,
@@ -143,7 +146,7 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = -1;
         this.detailsIndex = -1;
         this.sections = Collections.emptyList();
-    }
+   }
 
     public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
         return filterGroupDef != null ? filterGroupDef.match(type, bean, now) : true;
@@ -167,6 +170,22 @@ public abstract class AbstractTable<T, U> {
 
     public void setSwitchOnChangeHandlers(List<EventHandler> switchOnChangeHandlers) {
         this.switchOnChangeHandlers = switchOnChangeHandlers;
+    }
+
+    public synchronized void clearSummaryLines() {
+        summaryLines = null;
+    }
+    
+    public synchronized void addSummaryLine(TableSummaryLine summaryLine) {
+        if (summaryLines == null) {
+            summaryLines = new ArrayList<TableSummaryLine>();
+        }
+        
+        summaryLines.add(summaryLine);
+    }
+    
+    public List<TableSummaryLine> getSummaryLines() {
+        return summaryLines == null ? Collections.emptyList(): summaryLines;
     }
 
     public List<EventHandler> getCrudActionHandlers() {
@@ -398,11 +417,18 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void loadTotalSummaryValueStore() throws UnifyException {
+    public synchronized void addTotalTableSummaryLine() throws UnifyException {
         if (tableTotalSummary != null) {
-            ValueStore totalSummaryValueStore = tableTotalSummary.getTotalSummaryValueStore();
+            TableSummaryLine line = new TableSummaryLine(getTotalLabel());
             for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                totalSummaryValueStore.store(summary.getFieldName(), summary.getTotal());
+                Class<?> numberType = tableDef.getFieldDef(summary.getFieldName()).getDataType().dataType().javaClass();
+                line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
+            }
+
+            if (summaryLines == null) {
+                addSummaryLine(line);
+            } else {
+                summaryLines.add(0, line);
             }
         }
     }

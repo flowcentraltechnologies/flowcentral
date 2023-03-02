@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.SummaryPanel;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTable.Section;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractTableWidget;
+import com.flowcentraltech.flowcentral.application.web.widgets.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
 import com.flowcentraltech.flowcentral.common.data.EntryTableMessage;
@@ -567,7 +568,7 @@ public class TableWriter extends AbstractControlWriter {
                                 writer.write("<tr><td class=\"sfooter\" colspan=\"100%\"><span>");
                                 writer.write("</span></td></tr>");
                             }
-                            
+
                             writer.write("<tr><td class=\"sheader\" colspan=\"100%\"><span>");
                             writer.writeWithHtmlEscape(currentSection.getLabel());
                             writer.write("</span></td></tr>");
@@ -789,49 +790,49 @@ public class TableWriter extends AbstractControlWriter {
             // Total summary
             if (totalSummary) {
                 table.addParentColumnSummary();
-                table.loadTotalSummaryValueStore();
-                ValueStore totalSummaryValueStore = table.getTableTotalSummary().getTotalSummaryValueStore();
+                table.addTotalTableSummaryLine();
+                for (TableSummaryLine summaryLine : table.getSummaryLines()) {
+                    writer.write("<tr class=\"total\">");
+                    if (!entryMode && multiSelect) {
+                        writer.write("<td class=\"mseld\"><span></span></td>");
+                    }
 
-                writer.write("<tr class=\"total\">");
-                if (!entryMode && multiSelect) {
-                    writer.write("<td class=\"mseld\"><span></span></td>");
-                }
+                    if (isSerialNo) {
+                        writer.write("<td class=\"mseriald\"><span></span></td>");
+                    }
 
-                if (isSerialNo) {
-                    writer.write("<td class=\"mseriald\"><span></span></td>");
-                }
+                    int index = 0;
+                    for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
+                        if (widgetInfo.isExternal() && widgetInfo.isControl()) {
+                            TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
+                            Widget chWidget = table.getSummaryWidget(tabelColumnDef.getFieldName());
+                            if (chWidget != null) {
+                                chWidget.setEditable(false);
+                                chWidget.setValueStore(summaryLine.getValueStore());
+                                writer.write("<td");
+                                writeTagStyle(writer, chWidget.getColumnStyle());
+                                writer.write(">");
+                                writer.writeStructureAndContent(chWidget);
+                                writer.write("</td>");
+                            } else {
+                                writer.write("<td class=\"blank\">");
+                                if (table.isTotalLabelColumn(tabelColumnDef.getFieldName())) {
+                                    writer.writeWithHtmlEscape(summaryLine.getLabel());
+                                }
 
-                int index = 0;
-                for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
-                    if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                        TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
-                        Widget chWidget = table.getSummaryWidget(tabelColumnDef.getFieldName());
-                        if (chWidget != null) {
-                            chWidget.setEditable(false);
-                            chWidget.setValueStore(totalSummaryValueStore);
-                            writer.write("<td");
-                            writeTagStyle(writer, chWidget.getColumnStyle());
-                            writer.write(">");
-                            writer.writeStructureAndContent(chWidget);
-                            writer.write("</td>");
-                        } else {
-                            writer.write("<td class=\"blank\">");
-                            if (table.isTotalLabelColumn(tabelColumnDef.getFieldName())) {
-                                writer.writeWithHtmlEscape(table.getTotalLabel());
+                                writer.write("</td>");
                             }
 
-                            writer.write("</td>");
+                            index++;
                         }
-
-                        index++;
                     }
-                }
 
-                if (entryMode && multiSelect) {
-                    writer.write("<td class=\"mseld\"><span></span></td>");
-                }
+                    if (entryMode && multiSelect) {
+                        writer.write("<td class=\"mseld\"><span></span></td>");
+                    }
 
-                writer.write("</tr>");
+                    writer.write("</tr>");
+                }
             }
         }
     }
