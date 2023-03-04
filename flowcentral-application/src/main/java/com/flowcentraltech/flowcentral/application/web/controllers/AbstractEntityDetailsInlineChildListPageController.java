@@ -36,8 +36,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * @since 1.0
  */
 @UplBinding("web/application/upl/entitydetailsinlinechildlistpage.upl")
-@ResultMappings({
-    @ResultMapping(name = "refreshChildCrud",
+@ResultMappings({ @ResultMapping(name = "refreshChildCrud",
         response = { "!refreshpanelresponse panels:$l{entityCrudPanel}", "!commonreportresponse" }) })
 public abstract class AbstractEntityDetailsInlineChildListPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractEntityDetailsPageController<T> {
@@ -67,6 +66,13 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
         AbstractEntityDetailsPageBean pageBean = getPageBean();
         au().onMiniformSwitchOnChange(pageBean.getChildEntityCrud().getForm());
         return "refreshChildCrud";
+    }
+
+    @Override
+    protected void onOpenPage() throws UnifyException {
+        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        setPageWidgetVisible("entityCrudInlinePanel", pageBean.getApplet() != null);
+        super.onOpenPage();
     }
 
     protected final ManageEntityDetailsApplet createManageEntityDetailsApplet() throws UnifyException {
