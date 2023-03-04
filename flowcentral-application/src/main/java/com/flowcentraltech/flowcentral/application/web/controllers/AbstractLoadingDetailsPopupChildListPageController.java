@@ -44,8 +44,8 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
                         "!commonreportresponse" }),
         @ResultMapping(name = ApplicationResultMappingConstants.SHOW_CHILD_CRUD,
                 response = { "!showpopupresponse popup:$s{entityCrudPopup}" }) })
-public abstract class AbstractLoadingDetailsPopupChildListPageController<T extends AbstractEntityDetailsPageBean>
-        extends AbstractEntityDetailsPageController<T> {
+public abstract class AbstractLoadingDetailsPopupChildListPageController<T extends AbstractLoadingDetailsPageBean>
+        extends AbstractLoadingDetailsPageController<T> {
 
     private final String childAppletName;
 
@@ -62,14 +62,14 @@ public abstract class AbstractLoadingDetailsPopupChildListPageController<T exten
     @Action
     public final String crudSelectItem() throws UnifyException {
         int index = getRequestTarget(int.class);
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        AbstractLoadingDetailsPageBean pageBean = getPageBean();
         pageBean.getChildEntityCrud().enterMaintain(index);
         return "refreshChildCrud";
     }
 
     @Action
     public final String crudSwitchOnChange() throws UnifyException {
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        AbstractLoadingDetailsPageBean pageBean = getPageBean();
         au().onMiniformSwitchOnChange(pageBean.getChildEntityCrud().getForm());
         return "refreshChildCrud";
     }
@@ -81,7 +81,7 @@ public abstract class AbstractLoadingDetailsPopupChildListPageController<T exten
 
     protected String showChildCrud(Long parentId) throws UnifyException {
         if (parentId != null) {
-            final AbstractEntityDetailsPageBean pageBean = getPageBean();
+            final AbstractLoadingDetailsPageBean pageBean = getPageBean();
             pageBean.getApplet().createNewChildCrud(parentId);
             return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_CHILD_CRUD, pageBean, 800, 500));
         }

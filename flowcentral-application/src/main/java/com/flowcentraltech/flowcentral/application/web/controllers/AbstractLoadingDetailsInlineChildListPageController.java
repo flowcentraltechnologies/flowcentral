@@ -38,8 +38,8 @@ import com.tcdng.unify.web.ui.widget.Widget;
 @UplBinding("web/application/upl/loadingdetailsinlinechildlistpage.upl")
 @ResultMappings({ @ResultMapping(name = "refreshChildCrud",
         response = { "!refreshpanelresponse panels:$l{entityCrudPanel}", "!commonreportresponse" }) })
-public abstract class AbstractLoadingDetailsInlineChildListPageController<T extends AbstractEntityDetailsPageBean>
-        extends AbstractEntityDetailsPageController<T> {
+public abstract class AbstractLoadingDetailsInlineChildListPageController<T extends AbstractLoadingDetailsPageBean>
+        extends AbstractLoadingDetailsPageController<T> {
 
     private final String childAppletName;
 
@@ -56,14 +56,14 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
     @Action
     public final String crudSelectItem() throws UnifyException {
         int index = getRequestTarget(int.class);
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        AbstractLoadingDetailsPageBean pageBean = getPageBean();
         pageBean.getChildEntityCrud().enterMaintain(index);
         return "refreshChildCrud";
     }
 
     @Action
     public final String crudSwitchOnChange() throws UnifyException {
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        AbstractLoadingDetailsPageBean pageBean = getPageBean();
         au().onMiniformSwitchOnChange(pageBean.getChildEntityCrud().getForm());
         return "refreshChildCrud";
     }
@@ -75,7 +75,7 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
 
     protected void showChildCrud(Long parentId) throws UnifyException {
         if (parentId != null) {
-            final AbstractEntityDetailsPageBean pageBean = getPageBean();
+            final AbstractLoadingDetailsPageBean pageBean = getPageBean();
             pageBean.getApplet().createNewChildCrud(parentId);
             setPageWidgetVisible("entityCrudInlinePanel", true);
         } else {
@@ -84,7 +84,7 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
     }
 
     protected void hideChildCrud() throws UnifyException {
-        final AbstractEntityDetailsPageBean pageBean = getPageBean();
+        final AbstractLoadingDetailsPageBean pageBean = getPageBean();
         pageBean.getApplet().clearChildEntityCrud();
         setPageWidgetVisible("entityCrudInlinePanel", false);
     }

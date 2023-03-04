@@ -112,6 +112,10 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
         }
     }
 
+    protected String getDetailsAppletName() {
+        return detailsAppletName;
+    }
+
     protected final LoadingTable getResultTable() throws UnifyException {
         return getPageBean().getResultTable();
     }
