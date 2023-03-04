@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 
@@ -28,6 +29,10 @@ public abstract class AbstractEntityDetailsPageBean extends AbstractAppletPageBe
 
     public EntityListTable getResultTable() {
         return getApplet() != null ? getApplet().getResultTable() : null;
+    }
+
+    public EntityCRUD getChildEntityCrud() {
+        return getApplet() != null ? getApplet().getChildEntityCrud() : null;
     }
 
     public abstract String getViewActionCaption();

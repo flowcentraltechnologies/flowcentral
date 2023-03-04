@@ -93,7 +93,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         super.onOpenPage();
         AbstractEntityDetailsPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), detailsAppletName);
+            ManageEntityDetailsApplet applet = createManageEntityDetailsApplet();
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
                 String viewCaption = resolveSessionMessage(pageBean.getViewActionCaption());
@@ -107,7 +107,11 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
             applet.setResultTable(resultTable);
             pageBean.setApplet(applet);
-         }
+        }
+    }
+
+    protected ManageEntityDetailsApplet createManageEntityDetailsApplet() throws UnifyException {
+        return new ManageEntityDetailsApplet(au(), detailsAppletName);
     }
 
     protected final EntityListTable getResultTable() throws UnifyException {
@@ -119,6 +123,10 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         reportOptions.setContent(entityList);
         reportOptions.setReportResourcePath(CommonModuleNameConstants.CONFIGURED_REPORT_RESOURCE);
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
+    }
+
+    protected String getDetailsAppletName() {
+        return detailsAppletName;
     }
 
     protected final String refreshResult() throws UnifyException {
