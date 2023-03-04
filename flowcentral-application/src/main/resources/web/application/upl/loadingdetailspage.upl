@@ -21,6 +21,7 @@
 	components:$f{moreHeaderComponents}
 	components:$c{resultPanel}
 	components:$f{moreFooterComponents}
+	components:$f{moreAddendumComponents}
 
 !ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
 

@@ -14,7 +14,7 @@
 // the License.
 
 !ui-page childCrudPanelStyle:$s{width:50%;}
-	moreFooterComponents:$c{entityCrudInlinePanel}
+	moreAddendumComponents:$c{entityCrudInlinePanel}
 
 !ui-hidden:crudActionHolder
 	eventHandler:$d{!ui-event event:onclick action:$c{crudAct}}
