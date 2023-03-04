@@ -18,16 +18,13 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 import java.util.Arrays;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
-import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
@@ -53,19 +50,25 @@ import com.tcdng.unify.web.ui.widget.Widget;
         @ResultMapping(name = "reloadResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" },
                 reload = true) })
-public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
-        extends AbstractFlowCentralPageController<T> {
+public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean<ManageEntityDetailsApplet>>
+        extends AbstractDetailsAppletController<ManageEntityDetailsApplet, T> {
 
-    @Configurable
-    private AppletUtilities appletUtilities;
-
+    private final String childAppletName;
+    
+    private final String childBaseFieldName;
+    
     public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
+        this.childAppletName = null;
+        this.childBaseFieldName = null;
     }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
+    
+    public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
+            ResetOnWrite resetOnWrite, String childAppletName, String baseFieldName) {
+        super(pageBeanClass, secured, readOnly, resetOnWrite);
+        this.childAppletName = childAppletName;
+        this.childBaseFieldName = baseFieldName;
     }
 
     @Action
@@ -98,9 +101,11 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
-        if (pageBean.getResultTable() == null) {
+        AbstractEntityDetailsPageBean<ManageEntityDetailsApplet> pageBean = getPageBean();
+        if (pageBean.getApplet() == null) {
+            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), getPathVariable(),
+                    childAppletName, childBaseFieldName, getEntityFormEventHandlers());
+            // Result table
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
                 String viewCaption = resolveSessionMessage(pageBean.getViewActionCaption());
@@ -111,21 +116,14 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
                 resultTable.setCrudMode(true);
                 resultTable.setView(true);
             }
-
-            pageBean.setResultTable(resultTable);
+            
+            applet.setResultTable(resultTable);
+            pageBean.setApplet(applet);
         }
     }
 
-    protected final AppletUtilities au() {
-        return appletUtilities;
-    }
-
-    protected final ApplicationModuleService application() {
-        return appletUtilities.application();
-    }
-
     protected final EntityListTable getResultTable() throws UnifyException {
-        return getPageBean().getResultTable();
+        return getPageBean().getApplet().getResultTable();
     }
 
     protected final void setReport(String reportConfigName, List<? extends Entity> entityList) throws UnifyException {

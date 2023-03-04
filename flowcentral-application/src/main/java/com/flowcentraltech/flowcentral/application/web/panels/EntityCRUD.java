@@ -44,15 +44,15 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     private final AppletDef formAppletDef;
 
-    private final String childListName;
+    private final String childFieldName;
     
     public EntityCRUD(AppletUtilities au, SweepingCommitPolicy scp, AppletDef formAppletDef,
             EntityClassDef entityClassDef, String baseField, Object baseId, EntityTable table, MiniForm createForm,
-            MiniForm maintainForm, String childListName) {
+            MiniForm maintainForm, String childFieldName) {
         super(au, scp, baseField, baseId, table, createForm, maintainForm, "$m{button.save}");
         this.entityClassDef = entityClassDef;
         this.formAppletDef = formAppletDef;
-        this.childListName = childListName;
+        this.childFieldName = childFieldName;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     @Override
     protected void prepareCreate(FormContext formContext) throws UnifyException {
-        au().populateNewChildReferenceFields(formContext.getParentEntityDef(), childListName,
+        au().populateNewChildReferenceFields(formContext.getParentEntityDef(), childFieldName,
                 formContext.getParentInst(), (Entity) formContext.getInst());
         au().onFormConstruct(formAppletDef, formContext, getBaseField(), true);
     }

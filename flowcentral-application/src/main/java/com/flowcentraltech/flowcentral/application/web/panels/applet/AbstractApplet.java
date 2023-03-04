@@ -198,6 +198,14 @@ public abstract class AbstractApplet {
         return au.getEntityClassDef(entityName);
     }
 
+    protected EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException {
+        return au.getAppletEntityClassDef(appletName);
+    }
+
+    protected EntityDef getAppletEntityDef(String appletName) throws UnifyException {
+        return au.getAppletEntityDef(appletName);
+    }
+
     protected EntityDef getEntityDef(String entityName) throws UnifyException {
         return au.getEntityDef(entityName);
     }
