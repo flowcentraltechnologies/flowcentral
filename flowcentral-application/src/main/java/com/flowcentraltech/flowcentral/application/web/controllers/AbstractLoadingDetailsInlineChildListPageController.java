@@ -80,7 +80,7 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
                 getEntityFormEventHandlers());
     }
 
-    protected void showChildCrud(Long parentId) throws UnifyException {
+    protected String showChildCrud(Long parentId) throws UnifyException {
         if (parentId != null) {
             final AbstractLoadingDetailsPageBean pageBean = getPageBean();
             pageBean.getApplet().createNewChildCrud(parentId);
@@ -88,6 +88,8 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
         } else {
             hideChildCrud();
         }
+        
+        return refreshBase();
     }
 
     protected void hideChildCrud() throws UnifyException {
