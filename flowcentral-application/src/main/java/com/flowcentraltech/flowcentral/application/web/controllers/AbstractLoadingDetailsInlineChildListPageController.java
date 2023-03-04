@@ -73,6 +73,17 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
                 getEntityFormEventHandlers());
     }
 
+    protected void showChildCrud() throws UnifyException {
+        final AbstractEntityDetailsPageBean pageBean = getPageBean();
+        if (pageBean.getParentId() != null) {
+            pageBean.getApplet().createNewChildCrud(pageBean.getParentId());
+            setPageWidgetVisible("entityCrudInlinePanel", true);
+        } else {
+            pageBean.getApplet().clearChildEntityCrud();
+            setPageWidgetVisible("entityCrudInlinePanel", false);
+        }
+    }
+
     protected EntityFormEventHandlers getEntityFormEventHandlers() throws UnifyException {
         EventHandler[] formSwitchOnChangeHandlers = {};
         EventHandler[] assnSwitchOnChangeHandlers = {};

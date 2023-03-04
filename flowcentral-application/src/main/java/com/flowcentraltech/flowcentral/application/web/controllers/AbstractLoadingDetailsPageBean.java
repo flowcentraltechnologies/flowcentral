@@ -27,6 +27,8 @@ import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
  */
 public abstract class AbstractLoadingDetailsPageBean extends AbstractAppletPageBean<ManageLoadingDetailsApplet> {
 
+    private Long parentId;
+
     public LoadingTable getResultTable() {
         return getApplet() != null ? getApplet().getResultTable() : null;
     }
@@ -35,6 +37,14 @@ public abstract class AbstractLoadingDetailsPageBean extends AbstractAppletPageB
         return getApplet() != null ? getApplet().getChildEntityCrud() : null;
     }
    
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
     public abstract String getViewActionCaption();
     
     public abstract boolean isViewActionMode();

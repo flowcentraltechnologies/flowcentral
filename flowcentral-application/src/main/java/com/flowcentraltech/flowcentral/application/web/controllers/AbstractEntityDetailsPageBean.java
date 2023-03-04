@@ -27,12 +27,22 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
  */
 public abstract class AbstractEntityDetailsPageBean extends AbstractAppletPageBean<ManageEntityDetailsApplet> {
 
+    private Long parentId;
+    
     public EntityListTable getResultTable() {
         return getApplet() != null ? getApplet().getResultTable() : null;
     }
 
     public EntityCRUD getChildEntityCrud() {
         return getApplet() != null ? getApplet().getChildEntityCrud() : null;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
     public abstract String getViewActionCaption();
