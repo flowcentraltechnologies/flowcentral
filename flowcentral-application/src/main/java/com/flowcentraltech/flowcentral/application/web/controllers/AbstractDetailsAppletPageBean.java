@@ -30,7 +30,7 @@ public abstract class AbstractDetailsAppletPageBean<T extends AbstractDetailsApp
     private Long parentId;
 
     public EntityCRUD getChildEntityCrud() {
-        return getApplet().getChildEntityCrud();
+        return getApplet() != null ? getApplet().getChildEntityCrud() : null;
     }
 
     public T getApplet() {
@@ -53,7 +53,7 @@ public abstract class AbstractDetailsAppletPageBean<T extends AbstractDetailsApp
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
-    
+
     public abstract boolean isChildAppletInlineMode();
 
 }

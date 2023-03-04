@@ -27,11 +27,11 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 public abstract class AbstractEntityDetailsPageBean extends AbstractDetailsAppletPageBean<ManageEntityDetailsApplet> {
 
     public EntityListTable getResultTable() {
-        return getApplet().getResultTable();
+        return getApplet() != null ? getApplet().getResultTable() : null;
     }
-    
+
     public abstract String getViewActionCaption();
-    
+
     public abstract boolean isViewActionMode();
-     
+
 }
