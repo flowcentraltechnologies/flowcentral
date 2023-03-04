@@ -17,10 +17,15 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.And;
+import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Database;
 
 /**
@@ -69,6 +74,21 @@ public abstract class AbstractDetailsApplet extends AbstractApplet implements Sw
     public void createNewChildCrud(Long parentId) throws UnifyException {
         childEntityCrud = ctx.au().constructEntityCRUD(ctx, childAppletName, formEventHandlers, childBaseFieldName,
                 parentId);
+        EntityTable entityTable = childEntityCrud.getTable();
+        Restriction restriction = new Equals(childBaseFieldName, parentId);
+        Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, null, ctx.au().getNow());
+        if (baseRestriction != null) {
+            restriction = new And().add(restriction).add(baseRestriction);
+        }
+
+        entityTable.setSourceObjectKeepSelected(restriction);
+        entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
+
+        if (ctx.isContextEditable()) {
+            childEntityCrud.enterCreate();
+        } else {
+            childEntityCrud.enterMaintain(0);
+        }
     }
 
     public EntityCRUD getChildEntityCrud() {
