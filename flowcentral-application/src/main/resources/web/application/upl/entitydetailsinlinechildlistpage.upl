@@ -13,7 +13,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page childCrudPanelStyle:$s{width:50%;}
+!ui-page childCrudPanelStyle:$s{width:60%;}
 	moreAddendumComponents:$c{entityCrudInlinePanel}
 
 !ui-hidden:crudActionHolder
