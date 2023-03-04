@@ -28,8 +28,8 @@
      
 // Footer action panel
 !ui-panel:footerActionPanel styleClass:$e{footer} layout:$d{!ui-horizontal style:$s{float:right;}}
-	components:$c{closeBtn}
-!ui-button:closeBtn caption:$m{button.close}
+	components:$c{footerCloseBtn}
+!ui-button:footerCloseBtn caption:$m{button.close}
     eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 
 // Actions

@@ -26,5 +26,5 @@
 // Actions
 !ui-post:crudAct path:$n{/crudSelectItem}
 !ui-post:crudSwitchOnChangeAct path:$n{/crudSwitchOnChange}
-	components:$c{entitycrudPopup.entityCrudPanel}
+	components:$c{entityCrudPopup.entityCrudPanel}
 
