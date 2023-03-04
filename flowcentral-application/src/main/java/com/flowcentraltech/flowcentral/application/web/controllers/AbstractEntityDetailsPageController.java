@@ -45,6 +45,8 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
 @ResultMappings({
+        @ResultMapping(name = "refreshChildCrud",
+                response = { "!refreshpanelresponse panels:$l{entityCrudInlinePanel}", "!commonreportresponse" }),
         @ResultMapping(name = "refreshResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" }),
         @ResultMapping(name = "reloadResult",
@@ -102,6 +104,21 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return onView(getResultTable().getDispItemList().get(index));
     }
 
+    @Action
+    public final String crudSelectItem() throws UnifyException {
+        int index = getRequestTarget(int.class);
+        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        pageBean.getChildEntityCrud().enterMaintain(index);
+        return "refreshChildCrud";
+    }
+
+    @Action
+    public final String crudSwitchOnChange() throws UnifyException {
+        AbstractEntityDetailsPageBean pageBean = getPageBean();
+        au().onMiniformSwitchOnChange(pageBean.getChildEntityCrud().getForm());
+        return "refreshChildCrud";
+    }
+
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
@@ -110,7 +127,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
             ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), detailsAppletName, childAppletName,
                     childBaseFieldName, getEntityFormEventHandlers());
             pageBean.setApplet(applet);
-            
+
             // Result table
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {

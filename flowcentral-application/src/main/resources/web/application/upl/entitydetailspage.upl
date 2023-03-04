@@ -14,7 +14,7 @@
 // the License.
 
 !ui-page components:$c{basePanel} detailsMultiSelect:false
-	detailsViewButtonClass:$s{mbtn mblue}
+	detailsViewButtonClass:$s{mbtn mblue} childCrudPanelStyle:$s{width:50%;}
 		
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
@@ -36,7 +36,8 @@
 	multiSelDependentList:$f{detailsMultiSelDependentList}
 
 // Entity CRUD Page
-!ui-panel:entityCrudInlinePanel components:$c{entityCrudPanel}
+!ui-panel:entityCrudInlinePanel layout:$d{!ui-vertical style:$s{width:100%;}} style:$f{childCrudPanelStyle}
+	 components:$c{entityCrudPanel}
 !fc-entitycrudpanel:entityCrudPanel binding:childEntityCrud
 
 // Actions
