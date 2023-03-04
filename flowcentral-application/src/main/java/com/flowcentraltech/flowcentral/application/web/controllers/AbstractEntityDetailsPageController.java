@@ -53,20 +53,24 @@ import com.tcdng.unify.web.ui.widget.Widget;
 public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractDetailsAppletController<ManageEntityDetailsApplet, T> {
 
+    private final String detailsAppletName;
+
     private final String childAppletName;
 
     private final String childBaseFieldName;
 
     public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
-            ResetOnWrite resetOnWrite) {
+            ResetOnWrite resetOnWrite, String detailsAppletName) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
+        this.detailsAppletName = detailsAppletName;
         this.childAppletName = null;
         this.childBaseFieldName = null;
     }
 
     public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
-            ResetOnWrite resetOnWrite, String childAppletName, String baseFieldName) {
+            ResetOnWrite resetOnWrite, String detailsAppletName, String childAppletName, String baseFieldName) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
+        this.detailsAppletName = detailsAppletName;
         this.childAppletName = childAppletName;
         this.childBaseFieldName = baseFieldName;
     }
@@ -103,7 +107,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         super.onOpenPage();
         AbstractEntityDetailsPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), getPathVariable(), childAppletName,
+            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), detailsAppletName, childAppletName,
                     childBaseFieldName, getEntityFormEventHandlers());
             // Result table
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
@@ -119,6 +123,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
             applet.setResultTable(resultTable);
             pageBean.setApplet(applet);
+            showChildCrud();
         }
     }
 

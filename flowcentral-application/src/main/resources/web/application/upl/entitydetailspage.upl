@@ -43,7 +43,6 @@
 !ui-post:detailsAct path:$n{/details} components:$c{resultPanel}
 !ui-post:buttonAct path:$n{/buttons} 
 !ui-post:viewAct path:$n{/view}
-!ui-post:crudAct command:crudSelectItem refresh:$c{entityCrudInlinePanel}
+!ui-post:crudAct path:$n{/crudSelectItem}
 !ui-post:crudSwitchOnChangeAct path:$n{/crudSwitchOnChange} components:$c{entityCrudPanel}
-	refresh:$c{entityCrudPanel}
 
