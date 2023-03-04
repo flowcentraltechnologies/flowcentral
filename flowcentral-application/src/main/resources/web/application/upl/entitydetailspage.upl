@@ -14,19 +14,15 @@
 // the License.
 
 !ui-page components:$c{basePanel} detailsMultiSelect:false
-	detailsViewButtonClass:$s{mbtn mblue} childCrudPanelStyle:$s{width:50%;}
+	detailsViewButtonClass:$s{mbtn mblue}
 		
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$f{moreHeaderComponents}
-	components:$c{resultPanel entityCrudInlinePanel}
+	components:$c{resultPanel}
 	components:$f{moreFooterComponents}
 
 !ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
-!ui-hidden:crudActionHolder
-	eventHandler:$d{!ui-event event:onclick action:$c{crudAct}}
-!ui-hidden:switchOnChangeHolder
-	eventHandler:$d{!ui-event event:onchange action:$c{crudSwitchOnChangeAct}}
 
 // Result panel
 !ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
@@ -35,15 +31,7 @@
 	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
 	multiSelDependentList:$f{detailsMultiSelDependentList}
 
-// Entity CRUD Page
-!ui-panel:entityCrudInlinePanel layout:$d{!ui-vertical style:$s{width:100%;}} style:$f{childCrudPanelStyle}
-	 components:$c{entityCrudPanel}
-!fc-entitycrudpanel:entityCrudPanel binding:childEntityCrud
-
 // Actions
-!ui-post:detailsAct path:$n{/details} components:$c{resultPanel}
-!ui-post:buttonAct path:$n{/buttons} 
-!ui-post:viewAct path:$n{/view}
-!ui-post:crudAct path:$n{/crudSelectItem}
-!ui-post:crudSwitchOnChangeAct path:$n{/crudSwitchOnChange} components:$c{entityCrudPanel}
-
+!ui-post:detailsAct  path:$n{/details} components:$c{resultPanel}
+!ui-post:buttonAct  path:$n{/buttons} 
+!ui-post:viewAct  path:$n{/view}

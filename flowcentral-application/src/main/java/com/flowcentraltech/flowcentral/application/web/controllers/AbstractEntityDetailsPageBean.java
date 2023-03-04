@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntityDetailsPageBean extends AbstractDetailsAppletPageBean<ManageEntityDetailsApplet> {
+public abstract class AbstractEntityDetailsPageBean extends AbstractAppletPageBean<ManageEntityDetailsApplet> {
 
     public EntityListTable getResultTable() {
         return getApplet() != null ? getApplet().getResultTable() : null;

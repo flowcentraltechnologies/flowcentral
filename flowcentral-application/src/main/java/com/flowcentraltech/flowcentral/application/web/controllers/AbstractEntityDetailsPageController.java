@@ -45,36 +45,20 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
 @ResultMappings({
-        @ResultMapping(name = "refreshChildCrud",
-                response = { "!refreshpanelresponse panels:$l{entityCrudInlinePanel}", "!commonreportresponse" }),
         @ResultMapping(name = "refreshResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" }),
         @ResultMapping(name = "reloadResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" },
                 reload = true) })
 public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
-        extends AbstractDetailsAppletController<ManageEntityDetailsApplet, T> {
+        extends AbstractAppletController<T> {
 
     private final String detailsAppletName;
-
-    private final String childAppletName;
-
-    private final String childBaseFieldName;
 
     public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite, String detailsAppletName) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
         this.detailsAppletName = detailsAppletName;
-        this.childAppletName = null;
-        this.childBaseFieldName = null;
-    }
-
-    public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
-            ResetOnWrite resetOnWrite, String detailsAppletName, String childAppletName, String baseFieldName) {
-        super(pageBeanClass, secured, readOnly, resetOnWrite);
-        this.detailsAppletName = detailsAppletName;
-        this.childAppletName = childAppletName;
-        this.childBaseFieldName = baseFieldName;
     }
 
     @Action
@@ -104,30 +88,12 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return onView(getResultTable().getDispItemList().get(index));
     }
 
-    @Action
-    public final String crudSelectItem() throws UnifyException {
-        int index = getRequestTarget(int.class);
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
-        pageBean.getChildEntityCrud().enterMaintain(index);
-        return "refreshChildCrud";
-    }
-
-    @Action
-    public final String crudSwitchOnChange() throws UnifyException {
-        AbstractEntityDetailsPageBean pageBean = getPageBean();
-        au().onMiniformSwitchOnChange(pageBean.getChildEntityCrud().getForm());
-        return "refreshChildCrud";
-    }
-
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
         AbstractEntityDetailsPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), detailsAppletName, childAppletName,
-                    childBaseFieldName, getEntityFormEventHandlers());
-            pageBean.setApplet(applet);
-
+            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), detailsAppletName);
             // Result table
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
@@ -141,8 +107,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
             }
 
             applet.setResultTable(resultTable);
-            showChildCrud();
-        }
+            pageBean.setApplet(applet);
+         }
     }
 
     protected final EntityListTable getResultTable() throws UnifyException {

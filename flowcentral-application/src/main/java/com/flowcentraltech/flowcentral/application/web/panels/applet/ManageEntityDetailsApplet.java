@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 import com.tcdng.unify.core.UnifyException;
 
@@ -26,13 +25,12 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ManageEntityDetailsApplet extends AbstractDetailsApplet {
+public class ManageEntityDetailsApplet extends AbstractApplet {
 
     private EntityListTable resultTable;
 
-    public ManageEntityDetailsApplet(AppletUtilities au, String pathVariable, String childAppletName,
-            String baseFieldName, EntityFormEventHandlers formEventHandlers) throws UnifyException {
-        super(au, pathVariable, false, childAppletName, baseFieldName, formEventHandlers);
+    public ManageEntityDetailsApplet(AppletUtilities au, String pathVariable) throws UnifyException {
+        super(au, pathVariable);
     }
 
     public EntityListTable getResultTable() {
