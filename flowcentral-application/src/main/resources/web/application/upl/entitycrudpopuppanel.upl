@@ -17,7 +17,7 @@
 	components:$c{titleBar entityCrudInlinePanel footerActionPanel}
 	
 // Header
-!ui-titlebar:titleBar caption:$m{entitycrudpopuppanel.title} captionBinding:entryCaption
+!ui-titlebar:titleBar caption:$m{entitycrudpopuppanel.title} captionBinding:popupCaption
 	components:$c{closeBtn} draggable:true
 !ui-image:closeBtn src:$t{images/cross_white.png} styleClass:$e{tbbutton}
      eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}

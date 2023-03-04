@@ -27,12 +27,22 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
  */
 public abstract class AbstractEntityDetailsPageBean extends AbstractAppletPageBean<ManageEntityDetailsApplet> {
     
+    private String popupCaption;
+    
     public EntityListTable getResultTable() {
         return getApplet() != null ? getApplet().getResultTable() : null;
     }
 
     public EntityCRUD getChildEntityCrud() {
         return getApplet() != null ? getApplet().getChildEntityCrud() : null;
+    }
+
+    public String getPopupCaption() {
+        return popupCaption;
+    }
+
+    public void setPopupCaption(String popupCaption) {
+        this.popupCaption = popupCaption;
     }
 
     public abstract String getViewActionCaption();
