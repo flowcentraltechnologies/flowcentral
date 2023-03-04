@@ -68,21 +68,15 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
         return "refreshChildCrud";
     }
 
-    @Override
-    protected void onOpenPage() throws UnifyException {
-        super.onOpenPage();
-        showChildCrud();
-    }
-
     protected final ManageEntityDetailsApplet createManageEntityDetailsApplet() throws UnifyException {
         return new ManageEntityDetailsApplet(au(), getDetailsAppletName(), childAppletName, childBaseFieldName,
                 getEntityFormEventHandlers());
     }
 
-    protected void showChildCrud() throws UnifyException {
-        final AbstractEntityDetailsPageBean pageBean = getPageBean();
-        if (pageBean.getParentId() != null) {
-            pageBean.getApplet().createNewChildCrud(pageBean.getParentId());
+    protected void showChildCrud(Long parentId) throws UnifyException {
+        if (parentId != null) {
+            final AbstractEntityDetailsPageBean pageBean = getPageBean();
+            pageBean.getApplet().createNewChildCrud(parentId);
             setPageWidgetVisible("entityCrudInlinePanel", true);
         } else {
             hideChildCrud();
