@@ -106,13 +106,11 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
         AbstractEntityDetailsPageBean pageBean = getPageBean();
-        System.out.println("@prime: onOpenPage()");
         if (pageBean.getApplet() == null) {
             ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), detailsAppletName, childAppletName,
                     childBaseFieldName, getEntityFormEventHandlers());
             pageBean.setApplet(applet);
             
-            System.out.println("@prime: pageBean = " + pageBean);
             // Result table
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
@@ -126,7 +124,6 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
             }
 
             applet.setResultTable(resultTable);
-            System.out.println("@prime: resultTable = " + resultTable);
             showChildCrud();
         }
     }
