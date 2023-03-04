@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntit
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntityDetailsPageBean<T> extends AbstractDetailsAppletPageBean<ManageEntityDetailsApplet> {
+public abstract class AbstractEntityDetailsPageBean extends AbstractDetailsAppletPageBean<ManageEntityDetailsApplet> {
     
     public abstract String getViewActionCaption();
     

@@ -50,20 +50,20 @@ import com.tcdng.unify.web.ui.widget.Widget;
         @ResultMapping(name = "reloadResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" },
                 reload = true) })
-public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean<ManageEntityDetailsApplet>>
+public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
         extends AbstractDetailsAppletController<ManageEntityDetailsApplet, T> {
 
     private final String childAppletName;
-    
+
     private final String childBaseFieldName;
-    
+
     public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
         this.childAppletName = null;
         this.childBaseFieldName = null;
     }
-    
+
     public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite, String childAppletName, String baseFieldName) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
@@ -101,10 +101,10 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-        AbstractEntityDetailsPageBean<ManageEntityDetailsApplet> pageBean = getPageBean();
+        AbstractEntityDetailsPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
-            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), getPathVariable(),
-                    childAppletName, childBaseFieldName, getEntityFormEventHandlers());
+            ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), getPathVariable(), childAppletName,
+                    childBaseFieldName, getEntityFormEventHandlers());
             // Result table
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
@@ -116,7 +116,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
                 resultTable.setCrudMode(true);
                 resultTable.setView(true);
             }
-            
+
             applet.setResultTable(resultTable);
             pageBean.setApplet(applet);
         }
