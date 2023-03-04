@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractDetailsApplet;
 import com.tcdng.unify.core.UnifyException;
 
@@ -27,6 +28,10 @@ import com.tcdng.unify.core.UnifyException;
 public abstract class AbstractDetailsAppletPageBean<T extends AbstractDetailsApplet> extends AbstractAppletPageBean<T> {
 
     private Long parentId;
+
+    public EntityCRUD getChildEntityCrud() {
+        return getApplet().getChildEntityCrud();
+    }
 
     public T getApplet() {
         return super.getApplet();

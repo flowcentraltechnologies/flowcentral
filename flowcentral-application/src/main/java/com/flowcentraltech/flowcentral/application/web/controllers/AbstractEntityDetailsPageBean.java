@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 
 /**
  * Convenient abstract base class for entity details page beans.
@@ -24,6 +25,10 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntit
  * @since 1.0
  */
 public abstract class AbstractEntityDetailsPageBean extends AbstractDetailsAppletPageBean<ManageEntityDetailsApplet> {
+
+    public EntityListTable getResultTable() {
+        return getApplet().getResultTable();
+    }
     
     public abstract String getViewActionCaption();
     

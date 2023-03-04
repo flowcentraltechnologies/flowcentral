@@ -32,12 +32,12 @@
 !ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{resultTbl} 
 !fc-entitylisttable:resultTbl style:$s{width:100%;} viewButtonClass:$f{detailsViewButtonClass}
-	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:applet.resultTable
+	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
 	multiSelDependentList:$f{detailsMultiSelDependentList}
 
 // Entity CRUD Page
 !ui-panel:entityCrudInlinePanel components:$c{entityCrudPanel}
-!fc-entitycrudpanel:entityCrudPanel binding:applet.childEntityCrud
+!fc-entitycrudpanel:entityCrudPanel binding:childEntityCrud
 
 // Actions
 !ui-post:detailsAct path:$n{/details} components:$c{resultPanel}
