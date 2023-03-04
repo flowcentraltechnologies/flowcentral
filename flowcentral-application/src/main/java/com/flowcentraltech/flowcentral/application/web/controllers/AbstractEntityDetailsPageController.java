@@ -94,7 +94,6 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         AbstractEntityDetailsPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
             ManageEntityDetailsApplet applet = new ManageEntityDetailsApplet(au(), detailsAppletName);
-            // Result table
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
                 String viewCaption = resolveSessionMessage(pageBean.getViewActionCaption());

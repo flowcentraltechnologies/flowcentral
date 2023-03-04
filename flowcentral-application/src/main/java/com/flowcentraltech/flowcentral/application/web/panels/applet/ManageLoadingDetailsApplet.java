@@ -13,25 +13,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.controllers;
+package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
-import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingDetailsApplet;
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Convenient abstract base class for loading details page beans.
+ * Manage loading details applet object.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractLoadingDetailsPageBean extends AbstractAppletPageBean<ManageLoadingDetailsApplet> {
+public class ManageLoadingDetailsApplet extends AbstractApplet {
+
+    private LoadingTable resultTable;
+
+    public ManageLoadingDetailsApplet(AppletUtilities au, String pathVariable) throws UnifyException {
+        super(au, pathVariable);
+    }
 
     public LoadingTable getResultTable() {
-        return getApplet() != null ? getApplet().getResultTable() : null;
+        return resultTable;
     }
-   
-    public abstract String getViewActionCaption();
-    
-    public abstract boolean isViewActionMode();
-    
+
+    public void setResultTable(LoadingTable resultTable) {
+        this.resultTable = resultTable;
+    }
 }
