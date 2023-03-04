@@ -45,6 +45,8 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @UplBinding("web/application/upl/loadingdetailspage.upl")
 @ResultMappings({
+        @ResultMapping(name = "refreshBase",
+                response = { "!refreshpanelresponse panels:$l{basePanel}", "!commonreportresponse" }),
         @ResultMapping(name = "refreshResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" }),
         @ResultMapping(name = "reloadResult",
@@ -125,6 +127,10 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
         reportOptions.setContent(entityList);
         reportOptions.setReportResourcePath(CommonModuleNameConstants.CONFIGURED_REPORT_RESOURCE);
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
+    }
+
+    protected final String refreshBase() throws UnifyException {
+        return "refreshBase";
     }
 
     protected final String refreshResult() throws UnifyException {

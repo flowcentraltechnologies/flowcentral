@@ -45,6 +45,8 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
 @ResultMappings({
+        @ResultMapping(name = "refreshBase",
+                response = { "!refreshpanelresponse panels:$l{basePanel}", "!commonreportresponse" }),
         @ResultMapping(name = "refreshResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" }),
         @ResultMapping(name = "reloadResult",
@@ -128,6 +130,10 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected String getDetailsAppletName() {
         return detailsAppletName;
+    }
+
+    protected final String refreshBase() throws UnifyException {
+        return "refreshBase";
     }
 
     protected final String refreshResult() throws UnifyException {
