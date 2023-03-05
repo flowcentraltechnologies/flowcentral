@@ -18,16 +18,13 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 import java.util.Arrays;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
-import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
@@ -48,24 +45,22 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @UplBinding("web/application/upl/entitydetailspage.upl")
 @ResultMappings({
+        @ResultMapping(name = "refreshBase",
+                response = { "!refreshpanelresponse panels:$l{basePanel}", "!commonreportresponse" }),
         @ResultMapping(name = "refreshResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" }),
         @ResultMapping(name = "reloadResult",
                 response = { "!refreshpanelresponse panels:$l{resultPanel}", "!commonreportresponse" },
                 reload = true) })
 public abstract class AbstractEntityDetailsPageController<T extends AbstractEntityDetailsPageBean>
-        extends AbstractFlowCentralPageController<T> {
+        extends AbstractAppletController<T> {
 
-    @Configurable
-    private AppletUtilities appletUtilities;
+    private final String detailsAppletName;
 
     public AbstractEntityDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
-            ResetOnWrite resetOnWrite) {
+            ResetOnWrite resetOnWrite, String detailsAppletName) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
+        this.detailsAppletName = detailsAppletName;
     }
 
     @Action
@@ -83,7 +78,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     public final String buttons() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
-            return onAction(getResultTable().getDispItemList().get(target.getIndex()), target.getTarget());
+            return onAction(target.getIndex(), getResultTable().getDispItemList().get(target.getIndex()),
+                    target.getTarget());
         }
 
         return noResult();
@@ -92,15 +88,15 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     @Action
     public final String view() throws UnifyException {
         final int index = getRequestTarget(int.class);
-        return onView(getResultTable().getDispItemList().get(index));
+        return onView(index, getResultTable().getDispItemList().get(index));
     }
 
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-
         AbstractEntityDetailsPageBean pageBean = getPageBean();
-        if (pageBean.getResultTable() == null) {
+        if (pageBean.getApplet() == null) {
+            ManageEntityDetailsApplet applet = createManageEntityDetailsApplet();
             EntityListTable resultTable = new EntityListTable(au(), getTableDef());
             if (pageBean.isViewActionMode()) {
                 String viewCaption = resolveSessionMessage(pageBean.getViewActionCaption());
@@ -112,20 +108,17 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
                 resultTable.setView(true);
             }
 
-            pageBean.setResultTable(resultTable);
+            applet.setResultTable(resultTable);
+            pageBean.setApplet(applet);
         }
     }
 
-    protected final AppletUtilities au() {
-        return appletUtilities;
-    }
-
-    protected final ApplicationModuleService application() {
-        return appletUtilities.application();
+    protected ManageEntityDetailsApplet createManageEntityDetailsApplet() throws UnifyException {
+        return new ManageEntityDetailsApplet(au(), detailsAppletName);
     }
 
     protected final EntityListTable getResultTable() throws UnifyException {
-        return getPageBean().getResultTable();
+        return getPageBean().getApplet().getResultTable();
     }
 
     protected final void setReport(String reportConfigName, List<? extends Entity> entityList) throws UnifyException {
@@ -135,6 +128,14 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
     }
 
+    protected String getDetailsAppletName() {
+        return detailsAppletName;
+    }
+
+    protected final String refreshBase() throws UnifyException {
+        return "refreshBase";
+    }
+
     protected final String refreshResult() throws UnifyException {
         return "refreshResult";
     }
@@ -142,10 +143,10 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected final String reloadResult() throws UnifyException {
         return "reloadResult";
     }
-
+   
     protected abstract TableDef getTableDef() throws UnifyException;
 
-    protected abstract String onView(Entity inst) throws UnifyException;
+    protected abstract String onView(int rowIndex, Entity inst) throws UnifyException;
 
-    protected abstract String onAction(Entity inst, String action) throws UnifyException;
+    protected abstract String onAction(int rowIndex, Entity inst, String action) throws UnifyException;
 }

@@ -13,20 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.web.annotation.Action;
+import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
- * Entity CRUD panel
+ * Entity CRUD popup panel.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("fc-entitycrudpanel")
-@UplBinding("web/application/upl/entitycrudpanel.upl")
-public class EntityCRUDPanel extends AbstractCRUDPanel<EntityCRUD> {
+@Component("fc-entitycrudpopuppanel")
+@UplBinding("web/application/upl/entitycrudpopuppanel.upl")
+public class EntityCRUDPopupPanel extends AbstractPanel {
 
+
+    @Action
+    public void close() throws UnifyException {
+        commandHidePopup();
+    }
 }

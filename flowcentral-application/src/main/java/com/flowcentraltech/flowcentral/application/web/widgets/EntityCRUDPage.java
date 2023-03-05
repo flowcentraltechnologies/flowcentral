@@ -17,24 +17,18 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.data.AppletDef;
-import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterType;
-import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
-import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
-import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Entity CRUD page object.
@@ -44,200 +38,159 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class EntityCRUDPage {
 
-	private final AppletContext ctx;
+    private final AppletContext ctx;
 
-	private final AppletDef formAppletDef;
+    private final SweepingCommitPolicy sweepingCommitPolicy;
 
-	private final SweepingCommitPolicy sweepingCommitPolicy;
+    private final EntityDef parentEntityDef;
 
-	private final EntityDef parentEntityDef;
+    private final Entity parentInst;
 
-	private final Entity parentInst;
+    private final String baseField;
 
-	private final EntityClassDef entityClassDef;
+    private final Object baseId;
 
-	private final String baseField;
+    private final String appletName;
 
-	private final Object baseId;
+    private final String childFieldName;
 
-	private final String tableName;
+    private final SectorIcon sectorIcon;
 
-	private final String entryEditPolicy;
+    private final BreadCrumbs breadCrumbs;
 
-	private final String createFormName;
+    private final EntityFormEventHandlers formEventHandlers;
 
-	private final String maintainFormName;
+    private final FilterGroupDef filterGroupDef;
 
-	private final String childListName;
+    private final boolean viewOnly;
 
-	private final SectorIcon sectorIcon;
+    private final boolean fixedRows;
 
-	private final BreadCrumbs breadCrumbs;
+    private String displayItemCounter;
 
-	private final EntityFormEventHandlers formEventHandlers;
+    private String displayItemCounterClass;
 
-	private final FilterGroupDef filterGroupDef;
+    private EntityCRUD crud;
 
-	private final boolean fixedRows;
+    public EntityCRUDPage(AppletContext ctx, String appletName, EntityFormEventHandlers formEventHandlers,
+            SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst, String baseField,
+            Object baseId, String childFieldName, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
+            FilterGroupDef filterGroupDef, boolean viewOnly, boolean fixedRows) {
+        this.ctx = ctx;
+        this.appletName = appletName;
+        this.formEventHandlers = formEventHandlers;
+        this.sweepingCommitPolicy = sweepingCommitPolicy;
+        this.parentEntityDef = parentEntityDef;
+        this.parentInst = parentInst;
+        this.baseField = baseField;
+        this.baseId = baseId;
+        this.childFieldName = childFieldName;
+        this.sectorIcon = sectorIcon;
+        this.breadCrumbs = breadCrumbs;
+        this.filterGroupDef = filterGroupDef;
+        this.viewOnly = viewOnly;
+        this.fixedRows = fixedRows;
+    }
 
-	private String displayItemCounter;
+    public String getMainTitle() {
+        return breadCrumbs.getLastBreadCrumb().getTitle();
+    }
 
-	private String displayItemCounterClass;
+    public String getSubTitle() {
+        return breadCrumbs.getLastBreadCrumb().getSubTitle();
+    }
 
-	private EntityCRUD crud;
+    public SectorIcon getSectorIcon() {
+        return sectorIcon;
+    }
 
-	public EntityCRUDPage(AppletContext ctx, AppletDef formAppletDef, EntityFormEventHandlers formEventHandlers,
-			SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst,
-			EntityClassDef entityClassDef, String baseField, Object baseId, String childListName, SectorIcon sectorIcon,
-			BreadCrumbs breadCrumbs, String tableName, String entryEditPolicy, String createFormName,
-			String maintainFormName, FilterGroupDef filterGroupDef, boolean fixedRows) {
-		this.ctx = ctx;
-		this.formAppletDef = formAppletDef;
-		this.formEventHandlers = formEventHandlers;
-		this.sweepingCommitPolicy = sweepingCommitPolicy;
-		this.parentEntityDef = parentEntityDef;
-		this.parentInst = parentInst;
-		this.entityClassDef = entityClassDef;
-		this.baseField = baseField;
-		this.baseId = baseId;
-		this.childListName = childListName;
-		this.sectorIcon = sectorIcon;
-		this.breadCrumbs = breadCrumbs;
-		this.tableName = tableName;
-		this.entryEditPolicy = entryEditPolicy;
-		this.createFormName = createFormName;
-		this.maintainFormName = maintainFormName;
-		this.filterGroupDef = filterGroupDef;
-		this.fixedRows = fixedRows;
-	}
+    public BreadCrumbs getBreadCrumbs() {
+        return breadCrumbs;
+    }
 
-	public String getMainTitle() {
-		return breadCrumbs.getLastBreadCrumb().getTitle();
-	}
+    public AppletUtilities getAu() {
+        return ctx.au();
+    }
 
-	public String getSubTitle() {
-		return breadCrumbs.getLastBreadCrumb().getSubTitle();
-	}
+    public AppletContext getCtx() {
+        return ctx;
+    }
 
-	public SectorIcon getSectorIcon() {
-		return sectorIcon;
-	}
+    public EntityDef getEntityDef() throws UnifyException {
+        return ctx.au().getAppletEntityDef(appletName);
+    }
 
-	public BreadCrumbs getBreadCrumbs() {
-		return breadCrumbs;
-	}
+    public Object getBaseId() {
+        return baseId;
+    }
 
-	public AppletUtilities getAu() {
-		return ctx.au();
-	}
+    public String getDisplayItemCounter() {
+        return displayItemCounter;
+    }
 
-	public AppletContext getCtx() {
-		return ctx;
-	}
+    public void setDisplayItemCounter(String displayItemCounter) {
+        this.displayItemCounter = displayItemCounter;
+    }
 
-	public EntityDef getEntityDef() {
-		return entityClassDef.getEntityDef();
-	}
+    public boolean isWithValidationErrors() {
+        return crud.getForm().getCtx().isWithValidationErrors();
+    }
 
-	public Object getBaseId() {
-		return baseId;
-	}
+    public String getDisplayItemCounterClass() {
+        return displayItemCounterClass;
+    }
 
-	public String getDisplayItemCounter() {
-		return displayItemCounter;
-	}
+    public void setDisplayItemCounterClass(String displayItemCounterClass) {
+        this.displayItemCounterClass = displayItemCounterClass;
+    }
 
-	public void setDisplayItemCounter(String displayItemCounter) {
-		this.displayItemCounter = displayItemCounter;
-	}
+    public void clearDisplayItem() {
+        displayItemCounter = null;
+        displayItemCounterClass = null;
+    }
 
-	public boolean isWithValidationErrors() {
-		return crud.getForm().getCtx().isWithValidationErrors();
-	}
+    public boolean isWithSectorIcon() {
+        return sectorIcon != null;
+    }
 
-	public String getDisplayItemCounterClass() {
-		return displayItemCounterClass;
-	}
+    public boolean isCreate() {
+        return !viewOnly;
+    }
 
-	public void setDisplayItemCounterClass(String displayItemCounterClass) {
-		this.displayItemCounterClass = displayItemCounterClass;
-	}
+    public void crudSelectItem(int index) throws UnifyException {
+        getCrud().enterMaintain(index);
+    }
 
-	public void clearDisplayItem() {
-		displayItemCounter = null;
-		displayItemCounterClass = null;
-	}
+    public void switchOnChange() throws UnifyException {
+        ctx.au().onMiniformSwitchOnChange(getCrud().getForm());
+    }
 
-	public boolean isWithSectorIcon() {
-		return sectorIcon != null;
-	}
+    public EntityCRUD getCrud() throws UnifyException {
+        if (crud == null) {
+            crud = ctx.au().constructEntityCRUD(ctx, appletName, formEventHandlers, sweepingCommitPolicy,
+                    parentEntityDef, parentInst, baseField, baseId, childFieldName, filterGroupDef, viewOnly,
+                    fixedRows);
+        }
 
-	public boolean isCreate() {
-		return StringUtils.isNotBlank(createFormName);
-	}
+        return crud;
+    }
 
-	public void crudSelectItem(int index) throws UnifyException {
-		getCrud().enterMaintain(index);
-	}
+    public void loadCrudList() throws UnifyException {
+        EntityTable entityTable = getCrud().getTable();
+        Restriction restriction = new Equals(baseField, baseId);
+        Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, null, ctx.au().getNow());
+        if (baseRestriction != null) {
+            restriction = new And().add(restriction).add(baseRestriction);
+        }
 
-	public void switchOnChange() throws UnifyException {
-	    ctx.au().onMiniformSwitchOnChange(getCrud().getForm());
-	}
+        entityTable.setSourceObjectKeepSelected(restriction);
+        entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
 
-	public EntityCRUD getCrud() throws UnifyException {
-		if (crud == null) {
-			TableDef tableDef = ctx.au().getTableDef(tableName);
-			EntityTable entityTable = new EntityTable(ctx.au(), tableDef, filterGroupDef);
-			entityTable.setCrudMode(true);
-			entityTable.setFixedRows(fixedRows);
-			if (!StringUtils.isBlank(entryEditPolicy)) {
-				ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy);
-				entityTable.setPolicy(policy);
-			}
-
-			MiniForm createForm = null;
-			if (isCreate()) {
-				FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
-				createFrmCtx.setCrudMode();
-				createFrmCtx.setParentEntityDef(parentEntityDef);
-				createFrmCtx.setParentInst(parentInst);
-
-				createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
-						createFrmCtx.getFormDef().getFormTabDef(0));
-			} else {
-				entityTable.setView(true);
-			}
-
-			FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);
-			maintainFrmCtx.setCrudMode();
-			maintainFrmCtx.setParentEntityDef(parentEntityDef);
-			maintainFrmCtx.setParentInst(parentInst);
-
-			MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
-					maintainFrmCtx.getFormDef().getFormTabDef(0));
-			crud = new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
-					entityTable, createForm, maintainForm, childListName);
-		}
-
-		return crud;
-	}
-
-	public void loadCrudList() throws UnifyException {
-		EntityTable entityTable = getCrud().getTable();
-		Restriction restriction = new Equals(baseField, baseId);
-		Restriction baseRestriction = entityTable.getRestriction(FilterType.BASE, null, ctx.au().getNow());
-		if (baseRestriction != null) {
-			restriction = new And().add(restriction).add(baseRestriction);
-		}
-
-		entityTable.setSourceObjectKeepSelected(restriction);
-		entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
-
-		if (ctx.isContextEditable() && isCreate()) {
-			getCrud().enterCreate();
-		} else {
-			getCrud().enterMaintain(0);
-		}
-	}
+        if (ctx.isContextEditable() && isCreate()) {
+            getCrud().enterCreate();
+        } else {
+            getCrud().enterMaintain(0);
+        }
+    }
 
 }

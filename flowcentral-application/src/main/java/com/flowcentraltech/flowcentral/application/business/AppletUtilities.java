@@ -42,6 +42,7 @@ import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
@@ -85,6 +86,7 @@ import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.FormatHelper;
@@ -528,6 +530,28 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     AppletDef getAppletDef(Long appAppletId) throws UnifyException;
+
+    /**
+     * Gets a application entity definition.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the entity definition.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityDef getAppletEntityDef(String appletName) throws UnifyException;
+
+    /**
+     * Gets a application entity class definition.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the entity class definition.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException;
 
     /**
      * Gets a application entity class definition.
@@ -1360,6 +1384,62 @@ public interface AppletUtilities extends UnifyComponent {
      */
     BeanListTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
             throws UnifyException;
+    
+    /**
+     * Constructs an entity CRUD object
+     * 
+     * @param ctx
+     *                             the applet context
+     * @param appletName
+     *                             the applet name
+     * @param formEventHandlers
+     *                             the for event handler
+     * @param baseField
+     *                             the base field
+     * @param baseId
+     *                             the base ID
+     * @return the entity CRUD object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName, EntityFormEventHandlers formEventHandlers,
+            String baseField, Object baseId) throws UnifyException;
+    
+    /**
+     * Constructs an entity CRUD object
+     * 
+     * @param ctx
+     *                             the applet context
+     * @param appletName
+     *                             the applet name
+     * @param formEventHandlers
+     *                             the for event handler
+     * @param sweepingCommitPolicy
+     *                             the sweeping commit policy
+     * @param parentEntityDef
+     *                             the parent entity definition
+     * @param parentInst
+     *                             the parent instance
+     * @param baseField
+     *                             the base field
+     * @param baseId
+     *                             the base ID
+     * @param childListName
+     *                             the child list name
+     * @param filterGroupDef
+     *                             the filter group definition
+     * @param viewOnly
+     *                             the view only constant
+     * @param fixedRows
+     *                             the fixed rows
+     * @return the entity CRUD object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName, EntityFormEventHandlers formEventHandlers,
+            SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst, String baseField,
+            Object baseId, String childListName, FilterGroupDef filterGroupDef, final boolean viewOnly,
+            final boolean fixedRows) throws UnifyException;
 
     /**
      * Matches a form bean with applet condition property
@@ -1376,7 +1456,21 @@ public interface AppletUtilities extends UnifyComponent {
      */
     boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form, String conditionPropName)
             throws UnifyException;
-
+    
+    /**
+     * Bumps entity version
+     * 
+     * @param db
+     *                  the database
+     * @param entityDef
+     *                  the entity definition
+     * @param inst
+     *                  the entity instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException;
+    
     /**
      * Gets child entity foreign key field name
      * 

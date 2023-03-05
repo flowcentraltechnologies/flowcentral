@@ -15,8 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
-import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
  * Convenient abstract base class for entity details page beans.
@@ -24,20 +25,28 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntityDetailsPageBean extends AbstractPageBean {
-
-    private EntityListTable resultTable;
-
+public abstract class AbstractEntityDetailsPageBean extends AbstractAppletPageBean<ManageEntityDetailsApplet> {
+    
+    private String popupCaption;
+    
     public EntityListTable getResultTable() {
-        return resultTable;
+        return getApplet() != null ? getApplet().getResultTable() : null;
     }
 
-    public void setResultTable(EntityListTable resultTable) {
-        this.resultTable = resultTable;
+    public EntityCRUD getChildEntityCrud() {
+        return getApplet() != null ? getApplet().getChildEntityCrud() : null;
     }
-    
+
+    public String getPopupCaption() {
+        return popupCaption;
+    }
+
+    public void setPopupCaption(String popupCaption) {
+        this.popupCaption = popupCaption;
+    }
+
     public abstract String getViewActionCaption();
-    
+
     public abstract boolean isViewActionMode();
-    
+
 }

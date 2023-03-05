@@ -15,8 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
-import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
  * Convenient abstract base class for loading details page beans.
@@ -24,18 +25,26 @@ import com.tcdng.unify.web.ui.AbstractPageBean;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractLoadingDetailsPageBean extends AbstractPageBean {
+public abstract class AbstractLoadingDetailsPageBean extends AbstractAppletPageBean<ManageLoadingDetailsApplet> {
 
-    private LoadingTable resultTable;
+    private Long parentId;
 
     public LoadingTable getResultTable() {
-        return resultTable;
+        return getApplet() != null ? getApplet().getResultTable() : null;
     }
 
-    public void setResultTable(LoadingTable resultTable) {
-        this.resultTable = resultTable;
+    public EntityCRUD getChildEntityCrud() {
+        return getApplet() != null ? getApplet().getChildEntityCrud() : null;
     }
-    
+   
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
+    }
+
     public abstract String getViewActionCaption();
     
     public abstract boolean isViewActionMode();

@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
@@ -112,8 +113,7 @@ public interface EntryTablePolicy extends UnifyComponent {
      *                        if an error occurs
      */
     EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected,
-            TableChangeType changeType)
-            throws UnifyException;
+            TableChangeType changeType) throws UnifyException;
 
     /**
      * Handles on entry table data change.
@@ -131,6 +131,17 @@ public interface EntryTablePolicy extends UnifyComponent {
     EntryActionType onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore,
             RowChangeInfo rowChangeInfo) throws UnifyException;
 
+    /**
+     * Gets table summary lines.
+     * 
+     * @param tableValueStore
+     *                        the list data store object
+     * @return the table summary lines
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<TableSummaryLine> getTableSummaryLines(ValueStore tableValueStore) throws UnifyException;
+    
     /**
      * Apply table state overrides.
      * 

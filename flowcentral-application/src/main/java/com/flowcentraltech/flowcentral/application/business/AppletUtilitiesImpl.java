@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
+import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityChild;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFieldSequence;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityFilter;
@@ -82,6 +83,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApp
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
@@ -105,6 +107,7 @@ import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
+import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
 import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
@@ -125,6 +128,7 @@ import com.tcdng.unify.core.criterion.AbstractRestrictionTranslatorMapper;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.RestrictionTranslator;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
@@ -132,6 +136,7 @@ import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
@@ -203,8 +208,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     private MessageResolver messageResolver;
 
     @Configurable
-    private TaskLauncher taskLauncher;    
-    
+    private TaskLauncher taskLauncher;
+
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;
 
@@ -575,6 +580,17 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public AppletDef getAppletDef(Long appAppletId) throws UnifyException {
         return applicationModuleService.getAppletDef(appAppletId);
+    }
+
+    @Override
+    public EntityDef getAppletEntityDef(String appletName) throws UnifyException {
+        return applicationModuleService.getEntityDef(applicationModuleService.getAppletDef(appletName).getEntity());
+    }
+
+    @Override
+    public EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException {
+        return applicationModuleService
+                .getEntityClassDef(applicationModuleService.getAppletDef(appletName).getEntity());
     }
 
     @Override
@@ -1694,15 +1710,71 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public BeanListTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
-            throws UnifyException {
-        BeanListTable entryBeanTable = new BeanListTable(this, getTableDef(tableName), filterGroupDef, BeanListTable.ENTRY_ENABLED);
+    public BeanListTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef,
+            String entryEditPolicy) throws UnifyException {
+        BeanListTable entryBeanTable = new BeanListTable(this, getTableDef(tableName), filterGroupDef,
+                BeanListTable.ENTRY_ENABLED);
         if (!StringUtils.isBlank(entryEditPolicy)) {
             ChildListEditPolicy policy = getComponent(ChildListEditPolicy.class, entryEditPolicy);
             entryBeanTable.setPolicy(policy);
         }
 
         return entryBeanTable;
+    }
+
+    @Override
+    public EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName,
+            EntityFormEventHandlers formEventHandlers, String baseField, Object baseId) throws UnifyException {
+        return constructEntityCRUD(ctx, appletName, formEventHandlers, null, null, null, baseField, baseId, null, null,
+                false, false);
+    }
+
+    @Override
+    public EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName,
+            EntityFormEventHandlers formEventHandlers, SweepingCommitPolicy sweepingCommitPolicy,
+            EntityDef parentEntityDef, Entity parentInst, String baseField, Object baseId, String childListName,
+            FilterGroupDef filterGroupDef, final boolean viewOnly, final boolean fixedRows) throws UnifyException {
+        final AppletDef formAppletDef = getAppletDef(appletName);
+        final String tableName = formAppletDef.isPropWithValue(AppletPropertyConstants.ENTRY_TABLE)
+                ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.ENTRY_TABLE)
+                : formAppletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE);
+        final String entryTablePolicy = formAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.ENTRY_TABLE_POLICY);
+        final String createFormName = viewOnly ? null
+                : formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM);
+        final String maintainFormName = formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM);
+        final EntityClassDef entityClassDef = ctx.au().getEntityClassDef(formAppletDef.getEntity());
+        TableDef tableDef = ctx.au().getTableDef(tableName);
+        EntityTable entityTable = new EntityTable(ctx.au(), tableDef, filterGroupDef);
+        entityTable.setCrudMode(true);
+        entityTable.setFixedRows(fixedRows);
+        if (!StringUtils.isBlank(entryTablePolicy)) {
+            ChildListEditPolicy policy = ctx.au().getComponent(ChildListEditPolicy.class, entryTablePolicy);
+            entityTable.setPolicy(policy);
+        }
+
+        MiniForm createForm = null;
+        if (!viewOnly) {
+            FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
+            createFrmCtx.setCrudMode();
+            createFrmCtx.setParentEntityDef(parentEntityDef);
+            createFrmCtx.setParentInst(parentInst);
+
+            createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
+                    createFrmCtx.getFormDef().getFormTabDef(0));
+        } else {
+            entityTable.setView(true);
+        }
+
+        FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);
+        maintainFrmCtx.setCrudMode();
+        maintainFrmCtx.setParentEntityDef(parentEntityDef);
+        maintainFrmCtx.setParentInst(parentInst);
+
+        MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
+                maintainFrmCtx.getFormDef().getFormTabDef(0));
+        return new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
+                entityTable, createForm, maintainForm, childListName);
     }
 
     @Override
@@ -1717,6 +1789,20 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         }
 
         return true;
+    }
+
+    @SuppressWarnings("unchecked")
+    public void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {
+        if (inst != null) {
+            final EntityClassDef entityClassDef = getEntityClassDef(entityDef.getLongName());
+            if (BaseVersionEntity.class.isAssignableFrom(entityClassDef.getEntityClass())) {
+                Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id",
+                        inst.getId());
+                long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
+                db.updateAll(query, new Update().add("versionNo", bumpedVersionNo));
+                ((BaseVersionEntity) inst).setVersionNo(bumpedVersionNo);
+            }
+        }
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.widgets;
+package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.MapValues;

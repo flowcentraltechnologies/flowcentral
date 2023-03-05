@@ -68,8 +68,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
-        @UplAttribute(name = "summary", type = String.class),
-        @UplAttribute(name = "details", type = String.class),
+        @UplAttribute(name = "summary", type = String.class), @UplAttribute(name = "details", type = String.class),
         @UplAttribute(name = "viewButtonClass", type = String.class, defaultVal = "mbtn"),
         @UplAttribute(name = "viewButtonCaptionBinding", type = String.class, defaultVal = "viewButtonCaption"),
         @UplAttribute(name = "editButtonClass", type = String.class, defaultVal = "mbtn"),
@@ -284,7 +283,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public String getEditButtonCaptionBinding() throws UnifyException {
         return getUplAttribute(String.class, "editButtonCaptionBinding");
     }
-    
+
     public boolean isFixedRows() throws UnifyException {
         T table = getTable();
         return (table != null && table.isFixedRows()) || getUplAttribute(boolean.class, "fixedRows");
@@ -298,7 +297,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public boolean isDetails() throws UnifyException {
         return !StringUtils.isBlank(getDetails());
     }
-    
+
     public boolean isActionColumn() throws UnifyException {
         return actionCtrl != null && !isFixedRows();
     }
@@ -335,7 +334,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public Control getViewCtrl() throws UnifyException {
         if (viewCtrl == null) {
             viewCtrl = (Control) addInternalChildWidget(
-                    "!ui-button alwaysValueIndex:true styleClass:$e{" + getUplAttribute(String.class, "viewButtonClass") + "} caption:"
+                    "!ui-button symbol:$s{file} alwaysValueIndex:true styleClass:$e{"
+                            + getUplAttribute(String.class, "viewButtonClass") + " g_fsm} caption:"
                             + "$m{table.row.view} captionBinding:$s{"
                             + getUplAttribute(String.class, "viewButtonCaptionBinding") + "}");
         }
@@ -346,7 +346,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     public Control getEditCtrl() throws UnifyException {
         if (editCtrl == null) {
             editCtrl = (Control) addInternalChildWidget(
-                    "!ui-button alwaysValueIndex:true styleClass:$e{" + getUplAttribute(String.class, "editButtonClass") + "} caption:"
+                    "!ui-button symbol:$s{edit} alwaysValueIndex:true styleClass:$e{"
+                            + getUplAttribute(String.class, "editButtonClass") + " g_fsm} caption:"
                             + "$m{table.row.edit} captionBinding:$s{"
                             + getUplAttribute(String.class, "editButtonCaptionBinding") + "}");
         }
@@ -599,19 +600,19 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             final boolean view = !StringUtils.isBlank(viewCaption);
             final boolean edit = !StringUtils.isBlank(editCaption);
             if (view || edit) {
-                final String viewBinding= getViewButtonCaptionBinding();
-                final String editBinding= getEditButtonCaptionBinding();
-                for (ValueStore valueStore: getValueList()) {
+                final String viewBinding = getViewButtonCaptionBinding();
+                final String editBinding = getEditButtonCaptionBinding();
+                for (ValueStore valueStore : getValueList()) {
                     if (view) {
                         valueStore.setTempValue(viewBinding, viewCaption);
                     }
-                    
+
                     if (edit) {
                         valueStore.setTempValue(editBinding, editCaption);
                     }
                 }
             }
-        }        
+        }
     }
 
     @Override

@@ -16,6 +16,9 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
@@ -61,6 +64,11 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
                 environmentService.delete((Entity) valueStore.getValueObject()); 
             }
         }
+    }
+
+    @Override
+    public List<TableSummaryLine> getTableSummaryLines(ValueStore tableValueStore) {
+        return Collections.emptyList();
     }
 
     @Override
