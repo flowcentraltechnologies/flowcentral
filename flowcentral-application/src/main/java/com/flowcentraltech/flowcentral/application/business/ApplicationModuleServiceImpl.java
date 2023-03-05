@@ -167,6 +167,7 @@ import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.flowcentraltech.flowcentral.application.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
@@ -326,6 +327,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     private final Set<String> RESERVED_ENTITIES = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("application.propertyItem", "application.usage")));
+
+    private static final String ENTITY_NAME = "ENTITY_NAME";
 
     private static final int MAX_LIST_DEPTH = 8;
 
@@ -885,10 +888,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 : null;
                         OrderType order = OrderType.fromCode(appTableColumn.getOrder());
                         tdb.addColumnDef(appTableColumn.getLabel(), appTableColumn.getField(), renderer, editor,
-                                appTableColumn.getLinkAct(), appTableColumn.getSymbol(), order, appTableColumn.getWidthRatio(),
-                                appTableColumn.isSwitchOnChange(),appTableColumn.isHiddenOnNull(), appTableColumn.isHidden(),
-                                appTableColumn.isDisabled(), appTableColumn.isEditable(), appTableColumn.isSortable(),
-                                appTableColumn.isSummary());
+                                appTableColumn.getLinkAct(), appTableColumn.getSymbol(), order,
+                                appTableColumn.getWidthRatio(), appTableColumn.isSwitchOnChange(),
+                                appTableColumn.isHiddenOnNull(), appTableColumn.isHidden(), appTableColumn.isDisabled(),
+                                appTableColumn.isEditable(), appTableColumn.isSortable(), appTableColumn.isSummary());
                     }
 
                     for (AppTableAction appTableAction : appTable.getActionList()) {
@@ -1239,6 +1242,41 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     public final void setUsageListProvider(UsageListProvider usageListProvider) {
         this.usageListProvider = usageListProvider;
+    }
+
+    private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
+
+    private static final Class<?>[] WRAPPER_PARAMS_1 = { EntityClassDef.class, Entity.class };
+
+    private static final Class<?>[] WRAPPER_PARAMS_2 = { EntityClassDef.class, List.class };
+
+    @Override
+    public <T extends EntityWrapper> T wrapper(Class<T> wrapperType) throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, entityClassDef);
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapper(Class<T> wrapperType, Entity inst) throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_1, entityClassDef, inst);
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapper(Class<T> wrapperType, List<Entity> instList) throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_2, entityClassDef, instList);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Query<? extends Entity> queryOf(Class<? extends EntityWrapper> wrapperType) throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+        return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
     }
 
     @Override
