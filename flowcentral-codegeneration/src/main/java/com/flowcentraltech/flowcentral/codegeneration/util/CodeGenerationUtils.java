@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseEntityWrapper;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.EntityFieldType;
 import com.tcdng.unify.core.database.dynamic.DynamicChildFieldInfo;
@@ -46,6 +47,7 @@ import com.tcdng.unify.core.util.TypeInfo;
  */
 public final class CodeGenerationUtils {
 
+    
     private CodeGenerationUtils() {
 
     }
@@ -135,9 +137,12 @@ public final class CodeGenerationUtils {
             msb.append(" public ").append(fieldTypeName).append(" get").append(capField).append("() {return ")
                     .append("(").append(fieldTypeName).append(") valueStore.retrieve(").append(actFieldTypeName)
                     .append(".class, ").append(fieldNameConst).append(");}\n");
-            msb.append(" public void set").append(capField).append("(").append(fieldTypeName).append(" ")
-                    .append(fieldName).append(") {valueStore.store(").append(fieldNameConst).append(",")
-                    .append(fieldName).append(");}\n");
+            
+            if (!ApplicationEntityUtils.RESERVED_BASE_FIELDS.contains(fieldName)) {
+                msb.append(" public void set").append(capField).append("(").append(fieldTypeName).append(" ")
+                .append(fieldName).append(") {valueStore.store(").append(fieldNameConst).append(",")
+                .append(fieldName).append(");}\n");
+            }
         }
 
         // Construct class
