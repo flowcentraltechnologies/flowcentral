@@ -134,7 +134,7 @@ public final class CodeGenerationUtils {
 
             msb.append(" public ").append(fieldTypeName).append(" get").append(capField).append("() {return ")
                     .append("(").append(fieldTypeName).append(") valueStore.retrieve(").append(actFieldTypeName)
-                    .append(".class, ").append(fieldNameConst).append(";}\n");
+                    .append(".class, ").append(fieldNameConst).append(");}\n");
             msb.append(" public void set").append(capField).append("(").append(fieldTypeName).append(" ")
                     .append(fieldName).append(") {valueStore.store(").append(fieldNameConst).append(",")
                     .append(fieldName).append(");}\n");
