@@ -143,7 +143,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected final String reloadResult() throws UnifyException {
         return "reloadResult";
     }
-
+   
     protected abstract TableDef getTableDef() throws UnifyException;
 
     protected abstract String onView(int rowIndex, Entity inst) throws UnifyException;

@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
+import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
@@ -44,6 +45,7 @@ import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
@@ -131,9 +133,9 @@ public abstract class AbstractTable<T, U> {
     private RowChangeInfo lastRowChangeInfo;
 
     private List<Section> sections;
-    
+
     private List<TableSummaryLine> tableSummaryLines;
-    
+
     private int detailsIndex;
 
     public AbstractTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef, Order defaultOrder,
@@ -148,7 +150,7 @@ public abstract class AbstractTable<T, U> {
         this.highlightedRow = -1;
         this.detailsIndex = -1;
         this.sections = Collections.emptyList();
-   }
+    }
 
     public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
         return filterGroupDef != null ? filterGroupDef.match(type, bean, now) : true;
@@ -177,19 +179,19 @@ public abstract class AbstractTable<T, U> {
     private void clearTableSummaryLines() {
         tableSummaryLines = null;
     }
-    
+
     public void setTableSummaryLines(List<TableSummaryLine> tableSummaryLines) {
         this.tableSummaryLines = tableSummaryLines;
     }
-    
+
     public List<TableSummaryLine> getTableSummaryLines() {
-        return tableSummaryLines == null ? Collections.emptyList(): tableSummaryLines;
+        return tableSummaryLines == null ? Collections.emptyList() : tableSummaryLines;
     }
 
     public boolean isWithTableSummaryLines() {
         return tableSummaryLines != null;
     }
-    
+
     public List<EventHandler> getCrudActionHandlers() {
         return crudActionHandlers;
     }
@@ -234,7 +236,7 @@ public abstract class AbstractTable<T, U> {
         final int itemsPerPage = tableDef.getItemsPerPage();
         if (itemsPerPage >= 0) {
             final int minItemsPerPage = au.getSearchMinimumItemsPerPage();
-            return itemsPerPage < minItemsPerPage  ? minItemsPerPage :itemsPerPage;
+            return itemsPerPage < minItemsPerPage ? minItemsPerPage : itemsPerPage;
         }
 
         return itemsPerPage;
@@ -422,13 +424,19 @@ public abstract class AbstractTable<T, U> {
     public void setTotalTableSummaryLine() throws UnifyException {
         addParentColumnSummary();
         if (tableTotalSummary != null) {
-            TableSummaryLine line = new TableSummaryLine(getTotalLabel());
-            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                Class<?> numberType = tableDef.getFieldDef(summary.getFieldName()).getDataType().dataType().javaClass();
-                line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
-            }
+            tableSummaryLines = entryPolicy != null && dispItemList != null
+                    ? entryPolicy.getTableSummaryLines(new BeanValueListStore(dispItemList))
+                    : null;
+            if (DataUtils.isBlank(tableSummaryLines)) {
+                TableSummaryLine line = new TableSummaryLine(getTotalLabel());
+                for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
+                    Class<?> numberType = tableDef.getFieldDef(summary.getFieldName()).getDataType().dataType()
+                            .javaClass();
+                    line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
+                }
 
-            tableSummaryLines = Arrays.asList(line);
+                tableSummaryLines = Arrays.asList(line);
+            }
         }
     }
 
@@ -452,11 +460,11 @@ public abstract class AbstractTable<T, U> {
 
         return null;
     }
-    
+
     public void setSourceObjectKeepSelected(T sourceObject) throws UnifyException {
         setSourceObject(sourceObject, selected);
     }
-    
+
     public void setSourceObjectClearSelected(T sourceObject) throws UnifyException {
         setSourceObject(sourceObject, Collections.emptySet());
     }
@@ -489,7 +497,7 @@ public abstract class AbstractTable<T, U> {
         } else {
             actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
         }
-        
+
         return actionType;
     }
 
@@ -562,7 +570,7 @@ public abstract class AbstractTable<T, U> {
     public List<Section> getSections() {
         return sections;
     }
-    
+
     public void reset() throws UnifyException {
         int _pageIndex = pageIndex;
         calcPageDimensions();
@@ -670,11 +678,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public static class Section {
-        
+
         private final int startItemIndex;
-        
+
         private final int endItemIndex;
-        
+
         private final String label;
 
         public Section(int startItemIndex, int endItemIndex, String label) {
@@ -700,17 +708,16 @@ public abstract class AbstractTable<T, U> {
         public String getLabel() {
             return label;
         }
-        
+
         public boolean isEmpty() {
             return startItemIndex < 0;
         }
-        
+
         public boolean isIndexWithin(int index) {
             return index >= startItemIndex && index <= endItemIndex;
         }
     }
-    
-    
+
     protected abstract void validate(EvaluationMode evaluationMode, T sourceObject, FormValidationErrors errors)
             throws UnifyException;
 
