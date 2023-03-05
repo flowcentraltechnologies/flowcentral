@@ -108,13 +108,14 @@ public final class CodeGenerationUtils {
                 importSet.add(childClass);
             }
 
+            TypeInfo childEntityInfo = childClass != null ? new TypeInfo(childClass) : null;;
             String fieldTypeName = null;
             String actFieldTypeName = null;
             if (type.isChild()) {
-                actFieldTypeName = fieldTypeName = childClass;
+                actFieldTypeName = fieldTypeName = childEntityInfo.getSimpleName();
             } else if (type.isChildList()) {
                 actFieldTypeName = "List";
-                fieldTypeName = "List<" + childClass + ">";
+                fieldTypeName = "List<" + childEntityInfo.getSimpleName() + ">";
             } else {
                 Class<?> javaClass = dynamicFieldInfo.getDataType().javaClass();
                 if (Date.class.equals(javaClass)) {
@@ -142,7 +143,9 @@ public final class CodeGenerationUtils {
         // Construct class
         TypeInfo baseEntityInfo = new TypeInfo(BaseEntityWrapper.class);
         TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName() + "Wrapper");
-        esb.append("package ").append(typeInfo.getPackageName()).append(";\n");
+        final int index = typeInfo.getPackageName().lastIndexOf('.');
+        final String packageName = typeInfo.getPackageName().substring(0, index) + "entitywrappers";
+        esb.append("package ").append(packageName).append(";\n");
         List<String> importList = new ArrayList<String>(importSet);
         Collections.sort(importList);
         for (String imprt : importList) {
