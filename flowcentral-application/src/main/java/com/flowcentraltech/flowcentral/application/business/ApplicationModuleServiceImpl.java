@@ -328,7 +328,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private final Set<String> RESERVED_ENTITIES = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("application.propertyItem", "application.usage")));
 
-    private static final String ENTITY_NAME = "ENTITY_NAME";
+    private static final String ENTITY_NAME = "__ENTITY_NAME";
 
     private static final int MAX_LIST_DEPTH = 8;
 

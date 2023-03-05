@@ -10,6 +10,11 @@
 			label="$m{codegeneration.generateextensionmodulestaticfiles.manage.label}" icon="lock" type="path_page"
 			path="/codegeneration/extensionmodulestaticfilesgeneration/openPage" menuAccess="false">
 		</applet>
+		<applet name="generateStaticUtilitiesFiles"
+			description="$m{codegeneration.generateutilitiesmodulestaticfiles.manage}"
+			label="$m{codegeneration.generateutilitiesmodulestaticfiles.manage.label}" icon="lock" type="path_page"
+			path="/codegeneration/utilitiesmodulestaticfilesgeneration/openPage" menuAccess="false">
+		</applet>
 	</applets>
 	<!-- References -->
 	<!-- Entities -->

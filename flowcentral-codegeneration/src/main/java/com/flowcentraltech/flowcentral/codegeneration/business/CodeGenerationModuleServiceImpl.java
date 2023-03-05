@@ -24,8 +24,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleNameConstants;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationTaskConstants;
@@ -47,6 +50,7 @@ import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -61,14 +65,21 @@ import com.tcdng.unify.core.util.StringUtils;
 public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         implements CodeGenerationModuleService, CodeGenerationProvider {
 
-    private static final List<String> codegenerationAppletList = Collections.unmodifiableList(
-            Arrays.asList("codegeneration.generateStaticFiles"));
+    private static final List<String> codegenerationAppletList = Collections
+            .unmodifiableList(Arrays.asList("codegeneration.generateStaticFiles"));
 
     @Configurable
     private SystemModuleService systemModuleService;
-    
+
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
+
     public final void setSystemModuleService(SystemModuleService systemModuleService) {
         this.systemModuleService = systemModuleService;
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
     }
 
     @Override
@@ -77,12 +88,8 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections.unmodifiableList(
-            Arrays.asList("charts-xml-generator",
-                    "dashboards-xml-generator",
-                    "notifications-xml-generator",
-                    "reports-xml-generator",
-                    "workflows-xml-generator",
-                    "application-xml-generator"));
+            Arrays.asList("charts-xml-generator", "dashboards-xml-generator", "notifications-xml-generator",
+                    "reports-xml-generator", "workflows-xml-generator", "application-xml-generator"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME,
             description = "Generate Extension Module Files Task",
@@ -91,25 +98,28 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
     public int generateExtensionModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
             throws UnifyException {
-//        final String moduleName = codeGenerationItem.getSourceName();
         Date now = environment().getNow();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
         try {
-            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(codeGenerationItem.getBasePackage());
+            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
+                    codeGenerationItem.getBasePackage());
             List<String> moduleList = systemModuleService.getAllModuleNames();
-            for (final String moduleName: moduleList) {
+            for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for extension module [{0}]", moduleName);
-                final String replacements = systemModuleService.getSysParameterValue(String.class, CodeGenerationModuleSysParamConstants.MESSAGE_REPLACEMENT_LIST);
+                final String replacements = systemModuleService.getSysParameterValue(String.class,
+                        CodeGenerationModuleSysParamConstants.MESSAGE_REPLACEMENT_LIST);
                 Map<String, String> messageReplacements = CodeGenerationUtils.splitMessageReplacements(replacements);
                 addTaskMessage(taskMonitor, "Using message replacement list [{0}]...", replacements);
-                
-                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(
-                        mainCtx, moduleName, messageReplacements);
+
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                        moduleName, messageReplacements);
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM)); // TODO Include CUSTOMIZED
+                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM)); // TODO
+                                                                                                               // Include
+                                                                                                               // CUSTOMIZED
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
                         moduleCtx.nextApplication(application.getName(), application.getDescription());
@@ -124,15 +134,18 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                     // Generate module configuration XML
                     addTaskMessage(taskMonitor, "Generating module configuration for module [{0}]...", moduleName);
-                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...", "extension-module-xml-generator");
-                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent("extension-module-xml-generator");
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-xml-generator");
+                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-xml-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
                     // Generate module static settings
                     addTaskMessage(taskMonitor, "Generating static settings for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-static-settings-java-generator");
-                    generator = (StaticArtifactGenerator) getComponent("extension-module-static-settings-java-generator");
+                    generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-static-settings-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
                     // Generate entity classes
@@ -144,16 +157,76 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                     // Generate messages
                     addTaskMessage(taskMonitor, "Generating messages for module [{0}]...", moduleName);
-                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...", "extension-module-messages-generator");
-                    generator = (StaticArtifactGenerator) getComponent(
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-messages-generator");
+                    generator = (StaticArtifactGenerator) getComponent("extension-module-messages-generator");
                     generator.generate(moduleCtx, moduleName, zos);
                 }
-            }            
+            }
 
             SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
             final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
             String zipFilename = String.format("%s_extension_%s%s", filenamePrefix, smf.format(now), ".zip");
+
+            IOUtils.close(zos);
+            codeGenerationItem.setFilename(zipFilename);
+            codeGenerationItem.setData(baos.toByteArray());
+        } finally {
+            IOUtils.close(zos);
+        }
+
+        return 0;
+    }
+
+    @Taskable(name = CodeGenerationTaskConstants.GENERATE_UTILITIES_MODULE_FILES_TASK_NAME,
+            description = "Generate Utilities Module Files Task",
+            parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
+                    description = "Code Generation Item", type = CodeGenerationItem.class, mandatory = true) },
+            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+    public int generateUtilitiesModuleFilesTask(TaskMonitor taskMonitor, CodeGenerationItem codeGenerationItem)
+            throws UnifyException {
+        Date now = environment().getNow();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(baos);
+        try {
+            ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
+                    codeGenerationItem.getBasePackage());
+            List<String> moduleList = systemModuleService.getAllModuleNames();
+            for (final String moduleName : moduleList) {
+                addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
+                ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
+                        moduleName, Collections.emptyMap());
+
+                // Generate applications
+                List<Application> applicationList = environment()
+                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM));
+                if (!applicationList.isEmpty()) {
+                    for (Application application : applicationList) {
+                        final String applicationName = application.getName();
+                        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
+                                AppEntity.class);
+                        if (!DataUtils.isBlank(entityIdList)) {
+                            for (Long entityId : entityIdList) {
+                                AppEntity appEntity = applicationModuleService.findAppEntity(entityId);
+                                moduleCtx.addEntity(ApplicationNameUtils.getApplicationEntityLongName(applicationName,
+                                        appEntity.getName()));
+                            }
+                        }
+                    }
+
+                    // Generate entity wrappers
+                    addTaskMessage(taskMonitor, "Generating entity wrapper classes for module [{0}]...", moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-entitywrappers-java-generator");
+                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-entitywrappers-java-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
+                }
+            }
+
+            SimpleDateFormat smf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+            final String filenamePrefix = StringUtils.flatten(getApplicationCode().toLowerCase());
+            String zipFilename = String.format("%s_utilities_%s%s", filenamePrefix, smf.format(now), ".zip");
 
             IOUtils.close(zos);
             codeGenerationItem.setFilename(zipFilename);

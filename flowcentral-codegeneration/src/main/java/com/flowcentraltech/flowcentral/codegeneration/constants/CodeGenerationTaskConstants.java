@@ -26,6 +26,8 @@ public interface CodeGenerationTaskConstants {
 
     String GENERATE_EXTENSION_MODULE_FILES_TASK_NAME = "codegeneration.generateextensionmodulefiles.task";
 
+    String GENERATE_UTILITIES_MODULE_FILES_TASK_NAME = "codegeneration.generateutilitiesmodulefiles.task";
+
     String CODEGENERATION_ITEM = "codeGenerationItem";
 
 }
