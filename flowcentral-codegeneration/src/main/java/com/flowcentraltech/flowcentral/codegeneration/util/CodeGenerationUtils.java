@@ -144,7 +144,7 @@ public final class CodeGenerationUtils {
         TypeInfo baseEntityInfo = new TypeInfo(BaseEntityWrapper.class);
         TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName() + "Wrapper");
         final int index = typeInfo.getPackageName().lastIndexOf('.');
-        final String packageName = typeInfo.getPackageName().substring(0, index) + "entitywrappers";
+        final String packageName = typeInfo.getPackageName().substring(0, index) + ".entitywrappers";
         esb.append("package ").append(packageName).append(";\n");
         List<String> importList = new ArrayList<String>(importSet);
         Collections.sort(importList);
