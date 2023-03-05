@@ -65,8 +65,8 @@ import com.tcdng.unify.core.util.StringUtils;
 public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         implements CodeGenerationModuleService, CodeGenerationProvider {
 
-    private static final List<String> codegenerationAppletList = Collections
-            .unmodifiableList(Arrays.asList("codegeneration.generateStaticFiles"));
+    private static final List<String> codegenerationAppletList = Collections.unmodifiableList(
+            Arrays.asList("codegeneration.generateStaticFiles", "codegeneration.generateStaticUtilitiesFiles"));
 
     @Configurable
     private SystemModuleService systemModuleService;
