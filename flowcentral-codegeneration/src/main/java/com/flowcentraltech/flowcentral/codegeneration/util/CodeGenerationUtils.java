@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseEntityWrapper;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.tcdng.unify.core.UnifyException;
@@ -76,8 +77,12 @@ public final class CodeGenerationUtils {
 
         TypeInfo entityEntityInfo = new TypeInfo(Entity.class);
         TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
+        TypeInfo listEntityInfo = new TypeInfo(List.class);
+        TypeInfo entityClassDefEntityInfo = new TypeInfo(EntityClassDef.class);
         importSet.add(entityEntityInfo.getCanonicalName());
         importSet.add(exceptionEntityInfo.getCanonicalName());
+        importSet.add(listEntityInfo.getCanonicalName());
+        importSet.add(entityClassDefEntityInfo.getCanonicalName());
 
         // Evaluate fields
         Set<String> fieldNames = new HashSet<String>();
@@ -145,6 +150,12 @@ public final class CodeGenerationUtils {
         esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
                 .append(baseEntityInfo.getSimpleName()).append(" {\n");
         esb.append(fsb);
+        esb.append("\tpublic ").append(typeInfo.getSimpleName())
+                .append("(EntityClassDef entityClassDef) throws UnifyException {super(entityClassDef);}\n");
+        esb.append("\tpublic ").append(typeInfo.getSimpleName()).append(
+                "(EntityClassDef entityClassDef, Entity inst) throws UnifyException {super(entityClassDef, inst);}\n");
+        esb.append("\tpublic ").append(typeInfo.getSimpleName()).append(
+                "(EntityClassDef entityClassDef, List<? extends Entity> instList) throws UnifyException {super(entityClassDef, instList);}\n");
         esb.append(msb);
         esb.append("}\n");
         return esb.toString();
