@@ -30,11 +30,9 @@ import com.flowcentraltech.flowcentral.application.entities.BaseEntityWrapper;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.EntityFieldType;
-import com.tcdng.unify.core.database.dynamic.DynamicChildFieldInfo;
-import com.tcdng.unify.core.database.dynamic.DynamicChildListFieldInfo;
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.DynamicFieldInfo;
-import com.tcdng.unify.core.database.dynamic.DynamicForeignKeyFieldInfo;
 import com.tcdng.unify.core.util.SqlUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.core.util.TypeInfo;
@@ -47,7 +45,6 @@ import com.tcdng.unify.core.util.TypeInfo;
  */
 public final class CodeGenerationUtils {
 
-    
     private CodeGenerationUtils() {
 
     }
@@ -77,6 +74,11 @@ public final class CodeGenerationUtils {
         StringBuilder msb = new StringBuilder();
         Set<String> importSet = new HashSet<String>();
 
+        TypeInfo entityEntityInfo = new TypeInfo(Entity.class);
+        TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
+        importSet.add(entityEntityInfo.getCanonicalName());
+        importSet.add(exceptionEntityInfo.getCanonicalName());
+
         // Evaluate fields
         Set<String> fieldNames = new HashSet<String>();
         for (DynamicFieldInfo dynamicFieldInfo : dynamicEntityInfo.getFieldInfos()) {
@@ -91,33 +93,13 @@ public final class CodeGenerationUtils {
             }
 
             final EntityFieldType type = dynamicFieldInfo.getFieldType();
-            String childClass = null;
-            if (type.isForeignKey()) {
-                DynamicForeignKeyFieldInfo fkInfo = (DynamicForeignKeyFieldInfo) dynamicFieldInfo;
-                if (!fkInfo.isEnum()) {
-                    if (!dynamicEntityInfo.getClassName().equals(fkInfo.getParentDynamicEntityInfo().getClassName())) {
-                        importSet.add(fkInfo.getParentDynamicEntityInfo().getClassName());
-                    }
-                }
-            } else if (type.isChild()) {
-                DynamicChildFieldInfo childInfo = (DynamicChildFieldInfo) dynamicFieldInfo;
-                childClass = childInfo.getChildDynamicEntityInfo().getClassName();
-                importSet.add(childClass);
-            } else if (type.isChildList()) {
-                DynamicChildListFieldInfo childListInfo = (DynamicChildListFieldInfo) dynamicFieldInfo;
-                importSet.add(List.class.getCanonicalName());
-                childClass = childListInfo.getChildDynamicEntityInfo().getClassName();
-                importSet.add(childClass);
-            }
-
-            TypeInfo childEntityInfo = childClass != null ? new TypeInfo(childClass) : null;;
             String fieldTypeName = null;
             String actFieldTypeName = null;
             if (type.isChild()) {
-                actFieldTypeName = fieldTypeName = childEntityInfo.getSimpleName();
+                actFieldTypeName = fieldTypeName = entityEntityInfo.getSimpleName();
             } else if (type.isChildList()) {
                 actFieldTypeName = "List";
-                fieldTypeName = "List<" + childEntityInfo.getSimpleName() + ">";
+                fieldTypeName = "List<? extends " + entityEntityInfo.getSimpleName() + ">";
             } else {
                 Class<?> javaClass = dynamicFieldInfo.getDataType().javaClass();
                 if (Date.class.equals(javaClass)) {
@@ -134,14 +116,15 @@ public final class CodeGenerationUtils {
             fsb.append(" public static final String ").append(fieldNameConst).append(" = \"").append(fieldName)
                     .append("\";\n");
 
-            msb.append(" public ").append(fieldTypeName).append(" get").append(capField).append("() {return ")
-                    .append("(").append(fieldTypeName).append(") valueStore.retrieve(").append(actFieldTypeName)
-                    .append(".class, ").append(fieldNameConst).append(");}\n");
-            
+            msb.append(" public ").append(fieldTypeName).append(" get").append(capField)
+                    .append("() throws UnifyException {return ").append("(").append(fieldTypeName)
+                    .append(") valueStore.retrieve(").append(actFieldTypeName).append(".class, ").append(fieldNameConst)
+                    .append(");}\n");
+
             if (!ApplicationEntityUtils.RESERVED_BASE_FIELDS.contains(fieldName)) {
                 msb.append(" public void set").append(capField).append("(").append(fieldTypeName).append(" ")
-                .append(fieldName).append(") {valueStore.store(").append(fieldNameConst).append(",")
-                .append(fieldName).append(");}\n");
+                        .append(fieldName).append(") throws UnifyException {valueStore.store(").append(fieldNameConst)
+                        .append(",").append(fieldName).append(");}\n");
             }
         }
 
