@@ -150,11 +150,11 @@ public final class CodeGenerationUtils {
         esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
                 .append(baseEntityInfo.getSimpleName()).append(" {\n");
         esb.append(fsb);
-        esb.append("\tpublic ").append(typeInfo.getSimpleName())
+        esb.append("public ").append(typeInfo.getSimpleName())
                 .append("(EntityClassDef entityClassDef) throws UnifyException {super(entityClassDef);}\n");
-        esb.append("\tpublic ").append(typeInfo.getSimpleName()).append(
+        esb.append("public ").append(typeInfo.getSimpleName()).append(
                 "(EntityClassDef entityClassDef, Entity inst) throws UnifyException {super(entityClassDef, inst);}\n");
-        esb.append("\tpublic ").append(typeInfo.getSimpleName()).append(
+        esb.append("public ").append(typeInfo.getSimpleName()).append(
                 "(EntityClassDef entityClassDef, List<? extends Entity> instList) throws UnifyException {super(entityClassDef, instList);}\n");
         esb.append(msb);
         esb.append("}\n");
