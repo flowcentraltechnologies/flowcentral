@@ -49,4 +49,10 @@ public final class ApplicationCodeGenUtils {
                 : basePackage + ".extension." + moduleName.toLowerCase() + ".entities."
                         + StringUtils.capitalizeFirstLetter(entityName);
     }
+
+    public static String generateUtilitiesEntityWrapperClassName(String basePackage, String moduleName, String entityName) {
+        return StringUtils.isBlank(entityName) ? null
+                : basePackage + ".utilities." + moduleName.toLowerCase() + ".entitywrappers."
+                        + StringUtils.capitalizeFirstLetter(entityName);
+    }
 }

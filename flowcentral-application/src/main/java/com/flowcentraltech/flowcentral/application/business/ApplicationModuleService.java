@@ -1431,11 +1431,13 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                    the entity names
      * @param basePackage
      *                    the base package
+     * @param extension
+     *                    extension flag
      * @return list of dynamic entity information
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<DynamicEntityInfo> generateDynamicEntityInfos(List<String> entityNames, String basePackage)
+    List<DynamicEntityInfo> generateDynamicEntityInfos(List<String> entityNames, String basePackage, boolean extension)
             throws UnifyException;
 
     /**

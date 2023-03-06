@@ -538,12 +538,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     logDebug("Building dynamic entity information...");
                     Map<String, DynamicEntityInfo> dynamicEntityInfoMap = new HashMap<String, DynamicEntityInfo>();
                     DynamicEntityInfo _originDynamicEntityInfo = buildDynamicEntityInfo(entityDef, dynamicEntityInfoMap,
-                            null);
+                            null, true);
 
                     // Consider all dependants
                     List<String> entityNameList = getAllDependantEntities(longName);
                     for (String entity : entityNameList) {
-                        buildDynamicEntityInfo(getEntityDef(entity), dynamicEntityInfoMap, null);
+                        buildDynamicEntityInfo(getEntityDef(entity), dynamicEntityInfoMap, null, true);
                     }
 
                     // Get entity definitions for type that need to be generated
@@ -2593,12 +2593,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public List<DynamicEntityInfo> generateDynamicEntityInfos(List<String> entityNames, String basePackage)
-            throws UnifyException {
+    public List<DynamicEntityInfo> generateDynamicEntityInfos(List<String> entityNames, String basePackage,
+            boolean extension) throws UnifyException {
         Map<String, DynamicEntityInfo> workingMap = new HashMap<String, DynamicEntityInfo>();
         for (String entityName : entityNames) {
             EntityDef entityDef = getEntityDef(entityName);
-            buildDynamicEntityInfo(entityDef, workingMap, basePackage);
+            buildDynamicEntityInfo(entityDef, workingMap, basePackage, extension);
         }
 
         List<DynamicEntityInfo> resultList = new ArrayList<DynamicEntityInfo>();
@@ -5300,7 +5300,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private DynamicEntityInfo buildDynamicEntityInfo(final EntityDef entityDef,
-            Map<String, DynamicEntityInfo> dynamicEntityInfoMap, String basePackage) throws UnifyException {
+            Map<String, DynamicEntityInfo> dynamicEntityInfoMap, String basePackage, boolean extension)
+            throws UnifyException {
         logDebug("Constructing dynamic information for entity [{0}]...", entityDef.getLongName());
         DynamicEntityInfo _dynamicEntityInfo = dynamicEntityInfoMap.get(entityDef.getLongName());
         if (_dynamicEntityInfo == null) {
@@ -5320,8 +5321,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             if (!DynamicEntityType.INFO_ONLY.equals(dynamicEntityType) && !StringUtils.isBlank(basePackage)) {
                 String moduleName = environment().value(String.class, "moduleName",
                         new ApplicationQuery().name(entityDef.getApplicationName()));
-                className = ApplicationCodeGenUtils.generateExtensionEntityClassName(basePackage, moduleName,
-                        entityDef.getName());
+                className = extension
+                        ? ApplicationCodeGenUtils.generateExtensionEntityClassName(basePackage, moduleName,
+                                entityDef.getName())
+                        : ApplicationCodeGenUtils.generateUtilitiesEntityWrapperClassName(basePackage, moduleName,
+                                basePackage);
             }
 
             // Construct dynamic entity information and load dynamic class
@@ -5348,7 +5352,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 : DynamicFieldType.INFO_ONLY;
                         EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());
                         DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(_refEntityDef,
-                                dynamicEntityInfoMap, basePackage);
+                                dynamicEntityInfoMap, basePackage, extension);
                         if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
                             deib.addChildField(fieldType, _childDynamicEntityInfo, entityFieldDef.getFieldName());
                         } else {// Child list
@@ -5361,7 +5365,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                 entityDef.getLongName() + "." + entityFieldDef.getFieldName());
                         DynamicEntityInfo _refDynamicEntityInfo = entityDef.getLongName()
                                 .equals(_refEntityDef.getLongName()) ? DynamicEntityInfo.SELF_REFERENCE
-                                        : buildDynamicEntityInfo(_refEntityDef, dynamicEntityInfoMap, basePackage);
+                                        : buildDynamicEntityInfo(_refEntityDef, dynamicEntityInfoMap, basePackage,
+                                                extension);
                         deib.addForeignKeyField(type, _refDynamicEntityInfo, entityFieldDef.getColumnName(),
                                 entityFieldDef.getFieldName(), entityFieldDef.getDefaultVal(),
                                 entityFieldDef.isNullable());

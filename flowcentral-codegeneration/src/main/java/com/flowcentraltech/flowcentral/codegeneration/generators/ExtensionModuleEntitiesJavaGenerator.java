@@ -53,7 +53,7 @@ public class ExtensionModuleEntitiesJavaGenerator extends AbstractStaticArtifact
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {
         for (DynamicEntityInfo dynamicEntityInfo : applicationModuleService
-                .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage())) {
+                .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage(), true)) {
             TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName());
             final String filename = typeInfo.getSimpleName() + ".java";
             openEntry(filename, zos);

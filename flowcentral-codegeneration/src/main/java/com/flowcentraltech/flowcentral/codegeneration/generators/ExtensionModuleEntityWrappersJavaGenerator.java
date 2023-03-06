@@ -53,7 +53,7 @@ public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractStaticAr
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {
         for (DynamicEntityInfo dynamicEntityInfo : applicationModuleService
-                .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage())) {
+                .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage(), false)) {
             TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName());
             final String filename = typeInfo.getSimpleName() + "Wrapper.java";
             openEntry(filename, zos);
