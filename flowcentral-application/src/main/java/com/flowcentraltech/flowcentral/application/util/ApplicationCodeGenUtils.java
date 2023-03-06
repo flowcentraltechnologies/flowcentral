@@ -28,6 +28,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationCodeGenUtils {
 
+    public static final String ENTITY_NAME = "__ENTITY_NAME";
+
     private ApplicationCodeGenUtils() {
 
     }

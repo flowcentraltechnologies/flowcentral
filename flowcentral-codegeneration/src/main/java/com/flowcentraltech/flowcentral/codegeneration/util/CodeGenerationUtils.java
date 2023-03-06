@@ -28,6 +28,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseEntityWrapper;
+import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.EntityFieldType;
@@ -68,8 +69,7 @@ public final class CodeGenerationUtils {
         return replacements;
     }
 
-    public static String generateEntityWrapperJavaClassSource(DynamicEntityInfo dynamicEntityInfo)
-            throws UnifyException {
+    public static String generateEntityWrapperJavaClassSource(DynamicEntityInfo dynamicEntityInfo) throws UnifyException {
         StringBuilder esb = new StringBuilder();
         StringBuilder fsb = new StringBuilder();
         StringBuilder msb = new StringBuilder();
@@ -149,6 +149,8 @@ public final class CodeGenerationUtils {
 
         esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
                 .append(baseEntityInfo.getSimpleName()).append(" {\n");
+        esb.append("public static final String ").append(ApplicationCodeGenUtils.ENTITY_NAME).append(" = \"")
+                .append(dynamicEntityInfo.getAlias()).append("\";\n");
         esb.append(fsb);
         esb.append("public ").append(typeInfo.getSimpleName())
                 .append("(EntityClassDef entityClassDef) throws UnifyException {super(entityClassDef);}\n");

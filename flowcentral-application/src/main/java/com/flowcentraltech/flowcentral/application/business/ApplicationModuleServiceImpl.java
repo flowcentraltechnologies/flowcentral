@@ -328,8 +328,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private final Set<String> RESERVED_ENTITIES = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("application.propertyItem", "application.usage")));
 
-    private static final String ENTITY_NAME = "__ENTITY_NAME";
-
     private static final int MAX_LIST_DEPTH = 8;
 
     @Configurable
@@ -1252,21 +1250,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, entityClassDef);
     }
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_1, entityClassDef, inst);
     }
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, List<? extends Entity> instList) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_2, entityClassDef, instList);
     }
@@ -1274,7 +1272,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @SuppressWarnings("unchecked")
     @Override
     public Query<? extends Entity> queryOf(Class<? extends EntityWrapper> wrapperType) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
     }
@@ -2605,6 +2603,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         for (String entityName : entityNames) {
             DynamicEntityInfo info = workingMap.get(entityName);
             info.finalizeResolution();
+            info.setAlias(entityName);
             resultList.add(info);
         }
         return resultList;
