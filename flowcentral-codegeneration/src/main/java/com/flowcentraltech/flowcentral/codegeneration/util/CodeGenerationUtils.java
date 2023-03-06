@@ -47,6 +47,14 @@ import com.tcdng.unify.core.util.TypeInfo;
  */
 public final class CodeGenerationUtils {
 
+    private static final Set<String> RESERVED_BASE_FIELDS;
+
+    static {
+        Set<String> reserved = new HashSet<String>(ApplicationEntityUtils.RESERVED_BASE_FIELDS);
+        reserved.remove("id");
+        RESERVED_BASE_FIELDS = Collections.unmodifiableSet(reserved);
+    }
+
     private CodeGenerationUtils() {
 
     }
@@ -69,7 +77,8 @@ public final class CodeGenerationUtils {
         return replacements;
     }
 
-    public static String generateEntityWrapperJavaClassSource(DynamicEntityInfo dynamicEntityInfo) throws UnifyException {
+    public static String generateEntityWrapperJavaClassSource(DynamicEntityInfo dynamicEntityInfo)
+            throws UnifyException {
         StringBuilder esb = new StringBuilder();
         StringBuilder fsb = new StringBuilder();
         StringBuilder msb = new StringBuilder();
@@ -126,7 +135,7 @@ public final class CodeGenerationUtils {
                     .append(") valueStore.retrieve(").append(actFieldTypeName).append(".class, ").append(fieldNameConst)
                     .append(");}\n");
 
-            if (!ApplicationEntityUtils.RESERVED_BASE_FIELDS.contains(fieldName)) {
+            if (!RESERVED_BASE_FIELDS.contains(fieldName)) {
                 msb.append(" public void set").append(capField).append("(").append(fieldTypeName).append(" ")
                         .append(fieldName).append(") throws UnifyException {valueStore.store(").append(fieldNameConst)
                         .append(",").append(fieldName).append(");}\n");
