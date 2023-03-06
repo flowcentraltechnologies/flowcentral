@@ -28,6 +28,8 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationCodeGenUtils {
 
+    public static final String ENTITY_NAME = "__ENTITY_NAME";
+
     private ApplicationCodeGenUtils() {
 
     }
@@ -47,6 +49,12 @@ public final class ApplicationCodeGenUtils {
     public static String generateExtensionEntityClassName(String basePackage, String moduleName, String entityName) {
         return StringUtils.isBlank(entityName) ? null
                 : basePackage + ".extension." + moduleName.toLowerCase() + ".entities."
+                        + StringUtils.capitalizeFirstLetter(entityName);
+    }
+
+    public static String generateUtilitiesEntityWrapperClassName(String basePackage, String moduleName, String entityName) {
+        return StringUtils.isBlank(entityName) ? null
+                : basePackage + ".utilities." + moduleName.toLowerCase() + ".entitywrappers."
                         + StringUtils.capitalizeFirstLetter(entityName);
     }
 }

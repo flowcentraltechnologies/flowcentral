@@ -16,11 +16,28 @@
 
 package com.flowcentraltech.flowcentral.codegeneration.util;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.entities.BaseEntityWrapper;
+import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.EntityFieldType;
+import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
+import com.tcdng.unify.core.database.dynamic.DynamicFieldInfo;
+import com.tcdng.unify.core.util.SqlUtils;
 import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.core.util.TypeInfo;
 
 /**
  * Code generation utilities.
@@ -45,10 +62,104 @@ public final class CodeGenerationUtils {
                     replacements.put(replacement[0], replacement[1]);
                 }
             }
-            
+
             replacements = Collections.unmodifiableMap(replacements);
         }
 
         return replacements;
+    }
+
+    public static String generateEntityWrapperJavaClassSource(DynamicEntityInfo dynamicEntityInfo) throws UnifyException {
+        StringBuilder esb = new StringBuilder();
+        StringBuilder fsb = new StringBuilder();
+        StringBuilder msb = new StringBuilder();
+        Set<String> importSet = new HashSet<String>();
+
+        TypeInfo entityEntityInfo = new TypeInfo(Entity.class);
+        TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
+        TypeInfo listEntityInfo = new TypeInfo(List.class);
+        TypeInfo entityClassDefEntityInfo = new TypeInfo(EntityClassDef.class);
+        importSet.add(entityEntityInfo.getCanonicalName());
+        importSet.add(exceptionEntityInfo.getCanonicalName());
+        importSet.add(listEntityInfo.getCanonicalName());
+        importSet.add(entityClassDefEntityInfo.getCanonicalName());
+
+        // Evaluate fields
+        Set<String> fieldNames = new HashSet<String>();
+        for (DynamicFieldInfo dynamicFieldInfo : dynamicEntityInfo.getFieldInfos()) {
+            final String fieldName = dynamicFieldInfo.getFieldName();
+            final String capField = StringUtils.capitalizeFirstLetter(fieldName);
+            fieldNames.add(fieldName);
+
+            TypeInfo enumEntityInfo = null;
+            if (dynamicFieldInfo.isEnum()) {
+                enumEntityInfo = new TypeInfo(dynamicFieldInfo.getEnumClassName());
+                importSet.add(dynamicFieldInfo.getEnumClassName());
+            }
+
+            final EntityFieldType type = dynamicFieldInfo.getFieldType();
+            String fieldTypeName = null;
+            String actFieldTypeName = null;
+            if (type.isChild()) {
+                actFieldTypeName = fieldTypeName = entityEntityInfo.getSimpleName();
+            } else if (type.isChildList()) {
+                actFieldTypeName = "List";
+                fieldTypeName = "List<? extends " + entityEntityInfo.getSimpleName() + ">";
+            } else {
+                Class<?> javaClass = dynamicFieldInfo.getDataType().javaClass();
+                if (Date.class.equals(javaClass)) {
+                    importSet.add(Date.class.getCanonicalName());
+                } else if (BigDecimal.class.equals(javaClass)) {
+                    importSet.add(BigDecimal.class.getCanonicalName());
+                }
+
+                actFieldTypeName = fieldTypeName = enumEntityInfo != null ? enumEntityInfo.getSimpleName()
+                        : javaClass.getSimpleName();
+            }
+
+            final String fieldNameConst = SqlUtils.generateSchemaElementName(fieldName, true);
+            fsb.append(" public static final String ").append(fieldNameConst).append(" = \"").append(fieldName)
+                    .append("\";\n");
+
+            msb.append(" public ").append(fieldTypeName).append(" get").append(capField)
+                    .append("() throws UnifyException {return ").append("(").append(fieldTypeName)
+                    .append(") valueStore.retrieve(").append(actFieldTypeName).append(".class, ").append(fieldNameConst)
+                    .append(");}\n");
+
+            if (!ApplicationEntityUtils.RESERVED_BASE_FIELDS.contains(fieldName)) {
+                msb.append(" public void set").append(capField).append("(").append(fieldTypeName).append(" ")
+                        .append(fieldName).append(") throws UnifyException {valueStore.store(").append(fieldNameConst)
+                        .append(",").append(fieldName).append(");}\n");
+            }
+        }
+
+        // Construct class
+        TypeInfo baseEntityInfo = new TypeInfo(BaseEntityWrapper.class);
+        TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName() + "Wrapper");
+        final int index = typeInfo.getPackageName().lastIndexOf('.');
+        final String packageName = typeInfo.getPackageName().substring(0, index) + ".entitywrappers";
+        esb.append("package ").append(packageName).append(";\n");
+        List<String> importList = new ArrayList<String>(importSet);
+        Collections.sort(importList);
+        for (String imprt : importList) {
+            esb.append("import ").append(imprt).append(";\n");
+        }
+
+        esb.append("import ").append(baseEntityInfo.getCanonicalName()).append(";\n");
+
+        esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
+                .append(baseEntityInfo.getSimpleName()).append(" {\n");
+        esb.append("public static final String ").append(ApplicationCodeGenUtils.ENTITY_NAME).append(" = \"")
+                .append(dynamicEntityInfo.getAlias()).append("\";\n");
+        esb.append(fsb);
+        esb.append("public ").append(typeInfo.getSimpleName())
+                .append("(EntityClassDef entityClassDef) throws UnifyException {super(entityClassDef);}\n");
+        esb.append("public ").append(typeInfo.getSimpleName()).append(
+                "(EntityClassDef entityClassDef, Entity inst) throws UnifyException {super(entityClassDef, inst);}\n");
+        esb.append("public ").append(typeInfo.getSimpleName()).append(
+                "(EntityClassDef entityClassDef, List<? extends Entity> instList) throws UnifyException {super(entityClassDef, instList);}\n");
+        esb.append(msb);
+        esb.append("}\n");
+        return esb.toString();
     }
 }

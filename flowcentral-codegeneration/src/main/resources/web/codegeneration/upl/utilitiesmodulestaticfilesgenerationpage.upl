@@ -1,0 +1,44 @@
+// UPL template for static files generation page.
+// Copyright 2021-2022 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!ui-page caption:$m{utilitiesmodulestaticfilesgenerationpage.title} components:$c{basePanel}
+
+// Base panel
+!ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
+	components:$c{headerBar generationPanel}
+
+// Header
+!ui-panel:headerBar layout:$d{!ui-horizontal style:$s{width:100%;} cellType:bottom}
+	components:$c{generateLabel} 
+	
+!ui-label:generateLabel styleClass:$e{fc-largelabel}
+	caption:$m{utilitiesmodulestaticfilesgenerationpage.header.title}
+
+// Generation panel
+!ui-panel:generationPanel styleClass:$e{fc-licenseoptions}
+	components:$c{generationCaption generationBodyPanel}
+!ui-label:generationCaption styleClass:$e{label}
+	caption:$m{utilitiesmodulestaticfilesgenerationpage.generationdetails.caption}
+!ui-panel:generationBodyPanel
+	layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
+	components:$c{frmBasePackage generateBtn}	
+!ui-name:frmBasePackage caption:$m{utilitiesmodulestaticfilesgeneration.form.basepackage}
+	period:true case:lower binding:basePackage required:true size:48
+!ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.generate}
+	eventHandler:$d{!ui-event event:onclick action:$c{generateAct}}
+	
+// Actions
+!ui-post:generateAct path:$n{/generateStaticFiles} components:$c{generationBodyPanel}
+	

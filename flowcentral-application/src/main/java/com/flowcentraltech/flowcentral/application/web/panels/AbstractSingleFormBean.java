@@ -16,12 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
@@ -34,10 +30,6 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 public abstract class AbstractSingleFormBean implements SingleFormBean {
-
-    private final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(
-            new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
-                    "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     private AppletUtilities au;
 
@@ -68,7 +60,7 @@ public abstract class AbstractSingleFormBean implements SingleFormBean {
     }
 
     protected void copyTo(ValueStore entityValueStore) throws UnifyException {
-        entityValueStore.copyWithExclusions(getValueStore(), RESERVED_BASE_FIELDS);
+        entityValueStore.copyWithExclusions(getValueStore(), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
     }
 
     protected ValueStore getValueStore() {

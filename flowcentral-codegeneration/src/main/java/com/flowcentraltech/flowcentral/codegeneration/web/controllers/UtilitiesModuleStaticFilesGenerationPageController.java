@@ -34,21 +34,21 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 
 /**
- * Extension module static files generation page controller.
+ * Utilities module static files generation page controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/codegeneration/extensionmodulestaticfilesgeneration")
-@UplBinding("web/codegeneration/upl/extensionmodulestaticfilesgenerationpage.upl")
-public class ExtensionModuleStaticFilesGenerationPageController
-        extends AbstractCodeGenerationPageController<ExtensionModuleStaticFilesGenerationPageBean> {
+@Component("/codegeneration/utilitiesmodulestaticfilesgeneration")
+@UplBinding("web/codegeneration/upl/utilitiesmodulestaticfilesgenerationpage.upl")
+public class UtilitiesModuleStaticFilesGenerationPageController
+        extends AbstractCodeGenerationPageController<UtilitiesModuleStaticFilesGenerationPageBean> {
 
     @Configurable
     private SystemModuleService systemModuleService;
 
-    public ExtensionModuleStaticFilesGenerationPageController() {
-        super(ExtensionModuleStaticFilesGenerationPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    public UtilitiesModuleStaticFilesGenerationPageController() {
+        super(UtilitiesModuleStaticFilesGenerationPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
     public final void setSystemModuleService(SystemModuleService systemModuleService) {
@@ -57,19 +57,19 @@ public class ExtensionModuleStaticFilesGenerationPageController
 
     @Action
     public String generateStaticFiles() throws UnifyException {
-        ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();
+        UtilitiesModuleStaticFilesGenerationPageBean pageBean = getPageBean();
         pageBean.setCodeGenerationItem(new CodeGenerationItem(pageBean.getBasePackage()));
         TaskSetup taskSetup = TaskSetup.newBuilder()
-                .addTask(CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME)
+                .addTask(CodeGenerationTaskConstants.GENERATE_UTILITIES_MODULE_FILES_TASK_NAME)
                 .setParam(CodeGenerationTaskConstants.CODEGENERATION_ITEM, pageBean.getCodeGenerationItem())
                 .logMessages().build();
-        return launchTaskWithMonitorBox(taskSetup, "Generate Static Application Files (Extension)",
-                "/codegeneration/extensionmodulestaticfilesgeneration/downloadGeneratedFile", null);
+        return launchTaskWithMonitorBox(taskSetup, "Generate Static Application Files (Utilities)",
+                "/codegeneration/utilitiesmodulestaticfilesgeneration/downloadGeneratedFile", null);
     }
 
     @Action
     public String downloadGeneratedFile() throws UnifyException {
-        ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();
+        UtilitiesModuleStaticFilesGenerationPageBean pageBean = getPageBean();
         CodeGenerationItem codeGenerationItem = pageBean.getCodeGenerationItem();
         DownloadFile downloadFile = new DownloadFile(MimeType.APPLICATION_OCTETSTREAM, codeGenerationItem.getFilename(),
                 codeGenerationItem.getData());
@@ -80,7 +80,7 @@ public class ExtensionModuleStaticFilesGenerationPageController
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-        ExtensionModuleStaticFilesGenerationPageBean pageBean = getPageBean();
+        UtilitiesModuleStaticFilesGenerationPageBean pageBean = getPageBean();
         if (StringUtils.isBlank(pageBean.getBasePackage())) {
             String defaultBasePackage = systemModuleService.getSysParameterValue(String.class,
                     CodeGenerationModuleSysParamConstants.DEFAULT_CODEGEN_PACKAGE_BASE);

@@ -71,6 +71,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppWidgetTypeQuery;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -86,6 +87,7 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 
 /**
@@ -95,6 +97,56 @@ import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
  * @since 1.0
  */
 public interface ApplicationModuleService extends FlowCentralService {
+
+    /**
+     * Creates a wrapper instance initialized with a new instance of wrapped entity
+     * type.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
+
+    /**
+     * Creates a wrapper instance initialized with the supplied entity instance.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @param inst
+     *                    the entity inst
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException;
+
+    /**
+     * Creates a wrapper instance initialized with the supplied entity instance
+     * list.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @param instList
+     *                    the entity inst list
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, List<? extends Entity> instList) throws UnifyException;
+
+    /**
+     * Creates query of wrapper entity type.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @return the query object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Query<? extends Entity> queryOf(Class<? extends EntityWrapper> wrapperType) throws UnifyException;
 
     /**
      * Gets filter group definition for applet.
@@ -135,7 +187,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * Checks if application is developable.
      * 
      * @param applicationName
-     *                      the application name
+     *                        the application name
      * @return true if application is developable
      * @throws UnifyException
      *                        if an error occurs
@@ -1239,7 +1291,6 @@ public interface ApplicationModuleService extends FlowCentralService {
     void saveParamValuesDef(SweepingCommitPolicy sweepingCommitPolicy, String category, String ownerEntityName,
             Long ownerInstId, ParamValuesDef paramValuesDef) throws UnifyException;
 
-
     /**
      * Retrieves application search inputs definition for an entity instance.
      * 
@@ -1380,11 +1431,13 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                    the entity names
      * @param basePackage
      *                    the base package
+     * @param extension
+     *                    extension flag
      * @return list of dynamic entity information
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<DynamicEntityInfo> generateDynamicEntityInfos(List<String> entityNames, String basePackage)
+    List<DynamicEntityInfo> generateDynamicEntityInfos(List<String> entityNames, String basePackage, boolean extension)
             throws UnifyException;
 
     /**

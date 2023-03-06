@@ -22,27 +22,27 @@ import java.io.OutputStreamWriter;
 import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.codegeneration.util.CodeGenerationUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
-import com.tcdng.unify.core.util.DynamicEntityUtils;
 import com.tcdng.unify.core.util.TypeInfo;
 
 /**
- * Extension module entities Java class generator.
+ * Extension module entity wrappers Java class generator.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("extension-module-entities-java-generator")
-public class ExtensionModuleEntitiesJavaGenerator extends AbstractStaticArtifactGenerator {
+@Component("extension-module-entitywrappers-java-generator")
+public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractStaticArtifactGenerator {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
-    public ExtensionModuleEntitiesJavaGenerator() {
-        super("src/main/java/{0}/extension/{1}/entities/");
+    public ExtensionModuleEntityWrappersJavaGenerator() {
+        super("src/main/java/{0}/utilities/{1}/entitywrappers/");
     }
 
     public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
@@ -53,13 +53,13 @@ public class ExtensionModuleEntitiesJavaGenerator extends AbstractStaticArtifact
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {
         for (DynamicEntityInfo dynamicEntityInfo : applicationModuleService
-                .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage(), true)) {
+                .generateDynamicEntityInfos(ctx.getEntityList(), ctx.getBasePackage(), false)) {
             TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName());
-            final String filename = typeInfo.getSimpleName() + ".java";
+            final String filename = typeInfo.getSimpleName() + "Wrapper.java";
             openEntry(filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
-                String src = DynamicEntityUtils.generateEntityJavaClassSource(dynamicEntityInfo);
+                String src = CodeGenerationUtils.generateEntityWrapperJavaClassSource(dynamicEntityInfo);
                 bw.write(src);
                 bw.newLine();
                 bw.flush();
