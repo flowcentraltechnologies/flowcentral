@@ -1251,21 +1251,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private static final Class<?>[] WRAPPER_PARAMS_2 = { EntityClassDef.class, List.class };
 
     @Override
-    public <T extends EntityWrapper> T wrapper(Class<T> wrapperType) throws UnifyException {
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException {
         final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, entityClassDef);
     }
 
     @Override
-    public <T extends EntityWrapper> T wrapper(Class<T> wrapperType, Entity inst) throws UnifyException {
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException {
         final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_1, entityClassDef, inst);
     }
 
     @Override
-    public <T extends EntityWrapper> T wrapper(Class<T> wrapperType, List<Entity> instList) throws UnifyException {
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, List<? extends Entity> instList) throws UnifyException {
         final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_2, entityClassDef, instList);

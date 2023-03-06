@@ -108,7 +108,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends EntityWrapper> T wrapper(Class<T> wrapperType) throws UnifyException;
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
 
     /**
      * Creates a wrapper instance initialized with the supplied entity instance.
@@ -121,7 +121,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends EntityWrapper> T wrapper(Class<T> wrapperType, Entity inst) throws UnifyException;
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException;
 
     /**
      * Creates a wrapper instance initialized with the supplied entity instance
@@ -135,7 +135,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends EntityWrapper> T wrapper(Class<T> wrapperType, List<Entity> instList) throws UnifyException;
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, List<? extends Entity> instList) throws UnifyException;
 
     /**
      * Creates query of wrapper entity type.
