@@ -5325,7 +5325,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         ? ApplicationCodeGenUtils.generateExtensionEntityClassName(basePackage, moduleName,
                                 entityDef.getName())
                         : ApplicationCodeGenUtils.generateUtilitiesEntityWrapperClassName(basePackage, moduleName,
-                                basePackage);
+                                entityDef.getName());
             }
 
             // Construct dynamic entity information and load dynamic class
