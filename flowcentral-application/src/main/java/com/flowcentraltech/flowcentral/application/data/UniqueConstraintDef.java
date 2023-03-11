@@ -61,10 +61,4 @@ public class UniqueConstraintDef {
         return caseInsensitive;
     }
 
-    @Override
-    public String toString() {
-        return "UniqueConstraintDef [name=" + name + ", description=" + description + ", fieldList=" + fieldList
-                + ", caseInsensitive=" + caseInsensitive + "]";
-    }
-
 }
