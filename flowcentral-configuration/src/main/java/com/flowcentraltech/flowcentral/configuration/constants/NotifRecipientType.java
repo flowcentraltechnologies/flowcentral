@@ -30,7 +30,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  */
 @Table("FC_NOTIFRECIPIENTTYPE")
 @StaticList(name = "notificationrecipienttypelist", description = "$m{staticlist.notificationrecipienttypelist}")
-public enum NotificationRecipientType implements EnumConst {
+public enum NotifRecipientType implements EnumConst {
 
     TO(
             "TO",
@@ -46,7 +46,7 @@ public enum NotificationRecipientType implements EnumConst {
 
     private final EmailRecipient.TYPE emailRecipientType;
 
-    private NotificationRecipientType(String code, EmailRecipient.TYPE emailRecipientType) {
+    private NotifRecipientType(String code, EmailRecipient.TYPE emailRecipientType) {
         this.code = code;
         this.emailRecipientType = emailRecipientType;
     }
@@ -65,11 +65,11 @@ public enum NotificationRecipientType implements EnumConst {
         return emailRecipientType;
     }
 
-    public static NotificationRecipientType fromCode(String code) {
-        return EnumUtils.fromCode(NotificationRecipientType.class, code);
+    public static NotifRecipientType fromCode(String code) {
+        return EnumUtils.fromCode(NotifRecipientType.class, code);
     }
 
-    public static NotificationRecipientType fromName(String name) {
-        return EnumUtils.fromName(NotificationRecipientType.class, name);
+    public static NotifRecipientType fromName(String name) {
+        return EnumUtils.fromName(NotifRecipientType.class, name);
     }
 }

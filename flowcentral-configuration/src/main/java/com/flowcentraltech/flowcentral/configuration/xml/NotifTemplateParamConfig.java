@@ -13,21 +13,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
-import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
+package com.flowcentraltech.flowcentral.configuration.xml;
+
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * Notification type XML adapter.
+ * Notification template parameter configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationTypeXmlAdapter extends AbstractEnumConstXmlAdapter<NotifType> {
+public class NotifTemplateParamConfig {
 
-    public NotificationTypeXmlAdapter() {
-        super(NotifType.class);
+    private String name;
+
+    private String label;
+
+    public String getName() {
+        return name;
     }
+
+    @XmlAttribute(required = true)
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    @XmlAttribute(required = true)
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
 
 }

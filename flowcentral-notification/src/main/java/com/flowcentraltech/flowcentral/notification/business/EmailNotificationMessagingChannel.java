@@ -18,11 +18,11 @@ package com.flowcentraltech.flowcentral.notification.business;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationHostServerConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelDef;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -48,7 +48,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     }
 
     @Override
-    public boolean sendMessage(NotificationChannelDef notifChannelDef, NotificationChannelMessage notifChannelMessage) {
+    public boolean sendMessage(NotifChannelDef notifChannelDef, NotifMessage notifChannelMessage) {
         try {
             ensureServerConfigured(notifChannelDef);
             Email email = conctructEmail(notifChannelDef, notifChannelMessage);
@@ -63,8 +63,8 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     }
 
     @Override
-    public void sendMessages(NotificationChannelDef notifChannelDef,
-            NotificationChannelMessage... notifChannelMessages) {
+    public void sendMessages(NotifChannelDef notifChannelDef,
+            NotifMessage... notifChannelMessages) {
         try {
             ensureServerConfigured(notifChannelDef);
             Email[] email = new Email[notifChannelMessages.length];
@@ -82,7 +82,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         }
     }
 
-    private void ensureServerConfigured(NotificationChannelDef notifChannelDef) throws UnifyException {
+    private void ensureServerConfigured(NotifChannelDef notifChannelDef) throws UnifyException {
         final String configCode = notifChannelDef.getName();
         if (!notifChannelDef.isChannelConfigured() || !emailServer.isConfigured(configCode)) {
             EmailServerConfig emailServerConfig = EmailServerConfig.newBuilder()
@@ -102,7 +102,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         }
     }
 
-    private Email conctructEmail(NotificationChannelDef notifChannelDef, NotificationChannelMessage notifChannelMessage)
+    private Email conctructEmail(NotifChannelDef notifChannelDef, NotifMessage notifChannelMessage)
             throws UnifyException {
         Email.Builder eb = Email.newBuilder();
         for (Recipient recipient : notifChannelMessage.getRecipients()) {
@@ -111,7 +111,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
 
         eb.fromSender(notifChannelDef.getSenderContact()).withSubject(notifChannelMessage.getSubject())
                 .containingMessage(notifChannelMessage.getBody())
-                .asHTML(NotificationMessageFormat.HTML.equals(notifChannelMessage.getFormat()));
+                .asHTML(NotifMessageFormat.HTML.equals(notifChannelMessage.getFormat()));
 
         for (Attachment attachment : notifChannelMessage.getAttachments()) {
             eb.withAttachment(attachment.getFileName(), attachment.getData(), attachment.getType());

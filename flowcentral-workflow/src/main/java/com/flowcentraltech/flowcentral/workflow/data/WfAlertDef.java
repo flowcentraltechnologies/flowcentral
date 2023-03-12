@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.workflow.data;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -30,7 +30,7 @@ public class WfAlertDef {
 
     private WorkflowAlertType type;
 
-    private NotificationType notificationType;
+    private NotifType notifType;
 
     private String name;
 
@@ -48,11 +48,11 @@ public class WfAlertDef {
 
     private String fireOnCondition;
 
-    public WfAlertDef(WorkflowAlertType type, NotificationType notificationType, String name, String description,
+    public WfAlertDef(WorkflowAlertType type, NotifType notifType, String name, String description,
             String recipientPolicy, String recipientNameRule, String recipientContactRule, String template,
             String fireOnPrevStepName, String fireOnCondition) {
         this.type = type;
-        this.notificationType = notificationType;
+        this.notifType = notifType;
         this.name = name;
         this.description = description;
         this.recipientPolicy = recipientPolicy;
@@ -67,8 +67,8 @@ public class WfAlertDef {
         return type;
     }
 
-    public NotificationType getNotificationType() {
-        return notificationType;
+    public NotifType getNotificationType() {
+        return notifType;
     }
 
     public String getName() {
@@ -133,7 +133,7 @@ public class WfAlertDef {
 
     @Override
     public String toString() {
-        return "WfAlertDef [type=" + type + ", notificationType=" + notificationType + ", name=" + name
+        return "WfAlertDef [type=" + type + ", notificationType=" + notifType + ", name=" + name
                 + ", description=" + description + ", recipientPolicy=" + recipientPolicy + ", template=" + template
                 + ", fireOnPrevStepName=" + fireOnPrevStepName + ", fireOnCondition=" + fireOnCondition + "]";
     }

@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.notification.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionTenantEntity;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationRecipientType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -35,7 +35,7 @@ public class NotificationRecipient extends BaseVersionTenantEntity {
     private Long notificationId;
 
     @ForeignKey
-    private NotificationRecipientType type;
+    private NotifRecipientType type;
 
     @Column(length = 64)
     private String recipientName;
@@ -75,11 +75,11 @@ public class NotificationRecipient extends BaseVersionTenantEntity {
         this.recipientContact = recipientContact;
     }
 
-    public NotificationRecipientType getType() {
+    public NotifRecipientType getType() {
         return type;
     }
 
-    public void setType(NotificationRecipientType type) {
+    public void setType(NotifRecipientType type) {
         this.type = type;
     }
 

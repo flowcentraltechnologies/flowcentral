@@ -15,9 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationMessageFormat;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -34,10 +37,10 @@ import com.tcdng.unify.core.annotation.Table;
 public class NotificationTemplate extends BaseApplicationEntity {
 
     @ForeignKey
-    private NotificationType notificationType;
+    private NotifType notificationType;
 
     @ForeignKey
-    private NotificationMessageFormat messageFormat;
+    private NotifMessageFormat messageFormat;
 
     @Column(length = 128)
     private String entity;
@@ -48,8 +51,8 @@ public class NotificationTemplate extends BaseApplicationEntity {
     @Column(type = ColumnType.CLOB)
     private String template;
 
-    @Column(length = 64, nullable = true)
-    private String attachmentGenerator;
+    @ChildList
+    private List<NotificationTemplateParam> paramList;
 
     @ListOnly(key = "notificationType", property = "description")
     private String notificationTypeDesc;
@@ -57,11 +60,11 @@ public class NotificationTemplate extends BaseApplicationEntity {
     @ListOnly(key = "messageFormat", property = "description")
     private String messageFormatDesc;
 
-    public NotificationType getNotificationType() {
+    public NotifType getNotificationType() {
         return notificationType;
     }
 
-    public void setNotificationType(NotificationType notificationType) {
+    public void setNotificationType(NotifType notificationType) {
         this.notificationType = notificationType;
     }
 
@@ -69,8 +72,8 @@ public class NotificationTemplate extends BaseApplicationEntity {
         return notificationTypeDesc;
     }
 
-    public void setNotificationTypeDesc(String notificationDesc) {
-        this.notificationTypeDesc = notificationDesc;
+    public void setNotificationTypeDesc(String notificationTypeDesc) {
+        this.notificationTypeDesc = notificationTypeDesc;
     }
 
     public String getEntity() {
@@ -97,19 +100,11 @@ public class NotificationTemplate extends BaseApplicationEntity {
         this.template = template;
     }
 
-    public String getAttachmentGenerator() {
-        return attachmentGenerator;
-    }
-
-    public void setAttachmentGenerator(String attachmentGenerator) {
-        this.attachmentGenerator = attachmentGenerator;
-    }
-
-    public NotificationMessageFormat getMessageFormat() {
+    public NotifMessageFormat getMessageFormat() {
         return messageFormat;
     }
 
-    public void setMessageFormat(NotificationMessageFormat messageFormat) {
+    public void setMessageFormat(NotifMessageFormat messageFormat) {
         this.messageFormat = messageFormat;
     }
 
@@ -119,6 +114,14 @@ public class NotificationTemplate extends BaseApplicationEntity {
 
     public void setMessageFormatDesc(String messageFormatDesc) {
         this.messageFormatDesc = messageFormatDesc;
+    }
+
+    public List<NotificationTemplateParam> getParamList() {
+        return paramList;
+    }
+
+    public void setParamList(List<NotificationTemplateParam> paramList) {
+        this.paramList = paramList;
     }
 
 }

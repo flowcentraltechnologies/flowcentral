@@ -68,7 +68,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicatio
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -1277,7 +1277,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         if (!DataUtils.isBlank(recipientList)) {
-            NotificationChannelMessage ncm = notificationModuleService.constructNotificationChannelMessage(tenantId,
+            NotifMessage ncm = notificationModuleService.constructNotificationChannelMessage(tenantId,
                     wfAlertDef.getTemplate(), transitionItem.getWfInstValueStore(), recipientList);
             notificationModuleService.sendNotification(ncm);
         }

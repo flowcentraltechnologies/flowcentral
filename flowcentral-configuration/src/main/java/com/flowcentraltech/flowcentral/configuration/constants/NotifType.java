@@ -28,7 +28,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  */
 @Table("FC_NOTIFICATIONTYPE")
 @StaticList(name = "notificationtypelist", description = "$m{staticlist.notificationtypelist}")
-public enum NotificationType implements EnumConst {
+public enum NotifType implements EnumConst {
 
     SYSTEM(
             "SYS"),
@@ -39,7 +39,7 @@ public enum NotificationType implements EnumConst {
 
     private final String code;
 
-    private NotificationType(String code) {
+    private NotifType(String code) {
         this.code = code;
     }
 
@@ -53,11 +53,11 @@ public enum NotificationType implements EnumConst {
         return SYSTEM.code;
     }
 
-    public static NotificationType fromCode(String code) {
-        return EnumUtils.fromCode(NotificationType.class, code);
+    public static NotifType fromCode(String code) {
+        return EnumUtils.fromCode(NotifType.class, code);
     }
 
-    public static NotificationType fromName(String name) {
-        return EnumUtils.fromName(NotificationType.class, name);
+    public static NotifType fromName(String name) {
+        return EnumUtils.fromName(NotifType.class, name);
     }
 }

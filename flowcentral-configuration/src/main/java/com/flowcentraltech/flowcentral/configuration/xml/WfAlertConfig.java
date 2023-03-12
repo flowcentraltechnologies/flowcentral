@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.NotificationTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowAlertTypeXmlAdapter;
@@ -34,7 +34,7 @@ public class WfAlertConfig extends BaseNameConfig {
 
     private WorkflowAlertType type;
 
-    private NotificationType notificationType;
+    private NotifType notifType;
 
     private String recipientPolicy;
 
@@ -58,14 +58,14 @@ public class WfAlertConfig extends BaseNameConfig {
         this.type = type;
     }
 
-    public NotificationType getNotificationType() {
-        return notificationType;
+    public NotifType getNotificationType() {
+        return notifType;
     }
 
     @XmlJavaTypeAdapter(NotificationTypeXmlAdapter.class)
     @XmlAttribute(name = "channel", required = true)
-    public void setNotificationType(NotificationType notificationType) {
-        this.notificationType = notificationType;
+    public void setNotificationType(NotifType notifType) {
+        this.notifType = notifType;
     }
 
     public String getRecipientPolicy() {

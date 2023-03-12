@@ -36,10 +36,10 @@ import com.flowcentraltech.flowcentral.common.data.Dictionary;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
@@ -374,7 +374,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Recipient getRecipientByLoginId(Long tenantId, NotificationType type, String userLoginId)
+    public Recipient getRecipientByLoginId(Long tenantId, NotifType type, String userLoginId)
             throws UnifyException {
         User user = environment().find(new UserQuery().loginId(userLoginId).tenantId(tenantId));
         switch (type) {
@@ -389,13 +389,13 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, String roleCode)
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, String roleCode)
             throws UnifyException {
         return getRecipientsByRole(tenantId, type, Arrays.asList(roleCode));
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, Collection<String> roles)
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, Collection<String> roles)
             throws UnifyException {
         Set<Long> userIdSet = findIdsOfAllUsersWithRole(tenantId, roles);
         if (!userIdSet.isEmpty()) {
@@ -573,7 +573,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             dictionary.setValue("fullName", user.getFullName());
             dictionary.setValue("loginId", user.getLoginId());
             dictionary.setValue("plainPassword", password);
-            NotificationChannelMessage msg = notificationModuleService.constructNotificationChannelMessage(
+            NotifMessage msg = notificationModuleService.constructNotificationChannelMessage(
                     user.getTenantId(), "security.userPasswordReset", dictionary,
                     new Recipient(user.getFullName(), user.getEmail()));
             notificationModuleService.sendNotification(msg);

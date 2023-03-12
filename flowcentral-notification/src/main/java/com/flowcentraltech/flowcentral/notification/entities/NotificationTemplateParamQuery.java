@@ -13,37 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.notification.data;
+package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
- * Notification channel property definition.
+ * Query class for notification template parameter records.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationChannelPropDef {
+public class NotificationTemplateParamQuery extends BaseAuditEntityQuery<NotificationTemplateParam> {
 
-    private String name;
-
-    private String value;
-
-    public NotificationChannelPropDef(String name, String value) {
-        this.name = name;
-        this.value = value;
+    public NotificationTemplateParamQuery() {
+        super(NotificationTemplateParam.class);
     }
 
-    public String getName() {
-        return name;
+    public NotificationTemplateParamQuery notificationTemplateId(Long notificationTemplateId) {
+        return (NotificationTemplateParamQuery) addEquals("notificationTemplateId", notificationTemplateId);
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public <T> T getValue(Class<T> dataClazz) throws UnifyException {
-        return DataUtils.convert(dataClazz, value);
-    }
 }

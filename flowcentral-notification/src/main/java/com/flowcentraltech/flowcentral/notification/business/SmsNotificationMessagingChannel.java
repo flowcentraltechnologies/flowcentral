@@ -21,8 +21,8 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationHostServerConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelDef;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -49,7 +49,7 @@ public class SmsNotificationMessagingChannel extends AbstractNotificationMessagi
     }
 
     @Override
-    public boolean sendMessage(NotificationChannelDef notifChannelDef, NotificationChannelMessage notifChannelMessage) {
+    public boolean sendMessage(NotifChannelDef notifChannelDef, NotifMessage notifChannelMessage) {
         try {
             ensureServerConfigured(notifChannelDef);
             return sendSms(notifChannelDef, notifChannelMessage);
@@ -61,14 +61,14 @@ public class SmsNotificationMessagingChannel extends AbstractNotificationMessagi
     }
 
     @Override
-    public void sendMessages(NotificationChannelDef notifChannelDef,
-            NotificationChannelMessage... notifChannelMessages) {
-        for (NotificationChannelMessage _msg : notifChannelMessages) {
+    public void sendMessages(NotifChannelDef notifChannelDef,
+            NotifMessage... notifChannelMessages) {
+        for (NotifMessage _msg : notifChannelMessages) {
             sendSms(notifChannelDef, _msg);
         }
     }
 
-    private void ensureServerConfigured(NotificationChannelDef notifChannelDef) throws UnifyException {
+    private void ensureServerConfigured(NotifChannelDef notifChannelDef) throws UnifyException {
         final String configCode = notifChannelDef.getName();
         if (!notifChannelDef.isChannelConfigured() || !smsServer.isConfigured(configCode)) {
             SmsServerConfig smsServerConfig = SmsServerConfig.newBuilder()
@@ -88,7 +88,7 @@ public class SmsNotificationMessagingChannel extends AbstractNotificationMessagi
         }
     }
 
-    private boolean sendSms(NotificationChannelDef notifChannelDef, NotificationChannelMessage notifChannelMessage) {
+    private boolean sendSms(NotifChannelDef notifChannelDef, NotifMessage notifChannelMessage) {
         try {
             List<Recipient> recipientList = notifChannelMessage.getRecipients();
             if (recipientList.size() == 1) {

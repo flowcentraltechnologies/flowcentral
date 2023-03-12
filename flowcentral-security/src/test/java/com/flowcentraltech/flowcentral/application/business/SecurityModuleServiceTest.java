@@ -22,10 +22,10 @@ import org.junit.Test;
 import com.flowcentraltech.flowcentral.application.entities.Leave;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationRecipientType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.database.Entity;
 
@@ -41,18 +41,18 @@ public class SecurityModuleServiceTest extends AbstractFlowCentralTest {
 
     @Test
     public void testConstructUserCreationApprovalNotificationChannelMessage() throws Exception {
-        NotificationChannelMessage ncm = nms.constructNotificationChannelMessage(Entity.PRIMARY_TENANT_ID,
+        NotifMessage ncm = nms.constructNotificationChannelMessage(Entity.PRIMARY_TENANT_ID,
                 "security.userCreationApproval", new BeanValueStore(new Leave()),
-                new Recipient(NotificationRecipientType.TO, "Albert Einstien",
+                new Recipient(NotifRecipientType.TO, "Albert Einstien",
                         "albert.einstien@flowcentraltechnologies.com"));
         assertNotNull(ncm);
     }
 
     @Test
     public void testConstructUserWelcomeNotificationChannelMessage() throws Exception {
-        NotificationChannelMessage ncm = nms.constructNotificationChannelMessage(Entity.PRIMARY_TENANT_ID,
+        NotifMessage ncm = nms.constructNotificationChannelMessage(Entity.PRIMARY_TENANT_ID,
                 "security.userWelcome", new BeanValueStore(new Leave()),
-                new Recipient(NotificationRecipientType.TO, "Albert Einstien",
+                new Recipient(NotifRecipientType.TO, "Albert Einstien",
                         "albert.einstien@flowcentraltechnologies.com"));
         assertNotNull(ncm);
     }

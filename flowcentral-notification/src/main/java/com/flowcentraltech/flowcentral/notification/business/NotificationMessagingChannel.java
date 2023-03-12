@@ -16,8 +16,8 @@
 
 package com.flowcentraltech.flowcentral.notification.business;
 
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelDef;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.tcdng.unify.core.UnifyComponent;
 
 /**
@@ -37,7 +37,7 @@ public interface NotificationMessagingChannel extends UnifyComponent {
      *                            the message to send
      * @return true if message was successfully sent otherwise false
      */
-    boolean sendMessage(NotificationChannelDef notifChannelDef, NotificationChannelMessage notifChannelMessage);
+    boolean sendMessage(NotifChannelDef notifChannelDef, NotifMessage notifChannelMessage);
 
     /**
      * Sends multiple messages through a notification channel.
@@ -47,5 +47,5 @@ public interface NotificationMessagingChannel extends UnifyComponent {
      * @param notifChannelMessages
      *                             the messages to send
      */
-    void sendMessages(NotificationChannelDef notifChannelDef, NotificationChannelMessage... notifChannelMessages);
+    void sendMessages(NotifChannelDef notifChannelDef, NotifMessage... notifChannelMessages);
 }

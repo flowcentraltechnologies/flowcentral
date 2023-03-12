@@ -16,13 +16,15 @@
 
 package com.flowcentraltech.flowcentral.configuration.xml;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationMessageFormat;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.NotificationMessageFormatXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.NotificationTypeXmlAdapter;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
@@ -36,9 +38,9 @@ import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 @XmlRootElement(name = "notifTemplate")
 public class NotifTemplateConfig extends BaseNameConfig {
 
-    private NotificationType notificationType;
+    private NotifType notifType;
 
-    private NotificationMessageFormat messageFormat;
+    private NotifMessageFormat messageFormat;
 
     private String entity;
 
@@ -46,29 +48,29 @@ public class NotifTemplateConfig extends BaseNameConfig {
 
     private String body;
 
-    private String attachmentGenerator;
-
+    private List<NotifTemplateParamConfig> paramList;
+    
     public NotifTemplateConfig() {
-        messageFormat = NotificationMessageFormat.PLAIN_TEXT;
+        messageFormat = NotifMessageFormat.PLAIN_TEXT;
     }
 
-    public NotificationType getNotificationType() {
-        return notificationType;
+    public NotifType getNotifType() {
+        return notifType;
     }
 
     @XmlJavaTypeAdapter(NotificationTypeXmlAdapter.class)
     @XmlAttribute(name = "type", required = true)
-    public void setNotificationType(NotificationType notificationType) {
-        this.notificationType = notificationType;
+    public void setNotifType(NotifType notifType) {
+        this.notifType = notifType;
     }
 
-    public NotificationMessageFormat getMessageFormat() {
+    public NotifMessageFormat getMessageFormat() {
         return messageFormat;
     }
 
     @XmlJavaTypeAdapter(NotificationMessageFormatXmlAdapter.class)
     @XmlAttribute(name = "format")
-    public void setMessageFormat(NotificationMessageFormat messageFormat) {
+    public void setMessageFormat(NotifMessageFormat messageFormat) {
         this.messageFormat = messageFormat;
     }
 
@@ -101,13 +103,13 @@ public class NotifTemplateConfig extends BaseNameConfig {
         this.body = body;
     }
 
-    public String getAttachmentGenerator() {
-        return attachmentGenerator;
+    public List<NotifTemplateParamConfig> getParamList() {
+        return paramList;
     }
 
-    @XmlAttribute
-    public void setAttachmentGenerator(String attachmentGenerator) {
-        this.attachmentGenerator = attachmentGenerator;
+    @XmlElement(name = "parameter", required = true)
+    public void setParamList(List<NotifTemplateParamConfig> paramList) {
+        this.paramList = paramList;
     }
 
 }

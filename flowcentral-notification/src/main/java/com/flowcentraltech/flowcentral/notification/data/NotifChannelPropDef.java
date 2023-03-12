@@ -13,21 +13,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.configuration.xml.adapter;
+package com.flowcentraltech.flowcentral.notification.data;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
-import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Notification type XML adapter.
+ * Notification channel property definition.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationTypeXmlAdapter extends AbstractEnumConstXmlAdapter<NotifType> {
+public class NotifChannelPropDef {
 
-    public NotificationTypeXmlAdapter() {
-        super(NotifType.class);
+    private String name;
+
+    private String value;
+
+    public NotifChannelPropDef(String name, String value) {
+        this.name = name;
+        this.value = value;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public <T> T getValue(Class<T> dataClazz) throws UnifyException {
+        return DataUtils.convert(dataClazz, value);
+    }
 }

@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntity;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -39,7 +39,7 @@ public class WfStepAlert extends BaseNamedEntity {
     private Long wfStepId;
 
     @ForeignKey
-    private NotificationType notificationType;
+    private NotifType notifType;
 
     @ForeignKey(name = "ALERT_TY")
     private WorkflowAlertType type;
@@ -88,12 +88,12 @@ public class WfStepAlert extends BaseNamedEntity {
         this.wfStepId = wfStepId;
     }
 
-    public NotificationType getNotificationType() {
-        return notificationType;
+    public NotifType getNotificationType() {
+        return notifType;
     }
 
-    public void setNotificationType(NotificationType notificationType) {
-        this.notificationType = notificationType;
+    public void setNotificationType(NotifType notifType) {
+        this.notifType = notifType;
     }
 
     public WorkflowAlertType getType() {

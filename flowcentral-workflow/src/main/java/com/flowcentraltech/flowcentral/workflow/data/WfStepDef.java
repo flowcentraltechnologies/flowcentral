@@ -28,7 +28,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterCo
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.UIActionType;
@@ -521,7 +521,7 @@ public class WfStepDef {
             return this;
         }
 
-        public Builder addWfAlertDef(WorkflowAlertType type, NotificationType notificationType, String name,
+        public Builder addWfAlertDef(WorkflowAlertType type, NotifType notifType, String name,
                 String description, String recipientPolicy, String recipientNameRule, String recipientContactRule,
                 String template, String fireOnPrevStepName, String fireOnCondition) {
             if (alertList == null) {
@@ -532,7 +532,7 @@ public class WfStepDef {
                 throw new RuntimeException("Alert with name [" + name + "] already exists in this step.");
             }
 
-            alertList.put(name, new WfAlertDef(type, notificationType, name, description, recipientPolicy,
+            alertList.put(name, new WfAlertDef(type, notifType, name, description, recipientPolicy,
                     recipientNameRule, recipientContactRule, template, fireOnPrevStepName, fireOnCondition));
             return this;
         }

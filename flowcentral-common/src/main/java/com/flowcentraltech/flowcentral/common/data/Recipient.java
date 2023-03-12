@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.data;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationRecipientType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 
 /**
  * Recipient.
@@ -26,25 +26,25 @@ import com.flowcentraltech.flowcentral.configuration.constants.NotificationRecip
  */
 public class Recipient {
 
-    private NotificationRecipientType type;
+    private NotifRecipientType type;
 
     private String name;
 
     private String contact;
 
-    public Recipient(NotificationRecipientType type, String name, String contact) {
+    public Recipient(NotifRecipientType type, String name, String contact) {
         this.type = type;
         this.name = name;
         this.contact = contact;
     }
 
     public Recipient(String name, String contact) {
-        this.type = NotificationRecipientType.TO;
+        this.type = NotifRecipientType.TO;
         this.name = name;
         this.contact = contact;
     }
 
-    public NotificationRecipientType getType() {
+    public NotifRecipientType getType() {
         return type;
     }
 
@@ -55,10 +55,4 @@ public class Recipient {
     public String getContact() {
         return contact;
     }
-
-    @Override
-    public String toString() {
-        return "Recipient [type=" + type + ", name=" + name + ", contact=" + contact + "]";
-    }
-
 }

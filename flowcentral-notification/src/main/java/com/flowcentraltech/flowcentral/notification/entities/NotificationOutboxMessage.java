@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.notification.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseTenantEntity;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -35,12 +35,12 @@ public class NotificationOutboxMessage extends BaseTenantEntity {
     private Long notificationId;
 
     @ForeignKey
-    private NotificationMessageFormat format;
+    private NotifMessageFormat format;
 
     @Column(type = ColumnType.CLOB)
     private String message;
 
-    public NotificationOutboxMessage(NotificationMessageFormat format, String message) {
+    public NotificationOutboxMessage(NotifMessageFormat format, String message) {
         this.format = format;
         this.message = message;
     }
@@ -62,11 +62,11 @@ public class NotificationOutboxMessage extends BaseTenantEntity {
         this.notificationId = notificationId;
     }
 
-    public NotificationMessageFormat getFormat() {
+    public NotifMessageFormat getFormat() {
         return format;
     }
 
-    public void setFormat(NotificationMessageFormat format) {
+    public void setFormat(NotifMessageFormat format) {
         this.format = format;
     }
 
