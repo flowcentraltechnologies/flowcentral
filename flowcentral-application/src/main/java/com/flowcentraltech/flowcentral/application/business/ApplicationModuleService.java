@@ -288,6 +288,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException;
 
     /**
+     * Finds application entity unique fields.
+     * 
+     * @param entity
+     *               the application entity
+     * @return list of entity unique fields
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findAppEntityUniqueFields(String entity) throws UnifyException;
+
+    /**
      * Finds a list of applets.
      * 
      * @param query

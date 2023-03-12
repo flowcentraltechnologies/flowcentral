@@ -33,4 +33,13 @@ public class AppEntityUniqueConstraintQuery extends BaseConfigNamedEntityQuery<A
         return (AppEntityUniqueConstraintQuery) addEquals("appEntityId", appEntityId);
     }
 
+    public AppEntityUniqueConstraintQuery applicationName(String applicationName) {
+        return (AppEntityUniqueConstraintQuery) addEquals("applicationName", applicationName);
+    }
+
+    public AppEntityUniqueConstraintQuery entityName(String entityName) {
+        return (AppEntityUniqueConstraintQuery) addEquals("entityName", entityName);
+    }
+
+
 }

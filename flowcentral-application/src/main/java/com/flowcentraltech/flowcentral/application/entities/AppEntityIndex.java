@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 
 /**
@@ -35,6 +36,12 @@ public class AppEntityIndex extends BaseConfigNamedEntity {
     @Column(length = 512)
     private String fieldList;
 
+    @ListOnly(key = "appEntityId", property = "applicationName")
+    private String applicationName;
+
+    @ListOnly(key = "appEntityId", property = "name")
+    private String entityName;
+
     public Long getAppEntityId() {
         return appEntityId;
     }
@@ -49,6 +56,22 @@ public class AppEntityIndex extends BaseConfigNamedEntity {
 
     public void setFieldList(String fieldList) {
         this.fieldList = fieldList;
+    }
+
+    public String getApplicationName() {
+        return applicationName;
+    }
+
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
 }
