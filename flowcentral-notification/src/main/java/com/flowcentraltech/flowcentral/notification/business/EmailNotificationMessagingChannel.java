@@ -21,8 +21,8 @@ import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationHostServerConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
+import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
-import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -48,12 +48,12 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     }
 
     @Override
-    public boolean sendMessage(NotifChannelDef notifChannelDef, NotifMessage notifChannelMessage) {
+    public boolean sendMessage(NotifChannelDef notifChannelDef, ChannelMessage channelMessage) {
         try {
             ensureServerConfigured(notifChannelDef);
-            Email email = conctructEmail(notifChannelDef, notifChannelMessage);
+            Email email = conctructEmail(notifChannelDef, channelMessage);
             emailServer.sendEmail(notifChannelDef.getName(), email);
-            notifChannelMessage.setSent(email.isSent());
+            channelMessage.setSent(email.isSent());
             return email.isSent();
         } catch (UnifyException e) {
             logError(e);
@@ -63,19 +63,18 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     }
 
     @Override
-    public void sendMessages(NotifChannelDef notifChannelDef,
-            NotifMessage... notifChannelMessages) {
+    public void sendMessages(NotifChannelDef notifChannelDef, ChannelMessage... channelMessage) {
         try {
             ensureServerConfigured(notifChannelDef);
-            Email[] email = new Email[notifChannelMessages.length];
-            for (int i = 0; i < notifChannelMessages.length; i++) {
-                email[i] = conctructEmail(notifChannelDef, notifChannelMessages[i]);
+            Email[] email = new Email[channelMessage.length];
+            for (int i = 0; i < channelMessage.length; i++) {
+                email[i] = conctructEmail(notifChannelDef, channelMessage[i]);
             }
 
             emailServer.sendEmail(notifChannelDef.getName(), email);
 
-            for (int i = 0; i < notifChannelMessages.length; i++) {
-                notifChannelMessages[i].setSent(email[i].isSent());
+            for (int i = 0; i < channelMessage.length; i++) {
+                channelMessage[i].setSent(email[i].isSent());
             }
         } catch (UnifyException e) {
             logError(e);
@@ -102,18 +101,22 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         }
     }
 
-    private Email conctructEmail(NotifChannelDef notifChannelDef, NotifMessage notifChannelMessage)
+    private Email conctructEmail(NotifChannelDef notifChannelDef, ChannelMessage channelMessage)
             throws UnifyException {
         Email.Builder eb = Email.newBuilder();
-        for (Recipient recipient : notifChannelMessage.getRecipients()) {
+        if (channelMessage.isWithFrom()) {
+            eb.fromSender(channelMessage.getFrom());
+        }
+        
+        for (Recipient recipient : channelMessage.getRecipients()) {
             eb.toRecipient(recipient.getType().emailRecipientType(), recipient.getContact());
         }
 
-        eb.fromSender(notifChannelDef.getSenderContact()).withSubject(notifChannelMessage.getSubject())
-                .containingMessage(notifChannelMessage.getBody())
-                .asHTML(NotifMessageFormat.HTML.equals(notifChannelMessage.getFormat()));
+        eb.fromSender(notifChannelDef.getSenderContact()).withSubject(channelMessage.getSubject())
+                .containingMessage(channelMessage.getMessage())
+                .asHTML(NotifMessageFormat.HTML.equals(channelMessage.getFormat()));
 
-        for (Attachment attachment : notifChannelMessage.getAttachments()) {
+        for (Attachment attachment : channelMessage.getAttachments()) {
             eb.withAttachment(attachment.getFileName(), attachment.getData(), attachment.getType());
         }
 
