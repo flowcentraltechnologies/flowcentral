@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.notification.data;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 
 /**
@@ -27,6 +28,8 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
  */
 public interface NotifTemplateWrapper {
 
+    NotifType getNotifType();
+    
     String getTemplateName();
     
     String getEntity();

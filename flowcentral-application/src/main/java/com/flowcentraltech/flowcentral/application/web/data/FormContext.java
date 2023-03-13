@@ -559,7 +559,7 @@ public class FormContext extends AbstractContext {
             ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
                     formDef.getConsolidatedFormState());
             String trigger = triggerEvaluator != null ? triggerEvaluator.evaluateTrigger() : null;
-            TargetFormTabStates states = policy.evaluateTabStates(formValueStore.getReader(), trigger);
+            TargetFormTabStates states = policy.evaluateTabStates(formValueStoreReader, trigger);
             if (states.isWithValueList()) {
                 states.applyValues(formValueStore);
             }
@@ -579,7 +579,7 @@ public class FormContext extends AbstractContext {
                 ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
                         ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, formValueStoreReader, now)
                         : null;
-                if (objectFilter == null || objectFilter.match(formValueStore)) {
+                if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
                     for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
                         if (setStateDef.isTabRule()) {
                             for (String target : setStateDef.getTarget()) {

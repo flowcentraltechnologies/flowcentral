@@ -81,12 +81,12 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
 
             List<WfStepAlert> wfStepAlertList = environment().listAll(
                     new WfStepAlertQuery().applicationNameNot(applicationName).templateBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "workflowName", "wfStepName", "name", "template"));
+                            .addSelect("applicationName", "workflowName", "wfStepName", "name", "generator"));
             for (WfStepAlert wfStepAlert : wfStepAlertList) {
                 Usage usage = new Usage(UsageType.ENTITY, "WfStepAlert",
                         wfStepAlert.getApplicationName() + "." + wfStepAlert.getWorkflowName() + "."
                                 + wfStepAlert.getWfStepName() + "." + wfStepAlert.getName(),
-                        "template", wfStepAlert.getTemplate());
+                        "generator", wfStepAlert.getGenerator());
                 usageList.add(usage);
             }
         }

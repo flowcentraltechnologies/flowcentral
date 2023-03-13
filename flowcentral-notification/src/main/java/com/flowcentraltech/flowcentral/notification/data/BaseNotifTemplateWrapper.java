@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.notification.data;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 
 /**
@@ -34,6 +35,11 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
     public BaseNotifTemplateWrapper(NotifTemplateDef notifTemplateDef) {
         this.notifTemplateDef = notifTemplateDef;
         this.nmb = NotifMessage.newBuilder(notifTemplateDef.getLongName());
+    }
+
+    @Override
+    public NotifType getNotifType() {
+        return notifTemplateDef.getNotifType();
     }
 
     @Override

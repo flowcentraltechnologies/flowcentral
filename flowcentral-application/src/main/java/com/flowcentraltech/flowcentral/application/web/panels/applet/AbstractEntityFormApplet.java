@@ -83,7 +83,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -426,13 +426,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 : null;
         if (!DataUtils.isBlank(filterList)) {
             final EntityDef entityDef = form.getFormDef().getEntityDef();
-            final ValueStore formValueStore = form.getCtx().getFormValueStore();
+            final ValueStoreReader reader = form.getCtx().getFormValueStore().getReader();
             final Date now = au.getNow();
             for (AppletFilterDef filterDef : filterList) {
                 if (filterDef.isShowPopupChildListAction()) {
                     ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef,
-                            formValueStore.getReader(), now);
-                    if (filter.match(formValueStore)) {
+                            reader, now);
+                    if (filter.matchReader(reader)) {
                         AppletDef _childAppletDef = getAppletDef(_currFormTabDef.getApplet());
                         ShowPopupInfo.Type type = null;
                         String reference = null;

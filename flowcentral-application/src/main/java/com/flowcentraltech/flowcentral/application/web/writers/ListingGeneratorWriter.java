@@ -88,7 +88,7 @@ public class ListingGeneratorWriter {
     
     public ListingColorType getItemColor(ValueStore valueStore) throws UnifyException {
         for (ItemColorRule rule: itemColorRules) {
-            if (rule.filter.match(valueStore)) {
+            if (rule.filter.matchReader(valueStore.getReader())) {
                 return rule.color;
             }
         }
@@ -98,7 +98,7 @@ public class ListingGeneratorWriter {
     
     public ListingColorType getItemColor(Object bean) throws UnifyException {
         for (ItemColorRule rule: itemColorRules) {
-            if (rule.filter.match(bean)) {
+            if (rule.filter.matchObject(bean)) {
                 return rule.color;
             }
         }

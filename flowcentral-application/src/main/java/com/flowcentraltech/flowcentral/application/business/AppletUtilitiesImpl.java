@@ -947,7 +947,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         }
 
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
-                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, form.getFormValueStore(),
+                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, form.getFormValueStoreReader(),
                                 now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
@@ -1292,7 +1292,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         EntitySearch _entitySearch = (EntitySearch) tabSheetItem.getValObject();
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
                         Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB,
-                                formContext.getFormValueStore(), now);
+                                formContext.getFormValueStore().getReader(), now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setNewButtonVisible(newButtonVisible);
@@ -1786,7 +1786,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             return appletDef.getFilterDef(condFilterName).getFilterDef()
                     .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(),
                             form.getFormValueStoreReader(), getNow())
-                    .match(form.getFormBean());
+                    .matchObject(form.getFormBean());
         }
 
         return true;
@@ -1846,12 +1846,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         if (!filterList.isEmpty()) {
             final Date now = getNow();
             final EntityDef entityDef = form.getFormDef().getEntityDef();
-            final ValueStore formValueStore = form.getFormValueStore();
-            final ValueStoreReader valueStoreReader = form.getFormValueStoreReader();
+            final ValueStoreReader reader = form.getFormValueStoreReader();
             for (AppletFilterDef filterDef : filterList) {
                 if (filterDef.isHideAddWidgetChildListAction()) {
-                    ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef, valueStoreReader, now);
-                    if (filter.match(formValueStore)) {
+                    ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef, reader, now);
+                    if (filter.matchReader(reader)) {
                         return true;
                     }
                 }
@@ -2159,8 +2158,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final ValueStore _formValueStore = formContext.getFormValueStore();
         final ValueStoreReader _formValueStoreReader = formContext.getFormValueStore().getReader();
         final Date now = getNow();
-        logDebug("Applying delayed set values on [{0}] using form definition [{1}] ...", _formValueStore.retrieve("id"),
-                _formDef.getLongName());
+        logDebug("Applying delayed set values on [{0}] using form definition [{1}] ...",
+                _formValueStoreReader.read("id"), _formDef.getLongName());
         // Execute delayed set values
         final Map<String, Object> variables = Collections.emptyMap();
         for (FormStatePolicyDef formStatePolicyDef : _formDef.getOnDelayedSetValuesFormStatePolicyDefList()) {
@@ -2168,7 +2167,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     ? formStatePolicyDef.getOnCondition().getObjectFilter(_formDef.getEntityDef(),
                             _formValueStoreReader, now)
                     : null;
-            if (objectFilter == null || objectFilter.match(_formValueStore)) {
+            if (objectFilter == null || objectFilter.matchReader(_formValueStoreReader)) {
                 if (formStatePolicyDef.isSetValues()) {
                     formStatePolicyDef.getSetValuesDef().apply(this, _formDef.getEntityDef(), now, _formValueStore,
                             variables, null);

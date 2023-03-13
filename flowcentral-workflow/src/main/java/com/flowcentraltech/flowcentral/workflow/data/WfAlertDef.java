@@ -16,7 +16,6 @@
 
 package com.flowcentraltech.flowcentral.workflow.data;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -30,8 +29,6 @@ public class WfAlertDef {
 
     private WorkflowAlertType type;
 
-    private NotifType notifType;
-
     private String name;
 
     private String description;
@@ -42,33 +39,28 @@ public class WfAlertDef {
 
     private String recipientContactRule;
 
-    private String template;
+    private String generator;
 
     private String fireOnPrevStepName;
 
     private String fireOnCondition;
 
-    public WfAlertDef(WorkflowAlertType type, NotifType notifType, String name, String description,
-            String recipientPolicy, String recipientNameRule, String recipientContactRule, String template,
+    public WfAlertDef(WorkflowAlertType type, String name, String description,
+            String recipientPolicy, String recipientNameRule, String recipientContactRule, String generator,
             String fireOnPrevStepName, String fireOnCondition) {
         this.type = type;
-        this.notifType = notifType;
         this.name = name;
         this.description = description;
         this.recipientPolicy = recipientPolicy;
         this.recipientNameRule = recipientNameRule;
         this.recipientContactRule = recipientContactRule;
-        this.template = template;
+        this.generator = generator;
         this.fireOnPrevStepName = fireOnPrevStepName;
         this.fireOnCondition = fireOnCondition;
     }
 
     public WorkflowAlertType getType() {
         return type;
-    }
-
-    public NotifType getNotificationType() {
-        return notifType;
     }
 
     public String getName() {
@@ -95,8 +87,8 @@ public class WfAlertDef {
         return recipientContactRule;
     }
 
-    public String getTemplate() {
-        return template;
+    public String getGenerator() {
+        return generator;
     }
 
     public String getFireOnPrevStepName() {
@@ -129,13 +121,6 @@ public class WfAlertDef {
 
     public boolean isExpirationNotification() {
         return type.isExpirationNotification();
-    }
-
-    @Override
-    public String toString() {
-        return "WfAlertDef [type=" + type + ", notificationType=" + notifType + ", name=" + name
-                + ", description=" + description + ", recipientPolicy=" + recipientPolicy + ", template=" + template
-                + ", fireOnPrevStepName=" + fireOnPrevStepName + ", fireOnCondition=" + fireOnCondition + "]";
     }
 
 }

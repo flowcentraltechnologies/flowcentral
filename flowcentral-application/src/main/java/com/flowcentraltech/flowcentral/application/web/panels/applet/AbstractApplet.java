@@ -36,7 +36,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.EntitySingleForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -158,11 +158,11 @@ public abstract class AbstractApplet {
             throws UnifyException {
         if (appletDef.isWithPreferredFormFilters()) {
             final Date now = au.getNow();
-            final ValueStore instValueStore = new BeanValueStore(inst);
+            final ValueStoreReader reader = new BeanValueStore(inst).getReader();
             EntityDef _entityDef = getEntityClassDef(appletDef.getEntity()).getEntityDef();
             for (AppletFilterDef filterDef : appletDef.getPreferredFormFilterList()) {
-                if (filterDef.getFilterDef().getObjectFilter(_entityDef, instValueStore.getReader(), now)
-                        .match(instValueStore)) {
+                if (filterDef.getFilterDef().getObjectFilter(_entityDef, reader, now)
+                        .matchReader(reader)) {
                     String formName = filterDef.getPreferredForm();
                     FormDef formDef = au.getFormDef(formName);
                     if (type.supports(formDef)) {

@@ -40,11 +40,11 @@ public class WfEntityInst {
         return (WorkEntity) valueStore.getValueObject();
     }
 
-    public ValueStoreReader getValueStoreReader() {
+    public ValueStoreReader getReader() {
         return valueStore.getReader();
     }
 
-    public ValueStoreWriter getValueStoreWriter() {
+    public ValueStoreWriter getWriter() {
         return valueStore.getWriter();
     }
 

@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseNamedEntity;
-import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
@@ -38,9 +37,6 @@ public class WfStepAlert extends BaseNamedEntity {
     @ForeignKey(WfStep.class)
     private Long wfStepId;
 
-    @ForeignKey
-    private NotifType notifType;
-
     @ForeignKey(name = "ALERT_TY")
     private WorkflowAlertType type;
 
@@ -53,8 +49,8 @@ public class WfStepAlert extends BaseNamedEntity {
     @Column(length = 64, nullable = true)
     private String recipientContactRule;
 
-    @Column(length = 128)
-    private String template;
+    @Column(length = 64, nullable = true)
+    private String generator;
 
     @Column(name = "FIRE_ON_PREV_STEP_NM", length = 64, nullable = true)
     private String fireOnPrevStepName;
@@ -74,9 +70,6 @@ public class WfStepAlert extends BaseNamedEntity {
     @ListOnly(key = "wfStepId", property = "applicationName")
     private String applicationName;
 
-    @ListOnly(key = "notificationType", property = "description")
-    private String notificationTypeDesc;
-
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
 
@@ -86,14 +79,6 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setWfStepId(Long wfStepId) {
         this.wfStepId = wfStepId;
-    }
-
-    public NotifType getNotificationType() {
-        return notifType;
-    }
-
-    public void setNotificationType(NotifType notifType) {
-        this.notifType = notifType;
     }
 
     public WorkflowAlertType getType() {
@@ -128,12 +113,12 @@ public class WfStepAlert extends BaseNamedEntity {
         this.recipientContactRule = recipientContactRule;
     }
 
-    public String getTemplate() {
-        return template;
+    public String getGenerator() {
+        return generator;
     }
 
-    public void setTemplate(String template) {
-        this.template = template;
+    public void setGenerator(String generator) {
+        this.generator = generator;
     }
 
     public String getFireOnPrevStepName() {
@@ -166,14 +151,6 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
-    }
-
-    public String getNotificationTypeDesc() {
-        return notificationTypeDesc;
-    }
-
-    public void setNotificationTypeDesc(String notificationTypeDesc) {
-        this.notificationTypeDesc = notificationTypeDesc;
     }
 
     public String getWfStepName() {

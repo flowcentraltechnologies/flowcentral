@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.FilterGroupDef.FilterTyp
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -136,8 +136,8 @@ public class FormTabDef {
         return filterGroupDef != null && filterGroupDef.isWithFilterType(type);
     }
 
-    public Restriction getRestriction(FilterType type, ValueStore valueStore, Date now) throws UnifyException {
-        return filterGroupDef != null ? filterGroupDef.getRestriction(type, valueStore, now) : null;
+    public Restriction getRestriction(FilterType type, ValueStoreReader reader, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.getRestriction(type, reader, now) : null;
     }
 
     public String getName() {
