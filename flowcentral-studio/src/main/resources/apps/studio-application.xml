@@ -1107,6 +1107,22 @@
 			<property name="maintainForm.update" value="false" />
 			<property name="maintainForm.delete" value="false" />
 		</applet>
+		<applet name="manageNotifTemplateParam"
+			description="$m{studio.notificationtemplateparam.manage}"
+			label="$m{studio.notificationtemplateparam.manage.label}" type="manage_entitylist"
+			entity="notification.notifTemplateParam" menuAccess="false">
+			<property name="searchTable" value="notifTemplateParamTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="notifTemplateParamForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="notifTemplateParamForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageReportColumn"
 			description="$m{studio.reportcolumn.manage}"
 			label="$m{studio.reportcolumn.manage.label}" type="manage_entitylist"
@@ -1671,6 +1687,15 @@
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
+		</table>
+		<table name="notifTemplateParamTable"
+			description="$m{studio.notificationtemplateparam.table}"
+			label="$m{studio.notificationtemplateparam.table.label}"
+			entity="notification.notifTemplateParam">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1"/>
 		</table>
 		<table name="reportColumnTable"
 			description="$m{studio.reportcolumn.table}"
@@ -3019,6 +3044,10 @@
 						column="0" color="yellow" required="true" />
 				</section>
 			</tab>
+			<tab name="params"
+				label="$m{studio.notificationtemplate.form.params}"
+				contentType="child_list" applet="manageNotifTemplateParam"
+				reference="paramList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
@@ -3053,6 +3082,22 @@
 						target="name,description,entity,notificationType" disabled="true" />
 				</setStates>
 			</formStatePolicy>
+		</form>
+		<form name="notifTemplateParamForm"
+			description="$m{studio.notificationtemplateparam.form}"
+			entity="notification.notifTemplateParam">
+			<tab name="basicDetails"
+				label="$m{studio.notificationtemplateparam.form.basicdetails}"
+				contentType="miniform" editable="true">
+				<section name="templateParamDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="label" inputWidget="application.text"
+						column="1" required="true"/>
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="reportConfigForm"
 			description="$m{studio.reportconfiguration.form}"
