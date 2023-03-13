@@ -13,26 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.business;
 
-import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
+package com.flowcentraltech.flowcentral.notification.util;
+
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Security module service tests.
+ * Notification code generation utilities.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class SecurityModuleServiceTest extends AbstractFlowCentralTest {
+public final class NotificationCodeGenUtils {
 
-    @Override
-    protected void onSetup() throws Exception {
+    public static final String TEMPLATE_NAME = "__TEMPLATE_NAME";
 
-    }
-
-    @Override
-    protected void onTearDown() throws Exception {
+    private NotificationCodeGenUtils() {
 
     }
 
+    public static String generateUtilitiesTemplateWrapperClassName(String basePackage, String moduleName,
+            String templateName) {
+        return StringUtils.isBlank(templateName) ? null
+                : basePackage + ".utilities." + moduleName.toLowerCase() + ".templatewrappers."
+                        + StringUtils.capitalizeFirstLetter(templateName);
+    }
 }

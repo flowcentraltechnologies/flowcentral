@@ -973,7 +973,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     : getUserToken().getUserLoginId();
             String itemDesc = workInst.getWorkflowItemDesc();
             if (wfDef.isWithDescFormat()) {
-                ParameterizedStringGenerator generator = appletUtil.getStringGenerator(new BeanValueStore(workInst),
+                ParameterizedStringGenerator generator = appletUtil.getStringGenerator(new BeanValueStore(workInst).getReader(),
                         wfDef.getDescFormat());
                 itemDesc = generator.generate();
             }

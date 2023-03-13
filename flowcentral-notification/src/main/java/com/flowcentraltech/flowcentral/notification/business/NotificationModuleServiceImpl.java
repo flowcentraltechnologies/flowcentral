@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateParamDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationChannel;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationChannelProp;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationChannelQuery;
@@ -55,6 +56,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationRecipie
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParam;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
+import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -71,6 +73,7 @@ import com.tcdng.unify.core.security.TwoWayStringCryptograph;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
  * Default notification business service implementation.
@@ -151,12 +154,22 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         this.au = au;
     }
 
-    public void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
+    public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
         this.fileAttachmentProvider = fileAttachmentProvider;
     }
 
-    public void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
+    public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
         this.twoWayStringCryptograph = twoWayStringCryptograph;
+    }
+    
+    private static final Class<?>[] WRAPPER_PARAMS_0 = { NotifTemplateDef.class };
+
+    @Override
+    public <T extends NotifTemplateWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException {
+        final String templateName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                NotificationCodeGenUtils.TEMPLATE_NAME);
+        final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(templateName);
+        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, notifTemplateDef);
     }
 
     @Override
@@ -176,22 +189,26 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
-    public void sendNotification(NotifMessage notifMessage) throws UnifyException {
-        final NotifType type = notifMessage.getNotificationType();
+    public NotifTemplateDef getNotifTemplateDef(String templateName) throws UnifyException {
+        return templates.get(templateName);
+    }
 
-        if (NotifType.SYSTEM.equals(type)) {
+    @Override
+    public void sendNotification(NotifMessage notifMessage) throws UnifyException {
+        final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(notifMessage.getTemplate());
+        if (NotifType.SYSTEM.equals(notifTemplateDef.getNotifType())) {
             dispatchSystemNotification(notifMessage);
         } else {
             MessageParts messageParts = getMessageParts(notifMessage);
             NotificationOutbox notification = new NotificationOutbox();
             notification.setTenantId(getUserTenantId());
             notification.setFrom(notifMessage.getFrom());
-            notification.setType(type);
+            notification.setType(notifTemplateDef.getNotifType());
             notification.setExpiryDt(null);
             notification.setNextAttemptDt(getNow());
             notification.setSubject(messageParts.getSubject());
             notification.setStatus(NotificationOutboxStatus.NOT_SENT);
-            notification.setFormat(notifMessage.getFormat());
+            notification.setFormat(notifTemplateDef.getFormat());
             notification.setMessage(messageParts.getBody());
 
             // Recipients
@@ -270,8 +287,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                     logDebug("Sending [{0}] notifications via channel [{1}]...",
                                             pendingNotificationIdList.size(), notifChannelDef.getDescription());
                                     NotificationMessagingChannel channel = getNotificationMessagingChannel(notifType);
-                                    ChannelMessage[] messages = getChannelMessages(tenantId,
-                                            pendingNotificationIdList);
+                                    ChannelMessage[] messages = getChannelMessages(tenantId, pendingNotificationIdList);
                                     channel.sendMessages(notifChannelDef, messages);
                                     for (ChannelMessage message : messages) {
                                         final int attempts = message.getAttempts() + 1;
@@ -365,9 +381,10 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     private void dispatchSystemNotification(NotifMessage notifMessage) throws UnifyException {
-        if (!NotifType.SYSTEM.equals(notifMessage.getNotificationType())) {
+        final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(notifMessage.getTemplate());
+        if (!NotifType.SYSTEM.equals(notifTemplateDef.getNotifType())) {
             throw new UnifyException(NotificationModuleErrorConstants.CANNOT_SEND_NOTIFICATION_TYPE_THROUGH_CHANNEL,
-                    notifMessage.getNotificationType(), NotifType.SYSTEM);
+                    notifTemplateDef.getNotifType(), NotifType.SYSTEM);
         }
 
         MessageParts messageParts = getMessageParts(notifMessage);

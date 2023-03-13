@@ -19,6 +19,8 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
 import com.tcdng.unify.core.UnifyException;
@@ -30,6 +32,18 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface NotificationModuleService extends FlowCentralService {
+
+    /**
+     * Creates a wrapper instance initialized with a new instance of wrapped
+     * template type.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends NotifTemplateWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
 
     /**
      * Finds notification templates.
@@ -64,6 +78,17 @@ public interface NotificationModuleService extends FlowCentralService {
      */
     List<Long> findNotificationTemplateIdList(String applicationName) throws UnifyException;
 
+    /**
+     * Get notification template definition.
+     * 
+     * @param templateName
+     *                     the template name
+     * @return the template definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    NotifTemplateDef getNotifTemplateDef(String templateName) throws UnifyException;
+    
     /**
      * Sends a notification. This is an asynchronous call where message is pushed
      * into communication system that is left to do actual notification

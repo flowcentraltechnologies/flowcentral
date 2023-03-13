@@ -15,9 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.notification.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -45,7 +47,7 @@ public class NotifTemplateDef extends BaseApplicationEntityDef {
 
     private List<StringToken> templateTokenList;
 
-    private List<NotifTemplateParamDef> paramList;
+    private Map<String, NotifTemplateParamDef> params;
 
     public NotifTemplateDef(NotifType notifType, String entity, String subject, String template,
             NotifMessageFormat format, List<NotifTemplateParamDef> paramList, String longName, String description,
@@ -56,7 +58,10 @@ public class NotifTemplateDef extends BaseApplicationEntityDef {
         this.subjectTokenList = StringUtils.breakdownParameterizedString(subject);
         this.templateTokenList = StringUtils.breakdownParameterizedString(template);
         this.format = format;
-        this.paramList = Collections.unmodifiableList(new ArrayList<NotifTemplateParamDef>(paramList));
+        this.params = new LinkedHashMap<String, NotifTemplateParamDef>();
+        for (NotifTemplateParamDef param : paramList) {
+            this.params.put(param.getName(), param);
+        }
     }
 
     public String getEntity() {
@@ -79,7 +84,19 @@ public class NotifTemplateDef extends BaseApplicationEntityDef {
         return notifType;
     }
 
-    public List<NotifTemplateParamDef> getParamList() {
-        return paramList;
+    public Set<String> getParamNames() {
+        return params.keySet();
+    }
+
+    public Collection<NotifTemplateParamDef> getParams() {
+        return params.values();
+    }
+
+    public boolean isParam(String name) {
+        return params.containsKey(name);
+    }
+
+    public NotifTemplateParamDef getParam(String name) {
+        return params.get(name);
     }
 }

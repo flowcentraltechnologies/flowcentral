@@ -38,7 +38,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicatio
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
@@ -58,6 +57,7 @@ import com.flowcentraltech.flowcentral.security.entities.UserLoginEvent;
 import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
+import com.flowcentraltech.flowcentral.security.templatewrappers.UserPasswordResetTemplateWrapper;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
@@ -566,12 +566,13 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         // Send email if necessary
         if (systemModuleService.getSysParameterValue(boolean.class,
                 SecurityModuleSysParamConstants.USER_PASSWORD_SEND_EMAIL)) {
-            NotifMessage.Builder nmb = NotifMessage.newEmailMessageBuilder("security.userPasswordReset");
-            nmb.addParam("fullName", user.getFullName());
-            nmb.addParam("loginId", user.getLoginId());
-            nmb.addParam("plainPassword", password);
-            nmb.addTORecipient(user.getFullName(), user.getEmail());
-            notificationModuleService.sendNotification(nmb.build());
+            UserPasswordResetTemplateWrapper wrapper = notificationModuleService
+                    .wrapperOf(UserPasswordResetTemplateWrapper.class);
+            wrapper.setFullName(user.getFullName());
+            wrapper.setLoginId(user.getLoginId());
+            wrapper.setPlainPassword(password);
+            wrapper.addTORecipient(user.getFullName(), user.getEmail());
+            notificationModuleService.sendNotification(wrapper.getMessage());
         }
 
         return password;
