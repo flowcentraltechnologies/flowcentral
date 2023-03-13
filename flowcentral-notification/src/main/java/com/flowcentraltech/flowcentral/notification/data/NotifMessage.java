@@ -130,17 +130,17 @@ public class NotifMessage {
             this.attachments = new ArrayList<Attachment>();
         }
 
-        public Builder toRecipient(String name, String contact) {
+        public Builder addTORecipient(String name, String contact) {
             recipients.add(new Recipient(NotifRecipientType.TO, name, contact));
             return this;
         }
 
-        public Builder ccRecipient(String name, String contact) {
+        public Builder addCCRecipient(String name, String contact) {
             recipients.add(new Recipient(NotifRecipientType.CC, name, contact));
             return this;
         }
 
-        public Builder bccRecipient(String name, String contact) {
+        public Builder addBCCRecipient(String name, String contact) {
             recipients.add(new Recipient(NotifRecipientType.BCC, name, contact));
             return this;
         }

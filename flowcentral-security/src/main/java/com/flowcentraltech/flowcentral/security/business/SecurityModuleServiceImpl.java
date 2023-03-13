@@ -32,7 +32,6 @@ import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProv
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
-import com.flowcentraltech.flowcentral.common.data.Dictionary;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
@@ -374,8 +373,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Recipient getRecipientByLoginId(Long tenantId, NotifType type, String userLoginId)
-            throws UnifyException {
+    public Recipient getRecipientByLoginId(Long tenantId, NotifType type, String userLoginId) throws UnifyException {
         User user = environment().find(new UserQuery().loginId(userLoginId).tenantId(tenantId));
         switch (type) {
             case EMAIL:
@@ -389,8 +387,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, String roleCode)
-            throws UnifyException {
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, String roleCode) throws UnifyException {
         return getRecipientsByRole(tenantId, type, Arrays.asList(roleCode));
     }
 
@@ -569,14 +566,12 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         // Send email if necessary
         if (systemModuleService.getSysParameterValue(boolean.class,
                 SecurityModuleSysParamConstants.USER_PASSWORD_SEND_EMAIL)) {
-            Dictionary dictionary = new Dictionary();
-            dictionary.setValue("fullName", user.getFullName());
-            dictionary.setValue("loginId", user.getLoginId());
-            dictionary.setValue("plainPassword", password);
-            NotifMessage msg = notificationModuleService.constructNotificationChannelMessage(
-                    user.getTenantId(), "security.userPasswordReset", dictionary,
-                    new Recipient(user.getFullName(), user.getEmail()));
-            notificationModuleService.sendNotification(msg);
+            NotifMessage.Builder nmb = NotifMessage.newEmailMessageBuilder("security.userPasswordReset");
+            nmb.addParam("fullName", user.getFullName());
+            nmb.addParam("loginId", user.getLoginId());
+            nmb.addParam("plainPassword", password);
+            nmb.addTORecipient(user.getFullName(), user.getEmail());
+            notificationModuleService.sendNotification(nmb.build());
         }
 
         return password;
