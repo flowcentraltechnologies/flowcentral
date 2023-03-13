@@ -136,8 +136,9 @@ public class EntitySearchWidget extends AbstractEntityListWidget {
                 if (encode || listFormat) {
                     ParameterizedStringGenerator generator = null;
                     if (listFormat) {
-                        generator = specialParamProvider().getStringGenerator(new BeanValueListStore(result),
-                                _valueStore, refDef.getListFormat());
+                        generator = specialParamProvider().getStringGenerator(
+                                new BeanValueListStore(result).getReader(), _valueStore.getReader(),
+                                refDef.getListFormat());
                     }
                     final int len = result.size();
                     for (int j = 0; j < len; j++) {

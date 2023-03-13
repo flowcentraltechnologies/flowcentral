@@ -45,17 +45,23 @@ public class ChannelMessage {
     private List<Recipient> recipients;
 
     private List<Attachment> attachments;
+    
+    private Long originId;
 
+    private int attempts;
+    
     private boolean sent;
     
-    public ChannelMessage(NotifMessageFormat format, String from, String subject, String message,
-            List<Recipient> recipients, List<Attachment> attachments) {
+    public ChannelMessage(NotifMessageFormat format, Long originId, String from, String subject, String message,
+            List<Recipient> recipients, List<Attachment> attachments, int attempts) {
         this.format = format;
+        this.originId = originId;
         this.from = from;
         this.subject = subject;
         this.message = message;
         this.recipients = recipients;
         this.attachments = attachments;
+        this.attempts = attempts;
     }
 
     public NotifMessageFormat getFormat() {
@@ -82,6 +88,14 @@ public class ChannelMessage {
         return attachments;
     }
 
+    public Long getOriginId() {
+        return originId;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+
     public boolean isSent() {
         return sent;
     }
@@ -94,8 +108,8 @@ public class ChannelMessage {
         return !StringUtils.isBlank(from);
     }
     
-    public static Builder newBuilder(NotifMessageFormat format) {
-        return new Builder(format);
+    public static Builder newBuilder(NotifMessageFormat format, Long originId) {
+        return new Builder(format, originId);
     }
 
     public static class Builder {
@@ -111,9 +125,14 @@ public class ChannelMessage {
         private List<Recipient> recipients;
 
         private List<Attachment> attachments;
+        
+        private Long originId;
 
-        private Builder(NotifMessageFormat format) {
+        private int attempts;
+
+        private Builder(NotifMessageFormat format, Long originId) {
             this.format = format;
+            this.originId = originId;
             this.recipients = new ArrayList<Recipient>();
             this.attachments = new ArrayList<Attachment>();
         }
@@ -133,6 +152,11 @@ public class ChannelMessage {
             return this;
         }
 
+        public Builder attempts(int attempts) {
+            this.attempts = attempts;
+            return this;
+        }
+
         public Builder message(String message) {
             this.message = message;
             return this;
@@ -144,8 +168,8 @@ public class ChannelMessage {
         }
 
         public ChannelMessage build() {
-            return new ChannelMessage(format, from, subject, message,
-                    DataUtils.unmodifiableList(recipients), DataUtils.unmodifiableList(attachments));
+            return new ChannelMessage(format, originId, from, subject, message,
+                    DataUtils.unmodifiableList(recipients), DataUtils.unmodifiableList(attachments), attempts);
         }
 
     }

@@ -129,6 +129,7 @@ import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.RestrictionTranslator;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
@@ -390,15 +391,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, List<StringToken> tokenList)
             throws UnifyException {
-        return specialParamProvider.getStringGenerator(paramValueStore, tokenList);
+        return specialParamProvider.getStringGenerator(paramReader, tokenList);
     }
 
     @Override
-    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
-            List<StringToken> tokenList) throws UnifyException {
-        return specialParamProvider.getStringGenerator(paramValueStore, generatorValueStore, tokenList);
+    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader,
+            ValueStoreReader generatorReader, List<StringToken> tokenList) throws UnifyException {
+        return specialParamProvider.getStringGenerator(paramReader, generatorReader, tokenList);
     }
 
     @Override
@@ -1998,13 +1999,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     public void populateAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
         SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
-            ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
+            final ValueStoreReader reader = new BeanValueStore(inst).getReader();
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                 if (entityFieldDef.isStringAutoFormat()) {
                     String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
                     if (skeleton.equals(DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName()))) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen.getNextSequenceCode(
-                                _entityDef.getLongName(), entityFieldDef.getAutoFormat(), valueStoreReader));
+                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen
+                                .getNextSequenceCode(_entityDef.getLongName(), entityFieldDef.getAutoFormat(), reader));
                     }
                 }
             }
@@ -2139,14 +2140,14 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
         SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
-            ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
+            final ValueStoreReader reader = new BeanValueStore(inst).getReader();
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                 if (entityFieldDef.isStringAutoFormat()) {
                     final String val = DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName());
                     String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
                     if (val == null || skeleton.equals(val)) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen.getNextSequenceCode(
-                                _entityDef.getLongName(), entityFieldDef.getAutoFormat(), valueStoreReader));
+                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen
+                                .getNextSequenceCode(_entityDef.getLongName(), entityFieldDef.getAutoFormat(), reader));
                     }
                 }
             }

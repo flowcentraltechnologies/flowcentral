@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.notification.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
+import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 
@@ -32,6 +33,9 @@ public class NotificationOutboxAttachment extends BaseAuditEntity {
 
     @ForeignKey(NotificationOutbox.class)
     private Long notificationOutboxId;
+    
+    @ForeignKey(name = "ATTACHMENT_TY")
+    private FileAttachmentType type;
 
     @Column(name = "ATTACHMENT_NM", length = 128)
     private String name;
@@ -39,11 +43,11 @@ public class NotificationOutboxAttachment extends BaseAuditEntity {
     @Column(name = "ATTACHMENT_TITLE", length = 128)
     private String title;
     
-    @Column(name = "ATTACHMENT_TY")
-    private FileAttachmentType type;
-    
     @Column(name = "ATTACHMENT_DATA")
     private byte[] data;
+
+    @ListOnly(key = "type", property = "description")
+    private String typeDesc;
 
     @Override
     public String getDescription() {
@@ -88,6 +92,14 @@ public class NotificationOutboxAttachment extends BaseAuditEntity {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public String getTypeDesc() {
+        return typeDesc;
+    }
+
+    public void setTypeDesc(String typeDesc) {
+        this.typeDesc = typeDesc;
     }
 
 }

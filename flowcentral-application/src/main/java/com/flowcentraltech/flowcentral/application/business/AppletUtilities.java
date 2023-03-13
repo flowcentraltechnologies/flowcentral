@@ -133,31 +133,31 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Gets a generator instance.
      * 
-     * @param paramValueStore
-     *                        the parameter value store
+     * @param paramReader
+     *                    the parameter value store reader
+     * @param tokenList
+     *                    the token list
+     * @return the generator instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, List<StringToken> tokenList)
+            throws UnifyException;
+
+    /**
+     * Gets a generator instance.
+     * 
+     * @param paramReader
+     *                        the parameter value store reader
+     * @param generatorReader
+     *                        the generator value store reader
      * @param tokenList
      *                        the token list
      * @return the generator instance
      * @throws UnifyException
      *                        if an error occurs
      */
-    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
-            throws UnifyException;
-
-    /**
-     * Gets a generator instance.
-     * 
-     * @param paramValueStore
-     *                            the parameter value store
-     * @param generatorValueStore
-     *                            the generator value store
-     * @param tokenList
-     *                            the token list
-     * @return the generator instance
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+    ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, ValueStoreReader generatorReader,
             List<StringToken> tokenList) throws UnifyException;
 
     /**
@@ -446,13 +446,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the application privilege manager.
      */
     ApplicationPrivilegeManager applicationPrivilegeManager();
-    
+
     /**
      * Get the task launcher component.
+     * 
      * @return the task launcher
      */
     TaskLauncher taskLauncher();
-    
+
     /**
      * Gets the system service.
      * 
@@ -1384,27 +1385,27 @@ public interface AppletUtilities extends UnifyComponent {
      */
     BeanListTable constructEntryBeanTable(String tableName, FilterGroupDef filterGroupDef, String entryEditPolicy)
             throws UnifyException;
-    
+
     /**
      * Constructs an entity CRUD object
      * 
      * @param ctx
-     *                             the applet context
+     *                          the applet context
      * @param appletName
-     *                             the applet name
+     *                          the applet name
      * @param formEventHandlers
-     *                             the for event handler
+     *                          the for event handler
      * @param baseField
-     *                             the base field
+     *                          the base field
      * @param baseId
-     *                             the base ID
+     *                          the base ID
      * @return the entity CRUD object
      * @throws UnifyException
      *                        if an error occurs
      */
     EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName, EntityFormEventHandlers formEventHandlers,
             String baseField, Object baseId) throws UnifyException;
-    
+
     /**
      * Constructs an entity CRUD object
      * 
@@ -1456,7 +1457,7 @@ public interface AppletUtilities extends UnifyComponent {
      */
     boolean formBeanMatchAppletPropertyCondition(AppletDef appletDef, AbstractForm form, String conditionPropName)
             throws UnifyException;
-    
+
     /**
      * Bumps entity version
      * 
@@ -1470,7 +1471,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException;
-    
+
     /**
      * Gets child entity foreign key field name
      * 
@@ -1722,7 +1723,7 @@ public interface AppletUtilities extends UnifyComponent {
      * Get mapped tenant ID.
      * 
      * @param srcTenantId
-     *                 the source tenant ID
+     *                    the source tenant ID
      * @return the mapped tenant ID if found otherwise null
      * @throws UnifyException
      *                        if an error occurs

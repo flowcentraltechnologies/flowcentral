@@ -178,10 +178,10 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
 
         Listable result = environment().listLean(query);
         if (result != null && refDef != null) {
-            String formatDesc = refDef.isWithListFormat() ? specialParamProvider()
-                    .getStringGenerator(new BeanValueStore(result), getValueStore(), refDef.getListFormat()).generate()
-                    : application().getEntityDescription(entityClassDef, (Entity) result,
-                            refDef.getSearchField());
+            String formatDesc = refDef.isWithListFormat()
+                    ? specialParamProvider().getStringGenerator(new BeanValueStore(result).getReader(),
+                            getValueStore().getReader(), refDef.getListFormat()).generate()
+                    : application().getEntityDescription(entityClassDef, (Entity) result, refDef.getSearchField());
             String key = decodedKey.isLongNameRef()
                     ? RefEncodingUtils.encodeRefValue(decodedKey.getIndex(), decodedKey.getRefLongName(),
                             result.getListKey())
@@ -233,11 +233,12 @@ public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
 
     protected abstract void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException;
 
-    protected final void addMoreResultRestriction(EntityClassDef entityClassDef, Query<? extends Entity> query) throws UnifyException {
+    protected final void addMoreResultRestriction(EntityClassDef entityClassDef, Query<? extends Entity> query)
+            throws UnifyException {
         addMoreResultRestriction(query);
         if (entityClassDef.isWithTenantId() && isTenancyEnabled()) {
             applyOverrideTenantId(query, entityClassDef.getTenantIdDef().getFieldName());
-        }     
+        }
     }
 
 }

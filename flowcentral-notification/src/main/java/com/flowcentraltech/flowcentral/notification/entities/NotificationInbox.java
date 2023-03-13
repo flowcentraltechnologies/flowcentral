@@ -17,8 +17,8 @@ package com.flowcentraltech.flowcentral.notification.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationInboxStatus;
-import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Table;
@@ -47,8 +47,8 @@ public class NotificationInbox extends BaseAuditTenantEntity {
     @Column(length = 64)
     private String userLoginId;
 
-    @Child
-    private NotificationInboxMessage notificationInboxMessage;
+    @Column(type = ColumnType.CLOB, nullable = true)
+    private String message;
 
     @ListOnly(key = "status", property = "description")
     private String statusDesc;
@@ -98,12 +98,12 @@ public class NotificationInbox extends BaseAuditTenantEntity {
         this.userLoginId = userLoginId;
     }
 
-    public NotificationInboxMessage getNotificationInboxMessage() {
-        return notificationInboxMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setNotificationInboxMessage(NotificationInboxMessage notificationInboxMessage) {
-        this.notificationInboxMessage = notificationInboxMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getStatusDesc() {

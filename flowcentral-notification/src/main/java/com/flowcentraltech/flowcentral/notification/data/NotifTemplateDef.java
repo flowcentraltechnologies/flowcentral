@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.notification.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
@@ -54,7 +56,7 @@ public class NotifTemplateDef extends BaseApplicationEntityDef {
         this.subjectTokenList = StringUtils.breakdownParameterizedString(subject);
         this.templateTokenList = StringUtils.breakdownParameterizedString(template);
         this.format = format;
-        this.paramList = paramList;
+        this.paramList = Collections.unmodifiableList(new ArrayList<NotifTemplateParamDef>(paramList));
     }
 
     public String getEntity() {

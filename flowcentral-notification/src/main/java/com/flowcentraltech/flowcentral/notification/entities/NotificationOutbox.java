@@ -19,9 +19,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
-import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
@@ -41,13 +41,16 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
     @ForeignKey(name = "NOTIFICATION_TY")
     private NotifType type;
 
+    @ForeignKey(nullable = true)
+    private NotifMessageFormat format;
+
     @ForeignKey(name = "REC_ST")
     private NotificationOutboxStatus status;
 
-    @Column(name = "NOTIFACTION_FROM", length = 128, nullable = true)
+    @Column(name = "NOTIFACTION_FROM", length = 256, nullable = true)
     private String from;
 
-    @Column(name = "NOTIFACTION_SUBJECT", length = 128)
+    @Column(name = "NOTIFACTION_SUBJECT", length = 256)
     private String subject;
 
     @Column
@@ -62,8 +65,8 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
     @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
     private Date sentDt;
 
-    @Child
-    private NotificationOutboxMessage notificationMessage;
+    @Column(type = ColumnType.CLOB, nullable = true)
+    private String message;
 
     @ChildList
     private List<NotificationRecipient> recipientList;
@@ -76,6 +79,9 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
+
+    @ListOnly(key = "format", property = "description")
+    private String formatDesc;
 
     @Override
     public String getDescription() {
@@ -130,14 +136,6 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
         this.sentDt = sentDt;
     }
 
-    public NotificationOutboxMessage getNotificationMessage() {
-        return notificationMessage;
-    }
-
-    public void setNotificationMessage(NotificationOutboxMessage notificationMessage) {
-        this.notificationMessage = notificationMessage;
-    }
-
     public List<NotificationRecipient> getRecipientList() {
         return recipientList;
     }
@@ -184,6 +182,30 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
+    }
+
+    public NotifMessageFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(NotifMessageFormat format) {
+        this.format = format;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getFormatDesc() {
+        return formatDesc;
+    }
+
+    public void setFormatDesc(String formatDesc) {
+        this.formatDesc = formatDesc;
     }
 
 }

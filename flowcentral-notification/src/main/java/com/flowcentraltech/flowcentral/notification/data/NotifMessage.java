@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.constant.FileAttachmentType;
@@ -36,25 +37,25 @@ import com.tcdng.unify.core.util.DataUtils;
 public class NotifMessage {
 
     private NotifType notifType;
+    
+    private NotifMessageFormat format;
 
     private String from;
 
     private String template;
 
-    private Long id;
-
-    private Map<String, String> params;
+    private Map<String, Object> params;
 
     private List<Recipient> recipients;
 
     private List<Attachment> attachments;
 
-    private NotifMessage(NotifType notifType, String from, String template, Long id, Map<String, String> params,
+    private NotifMessage(NotifType notifType, NotifMessageFormat format, String from, String template, Map<String, Object> params,
             List<Recipient> recipients, List<Attachment> attachments) {
         this.notifType = notifType;
+        this.format = format;
         this.from = from;
         this.template = template;
-        this.id = id;
         this.params = params;
         this.recipients = recipients;
         this.attachments = attachments;
@@ -68,6 +69,10 @@ public class NotifMessage {
         return notifType;
     }
 
+    public NotifMessageFormat getFormat() {
+        return format;
+    }
+
     public String getFrom() {
         return from;
     }
@@ -76,11 +81,7 @@ public class NotifMessage {
         return template;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Map<String, String> getParams() {
+    public Map<String, Object> getParams() {
         return params;
     }
 
@@ -92,39 +93,39 @@ public class NotifMessage {
         return attachments;
     }
 
-    public static Builder newEmailMessageBuilder(Long id, String template) {
-        return new Builder(NotifType.EMAIL, id, template);
+    public static Builder newEmailMessageBuilder(String template) {
+        return new Builder(NotifType.EMAIL, template);
     }
 
-    public static Builder newSmsMessageBuilder(Long id, String template) {
-        return new Builder(NotifType.SMS, id, template);
+    public static Builder newSmsMessageBuilder(String template) {
+        return new Builder(NotifType.SMS, template);
     }
 
-    public static Builder newSystemMessageBuilder(Long id, String template) {
-        return new Builder(NotifType.SYSTEM, id, template);
+    public static Builder newSystemMessageBuilder(String template) {
+        return new Builder(NotifType.SYSTEM, template);
     }
 
     public static class Builder {
 
         private NotifType notifType;
+        
+        private NotifMessageFormat format;
 
         private String from;
 
         private String template;
 
-        private Map<String, String> params;
-
-        private Long id;
+        private Map<String, Object> params;
 
         private List<Recipient> recipients;
 
         private List<Attachment> attachments;
 
-        private Builder(NotifType notifType, Long id, String template) {
+        private Builder(NotifType notifType, String template) {
             this.notifType = notifType;
-            this.id = id;
+            this.format = NotifMessageFormat.PLAIN_TEXT;
             this.template = template;
-            this.params = new HashMap<String, String>();
+            this.params = new HashMap<String, Object>();
             this.recipients = new ArrayList<Recipient>();
             this.attachments = new ArrayList<Attachment>();
         }
@@ -144,29 +145,42 @@ public class NotifMessage {
             return this;
         }
 
+        public Builder format(NotifMessageFormat format) {
+            this.format = format;
+            return this;
+        }
+
         public Builder from(String from) {
             this.from = from;
             return this;
         }
 
-        public Builder withAttachment(FileAttachmentType type, String name, String title, String fileName,
-                byte[] data) {
+        public Builder addParam(String name, Object val) {
+            params.put(name, val);
+            return this;
+        }
+
+        public Builder addAttachment(FileAttachmentType type, String name, String title, String fileName, byte[] data) {
             attachments.add(Attachment.newBuilder(type).name(name).title(title).fileName(fileName).data(data).build());
             return this;
         }
 
-        public Builder withAttachment(FileAttachmentType type, String name, String title, byte[] data) {
+        public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data) {
             attachments.add(Attachment.newBuilder(type).name(name).title(title).data(data).build());
             return this;
         }
 
-        public Builder withAttachment(Attachment attachment) {
+        public Builder addAttachment(Attachment attachment) {
             attachments.add(attachment);
             return this;
         }
 
         public NotifMessage build() {
-            return new NotifMessage(notifType, from, template, id, DataUtils.unmodifiableMap(params),
+            if (DataUtils.isBlank(recipients)) {
+                throw new IllegalArgumentException("At least one recipient is required.");
+            }
+            
+            return new NotifMessage(notifType, format, from, template, DataUtils.unmodifiableMap(params),
                     DataUtils.unmodifiableList(recipients), DataUtils.unmodifiableList(attachments));
         }
 
