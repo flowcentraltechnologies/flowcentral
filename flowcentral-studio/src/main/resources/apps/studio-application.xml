@@ -240,10 +240,10 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioworkflowformlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="wfstepnotiftempllist"
-			description="$m{studio.widgettype.wfstepnotiftempllist}"
+		<widgetType name="wfstepnotifsenderlist"
+			description="$m{studio.widgettype.wfstepnotifsenderlist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studiowfstepnotiftempllist listParams:$l{wfStepId} blankOption:$m{blank.none}"
+			editor="!ui-select list:studiowfstepnotifsenderlist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfstepreceivefromlist"
 			description="$m{studio.widgettype.wfstepreceivefromlist}"
@@ -4480,8 +4480,8 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="template"
-						inputWidget="studio.wfstepnotiftempllist" column="0"
+					<field name="generator"
+						inputWidget="studio.wfstepnotifsenderlist" column="0"
 						required="true" />
 					<field name="recipientPolicy"
 						inputWidget="studio.wfrecipientpolicylist" column="0"

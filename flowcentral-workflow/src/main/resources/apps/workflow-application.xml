@@ -336,7 +336,7 @@
 				label="$m{workflow.stepalert.recipientnamerule}" type="string" maxLen="64"  nullable="true" />
 			<field name="recipientContactRule"
 				label="$m{workflow.stepalert.recipientcontactrule}" type="string" maxLen="64"  nullable="true" />
-			<field name="template" label="$m{workflow.stepalert.template}"
+			<field name="generator" label="$m{workflow.stepalert.generator}"
 				type="string"  maxLen="128" />
 			<field name="fireOnPrevStepName"
 				label="$m{workflow.stepalert.fireonprevstepname}" type="string"
