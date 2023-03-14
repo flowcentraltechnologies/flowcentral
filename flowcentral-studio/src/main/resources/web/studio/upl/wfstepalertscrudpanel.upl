@@ -15,7 +15,7 @@
 
 !fc-wfstepalertscrudpanel
 	tableComponents:$c{nameLabel descLabel}
-	formSection:$d{!ui-section components:$c{frmNotificationType frmName frmDesc frmSender
+	formSection:$d{!ui-section components:$c{frmName frmDesc frmSender
 		frmFireOnPrevStepName frmFireOnConditionName frmRecipientPolicy frmRecipientNameRule frmRecipientContactRule frmType}}
 !ui-label:nameLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.name} binding:name
 !ui-label:descLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.description} binding:description
@@ -37,7 +37,5 @@
 	list:$s{wfrecipientnamerulelist} blankOption:$s{} listParamType:$s{PANEL} listParams:$l{entityName recipientPolicy}
 !ui-select:frmRecipientContactRule styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.recipientcontactrule} binding:recipientContactRule
 	list:$s{wfrecipientcontactrulelist} blankOption:$s{} listParamType:$s{PANEL} listParams:$l{entityName recipientPolicy}
-!ui-select:frmNotificationType styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.notificationtype}
-	list:$s{notificationtypelist} blankOption:$s{} binding:notificationType required:true
 !ui-select:frmType styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.type}
 	list:$s{wfalerttypelist} blankOption:$s{} binding:type required:true
