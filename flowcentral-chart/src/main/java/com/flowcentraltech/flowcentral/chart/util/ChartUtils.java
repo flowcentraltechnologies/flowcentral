@@ -130,9 +130,7 @@ public final class ChartUtils {
         // Data labels
         jw.beginObject("dataLabels");
         jw.write("enabled", chartDef.isShowDataLabels());
-        if (chartDef.isFormatDataLabels()) {
-            jw.writeScript("formatter", "function (val, opts){return val.toLocaleString();}");
-        }
+        jw.write("_dformatter", chartDef.isFormatDataLabels());
         jw.endObject();
 
         // Theme
@@ -190,11 +188,9 @@ public final class ChartUtils {
 
             // Y-axis
             jw.write("_yintegers", integers);
+            jw.write("_yformatter", chartDef.isFormatYLabels());
             jw.beginObject("yaxis");
             jw.beginObject("labels");
-            if (chartDef.isFormatYLabels()) {
-                jw.writeScript("formatter", "function (val, opts){return val.toLocaleString();}");
-            }
             jw.endObject();
             jw.endObject();
 

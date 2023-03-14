@@ -61,7 +61,7 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private ChartDef(ChartType type, ChartPaletteType paletteType, String title, String subTitle, String provider,
             String rule, int width, int height, boolean stacked, boolean showGrid, boolean showDataLabels,
-            boolean formatYLabels, boolean formatDataLabels, boolean smooth, ApplicationEntityNameParts nameParts,
+            boolean formatDataLabels, boolean formatYLabels, boolean smooth, ApplicationEntityNameParts nameParts,
             String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;

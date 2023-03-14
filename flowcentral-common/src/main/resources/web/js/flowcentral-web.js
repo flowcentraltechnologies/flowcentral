@@ -135,17 +135,22 @@ fux.chartList = [];
 fux.rigChart = function(rgp) {
 	const id = rgp.pId;
 	const options = rgp.pOptions
-	if (options._yintegers) {
-		options.yaxis = [
-			{
-			    labels: {
-			      formatter: function(val) {
-			        return val.toFixed(0);
-			      }
-			    }
-  			}
-		]
+	if (options._yformatter) {
+		options.yaxis.labels.formatter = function(val, opts) {
+		        return val.toLocaleString();
+		      };
+	} else if (options._yintegers) {
+		options.yaxis.labels.formatter = function(val, opts) {
+		        return val.toFixed(0);
+		      };
 	}
+	
+	if (options.dataLabels._dformatter) {
+		options.dataLabels.formatter = function(val, opts) {
+			        return val.toLocaleString();
+			      };
+	}
+	
 	var chart = new ApexCharts(_id(id), options);
     chart.render();
     fux.chartList.push(chart);
