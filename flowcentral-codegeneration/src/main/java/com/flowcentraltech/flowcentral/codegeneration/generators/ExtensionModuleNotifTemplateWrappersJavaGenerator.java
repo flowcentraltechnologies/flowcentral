@@ -45,7 +45,7 @@ public class ExtensionModuleNotifTemplateWrappersJavaGenerator extends AbstractS
         super("src/main/java/{0}/utilities/{1}/templatewrappers/");
     }
 
-    public final void setApplicationModuleService(NotificationModuleService notificationModuleService) {
+    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
 
