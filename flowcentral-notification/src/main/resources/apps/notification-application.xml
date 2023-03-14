@@ -291,7 +291,7 @@
 				label="$m{notification.notificationtemplateparam.name}"
 				type="string" maxLen="128" />
 			<field name="label"
-				label="$m{notification.notificationtemplateparam.label}"
+				label="$m{notification.notificationtemplateparam.llabel}"
 				type="string" maxLen="128" />
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationtemplateparam.uc.name}"

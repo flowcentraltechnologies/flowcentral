@@ -179,7 +179,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public List<DynamicNotifTemplateInfo> generateDynamicNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException {
-        List<NotificationTemplate> templates = environment().findAll(new NotificationTemplateQuery()
+        List<NotificationTemplate> templates = environment().listAll(new NotificationTemplateQuery()
                 .moduleName(moduleName).configType(ConfigType.CUSTOM).addSelect("applicationName", "name"));
         if (!DataUtils.isBlank(templates)) {
             List<DynamicNotifTemplateInfo> resultList = new ArrayList<DynamicNotifTemplateInfo>();
