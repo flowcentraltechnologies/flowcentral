@@ -86,6 +86,7 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -109,6 +110,19 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
+
+    /**
+     * Creates a wrapper instance initialized with the supplied value store.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @param valueStore
+     *                    the value store
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStore valueStore) throws UnifyException;
 
     /**
      * Creates a wrapper instance initialized with the supplied entity instance.

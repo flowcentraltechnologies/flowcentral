@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.workflow.business.generators;
+package com.flowcentraltech.flowcentral.notification.senders;
 
 import java.util.List;
 
@@ -25,36 +25,36 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Convenient abstract base class for notification template workflow alert
+ * Convenient abstract base class for notification template alert
  * sender.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractNotifTemplateWfAlertSender<T extends NotifTemplateWrapper> extends AbstractWfAlertSender {
+public abstract class AbstractNotifTemplateAlertSender<T extends NotifTemplateWrapper> extends AbstractNotifAlertSender {
 
-    private final Class<T> wrapperType;
+    private final Class<T> notifWrapperType;
 
-    public AbstractNotifTemplateWfAlertSender(Class<T> wrapperType) {
-        this.wrapperType = wrapperType;
+    public AbstractNotifTemplateAlertSender(Class<T> notifWrapperType) {
+        this.notifWrapperType = notifWrapperType;
     }
 
     @Override
     public NotifType getNotifType() throws UnifyException {
-        return notification().wrapperOf(wrapperType).getNotifType();
+        return notification().wrapperOf(notifWrapperType).getNotifType();
     }
 
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
-        T wrapper = notification().wrapperOf(wrapperType);
+        T notifWrapper = notification().wrapperOf(notifWrapperType);
         if (!DataUtils.isBlank(recipientList)) {
             for (Recipient recipient : recipientList) {
-                wrapper.addRecipient(recipient);
+                notifWrapper.addRecipient(recipient);
             }
         }
 
-        compose(wrapper, reader);
-        notification().sendNotification(wrapper.getMessage());
+        compose(notifWrapper, reader);
+        notification().sendNotification(notifWrapper.getMessage());
     }
 
     protected abstract void compose(T notifWrapper, ValueStoreReader reader) throws UnifyException;

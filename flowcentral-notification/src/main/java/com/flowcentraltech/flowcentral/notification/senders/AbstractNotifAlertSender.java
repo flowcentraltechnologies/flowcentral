@@ -13,26 +13,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.workflow.business.generators;
+package com.flowcentraltech.flowcentral.notification.senders;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
 /**
- * Convenient abstract base class for workflow alert sender.
+ * Convenient abstract base class for notification alert sender.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractWfAlertSender extends AbstractUnifyComponent implements WfAlertSender {
+public abstract class AbstractNotifAlertSender extends AbstractUnifyComponent implements NotifAlertSender {
 
     @Configurable
     private NotificationModuleService notificationModuleService;
 
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
+
     public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
     }
 
     @Override
@@ -47,6 +55,10 @@ public abstract class AbstractWfAlertSender extends AbstractUnifyComponent imple
 
     protected final NotificationModuleService notification() {
         return notificationModuleService;
+    }
+
+    protected final ApplicationModuleService application() {
+        return applicationModuleService;
     }
 
 }

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.workflow.business.generators;
+package com.flowcentraltech.flowcentral.notification.senders;
 
 import java.util.List;
 
@@ -24,12 +24,12 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
- * Workflow alert sender.
+ * Notification alert sender.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WfAlertSender extends UnifyComponent {
+public interface NotifAlertSender extends UnifyComponent {
 
     NotifType getNotifType() throws UnifyException;
     

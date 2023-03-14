@@ -1250,6 +1250,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     private static final Class<?>[] WRAPPER_PARAMS_2 = { EntityClassDef.class, List.class };
 
+    private static final Class<?>[] WRAPPER_PARAMS_3 = { EntityClassDef.class, ValueStore.class };
+
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException {
         final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
@@ -1273,6 +1275,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_2, entityClassDef, instList);
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStore valueStore) throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                ApplicationCodeGenUtils.ENTITY_NAME);
+        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_3, entityClassDef, valueStore);
     }
 
     @SuppressWarnings("unchecked")
