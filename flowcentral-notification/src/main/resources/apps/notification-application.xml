@@ -407,15 +407,15 @@
 					<field name="message" inputWidget="application.textarealarge"
 						column="0" required="true" />
 				</section>
-				<section name="outboxDetails" columns="type_2"
+				<section name="procDetails" columns="type_2"
 					label="$m{notification.notificationoutbox.form.processingdetails}">
-					<field name="expiryDt" inputWidget="application.datetime"
-						column="0" />
+					<field name="nextAttemptDt"
+						inputWidget="application.datetime" column="0" />
 					<field name="attempts" inputWidget="application.integer"
 						column="0" required="true" />
-					<field name="nextAttemptDt"
-						inputWidget="application.datetime" column="1" />
 					<field name="sentDt" inputWidget="application.datetime"
+						column="1" />
+					<field name="expiryDt" inputWidget="application.datetime"
 						column="1" />
 				</section>
 			</tab>
