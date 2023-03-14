@@ -24,6 +24,7 @@ import java.util.zip.ZipOutputStream;
 import com.flowcentraltech.flowcentral.codegeneration.util.CodeGenerationUtils;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
+import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -53,13 +54,15 @@ public class ExtensionModuleNotifTemplateWrappersJavaGenerator extends AbstractS
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {
         for (DynamicNotifTemplateInfo dynamicTemplateInfo : notificationModuleService
-                .generateDynamicNotifTemplateInfos(ctx.getBasePackage(), moduleName)) {
+                .generateNotifTemplateInfos(ctx.getBasePackage(), moduleName)) {
             TypeInfo typeInfo = new TypeInfo(dynamicTemplateInfo.getTemplateClassName());
             final String filename = typeInfo.getSimpleName() + "Wrapper.java";
             openEntry(filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
-                String src = CodeGenerationUtils.generateTemplateWrapperJavaClassSource(dynamicTemplateInfo);
+                String src = CodeGenerationUtils.generateTemplateWrapperJavaClassSource(NotificationCodeGenUtils
+                        .generateUtilitiesTemplateWrapperPackageName(ctx.getBasePackage(), moduleName),
+                        dynamicTemplateInfo);
                 bw.write(src);
                 bw.newLine();
                 bw.flush();

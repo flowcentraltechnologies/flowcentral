@@ -28,7 +28,6 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
-import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
@@ -177,10 +176,10 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
-    public List<DynamicNotifTemplateInfo> generateDynamicNotifTemplateInfos(String basePackage, String moduleName)
+    public List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException {
         List<NotificationTemplate> templates = environment().listAll(new NotificationTemplateQuery()
-                .moduleName(moduleName).configType(ConfigType.CUSTOM).addSelect("applicationName", "name"));
+                .moduleName(moduleName)/*.configType(ConfigType.CUSTOM)*/.addSelect("applicationName", "name"));
         if (!DataUtils.isBlank(templates)) {
             List<DynamicNotifTemplateInfo> resultList = new ArrayList<DynamicNotifTemplateInfo>();
             for (NotificationTemplate template : templates) {

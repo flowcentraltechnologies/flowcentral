@@ -57,7 +57,7 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<DynamicNotifTemplateInfo> generateDynamicNotifTemplateInfos(String basePackage, String moduleName)
+    List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException;
     
     /**

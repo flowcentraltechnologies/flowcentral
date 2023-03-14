@@ -82,7 +82,7 @@ public final class CodeGenerationUtils {
         return replacements;
     }
 
-    public static String generateEntityWrapperJavaClassSource(DynamicEntityInfo dynamicEntityInfo)
+    public static String generateEntityWrapperJavaClassSource(String packageName, DynamicEntityInfo dynamicEntityInfo)
             throws UnifyException {
         StringBuilder esb = new StringBuilder();
         StringBuilder fsb = new StringBuilder();
@@ -152,8 +152,9 @@ public final class CodeGenerationUtils {
         // Construct class
         TypeInfo baseEntityInfo = new TypeInfo(BaseEntityWrapper.class);
         TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName() + "Wrapper");
-        final int index = typeInfo.getPackageName().lastIndexOf('.');
-        final String packageName = typeInfo.getPackageName().substring(0, index) + ".entitywrappers";
+        // final int index = typeInfo.getPackageName().lastIndexOf('.');
+        // final String packageName = typeInfo.getPackageName().substring(0, index) +
+        // ".entitywrappers";
         esb.append("package ").append(packageName).append(";\n");
         List<String> importList = new ArrayList<String>(importSet);
         Collections.sort(importList);
@@ -181,8 +182,8 @@ public final class CodeGenerationUtils {
         return esb.toString();
     }
 
-    public static String generateTemplateWrapperJavaClassSource(DynamicNotifTemplateInfo dynamicTemplateInfo)
-            throws UnifyException {
+    public static String generateTemplateWrapperJavaClassSource(String packageName,
+            DynamicNotifTemplateInfo dynamicTemplateInfo) throws UnifyException {
         StringBuilder esb = new StringBuilder();
         StringBuilder msb = new StringBuilder();
         Set<String> importSet = new HashSet<String>();
@@ -202,8 +203,6 @@ public final class CodeGenerationUtils {
         // Construct class
         TypeInfo baseEntityInfo = new TypeInfo(BaseNotifTemplateWrapper.class);
         TypeInfo typeInfo = new TypeInfo(dynamicTemplateInfo.getTemplateClassName() + "Wrapper");
-        final int index = typeInfo.getPackageName().lastIndexOf('.');
-        final String packageName = typeInfo.getPackageName().substring(0, index) + ".templatewrappers";
         esb.append("package ").append(packageName).append(";\n");
         List<String> importList = new ArrayList<String>(importSet);
         Collections.sort(importList);

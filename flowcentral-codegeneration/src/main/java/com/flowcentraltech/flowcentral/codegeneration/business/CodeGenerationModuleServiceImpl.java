@@ -203,7 +203,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
                         final String applicationName = application.getName();
-                        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
+                        List<Long> entityIdList = applicationModuleService.findAppComponentIdList(applicationName,
                                 AppEntity.class);
                         if (!DataUtils.isBlank(entityIdList)) {
                             for (Long entityId : entityIdList) {

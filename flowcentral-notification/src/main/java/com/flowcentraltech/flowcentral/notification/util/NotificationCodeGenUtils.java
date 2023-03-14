@@ -35,7 +35,11 @@ public final class NotificationCodeGenUtils {
     public static String generateUtilitiesTemplateWrapperClassName(String basePackage, String moduleName,
             String templateName) {
         return StringUtils.isBlank(templateName) ? null
-                : basePackage + ".utilities." + moduleName.toLowerCase() + ".templatewrappers."
+                : NotificationCodeGenUtils.generateUtilitiesTemplateWrapperPackageName(basePackage, moduleName) + "."
                         + StringUtils.capitalizeFirstLetter(templateName);
+    }
+
+    public static String generateUtilitiesTemplateWrapperPackageName(String basePackage, String moduleName) {
+        return basePackage + ".utilities." + moduleName.toLowerCase() + ".templatewrappers";
     }
 }
