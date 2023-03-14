@@ -3026,8 +3026,6 @@
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="attachmentGenerator"
-						inputWidget="application.text" column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
@@ -3040,8 +3038,8 @@
 				<section name="messageDetails" columns="type_1">
 					<field name="subject" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="template" inputWidget="application.textarea"
-						column="0" color="yellow" required="true" />
+					<field name="template" inputWidget="application.textarealarge"
+						column="0" required="true" />
 				</section>
 			</tab>
 			<tab name="params"
