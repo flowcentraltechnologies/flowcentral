@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.notification.data;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 
@@ -33,6 +34,8 @@ public interface NotifTemplateWrapper {
     String getTemplateName();
     
     String getEntity();
+    
+    void setImportance(ImportanceType importance);
     
     void addTORecipient(String name, String contact);
 

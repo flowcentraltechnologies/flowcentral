@@ -228,6 +228,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             MessageParts messageParts = getMessageParts(notifMessage);
             NotificationOutbox notification = new NotificationOutbox();
             notification.setTenantId(getUserTenantId());
+            notification.setImportance(notifMessage.getImportance());
             notification.setFrom(notifMessage.getFrom());
             notification.setType(notifTemplateDef.getNotifType());
             notification.setExpiryDt(null);

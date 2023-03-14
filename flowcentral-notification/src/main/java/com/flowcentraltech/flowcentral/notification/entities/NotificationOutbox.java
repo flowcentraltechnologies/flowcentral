@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
@@ -41,9 +42,12 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
     @ForeignKey(name = "NOTIFICATION_TY")
     private NotifType type;
 
-    @ForeignKey(nullable = true)
+    @ForeignKey
     private NotifMessageFormat format;
 
+    @ForeignKey
+    private ImportanceType importance;
+    
     @ForeignKey(name = "REC_ST")
     private NotificationOutboxStatus status;
 
@@ -82,6 +86,9 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     @ListOnly(key = "format", property = "description")
     private String formatDesc;
+
+    @ListOnly(key = "importance", property = "description")
+    private String importanceDesc;
 
     @Override
     public String getDescription() {
@@ -206,6 +213,22 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     public void setFormatDesc(String formatDesc) {
         this.formatDesc = formatDesc;
+    }
+
+    public ImportanceType getImportance() {
+        return importance;
+    }
+
+    public void setImportance(ImportanceType importance) {
+        this.importance = importance;
+    }
+
+    public String getImportanceDesc() {
+        return importanceDesc;
+    }
+
+    public void setImportanceDesc(String importanceDesc) {
+        this.importanceDesc = importanceDesc;
     }
 
 }

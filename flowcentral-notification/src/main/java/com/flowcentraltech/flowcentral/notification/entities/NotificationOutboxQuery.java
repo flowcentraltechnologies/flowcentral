@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.notification.entities;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntityQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
 import com.tcdng.unify.core.util.CalendarUtils;
@@ -61,5 +62,9 @@ public class NotificationOutboxQuery extends BaseAuditTenantEntityQuery<Notifica
 
     public NotificationOutboxQuery status(NotificationOutboxStatus status) {
         return (NotificationOutboxQuery) addEquals("status", status);
+    }
+
+    public NotificationOutboxQuery importance(ImportanceType importance) {
+        return (NotificationOutboxQuery) addEquals("importance", importance);
     }
 }

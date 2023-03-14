@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.util.DataUtils;
@@ -34,6 +35,8 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class NotifMessage {
 
+    private ImportanceType importance;
+
     private String template;
 
     private String from;
@@ -44,8 +47,9 @@ public class NotifMessage {
 
     private List<Attachment> attachments;
 
-    private NotifMessage(String from, String template, Map<String, Object> params,
+    private NotifMessage(ImportanceType importance, String from, String template, Map<String, Object> params,
             List<Recipient> recipients, List<Attachment> attachments) {
+        this.importance = importance;
         this.from = from;
         this.template = template;
         this.params = params;
@@ -55,6 +59,10 @@ public class NotifMessage {
 
     public String getTemplate() {
         return template;
+    }
+
+    public ImportanceType getImportance() {
+        return importance;
     }
 
     public String getFrom() {
@@ -79,6 +87,8 @@ public class NotifMessage {
 
     public static class Builder {
 
+        private ImportanceType importance;
+
         private String template;
 
         private String from;
@@ -90,6 +100,7 @@ public class NotifMessage {
         private List<Attachment> attachments;
 
         private Builder(String template) {
+            this.importance = ImportanceType.LOW;
             this.template = template;
             this.params = new HashMap<String, Object>();
             this.recipients = new ArrayList<Recipient>();
@@ -121,6 +132,11 @@ public class NotifMessage {
             return this;
         }
 
+        public Builder importance(ImportanceType importance) {
+            this.importance = importance != null ? importance : ImportanceType.LOW;
+            return this;
+        }
+
         public Builder addParam(String name, Object val) {
             params.put(name, val);
             return this;
@@ -145,8 +161,8 @@ public class NotifMessage {
             if (DataUtils.isBlank(recipients)) {
                 throw new IllegalArgumentException("At least one recipient is required.");
             }
-            
-            return new NotifMessage(from, template, DataUtils.unmodifiableMap(params),
+
+            return new NotifMessage(importance, from, template, DataUtils.unmodifiableMap(params),
                     DataUtils.unmodifiableList(recipients), DataUtils.unmodifiableList(attachments));
         }
 

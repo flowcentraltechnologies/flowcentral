@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.notification.data;
 
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 
@@ -52,6 +53,11 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
         return notifTemplateDef.getEntity();
     }
 
+    @Override
+    public void setImportance(ImportanceType importance) {
+        nmb.importance(importance);
+    }
+  
     @Override
     public void addTORecipient(String name, String contact) {
         nmb.addTORecipient(name, contact);
