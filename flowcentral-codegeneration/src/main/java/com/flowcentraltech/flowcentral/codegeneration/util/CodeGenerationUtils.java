@@ -187,8 +187,10 @@ public final class CodeGenerationUtils {
         StringBuilder msb = new StringBuilder();
         Set<String> importSet = new HashSet<String>();
 
-        TypeInfo NotifTemplateDefEntityInfo = new TypeInfo(NotifTemplateDef.class);
-        importSet.add(NotifTemplateDefEntityInfo.getCanonicalName());
+        TypeInfo notifTemplateDefEntityInfo = new TypeInfo(NotifTemplateDef.class);
+        TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
+        importSet.add(notifTemplateDefEntityInfo.getCanonicalName());
+        importSet.add(exceptionEntityInfo.getCanonicalName());
 
         // Evaluate parameters
         for (final String param : dynamicTemplateInfo.getParams()) {

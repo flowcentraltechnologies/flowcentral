@@ -15,7 +15,7 @@
 
 !fc-wfstepalertscrudpanel
 	tableComponents:$c{nameLabel descLabel}
-	formSection:$d{!ui-section components:$c{frmNotificationType frmName frmDesc frmTemplate
+	formSection:$d{!ui-section components:$c{frmNotificationType frmName frmDesc frmSender
 		frmFireOnPrevStepName frmFireOnConditionName frmRecipientPolicy frmRecipientNameRule frmRecipientContactRule frmType}}
 !ui-label:nameLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.name} binding:name
 !ui-label:descLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.description} binding:description

@@ -199,7 +199,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM));
+                        .listAll(new ApplicationQuery().moduleName(moduleName)/*.configType(ConfigType.CUSTOM)*/);
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
                         final String applicationName = application.getName();
