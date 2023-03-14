@@ -4803,7 +4803,7 @@
 					description="$m{studio.appappletprop.manageentity.searchtable}"
 					inputWidget="studio.propertyapplettablelist" required="true" />
 				<property name="searchTable.selectByField"
-					description="$m{studio.appappletprop.manageentity.selectbyfield}"
+					description="$m{studio.appappletprop.manageentity.searchtable.selectbyfield}"
 					inputWidget="studio.propertyappletuniquefieldlist" required="true" />
 				<property name="baseRestriction"
 					description="$m{studio.appappletprop.manageentity.baserestriction}"

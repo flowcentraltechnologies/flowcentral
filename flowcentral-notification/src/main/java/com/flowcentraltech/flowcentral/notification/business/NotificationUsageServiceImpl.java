@@ -48,8 +48,8 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         // Notification template
         if (UsageType.isQualifiesEntity(usageType)) {
             List<NotificationTemplate> notificationTemplateList = environment()
-                    .listAll(new NotificationTemplateQuery().applicationNameNot(applicationName)
-                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+                    .listAll(new NotificationTemplateQuery().entityBeginsWith(applicationNameBase)
+                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
             for (NotificationTemplate notificationTemplate : notificationTemplateList) {
                 Usage usage = new Usage(UsageType.ENTITY, "NotificationTemplate",
                         notificationTemplate.getApplicationName() + "." + notificationTemplate.getName(), "entity",
@@ -68,8 +68,8 @@ public class NotificationUsageServiceImpl extends AbstractFlowCentralService imp
         long usages = 0L;
         // Notification template
         if (UsageType.isQualifiesEntity(usageType)) {
-            usages += environment().countAll(new NotificationTemplateQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new NotificationTemplateQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
         }
 
         return usages;

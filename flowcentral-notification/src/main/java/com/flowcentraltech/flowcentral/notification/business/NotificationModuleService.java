@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
+import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -45,6 +46,20 @@ public interface NotificationModuleService extends FlowCentralService {
      */
     <T extends NotifTemplateWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
 
+    /**
+     * Generates dynamic notification template information.
+     * 
+     * @param basePackage
+     *                    the base package
+     * @param moduleName
+     *                    the module name
+     * @return list of template infos
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<DynamicNotifTemplateInfo> generateDynamicNotifTemplateInfos(String basePackage, String moduleName)
+            throws UnifyException;
+    
     /**
      * Finds notification templates.
      * 

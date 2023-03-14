@@ -32,7 +32,7 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_NOTIFCHANNEL", uniqueConstraints = { @UniqueConstraint({ "notifType" }),
+@Table(name = "FC_NOTIFCHANNEL", uniqueConstraints = { @UniqueConstraint({ "notificationType" }),
         @UniqueConstraint({ "name" }), @UniqueConstraint({ "description" }) })
 public class NotificationChannel extends BaseStatusTenantEntity {
 

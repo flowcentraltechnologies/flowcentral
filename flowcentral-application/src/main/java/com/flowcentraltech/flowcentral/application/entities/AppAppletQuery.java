@@ -31,10 +31,6 @@ public class AppAppletQuery extends BaseApplicationEntityQuery<AppApplet> {
         super(AppApplet.class);
     }
 
-    public AppAppletQuery applicationNameNot(String applicationName) {
-        return (AppAppletQuery) addNotEquals("applicationName", applicationName);
-    }
-
     public AppAppletQuery routeToApplet(String routeToApplet) {
         return (AppAppletQuery) addEquals("routeToApplet", routeToApplet);
     }

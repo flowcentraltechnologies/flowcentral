@@ -215,7 +215,7 @@
 			<field name="notificationTypeDesc"
 				label="$m{notification.notificationchannel.typedesc}"
 				type="list_only" key="notificationType" property="description" />
-			<field name="notificationChannelPropList"
+			<field name="channelPropList"
 				label="$m{notification.notificationchannel.settings}"
 				type="child_list" references="notifChannelPropRef" />
 			<uniqueConstraint name="typeUc"
@@ -440,7 +440,7 @@
 			<tab name="settings"
 				label="$m{notification.notificationchannel.form.settings}"
 				contentType="property_list" applet="manageNotifChannelProp"
-				reference="notificationChannelPropList" />
+				reference="channelPropList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>
@@ -491,7 +491,7 @@
 		<propertyRule name="notifChannelPropRule"
 			description="$m{notification.notificationchannel.propertyrule}"
 			entity="notifChannel" choiceField="notificationType"
-			listField="notificationChannelPropList" propNameField="name"
+			listField="channelPropList" propNameField="name"
 			propValField="value" ignoreCase="true">
 			<choice name="eml" val="notifChannelPropList" />
 			<choice name="sms" val="notifChannelPropList" />

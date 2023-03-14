@@ -33,10 +33,6 @@ public class ReportableDefinitionQuery extends BaseApplicationEntityQuery<Report
         return (ReportableDefinitionQuery) addEquals("entity", entity);
     }
 
-    public ReportableDefinitionQuery applicationNameNot(String applicationName) {
-        return (ReportableDefinitionQuery) addNotEquals("applicationName", applicationName);
-    }
-
     public ReportableDefinitionQuery entityBeginsWith(String entity) {
         return (ReportableDefinitionQuery) addBeginsWith("entity", entity);
     }

@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.notification.business;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNamePar
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
@@ -55,7 +57,9 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxQ
 import com.flowcentraltech.flowcentral.notification.entities.NotificationRecipient;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParam;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParamQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
+import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -161,7 +165,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public final void setTwoWayStringCryptograph(TwoWayStringCryptograph twoWayStringCryptograph) {
         this.twoWayStringCryptograph = twoWayStringCryptograph;
     }
-    
+
     private static final Class<?>[] WRAPPER_PARAMS_0 = { NotifTemplateDef.class };
 
     @Override
@@ -170,6 +174,28 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 NotificationCodeGenUtils.TEMPLATE_NAME);
         final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(templateName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, notifTemplateDef);
+    }
+
+    @Override
+    public List<DynamicNotifTemplateInfo> generateDynamicNotifTemplateInfos(String basePackage, String moduleName)
+            throws UnifyException {
+        List<NotificationTemplate> templates = environment().findAll(new NotificationTemplateQuery()
+                .moduleName(moduleName).configType(ConfigType.CUSTOM).addSelect("applicationName", "name"));
+        if (!DataUtils.isBlank(templates)) {
+            List<DynamicNotifTemplateInfo> resultList = new ArrayList<DynamicNotifTemplateInfo>();
+            for (NotificationTemplate template : templates) {
+                final String templateClassName = NotificationCodeGenUtils
+                        .generateUtilitiesTemplateWrapperClassName(basePackage, moduleName, template.getName());
+                final List<String> paramNames = environment().valueList(String.class, "name",
+                        new NotificationTemplateParamQuery().notificationTemplateId(template.getId()));
+                resultList.add(new DynamicNotifTemplateInfo(ApplicationNameUtils.getApplicationEntityLongName(
+                        template.getApplicationName(), template.getName()), templateClassName, paramNames));
+            }
+
+            return resultList;
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
