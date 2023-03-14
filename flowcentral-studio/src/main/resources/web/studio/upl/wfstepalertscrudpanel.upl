@@ -21,9 +21,9 @@
 !ui-label:descLabel styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.description} binding:description
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.name} size:32 binding:name required:true focus:true
 !ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.description} size:32 binding:description required:true
-!ui-select:frmTemplate styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.template}
-	list:$s{wfeditnotiftemplatelist} listParamType:$s{PANEL} listParams:$l{entityName} blankOption:$s{}
-	binding:template required:true 
+!ui-select:frmSender styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.sender}
+	list:$s{wfeditnotifsenderlist} listParamType:$s{PANEL} listParams:$l{entityName} blankOption:$s{}
+	binding:generator required:true 
 !ui-select:frmFireOnPrevStepName styleClass:$e{fc-formfield} caption:$m{wfstepalertscrudpanel.fireonprevstepname}
 	list:$s{wfeditprevsteplist} listParamType:$s{PANEL} listParams:$l{prevStepList} blankOption:$s{}
 	binding:fireOnPrevStepName
