@@ -76,6 +76,8 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                     chart.setRule(appChartConfig.getRule());
                     chart.setShowGrid(appChartConfig.isShowGrid());
                     chart.setShowDataLabels(appChartConfig.isShowDataLabels());
+                    chart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
+                    chart.setFormatYLabels(appChartConfig.isFormatYLabels());
                     chart.setStacked(appChartConfig.isStacked());
                     chart.setSmooth(appChartConfig.isSmooth());
                     chart.setConfigType(ConfigType.MUTABLE_INSTALL);
@@ -93,6 +95,8 @@ public class ApplicationChartInstallerImpl extends AbstractApplicationArtifactIn
                         oldChart.setRule(appChartConfig.getRule());
                         oldChart.setShowGrid(appChartConfig.isShowGrid());
                         oldChart.setShowDataLabels(appChartConfig.isShowDataLabels());
+                        oldChart.setFormatDataLabels(appChartConfig.isFormatDataLabels());
+                        oldChart.setFormatYLabels(appChartConfig.isFormatYLabels());
                         oldChart.setStacked(appChartConfig.isStacked());
                         oldChart.setSmooth(appChartConfig.isSmooth());
                         environment().updateByIdVersion(oldChart);

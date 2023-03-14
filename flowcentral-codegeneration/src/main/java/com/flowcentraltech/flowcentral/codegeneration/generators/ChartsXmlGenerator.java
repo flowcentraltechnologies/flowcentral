@@ -76,6 +76,8 @@ public class ChartsXmlGenerator extends AbstractStaticArtifactGenerator {
                 appChartConfig.setRule(chart.getRule());
                 appChartConfig.setShowGrid(chart.isShowGrid());
                 appChartConfig.setShowDataLabels(chart.isShowDataLabels());
+                appChartConfig.setFormatDataLabels(chart.isFormatDataLabels());
+                appChartConfig.setFormatYLabels(chart.isFormatYLabels());
                 appChartConfig.setStacked(chart.isStacked());
                 appChartConfig.setSmooth(chart.isSmooth());
 

@@ -58,8 +58,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
             {
                 @Override
                 protected boolean stale(String chartName, ChartDef chartDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new ChartQuery().id(chartDef.getId())) > chartDef
-                            .getVersion();
+                    return environment().value(long.class, "versionNo",
+                            new ChartQuery().id(chartDef.getId())) > chartDef.getVersion();
                 }
 
                 @Override
@@ -76,8 +76,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             chart.getVersionNo());
                     cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).width(chart.getWidth())
                             .height(chart.getHeight()).showGrid(chart.isShowGrid())
-                            .showDataLabels(chart.isShowDataLabels()).stacked(chart.isStacked())
-                            .smooth(chart.isSmooth());
+                            .showDataLabels(chart.isShowDataLabels()).formatDataLabels(chart.isFormatDataLabels())
+                            .formatYLabels(chart.isFormatYLabels()).stacked(chart.isStacked()).smooth(chart.isSmooth());
                     return cdb.build();
                 }
 

@@ -2866,6 +2866,8 @@
 					<field name="smooth" column="1" />
 					<field name="showGrid" column="1" />
 					<field name="showDataLabels" column="1" />
+					<field name="formatDataLabels" column="1" />
+					<field name="formatYLabels" column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

@@ -67,6 +67,12 @@ public class Chart extends BaseApplicationEntity {
     private boolean showDataLabels;
 
     @Column
+    private boolean formatDataLabels;
+
+    @Column
+    private boolean formatYLabels;
+
+    @Column
     private boolean smooth;
 
     @ListOnly(key = "type", property = "description")
@@ -161,6 +167,22 @@ public class Chart extends BaseApplicationEntity {
 
     public void setShowDataLabels(boolean showDataLabels) {
         this.showDataLabels = showDataLabels;
+    }
+
+    public boolean isFormatDataLabels() {
+        return formatDataLabels;
+    }
+
+    public void setFormatDataLabels(boolean formatDataLabels) {
+        this.formatDataLabels = formatDataLabels;
+    }
+
+    public boolean isFormatYLabels() {
+        return formatYLabels;
+    }
+
+    public void setFormatYLabels(boolean formatYLabels) {
+        this.formatYLabels = formatYLabels;
     }
 
     public boolean isSmooth() {
