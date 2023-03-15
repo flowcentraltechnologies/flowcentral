@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.notification.tasks;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.task.AbstractTask;
@@ -34,6 +35,9 @@ public abstract class AbstractNotificationTask extends AbstractTask {
     @Configurable
     private ApplicationModuleService applicationModuleService;
 
+    @Configurable
+    private EnvironmentService environmentService;
+
     public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
@@ -42,11 +46,19 @@ public abstract class AbstractNotificationTask extends AbstractTask {
         this.applicationModuleService = applicationModuleService;
     }
 
+    public final void setEnvironmentService(EnvironmentService environmentService) {
+        this.environmentService = environmentService;
+    }
+
     protected final NotificationModuleService notification() {
         return notificationModuleService;
     }
 
     protected final ApplicationModuleService application() {
         return applicationModuleService;
+    }
+
+    protected final EnvironmentService environment() {
+        return environmentService;
     }
 }

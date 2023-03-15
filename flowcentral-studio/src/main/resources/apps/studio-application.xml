@@ -280,7 +280,7 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioapplettablelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="propertyappleuniquefieldlist"
+		<widgetType name="propertyappletuniquefieldlist"
 			description="$m{studio.widgettype.propertyappletuniquefieldlist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletuniquefieldlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
