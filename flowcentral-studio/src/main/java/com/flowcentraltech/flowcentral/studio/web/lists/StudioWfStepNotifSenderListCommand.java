@@ -17,7 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
-import com.flowcentraltech.flowcentral.notification.senders.NotifAlertSender;
+import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.tcdng.unify.core.UnifyException;
@@ -32,13 +32,13 @@ import com.tcdng.unify.core.list.LongParam;
  * @since 1.0
  */
 @Component("studiowfstepnotifsenderlist")
-public class StudioWfStepNotifSenderListCommand extends AbstractEntityTypeListCommand<NotifAlertSender, LongParam> {
+public class StudioWfStepNotifSenderListCommand extends AbstractEntityTypeListCommand<NotificationAlertSender, LongParam> {
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
     public StudioWfStepNotifSenderListCommand() {
-        super(NotifAlertSender.class, LongParam.class);
+        super(NotificationAlertSender.class, LongParam.class);
     }
 
     public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {

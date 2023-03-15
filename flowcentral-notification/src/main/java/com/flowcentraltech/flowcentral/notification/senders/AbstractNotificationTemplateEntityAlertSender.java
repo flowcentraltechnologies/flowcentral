@@ -26,12 +26,12 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractNotifTemplateEntityAlertSender<T extends NotifTemplateWrapper, U extends EntityWrapper>
-        extends AbstractNotifTemplateAlertSender<T> {
+public abstract class AbstractNotificationTemplateEntityAlertSender<T extends NotifTemplateWrapper, U extends EntityWrapper>
+        extends AbstractNotificationTemplateAlertSender<T> {
 
     private final Class<U> entityWrapperType;
 
-    public AbstractNotifTemplateEntityAlertSender(Class<T> notifWrapperType, Class<U> entityWrapperType) {
+    public AbstractNotificationTemplateEntityAlertSender(Class<T> notifWrapperType, Class<U> entityWrapperType) {
         super(notifWrapperType);
         this.entityWrapperType = entityWrapperType;
     }

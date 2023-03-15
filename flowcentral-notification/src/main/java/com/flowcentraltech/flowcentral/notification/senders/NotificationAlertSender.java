@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface NotifAlertSender extends UnifyComponent {
+public interface NotificationAlertSender extends UnifyComponent {
 
     NotifType getNotifType() throws UnifyException;
     

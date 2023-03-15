@@ -27,7 +27,8 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractNotifAlertSender extends AbstractUnifyComponent implements NotifAlertSender {
+public abstract class AbstractNotificationAlertSender extends AbstractUnifyComponent
+        implements NotificationAlertSender {
 
     @Configurable
     private NotificationModuleService notificationModuleService;

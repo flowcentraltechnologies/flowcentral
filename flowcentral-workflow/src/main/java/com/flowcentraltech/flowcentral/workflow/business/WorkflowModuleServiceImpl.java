@@ -67,7 +67,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
-import com.flowcentraltech.flowcentral.notification.senders.NotifAlertSender;
+import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -1251,7 +1251,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         if (!StringUtils.isBlank(wfAlertDef.getGenerator())) {
-            NotifAlertSender sender = getComponent(NotifAlertSender.class, wfAlertDef.getGenerator());
+            NotificationAlertSender sender = getComponent(NotificationAlertSender.class, wfAlertDef.getGenerator());
             final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
             List<Recipient> recipientList = null;
             if (wfAlertDef.isWithRecipientPolicy()) {

@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.studio.web.lists;
 
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.senders.NotifAlertSender;
+import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -31,13 +31,13 @@ import com.tcdng.unify.core.list.StringParam;
  * @since 1.0
  */
 @Component("wfeditnotifsenderlist")
-public class WfEditNotifSenderListCommand extends AbstractEntityTypeListCommand<NotifAlertSender, StringParam> {
+public class WfEditNotifSenderListCommand extends AbstractEntityTypeListCommand<NotificationAlertSender, StringParam> {
 
     @Configurable
     private NotificationModuleService notificationModuleService;
 
     public WfEditNotifSenderListCommand() {
-        super(NotifAlertSender.class, StringParam.class);
+        super(NotificationAlertSender.class, StringParam.class);
     }
 
     public void setNotificationModuleService(NotificationModuleService notificationModuleService) {

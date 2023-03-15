@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.security.business.senders;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
-import com.flowcentraltech.flowcentral.notification.senders.AbstractNotifTemplateAlertSender;
+import com.flowcentraltech.flowcentral.notification.senders.AbstractNotificationTemplateAlertSender;
 import com.flowcentraltech.flowcentral.security.templatewrappers.UserCreationTemplateWrapper;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 @EntityReferences({ "security.user" })
 @Component("usercreation-alertsender")
-public class UserCreationTemplateAlertSender extends AbstractNotifTemplateAlertSender<UserCreationTemplateWrapper> {
+public class UserCreationTemplateAlertSender extends AbstractNotificationTemplateAlertSender<UserCreationTemplateWrapper> {
 
     public UserCreationTemplateAlertSender() {
         super(UserCreationTemplateWrapper.class);

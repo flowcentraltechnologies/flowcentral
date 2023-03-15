@@ -25,17 +25,17 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Convenient abstract base class for notification template alert
- * sender.
+ * Convenient abstract base class for notification template alert sender.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractNotifTemplateAlertSender<T extends NotifTemplateWrapper> extends AbstractNotifAlertSender {
+public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTemplateWrapper>
+        extends AbstractNotificationAlertSender {
 
     private final Class<T> notifWrapperType;
 
-    public AbstractNotifTemplateAlertSender(Class<T> notifWrapperType) {
+    public AbstractNotificationTemplateAlertSender(Class<T> notifWrapperType) {
         this.notifWrapperType = notifWrapperType;
     }
 
