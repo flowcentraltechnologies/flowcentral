@@ -39,7 +39,7 @@ public class ScheduledTask extends BaseStatusEntity {
     @Column(name = "SCHEDTASK_DESC", length = 64)
     private String description;
 
-    @Column(name = "TASK_NM")
+    @Column(name = "TASK_NM", length = 64)
     private String taskName;
 
     @Column(type = ColumnType.TIMESTAMP_UTC)
@@ -57,13 +57,13 @@ public class ScheduledTask extends BaseStatusEntity {
     @Column(nullable = true)
     private String frequency;
 
-    @Column(length = 128, nullable = true)
+    @Column(length = 256, nullable = true)
     private String weekdays;
 
-    @Column(length = 128, nullable = true)
+    @Column(length = 256, nullable = true)
     private String days;
 
-    @Column(length = 128, nullable = true)
+    @Column(length = 256, nullable = true)
     private String months;
 
     @Child(category = "scheduledtask")
