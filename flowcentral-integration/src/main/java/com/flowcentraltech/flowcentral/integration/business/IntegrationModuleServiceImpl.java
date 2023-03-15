@@ -285,7 +285,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         }
     }
 
-    @Periodic(PeriodicType.FASTER)
+    @Periodic(PeriodicType.NORMAL)
     public void processReadConfigEvents(TaskMonitor taskMonitor) throws UnifyException {
         ReadConfigProc readConfigProc = grabPendingReadConfigProcessing();
         if (readConfigProc != null) {
@@ -311,7 +311,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         }
     }
 
-    @Periodic(PeriodicType.FASTER)
+    @Periodic(PeriodicType.NORMAL)
     public void executeEndpointReadHousekeep(TaskMonitor taskMonitor) throws UnifyException {
         Map<String, List<Long>> readEventIds = environment().valueListMap(String.class, "readConfigName", Long.class, "id",
                 new ReadEventQuery().node(getNodeId()).statusNot(EndpointReadEventStatus.UNPROCESSED));
