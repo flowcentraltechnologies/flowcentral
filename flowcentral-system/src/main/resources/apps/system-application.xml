@@ -441,7 +441,7 @@
 				inputWidget="application.text" maxLen="64" basicSearch="true" />
 			<field name="taskName"
 				label="$m{system.scheduledtask.taskname}" type="string"
-				inputWidget="schedulabletasklist" maxLen="32" basicSearch="true" />
+				inputWidget="schedulabletasklist" maxLen="64" basicSearch="true" />
 			<field name="startTime"
 				label="$m{system.scheduledtask.starttime}" type="timestamp_utc"
 				inputWidget="application.time" />
@@ -460,12 +460,12 @@
 				inputWidget="application.period" maxLen="32" nullable="true" />
 			<field name="weekdays"
 				label="$m{system.scheduledtask.weekdays}" type="string"
-				inputWidget="weekdayschecklist" maxLen="128" nullable="true" />
+				inputWidget="weekdayschecklist" maxLen="256" nullable="true" />
 			<field name="days" label="$m{system.scheduledtask.days}"
-				type="string" inputWidget="dayschecklist" maxLen="128"
+				type="string" inputWidget="dayschecklist" maxLen="256"
 				nullable="true" />
 			<field name="months" label="$m{system.scheduledtask.months}"
-				type="string" inputWidget="monthschecklist" maxLen="128"
+				type="string" inputWidget="monthschecklist" maxLen="256"
 				nullable="true" />
 			<uniqueConstraint name="descUc"
 				description="$m{system.scheduledtask.uc.description}"
