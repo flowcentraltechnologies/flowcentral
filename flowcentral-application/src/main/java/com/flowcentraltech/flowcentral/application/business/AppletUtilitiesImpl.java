@@ -947,8 +947,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         }
 
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
-                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, form.getFormValueStoreReader(),
-                                now);
+                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB,
+                                form.getFormValueStoreReader(), now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setChildTabIndex(tabIndex);
@@ -1526,7 +1526,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         }
 
         if (!isIgnoreReport
-                && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)) {
+                && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_REPORT, false)
+                && systemModuleService.getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ENABLE_QUICK_REPORT)) {
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
 

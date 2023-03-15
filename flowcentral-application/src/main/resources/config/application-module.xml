@@ -98,5 +98,8 @@
 		<sysParameter code="APP-001D" defaultVal="false"
 			description="$m{application.sysparam.sectioncolorindicationonmenu}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-001E" defaultVal="false"
+			description="$m{application.sysparam.enablequickreport}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>
