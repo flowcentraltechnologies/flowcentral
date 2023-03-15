@@ -290,7 +290,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 // Alerts
                 for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
                     wfStepAlert.setRecipientPolicy(ctx.componentSwap(wfStepAlert.getRecipientPolicy()));
-                    wfStepAlert.setTemplate(ctx.entitySwap(wfStepAlert.getTemplate()));
+                    wfStepAlert.setGenerator(ctx.entitySwap(wfStepAlert.getGenerator()));
                 }
             }
 
@@ -514,14 +514,12 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             for (WfAlertConfig wfAlertConfig : stepConfig.getWfAlertsConfig().getWfAlertConfigList()) {
                 WfStepAlert wfStepAlert = new WfStepAlert();
                 wfStepAlert.setType(wfAlertConfig.getType());
-                wfStepAlert.setNotificationType(wfAlertConfig.getNotificationType());
                 wfStepAlert.setName(wfAlertConfig.getName());
                 wfStepAlert.setDescription(resolveApplicationMessage(wfAlertConfig.getDescription()));
                 wfStepAlert.setRecipientPolicy(wfAlertConfig.getRecipientPolicy());
                 wfStepAlert.setRecipientNameRule(wfAlertConfig.getRecipientNameRule());
                 wfStepAlert.setRecipientContactRule(wfAlertConfig.getRecipientContactRule());
-                wfStepAlert.setTemplate(
-                        ApplicationNameUtils.ensureLongNameReference(applicationName, wfAlertConfig.getTemplate()));
+                wfStepAlert.setGenerator(wfAlertConfig.getGenerator());
                 wfStepAlert.setFireOnPrevStepName(wfAlertConfig.getFireOnPrevStepName());
                 wfStepAlert.setFireOnConditionName(wfAlertConfig.getFireOnCondition());
                 alertList.add(wfStepAlert);

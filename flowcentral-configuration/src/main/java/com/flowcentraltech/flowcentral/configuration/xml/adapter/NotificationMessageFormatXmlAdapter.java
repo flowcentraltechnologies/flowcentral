@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
@@ -24,10 +24,10 @@ import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationMessageFormatXmlAdapter extends AbstractEnumConstXmlAdapter<NotificationMessageFormat> {
+public class NotificationMessageFormatXmlAdapter extends AbstractEnumConstXmlAdapter<NotifMessageFormat> {
 
     public NotificationMessageFormatXmlAdapter() {
-        super(NotificationMessageFormat.class);
+        super(NotifMessageFormat.class);
     }
 
 }

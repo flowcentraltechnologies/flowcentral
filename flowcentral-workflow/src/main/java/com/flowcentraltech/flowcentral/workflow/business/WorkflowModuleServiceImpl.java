@@ -67,8 +67,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
-import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
@@ -172,9 +171,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private OrganizationModuleService organizationModuleService;
-
-    @Configurable
-    private NotificationModuleService notificationModuleService;
 
     @Configurable
     private AppletUtilities appletUtil;
@@ -319,11 +315,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                         + "].");
                             }
 
-                            wsdb.addWfAlertDef(wfStepAlert.getType(), wfStepAlert.getNotificationType(),
-                                    wfStepAlert.getName(), wfStepAlert.getDescription(),
-                                    wfStepAlert.getRecipientPolicy(), wfStepAlert.getRecipientNameRule(),
-                                    wfStepAlert.getRecipientContactRule(), wfStepAlert.getTemplate(),
-                                    wfStepAlert.getFireOnPrevStepName(), wfStepAlert.getFireOnConditionName());
+                            wsdb.addWfAlertDef(wfStepAlert.getType(), wfStepAlert.getName(),
+                                    wfStepAlert.getDescription(), wfStepAlert.getRecipientPolicy(),
+                                    wfStepAlert.getRecipientNameRule(), wfStepAlert.getRecipientContactRule(),
+                                    wfStepAlert.getGenerator(), wfStepAlert.getFireOnPrevStepName(),
+                                    wfStepAlert.getFireOnConditionName());
                         }
 
                         for (WfStepRole wfStepRole : wfStep.getRoleList()) {
@@ -414,10 +410,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     public final void setOrganizationModuleService(OrganizationModuleService organizationModuleService) {
         this.organizationModuleService = organizationModuleService;
-    }
-
-    public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
     }
 
     public final void setAppletUtil(AppletUtilities appletUtil) {
@@ -586,10 +578,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfItem.getWorkRecId());
         }
 
-        ValueStore workEntityValueStore = new BeanValueStore(workEntity);
+        final ValueStore valueStore = new BeanValueStore(workEntity);
+        final ValueStoreReader reader = valueStore.getReader();
         WfStepDef wfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
         InputArrayEntries emails = null;
-        final boolean isEmails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, workEntityValueStore, wfDef,
+        final boolean isEmails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, reader, wfDef,
                 wfStepDef.getEmails());
         if (isEmails && wfDef.getEntityDef().emailProducerConsumer()) {
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
@@ -602,14 +595,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             if (wfReviewMode.lean()) {
                 environment().findChildren(workEntity);
             }
-            List<InputValue> emailList = emailProducerConsumer.produce(wfDef.getEntityDef(), workEntityValueStore);
+            List<InputValue> emailList = emailProducerConsumer.produce(wfDef.getEntityDef(), valueStore);
             ieb.addEntries(emailList);
             emails = ieb.build();
         }
 
         Comments comments = null;
-        final boolean isComments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, workEntityValueStore,
-                wfDef, wfStepDef.getComments());
+        final boolean isComments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, reader, wfDef,
+                wfStepDef.getComments());
         if (isComments) {
             Comments.Builder cmb = Comments.newBuilder();//
             List<WfItemEvent> events = environment().findAll(new WfItemEventQuery()
@@ -667,7 +660,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
                 if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
                         .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
-                        .match(wfEntityInstValueStore)) {
+                        .matchReader(wfEntityInstValueStore.getReader())) {
                     wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
                             Collections.emptyMap(), null);
                 }
@@ -945,7 +938,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 instValueStore.save(wfDef.getOnEntrySetValuesFields());
                 for (WfSetValuesDef wfSetValuesDef : wfDef.getOnEntrySetValuesList()) {
                     if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
-                            .getObjectFilter(entityDef, instValueStore.getReader(), now).match(instValueStore)) {
+                            .getObjectFilter(entityDef, instValueStore.getReader(), now)
+                            .matchReader(instValueStore.getReader())) {
                         wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, workInst,
                                 Collections.emptyMap(), null);
                     }
@@ -973,8 +967,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     : getUserToken().getUserLoginId();
             String itemDesc = workInst.getWorkflowItemDesc();
             if (wfDef.isWithDescFormat()) {
-                ParameterizedStringGenerator generator = appletUtil.getStringGenerator(new BeanValueStore(workInst),
-                        wfDef.getDescFormat());
+                ParameterizedStringGenerator generator = appletUtil
+                        .getStringGenerator(new BeanValueStore(workInst).getReader(), wfDef.getDescFormat());
                 itemDesc = generator.generate();
             }
 
@@ -1018,8 +1012,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final EntityDef entityDef = entityClassDef.getEntityDef();
         final WfStepDef currWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
         final WorkEntity wfEntityInst = transitionItem.getWfEntityInst();
-        final ValueStoreReader wfItemReader = transitionItem.getValueStoreReader();
-        final ValueStoreWriter wfItemWriter = transitionItem.getValueStoreWriter();
+        final ValueStoreReader wfInstReader = transitionItem.getReader();
+        final ValueStoreWriter wfInstWriter = transitionItem.getWriter();
         final String prevStepName = wfItem.getPrevWfStepName();
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
@@ -1054,14 +1048,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 case ENRICHMENT:
                     if (currWfStepDef.isWithPolicy()) {
                         WfEnrichmentPolicy policy = (WfEnrichmentPolicy) getComponent(currWfStepDef.getPolicy());
-                        policy.enrich(wfItemWriter, wfItemReader, currWfStepDef.getRule());
+                        policy.enrich(wfInstWriter, wfInstReader, currWfStepDef.getRule());
                         transitionItem.setUpdated();
                     }
                     break;
                 case PROCEDURE:
                     if (currWfStepDef.isWithPolicy()) {
                         WfProcessPolicy policy = (WfProcessPolicy) getComponent(currWfStepDef.getPolicy());
-                        policy.execute(wfItemReader, currWfStepDef.getRule());
+                        policy.execute(wfInstReader, currWfStepDef.getRule());
                     }
                     break;
                 case RECORD_ACTION:
@@ -1090,9 +1084,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case BINARY_ROUTING:
                     if (wfDef.getFilterDef(currWfStepDef.getBinaryConditionName()).getFilterDef()
-                            .getObjectFilter(wfDef.getEntityDef(), transitionItem.getWfInstValueStore().getReader(),
-                                    now)
-                            .match(transitionItem.getWfInstValueStore())) {
+                            .getObjectFilter(wfDef.getEntityDef(), wfInstReader, now).matchReader(wfInstReader)) {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getNextStepName());
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
@@ -1100,15 +1092,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case POLICY_ROUTING:
                     WfBinaryPolicy policy = (WfBinaryPolicy) getComponent(currWfStepDef.getPolicy());
-                    if (policy.evaluate(wfItemReader, wfDef.getEntity(), currWfStepDef.getRule())) {
+                    if (policy.evaluate(wfInstReader, wfDef.getEntity(), currWfStepDef.getRule())) {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getNextStepName());
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
                     }
                     break;
                 case MULTI_ROUTING:
-                    WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef,
-                            transitionItem.getWfInstValueStore());
+                    WfStepDef routeToWfStep = resolveMultiRouting(wfDef, currWfStepDef, wfInstReader);
                     nextWfStep = routeToWfStep != null ? nextWfStep = routeToWfStep : nextWfStep;
                     break;
                 case USER_ACTION:
@@ -1178,8 +1169,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                 String errorMessage = getExceptionMessage(LocaleType.APPLICATION, e);
                 String errorTrace = getPrintableStackTrace(e);
-                String errorDoc = wfItemReader.isTempValue(ProcessErrorConstants.ERROR_DOC)
-                        ? wfItemReader.getTempValue(String.class, ProcessErrorConstants.ERROR_DOC)
+                String errorDoc = wfInstReader.isTempValue(ProcessErrorConstants.ERROR_DOC)
+                        ? wfInstReader.getTempValue(String.class, ProcessErrorConstants.ERROR_DOC)
                         : null;
                 WfStepDef errWfStepDef = wfDef.getErrorStepDef();
                 Long wfItemEventId = createWfItemEvent(errWfStepDef, wfItem.getWfItemHistId(), currWfStepDef.getName(),
@@ -1205,15 +1196,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return true;
     }
 
-    private WfStepDef resolveMultiRouting(WfDef wfDef, WfStepDef currWfStepDef, ValueStore wfInstValueStore)
+    private WfStepDef resolveMultiRouting(WfDef wfDef, WfStepDef currWfStepDef, ValueStoreReader reader)
             throws UnifyException {
         if (!DataUtils.isBlank(currWfStepDef.getRoutingList())) {
             final Date now = getNow();
             for (WfRoutingDef wfRoutingDef : currWfStepDef.getRoutingList()) {
                 if (wfRoutingDef.isWithCondition()) {
                     if (wfDef.getFilterDef(wfRoutingDef.getCondition()).getFilterDef()
-                            .getObjectFilter(wfDef.getEntityDef(), wfInstValueStore.getReader(), now)
-                            .match(wfInstValueStore)) {
+                            .getObjectFilter(wfDef.getEntityDef(), reader, now).matchReader(reader)) {
                         return wfDef.getWfStepDef(wfRoutingDef.getNextStepName());
                     }
                 } else {
@@ -1251,35 +1241,35 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             throws UnifyException {
         final WfDef wfDef = transitionItem.getWfDef();
         final WfItem wfItem = transitionItem.getWfItem();
+        final ValueStoreReader reader = transitionItem.getReader();
         final Date now = getNow();
         if (wfAlertDef.isWithFireAlertOnCondition()) {
             if (wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
-                    .getObjectFilter(wfDef.getEntityDef(), transitionItem.getWfInstValueStore().getReader(), now)
-                    .match(transitionItem.getWfInstValueStore())) {
+                    .getObjectFilter(wfDef.getEntityDef(), reader, now).matchReader(reader)) {
                 return;
             }
         }
 
-        final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
-        List<Recipient> recipientList = null;
-        if (wfAlertDef.isWithRecipientPolicy()) {
-            recipientList = ((WfRecipientPolicy) getComponent(wfAlertDef.getRecipientPolicy())).getRecipients(
-                    transitionItem.getValueStoreReader(), wfAlertDef.getRecipientNameRule(),
-                    wfAlertDef.getRecipientContactRule());
-        } else {
-            if (!StringUtils.isBlank(wfItem.getHeldBy())) {
-                recipientList = Arrays.asList(notifRecipientProvider.getRecipientByLoginId(tenantId,
-                        wfAlertDef.getNotificationType(), wfItem.getHeldBy()));
-            } else if (wfStepDef.isWithParticipatingRoles()) {
-                recipientList = notifRecipientProvider.getRecipientsByRole(tenantId, wfAlertDef.getNotificationType(),
-                        wfStepDef.getRoleSet());
+        if (!StringUtils.isBlank(wfAlertDef.getGenerator())) {
+            NotificationAlertSender sender = getComponent(NotificationAlertSender.class, wfAlertDef.getGenerator());
+            final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
+            List<Recipient> recipientList = null;
+            if (wfAlertDef.isWithRecipientPolicy()) {
+                recipientList = ((WfRecipientPolicy) getComponent(wfAlertDef.getRecipientPolicy()))
+                        .getRecipients(reader, wfAlertDef.getRecipientNameRule(), wfAlertDef.getRecipientContactRule());
+            } else {
+                if (!StringUtils.isBlank(wfItem.getHeldBy())) {
+                    recipientList = Arrays.asList(notifRecipientProvider.getRecipientByLoginId(tenantId,
+                            sender.getNotifType(), wfItem.getHeldBy()));
+                } else if (wfStepDef.isWithParticipatingRoles()) {
+                    recipientList = notifRecipientProvider.getRecipientsByRole(tenantId, sender.getNotifType(),
+                            wfStepDef.getRoleSet());
+                }
             }
-        }
 
-        if (!DataUtils.isBlank(recipientList)) {
-            NotificationChannelMessage ncm = notificationModuleService.constructNotificationChannelMessage(tenantId,
-                    wfAlertDef.getTemplate(), transitionItem.getWfInstValueStore(), recipientList);
-            notificationModuleService.sendNotification(ncm);
+            if (!DataUtils.isBlank(recipientList)) {
+                sender.composeAndSend(reader, recipientList);
+            }
         }
     }
 
@@ -1288,8 +1278,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db().getDataSource().getDialect())
                     .findSqlEntityInfo(transitionItem.getWfDef().getEntityClassDef().getEntityClass());
             if (sqlEntityInfo.isWithTenantId()) {
-                return transitionItem.getValueStoreReader().read(Long.class,
-                        sqlEntityInfo.getTenantIdFieldInfo().getName());
+                return transitionItem.getReader().read(Long.class, sqlEntityInfo.getTenantIdFieldInfo().getName());
             }
         }
 
@@ -1358,8 +1347,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             return wfDef;
         }
 
-        public ValueStore getWfInstValueStore() {
-            return wfEntityInst.getWfInstValueStore();
+        public ValueStoreReader getReader() {
+            return wfEntityInst.getReader();
+        }
+
+        public ValueStoreWriter getWriter() {
+            return wfEntityInst.getWriter();
         }
 
         public WorkEntity getWfEntityInst() {
@@ -1392,14 +1385,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
         public void setDeleted() {
             this.deleted = true;
-        }
-
-        public ValueStoreReader getValueStoreReader() {
-            return wfEntityInst.getValueStoreReader();
-        }
-
-        public ValueStoreWriter getValueStoreWriter() {
-            return wfEntityInst.getValueStoreWriter();
         }
     }
 

@@ -188,7 +188,7 @@ public class SetValuesDef {
         Object val = valueStore.retrieve(fieldName);
         if ((val instanceof String) && ((String) val).indexOf('{') >= 0) {
             List<StringToken> tokenList = StringUtils.breakdownParameterizedString((String) val);
-            ParameterizedStringGenerator generator = au.getStringGenerator(valueStore, tokenList);
+            ParameterizedStringGenerator generator = au.getStringGenerator(valueStore.getReader(), tokenList);
             return generator.generate();
         }
 

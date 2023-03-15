@@ -36,20 +36,24 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
         super(entityClass);
     }
 
-    public BaseApplicationEntityQuery<T> applicationId(Long applicationId) {
+    public final BaseApplicationEntityQuery<T> applicationId(Long applicationId) {
         return (BaseApplicationEntityQuery<T>) addEquals("applicationId", applicationId);
     }
 
-    public BaseApplicationEntityQuery<T> applicationName(String applicationName) {
+    public final BaseApplicationEntityQuery<T> applicationName(String applicationName) {
         return (BaseApplicationEntityQuery<T>) addEquals("applicationName", applicationName);
     }
 
-    public BaseApplicationEntityQuery<T> applicationNameNot(String applicationName) {
+    public final BaseApplicationEntityQuery<T> applicationNameNot(String applicationName) {
         return (BaseApplicationEntityQuery<T>) addNotEquals("applicationName", applicationName);
     }
 
-    public BaseApplicationEntityQuery<T> applicationNameIn(Collection<String> applicationNames) {
+    public final BaseApplicationEntityQuery<T> applicationNameIn(Collection<String> applicationNames) {
         return (BaseApplicationEntityQuery<T>) addAmongst("applicationName", applicationNames);
+    }
+
+    public final BaseApplicationEntityQuery<T> moduleName(String moduleName) {
+        return (BaseApplicationEntityQuery<T>) addEquals("moduleName", moduleName);
     }
 
 }

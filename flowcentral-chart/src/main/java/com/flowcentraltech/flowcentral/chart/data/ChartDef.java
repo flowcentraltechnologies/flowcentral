@@ -55,9 +55,14 @@ public class ChartDef extends BaseApplicationEntityDef {
 
     private boolean showDataLabels;
 
+    private boolean formatDataLabels;
+
+    private boolean formatYLabels;
+
     private ChartDef(ChartType type, ChartPaletteType paletteType, String title, String subTitle, String provider,
             String rule, int width, int height, boolean stacked, boolean showGrid, boolean showDataLabels,
-            boolean smooth, ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+            boolean formatDataLabels, boolean formatYLabels, boolean smooth, ApplicationEntityNameParts nameParts,
+            String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.paletteType = paletteType;
@@ -70,6 +75,8 @@ public class ChartDef extends BaseApplicationEntityDef {
         this.stacked = stacked;
         this.showGrid = showGrid;
         this.showDataLabels = showDataLabels;
+        this.formatDataLabels = formatDataLabels;
+        this.formatYLabels = formatYLabels;
         this.smooth = smooth;
     }
 
@@ -117,6 +124,14 @@ public class ChartDef extends BaseApplicationEntityDef {
         return showDataLabels;
     }
 
+    public boolean isFormatDataLabels() {
+        return formatDataLabels;
+    }
+
+    public boolean isFormatYLabels() {
+        return formatYLabels;
+    }
+
     public boolean isSmooth() {
         return smooth;
     }
@@ -151,6 +166,10 @@ public class ChartDef extends BaseApplicationEntityDef {
         private boolean smooth;
 
         private boolean showDataLabels;
+
+        private boolean formatDataLabels;
+
+        private boolean formatYLabels;
 
         private String longName;
 
@@ -207,6 +226,16 @@ public class ChartDef extends BaseApplicationEntityDef {
             return this;
         }
 
+        public Builder formatDataLabels(boolean formatDataLabels) {
+            this.formatDataLabels = formatDataLabels;
+            return this;
+        }
+
+        public Builder formatYLabels(boolean formatYLabels) {
+            this.formatYLabels = formatYLabels;
+            return this;
+        }
+
         public Builder smooth(boolean smooth) {
             this.smooth = smooth;
             return this;
@@ -214,8 +243,8 @@ public class ChartDef extends BaseApplicationEntityDef {
 
         public ChartDef build() throws UnifyException {
             return new ChartDef(type, paletteType, title, subTitle, provider, rule, width, height, stacked, showGrid,
-                    showDataLabels, smooth, ApplicationNameUtils.getApplicationEntityNameParts(longName), description,
-                    id, version);
+                    showDataLabels, formatDataLabels, formatYLabels, smooth,
+                    ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         }
     }
 

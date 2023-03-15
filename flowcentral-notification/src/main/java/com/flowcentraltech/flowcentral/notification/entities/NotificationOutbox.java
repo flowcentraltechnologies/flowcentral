@@ -19,10 +19,10 @@ import java.util.Date;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditTenantEntity;
-import com.flowcentraltech.flowcentral.common.entities.FileAttachment;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
-import com.tcdng.unify.core.annotation.Child;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
@@ -40,12 +40,21 @@ import com.tcdng.unify.core.annotation.Table;
 public class NotificationOutbox extends BaseAuditTenantEntity {
 
     @ForeignKey(name = "NOTIFICATION_TY")
-    private NotificationType type;
+    private NotifType type;
 
+    @ForeignKey
+    private NotifMessageFormat format;
+
+    @ForeignKey
+    private ImportanceType importance;
+    
     @ForeignKey(name = "REC_ST")
     private NotificationOutboxStatus status;
 
-    @Column(name = "NOTIFACTION_SUBJECT", length = 96)
+    @Column(name = "NOTIFACTION_FROM", length = 256, nullable = true)
+    private String from;
+
+    @Column(name = "NOTIFACTION_SUBJECT", length = 256)
     private String subject;
 
     @Column
@@ -60,20 +69,26 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
     @Column(type = ColumnType.TIMESTAMP_UTC, nullable = true)
     private Date sentDt;
 
-    @Child
-    private NotificationOutboxMessage notificationMessage;
+    @Column(type = ColumnType.CLOB, nullable = true)
+    private String message;
 
     @ChildList
-    private List<NotificationRecipient> notificationRecipientList;
+    private List<NotificationRecipient> recipientList;
 
-    @ChildList(category = "notification")
-    private List<FileAttachment> attachmentList;
+    @ChildList
+    private List<NotificationOutboxAttachment> attachmentList;
 
     @ListOnly(key = "status", property = "description")
     private String statusDesc;
 
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
+
+    @ListOnly(key = "format", property = "description")
+    private String formatDesc;
+
+    @ListOnly(key = "importance", property = "description")
+    private String importanceDesc;
 
     @Override
     public String getDescription() {
@@ -86,6 +101,14 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     public void setStatus(NotificationOutboxStatus status) {
         this.status = status;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 
     public int getAttempts() {
@@ -120,27 +143,19 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
         this.sentDt = sentDt;
     }
 
-    public NotificationOutboxMessage getNotificationMessage() {
-        return notificationMessage;
+    public List<NotificationRecipient> getRecipientList() {
+        return recipientList;
     }
 
-    public void setNotificationMessage(NotificationOutboxMessage notificationMessage) {
-        this.notificationMessage = notificationMessage;
+    public void setRecipientList(List<NotificationRecipient> recipientList) {
+        this.recipientList = recipientList;
     }
 
-    public List<NotificationRecipient> getNotificationRecipientList() {
-        return notificationRecipientList;
-    }
-
-    public void setNotificationRecipientList(List<NotificationRecipient> notificationRecipientList) {
-        this.notificationRecipientList = notificationRecipientList;
-    }
-
-    public List<FileAttachment> getAttachmentList() {
+    public List<NotificationOutboxAttachment> getAttachmentList() {
         return attachmentList;
     }
 
-    public void setAttachmentList(List<FileAttachment> attachmentList) {
+    public void setAttachmentList(List<NotificationOutboxAttachment> attachmentList) {
         this.attachmentList = attachmentList;
     }
 
@@ -152,11 +167,11 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
         this.statusDesc = statusDesc;
     }
 
-    public NotificationType getType() {
+    public NotifType getType() {
         return type;
     }
 
-    public void setType(NotificationType type) {
+    public void setType(NotifType type) {
         this.type = type;
     }
 
@@ -174,6 +189,46 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
+    }
+
+    public NotifMessageFormat getFormat() {
+        return format;
+    }
+
+    public void setFormat(NotifMessageFormat format) {
+        this.format = format;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getFormatDesc() {
+        return formatDesc;
+    }
+
+    public void setFormatDesc(String formatDesc) {
+        this.formatDesc = formatDesc;
+    }
+
+    public ImportanceType getImportance() {
+        return importance;
+    }
+
+    public void setImportance(ImportanceType importance) {
+        this.importance = importance;
+    }
+
+    public String getImportanceDesc() {
+        return importanceDesc;
+    }
+
+    public void setImportanceDesc(String importanceDesc) {
+        this.importanceDesc = importanceDesc;
     }
 
 }

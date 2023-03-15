@@ -92,8 +92,8 @@ public class EntityListWidget extends AbstractEntityListWidget {
             final boolean isListFormat = refDef != null && refDef.isWithListFormat();
             ParameterizedStringGenerator generator = null;
             if (isListFormat) {
-                generator = specialParamProvider().getStringGenerator(new BeanValueListStore(listableList),
-                        getValueStore(), refDef.getListFormat());
+                generator = specialParamProvider().getStringGenerator(new BeanValueListStore(listableList).getReader(),
+                        getValueStore().getReader(), refDef.getListFormat());
             }
 
             boolean isListKey = !StringUtils.isBlank(listKey);
@@ -161,6 +161,6 @@ public class EntityListWidget extends AbstractEntityListWidget {
 
     @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
-        
+
     }
 }

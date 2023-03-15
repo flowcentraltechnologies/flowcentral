@@ -63,6 +63,10 @@
 				inputWidget="application.checkbox" />
 			<field name="showDataLabels" label="$m{chart.chart.showdatalabels}"
 				type="boolean" inputWidget="application.checkbox" />
+			<field name="formatDataLabels" label="$m{chart.chart.formatdatalabels}"
+				type="boolean" inputWidget="application.checkbox" />
+			<field name="formatYLabels" label="$m{chart.chart.formatylabels}"
+				type="boolean" inputWidget="application.checkbox" />
 			<field name="typeDesc" label="$m{chart.chart.typedesc}" type="list_only"
 				key="type" property="description" />
 			<field name="paletteTypeDesc" label="$m{chart.chart.palettetypedesc}"

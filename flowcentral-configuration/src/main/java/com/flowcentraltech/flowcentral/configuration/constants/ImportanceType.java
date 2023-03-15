@@ -13,42 +13,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.flowcentraltech.flowcentral.configuration.constants;
 
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
-import com.tcdng.unify.core.notification.EmailRecipient;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
- * Notification recipient type.
+ * Importance type enumeration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table("FC_NOTIFRECIPIENTTYPE")
-@StaticList(name = "notificationrecipienttypelist", description = "$m{staticlist.notificationrecipienttypelist}")
-public enum NotificationRecipientType implements EnumConst {
+@Table("FC_IMPORTANCETYPE")
+@StaticList(name = "importancetypelist", description = "$m{staticlist.importancetypelist}")
+public enum ImportanceType implements EnumConst {
 
-    TO(
-            "TO",
-            EmailRecipient.TYPE.TO),
-    CC(
-            "CC",
-            EmailRecipient.TYPE.CC),
-    BCC(
-            "BC",
-            EmailRecipient.TYPE.BCC);
+    CRITICAL(
+            "C"),
+    HIGH(
+            "H"),
+    NORMAL(
+            "N"),
+    LOW(
+            "L");
 
     private final String code;
 
-    private final EmailRecipient.TYPE emailRecipientType;
-
-    private NotificationRecipientType(String code, EmailRecipient.TYPE emailRecipientType) {
+    private ImportanceType(String code) {
         this.code = code;
-        this.emailRecipientType = emailRecipientType;
     }
 
     @Override
@@ -58,18 +52,14 @@ public enum NotificationRecipientType implements EnumConst {
 
     @Override
     public String defaultCode() {
-        return TO.code;
+        return LOW.code;
     }
 
-    public EmailRecipient.TYPE emailRecipientType() {
-        return emailRecipientType;
+    public static ImportanceType fromCode(String code) {
+        return EnumUtils.fromCode(ImportanceType.class, code);
     }
 
-    public static NotificationRecipientType fromCode(String code) {
-        return EnumUtils.fromCode(NotificationRecipientType.class, code);
-    }
-
-    public static NotificationRecipientType fromName(String name) {
-        return EnumUtils.fromName(NotificationRecipientType.class, name);
+    public static ImportanceType fromName(String name) {
+        return EnumUtils.fromName(ImportanceType.class, name);
     }
 }

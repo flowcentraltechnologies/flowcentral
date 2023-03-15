@@ -43,6 +43,16 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
         this.valueStore = new BeanValueStore(entityClassDef.newInst());
     }
 
+    public BaseEntityWrapper(EntityClassDef entityClassDef, ValueStore valueStore) {
+        if (!valueStore.getValueObject().getClass().isAssignableFrom(entityClassDef.getEntityClass())) {
+            throw new IllegalArgumentException(
+                    "Supplied value store entity instance is incompatible with entity class definition.");
+        }
+
+        this.entityClassDef = entityClassDef;
+        this.valueStore = valueStore;
+    }
+
     public BaseEntityWrapper(EntityClassDef entityClassDef, Entity inst) {
         if (!inst.getClass().isAssignableFrom(entityClassDef.getEntityClass())) {
             throw new IllegalArgumentException(

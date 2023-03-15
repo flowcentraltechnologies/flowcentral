@@ -15,19 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
-
-import com.flowcentraltech.flowcentral.application.entities.Leave;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralTest;
-import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationRecipientType;
-import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
-import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.database.Entity;
 
 /**
  * Security module service tests.
@@ -37,29 +25,9 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class SecurityModuleServiceTest extends AbstractFlowCentralTest {
 
-    private NotificationModuleService nms;
-
-    @Test
-    public void testConstructUserCreationApprovalNotificationChannelMessage() throws Exception {
-        NotificationChannelMessage ncm = nms.constructNotificationChannelMessage(Entity.PRIMARY_TENANT_ID,
-                "security.userCreationApproval", new BeanValueStore(new Leave()),
-                new Recipient(NotificationRecipientType.TO, "Albert Einstien",
-                        "albert.einstien@flowcentraltechnologies.com"));
-        assertNotNull(ncm);
-    }
-
-    @Test
-    public void testConstructUserWelcomeNotificationChannelMessage() throws Exception {
-        NotificationChannelMessage ncm = nms.constructNotificationChannelMessage(Entity.PRIMARY_TENANT_ID,
-                "security.userWelcome", new BeanValueStore(new Leave()),
-                new Recipient(NotificationRecipientType.TO, "Albert Einstien",
-                        "albert.einstien@flowcentraltechnologies.com"));
-        assertNotNull(ncm);
-    }
-
     @Override
     protected void onSetup() throws Exception {
-        nms = (NotificationModuleService) getComponent(NotificationModuleNameConstants.NOTIFICATION_MODULE_SERVICE);
+
     }
 
     @Override

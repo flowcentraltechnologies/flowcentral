@@ -64,6 +64,8 @@ import com.flowcentraltech.flowcentral.system.data.ScheduledTaskDef;
 import com.flowcentraltech.flowcentral.system.entities.Credential;
 import com.flowcentraltech.flowcentral.system.entities.CredentialQuery;
 import com.flowcentraltech.flowcentral.system.entities.DownloadLog;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.entities.Module;
 import com.flowcentraltech.flowcentral.system.entities.ModuleApp;
 import com.flowcentraltech.flowcentral.system.entities.ModuleAppQuery;
@@ -75,8 +77,6 @@ import com.flowcentraltech.flowcentral.system.entities.Sector;
 import com.flowcentraltech.flowcentral.system.entities.SectorQuery;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameter;
 import com.flowcentraltech.flowcentral.system.entities.SystemParameterQuery;
-import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
-import com.flowcentraltech.flowcentral.system.entities.MappedTenantQuery;
 import com.flowcentraltech.flowcentral.system.util.LicenseUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.Setting;
@@ -100,7 +100,7 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ParamGeneratorManager;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.Period;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.sql.DynamicSqlDataSourceManager;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
@@ -326,15 +326,15 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, List<StringToken> tokenList)
             throws UnifyException {
-        return paramGeneratorManager.getParameterizedStringGenerator(paramValueStore, tokenList);
+        return paramGeneratorManager.getParameterizedStringGenerator(paramReader, tokenList);
     }
 
     @Override
-    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, ValueStoreReader generatorReader,
             List<StringToken> tokenList) throws UnifyException {
-        return paramGeneratorManager.getParameterizedStringGenerator(paramValueStore, generatorValueStore, tokenList);
+        return paramGeneratorManager.getParameterizedStringGenerator(paramReader, generatorReader, tokenList);
     }
 
     @Override

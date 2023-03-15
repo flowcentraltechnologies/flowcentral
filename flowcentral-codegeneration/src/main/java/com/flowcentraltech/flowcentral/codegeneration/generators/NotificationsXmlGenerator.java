@@ -23,9 +23,11 @@ import java.util.zip.ZipOutputStream;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplatesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateParamConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParam;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -78,15 +80,24 @@ public class NotificationsXmlGenerator extends AbstractStaticArtifactGenerator {
                 ctx.addMessage(StaticMessageCategoryType.NOTIFICATION, subjectKey, notifTemplate.getSubject());
                 ctx.addMessage(StaticMessageCategoryType.NOTIFICATION, bodyKey, notifTemplate.getTemplate());
 
-                notifTemplateConfig.setNotificationType(notifTemplate.getNotificationType());
+                notifTemplateConfig.setNotifType(notifTemplate.getNotificationType());
                 notifTemplateConfig.setMessageFormat(notifTemplate.getMessageFormat());
                 notifTemplateConfig.setName(notifTemplate.getName());
                 notifTemplateConfig.setDescription("$m{" + descKey + "}");
                 notifTemplateConfig.setEntity(notifTemplate.getEntity());
                 notifTemplateConfig.setSubject("$m{" + subjectKey + "}");
                 notifTemplateConfig.setBody("$m{" + bodyKey + "}");
-                notifTemplateConfig.setAttachmentGenerator(notifTemplate.getAttachmentGenerator());
 
+                List<NotifTemplateParamConfig> paramList = new ArrayList<NotifTemplateParamConfig>();
+                for (NotificationTemplateParam param: notifTemplate.getParamList()) {
+                    NotifTemplateParamConfig pConfig = new NotifTemplateParamConfig();
+                    pConfig.setName(param.getName());
+                    pConfig.setLabel(param.getLabel());
+                    paramList.add(pConfig);
+                }
+                
+                notifTemplateConfig.setParamList(paramList);
+                
                 ConfigurationUtils.writeConfigNoEscape(notifTemplateConfig, zos);
                 closeEntry(zos);
   

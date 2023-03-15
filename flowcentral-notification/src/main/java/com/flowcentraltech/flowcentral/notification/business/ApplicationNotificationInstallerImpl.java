@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.notification.business;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,8 +30,10 @@ import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateParamConfig;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParam;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -74,25 +77,25 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 if (oldNotificationTemplate == null) {
                     NotificationTemplate notificationTemplate = new NotificationTemplate();
                     notificationTemplate.setApplicationId(applicationId);
-                    notificationTemplate.setNotificationType(notifTemplateConfig.getNotificationType());
+                    notificationTemplate.setNotificationType(notifTemplateConfig.getNotifType());
                     notificationTemplate.setMessageFormat(notifTemplateConfig.getMessageFormat());
                     notificationTemplate.setName(notifTemplateConfig.getName());
                     notificationTemplate.setDescription(description);
                     notificationTemplate.setEntity(entity);
                     notificationTemplate.setSubject(subject);
                     notificationTemplate.setTemplate(body);
-                    notificationTemplate.setAttachmentGenerator(notifTemplateConfig.getAttachmentGenerator());
                     notificationTemplate.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    populateChildList(notificationTemplate, notifTemplateConfig);
                     environment().create(notificationTemplate);
                 } else {
                     if (ConfigUtils.isSetInstall(oldNotificationTemplate)) {
-                        oldNotificationTemplate.setNotificationType(notifTemplateConfig.getNotificationType());
+                        oldNotificationTemplate.setNotificationType(notifTemplateConfig.getNotifType());
                         oldNotificationTemplate.setMessageFormat(notifTemplateConfig.getMessageFormat());
                         oldNotificationTemplate.setDescription(description);
                         oldNotificationTemplate.setEntity(entity);
                         oldNotificationTemplate.setSubject(subject);
                         oldNotificationTemplate.setTemplate(body);
-                        oldNotificationTemplate.setAttachmentGenerator(notifTemplateConfig.getAttachmentGenerator());
+                        populateChildList(oldNotificationTemplate, notifTemplateConfig);
                         environment().updateByIdVersion(oldNotificationTemplate);
                     }
                 }
@@ -114,16 +117,32 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
             srcNotificationTemplate.setName(ctx.nameSwap(srcNotificationTemplate.getName()));
             srcNotificationTemplate.setDescription(ctx.messageSwap(srcNotificationTemplate.getDescription()));
             srcNotificationTemplate.setEntity(ctx.entitySwap(srcNotificationTemplate.getEntity()));
-            srcNotificationTemplate.setAttachmentGenerator(ctx.componentSwap(srcNotificationTemplate.getAttachmentGenerator()));
 
             environment().create(srcNotificationTemplate);
-            logDebug(taskMonitor, "Notification template [{0}] -> [{1}]...", oldDescription, srcNotificationTemplate.getDescription());
+            logDebug(taskMonitor, "Notification template [{0}] -> [{1}]...", oldDescription,
+                    srcNotificationTemplate.getDescription());
         }
     }
 
     @Override
     protected List<DeletionParams> getDeletionParams() throws UnifyException {
         return Arrays.asList(new DeletionParams("notification templates", new NotificationTemplateQuery()));
+    }
+
+    private void populateChildList(NotificationTemplate notificationTemplate, NotifTemplateConfig notifTemplateConfig)
+            throws UnifyException {
+        List<NotificationTemplateParam> paramList = null;
+        if (!DataUtils.isBlank(notifTemplateConfig.getParamList())) {
+            paramList = new ArrayList<NotificationTemplateParam>();
+            for (NotifTemplateParamConfig paramConfig : notifTemplateConfig.getParamList()) {
+                NotificationTemplateParam param = new NotificationTemplateParam();
+                param.setName(paramConfig.getName());
+                param.setLabel(paramConfig.getLabel());
+                paramList.add(param);
+            }
+        }
+
+        notificationTemplate.setParamList(paramList);
     }
 
 }

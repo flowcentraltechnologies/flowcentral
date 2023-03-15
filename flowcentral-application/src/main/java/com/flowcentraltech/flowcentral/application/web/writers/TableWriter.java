@@ -603,7 +603,7 @@ public class TableWriter extends AbstractControlWriter {
                         for (TableFilterDef tableFilterDef : tableDef.getRowColorFilterList()) {
                             if (tableFilterDef.getFilterDef()
                                     .getObjectFilter(tableDef.getEntityDef(), valueStore.getReader(), now)
-                                    .match(valueStore)) {
+                                    .matchReader(valueStore.getReader())) {
                                 writer.write(" style=\"background-color:");
                                 writer.write(summaryColor = tableFilterDef.getRowColor());
                                 writer.write(";\"");

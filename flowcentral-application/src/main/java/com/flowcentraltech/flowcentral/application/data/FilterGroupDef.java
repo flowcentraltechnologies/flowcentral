@@ -7,7 +7,7 @@ import java.util.Map;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Filter group definition.
@@ -33,23 +33,23 @@ public class FilterGroupDef {
         this.filterDefs = filterDefs;
     }
 
-    public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
-        return match(type, bean != null ? new BeanValueStore(bean) : null, now);
+    public boolean matchObject(FilterType type, Object bean, Date now) throws UnifyException {
+        return matchReader(type, bean != null ? new BeanValueStore(bean).getReader() : null, now);
     }
 
-    public boolean match(FilterType type, ValueStore beanValueStore, Date now) throws UnifyException {
+    public boolean matchReader(FilterType type, ValueStoreReader reader, Date now) throws UnifyException {
         AppletFilterDef _filterDef = filterDefs.get(type);
         return _filterDef != null
                 ? _filterDef.getFilterDef()
-                        .getObjectFilter(entityDef, beanValueStore != null ? beanValueStore.getReader() : null, now)
-                        .match(beanValueStore)
+                        .getObjectFilter(entityDef, reader != null ? reader : null, now)
+                        .matchReader(reader)
                 : true;
     }
 
-    public Restriction getRestriction(FilterType type, ValueStore beanValueStore, Date now) throws UnifyException {
+    public Restriction getRestriction(FilterType type, ValueStoreReader reader, Date now) throws UnifyException {
         AppletFilterDef _filterDef = filterDefs.get(type);
         return _filterDef != null ? _filterDef.getFilterDef().getRestriction(entityDef,
-                beanValueStore != null ? beanValueStore.getReader() : null, now) : null;
+                reader != null ? reader : null, now) : null;
     }
 
     public boolean isWithFilterType(FilterType type) {

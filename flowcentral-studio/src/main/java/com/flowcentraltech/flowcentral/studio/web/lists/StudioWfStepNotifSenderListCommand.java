@@ -16,56 +16,43 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-
-import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
-import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
+import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
+import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.LongParam;
 
 /**
- * Studio workflow step notification template list command
+ * Studio workflow step notification sender list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studiowfstepnotiftempllist")
-public class StudioWfStepNotifTemplateListCommand extends AbstractApplicationListCommand<LongParam> {
+@Component("studiowfstepnotifsenderlist")
+public class StudioWfStepNotifSenderListCommand extends AbstractEntityTypeListCommand<NotificationAlertSender, LongParam> {
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
-    @Configurable
-    private NotificationModuleService notificationModuleService;
-
-    public StudioWfStepNotifTemplateListCommand() {
-        super(LongParam.class);
+    public StudioWfStepNotifSenderListCommand() {
+        super(NotificationAlertSender.class, LongParam.class);
     }
 
     public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
     }
 
-    public void setNotificationModuleService(NotificationModuleService notificationModuleService) {
-        this.notificationModuleService = notificationModuleService;
-    }
-
     @Override
-    public List<? extends Listable> execute(Locale locale, LongParam longParam) throws UnifyException {
-        if (longParam.isPresent()) {
-            WfStep wfStep = workflowModuleService.findLeanWorkflowStepById(longParam.getValue());
-            return au().getApplicationEntities(new NotificationTemplateQuery().entity(wfStep.getEntityName()));
+    protected String getEntityName(LongParam param) throws UnifyException {
+        if (param.isPresent()) {
+            WfStep wfStep = workflowModuleService.findLeanWorkflowStepById(param.getValue());
+            return wfStep.getEntityName();
         }
 
-        return Collections.emptyList();
+        return null;
     }
 
 }

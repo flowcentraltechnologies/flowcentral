@@ -31,10 +31,6 @@ public class AppAssignmentPageQuery extends BaseApplicationEntityQuery<AppAssign
         return (AppAssignmentPageQuery) addEquals("entity", entity);
     }
 
-    public AppAssignmentPageQuery applicationNameNot(String applicationName) {
-        return (AppAssignmentPageQuery) addNotEquals("applicationName", applicationName);
-    }
-
     public AppAssignmentPageQuery entityBeginsWith(String entity) {
         return (AppAssignmentPageQuery) addBeginsWith("entity", entity);
     }

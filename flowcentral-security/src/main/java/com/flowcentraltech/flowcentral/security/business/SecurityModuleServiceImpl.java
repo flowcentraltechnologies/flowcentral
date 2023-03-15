@@ -32,14 +32,12 @@ import com.flowcentraltech.flowcentral.common.business.NotificationRecipientProv
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
-import com.flowcentraltech.flowcentral.common.data.Dictionary;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
 import com.flowcentraltech.flowcentral.organization.entities.MappedBranch;
 import com.flowcentraltech.flowcentral.security.constants.LoginEventType;
@@ -59,6 +57,7 @@ import com.flowcentraltech.flowcentral.security.entities.UserLoginEvent;
 import com.flowcentraltech.flowcentral.security.entities.UserQuery;
 import com.flowcentraltech.flowcentral.security.entities.UserRole;
 import com.flowcentraltech.flowcentral.security.entities.UserRoleQuery;
+import com.flowcentraltech.flowcentral.security.templatewrappers.UserPasswordResetTemplateWrapper;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
@@ -374,8 +373,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public Recipient getRecipientByLoginId(Long tenantId, NotificationType type, String userLoginId)
-            throws UnifyException {
+    public Recipient getRecipientByLoginId(Long tenantId, NotifType type, String userLoginId) throws UnifyException {
         User user = environment().find(new UserQuery().loginId(userLoginId).tenantId(tenantId));
         switch (type) {
             case EMAIL:
@@ -389,13 +387,12 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, String roleCode)
-            throws UnifyException {
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, String roleCode) throws UnifyException {
         return getRecipientsByRole(tenantId, type, Arrays.asList(roleCode));
     }
 
     @Override
-    public List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, Collection<String> roles)
+    public List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, Collection<String> roles)
             throws UnifyException {
         Set<Long> userIdSet = findIdsOfAllUsersWithRole(tenantId, roles);
         if (!userIdSet.isEmpty()) {
@@ -569,14 +566,13 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         // Send email if necessary
         if (systemModuleService.getSysParameterValue(boolean.class,
                 SecurityModuleSysParamConstants.USER_PASSWORD_SEND_EMAIL)) {
-            Dictionary dictionary = new Dictionary();
-            dictionary.setValue("fullName", user.getFullName());
-            dictionary.setValue("loginId", user.getLoginId());
-            dictionary.setValue("plainPassword", password);
-            NotificationChannelMessage msg = notificationModuleService.constructNotificationChannelMessage(
-                    user.getTenantId(), "security.userPasswordReset", dictionary,
-                    new Recipient(user.getFullName(), user.getEmail()));
-            notificationModuleService.sendNotification(msg);
+            UserPasswordResetTemplateWrapper wrapper = notificationModuleService
+                    .wrapperOf(UserPasswordResetTemplateWrapper.class);
+            wrapper.setFullName(user.getFullName());
+            wrapper.setLoginId(user.getLoginId());
+            wrapper.setPlainPassword(password);
+            wrapper.addTORecipient(user.getFullName(), user.getEmail());
+            notificationModuleService.sendNotification(wrapper.getMessage());
         }
 
         return password;

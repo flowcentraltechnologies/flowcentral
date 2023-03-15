@@ -28,7 +28,7 @@ import com.tcdng.unify.core.util.EnumUtils;
  */
 @Table("FC_NOTIFMESSAGEFORMAT")
 @StaticList(name = "notifmessageformatlist", description = "$m{staticlist.notifmessageformatlist}")
-public enum NotificationMessageFormat implements EnumConst {
+public enum NotifMessageFormat implements EnumConst {
 
     PLAIN_TEXT(
             "PLT"),
@@ -37,7 +37,7 @@ public enum NotificationMessageFormat implements EnumConst {
 
     private final String code;
 
-    private NotificationMessageFormat(String code) {
+    private NotifMessageFormat(String code) {
         this.code = code;
     }
 
@@ -51,11 +51,11 @@ public enum NotificationMessageFormat implements EnumConst {
         return PLAIN_TEXT.code;
     }
 
-    public static NotificationMessageFormat fromCode(String code) {
-        return EnumUtils.fromCode(NotificationMessageFormat.class, code);
+    public static NotifMessageFormat fromCode(String code) {
+        return EnumUtils.fromCode(NotifMessageFormat.class, code);
     }
 
-    public static NotificationMessageFormat fromName(String name) {
-        return EnumUtils.fromName(NotificationMessageFormat.class, name);
+    public static NotifMessageFormat fromName(String name) {
+        return EnumUtils.fromName(NotifMessageFormat.class, name);
     }
 }

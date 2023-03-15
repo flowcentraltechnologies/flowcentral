@@ -240,10 +240,10 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioworkflowformlist listParams:$l{workflowId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="wfstepnotiftempllist"
-			description="$m{studio.widgettype.wfstepnotiftempllist}"
+		<widgetType name="wfstepnotifsenderlist"
+			description="$m{studio.widgettype.wfstepnotifsenderlist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studiowfstepnotiftempllist listParams:$l{wfStepId} blankOption:$m{blank.none}"
+			editor="!ui-select list:studiowfstepnotifsenderlist listParams:$l{wfStepId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfstepreceivefromlist"
 			description="$m{studio.widgettype.wfstepreceivefromlist}"
@@ -279,6 +279,11 @@
 			description="$m{studio.widgettype.propertyapplettablelist}"
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioapplettablelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="propertyappleuniquefieldlist"
+			description="$m{studio.widgettype.propertyappletuniquefieldlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletuniquefieldlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletbeantablepolicylist"
 			description="$m{studio.widgettype.propertyappletbeantablepolicylist}"
@@ -1102,6 +1107,22 @@
 			<property name="maintainForm.update" value="false" />
 			<property name="maintainForm.delete" value="false" />
 		</applet>
+		<applet name="manageNotifTemplateParam"
+			description="$m{studio.notificationtemplateparam.manage}"
+			label="$m{studio.notificationtemplateparam.manage.label}" type="manage_entitylist"
+			entity="notification.notifTemplateParam" menuAccess="false">
+			<property name="searchTable" value="notifTemplateParamTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="notifTemplateParamForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="notifTemplateParamForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
 		<applet name="manageReportColumn"
 			description="$m{studio.reportcolumn.manage}"
 			label="$m{studio.reportcolumn.manage.label}" type="manage_entitylist"
@@ -1666,6 +1687,15 @@
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
 				widthRatio="1" />
+		</table>
+		<table name="notifTemplateParamTable"
+			description="$m{studio.notificationtemplateparam.table}"
+			label="$m{studio.notificationtemplateparam.table.label}"
+			entity="notification.notifTemplateParam">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1"/>
 		</table>
 		<table name="reportColumnTable"
 			description="$m{studio.reportcolumn.table}"
@@ -2836,6 +2866,8 @@
 					<field name="smooth" column="1" />
 					<field name="showGrid" column="1" />
 					<field name="showDataLabels" column="1" />
+					<field name="formatDataLabels" column="1" />
+					<field name="formatYLabels" column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -2996,8 +3028,6 @@
 						required="true" saveAs="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" saveAs="true" />
-					<field name="attachmentGenerator"
-						inputWidget="application.text" column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
@@ -3010,10 +3040,14 @@
 				<section name="messageDetails" columns="type_1">
 					<field name="subject" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="template" inputWidget="application.textarea"
-						column="0" color="yellow" required="true" />
+					<field name="template" inputWidget="application.textarealarge"
+						column="0" required="true" />
 				</section>
 			</tab>
+			<tab name="params"
+				label="$m{studio.notificationtemplate.form.params}"
+				contentType="child_list" applet="manageNotifTemplateParam"
+				reference="paramList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formStatePolicy type="on_switch"
@@ -3048,6 +3082,22 @@
 						target="name,description,entity,notificationType" disabled="true" />
 				</setStates>
 			</formStatePolicy>
+		</form>
+		<form name="notifTemplateParamForm"
+			description="$m{studio.notificationtemplateparam.form}"
+			entity="notification.notifTemplateParam">
+			<tab name="basicDetails"
+				label="$m{studio.notificationtemplateparam.form.basicdetails}"
+				contentType="miniform" editable="true">
+				<section name="templateParamDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="label" inputWidget="application.text"
+						column="1" required="true"/>
+				</section>
+			</tab>
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
 		</form>
 		<form name="reportConfigForm"
 			description="$m{studio.reportconfiguration.form}"
@@ -4475,8 +4525,8 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="template"
-						inputWidget="studio.wfstepnotiftempllist" column="0"
+					<field name="generator"
+						inputWidget="studio.wfstepnotifsenderlist" column="0"
 						required="true" />
 					<field name="recipientPolicy"
 						inputWidget="studio.wfrecipientpolicylist" column="0"
@@ -4752,6 +4802,9 @@
 				<property name="searchTable"
 					description="$m{studio.appappletprop.manageentity.searchtable}"
 					inputWidget="studio.propertyapplettablelist" required="true" />
+				<property name="searchTable.selectByField"
+					description="$m{studio.appappletprop.manageentity.searchtable.selectbyfield}"
+					inputWidget="studio.propertyappletuniquefieldlist" required="true" />
 				<property name="baseRestriction"
 					description="$m{studio.appappletprop.manageentity.baserestriction}"
 					inputWidget="studio.propertyappletfilterlist" />

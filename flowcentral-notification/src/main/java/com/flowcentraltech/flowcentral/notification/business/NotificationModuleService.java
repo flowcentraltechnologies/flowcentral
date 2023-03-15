@@ -18,13 +18,13 @@ package com.flowcentraltech.flowcentral.notification.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
-import com.flowcentraltech.flowcentral.common.data.Dictionary;
-import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.notification.data.NotificationChannelMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
+import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStore;
 
 /**
  * Notification business service.
@@ -34,6 +34,32 @@ import com.tcdng.unify.core.data.ValueStore;
  */
 public interface NotificationModuleService extends FlowCentralService {
 
+    /**
+     * Creates a wrapper instance initialized with a new instance of wrapped
+     * template type.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends NotifTemplateWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
+
+    /**
+     * Generates dynamic notification template information.
+     * 
+     * @param basePackage
+     *                    the base package
+     * @param moduleName
+     *                    the module name
+     * @return list of template infos
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
+            throws UnifyException;
+    
     /**
      * Finds notification templates.
      * 
@@ -68,93 +94,25 @@ public interface NotificationModuleService extends FlowCentralService {
     List<Long> findNotificationTemplateIdList(String applicationName) throws UnifyException;
 
     /**
-     * Constructs a notification channel message.
+     * Get notification template definition.
      * 
-     * @param tenantId the tenant ID
-     * @param notifTemplateName
-     *                          the long name of the template to use
-     * @param dictionary
-     *                          the message dictionary
-     * @param recipients
-     *                          the message recipients
-     * @return the constructed notification channel message
+     * @param templateName
+     *                     the template name
+     * @return the template definition
      * @throws UnifyException
-     *                        if template if unknown. If an error occurs
+     *                        if an error occurs
      */
-    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, Dictionary dictionary,
-            Recipient... recipients) throws UnifyException;
-
-    /**
-     * Constructs a notification channel message.
-     * 
-     * @param tenantId the tenant ID
-     * @param notifTemplateName
-     *                          the long name of the template to use
-     * @param dictionary
-     *                          the message dictionary
-     * @param recipients
-     *                          the message recipients
-     * @return the constructed notification channel message
-     * @throws UnifyException
-     *                        if template if unknown. If an error occurs
-     */
-    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, Dictionary dictionary,
-            List<Recipient> recipients) throws UnifyException;
-
-    /**
-     * Constructs a notification channel message.
-     * 
-     * @param tenantId the tenant ID
-     * @param notifTemplateName
-     *                          the long name of the template to use
-     * @param valueStore
-     *                          the value store
-     * @param recipients
-     *                          the message recipients
-     * @return the constructed notification channel message
-     * @throws UnifyException
-     *                        if template if unknown. If an error occurs
-     */
-    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, ValueStore valueStore,
-            Recipient... recipients) throws UnifyException;
-
-    /**
-     * Constructs a notification channel message.
-     * 
-     * @param tenantId the tenant ID
-     * @param notifTemplateName
-     *                          the long name of the template to use
-     * @param valueStore
-     *                          the value store
-     * @param recipients
-     *                          the message recipients
-     * @return the constructed notification channel message
-     * @throws UnifyException
-     *                        if template if unknown. If an error occurs
-     */
-    NotificationChannelMessage constructNotificationChannelMessage(Long tenantId, String notifTemplateName, ValueStore valueStore,
-            List<Recipient> recipients) throws UnifyException;
-
+    NotifTemplateDef getNotifTemplateDef(String templateName) throws UnifyException;
+    
     /**
      * Sends a notification. This is an asynchronous call where message is pushed
      * into communication system that is left to do actual notification
      * transmission.
      * 
-     * @param notifChannelMessage
+     * @param notifMessage
      *                            the message to send
      * @throws UnifyException
      *                        if an error occurs
      */
-    void sendNotification(NotificationChannelMessage notifChannelMessage) throws UnifyException;
-
-    /**
-     * Dispatches system notification.
-     * 
-     * @param notifChannelMessage
-     *                            the notification channel message
-     * @throws UnifyException
-     *                        if message notification type is not SYSTEM. if an
-     *                        error occurs
-     */
-    void dispatchSystemNotification(NotificationChannelMessage notifChannelMessage) throws UnifyException;
+    void sendNotification(NotifMessage notifMessage) throws UnifyException;
 }

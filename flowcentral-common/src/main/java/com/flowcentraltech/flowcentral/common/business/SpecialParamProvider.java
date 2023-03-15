@@ -22,7 +22,7 @@ import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Special parameter provider.
@@ -31,35 +31,35 @@ import com.tcdng.unify.core.data.ValueStore;
  * @since 1.0
  */
 public interface SpecialParamProvider extends UnifyComponent {
-    
+
     /**
      * Gets a generator instance.
      * 
-     * @param paramValueStore
-     *                        the parameter value store
+     * @param paramReader
+     *                    the parameter value store reader
+     * @param tokenList
+     *                    the token list
+     * @return the generator instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, List<StringToken> tokenList)
+            throws UnifyException;
+
+    /**
+     * Gets a generator instance.
+     * 
+     * @param paramReader
+     *                        the parameter value store reader
+     * @param generatorReader
+     *                        the generator value store reader
      * @param tokenList
      *                        the token list
      * @return the generator instance
      * @throws UnifyException
      *                        if an error occurs
      */
-    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
-            throws UnifyException;
-    
-    /**
-     * Gets a generator instance.
-     * 
-     * @param paramValueStore
-     *                            the parameter value store
-     * @param generatorValueStore
-     *                            the generator value store
-     * @param tokenList
-     *                            the token list
-     * @return the generator instance
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
+    ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, ValueStoreReader generatorReader,
             List<StringToken> tokenList) throws UnifyException;
 
     /**

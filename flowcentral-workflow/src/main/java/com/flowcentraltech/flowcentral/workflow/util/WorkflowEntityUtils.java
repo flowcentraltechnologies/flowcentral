@@ -20,7 +20,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterCo
 import com.flowcentraltech.flowcentral.application.data.EntityInstNameParts;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -49,11 +49,11 @@ public final class WorkflowEntityUtils {
                 new EntityInstNameParts(po[2], Long.valueOf(po[3])));
     }
 
-    public static boolean isWorkflowConditionMatched(AppletUtilities au, ValueStore valueStore, WfDef wfDef,
+    public static boolean isWorkflowConditionMatched(AppletUtilities au, ValueStoreReader reader, WfDef wfDef,
             String conditionName) throws UnifyException {
-        return conditionName != null && (ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(conditionName) || wfDef
-                .getFilterDef(conditionName).getFilterDef()
-                .getObjectFilter(wfDef.getEntityDef(), valueStore.getReader(), au.getNow()).match(valueStore));
+        return conditionName != null && (ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(conditionName)
+                || wfDef.getFilterDef(conditionName).getFilterDef()
+                        .getObjectFilter(wfDef.getEntityDef(), reader, au.getNow()).matchReader(reader));
     }
 
 }

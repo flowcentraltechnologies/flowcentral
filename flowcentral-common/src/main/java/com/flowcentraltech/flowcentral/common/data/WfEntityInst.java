@@ -32,10 +32,6 @@ public class WfEntityInst {
 
     private ValueStore valueStore;
 
-    private ValueStoreReader valueStoreReader;
-
-    private ValueStoreWriter valueStoreWriter;
-
     public WfEntityInst(WorkEntity wfEntityInst) {
         this.valueStore = new BeanValueStore(wfEntityInst);
     }
@@ -44,28 +40,12 @@ public class WfEntityInst {
         return (WorkEntity) valueStore.getValueObject();
     }
 
-    public ValueStoreReader getValueStoreReader() {
-        if (valueStoreReader == null) {
-            synchronized (this) {
-                if (valueStoreReader == null) {
-                    valueStoreReader = new ValueStoreReader(valueStore);
-                }
-            }
-        }
-
-        return valueStoreReader;
+    public ValueStoreReader getReader() {
+        return valueStore.getReader();
     }
 
-    public ValueStoreWriter getValueStoreWriter() {
-        if (valueStoreWriter == null) {
-            synchronized (this) {
-                if (valueStoreWriter == null) {
-                    valueStoreWriter = new ValueStoreWriter(valueStore);
-                }
-            }
-        }
-
-        return valueStoreWriter;
+    public ValueStoreWriter getWriter() {
+        return valueStore.getWriter();
     }
 
     public ValueStore getWfInstValueStore() {

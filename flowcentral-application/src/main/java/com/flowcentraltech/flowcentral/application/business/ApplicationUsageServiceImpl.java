@@ -62,8 +62,9 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
         List<Usage> usageList = new ArrayList<Usage>();
         // App applet
         if (UsageType.isQualifiesApplet(usageType)) {
-            List<AppApplet> appletList = environment().listAll(new AppAppletQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            List<AppApplet> appletList = environment()
+                    .listAll(new AppAppletQuery().entityBeginsWith(applicationNameBase)
+                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
             for (AppApplet appApplet : appletList) {
                 Usage usage = new Usage(UsageType.APPLET, "AppApplet",
                         appApplet.getApplicationName() + "." + appApplet.getName(), "entity", appApplet.getEntity());
@@ -81,8 +82,8 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
             }
 
             List<AppAssignmentPage> appAssignmentPageList = environment()
-                    .listAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
-                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+                    .listAll(new AppAssignmentPageQuery().entityBeginsWith(applicationNameBase)
+                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
             for (AppAssignmentPage appAssignmentPage : appAssignmentPageList) {
                 Usage usage = new Usage(UsageType.APPLET, "AppAssignmentPage",
                         appAssignmentPage.getApplicationName() + "." + appAssignmentPage.getName(), "entity",
@@ -140,8 +141,8 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
 
         // App form
         if (UsageType.isQualifiesForm(usageType)) {
-            List<AppForm> appFormList = environment().listAll(new AppFormQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            List<AppForm> appFormList = environment().listAll(new AppFormQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
             for (AppForm appForm : appFormList) {
                 Usage usage = new Usage(UsageType.FORM, "AppForm", appForm.getApplicationName(),
                         appForm.getName() + "." + "entity", appForm.getEntity());
@@ -217,8 +218,8 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
 
         // App ref
         if (UsageType.isQualifiesRef(usageType)) {
-            List<AppRef> appRefList = environment().listAll(new AppRefQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            List<AppRef> appRefList = environment().listAll(new AppRefQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
             for (AppRef appRef : appRefList) {
                 Usage usage = new Usage(UsageType.REF, "AppRef", appRef.getApplicationName(),
                         appRef.getName() + "." + "entity", appRef.getEntity());
@@ -228,8 +229,9 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
 
         // App table
         if (UsageType.isQualifiesTable(usageType)) {
-            List<AppTable> appTableList = environment().listAll(new AppTableQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            List<AppTable> appTableList = environment()
+                    .listAll(new AppTableQuery().entityBeginsWith(applicationNameBase)
+                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
             for (AppTable appTable : appTableList) {
                 Usage usage = new Usage(UsageType.TABLE, "AppTable", appTable.getApplicationName(),
                         appTable.getName() + "." + "entity", appTable.getEntity());
@@ -247,14 +249,14 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
         long usages = 0L;
         // App applet
         if (UsageType.isQualifiesApplet(usageType)) {
-            usages += environment().countAll(new AppAppletQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new AppAppletQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
 
             usages += environment().countAll(new AppAppletPropQuery().applicationNameNot(applicationName)
                     .valueBeginsWith(applicationNameBase).addSelect("applicationName", "appletName", "name", "value"));
 
-            usages += environment().countAll(new AppAssignmentPageQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new AppAssignmentPageQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
         }
 
         // App entity field
@@ -278,8 +280,8 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
 
         // App form
         if (UsageType.isQualifiesForm(usageType)) {
-            usages += environment().countAll(new AppFormQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new AppFormQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
 
             usages += environment().countAll(new AppFormElementQuery().applicationNameNot(applicationName)
                     .tabAppletBeginsWith(applicationNameBase)
@@ -308,14 +310,14 @@ public class ApplicationUsageServiceImpl extends AbstractFlowCentralService impl
 
         // App ref
         if (UsageType.isQualifiesRef(usageType)) {
-            usages += environment().countAll(new AppRefQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new AppRefQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
         }
 
         // App table
         if (UsageType.isQualifiesTable(usageType)) {
-            usages += environment().countAll(new AppTableQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new AppTableQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
         }
 
         return usages;

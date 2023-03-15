@@ -20,17 +20,17 @@
 				<alert name="userCreationApproval"
 					description="$m{security.workflow.usercreation.alert.approval}"
 					type="user_interact" channel="email"
-					template="userCreationApproval" />
+					generator="usercreation-alertsender" />
 			</alerts>
 			<userActions>
 				<userAction name="approveUserCreate"
 					description="$m{security.workflow.usercreation.useraction.approve}"
 					label="$m{security.workflow.usercreation.useraction.approve.label}"
-					nextStep="prepareCreateUser" highlight="GREEN"/>
+					nextStep="prepareCreateUser" highlight="GREEN" />
 				<userAction name="declineUserCreate"
 					description="$m{security.workflow.usercreation.useraction.decline}"
 					label="$m{security.workflow.usercreation.useraction.decline.label}"
-					nextStep="deleteUser" highlight="RED"/>
+					nextStep="deleteUser" highlight="RED" />
 			</userActions>
 		</step>
 		<step type="enrichment" name="prepareCreateUser"
@@ -48,7 +48,8 @@
 			<alerts>
 				<alert name="userWelcome"
 					description="$m{security.workflow.usercreation.alert.welcome}"
-					type="pass_through" channel="email" template="userWelcome"
+					type="pass_through" channel="email"
+					generator="userwelcome-alertsender"
 					recipientPolicy="entity-wfrecipientpolicy"
 					recipientNameRule="fullName" recipientContactRule="email" />
 			</alerts>
@@ -72,7 +73,7 @@
 				<userAction name="recover"
 					description="$m{security.workflow.usercreation.useraction.recover}"
 					label="$m{security.workflow.usercreation.useraction.recover.label}"
-					nextStep="approval" highlight="ORANGE"/>
+					nextStep="approval" highlight="ORANGE" />
 			</userActions>
 		</step>
 	</steps>

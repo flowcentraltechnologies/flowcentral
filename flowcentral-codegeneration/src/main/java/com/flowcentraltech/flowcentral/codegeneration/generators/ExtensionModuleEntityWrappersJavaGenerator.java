@@ -22,6 +22,7 @@ import java.io.OutputStreamWriter;
 import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.codegeneration.util.CodeGenerationUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -59,7 +60,9 @@ public class ExtensionModuleEntityWrappersJavaGenerator extends AbstractStaticAr
             openEntry(filename, zos);
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
-                String src = CodeGenerationUtils.generateEntityWrapperJavaClassSource(dynamicEntityInfo);
+                String src = CodeGenerationUtils.generateEntityWrapperJavaClassSource(ApplicationCodeGenUtils
+                        .generateUtilitiesEntityWrapperPackageName(ctx.getBasePackage(), moduleName),
+                        dynamicEntityInfo);
                 bw.write(src);
                 bw.newLine();
                 bw.flush();

@@ -129,6 +129,7 @@ import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.RestrictionTranslator;
 import com.tcdng.unify.core.criterion.Update;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
@@ -390,15 +391,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, List<StringToken> tokenList)
+    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, List<StringToken> tokenList)
             throws UnifyException {
-        return specialParamProvider.getStringGenerator(paramValueStore, tokenList);
+        return specialParamProvider.getStringGenerator(paramReader, tokenList);
     }
 
     @Override
-    public ParameterizedStringGenerator getStringGenerator(ValueStore paramValueStore, ValueStore generatorValueStore,
-            List<StringToken> tokenList) throws UnifyException {
-        return specialParamProvider.getStringGenerator(paramValueStore, generatorValueStore, tokenList);
+    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader,
+            ValueStoreReader generatorReader, List<StringToken> tokenList) throws UnifyException {
+        return specialParamProvider.getStringGenerator(paramReader, generatorReader, tokenList);
     }
 
     @Override
@@ -946,7 +947,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         }
 
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
-                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, form.getFormValueStore(),
+                        Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB, form.getFormValueStoreReader(),
                                 now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
@@ -1291,7 +1292,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         EntitySearch _entitySearch = (EntitySearch) tabSheetItem.getValObject();
                         Restriction childRestriction = getChildRestriction(entityDef, formTabDef.getReference(), inst);
                         Restriction tabRestriction = formTabDef.getRestriction(FilterType.TAB,
-                                formContext.getFormValueStore(), now);
+                                formContext.getFormValueStore().getReader(), now);
                         childRestriction = RestrictionUtils.and(childRestriction, tabRestriction);
 
                         _entitySearch.setNewButtonVisible(newButtonVisible);
@@ -1785,7 +1786,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             return appletDef.getFilterDef(condFilterName).getFilterDef()
                     .getObjectFilter(getEntityClassDef(appletDef.getEntity()).getEntityDef(),
                             form.getFormValueStoreReader(), getNow())
-                    .match(form.getFormBean());
+                    .matchObject(form.getFormBean());
         }
 
         return true;
@@ -1845,12 +1846,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         if (!filterList.isEmpty()) {
             final Date now = getNow();
             final EntityDef entityDef = form.getFormDef().getEntityDef();
-            final ValueStore formValueStore = form.getFormValueStore();
-            final ValueStoreReader valueStoreReader = form.getFormValueStoreReader();
+            final ValueStoreReader reader = form.getFormValueStoreReader();
             for (AppletFilterDef filterDef : filterList) {
                 if (filterDef.isHideAddWidgetChildListAction()) {
-                    ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef, valueStoreReader, now);
-                    if (filter.match(formValueStore)) {
+                    ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef, reader, now);
+                    if (filter.matchReader(reader)) {
                         return true;
                     }
                 }
@@ -1998,13 +1998,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     public void populateAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
         SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
-            ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
+            final ValueStoreReader reader = new BeanValueStore(inst).getReader();
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                 if (entityFieldDef.isStringAutoFormat()) {
                     String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
                     if (skeleton.equals(DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName()))) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen.getNextSequenceCode(
-                                _entityDef.getLongName(), entityFieldDef.getAutoFormat(), valueStoreReader));
+                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen
+                                .getNextSequenceCode(_entityDef.getLongName(), entityFieldDef.getAutoFormat(), reader));
                     }
                 }
             }
@@ -2139,14 +2139,14 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
         SequenceCodeGenerator gen = sequenceCodeGenerator();
         if (_entityDef.isWithAutoFormatFields()) {
-            ValueStoreReader valueStoreReader = new ValueStoreReader(inst);
+            final ValueStoreReader reader = new BeanValueStore(inst).getReader();
             for (EntityFieldDef entityFieldDef : _entityDef.getAutoFormatFieldDefList()) {
                 if (entityFieldDef.isStringAutoFormat()) {
                     final String val = DataUtils.getBeanProperty(String.class, inst, entityFieldDef.getFieldName());
                     String skeleton = gen.getCodeSkeleton(entityFieldDef.getAutoFormat());
                     if (val == null || skeleton.equals(val)) {
-                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen.getNextSequenceCode(
-                                _entityDef.getLongName(), entityFieldDef.getAutoFormat(), valueStoreReader));
+                        DataUtils.setBeanProperty(inst, entityFieldDef.getFieldName(), gen
+                                .getNextSequenceCode(_entityDef.getLongName(), entityFieldDef.getAutoFormat(), reader));
                     }
                 }
             }
@@ -2158,8 +2158,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final ValueStore _formValueStore = formContext.getFormValueStore();
         final ValueStoreReader _formValueStoreReader = formContext.getFormValueStore().getReader();
         final Date now = getNow();
-        logDebug("Applying delayed set values on [{0}] using form definition [{1}] ...", _formValueStore.retrieve("id"),
-                _formDef.getLongName());
+        logDebug("Applying delayed set values on [{0}] using form definition [{1}] ...",
+                _formValueStoreReader.read("id"), _formDef.getLongName());
         // Execute delayed set values
         final Map<String, Object> variables = Collections.emptyMap();
         for (FormStatePolicyDef formStatePolicyDef : _formDef.getOnDelayedSetValuesFormStatePolicyDefList()) {
@@ -2167,7 +2167,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                     ? formStatePolicyDef.getOnCondition().getObjectFilter(_formDef.getEntityDef(),
                             _formValueStoreReader, now)
                     : null;
-            if (objectFilter == null || objectFilter.match(_formValueStore)) {
+            if (objectFilter == null || objectFilter.matchReader(_formValueStoreReader)) {
                 if (formStatePolicyDef.isSetValues()) {
                     formStatePolicyDef.getSetValuesDef().apply(this, _formDef.getEntityDef(), now, _formValueStore,
                             variables, null);

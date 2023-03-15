@@ -90,7 +90,7 @@ public class FormContext extends AbstractContext {
     private FormTriggerEvaluator triggerEvaluator;
 
     private List<EventHandler> quickEditFormEventHandlers;
-    
+
     private ValueStore formValueStore;
 
     private Object oldInst;
@@ -269,8 +269,10 @@ public class FormContext extends AbstractContext {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef != null && formDef.isWithTitleFormat() ? appletContext.specialParamProvider()
-                .getStringGenerator(null, getFormValueStore(), formDef.getTitleFormat()).generate() : null;
+        altFormTitle = formDef != null && formDef.isWithTitleFormat()
+                ? appletContext.specialParamProvider()
+                        .getStringGenerator(null, getFormValueStore().getReader(), formDef.getTitleFormat()).generate()
+                : null;
     }
 
     public Object getInst() {
@@ -417,11 +419,11 @@ public class FormContext extends AbstractContext {
         } else {
             FormMessage formMessage = message.getFormMessage();
             rrb.addRequired(formMessage.getMessage());
-            
+
             String mainTabName = formDef.getFormTabDef(0).getName();
             if (message.isTarget(mainTabName)) {
                 addValidationError(formMessage);
-            }         
+            }
         }
     }
 
@@ -557,11 +559,11 @@ public class FormContext extends AbstractContext {
             ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
                     formDef.getConsolidatedFormState());
             String trigger = triggerEvaluator != null ? triggerEvaluator.evaluateTrigger() : null;
-            TargetFormTabStates states = policy.evaluateTabStates(formValueStore.getReader(), trigger);
+            TargetFormTabStates states = policy.evaluateTabStates(formValueStoreReader, trigger);
             if (states.isWithValueList()) {
                 states.applyValues(formValueStore);
             }
-            
+
             for (TargetFormState state : states.getTargetStateList()) {
                 for (String target : state.getTarget()) {
                     FormTab tb = formTabs.get(target);
@@ -577,7 +579,7 @@ public class FormContext extends AbstractContext {
                 ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
                         ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, formValueStoreReader, now)
                         : null;
-                if (objectFilter == null || objectFilter.match(formValueStore)) {
+                if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
                     for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
                         if (setStateDef.isTabRule()) {
                             for (String target : setStateDef.getTarget()) {
@@ -616,7 +618,7 @@ public class FormContext extends AbstractContext {
 
         return false;
     }
-    
+
     public Collection<String> getFormTabNames() {
         return formTabs.keySet();
     }

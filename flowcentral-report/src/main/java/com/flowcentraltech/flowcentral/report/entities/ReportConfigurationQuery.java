@@ -29,10 +29,6 @@ public class ReportConfigurationQuery extends BaseApplicationEntityQuery<ReportC
         super(ReportConfiguration.class);
     }
 
-    public ReportConfigurationQuery applicationNameNot(String applicationName) {
-        return (ReportConfigurationQuery) addNotEquals("applicationName", applicationName);
-    }
-
     public ReportConfigurationQuery reportableBeginsWith(String reportable) {
         return (ReportConfigurationQuery) addBeginsWith("reportable", reportable);
     }

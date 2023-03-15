@@ -33,6 +33,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -50,7 +51,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     private AppletUtilities appletUtilities;
 
     private final WfReviewMode wfReviewMode;
-    
+
     private final String workflowName;
 
     private final String wfStepName;
@@ -103,13 +104,13 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst) throws UnifyException {
         WfDef wfDef = workflowModuleService.getWfDef(workflowName);
         WfStepDef wfStepDef = wfDef.getWfStepDef(wfStepName);
-        ValueStore currEntityInstValueStore = new BeanValueStore(inst);
-        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities,
-                currEntityInstValueStore, wfDef, wfStepDef.getComments());
-        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, currEntityInstValueStore,
-                wfDef, wfStepDef.getEmails());
-        final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities,
-                currEntityInstValueStore, wfDef, wfStepDef.getReadOnlyConditionName());
+        ValueStoreReader reader = new BeanValueStore(inst).getReader();
+        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
+                wfStepDef.getComments());
+        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
+                wfStepDef.getEmails());
+        final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
+                wfStepDef.getReadOnlyConditionName());
         return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), readOnly, comments, emails,
                 wfStepDef.isError());
     }
@@ -117,8 +118,8 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     @Override
     public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
             InputArrayEntries emails) throws UnifyException {
-        return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, wfStepName, userAction, comment, emails,
-                wfReviewMode);
+        return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, wfStepName, userAction, comment,
+                emails, wfReviewMode);
     }
 
     @Override
@@ -126,8 +127,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         CommitChangeInfo commitChangeInfo = resolveCommitChangeInfo(itemValueStore);
         if (commitChangeInfo != null && commitChangeInfo.isPresent()) {
             workflowModuleService.applyUserAction(commitChangeInfo.getWorkEntity(), commitChangeInfo.getWfItemId(),
-                    wfStepName, commitChangeInfo.getActionName(), commitChangeInfo.getComment(), null,
-                    wfReviewMode);
+                    wfStepName, commitChangeInfo.getActionName(), commitChangeInfo.getComment(), null, wfReviewMode);
         }
     }
 
@@ -161,15 +161,15 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
     }
 
     protected abstract CommitChangeInfo resolveCommitChangeInfo(ValueStore itemValueStore) throws UnifyException;
-    
+
     protected static class CommitChangeInfo {
-        
+
         private final Long wfItemId;
-        
+
         private final WorkEntity workEntity;
-        
+
         private final String actionName;
-        
+
         private final String comment;
 
         public CommitChangeInfo(Long wfItemId, WorkEntity workEntity, String actionName, String comment) {
@@ -185,7 +185,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
             this.actionName = null;
             this.comment = null;
         }
-        
+
         public Long getWfItemId() {
             return wfItemId;
         }
@@ -201,7 +201,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
         public String getComment() {
             return comment;
         }
-        
+
         public boolean isPresent() {
             return wfItemId != null && workEntity != null && !StringUtils.isBlank(actionName);
         }

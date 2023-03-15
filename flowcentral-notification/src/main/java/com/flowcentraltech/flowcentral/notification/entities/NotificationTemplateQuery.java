@@ -33,10 +33,6 @@ public class NotificationTemplateQuery extends BaseApplicationEntityQuery<Notifi
         return (NotificationTemplateQuery) addEquals("entity", entity);
     }
 
-    public NotificationTemplateQuery applicationNameNot(String applicationName) {
-        return (NotificationTemplateQuery) addNotEquals("applicationName", applicationName);
-    }
-
     public NotificationTemplateQuery entityBeginsWith(String entity) {
         return (NotificationTemplateQuery) addBeginsWith("entity", entity);
     }

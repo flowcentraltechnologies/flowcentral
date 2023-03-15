@@ -19,9 +19,7 @@ package com.flowcentraltech.flowcentral.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
-import com.flowcentraltech.flowcentral.configuration.xml.adapter.NotificationTypeXmlAdapter;
 import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowAlertTypeXmlAdapter;
 
 /**
@@ -34,15 +32,13 @@ public class WfAlertConfig extends BaseNameConfig {
 
     private WorkflowAlertType type;
 
-    private NotificationType notificationType;
-
     private String recipientPolicy;
 
     private String recipientNameRule;
 
     private String recipientContactRule;
 
-    private String template;
+    private String generator;
 
     private String fireOnPrevStepName;
 
@@ -56,16 +52,6 @@ public class WfAlertConfig extends BaseNameConfig {
     @XmlAttribute(name = "type", required = true)
     public void setType(WorkflowAlertType type) {
         this.type = type;
-    }
-
-    public NotificationType getNotificationType() {
-        return notificationType;
-    }
-
-    @XmlJavaTypeAdapter(NotificationTypeXmlAdapter.class)
-    @XmlAttribute(name = "channel", required = true)
-    public void setNotificationType(NotificationType notificationType) {
-        this.notificationType = notificationType;
     }
 
     public String getRecipientPolicy() {
@@ -95,13 +81,13 @@ public class WfAlertConfig extends BaseNameConfig {
         this.recipientContactRule = recipientContactRule;
     }
 
-    public String getTemplate() {
-        return template;
+    public String getGenerator() {
+        return generator;
     }
 
     @XmlAttribute(required = true)
-    public void setTemplate(String template) {
-        this.template = template;
+    public void setGenerator(String generator) {
+        this.generator = generator;
     }
 
     public String getFireOnPrevStepName() {

@@ -83,13 +83,13 @@
 			subTitle="$m{dashboard.samplechart5.subtitle}"
 			provider="chartsnapshot-provider"
 			rule="sampleSalesAndCostsChartSnapshot" showGrid="true" smooth="true"
-			stacked="true" />
+			stacked="true" showDataLabels="true" formatDataLabels="true" formatYLabels="true" />
 		<chart name="sampleChart6"
 			description="$m{dashboard.samplechart6.description}" type="donut"
 			title="$m{dashboard.samplechart6.title}"
 			subTitle="$m{dashboard.samplechart6.subtitle}" height="300"
 			provider="chartsnapshot-provider" rule="sampleCostsChartSnapshot"
-			showGrid="true" smooth="true" stacked="false" />
+			showGrid="true" smooth="true" stacked="false" showDataLabels="true" />
 	</charts>
 	<!-- References -->
 	<references>

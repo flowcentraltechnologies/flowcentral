@@ -56,6 +56,10 @@ public class AppChartConfig extends BaseNameConfig {
 
     private boolean showDataLabels;
 
+    private boolean formatDataLabels;
+
+    private boolean formatYLabels;
+
     private boolean smooth;
 
     public AppChartConfig() {
@@ -170,6 +174,24 @@ public class AppChartConfig extends BaseNameConfig {
     @XmlAttribute
     public void setSmooth(boolean smooth) {
         this.smooth = smooth;
+    }
+
+    public boolean isFormatDataLabels() {
+        return formatDataLabels;
+    }
+
+    @XmlAttribute
+    public void setFormatDataLabels(boolean formatDataLabels) {
+        this.formatDataLabels = formatDataLabels;
+    }
+
+    public boolean isFormatYLabels() {
+        return formatYLabels;
+    }
+
+    @XmlAttribute
+    public void setFormatYLabels(boolean formatYLabels) {
+        this.formatYLabels = formatYLabels;
     }
 
 }

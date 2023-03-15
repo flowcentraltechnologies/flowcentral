@@ -67,7 +67,7 @@ import com.tcdng.unify.web.ui.widget.control.TextField;
 @Component("fc-miniform")
 @UplAttributes({ @UplAttribute(name = "strictRows", type = boolean.class) })
 public class MiniFormWidget extends AbstractMultiControl implements FormTriggerEvaluator {
-    
+
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -148,7 +148,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
                     formSections.put(formSectionDef.getName(),
                             new FormSection(formSectionDef, formWidgetLists, rows, isStrictRows));
                 }
-                
+
                 formSections = DataUtils.unmodifiableMap(formSections);
 
                 FormContext ctx = miniForm.getCtx();
@@ -242,12 +242,13 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                 if (formStatePolicyDef.isTriggered(trigger)) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), formValueStoreReader, now)
+                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
+                                    formValueStoreReader, now)
                             : null;
-                    if (objectFilter == null || objectFilter.match(formValueStore)) {
+                    if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
                         if (formStatePolicyDef.isSetValues()) {
-                            formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now, formValueStore,
-                                    variables, trigger);
+                            formStatePolicyDef.getSetValuesDef().apply(appletUtilities, formDef.getEntityDef(), now,
+                                    formValueStore, variables, trigger);
                             setValuesExecuted = true;
                         }
                     }
@@ -257,12 +258,12 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             if (setValuesExecuted) {
                 ctx.au().populateListOnlyFields(formDef.getEntityDef(), (Entity) formValueStore.getValueObject());
             }
-            
+
             // Then switch states
             if (formDef.isWithConsolidatedFormState()) {
                 ConsolidatedFormStatePolicy policy = ctx.au().getComponent(ConsolidatedFormStatePolicy.class,
                         formDef.getConsolidatedFormState());
-                TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStore.getReader(), trigger);
+                TargetFormWidgetStates _states = policy.evaluateWidgetStates(formValueStoreReader, trigger);
                 for (TargetFormState state : _states.getTargetStateList()) {
                     if (state.isSectionRule()) {
                         for (String target : state.getTarget()) {
@@ -282,9 +283,10 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
             for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
                 if (formStatePolicyDef.isTriggered(trigger)) {
                     ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(), formValueStoreReader, now)
+                            ? formStatePolicyDef.getOnCondition().getObjectFilter(formDef.getEntityDef(),
+                                    formValueStoreReader, now)
                             : null;
-                    if (objectFilter == null || objectFilter.match(formValueStore)) {
+                    if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
                         for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
                             if (setStateDef.isSectionRule()) {
                                 for (String target : setStateDef.getTarget()) {
@@ -419,7 +421,7 @@ public class MiniFormWidget extends AbstractMultiControl implements FormTriggerE
         public String getName() {
             return formSectionDef.getName();
         }
-        
+
         public String getLabel() {
             return formSectionDef.getLabel();
         }

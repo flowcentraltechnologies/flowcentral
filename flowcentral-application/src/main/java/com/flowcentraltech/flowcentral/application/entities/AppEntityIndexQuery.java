@@ -33,4 +33,12 @@ public class AppEntityIndexQuery extends BaseConfigNamedEntityQuery<AppEntityInd
         return (AppEntityIndexQuery) addEquals("appEntityId", appEntityId);
     }
 
+    public AppEntityIndexQuery applicationName(String applicationName) {
+        return (AppEntityIndexQuery) addEquals("applicationName", applicationName);
+    }
+
+    public AppEntityIndexQuery entityName(String entityName) {
+        return (AppEntityIndexQuery) addEquals("entityName", entityName);
+    }
+
 }

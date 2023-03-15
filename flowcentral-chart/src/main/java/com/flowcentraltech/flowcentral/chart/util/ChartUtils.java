@@ -130,6 +130,7 @@ public final class ChartUtils {
         // Data labels
         jw.beginObject("dataLabels");
         jw.write("enabled", chartDef.isShowDataLabels());
+        jw.write("_dformatter", chartDef.isFormatDataLabels());
         jw.endObject();
 
         // Theme
@@ -187,6 +188,11 @@ public final class ChartUtils {
 
             // Y-axis
             jw.write("_yintegers", integers);
+            jw.write("_yformatter", chartDef.isFormatYLabels());
+            jw.beginObject("yaxis");
+            jw.beginObject("labels");
+            jw.endObject();
+            jw.endObject();
 
             // X-axis
             jw.beginObject("xaxis");

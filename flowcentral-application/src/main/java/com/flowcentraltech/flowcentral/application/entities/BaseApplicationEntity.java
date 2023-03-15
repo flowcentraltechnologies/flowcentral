@@ -40,6 +40,9 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
     @ListOnly(key = "applicationId", property = "description")
     private String applicationDesc;
 
+    @ListOnly(key = "applicationId", property = "moduleName")
+    private String moduleName;
+
     public final Long getApplicationId() {
         return applicationId;
     }
@@ -62,6 +65,14 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     public final void setApplicationDesc(String applicationDesc) {
         this.applicationDesc = applicationDesc;
+    }
+
+    public final String getModuleName() {
+        return moduleName;
+    }
+
+    public final void setModuleName(String moduleName) {
+        this.moduleName = moduleName;
     }
 
 }

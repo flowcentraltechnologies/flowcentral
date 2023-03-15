@@ -279,7 +279,7 @@ public class EntityTreeTableWriter extends AbstractControlWriter {
                         writer.write(filler + 1);
                     }
                     writer.write("\"><span>");
-                    ParameterizedStringGenerator generator = au.getStringGenerator(item.getInstValueStore(),
+                    ParameterizedStringGenerator generator = au.getStringGenerator(item.getInstValueStore().getReader(),
                             treeLevel.getLineFormat());
                     String line = generator.generate();
                     writer.writeWithHtmlEscape(line);

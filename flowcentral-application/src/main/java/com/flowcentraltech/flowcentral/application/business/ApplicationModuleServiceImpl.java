@@ -279,12 +279,14 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -1248,31 +1250,46 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     private static final Class<?>[] WRAPPER_PARAMS_2 = { EntityClassDef.class, List.class };
 
+    private static final Class<?>[] WRAPPER_PARAMS_3 = { EntityClassDef.class, ValueStore.class };
+
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, entityClassDef);
     }
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_1, entityClassDef, inst);
     }
 
     @Override
-    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, List<? extends Entity> instList) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, List<? extends Entity> instList)
+            throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_2, entityClassDef, instList);
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStore valueStore) throws UnifyException {
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                ApplicationCodeGenUtils.ENTITY_NAME);
+        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_3, entityClassDef, valueStore);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Query<? extends Entity> queryOf(Class<? extends EntityWrapper> wrapperType) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType, ApplicationCodeGenUtils.ENTITY_NAME);
+        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                ApplicationCodeGenUtils.ENTITY_NAME);
         final EntityClassDef entityClassDef = getEntityClassDef(entityName);
         return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
     }
@@ -1436,6 +1453,40 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException {
         return environment().listAll(new AppAppletQuery().typeIn(AppletType.MANAGE_ENTITY_LIST_TYPES).entity(entity));
+    }
+
+    @Override
+    public List<? extends Listable> findAppEntityUniqueFields(String entity) throws UnifyException {
+        ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entity);
+        Set<String> fields = environment().valueSet(String.class, "fieldList", new AppEntityUniqueConstraintQuery()
+                .applicationName(parts.getApplicationName()).entityName(parts.getEntityName()));
+        if (!DataUtils.isBlank(fields)) {
+            List<String> singleFields = new ArrayList<String>();
+            for (String field : fields) {
+                if (field.indexOf(',') < 0) {
+                    singleFields.add(field);
+                }
+            }
+
+            if (!DataUtils.isBlank(singleFields)) {
+                List<Listable> resultList = new ArrayList<>();
+                List<? extends Entity> singleList = environment().findAll(new AppEntityFieldQuery()
+                        .appEntityName(parts.getEntityName()).applicationName(parts.getApplicationName())
+                        .addAmongst("name", singleFields).addSelect("name", "label"));
+                ValueStore fValueStore = new BeanValueListStore(singleList);
+                final int len = fValueStore.size();
+                for (int i = 0; i < len; i++) {
+                    fValueStore.setDataIndex(i);
+                    String name = fValueStore.retrieve(String.class, "name");
+                    String label = fValueStore.retrieve(String.class, "label");
+                    resultList.add(new ListData(name, label));
+                }
+
+                return resultList;
+            }
+        }
+
+        return Collections.emptyList();
     }
 
     @Override

@@ -20,7 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
@@ -45,7 +45,7 @@ public interface NotificationRecipientProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Recipient getRecipientByLoginId(Long tenantId, NotificationType type, String userLoginId) throws UnifyException;
+    Recipient getRecipientByLoginId(Long tenantId, NotifType type, String userLoginId) throws UnifyException;
 
     /**
      * Gets notification recipients by role.
@@ -60,7 +60,7 @@ public interface NotificationRecipientProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, String roleCode) throws UnifyException;
+    List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, String roleCode) throws UnifyException;
 
     /**
      * Gets notification recipients by roles.
@@ -75,6 +75,6 @@ public interface NotificationRecipientProvider extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Recipient> getRecipientsByRole(Long tenantId, NotificationType type, Collection<String> roles)
+    List<Recipient> getRecipientsByRole(Long tenantId, NotifType type, Collection<String> roles)
             throws UnifyException;
 }

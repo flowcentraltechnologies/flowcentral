@@ -30,8 +30,13 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseEntityWrapper;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
+import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
+import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
+import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.EntityFieldType;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 import com.tcdng.unify.core.database.dynamic.DynamicFieldInfo;
@@ -77,7 +82,7 @@ public final class CodeGenerationUtils {
         return replacements;
     }
 
-    public static String generateEntityWrapperJavaClassSource(DynamicEntityInfo dynamicEntityInfo)
+    public static String generateEntityWrapperJavaClassSource(String packageName, DynamicEntityInfo dynamicEntityInfo)
             throws UnifyException {
         StringBuilder esb = new StringBuilder();
         StringBuilder fsb = new StringBuilder();
@@ -88,10 +93,12 @@ public final class CodeGenerationUtils {
         TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
         TypeInfo listEntityInfo = new TypeInfo(List.class);
         TypeInfo entityClassDefEntityInfo = new TypeInfo(EntityClassDef.class);
+        TypeInfo valueStoreEntityInfo = new TypeInfo(ValueStore.class);
         importSet.add(entityEntityInfo.getCanonicalName());
         importSet.add(exceptionEntityInfo.getCanonicalName());
         importSet.add(listEntityInfo.getCanonicalName());
         importSet.add(entityClassDefEntityInfo.getCanonicalName());
+        importSet.add(valueStoreEntityInfo.getCanonicalName());
 
         // Evaluate fields
         Set<String> fieldNames = new HashSet<String>();
@@ -145,8 +152,9 @@ public final class CodeGenerationUtils {
         // Construct class
         TypeInfo baseEntityInfo = new TypeInfo(BaseEntityWrapper.class);
         TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName() + "Wrapper");
-        final int index = typeInfo.getPackageName().lastIndexOf('.');
-        final String packageName = typeInfo.getPackageName().substring(0, index) + ".entitywrappers";
+        // final int index = typeInfo.getPackageName().lastIndexOf('.');
+        // final String packageName = typeInfo.getPackageName().substring(0, index) +
+        // ".entitywrappers";
         esb.append("package ").append(packageName).append(";\n");
         List<String> importList = new ArrayList<String>(importSet);
         Collections.sort(importList);
@@ -164,9 +172,52 @@ public final class CodeGenerationUtils {
         esb.append("public ").append(typeInfo.getSimpleName())
                 .append("(EntityClassDef entityClassDef) throws UnifyException {super(entityClassDef);}\n");
         esb.append("public ").append(typeInfo.getSimpleName()).append(
+                "(EntityClassDef entityClassDef, ValueStore valueStore) throws UnifyException {super(entityClassDef, valueStore);}\n");
+        esb.append("public ").append(typeInfo.getSimpleName()).append(
                 "(EntityClassDef entityClassDef, Entity inst) throws UnifyException {super(entityClassDef, inst);}\n");
         esb.append("public ").append(typeInfo.getSimpleName()).append(
                 "(EntityClassDef entityClassDef, List<? extends Entity> instList) throws UnifyException {super(entityClassDef, instList);}\n");
+        esb.append(msb);
+        esb.append("}\n");
+        return esb.toString();
+    }
+
+    public static String generateTemplateWrapperJavaClassSource(String packageName,
+            DynamicNotifTemplateInfo dynamicTemplateInfo) throws UnifyException {
+        StringBuilder esb = new StringBuilder();
+        StringBuilder msb = new StringBuilder();
+        Set<String> importSet = new HashSet<String>();
+
+        TypeInfo notifTemplateDefEntityInfo = new TypeInfo(NotifTemplateDef.class);
+        TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
+        importSet.add(notifTemplateDefEntityInfo.getCanonicalName());
+        importSet.add(exceptionEntityInfo.getCanonicalName());
+
+        // Evaluate parameters
+        for (final String param : dynamicTemplateInfo.getParams()) {
+            final String capParam = StringUtils.capitalizeFirstLetter(param);
+            msb.append(" public void set").append(capParam)
+                    .append("(String val) throws UnifyException {nmb.addParam(\"").append(param).append("\", val);}\n");
+        }
+
+        // Construct class
+        TypeInfo baseEntityInfo = new TypeInfo(BaseNotifTemplateWrapper.class);
+        TypeInfo typeInfo = new TypeInfo(dynamicTemplateInfo.getTemplateClassName() + "Wrapper");
+        esb.append("package ").append(packageName).append(";\n");
+        List<String> importList = new ArrayList<String>(importSet);
+        Collections.sort(importList);
+        for (String imprt : importList) {
+            esb.append("import ").append(imprt).append(";\n");
+        }
+
+        esb.append("import ").append(baseEntityInfo.getCanonicalName()).append(";\n");
+
+        esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
+                .append(baseEntityInfo.getSimpleName()).append(" {\n");
+        esb.append("public static final String ").append(NotificationCodeGenUtils.TEMPLATE_NAME).append(" = \"")
+                .append(dynamicTemplateInfo.getTemplateName()).append("\";\n");
+        esb.append("public ").append(typeInfo.getSimpleName())
+                .append("(NotifTemplateDef notifTemplateDef) throws UnifyException {super(notifTemplateDef);}\n");
         esb.append(msb);
         esb.append("}\n");
         return esb.toString();

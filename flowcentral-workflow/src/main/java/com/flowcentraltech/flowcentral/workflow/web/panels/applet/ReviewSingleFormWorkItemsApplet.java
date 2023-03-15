@@ -37,7 +37,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.RequirementType;
 import com.tcdng.unify.core.criterion.AndBuilder;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -65,7 +65,8 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         AppletDef _appletDef = getRootAppletDef();
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), null, null,
                 getRootAppletDef().getDescription(), _appletDef, null,
-                EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON), false, false);
+                EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_NEW_BUTTON | EntitySearch.SHOW_EDIT_BUTTON), false,
+                false);
         final String originApplicationName = _appletDef.getOriginApplicationName();
         final String workflowName = _appletDef.getPropValue(String.class, WfAppletPropertyConstants.WORKFLOW);
         final String wfStepName = _appletDef.getPropValue(String.class, WfAppletPropertyConstants.WORKFLOW_STEP);
@@ -84,11 +85,10 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
     public void maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         EntityItem entityItem = getEntitySearchItem(entitySearch, mIndex);
-        ValueStore currEntityInstValueStore = new BeanValueStore(currEntityInst);
+        ValueStoreReader reader = new BeanValueStore(currEntityInst).getReader();
         WfDef wfDef = wms.getWfDef(currWfItem.getWorkflowName());
-        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au, currEntityInstValueStore, wfDef,
-                wfStepDef.getEmails());
-        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(au, currEntityInstValueStore, wfDef,
+        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef, wfStepDef.getEmails());
+        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef,
                 wfStepDef.getComments());
         getCtx().setRecovery(wfStepDef.isError());
         getCtx().setEmails(emails);
@@ -106,7 +106,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
         // Check if enter read-only mode
         getCtx().setReadOnly(!userActionRight || wfStepDef.isError());
         if (userActionRight) {
-            final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(au, currEntityInstValueStore, wfDef,
+            final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(au, reader, wfDef,
                     wfStepDef.getReadOnlyConditionName());
             getCtx().setReadOnly(readOnly);
         }

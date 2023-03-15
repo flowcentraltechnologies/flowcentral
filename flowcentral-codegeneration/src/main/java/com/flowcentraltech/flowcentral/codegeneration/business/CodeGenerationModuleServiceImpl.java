@@ -199,11 +199,11 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName).configType(ConfigType.CUSTOM));
+                        .listAll(new ApplicationQuery().moduleName(moduleName)/*.configType(ConfigType.CUSTOM)*/);
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
                         final String applicationName = application.getName();
-                        List<Long> entityIdList = applicationModuleService.findCustomAppComponentIdList(applicationName,
+                        List<Long> entityIdList = applicationModuleService.findAppComponentIdList(applicationName,
                                 AppEntity.class);
                         if (!DataUtils.isBlank(entityIdList)) {
                             for (Long entityId : entityIdList) {
@@ -220,6 +220,14 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                             "extension-module-entitywrappers-java-generator");
                     StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
                             "extension-module-entitywrappers-java-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
+                    
+                    // Generate template wrappers
+                    addTaskMessage(taskMonitor, "Generating template wrapper classes for module [{0}]...", moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-templatewrappers-java-generator");
+                    generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-templatewrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
                 }
             }

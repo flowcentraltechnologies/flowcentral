@@ -160,7 +160,6 @@ public class EntitySelectWidget extends AbstractPopupTextField {
         Query<? extends Entity> query = null;
         Restriction br = refDef.isWithFilter() ? refDef.getFilter().getRestriction(entityClassDef.getEntityDef(),
                 getValueStore().getReader(), application().getNow()) : null;
-
         if (br != null) {
             query = Query.ofDefaultingToAnd((Class<? extends Entity>) entityClassDef.getEntityClass(), br);
         } else {
@@ -176,8 +175,9 @@ public class EntitySelectWidget extends AbstractPopupTextField {
 
         Listable result = environment().listLean(query);
         if (result != null) {
-            String formatDesc = refDef.isWithListFormat() ? specialParamProvider()
-                    .getStringGenerator(new BeanValueStore(result), getValueStore(), refDef.getListFormat()).generate()
+            String formatDesc = refDef.isWithListFormat()
+                    ? specialParamProvider().getStringGenerator(new BeanValueStore(result).getReader(),
+                            getValueStore().getReader(), refDef.getListFormat()).generate()
                     : application().getEntityDescription(entityClassDef, (Entity) result, refDef.getSearchField());
             return new ListData(result.getListKey(), formatDesc);
         }

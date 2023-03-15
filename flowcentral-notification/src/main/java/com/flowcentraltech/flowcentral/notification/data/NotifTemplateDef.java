@@ -15,12 +15,16 @@
  */
 package com.flowcentraltech.flowcentral.notification.data;
 
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationMessageFormat;
-import com.flowcentraltech.flowcentral.configuration.constants.NotificationType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.StringUtils;
@@ -31,35 +35,37 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationTemplateDef extends BaseApplicationEntityDef {
+public class NotifTemplateDef extends BaseApplicationEntityDef {
 
-    private NotificationType notificationType;
+    private NotifType notifType;
 
-    private NotificationMessageFormat format;
+    private NotifMessageFormat format;
 
-    private String attachmentGenerator;
+    private String entity;
 
     private List<StringToken> subjectTokenList;
 
     private List<StringToken> templateTokenList;
 
-    public NotificationTemplateDef(NotificationType notificationType, String attachmentGenerator, String subject,
-            String template, NotificationMessageFormat format, String longName, String description, Long id,
-            long version) throws UnifyException {
+    private Map<String, NotifTemplateParamDef> params;
+
+    public NotifTemplateDef(NotifType notifType, String entity, String subject, String template,
+            NotifMessageFormat format, List<NotifTemplateParamDef> paramList, String longName, String description,
+            Long id, long version) throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
-        this.notificationType = notificationType;
-        this.attachmentGenerator = attachmentGenerator;
+        this.notifType = notifType;
+        this.entity = entity;
         this.subjectTokenList = StringUtils.breakdownParameterizedString(subject);
         this.templateTokenList = StringUtils.breakdownParameterizedString(template);
         this.format = format;
+        this.params = new LinkedHashMap<String, NotifTemplateParamDef>();
+        for (NotifTemplateParamDef param : paramList) {
+            this.params.put(param.getName(), param);
+        }
     }
 
-    public NotificationType getNotificationType() {
-        return notificationType;
-    }
-
-    public String getAttachmentGenerator() {
-        return attachmentGenerator;
+    public String getEntity() {
+        return entity;
     }
 
     public List<StringToken> getSubjectTokenList() {
@@ -70,11 +76,27 @@ public class NotificationTemplateDef extends BaseApplicationEntityDef {
         return templateTokenList;
     }
 
-    public NotificationMessageFormat getFormat() {
+    public NotifMessageFormat getFormat() {
         return format;
     }
 
-    public boolean isWithAttachmentGenerator() {
-        return !StringUtils.isBlank(attachmentGenerator);
+    public NotifType getNotifType() {
+        return notifType;
+    }
+
+    public Set<String> getParamNames() {
+        return params.keySet();
+    }
+
+    public Collection<NotifTemplateParamDef> getParams() {
+        return params.values();
+    }
+
+    public boolean isParam(String name) {
+        return params.containsKey(name);
+    }
+
+    public NotifTemplateParamDef getParam(String name) {
+        return params.get(name);
     }
 }

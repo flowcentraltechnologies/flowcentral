@@ -158,14 +158,13 @@ public class EntityTextSearchWidget extends AbstractPopupTextField {
             List<? extends Entity> entityList = environment().listAll(query);
             ParameterizedStringGenerator generator = null;
             if (listFormat) {
-                generator = specialParamProvider().getStringGenerator(new BeanValueListStore(entityList),
-                        getValueStore(), refDef.getListFormat());
+                generator = specialParamProvider().getStringGenerator(new BeanValueListStore(entityList).getReader(),
+                        getValueStore().getReader(), refDef.getListFormat());
             }
 
             final int len = entityList.size();
             for (int j = 0; j < len; j++) {
-                String desc = listFormat
-                        ? generator.setDataIndex(j).generate()
+                String desc = listFormat ? generator.setDataIndex(j).generate()
                         : DataUtils.getBeanProperty(String.class, entityList.get(j), searchField);
                 result.add(new ListData(desc, desc));
             }

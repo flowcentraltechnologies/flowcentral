@@ -49,8 +49,8 @@ public class ReportUsageServiceImpl extends AbstractFlowCentralService implement
         List<Usage> usageList = new ArrayList<Usage>();
         if (UsageType.isQualifiesEntity(usageType)) {
             List<ReportableDefinition> reportableDefinitionList = environment()
-                    .listAll(new ReportableDefinitionQuery().applicationNameNot(applicationName)
-                            .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+                    .listAll(new ReportableDefinitionQuery().entityBeginsWith(applicationNameBase)
+                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
             for (ReportableDefinition reportableDefinition : reportableDefinitionList) {
                 Usage usage = new Usage(UsageType.ENTITY, "ReportableDefinition",
                         reportableDefinition.getApplicationName() + "." + reportableDefinition.getName(), "entity",
@@ -58,9 +58,9 @@ public class ReportUsageServiceImpl extends AbstractFlowCentralService implement
                 usageList.add(usage);
             }
 
-            List<ReportConfiguration> reportConfigurationList = environment().listAll(new ReportConfigurationQuery()
-                    .applicationNameNot(applicationName).reportableBeginsWith(applicationNameBase)
-                    .addSelect("applicationName", "name", "reportable"));
+            List<ReportConfiguration> reportConfigurationList = environment()
+                    .listAll(new ReportConfigurationQuery().reportableBeginsWith(applicationNameBase)
+                            .applicationNameNot(applicationName).addSelect("applicationName", "name", "reportable"));
             for (ReportConfiguration reportConfiguration : reportConfigurationList) {
                 Usage usage = new Usage(UsageType.ENTITY, "ReportConfiguration",
                         reportConfiguration.getApplicationName() + "." + reportConfiguration.getName(), "reportable",
@@ -79,11 +79,11 @@ public class ReportUsageServiceImpl extends AbstractFlowCentralService implement
         final String applicationNameBase = applicationName + '.';
         long usages = 0L;
         if (UsageType.isQualifiesEntity(usageType)) {
-            usages += environment().countAll(new ReportableDefinitionQuery().applicationNameNot(applicationName)
-                    .entityBeginsWith(applicationNameBase).addSelect("applicationName", "name", "entity"));
+            usages += environment().countAll(new ReportableDefinitionQuery().entityBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "entity"));
 
-            usages += environment().countAll(new ReportConfigurationQuery().applicationNameNot(applicationName)
-                    .reportableBeginsWith(applicationNameBase).addSelect("applicationName", "name", "reportable"));
+            usages += environment().countAll(new ReportConfigurationQuery().reportableBeginsWith(applicationNameBase)
+                    .applicationNameNot(applicationName).addSelect("applicationName", "name", "reportable"));
         }
 
         return usages;

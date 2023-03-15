@@ -153,15 +153,15 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean match(FilterType type, Object bean, Date now) throws UnifyException {
-        return filterGroupDef != null ? filterGroupDef.match(type, bean, now) : true;
+        return filterGroupDef != null ? filterGroupDef.matchObject(type, bean, now) : true;
     }
 
-    public boolean match(FilterType type, ValueStore beanValueStore, Date now) throws UnifyException {
-        return filterGroupDef != null ? filterGroupDef.match(type, beanValueStore, now) : true;
+    public boolean match(FilterType type, ValueStoreReader reader, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.matchReader(type, reader, now) : true;
     }
 
-    public Restriction getRestriction(FilterType type, ValueStore beanValueStore, Date now) throws UnifyException {
-        return filterGroupDef != null ? filterGroupDef.getRestriction(type, beanValueStore, now) : null;
+    public Restriction getRestriction(FilterType type, ValueStoreReader reader, Date now) throws UnifyException {
+        return filterGroupDef != null ? filterGroupDef.getRestriction(type, reader, now) : null;
     }
 
     public void setTableSelect(TableSelect<?> tableSelect) {

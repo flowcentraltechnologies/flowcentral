@@ -238,7 +238,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                             }
 
                             if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                                    .getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
+                                    .getObjectFilter(entityDef, instValueStoreReader, now).matchObject(inst)) {
                                 addValidationMessage(ctx, policyDef);
                             }
                         }
@@ -279,7 +279,7 @@ public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements 
                 }
 
                 if (policyDef.isErrorCondition() && policyDef.getErrorCondition()
-                        .getObjectFilter(entityDef, instValueStoreReader, now).match(inst)) {
+                        .getObjectFilter(entityDef, instValueStoreReader, now).matchObject(inst)) {
                     ctx.addReviewError(rrb, policyDef);
                 }
             }

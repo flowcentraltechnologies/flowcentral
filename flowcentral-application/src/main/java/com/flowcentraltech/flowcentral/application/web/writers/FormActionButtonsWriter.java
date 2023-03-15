@@ -83,7 +83,7 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
                 if (formActionDef.isWithCondition()) {
                     ObjectFilter filter = formActionDef.getOnCondition().getObjectFilter(formContext.getEntityDef(),
                             formValueStoreReader, now);
-                    if (!filter.match(formValueStore)) {
+                    if (!filter.matchReader(formValueStoreReader)) {
                         continue;
                     }
                 }

@@ -13,37 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.notification.data;
+package com.flowcentraltech.flowcentral.configuration.xml.adapter;
 
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
+import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
- * Notification channel property definition.
+ * Importance type XML adapter.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationChannelPropDef {
+public class ImportanceTypeXmlAdapter extends AbstractEnumConstXmlAdapter<ImportanceType> {
 
-    private String name;
-
-    private String value;
-
-    public NotificationChannelPropDef(String name, String value) {
-        this.name = name;
-        this.value = value;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public <T> T getValue(Class<T> dataClazz) throws UnifyException {
-        return DataUtils.convert(dataClazz, value);
+    public ImportanceTypeXmlAdapter() {
+        super(ImportanceType.class);
     }
 }

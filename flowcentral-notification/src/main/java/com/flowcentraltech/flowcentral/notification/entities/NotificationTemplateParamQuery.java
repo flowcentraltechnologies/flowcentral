@@ -15,22 +15,22 @@
  */
 package com.flowcentraltech.flowcentral.notification.entities;
 
-import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntityQuery;
 
 /**
- * Notification attachment query class;
+ * Query class for notification template parameter records.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class NotificationInboxMessageQuery extends BaseEntityQuery<NotificationInboxMessage> {
+public class NotificationTemplateParamQuery extends BaseAuditEntityQuery<NotificationTemplateParam> {
 
-    public NotificationInboxMessageQuery() {
-        super(NotificationInboxMessage.class);
+    public NotificationTemplateParamQuery() {
+        super(NotificationTemplateParam.class);
     }
 
-    public NotificationInboxMessageQuery notificationInboxId(Long notificationInboxId) {
-        return (NotificationInboxMessageQuery) addEquals("notificationInboxId", notificationInboxId);
+    public NotificationTemplateParamQuery notificationTemplateId(Long notificationTemplateId) {
+        return (NotificationTemplateParamQuery) addEquals("notificationTemplateId", notificationTemplateId);
     }
 
 }

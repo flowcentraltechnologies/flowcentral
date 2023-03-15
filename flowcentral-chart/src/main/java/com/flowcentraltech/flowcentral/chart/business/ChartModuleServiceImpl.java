@@ -58,8 +58,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
             {
                 @Override
                 protected boolean stale(String chartName, ChartDef chartDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new ChartQuery().id(chartDef.getId())) > chartDef
-                            .getVersion();
+                    return environment().value(long.class, "versionNo",
+                            new ChartQuery().id(chartDef.getId())) > chartDef.getVersion();
                 }
 
                 @Override
@@ -76,8 +76,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                             chart.getVersionNo());
                     cdb.title(chart.getTitle()).subTitle(chart.getSubTitle()).width(chart.getWidth())
                             .height(chart.getHeight()).showGrid(chart.isShowGrid())
-                            .showDataLabels(chart.isShowDataLabels()).stacked(chart.isStacked())
-                            .smooth(chart.isSmooth());
+                            .showDataLabels(chart.isShowDataLabels()).formatDataLabels(chart.isFormatDataLabels())
+                            .formatYLabels(chart.isFormatYLabels()).stacked(chart.isStacked()).smooth(chart.isSmooth());
                     return cdb.build();
                 }
 
@@ -183,8 +183,8 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                     "sampleSalesAndCostsChartSnapshot", "Sample Sales and Costs Chart Snapshot",
                     "[\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\"]");
             chartSnapshot.setSeriesList(Arrays.asList(
-                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales", "[60,40,30,50,70,55,62]"),
-                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Costs", "[25,40,35,38,40,58,50]")));
+                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Sales", "[6000,4050,3820,5000,7200,5580,6240]"),
+                    new ChartSnapshotSeries(ChartSeriesDataType.INTEGER, "Costs", "[2500,400,3500,3840,4000,5830,5000]")));
             environment().create(chartSnapshot);
         }
 
