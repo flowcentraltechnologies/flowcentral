@@ -859,6 +859,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
                 List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().supportsAutoload()
                         .addSelect("applicationName", "workflowName", "autoLoadConditionName"));
+                logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
                 for (WfStep wfStep : autoLoadStepList) {
                     String workflowName = ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
                             wfStep.getWorkflowName());
