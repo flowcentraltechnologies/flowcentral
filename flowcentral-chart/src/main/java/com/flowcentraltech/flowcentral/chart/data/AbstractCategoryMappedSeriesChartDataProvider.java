@@ -24,14 +24,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartCategoryDataType;
 import com.flowcentraltech.flowcentral.configuration.constants.ChartSeriesDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -63,7 +61,6 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
         this.seriesValuePropertyByNameMap = seriesValuePropertyByNameMap;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public final ChartData provide(String rule) throws UnifyException {
         SimpleDateFormat format = getDateFormat();
@@ -73,9 +70,7 @@ public abstract class AbstractCategoryMappedSeriesChartDataProvider extends Abst
             series.put(seriesName, new ArrayList<Number>());
         }
 
-        EntityClassDef entityClassDef = application().getEntityClassDef(entity);
-        List<? extends Entity> statistics = environment()
-                .findAll(Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()));
+        List<? extends Entity> statistics = getStatistics(entity);
         ValueStore valueStore = new BeanValueListStore(statistics);
         final int len = valueStore.size();
         for (int i = 0; i < len; i++) {

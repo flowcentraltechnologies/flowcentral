@@ -137,6 +137,9 @@ fux.rigChart = function(rgp) {
 	const options = rgp.pOptions
 	if (options._yformatter) {
 		options.yaxis.labels.formatter = function(val, opts) {
+				if (options._yintegers) {
+					val = parseInt(val.toFixed(0));
+				}				
 		        return val.toLocaleString();
 		      };
 	} else if (options._yintegers) {

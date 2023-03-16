@@ -81,4 +81,6 @@ public interface ApplicationModuleSysParamConstants {
 
     String SECTOR_COLOR_INDICATION_ON_MENU = "APP-001D";
 
+    String ENABLE_QUICK_REPORT = "APP-001E";
+
 }

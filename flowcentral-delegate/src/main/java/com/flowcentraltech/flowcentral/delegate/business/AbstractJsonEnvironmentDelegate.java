@@ -16,8 +16,6 @@
 
 package com.flowcentraltech.flowcentral.delegate.business;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
-import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
@@ -25,7 +23,6 @@ import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.delegate.constants.DelegateErrorCodeConstants;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -47,32 +44,13 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmen
     }
 
     protected BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException {
-        JsonDataSourceResponse resp = null;
-        try {
-            String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
-            String respJSON = sendToDelegateDatasourceService(reqJSON);
-            resp = DataUtils.fromJsonString(JsonDataSourceResponse.class, respJSON);
-            if (resp.error()) {
-                // TODO Translate to local exception and throw
-            }
-        } catch (UnifyException e) {
-            logError(e);
-            resp = new JsonDataSourceResponse(e.getErrorCode(), getErrorMessage(LocaleType.SESSION, e.getUnifyError()));
-        } catch (Exception e) {
-            logError(e);
-            resp = new JsonDataSourceResponse(DelegateErrorCodeConstants.DELEGATE_BACKEND_CONNECTION_ERROR, this
-                    .getSessionMessage(DelegateErrorCodeConstants.DELEGATE_BACKEND_CONNECTION_ERROR, e.getMessage()));
+        String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
+        String respJSON = sendToDelegateDatasourceService(reqJSON);
+        JsonDataSourceResponse resp = DataUtils.fromJsonString(JsonDataSourceResponse.class, respJSON);
+        if (resp.error()) {
+            throw new UnifyException(DelegateErrorCodeConstants.DELEGATION_ERROR, resp.getErrorMsg());
         }
 
-        if (resp.error()) {
-            DataSourceOperation dso = req.getOperation();
-            if (dso.formResult()) {
-                setRequestAttribute(AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG, resp.getErrorMsg());
-            } else {
-                setRequestAttribute(AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG, resp.getErrorMsg());
-            }
-        }
-        
         return resp;
     }
 

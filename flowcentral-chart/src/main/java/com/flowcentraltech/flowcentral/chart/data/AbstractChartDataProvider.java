@@ -19,14 +19,20 @@ package com.flowcentraltech.flowcentral.chart.data;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 
 /**
  * Convenient abstract base class for chart data providers.
@@ -40,14 +46,10 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
     private ChartModuleService chartModuleService;
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities appletUtilities;
 
     @Configurable
     private EnvironmentService environmentService;
-    
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
 
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
@@ -55,6 +57,10 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
 
     public final void setChartModuleService(ChartModuleService chartModuleService) {
         this.chartModuleService = chartModuleService;
+    }
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -68,7 +74,7 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
     }
 
     protected final ApplicationModuleService application() {
-        return applicationModuleService;
+        return appletUtilities.application();
     }
 
     protected final EnvironmentService environment() {
@@ -77,6 +83,18 @@ public abstract class AbstractChartDataProvider extends AbstractUnifyComponent i
 
     protected final ChartModuleService chart() {
         return chartModuleService;
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected final List<? extends Entity> getStatistics(String entity) {
+        try {
+            EntityClassDef entityClassDef = application().getEntityClassDef(entity);
+            return environment().findAll(Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()));
+        } catch (UnifyException e) {
+            appletUtilities.consumeExceptionAndGenerateHint(e, "$m{chart.provider.errorgettingdata}");
+        }
+
+        return Collections.emptyList();
     }
     
     protected SimpleDateFormat getDateFormat() {
