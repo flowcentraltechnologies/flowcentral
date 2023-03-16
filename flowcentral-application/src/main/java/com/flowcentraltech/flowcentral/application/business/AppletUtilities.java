@@ -1797,4 +1797,13 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     String getProviderSrcEntity(String destEntity);
+    
+    /**
+     * Consumes an exception and generates an equivalent silent error
+     * 
+     * @param e
+     *          the exception to consume
+     * @param tableResult indicates table result
+     */
+    void consumeExceptionAndGenerateSilentError(Exception e, boolean tableResult);
 }

@@ -24,5 +24,5 @@ package com.flowcentraltech.flowcentral.delegate.constants;
 public interface DelegateErrorCodeConstants {
 
     /** Delegate backend connection error. Caused by [{0}].*/
-    String DELEGATE_BACKEND_CONNECTION_ERROR = "DELEGATE_0001";
+    String DELEGATION_ERROR = "DELEGATE_0001";
 }

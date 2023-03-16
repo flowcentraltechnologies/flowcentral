@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -119,6 +120,7 @@ import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
+import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -341,6 +343,23 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         return mappedEntityProviderInfo.isProviderPresent(destEntity)
                 ? mappedEntityProviderInfo.getProvider(destEntity).srcEntity()
                 : null;
+    }
+
+    @Override
+    public void consumeExceptionAndGenerateSilentError(Exception e, boolean tableResult) {
+        try {
+            logError(e);
+            final String errorMsg = e instanceof UnifyException
+                    ? getErrorMessage(LocaleType.SESSION, ((UnifyException) e).getUnifyError())
+                    : getSessionMessage(UnifyCoreErrorConstants.COMPONENT_OPERATION_ERROR, e.getMessage());
+            if (tableResult) {
+                setRequestAttribute(AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG, errorMsg);
+            } else {
+                setRequestAttribute(AppletRequestAttributeConstants.SILENT_FORM_ERROR_MSG, errorMsg);
+            }
+        } catch (Exception e1) {
+            logError(e);
+        }
     }
 
     @Override

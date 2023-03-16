@@ -252,7 +252,6 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         entitySearch.setAppAppletFilterName(null);
         entitySearch.clearSearchEntries();
         entitySearch.applySearchEntriesToSearch();
-        ;
         getRequestContextUtil().setContentScrollReset();
     }
 

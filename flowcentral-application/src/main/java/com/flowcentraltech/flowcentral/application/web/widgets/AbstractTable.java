@@ -736,38 +736,46 @@ public abstract class AbstractTable<T, U> {
 
     protected abstract void orderOnReset() throws UnifyException;
 
-    private void calcPageDimensions() throws UnifyException {
-        pageIndex = 0;
-        totalItemCount = getSourceObjectSize(sourceObject);
-        if (totalItemCount <= 0) {
-            totalItemCount = 0;
-            numberOfPages = 0;
-        } else {
-            if (tableDef.isPagination()) {
-                int itemsPerPage = getItemsPerPage();
-                numberOfPages = totalItemCount / itemsPerPage;
-                if (totalItemCount % itemsPerPage > 0) {
-                    numberOfPages++;
-                }
+    private void calcPageDimensions() { 
+        try {
+            pageIndex = 0;
+            totalItemCount = getSourceObjectSize(sourceObject);
+            if (totalItemCount <= 0) {
+                totalItemCount = 0;
+                numberOfPages = 0;
             } else {
-                numberOfPages = 1;
+                if (tableDef.isPagination()) {
+                    int itemsPerPage = getItemsPerPage();
+                    numberOfPages = totalItemCount / itemsPerPage;
+                    if (totalItemCount % itemsPerPage > 0) {
+                        numberOfPages++;
+                    }
+                } else {
+                    numberOfPages = 1;
+                }
             }
+        } catch (UnifyException e) {
+            au.consumeExceptionAndGenerateSilentError(e, true);
         }
     }
 
-    private void getDispItems() throws UnifyException {
-        if (tableDef.isPagination()) {
-            int itemsPerPage = getItemsPerPage();
-            dispStartIndex = pageIndex * itemsPerPage;
-            dispEndIndex = dispStartIndex + itemsPerPage;
-            if (dispEndIndex > totalItemCount) {
+    private void getDispItems() {
+        try {
+            if (tableDef.isPagination()) {
+                int itemsPerPage = getItemsPerPage();
+                dispStartIndex = pageIndex * itemsPerPage;
+                dispEndIndex = dispStartIndex + itemsPerPage;
+                if (dispEndIndex > totalItemCount) {
+                    dispEndIndex = totalItemCount;
+                }
+            } else {
+                dispStartIndex = 0;
                 dispEndIndex = totalItemCount;
             }
-        } else {
-            dispStartIndex = 0;
-            dispEndIndex = totalItemCount;
-        }
 
-        dispItemList = getDisplayItems(sourceObject, dispStartIndex, dispEndIndex);
+            dispItemList = getDisplayItems(sourceObject, dispStartIndex, dispEndIndex);
+        } catch (UnifyException e) {
+            au.consumeExceptionAndGenerateSilentError(e, true);
+        }
     }
 }
