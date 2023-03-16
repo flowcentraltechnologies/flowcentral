@@ -16,7 +16,6 @@
 
 package com.flowcentraltech.flowcentral.chart.web.writers;
 
-import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
 import com.flowcentraltech.flowcentral.chart.data.ChartData;
 import com.flowcentraltech.flowcentral.chart.data.ChartDataProvider;
@@ -44,15 +43,8 @@ public class ChartWriter extends AbstractWidgetWriter {
     @Configurable
     private ChartModuleService chartModuleService;
 
-    @Configurable
-    private AppletUtilities appletUtilities;
-
     public final void setChartModuleService(ChartModuleService chartModuleService) {
         this.chartModuleService = chartModuleService;
-    }
-
-    public final void setAppletUtilities(AppletUtilities appletUtilities) {
-        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -67,19 +59,14 @@ public class ChartWriter extends AbstractWidgetWriter {
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
         super.doWriteBehavior(writer, widget);
-        
-        try {
-            ChartWidget chartWidget = (ChartWidget) widget;
-            final String chartLongName = chartWidget.getValue(String.class);
-            ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
-            ChartData chartData = ((ChartDataProvider) getComponent(chartDef.getProvider())).provide(chartDef.getRule());
-            writer.beginFunction("fux.rigChart");
-            writer.writeParam("pId", chartWidget.getId());
-            writer.writeParam("pOptions",
-                    ChartUtils.getOptionsJsonWriter(chartDef, chartData, chartWidget.isSparkLine()));
-            writer.endFunction();
-        } catch (UnifyException e) {
-            appletUtilities.consumeExceptionAndGenerateHint(e, "$m{chart.provider.errorgettingdata}");
-        }
+
+        ChartWidget chartWidget = (ChartWidget) widget;
+        final String chartLongName = chartWidget.getValue(String.class);
+        ChartDef chartDef = chartModuleService.getChartDef(chartLongName);
+        ChartData chartData = ((ChartDataProvider) getComponent(chartDef.getProvider())).provide(chartDef.getRule());
+        writer.beginFunction("fux.rigChart");
+        writer.writeParam("pId", chartWidget.getId());
+        writer.writeParam("pOptions", ChartUtils.getOptionsJsonWriter(chartDef, chartData, chartWidget.isSparkLine()));
+        writer.endFunction();
     }
 }
