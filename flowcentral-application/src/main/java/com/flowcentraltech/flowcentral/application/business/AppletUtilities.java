@@ -1806,4 +1806,16 @@ public interface AppletUtilities extends UnifyComponent {
      * @param tableResult indicates table result
      */
     void consumeExceptionAndGenerateSilentError(Exception e, boolean tableResult);
+    
+    /**
+     * Consumes an exception and generates an equivalent silent hint
+     * 
+     * @param e
+     *               the exception to consume
+     * @param hint
+     *               message
+     * @param params
+     *               optional message parameters
+     */
+    void consumeExceptionAndGenerateHint(Exception e, String hint, Object... params);
 }

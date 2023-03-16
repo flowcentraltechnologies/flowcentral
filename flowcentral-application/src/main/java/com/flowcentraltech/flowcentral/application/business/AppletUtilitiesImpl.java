@@ -363,6 +363,16 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public void consumeExceptionAndGenerateHint(Exception e, String hint, Object... params) {
+        try {
+            logError(e);
+            hintUser(MODE.ERROR, hint, params);
+        } catch (UnifyException e1) {
+            logError(e);
+        }
+    }
+
+    @Override
     public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
         return applicationModuleService.getFilterGroupDef(appletName, tabFilter);
     }
