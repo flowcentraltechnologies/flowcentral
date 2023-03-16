@@ -797,9 +797,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     }
 
     private void logSevere(String message, Exception e) {
-        if (logging) {
-            LOGGER.log(Level.SEVERE, message, e);
-        }
+        LOGGER.log(Level.SEVERE, message, e);
     }
 
     private PlatformInfo getPlatform(EntityInfo entityInfo) {
