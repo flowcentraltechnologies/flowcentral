@@ -178,6 +178,10 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return 0;
     }
 
+    private static final List<String> EXCLUDED_UTILITIES_MODULES = Collections
+            .unmodifiableList(Arrays.asList("application", "codegeneration", "collaboration", "dashboard",
+                    "integration", "notification", "report", "studio", "workflow", "workspace"));
+
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_UTILITIES_MODULE_FILES_TASK_NAME,
             description = "Generate Utilities Module Files Task",
             parameters = { @Parameter(name = CodeGenerationTaskConstants.CODEGENERATION_ITEM,
@@ -192,6 +196,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
             ExtensionStaticFileBuilderContext mainCtx = new ExtensionStaticFileBuilderContext(
                     codeGenerationItem.getBasePackage());
             List<String> moduleList = systemModuleService.getAllModuleNames();
+            moduleList.removeAll(EXCLUDED_UTILITIES_MODULES);
             for (final String moduleName : moduleList) {
                 addTaskMessage(taskMonitor, "Generating code for utilities module [{0}]", moduleName);
                 ExtensionModuleStaticFileBuilderContext moduleCtx = new ExtensionModuleStaticFileBuilderContext(mainCtx,
@@ -199,7 +204,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                 // Generate applications
                 List<Application> applicationList = environment()
-                        .listAll(new ApplicationQuery().moduleName(moduleName)/*.configType(ConfigType.CUSTOM)*/);
+                        .listAll(new ApplicationQuery().moduleName(moduleName));
                 if (!applicationList.isEmpty()) {
                     for (Application application : applicationList) {
                         final String applicationName = application.getName();
@@ -221,7 +226,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
                             "extension-module-entitywrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
-                    
+
                     // Generate template wrappers
                     addTaskMessage(taskMonitor, "Generating template wrapper classes for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",

@@ -77,11 +77,4 @@ public class ReadConfigDef {
     public ParamValuesDef getReaderParamsDef() {
         return readerParamsDef;
     }
-
-    @Override
-    public String toString() {
-        return "ReadConfigDef [name=" + name + ", readerName=" + readerName + ", eventProcessorName="
-                + eventProcessorName + ", readerPeriod=" + readerPeriod + ", readConfigId=" + readConfigId
-                + ", version=" + version + ", readerParamsDef=" + readerParamsDef + "]";
-    }
 }
