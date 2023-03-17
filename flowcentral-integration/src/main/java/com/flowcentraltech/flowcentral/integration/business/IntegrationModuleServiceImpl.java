@@ -78,6 +78,10 @@ import com.tcdng.unify.core.util.DataUtils;
 @Component(IntegrationModuleNameConstants.INTEGRATION_MODULE_SERVICE)
 public class IntegrationModuleServiceImpl extends AbstractFlowCentralService implements IntegrationModuleService {
 
+    private static final int MINIMUM_READ_PERIOD_SECONDS = 1;
+
+    private static final int MINIMUM_LOADING_SIZE = 1;
+
     @Configurable
     private SystemModuleService systemModuleService;
 
@@ -143,8 +147,8 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
                             endpointReaderParamConfigByTypeMap.get(readConfig.getEndpointReader()),
                             readConfig.getReaderParams());
                     return new ReadConfigDef(readConfigName, readConfig.getEndpointReader(),
-                            readConfig.getEventProcessor(), readConfig.getEndpointReaderPeriod(), readConfig.getId(),
-                            readConfig.getVersionNo(), pvd);
+                            readConfig.getEventProcessor(), readConfig.getEndpointReaderPeriod(),
+                            readConfig.getEndpointMaxLoadingSize(), readConfig.getId(), readConfig.getVersionNo(), pvd);
                 }
 
             };
@@ -211,13 +215,15 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         ReadConfigDef readConfigDef = getReadConfigDef(readConfigName);
         EndpointReader endpointReader = endpointReaderFactory.getEndpointReader(readConfigDef);
         try {
-            Long readConfigProcId = environment().value(Long.class, "id",
+            final Long readConfigProcId = environment().value(Long.class, "id",
                     new ReadConfigProcQuery().readConfigId(readConfigDef.getReadConfigId()));
             ReadEvent readEvent = new ReadEvent();
             readEvent.setNode(getNodeId());
             readEvent.setReadConfigProcId(readConfigProcId);
             readEvent.setStatus(EndpointReadEventStatus.UNPROCESSED);
-            while (endpointReader.next()) {
+            int loading = readConfigDef.getMaxLoadingSize() < MINIMUM_LOADING_SIZE ? MINIMUM_LOADING_SIZE
+                    : readConfigDef.getMaxLoadingSize();
+            while (loading > 0 && endpointReader.next()) {
                 ReadEventInst readEventInst = endpointReader.getEvent();
                 if (!readEventInst.isEmpty()) {
                     List<ReadEventMessage> messageList = new ArrayList<ReadEventMessage>();
@@ -232,6 +238,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
                     readEvent.setMessageList(messageList);
                     environment().create(readEvent);
                     commitTransactions();
+                    loading--;
                 }
             }
         } finally {
@@ -240,7 +247,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         return 0;
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FASTER)
     public void executeEndpointReads(TaskMonitor taskMonitor) throws UnifyException {
         final boolean readProcessingEnabled = systemModuleService.getSysParameterValue(boolean.class,
                 IntegrationModuleSysParamConstants.INTGERATION_INWARD_ENDPOINT_PROCESSING_ENABLED);
@@ -264,8 +271,9 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
                 if (!endpointReaderMonitors.containsKey(readConfigName)) {
                     // Fetch reader period
                     ReadConfigDef readConfigDef = getReadConfigDef(readConfigName);
-                    long readerMillSec = CalendarUtils.getMilliSecondsByFrequency(FrequencyUnit.SECOND,
-                            readConfigDef.getReaderPeriod());
+                    final long readerMillSec = CalendarUtils.getMilliSecondsByFrequency(FrequencyUnit.SECOND,
+                            readConfigDef.getReaderPeriod() < MINIMUM_READ_PERIOD_SECONDS ? MINIMUM_READ_PERIOD_SECONDS
+                                    : readConfigDef.getReaderPeriod());
 
                     // Setup and launch task
                     TaskSetup taskSetup = TaskSetup.newBuilder(TaskExecType.RUN_PERIODIC).addTask("executeEndpointRead")
@@ -287,7 +295,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         }
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FASTER)
     public void processReadConfigEvents(TaskMonitor taskMonitor) throws UnifyException {
         ReadConfigProc readConfigProc = grabPendingReadConfigProcessing();
         if (readConfigProc != null) {
@@ -314,7 +322,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         }
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FAST)
     public void executeEndpointReadHousekeep(TaskMonitor taskMonitor) throws UnifyException {
         Map<String, List<Long>> readEventIds = environment().valueListMap(String.class, "readConfigName", Long.class,
                 "id", new ReadEventQuery().node(getNodeId()).statusNot(EndpointReadEventStatus.UNPROCESSED));
