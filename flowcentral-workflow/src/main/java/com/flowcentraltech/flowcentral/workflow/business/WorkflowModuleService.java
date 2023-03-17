@@ -48,6 +48,22 @@ import com.tcdng.unify.core.UnifyException;
 public interface WorkflowModuleService extends FlowCentralService, ApplicationWorkItemUtilities {
 
     /**
+     * Submit work entity instance to workflow by name.
+     * 
+     * @param workflowName
+     *                            the workflow name
+     * @param entity
+     *                            the entity long name
+     * @param id
+     *                            the entity ID
+     * @throws UnifyException
+     *                        if workflow channel is unknown. If instance type does
+     *                        not match workflow entity definition. If an error
+     *                        occurs
+     */
+    void submitToWorkflowByName(String workflowName, String entity, Long id) throws UnifyException;
+
+    /**
      * Submit entity instance to workflow by workflow name.
      * 
      * @param workflowName
@@ -59,6 +75,23 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        match workflow entity definition. If an error occurs
      */
     void submitToWorkflowByName(String workflowName, WorkEntity inst) throws UnifyException;
+
+    /**
+     * Submit work entity instance to workflow by channel name.
+     * 
+     * @param workflowChannelName
+     *                            the workflow channel name
+     * @param entity
+     *                            the entity long name
+     * @param id
+     *                            the entity ID
+     * @return the result code
+     * @throws UnifyException
+     *                        if workflow channel is unknown. If instance type does
+     *                        not match workflow entity definition. If an error
+     *                        occurs
+     */
+    int submitToWorkflowByChannel(String wfDocChannelName, String entity, Long id) throws UnifyException;
 
     /**
      * Submit work entity instance to workflow by channel name.

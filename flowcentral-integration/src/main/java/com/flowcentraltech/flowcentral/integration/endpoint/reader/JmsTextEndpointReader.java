@@ -25,8 +25,8 @@ import javax.jms.Session;
 
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
 import com.flowcentraltech.flowcentral.integration.endpoint.JmsEndpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Parameter;

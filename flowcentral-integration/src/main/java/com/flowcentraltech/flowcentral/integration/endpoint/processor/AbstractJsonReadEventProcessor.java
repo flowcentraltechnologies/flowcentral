@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.reader;
+package com.flowcentraltech.flowcentral.integration.endpoint.processor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.integration.data.JsonReadEvent;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst.EventMessage;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.JsonReadEvent;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst.EventMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Convenient abstract base class for read event processor.
+ * Convenient abstract base class for JSON read event processor.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0

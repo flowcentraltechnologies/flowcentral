@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.reader;
+package com.flowcentraltech.flowcentral.integration.endpoint.processor;
 
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;

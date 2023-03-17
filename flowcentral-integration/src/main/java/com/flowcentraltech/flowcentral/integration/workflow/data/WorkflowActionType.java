@@ -13,40 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.data;
-
-import java.util.Date;
-import java.util.List;
+package com.flowcentraltech.flowcentral.integration.workflow.data;
 
 /**
- * Read event instance.
+ * Workflow action type enumeration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class JsonReadEvent<T> {
-
-    private Long id;
-
-    private Date createDt;
-    
-    private List<T> itemList;
-
-    public JsonReadEvent(Long id, Date createDt, List<T> itemList) {
-        this.id = id;
-        this.createDt = createDt;
-        this.itemList = itemList;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Date getCreateDt() {
-        return createDt;
-    }
-
-    public List<T> getItemList() {
-        return itemList;
-    }
+public enum WorkflowActionType {
+    SUBMIT
 }

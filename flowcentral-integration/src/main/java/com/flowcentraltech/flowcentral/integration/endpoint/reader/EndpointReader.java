@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.integration.endpoint.reader;
 
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 

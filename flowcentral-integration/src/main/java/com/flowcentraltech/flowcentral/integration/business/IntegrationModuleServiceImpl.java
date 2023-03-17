@@ -32,12 +32,12 @@ import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNa
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
+import com.flowcentraltech.flowcentral.integration.endpoint.processor.ReadEventProcessor;
 import com.flowcentraltech.flowcentral.integration.endpoint.reader.EndpointReadEventStatus;
 import com.flowcentraltech.flowcentral.integration.endpoint.reader.EndpointReader;
 import com.flowcentraltech.flowcentral.integration.endpoint.reader.EndpointReaderFactory;
-import com.flowcentraltech.flowcentral.integration.endpoint.reader.ReadEventProcessor;
 import com.flowcentraltech.flowcentral.integration.entities.EndpointConfig;
 import com.flowcentraltech.flowcentral.integration.entities.EndpointConfigQuery;
 import com.flowcentraltech.flowcentral.integration.entities.ReadConfig;

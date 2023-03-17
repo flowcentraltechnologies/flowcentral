@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.reader;
+package com.flowcentraltech.flowcentral.integration.endpoint.processor;
 
 import com.flowcentraltech.flowcentral.common.business.RuleListComponent;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.tcdng.unify.core.UnifyException;
 
 /**

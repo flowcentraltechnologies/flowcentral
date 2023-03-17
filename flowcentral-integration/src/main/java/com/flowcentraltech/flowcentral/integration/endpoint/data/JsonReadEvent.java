@@ -13,23 +13,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.lists;
+package com.flowcentraltech.flowcentral.integration.endpoint.data;
 
-import com.flowcentraltech.flowcentral.integration.endpoint.processor.ReadEventProcessor;
-import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.list.AbstractTypeListCommand;
+import java.util.Date;
+import java.util.List;
 
 /**
- * End-point event processor list command.
+ * Read event instance.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("readeventprocessorlist")
-public class EndpointReadEventProcessorListCommand extends AbstractTypeListCommand<ReadEventProcessor> {
+public class JsonReadEvent<T> {
 
-    public EndpointReadEventProcessorListCommand() {
-        super(ReadEventProcessor.class);
+    private Long id;
+
+    private Date createDt;
+    
+    private List<T> itemList;
+
+    public JsonReadEvent(Long id, Date createDt, List<T> itemList) {
+        this.id = id;
+        this.createDt = createDt;
+        this.itemList = itemList;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public List<T> getItemList() {
+        return itemList;
+    }
 }
