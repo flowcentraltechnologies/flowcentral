@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.integration.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.Table;
 
@@ -35,8 +36,11 @@ public class ReadEventMessage extends BaseEntity {
     @Column(length = 64, nullable = true)
     private String fileName;
 
-    @Column
-    private byte[] message;
+    @Column(type = ColumnType.CLOB, name = "TEXT_MSG", nullable = true)
+    private String text;
+
+    @Column(name = "FILE_MSG", nullable = true)
+    private byte[] file;
 
     @Override
     public String getDescription() {
@@ -59,12 +63,20 @@ public class ReadEventMessage extends BaseEntity {
         this.fileName = fileName;
     }
 
-    public byte[] getMessage() {
-        return message;
+    public String getText() {
+        return text;
     }
 
-    public void setMessage(byte[] message) {
-        this.message = message;
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public byte[] getFile() {
+        return file;
+    }
+
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 
 }

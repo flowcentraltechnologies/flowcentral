@@ -51,6 +51,10 @@ public enum EndpointReadEventStatus implements EnumConst {
         return UNPROCESSED.code();
     }
 
+    public boolean isSuccess() {
+        return SUCCESSFUL.equals(this);
+    }
+    
     public static EndpointReadEventStatus fromCode(String code) {
         return EnumUtils.fromCode(EndpointReadEventStatus.class, code);
     }

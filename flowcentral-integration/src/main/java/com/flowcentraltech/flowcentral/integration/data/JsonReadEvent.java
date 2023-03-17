@@ -13,27 +13,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.reader;
+package com.flowcentraltech.flowcentral.integration.data;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
-import com.tcdng.unify.core.UnifyException;
+import java.util.Date;
+import java.util.List;
 
 /**
- * Convenient abstract base class for read event processor.
+ * Read event instance.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractReadEventProcessor extends AbstractUnifyComponent implements ReadEventProcessor {
+public class JsonReadEvent<T> {
 
-    @Override
-    protected void onInitialize() throws UnifyException {
+    private Long id;
 
+    private Date createDt;
+    
+    private List<T> itemList;
+
+    public JsonReadEvent(Long id, Date createDt, List<T> itemList) {
+        this.id = id;
+        this.createDt = createDt;
+        this.itemList = itemList;
     }
 
-    @Override
-    protected void onTerminate() throws UnifyException {
-
+    public Long getId() {
+        return id;
     }
 
+    public Date getCreateDt() {
+        return createDt;
+    }
+
+    public List<T> getItemList() {
+        return itemList;
+    }
 }

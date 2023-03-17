@@ -49,8 +49,23 @@ public class ReadEventInst {
         this.eventMessages = new ArrayList<EventMessage>();
     }
 
+    public ReadEventInst addEventMessage(String fileName, byte[] file, String text) {
+        eventMessages.add(new EventMessage(text, fileName, file));
+        return this;
+    }
+
     public ReadEventInst addEventMessage(String fileName, byte[] data) {
         eventMessages.add(new EventMessage(fileName, data));
+        return this;
+    }
+
+    public ReadEventInst addEventMessage(byte[] data) {
+        eventMessages.add(new EventMessage(data));
+        return this;
+    }
+
+    public ReadEventInst addEventMessage(String text) {
+        eventMessages.add(new EventMessage(text));
         return this;
     }
 
@@ -84,21 +99,49 @@ public class ReadEventInst {
 
     public static class EventMessage {
 
+        private String text;
+
         private String fileName;
 
-        private byte[] message;
+        private byte[] file;
 
-        public EventMessage(String fileName, byte[] message) {
+        public EventMessage(String text, String fileName, byte[] file) {
+            this.text = text;
             this.fileName = fileName;
-            this.message = message;
+            this.file = file;
+        }
+
+        public EventMessage(String fileName, byte[] file) {
+            this.fileName = fileName;
+            this.file = file;
+        }
+
+        public EventMessage(byte[] file) {
+            this.file = file;
+        }
+
+        public EventMessage(String text) {
+            this.text = text;
         }
 
         public String getFileName() {
             return fileName;
         }
 
-        public byte[] getMessage() {
-            return message;
+        public String getText() {
+            return text;
+        }
+
+        public byte[] getFile() {
+            return file;
+        }
+        
+        public boolean isText() {
+            return text != null;
+        }
+        
+        public boolean isFile() {
+            return file != null;
         }
     }
 }

@@ -162,8 +162,7 @@ public class JmsTextEndpointReader extends AbstractEndpointReader {
 
             if (mProducer != null) {
                 for (ReadEventInst.EventMessage eventMessage : event.getEventMessages()) {
-                    String text = new String(eventMessage.getMessage());
-                    Message hMsg = session.createTextMessage(text);
+                    Message hMsg = session.createTextMessage(eventMessage.getText());
                     mProducer.send(hMsg);
                 }
             }

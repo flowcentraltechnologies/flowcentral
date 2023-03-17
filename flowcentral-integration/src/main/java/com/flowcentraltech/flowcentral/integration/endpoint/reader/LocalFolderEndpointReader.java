@@ -28,6 +28,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Parameter;
 import com.tcdng.unify.core.annotation.Parameters;
 import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Local folder end-point reader.
@@ -119,14 +120,14 @@ public class LocalFolderEndpointReader extends AbstractEndpointReader {
             housekeepPath = errorPath;
         }
 
-        if (housekeepPath != null) {
+        if (!StringUtils.isBlank(housekeepPath)) {
             File folder = new File(housekeepPath);
             if (!folder.isDirectory()) {
                 folder.mkdirs();
             }
 
             for (ReadEventInst.EventMessage eventMessage : event.getEventMessages()) {
-                IOUtils.writeToFile(new File(folder, eventMessage.getFileName()), eventMessage.getMessage());
+                IOUtils.writeToFile(new File(folder, eventMessage.getFileName()), eventMessage.getFile());
             }
         }
     }
