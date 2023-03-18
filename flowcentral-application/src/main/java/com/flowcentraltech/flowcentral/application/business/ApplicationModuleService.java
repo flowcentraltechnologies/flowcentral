@@ -302,15 +302,15 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException;
 
     /**
-     * Finds application entity unique fields.
+     * Finds application entity unique constraints.
      * 
      * @param entity
      *               the application entity
-     * @return list of entity unique fields
+     * @return list of entity unique constraints
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> findAppEntityUniqueFields(String entity) throws UnifyException;
+    List<? extends Listable> findAppEntityUniqueConstraints(String entity) throws UnifyException;
 
     /**
      * Finds a list of applets.

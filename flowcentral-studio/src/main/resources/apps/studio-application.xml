@@ -280,10 +280,10 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioapplettablelist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="propertyappletuniquefieldlist"
-			description="$m{studio.widgettype.propertyappletuniquefieldlist}"
+		<widgetType name="propertyappletuniqueconstraintlist"
+			description="$m{studio.widgettype.propertyappletuniqueconstraintlist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studioappletuniquefieldlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			editor="!ui-select list:studioappletuniqueconstraintlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="propertyappletbeantablepolicylist"
 			description="$m{studio.widgettype.propertyappletbeantablepolicylist}"
@@ -4804,7 +4804,7 @@
 					inputWidget="studio.propertyapplettablelist" required="true" />
 				<property name="searchTable.selectByField"
 					description="$m{studio.appappletprop.manageentity.searchtable.selectbyfield}"
-					inputWidget="studio.propertyappletuniquefieldlist" required="true" />
+					inputWidget="studio.propertyappletuniqueconstraintlist" required="true" />
 				<property name="baseRestriction"
 					description="$m{studio.appappletprop.manageentity.baserestriction}"
 					inputWidget="studio.propertyappletfilterlist" />

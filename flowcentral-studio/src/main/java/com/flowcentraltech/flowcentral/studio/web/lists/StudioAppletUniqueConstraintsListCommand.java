@@ -28,15 +28,15 @@ import com.tcdng.unify.core.list.LongParam;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Studio applet unique field list command
+ * Studio applet unique constraints list command
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studioappletuniquefieldlist")
-public class StudioAppletUniqueFieldListCommand extends AbstractApplicationListCommand<LongParam> {
+@Component("studioappletuniqueconstraintlist")
+public class StudioAppletUniqueConstraintsListCommand extends AbstractApplicationListCommand<LongParam> {
 
-    public StudioAppletUniqueFieldListCommand() {
+    public StudioAppletUniqueConstraintsListCommand() {
         super(LongParam.class);
     }
 
@@ -45,7 +45,7 @@ public class StudioAppletUniqueFieldListCommand extends AbstractApplicationListC
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return au().application().findAppEntityUniqueFields(entity);
+                return au().application().findAppEntityUniqueConstraints(entity);
             }
         }
 

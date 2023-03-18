@@ -58,7 +58,7 @@ public interface AppletPropertyConstants {
     
     String SEARCH_TABLE_SEARCH_COLUMNS = "searchTable.searchColumns";
     
-    String SEARCH_TABLE_SELECT_BY_FIELD = "searchTable.selectByField";
+    String SEARCH_TABLE_SELECT_BY_CONSTRAINT = "searchTable.selectByField";
     
     String ENTITY_FORM = "entityForm";
 

@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormRelatedListDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
+import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
@@ -430,8 +431,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final Date now = au.getNow();
             for (AppletFilterDef filterDef : filterList) {
                 if (filterDef.isShowPopupChildListAction()) {
-                    ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef,
-                            reader, now);
+                    ObjectFilter filter = filterDef.getFilterDef().getObjectFilter(entityDef, reader, now);
                     if (filter.matchReader(reader)) {
                         AppletDef _childAppletDef = getAppletDef(_currFormTabDef.getApplet());
                         ShowPopupInfo.Type type = null;
@@ -650,7 +650,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     private void maintainChildInst(Entity _inst, int tabIndex) throws UnifyException {
-        _inst = reloadEntity(_inst, true);
         FormTabDef _currFormTabDef = form.getFormDef().getFormTabDef(tabIndex);
         AppletDef childAppletDef = getAppletDef(_currFormTabDef.getApplet());
         saveCurrentForm(_currFormTabDef);
@@ -659,6 +658,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         currFormTabDef = _currFormTabDef;
         currFormAppletDef = childAppletDef;
         String childFkFieldName = au().getChildFkFieldName(currParentEntityDef, _currFormTabDef.getReference());
+        _inst = reloadEntity(_inst, true);
         form = constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, true);
         viewMode = ViewMode.MAINTAIN_CHILDLIST_FORM_NO_SCROLL;
     }
@@ -667,7 +667,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (ensureSaveOnTabAction()) {
             EntitySearch _entitySearch = (EntitySearch) form.getRelatedListTabSheet().getCurrentItem().getValObject();
             Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
-            _inst = reloadEntity(_inst, true);
             FormRelatedListDef _formRelatedListDef = form.getFormDef()
                     .getFormRelatedListDef(_entitySearch.getRelatedList());
             AppletDef relAppletDef = getAppletDef(_formRelatedListDef);
@@ -677,6 +676,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             currFormAppletDef = relAppletDef;
             String childFkFieldName = au().getChildFkFieldName(currParentEntityDef.getLongName(),
                     relAppletDef.getEntity());
+            _inst = reloadEntity(_inst, true);
             form = constructForm(_inst, FormMode.MAINTAIN, childFkFieldName, false);
             viewMode = ViewMode.MAINTAIN_RELATEDLIST_FORM_NO_SCROLL;
         }
@@ -686,10 +686,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         TabSheetItem tabSheetItem = headlessForm.getHeadlessTabSheet().getCurrentItem();
         EntitySearch _entitySearch = (EntitySearch) tabSheetItem.getValObject();
         Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
-        _inst = reloadEntity(_inst, true);
         final AppletDef hdlAppletDef = getAppletDef(tabSheetItem.getAppletName());
         saveCurrentForm(null);
         currFormAppletDef = hdlAppletDef;
+        _inst = reloadEntity(_inst, true);
         form = constructForm(_inst, FormMode.MAINTAIN, null, false);
         viewMode = ViewMode.MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL;
     }
@@ -1210,6 +1210,21 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     protected Entity reloadEntity(Entity _inst, boolean maintainAct) throws UnifyException {
         if (maintainAct) {
             // TODO Fire on-maintain-action policy
+        }
+
+        if (currFormAppletDef != null) {
+            final String ucName = currFormAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.SEARCH_TABLE_SELECT_BY_CONSTRAINT);
+            if (!StringUtils.isBlank(ucName)) {
+                UniqueConstraintDef uniqueConstraintDef = au().getEntityDef(currFormAppletDef.getEntity())
+                        .getUniqueConstraint(ucName);
+                Query<? extends Entity> query = Query.of((Class<? extends Entity>) _inst.getClass());
+                for (String fieldName : uniqueConstraintDef.getFieldList()) {
+                    query.addEquals(fieldName, ReflectUtils.getBeanProperty(_inst, fieldName));
+                }
+
+                return au().environment().listLean(query);
+            }
         }
 
         return au().environment().listLean((Class<? extends Entity>) _inst.getClass(), _inst.getId());
