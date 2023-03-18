@@ -29,9 +29,13 @@ public interface IntegrationModuleNameConstants {
 
     String ENDPOINT_MANAGER = "endpoint-manager";
 
-    String ENDPOINTREADER_FACTORY = "endpointreader-factory";
-
     String ENDPOINT_PARAMCONFIGPROVIDER = "endpoint-paramconfigprovider";
 
+    String ENDPOINTREADER_FACTORY = "endpointreader-factory";
+
     String ENDPOINTREADER_PARAMCONFIGPROVIDER = "endpointreader-paramconfigprovider";
+
+    String ENDPOINTWRITER_PARAMCONFIGPROVIDER = "endpointwriter-paramconfigprovider";
+
+    String ENDPOINTWRITER_FACTORY = "endpointwriter-factory";
 }

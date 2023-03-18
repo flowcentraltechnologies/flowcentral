@@ -27,7 +27,6 @@ import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameCons
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlertQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
@@ -77,17 +76,6 @@ public class WorkflowUsageServiceImpl extends AbstractFlowCentralService impleme
                 Usage usage = new Usage(UsageType.ENTITY, "WfStep",
                         wfStep.getApplicationName() + "." + wfStep.getWorkflowName() + "." + wfStep.getName(),
                         "appletName", wfStep.getAppletName());
-                usageList.add(usage);
-            }
-
-            List<WfStepAlert> wfStepAlertList = environment().listAll(
-                    new WfStepAlertQuery().applicationNameNot(applicationName).templateBeginsWith(applicationNameBase)
-                            .addSelect("applicationName", "workflowName", "wfStepName", "name", "generator"));
-            for (WfStepAlert wfStepAlert : wfStepAlertList) {
-                Usage usage = new Usage(UsageType.ENTITY, "WfStepAlert",
-                        wfStepAlert.getApplicationName() + "." + wfStepAlert.getWorkflowName() + "."
-                                + wfStepAlert.getWfStepName() + "." + wfStepAlert.getName(),
-                        "generator", wfStepAlert.getGenerator());
                 usageList.add(usage);
             }
         }

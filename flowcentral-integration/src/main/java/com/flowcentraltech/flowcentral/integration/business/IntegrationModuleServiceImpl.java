@@ -32,8 +32,9 @@ import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleNa
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.EventMessage;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.flowcentraltech.flowcentral.integration.endpoint.reader.EndpointReadEventStatus;
 import com.flowcentraltech.flowcentral.integration.endpoint.reader.EndpointReader;
 import com.flowcentraltech.flowcentral.integration.endpoint.reader.EndpointReaderFactory;
@@ -78,6 +79,10 @@ import com.tcdng.unify.core.util.DataUtils;
 @Component(IntegrationModuleNameConstants.INTEGRATION_MODULE_SERVICE)
 public class IntegrationModuleServiceImpl extends AbstractFlowCentralService implements IntegrationModuleService {
 
+    private static final int MINIMUM_READ_PERIOD_SECONDS = 1;
+
+    private static final int MINIMUM_LOADING_SIZE = 1;
+
     @Configurable
     private SystemModuleService systemModuleService;
 
@@ -107,7 +112,8 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected EndpointDef create(String endpointConfigName, Object... arg1) throws Exception {
-                    EndpointConfig endpointConfig = environment().list(new EndpointConfigQuery().name(endpointConfigName));
+                    EndpointConfig endpointConfig = environment()
+                            .list(new EndpointConfigQuery().name(endpointConfigName));
                     if (endpointConfig == null) {
                         throw new UnifyException(IntegrationModuleErrorConstants.CANNOT_FIND_ENDPOINT_CONFIG,
                                 endpointConfigName);
@@ -142,8 +148,8 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
                             endpointReaderParamConfigByTypeMap.get(readConfig.getEndpointReader()),
                             readConfig.getReaderParams());
                     return new ReadConfigDef(readConfigName, readConfig.getEndpointReader(),
-                            readConfig.getEventProcessor(), readConfig.getEndpointReaderPeriod(), readConfig.getId(),
-                            readConfig.getVersionNo(), pvd);
+                            readConfig.getEventProcessor(), readConfig.getEndpointReaderPeriod(),
+                            readConfig.getEndpointMaxLoadingSize(), readConfig.getId(), readConfig.getVersionNo(), pvd);
                 }
 
             };
@@ -210,26 +216,30 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         ReadConfigDef readConfigDef = getReadConfigDef(readConfigName);
         EndpointReader endpointReader = endpointReaderFactory.getEndpointReader(readConfigDef);
         try {
-            Long readConfigProcId = environment().value(Long.class, "id",
+            final Long readConfigProcId = environment().value(Long.class, "id",
                     new ReadConfigProcQuery().readConfigId(readConfigDef.getReadConfigId()));
             ReadEvent readEvent = new ReadEvent();
             readEvent.setNode(getNodeId());
             readEvent.setReadConfigProcId(readConfigProcId);
             readEvent.setStatus(EndpointReadEventStatus.UNPROCESSED);
-            while (endpointReader.next()) {
+            int loading = readConfigDef.getMaxLoadingSize() < MINIMUM_LOADING_SIZE ? MINIMUM_LOADING_SIZE
+                    : readConfigDef.getMaxLoadingSize();
+            while (loading > 0 && endpointReader.next()) {
                 ReadEventInst readEventInst = endpointReader.getEvent();
                 if (!readEventInst.isEmpty()) {
                     List<ReadEventMessage> messageList = new ArrayList<ReadEventMessage>();
-                    for (ReadEventInst.EventMessage eventMessage : readEventInst.getEventMessages()) {
+                    for (EventMessage eventMessage : readEventInst.getEventMessages()) {
                         ReadEventMessage readEventMsg = new ReadEventMessage();
                         readEventMsg.setFileName(eventMessage.getFileName());
-                        readEventMsg.setMessage(eventMessage.getMessage());
+                        readEventMsg.setFile(eventMessage.getFile());
+                        readEventMsg.setText(eventMessage.getText());
                         messageList.add(readEventMsg);
                     }
 
                     readEvent.setMessageList(messageList);
                     environment().create(readEvent);
                     commitTransactions();
+                    loading--;
                 }
             }
         } finally {
@@ -238,7 +248,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         return 0;
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FASTER)
     public void executeEndpointReads(TaskMonitor taskMonitor) throws UnifyException {
         final boolean readProcessingEnabled = systemModuleService.getSysParameterValue(boolean.class,
                 IntegrationModuleSysParamConstants.INTGERATION_INWARD_ENDPOINT_PROCESSING_ENABLED);
@@ -262,8 +272,9 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
                 if (!endpointReaderMonitors.containsKey(readConfigName)) {
                     // Fetch reader period
                     ReadConfigDef readConfigDef = getReadConfigDef(readConfigName);
-                    long readerMillSec = CalendarUtils.getMilliSecondsByFrequency(FrequencyUnit.SECOND,
-                            readConfigDef.getReaderPeriod());
+                    final long readerMillSec = CalendarUtils.getMilliSecondsByFrequency(FrequencyUnit.SECOND,
+                            readConfigDef.getReaderPeriod() < MINIMUM_READ_PERIOD_SECONDS ? MINIMUM_READ_PERIOD_SECONDS
+                                    : readConfigDef.getReaderPeriod());
 
                     // Setup and launch task
                     TaskSetup taskSetup = TaskSetup.newBuilder(TaskExecType.RUN_PERIODIC).addTask("executeEndpointRead")
@@ -285,7 +296,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         }
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FASTER)
     public void processReadConfigEvents(TaskMonitor taskMonitor) throws UnifyException {
         ReadConfigProc readConfigProc = grabPendingReadConfigProcessing();
         if (readConfigProc != null) {
@@ -295,7 +306,8 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
             try {
                 for (Long readEventId : environment().valueList(Long.class, "id", new ReadEventQuery()
                         .readConfigProcId(readConfigProcId).status(EndpointReadEventStatus.UNPROCESSED))) {
-                    ReadEventInst readEventInst = getEndpointReadEvent(environment().list(ReadEvent.class, readEventId));
+                    ReadEventInst readEventInst = getEndpointReadEvent(
+                            environment().list(ReadEvent.class, readEventId));
                     if (processReadEvent(taskMonitor, readEventInst)) {
                         successCount++;
                     } else {
@@ -311,10 +323,10 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         }
     }
 
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.FAST)
     public void executeEndpointReadHousekeep(TaskMonitor taskMonitor) throws UnifyException {
-        Map<String, List<Long>> readEventIds = environment().valueListMap(String.class, "readConfigName", Long.class, "id",
-                new ReadEventQuery().node(getNodeId()).statusNot(EndpointReadEventStatus.UNPROCESSED));
+        Map<String, List<Long>> readEventIds = environment().valueListMap(String.class, "readConfigName", Long.class,
+                "id", new ReadEventQuery().node(getNodeId()).statusNot(EndpointReadEventStatus.UNPROCESSED));
         for (Map.Entry<String, List<Long>> entry : readEventIds.entrySet()) {
             ReadConfigDef readConfigDef = getReadConfigDef(entry.getKey());
             EndpointReader endpointReader = endpointReaderFactory.getEndpointReader(readConfigDef);
@@ -378,32 +390,29 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     private boolean processReadEvent(TaskMonitor taskMonitor, ReadEventInst readEventInst) throws UnifyException {
-        boolean success = false;
+        EndpointReadEventStatus status = EndpointReadEventStatus.FAILED;
         try {
             ReadEventProcessor processor = (ReadEventProcessor) getComponent(readEventInst.getEventProcessor());
             processor.process(readEventInst);
-            success = true;
+            status = EndpointReadEventStatus.SUCCESSFUL;
         } catch (Exception ex) {
             logError(ex);
         } finally {
             commitTransactions();
-            EndpointReadEventStatus status = EndpointReadEventStatus.FAILED;
-            if (success) {
-                status = EndpointReadEventStatus.SUCCESSFUL;
-            }
-
             environment().updateAll(new ReadEventQuery().id(readEventInst.getId()), new Update().add("status", status));
             commitTransactions();
         }
 
-        return success;
+        return status.isSuccess();
     }
 
     private void releaseReadConfigProcessing(ReadConfigProc readConfigProc) throws UnifyException {
         try {
-            environment().updateAll(new ReadConfigProcQuery().id(readConfigProc.getId()), new Update()
-                    .add("lastProcessTime", environment().getNow()).add("successCounter", readConfigProc.getSuccessCounter())
-                    .add("failureCounter", readConfigProc.getFailureCounter()).add("inProcessFlag", Boolean.FALSE));
+            environment().updateAll(new ReadConfigProcQuery().id(readConfigProc.getId()),
+                    new Update().add("lastProcessTime", environment().getNow())
+                            .add("successCounter", readConfigProc.getSuccessCounter())
+                            .add("failureCounter", readConfigProc.getFailureCounter())
+                            .add("inProcessFlag", Boolean.FALSE));
         } finally {
             commitTransactions();
         }
@@ -413,7 +422,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
         ReadEventInst readEventInst = new ReadEventInst(readEvent.getEventProcessor(), readEvent.getProcessorRule(),
                 readEvent.getId(), readEvent.getCreateDt());
         for (ReadEventMessage readEventMsg : readEvent.getMessageList()) {
-            readEventInst.addEventMessage(readEventMsg.getFileName(), readEventMsg.getMessage());
+            readEventInst.addEventMessage(readEventMsg.getFileName(), readEventMsg.getFile(), readEventMsg.getText());
         }
 
         return readEventInst;

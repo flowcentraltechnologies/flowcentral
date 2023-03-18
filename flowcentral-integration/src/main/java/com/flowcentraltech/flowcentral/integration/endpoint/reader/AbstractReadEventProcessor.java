@@ -19,7 +19,7 @@ import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Convenient abstract read event processor.
+ * Convenient abstract base class for read event processor.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0

@@ -25,8 +25,9 @@ import javax.jms.Session;
 
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
 import com.flowcentraltech.flowcentral.integration.endpoint.JmsEndpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.EventMessage;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Parameter;
@@ -161,9 +162,8 @@ public class JmsTextEndpointReader extends AbstractEndpointReader {
             }
 
             if (mProducer != null) {
-                for (ReadEventInst.EventMessage eventMessage : event.getEventMessages()) {
-                    String text = new String(eventMessage.getMessage());
-                    Message hMsg = session.createTextMessage(text);
+                for (EventMessage eventMessage : event.getEventMessages()) {
+                    Message hMsg = session.createTextMessage(eventMessage.getText());
                     mProducer.send(hMsg);
                 }
             }

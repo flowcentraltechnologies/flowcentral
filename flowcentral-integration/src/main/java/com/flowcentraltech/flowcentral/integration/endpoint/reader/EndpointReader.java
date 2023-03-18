@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.integration.endpoint.reader;
 
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
-import com.flowcentraltech.flowcentral.integration.data.ReadEventInst;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * End-point reader. This component typically a non-singleton.
+ * End-point reader.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.UnifyException;
 public interface EndpointReader extends UnifyComponent {
 
     /**
-     * Sets up an inward end-point watch.
+     * Sets up this end-point reader.
      * 
      * @param readConfigDef
      *                      the end-point reader definition
@@ -39,7 +39,7 @@ public interface EndpointReader extends UnifyComponent {
     void setup(ReadConfigDef readConfigDef) throws UnifyException;
 
     /**
-     * Begins a file watch.
+     * Begins a event watch.
      * 
      * @throws UnifyException
      *                        if an error occurs

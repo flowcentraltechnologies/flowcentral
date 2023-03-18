@@ -13,23 +13,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.data;
+package com.flowcentraltech.flowcentral.integration.endpoint.data;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Read event instance.
+ * Base class for event types.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReadEventInst {
-
-    private String eventProcessor;
-
-    private String processorRule;
+public abstract class BaseEventInst {
 
     private Long id;
 
@@ -37,29 +33,30 @@ public class ReadEventInst {
 
     private List<EventMessage> eventMessages;
 
-    public ReadEventInst(String eventProcessor, String processorRule, Long id, Date createDt) {
-        this.eventProcessor = eventProcessor;
-        this.processorRule = processorRule;
-        this.id = id;
+    protected BaseEventInst(Long id, Date createDt) {
+         this.id = id;
         this.createDt = createDt;
         this.eventMessages = new ArrayList<EventMessage>();
     }
 
-    public ReadEventInst() {
+    public BaseEventInst() {
         this.eventMessages = new ArrayList<EventMessage>();
     }
 
-    public ReadEventInst addEventMessage(String fileName, byte[] data) {
+    public void addEventMessage(String fileName, byte[] file, String text) {
+        eventMessages.add(new EventMessage(text, fileName, file));
+    }
+
+    public void addEventMessage(String fileName, byte[] data) {
         eventMessages.add(new EventMessage(fileName, data));
-        return this;
     }
 
-    public String getEventProcessor() {
-        return eventProcessor;
+    public void addEventMessage(byte[] data) {
+        eventMessages.add(new EventMessage(data));
     }
 
-    public String getProcessorRule() {
-        return processorRule;
+    public void addEventMessage(String text) {
+        eventMessages.add(new EventMessage(text));
     }
 
     public Long getId() {
@@ -80,25 +77,5 @@ public class ReadEventInst {
 
     public boolean isEmpty() {
         return eventMessages.isEmpty();
-    }
-
-    public static class EventMessage {
-
-        private String fileName;
-
-        private byte[] message;
-
-        public EventMessage(String fileName, byte[] message) {
-            this.fileName = fileName;
-            this.message = message;
-        }
-
-        public String getFileName() {
-            return fileName;
-        }
-
-        public byte[] getMessage() {
-            return message;
-        }
     }
 }

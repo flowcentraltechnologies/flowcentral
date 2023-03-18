@@ -105,7 +105,9 @@
 			<field name="endpointReader" label="$m{integration.readconfig.endpointreader}"
 				type="string" inputWidget="endpointreaderlist" maxLen="64" />
 			<field name="endpointReaderPeriod" label="$m{integration.readconfig.endpointreaderperiod}"
-				type="integer" inputWidget="application.integer" />
+				type="integer" inputWidget="application.integer" precision="3" />
+			<field name="endpointMaxLoadingSize" label="$m{integration.readconfig.endpointmaxloadingsize}"
+				type="integer" inputWidget="application.integer" precision="4"/>
 			<field name="eventProcessor" label="$m{integration.readconfig.eventprocessor}"
 				type="string" inputWidget="readeventprocessorlist" maxLen="64"/>
 			<field name="processorRule" label="$m{integration.readconfig.processorrule}"
@@ -143,6 +145,10 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="endpointReader" renderWidget="application.text"
 				widthRatio="1" />
+			<column field="endpointReaderPeriod" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="endpointMaxLoadingSize" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="eventProcessor" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
@@ -177,6 +183,7 @@
 					<field name="name" column="0" required="true" />
 					<field name="description" column="0" required="true" />
 					<field name="endpointReaderPeriod" column="0" required="true" />
+					<field name="endpointMaxLoadingSize" column="0" required="true" />
 					<field name="endpointReader" column="1" required="true" switchOnChange="true"/>
 					<field name="eventProcessor" column="1" required="true" switchOnChange="true"/>
 					<field name="processorRule" column="1" />

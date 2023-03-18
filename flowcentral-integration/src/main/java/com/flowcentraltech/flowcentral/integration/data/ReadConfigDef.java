@@ -33,18 +33,21 @@ public class ReadConfigDef {
 
     private int readerPeriod;
 
+    private int maxLoadingSize;
+
     private Long readConfigId;
 
     private long version;
 
     private ParamValuesDef readerParamsDef;
 
-    public ReadConfigDef(String name, String readerName, String eventProcessorName, int readerPeriod, Long readConfigId,
-            long version, ParamValuesDef readerParamsDef) {
+    public ReadConfigDef(String name, String readerName, String eventProcessorName, int readerPeriod,
+            int maxLoadingSize, Long readConfigId, long version, ParamValuesDef readerParamsDef) {
         this.name = name;
         this.readerName = readerName;
         this.eventProcessorName = eventProcessorName;
         this.readerPeriod = readerPeriod;
+        this.maxLoadingSize = maxLoadingSize;
         this.readConfigId = readConfigId;
         this.version = version;
         this.readerParamsDef = readerParamsDef;
@@ -66,6 +69,10 @@ public class ReadConfigDef {
         return readerPeriod;
     }
 
+    public int getMaxLoadingSize() {
+        return maxLoadingSize;
+    }
+
     public Long getReadConfigId() {
         return readConfigId;
     }
@@ -76,12 +83,5 @@ public class ReadConfigDef {
 
     public ParamValuesDef getReaderParamsDef() {
         return readerParamsDef;
-    }
-
-    @Override
-    public String toString() {
-        return "ReadConfigDef [name=" + name + ", readerName=" + readerName + ", eventProcessorName="
-                + eventProcessorName + ", readerPeriod=" + readerPeriod + ", readConfigId=" + readConfigId
-                + ", version=" + version + ", readerParamsDef=" + readerParamsDef + "]";
     }
 }

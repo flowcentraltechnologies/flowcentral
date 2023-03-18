@@ -437,9 +437,25 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return executeEntityPostActionPolicy(ctx);
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void submitToWorkflowByName(String workflowName, String entity, Long id) throws UnifyException {
+        EntityClassDef entityClassDef = appletUtil.getEntityClassDef(entity);
+        WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+        submitToWorkflowByName(workflowName, inst);
+    }
+
     @Override
     public void submitToWorkflowByName(String workflowName, WorkEntity inst) throws UnifyException {
         submitToWorkflow(getWfDef(workflowName), inst);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public int submitToWorkflowByChannel(String wfDocChannelName, String entity, Long id) throws UnifyException {
+        EntityClassDef entityClassDef = appletUtil.getEntityClassDef(entity);
+        WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+        return submitToWorkflowByChannel(wfDocChannelName, inst);
     }
 
     @Override

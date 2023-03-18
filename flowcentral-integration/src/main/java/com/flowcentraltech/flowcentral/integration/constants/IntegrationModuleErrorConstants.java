@@ -34,4 +34,7 @@ public interface IntegrationModuleErrorConstants {
 
     /** Can not find inward end-point with name {0} */
     String CANNOT_FIND_INWARD_ENDPOINT = "INTEGRATION_0004";
+
+    /** Local folder transport writer {0} failed to access local path {1} */
+    String LOCALFILE_TRANSPORTWRITER_UNKNOWNFOLDER = "INTEGRATION_0005";
 }

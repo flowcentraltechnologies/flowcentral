@@ -52,6 +52,9 @@ public class ReadConfig extends BaseStatusEntity {
     @Column
     private Integer endpointReaderPeriod;
 
+    @Column
+    private Integer endpointMaxLoadingSize;
+
     @Child(category = "integration-readconfig")
     private ParamValues readerParams;
 
@@ -89,6 +92,14 @@ public class ReadConfig extends BaseStatusEntity {
 
     public void setEndpointReaderPeriod(Integer endpointReaderPeriod) {
         this.endpointReaderPeriod = endpointReaderPeriod;
+    }
+
+    public Integer getEndpointMaxLoadingSize() {
+        return endpointMaxLoadingSize;
+    }
+
+    public void setEndpointMaxLoadingSize(Integer endpointMaxLoadingSize) {
+        this.endpointMaxLoadingSize = endpointMaxLoadingSize;
     }
 
     public String getEventProcessor() {
