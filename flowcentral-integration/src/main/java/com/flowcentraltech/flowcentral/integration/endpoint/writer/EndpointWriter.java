@@ -13,30 +13,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.reader;
+package com.flowcentraltech.flowcentral.integration.endpoint.writer;
 
-import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
+import com.flowcentraltech.flowcentral.integration.data.WriteConfigDef;
 import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * End-point reader.
+ * End-point writer.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EndpointReader extends UnifyComponent {
+public interface EndpointWriter extends UnifyComponent {
 
     /**
-     * Sets up this end-point reader.
+     * Sets up this end-point writer.
      * 
-     * @param readConfigDef
-     *                      the end-point reader definition
+     * @param writeConfigDef
+     *                      the end-point writer definition
      * @throws UnifyException
      *                        if an error occurs
      */
-    void setup(ReadConfigDef readConfigDef) throws UnifyException;
+    void setup(WriteConfigDef writeConfigDef) throws UnifyException;
 
     /**
      * Begins a event watch.
@@ -45,14 +45,6 @@ public interface EndpointReader extends UnifyComponent {
      *                        if an error occurs
      */
     void beginWatch() throws UnifyException;
-
-    /**
-     * Returns true if an event component exists in current watch
-     * 
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    boolean next() throws UnifyException;
 
     /**
      * Returns current end-point read event.
@@ -70,15 +62,4 @@ public interface EndpointReader extends UnifyComponent {
      */
     void endWatch() throws UnifyException;
 
-    /**
-     * Method to execute on completion of inward file end-point event processing.
-     * 
-     * @param event
-     *               the inward file event
-     * @param status
-     *               the event status
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void housekeepWatch(ReadEventInst event, EndpointReadEventStatus status) throws UnifyException;
 }

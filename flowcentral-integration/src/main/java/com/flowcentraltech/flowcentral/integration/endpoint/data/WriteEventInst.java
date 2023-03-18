@@ -13,29 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.constants;
+package com.flowcentraltech.flowcentral.integration.endpoint.data;
+
+import java.util.Date;
 
 /**
- * Integration module name constants.
+ * Write event instance.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface IntegrationModuleNameConstants {
+public class WriteEventInst extends BaseEventInst {
 
-    String INTEGRATION_MODULE_NAME = "integration";
+    public WriteEventInst(String eventProcessor, String processorRule, Long id, Date createDt) {
+        super(eventProcessor, processorRule, id, createDt);
+    }
 
-    String INTEGRATION_MODULE_SERVICE = "integration-moduleservice";
+    public WriteEventInst() {
 
-    String ENDPOINT_MANAGER = "endpoint-manager";
+    }
 
-    String ENDPOINT_PARAMCONFIGPROVIDER = "endpoint-paramconfigprovider";
-
-    String ENDPOINTREADER_FACTORY = "endpointreader-factory";
-
-    String ENDPOINTREADER_PARAMCONFIGPROVIDER = "endpointreader-paramconfigprovider";
-
-    String ENDPOINTWRITER_PARAMCONFIGPROVIDER = "endpointwriter-paramconfigprovider";
-
-    String ENDPOINTWRITER_FACTORY = "endpointwriter-factory";
 }

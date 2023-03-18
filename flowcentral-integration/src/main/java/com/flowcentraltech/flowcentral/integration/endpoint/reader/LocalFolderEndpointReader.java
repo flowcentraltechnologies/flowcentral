@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.EventMessage;
 import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -103,7 +104,9 @@ public class LocalFolderEndpointReader extends AbstractEndpointReader {
     public ReadEventInst getEvent() throws UnifyException {
         File file = files.get(index);
         byte[] data = IOUtils.readAll(file);
-        return new ReadEventInst().addEventMessage(file.getName(), data);
+        ReadEventInst event = new ReadEventInst();
+        event.addEventMessage(file.getName(), data);
+        return event;
     }
 
     @Override
@@ -126,7 +129,7 @@ public class LocalFolderEndpointReader extends AbstractEndpointReader {
                 folder.mkdirs();
             }
 
-            for (ReadEventInst.EventMessage eventMessage : event.getEventMessages()) {
+            for (EventMessage eventMessage : event.getEventMessages()) {
                 IOUtils.writeToFile(new File(folder, eventMessage.getFileName()), eventMessage.getFile());
             }
         }

@@ -20,9 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.integration.endpoint.data.EventMessage;
 import com.flowcentraltech.flowcentral.integration.endpoint.data.JsonReadEvent;
 import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
-import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst.EventMessage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.DataUtils;

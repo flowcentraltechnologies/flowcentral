@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.integration.constants.IntegrationModuleSy
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.EventMessage;
 import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
 import com.flowcentraltech.flowcentral.integration.endpoint.processor.ReadEventProcessor;
 import com.flowcentraltech.flowcentral.integration.endpoint.reader.EndpointReadEventStatus;
@@ -227,7 +228,7 @@ public class IntegrationModuleServiceImpl extends AbstractFlowCentralService imp
                 ReadEventInst readEventInst = endpointReader.getEvent();
                 if (!readEventInst.isEmpty()) {
                     List<ReadEventMessage> messageList = new ArrayList<ReadEventMessage>();
-                    for (ReadEventInst.EventMessage eventMessage : readEventInst.getEventMessages()) {
+                    for (EventMessage eventMessage : readEventInst.getEventMessages()) {
                         ReadEventMessage readEventMsg = new ReadEventMessage();
                         readEventMsg.setFileName(eventMessage.getFileName());
                         readEventMsg.setFile(eventMessage.getFile());
