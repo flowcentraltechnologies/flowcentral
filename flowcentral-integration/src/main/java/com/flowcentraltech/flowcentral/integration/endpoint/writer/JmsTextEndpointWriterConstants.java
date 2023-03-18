@@ -13,38 +13,17 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.data;
-
-import java.util.Date;
+package com.flowcentraltech.flowcentral.integration.endpoint.writer;
 
 /**
- * Read event instance.
+ * JMS text end-point writer constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReadEventInst extends BaseEventInst {
+public interface JmsTextEndpointWriterConstants {
 
-    private String eventProcessor;
+    String ENDPOINT = "jmsTextEndpoint";
 
-    private String processorRule;
-
-    public ReadEventInst(String eventProcessor, String processorRule, Long id, Date createDt) {
-        super(id, createDt);
-        this.eventProcessor = eventProcessor;
-        this.processorRule = processorRule;
-    }
-
-    public ReadEventInst() {
-
-    }
-
-    public String getEventProcessor() {
-        return eventProcessor;
-    }
-
-    public String getProcessorRule() {
-        return processorRule;
-    }
-
+    String DESTINATIONQUEUE = "jmsTextEndpointReaderDestQueue";
 }

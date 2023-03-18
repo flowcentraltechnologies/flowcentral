@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.workflow.processor;
+package com.flowcentraltech.flowcentral.integration.processor;
 
-import com.flowcentraltech.flowcentral.integration.endpoint.processor.AbstractJsonReadEventProcessor;
+import com.flowcentraltech.flowcentral.integration.endpoint.reader.AbstractJsonReadEventProcessor;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.tcdng.unify.core.annotation.Configurable;
 

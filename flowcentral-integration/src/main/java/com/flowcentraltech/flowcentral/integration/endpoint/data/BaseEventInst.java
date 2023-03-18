@@ -27,20 +27,14 @@ import java.util.List;
  */
 public abstract class BaseEventInst {
 
-    private String eventProcessor;
-
-    private String processorRule;
-
     private Long id;
 
     private Date createDt;
 
     private List<EventMessage> eventMessages;
 
-    protected BaseEventInst(String eventProcessor, String processorRule, Long id, Date createDt) {
-        this.eventProcessor = eventProcessor;
-        this.processorRule = processorRule;
-        this.id = id;
+    protected BaseEventInst(Long id, Date createDt) {
+         this.id = id;
         this.createDt = createDt;
         this.eventMessages = new ArrayList<EventMessage>();
     }
@@ -63,14 +57,6 @@ public abstract class BaseEventInst {
 
     public void addEventMessage(String text) {
         eventMessages.add(new EventMessage(text));
-    }
-
-    public String getEventProcessor() {
-        return eventProcessor;
-    }
-
-    public String getProcessorRule() {
-        return processorRule;
     }
 
     public Long getId() {

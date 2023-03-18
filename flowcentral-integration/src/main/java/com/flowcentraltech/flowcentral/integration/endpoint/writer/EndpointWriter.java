@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.integration.endpoint.writer;
 
 import com.flowcentraltech.flowcentral.integration.data.WriteConfigDef;
-import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
+import com.flowcentraltech.flowcentral.integration.endpoint.data.WriteEventInst;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
@@ -47,12 +47,13 @@ public interface EndpointWriter extends UnifyComponent {
     void beginWatch() throws UnifyException;
 
     /**
-     * Returns current end-point read event.
+     * Sets current end-point write event.
      * 
+     * @return true on success otherwise false
      * @throws UnifyException
      *                        if an error occurs
      */
-    ReadEventInst getEvent() throws UnifyException;
+    boolean setEvent(WriteEventInst writeEventInst) throws UnifyException;
 
     /**
      * Ends current inward end-point watch

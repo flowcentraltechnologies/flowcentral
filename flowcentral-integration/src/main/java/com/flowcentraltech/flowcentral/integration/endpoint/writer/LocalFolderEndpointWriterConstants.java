@@ -13,14 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.workflow.data;
+package com.flowcentraltech.flowcentral.integration.endpoint.writer;
 
 /**
- * Workflow action type enumeration.
+ * Local folder end-point writer constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum WorkflowActionType {
-    SUBMIT
+public interface LocalFolderEndpointWriterConstants {
+
+    String LOCALPATH = "locFileEndpointWriterPath";
 }

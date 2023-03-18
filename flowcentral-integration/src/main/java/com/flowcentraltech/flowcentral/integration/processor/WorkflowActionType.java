@@ -13,27 +13,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.processor;
-
-import com.flowcentraltech.flowcentral.common.business.RuleListComponent;
-import com.flowcentraltech.flowcentral.integration.endpoint.data.ReadEventInst;
-import com.tcdng.unify.core.UnifyException;
+package com.flowcentraltech.flowcentral.integration.processor;
 
 /**
- * Read event processor.
+ * Workflow action type enumeration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ReadEventProcessor extends RuleListComponent {
-
-    /**
-     * Process end-point read event.
-     * 
-     * @param readEventInst
-     *                      the event object
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void process(ReadEventInst readEventInst) throws UnifyException;
+public enum WorkflowActionType {
+    SUBMIT
 }

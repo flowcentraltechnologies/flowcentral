@@ -25,8 +25,8 @@ import java.util.Date;
  */
 public class WriteEventInst extends BaseEventInst {
 
-    public WriteEventInst(String eventProcessor, String processorRule, Long id, Date createDt) {
-        super(eventProcessor, processorRule, id, createDt);
+    public WriteEventInst(Long id, Date createDt) {
+        super(id, createDt);
     }
 
     public WriteEventInst() {

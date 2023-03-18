@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.integration.lists;
 
-import com.flowcentraltech.flowcentral.integration.endpoint.processor.ReadEventProcessor;
+import com.flowcentraltech.flowcentral.integration.endpoint.reader.ReadEventProcessor;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.list.AbstractTypeListCommand;
 

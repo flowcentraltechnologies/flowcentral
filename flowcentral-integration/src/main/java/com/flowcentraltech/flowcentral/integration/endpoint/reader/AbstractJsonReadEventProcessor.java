@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.processor;
+package com.flowcentraltech.flowcentral.integration.endpoint.reader;
 
 import java.util.ArrayList;
 import java.util.Collections;

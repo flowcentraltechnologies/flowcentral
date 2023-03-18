@@ -13,11 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.workflow.processor;
+package com.flowcentraltech.flowcentral.integration.processor;
 
 import com.flowcentraltech.flowcentral.integration.endpoint.data.JsonReadEvent;
-import com.flowcentraltech.flowcentral.integration.workflow.data.WorkflowActionTrigger;
-import com.flowcentraltech.flowcentral.integration.workflow.data.WorkflowActionType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 

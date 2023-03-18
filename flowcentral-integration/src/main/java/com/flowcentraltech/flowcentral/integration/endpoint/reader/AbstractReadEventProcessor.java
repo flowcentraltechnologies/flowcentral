@@ -13,38 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.integration.endpoint.data;
+package com.flowcentraltech.flowcentral.integration.endpoint.reader;
 
-import java.util.Date;
+import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Read event instance.
+ * Convenient abstract base class for read event processor.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class ReadEventInst extends BaseEventInst {
+public abstract class AbstractReadEventProcessor extends AbstractUnifyComponent implements ReadEventProcessor {
 
-    private String eventProcessor;
-
-    private String processorRule;
-
-    public ReadEventInst(String eventProcessor, String processorRule, Long id, Date createDt) {
-        super(id, createDt);
-        this.eventProcessor = eventProcessor;
-        this.processorRule = processorRule;
-    }
-
-    public ReadEventInst() {
+    @Override
+    protected void onInitialize() throws UnifyException {
 
     }
 
-    public String getEventProcessor() {
-        return eventProcessor;
-    }
+    @Override
+    protected void onTerminate() throws UnifyException {
 
-    public String getProcessorRule() {
-        return processorRule;
     }
 
 }
