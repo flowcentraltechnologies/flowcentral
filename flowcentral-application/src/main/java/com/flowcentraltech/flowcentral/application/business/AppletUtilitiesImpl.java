@@ -373,6 +373,21 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public void setReloadOnSwitch() throws UnifyException {
+        applicationModuleService.setReloadOnSwitch();
+    }
+
+    @Override
+    public boolean clearReloadOnSwitch() throws UnifyException {
+        return applicationModuleService.clearReloadOnSwitch();
+    }
+
+    @Override
+    public boolean isReloadOnSwitch() throws UnifyException {
+        return applicationModuleService.isReloadOnSwitch();
+    }
+
+    @Override
     public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
         return applicationModuleService.getFilterGroupDef(appletName, tabFilter);
     }

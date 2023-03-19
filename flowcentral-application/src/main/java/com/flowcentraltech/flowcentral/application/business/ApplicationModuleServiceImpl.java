@@ -36,6 +36,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationDeletionTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationImportDataTaskConstants;
@@ -2634,6 +2635,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         return new Equals(_childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName(),
                 parentInst.getId());
+    }
+
+    @Override
+    public void setReloadOnSwitch() throws UnifyException {
+        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+    }
+
+    @Override
+    public boolean clearReloadOnSwitch() throws UnifyException {
+        return Boolean.TRUE.equals(removeRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH));
+    }
+
+    @Override
+    public boolean isReloadOnSwitch() throws UnifyException {
+        return getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH);
     }
 
     @Taskable(name = ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME,

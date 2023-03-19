@@ -22,7 +22,6 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 
 /**
@@ -32,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.EventHandler;
  * @since 1.0
  */
 @UplBinding("web/application/upl/formpanel.upl")
-public abstract class AbstractFormPanel extends AbstractPanel implements FormPanel {
+public abstract class AbstractFormPanel extends AbstractApplicationPanel implements FormPanel {
 
     @Override
     public void switchState() throws UnifyException {

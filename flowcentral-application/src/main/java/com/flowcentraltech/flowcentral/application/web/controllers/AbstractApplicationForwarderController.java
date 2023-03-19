@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
@@ -42,15 +43,15 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
     private static final String LAUNCH_STUDIO_WINDOW = "launchStudio";
 
     @Configurable
-    private SystemModuleService systemModuleService;
+    private AppletUtilities appletUtilities;
 
     public AbstractApplicationForwarderController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
     }
 
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     protected final String forwardToApplication(UserRoleInfo userRoleInfo) throws UnifyException {
@@ -67,15 +68,27 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
                 .equals(getRequestAttribute(PageRequestParameterConstants.WINDOW_NAME)); // TODO Check if role has
                                                                                          // developer privilege
         String applicationPath = inStudioWindow
-                ? systemModuleService.getSysParameterValue(String.class,
+                ? appletUtilities.system().getSysParameterValue(String.class,
                         ApplicationModuleSysParamConstants.STUDIO_APPLICATION)
-                : systemModuleService.getSysParameterValue(String.class,
+                : appletUtilities.system().getSysParameterValue(String.class,
                         ApplicationModuleSysParamConstants.DEFAULT_APPLICATION);
         return forwardToPath(applicationPath);
     }
 
     protected SystemModuleService system() {
-        return systemModuleService;
+        return appletUtilities.system();
+    }
+    
+    protected final void setReloadOnSwitch() throws UnifyException {
+        appletUtilities.setReloadOnSwitch();
+    }
+    
+    protected final boolean clearReloadOnSwitch() throws UnifyException {
+        return appletUtilities.clearReloadOnSwitch();
+    }
+    
+    protected final boolean isReloadOnSwitch() throws UnifyException {
+        return appletUtilities.isReloadOnSwitch();
     }
 
 }

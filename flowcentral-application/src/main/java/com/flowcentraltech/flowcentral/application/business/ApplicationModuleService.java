@@ -1480,4 +1480,29 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     Restriction getChildRestriction(EntityDef parentEntityDef, String childFieldName, Entity parentInst)
             throws UnifyException;
+    
+    /**
+     * Sets the reload on switch flag in current request context.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setReloadOnSwitch() throws UnifyException;
+
+    /**
+     * Clears the reload on switch flag in current request context.
+     * 
+     * @return last state
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean clearReloadOnSwitch() throws UnifyException;
+
+    /**
+     * Checks if the reload on switch flag is set in current request context.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isReloadOnSwitch() throws UnifyException;
 }

@@ -407,7 +407,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public void applyQuickFilter() throws UnifyException {
         localApplyQuickFilter();
-        applyFilterToSearch();
+        applyFilterToSearch(); 
         hideFilterEditor();
     }
 
@@ -466,6 +466,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
         }
 
         entityTable.setSourceObjectClearSelected(searchRestriction);
+        au().clearReloadOnSwitch();
     }
 
     public void hideFilterEditor() {

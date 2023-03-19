@@ -1797,16 +1797,17 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     String getProviderSrcEntity(String destEntity);
-    
+
     /**
      * Consumes an exception and generates an equivalent silent error
      * 
      * @param e
-     *          the exception to consume
-     * @param tableResult indicates table result
+     *                    the exception to consume
+     * @param tableResult
+     *                    indicates table result
      */
     void consumeExceptionAndGenerateSilentError(Exception e, boolean tableResult);
-    
+
     /**
      * Consumes an exception and generates an equivalent silent hint
      * 
@@ -1818,4 +1819,30 @@ public interface AppletUtilities extends UnifyComponent {
      *               optional message parameters
      */
     void consumeExceptionAndGenerateHint(Exception e, String hint, Object... params);
+
+    /**
+     * Sets the reload on switch flag in current request context.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setReloadOnSwitch() throws UnifyException;
+
+    /**
+     * Clears the reload on switch flag in current request context.
+     * 
+     * @return the last state
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean clearReloadOnSwitch() throws UnifyException;
+
+    /**
+     * Checks if the reload on switch flag is set in current request context.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isReloadOnSwitch() throws UnifyException;
+
 }

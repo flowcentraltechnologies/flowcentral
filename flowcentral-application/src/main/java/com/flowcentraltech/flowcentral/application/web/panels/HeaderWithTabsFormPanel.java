@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormWidget;
 import com.tcdng.unify.core.UnifyException;
@@ -41,7 +40,7 @@ public class HeaderWithTabsFormPanel extends AbstractFormPanel {
         boolean evaluate = true;
         
         // Do a form update on reload on switch. Usually triggered by select popups.
-        if (Boolean.TRUE.equals(removeRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
+        if (clearReloadOnSwitch()) {
             formContext.au().updateHeaderWithTabsForm(headerWithTabsForm, (Entity) headerWithTabsForm.getFormBean());
             evaluate = false;
         }

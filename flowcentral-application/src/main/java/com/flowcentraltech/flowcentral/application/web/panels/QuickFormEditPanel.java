@@ -18,14 +18,12 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.Arrays;
 import java.util.Collections;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -38,7 +36,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 @Component("fc-quickformeditpanel")
 @UplBinding("web/application/upl/quickformeditpanel.upl")
-public class QuickFormEditPanel extends AbstractPanel {
+public class QuickFormEditPanel extends AbstractApplicationPanel {
 
     @Override
     public void switchState() throws UnifyException {
@@ -65,7 +63,7 @@ public class QuickFormEditPanel extends AbstractPanel {
         if (quickFormEdit.commit()) {
             removeCurrentPopup();
             hintUser("$m{quickedit.hint.success}");
-            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+            setReloadOnSwitch();
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
             return;
         }

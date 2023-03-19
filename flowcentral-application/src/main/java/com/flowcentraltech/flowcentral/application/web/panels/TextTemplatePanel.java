@@ -15,13 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
@@ -32,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  */
 @Component("fc-texttemplatepanel")
 @UplBinding("web/application/upl/texttemplatepanel.upl")
-public class TextTemplatePanel extends AbstractPanel {
+public class TextTemplatePanel extends AbstractApplicationPanel {
 
     @Action
     public void set() throws UnifyException {
@@ -40,7 +38,7 @@ public class TextTemplatePanel extends AbstractPanel {
         TextTemplate textTemplate = (TextTemplate) popup.getBackingBean();
         textTemplate.set();
         removeCurrentPopup();
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        setReloadOnSwitch();
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
 

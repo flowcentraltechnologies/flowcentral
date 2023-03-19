@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
@@ -52,7 +51,7 @@ public class LoadingSearchPanel extends AbstractApplicationPanel {
         setVisible("sectorIcon", loadingSearch.isWithSectorIcon());
 
         loadingSearch.ensureTableStruct();
-        if (Boolean.TRUE.equals(getRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH))) {
+        if (isReloadOnSwitch()) {
             loadingSearch.applySearchEntriesToSearch();
         }
 

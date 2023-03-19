@@ -60,7 +60,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         setVisible("sectorIcon", entitySearch.isWithSectorIcon());
 
         entitySearch.ensureTableStruct();
-        if (getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH)) {
+        if (isReloadOnSwitch()) {
             entitySearch.applySearchEntriesToSearch();
         }
 

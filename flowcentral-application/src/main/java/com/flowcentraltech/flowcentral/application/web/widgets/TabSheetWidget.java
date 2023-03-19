@@ -18,13 +18,14 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.Collections;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
@@ -39,15 +40,22 @@ import com.tcdng.unify.web.ui.widget.Widget;
 @Component("fc-tabsheet")
 public class TabSheetWidget extends AbstractValueListMultiControl<ValueStore, TabSheetItem> {
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+    
     private TabSheet oldTabSheet;
 
     private Widget[] tabWidgets;
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
+    }
 
     @Action
     public void choose() throws UnifyException {
         TabSheet tabSheet = getTabSheet();
         if (tabSheet != null) {
-            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+            appletUtilities.setReloadOnSwitch();;
             tabSheet.setCurrentTabIndex(getRequestTarget(int.class));
             if (tabSheet.isWithEventHandler() && tabSheet.isWithCurrentItem()) {
                 tabSheet.getEventHandler().onChoose(tabSheet.getCurrentItem());
