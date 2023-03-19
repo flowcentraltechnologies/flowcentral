@@ -423,7 +423,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             TableDef _nTableDef = getAppletCtx().au().getTableDef(_eTableDef.getLongName());
             if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
                 entityTable = new EntityTable(getAppletCtx().au(), _nTableDef, null);
-                applyFilterToSearch();
+                applySearchEntriesToSearch();
             }
         }
     }

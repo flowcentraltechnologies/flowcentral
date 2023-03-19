@@ -274,7 +274,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         currFormRelatedListDef = null;
         formFileAttachments.setFileAttachmentsInfo(null);
         if (entitySearch != null) {
-            entitySearch.applyFilterToSearch();
+            entitySearch.applySearchEntriesToSearch();
             return true;
         }
 

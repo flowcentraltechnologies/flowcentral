@@ -1197,7 +1197,6 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             }
 
             _entitySearch.setChildTabIndex(i);
-//            _entitySearch.setOrder(ORDER_BY_ID);
             _entitySearch.setHeadlessList(appletName);
             _entitySearch.applyFilterToSearch();
 

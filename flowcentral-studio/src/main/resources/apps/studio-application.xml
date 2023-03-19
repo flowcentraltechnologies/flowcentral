@@ -4802,8 +4802,11 @@
 				<property name="searchTable"
 					description="$m{studio.appappletprop.manageentity.searchtable}"
 					inputWidget="studio.propertyapplettablelist" required="true" />
-				<property name="searchTable.selectByField"
-					description="$m{studio.appappletprop.manageentity.searchtable.selectbyfield}"
+				<property name="searchTable.searchOnCriteriaOnly"
+					description="$m{studio.appappletprop.manageentity.searchtable.searchoncriteriaonly}"
+					inputWidget="application.checkbox" />
+				<property name="searchTable.selectByConstraint"
+					description="$m{studio.appappletprop.manageentity.searchtable.selectbyconstraint}"
 					inputWidget="studio.propertyappletuniqueconstraintlist" required="true" />
 				<property name="baseRestriction"
 					description="$m{studio.appappletprop.manageentity.baserestriction}"

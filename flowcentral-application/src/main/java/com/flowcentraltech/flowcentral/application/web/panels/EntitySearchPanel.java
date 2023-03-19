@@ -214,7 +214,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
     @Action
     public void refresh() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.applyFilterToSearch();
+        entitySearch.applySearchEntriesToSearch();
         hideFilterEditor();
 
         PageRequestContextUtil rcUtil = getRequestContextUtil();
@@ -287,7 +287,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
                     appTableActionPolicy);
             EntityListActionResult entityActionResult = entitySearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
-            entitySearch.applyFilterToSearch();
+            entitySearch.applySearchEntriesToSearch();
             getRequestContextUtil().setContentScrollReset();
         }
 
