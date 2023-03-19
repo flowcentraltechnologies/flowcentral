@@ -4807,7 +4807,7 @@
 					inputWidget="application.checkbox" />
 				<property name="searchTable.selectByConstraint"
 					description="$m{studio.appappletprop.manageentity.searchtable.selectbyconstraint}"
-					inputWidget="studio.propertyappletuniqueconstraintlist" required="true" />
+					inputWidget="studio.propertyappletuniqueconstraintlist"/>
 				<property name="baseRestriction"
 					description="$m{studio.appappletprop.manageentity.baserestriction}"
 					inputWidget="studio.propertyappletfilterlist" />
