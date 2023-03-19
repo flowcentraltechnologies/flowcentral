@@ -1574,6 +1574,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         ApplicationModuleSysParamConstants.ENABLE_QUICK_REPORT)) {
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
+        
+        if(_appletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.SEARCH_TABLE_SEARCH_ON_CRITERIA_ONLY, false)) {
+            entitySearchMode |= EntitySearch.SEARCH_ON_CRITERIA_ONLY;
+        }
 
         final boolean basicSearchOnly = _appletDef.getPropValue(boolean.class,
                 AppletPropertyConstants.SEARCH_TABLE_BASICSEARCHONLY, false);
