@@ -29,6 +29,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.control.AbstractFileUploadViewHandler;
@@ -79,15 +80,38 @@ public class RefBlobFileUploadViewHandler extends AbstractFileUploadViewHandler 
 
     @SuppressWarnings("unchecked")
     @Override
+    public FileAttachmentInfo peek(Object id, String category, FileAttachmentType type) throws UnifyException {
+        final RefDef refDef = application().getRefDef(category);
+        final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
+        final EntityDef entityDef = entityClassDef.getEntityDef();
+        final String blobFieldName = entityDef.getBlobFieldName();
+        final String blobDescFieldName = entityDef.getBlobDescFieldName();
+
+        Query<? extends Entity> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass())
+                .addEquals("id", id);
+        final String fileName = !StringUtils.isBlank(blobDescFieldName)
+                ? environment().value(String.class, blobDescFieldName, query)
+                : null;
+        query.addIsNotNull(blobFieldName);
+        final boolean present = environment().countAll(query) > 0;
+
+        FileAttachmentInfo fileAttachmentInfo = new FileAttachmentInfo(type);
+        fileAttachmentInfo.setFilename(fileName);
+        fileAttachmentInfo.setPresent(present);
+        return fileAttachmentInfo;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public FileAttachmentInfo retrive(Object id, String category, FileAttachmentType type) throws UnifyException {
         final RefDef refDef = application().getRefDef(category);
         final EntityClassDef entityClassDef = application().getEntityClassDef(refDef.getEntity());
         final EntityDef entityDef = entityClassDef.getEntityDef();
         final String blobFieldName = entityDef.getBlobFieldName();
         final String blobDescFieldName = entityDef.getBlobDescFieldName();
-        Entity inst = environment().find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
-        byte[] attachment = DataUtils.getBeanProperty(byte[].class, inst, blobFieldName);
-        String filename = !StringUtils.isBlank(blobDescFieldName)
+        final Entity inst = environment().find((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+        final byte[] attachment = DataUtils.getBeanProperty(byte[].class, inst, blobFieldName);
+        final String filename = !StringUtils.isBlank(blobDescFieldName)
                 ? DataUtils.getBeanProperty(String.class, inst, blobDescFieldName)
                 : null;
 
