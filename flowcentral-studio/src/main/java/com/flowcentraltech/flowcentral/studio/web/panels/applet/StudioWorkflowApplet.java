@@ -47,11 +47,10 @@ public class StudioWorkflowApplet extends StudioAppComponentApplet {
     }
 
     public void designChildItem(int childTabIndex) throws UnifyException {
-        currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
         Workflow workflow = (Workflow) form.getFormBean();
         Long workflowId = workflow.getId();
         String subTitle = workflow.getDescription();
-        saveCurrentForm(currFormTabDef);
+        setTabDefAndSaveCurrentForm(childTabIndex);
         workflowEditorPage = constructNewWorkflowEditorPage(workflow.getEntity(), workflowId, subTitle);
         workflowEditorPage.newEditor();
         viewMode = ViewMode.CUSTOM_PAGE;

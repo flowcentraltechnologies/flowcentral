@@ -33,9 +33,9 @@ public class HeadlessTabsFormApplet extends AbstractEntityFormApplet {
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
-        currFormAppletDef = getRootAppletDef();
+        setCurrFormAppletDef(getRootAppletDef());
         headlessForm = au.constructHeadlessTabsForm(getCtx(), this, getRootAppletDef().getDescription(),
-                currFormAppletDef);
+                getCurrFormAppletDef());
         setAltSubCaption(getRootAppletDef().getDescription());
         navBackToHeadless();
     }
