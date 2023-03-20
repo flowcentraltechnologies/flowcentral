@@ -36,6 +36,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationDeletionTaskConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFeatureConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationImportDataTaskConstants;
@@ -200,6 +201,7 @@ import com.flowcentraltech.flowcentral.common.entities.ParamValues;
 import com.flowcentraltech.flowcentral.common.entities.ParamValuesQuery;
 import com.flowcentraltech.flowcentral.common.util.CommonInputUtils;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
+import com.flowcentraltech.flowcentral.common.util.EntityUtils;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
@@ -279,7 +281,6 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
@@ -1456,37 +1457,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
-    public List<? extends Listable> findAppEntityUniqueFields(String entity) throws UnifyException {
+    public List<? extends Listable> findAppEntityUniqueConstraints(String entity) throws UnifyException {
         ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entity);
-        Set<String> fields = environment().valueSet(String.class, "fieldList", new AppEntityUniqueConstraintQuery()
-                .applicationName(parts.getApplicationName()).entityName(parts.getEntityName()));
-        if (!DataUtils.isBlank(fields)) {
-            List<String> singleFields = new ArrayList<String>();
-            for (String field : fields) {
-                if (field.indexOf(',') < 0) {
-                    singleFields.add(field);
-                }
-            }
-
-            if (!DataUtils.isBlank(singleFields)) {
-                List<Listable> resultList = new ArrayList<>();
-                List<? extends Entity> singleList = environment().findAll(new AppEntityFieldQuery()
-                        .appEntityName(parts.getEntityName()).applicationName(parts.getApplicationName())
-                        .addAmongst("name", singleFields).addSelect("name", "label"));
-                ValueStore fValueStore = new BeanValueListStore(singleList);
-                final int len = fValueStore.size();
-                for (int i = 0; i < len; i++) {
-                    fValueStore.setDataIndex(i);
-                    String name = fValueStore.retrieve(String.class, "name");
-                    String label = fValueStore.retrieve(String.class, "label");
-                    resultList.add(new ListData(name, label));
-                }
-
-                return resultList;
-            }
-        }
-
-        return Collections.emptyList();
+        List<? extends Entity> list = environment()
+                .findAll(new AppEntityUniqueConstraintQuery().applicationName(parts.getApplicationName())
+                        .entityName(parts.getEntityName()).addSelect("name", "description"));
+        return EntityUtils.getListablesFromEntityList(list, "name", "description");
     }
 
     @Override
@@ -1561,15 +1537,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 new AppEntityQuery().applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
         List<AppEntitySearchInput> entitySearchInputList = environment()
                 .findAll(new AppEntitySearchInputQuery().appEntityId(appEntityId).addSelect("name", "description"));
-        if (!DataUtils.isBlank(entitySearchInputList)) {
-            List<ListData> list = new ArrayList<ListData>();
-            for (AppEntitySearchInput filter : entitySearchInputList) {
-                list.add(new ListData(filter.getName(), filter.getDescription()));
-            }
-            return list;
-        }
-
-        return Collections.emptyList();
+        return EntityUtils.getListablesFromEntityList(entitySearchInputList, "name", "description");
     }
 
     @Override
@@ -1589,15 +1557,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     public List<? extends Listable> findAppAppletFiltersListable(Long appAppletId) throws UnifyException {
         List<AppAppletFilter> filterList = environment()
                 .findAll(new AppAppletFilterQuery().appAppletId(appAppletId).addSelect("name", "description"));
-        if (!DataUtils.isBlank(filterList)) {
-            List<ListData> list = new ArrayList<ListData>();
-            for (AppAppletFilter filter : filterList) {
-                list.add(new ListData(filter.getName(), filter.getDescription()));
-            }
-            return list;
-        }
-
-        return Collections.emptyList();
+        return EntityUtils.getListablesFromEntityList(filterList, "name", "description");
     }
 
     @Override
@@ -2675,6 +2635,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
         return new Equals(_childEntityDef.getRefEntityFieldDef(parentEntityDef.getLongName()).getFieldName(),
                 parentInst.getId());
+    }
+
+    @Override
+    public void setReloadOnSwitch() throws UnifyException {
+        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+    }
+
+    @Override
+    public boolean clearReloadOnSwitch() throws UnifyException {
+        return Boolean.TRUE.equals(removeRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH));
+    }
+
+    @Override
+    public boolean isReloadOnSwitch() throws UnifyException {
+        return getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH);
     }
 
     @Taskable(name = ApplicationReplicationTaskConstants.APPLICATION_REPLICATION_TASK_NAME,

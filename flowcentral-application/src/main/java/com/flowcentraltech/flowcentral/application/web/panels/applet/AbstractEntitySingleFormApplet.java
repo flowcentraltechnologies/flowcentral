@@ -127,7 +127,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         getCtx().setInWorkflow(false);
         form = null;
         viewMode = ViewMode.SEARCH;
-        entitySearch.applyFilterToSearch();
+        entitySearch.applySearchEntriesToSearch();
     }
 
     public void previousInst() throws UnifyException {

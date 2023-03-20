@@ -64,11 +64,11 @@
 
 // Search entries panel
 !ui-panel:searchEntriesPanel styleClass:$s{filall} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{searchEntriesHeader searchEntriesBodyPanel}
+	components:$c{searchEntriesHeader searchEntriesRequired searchEntriesBodyPanel}
 	ignoreParentState:true
 
 !ui-panel:searchEntriesHeader style:$s{display:inline-block;} components:$c{baseFilterTranslation}
-
+!ui-label:searchEntriesRequired styleClass:$e{ewarn} caption:$m{entitysearchpanel.searchentriesrequired}
 !ui-panel:searchEntriesBodyPanel layout:$d{!ui-horizontal style:$s{width:100%;}  widths:$l{100% none}}
 	components:$c{searchEntriesBody switchToAdvanced}
 

@@ -302,15 +302,15 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException;
 
     /**
-     * Finds application entity unique fields.
+     * Finds application entity unique constraints.
      * 
      * @param entity
      *               the application entity
-     * @return list of entity unique fields
+     * @return list of entity unique constraints
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> findAppEntityUniqueFields(String entity) throws UnifyException;
+    List<? extends Listable> findAppEntityUniqueConstraints(String entity) throws UnifyException;
 
     /**
      * Finds a list of applets.
@@ -1480,4 +1480,29 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     Restriction getChildRestriction(EntityDef parentEntityDef, String childFieldName, Entity parentInst)
             throws UnifyException;
+    
+    /**
+     * Sets the reload on switch flag in current request context.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setReloadOnSwitch() throws UnifyException;
+
+    /**
+     * Clears the reload on switch flag in current request context.
+     * 
+     * @return last state
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean clearReloadOnSwitch() throws UnifyException;
+
+    /**
+     * Checks if the reload on switch flag is set in current request context.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean isReloadOnSwitch() throws UnifyException;
 }

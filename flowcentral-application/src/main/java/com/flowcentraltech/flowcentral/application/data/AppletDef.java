@@ -89,11 +89,11 @@ public class AppletDef extends BaseApplicationEntityDef {
     private Map<String, List<AppletFilterDef>> childListAppletFilterDefMap;
 
     private AppletDef(AppletType type, List<AppletPropDef> propDefList, Map<String, AppletPropDef> propDefMap,
-            Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
-            String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
-            String openPath, String originApplicationName, String originName, int displayIndex, boolean openWindow,
-            boolean menuAccess, boolean allowSecondaryTenants, boolean descriptiveButtons,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+            Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity, String label, String icon,
+            String assignDescField, String pseudoDeleteField, String routeToApplet, String openPath,
+            String originApplicationName, String originName, int displayIndex, boolean openWindow, boolean menuAccess,
+            boolean allowSecondaryTenants, boolean descriptiveButtons, ApplicationEntityNameParts nameParts,
+            String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -498,9 +498,10 @@ public class AppletDef extends BaseApplicationEntityDef {
             }
             return new AppletDef(type, DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())),
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
-                    DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
-                    routeToApplet, openPath, originApplicationName, originName, displayIndex, openWindow, menuAccess,
-                    allowSecondaryTenants, descriptiveButtons, nameParts, description, id, version);
+                    DataUtils.unmodifiableMap(filterDefMap), entity, label, icon,
+                    assignDescField, pseudoDeleteField, routeToApplet, openPath, originApplicationName, originName,
+                    displayIndex, openWindow, menuAccess, allowSecondaryTenants, descriptiveButtons, nameParts,
+                    description, id, version);
         }
     }
 

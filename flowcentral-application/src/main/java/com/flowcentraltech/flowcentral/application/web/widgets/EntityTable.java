@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -52,6 +53,8 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
 
     private boolean limitSelectToColumns;
 
+    private boolean requiredCriteriaNotSet;
+
     public EntityTable(AppletUtilities au, TableDef tableDef, FilterGroupDef filterGroupDef) {
         super(au, tableDef, filterGroupDef, DEFAULT_TABLE_ORDER, 0);
         this.setFixedRows(tableDef.isFixedRows());
@@ -88,6 +91,14 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
         this.limitSelectToColumns = limitSelectToColumns;
     }
 
+    public boolean isRequiredCriteriaNotSet() {
+        return requiredCriteriaNotSet;
+    }
+
+    public void setRequiredCriteriaNotSet(boolean requiredCriteriaNotSet) {
+        this.requiredCriteriaNotSet = requiredCriteriaNotSet;
+    }
+
     @Override
     protected void validate(EvaluationMode evaluationMode, Restriction sourceObject, FormValidationErrors errors)
             throws UnifyException {
@@ -119,6 +130,10 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     @SuppressWarnings("unchecked")
     @Override
     protected int getSourceObjectSize(Restriction restriction) throws UnifyException {
+        if (requiredCriteriaNotSet) {
+            return 0;
+        }
+        
         final EntityClassDef entityClassDef = au.getEntityClassDef(getTableDef().getEntityDef().getLongName());
         if (restriction != null) {
             return au.environment().countAll(
@@ -133,6 +148,10 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
     @Override
     protected List<Entity> getDisplayItems(Restriction restriction, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
+        if (requiredCriteriaNotSet) {
+            return Collections.emptyList();
+        }
+        
         final TableDef tableDef = getTableDef();
         final EntityClassDef entityClassDef = au.getEntityClassDef(tableDef.getEntityDef().getLongName());
         if (restriction != null) {

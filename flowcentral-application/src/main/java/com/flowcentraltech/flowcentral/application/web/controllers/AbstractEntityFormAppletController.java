@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.EntityTreeSelectGenerator;
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
@@ -252,7 +251,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         if (indicateHighLatency) {
             getPageRequestContextUtil().setLowLatencyRequest();
         } else {
-            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+            setReloadOnSwitch();
         }
     }
 

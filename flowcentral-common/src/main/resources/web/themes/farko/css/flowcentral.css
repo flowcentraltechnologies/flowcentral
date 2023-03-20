@@ -450,7 +450,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-miniform .mfpost {display:table-cell;width:12px;}
 .fc-miniform .mfannot {display:table-caption;}
 .fc-miniform .mfannot span {display:block; padding:8px 6px; margin: 0px 20px;}
-.fc-miniform .mwarn {border: 1px solid #ff823b;font-size: 8pt;color: #ff823b;font-weight: bold;background-color: #ffe6d7;padding: 10px 0px;}
+.fc-miniform .mwarn {border: 1px solid #ff823b;font-size: 8pt;color:#b35b29;font-weight: bold;background-color: #ffe6d7;padding: 6px 0px;}
 
 /* Parameter values */
 .fc-paramvalues {padding:4px;}
@@ -607,7 +607,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .mblue:hover:enabled {background-color:#005dbc;color: #FFF;}
 .fc-table .table .msection {display:block;text-align:left; font-weight:bold; font-size:8pt;color:#121212; padding: 6px 8px;}
 .fc-table .table .mnorec {display:block;text-align:center; font-size:8pt;color: #606060;}
-.fc-table .mwarn {border: 1px solid #ff823b;font-size: 8pt;color: #ff823b;font-weight: bold;background-color: #ffe6d7;padding: 10px 0px;}
+.fc-table .mwarn {border: 1px solid #ff823b;font-size: 8pt;color:#b35b29;font-weight: bold;background-color: #ffe6d7;padding: 6px 0px;}
 .fc-table .classic th {border: 1px solid #e8e8e8;background-color: #d5d5d5;}
 .fc-table .classic td {border-right: 1px solid #e8e8e8;border-left: 1px solid #e8e8e8;}
 .fc-table .classic .mselh {width: 22px;background-color: #e3e7ea;}
@@ -835,6 +835,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-entitysearchpanel .savebar {width:784px;}
 .fc-entitysearchpanel .footer {display: inline-block;padding-left:40px;padding-bottom:20px;padding-top:8px;box-sizing: border-box;}
 .fc-entitysearchpanel .footersel {width:200px}
+.fc-entitysearchpanel .ewarn {display: inline-block;border: 1px solid #ff823b;font-size: 7pt;color:#b35b29;font-weight: bold;
+	background-color: #ffe6d7;padding: 2px 4px;}
 
 /* Entity select panel */
 .fc-entityselectpanel {width:896px; background-color:#ffffff;border: 1px solid #b8b8b8;}

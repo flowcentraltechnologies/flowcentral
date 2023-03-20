@@ -15,13 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
@@ -32,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 @Component("fc-quicktableeditpanel")
 @UplBinding("web/application/upl/quicktableeditpanel.upl")
-public class QuickTableEditPanel extends AbstractPanel {
+public class QuickTableEditPanel extends AbstractApplicationPanel {
 
     @Action
     public void saveEntries() throws UnifyException {
@@ -40,7 +38,7 @@ public class QuickTableEditPanel extends AbstractPanel {
         if (quickTableEdit.commitEntryList()) {
             removeCurrentPopup();
             hintUser("$m{quickedit.hint.success}");
-            setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+            setReloadOnSwitch();
             setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
             return;
         } 

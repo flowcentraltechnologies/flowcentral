@@ -47,11 +47,10 @@ public class StudioAppTableApplet extends StudioAppComponentApplet {
     }
 
     public void designChildItem(int childTabIndex) throws UnifyException {
-        currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
         AppTable appTable = (AppTable) form.getFormBean();
         Object id = appTable.getId();
         String subTitle = appTable.getDescription();
-        saveCurrentForm(currFormTabDef);
+        setTabDefAndSaveCurrentForm(childTabIndex);
         tableEditorPage = constructNewTableEditorPage(appTable.getEntity(), id, subTitle);
         tableEditorPage.newEditor();
         viewMode = ViewMode.CUSTOM_PAGE;

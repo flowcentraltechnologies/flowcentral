@@ -15,13 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
@@ -32,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  */
 @Component("fc-entitytreemultiselectpanel")
 @UplBinding("web/application/upl/entitytreemultiselectpanel.upl")
-public class EntityTreeMultiSelectPanel extends AbstractPanel {
+public class EntityTreeMultiSelectPanel extends AbstractApplicationPanel {
 
     @Action
     public void select() throws UnifyException {
@@ -40,7 +38,7 @@ public class EntityTreeMultiSelectPanel extends AbstractPanel {
         EntityTreeSelect entityTreeSelect = (EntityTreeSelect) popup.getBackingBean();
         entityTreeSelect.applySelect();
         removeCurrentPopup();
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        setReloadOnSwitch();
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
 

@@ -373,6 +373,21 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public void setReloadOnSwitch() throws UnifyException {
+        applicationModuleService.setReloadOnSwitch();
+    }
+
+    @Override
+    public boolean clearReloadOnSwitch() throws UnifyException {
+        return applicationModuleService.clearReloadOnSwitch();
+    }
+
+    @Override
+    public boolean isReloadOnSwitch() throws UnifyException {
+        return applicationModuleService.isReloadOnSwitch();
+    }
+
+    @Override
     public FilterGroupDef getFilterGroupDef(String appletName, String tabFilter) throws UnifyException {
         return applicationModuleService.getFilterGroupDef(appletName, tabFilter);
     }
@@ -1182,7 +1197,6 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             }
 
             _entitySearch.setChildTabIndex(i);
-//            _entitySearch.setOrder(ORDER_BY_ID);
             _entitySearch.setHeadlessList(appletName);
             _entitySearch.applyFilterToSearch();
 
@@ -1559,6 +1573,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 && systemModuleService.getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ENABLE_QUICK_REPORT)) {
             entitySearchMode |= EntitySearch.SHOW_REPORT;
+        }
+        
+        if(_appletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.SEARCH_TABLE_SEARCH_ON_CRITERIA_ONLY, false)) {
+            entitySearchMode |= EntitySearch.SEARCH_ON_CRITERIA_ONLY;
         }
 
         final boolean basicSearchOnly = _appletDef.getPropValue(boolean.class,

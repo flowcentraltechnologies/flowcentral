@@ -653,6 +653,18 @@ public class EntityDef extends BaseApplicationEntityDef {
         return uniqueConstraintList;
     }
 
+    public UniqueConstraintDef getUniqueConstraint(String name) {
+        if (uniqueConstraintList != null) {
+            for (UniqueConstraintDef uniqueConstraintDef: uniqueConstraintList) {
+                if (uniqueConstraintDef.getName().equals(name)) {
+                    return uniqueConstraintDef;
+                }
+            }
+        }
+        
+        return null;
+    }
+    
     public List<IndexDef> getIndexList() {
         return indexList;
     }

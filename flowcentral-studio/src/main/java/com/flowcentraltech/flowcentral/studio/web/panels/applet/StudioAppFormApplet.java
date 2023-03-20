@@ -48,11 +48,10 @@ public class StudioAppFormApplet extends StudioAppComponentApplet {
     }
 
     public void designChildItem(int childTabIndex) throws UnifyException {
-        currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
         AppForm appForm = (AppForm) form.getFormBean();
         Object id = appForm.getId();
         String subTitle = appForm.getDescription();
-        saveCurrentForm(currFormTabDef);
+        setTabDefAndSaveCurrentForm(childTabIndex);
         formEditorPage = constructNewFormEditorPage(
                 ApplicationNameUtils.getApplicationEntityLongName(getApplicationName(), appForm.getName()), id,
                 subTitle);

@@ -53,6 +53,10 @@ public class UniqueConstraintDef {
         return fieldList;
     }
 
+    public boolean isWithFields() {
+        return fieldList != null && !fieldList.isEmpty();
+    }
+
     public boolean isSingleFieldConstraint(String fieldName) {
         return fieldList != null && fieldList.size() == 1 && fieldList.get(0).equals(fieldName);
     }

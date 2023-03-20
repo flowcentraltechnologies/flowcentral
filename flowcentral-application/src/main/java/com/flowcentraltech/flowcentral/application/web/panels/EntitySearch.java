@@ -58,6 +58,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public static final int SHOW_SEARCH = 0x00000100;
     public static final int SHOW_QUICK_EDIT = 0x00000200;
     public static final int SHOW_REPORT = 0x00000400;
+    public static final int SEARCH_ON_CRITERIA_ONLY = 0x00000800;
 
     public static final int ENABLE_ALL = EDIT_FILTER_ENABLED | SHOW_FILTER_SAVE | SHOW_FILTER_THUMBTACK
             | SHOW_NEW_BUTTON | SHOW_EDIT_BUTTON | SHOW_QUICKFILTER | SHOW_ACTIONFOOTER | SHOW_SEARCH;
@@ -192,7 +193,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public boolean isWithSearchInput() {
         return searchEntries != null && !searchEntries.isEmpty();
     }
-    
+
     public EntityTable getEntityTable() {
         return entityTable;
     }
@@ -365,6 +366,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
         entityTable.setOrder(order);
     }
 
+    public boolean isRequiredCriteriaNotSet() {
+        return entityTable.isRequiredCriteriaNotSet();
+    }
+
     public void setBaseFilter(FilterDef filterDef, SpecialParamProvider specialParamProvider) throws UnifyException {
         this.baseFilterDef = filterDef;
         setBaseRestriction(null, specialParamProvider);
@@ -423,7 +428,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
             TableDef _nTableDef = getAppletCtx().au().getTableDef(_eTableDef.getLongName());
             if (_eTableDef.getVersion() != _nTableDef.getVersion()) {
                 entityTable = new EntityTable(getAppletCtx().au(), _nTableDef, null);
-                applyFilterToSearch();
+                applySearchEntriesToSearch();
             }
         }
     }
@@ -431,6 +436,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public void applySearchEntriesToSearch() throws UnifyException {
         EntityDef entityDef = searchEntries.getEntityDef();
         Restriction restriction = searchEntries.getRestriction();
+        entityTable.setRequiredCriteriaNotSet(restriction == null && isSearchOnCriteriaOnly());
         applyRestrictionToSearch(entityDef, restriction);
     }
 
@@ -441,31 +447,6 @@ public class EntitySearch extends AbstractPanelFormBinding {
             applyRestrictionToSearch(entityDef, restriction);
             entityFilterTranslation = getAppletCtx().au().translate(restriction, entityDef);
         }
-    }
-
-    private void localApplyQuickFilter() throws UnifyException {
-        FilterDef quickFilterDef = appAppletId != null && appAppletFilterName != null
-                ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
-                : null;
-        entityFilter = quickFilterDef != null ? new Filter(null, null, entityFilter.getEntityDef(),
-                quickFilterDef.explodeGenerator(getEntityDef(), au().getNow()), FilterConditionListType.IMMEDIATE_FIELD)
-                : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
-                        FilterConditionListType.IMMEDIATE_FIELD);
-    }
-
-    private void applyRestrictionToSearch(EntityDef entityDef, Restriction restriction) throws UnifyException {
-        Restriction searchRestriction = null;
-        if (isWithBaseFilter()) {
-            if (restriction != null) {
-                searchRestriction = new And().add(baseRestriction).add(restriction);
-            } else {
-                searchRestriction = baseRestriction;
-            }
-        } else {
-            searchRestriction = restriction;
-        }
-
-        entityTable.setSourceObjectClearSelected(searchRestriction);
     }
 
     public void hideFilterEditor() {
@@ -553,5 +534,35 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     public boolean isShowReport() {
         return (mode & SHOW_REPORT) > 0;
+    }
+
+    public boolean isSearchOnCriteriaOnly() {
+        return (mode & SEARCH_ON_CRITERIA_ONLY) > 0;
+    }
+
+    private void localApplyQuickFilter() throws UnifyException {
+        FilterDef quickFilterDef = appAppletId != null && appAppletFilterName != null
+                ? getAppletCtx().au().getAppletDef(appAppletId).getFilterDef(appAppletFilterName).getFilterDef()
+                : null;
+        entityFilter = quickFilterDef != null ? new Filter(null, null, entityFilter.getEntityDef(),
+                quickFilterDef.explodeGenerator(getEntityDef(), au().getNow()), FilterConditionListType.IMMEDIATE_FIELD)
+                : new Filter(null, null, entityFilter.getEntityDef(), entityFilter.getLabelSuggestionDef(),
+                        FilterConditionListType.IMMEDIATE_FIELD);
+    }
+
+    private void applyRestrictionToSearch(EntityDef entityDef, Restriction restriction) throws UnifyException {
+        Restriction searchRestriction = null;
+        if (isWithBaseFilter()) {
+            if (restriction != null) {
+                searchRestriction = new And().add(baseRestriction).add(restriction);
+            } else {
+                searchRestriction = baseRestriction;
+            }
+        } else {
+            searchRestriction = restriction;
+        }
+
+        entityTable.setSourceObjectClearSelected(searchRestriction);
+        au().clearReloadOnSwitch();
     }
 }

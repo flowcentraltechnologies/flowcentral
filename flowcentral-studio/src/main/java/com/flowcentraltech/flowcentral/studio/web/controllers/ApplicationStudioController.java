@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
@@ -66,22 +66,29 @@ public class ApplicationStudioController extends AbstractFlowCentralPageControll
     @Configurable
     private UserLoginActivityProvider userLoginActivityProvider;
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
     public ApplicationStudioController() {
         super(ApplicationStudioPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setUserPhotoGenerator(LoginUserPhotoGenerator userPhotoGenerator) {
+    public final void setUserPhotoGenerator(LoginUserPhotoGenerator userPhotoGenerator) {
         this.userPhotoGenerator = userPhotoGenerator;
     }
 
-    public void setUserLoginActivityProvider(UserLoginActivityProvider userLoginActivityProvider) {
+    public final void setUserLoginActivityProvider(UserLoginActivityProvider userLoginActivityProvider) {
         this.userLoginActivityProvider = userLoginActivityProvider;
+    }
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Action
     @Override
     public String content() throws UnifyException {
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        appletUtilities.setReloadOnSwitch();
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 

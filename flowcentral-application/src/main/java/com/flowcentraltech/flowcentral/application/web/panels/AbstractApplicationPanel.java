@@ -98,4 +98,17 @@ public abstract class AbstractApplicationPanel extends AbstractPanel {
     protected void showReportOptionsBox(ReportOptions reportOptions) throws UnifyException {
         commandShowPopup(new Popup("showapplicationreportoptions", reportOptions));
     }
+    
+    protected final void setReloadOnSwitch() throws UnifyException {
+        appletUtilities.setReloadOnSwitch();
+    }
+
+    protected final boolean clearReloadOnSwitch() throws UnifyException {
+        return appletUtilities.clearReloadOnSwitch();
+    }
+    
+    protected final boolean isReloadOnSwitch() throws UnifyException {
+        return appletUtilities.isReloadOnSwitch();
+    }
+  
 }

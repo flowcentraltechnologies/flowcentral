@@ -60,7 +60,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         setVisible("sectorIcon", entitySearch.isWithSectorIcon());
 
         entitySearch.ensureTableStruct();
-        if (getRequestAttribute(boolean.class, AppletRequestAttributeConstants.RELOAD_ONSWITCH)) {
+        if (isReloadOnSwitch()) {
             entitySearch.applySearchEntriesToSearch();
         }
 
@@ -79,6 +79,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         setVisible("viewBtn", entitySearch.isViewButtonVisible()
                 && applicationPrivilegeManager().isRoleWithPrivilege(roleCode, entityDef.getEditPrivilege()));
         setVisible("switchToBasic", entityTable.isSupportsBasicSearch());
+        setVisible("searchEntriesRequired", entitySearch.isRequiredCriteriaNotSet());
 
         final boolean reportBtnVisible = entityTable.getTotalItemCount() > 0 && entitySearch.isShowReport()
                 && entitySearch.au().reportProvider().isReportable(entityTable.getEntityDef().getLongName())
@@ -214,7 +215,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
     @Action
     public void refresh() throws UnifyException {
         EntitySearch entitySearch = getEntitySearch();
-        entitySearch.applyFilterToSearch();
+        entitySearch.applySearchEntriesToSearch();
         hideFilterEditor();
 
         PageRequestContextUtil rcUtil = getRequestContextUtil();
@@ -287,7 +288,7 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
                     appTableActionPolicy);
             EntityListActionResult entityActionResult = entitySearch.environment().performEntityAction(eCtx);
             handleEntityActionResult(entityActionResult);
-            entitySearch.applyFilterToSearch();
+            entitySearch.applySearchEntriesToSearch();
             getRequestContextUtil().setContentScrollReset();
         }
 

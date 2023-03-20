@@ -64,4 +64,16 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         setSessionAttribute(backingBeanKey, backingBean);
         return resultMapping;
     }
+    
+    protected final void setReloadOnSwitch() throws UnifyException {
+        appletUtilities.setReloadOnSwitch();
+    }
+    
+    protected final boolean clearReloadOnSwitch() throws UnifyException {
+        return appletUtilities.clearReloadOnSwitch();
+    }
+    
+    protected final boolean isReloadOnSwitch() throws UnifyException {
+        return appletUtilities.isReloadOnSwitch();
+    }
 }

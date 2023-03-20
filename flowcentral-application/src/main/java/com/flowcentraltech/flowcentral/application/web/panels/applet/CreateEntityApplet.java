@@ -33,7 +33,7 @@ public class CreateEntityApplet extends AbstractEntityFormApplet {
     public CreateEntityApplet(AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
-        currFormAppletDef = getRootAppletDef();
+        setCurrFormAppletDef(getRootAppletDef());
         form = constructNewForm(FormMode.CREATE, null, false);
         viewMode = ViewMode.NEW_PRIMARY_FORM;
         setAltSubCaption(form.getFormTitle());

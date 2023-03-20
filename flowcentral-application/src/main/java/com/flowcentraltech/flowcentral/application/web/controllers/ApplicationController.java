@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleAuditConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
@@ -106,7 +105,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
     @Action
     @Override
     public String content() throws UnifyException {
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        setReloadOnSwitch();
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
@@ -157,7 +156,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     @Action
     public String refreshContent() throws UnifyException {
-        setRequestAttribute(AppletRequestAttributeConstants.RELOAD_ONSWITCH, Boolean.TRUE);
+        setReloadOnSwitch();
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 
