@@ -552,6 +552,10 @@ public class Interconnect {
                 while ((line = reader.readLine()) != null) {
                     String[] p = line.split("]");
                     String fieldName = p[0];
+                    if ("id".equals(fieldName) && entityInfo.getIdFieldName() == null) {
+                        continue;
+                    }
+
                     boolean ascending = "ASCENDING".equals(p[1]);
                     orderDefList.add(new OrderDef(entityInfo.getLocalFieldName(fieldName), ascending));
                 }
@@ -717,8 +721,11 @@ public class Interconnect {
         if (refType.object()) {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
                 EntityInfo parentEntityInfo = getEntityInfo(entityFieldInfo.getReferences());
-                Object id = getBeanProperty(bean, entityFieldInfo.getName() + "." + parentEntityInfo.getIdFieldName());
-                map.put(entityFieldInfo.getName(), id);
+                if (parentEntityInfo.getIdFieldName() != null) {
+                    Object id = getBeanProperty(bean,
+                            entityFieldInfo.getName() + "." + parentEntityInfo.getIdFieldName());
+                    map.put(entityFieldInfo.getName(), id);
+                }
             }
         } else {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
@@ -768,11 +775,11 @@ public class Interconnect {
         }
 
         Map<String, Object> result = new HashMap<>();
-        for (Map.Entry<String, Object> entry: map.entrySet()) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
             String fieldName = entityInfo.getFieldNameFromLocal(entry.getKey());
             result.put(fieldName, entry.getValue());
         }
-        
+
         return result;
     }
 
