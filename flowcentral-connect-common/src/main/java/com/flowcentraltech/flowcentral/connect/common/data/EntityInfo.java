@@ -292,9 +292,9 @@ public class EntityInfo {
                 throw new RuntimeException("Entity information implementation is required");
             }
 
-            if (idFieldName == null) {
-                throw new RuntimeException("Entity information ID field name is required");
-            }
+//            if (idFieldName == null) {
+//                throw new RuntimeException("Entity information ID field name is required");
+//            }
 
             Class<?> implClass = Class.forName(implementation);
             return new EntityInfo(entityManagerFactory, name, description, idFieldName, versionNoFieldName, handler,

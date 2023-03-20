@@ -717,8 +717,10 @@ public class Interconnect {
         if (refType.object()) {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
                 EntityInfo parentEntityInfo = getEntityInfo(entityFieldInfo.getReferences());
-                Object id = getBeanProperty(bean, entityFieldInfo.getName() + "." + parentEntityInfo.getIdFieldName());
-                map.put(entityFieldInfo.getName(), id);
+                if (parentEntityInfo.getIdFieldName() != null) {
+                    Object id = getBeanProperty(bean, entityFieldInfo.getName() + "." + parentEntityInfo.getIdFieldName());
+                    map.put(entityFieldInfo.getName(), id);
+                }
             }
         } else {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
