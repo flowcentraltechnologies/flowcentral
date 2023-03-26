@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.core.annotation.CategoryColumn;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.FosterParentId;
 import com.tcdng.unify.core.annotation.FosterParentType;
 import com.tcdng.unify.core.annotation.Index;
@@ -41,7 +42,7 @@ public class AppSearchInput extends BaseAuditEntity {
     @CategoryColumn(name = "SEARCHINPUT_CAT")
     private String category;
 
-    @Column(name = "SEARCHINPUT_DEF", length = 4000)
+    @Column(type = ColumnType.CLOB, name = "SEARCHINPUT_DEF", nullable = true)
     private String definition;
 
     public AppSearchInput(String definition) {

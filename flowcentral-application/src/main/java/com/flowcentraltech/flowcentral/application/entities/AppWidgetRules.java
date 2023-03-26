@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.tcdng.unify.core.annotation.CategoryColumn;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.FosterParentId;
 import com.tcdng.unify.core.annotation.FosterParentType;
 import com.tcdng.unify.core.annotation.Index;
@@ -42,7 +43,7 @@ public class AppWidgetRules extends BaseAuditEntity {
     @CategoryColumn(name = "WIDGETRULES_CAT")
     private String category;
 
-    @Column(name = "WIDGETRULES_DEF", length = 4000)
+    @Column(type = ColumnType.CLOB, name = "WIDGETRULES_DEF", nullable = true)
     private String definition;
 
     public AppWidgetRules(String definition) {
