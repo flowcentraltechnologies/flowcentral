@@ -21,7 +21,6 @@ import com.flowcentraltech.flowcentral.common.constants.SystemSchedTaskConstants
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.task.AbstractTaskStatusLogger;
 import com.tcdng.unify.core.task.TaskMonitor;
 
@@ -52,7 +51,7 @@ public class ScheduledTaskStatusLogger extends AbstractTaskStatusLogger {
                 if (exceptions != null && exceptions.length > 0) {
                     StringBuilder sb = new StringBuilder();
                     for (Exception exception : exceptions) {
-                        sb.append(getExceptionMessage(LocaleType.APPLICATION, exception));
+                        sb.append(getPrintableStackTrace(exception));
                         sb.append(getLineSeparator());
                     }
                     errorMsgs = sb.toString();
