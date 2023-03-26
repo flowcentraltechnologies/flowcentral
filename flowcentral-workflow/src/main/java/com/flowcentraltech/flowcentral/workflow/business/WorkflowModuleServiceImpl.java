@@ -821,7 +821,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return Collections.emptyList();
     }
 
-    @Periodic(PeriodicType.FAST)
+    @Periodic(PeriodicType.NORMAL)
     public void processWfTransitionQueueItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing transition queue items...");
         List<WfTransitionQueue> pendingList = null;
@@ -864,7 +864,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @SuppressWarnings("unchecked")
-    @Periodic(PeriodicType.NORMAL)
+    @Periodic(PeriodicType.SLOW)
     public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
         logDebug("Processing workflow auto-loading...");
         if (grabClusterLock(WFAUTOLOADING_LOCK)) {
