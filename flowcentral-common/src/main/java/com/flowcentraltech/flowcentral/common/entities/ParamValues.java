@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import com.tcdng.unify.core.annotation.CategoryColumn;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.ColumnType;
 import com.tcdng.unify.core.annotation.FosterParentId;
 import com.tcdng.unify.core.annotation.FosterParentType;
 import com.tcdng.unify.core.annotation.Index;
@@ -41,7 +42,7 @@ public class ParamValues extends BaseAuditEntity {
     @CategoryColumn(name = "PARAMVALUES_CAT")
     private String category;
 
-    @Column(name = "PARAMVALUES_DEF", length = 4000)
+    @Column(type = ColumnType.CLOB, name = "PARAMVALUES_DEF", nullable = false)
     private String definition;
 
     public ParamValues(String definition) {

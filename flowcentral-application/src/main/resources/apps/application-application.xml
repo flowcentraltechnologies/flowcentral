@@ -183,16 +183,16 @@
 			renderer="!ui-label" />
 		<widgetType name="textarea" listOption="true"
 			description="$m{application.widgettype.textarea}" dataType="string"
-			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:3"
+			inputType="string" editor="!ui-textarea minLen:%s maxLen:%s rows:4"
 			renderer="!ui-label" />
 		<widgetType name="textareamedium" listOption="true"
 			description="$m{application.widgettype.textareamedium}"
 			dataType="string" inputType="string"
-			editor="!ui-textarea minLen:%s maxLen:%s rows:6" renderer="!ui-label" />
+			editor="!ui-textarea minLen:%s maxLen:%s rows:8" renderer="!ui-label" />
 		<widgetType name="textarealarge" listOption="true"
 			description="$m{application.widgettype.textarealarge}"
 			dataType="string" inputType="string"
-			editor="!ui-textarea minLen:%s maxLen:%s rows:12"
+			editor="!ui-textarea minLen:%s maxLen:%s rows:16"
 			renderer="!ui-label" />
 		<widgetType name="password" listOption="true"
 			description="$m{application.widgettype.password}" dataType="string"

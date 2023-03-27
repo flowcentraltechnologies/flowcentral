@@ -493,7 +493,7 @@
 				inputWidget="application.datetime" nullable="true" />
 			<field name="errorMsg"
 				label="$m{system.scheduledtaskhist.errormsg}" type="string"
-				inputWidget="application.textarea" maxLen="512" nullable="true" />
+				inputWidget="application.textarealarge" maxLen="512" nullable="true" />
 			<field name="scheduledTaskDesc"
 				label="$m{system.scheduledtaskhist.scheduledtaskdesc}"
 				type="list_only" inputWidget="application.text"
@@ -686,7 +686,7 @@
 			<column field="taskName" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="startedOn" renderWidget="application.datetime"
-				widthRatio="1" />
+				widthRatio="1" order="DESC"/>
 			<column field="finishedOn" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="taskStatusDesc" renderWidget="application.text"

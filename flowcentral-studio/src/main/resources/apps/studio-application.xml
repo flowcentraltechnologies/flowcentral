@@ -1196,10 +1196,20 @@
 			entity="application.application" itemsPerPage="20" serialNo="true">
 			<column field="moduleLabel" renderWidget="application.text"
 				widthRatio="1" label="$m{application.application.module}" />
+			<column field="sectorDesc" renderWidget="application.text"
+				widthRatio="1" label="$m{application.application.sectorname}" />
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="dialogMaintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="dialogMaintainAct" order="ASC" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1"/>
+			<column field="developable" renderWidget="application.text"
+				widthRatio="1"/>
+			<column field="menuAccess" renderWidget="application.text"
+				widthRatio="1"/>
+			<column field="allowSecondaryTenants" renderWidget="application.text"
+				widthRatio="1"/>
 		</table>
 		<table name="appApplicationTable"
 			description="$m{studio.application.table}"

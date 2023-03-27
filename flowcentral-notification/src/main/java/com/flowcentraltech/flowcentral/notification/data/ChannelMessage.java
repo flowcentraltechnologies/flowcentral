@@ -42,6 +42,8 @@ public class ChannelMessage {
 
     private String message;
 
+    private String error;
+
     private List<Recipient> recipients;
 
     private List<Attachment> attachments;
@@ -51,6 +53,8 @@ public class ChannelMessage {
     private int attempts;
     
     private boolean sent;
+    
+    private boolean retry;
     
     public ChannelMessage(NotifMessageFormat format, Long originId, String from, String subject, String message,
             List<Recipient> recipients, List<Attachment> attachments, int attempts) {
@@ -62,6 +66,7 @@ public class ChannelMessage {
         this.recipients = recipients;
         this.attachments = attachments;
         this.attempts = attempts;
+        this.retry = true;
     }
 
     public NotifMessageFormat getFormat() {
@@ -102,6 +107,26 @@ public class ChannelMessage {
 
     public void setSent(boolean sent) {
         this.sent = sent;
+    }
+
+    public boolean isRetry() {
+        return retry;
+    }
+
+    public void setRetry(boolean retry) {
+        this.retry = retry;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public boolean isWithError() {
+        return error != null;
     }
 
     public boolean isWithFrom() {

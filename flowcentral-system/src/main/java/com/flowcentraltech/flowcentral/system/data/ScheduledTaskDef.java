@@ -16,8 +16,6 @@
 
 package com.flowcentraltech.flowcentral.system.data;
 
-import java.util.Arrays;
-
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 
 /**
@@ -115,14 +113,6 @@ public class ScheduledTaskDef {
 
     public long getVersion() {
         return version;
-    }
-
-    @Override
-    public String toString() {
-        return "ScheduledTaskDef [lock=" + lock + ", description=" + description + ", taskName=" + taskName
-                + ", startOffset=" + startOffset + ", endOffset=" + endOffset + ", repeatMillSecs=" + repeatMillSecs
-                + ", weekdays=" + Arrays.toString(weekdays) + ", days=" + Arrays.toString(days) + ", months="
-                + Arrays.toString(months) + ", paramValuesDef=" + paramValuesDef + ", version=" + version + "]";
     }
 
 }
