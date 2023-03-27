@@ -283,6 +283,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 final Date now = environment().getNow();
                 for (NotifType notifType : NOTIFICATION_TYPE_LIST) {
                     for (Long tenantId : au.system().getPrimaryMappedTenantIds()) {
+                        logDebug("Checking [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
                         if (environment().countAll(new NotificationChannelQuery().notifType(notifType)
                                 .tenantId(tenantId).status(RecordStatus.ACTIVE)) > 0) {
                             logDebug("Sending [{0}] notifications for tenant with id [{1}]...", notifType, tenantId);
@@ -312,8 +313,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                             .status(NotificationOutboxStatus.NOT_SENT).setLimit(localMaxBatchSize));
                             logDebug("Sending [{0}] notifications via channel [{1}]...",
                                     pendingNotificationIdList.size(), notifChannelDef.getDescription());
-                           if (!DataUtils.isBlank(pendingNotificationIdList)) {
-                                 NotificationMessagingChannel channel = getNotificationMessagingChannel(notifType);
+                            if (!DataUtils.isBlank(pendingNotificationIdList)) {
+                                NotificationMessagingChannel channel = getNotificationMessagingChannel(notifType);
                                 ChannelMessage[] messages = getChannelMessages(tenantId, pendingNotificationIdList);
                                 channel.sendMessages(notifChannelDef, messages);
                                 for (ChannelMessage message : messages) {

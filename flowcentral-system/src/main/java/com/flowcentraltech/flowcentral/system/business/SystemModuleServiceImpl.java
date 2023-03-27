@@ -332,8 +332,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader, ValueStoreReader generatorReader,
-            List<StringToken> tokenList) throws UnifyException {
+    public ParameterizedStringGenerator getStringGenerator(ValueStoreReader paramReader,
+            ValueStoreReader generatorReader, List<StringToken> tokenList) throws UnifyException {
         return paramGeneratorManager.getParameterizedStringGenerator(paramReader, generatorReader, tokenList);
     }
 
@@ -392,7 +392,13 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         Long actualPrimaryTenantId = getSysParameterValue(Long.class,
                 SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID);
         if (actualPrimaryTenantId != null) {
-            tenantIds.replaceAll(id -> id == actualPrimaryTenantId ? Entity.PRIMARY_TENANT_ID : id);
+            final int len = tenantIds.size();
+            for (int i = 0; i < len; i++) {
+                if (tenantIds.get(i).equals(actualPrimaryTenantId)) {
+                    tenantIds.set(i, Entity.PRIMARY_TENANT_ID);
+                    break;
+                }
+            }
         }
 
         return tenantIds;
@@ -401,8 +407,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public Long getMappedDestTenantId(Long srcTenantId) throws UnifyException {
         if (srcTenantId != null && !Entity.PRIMARY_TENANT_ID.equals(srcTenantId)) {
-            if (srcTenantId.equals(getSysParameterValue(Long.class,
-                    SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID))) {
+            if (srcTenantId.equals(
+                    getSysParameterValue(Long.class, SystemModuleSysParamConstants.SYSTEM_ACTUAL_PRIMARY_TENANT_ID))) {
                 return Entity.PRIMARY_TENANT_ID;
             }
         }
