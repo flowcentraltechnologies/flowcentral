@@ -30,6 +30,7 @@ import com.tcdng.unify.core.constant.NetworkSecurityType;
 import com.tcdng.unify.core.notification.Email;
 import com.tcdng.unify.core.notification.EmailServer;
 import com.tcdng.unify.core.notification.EmailServerConfig;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Email notification messaging channel.
@@ -51,12 +52,23 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     public boolean sendMessage(NotifChannelDef notifChannelDef, ChannelMessage channelMessage) {
         try {
             ensureServerConfigured(notifChannelDef);
-            Email email = conctructEmail(notifChannelDef, channelMessage);
+            Email email = null;
+            try {
+                email = conctructEmail(notifChannelDef, channelMessage);
+            } catch (Exception e) {
+                channelMessage.setError(StringUtils.getPrintableStackTrace(e));
+                channelMessage.setSent(false);
+                channelMessage.setRetry(false);
+                return false;
+            }
+            
             emailServer.sendEmail(notifChannelDef.getName(), email);
+            channelMessage.setError(email.getError());
             channelMessage.setSent(email.isSent());
             return email.isSent();
         } catch (UnifyException e) {
             logError(e);
+            channelMessage.setError(StringUtils.getPrintableStackTrace(e));
         }
 
         return false;
@@ -68,15 +80,25 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
             ensureServerConfigured(notifChannelDef);
             Email[] email = new Email[channelMessage.length];
             for (int i = 0; i < channelMessage.length; i++) {
-                email[i] = conctructEmail(notifChannelDef, channelMessage[i]);
+                try {
+                    email[i] = conctructEmail(notifChannelDef, channelMessage[i]);
+                } catch (Exception e) {
+                    email[i] = new Email(StringUtils.getPrintableStackTrace(e));
+                    channelMessage[i].setRetry(false);
+                }
             }
 
             emailServer.sendEmail(notifChannelDef.getName(), email);
 
             for (int i = 0; i < channelMessage.length; i++) {
+                channelMessage[i].setError(email[i].getError());
                 channelMessage[i].setSent(email[i].isSent());
             }
         } catch (UnifyException e) {
+            final String error = StringUtils.getPrintableStackTrace(e);
+            for (int i = 0; i < channelMessage.length; i++) {
+                channelMessage[i].setError(error);
+            }
             logError(e);
         }
     }

@@ -52,6 +52,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationChannel
 import com.flowcentraltech.flowcentral.notification.entities.NotificationInbox;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutbox;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxAttachment;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxError;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationRecipient;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
@@ -324,7 +325,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                         update.add("sentDt", now);
                                         update.add("status", NotificationOutboxStatus.SENT);
                                     } else {
-                                        if (attempts >= localMaxAttempts) {
+                                        if (attempts >= localMaxAttempts || !message.isRetry()) {
                                             update.add("status", NotificationOutboxStatus.ABORTED);
                                         } else {
                                             Date nextAttemptDt = CalendarUtils.getNowWithFrequencyOffset(now,
@@ -334,6 +335,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                                     }
 
                                     environment().updateById(NotificationOutbox.class, message.getOriginId(), update);
+                                    if (message.isWithError()) {
+                                        NotificationOutboxError error = new NotificationOutboxError();
+                                        error.setNotificationId(message.getOriginId());
+                                        error.setError(message.getError());
+                                        environment().create(error);
+                                    }
                                 }
                             }
                             commitTransactions();

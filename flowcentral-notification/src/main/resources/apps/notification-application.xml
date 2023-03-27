@@ -32,6 +32,13 @@
 				value="notifOutboxAttachmentTable" />
 			<property name="searchTable.basicSearchOnly" value="true" />
 		</applet>
+		<applet name="manageNotifOutboxError"
+			description="$m{notification.notificationoutboxerror.manage}"
+			label="$m{notification.notificationoutboxerror.manage.label}"
+			entity="notifOutboxError" type="manage_entitylist" menuAccess="false">
+			<property name="searchTable" value="notifOutboxErrorTable" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+		</applet>
 		<applet name="manageNotifChannel"
 			description="$m{notification.notificationchannel.manage}"
 			label="$m{notification.notificationchannel.manage.label}"
@@ -69,6 +76,9 @@
 		<reference name="notifRecipientRef"
 			description="$m{notification.notificationrecipient.reference}"
 			entity="notifRecipient" searchField="recipientName" />
+		<reference name="notifOutboxErrorRef"
+			description="$m{notification.notificationoutboxerror.reference}"
+			entity="notifOutboxError" searchField="error" />
 		<reference name="notifChannelRef"
 			description="$m{notification.notificationchannel.reference}"
 			entity="notifChannel" searchField="description" />
@@ -147,6 +157,9 @@
 			<field name="attachmentList"
 				label="$m{notification.notificationoutbox.attachments}"
 				type="child_list" references="notifOutboxAttachmentRef" />
+			<field name="errorList"
+				label="$m{notification.notificationoutbox.errors}"
+				type="child_list" references="notifOutboxErrorRef" />
 		</entity>
 		<entity name="notifRecipient"
 			description="$m{notification.notificationrecipient}"
@@ -168,6 +181,17 @@
 			<field name="typeDesc"
 				label="$m{notification.notificationrecipient.typedesc}"
 				type="list_only" key="type" property="description" />
+		</entity>
+		<entity name="notifOutboxError"
+			description="$m{notification.notificationoutboxerror}"
+			label="$m{notification.notificationoutboxerror.label}"
+			type="com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxError">
+			<field name="notificationId"
+				label="$m{notification.notificationoutboxerror.notificationid}"
+				type="ref" references="notifOutboxRef" basicSearch="true" />
+			<field name="error"
+				label="$m{notification.notificationoutboxerror.error}"
+				type="string" />
 		</entity>
 		<entity name="notifOutboxAttachment"
 			description="$m{notification.notificationoutboxattachment}"
@@ -343,6 +367,16 @@
 			<column field="recipientContact"
 				renderWidget="application.text" widthRatio="1" />
 		</table>
+		<table name="notifOutboxErrorTable"
+			description="$m{notification.notificationoutboxerror.table}"
+			label="$m{notification.notificationoutboxerror.table.label}"
+			entity="notifOutboxError" itemsPerPage="20" serialNo="true"
+			basicSearch="true">
+			<column field="error"
+				renderWidget="application.text" widthRatio="4" />
+			<column field="createDt"
+				renderWidget="application.text" widthRatio="1" />
+		</table>
 		<table name="notifOutboxAttachmentTable"
 			description="$m{notification.notificationoutboxattachment.table}"
 			label="$m{notification.notificationoutboxattachment.table.label}"
@@ -427,6 +461,10 @@
 				label="$m{notification.notificationoutbox.attachments}"
 				contentType="child_list" applet="manageNotifOutboxAttachment"
 				reference="attachmentList" />
+			<tab name="errors"
+				label="$m{notification.notificationoutbox.errors}"
+				contentType="child_list" applet="manageNotifOutboxError"
+				reference="errorList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>

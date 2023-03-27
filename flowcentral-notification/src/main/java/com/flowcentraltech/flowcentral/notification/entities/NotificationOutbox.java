@@ -71,12 +71,15 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     @Column(type = ColumnType.CLOB, nullable = true)
     private String message;
-
+    
     @ChildList
     private List<NotificationRecipient> recipientList;
 
     @ChildList
     private List<NotificationOutboxAttachment> attachmentList;
+
+    @ChildList
+    private List<NotificationOutboxError> errorList;
 
     @ListOnly(key = "status", property = "description")
     private String statusDesc;
@@ -157,6 +160,14 @@ public class NotificationOutbox extends BaseAuditTenantEntity {
 
     public void setAttachmentList(List<NotificationOutboxAttachment> attachmentList) {
         this.attachmentList = attachmentList;
+    }
+
+    public List<NotificationOutboxError> getErrorList() {
+        return errorList;
+    }
+
+    public void setErrorList(List<NotificationOutboxError> errorList) {
+        this.errorList = errorList;
     }
 
     public String getStatusDesc() {
