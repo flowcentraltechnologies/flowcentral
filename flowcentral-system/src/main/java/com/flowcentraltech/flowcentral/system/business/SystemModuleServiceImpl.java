@@ -188,7 +188,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 protected ScheduledTaskDef create(Long scheduledTaskId, Object... params) throws Exception {
                     ScheduledTask scheduledTask = environment().find(ScheduledTask.class, scheduledTaskId);
 
-                    String lock = "scheduledtask-lock" + scheduledTaskId;
+                    final String lock = "scheduledtask-lock" + scheduledTaskId;
                     long startTimeOffset = CalendarUtils.getTimeOfDayOffset(scheduledTask.getStartTime());
                     long endTimeOffset = 0;
                     if (scheduledTask.getEndTime() != null) {
@@ -604,7 +604,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
         int triggered = 0;
         for (Long scheduledTaskId : readyScheduledTaskIdList) {
             ScheduledTaskDef scheduledTaskDef = scheduledTaskDefs.get(scheduledTaskId);
-            String taskLock = scheduledTaskDef.getLock();
+            final String taskLock = scheduledTaskDef.getLock();
             logDebug("Attempting to grab scheduled task lock [{0}] ...", taskLock);
 
             if (!isWithClusterLock(taskLock) && grabClusterLock(taskLock)) {
