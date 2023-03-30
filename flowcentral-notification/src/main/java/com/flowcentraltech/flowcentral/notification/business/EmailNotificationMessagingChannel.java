@@ -134,14 +134,20 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
             eb.toRecipient(recipient.getType().emailRecipientType(), recipient.getContact());
         }
 
+        final boolean isHTML = NotifMessageFormat.HTML.equals(channelMessage.getFormat());
+        final String msg = isHTML ? formatHTML(channelMessage.getMessage()) : channelMessage.getMessage();
         eb.fromSender(notifChannelDef.getSenderContact()).withSubject(channelMessage.getSubject())
-                .containingMessage(channelMessage.getMessage())
-                .asHTML(NotifMessageFormat.HTML.equals(channelMessage.getFormat()));
+                .containingMessage(msg)
+                .asHTML(isHTML);
 
         for (Attachment attachment : channelMessage.getAttachments()) {
             eb.withAttachment(attachment.getFileName(), attachment.getData(), attachment.getType());
         }
 
         return eb.build();
+    }
+    
+    private String formatHTML(String msg) {
+        return msg.replace("\n", "<br>");
     }
 }
