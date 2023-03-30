@@ -269,7 +269,7 @@ public class FormContext extends AbstractContext {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef != null && formDef.isWithTitleFormat()
+        altFormTitle = formDef != null && inst != null && formDef.isWithTitleFormat()
                 ? appletContext.specialParamProvider()
                         .getStringGenerator(null, getFormValueStore().getReader(), formDef.getTitleFormat()).generate()
                 : null;
