@@ -1263,27 +1263,39 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
-                ApplicationCodeGenUtils.ENTITY_NAME);
-        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
-        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_1, entityClassDef, inst);
+        if (inst != null) {
+            final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                    ApplicationCodeGenUtils.ENTITY_NAME);
+            final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+            return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_1, entityClassDef, inst);
+        }
+
+        return null;
     }
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, List<? extends Entity> instList)
             throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
-                ApplicationCodeGenUtils.ENTITY_NAME);
-        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
-        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_2, entityClassDef, instList);
+        if (instList != null) {
+            final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                    ApplicationCodeGenUtils.ENTITY_NAME);
+            final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+            return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_2, entityClassDef, instList);
+        }
+
+        return null;
     }
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStore valueStore) throws UnifyException {
-        final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
-                ApplicationCodeGenUtils.ENTITY_NAME);
-        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
-        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_3, entityClassDef, valueStore);
+        if (valueStore != null) {
+            final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                    ApplicationCodeGenUtils.ENTITY_NAME);
+            final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+            return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_3, entityClassDef, valueStore);
+        }
+        
+        return null;
     }
 
     @SuppressWarnings("unchecked")
