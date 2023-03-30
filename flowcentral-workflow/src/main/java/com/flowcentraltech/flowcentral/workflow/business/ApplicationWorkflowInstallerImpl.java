@@ -284,7 +284,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 // Set values
                 if (wfStep.getSetValues() != null) {
                     ApplicationReplicationUtils.applyReplicationRules(ctx,
-                            null, wfStep.getSetValues().getSetValues());
+                            wfStep.getValueGenerator(), wfStep.getSetValues().getSetValues());
                 }
 
                 // Alerts
@@ -433,6 +433,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setReadOnlyConditionName(stepConfig.getReadOnlyCondition());
                 wfStep.setAutoLoadConditionName(stepConfig.getAutoLoadCondition());
                 wfStep.setPolicy(stepConfig.getPolicy());
+                wfStep.setValueGenerator(stepConfig.getValueGenerator());
                 wfStep.setRule(stepConfig.getRule());
                 wfStep.setConfigType(ConfigType.MUTABLE_INSTALL);
                 populateChildList(stepConfig, applicationName, wfStep);
