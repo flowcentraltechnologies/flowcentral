@@ -46,7 +46,7 @@ public class WidgetRulesWidget extends AbstractValueListWidget<WidgetRuleEntry> 
         widgetCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:entityfielddefinputwidgetlist listParams:$l{entityDef fieldName} binding:widget");
         deleteCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }
 
     @Action

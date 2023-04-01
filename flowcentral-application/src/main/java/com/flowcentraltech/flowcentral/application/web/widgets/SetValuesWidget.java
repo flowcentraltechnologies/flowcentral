@@ -51,7 +51,7 @@ public class SetValuesWidget extends AbstractValueListWidget<SetValueEntry> {
         paramCtrl = (DynamicField) addInternalChildWidget(
                 "!ui-dynamic binding:paramInput.value descriptorBinding:paramInput.editor");
         deleteCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }
 
     @Action

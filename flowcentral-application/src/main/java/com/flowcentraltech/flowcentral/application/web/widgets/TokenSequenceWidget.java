@@ -61,11 +61,11 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
         generatorSelectCtrl = (Control) addInternalChildWidget(
                 "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:paramgeneratorlist listParams:$s{entityDef} binding:param");
         moveUpCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{arrow-down} hint:$m{button.movedown.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-down} hint:$m{button.movedown.hint} debounce:false");
         deleteCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }
 
     @Action
