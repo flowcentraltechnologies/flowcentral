@@ -96,7 +96,7 @@ public class EntityChild extends AbstractPanelFormBinding {
     }
 
     public boolean isCreateButtonVisible() {
-        return canCreate && getAppletCtx().isContextEditable();
+        return canCreate && getAppletCtx().isContextEditable() && isTabEditable();
     }
 
     public boolean isCanCreate() {
