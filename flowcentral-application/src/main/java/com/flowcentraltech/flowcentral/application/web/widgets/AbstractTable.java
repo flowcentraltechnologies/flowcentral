@@ -106,7 +106,9 @@ public abstract class AbstractTable<T, U> {
 
     private boolean crudMode;
 
-    private boolean view;
+    private boolean viewOnly;
+
+    private boolean disabled;
 
     private boolean fixedRows;
 
@@ -337,12 +339,20 @@ public abstract class AbstractTable<T, U> {
         this.crudMode = crudMode;
     }
 
-    public boolean isView() {
-        return view;
+    public boolean isViewOnly() {
+        return viewOnly || disabled;
     }
 
-    public void setView(boolean view) {
-        this.view = view;
+    public void setViewOnly(boolean viewOnly) {
+        this.viewOnly = viewOnly;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     public int getDetailsIndex() {

@@ -105,7 +105,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
                         .getUplAttribute(EventHandler[].class, "eventHandler");
                 resultTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
                 resultTable.setCrudMode(true);
-                resultTable.setView(true);
+                resultTable.setViewOnly(true);
             }
 
             applet.setResultTable(resultTable);

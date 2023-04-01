@@ -106,7 +106,7 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
                         .getUplAttribute(EventHandler[].class, "eventHandler");
                 resultTable.setCrudActionHandlers(Arrays.asList(viewActHandlers));
                 resultTable.setCrudMode(true);
-                resultTable.setView(true);
+                resultTable.setViewOnly(true);
             }
 
             applet.setResultTable(resultTable);

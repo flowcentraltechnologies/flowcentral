@@ -206,7 +206,7 @@ public class TableWriter extends AbstractControlWriter {
 
             Control _crudCtrl = null;
             if (isCrudMode) {
-                _crudCtrl = table.isView() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
+                _crudCtrl = table.isViewOnly() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
             }
 
             List<ValueStore> valueList = tableWidget.getValueList();
@@ -544,7 +544,7 @@ public class TableWriter extends AbstractControlWriter {
 
                 Control _crudCtrl = null;
                 if (isCrudMode) {
-                    _crudCtrl = table.isView() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
+                    _crudCtrl = table.isViewOnly() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
                 }
 
                 final List<Section> sections = table.getSections();

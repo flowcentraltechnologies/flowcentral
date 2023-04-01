@@ -269,7 +269,7 @@ public class FormContext extends AbstractContext {
     public void setInst(Object inst) throws UnifyException {
         appletContext.extractReference(entityDef, inst);
         this.inst = inst;
-        altFormTitle = formDef != null && inst != null && formDef.isWithTitleFormat()
+        altFormTitle = formDef != null && isWithInst() && formDef.isWithTitleFormat()
                 ? appletContext.specialParamProvider()
                         .getStringGenerator(null, getFormValueStore().getReader(), formDef.getTitleFormat()).generate()
                 : null;
@@ -393,6 +393,10 @@ public class FormContext extends AbstractContext {
         return formValidationErrors;
     }
 
+    public boolean isWithInst() {
+        return inst != null;
+    }
+    
     public void addReviewError(ReviewResult.Builder rrb, FormReviewPolicyDef policyDef) {
         addReviewError(rrb, policyDef.getTarget(), policyDef.getMessageType(), policyDef.getMessage(),
                 policyDef.isSkippable());
@@ -552,44 +556,46 @@ public class FormContext extends AbstractContext {
 
     public void evaluateTabStates() throws UnifyException {
         revertTabStates();
-        final ValueStore formValueStore = getFormValueStore();
-        final ValueStoreReader formValueStoreReader = formValueStore.getReader();
-        final Date now = appletContext.au().getNow();
-        if (formDef.isWithConsolidatedFormState()) {
-            ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
-                    formDef.getConsolidatedFormState());
-            String trigger = triggerEvaluator != null ? triggerEvaluator.evaluateTrigger() : null;
-            TargetFormTabStates states = policy.evaluateTabStates(formValueStoreReader, trigger);
-            if (states.isWithValueList()) {
-                states.applyValues(formValueStore);
-            }
+        if (isWithInst()) {
+            final ValueStore formValueStore = getFormValueStore();
+            final ValueStoreReader formValueStoreReader = formValueStore.getReader();
+            final Date now = appletContext.au().getNow();
+            if (formDef.isWithConsolidatedFormState()) {
+                ConsolidatedFormStatePolicy policy = au().getComponent(ConsolidatedFormStatePolicy.class,
+                        formDef.getConsolidatedFormState());
+                String trigger = triggerEvaluator != null ? triggerEvaluator.evaluateTrigger() : null;
+                TargetFormTabStates states = policy.evaluateTabStates(formValueStoreReader, trigger);
+                if (states.isWithValueList()) {
+                    states.applyValues(formValueStore);
+                }
 
-            for (TargetFormState state : states.getTargetStateList()) {
-                for (String target : state.getTarget()) {
-                    FormTab tb = formTabs.get(target);
-                    if (tb != null) {
-                        tb.applyStatePolicy(state);
+                for (TargetFormState state : states.getTargetStateList()) {
+                    for (String target : state.getTarget()) {
+                        FormTab tb = formTabs.get(target);
+                        if (tb != null) {
+                            tb.applyStatePolicy(state);
+                        }
                     }
                 }
             }
-        }
 
-        for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
-            if (formStatePolicyDef.isTriggered("")) {
-                ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
-                        ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, formValueStoreReader, now)
-                        : null;
-                if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
-                    for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
-                        if (setStateDef.isTabRule()) {
-                            for (String target : setStateDef.getTarget()) {
-                                FormTab tb = formTabs.get(target);
-                                if (tb != null) {
-                                    tb.applyStatePolicy(setStateDef);
+            for (FormStatePolicyDef formStatePolicyDef : formDef.getOnSwitchFormStatePolicyDefList()) {
+                if (formStatePolicyDef.isTriggered("")) {
+                    ObjectFilter objectFilter = formStatePolicyDef.isWithCondition()
+                            ? formStatePolicyDef.getOnCondition().getObjectFilter(entityDef, formValueStoreReader, now)
+                            : null;
+                    if (objectFilter == null || objectFilter.matchReader(formValueStoreReader)) {
+                        for (SetStateDef setStateDef : formStatePolicyDef.getSetStatesDef().getSetStateList()) {
+                            if (setStateDef.isTabRule()) {
+                                for (String target : setStateDef.getTarget()) {
+                                    FormTab tb = formTabs.get(target);
+                                    if (tb != null) {
+                                        tb.applyStatePolicy(setStateDef);
+                                    }
                                 }
+                            } else if (setStateDef.isAnnotationRule() && setStateDef.getVisible().isTrue()) {
+                                visibleAnnotations.addAll(setStateDef.getTarget());
                             }
-                        } else if (setStateDef.isAnnotationRule() && setStateDef.getVisible().isTrue()) {
-                            visibleAnnotations.addAll(setStateDef.getTarget());
                         }
                     }
                 }

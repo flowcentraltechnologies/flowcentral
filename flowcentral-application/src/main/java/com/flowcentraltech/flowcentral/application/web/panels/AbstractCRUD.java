@@ -123,7 +123,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 	}
 
 	public boolean isEditable() {
-		return !table.isView();
+		return !table.isViewOnly();
 	}
 
 	public boolean isAllowUpdate() {
@@ -156,7 +156,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
             allowDelete = table.match(FilterType.MAINTAIN_DELETE, _inst, now);
             
 			FormContext formContext = getForm().getCtx();
-			formContext.setReadOnly(table.isView());
+			formContext.setReadOnly(table.isViewOnly());
 			formContext.setInst(_inst);
 			prepareMaintain(formContext);
 			maintainIndex = index;

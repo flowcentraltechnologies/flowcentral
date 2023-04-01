@@ -89,6 +89,8 @@ public class AssignmentPage {
 
     private BeanListTable entryBeanTable;
 
+    private boolean disabled;
+    
     public AssignmentPage(AppletContext ctx, List<EventHandler> assnSwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, AssignmentPageDef assignmentPageDef,
             EntityClassDef entityClassDef, Object baseId, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
@@ -205,6 +207,14 @@ public class AssignmentPage {
         return !StringUtils.isBlank(pseudoDeleteField);
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
     @SuppressWarnings("unchecked")
     public void loadAssignedList() throws UnifyException {
         if (isEntryTableMode()) {
@@ -281,6 +291,7 @@ public class AssignmentPage {
             _beanTable.setSwitchOnChangeHandlers(assnSwitchOnChangeHandlers);
             _beanTable.setSourceObject(resultList, selectedOnLoad);
             _beanTable.setFixedAssignment(fixedAssignment);
+            _beanTable.setDisabled(disabled);
         } else {
             assignedIdList = ctx.environment().getAssignedList(
                     (Class<? extends Entity>) entityClassDef.getEntityClass(), Long.class,
