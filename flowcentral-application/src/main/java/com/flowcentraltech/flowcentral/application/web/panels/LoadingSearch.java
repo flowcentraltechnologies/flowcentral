@@ -88,7 +88,7 @@ public class LoadingSearch {
                 tableDef.getLabelSuggestionDef(), appAppletSearchConfigName, columns, showConditions);
         this.loadingTable = new LoadingTable(appletContext.au(), tableDef);
         this.loadingTable.setCrudMode(true);
-        this.loadingTable.setView(true);
+        this.loadingTable.setViewOnly(true);
         this.appAppletId = appAppletId;
         this.mode = mode;
     }

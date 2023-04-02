@@ -230,6 +230,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
         }
 
+        boolean parentDisabled = false;
         if (form != null) {
             form.clearDisplayItem();
 
@@ -248,23 +249,26 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 if (isRootForm) {
                     form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
-                } else {
+                 } else {
                     form.setDisplayItemCounter(
                             resolveSessionMessage("$m{entityformapplet.form.parentinworkflow.viewonly}"));
-                }
+                    parentDisabled = true;
+               }
             }
         }
-
+        
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
                 switchContent("entityCrudPanel");
                 setEditable("entityCrudPanel", isContextEditable);
+                applet.getEntityCrudPage().setDisabled(parentDisabled);
                 break;
             case ENTRY_TABLE_PAGE:
                 switchContent("entryTablePanel");
                 setEditable("entryTablePanel", isContextEditable);
                 setVisible("entryTablePanel.saveBtn", isContextEditable);
                 setVisible("saveEntryCloseBtn", isContextEditable);
+                applet.getEntryTablePage().setDisabled(parentDisabled);
                 break;
             case ASSIGNMENT_PAGE:
                 switchContent("assignmentPanel");
@@ -274,6 +278,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 final boolean isEntryMode = applet.getAssignmentPage().isEntryTableMode();
                 setVisible("assignmentPanel.assignmentPage", !isEntryMode);
                 setVisible("assignmentPanel.assignmentEntryTbl", isEntryMode);
+                applet.getAssignmentPage().setDisabled(parentDisabled);
                 break;
             case PROPERTYLIST_PAGE:
                 switchContent("editPropertyListPanel");

@@ -45,10 +45,12 @@ public class AssignmentPagePanel extends AbstractPanel {
             assignmentPage.setDisplayItemCounterClass("fc-dispcounterorange");
             assignmentPage.setDisplayItemCounter(
                     resolveSessionMessage("$m{assignmentpage.parentinworkflow.viewonly}"));
+            assignmentPage.setDisabled(true);
         } else {
             assignmentPage.setDisplayItemCounter(
                     resolveSessionMessage("$m{assignmentpage.viewing}"));
-        }
+            assignmentPage.setDisabled(false);
+       }
     }
 
     @Action

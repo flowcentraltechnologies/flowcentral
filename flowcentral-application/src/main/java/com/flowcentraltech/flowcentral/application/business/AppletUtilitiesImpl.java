@@ -1804,6 +1804,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entityTable.setPolicy(policy);
         }
 
+        entityTable.setViewOnly(viewOnly);
         MiniForm createForm = null;
         if (!viewOnly) {
             FormContext createFrmCtx = new FormContext(ctx, ctx.au().getFormDef(createFormName), formEventHandlers);
@@ -1813,8 +1814,6 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
             createForm = new MiniForm(MiniFormScope.MAIN_FORM, createFrmCtx,
                     createFrmCtx.getFormDef().getFormTabDef(0));
-        } else {
-            entityTable.setView(true);
         }
 
         FormContext maintainFrmCtx = new FormContext(ctx, ctx.au().getFormDef(maintainFormName), formEventHandlers);

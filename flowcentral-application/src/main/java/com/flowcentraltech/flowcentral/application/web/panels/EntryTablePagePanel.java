@@ -45,9 +45,11 @@ public class EntryTablePagePanel extends AbstractPanel {
             entryTablePage.setDisplayItemCounterClass("fc-dispcounterorange");
             entryTablePage.setDisplayItemCounter(
                     resolveSessionMessage("$m{entrytablepage.parentinworkflow.viewonly}"));
+            entryTablePage.setDisabled(true);
         } else {
             entryTablePage.setDisplayItemCounter(
                     resolveSessionMessage("$m{entrytablepage.viewing}"));
+            entryTablePage.setDisabled(false);
         }
         
         setVisible("entryPanelCaption", entryTablePage.getEntryCaption() != null);

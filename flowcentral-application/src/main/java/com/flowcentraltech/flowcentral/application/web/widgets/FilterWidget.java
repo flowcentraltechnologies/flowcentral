@@ -68,15 +68,15 @@ public class FilterWidget extends AbstractValueListWidget<FilterCondition> {
         paramCtrlB = (DynamicField) addInternalChildWidget(
                 "!ui-dynamic binding:paramInputB.value descriptorBinding:paramInputB.editor");
         swapCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{swap} hint:$m{button.swap.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{swap} hint:$m{button.swap.hint} debounce:false");
         andCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} caption:$m{button.and} hint:$m{button.and.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} caption:$m{button.and} hint:$m{button.and.hint} debounce:false");
         orCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} caption:$m{button.or} hint:$m{button.or.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} caption:$m{button.or} hint:$m{button.or.hint} debounce:false");
         addCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.add.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{plus} hint:$m{button.add.hint} debounce:false");
         deleteCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }
 
     @Action

@@ -66,6 +66,8 @@ public class EntityCRUDPage {
 
     private final boolean fixedRows;
 
+    private boolean disabled;
+
     private String displayItemCounter;
 
     private String displayItemCounterClass;
@@ -157,6 +159,14 @@ public class EntityCRUDPage {
         return !viewOnly;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
     public void crudSelectItem(int index) throws UnifyException {
         getCrud().enterMaintain(index);
     }
@@ -185,7 +195,8 @@ public class EntityCRUDPage {
 
         entityTable.setSourceObjectKeepSelected(restriction);
         entityTable.setCrudActionHandlers(formEventHandlers.getCrudActionHandlers());
-
+        entityTable.setDisabled(disabled);
+        
         if (ctx.isContextEditable() && isCreate()) {
             getCrud().enterCreate();
         } else {

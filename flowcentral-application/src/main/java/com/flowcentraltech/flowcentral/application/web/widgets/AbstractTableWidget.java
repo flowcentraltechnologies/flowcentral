@@ -126,6 +126,16 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     }
 
     @Override
+    public boolean isContainerDisabled() throws UnifyException {
+        return super.isContainerDisabled() || isTableDisabled();
+    }
+
+    @Override
+    public boolean isContainerEditable() throws UnifyException {
+        return super.isContainerEditable() && !isTableViewOnly();
+    }
+
+    @Override
     public void addPageAliases() throws UnifyException {
         if (selectCtrl != null) {
             addPageAlias(selectCtrl);
@@ -314,6 +324,16 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return getPrefixedId("row_");
     }
 
+    public boolean isTableDisabled() throws UnifyException {
+        T table = getTable();
+        return table != null && table.isDisabled();
+    }
+
+    public boolean isTableViewOnly() throws UnifyException {
+        T table = getTable();
+        return table != null && table.isViewOnly();
+    }
+    
     public Control[] getFixedCtrl() throws UnifyException {
         if (fixedCtrl == null) {
             List<Control> controls = new ArrayList<Control>();

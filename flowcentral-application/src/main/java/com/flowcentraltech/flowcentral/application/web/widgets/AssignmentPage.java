@@ -89,6 +89,8 @@ public class AssignmentPage {
 
     private BeanListTable entryBeanTable;
 
+    private boolean disabled;
+    
     public AssignmentPage(AppletContext ctx, List<EventHandler> assnSwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, AssignmentPageDef assignmentPageDef,
             EntityClassDef entityClassDef, Object baseId, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
@@ -194,6 +196,7 @@ public class AssignmentPage {
             }
         }
 
+        entryBeanTable.setDisabled(disabled);
         return entryBeanTable;
     }
 
@@ -203,6 +206,14 @@ public class AssignmentPage {
 
     public boolean isPseudoDelete() {
         return !StringUtils.isBlank(pseudoDeleteField);
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     @SuppressWarnings("unchecked")

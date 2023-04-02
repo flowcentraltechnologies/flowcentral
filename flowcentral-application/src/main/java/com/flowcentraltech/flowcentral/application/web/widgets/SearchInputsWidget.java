@@ -57,11 +57,11 @@ public class SearchInputsWidget extends AbstractValueListWidget<SearchInputEntry
         conditionTypeCtrl = (Control) addInternalChildWidget(
                 "!ui-select blankOption:$s{} list:searchinputconditionlist listParams:$l{entityDef fieldName} binding:condition");
         moveUpCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-up} hint:$m{button.moveup.hint} debounce:false");
         moveDownCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{arrow-down} hint:$m{button.movedown.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{arrow-down} hint:$m{button.movedown.hint} debounce:false");
         deleteCtrl = (Control) addInternalChildWidget(
-                "!ui-button styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
+                "!ui-button alwaysValueIndex:true styleClass:$e{abutton} symbol:$s{cross} hint:$m{button.delete.hint} debounce:false");
     }
 
     @Action
