@@ -81,6 +81,8 @@ public class EntryTablePage {
 
     private List<FormMessage> validationErrors;
 
+    private boolean disabled;
+
     public EntryTablePage(AppletContext ctx, List<EventHandler> entrySwitchOnChangeHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityClassDef entityClassDef, String baseField, Object baseId,
             SectorIcon sectorIcon, BreadCrumbs breadCrumbs, String entryTable, String entryEditPolicy,
@@ -191,6 +193,14 @@ public class EntryTablePage {
         return entryBeanTable;
     }
 
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
     @SuppressWarnings("unchecked")
     public void loadEntryList() throws UnifyException {
         final BeanListTable _beanTable = getEntryBeanTable();
@@ -207,6 +217,7 @@ public class EntryTablePage {
         _beanTable.setSwitchOnChangeHandlers(entrySwitchOnChangeHandlers);
         _beanTable.setSourceObjectKeepSelected(resultList);
         _beanTable.setFixedAssignment(true);
+        _beanTable.setDisabled(disabled);
 
         if (entryEditPolicy != null) {
             PageLoadDetails pageLoadDetails = ctx.au().getComponent(ChildListEditPolicy.class, entryEditPolicy)
