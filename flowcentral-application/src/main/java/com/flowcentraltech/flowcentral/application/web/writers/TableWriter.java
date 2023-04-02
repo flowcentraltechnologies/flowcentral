@@ -176,7 +176,8 @@ public class TableWriter extends AbstractControlWriter {
         super.doWriteBehavior(writer, widget);
         AbstractTableWidget<?, ?, ?> tableWidget = (AbstractTableWidget<?, ?, ?>) widget;
         final String tableWidgetId = tableWidget.getId();
-        final boolean isContainerEditable = tableWidget.isContainerEditable();
+        final boolean isTableEditable = tableWidget.isContainerEditable();
+        final boolean isTableDisabled = tableWidget.isContainerDisabled();
 
         // External control behavior
         final AbstractTable<?, ?> table = tableWidget.getTable();
@@ -190,8 +191,8 @@ public class TableWriter extends AbstractControlWriter {
             final EventHandler switchOnChangeHandler = tableWidget.getSwitchOnChangeHandler();
             final List<EventHandler> crudActionHandlers = table.getCrudActionHandlers();
             final EventHandler[] actionHandler = tableWidget.getActionEventHandler();
-            final boolean isFixedRows = isContainerEditable && tableWidget.isFixedRows();
-            final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
+            final boolean isFixedRows = isTableEditable && tableWidget.isFixedRows();
+            final boolean isActionColumn = isTableEditable && tableWidget.isActionColumn();
             final boolean focusManagement = tableWidget.isFocusManagement();
             final boolean isCrudMode = tableWidget.isCrudMode();
             final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
@@ -221,20 +222,25 @@ public class TableWriter extends AbstractControlWriter {
                         TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
                         String fieldName = tabelColumnDef.getFieldName();
                         Widget chWidget = widgetInfo.getWidget();
-                        if (entryMode) {
-                            chWidget.setEditable(
-                                    tableStateOverride[i].isColumnEditable(fieldName, tabelColumnDef.isEditable()));
-                            chWidget.setDisabled(
-                                    tableStateOverride[i].isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
+                        if (isTableDisabled) {
+                            chWidget.setEditable(false);
+                            chWidget.setDisabled(true);
                         } else {
-                            chWidget.setEditable(tabelColumnDef.isEditable());
-                            chWidget.setDisabled(tabelColumnDef.isDisabled());
+                            if (entryMode) {
+                                chWidget.setEditable(
+                                        tableStateOverride[i].isColumnEditable(fieldName, tabelColumnDef.isEditable()));
+                                chWidget.setDisabled(
+                                        tableStateOverride[i].isColumnDisabled(fieldName, tabelColumnDef.isDisabled()));
+                            } else {
+                                chWidget.setEditable(tabelColumnDef.isEditable());
+                                chWidget.setDisabled(tabelColumnDef.isDisabled());
+                            }
                         }
 
                         chWidget.setValueStore(valueStore);
                         writer.writeBehavior(chWidget);
 
-                        if (isContainerEditable && chWidget.isEditable() && !chWidget.isDisabled()) {
+                        if (isTableEditable && chWidget.isEditable() && !chWidget.isDisabled()) {
                             final String cId = chWidget.isBindEventsToFacade() ? chWidget.getFacadeId()
                                     : chWidget.getId();
                             if (focusManagement) {
@@ -267,7 +273,7 @@ public class TableWriter extends AbstractControlWriter {
                             }
                         }
 
-                        if (isContainerEditable && tableWidget.isInputWidget(chWidget)) {
+                        if (isTableEditable && tableWidget.isInputWidget(chWidget)) {
                             addPageAlias(tableWidgetId, chWidget);
                         }
 
@@ -314,7 +320,7 @@ public class TableWriter extends AbstractControlWriter {
             }
 
             final boolean supportSelect = !table.isFixedAssignment();
-            if (isContainerEditable && table.isEntryMode()) {
+            if (isTableEditable && table.isEntryMode()) {
                 getRequestContextUtil().addOnSaveContentWidget(tableWidgetId);
             }
 
@@ -348,6 +354,7 @@ public class TableWriter extends AbstractControlWriter {
             }
 
             writer.writeParam("pRefPanels", table.getRefreshPanelIds());
+            writer.writeParam("pDisabled", isTableDisabled);
 
             if (isFixedRows) {
                 writer.writeParam("pFixedRows", true);

@@ -196,6 +196,7 @@ public class AssignmentPage {
             }
         }
 
+        entryBeanTable.setDisabled(disabled);
         return entryBeanTable;
     }
 
@@ -291,7 +292,6 @@ public class AssignmentPage {
             _beanTable.setSwitchOnChangeHandlers(assnSwitchOnChangeHandlers);
             _beanTable.setSourceObject(resultList, selectedOnLoad);
             _beanTable.setFixedAssignment(fixedAssignment);
-            _beanTable.setDisabled(disabled);
         } else {
             assignedIdList = ctx.environment().getAssignedList(
                     (Class<? extends Entity>) entityClassDef.getEntityClass(), Long.class,

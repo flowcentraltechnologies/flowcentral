@@ -650,33 +650,35 @@ fux.rigTable = function(rgp) {
 		tbl.uVisibleSel = 0;
 
 		// Rig select
-		const selAll = _id(rgp.pSelAllId);
-		selAll._active = true;
-		ux.cbWire(selAll);
-
-		const selBoxes = _name(rgp.pSelCtrlId);
-		tbl.uSelBoxes = selBoxes;
-
-		const evp = {uRigTbl:tbl};
-		const selAllFac = _id("fac_" + rgp.pSelAllId);
-		selAllFac.selAll = selAll;
-		ux.addHdl(selAllFac, "change", fux.tableSelAllClick, evp);
-
-		for (var i = 0; i < selBoxes.length; i++) {
-			var selBox = selBoxes[i];
-			selBox._active = true;
-			ux.cbWire(selBox);
-			
-			const selBoxFac = _id("fac_" + selBox.id);
-			var _evp = evp;
-			if (rgp.pMultiSelLink) {
-				_evp = fux.newCmdEvPrm(rgp, "multiSelect");
-				_evp.uSendTrg = i;
-				_evp.uRigTbl = evp.uRigTbl;
+		if (!rgp.pDisabled) {
+			const selAll = _id(rgp.pSelAllId);
+			selAll._active = true;
+			ux.cbWire(selAll);
+	
+			const selBoxes = _name(rgp.pSelCtrlId);
+			tbl.uSelBoxes = selBoxes;
+	
+			const evp = {uRigTbl:tbl};
+			const selAllFac = _id("fac_" + rgp.pSelAllId);
+			selAllFac.selAll = selAll;
+			ux.addHdl(selAllFac, "change", fux.tableSelAllClick, evp);
+	
+			for (var i = 0; i < selBoxes.length; i++) {
+				var selBox = selBoxes[i];
+				selBox._active = true;
+				ux.cbWire(selBox);
+				
+				const selBoxFac = _id("fac_" + selBox.id);
+				var _evp = evp;
+				if (rgp.pMultiSelLink) {
+					_evp = fux.newCmdEvPrm(rgp, "multiSelect");
+					_evp.uSendTrg = i;
+					_evp.uRigTbl = evp.uRigTbl;
+				}
+				
+				selBoxFac.selBox = selBox;
+				ux.addHdl(selBoxFac, "change", fux.tableMultiSelClick, _evp);
 			}
-			
-			selBoxFac.selBox = selBox;
-			ux.addHdl(selBoxFac, "change", fux.tableMultiSelClick, _evp);
 		}
 	}
 
