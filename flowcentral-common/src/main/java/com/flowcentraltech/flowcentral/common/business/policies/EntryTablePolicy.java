@@ -65,7 +65,7 @@ public interface EntryTablePolicy extends UnifyComponent {
      */
     Number getTableColumnSummaryValue(ValueStoreReader parentReader, String fieldName, ValueStore itemValueStore)
             throws UnifyException;
-    
+
     /**
      * Validate entries,
      * 
@@ -134,14 +134,17 @@ public interface EntryTablePolicy extends UnifyComponent {
     /**
      * Gets table summary lines.
      * 
+     * @param parentReader
+     *                        optional parent value store reader
      * @param tableValueStore
      *                        the list data store object
      * @return the table summary lines
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<TableSummaryLine> getTableSummaryLines(ValueStore tableValueStore) throws UnifyException;
-    
+    List<TableSummaryLine> getTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+            throws UnifyException;
+
     /**
      * Apply table state overrides.
      * 

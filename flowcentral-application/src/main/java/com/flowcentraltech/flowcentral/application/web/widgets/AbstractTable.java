@@ -435,7 +435,7 @@ public abstract class AbstractTable<T, U> {
         addParentColumnSummary();
         if (tableTotalSummary != null) {
             tableSummaryLines = entryPolicy != null && dispItemList != null
-                    ? entryPolicy.getTableSummaryLines(new BeanValueListStore(dispItemList))
+                    ? entryPolicy.getTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
                     : null;
             if (DataUtils.isBlank(tableSummaryLines)) {
                 TableSummaryLine line = new TableSummaryLine(getTotalLabel());
