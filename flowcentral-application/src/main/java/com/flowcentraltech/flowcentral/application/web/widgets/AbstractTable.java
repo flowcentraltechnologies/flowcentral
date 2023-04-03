@@ -489,6 +489,7 @@ public abstract class AbstractTable<T, U> {
     }
 
     public EntryActionType fireOnTableChange(TableChangeType changeType) throws UnifyException {
+        clearTableSummaryLines();
         return onFireOnTableChange(sourceObject, selected, changeType);
     }
 
@@ -594,6 +595,7 @@ public abstract class AbstractTable<T, U> {
             orderOnReset();
         }
 
+        clearTableSummaryLines();
         getDispItems();
     }
 
