@@ -508,6 +508,7 @@ public abstract class AbstractTable<T, U> {
             actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
         }
 
+        clearTableSummaryLines();
         return actionType;
     }
 
