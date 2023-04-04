@@ -25,6 +25,8 @@ public class TableActionResult {
 
     private final Object result;
     
+    private boolean openPath;
+    
     private boolean displayListingReport;
 
     public TableActionResult(Object result) {
@@ -33,6 +35,14 @@ public class TableActionResult {
 
     public Object getResult() {
         return result;
+    }
+
+    public boolean isOpenPath() {
+        return openPath;
+    }
+
+    public void setOpenPath(boolean openPath) {
+        this.openPath = openPath;
     }
 
     public boolean isDisplayListingReport() {

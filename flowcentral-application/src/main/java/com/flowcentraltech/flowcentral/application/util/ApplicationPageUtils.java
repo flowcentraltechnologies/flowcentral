@@ -33,6 +33,15 @@ public final class ApplicationPageUtils {
         return ApplicationPageUtils.constructAppletOpenPagePath(type.path(), appletName);
     }
 
+    public static String constructAppletOpenPagePath(AppletType type, String appletName, Object instId) {
+        return ApplicationPageUtils.constructAppletOpenPagePath(type.path(), appletName, instId);
+    }
+
+    public static String constructAppletOpenPagePath(String controllerName, String appletName, Object instId) {
+        return ApplicationPageUtils.constructAppletOpenPagePath(controllerName,
+                ApplicationNameUtils.addVestigialNamePart(appletName, String.valueOf(instId)));
+    }
+
     public static String constructAppletOpenPagePath(String controllerName, String appletName) {
         return new StringBuilder().append(controllerName).append(':').append(appletName).append("/openPage").toString();
     }

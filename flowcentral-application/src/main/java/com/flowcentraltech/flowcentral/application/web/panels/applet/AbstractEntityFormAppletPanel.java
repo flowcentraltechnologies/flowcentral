@@ -755,7 +755,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
             TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
             if (result != null) {
-                if (result.isDisplayListingReport()) {
+                if (result.isOpenPath()) {
+                    setCommandOpenPath((String) result.getResult());
+                } else if (result.isDisplayListingReport()) {
                     setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
                     setCommandResultMapping("viewlistingreport");
                 }

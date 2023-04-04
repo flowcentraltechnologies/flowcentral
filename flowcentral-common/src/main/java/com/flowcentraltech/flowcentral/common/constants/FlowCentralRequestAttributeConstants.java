@@ -30,4 +30,7 @@ public interface FlowCentralRequestAttributeConstants {
 
     /** User login ID */
     String USER_LOGINID = "fc.userloginid";
+
+    /** Open page URL */
+    String OPEN_PAGE_URL = "fc.openpageurl";
 }
