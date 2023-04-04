@@ -67,7 +67,7 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     }
 
     @Override
-    public List<TableSummaryLine> getTableSummaryLines(ValueStore tableValueStore) {
+    public List<TableSummaryLine> getTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore) throws UnifyException {
         return Collections.emptyList();
     }
 

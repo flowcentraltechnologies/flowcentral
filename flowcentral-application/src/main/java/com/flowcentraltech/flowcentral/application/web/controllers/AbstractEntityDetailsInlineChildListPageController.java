@@ -197,7 +197,8 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
         }
 
         @Override
-        public List<TableSummaryLine> getTableSummaryLines(ValueStore tableValueStore) throws UnifyException {
+        public List<TableSummaryLine> getTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+                throws UnifyException {
             return getAddendumTableSummaryLines(tableValueStore);
         }
 

@@ -435,7 +435,7 @@ public abstract class AbstractTable<T, U> {
         addParentColumnSummary();
         if (tableTotalSummary != null) {
             tableSummaryLines = entryPolicy != null && dispItemList != null
-                    ? entryPolicy.getTableSummaryLines(new BeanValueListStore(dispItemList))
+                    ? entryPolicy.getTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
                     : null;
             if (DataUtils.isBlank(tableSummaryLines)) {
                 TableSummaryLine line = new TableSummaryLine(getTotalLabel());
@@ -489,6 +489,7 @@ public abstract class AbstractTable<T, U> {
     }
 
     public EntryActionType fireOnTableChange(TableChangeType changeType) throws UnifyException {
+        clearTableSummaryLines();
         return onFireOnTableChange(sourceObject, selected, changeType);
     }
 
@@ -508,6 +509,7 @@ public abstract class AbstractTable<T, U> {
             actionType = onFireOnRowChange(sourceObject, rowChangeInfo);
         }
 
+        clearTableSummaryLines();
         return actionType;
     }
 
@@ -593,6 +595,7 @@ public abstract class AbstractTable<T, U> {
             orderOnReset();
         }
 
+        clearTableSummaryLines();
         getDispItems();
     }
 
