@@ -772,16 +772,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (target.isValidIndex()) {
             switch (target.getTarget()) {
                 case EntitySearchValueMarkerConstants.CHILD_LIST:
-                    // TODO
-//                    getEntityFormApplet().maintainChildInst(mIndex);
                     return;
                 case EntitySearchValueMarkerConstants.RELATED_LIST:
-                    // TODO
-//                    getEntityFormApplet().maintainRelatedInst(mIndex);
                     return;
                 case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                    // TODO
-//                    getEntityFormApplet().maintainHeadlessInst(mIndex);
                     return;
                 default:
             }

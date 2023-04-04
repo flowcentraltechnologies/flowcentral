@@ -231,6 +231,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.formEventHandlers = formEventHandlers;
         this.formFileAttachments = new EntityFileAttachments();
         this.collaboration = collaboration;
+        entitySearch = null;
     }
 
     public boolean isCollaboration() {

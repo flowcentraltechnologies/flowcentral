@@ -83,4 +83,6 @@ public interface ApplicationModuleSysParamConstants {
 
     String ENABLE_QUICK_REPORT = "APP-001E";
 
+    String ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB = "APP-001F";
+
 }

@@ -63,6 +63,10 @@ public class CreateEntityAppletController
             if (pageBean.getAltCaption() == null) {
                 setPageTitle(applet);
             }
+            
+            System.out.println("@prime: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+            System.out.println("@prime: getPathVariable() = " + getPathVariable());
+            System.out.println("@prime: CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
         }
     }
 

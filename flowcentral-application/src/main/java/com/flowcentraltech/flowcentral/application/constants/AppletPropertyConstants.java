@@ -62,6 +62,8 @@ public interface AppletPropertyConstants {
     
     String SEARCH_TABLE_SEARCH_ON_CRITERIA_ONLY = "searchTable.searchOnCriteriaOnly";
     
+    String SEARCH_TABLE_MAINTAIN_APPLET = "searchTable.maintainApplet";
+   
     String ENTITY_FORM = "entityForm";
 
     String CREATE_FORM = "createForm";

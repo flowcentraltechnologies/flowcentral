@@ -1469,6 +1469,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public List<AppApplet> findCreateEntityApplets(String entity) throws UnifyException {
+        return environment().listAll(new AppAppletQuery().type(AppletType.CREATE_ENTITY).entity(entity));
+    }
+
+    @Override
     public List<? extends Listable> findAppEntityUniqueConstraints(String entity) throws UnifyException {
         ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entity);
         List<? extends Entity> list = environment()
