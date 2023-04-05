@@ -79,7 +79,7 @@ public class RowChangeInfo {
                 }
             }
         }
-        
+
         return false;
     }
 

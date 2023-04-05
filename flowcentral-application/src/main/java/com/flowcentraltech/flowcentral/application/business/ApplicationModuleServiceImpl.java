@@ -288,6 +288,8 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -1296,6 +1298,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
         
         return null;
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStoreReader valueStoreReader)
+            throws UnifyException {
+        return this.wrapperOf(wrapperType, valueStoreReader.getValueStore());
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStoreWriter valueStoreWriter)
+            throws UnifyException {
+        return this.wrapperOf(wrapperType, valueStoreWriter.getValueStore());
     }
 
     @SuppressWarnings("unchecked")
