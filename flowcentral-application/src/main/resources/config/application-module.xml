@@ -103,6 +103,6 @@
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="APP-001F" defaultVal="false"
 			description="$m{application.sysparam.enableviewentityinseparatetab}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="false" />
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>
