@@ -36,6 +36,8 @@ public final class ApplicationNameUtils {
 
     public static final String RESERVED_FC_PREFIX = "__";
 
+    public static final String VESTIGIAL_INFIX = "_0_";
+
     private static final FactoryMap<String, ApplicationEntityNameParts> applicationNameParts;
 
     private static final FactoryMap<String, EntityAssignRuleNameParts> assignRuleNameParts;
@@ -140,15 +142,24 @@ public final class ApplicationNameUtils {
     }
     
     public static String addVestigialNamePart(String longName, String vestigial) {
-        return longName + "_0_" + vestigial;
+        return longName + VESTIGIAL_INFIX + vestigial;
     }
     
     public static String removeVestigialNamePart(String longName) {
-        int index = longName.indexOf("_0_");
+        int index = longName.indexOf(VESTIGIAL_INFIX);
         if (index > 0) {
             return longName.substring(0, index);
         }
         
         return longName;
+    }
+    
+    public static String getVestigialNamePart(String longName) {
+        int index = longName.indexOf(VESTIGIAL_INFIX);
+        if (index > 0) {
+            return longName.substring(index + VESTIGIAL_INFIX.length());
+        }
+        
+        return null;
     }
 }

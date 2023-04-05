@@ -1359,6 +1359,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return currFormAppletDef;
     }
 
+    @SuppressWarnings("unchecked")
+    protected Entity loadEntity(Object entityInstId) throws UnifyException {
+        final AppletDef _currentFormAppletDef = getFormAppletDef();
+        final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
+        return au().environment().listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);
+    }
+
     private boolean ensureSaveOnTabAction() throws UnifyException {
         if (!ctx.isStudioComponent() && isSaveHeaderFormOnTabAction()) {
             FormContext ctx = getResolvedForm().getCtx();
@@ -1383,13 +1390,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     private SectorIcon getSectorIcon() throws UnifyException {
         AppletDef _rootAppletDef = getRootAppletDef();
         return au().getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
-    }
-
-    @SuppressWarnings("unchecked")
-    private Entity loadEntity(Object entityInstId) throws UnifyException {
-        final AppletDef _currentFormAppletDef = getFormAppletDef();
-        final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
-        return au().environment().listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);
     }
 
     private BreadCrumbs makeFormBreadCrumbs() {
