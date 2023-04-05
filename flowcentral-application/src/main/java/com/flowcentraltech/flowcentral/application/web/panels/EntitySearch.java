@@ -108,6 +108,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private OwnershipType saveFilterScope;
 
     private String appAppletFilterName;
+    
+    private String maintainAppletName;
 
     private int childTabIndex;
 
@@ -254,6 +256,18 @@ public class EntitySearch extends AbstractPanelFormBinding {
         this.appAppletFilterName = appAppletFilterName;
     }
 
+    public String getMaintainAppletName() {
+        return maintainAppletName;
+    }
+
+    public void setMaintainAppletName(String maintainAppletName) {
+        this.maintainAppletName = maintainAppletName;
+    }
+
+    public boolean isWithMaintainApplet() {
+        return !StringUtils.isBlank(maintainAppletName);
+    }
+    
     public String getEditAction() {
         return editAction;
     }

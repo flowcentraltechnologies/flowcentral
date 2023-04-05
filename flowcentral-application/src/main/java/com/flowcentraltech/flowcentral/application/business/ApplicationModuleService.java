@@ -87,6 +87,8 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -123,6 +125,34 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStore valueStore) throws UnifyException;
+
+    /**
+     * Creates a wrapper instance initialized with the supplied value store reader.
+     * 
+     * @param wrapperType
+     *                         the wrapper type
+     * @param valueStoreReader
+     *                         the value store reader
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStoreReader valueStoreReader)
+            throws UnifyException;
+
+    /**
+     * Creates a wrapper instance initialized with the supplied value store writer.
+     * 
+     * @param wrapperType
+     *                         the wrapper type
+     * @param valueStoreWriter
+     *                         the value store writer
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStoreWriter valueStoreWriter)
+            throws UnifyException;
 
     /**
      * Creates a wrapper instance initialized with the supplied entity instance.
@@ -300,6 +330,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException;
+
+    /**
+     * Finds create entity applets.
+     * 
+     * @param entity
+     *               the application entity
+     * @return list of create entity applets
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<AppApplet> findCreateEntityApplets(String entity) throws UnifyException;
 
     /**
      * Finds application entity unique constraints.

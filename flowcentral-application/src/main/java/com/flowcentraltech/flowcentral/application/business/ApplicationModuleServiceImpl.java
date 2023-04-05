@@ -288,6 +288,8 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.data.ValueStoreWriter;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
@@ -1298,6 +1300,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return null;
     }
 
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStoreReader valueStoreReader)
+            throws UnifyException {
+        return this.wrapperOf(wrapperType, valueStoreReader.getValueStore());
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStoreWriter valueStoreWriter)
+            throws UnifyException {
+        return this.wrapperOf(wrapperType, valueStoreWriter.getValueStore());
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public Query<? extends Entity> queryOf(Class<? extends EntityWrapper> wrapperType) throws UnifyException {
@@ -1466,6 +1480,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @Override
     public List<AppApplet> findManageEntityListApplets(String entity) throws UnifyException {
         return environment().listAll(new AppAppletQuery().typeIn(AppletType.MANAGE_ENTITY_LIST_TYPES).entity(entity));
+    }
+
+    @Override
+    public List<AppApplet> findCreateEntityApplets(String entity) throws UnifyException {
+        return environment().listAll(new AppAppletQuery().type(AppletType.CREATE_ENTITY).entity(entity));
     }
 
     @Override

@@ -42,6 +42,7 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -79,6 +80,7 @@ import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.tcdng.unify.core.UnifyException;
@@ -231,6 +233,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.formEventHandlers = formEventHandlers;
         this.formFileAttachments = new EntityFileAttachments();
         this.collaboration = collaboration;
+        entitySearch = null;
     }
 
     public boolean isCollaboration() {
@@ -623,6 +626,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
+        if (entitySearch.isWithMaintainApplet()) {
+            final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
+                    entitySearch.getMaintainAppletName(), _inst.getId());
+            TableActionResult result = new TableActionResult(openPath);
+            result.setOpenPath(true);
+            return result;
+        }
+
         _inst = reloadEntity(_inst, true);
         if (form == null) {
             form = constructForm(_inst, FormMode.MAINTAIN, null, false);
@@ -1348,6 +1359,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return currFormAppletDef;
     }
 
+    @SuppressWarnings("unchecked")
+    protected Entity loadEntity(Object entityInstId) throws UnifyException {
+        final AppletDef _currentFormAppletDef = getFormAppletDef();
+        final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
+        return au().environment().listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);
+    }
+
     private boolean ensureSaveOnTabAction() throws UnifyException {
         if (!ctx.isStudioComponent() && isSaveHeaderFormOnTabAction()) {
             FormContext ctx = getResolvedForm().getCtx();
@@ -1372,13 +1390,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     private SectorIcon getSectorIcon() throws UnifyException {
         AppletDef _rootAppletDef = getRootAppletDef();
         return au().getPageSectorIconByApplication(_rootAppletDef.getApplicationName());
-    }
-
-    @SuppressWarnings("unchecked")
-    private Entity loadEntity(Object entityInstId) throws UnifyException {
-        final AppletDef _currentFormAppletDef = getFormAppletDef();
-        final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
-        return au().environment().listLean((Class<? extends Entity>) entityClassDef.getEntityClass(), entityInstId);
     }
 
     private BreadCrumbs makeFormBreadCrumbs() {

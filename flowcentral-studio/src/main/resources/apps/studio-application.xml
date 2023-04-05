@@ -360,6 +360,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletroutetoappletlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertymaintainappletlist"
+			description="$m{studio.widgettype.propertymaintainappletlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletmaintainappletlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyappletassignpagelist"
 			description="$m{studio.widgettype.propertyappletassignpagelist}"
 			dataType="string" inputType="string"
@@ -4848,6 +4853,9 @@
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
 					inputWidget="studio.propertyappletsingledigit" />
+				<property name="searchTable.maintainApplet"
+					description="$m{studio.appappletprop.manageentity.searchtable.maintainapplet}"
+					inputWidget="studio.propertymaintainappletlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">

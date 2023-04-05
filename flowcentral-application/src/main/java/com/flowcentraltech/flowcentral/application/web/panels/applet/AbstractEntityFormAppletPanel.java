@@ -755,7 +755,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
             TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
             if (result != null) {
-                if (result.isDisplayListingReport()) {
+                if (result.isOpenPath()) {
+                    setCommandOpenPath((String) result.getResult());
+                } else if (result.isDisplayListingReport()) {
                     setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
                     setCommandResultMapping("viewlistingreport");
                 }
@@ -772,16 +774,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         if (target.isValidIndex()) {
             switch (target.getTarget()) {
                 case EntitySearchValueMarkerConstants.CHILD_LIST:
-                    // TODO
-//                    getEntityFormApplet().maintainChildInst(mIndex);
                     return;
                 case EntitySearchValueMarkerConstants.RELATED_LIST:
-                    // TODO
-//                    getEntityFormApplet().maintainRelatedInst(mIndex);
                     return;
                 case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                    // TODO
-//                    getEntityFormApplet().maintainHeadlessInst(mIndex);
                     return;
                 default:
             }

@@ -1574,9 +1574,14 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         ApplicationModuleSysParamConstants.ENABLE_QUICK_REPORT)) {
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
-        
-        if(_appletDef.getPropValue(boolean.class,
-                AppletPropertyConstants.SEARCH_TABLE_SEARCH_ON_CRITERIA_ONLY, false)) {
+
+        final String maintainAppletName = systemModuleService.getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB)
+                        ? _appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE_MAINTAIN_APPLET)
+                        : null;
+
+        if (_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_SEARCH_ON_CRITERIA_ONLY,
+                false)) {
             entitySearchMode |= EntitySearch.SEARCH_ON_CRITERIA_ONLY;
         }
 
@@ -1620,6 +1625,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         }
 
         _entitySearch.setEntitySubTitle(rootTitle);
+        _entitySearch.setMaintainAppletName(maintainAppletName);
         return _entitySearch;
     }
 

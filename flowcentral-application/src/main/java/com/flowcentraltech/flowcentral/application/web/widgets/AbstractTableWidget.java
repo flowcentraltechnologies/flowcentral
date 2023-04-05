@@ -682,7 +682,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             for (int i = 0; i < actionSymbol.length; i++) {
                 String symbol = actionSymbol[i];
                 actionCtrl[i] = (Control) addInternalChildWidget(
-                        "!ui-symbol styleClass:$e{mact} symbol:$s{" + symbol + "} ignoreParentState:true");
+                        "!ui-symbol alwaysValueIndex:true styleClass:$e{mact} symbol:$s{" + symbol + "} ignoreParentState:true");
             }
         }
 
