@@ -1264,6 +1264,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Long Id) throws UnifyException {
+        Entity inst = environment().listLean(queryOf(wrapperType).addEquals("id", Id));
+        return wrapperOf(wrapperType, inst);
+    }
+
+    @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException {
         if (inst != null) {
             final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
@@ -1273,6 +1279,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         return null;
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Query<? extends Entity> query)
+            throws UnifyException {
+        List<? extends Entity> instList = environment().listAll(query);
+        return wrapperOf(wrapperType, instList);
     }
 
     @Override
@@ -1296,7 +1309,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             final EntityClassDef entityClassDef = getEntityClassDef(entityName);
             return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_3, entityClassDef, valueStore);
         }
-        
+
         return null;
     }
 

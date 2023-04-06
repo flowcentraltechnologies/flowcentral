@@ -59,6 +59,10 @@ public class ManageEntityDetailsApplet extends AbstractApplet {
         this.formEventHandlers = formEventHandlers;
     }
 
+    public void setSubCaption(String subCaption) {
+        setAltSubCaption(subCaption);
+    }
+
     public void childCrudSwitchOnChange() throws UnifyException {
         ctx.au().onMiniformSwitchOnChange(childEntityCrud.getForm());
     }

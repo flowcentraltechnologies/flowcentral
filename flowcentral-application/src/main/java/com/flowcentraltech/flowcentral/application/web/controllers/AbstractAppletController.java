@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.tcdng.unify.core.UnifyException;
@@ -75,5 +76,9 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
     
     protected final boolean isReloadOnSwitch() throws UnifyException {
         return appletUtilities.isReloadOnSwitch();
+    }
+
+    protected final String refreshContent() throws UnifyException {
+        return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
 }
