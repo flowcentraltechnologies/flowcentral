@@ -811,9 +811,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Entity _inst = (Entity) _form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(_form.getFormDef().getEntityDef(), _inst, actionPolicyName);
         efCtx.setAll(formContext);
-        efCtx.setListingOptions(new FormListingOptions(formActionName));
         if (isListingView()) {
             final String listingGenerator = listingForm.getFormListing().getListingGenerator();
+            efCtx.setListingOptions(new FormListingOptions(formActionName));
             efCtx.setListingGenerator(listingGenerator);
             return au().environment().performEntityAction(efCtx);
         }

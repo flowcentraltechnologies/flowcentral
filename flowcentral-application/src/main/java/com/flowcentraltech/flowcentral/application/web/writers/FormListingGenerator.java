@@ -43,4 +43,15 @@ public interface FormListingGenerator extends FormListingReportGenerator {
      */
     void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties, ResponseWriter writer)
             throws UnifyException;
+
+    /**
+     * Gets options flag overrides
+     * 
+     * @param formBeanValueStore
+     *                           the value store
+     * @return the options override. Override is ignored if zero is returned.
+     * @throws UnifyException
+     *                        is an error happens
+     */
+    int getOptionFlagsOverride(ValueStore formBeanValueStore) throws UnifyException;
 }

@@ -20,9 +20,11 @@ import com.flowcentraltech.flowcentral.application.web.writers.FormListingGenera
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.report.Report;
 
 /**
@@ -31,7 +33,7 @@ import com.tcdng.unify.core.report.Report;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@EntityReferences({"*"})
+@EntityReferences({ "*" })
 @Component(name = "printlistingreport-actionpolicy",
         description = "$m{application.entityactionpolicy.printlistingreport}")
 public class PrintListingReportFormActionPolicy extends AbstractApplicationFormActionPolicy {
@@ -46,7 +48,11 @@ public class PrintListingReportFormActionPolicy extends AbstractApplicationFormA
         EntityActionResult result = new EntityActionResult(ctx);
         if (ctx.isWithListingGenerator()) {
             FormListingGenerator generator = (FormListingGenerator) getComponent(ctx.getListingGenerator());
-            Report report = generator.generateReport(new BeanValueStore(ctx.getInst()), ctx.getListingOptions());
+            final ValueStore instValueStore = new BeanValueStore(ctx.getInst());
+            final int optionFlags = generator.getOptionFlagsOverride(instValueStore);
+            FormListingOptions options = optionFlags == 0 ? ctx.getListingOptions()
+                    : new FormListingOptions(ctx.getListingOptions().getFormActionName(), optionFlags);
+            Report report = generator.generateReport(instValueStore, options);
             ctx.setResult(report);
             result = new EntityActionResult(ctx);
             result.setDisplayListingReport(true);
