@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.entities;
 
 import java.util.Collection;
+import java.util.Map;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
@@ -28,14 +29,14 @@ import com.tcdng.unify.core.database.Entity;
  * @since 1.0
  */
 public interface EntityWrapper {
-    
+
     /**
      * Gets wrapper value store
      * 
      * @return the value store
      */
     ValueStore getValueStore();
-    
+
     /**
      * Returns the entity wrapper value object.
      */
@@ -58,13 +59,63 @@ public interface EntityWrapper {
      *                  the data index to set
      */
     void setDataIndex(int dataIndex);
-   
+
     /**
      * Returns the storage size for this wrapper
      * 
      * @return the storage size
      */
     int size();
+
+    /**
+     * Compares between wrapper.
+     * 
+     * @param source
+     *               the source wrapper
+     * @return Zero is same otherwise non-zero
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int compare(EntityWrapper source) throws UnifyException;
+
+    /**
+     * Compares between wrapper.
+     * 
+     * @param source
+     *                            the source wrapper
+     * @param inclusionFieldNames
+     *                            the fields to include in difference check.
+     * @return Zero is same otherwise non-zero
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int compare(EntityWrapper source, String... inclusionFieldNames) throws UnifyException;
+
+    /**
+     * Compares between wrapper.
+     * 
+     * @param source
+     *                            the source wrapper
+     * @param inclusionFieldNames
+     *                            the fields to include in difference check.
+     * @return Zero is same otherwise non-zero
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int compare(EntityWrapper source, Collection<String> inclusionFieldNames) throws UnifyException;
+
+    /**
+     * Compares between wrapper.
+     * 
+     * @param source
+     *                         source wrapper
+     * @param inclusionMapping
+     *                         the fields to include in difference check.
+     * @return Zero is same otherwise non-zero
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int compare(EntityWrapper source, Map<String, String> inclusionMapping) throws UnifyException;
 
     /**
      * Copies supplied entity wrapper to this object.
