@@ -349,9 +349,18 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
     }
 
-    public void newEntityInst() throws UnifyException {
+    public TableActionResult newEntityInst() throws UnifyException {
+        if (entitySearch.isWithMaintainApplet()) {
+            final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
+                    entitySearch.getMaintainAppletName());
+            TableActionResult result = new TableActionResult(openPath);
+            result.setOpenPath(true);
+            return result;
+        }
+        
         form = constructNewForm(FormMode.CREATE, null, false);
         viewMode = ViewMode.NEW_FORM;
+        return new TableActionResult();
     }
 
     public void newChildItem(int childTabIndex) throws UnifyException {
@@ -802,9 +811,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         Entity _inst = (Entity) _form.getFormBean();
         EntityActionContext efCtx = new EntityActionContext(_form.getFormDef().getEntityDef(), _inst, actionPolicyName);
         efCtx.setAll(formContext);
-        efCtx.setListingOptions(new FormListingOptions(formActionName));
         if (isListingView()) {
             final String listingGenerator = listingForm.getFormListing().getListingGenerator();
+            efCtx.setListingOptions(new FormListingOptions(formActionName));
             efCtx.setListingGenerator(listingGenerator);
             return au().environment().performEntityAction(efCtx);
         }

@@ -23,7 +23,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  */
 public class TableActionResult {
 
-    private final Object result;
+    private Object result;
     
     private boolean openPath;
     
@@ -31,6 +31,10 @@ public class TableActionResult {
 
     public TableActionResult(Object result) {
         this.result = result;
+    }
+
+    public TableActionResult() {
+        
     }
 
     public Object getResult() {

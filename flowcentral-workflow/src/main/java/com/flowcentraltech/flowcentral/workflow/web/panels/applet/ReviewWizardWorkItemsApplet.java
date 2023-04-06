@@ -96,9 +96,10 @@ public class ReviewWizardWorkItemsApplet extends AbstractEntityFormApplet {
     }
 
     @Override
-    public void newEntityInst() throws UnifyException {
+    public TableActionResult newEntityInst() throws UnifyException {
         priEntityInst = null;
         loadWizardStep(0);
+        return new TableActionResult();
     }
 
     @SuppressWarnings("unchecked")

@@ -462,8 +462,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void newInst() throws UnifyException {
-        getEntityFormApplet().newEntityInst();
-        getRequestContextUtil().setContentScrollReset();
+        TableActionResult result = getEntityFormApplet().newEntityInst();
+        if (result != null && result.isOpenPath()) {
+            setCommandOpenPath((String) result.getResult());
+        } else {
+            getRequestContextUtil().setContentScrollReset();
+        }
     }
 
     @Action
