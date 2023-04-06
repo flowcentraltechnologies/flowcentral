@@ -41,7 +41,7 @@ public class AppRef extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String selectHandler;
 
-    @Column(length = 128, nullable = true)
+    @Column(length = 512, nullable = true)
     private String listFormat;
     
     @Column(length = 64, nullable = true)

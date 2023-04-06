@@ -3653,7 +3653,7 @@
 						column="1" required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
-					<field name="titleFormat" inputWidget="application.text"
+					<field name="titleFormat" inputWidget="application.texttemplate"
 						column="1" />
 					<field name="consolidatedValidation"
 						inputWidget="studio.consformvalidationpolicylist" column="1"
