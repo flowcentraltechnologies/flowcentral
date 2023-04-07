@@ -5207,6 +5207,15 @@
 					inputWidget="studio.propertyroutetoappletlist" required="false" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="ppgAppAppletPropList"
+			description="$m{studio.appappletprop.pathpage.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.pathpage.properties}">
+				<property name="page.multiple"
+					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
+					inputWidget="application.checkbox"/>
+			</propertySet>
+		</propertyList>
 	</propertyLists>
 
 	<!-- Property Rules -->
@@ -5226,6 +5235,7 @@
 			<choice name="hdl" val="hdlAppAppletPropList" />
 			<choice name="tex" val="texAppAppletPropList" />
 			<choice name="dim" val="impAppAppletPropList" />
+			<choice name="ppg" val="ppgAppAppletPropList" />
 		</propertyRule>
 	</propertyRules>
 </application>
