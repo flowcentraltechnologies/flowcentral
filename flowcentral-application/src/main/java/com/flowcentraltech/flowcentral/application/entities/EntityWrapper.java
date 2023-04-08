@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.entities;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import com.tcdng.unify.core.UnifyException;
@@ -41,6 +42,11 @@ public interface EntityWrapper {
      * Returns the entity wrapper value object.
      */
     Entity getValueObject();
+
+    /**
+     * Returns the entity wrapper value list object.
+     */
+    List<? extends Entity> getValueListObject();
 
     /**
      * Returns the entity wrapper value object at data index.

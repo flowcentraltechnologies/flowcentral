@@ -87,6 +87,12 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
         return (Entity) valueStore.getValueObject();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<? extends Entity> getValueListObject() {
+        return (List<? extends Entity>) valueStore.getValueObject();
+    }
+
     @Override
     public Entity getValueObjectAtDataIndex() {
         return (Entity) valueStore.getValueObjectAtDataIndex();
