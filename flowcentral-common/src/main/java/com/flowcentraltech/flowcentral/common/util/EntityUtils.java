@@ -46,6 +46,7 @@ public final class EntityUtils {
             ValueStore valueStore = new BeanValueListStore(entityList);
             final int len = valueStore.size();
             for (int i = 0; i < len; i++) {
+                valueStore.setDataIndex(i);
                 resultList.add(
                         new ListData(valueStore.retrieve(String.class, key), valueStore.retrieve(String.class, label)));
             }
