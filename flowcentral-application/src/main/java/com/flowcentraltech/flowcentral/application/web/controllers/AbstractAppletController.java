@@ -103,9 +103,9 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         if (appletDef.getPropValue(boolean.class, AppletPropertyConstants.PAGE_MULTIPLE)
                 && system().getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB)) {
-            path = getContextURL(ApplicationPageUtils.constructMultiPageAppletOpenPagePath(appletDef.getOpenPath()));
+            path = ApplicationPageUtils.constructMultiPageAppletOpenPagePath(appletDef.getOpenPath());
         } else {
-            path = getContextURL(appletDef.getOpenPath());
+            path = appletDef.getOpenPath();
         }
         
         if (relayObject != null) {
@@ -116,7 +116,7 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
     }
     
     @SuppressWarnings("unchecked")
-    protected <U> U getRelayObject(Class<T> type) throws UnifyException {
+    protected <U> U getRelayObject(Class<U> type) throws UnifyException {
         return (U) removeSessionAttribute(RELAY_SESSION_OBJECT);
     }
 }
