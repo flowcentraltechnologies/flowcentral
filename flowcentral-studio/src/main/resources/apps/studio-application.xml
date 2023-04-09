@@ -4855,7 +4855,7 @@
 					inputWidget="studio.propertyappletsingledigit" />
 				<property name="searchTable.maintainApplet"
 					description="$m{studio.appappletprop.manageentity.searchtable.maintainapplet}"
-					inputWidget="studio.propertymaintainappletlist" />
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">

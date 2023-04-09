@@ -254,6 +254,8 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         if (indicateHighLatency) {
             getPageRequestContextUtil().setLowLatencyRequest();
         }
+        
+        setReloadOnSwitch();
     }
 
     protected AppletWidgetReferences getAppletWidgetReferences() throws UnifyException {

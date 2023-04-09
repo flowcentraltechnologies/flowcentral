@@ -109,7 +109,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private String appAppletFilterName;
     
-    private String maintainAppletName;
+    private final boolean detachedMaintainApplet;
 
     private int childTabIndex;
 
@@ -128,8 +128,9 @@ public class EntitySearch extends AbstractPanelFormBinding {
     public EntitySearch(FormContext ctx, SectorIcon sectorIcon, SweepingCommitPolicy sweepingCommitPolicy,
             String tabName, TableDef tableDef, Long appAppletId, String editAction, String appAppletFilterName,
             String appAppletSearchConfigName, int columns, int mode, boolean showConditions,
-            boolean ignoreConditionalDisabled) throws UnifyException {
+            boolean ignoreConditionalDisabled, boolean detachedMaintainApplet) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
+        this.detachedMaintainApplet = detachedMaintainApplet;
         this.sectorIcon = sectorIcon;
         this.entityFilter = new Filter(null, null, tableDef.getEntityDef(), tableDef.getLabelSuggestionDef(),
                 FilterConditionListType.IMMEDIATE_FIELD);
@@ -256,18 +257,10 @@ public class EntitySearch extends AbstractPanelFormBinding {
         this.appAppletFilterName = appAppletFilterName;
     }
 
-    public String getMaintainAppletName() {
-        return maintainAppletName;
+    public boolean isDetachedMaintainApplet() {
+        return detachedMaintainApplet;
     }
 
-    public void setMaintainAppletName(String maintainAppletName) {
-        this.maintainAppletName = maintainAppletName;
-    }
-
-    public boolean isWithMaintainApplet() {
-        return !StringUtils.isBlank(maintainAppletName);
-    }
-    
     public String getEditAction() {
         return editAction;
     }

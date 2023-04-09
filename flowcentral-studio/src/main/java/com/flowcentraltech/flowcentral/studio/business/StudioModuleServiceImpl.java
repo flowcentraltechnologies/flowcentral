@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.entities.AppFilter;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -141,7 +142,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                                     .getLongName();
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
-                            AppletDef.Builder adb = AppletDef.newBuilder(type.appletType(), entity, label, type.icon(),
+                            StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type.appletType(), entity, label, type.icon(),
                                     assignDescField, pseudoDeleteField, 0, true, false, descriptiveButtons, appletName,
                                     description, np.getInstId(), 0L);
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM, form);

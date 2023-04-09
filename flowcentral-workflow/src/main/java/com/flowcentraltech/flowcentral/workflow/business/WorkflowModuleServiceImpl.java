@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -250,7 +251,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStep.getLabel());
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
-                            AppletDef.Builder adb = AppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
+                            StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
                                     assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons, appletName,
                                     label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
@@ -357,7 +358,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     final String assignDescField = null;
                     final String pseudoDeleteField = null;
-                    AppletDef.Builder adb = AppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS, null, label,
+                    StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS, null, label,
                             "magic", assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons, appletName,
                             label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");

@@ -201,6 +201,10 @@ public enum AppletType implements EnumConst {
         return STUDIO_FC_COMPONENT.equals(this);
     }
     
+    public boolean supportsDetachedMaintain() {
+        return MANAGE_ENTITYLIST.equals(this) || MANAGE_ENTITYLIST_ASSIGN.equals(this) ;
+    }
+    
     public static AppletType fromCode(String code) {
         return EnumUtils.fromCode(AppletType.class, code);
     }

@@ -50,6 +50,15 @@ public class CreateEntityApplet extends AbstractEntityFormApplet {
         setAltSubCaption(form.getFormTitle());
     }
 
+    protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
+        AppletDef appletDef = au.getAppletDef(appletName);
+        if (appletDef.getType().isEntityList()) {
+            appletDef = appletDef.getDetachedAppletDef();
+        }
+        
+        return appletDef;
+    }
+
     @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         return null;
