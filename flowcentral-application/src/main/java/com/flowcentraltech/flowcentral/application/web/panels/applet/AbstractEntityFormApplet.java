@@ -350,9 +350,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public TableActionResult newEntityInst() throws UnifyException {
-        if (entitySearch.isWithMaintainApplet()) {
+        if (entitySearch.isDetachedMaintainApplet()) {
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                    entitySearch.getMaintainAppletName());
+                    getAppletName());
             TableActionResult result = new TableActionResult(openPath);
             result.setOpenPath(true);
             return result;
@@ -635,9 +635,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isWithMaintainApplet()) {
+        if (entitySearch.isDetachedMaintainApplet()) {
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
-                    entitySearch.getMaintainAppletName(), _inst.getId());
+                    getAppletName(), _inst.getId());
             TableActionResult result = new TableActionResult(openPath);
             result.setOpenPath(true);
             return result;

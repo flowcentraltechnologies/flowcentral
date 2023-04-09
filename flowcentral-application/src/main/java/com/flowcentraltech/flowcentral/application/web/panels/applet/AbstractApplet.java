@@ -104,7 +104,7 @@ public abstract class AbstractApplet {
 
     public AppletDef getRootAppletDef() throws UnifyException {
         if (rootAppletDef == null) {
-            rootAppletDef = au.getAppletDef(appletName);
+            rootAppletDef = resolveRootAppletDef(appletName);
         }
 
         return rootAppletDef;
@@ -133,11 +133,15 @@ public abstract class AbstractApplet {
 
     public void ensureRootAppletStruct() throws UnifyException {
         if (rootAppletDef != null) {
-            AppletDef _nAppletDef = au.getAppletDef(rootAppletDef.getLongName());
+            AppletDef _nAppletDef = resolveRootAppletDef(appletName);
             if (rootAppletDef.getVersion() != _nAppletDef.getVersion()) {
                 rootAppletDef = _nAppletDef;
             }
         }
+    }
+
+    protected AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
+        return au.getAppletDef(appletName);
     }
 
     protected void setFormProperties(AppletDef _appletDef, AbstractForm form) throws UnifyException {

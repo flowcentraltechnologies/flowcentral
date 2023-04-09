@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.tcdng.unify.core.UnifyException;
@@ -86,6 +87,12 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
         return (Entity) valueStore.getValueObject();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<? extends Entity> getValueListObject() {
+        return (List<? extends Entity>) valueStore.getValueObject();
+    }
+
     @Override
     public Entity getValueObjectAtDataIndex() {
         return (Entity) valueStore.getValueObjectAtDataIndex();
@@ -104,6 +111,26 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
     @Override
     public int size() {
         return valueStore.size();
+    }
+
+    @Override
+    public int compare(EntityWrapper source) throws UnifyException {
+        return valueStore.compare(source.getValueStore());
+    }
+
+    @Override
+    public int compare(EntityWrapper source, String... inclusionFieldNames) throws UnifyException {
+        return valueStore.compare(source.getValueStore(), inclusionFieldNames);
+    }
+
+    @Override
+    public int compare(EntityWrapper source, Collection<String> inclusionFieldNames) throws UnifyException {
+        return valueStore.compare(source.getValueStore(), inclusionFieldNames);
+    }
+
+    @Override
+    public int compare(EntityWrapper source, Map<String, String> inclusionMapping) throws UnifyException {
+        return valueStore.compare(source.getValueStore(), inclusionMapping);
     }
 
     @Override

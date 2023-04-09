@@ -17,8 +17,14 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.web.constant.ReadOnly;
@@ -34,6 +40,8 @@ import com.tcdng.unify.web.constant.Secured;
 public abstract class AbstractAppletController<T extends AbstractAppletPageBean<? extends AbstractApplet>>
         extends AbstractFlowCentralPageController<T> {
 
+    private static final String RELAY_SESSION_OBJECT = "applet.RELAY_SESSION_OBJECT";
+    
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -52,6 +60,10 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
 
     protected final ApplicationModuleService application() {
         return appletUtilities.application();
+    }
+
+    protected final SystemModuleService system() {
+        return appletUtilities.system();
     }
 
     protected void setPageTitle(AbstractApplet applet) throws UnifyException {
@@ -75,5 +87,36 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
     
     protected final boolean isReloadOnSwitch() throws UnifyException {
         return appletUtilities.isReloadOnSwitch();
+    }
+
+    protected final String refreshContent() throws UnifyException {
+        return ApplicationResultMappingConstants.REFRESH_CONTENT;
+    }
+    
+    protected final String openApplet(String appletName) throws UnifyException {
+        return openApplet(appletName, null);
+    }
+    
+    protected final String openApplet(String appletName, Object relayObject) throws UnifyException {
+        AppletDef appletDef = application().getAppletDef(appletName);
+        String path = null;
+        if (appletDef.getPropValue(boolean.class, AppletPropertyConstants.PAGE_MULTIPLE)
+                && system().getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB)) {
+            path = ApplicationPageUtils.constructMultiPageAppletOpenPagePath(appletDef.getOpenPath());
+        } else {
+            path = appletDef.getOpenPath();
+        }
+        
+        if (relayObject != null) {
+            setSessionAttribute(RELAY_SESSION_OBJECT, relayObject);
+        }
+        
+        return openPath(path);
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected <U> U getRelayObject(Class<U> type) throws UnifyException {
+        return (U) removeSessionAttribute(RELAY_SESSION_OBJECT);
     }
 }

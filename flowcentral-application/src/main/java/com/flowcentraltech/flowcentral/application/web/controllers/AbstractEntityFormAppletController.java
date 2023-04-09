@@ -27,9 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.QuickTableEdit;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet.ShowPopupInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTableWidget;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
@@ -52,16 +50,9 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
 public abstract class AbstractEntityFormAppletController<T extends AbstractEntityFormApplet, U extends AbstractEntityFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 
-    @Configurable
-    private SystemModuleService systemModuleService;
-
     public AbstractEntityFormAppletController(Class<U> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
     }
 
     @Action
@@ -263,6 +254,8 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         if (indicateHighLatency) {
             getPageRequestContextUtil().setLowLatencyRequest();
         }
+        
+        setReloadOnSwitch();
     }
 
     protected AppletWidgetReferences getAppletWidgetReferences() throws UnifyException {
@@ -295,10 +288,6 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
                 entrySwitchOnChangeHandlers, crudActionHandlers, crudSwitchOnChangeHandlers,
                 saveAsSwitchOnChangeHandlers, maintainActHandlers);
-    }
-
-    protected SystemModuleService system() {
-        return systemModuleService;
     }
 
     private boolean saveFormState(AbstractEntityFormApplet applet) throws UnifyException {

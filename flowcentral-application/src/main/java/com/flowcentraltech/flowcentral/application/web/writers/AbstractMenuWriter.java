@@ -15,7 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
@@ -46,19 +48,19 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
     }
 
     protected void writeMenuAppletDef(ResponseWriter writer, StringBuilder misb, AppletDef appletDef,
-            boolean appendISym) throws UnifyException {
+            boolean appendISym, boolean multiPage) throws UnifyException {
         writer.write("<div id=\"item_").write(appletDef.getViewId()).write("\">");
         writeLabelWithIcon(writer, appletDef);
         writer.write("</div>");
-        writeAppletDefJs(writer, misb, appletDef, appendISym);
+        writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage);
     }
 
     protected void writeSubMenuAppletDef(ResponseWriter writer, StringBuilder misb, AppletDef appletDef,
-            boolean appendISym) throws UnifyException {
+            boolean appendISym, boolean multiPage) throws UnifyException {
         writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
         writeLabelWithIcon(writer, appletDef);
         writer.write("</li>");
-        writeAppletDefJs(writer, misb, appletDef, appendISym);
+        writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage);
     }
 
     private void writeLabelWithIcon(ResponseWriter writer, AppletDef appletDef) throws UnifyException {
@@ -67,18 +69,23 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         writer.write(resolveSymbolHtmlHexCode(icon));
         writer.write("</span>");
         writer.write("<span class=\"acl\">").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
-        ;
     }
 
-    private void writeAppletDefJs(ResponseWriter writer, StringBuilder misb, AppletDef appletDef, boolean appendISym)
-            throws UnifyException {
+    private void writeAppletDefJs(ResponseWriter writer, StringBuilder misb, AppletDef appletDef, boolean appendISym,
+            boolean multiPage) throws UnifyException {
         if (appendISym) {
             misb.append(",");
         }
 
         misb.append("{\"id\":\"item_").append(appletDef.getViewId()).append('"');
         misb.append(",\"path\":\"");
-        writer.writeContextURL(misb, appletDef.getOpenPath());
+        if (multiPage && appletDef.getPropValue(boolean.class, AppletPropertyConstants.PAGE_MULTIPLE)) {
+            writer.writeContextURL(misb,
+                    ApplicationPageUtils.constructMultiPageAppletOpenPagePath(appletDef.getOpenPath()));
+        } else {
+            writer.writeContextURL(misb, appletDef.getOpenPath());
+        }
+
         misb.append('"');
         if (appletDef.isOpenWindow()) {
             misb.append(",\"isOpenWin\":").append(appletDef.isOpenWindow());

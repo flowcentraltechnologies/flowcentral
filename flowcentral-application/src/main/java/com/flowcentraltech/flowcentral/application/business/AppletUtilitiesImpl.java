@@ -1575,10 +1575,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
 
-        final String maintainAppletName = systemModuleService.getSysParameterValue(boolean.class,
-                ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB)
-                        ? _appletDef.getPropValue(String.class, AppletPropertyConstants.SEARCH_TABLE_MAINTAIN_APPLET)
-                        : null;
+        final boolean detachedMaintainApplet = _appletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.SEARCH_TABLE_MAINTAIN_APPLET)
+                && systemModuleService.getSysParameterValue(boolean.class,
+                        ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB);
 
         if (_appletDef.getPropValue(boolean.class, AppletPropertyConstants.SEARCH_TABLE_SEARCH_ON_CRITERIA_ONLY,
                 false)) {
@@ -1610,7 +1610,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
                 _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
-                showConditions, isIgnoreParentCondition);
+                showConditions, isIgnoreParentCondition, detachedMaintainApplet);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         _entitySearch.setShowBaseRestriction(showBaseRestriction);
@@ -1625,7 +1625,6 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         }
 
         _entitySearch.setEntitySubTitle(rootTitle);
-        _entitySearch.setMaintainAppletName(maintainAppletName);
         return _entitySearch;
     }
 

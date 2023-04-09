@@ -15,20 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
-import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
-import com.tcdng.unify.convert.util.ConverterUtils;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Applet definition
@@ -36,473 +27,99 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class AppletDef extends BaseApplicationEntityDef {
+public interface AppletDef {
 
-    private static long viewIdCounter;
+    AppletDef facade(AppletDef appletDef);
 
-    private AppletType type;
+    ApplicationEntityNameParts getNameParts();
 
-    private String entity;
+    String getLongName();
 
-    private String label;
+    String getApplicationName();
 
-    private String lowerCaseLabel;
+    String getName();
 
-    private String privilege;
+    String getDescription();
 
-    private String routeToApplet;
+    String getFieldName();
 
-    private String openPath;
+    Long getId();
 
-    private String originApplicationName;
+    long getVersion();
 
-    private String originName;
+    AppletType getType();
 
-    private String viewId;
+    AppletDef getDetachedAppletDef();
 
-    private String icon;
-
-    private String assignDescField;
-
-    private String pseudoDeleteField;
-
-    private int displayIndex;
-
-    private boolean openWindow;
-
-    private boolean menuAccess;
-
-    private boolean allowSecondaryTenants;
-
-    private boolean descriptiveButtons;
-
-    private List<AppletPropDef> propDefList;
-
-    private Map<String, AppletPropDef> propDefMap;
-
-    private Map<String, AppletSetValuesDef> setValuesDefMap;
-
-    private Map<String, AppletFilterDef> filterDefMap;
-
-    private List<AppletFilterDef> preferredFormFilterList;
-
-    private Map<String, List<AppletFilterDef>> childListAppletFilterDefMap;
-
-    private AppletDef(AppletType type, List<AppletPropDef> propDefList, Map<String, AppletPropDef> propDefMap,
-            Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity, String label, String icon,
-            String assignDescField, String pseudoDeleteField, String routeToApplet, String openPath,
-            String originApplicationName, String originName, int displayIndex, boolean openWindow, boolean menuAccess,
-            boolean allowSecondaryTenants, boolean descriptiveButtons, ApplicationEntityNameParts nameParts,
-            String description, Long id, long version) {
-        super(nameParts, description, id, version);
-        this.type = type;
-        this.entity = entity;
-        this.label = label;
-        this.lowerCaseLabel = label != null ? label.toLowerCase() : null;
-        this.icon = icon;
-        this.assignDescField = assignDescField;
-        this.pseudoDeleteField = pseudoDeleteField;
-        this.routeToApplet = routeToApplet;
-        this.openPath = openPath;
-        this.originApplicationName = originApplicationName;
-        this.originName = originName;
-        this.displayIndex = displayIndex;
-        this.openWindow = openWindow;
-        this.menuAccess = menuAccess;
-        this.allowSecondaryTenants = allowSecondaryTenants;
-        this.descriptiveButtons = descriptiveButtons;
-        this.propDefList = propDefList;
-        this.propDefMap = propDefMap;
-        this.setValuesDefMap = setValuesDefMap;
-        this.filterDefMap = filterDefMap;
-        List<AppletFilterDef> preferredFormFilterList = new ArrayList<AppletFilterDef>();
-        Map<String, List<AppletFilterDef>> childListAppletFilterDefMap = new HashMap<String, List<AppletFilterDef>>();
-        for (AppletFilterDef filterDef : filterDefMap.values()) {
-            if (filterDef.isWithPreferredForm()) {
-                preferredFormFilterList.add(filterDef);
-            }
-
-            if (filterDef.isWithPreferredChildListApplet()) {
-                List<AppletFilterDef> list = childListAppletFilterDefMap.get(filterDef.getPreferredChildListApplet());
-                if (list == null) {
-                    list = new ArrayList<AppletFilterDef>();
-                    childListAppletFilterDefMap.put(filterDef.getPreferredChildListApplet(), list);
-                }
-                list.add(filterDef);
-            }
-        }
-
-        for (String appletName : childListAppletFilterDefMap.keySet()) {
-            childListAppletFilterDefMap.replace(appletName,
-                    DataUtils.unmodifiableList(childListAppletFilterDefMap.get(appletName)));
-        }
-
-        this.preferredFormFilterList = DataUtils.unmodifiableList(preferredFormFilterList);
-        this.childListAppletFilterDefMap = DataUtils.unmodifiableMap(childListAppletFilterDefMap);
-        this.privilege = PrivilegeNameUtils.getAppletPrivilegeName(nameParts.getLongName());
-    }
-
-    private AppletDef(ApplicationEntityNameParts nameParts, String description, Long id, long version) {
-        super(nameParts, description, id, version);
-    }
-
-    public AppletDef facade(AppletDef _appletDef) {
-        AppletDef _facade = new AppletDef(getNameParts(), getDescription(), getId(), getVersion());
-        _facade.type = type;
-        _facade.entity = entity;
-        _facade.label = label;
-        _facade.icon = icon;
-        _facade.assignDescField = assignDescField;
-        _facade.pseudoDeleteField = pseudoDeleteField;
-        _facade.routeToApplet = routeToApplet;
-        _facade.openPath = openPath;
-        _facade.originApplicationName = originApplicationName;
-        _facade.originName = originName;
-        _facade.displayIndex = _appletDef.displayIndex;
-        _facade.openWindow = openWindow;
-        _facade.menuAccess = menuAccess;
-        _facade.allowSecondaryTenants = allowSecondaryTenants;
-        _facade.descriptiveButtons = descriptiveButtons;
-        _facade.propDefList = propDefList;
-        _facade.propDefMap = propDefMap;
-        _facade.filterDefMap = filterDefMap;
-        _facade.preferredFormFilterList = preferredFormFilterList;
-        _facade.privilege = privilege;
-        return _facade;
-    }
-
-    public AppletType getType() {
-        return type;
-    }
-
-    public boolean isStudioComponent() {
-        return type.isStudioComponent();
-    }
-
-    public String getOriginApplicationName() {
-        return originApplicationName;
-    }
-
-    public String getOriginName() {
-        return originName;
-    }
-
-    public String getEntity() {
-        return entity;
-    }
-
-    public String getAssignDescField() {
-        return assignDescField;
-    }
-
-    public String getPseudoDeleteField() {
-        return pseudoDeleteField;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public String getIcon() {
-        return icon;
-    }
-
-    public boolean isFacade() {
-        return type.isFacade();
-    }
-
-    public boolean isWithEntity() {
-        return entity != null;
-    }
-
-    public boolean isWithAssignDescField() {
-        return assignDescField != null;
-    }
-
-    public boolean isWithPseudoDeleteField() {
-        return pseudoDeleteField != null;
-    }
-
-    public boolean isWithIcon() {
-        return icon != null;
-    }
-
-    public String getPrivilege() {
-        return privilege;
-    }
-
-    public String getRouteToApplet() {
-        return routeToApplet;
-    }
-
-    public String getOpenPath() {
-        return openPath;
-    }
-
-    public boolean isDescriptiveButtons() {
-        return descriptiveButtons;
-    }
-
-    public String getViewId() {
-        if (viewId == null) {
-            synchronized (this) {
-                if (viewId == null) {
-                    viewId = "v" + (++viewIdCounter);
-                }
-            }
-        }
-
-        return viewId;
-    }
-
-    public int getDisplayIndex() {
-        return displayIndex;
-    }
-
-    public boolean isOpenWindow() {
-        return openWindow;
-    }
-
-    public boolean isMenuAccess() {
-        return menuAccess;
-    }
-
-    public boolean isAllowSecondaryTenants() {
-        return allowSecondaryTenants;
-    }
-
-    public List<AppletFilterDef> getPreferredFormFilterList() {
-        return preferredFormFilterList;
-    }
-
-    public boolean isWithPreferredFormFilters() {
-        return !preferredFormFilterList.isEmpty();
-    }
-
-    public List<AppletPropDef> getPropDefList() {
-        return propDefList;
-    }
-
-    public boolean isLabelMatch(String filter) {
-        return lowerCaseLabel != null && lowerCaseLabel.indexOf(filter) >= 0;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getPropValue(Class<T> dataClazz, String name) throws UnifyException {
-        AppletPropDef appletPropDef = propDefMap.get(name);
-        if (appletPropDef != null) {
-            return appletPropDef.getValue(dataClazz);
-        }
-
-        return (T) ConverterUtils.getNullValue(dataClazz);
-    }
-
-    public <T> T getPropValue(Class<T> dataClazz, String name, T defVal) throws UnifyException {
-        AppletPropDef appletPropDef = propDefMap.get(name);
-        if (appletPropDef != null) {
-            return appletPropDef.getValue(dataClazz);
-        }
-
-        return defVal;
-    }
-
-    public boolean isProp(String name) {
-        return propDefMap.containsKey(name);
-    }
+    boolean isStudioComponent();
 
-    public boolean isPropWithValue(String name) throws UnifyException {
-        return !StringUtils.isBlank(getPropValue(String.class, name));
-    }
+    String getOriginApplicationName();
 
-    public AppletPropDef getPropDef(String name) {
-        AppletPropDef appletPropDef = propDefMap.get(name);
-        if (appletPropDef == null) {
-            throw new RuntimeException(
-                    "Property with name [" + name + "] is unknown for applet definition [" + getName() + "].");
-        }
+    String getOriginName();
 
-        return appletPropDef;
-    }
-
-    public AppletSetValuesDef getSetValues(String name) {
-        AppletSetValuesDef appletSetValuesDef = setValuesDefMap.get(name);
-        if (appletSetValuesDef == null) {
-            throw new RuntimeException(
-                    "Set values with name [" + name + "] is unknown for applet definition [" + getName() + "].");
-        }
-
-        return appletSetValuesDef;
-    }
-
-    public boolean isFilter(String name) {
-        return filterDefMap.containsKey(name);
-    }
-
-    public AppletFilterDef getFilterDef(String name) {
-        AppletFilterDef filterDef = filterDefMap.get(name);
-        if (filterDef == null) {
-            throw new RuntimeException(
-                    "Filter with name [" + name + "] is unknown for applet definition [" + getName() + "].");
-        }
-
-        return filterDef;
-    }
-
-    public List<AppletFilterDef> getChildListFilterDefs(String prefferedChildListApplet) {
-        List<AppletFilterDef> result = childListAppletFilterDefMap.get(prefferedChildListApplet);
-        return result != null ? result : Collections.emptyList();
-    }
-
-    public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
-            boolean descriptiveButtons, String longName, String description) {
-        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
-                allowSecondaryTenants, descriptiveButtons, longName, description, null, 0L);
-    }
-
-    public static Builder newBuilder(AppletType type, String entity, String label, String icon, String assignDescField,
-            String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
-            boolean descriptiveButtons, String longName, String description, Long id, long version) {
-        return new Builder(type, entity, label, icon, assignDescField, pseudoDeleteField, displayIndex, menuAccess,
-                allowSecondaryTenants, descriptiveButtons, longName, description, id, version);
-    }
-
-    public static class Builder {
-
-        private Map<String, AppletPropDef> propDefMap;
-
-        private Map<String, AppletSetValuesDef> setValuesDefMap;
-
-        private Map<String, AppletFilterDef> filterDefMap;
-
-        private AppletType type;
-
-        private String entity;
-
-        private String label;
-
-        private String icon;
-
-        private String assignDescField;
-
-        private String pseudoDeleteField;
-
-        private String routeToApplet;
-
-        private String openPath;
-
-        private String originApplicationName;
-
-        private String originName;
-
-        private int displayIndex;
-
-        private boolean openWindow;
-
-        private boolean menuAccess;
-
-        private boolean allowSecondaryTenants;
-
-        private boolean descriptiveButtons;
-
-        private String longName;
-
-        private String description;
-
-        private Long id;
-
-        private long version;
-
-        public Builder(AppletType type, String entity, String label, String icon, String assignDescField,
-                String pseudoDeleteField, int displayIndex, boolean menuAccess, boolean allowSecondaryTenants,
-                boolean descriptiveButtons, String longName, String description, Long id, long version) {
-            this.type = type;
-            this.propDefMap = new HashMap<String, AppletPropDef>();
-            this.setValuesDefMap = new HashMap<String, AppletSetValuesDef>();
-            this.filterDefMap = new HashMap<String, AppletFilterDef>();
-            this.entity = entity;
-            this.label = label;
-            this.icon = icon;
-            this.assignDescField = assignDescField;
-            this.pseudoDeleteField = pseudoDeleteField;
-            this.displayIndex = displayIndex;
-            this.menuAccess = menuAccess;
-            this.allowSecondaryTenants = allowSecondaryTenants;
-            this.descriptiveButtons = descriptiveButtons;
-            this.longName = longName;
-            this.description = description;
-            this.id = id;
-            this.version = version;
-        }
-
-        public Builder openPath(String openPath) {
-            this.openPath = openPath;
-            return this;
-        }
-
-        public Builder routeToApplet(String routeToApplet) {
-            this.routeToApplet = routeToApplet;
-            return this;
-        }
-
-        public Builder openWindow(boolean openWindow) {
-            this.openWindow = openWindow;
-            return this;
-        }
-
-        public Builder originApplicationName(String originApplicationName) {
-            this.originApplicationName = originApplicationName;
-            return this;
-        }
-
-        public Builder originName(String originName) {
-            this.originName = originName;
-            return this;
-        }
-
-        public Builder addPropDef(String name, String value) {
-            if (propDefMap.containsKey(name)) {
-                throw new RuntimeException("Property with name [" + name + "] already exists in this definition.");
-            }
-
-            propDefMap.put(name, new AppletPropDef(name, value));
-            return this;
-        }
-
-        public Builder addSetValuesDef(String name, String description, SetValuesDef setValuesDef) {
-            if (setValuesDefMap.containsKey(name)) {
-                throw new RuntimeException("Set values with name [" + name + "] already exists in this definition.");
-            }
-
-            setValuesDefMap.put(name, new AppletSetValuesDef(setValuesDef, name, description));
-            return this;
-        }
-
-        public Builder addFilterDef(AppletFilterDef filterDef) {
-            if (filterDef != null) {
-                if (filterDefMap.containsKey(filterDef.getName())) {
-                    throw new RuntimeException(
-                            "Filter with name [" + filterDef.getName() + "] already exists in this definition.");
-                }
-
-                filterDefMap.put(filterDef.getName(), filterDef);
-            }
-
-            return this;
-        }
-
-        public AppletDef build() throws UnifyException {
-            ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-            if (originApplicationName == null) {
-                originApplicationName = nameParts.getApplicationName();
-            }
-            return new AppletDef(type, DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())),
-                    DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
-                    DataUtils.unmodifiableMap(filterDefMap), entity, label, icon,
-                    assignDescField, pseudoDeleteField, routeToApplet, openPath, originApplicationName, originName,
-                    displayIndex, openWindow, menuAccess, allowSecondaryTenants, descriptiveButtons, nameParts,
-                    description, id, version);
-        }
-    }
+    String getEntity();
 
+    String getAssignDescField();
+
+    String getPseudoDeleteField();
+
+    String getLabel();
+
+    String getIcon();
+
+    boolean isFacade();
+
+    boolean isWithEntity();
+
+    boolean isWithAssignDescField();
+
+    boolean isWithPseudoDeleteField();
+
+    boolean isWithIcon();
+
+    String getPrivilege();
+
+    String getRouteToApplet();
+
+    String getOpenPath();
+
+    String getDetachedOpenPath();
+
+    boolean isDescriptiveButtons();
+
+    String getViewId();
+
+    int getDisplayIndex();
+
+    boolean isOpenWindow();
+
+    boolean isMenuAccess() ;
+
+    boolean isAllowSecondaryTenants();
+
+    List<AppletFilterDef> getPreferredFormFilterList();
+
+    boolean isWithPreferredFormFilters();
+
+    List<AppletPropDef> getPropDefList();
+
+    boolean isLabelMatch(String filter);
+
+    <T> T getPropValue(Class<T> dataClazz, String name) throws UnifyException;
+
+    <T> T getPropValue(Class<T> dataClazz, String name, T defVal) throws UnifyException;
+
+    boolean isProp(String name);
+
+    boolean isPropWithValue(String name) throws UnifyException;
+
+    AppletPropDef getPropDef(String name);
+
+    AppletSetValuesDef getSetValues(String name);
+
+    boolean isFilter(String name);
+
+    AppletFilterDef getFilterDef(String name);
+
+    List<AppletFilterDef> getChildListFilterDefs(String prefferedChildListApplet);
 }

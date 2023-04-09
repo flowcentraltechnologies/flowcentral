@@ -29,26 +29,20 @@ public abstract class AbstractAppletPageBean<T extends AbstractApplet> extends A
 
     private T applet;
 
-    private String altCaption;
-
-    private String altSubCaption;
-
     public T getApplet() {
         return applet;
     }
 
     public void setApplet(T applet) throws UnifyException{
         this.applet = applet;
-        altCaption = applet.getPageAltCaption();
-        altSubCaption = applet.getPageAltSubCaption();
     }
 
-    public String getAltCaption() {
-        return altCaption;
+    public String getAltCaption() throws UnifyException {
+        return applet.getPageAltCaption();
     }
 
-    public String getAltSubCaption() {
-        return altSubCaption;
+    public String getAltSubCaption() throws UnifyException {
+        return applet.getPageAltSubCaption();
     }
 
 }

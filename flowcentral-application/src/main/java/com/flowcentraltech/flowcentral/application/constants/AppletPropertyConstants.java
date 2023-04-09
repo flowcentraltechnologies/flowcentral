@@ -175,4 +175,6 @@ public interface AppletPropertyConstants {
     String HEADLESS_TABS_APPLETS = "headlesstabs.applets";
 
     String SINGLE_FORM_PANEL = "singleForm.panel";
+
+    String PAGE_MULTIPLE = "page.multiple";
 }

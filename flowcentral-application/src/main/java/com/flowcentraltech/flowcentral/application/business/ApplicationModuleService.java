@@ -155,6 +155,20 @@ public interface ApplicationModuleService extends FlowCentralService {
             throws UnifyException;
 
     /**
+     * Creates a wrapper instance initialized with the entity instance found by
+     * supplied ID.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @param id
+     *                    the id
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Long Id) throws UnifyException;
+
+    /**
      * Creates a wrapper instance initialized with the supplied entity instance.
      * 
      * @param wrapperType
@@ -166,6 +180,20 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException;
+
+    /**
+     * Creates a wrapper instance initialized with the entity list found by supplied
+     * query.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @param query
+     *                    the query
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Query<? extends Entity> query) throws UnifyException;
 
     /**
      * Creates a wrapper instance initialized with the supplied entity instance

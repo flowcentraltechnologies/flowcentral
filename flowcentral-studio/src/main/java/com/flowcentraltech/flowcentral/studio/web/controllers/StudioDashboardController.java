@@ -144,7 +144,7 @@ public class StudioDashboardController extends AbstractPageController<StudioDash
 
             EntitySearch _switchApplicationSearch = new EntitySearch(
                     new FormContext(new AppletContext(null, appletUtils)), null, null, null, _tableDef, null, null,
-                    null, null, 4, EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_EDIT_BUTTON), false, false);
+                    null, null, 4, EntitySearch.ENABLE_ALL & ~(EntitySearch.SHOW_EDIT_BUTTON), false, false, false);
             _switchApplicationSearch
                     .setPaginationLabel(appletUtils.resolveSessionMessage("$m{entitysearch.display.label}"));
             _switchApplicationSearch.setEntitySubTitle("Application");

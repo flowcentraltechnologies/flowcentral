@@ -71,6 +71,7 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.data.SearchInputsDef;
 import com.flowcentraltech.flowcentral.application.data.SetStatesDef;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
@@ -427,11 +428,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     AppApplet appApplet = getApplicationEntity(AppApplet.class, _actLongName);
                     final boolean descriptiveButtons = appletUtilities.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
-                    AppletDef.Builder adb = AppletDef.newBuilder(appApplet.getType(), appApplet.getEntity(),
+                    final AppletType type = appApplet.getType();
+                    StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type, appApplet.getEntity(),
                             appApplet.getLabel(), appApplet.getIcon(), appApplet.getAssignDescField(),
                             appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
                             appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
                             appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
+                     
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
                     }
@@ -448,19 +451,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     }
 
                     for (AppAppletSetValues appAppletSetValues : appApplet.getSetValuesList()) {
+                        SetValuesDef setValuesDef = InputWidgetUtils.getSetValuesDef(appAppletSetValues.getName(),
+                                appAppletSetValues.getDescription(), appAppletSetValues.getValueGenerator(),
+                                appAppletSetValues.getSetValues());
                         adb.addSetValuesDef(appAppletSetValues.getName(), appAppletSetValues.getDescription(),
-                                InputWidgetUtils.getSetValuesDef(appAppletSetValues.getName(),
-                                        appAppletSetValues.getDescription(), appAppletSetValues.getValueGenerator(),
-                                        appAppletSetValues.getSetValues()));
+                                setValuesDef);
                     }
 
                     adb.routeToApplet(appApplet.getRouteToApplet());
                     if (!StringUtils.isBlank(appApplet.getPath())) {
                         adb.openPath(appApplet.getPath());
-                    } else {
+                     } else {
                         adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(appApplet.getType(), longName));
+                        if (type.isEntityList()) {
+                            adb.detachedOpenPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY, longName));
+                        }
                     }
-
+                    
                     adb.openWindow(appApplet.getType().isOpenWindow());
                     return adb.build();
                 }
@@ -1264,6 +1271,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Long Id) throws UnifyException {
+        Entity inst = environment().listLean(queryOf(wrapperType).addEquals("id", Id));
+        return wrapperOf(wrapperType, inst);
+    }
+
+    @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Entity inst) throws UnifyException {
         if (inst != null) {
             final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
@@ -1273,6 +1286,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         }
 
         return null;
+    }
+
+    @Override
+    public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, Query<? extends Entity> query)
+            throws UnifyException {
+        List<? extends Entity> instList = environment().listAll(query);
+        return wrapperOf(wrapperType, instList);
     }
 
     @Override
@@ -1296,7 +1316,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             final EntityClassDef entityClassDef = getEntityClassDef(entityName);
             return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_3, entityClassDef, valueStore);
         }
-        
+
         return null;
     }
 

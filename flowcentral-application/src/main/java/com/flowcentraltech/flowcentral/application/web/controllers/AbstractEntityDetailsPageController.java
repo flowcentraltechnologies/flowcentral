@@ -143,6 +143,10 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected final String reloadResult() throws UnifyException {
         return "reloadResult";
     }
+
+    protected final void setPageSubCaption(String subCaption) throws UnifyException {
+        getPageBean().getApplet().setSubCaption(subCaption);
+    }
    
     protected abstract TableDef getTableDef() throws UnifyException;
 

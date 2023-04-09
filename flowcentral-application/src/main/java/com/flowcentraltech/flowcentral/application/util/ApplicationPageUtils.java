@@ -16,6 +16,8 @@
 package com.flowcentraltech.flowcentral.application.util;
 
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
 
 /**
  * Application page utilities.
@@ -25,8 +27,14 @@ import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
  */
 public final class ApplicationPageUtils {
 
+    private static final String MULTIPAGE_PART = UnifyWebRequestAttributeConstants.TIMESTAMP_VARIABLE + "/";
+    
     private ApplicationPageUtils() {
 
+    }
+
+    public static String constructMultiPageAppletOpenPagePath(String path) {
+        return StringUtils.replaceLast(path, "/", MULTIPAGE_PART);
     }
 
     public static String constructAppletOpenPagePath(AppletType type, String appletName) {
@@ -50,4 +58,5 @@ public final class ApplicationPageUtils {
         return new StringBuilder().append(controllerName).append(':').append(appletName).append("/replacePage")
                 .toString();
     }
+
 }

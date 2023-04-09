@@ -271,8 +271,10 @@ public class FormContext extends AbstractContext {
         this.inst = inst;
         altFormTitle = formDef != null && isWithInst() && formDef.isWithTitleFormat()
                 ? appletContext.specialParamProvider()
-                        .getStringGenerator(null, getFormValueStore().getReader(), formDef.getTitleFormat()).generate()
-                : null;
+                        .getStringGenerator(getFormValueStore().getReader(), getFormValueStore().getReader(),
+                                formDef.getTitleFormat())
+                        .generate()
+                : au().resolveSessionMessage("$m{form.newrecord}");
     }
 
     public Object getInst() {
@@ -396,7 +398,7 @@ public class FormContext extends AbstractContext {
     public boolean isWithInst() {
         return inst != null;
     }
-    
+
     public void addReviewError(ReviewResult.Builder rrb, FormReviewPolicyDef policyDef) {
         addReviewError(rrb, policyDef.getTarget(), policyDef.getMessageType(), policyDef.getMessage(),
                 policyDef.isSkippable());

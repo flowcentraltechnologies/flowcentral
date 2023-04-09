@@ -165,6 +165,8 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             final boolean sectionWithItemsOnly = au.system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_MENU_SECTIONS_ITEMS_ONLY);
             final boolean enterprise = au.collaborationProvider() != null;
+            final boolean multiPage = au.system().getSysParameterValue(boolean.class,
+                    ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB);
 
             final StringBuilder msb = new StringBuilder();
             final StringBuilder misb = new StringBuilder();
@@ -230,7 +232,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                             if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
                                     && (wkspPrivilegeManager == null || wkspPrivilegeManager
                                             .isWorkspaceWithPrivilege(workspaceCode, appletPrivilegeCode))) {
-                                writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
+                                writeSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
                                 isWithSubMenus = true;
                                 appendISym = true;
                             }
@@ -240,7 +242,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                             for (AppletDef appletDef : appletDefProvider
                                     .getAppletDefsByRole(applicationMenuDef.getName(), roleCode, searchInput)) {
                                 if (appletDef.isMenuAccess()) {
-                                    writeSubMenuAppletDef(writer, misb, appletDef, appendISym);
+                                    writeSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
                                     isWithSubMenus = true;
                                     appendISym = true;
                                 }

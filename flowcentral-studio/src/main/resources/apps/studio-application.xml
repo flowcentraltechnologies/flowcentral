@@ -3653,7 +3653,7 @@
 						column="1" required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
-					<field name="titleFormat" inputWidget="application.text"
+					<field name="titleFormat" inputWidget="application.texttemplate"
 						column="1" />
 					<field name="consolidatedValidation"
 						inputWidget="studio.consformvalidationpolicylist" column="1"
@@ -4855,7 +4855,7 @@
 					inputWidget="studio.propertyappletsingledigit" />
 				<property name="searchTable.maintainApplet"
 					description="$m{studio.appappletprop.manageentity.searchtable.maintainapplet}"
-					inputWidget="studio.propertymaintainappletlist" />
+					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.formproperties}">
@@ -5207,6 +5207,15 @@
 					inputWidget="studio.propertyroutetoappletlist" required="false" />
 			</propertySet>
 		</propertyList>
+		<propertyList name="ppgAppAppletPropList"
+			description="$m{studio.appappletprop.pathpage.propertylist}">
+			<propertySet
+				label="$m{studio.appappletprop.pathpage.properties}">
+				<property name="page.multiple"
+					description="$m{studio.appappletprop.pathpage.property.pagemultiple}"
+					inputWidget="application.checkbox"/>
+			</propertySet>
+		</propertyList>
 	</propertyLists>
 
 	<!-- Property Rules -->
@@ -5226,6 +5235,7 @@
 			<choice name="hdl" val="hdlAppAppletPropList" />
 			<choice name="tex" val="texAppAppletPropList" />
 			<choice name="dim" val="impAppAppletPropList" />
+			<choice name="ppg" val="ppgAppAppletPropList" />
 		</propertyRule>
 	</propertyRules>
 </application>
