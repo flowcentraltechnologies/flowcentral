@@ -13,38 +13,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.data;
+package com.flowcentraltech.flowcentral.application.web.controllers;
 
-import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
+import com.flowcentraltech.flowcentral.application.web.panels.applet.ListingApplet;
+import com.tcdng.unify.core.UnifyException;
 
 /**
- * Create entity detached applet definition
+ * Listing applet page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class CreateEntityDetachedAppletDef extends AbstractDetachedAppletDef {
+public class ListingAppletPageBean extends AbstractAppletPageBean<ListingApplet> {
 
-    public CreateEntityDetachedAppletDef(AppletDef parentAppletDef) {
-        super(AppletType.CREATE_ENTITY, parentAppletDef);
+    public ListingApplet getApplet() {
+        return super.getApplet();
     }
 
     @Override
-    public String getOpenPath() {
-        // This not an error
-        return parentAppletDef.getMaintainOpenPath();
-    }
-
-    @Override
-    public String getMaintainOpenPath() {
-        // Neither is this
-        return null;
-    }
-
-    @Override
-    public String getListingOpenPath() {
-        // Nor this
-        return null;
+    public void setApplet(ListingApplet applet) throws UnifyException {
+        super.setApplet(applet);
     }
 
 }

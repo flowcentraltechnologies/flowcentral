@@ -28,6 +28,10 @@ public interface AppletPropertyConstants {
 
     String PAGE_ALTERNATE_SUBCAPTION = "page.alternateSubCaption";
 
+    String PAGE_MAINTAIN_CAPTION = "page.maintainCaption";
+
+    String PAGE_LISTING_CAPTION = "page.listingCaption";
+
     String LOADING_TABLE = "loadingTable";
     
     String LOADING_TABLE_ACTIONFOOTER = "loadingTable.actionFooter";
@@ -62,7 +66,7 @@ public interface AppletPropertyConstants {
     
     String SEARCH_TABLE_SEARCH_ON_CRITERIA_ONLY = "searchTable.searchOnCriteriaOnly";
     
-    String SEARCH_TABLE_MAINTAIN_APPLET = "searchTable.maintainApplet";
+    String SEARCH_TABLE_VIEW_ITEM_SEPARATE_TAB = "searchTable.viewItemInSeparateTab";
    
     String ENTITY_FORM = "entityForm";
 

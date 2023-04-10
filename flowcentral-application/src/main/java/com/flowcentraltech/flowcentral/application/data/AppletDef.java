@@ -49,7 +49,9 @@ public interface AppletDef {
 
     AppletType getType();
 
-    AppletDef getDetachedAppletDef();
+    AppletDef getMaintainAppletDef();
+
+    AppletDef getListingAppletDef();
 
     boolean isStudioComponent();
 
@@ -83,7 +85,9 @@ public interface AppletDef {
 
     String getOpenPath();
 
-    String getDetachedOpenPath();
+    String getMaintainOpenPath();
+
+    String getListingOpenPath();
 
     boolean isDescriptiveButtons();
 

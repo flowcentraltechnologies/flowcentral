@@ -240,6 +240,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return collaboration;
     }
 
+    @Override
     public boolean navBackToPrevious() throws UnifyException {
         boolean success = true;
         if (restoreForm()) {
@@ -350,7 +351,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public TableActionResult newEntityInst() throws UnifyException {
-        if (entitySearch.isDetachedMaintainApplet()) {
+        if (entitySearch.isViewItemsInSeparateTabs()) {
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
                     getAppletName());
             TableActionResult result = new TableActionResult(openPath);
@@ -635,7 +636,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public TableActionResult maintainInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
-        if (entitySearch.isDetachedMaintainApplet()) {
+        if (entitySearch.isViewItemsInSeparateTabs()) {
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY,
                     getAppletName(), _inst.getId());
             TableActionResult result = new TableActionResult(openPath);
@@ -654,13 +655,22 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return null;
     }
 
-    public void listingInst(int mIndex) throws UnifyException {
+    public TableActionResult listingInst(int mIndex) throws UnifyException {
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
+        if (entitySearch.isViewItemsInSeparateTabs()) {
+            // TODO Re-direct listing
+            final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
+                    getAppletName(), _inst.getId());
+            TableActionResult result = new TableActionResult(openPath);
+            result.setOpenPath(true);
+            return result;
+        }
+
         _inst = reloadEntity(_inst, true);
         listingForm = constructListingForm(_inst);
         viewMode = ViewMode.LISTING_FORM;
-        return;
+        return null;
     }
 
     public void maintainChildInst(int mIndex) throws UnifyException {

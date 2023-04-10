@@ -824,7 +824,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public ListingForm constructListingForm(AbstractEntityFormApplet applet, String rootTitle, String beanTitle,
+    public ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle,
             FormDef formDef, Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
@@ -1575,8 +1575,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
 
-        final boolean detachedMaintainApplet = _appletDef.getPropValue(boolean.class,
-                AppletPropertyConstants.SEARCH_TABLE_MAINTAIN_APPLET)
+        final boolean viewItemsInSeparateTabs = _appletDef.getPropValue(boolean.class,
+                AppletPropertyConstants.SEARCH_TABLE_VIEW_ITEM_SEPARATE_TAB)
                 && systemModuleService.getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB);
 
@@ -1610,7 +1610,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
                 _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
-                showConditions, isIgnoreParentCondition, detachedMaintainApplet);
+                showConditions, isIgnoreParentCondition, viewItemsInSeparateTabs);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         _entitySearch.setShowBaseRestriction(showBaseRestriction);

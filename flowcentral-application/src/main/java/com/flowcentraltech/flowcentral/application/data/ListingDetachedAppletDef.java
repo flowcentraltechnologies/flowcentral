@@ -18,21 +18,21 @@ package com.flowcentraltech.flowcentral.application.data;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 
 /**
- * Create entity detached applet definition
+ * Listing detached applet definition
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class CreateEntityDetachedAppletDef extends AbstractDetachedAppletDef {
+public class ListingDetachedAppletDef extends AbstractDetachedAppletDef {
 
-    public CreateEntityDetachedAppletDef(AppletDef parentAppletDef) {
-        super(AppletType.CREATE_ENTITY, parentAppletDef);
+    public ListingDetachedAppletDef(AppletDef parentAppletDef) {
+        super(AppletType.LISTING, parentAppletDef);
     }
 
     @Override
     public String getOpenPath() {
         // This not an error
-        return parentAppletDef.getMaintainOpenPath();
+        return parentAppletDef.getListingOpenPath();
     }
 
     @Override

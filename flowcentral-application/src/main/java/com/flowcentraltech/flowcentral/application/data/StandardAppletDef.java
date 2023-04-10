@@ -54,7 +54,9 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private String openPath;
 
-    private String detachedOpenPath;
+    private String maintainOpenPath;
+
+    private String listingOpenPath;
 
     private String originApplicationName;
 
@@ -90,14 +92,17 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private Map<String, List<AppletFilterDef>> childListAppletFilterDefMap;
 
-    private AppletDef detachedAppletDef;
+    private AppletDef maintainAppletDef;
+
+    private AppletDef listingAppletDef;
 
     private StandardAppletDef(AppletType type, List<AppletPropDef> propDefList, Map<String, AppletPropDef> propDefMap,
             Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
             String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
-            String openPath, String detachedOpenPath, String originApplicationName, String originName, int displayIndex,
-            boolean openWindow, boolean menuAccess, boolean allowSecondaryTenants, boolean descriptiveButtons,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+            String openPath, String maintainOpenPath, String listingOpenPath, String originApplicationName,
+            String originName, int displayIndex, boolean openWindow, boolean menuAccess, boolean allowSecondaryTenants,
+            boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -108,7 +113,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         this.pseudoDeleteField = pseudoDeleteField;
         this.routeToApplet = routeToApplet;
         this.openPath = openPath;
-        this.detachedOpenPath = detachedOpenPath;
+        this.maintainOpenPath = maintainOpenPath;
+        this.listingOpenPath = listingOpenPath;
         this.originApplicationName = originApplicationName;
         this.originName = originName;
         this.displayIndex = displayIndex;
@@ -161,17 +167,29 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
-    public AppletDef getDetachedAppletDef() {
-        if (detachedAppletDef == null) {
+    public AppletDef getMaintainAppletDef() {
+        if (maintainAppletDef == null) {
             synchronized (this) {
-                if (detachedAppletDef == null) {
-                    // TODO Make decision based on type
-                    detachedAppletDef = new CreateEntityDetachedAppletDef(this);
+                if (maintainAppletDef == null) {
+                    maintainAppletDef = new CreateEntityDetachedAppletDef(this);
                 }
             }
         }
 
-        return detachedAppletDef;
+        return maintainAppletDef;
+    }
+
+    @Override
+    public AppletDef getListingAppletDef() {
+        if (listingAppletDef == null) {
+            synchronized (this) {
+                if (listingAppletDef == null) {
+                    listingAppletDef = new ListingDetachedAppletDef(this);
+                }
+            }
+        }
+
+        return listingAppletDef;
     }
 
     @Override
@@ -255,8 +273,13 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
-    public String getDetachedOpenPath() {
-        return detachedOpenPath;
+    public String getMaintainOpenPath() {
+        return maintainOpenPath;
+    }
+
+    @Override
+    public String getListingOpenPath() {
+        return listingOpenPath;
     }
 
     @Override
@@ -430,7 +453,9 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private String openPath;
 
-        private String detachedOpenPath;
+        private String maintainOpenPath;
+
+        private String listingOpenPath;
 
         private String originApplicationName;
 
@@ -481,8 +506,13 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             return this;
         }
 
-        public Builder detachedOpenPath(String detachedOpenPath) {
-            this.detachedOpenPath = detachedOpenPath;
+        public Builder maintainOpenPath(String maintainOpenPath) {
+            this.maintainOpenPath = maintainOpenPath;
+            return this;
+        }
+
+        public Builder listingOpenPath(String listingOpenPath) {
+            this.listingOpenPath = listingOpenPath;
             return this;
         }
 
@@ -546,9 +576,9 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
                     DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())),
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
                     DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
-                    routeToApplet, openPath, detachedOpenPath, originApplicationName, originName, displayIndex,
-                    openWindow, menuAccess, allowSecondaryTenants, descriptiveButtons, nameParts, description, id,
-                    version);
+                    routeToApplet, openPath, maintainOpenPath, listingOpenPath, originApplicationName, originName,
+                    displayIndex, openWindow, menuAccess, allowSecondaryTenants, descriptiveButtons, nameParts,
+                    description, id, version);
         }
     }
 

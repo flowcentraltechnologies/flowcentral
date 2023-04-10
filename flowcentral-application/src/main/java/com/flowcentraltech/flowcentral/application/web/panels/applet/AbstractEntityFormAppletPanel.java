@@ -19,7 +19,6 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
-import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -58,7 +57,6 @@ import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
@@ -758,14 +756,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
 
             TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
-            if (result != null) {
-                if (result.isOpenPath()) {
-                    setCommandOpenPath((String) result.getResult());
-                } else if (result.isDisplayListingReport()) {
-                    setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
-                    setCommandResultMapping("viewlistingreport");
-                }
-            }
+            processTableActionResult(result);
         } else {
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
@@ -786,10 +777,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 default:
             }
 
-            getEntityFormApplet().listingInst(target.getIndex());
+            TableActionResult result = getEntityFormApplet().listingInst(target.getIndex());
+            processTableActionResult(result);
         }
     }
-
+    
     @Action
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();
@@ -810,6 +802,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+    @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
         // Select first tab with review message TODO Move to method?
         TabSheetWidget tabSheetWidget = getWidgetByShortName(TabSheetWidget.class, "formPanel.formTabSheet");
@@ -851,61 +844,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
-    private void handleEntityActionResult(EntityActionResult entityActionResult) throws UnifyException {
-        handleEntityActionResult(entityActionResult, null);
-    }
 
-    private void handleEntityActionResult(EntityActionResult entityActionResult, FormContext ctx)
-            throws UnifyException {
-        if (entityActionResult.isRefreshMenu()) {
-            refreshApplicationMenu();
-        }
-
-        if (ctx != null && ctx.isWithReviewErrors()) {
-            onReviewErrors(entityActionResult);
-        } else if (entityActionResult.isWithTaskResult()) {
-            fireEntityActionResultTask(entityActionResult);
-        } else {
-            setCommandResultMapping(entityActionResult, false);
-        }
-
-        handleHints(entityActionResult, ctx);
-    }
-
-    private void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
-        String errMsg = (String) getRequestAttribute(
-                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
-        if (!StringUtils.isBlank(errMsg)) {
-            hintUser(MODE.ERROR, "$m{entityformapplet.formdelegation.error.hint}");
-        } else {
-            String successHint = entityActionResult.getSuccessHint();
-            if (!StringUtils.isBlank(successHint)) {
-                formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
+    private void processTableActionResult(TableActionResult result) throws UnifyException {
+        if (result != null) {
+            if (result.isOpenPath()) {
+                setCommandOpenPath((String) result.getResult());
+            } else if (result.isDisplayListingReport()) {
+                setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
+                setCommandResultMapping("viewlistingreport");
             }
-        }
-    }
-
-    private void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
-            throws UnifyException {
-        if (entityActionResult.isHidePopupOnly()) {
-            setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
-        } else if (entityActionResult.isWithResultPath()) {
-            commandPost(entityActionResult.getResultPath());
-        } else if (entityActionResult.isWithTaskResult()) {
-            fireEntityActionResultTask(entityActionResult);
-        } else if (entityActionResult.isCloseView()) {
-            if (getEntityFormApplet().navBackToPrevious()) {
-                if (refereshPanel) {
-                    getEntityFormApplet().au().commandRefreshPanelsAndHidePopup(this);
-                }
-            } else {
-                setCommandResultMapping(ResultMappingConstants.CLOSE);
-            }
-        } else if (entityActionResult.isClosePage()) {
-            setCommandResultMapping(ResultMappingConstants.CLOSE);
-        } else if (entityActionResult.isDisplayListingReport()) {
-            setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
-            setCommandResultMapping("viewlistingreport");
         }
     }
 
@@ -1005,14 +952,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         return ctx;
-    }
-
-    private void formHintSuccess(String messageKey, String entityName) throws UnifyException {
-        if (!StringUtils.isBlank(entityName)) {
-            hintUser(messageKey, StringUtils.capitalizeFirstLetter(entityName));
-        } else {
-            hintUser(messageKey);
-        }
     }
 
 }

@@ -4805,6 +4805,12 @@
 				<property name="page.alternateSubCaption"
 					description="$m{studio.appappletprop.manageentity.pagealtsubcaption}"
 					inputWidget="application.text" />
+				<property name="page.maintainCaption"
+					description="$m{studio.appappletprop.manageentity.pagemaintaincaption}"
+					inputWidget="application.text" />
+				<property name="page.listingCaption"
+					description="$m{studio.appappletprop.manageentity.pagelistingcaption}"
+					inputWidget="application.text" />
 				<property name="searchTable.new.caption"
 					description="$m{studio.appappletprop.manageentity.searchtable.newcaption}"
 					inputWidget="application.text" />
@@ -4853,8 +4859,8 @@
 				<property name="searchTable.searchColumns"
 					description="$m{studio.appappletprop.manageentity.searchtable.searchcolumns}"
 					inputWidget="studio.propertyappletsingledigit" />
-				<property name="searchTable.maintainApplet"
-					description="$m{studio.appappletprop.manageentity.searchtable.maintainapplet}"
+				<property name="searchTable.viewItemInSeparateTab"
+					description="$m{studio.appappletprop.manageentity.searchtable.viewiteminseparatetab}"
 					inputWidget="application.checkbox" />
 			</propertySet>
 			<propertySet

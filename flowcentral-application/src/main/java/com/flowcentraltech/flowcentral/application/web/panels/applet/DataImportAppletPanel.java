@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationImportDataTaskConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -59,6 +60,11 @@ public class DataImportAppletPanel extends AbstractAppletPanel {
                 ? application().getAppletDef(routeToAppletName).getOpenPath()
                 : null;
         launchTaskWithMonitorBox(taskSetup, appletDef.getDescription(), onSuccessPath, null);
+    }
+
+    @Override
+    protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
+        
     }
 
     protected DataImportApplet getDataImportApplet() throws UnifyException {

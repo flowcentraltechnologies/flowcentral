@@ -464,7 +464,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                      } else {
                         adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(appApplet.getType(), longName));
                         if (type.isEntityList()) {
-                            adb.detachedOpenPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY, longName));
+                            adb.maintainOpenPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY, longName));
+                            adb.listingOpenPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING, longName));
                         }
                     }
                     

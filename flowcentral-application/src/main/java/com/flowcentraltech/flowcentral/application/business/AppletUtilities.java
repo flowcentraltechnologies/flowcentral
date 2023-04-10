@@ -1015,7 +1015,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    ListingForm constructListingForm(AbstractEntityFormApplet applet, String rootTitle, String beanTitle,
+    ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle,
             FormDef formDef, Entity inst, BreadCrumbs breadCrumbs) throws UnifyException;
 
     /**

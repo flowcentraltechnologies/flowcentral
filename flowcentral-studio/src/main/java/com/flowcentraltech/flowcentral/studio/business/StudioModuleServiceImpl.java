@@ -110,6 +110,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                         case MANAGE_PROPERTYLIST:
                         case CREATE_ENTITY:
                         case CREATE_ENTITY_SINGLEFORM:
+                        case LISTING:
                         case TASK_EXECUTION:
                         case DATA_IMPORT:
                         case PATH_WINDOW:

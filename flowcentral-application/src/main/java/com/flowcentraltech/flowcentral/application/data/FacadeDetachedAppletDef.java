@@ -33,8 +33,13 @@ public class FacadeDetachedAppletDef extends AbstractDetachedAppletDef {
     }
 
     @Override
-    public String getDetachedOpenPath() {
-        return parentAppletDef.getDetachedOpenPath();
+    public String getMaintainOpenPath() {
+        return parentAppletDef.getMaintainOpenPath();
+    }
+
+    @Override
+    public String getListingOpenPath() {
+        return parentAppletDef.getListingOpenPath();
     }
 
 }

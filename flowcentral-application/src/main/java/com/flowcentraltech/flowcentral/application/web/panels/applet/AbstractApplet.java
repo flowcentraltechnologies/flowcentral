@@ -67,6 +67,8 @@ public abstract class AbstractApplet {
 
     private AppletDef rootAppletDef;
 
+    private String altCaption;
+
     private String altSubCaption;
 
     public AbstractApplet(AppletUtilities au, String appletName) throws UnifyException {
@@ -92,7 +94,8 @@ public abstract class AbstractApplet {
     }
 
     public String getPageAltCaption() throws UnifyException {
-        return au.resolveSessionMessage(
+        return !StringUtils.isBlank(altCaption) ? altCaption
+                : au.resolveSessionMessage(
                 getRootAppletDef().getPropValue(String.class, AppletPropertyConstants.PAGE_ALTERNATE_CAPTION));
     }
 
@@ -109,7 +112,11 @@ public abstract class AbstractApplet {
 
         return rootAppletDef;
     }
-
+    
+    public boolean navBackToPrevious() throws UnifyException {
+        return false;
+    }
+    
     public AppletDef getSingleFormAppletDef() throws UnifyException {
         return null;
     }
@@ -123,10 +130,6 @@ public abstract class AbstractApplet {
                 ApplicationModuleSysParamConstants.SAVE_HEADER_FORM_ON_TAB_ACTION);
     }
 
-    protected void setAltSubCaption(String altSubCaption) {
-        this.altSubCaption = altSubCaption;
-    }
-
     public final AppletUtilities au() {
         return au;
     }
@@ -138,6 +141,14 @@ public abstract class AbstractApplet {
                 rootAppletDef = _nAppletDef;
             }
         }
+    }
+
+    protected void setAltCaption(String altCaption) {
+        this.altCaption = altCaption;
+    }
+
+    protected void setAltSubCaption(String altSubCaption) {
+        this.altSubCaption = altSubCaption;
     }
 
     protected AppletDef resolveRootAppletDef(String appletName) throws UnifyException {

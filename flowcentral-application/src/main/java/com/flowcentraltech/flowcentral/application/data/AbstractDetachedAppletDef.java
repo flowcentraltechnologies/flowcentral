@@ -89,7 +89,12 @@ public abstract class AbstractDetachedAppletDef implements AppletDef {
     }
 
     @Override
-    public AppletDef getDetachedAppletDef() {
+    public AppletDef getMaintainAppletDef() {
+        return null;
+    }
+
+    @Override
+    public AppletDef getListingAppletDef() {
         return null;
     }
 
