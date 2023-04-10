@@ -32,12 +32,18 @@ public class CreateEntityDetachedAppletDef extends AbstractDetachedAppletDef {
     @Override
     public String getOpenPath() {
         // This not an error
-        return parentAppletDef.getDetachedOpenPath();
+        return parentAppletDef.getMaintainOpenPath();
     }
 
     @Override
-    public String getDetachedOpenPath() {
+    public String getMaintainOpenPath() {
         // Neither is this
+        return null;
+    }
+
+    @Override
+    public String getListingOpenPath() {
+        // Nor this
         return null;
     }
 

@@ -153,7 +153,7 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
     protected final AppletDef resolveRootAppletDef(String appletName) throws UnifyException {
         AppletDef appletDef = au.getAppletDef(appletName);
         if (appletDef.getType().isEntityList()) {
-            appletDef = appletDef.getDetachedAppletDef();
+            appletDef = appletDef.getMaintainAppletDef();
         }
 
         return appletDef;

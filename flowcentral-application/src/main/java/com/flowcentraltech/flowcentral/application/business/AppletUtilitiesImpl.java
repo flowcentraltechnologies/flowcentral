@@ -1576,7 +1576,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         }
 
         final boolean detachedMaintainApplet = _appletDef.getPropValue(boolean.class,
-                AppletPropertyConstants.SEARCH_TABLE_MAINTAIN_APPLET)
+                AppletPropertyConstants.SEARCH_TABLE_VIEW_ITEM_SEPARATE_TAB)
                 && systemModuleService.getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB);
 
