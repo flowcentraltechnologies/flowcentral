@@ -23,10 +23,11 @@
 !ui-label:listDisplayCounterLabel styleClass:$e{fc-dispcounter}
 	styleClassBinding:displayItemCounterClass binding:displayItemCounter
 !ui-button:listCancelBtn caption:$m{button.close}
-	eventHandler:$d{!ui-event event:onclick action:$c{navBackAct}}
+	eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 !fc-formactionbuttons:listFrmActionBtns binding:formActionDefList
     eventHandler:$d{!ui-event event:onclick action:$c{formActionAct}}
 
 // Actions
 !ui-postcommand:formActionAct command:performFormAction
+!ui-postcommand:closeAct command:close
     

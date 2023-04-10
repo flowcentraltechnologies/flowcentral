@@ -82,7 +82,9 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
         Entity _inst = loadEntity(entityInstId);
         listingForm = constructListingForm(_inst);
         this.viewMode = ViewMode.LISTING_FORM;
-    }
+        
+        setAltSubCaption(listingForm.getFormTitle());
+   }
 
     public void ensureFormStruct() throws UnifyException {
         if (listingForm != null) {
