@@ -28,6 +28,10 @@ public interface AppletPropertyConstants {
 
     String PAGE_ALTERNATE_SUBCAPTION = "page.alternateSubCaption";
 
+    String PAGE_MAINTAIN_CAPTION = "page.maintainCaption";
+
+    String PAGE_LISTING_CAPTION = "page.listingCaption";
+
     String LOADING_TABLE = "loadingTable";
     
     String LOADING_TABLE_ACTIONFOOTER = "loadingTable.actionFooter";

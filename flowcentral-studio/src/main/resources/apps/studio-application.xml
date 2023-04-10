@@ -4805,6 +4805,12 @@
 				<property name="page.alternateSubCaption"
 					description="$m{studio.appappletprop.manageentity.pagealtsubcaption}"
 					inputWidget="application.text" />
+				<property name="page.maintainCaption"
+					description="$m{studio.appappletprop.manageentity.pagemaintaincaption}"
+					inputWidget="application.text" />
+				<property name="page.listingCaption"
+					description="$m{studio.appappletprop.manageentity.pagelistcaption}"
+					inputWidget="application.text" />
 				<property name="searchTable.new.caption"
 					description="$m{studio.appappletprop.manageentity.searchtable.newcaption}"
 					inputWidget="application.text" />

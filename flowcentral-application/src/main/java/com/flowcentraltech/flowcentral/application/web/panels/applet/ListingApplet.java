@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -49,22 +50,6 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
 
     public enum ViewMode {
         LISTING_FORM;
-
-        public boolean isListingForm() {
-            return LISTING_FORM.equals(this);
-        }
-
-        public boolean isRootForm() {
-            return true;
-        }
-
-        public boolean isPrimary() {
-            return true;
-        }
-
-        public boolean isInForm() {
-            return true;
-        }
     };
 
     protected ListingForm listingForm;
@@ -73,8 +58,7 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
 
     protected EntityFileAttachments formFileAttachments;
 
-    public ListingApplet(AppletUtilities au, String pathVariable)
-            throws UnifyException {
+    public ListingApplet(AppletUtilities au, String pathVariable) throws UnifyException {
         super(au, pathVariable);
         this.formFileAttachments = new EntityFileAttachments();
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariable);
@@ -82,9 +66,9 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
         Entity _inst = loadEntity(entityInstId);
         listingForm = constructListingForm(_inst);
         this.viewMode = ViewMode.LISTING_FORM;
-        
+
         setAltSubCaption(listingForm.getFormTitle());
-   }
+    }
 
     public void ensureFormStruct() throws UnifyException {
         if (listingForm != null) {
@@ -152,6 +136,7 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
         AppletDef appletDef = au.getAppletDef(appletName);
         if (appletDef.getType().isEntityList()) {
             appletDef = appletDef.getMaintainAppletDef();
+            setAltCaption(appletDef.getPropValue(String.class, AppletPropertyConstants.PAGE_LISTING_CAPTION));
         }
 
         return appletDef;

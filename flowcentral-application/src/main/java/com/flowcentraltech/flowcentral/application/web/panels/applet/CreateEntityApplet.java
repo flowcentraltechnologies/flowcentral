@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -46,7 +47,7 @@ public class CreateEntityApplet extends AbstractEntityFormApplet {
             form = constructForm(inst, FormMode.MAINTAIN, null, false);
             viewMode = ViewMode.MAINTAIN_PRIMARY_FORM_NO_SCROLL;
         }
-        
+
         setAltSubCaption(form.getFormTitle());
     }
 
@@ -54,8 +55,9 @@ public class CreateEntityApplet extends AbstractEntityFormApplet {
         AppletDef appletDef = au.getAppletDef(appletName);
         if (appletDef.getType().isEntityList()) {
             appletDef = appletDef.getMaintainAppletDef();
+            setAltCaption(appletDef.getPropValue(String.class, AppletPropertyConstants.PAGE_MAINTAIN_CAPTION));
         }
-        
+
         return appletDef;
     }
 
