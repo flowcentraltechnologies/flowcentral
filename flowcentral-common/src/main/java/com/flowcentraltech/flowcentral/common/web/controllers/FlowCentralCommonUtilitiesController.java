@@ -82,6 +82,11 @@ public class FlowCentralCommonUtilitiesController
     }
 
     @Action
+    public String refreshContent() throws UnifyException {
+        return hidePopup();
+    }
+
+    @Action
     public String generateReport() throws UnifyException {
         Popup popup = getCurrentPopup();
         ReportOptions reportOptions = (ReportOptions) popup.getBackingBean();

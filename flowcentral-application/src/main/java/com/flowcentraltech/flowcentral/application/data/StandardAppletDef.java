@@ -152,7 +152,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     public AppletDef facade(AppletDef _appletDef) {
-        return new FacadeDetachedAppletDef(_appletDef);
+        return new FacadeDetachedAppletDef(this);
     }
 
     @Override
