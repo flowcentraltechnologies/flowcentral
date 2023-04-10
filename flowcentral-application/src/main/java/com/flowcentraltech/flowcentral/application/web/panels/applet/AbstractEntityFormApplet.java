@@ -240,6 +240,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return collaboration;
     }
 
+    @Override
     public boolean navBackToPrevious() throws UnifyException {
         boolean success = true;
         if (restoreForm()) {

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.panels.applet;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.web.widgets.ParamValueEntries;
 import com.flowcentraltech.flowcentral.application.web.widgets.ParamValueEntry;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -46,6 +47,11 @@ public class TaskExecutionAppletPanel extends AbstractAppletPanel {
 
         tsb.logMessages();
         launchTaskWithMonitorBox(tsb.build(), applet.getTaskTitle());
+    }
+
+    @Override
+    protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
+        
     }
 
     protected TaskExecutionApplet getTaskExecutionApplet() throws UnifyException {

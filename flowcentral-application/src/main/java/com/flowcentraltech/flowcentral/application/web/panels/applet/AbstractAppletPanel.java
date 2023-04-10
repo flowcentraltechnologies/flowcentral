@@ -16,12 +16,18 @@
 package com.flowcentraltech.flowcentral.application.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractApplicationSwitchPanel;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
+import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.util.StringUtils;
+import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.widget.Panel;
+import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
  * Convenient abstract base panel for applet panels.
@@ -65,5 +71,73 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
         reportOptions.setRestriction(entityTable.getSourceObject());
         reportOptions.setReportEntityList(true);
         showReportOptionsBox(reportOptions);
+    }
+
+    protected void handleEntityActionResult(EntityActionResult entityActionResult) throws UnifyException {
+        handleEntityActionResult(entityActionResult, null);
+    }
+
+    protected void handleEntityActionResult(EntityActionResult entityActionResult, FormContext ctx)
+            throws UnifyException {
+        if (entityActionResult.isRefreshMenu()) {
+            refreshApplicationMenu();
+        }
+
+        if (ctx != null && ctx.isWithReviewErrors()) {
+            onReviewErrors(entityActionResult);
+        } else if (entityActionResult.isWithTaskResult()) {
+            fireEntityActionResultTask(entityActionResult);
+        } else {
+            setCommandResultMapping(entityActionResult, false);
+        }
+
+        handleHints(entityActionResult, ctx);
+    }
+
+    protected void setCommandResultMapping(EntityActionResult entityActionResult, boolean refereshPanel)
+            throws UnifyException {
+        if (entityActionResult.isHidePopupOnly()) {
+            setCommandResultMapping(ResultMappingConstants.REFRESH_HIDE_POPUP);
+        } else if (entityActionResult.isWithResultPath()) {
+            commandPost(entityActionResult.getResultPath());
+        } else if (entityActionResult.isWithTaskResult()) {
+            fireEntityActionResultTask(entityActionResult);
+        } else if (entityActionResult.isCloseView()) {
+            if (getApplet().navBackToPrevious()) {
+                if (refereshPanel) {
+                    getApplet().au().commandRefreshPanelsAndHidePopup(this);
+                }
+            } else {
+                setCommandResultMapping(ResultMappingConstants.CLOSE);
+            }
+        } else if (entityActionResult.isClosePage()) {
+            setCommandResultMapping(ResultMappingConstants.CLOSE);
+        } else if (entityActionResult.isDisplayListingReport()) {
+            setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
+            setCommandResultMapping("viewlistingreport");
+        }
+    }
+
+    protected void handleHints(EntityActionResult entityActionResult, FormContext ctx) throws UnifyException {
+        String errMsg = (String) getRequestAttribute(
+                AppletRequestAttributeConstants.SILENT_MULTIRECORD_SEARCH_ERROR_MSG);
+        if (!StringUtils.isBlank(errMsg)) {
+            hintUser(MODE.ERROR, "$m{entityformapplet.formdelegation.error.hint}");
+        } else {
+            String successHint = entityActionResult.getSuccessHint();
+            if (!StringUtils.isBlank(successHint)) {
+                formHintSuccess(successHint, ctx != null ? ctx.getEntityName() : null);
+            }
+        }
+    }
+
+    protected abstract void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException;
+    
+    private void formHintSuccess(String messageKey, String entityName) throws UnifyException {
+        if (!StringUtils.isBlank(entityName)) {
+            hintUser(messageKey, StringUtils.capitalizeFirstLetter(entityName));
+        } else {
+            hintUser(messageKey);
+        }
     }
 }

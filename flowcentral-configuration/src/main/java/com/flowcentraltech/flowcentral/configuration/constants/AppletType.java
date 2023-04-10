@@ -69,6 +69,11 @@ public enum AppletType implements EnumConst {
             "/createentitysingleformapplet",
             true,
             true),
+    LISTING(
+            "LST",
+            "/listingapplet",
+            true,
+            false),
     MANAGE_PROPERTYLIST(
             "MPL",
             null,
@@ -126,7 +131,7 @@ public enum AppletType implements EnumConst {
 
     public static final List<AppletType> UNRESERVED_LIST = Collections.unmodifiableList(Arrays.asList(MANAGE_ENTITYLIST,
             MANAGE_ENTITYLIST_ASSIGN, MANAGE_ENTITYLIST_SINGLEFORM, MANAGE_LOADINGLIST,  HEADLESS_TABS, CREATE_ENTITY,
-            CREATE_ENTITY_SINGLEFORM, TASK_EXECUTION, FACADE, PATH_WINDOW, PATH_PAGE));
+            CREATE_ENTITY_SINGLEFORM, LISTING, TASK_EXECUTION, FACADE, PATH_WINDOW, PATH_PAGE));
 
     private final String code;
 

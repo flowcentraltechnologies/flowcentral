@@ -109,7 +109,11 @@ public abstract class AbstractApplet {
 
         return rootAppletDef;
     }
-
+    
+    public boolean navBackToPrevious() throws UnifyException {
+        return false;
+    }
+    
     public AppletDef getSingleFormAppletDef() throws UnifyException {
         return null;
     }

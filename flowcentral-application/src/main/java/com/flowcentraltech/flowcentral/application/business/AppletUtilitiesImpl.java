@@ -824,7 +824,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public ListingForm constructListingForm(AbstractEntityFormApplet applet, String rootTitle, String beanTitle,
+    public ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle,
             FormDef formDef, Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());

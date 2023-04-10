@@ -373,6 +373,11 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         }
     }
 
+    @Override
+    protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
+        
+    }
+
     private void handleEntityActionResult(EntityActionResult entityActionResult, String entityName)
             throws UnifyException {
         if (entityActionResult.isRefreshMenu()) {
