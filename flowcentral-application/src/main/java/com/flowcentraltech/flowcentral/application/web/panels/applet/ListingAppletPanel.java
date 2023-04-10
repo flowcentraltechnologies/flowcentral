@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
@@ -33,6 +34,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Component("fc-listingappletpanel")
 @UplBinding("web/application/upl/listingappletpanel.upl")
 public class ListingAppletPanel extends AbstractAppletPanel {
 
