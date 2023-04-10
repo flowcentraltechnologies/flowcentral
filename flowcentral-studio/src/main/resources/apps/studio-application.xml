@@ -4809,7 +4809,7 @@
 					description="$m{studio.appappletprop.manageentity.pagemaintaincaption}"
 					inputWidget="application.text" />
 				<property name="page.listingCaption"
-					description="$m{studio.appappletprop.manageentity.pagelistcaption}"
+					description="$m{studio.appappletprop.manageentity.pagelistingcaption}"
 					inputWidget="application.text" />
 				<property name="searchTable.new.caption"
 					description="$m{studio.appappletprop.manageentity.searchtable.newcaption}"
