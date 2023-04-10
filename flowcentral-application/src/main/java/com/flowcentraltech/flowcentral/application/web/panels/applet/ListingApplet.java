@@ -21,7 +21,6 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
-import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -72,14 +71,11 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
 
     protected ViewMode viewMode;
 
-    protected EntityFormEventHandlers formEventHandlers;
-
     protected EntityFileAttachments formFileAttachments;
 
-    public ListingApplet(AppletUtilities au, String pathVariable, EntityFormEventHandlers formEventHandlers)
+    public ListingApplet(AppletUtilities au, String pathVariable)
             throws UnifyException {
         super(au, pathVariable);
-        this.formEventHandlers = formEventHandlers;
         this.formFileAttachments = new EntityFileAttachments();
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariable);
         final Long entityInstId = Long.valueOf(vestigial);
