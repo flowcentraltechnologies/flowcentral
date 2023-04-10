@@ -1575,7 +1575,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entitySearchMode |= EntitySearch.SHOW_REPORT;
         }
 
-        final boolean detachedMaintainApplet = _appletDef.getPropValue(boolean.class,
+        final boolean viewItemsInSeparateTabs = _appletDef.getPropValue(boolean.class,
                 AppletPropertyConstants.SEARCH_TABLE_VIEW_ITEM_SEPARATE_TAB)
                 && systemModuleService.getSysParameterValue(boolean.class,
                         ApplicationModuleSysParamConstants.ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB);
@@ -1610,7 +1610,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         SectorIcon sectorIcon = getPageSectorIconByApplication(_appletDef.getApplicationName());
         EntitySearch _entitySearch = new EntitySearch(ctx, sectorIcon, sweepingCommitPolicy, tabName, _tableDef,
                 _appletDef.getId(), editAction, defaultQuickFilter, searchConfigName, searchColumns, entitySearchMode,
-                showConditions, isIgnoreParentCondition, detachedMaintainApplet);
+                showConditions, isIgnoreParentCondition, viewItemsInSeparateTabs);
         _entitySearch.setPaginationLabel(resolveSessionMessage("$m{entitysearch.display.label}"));
         _entitySearch.setBasicSearchOnly(basicSearchOnly);
         _entitySearch.setShowBaseRestriction(showBaseRestriction);

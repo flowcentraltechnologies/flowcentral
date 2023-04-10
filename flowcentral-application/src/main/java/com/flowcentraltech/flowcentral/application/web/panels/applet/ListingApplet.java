@@ -167,14 +167,6 @@ public class ListingApplet extends AbstractApplet implements SweepingCommitPolic
         return listingForm;
     }
 
-    private ListingForm constructListingForm(FormDef formDef, Entity _inst) throws UnifyException {
-        String beanTitle = au.getEntityDescription(au.getEntityClassDef(formDef.getEntityDef().getLongName()), _inst,
-                null);
-        ListingForm listingForm = au.constructListingForm(this, getRootAppletDef().getDescription(), beanTitle, formDef,
-                _inst, makeFormBreadCrumbs());
-        return listingForm;
-    }
-
     protected List<BreadCrumb> getBaseFormBreadCrumbs() {
         return Collections.emptyList();
     }

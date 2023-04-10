@@ -756,14 +756,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             }
 
             TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
-            if (result != null) {
-                if (result.isOpenPath()) {
-                    setCommandOpenPath((String) result.getResult());
-                } else if (result.isDisplayListingReport()) {
-                    setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
-                    setCommandResultMapping("viewlistingreport");
-                }
-            }
+            processTableActionResult(result);
         } else {
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
@@ -784,10 +777,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 default:
             }
 
-            getEntityFormApplet().listingInst(target.getIndex());
+            TableActionResult result = getEntityFormApplet().listingInst(target.getIndex());
+            processTableActionResult(result);
         }
     }
-
+    
     @Action
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();
@@ -850,6 +844,17 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+
+    private void processTableActionResult(TableActionResult result) throws UnifyException {
+        if (result != null) {
+            if (result.isOpenPath()) {
+                setCommandOpenPath((String) result.getResult());
+            } else if (result.isDisplayListingReport()) {
+                setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
+                setCommandResultMapping("viewlistingreport");
+            }
+        }
+    }
 
     private String concatenateMessages(String base, List<String> messages) throws UnifyException {
         StringBuilder sb = new StringBuilder();
