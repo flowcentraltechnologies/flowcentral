@@ -40,7 +40,7 @@ public class EntityFieldDefListCommand extends AbstractListCommand<EntityDefList
     @Override
     public List<? extends Listable> execute(Locale locale, EntityDefListParams params) throws UnifyException {
         if (params.isPresent()) {
-            return params.getEntityDef().getFieldDefList();
+            return params.getEntityDef().getSortedFieldDefList();
         }
 
         return Collections.emptyList();
