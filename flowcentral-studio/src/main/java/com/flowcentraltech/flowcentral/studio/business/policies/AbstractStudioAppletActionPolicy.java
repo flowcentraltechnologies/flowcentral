@@ -132,6 +132,7 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
                         ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName()));
                 registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                         privilegeCode, appEntity.getDescription());
+                privilegeCodeList.add(privilegeCode);
                 break;
             case TABLE:
                 break;
