@@ -133,6 +133,7 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
                 registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTCONFIG_CATEGORY_CODE,
                         privilegeCode, appEntity.getDescription());
                 privilegeCodeList.add(privilegeCode);
+                assignToRole = true;
                 break;
             case TABLE:
                 break;
