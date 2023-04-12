@@ -203,10 +203,9 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
     @Override
     public void applyUserAction(String actionName) throws UnifyException {
-        String comment = null;// getNewComment();
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
-        loadingSearch.applyUserAction(currEntityInst, actionName, comment, _form.getEmails(), mIndex);
+        loadingSearch.applyUserAction(currEntityInst, actionName, _form.getNewComment(), _form.getEmails(), mIndex);
         navBackToSearch();
     }
 
