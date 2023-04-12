@@ -104,6 +104,13 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         return false;
     }
 
+    @Override
+    public boolean navBackToPrevious() throws UnifyException {
+        setAltSubCaption(loadingSearch.getEntityDef().getDescription());
+        return super.navBackToPrevious();
+    }
+
+
     public EntityActionResult updateSingleFormInst() throws UnifyException {
         singleForm.unloadSingleFormBean();
         Entity inst = (Entity) singleForm.getFormBean();

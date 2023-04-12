@@ -487,6 +487,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         applet.navBackToPrevious();
+        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         getRequestContextUtil().setContentScrollReset();
     }
 

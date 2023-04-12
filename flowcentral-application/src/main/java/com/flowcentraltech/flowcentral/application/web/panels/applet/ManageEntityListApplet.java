@@ -57,6 +57,12 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
     }
 
     @Override
+    public boolean navBackToPrevious() throws UnifyException {
+        setAltSubCaption(entitySearch.getEntityDef().getDescription());
+        return super.navBackToPrevious();
+    }
+
+    @Override
     protected AppletDef getAlternateFormAppletDef() throws UnifyException {
         return null;
     }
