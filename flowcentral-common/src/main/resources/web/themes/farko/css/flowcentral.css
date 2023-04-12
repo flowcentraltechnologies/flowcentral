@@ -770,7 +770,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-assignmentpagepanel .ui-assignmentbox .abmselect {height: 472px;}
 
 /** Comments panel */
-.fc-commentspanel {max-width:1240px;}
+.fc-commentspanel {/*max-width:1240px;*/}
 
 /* Child panel */
 .fc-childpanel {}

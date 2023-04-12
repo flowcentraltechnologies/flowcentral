@@ -22,8 +22,8 @@
 !ui-formpanel:formPanel
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
-	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmAutoLoadingCondition
-		frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred}}
+	formSection:$d{!ui-section components:$c{frmType frmName frmDesc frmLabel frmAppletName frmBinaryConditionName frmReadOnlyConditionName frmValueGenerator frmEmails frmComments frmNewCommentCaption
+		frmAutoLoadingCondition frmPolicy frmRule frmActionType frmNextStepName frmAltNextStepName frmPriority frmCriticalMinutes frmExpiryMinutes frmAudit frmBranchOnly frmIncludeForwarder frmForwarderPreferred}}
 
 !ui-name:frmName styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.name} size:32 binding:name required:true
 !ui-text:frmDesc styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.description} size:32 binding:description required:true focus:true
@@ -47,6 +47,7 @@
 !ui-select:frmComments styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.comments}
 	list:$s{studioworkflowfilterlist} listParams:$l{workflowId} blankOption:$s{}
 	binding:comments
+!ui-text:frmNewCommentCaption styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.newcommentcaption} size:32 binding:newCommentCaption
 !ui-select:frmType styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.type}
 	list:$s{wfsteptypelist} blankOption:$s{} binding:type required:true
 !ui-select:frmPriority styleClass:$e{fc-formfield} caption:$m{wfstepeditpanel.priority}

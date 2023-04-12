@@ -18,5 +18,5 @@
 !fc-form:commentsForm columns:2 caption:$m{commentspanel.comments}
 	section:$d{!ui-section components:$c{commentListing newComment}}
 !ui-textarea:newComment caption:$m{commentspanel.comment.add} maxLen:512 rows:6
-	binding:newComment
+	captionBinding:newCommentCaption binding:newComment
 !fc-commentlisting:commentListing caption:$m{commentspanel.comments} binding:oldComments

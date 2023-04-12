@@ -53,6 +53,8 @@ public class WfStepConfig extends BaseNameConfig {
 
     private String autoLoadCondition;
 
+    private String newCommentCaption;
+
     private String policy;
 
     private String rule;
@@ -169,6 +171,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setAutoLoadCondition(String autoLoadCondition) {
         this.autoLoadCondition = autoLoadCondition;
+    }
+
+    public String getNewCommentCaption() {
+        return newCommentCaption;
+    }
+
+    @XmlAttribute
+    public void setNewCommentCaption(String newCommentCaption) {
+        this.newCommentCaption = newCommentCaption;
     }
 
     public String getPolicy() {
