@@ -251,9 +251,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStep.getLabel());
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
-                            StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label, "tasks",
-                                    assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons, appletName,
-                                    label);
+                            StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(_reviewAppletType, null, label,
+                                    "tasks", assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons,
+                                    appletName, label);
                             final String table = useraction ? "workflow.wfItemReviewTable"
                                     : "workflow.wfItemRecoveryTable";
                             final String update = useraction ? "true" : "false";
@@ -274,8 +274,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getRecordActionType(), wfStep.getAppletName(), wfStep.getNextStepName(),
                                 wfStep.getAltNextStepName(), wfStep.getBinaryConditionName(),
                                 wfStep.getReadOnlyConditionName(), wfStep.getAutoLoadConditionName(),
-                                wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(), wfStep.getDescription(),
-                                wfStep.getLabel(), DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
+                                wfStep.getNewCommentCaption(), wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(),
+                                wfStep.getDescription(), wfStep.getLabel(),
+                                DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
                                 wfStep.getEmails(), wfStep.getComments());
@@ -358,9 +359,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     final String assignDescField = null;
                     final String pseudoDeleteField = null;
-                    StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS, null, label,
-                            "magic", assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons, appletName,
-                            label);
+                    StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(AppletType.REVIEW_WIZARDWORKITEMS,
+                            null, label, "magic", assignDescField, pseudoDeleteField, 0, true, true, descriptiveButtons,
+                            appletName, label);
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE, "workflow.wfWizardItemReviewTable");
                     adb.addPropDef(AppletPropertyConstants.SEARCH_TABLE_NEW, "true");
                     adb.addPropDef(WfWizardAppletPropertyConstants.WORKFLOW_WIZARD, longName);
@@ -442,7 +443,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public void submitToWorkflowByName(String workflowName, String entity, Long id) throws UnifyException {
         EntityClassDef entityClassDef = appletUtil.getEntityClassDef(entity);
-        WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+        WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(),
+                id);
         submitToWorkflowByName(workflowName, inst);
     }
 
@@ -455,7 +457,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public int submitToWorkflowByChannel(String wfDocChannelName, String entity, Long id) throws UnifyException {
         EntityClassDef entityClassDef = appletUtil.getEntityClassDef(entity);
-        WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(), id);
+        WorkEntity inst = (WorkEntity) environment().list((Class<? extends Entity>) entityClassDef.getEntityClass(),
+                id);
         return submitToWorkflowByChannel(wfDocChannelName, inst);
     }
 
@@ -621,7 +624,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final boolean isComments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, reader, wfDef,
                 wfStepDef.getComments());
         if (isComments) {
-            Comments.Builder cmb = Comments.newBuilder();//
+            Comments.Builder cmb = Comments.newBuilder();
+            cmb.newCommentCaption(wfStepDef.getNewCommentCaption());
             List<WfItemEvent> events = environment().findAll(new WfItemEventQuery()
                     .wfItemHistId(wfItem.getWfItemHistId()).commentsOnly()
                     .addSelect("comment", "actor", "wfAction", "actionDt").addOrder(OrderType.DESCENDING, "actionDt"));

@@ -68,8 +68,6 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
         loadingSearch.applySearchEntriesToSearch();
         loadingSearch.getLoadingTable().setCrudActionHandlers(formEventHandlers.getMaintainActHandlers());
-
-        setAltSubCaption(loadingSearch.getEntityDef().getDescription());
         navBackToSearch();
     }
 
@@ -93,6 +91,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
     @Override
     public boolean navBackToSearch() throws UnifyException {
+        setAltSubCaption(loadingSearch.getEntityDef().getDescription());
         if (!super.navBackToSearch()) {
             if (loadingSearch != null) {
                 loadingSearch.applySearchEntriesToSearch();
@@ -104,6 +103,13 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         singleForm = null;
         return false;
     }
+
+    @Override
+    public boolean navBackToPrevious() throws UnifyException {
+        setAltSubCaption(loadingSearch.getEntityDef().getDescription());
+        return super.navBackToPrevious();
+    }
+
 
     public EntityActionResult updateSingleFormInst() throws UnifyException {
         singleForm.unloadSingleFormBean();
@@ -137,6 +143,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 updateForm(HeaderWithTabsForm.UpdateType.MAINTAIN_INST, form, _inst);
             }
 
+            setAltSubCaption(form.getFormTitle());
             viewMode = ViewMode.MAINTAIN_FORM;
         } else if (item.isReport()) {
             if (item.isWithListingParams()) {
@@ -167,6 +174,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
 
                 form.setAppendables(item);
                 getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+                setAltSubCaption(form.getFormTitle());
                 viewMode = ViewMode.MAINTAIN_FORM;
             } else { // Listing
                 listingForm = constructListingForm(formDef, currEntityInst);
@@ -175,6 +183,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
                 listingForm.setAppendables(item);
                 getCtx().setEmails(loadingWorkItemInfo.isEmails());
                 getCtx().setReadOnly(loadingWorkItemInfo.isError());
+                setAltSubCaption(listingForm.getFormTitle());
                 viewMode = ViewMode.LISTING_FORM;
             }
         } else if (item.isWorkItemSingleForm()) {
@@ -193,20 +202,21 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             }
 
             singleForm.setAppendables(item);
-
             getCtx().setReadOnly(loadingWorkItemInfo.isReadOnly());
+            setAltSubCaption(singleForm.getFormTitle());
             viewMode = ViewMode.SINGLE_FORM;
         }
-
-        return null;
+ 
+        TableActionResult result = new TableActionResult();
+        result.setRefreshContent(true);
+        return result;
     }
 
     @Override
     public void applyUserAction(String actionName) throws UnifyException {
-        String comment = null;// getNewComment();
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
-        loadingSearch.applyUserAction(currEntityInst, actionName, comment, _form.getEmails(), mIndex);
+        loadingSearch.applyUserAction(currEntityInst, actionName, _form.getNewComment(), _form.getEmails(), mIndex);
         navBackToSearch();
     }
 

@@ -487,6 +487,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         applet.navBackToPrevious();
+        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
         getRequestContextUtil().setContentScrollReset();
     }
 
@@ -727,13 +728,15 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void previous() throws UnifyException {
-        getEntityFormApplet().previousInst();
+        TableActionResult result = getEntityFormApplet().previousInst();
+        processTableActionResult(result);
         getRequestContextUtil().setContentScrollReset();
     }
 
     @Action
     public void next() throws UnifyException {
-        getEntityFormApplet().nextInst();
+        TableActionResult result = getEntityFormApplet().nextInst();
+        processTableActionResult(result);
         getRequestContextUtil().setContentScrollReset();
     }
 
@@ -852,6 +855,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             } else if (result.isDisplayListingReport()) {
                 setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
                 setCommandResultMapping("viewlistingreport");
+            } else if (result.isRefreshContent()) {
+                setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
             }
         }
     }

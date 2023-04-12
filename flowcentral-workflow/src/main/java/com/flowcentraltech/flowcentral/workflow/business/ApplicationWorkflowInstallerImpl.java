@@ -432,6 +432,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStep.setBinaryConditionName(stepConfig.getBinaryCondition());
                 wfStep.setReadOnlyConditionName(stepConfig.getReadOnlyCondition());
                 wfStep.setAutoLoadConditionName(stepConfig.getAutoLoadCondition());
+                wfStep.setNewCommentCaption(stepConfig.getNewCommentCaption());
                 wfStep.setPolicy(stepConfig.getPolicy());
                 wfStep.setValueGenerator(stepConfig.getValueGenerator());
                 wfStep.setRule(stepConfig.getRule());

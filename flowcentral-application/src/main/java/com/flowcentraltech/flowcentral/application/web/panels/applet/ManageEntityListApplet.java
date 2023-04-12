@@ -47,8 +47,19 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
             entitySearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()), au.specialParamProvider());
         }
 
-        setAltSubCaption(entitySearch.getEntityDef().getDescription());
         navBackToSearch();
+    }
+
+    @Override
+    public boolean navBackToSearch() throws UnifyException {
+        setAltSubCaption(entitySearch.getEntityDef().getDescription());
+        return super.navBackToSearch();
+    }
+
+    @Override
+    public boolean navBackToPrevious() throws UnifyException {
+        setAltSubCaption(entitySearch.getEntityDef().getDescription());
+        return super.navBackToPrevious();
     }
 
     @Override

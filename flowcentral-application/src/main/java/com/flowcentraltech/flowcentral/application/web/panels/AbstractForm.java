@@ -219,6 +219,11 @@ public abstract class AbstractForm {
         return appendables != null ? appendables.getComments() : null;
     }
 
+    public String getNewComment() {
+        return appendables != null && appendables.getComments() != null ? appendables.getComments().getNewComment()
+                : null;
+    }
+
     public Errors getErrors() {
         return appendables != null ? appendables.getErrors() : null;
     }

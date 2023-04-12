@@ -73,6 +73,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column(name = "AUTOLOAN_CONDITION_NM", length = 64, nullable = true)
     private String autoLoadConditionName;
 
+    @Column(name = "NEW_COMMENT_CAPTION", length = 64, nullable = true)
+    private String newCommentCaption;
+
     @Column(name = "STEP_POLICY", length = 64, nullable = true)
     private String policy;
 
@@ -237,6 +240,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setAutoLoadConditionName(String autoLoadConditionName) {
         this.autoLoadConditionName = autoLoadConditionName;
+    }
+
+    public String getNewCommentCaption() {
+        return newCommentCaption;
+    }
+
+    public void setNewCommentCaption(String newCommentCaption) {
+        this.newCommentCaption = newCommentCaption;
     }
 
     public String getPolicy() {

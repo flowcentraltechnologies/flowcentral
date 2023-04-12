@@ -66,6 +66,8 @@ public class WfStepDef {
 
     private String autoLoadingConditionName;
 
+    private String newCommentCaption;
+
     private String policy;
 
     private String rule;
@@ -105,12 +107,13 @@ public class WfStepDef {
     private Set<String> roleSet;
 
     private WfStepDef(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName, String binaryConditionName,
-            String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
-            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean includeForwarder, boolean forwarderPreferred, String emails, String comments,
-            WfStepSetValuesDef wfSetValuesDef, Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList,
-            List<WfAlertDef> alertList, Set<String> roleSet) {
+            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName,
+            String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
+            String newCommentCaption, String policy, String rule, String name, String description, String label,
+            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
+            boolean forwarderPreferred, String emails, String comments, WfStepSetValuesDef wfSetValuesDef,
+            Map<String, WfUserActionDef> userActions, List<WfRoutingDef> routingList, List<WfAlertDef> alertList,
+            Set<String> roleSet) {
         this.appletDef = appletDef;
         this.type = type;
         this.priority = priority;
@@ -121,6 +124,7 @@ public class WfStepDef {
         this.binaryConditionName = binaryConditionName;
         this.readOnlyConditionName = readOnlyConditionName;
         this.autoLoadingConditionName = autoLoadingConditionName;
+        this.newCommentCaption = newCommentCaption;
         this.policy = policy;
         this.rule = rule;
         this.name = name;
@@ -239,6 +243,10 @@ public class WfStepDef {
 
     public boolean isWithAutoLoadingCondition() {
         return !StringUtils.isBlank(autoLoadingConditionName);
+    }
+
+    public String getNewCommentCaption() {
+        return newCommentCaption;
     }
 
     public Map<String, WfUserActionDef> getUserActions() {
@@ -372,14 +380,15 @@ public class WfStepDef {
     }
 
     public static Builder newBuilder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
-            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName, String binaryConditionName,
-            String readOnlyConditionName, String autoLoadingConditionName, String policy, String rule, String name,
-            String description, String label, int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly,
-            boolean includeForwarder, boolean forwarderPreferred, String emails, String comments) {
+            RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName,
+            String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
+            String newCommentCaption, String policy, String rule, String name, String description, String label,
+            int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
+            boolean forwarderPreferred, String emails, String comments) {
         return new Builder(appletDef, type, priority, recordActionType, stepAppletName, nextStepName, altNextStepName,
-                binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name, description,
-                label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder, forwarderPreferred, emails,
-                comments);
+                binaryConditionName, readOnlyConditionName, autoLoadingConditionName, newCommentCaption, policy, rule,
+                name, description, label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder,
+                forwarderPreferred, emails, comments);
     }
 
     public static class Builder {
@@ -393,7 +402,7 @@ public class WfStepDef {
         private RecordActionType recordActionType;
 
         private String stepAppletName;
-        
+
         private String nextStepName;
 
         private String altNextStepName;
@@ -403,6 +412,8 @@ public class WfStepDef {
         private String readOnlyConditionName;
 
         private String autoLoadingConditionName;
+
+        private String newCommentCaption;
 
         private String policy;
 
@@ -443,8 +454,8 @@ public class WfStepDef {
         public Builder(AppletDef appletDef, WorkflowStepType type, WorkflowStepPriority priority,
                 RecordActionType recordActionType, String stepAppletName, String nextStepName, String altNextStepName,
                 String binaryConditionName, String readOnlyConditionName, String autoLoadingConditionName,
-                String policy, String rule, String name, String description, String label, int criticalMinutes,
-                int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
+                String newCommentCaption, String policy, String rule, String name, String description, String label,
+                int criticalMinutes, int expiryMinutes, boolean audit, boolean branchOnly, boolean includeForwarder,
                 boolean forwarderPreferred, String emails, String comments) {
             this.appletDef = appletDef;
             this.type = type;
@@ -458,6 +469,7 @@ public class WfStepDef {
             this.binaryConditionName = binaryConditionName;
             this.readOnlyConditionName = readOnlyConditionName;
             this.autoLoadingConditionName = autoLoadingConditionName;
+            this.newCommentCaption = newCommentCaption;
             this.policy = policy;
             this.name = name;
             this.description = description;
@@ -520,9 +532,9 @@ public class WfStepDef {
             return this;
         }
 
-        public Builder addWfAlertDef(WorkflowAlertType type, String name,
-                String description, String recipientPolicy, String recipientNameRule, String recipientContactRule,
-                String generator, String fireOnPrevStepName, String fireOnCondition) {
+        public Builder addWfAlertDef(WorkflowAlertType type, String name, String description, String recipientPolicy,
+                String recipientNameRule, String recipientContactRule, String generator, String fireOnPrevStepName,
+                String fireOnCondition) {
             if (alertList == null) {
                 alertList = new LinkedHashMap<String, WfAlertDef>();
             }
@@ -531,8 +543,8 @@ public class WfStepDef {
                 throw new RuntimeException("Alert with name [" + name + "] already exists in this step.");
             }
 
-            alertList.put(name, new WfAlertDef(type, name, description, recipientPolicy,
-                    recipientNameRule, recipientContactRule, generator, fireOnPrevStepName, fireOnCondition));
+            alertList.put(name, new WfAlertDef(type, name, description, recipientPolicy, recipientNameRule,
+                    recipientContactRule, generator, fireOnPrevStepName, fireOnCondition));
             return this;
         }
 
@@ -546,12 +558,12 @@ public class WfStepDef {
         }
 
         public WfStepDef build() {
-            return new WfStepDef(appletDef, type, priority, recordActionType, stepAppletName, nextStepName, altNextStepName,
-                    binaryConditionName, readOnlyConditionName, autoLoadingConditionName, policy, rule, name,
-                    description, label, criticalMinutes, expiryMinutes, audit, branchOnly, includeForwarder,
-                    forwarderPreferred, emails, comments, wfSetValuesDef, DataUtils.unmodifiableMap(userActionList),
-                    DataUtils.unmodifiableValuesList(routingList), DataUtils.unmodifiableValuesList(alertList),
-                    DataUtils.unmodifiableSet(roleSet));
+            return new WfStepDef(appletDef, type, priority, recordActionType, stepAppletName, nextStepName,
+                    altNextStepName, binaryConditionName, readOnlyConditionName, autoLoadingConditionName,
+                    newCommentCaption, policy, rule, name, description, label, criticalMinutes, expiryMinutes, audit,
+                    branchOnly, includeForwarder, forwarderPreferred, emails, comments, wfSetValuesDef,
+                    DataUtils.unmodifiableMap(userActionList), DataUtils.unmodifiableValuesList(routingList),
+                    DataUtils.unmodifiableValuesList(alertList), DataUtils.unmodifiableSet(roleSet));
         }
     }
 

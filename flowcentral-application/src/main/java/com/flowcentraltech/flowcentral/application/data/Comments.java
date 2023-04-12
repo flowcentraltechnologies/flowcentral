@@ -30,12 +30,19 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class Comments {
 
+    private String newCommentCaption;
+
     private String newComment;
 
     private List<Comment> oldComments;
     
-    public Comments(List<Comment> oldComments) {
+    public Comments(String newCommentCaption, List<Comment> oldComments) {
+        this.newCommentCaption = newCommentCaption;
         this.oldComments = oldComments;
+    }
+
+    public String getNewCommentCaption() {
+        return newCommentCaption;
     }
 
     public String getNewComment() {
@@ -55,11 +62,18 @@ public class Comments {
     }
     
     public static class Builder {
+
+        private String newCommentCaption;
         
         private List<Comment> oldComments;
         
         public Builder() {
             this.oldComments = new ArrayList<Comment>();
+        }
+        
+        public Builder newCommentCaption(String newCommentCaption) {
+            this.newCommentCaption = newCommentCaption;
+            return this;
         }
         
         public Builder addOldComment(String message, String commentBy, String action, Date timestamp) {
@@ -68,7 +82,7 @@ public class Comments {
         }
         
         public Comments build() {
-            return new Comments(DataUtils.unmodifiableList(oldComments));
+            return new Comments(newCommentCaption, DataUtils.unmodifiableList(oldComments));
         }
     }
 }
