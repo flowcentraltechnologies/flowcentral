@@ -324,30 +324,37 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         // TODO
     }
 
-    public void previousInst() throws UnifyException {
+    public TableActionResult previousInst() throws UnifyException {
         if (isPrevNav()) {
             mIndex--;
-            loadScrollInst();
+            return loadScrollInst();
         }
+        
+        return null;
     }
 
-    public void nextInst() throws UnifyException {
+    public TableActionResult nextInst() throws UnifyException {
         if (isNextNav()) {
             mIndex++;
-            loadScrollInst();
+            return loadScrollInst();
         }
+        
+        return null;
     }
 
-    private void loadScrollInst() throws UnifyException {
+    private TableActionResult loadScrollInst() throws UnifyException {
+        TableActionResult result = null;
         if (getCtx().isReview()) {
-            maintainInst(mIndex);
+            result = maintainInst(mIndex);
         } else {
             if (ViewMode.LISTING_FORM.equals(viewMode)) {
-                listingInst(mIndex);
+                result = listingInst(mIndex);
             } else {
-                maintainInst(mIndex);
+                result = maintainInst(mIndex);
             }
         }
+        
+        return result;
     }
 
     public TableActionResult newEntityInst() throws UnifyException {
@@ -669,6 +676,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
         _inst = reloadEntity(_inst, true);
         listingForm = constructListingForm(_inst);
+        setAltSubCaption(listingForm.getFormTitle());
         viewMode = ViewMode.LISTING_FORM;
         return null;
     }
