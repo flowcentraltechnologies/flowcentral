@@ -624,7 +624,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final boolean isComments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, reader, wfDef,
                 wfStepDef.getComments());
         if (isComments) {
-            Comments.Builder cmb = Comments.newBuilder();//
+            Comments.Builder cmb = Comments.newBuilder();
+            cmb.newCommentCaption(wfStepDef.getNewCommentCaption());
             List<WfItemEvent> events = environment().findAll(new WfItemEventQuery()
                     .wfItemHistId(wfItem.getWfItemHistId()).commentsOnly()
                     .addSelect("comment", "actor", "wfAction", "actionDt").addOrder(OrderType.DESCENDING, "actionDt"));
