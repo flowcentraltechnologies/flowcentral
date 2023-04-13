@@ -79,7 +79,7 @@
 !ui-postcommand:deleteAct command:delete confirm:$m{entityformappletpanel.confirm.delete}
 !ui-postcommand:prevAct command:previous
 !ui-postcommand:nextAct command:next
-!ui-postcommand:formActionAct command:performFormAction components:$c{formPanel}
+!ui-postcommand:formActionAct command:performFormAction components:$c{formPanel listingPanel}
 !ui-postcommand:maintainAct command:maintain debounce:true
 !ui-postcommand:listingAct command:listing debounce:true
 
