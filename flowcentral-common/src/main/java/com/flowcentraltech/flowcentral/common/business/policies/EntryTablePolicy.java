@@ -132,17 +132,31 @@ public interface EntryTablePolicy extends UnifyComponent {
             RowChangeInfo rowChangeInfo) throws UnifyException;
 
     /**
-     * Gets table summary lines.
+     * Gets pre-table summary lines.
      * 
      * @param parentReader
      *                        optional parent value store reader
      * @param tableValueStore
      *                        the list data store object
-     * @return the table summary lines
+     * @return the pre-table summary lines
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<TableSummaryLine> getTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+    List<TableSummaryLine> getPreTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+            throws UnifyException;
+
+    /**
+     * Gets post table summary lines.
+     * 
+     * @param parentReader
+     *                        optional parent value store reader
+     * @param tableValueStore
+     *                        the list data store object
+     * @return the post table summary lines
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
             throws UnifyException;
 
     /**

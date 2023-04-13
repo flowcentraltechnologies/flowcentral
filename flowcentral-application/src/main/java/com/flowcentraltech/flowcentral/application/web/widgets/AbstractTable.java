@@ -136,7 +136,10 @@ public abstract class AbstractTable<T, U> {
 
     private List<Section> sections;
 
-    private List<TableSummaryLine> tableSummaryLines;
+    private List<TableSummaryLine> preTableSummaryLines;
+
+
+    private List<TableSummaryLine> postTableSummaryLines;
 
     private int detailsIndex;
 
@@ -178,20 +181,29 @@ public abstract class AbstractTable<T, U> {
         this.switchOnChangeHandlers = switchOnChangeHandlers;
     }
 
-    private void clearTableSummaryLines() {
-        tableSummaryLines = null;
+    public void preTableSummaryLines(List<TableSummaryLine> preTableSummaryLines) {
+        this.preTableSummaryLines = preTableSummaryLines;
     }
 
-    public void setTableSummaryLines(List<TableSummaryLine> tableSummaryLines) {
-        this.tableSummaryLines = tableSummaryLines;
+    public List<TableSummaryLine> getPreTableSummaryLines() {
+        return preTableSummaryLines == null ? Collections.emptyList() : preTableSummaryLines;
     }
 
-    public List<TableSummaryLine> getTableSummaryLines() {
-        return tableSummaryLines == null ? Collections.emptyList() : tableSummaryLines;
+    public boolean isWithPreTableSummaryLines() {
+        return preTableSummaryLines != null;
     }
 
-    public boolean isWithTableSummaryLines() {
-        return tableSummaryLines != null;
+
+    public void setPostTableSummaryLines(List<TableSummaryLine> postTableSummaryLines) {
+        this.postTableSummaryLines = postTableSummaryLines;
+    }
+
+    public List<TableSummaryLine> getPostTableSummaryLines() {
+        return postTableSummaryLines == null ? Collections.emptyList() : postTableSummaryLines;
+    }
+
+    public boolean isWithPostTableSummaryLines() {
+        return postTableSummaryLines != null;
     }
 
     public List<EventHandler> getCrudActionHandlers() {
@@ -431,13 +443,21 @@ public abstract class AbstractTable<T, U> {
         }
     }
 
-    public void setTotalTableSummaryLine() throws UnifyException {
+    public void setPreTableSummaryLines() throws UnifyException {
+        if (tableTotalSummary != null) {
+            preTableSummaryLines = entryPolicy != null && dispItemList != null
+                    ? entryPolicy.getPreTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
+                    : null;
+        }
+    }
+
+    public void setPostTableSummaryLines() throws UnifyException {
         addParentColumnSummary();
         if (tableTotalSummary != null) {
-            tableSummaryLines = entryPolicy != null && dispItemList != null
-                    ? entryPolicy.getTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
+            postTableSummaryLines = entryPolicy != null && dispItemList != null
+                    ? entryPolicy.getPostTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
                     : null;
-            if (DataUtils.isBlank(tableSummaryLines)) {
+            if (DataUtils.isBlank(postTableSummaryLines)) {
                 TableSummaryLine line = new TableSummaryLine(getTotalLabel());
                 for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
                     Class<?> numberType = tableDef.getFieldDef(summary.getFieldName()).getDataType().dataType()
@@ -445,7 +465,7 @@ public abstract class AbstractTable<T, U> {
                     line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
                 }
 
-                tableSummaryLines = Arrays.asList(line);
+                postTableSummaryLines = Arrays.asList(line);
             }
         }
     }
@@ -748,6 +768,11 @@ public abstract class AbstractTable<T, U> {
             throws UnifyException;
 
     protected abstract void orderOnReset() throws UnifyException;
+
+    private void clearTableSummaryLines() {
+        preTableSummaryLines = null;
+        postTableSummaryLines = null;
+    }
 
     private void calcPageDimensions() { 
         try {

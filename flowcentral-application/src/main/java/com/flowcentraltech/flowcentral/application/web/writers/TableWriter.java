@@ -156,6 +156,16 @@ public class TableWriter extends AbstractControlWriter {
 
                 writer.write("</colgroup>");
             } else {
+                // Table summary
+                if (table.isTotalSummary()) {
+                    if (!table.isWithPreTableSummaryLines()) {
+                        table.setPreTableSummaryLines();
+                    }
+
+                    writeSummaryLines(writer, tableWidget, table.isEntryMode(), multiSelect, tableDef.isSerialNo(),
+                            table.getPreTableSummaryLines());
+                }
+
                 // Header
                 writeHeaderRow(writer, tableWidget);
             }
@@ -794,55 +804,65 @@ public class TableWriter extends AbstractControlWriter {
                 }
             }
 
-            // Total summary
+            // Table summary
             if (totalSummary) {
-                if (!table.isWithTableSummaryLines()) {
-                    table.setTotalTableSummaryLine();
+                if (!table.isWithPostTableSummaryLines()) {
+                    table.setPostTableSummaryLines();
                 }
-                
-                for (TableSummaryLine summaryLine : table.getTableSummaryLines()) {
-                    writer.write("<tr class=\"total\">");
-                    if (!entryMode && multiSelect) {
-                        writer.write("<td class=\"mseld\"><span></span></td>");
-                    }
 
-                    if (isSerialNo) {
-                        writer.write("<td class=\"mseriald\"><span></span></td>");
-                    }
+                writeSummaryLines(writer, tableWidget, entryMode, multiSelect, isSerialNo,
+                        table.getPostTableSummaryLines());
+            }
+        }
+    }
 
-                    int index = 0;
-                    for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
-                        if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                            TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
-                            Widget chWidget = table.getSummaryWidget(tabelColumnDef.getFieldName());
-                            if (chWidget != null) {
-                                chWidget.setEditable(false);
-                                chWidget.setValueStore(summaryLine.getValueStore());
-                                writer.write("<td");
-                                writeTagStyle(writer, chWidget.getColumnStyle());
-                                writer.write(">");
-                                writer.writeStructureAndContent(chWidget);
+    private void writeSummaryLines(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, boolean entryMode,
+            boolean multiSelect, boolean isSerialNo, List<TableSummaryLine> summaryLines) throws UnifyException {
+        if (!DataUtils.isBlank(summaryLines)) {
+            final AbstractTable<?, ?> table = tableWidget.getTable();
+            final TableDef tableDef = table.getTableDef();
+            for (TableSummaryLine summaryLine : summaryLines) {
+                writer.write("<tr class=\"total\">");
+                if (!entryMode && multiSelect) {
+                    writer.write("<td class=\"mseld\"><span></span></td>");
+                }
+
+                if (isSerialNo) {
+                    writer.write("<td class=\"mseriald\"><span></span></td>");
+                }
+
+                int index = 0;
+                for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
+                    if (widgetInfo.isExternal() && widgetInfo.isControl()) {
+                        TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(index);
+                        Widget chWidget = table.getSummaryWidget(tabelColumnDef.getFieldName());
+                        if (chWidget != null) {
+                            chWidget.setEditable(false);
+                            chWidget.setValueStore(summaryLine.getValueStore());
+                            writer.write("<td");
+                            writeTagStyle(writer, chWidget.getColumnStyle());
+                            writer.write(">");
+                            writer.writeStructureAndContent(chWidget);
+                            writer.write("</td>");
+                        } else {
+                            if (table.isTotalLabelColumn(tabelColumnDef.getFieldName())) {
+                                writer.write("<td class=\"blankr\">");
+                                writer.writeWithHtmlEscape(summaryLine.getLabel());
                                 writer.write("</td>");
                             } else {
-                                if (table.isTotalLabelColumn(tabelColumnDef.getFieldName())) {
-                                    writer.write("<td class=\"blankr\">");
-                                    writer.writeWithHtmlEscape(summaryLine.getLabel());
-                                    writer.write("</td>");
-                                } else {
-                                    writer.write("<td class=\"blank\"></td>");
-                                }
+                                writer.write("<td class=\"blank\"></td>");
                             }
-
-                            index++;
                         }
-                    }
 
-                    if (entryMode && multiSelect) {
-                        writer.write("<td class=\"mseld\"><span></span></td>");
+                        index++;
                     }
-
-                    writer.write("</tr>");
                 }
+
+                if (entryMode && multiSelect) {
+                    writer.write("<td class=\"mseld\"><span></span></td>");
+                }
+
+                writer.write("</tr>");
             }
         }
     }

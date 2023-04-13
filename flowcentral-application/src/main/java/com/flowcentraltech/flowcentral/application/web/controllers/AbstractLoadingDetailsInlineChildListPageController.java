@@ -86,7 +86,10 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
         return "refreshChildCrud";
     }
 
-    protected abstract List<TableSummaryLine> getAddendumTableSummaryLines(ValueStore tableValueStore)
+    protected abstract List<TableSummaryLine> getPreDetailsTableSummaryLines(ValueStore tableValueStore)
+            throws UnifyException;
+
+    protected abstract List<TableSummaryLine> getPostDetailsTableSummaryLines(ValueStore tableValueStore)
             throws UnifyException;
 
     @Override
@@ -197,9 +200,15 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
         }
 
         @Override
-        public List<TableSummaryLine> getTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+        public List<TableSummaryLine> getPreTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
                 throws UnifyException {
-            return getAddendumTableSummaryLines(tableValueStore);
+            return getPreDetailsTableSummaryLines(tableValueStore);
+        }
+
+        @Override
+        public List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+                throws UnifyException {
+            return getPostDetailsTableSummaryLines(tableValueStore);
         }
 
         @Override
