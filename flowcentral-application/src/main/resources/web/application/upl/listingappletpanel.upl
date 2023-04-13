@@ -28,6 +28,6 @@
     eventHandler:$d{!ui-event event:onclick action:$c{formActionAct}}
 
 // Actions
-!ui-postcommand:formActionAct command:performFormAction
+!ui-postcommand:formActionAct command:performFormAction components:$c{listingPanel}
 !ui-postcommand:closeAct command:close
     
