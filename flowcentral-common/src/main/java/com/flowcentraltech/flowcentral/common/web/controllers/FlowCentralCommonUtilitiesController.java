@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.common.web.controllers;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleAuditConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockedResourceInfo;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
@@ -41,13 +42,16 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
 @Component("/application/commonutilities")
 @UplBinding("web/common/upl/flowcentralcommonutilities.upl")
 @ResultMappings({
-        @ResultMapping(name = "showapplicationreportoptions",
+        @ResultMapping(name = FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS,
                 response = { "!showpopupresponse popup:$s{reportRunnerPopup}" }),
-        @ResultMapping(name = "viewreport",
+        @ResultMapping(name = FlowCentralResultMappingConstants.VIEW_REPORT,
                 response = { "!refreshpanelresponse panels:$l{reportRunnerPopup}", "!commonreportresponse" }),
-        @ResultMapping(name = "viewlistingreport", response = { "!commonlistingreportresponse" }),
-        @ResultMapping(name = "showlockedresource", response = { "!showpopupresponse popup:$s{lockedResourcePopup}" }),
-        @ResultMapping(name = "grablocksuccess", response = { "!hidepopupresponse" }) })
+        @ResultMapping(name = FlowCentralResultMappingConstants.VIEW_LISTING_REPORT,
+                response = { "!commonlistingreportresponse" }),
+        @ResultMapping(name = FlowCentralResultMappingConstants.SHOW_LOCKED_RESOURCE,
+                response = { "!showpopupresponse popup:$s{lockedResourcePopup}" }),
+        @ResultMapping(name = FlowCentralResultMappingConstants.GRAB_LOCK_SUCCESS,
+                response = { "!hidepopupresponse" }) })
 public class FlowCentralCommonUtilitiesController
         extends AbstractCommonUtilitiesPageController<FlowCentralCommonUtilitiesPageBean> {
 
@@ -66,7 +70,8 @@ public class FlowCentralCommonUtilitiesController
     public String showLockedResource() throws UnifyException {
         CollaborationLockedResourceInfo collaborationLockedResourceInfo = (CollaborationLockedResourceInfo) removeSessionAttribute(
                 FlowCentralSessionAttributeConstants.LOCKED_RESOURCEOPTIONS);
-        return showPopup(new Popup("showlockedresource", collaborationLockedResourceInfo));
+        return showPopup(
+                new Popup(FlowCentralResultMappingConstants.SHOW_LOCKED_RESOURCE, collaborationLockedResourceInfo));
     }
 
     @Action
@@ -78,7 +83,7 @@ public class FlowCentralCommonUtilitiesController
             removeCurrentPopup();
         }
 
-        return "grablocksuccess";
+        return FlowCentralResultMappingConstants.GRAB_LOCK_SUCCESS;
     }
 
     @Action
@@ -92,7 +97,7 @@ public class FlowCentralCommonUtilitiesController
         ReportOptions reportOptions = (ReportOptions) popup.getBackingBean();
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
         getEventLogger().logUserEvent(CommonModuleAuditConstants.GENERATE_REPORT, reportOptions.getTitle());
-        return "viewreport";
+        return FlowCentralResultMappingConstants.VIEW_REPORT;
     }
 
     @Action

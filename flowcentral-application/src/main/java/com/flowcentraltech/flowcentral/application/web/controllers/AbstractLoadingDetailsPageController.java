@@ -17,16 +17,29 @@ package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.LoadingTable;
+import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
+import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
+import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.EntryActionType;
+import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.TableChangeType;
+import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
+import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
+import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.data.IndexedTarget;
+import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
@@ -57,10 +70,13 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
 
     private final String detailsAppletName;
 
+    private final DetailsEntryTablePolicy entryTablePolicy;
+
     public AbstractLoadingDetailsPageController(Class<T> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite, String detailsAppletName) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
         this.detailsAppletName = detailsAppletName;
+        this.entryTablePolicy = new DetailsEntryTablePolicy();
     }
 
     @Action
@@ -99,6 +115,7 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
         if (pageBean.getApplet() == null) {
             ManageLoadingDetailsApplet applet = new ManageLoadingDetailsApplet(au(), detailsAppletName);
             LoadingTable resultTable = new LoadingTable(au(), getTableDef());
+            resultTable.setPolicy(entryTablePolicy);
             if (pageBean.isViewActionMode()) {
                 String viewCaption = resolveSessionMessage(pageBean.getViewActionCaption());
                 resultTable.setViewButtonCaption(viewCaption);
@@ -141,9 +158,112 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
         return "reloadResult";
     }
 
+    protected abstract List<TableSummaryLine> getPreDetailsTableSummaryLines(ValueStore tableValueStore)
+            throws UnifyException;
+
+    protected abstract List<TableSummaryLine> getPostDetailsTableSummaryLines(ValueStore tableValueStore)
+            throws UnifyException;
+
     protected abstract TableDef getTableDef() throws UnifyException;
 
     protected abstract String onView(int rowIndex, Entity inst) throws UnifyException;
 
     protected abstract String onAction(int rowIndex, Entity inst, String action) throws UnifyException;
+
+    protected final class DetailsEntryTablePolicy implements EntryTablePolicy {
+
+        @Override
+        public String getName() {
+            return null;
+        }
+
+        @Override
+        public UnifyComponentContext getUnifyComponentContext() throws UnifyException {
+            return null;
+        }
+
+        @Override
+        public void initialize(UnifyComponentContext arg0) throws UnifyException {
+
+        }
+
+        @Override
+        public boolean isInitialized() {
+            return false;
+        }
+
+        @Override
+        public void terminate() throws UnifyException {
+
+        }
+
+        @Override
+        public Number getParentColumnSummaryValue(ValueStoreReader parentReader, String fieldName)
+                throws UnifyException {
+            return null;
+        }
+
+        @Override
+        public Number getTableColumnSummaryValue(ValueStoreReader parentReader, String fieldName,
+                ValueStore itemValueStore) throws UnifyException {
+            return null;
+        }
+
+        @Override
+        public void validateEntries(EvaluationMode evaluationMode, ValueStoreReader parentReader,
+                ValueStore tableValueStore, FormValidationErrors errors) throws UnifyException {
+        }
+
+        @Override
+        public void onEntryTableLoad(ValueStoreReader parentReader, ValueStore tableValueStore, Set<Integer> selected)
+                throws UnifyException {
+        }
+
+        @Override
+        public EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore,
+                Set<Integer> selected, TableChangeType changeType) throws UnifyException {
+            return null;
+        }
+
+        @Override
+        public EntryActionType onEntryRowChange(ValueStoreReader parentReader, ValueStore tableValueStore,
+                RowChangeInfo rowChangeInfo) throws UnifyException {
+            return null;
+        }
+
+        @Override
+        public List<TableSummaryLine> getPreTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+                throws UnifyException {
+            return getPreDetailsTableSummaryLines(tableValueStore);
+        }
+
+        @Override
+        public List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+                throws UnifyException {
+            return getPostDetailsTableSummaryLines(tableValueStore);
+        }
+
+        @Override
+        public void applyTableStateOverride(ValueStoreReader parentReader, ValueStore rowValueStore,
+                TableStateOverride tableStateOverride) throws UnifyException {
+        }
+
+        @Override
+        public void applyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
+                FixedRowActionType fixedActionType) throws UnifyException {
+        }
+
+        @Override
+        public FixedRowActionType resolveFixedIndex(ValueStoreReader parentReader, ValueStore valueStore, int index,
+                int size) throws UnifyException {
+            return null;
+        }
+
+        @Override
+        public int resolveActionIndex(ValueStoreReader parentReader, ValueStore valueStore, int index, int size)
+                throws UnifyException {
+            return 0;
+        }
+
+    }
 }

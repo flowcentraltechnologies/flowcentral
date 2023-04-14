@@ -48,6 +48,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
@@ -854,7 +855,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setCommandOpenPath((String) result.getResult());
             } else if (result.isDisplayListingReport()) {
                 setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, result.getResult());
-                setCommandResultMapping("viewlistingreport");
+                setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
             } else if (result.isRefreshContent()) {
                 setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
             }

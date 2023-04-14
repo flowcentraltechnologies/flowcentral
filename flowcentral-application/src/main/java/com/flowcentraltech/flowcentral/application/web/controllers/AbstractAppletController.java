@@ -23,10 +23,18 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMa
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractApplet;
+import com.flowcentraltech.flowcentral.application.web.writers.DetailsFormListing;
+import com.flowcentraltech.flowcentral.application.web.writers.DetailsFormListingGenerator;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentralPageController;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.BeanValueStore;
+import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
@@ -118,5 +126,13 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
     @SuppressWarnings("unchecked")
     protected <U> U getRelayObject(Class<U> type) throws UnifyException {
         return (U) removeSessionAttribute(RELAY_SESSION_OBJECT);
+    }
+    
+    protected String viewListingReport(DetailsFormListing listing) throws UnifyException {
+        DetailsFormListingGenerator generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
+        final ValueStore instValueStore = new BeanValueStore(listing);
+        Report report = generator.generateReport(instValueStore, new FormListingOptions());
+        setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, report);
+        return FlowCentralResultMappingConstants.VIEW_LISTING_REPORT;
     }
 }

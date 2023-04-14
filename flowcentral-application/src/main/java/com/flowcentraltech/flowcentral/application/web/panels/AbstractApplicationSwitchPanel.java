@@ -19,6 +19,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -91,7 +92,7 @@ public abstract class AbstractApplicationSwitchPanel extends SwitchPanel {
     }
 
     protected void showReportOptionsBox(ReportOptions reportOptions) throws UnifyException {
-        commandShowPopup(new Popup("showapplicationreportoptions", reportOptions));
+        commandShowPopup(new Popup(FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS, reportOptions));
     }
 
 }

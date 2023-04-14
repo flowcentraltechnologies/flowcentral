@@ -60,7 +60,7 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
 
     private final String childBaseFieldName;
 
-    private final DetailsEntryTablePolicy childListEntryTablePolicy;
+    private final InlineDetailsEntryTablePolicy childListEntryTablePolicy;
 
     public AbstractEntityDetailsInlineChildListPageController(Class<T> pageBeanClass, Secured secured,
             ReadOnly readOnly, ResetOnWrite resetOnWrite, String detailsAppletName, String childAppletName,
@@ -68,7 +68,7 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
         super(pageBeanClass, secured, readOnly, resetOnWrite, detailsAppletName);
         this.childAppletName = childAppletName;
         this.childBaseFieldName = childBaseFieldName;
-        this.childListEntryTablePolicy = new DetailsEntryTablePolicy();
+        this.childListEntryTablePolicy = new InlineDetailsEntryTablePolicy();
     }
 
     @Action
@@ -86,7 +86,10 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
         return "refreshChildCrud";
     }
 
-    protected abstract List<TableSummaryLine> getAddendumTableSummaryLines(ValueStore tableValueStore)
+    protected abstract List<TableSummaryLine> getInlinePreDetailsTableSummaryLines(ValueStore tableValueStore)
+            throws UnifyException;
+
+    protected abstract List<TableSummaryLine> getInlinePostDetailsTableSummaryLines(ValueStore tableValueStore)
             throws UnifyException;
 
     @Override
@@ -135,7 +138,7 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
                 saveAsSwitchOnChangeHandlers, maintainActHandlers);
     }
 
-    protected class DetailsEntryTablePolicy implements EntryTablePolicy {
+    protected class InlineDetailsEntryTablePolicy implements EntryTablePolicy {
 
         @Override
         public String getName() {
@@ -197,9 +200,15 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
         }
 
         @Override
-        public List<TableSummaryLine> getTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+        public List<TableSummaryLine> getPreTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
                 throws UnifyException {
-            return getAddendumTableSummaryLines(tableValueStore);
+            return getInlinePreDetailsTableSummaryLines(tableValueStore);
+        }
+
+        @Override
+        public List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+                throws UnifyException {
+            return getInlinePostDetailsTableSummaryLines(tableValueStore);
         }
 
         @Override
