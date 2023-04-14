@@ -148,9 +148,9 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
                 rowCells.get(j).setContent(detailsValueStore.retrieve(columnFieldNames.get(i)));
             }
 
+            writer.writeRow(rowCells);
         }
 
-        writer.writeRow(rowCells);
         writer.endTable();
         writer.endSection();
     }
