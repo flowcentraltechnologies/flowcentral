@@ -15,14 +15,23 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.constant.HAlignType;
+import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Convenient abstract base class for details form listing generators.
@@ -67,10 +76,86 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         generateReportFooter((DetailsFormListing) formBeanValueStore.getValueObject(), properties, writer);
     }
 
-    protected abstract int getOptionFlagsOverride(DetailsFormListing detailsFormListing) throws UnifyException;
+    protected void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
+            ListingGeneratorWriter writer) throws UnifyException {
+        final EntityDef entityDef = detailsFormListing.getEntityDef();
+        final boolean isSerialNo = detailsFormListing.isSerialNo();
+        final DecimalFormat amountFormat = new DecimalFormat("###,###.00");
+        final SimpleDateFormat dateFormat = StringUtils.isBlank(detailsFormListing.getDateFormat())
+                ? new SimpleDateFormat("yyyy-MM-dd")
+                : new SimpleDateFormat(detailsFormListing.getDateFormat());
+        final SimpleDateFormat timestampFormat = StringUtils.isBlank(detailsFormListing.getTimestampFormat())
+                ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+                : new SimpleDateFormat(detailsFormListing.getTimestampFormat());
+        final List<String> columnFieldNames = detailsFormListing.getColumnFieldNames();
+        final int columns = columnFieldNames.size();
+        final int columnWidth = 100 / columns;
+        // Header
+        writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_ALL);
+        List<ListingColumn> listingColumns = new ArrayList<ListingColumn>();
+        List<ListingCell> rowCells = new ArrayList<ListingCell>();
+        if (isSerialNo) {
+            listingColumns.add(new ListingColumn(HAlignType.CENTER, 40, true));
+            rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT, "S/N")); // TODO Get from messages
+        }
 
-    protected abstract void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
-            ListingGeneratorWriter writer) throws UnifyException;
+        for (int i = 0; i < columns; i++) {
+            listingColumns.add(new ListingColumn(HAlignType.CENTER, columnWidth));
+            rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT,
+                    entityDef.getFieldDef(columnFieldNames.get(i)).getFieldLabel().toUpperCase()));
+        }
+
+        writer.beginTable(listingColumns);
+        writer.writeRow(rowCells);
+        writer.endTable();
+        writer.endSection();
+
+        // Rows
+        writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_ALL);
+        int j = 0;
+        if (isSerialNo) {
+            listingColumns.get(j).setAlign(HAlignType.LEFT);
+            rowCells.get(j).setType(ListingCellType.TEXT);
+            j++;
+        }
+
+        for (int i = 0; i < columns; i++, j++) {
+            EntityFieldDef entityFieldDef = entityDef.getFieldDef(columnFieldNames.get(i));
+            listingColumns.get(j).setAlign(entityFieldDef.getDataType().alignType());
+            rowCells.get(j).setType(ListingCellType.TEXT);
+            if (entityFieldDef.isDecimal()) {
+                rowCells.get(j).setFormat(amountFormat);
+            } else if (entityFieldDef.isDate()) {
+                rowCells.get(j).setFormat(dateFormat);
+            } else if (entityFieldDef.isTimestamp()) {
+                rowCells.get(j).setFormat(timestampFormat);
+            }
+        }
+
+        writer.beginTable(listingColumns);
+        final ValueStore detailsValueStore = new BeanValueListStore(detailsFormListing.getDetails());
+        final int len = detailsValueStore.size();
+        for (int k = 0; k < len;) {
+            detailsValueStore.setDataIndex(k++);
+
+            j = 0;
+            if (isSerialNo) {
+                rowCells.get(j).setContent(String.valueOf(k));
+                j++;
+            }
+
+            for (int i = 0; i < columns; i++, j++) {
+                rowCells.get(j).setContent(detailsValueStore.retrieve(columnFieldNames.get(i)));
+            }
+
+            writer.writeRow(rowCells);
+        }
+
+        writer.endTable();
+        writer.endSection();
+    }
+
+    protected abstract int getOptionFlagsOverride(DetailsFormListing detailsFormListing) throws UnifyException;
 
     protected abstract void generateReportHeader(DetailsFormListing detailsFormListing,
             ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;

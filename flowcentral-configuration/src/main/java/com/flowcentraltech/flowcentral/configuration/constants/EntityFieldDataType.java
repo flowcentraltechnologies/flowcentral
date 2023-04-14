@@ -19,6 +19,7 @@ import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
 import com.tcdng.unify.core.constant.DataType;
+import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.util.EnumUtils;
 
 /**
@@ -293,6 +294,10 @@ public enum EntityFieldDataType implements EnumConst {
 
     public DataType dataType() {
         return dataType;
+    }
+
+    public HAlignType alignType() {
+        return dataType != null ? dataType.alignType() : HAlignType.LEFT;
     }
 
     public boolean isTableViewable() {

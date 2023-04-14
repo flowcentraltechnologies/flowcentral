@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.text.Format;
+
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -28,24 +30,32 @@ import com.tcdng.unify.core.util.StringUtils;
 public class ListingCell {
 
     public static final int BORDER_TOP = 0x00000001;
-    
+
     public static final int BORDER_RIGHT = 0x00000002;
-    
+
     public static final int BORDER_BOTTOM = 0x00000004;
-    
+
     public static final int BORDER_LEFT = 0x00000008;
-    
+
     public static final int BORDER_ALL = BORDER_TOP | BORDER_RIGHT | BORDER_BOTTOM | BORDER_LEFT;
-    
+
     private ListingCellType type;
-    
+
     private ListingColorType cellColor;
-    
+
     private String content;
-    
+
     private String contentStyle;
-    
+
+    private Format format;
+
     private int borders;
+
+    public ListingCell(String content) {
+        this.type = ListingCellType.TEXT;
+        this.content = content;
+        this.borders = BORDER_ALL;
+    }
 
     public ListingCell(ListingCellType type, String content, int borders) {
         this.type = type;
@@ -65,7 +75,7 @@ public class ListingCell {
         this.content = content;
         this.contentStyle = contentStyle;
         this.borders = borders;
-   }
+    }
 
     public ListingCell(ListingCellType type, String content) {
         this.type = type;
@@ -82,7 +92,7 @@ public class ListingCell {
         this.type = ListingCellType.TEXT;
         this.content = content;
         this.contentStyle = contentStyle;
-   }
+    }
 
     public ListingCell(ListingCellType type, ListingColorType cellColor, String content, int borders) {
         this.type = type;
@@ -91,7 +101,8 @@ public class ListingCell {
         this.borders = borders;
     }
 
-    public ListingCell(ListingCellType type, ListingColorType cellColor, String content, String contentStyle, int borders) {
+    public ListingCell(ListingCellType type, ListingColorType cellColor, String content, String contentStyle,
+            int borders) {
         this.type = type;
         this.cellColor = cellColor;
         this.content = content;
@@ -105,7 +116,7 @@ public class ListingCell {
         this.content = content;
         this.contentStyle = contentStyle;
         this.borders = borders;
-   }
+    }
 
     public ListingCell(ListingCellType type, ListingColorType cellColor, String content) {
         this.type = type;
@@ -125,8 +136,8 @@ public class ListingCell {
         this.cellColor = cellColor;
         this.content = content;
         this.contentStyle = contentStyle;
-   }
-    
+    }
+
     public ListingCellType getType() {
         return type;
     }
@@ -137,6 +148,22 @@ public class ListingCell {
 
     public String getContentStyle() {
         return contentStyle;
+    }
+
+    public void setType(ListingCellType type) {
+        this.type = type;
+    }
+
+    public Format getFormat() {
+        return format;
+    }
+
+    public void setFormat(Format format) {
+        this.format = format;
+    }
+
+    public void setContent(Object content) {
+        this.content = content != null ? (format != null ? format.format(content) : String.valueOf(content)) : null;
     }
 
     public int getBorders() {
@@ -150,7 +177,7 @@ public class ListingCell {
     public boolean isWithContentStyle() {
         return !StringUtils.isBlank(contentStyle);
     }
-    
+
     public ListingColorType getCellColor() {
         return cellColor;
     }
@@ -158,11 +185,11 @@ public class ListingCell {
     public boolean isWithCellColor() {
         return cellColor != null;
     }
-    
+
     public boolean isFileImage() {
         return type.isFileImage();
     }
-    
+
     public boolean isScopeImage() {
         return type.isScopeImage();
     }

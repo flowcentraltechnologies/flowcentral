@@ -426,6 +426,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         return dataType.isBoolean();
     }
 
+    public boolean isDecimal() {
+        return dataType.isDecimal();
+    }
+
     public boolean isNumber() {
         return dataType.isNumber();
     }
