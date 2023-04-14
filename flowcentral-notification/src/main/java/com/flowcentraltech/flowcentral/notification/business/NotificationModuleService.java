@@ -47,6 +47,17 @@ public interface NotificationModuleService extends FlowCentralService {
     <T extends NotifTemplateWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
 
     /**
+     * Counts notification templates by module
+     * 
+     * @param moduleName
+     *                   the module name
+     * @return the template count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int countNotifTemplatesByModule(String moduleName) throws UnifyException;
+    
+    /**
      * Generates dynamic notification template information.
      * 
      * @param basePackage

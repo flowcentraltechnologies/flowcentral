@@ -327,6 +327,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     Long createApplication(Application application, Module module) throws UnifyException;
 
     /**
+     * Gets names of all applications in module.
+     * 
+     * @param moduleName
+     *                   the module name
+     * @return the application names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getApplicationNames(String moduleName) throws UnifyException;
+    
+    /**
      * Finds applications based on query.
      * 
      * @param query
@@ -842,6 +853,20 @@ public interface ApplicationModuleService extends FlowCentralService {
      */
     <T extends BaseApplicationEntity> List<Long> findAppComponentIdList(String applicationName, Class<T> componentClazz)
             throws UnifyException;
+
+    /**
+     * Finds all application component names.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @param componentClazz
+     *                        the application component type
+     * @return list of application component names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends BaseApplicationEntity> List<String> findAppComponentNames(String applicationName,
+            Class<T> componentClazz) throws UnifyException;
 
     /**
      * Finds all custom application component IDs.

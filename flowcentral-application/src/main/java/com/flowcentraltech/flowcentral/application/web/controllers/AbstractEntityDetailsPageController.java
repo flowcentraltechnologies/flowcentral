@@ -149,6 +149,21 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
     }
 
+    protected final String viewListingReport(String tableName) throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName),
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), null, null);
+    }
+
+    protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties)
+            throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName), generator, properties, null, null);
+    }
+
+    protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties,
+            String dateFormat, String timestampFormat) throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName), generator, properties, dateFormat, timestampFormat);
+    }
+
     protected final String viewListingReport() throws UnifyException {
         return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
                 Collections.emptyMap(), null, null);
@@ -165,10 +180,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             String dateFormat, String timestampFormat) throws UnifyException {
-        DetailsFormListing listing = DetailsFormListing
-                .newBuilder(tableDef.getEntityDef(), getResultTable().getSourceObject())
-                .showSerialNo(tableDef.isSerialNo()).useGenerator(generator).useDateFormat(dateFormat)
-                .useTimestampFormat(timestampFormat).addColumns(tableDef).build();
+        DetailsFormListing listing = DetailsFormListing.newBuilder(tableDef, getResultTable().getSourceObject())
+                .useGenerator(generator).useDateFormat(dateFormat).useTimestampFormat(timestampFormat).build();
         return viewListingReport(listing);
     }
 

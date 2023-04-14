@@ -30,6 +30,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseEntityWrapper;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
+import com.flowcentraltech.flowcentral.common.constants.ComponentType;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
@@ -80,6 +83,16 @@ public final class CodeGenerationUtils {
         }
 
         return replacements;
+    }
+
+    public static String generateUtilitiesConstantsClassName(String basePackage, String moduleName,
+            String constantName) {
+        return CodeGenerationUtils.generateUtilitiesConstantsPackageName(basePackage, moduleName) + "."
+                + StringUtils.capitalizeFirstLetter(constantName) + "Module";
+    }
+
+    public static String generateUtilitiesConstantsPackageName(String basePackage, String moduleName) {
+        return basePackage + ".utilities." + moduleName.toLowerCase() + ".constants";
     }
 
     public static String generateEntityWrapperJavaClassSource(String packageName, DynamicEntityInfo dynamicEntityInfo)
@@ -152,9 +165,6 @@ public final class CodeGenerationUtils {
         // Construct class
         TypeInfo baseEntityInfo = new TypeInfo(BaseEntityWrapper.class);
         TypeInfo typeInfo = new TypeInfo(dynamicEntityInfo.getClassName() + "Wrapper");
-        // final int index = typeInfo.getPackageName().lastIndexOf('.');
-        // final String packageName = typeInfo.getPackageName().substring(0, index) +
-        // ".entitywrappers";
         esb.append("package ").append(packageName).append(";\n");
         List<String> importList = new ArrayList<String>(importSet);
         Collections.sort(importList);
@@ -221,5 +231,35 @@ public final class CodeGenerationUtils {
         esb.append(msb);
         esb.append("}\n");
         return esb.toString();
+    }
+
+    public static String generateModuleNameConstantsJavaClassSource(TypeInfo typeInfo, String packageName,
+            DynamicModuleInfo dynamicModuleInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("package ").append(packageName).append(";\n");
+        sb.append("public interface ").append(typeInfo.getSimpleName()).append(" {\n");
+        sb.append("String NAME = \"").append(dynamicModuleInfo.getModuleName()).append("\";\n");
+        for (ApplicationInfo applicationInfo : dynamicModuleInfo.getApplications()) {
+            sb.append("interface ").append(StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()))
+                    .append("Application {\n");
+            sb.append("String NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
+
+            for (Map.Entry<ComponentType, List<String>> entry : applicationInfo.getComponentNames().entrySet()) {
+                sb.append("interface ").append(StringUtils.capitalizeFirstLetter(entry.getKey().term()))
+                        .append(" {\n");
+                for (String componentName : entry.getValue()) {
+                    final String fieldNameConst = SqlUtils.generateSchemaElementName(componentName, true);
+                    sb.append("String ").append(fieldNameConst).append(" = \"")
+                            .append(applicationInfo.getApplicationName()).append('.').append(componentName).append("\";\n");
+                }
+
+                sb.append("}\n");
+            }
+
+            sb.append("}\n");
+        }
+
+        sb.append("}\n");
+        return sb.toString();
     }
 }

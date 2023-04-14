@@ -1489,6 +1489,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     }
 
     @Override
+    public List<String> getApplicationNames(String moduleName) throws UnifyException {
+        return environment().valueList(String.class, "name",
+                new ApplicationQuery().moduleName(moduleName).addOrder("name"));
+    }
+
+    @Override
     public List<Application> findApplications(ApplicationQuery query) throws UnifyException {
         return environment().listAll(query);
     }
@@ -1915,6 +1921,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             Class<T> componentClazz) throws UnifyException {
         return environment().valueList(Long.class, "id",
                 Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("id"));
+    }
+
+    @Override
+    public <T extends BaseApplicationEntity> List<String> findAppComponentNames(String applicationName,
+            Class<T> componentClazz) throws UnifyException {
+        return environment().valueList(String.class, "name",
+                Query.of(componentClazz).addEquals("applicationName", applicationName).addOrder("name"));
     }
 
     @Override

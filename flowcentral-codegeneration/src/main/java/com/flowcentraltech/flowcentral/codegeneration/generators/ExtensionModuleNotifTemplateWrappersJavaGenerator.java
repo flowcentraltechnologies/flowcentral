@@ -50,6 +50,11 @@ public class ExtensionModuleNotifTemplateWrappersJavaGenerator extends AbstractS
         this.notificationModuleService = notificationModuleService;
     }
 
+    protected final boolean checkGeneration(ExtensionModuleStaticFileBuilderContext ctx, String entityName)
+            throws UnifyException {
+        return notificationModuleService.countNotifTemplatesByModule(entityName) > 0;
+    }
+
     @Override
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String moduleName, ZipOutputStream zos)
             throws UnifyException {

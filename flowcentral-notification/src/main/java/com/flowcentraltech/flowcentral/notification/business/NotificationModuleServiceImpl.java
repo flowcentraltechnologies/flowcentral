@@ -177,6 +177,11 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     @Override
+    public int countNotifTemplatesByModule(String moduleName) throws UnifyException {
+        return environment().countAll(new NotificationTemplateQuery().moduleName(moduleName));
+    }
+
+    @Override
     public List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException {
         List<NotificationTemplate> templates = environment().listAll(new NotificationTemplateQuery()

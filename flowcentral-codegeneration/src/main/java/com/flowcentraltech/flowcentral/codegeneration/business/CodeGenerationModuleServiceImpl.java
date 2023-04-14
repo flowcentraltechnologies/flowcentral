@@ -17,31 +17,47 @@ package com.flowcentraltech.flowcentral.codegeneration.business;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
+import com.flowcentraltech.flowcentral.application.entities.AppForm;
+import com.flowcentraltech.flowcentral.application.entities.AppRef;
+import com.flowcentraltech.flowcentral.application.entities.AppTable;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.entities.ApplicationQuery;
+import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleNameConstants;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.codegeneration.constants.CodeGenerationTaskConstants;
 import com.flowcentraltech.flowcentral.codegeneration.data.CodeGenerationItem;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionModuleStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.ExtensionStaticFileBuilderContext;
 import com.flowcentraltech.flowcentral.codegeneration.generators.StaticArtifactGenerator;
 import com.flowcentraltech.flowcentral.codegeneration.util.CodeGenerationUtils;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.CodeGenerationProvider;
+import com.flowcentraltech.flowcentral.common.constants.ComponentType;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
+import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
+import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -67,6 +83,25 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
     private static final List<String> codegenerationAppletList = Collections.unmodifiableList(
             Arrays.asList("codegeneration.generateStaticFiles", "codegeneration.generateStaticUtilitiesFiles"));
+
+    @SuppressWarnings("serial")
+    private static final Map<ComponentType, Class<? extends BaseApplicationEntity>> COMPONENTS = Collections
+            .unmodifiableMap(new LinkedHashMap<ComponentType, Class<? extends BaseApplicationEntity>>()
+                {
+                    {
+                        put(ComponentType.WIDGET, AppWidgetType.class);
+                        put(ComponentType.ENTITY, AppEntity.class);
+                        put(ComponentType.REFERENCE, AppRef.class);
+                        put(ComponentType.APPLET, AppApplet.class);
+                        put(ComponentType.CHART, Chart.class);
+                        put(ComponentType.DASHBOARD, Dashboard.class);
+                        put(ComponentType.NOTIFICATION_TEMPLATE, NotificationTemplate.class);
+                        put(ComponentType.REPORT_CONFIGURATION, ReportConfiguration.class);
+                        put(ComponentType.FORM, AppForm.class);
+                        put(ComponentType.TABLE, AppTable.class);
+                        put(ComponentType.WORKFLOW, Workflow.class);
+                    }
+                });
 
     @Configurable
     private SystemModuleService systemModuleService;
@@ -219,11 +254,23 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                         }
                     }
 
+                    DynamicModuleInfo dynamicModuleInfo = getDynamicModuleInfo(moduleName);
+                    moduleCtx.setDynamicModuleInfo(dynamicModuleInfo);
+                    
+                    // Generate component name constants
+                    addTaskMessage(taskMonitor, "Generating component name constants classes for module [{0}]...",
+                            moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-componentnames-java-generator");
+                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-componentnames-java-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
+
                     // Generate entity wrappers
                     addTaskMessage(taskMonitor, "Generating entity wrapper classes for module [{0}]...", moduleName);
                     addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
                             "extension-module-entitywrappers-java-generator");
-                    StaticArtifactGenerator generator = (StaticArtifactGenerator) getComponent(
+                    generator = (StaticArtifactGenerator) getComponent(
                             "extension-module-entitywrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
 
@@ -254,6 +301,21 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     protected void doInstallModuleFeatures(final ModuleInstall moduleInstall) throws UnifyException {
 
+    }
+
+    private DynamicModuleInfo getDynamicModuleInfo(String moduleName) throws UnifyException {
+        List<ApplicationInfo> applications = new ArrayList<ApplicationInfo>();
+        for (String applicationName : applicationModuleService.getApplicationNames(moduleName)) {
+            Map<ComponentType, List<String>> componentNames = new LinkedHashMap<ComponentType, List<String>>();
+            for (Map.Entry<ComponentType, Class<? extends BaseApplicationEntity>> entry : COMPONENTS.entrySet()) {
+                List<String> names = applicationModuleService.findAppComponentNames(applicationName, entry.getValue());
+                componentNames.put(entry.getKey(), names);
+            }
+
+            applications.add(new ApplicationInfo(applicationName, componentNames));
+        }
+
+        return new DynamicModuleInfo(moduleName, applications);
     }
 
 }
