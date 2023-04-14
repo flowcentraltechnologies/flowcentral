@@ -16,10 +16,12 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
@@ -147,24 +149,26 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
     }
 
+    protected final String viewListingReport() throws UnifyException {
+        return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
+                Collections.emptyMap(), null, null);
+    }
+
     protected final String viewListingReport(String generator, Map<String, Object> properties) throws UnifyException {
         return viewListingReport(getTableDef(), generator, properties, null, null);
     }
 
-    protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties) throws UnifyException {
+    protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties)
+            throws UnifyException {
         return viewListingReport(tableDef, generator, properties, null, null);
     }
-    
+
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             String dateFormat, String timestampFormat) throws UnifyException {
         DetailsFormListing listing = DetailsFormListing
                 .newBuilder(tableDef.getEntityDef(), getResultTable().getSourceObject())
-                .showSerialNo(tableDef.isSerialNo())
-                .useGenerator(generator)
-                .useDateFormat(dateFormat)
-                .useTimestampFormat(timestampFormat)
-                .addColumns(tableDef)
-                .build();
+                .showSerialNo(tableDef.isSerialNo()).useGenerator(generator).useDateFormat(dateFormat)
+                .useTimestampFormat(timestampFormat).addColumns(tableDef).build();
         return viewListingReport(listing);
     }
 

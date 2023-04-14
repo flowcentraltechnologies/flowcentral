@@ -50,4 +50,6 @@ public interface ApplicationModuleNameConstants {
     String DELEGATE_ENTITYLIST_PROVIDER = "application-delegate-entitylist-provider";
     
     String TABLE_LOADING_ENVIRONMENT_DELEGATE = "tableloading-environmentdelegate";
+    
+    String BASIC_DETAILSFORMLISTING_GENERATOR = "basic-detailsformlistinggenerator";
 }
