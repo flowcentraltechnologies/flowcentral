@@ -32,42 +32,42 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum CollaborationType implements EnumConst {
 
     WIDGET(
-            "WDG"),
+            ComponentType.WIDGET),
     ENTITY(
-            "ENT"),
+            ComponentType.ENTITY),
     REFERENCE(
-            "REF"),
+            ComponentType.REFERENCE),
     APPLET(
-            "APL"),
+            ComponentType.APPLET),
     CHART(
-            "CRT"),
+            ComponentType.CHART),
     DASHBOARD(
-            "DSH"),
+            ComponentType.DASHBOARD),
     NOTIFICATION_TEMPLATE(
-            "NTP"),
+            ComponentType.NOTIFICATION_TEMPLATE),
     REPORT_CONFIGURATION(
-            "RPC"),
+            ComponentType.REPORT_CONFIGURATION),
     FORM(
-            "FRM"),
+            ComponentType.FORM),
     TABLE(
-            "TBL"),
+            ComponentType.TABLE),
     WORKFLOW(
-            "WRK");
+            ComponentType.WORKFLOW);
 
-    private final String code;
+    private final ComponentType type;
 
-    private CollaborationType(String code) {
-        this.code = code;
+    private CollaborationType(ComponentType type) {
+        this.type = type;
     }
 
     @Override
     public String code() {
-        return this.code;
+        return type.code();
     }
 
     @Override
     public String defaultCode() {
-        return ENTITY.code;
+        return ENTITY.type.code();
     }
 
     public static CollaborationType fromCode(String code) {

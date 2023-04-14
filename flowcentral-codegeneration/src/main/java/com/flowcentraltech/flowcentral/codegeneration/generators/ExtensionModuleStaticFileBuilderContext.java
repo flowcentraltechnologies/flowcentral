@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
+import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplatesConfig;
@@ -54,6 +55,8 @@ public class ExtensionModuleStaticFileBuilderContext {
 
     private String moduleName;
 
+    private DynamicModuleInfo dynamicModuleInfo;
+    
     public ExtensionModuleStaticFileBuilderContext(ExtensionStaticFileBuilderContext mainCtx, String moduleName,
             Map<String, String> messageReplacements) {
         this.staticApplicationConfigs = new ArrayList<StaticApplicationConfig>();
@@ -87,6 +90,14 @@ public class ExtensionModuleStaticFileBuilderContext {
 
     public List<String> getEntityList() {
         return entityList;
+    }
+
+    public DynamicModuleInfo getDynamicModuleInfo() {
+        return dynamicModuleInfo;
+    }
+
+    public void setDynamicModuleInfo(DynamicModuleInfo dynamicModuleInfo) {
+        this.dynamicModuleInfo = dynamicModuleInfo;
     }
 
     public void nextApplication(String applicationName, String applicationDesc) {

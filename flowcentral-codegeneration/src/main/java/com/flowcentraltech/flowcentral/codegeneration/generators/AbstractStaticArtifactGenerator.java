@@ -58,23 +58,25 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractUnifyCompo
     @Override
     public final void generate(ExtensionModuleStaticFileBuilderContext ctx, String entityName, ZipOutputStream zos)
             throws UnifyException {
-        if (!StringUtils.isBlank(zipDir)) {
-            if (zipDir.indexOf('{') >= 0) {
-                String packageFolder = ctx.getBasePackage().replaceAll("\\.", "/");
-                String lowerEntityName = entityName.toLowerCase();
-                zipDir = MessageFormat.format(zipDir, packageFolder, lowerEntityName);
-            }
-            
-            if (ctx.addZipDir(zipDir)) {
-                try {
-                    zos.putNextEntry(new ZipEntry(zipDir));
-                } catch (IOException e) {
-                    throwOperationErrorException(e);
+        if (checkGeneration(ctx, entityName)) {
+            if (!StringUtils.isBlank(zipDir)) {
+                if (zipDir.indexOf('{') >= 0) {
+                    String packageFolder = ctx.getBasePackage().replaceAll("\\.", "/");
+                    String lowerEntityName = entityName.toLowerCase();
+                    zipDir = MessageFormat.format(zipDir, packageFolder, lowerEntityName);
+                }
+
+                if (ctx.addZipDir(zipDir)) {
+                    try {
+                        zos.putNextEntry(new ZipEntry(zipDir));
+                    } catch (IOException e) {
+                        throwOperationErrorException(e);
+                    }
                 }
             }
-        }
 
-        doGenerate(ctx, entityName, zos);
+            doGenerate(ctx, entityName, zos);
+        }
     }
 
     protected AppletUtilities au() {
@@ -94,6 +96,11 @@ public abstract class AbstractStaticArtifactGenerator extends AbstractUnifyCompo
 
     }
 
+    protected boolean checkGeneration(ExtensionModuleStaticFileBuilderContext ctx, String entityName)
+            throws UnifyException {
+        return true;
+    }
+    
     protected void openEntry(String filename, ZipOutputStream zos) throws UnifyException {
         try {
             zos.putNextEntry(new ZipEntry(zipDir + filename));
