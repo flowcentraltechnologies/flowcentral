@@ -23,10 +23,11 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
-import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
+import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
+import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.data.BeanValueListStore;
@@ -78,8 +79,9 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
     protected void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
-        final EntityDef entityDef = detailsFormListing.getEntityDef();
-        final boolean isSerialNo = detailsFormListing.isSerialNo();
+        final TableDef tableDef = detailsFormListing.getTableDef();
+        final boolean isSerialNo = tableDef.isSerialNo();
+        final boolean isHeaderToUpperCase = tableDef.isHeaderToUpperCase();
         final DecimalFormat amountFormat = new DecimalFormat("###,###.00");
         final SimpleDateFormat dateFormat = StringUtils.isBlank(detailsFormListing.getDateFormat())
                 ? new SimpleDateFormat("yyyy-MM-dd")
@@ -87,8 +89,8 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         final SimpleDateFormat timestampFormat = StringUtils.isBlank(detailsFormListing.getTimestampFormat())
                 ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
                 : new SimpleDateFormat(detailsFormListing.getTimestampFormat());
-        final List<String> columnFieldNames = detailsFormListing.getColumnFieldNames();
-        final int columns = columnFieldNames.size();
+        final List<TableColumnDef> tableColumns = tableDef.getVisibleColumnDefList();
+        final int columns = tableColumns.size();
         final int columnWidth = 100 / columns;
         // Header
         writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_ALL);
@@ -102,7 +104,8 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         for (int i = 0; i < columns; i++) {
             listingColumns.add(new ListingColumn(HAlignType.CENTER, columnWidth));
             rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT,
-                    entityDef.getFieldDef(columnFieldNames.get(i)).getFieldLabel().toUpperCase()));
+                    isHeaderToUpperCase ? tableColumns.get(i).getLabel().toUpperCase()
+                            : tableColumns.get(i).getLabel()));
         }
 
         writer.beginTable(listingColumns);
@@ -120,7 +123,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         }
 
         for (int i = 0; i < columns; i++, j++) {
-            EntityFieldDef entityFieldDef = entityDef.getFieldDef(columnFieldNames.get(i));
+            EntityFieldDef entityFieldDef = tableDef.getEntityDef().getFieldDef(tableColumns.get(i).getFieldName());
             listingColumns.get(j).setAlign(entityFieldDef.getDataType().alignType());
             rowCells.get(j).setType(ListingCellType.TEXT);
             if (entityFieldDef.isDecimal()) {
@@ -145,7 +148,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
             }
 
             for (int i = 0; i < columns; i++, j++) {
-                rowCells.get(j).setContent(detailsValueStore.retrieve(columnFieldNames.get(i)));
+                rowCells.get(j).setContent(detailsValueStore.retrieve(tableColumns.get(i).getFieldName()));
             }
 
             writer.writeRow(rowCells);

@@ -165,10 +165,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             String dateFormat, String timestampFormat) throws UnifyException {
-        DetailsFormListing listing = DetailsFormListing
-                .newBuilder(tableDef.getEntityDef(), getResultTable().getSourceObject())
-                .showSerialNo(tableDef.isSerialNo()).useGenerator(generator).useDateFormat(dateFormat)
-                .useTimestampFormat(timestampFormat).addColumns(tableDef).build();
+        DetailsFormListing listing = DetailsFormListing.newBuilder(tableDef, getResultTable().getSourceObject())
+                .useGenerator(generator).useDateFormat(dateFormat).useTimestampFormat(timestampFormat).build();
         return viewListingReport(listing);
     }
 

@@ -163,7 +163,12 @@ public class ListingCell {
     }
 
     public void setContent(Object content) {
+        System.out.println("@prime: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("@prime: format = " + format);
+        System.out.println("@prime: content = " + content);
         this.content = content != null ? (format != null ? format.format(content) : String.valueOf(content)) : null;
+        System.out.println("@prime: this.content = " + this.content);
+        System.out.println("@prime: >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     public int getBorders() {
