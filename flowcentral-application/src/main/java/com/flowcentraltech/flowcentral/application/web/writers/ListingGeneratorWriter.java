@@ -26,6 +26,7 @@ import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.filter.ObjectFilter;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
 /**
@@ -215,6 +216,10 @@ public class ListingGeneratorWriter {
         inSection = true;
     }
 
+    public void beginTable(List<ListingColumn> _columns) throws UnifyException {
+        beginTable(DataUtils.toArray(ListingColumn.class, _columns));
+    }
+    
     public void beginTable(ListingColumn... _columns) throws UnifyException {
         if (!inSection) {
             throw new RuntimeException("No section started.");
@@ -238,6 +243,10 @@ public class ListingGeneratorWriter {
         }
         writer.write("\" style=\"width:").write(width).write("%;\">");
         writer.write("<div class=\"fltable\">");
+    }
+
+    public void writeRow(List<ListingCell> cells) throws UnifyException {
+        writeRow(DataUtils.toArray(ListingCell.class, cells));
     }
 
     public void writeRow(ListingCell... cells) throws UnifyException {

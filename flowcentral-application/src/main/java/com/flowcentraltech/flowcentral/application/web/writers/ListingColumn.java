@@ -30,9 +30,12 @@ public class ListingColumn {
     
     private int widthPercent;
 
+    private boolean widthInPixels;
+
     public ListingColumn(int widthPercent) {
         this.align = HAlignType.LEFT;
         this.widthPercent = widthPercent;
+        this.widthInPixels = false;
     }
 
     public ListingColumn(HAlignType align, int widthPercent) {
@@ -40,11 +43,31 @@ public class ListingColumn {
         this.widthPercent = widthPercent;
     }
 
+    public ListingColumn(int widthPercent, boolean widthInPixels) {
+        this.align = HAlignType.LEFT;
+        this.widthPercent = widthPercent;
+        this.widthInPixels = widthInPixels;
+    }
+
+    public ListingColumn(HAlignType align, int widthPercent, boolean widthInPixels) {
+        this.align = align;
+        this.widthPercent = widthPercent;
+        this.widthInPixels = widthInPixels;
+    }
+
     public HAlignType getAlign() {
         return align;
     }
 
+    public void setAlign(HAlignType align) {
+        this.align = align;
+    }
+
     public int getWidthPercent() {
         return widthPercent;
+    }
+
+    public boolean isWidthInPixels() {
+        return widthInPixels;
     }
 }

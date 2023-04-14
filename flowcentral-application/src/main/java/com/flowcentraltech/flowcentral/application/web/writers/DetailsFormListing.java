@@ -39,6 +39,10 @@ public class DetailsFormListing {
 
     private String generator;
 
+    private String dateFormat;
+
+    private String timestampFormat;
+
     private EntityDef entityDef;
 
     private Map<String, Object> properties;
@@ -47,17 +51,31 @@ public class DetailsFormListing {
 
     private List<? extends Entity> details;
 
-    private DetailsFormListing(String generator, EntityDef entityDef, Map<String, Object> properties,
-            List<String> columnFieldNames, List<? extends Entity> details) {
+    private boolean serialNo;
+
+    private DetailsFormListing(String generator, String dateFormat, String timestampFormat, EntityDef entityDef,
+            Map<String, Object> properties, List<String> columnFieldNames, List<? extends Entity> details,
+            boolean serialNo) {
         this.generator = generator;
+        this.dateFormat = dateFormat;
+        this.timestampFormat = timestampFormat;
         this.entityDef = entityDef;
         this.properties = properties;
         this.columnFieldNames = columnFieldNames;
         this.details = details;
+        this.serialNo = serialNo;
     }
 
     public String getGenerator() {
         return generator;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
+    }
+
+    public String getTimestampFormat() {
+        return timestampFormat;
     }
 
     public EntityDef getEntityDef() {
@@ -69,7 +87,7 @@ public class DetailsFormListing {
     }
 
     public <T> T getProperty(Class<T> dataType, String name) throws UnifyException {
-        return DataUtils.convert(dataType, properties.get(name)) ;
+        return DataUtils.convert(dataType, properties.get(name));
     }
 
     public List<String> getColumnFieldNames() {
@@ -80,6 +98,10 @@ public class DetailsFormListing {
         return details;
     }
 
+    public boolean isSerialNo() {
+        return serialNo;
+    }
+
     public static Builder newBuilder(EntityDef entityDef, List<? extends Entity> details) {
         return new Builder(entityDef, details);
     }
@@ -88,6 +110,10 @@ public class DetailsFormListing {
 
         private String generator;
 
+        private String dateFormat;
+
+        private String timestampFormat;
+
         private EntityDef entityDef;
 
         private Map<String, Object> properties;
@@ -95,6 +121,8 @@ public class DetailsFormListing {
         private List<String> columnFieldNames;
 
         private List<? extends Entity> details;
+
+        private boolean serialNo;
 
         public Builder(EntityDef entityDef, List<? extends Entity> details) {
             this.properties = new HashMap<String, Object>();
@@ -108,8 +136,28 @@ public class DetailsFormListing {
             return this;
         }
 
+        public Builder useDateFormat(String dateFormat) throws UnifyException {
+            this.dateFormat = dateFormat;
+            return this;
+        }
+
+        public Builder useTimestampFormat(String timestampFormat) throws UnifyException {
+            this.timestampFormat = timestampFormat;
+            return this;
+        }
+
+        public Builder showSerialNo(boolean serialNo) throws UnifyException {
+            this.serialNo = serialNo;
+            return this;
+        }
+
         public Builder addProperty(String name, Object val) throws UnifyException {
             properties.put(name, val);
+            return this;
+        }
+
+        public Builder addProperties(Map<String, Object> properties) throws UnifyException {
+            this.properties.putAll(properties);
             return this;
         }
 
@@ -144,8 +192,13 @@ public class DetailsFormListing {
                 throw new IllegalArgumentException("Generator is required!");
             }
 
-            return new DetailsFormListing(generator, entityDef, Collections.unmodifiableMap(properties),
-                    Collections.unmodifiableList(columnFieldNames), Collections.unmodifiableList(details));
+            if (DataUtils.isBlank(columnFieldNames)) {
+                throw new IllegalArgumentException("At least one column field name required!");
+            }
+
+            return new DetailsFormListing(generator, dateFormat, timestampFormat, entityDef,
+                    Collections.unmodifiableMap(properties), Collections.unmodifiableList(columnFieldNames),
+                    Collections.unmodifiableList(details), serialNo);
         }
     }
 }

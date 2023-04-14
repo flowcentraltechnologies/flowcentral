@@ -130,7 +130,7 @@ public abstract class AbstractLoadingDetailsPageController<T extends AbstractLoa
             pageBean.setApplet(applet);
         }
     }
-
+    
     protected String getDetailsAppletName() {
         return detailsAppletName;
     }
