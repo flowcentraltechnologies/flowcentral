@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.EntityTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.StringUtils;
@@ -114,7 +115,7 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
             setCommandResultMapping(ResultMappingConstants.CLOSE);
         } else if (entityActionResult.isDisplayListingReport()) {
             setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, entityActionResult.getResult());
-            setCommandResultMapping("viewlistingreport");
+            setCommandResultMapping(FlowCentralResultMappingConstants.VIEW_LISTING_REPORT);
         }
     }
 

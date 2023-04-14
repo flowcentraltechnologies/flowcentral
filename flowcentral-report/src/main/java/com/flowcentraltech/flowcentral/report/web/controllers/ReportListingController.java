@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.report.web.controllers;
 
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
@@ -66,7 +67,7 @@ public class ReportListingController extends AbstractPageController<ReportListin
         ReportOptions reportOptions = reportModuleService.getReportOptionsForConfiguration(reportConfigName);
         reportOptions.setReportResourcePath(reportResourcePath);
         reportOptions.setUserInputOnly(true);
-        return showPopup(new Popup("showapplicationreportoptions", reportOptions));
+        return showPopup(new Popup(FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS, reportOptions));
     }
 
     @Override

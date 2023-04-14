@@ -60,7 +60,7 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
 
     private final String childBaseFieldName;
 
-    private final DetailsEntryTablePolicy childListEntryTablePolicy;
+    private final InlineDetailsEntryTablePolicy childListEntryTablePolicy;
 
     public AbstractLoadingDetailsInlineChildListPageController(Class<T> pageBeanClass, Secured secured,
             ReadOnly readOnly, ResetOnWrite resetOnWrite, String detailsAppletName, String childAppletName,
@@ -68,7 +68,7 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
         super(pageBeanClass, secured, readOnly, resetOnWrite, detailsAppletName);
         this.childAppletName = childAppletName;
         this.childBaseFieldName = childBaseFieldName;
-        this.childListEntryTablePolicy = new DetailsEntryTablePolicy();
+        this.childListEntryTablePolicy = new InlineDetailsEntryTablePolicy();
     }
 
     @Action
@@ -86,10 +86,10 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
         return "refreshChildCrud";
     }
 
-    protected abstract List<TableSummaryLine> getPreDetailsTableSummaryLines(ValueStore tableValueStore)
+    protected abstract List<TableSummaryLine> getInlinePreDetailsTableSummaryLines(ValueStore tableValueStore)
             throws UnifyException;
 
-    protected abstract List<TableSummaryLine> getPostDetailsTableSummaryLines(ValueStore tableValueStore)
+    protected abstract List<TableSummaryLine> getInlinePostDetailsTableSummaryLines(ValueStore tableValueStore)
             throws UnifyException;
 
     @Override
@@ -138,7 +138,7 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
                 saveAsSwitchOnChangeHandlers, maintainActHandlers);
     }
 
-    protected class DetailsEntryTablePolicy implements EntryTablePolicy {
+    protected final class InlineDetailsEntryTablePolicy implements EntryTablePolicy {
 
         @Override
         public String getName() {
@@ -202,13 +202,13 @@ public abstract class AbstractLoadingDetailsInlineChildListPageController<T exte
         @Override
         public List<TableSummaryLine> getPreTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
                 throws UnifyException {
-            return getPreDetailsTableSummaryLines(tableValueStore);
+            return getInlinePreDetailsTableSummaryLines(tableValueStore);
         }
 
         @Override
         public List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
                 throws UnifyException {
-            return getPostDetailsTableSummaryLines(tableValueStore);
+            return getInlinePostDetailsTableSummaryLines(tableValueStore);
         }
 
         @Override

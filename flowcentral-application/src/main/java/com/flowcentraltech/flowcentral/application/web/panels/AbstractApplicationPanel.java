@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.business.ApplicationModuleSer
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -96,7 +97,7 @@ public abstract class AbstractApplicationPanel extends AbstractPanel {
     }
 
     protected void showReportOptionsBox(ReportOptions reportOptions) throws UnifyException {
-        commandShowPopup(new Popup("showapplicationreportoptions", reportOptions));
+        commandShowPopup(new Popup(FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS, reportOptions));
     }
     
     protected final void setReloadOnSwitch() throws UnifyException {
