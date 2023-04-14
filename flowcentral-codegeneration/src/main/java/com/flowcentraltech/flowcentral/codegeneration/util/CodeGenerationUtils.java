@@ -88,7 +88,7 @@ public final class CodeGenerationUtils {
     public static String generateUtilitiesConstantsClassName(String basePackage, String moduleName,
             String constantName) {
         return CodeGenerationUtils.generateUtilitiesConstantsPackageName(basePackage, moduleName) + "."
-                + StringUtils.capitalizeFirstLetter(constantName);
+                + StringUtils.capitalizeFirstLetter(constantName) + "Mdl";
     }
 
     public static String generateUtilitiesConstantsPackageName(String basePackage, String moduleName) {
@@ -238,25 +238,25 @@ public final class CodeGenerationUtils {
         StringBuilder sb = new StringBuilder();
         sb.append("package ").append(packageName).append(";\n");
         sb.append("public interface ").append(typeInfo.getSimpleName()).append(" {\n");
-        sb.append("\tString NAME = \"").append(dynamicModuleInfo.getModuleName()).append("\";\n");
+        sb.append("String NAME = \"").append(dynamicModuleInfo.getModuleName()).append("\";\n");
         for (ApplicationInfo applicationInfo : dynamicModuleInfo.getApplications()) {
-            sb.append("\tinterface ").append(StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()))
-                    .append(" {\n");
-            sb.append("\t\tString NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
+            sb.append("interface ").append(StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()))
+                    .append("Appl {\n");
+            sb.append("String NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
 
             for (Map.Entry<ComponentType, List<String>> entry : applicationInfo.getComponentNames().entrySet()) {
-                sb.append("\t\tinterface ").append(StringUtils.capitalizeFirstLetter(entry.getKey().term()))
+                sb.append("interface ").append(StringUtils.capitalizeFirstLetter(entry.getKey().term()))
                         .append(" {\n");
                 for (String componentName : entry.getValue()) {
                     final String fieldNameConst = SqlUtils.generateSchemaElementName(componentName, true);
-                    sb.append("\t\t\tString ").append(fieldNameConst).append(" = \"")
+                    sb.append("String ").append(fieldNameConst).append(" = \"")
                             .append(applicationInfo.getApplicationName()).append('.').append(componentName).append("\";\n");
                 }
 
-                sb.append("\t\t}\n");
+                sb.append("}\n");
             }
 
-            sb.append("\t}\n");
+            sb.append("}\n");
         }
 
         sb.append("}\n");

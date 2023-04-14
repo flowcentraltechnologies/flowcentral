@@ -1490,8 +1490,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public List<String> getApplicationNames(String moduleName) throws UnifyException {
-        return environment().valueList(String.class, "moduleName",
-                new ApplicationQuery().moduleName(moduleName).addOrder("moduleName"));
+        return environment().valueList(String.class, "name",
+                new ApplicationQuery().moduleName(moduleName).addOrder("name"));
     }
 
     @Override
