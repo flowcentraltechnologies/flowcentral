@@ -26,37 +26,37 @@ public enum ComponentType {
 
     WIDGET(
             "WDG",
-            "Wdg"),
+            "Widget"),
     ENTITY(
             "ENT",
-            "Ent"),
+            "Entity"),
     REFERENCE(
             "REF",
-            "Ref"),
+            "Reference"),
     APPLET(
             "APL",
-            "Apt"),
+            "Applet"),
     CHART(
             "CRT",
-            "Crt"),
+            "Chart"),
     DASHBOARD(
             "DSH",
-            "Dsh"),
+            "Dashboard"),
     NOTIFICATION_TEMPLATE(
             "NTP",
-            "NotTmpl"),
+            "NotifTemplate"),
     REPORT_CONFIGURATION(
             "RPC",
-            "RptConf"),
+            "ReportConfiguration"),
     FORM(
             "FRM",
-            "Frm"),
+            "Form"),
     TABLE(
             "TBL",
-            "Tbl"),
+            "Table"),
     WORKFLOW(
             "WRK",
-            "Wf");
+            "Workflow");
 
     private final String code;
 

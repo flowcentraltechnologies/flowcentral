@@ -88,7 +88,7 @@ public final class CodeGenerationUtils {
     public static String generateUtilitiesConstantsClassName(String basePackage, String moduleName,
             String constantName) {
         return CodeGenerationUtils.generateUtilitiesConstantsPackageName(basePackage, moduleName) + "."
-                + StringUtils.capitalizeFirstLetter(constantName) + "Mdl";
+                + StringUtils.capitalizeFirstLetter(constantName) + "Module";
     }
 
     public static String generateUtilitiesConstantsPackageName(String basePackage, String moduleName) {
@@ -241,7 +241,7 @@ public final class CodeGenerationUtils {
         sb.append("String NAME = \"").append(dynamicModuleInfo.getModuleName()).append("\";\n");
         for (ApplicationInfo applicationInfo : dynamicModuleInfo.getApplications()) {
             sb.append("interface ").append(StringUtils.capitalizeFirstLetter(applicationInfo.getApplicationName()))
-                    .append("Appl {\n");
+                    .append("Application {\n");
             sb.append("String NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
 
             for (Map.Entry<ComponentType, List<String>> entry : applicationInfo.getComponentNames().entrySet()) {
