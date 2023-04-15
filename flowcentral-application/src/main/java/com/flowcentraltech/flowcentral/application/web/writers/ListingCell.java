@@ -37,6 +37,8 @@ public class ListingCell {
 
     public static final int BORDER_LEFT = 0x00000008;
 
+    public static final int BORDER_NONE = 0;
+
     public static final int BORDER_ALL = BORDER_TOP | BORDER_RIGHT | BORDER_BOTTOM | BORDER_LEFT;
 
     private ListingCellType type;

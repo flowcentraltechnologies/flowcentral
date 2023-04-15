@@ -54,6 +54,11 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     }
 
     @Override
+    protected String additionalStyleClass() {
+        return "fc-detailsformlisting";
+    }
+
+    @Override
     protected final void doGenerate(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         doGenerate((DetailsFormListing) formBeanValueStore.getValueObject(), listingProperties, writer);
@@ -92,8 +97,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         final List<TableColumnDef> tableColumns = tableDef.getVisibleColumnDefList();
         final int columns = tableColumns.size();
         final int columnWidth = 100 / columns;
-        // Header
-        writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_ALL);
+        writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_NONE);
         List<ListingColumn> listingColumns = new ArrayList<ListingColumn>();
         List<ListingCell> rowCells = new ArrayList<ListingCell>();
         if (isSerialNo) {
@@ -109,13 +113,11 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
                     ListingCell.BORDER_ALL));
         }
 
-        writer.beginTable(listingColumns);
+        writer.beginClassicTable(listingColumns);
+        // Header
         writer.writeRow(rowCells);
-        writer.endTable();
-        writer.endSection();
 
         // Rows
-        writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_ALL);
         int j = 0;
         if (isSerialNo) {
             listingColumns.get(j).setAlign(HAlignType.LEFT);
@@ -136,7 +138,6 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
             }
         }
 
-        writer.beginTable(listingColumns);
         final ValueStore detailsValueStore = new BeanValueListStore(detailsFormListing.getDetails());
         final int len = detailsValueStore.size();
         for (int k = 0; k < len;) {

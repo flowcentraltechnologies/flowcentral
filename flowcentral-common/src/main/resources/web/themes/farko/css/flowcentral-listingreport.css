@@ -28,3 +28,9 @@
 .fc-formlisting .hacenter {text-align:center;}
 .fc-formlisting .haright {text-align:right;}
 .fc-formlisting .hajustified {text-align:justify;}
+
+/** Details Form Listing */
+.fc-detailsformlisting {font-size:10px;}
+.fc-detailsformlisting .flbody {border-left: none;border-right: none;}
+.fc-detailsformlisting .flsectionbodycell {padding-left: none;padding-right: none;}
+.fc-detailsformlisting .flcell {padding: 2px 2px;}

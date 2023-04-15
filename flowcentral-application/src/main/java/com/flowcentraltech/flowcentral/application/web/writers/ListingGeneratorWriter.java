@@ -44,10 +44,12 @@ public class ListingGeneratorWriter {
     private ListingColorType rowColor;
 
     private final String listingType;
-    
+
     private int[] sectionColumnWidth;
 
     private int currentSectionColumn;
+
+    private boolean classicTable;
 
     private boolean inSection;
 
@@ -56,11 +58,11 @@ public class ListingGeneratorWriter {
     private final boolean highlighting;
 
     private boolean pauseRowPrinting;
-    
+
     private List<ItemColorRule> itemColorRules;
-    
+
     private Set<ListingColorType> pauseRowPrintColors;
- 
+
     public ListingGeneratorWriter(String listingType, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) {
         this.listingType = listingType;
@@ -82,43 +84,43 @@ public class ListingGeneratorWriter {
     public void addItemColorRule(Restriction restriction, ListingColorType color) {
         itemColorRules.add(new ItemColorRule(new ObjectFilter(restriction), color));
     }
-    
+
     public void clearItemColorRules() {
         itemColorRules.clear();
     }
-    
+
     public ListingColorType getItemColor(ValueStore valueStore) throws UnifyException {
-        for (ItemColorRule rule: itemColorRules) {
+        for (ItemColorRule rule : itemColorRules) {
             if (rule.filter.matchReader(valueStore.getReader())) {
                 return rule.color;
             }
         }
-        
+
         return null;
     }
-    
+
     public ListingColorType getItemColor(Object bean) throws UnifyException {
-        for (ItemColorRule rule: itemColorRules) {
+        for (ItemColorRule rule : itemColorRules) {
             if (rule.filter.matchObject(bean)) {
                 return rule.color;
             }
         }
-        
+
         return null;
     }
-    
+
     public void setRowColor(ListingColorType rowColor) {
         pauseRowPrinting = pauseRowPrintColors.contains(rowColor);
         if (highlighting) {
             this.rowColor = rowColor;
         }
     }
-    
+
     public boolean isPausePrint(ValueStore valueStore) throws UnifyException {
         ListingColorType color = getItemColor(valueStore);
         return color != null && pauseRowPrintColors.contains(color);
     }
-    
+
     public boolean isPausePrint(Object bean) throws UnifyException {
         ListingColorType color = getItemColor(bean);
         return color != null && pauseRowPrintColors.contains(color);
@@ -216,33 +218,20 @@ public class ListingGeneratorWriter {
         inSection = true;
     }
 
+    public void beginClassicTable(List<ListingColumn> _columns) throws UnifyException {
+        beginClassicTable(DataUtils.toArray(ListingColumn.class, _columns));
+    }
+
+    public void beginClassicTable(ListingColumn... _columns) throws UnifyException {
+        beginTable(true, _columns);
+    }
+
     public void beginTable(List<ListingColumn> _columns) throws UnifyException {
         beginTable(DataUtils.toArray(ListingColumn.class, _columns));
     }
-    
+
     public void beginTable(ListingColumn... _columns) throws UnifyException {
-        if (!inSection) {
-            throw new RuntimeException("No section started.");
-        }
-
-        if (columns != null) {
-            throw new RuntimeException("Table already begun.");
-        }
-
-        if (currentSectionColumn == 0) {
-            writer.write("<div class=\"flsectionbodyrow\">"); // Begin section row
-        }
-
-        int width = sectionColumnWidth[currentSectionColumn];
-        currentSectionColumn++;
-
-        this.columns = _columns;
-        writer.write("<div class=\"flsectionbodycell");
-        if (alternatingColumn && (currentSectionColumn % 2) == 0) {
-            writer.write(" flgray");
-        }
-        writer.write("\" style=\"width:").write(width).write("%;\">");
-        writer.write("<div class=\"fltable\">");
+        beginTable(false, _columns);
     }
 
     public void writeRow(List<ListingCell> cells) throws UnifyException {
@@ -265,20 +254,55 @@ public class ListingGeneratorWriter {
     }
 
     private class ItemColorRule {
-        
+
         private final ObjectFilter filter;
-        
+
         private final ListingColorType color;
 
         public ItemColorRule(ObjectFilter filter, ListingColorType color) {
             this.filter = filter;
             this.color = color;
         }
-        
+
     }
-    
+
+    private void beginTable(boolean classicTable, ListingColumn... _columns) throws UnifyException {
+        if (!inSection) {
+            throw new RuntimeException("No section started.");
+        }
+
+        if (columns != null) {
+            throw new RuntimeException("Table already begun.");
+        }
+
+        if (currentSectionColumn == 0) {
+            writer.write("<div class=\"flsectionbodyrow\">"); // Begin section row
+        }
+
+        int width = sectionColumnWidth[currentSectionColumn];
+        currentSectionColumn++;
+
+        this.classicTable = classicTable;
+        this.columns = _columns;
+        writer.write("<div class=\"flsectionbodycell");
+        if (alternatingColumn && (currentSectionColumn % 2) == 0) {
+            writer.write(" flgray");
+        }
+        writer.write("\" style=\"width:").write(width).write("%;\">");
+        if (classicTable) {
+            writer.write("<table>");
+        } else {
+            writer.write("<div class=\"fltable\">");
+        }
+    }
+
     private void internalWriteRow(ListingColumn[] columns, ListingCell... cells) throws UnifyException {
-        writer.write("<div class=\"flrow\"");
+        if (classicTable) {
+            writer.write("<tr");
+        } else {
+            writer.write("<div class=\"flrow\"");
+        }
+
         if (isWithRowColor()) {
             writer.write(" style=\"background-color:");
             writer.write(rowColor.backgroundColor());
@@ -289,14 +313,20 @@ public class ListingGeneratorWriter {
         for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             ListingColumn column = columns[cellIndex];
             ListingCell cell = cells[cellIndex];
-            writer.write("<div class=\"flcell").write(ListingUtils.getBorderStyle(cell.getBorders()))
-                    .write("\" style=\"width:").write(column.getWidthPercent());
-            if(column.isWidthInPixels() ) {
+            if (classicTable) {
+                writer.write("<td");
+            } else {
+                writer.write("<div class=\"flcell");
+            }
+
+            writer.write(ListingUtils.getBorderStyle(cell.getBorders())).write("\" style=\"width:")
+                    .write(column.getWidthPercent());
+            if (column.isWidthInPixels()) {
                 writer.write("px;");
             } else {
                 writer.write("%;");
             }
-            
+
             if (highlighting && cell.isWithCellColor()) {
                 writer.write("background-color:");
                 writer.write(cell.getCellColor().backgroundColor());
@@ -324,10 +354,19 @@ public class ListingGeneratorWriter {
                 }
             }
             writer.write("</span>");
-            writer.write("</div>");
+
+            if (classicTable) {
+                writer.write("</td>");
+            } else {
+                writer.write("</div>");
+            }
         }
 
-        writer.write("</div>");
+        if (classicTable) {
+            writer.write("</tr>");
+        } else {
+            writer.write("</div>");
+        }
     }
 
     public void endTable() throws UnifyException {
@@ -336,7 +375,12 @@ public class ListingGeneratorWriter {
         }
 
         columns = null;
-        writer.write("</div></div>");
+        if (classicTable) {
+            writer.write("</table>");
+        } else {
+            writer.write("</div>");
+        }
+        writer.write("</div>");
 
         if (currentSectionColumn == sectionColumnWidth.length) {
             currentSectionColumn = 0;
