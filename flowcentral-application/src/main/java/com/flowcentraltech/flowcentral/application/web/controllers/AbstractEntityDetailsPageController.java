@@ -149,9 +149,21 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
     }
 
+    protected final String viewListingReport() throws UnifyException {
+        return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
+                Collections.emptyMap(), null, null);
+    }
+
     protected final String viewListingReport(String tableName) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
                 ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), null, null);
+    }
+
+    protected final String viewListingReport(String tableName, String dateFormat, String timestampFormat)
+            throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName),
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), dateFormat,
+                timestampFormat);
     }
 
     protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties)
@@ -162,11 +174,6 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties,
             String dateFormat, String timestampFormat) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName), generator, properties, dateFormat, timestampFormat);
-    }
-
-    protected final String viewListingReport() throws UnifyException {
-        return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
-                Collections.emptyMap(), null, null);
     }
 
     protected final String viewListingReport(String generator, Map<String, Object> properties) throws UnifyException {

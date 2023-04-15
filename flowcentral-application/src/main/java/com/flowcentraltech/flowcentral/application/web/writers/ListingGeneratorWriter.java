@@ -290,7 +290,13 @@ public class ListingGeneratorWriter {
             ListingColumn column = columns[cellIndex];
             ListingCell cell = cells[cellIndex];
             writer.write("<div class=\"flcell").write(ListingUtils.getBorderStyle(cell.getBorders()))
-                    .write("\" style=\"width:").write(column.getWidthPercent()).write("%;");
+                    .write("\" style=\"width:").write(column.getWidthPercent());
+            if(column.isWidthInPixels() ) {
+                writer.write("px;");
+            } else {
+                writer.write("%;");
+            }
+            
             if (highlighting && cell.isWithCellColor()) {
                 writer.write("background-color:");
                 writer.write(cell.getCellColor().backgroundColor());

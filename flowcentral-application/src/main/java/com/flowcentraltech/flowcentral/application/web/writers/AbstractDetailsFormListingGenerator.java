@@ -97,15 +97,16 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         List<ListingColumn> listingColumns = new ArrayList<ListingColumn>();
         List<ListingCell> rowCells = new ArrayList<ListingCell>();
         if (isSerialNo) {
-            listingColumns.add(new ListingColumn(HAlignType.CENTER, 40, true));
-            rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT, "S/N")); // TODO Get from messages
+            listingColumns.add(new ListingColumn(HAlignType.CENTER, 56, true));
+            rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT, "S/N", ListingCell.BORDER_ALL)); // TODO Get from
+                                                                                                     // messages
         }
 
         for (int i = 0; i < columns; i++) {
             listingColumns.add(new ListingColumn(HAlignType.CENTER, columnWidth));
             rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT,
-                    isHeaderToUpperCase ? tableColumns.get(i).getLabel().toUpperCase()
-                            : tableColumns.get(i).getLabel()));
+                    isHeaderToUpperCase ? tableDef.getFieldLabel(i).toUpperCase() : tableDef.getFieldLabel(i),
+                    ListingCell.BORDER_ALL));
         }
 
         writer.beginTable(listingColumns);
