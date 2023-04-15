@@ -13,6 +13,9 @@
 .fc-formlisting .flsectionbodyrow {display:table-row;}
 .fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;vertical-align: top;}
 .fc-formlisting .flgray {background-color:#f4f4f4;}
+.fc-formlisting .flctable {width:100%;border: 1px solid #c0c0c0; border-collapse: collapse;}
+.fc-formlisting .flctable tr {border: 1px solid #c0c0c0; border-collapse: collapse;}
+.fc-formlisting .flctable td {border: 1px solid #c0c0c0; border-collapse: collapse;padding:2px;vertical-align:top;}
 .fc-formlisting .fltable {display:table;width:100%;}
 .fc-formlisting .flrow {display:table-row;}
 .fc-formlisting .flbtop {border-top: 1px solid #c0c0c0;}

@@ -257,6 +257,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         }
     }
 
+    public EntityFieldDataType getResolvedDataType() {
+        return isWithResolvedTypeFieldDef() ? resolvedTypeFieldDef.getDataType() : dataType;
+    }
+    
     public boolean isWithResolvedTypeFieldDef() {
         return resolvedTypeFieldDef != null;
     }

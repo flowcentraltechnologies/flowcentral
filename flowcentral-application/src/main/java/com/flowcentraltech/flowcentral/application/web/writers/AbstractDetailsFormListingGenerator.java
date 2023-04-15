@@ -23,16 +23,17 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
-import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
+import com.flowcentraltech.flowcentral.application.web.data.Formats;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Convenient abstract base class for details form listing generators.
@@ -87,13 +88,10 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         final TableDef tableDef = detailsFormListing.getTableDef();
         final boolean isSerialNo = tableDef.isSerialNo();
         final boolean isHeaderToUpperCase = tableDef.isHeaderToUpperCase();
-        final DecimalFormat amountFormat = new DecimalFormat("###,###.00");
-        final SimpleDateFormat dateFormat = StringUtils.isBlank(detailsFormListing.getDateFormat())
-                ? new SimpleDateFormat("yyyy-MM-dd")
-                : new SimpleDateFormat(detailsFormListing.getDateFormat());
-        final SimpleDateFormat timestampFormat = StringUtils.isBlank(detailsFormListing.getTimestampFormat())
-                ? new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-                : new SimpleDateFormat(detailsFormListing.getTimestampFormat());
+        final Formats formats = detailsFormListing.getFormats();
+        final DecimalFormat amountFormat = new DecimalFormat(formats.getDecimalFormat());
+        final SimpleDateFormat dateFormat = new SimpleDateFormat(formats.getDateFormat());
+        final SimpleDateFormat timestampFormat = new SimpleDateFormat(formats.getTimestampFormat());
         final List<TableColumnDef> tableColumns = tableDef.getVisibleColumnDefList();
         final int columns = tableColumns.size();
         final int columnWidth = 100 / columns;
@@ -126,14 +124,15 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         }
 
         for (int i = 0; i < columns; i++, j++) {
-            EntityFieldDef entityFieldDef = tableDef.getEntityDef().getFieldDef(tableColumns.get(i).getFieldName());
-            listingColumns.get(j).setAlign(entityFieldDef.getDataType().alignType());
+            final EntityFieldDataType dataType = tableDef.getEntityDef().getFieldDef(tableColumns.get(i).getFieldName())
+                    .getResolvedDataType();
+            listingColumns.get(j).setAlign(dataType.alignType());
             rowCells.get(j).setType(ListingCellType.TEXT);
-            if (entityFieldDef.isDecimal()) {
+            if (dataType.isDecimal()) {
                 rowCells.get(j).setFormat(amountFormat);
-            } else if (entityFieldDef.isDate()) {
+            } else if (dataType.isDate()) {
                 rowCells.get(j).setFormat(dateFormat);
-            } else if (entityFieldDef.isTimestamp()) {
+            } else if (dataType.isTimestamp()) {
                 rowCells.get(j).setFormat(timestampFormat);
             }
         }

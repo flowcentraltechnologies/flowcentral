@@ -290,7 +290,7 @@ public class ListingGeneratorWriter {
         }
         writer.write("\" style=\"width:").write(width).write("%;\">");
         if (classicTable) {
-            writer.write("<table>");
+            writer.write("<table class=\"flctable\">");
         } else {
             writer.write("<div class=\"fltable\">");
         }
@@ -316,11 +316,10 @@ public class ListingGeneratorWriter {
             if (classicTable) {
                 writer.write("<td");
             } else {
-                writer.write("<div class=\"flcell");
+                writer.write("<div class=\"flcell").write(ListingUtils.getBorderStyle(cell.getBorders())).write("\"");
             }
 
-            writer.write(ListingUtils.getBorderStyle(cell.getBorders())).write("\" style=\"width:")
-                    .write(column.getWidthPercent());
+            writer.write(" style=\"width:").write(column.getWidthPercent());
             if (column.isWidthInPixels()) {
                 writer.write("px;");
             } else {

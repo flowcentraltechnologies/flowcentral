@@ -23,9 +23,10 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
+import com.flowcentraltech.flowcentral.application.web.data.Formats;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
-import com.flowcentraltech.flowcentral.application.web.writers.DetailsFormListing;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
@@ -151,44 +152,43 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final String viewListingReport() throws UnifyException {
         return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
-                Collections.emptyMap(), null, null);
+                Collections.emptyMap(), Formats.DEFAULT);
     }
 
     protected final String viewListingReport(String tableName) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
-                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), null, null);
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(),
+                Formats.DEFAULT);
     }
 
-    protected final String viewListingReport(String tableName, String dateFormat, String timestampFormat)
-            throws UnifyException {
+    protected final String viewListingReport(String tableName, Formats formats) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
-                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), dateFormat,
-                timestampFormat);
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats);
     }
 
     protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties)
             throws UnifyException {
-        return viewListingReport(au().getTableDef(tableName), generator, properties, null, null);
+        return viewListingReport(au().getTableDef(tableName), generator, properties, Formats.DEFAULT);
     }
 
     protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties,
-            String dateFormat, String timestampFormat) throws UnifyException {
-        return viewListingReport(au().getTableDef(tableName), generator, properties, dateFormat, timestampFormat);
+            Formats formats) throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName), generator, properties, formats);
     }
 
     protected final String viewListingReport(String generator, Map<String, Object> properties) throws UnifyException {
-        return viewListingReport(getTableDef(), generator, properties, null, null);
+        return viewListingReport(getTableDef(), generator, properties, Formats.DEFAULT);
     }
 
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties)
             throws UnifyException {
-        return viewListingReport(tableDef, generator, properties, null, null);
+        return viewListingReport(tableDef, generator, properties, Formats.DEFAULT);
     }
 
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
-            String dateFormat, String timestampFormat) throws UnifyException {
+            Formats formats) throws UnifyException {
         DetailsFormListing listing = DetailsFormListing.newBuilder(tableDef, getResultTable().getSourceObject())
-                .useGenerator(generator).useDateFormat(dateFormat).useTimestampFormat(timestampFormat).build();
+                .useGenerator(generator).useFormats(formats).build();
         return viewListingReport(listing);
     }
 

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.web.data;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,21 +36,18 @@ public class DetailsFormListing {
 
     private String generator;
 
-    private String dateFormat;
-
-    private String timestampFormat;
-
+    private Formats formats;
+    
     private TableDef tableDef;
 
     private Map<String, Object> properties;
 
     private List<? extends Entity> details;
 
-    private DetailsFormListing(String generator, String dateFormat, String timestampFormat, TableDef tableDef,
+    private DetailsFormListing(String generator,Formats formats, TableDef tableDef,
             Map<String, Object> properties, List<? extends Entity> details) {
         this.generator = generator;
-        this.dateFormat = dateFormat;
-        this.timestampFormat = timestampFormat;
+        this.formats = formats;
         this.tableDef = tableDef;
         this.properties = properties;
         this.details = details;
@@ -60,12 +57,8 @@ public class DetailsFormListing {
         return generator;
     }
 
-    public String getDateFormat() {
-        return dateFormat;
-    }
-
-    public String getTimestampFormat() {
-        return timestampFormat;
+    public Formats getFormats() {
+        return formats;
     }
 
     public TableDef getTableDef() {
@@ -96,9 +89,7 @@ public class DetailsFormListing {
 
         private String generator;
 
-        private String dateFormat;
-
-        private String timestampFormat;
+        private Formats formats;
 
         private TableDef tableDef;
 
@@ -117,13 +108,8 @@ public class DetailsFormListing {
             return this;
         }
 
-        public Builder useDateFormat(String dateFormat) throws UnifyException {
-            this.dateFormat = dateFormat;
-            return this;
-        }
-
-        public Builder useTimestampFormat(String timestampFormat) throws UnifyException {
-            this.timestampFormat = timestampFormat;
+        public Builder useFormats(Formats formats) throws UnifyException {
+            this.formats = formats;
             return this;
         }
 
@@ -142,7 +128,7 @@ public class DetailsFormListing {
                 throw new IllegalArgumentException("Generator is required!");
             }
 
-            return new DetailsFormListing(generator, dateFormat, timestampFormat, tableDef,
+            return new DetailsFormListing(generator, formats, tableDef,
                     Collections.unmodifiableMap(properties),
                     Collections.unmodifiableList(details));
         }
