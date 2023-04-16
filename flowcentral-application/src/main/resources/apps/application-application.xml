@@ -1157,6 +1157,8 @@
 				label="$m{application.apptable.limitselecttocolumns}" type="boolean" />
 			<field name="itemsPerPage"
 				label="$m{application.apptable.itemsperpage}" type="integer" />
+			<field name="summaryTitleColumns"
+				label="$m{application.apptable.summarytitlecolumns}" type="integer" precision="2" />
 			<field name="columnList"
 				label="$m{application.apptable.columns}" type="child_list"
 				references="appTableColumnRef" />

@@ -3444,6 +3444,8 @@
 						inputWidget="studio.detailspanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"
 						column="1" />
+					<field name="summaryTitleColumns" inputWidget="application.integer"
+						column="1" />
 				</section>
 				<section name="tableFlags" columns="type_1_2">
 					<field name="headerless" inputWidget="application.checkbox"

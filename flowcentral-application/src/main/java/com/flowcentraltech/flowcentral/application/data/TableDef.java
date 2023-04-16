@@ -69,6 +69,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private int itemsPerPage;
 
+    private int summaryTitleColumns;
+
     private boolean serialNo;
 
     private boolean sortable;
@@ -102,10 +104,10 @@ public class TableDef extends BaseApplicationEntityDef {
     private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
             List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
             Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
-            int itemsPerPage, boolean serialNo, boolean sortable, boolean headerToUpperCase, boolean headerCenterAlign,
-            boolean basicSearch, boolean totalSummary, boolean headerless, boolean multiSelect, boolean nonConforming,
-            boolean fixedRows, boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description,
-            Long id, long version) {
+            int itemsPerPage, int summaryTitleColumns, boolean serialNo, boolean sortable, boolean headerToUpperCase,
+            boolean headerCenterAlign, boolean basicSearch, boolean totalSummary, boolean headerless,
+            boolean multiSelect, boolean nonConforming, boolean fixedRows, boolean limitSelectToColumns,
+            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
         this.loadingDefList = loadingDefList;
@@ -116,6 +118,7 @@ public class TableDef extends BaseApplicationEntityDef {
         this.detailsPanelName = detailsPanelName;
         this.sortHistory = sortHistory;
         this.itemsPerPage = itemsPerPage;
+        this.summaryTitleColumns = summaryTitleColumns;
         this.serialNo = serialNo;
         this.sortable = sortable;
         this.headerToUpperCase = headerToUpperCase;
@@ -298,6 +301,10 @@ public class TableDef extends BaseApplicationEntityDef {
         return itemsPerPage;
     }
 
+    public int getSummaryTitleColumns() {
+        return summaryTitleColumns;
+    }
+
     public int getColumnCount() {
         return columnDefList.size();
     }
@@ -406,6 +413,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private int itemsPerPage;
 
+        private int summaryTitleColumns;
+
         private boolean serialNo;
 
         private boolean sortable;
@@ -501,6 +510,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder itemsPerPage(int itemsPerPage) {
             this.itemsPerPage = itemsPerPage;
+            return this;
+        }
+
+        public Builder summaryTitleColumns(int summaryTitleColumns) {
+            this.summaryTitleColumns = summaryTitleColumns;
             return this;
         }
 
@@ -681,7 +695,7 @@ public class TableDef extends BaseApplicationEntityDef {
             return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList),
                     DataUtils.unmodifiableList(columnDefList), DataUtils.unmodifiableList(_visibleColumnDefList),
                     DataUtils.unmodifiableList(actionBtnInfos), DataUtils.unmodifiableMap(filterDefMap), label,
-                    detailsPanelName, sortHistory, itemsPerPage, serialNo, sortable, headerToUpperCase,
+                    detailsPanelName, sortHistory, itemsPerPage, summaryTitleColumns, serialNo, sortable, headerToUpperCase,
                     headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect, nonConforming, fixedRows,
                     limitSelectToColumns, nameParts, description, id, version);
         }
