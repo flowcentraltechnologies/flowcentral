@@ -226,6 +226,8 @@ public class ListingGeneratorWriter {
         if (columns == null) {
             throw new RuntimeException("No table is started.");
         }
+        
+        columns = _columns;
     }
 
     public void beginClassicTable(List<ListingColumn> _columns) throws UnifyException {

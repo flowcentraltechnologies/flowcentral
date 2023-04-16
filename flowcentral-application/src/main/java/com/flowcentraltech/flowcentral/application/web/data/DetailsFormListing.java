@@ -49,17 +49,17 @@ public class DetailsFormListing {
 
     private List<? extends Entity> details;
 
-    private int summaryTitleColumns;
+    private int summaryTitleColumn;
 
     private DetailsFormListing(String generator, Formats formats, TableDef tableDef, Map<String, Object> properties,
-            List<? extends Entity> details, int summaryTitleColumns, List<Summary> preSummaries,
+            List<? extends Entity> details, int summaryTitleColumn, List<Summary> preSummaries,
             List<Summary> postSummaries) {
         this.generator = generator;
         this.formats = formats;
         this.tableDef = tableDef;
         this.properties = properties;
         this.details = details;
-        this.summaryTitleColumns = summaryTitleColumns;
+        this.summaryTitleColumn = summaryTitleColumn;
         this.preSummaries = preSummaries;
         this.postSummaries = postSummaries;
     }
@@ -92,8 +92,8 @@ public class DetailsFormListing {
         return tableDef.isSerialNo();
     }
 
-    public int getSummaryTitleColumns() {
-        return summaryTitleColumns;
+    public int getSummaryTitleColumn() {
+        return summaryTitleColumn;
     }
 
     public List<Summary> getPreSummaries() {
@@ -136,7 +136,7 @@ public class DetailsFormListing {
 
         private List<? extends Entity> details;
 
-        private int summaryTitleColumns;
+        private int summaryTitleColumn;
 
         public Builder(TableDef tableDef, List<? extends Entity> details) {
             this.properties = new HashMap<String, Object>();
@@ -151,8 +151,8 @@ public class DetailsFormListing {
             return this;
         }
 
-        public Builder summaryTitleColumns(int summaryTitleColumns) throws UnifyException {
-            this.summaryTitleColumns = summaryTitleColumns;
+        public Builder summaryTitleColumn(int summaryTitleColumn) throws UnifyException {
+            this.summaryTitleColumn = summaryTitleColumn;
             return this;
         }
 
@@ -187,7 +187,7 @@ public class DetailsFormListing {
             }
 
             return new DetailsFormListing(generator, formats, tableDef, Collections.unmodifiableMap(properties),
-                    Collections.unmodifiableList(details), summaryTitleColumns,
+                    Collections.unmodifiableList(details), summaryTitleColumn,
                     Collections.unmodifiableList(preSummaries), Collections.unmodifiableList(postSummaries));
         }
     }

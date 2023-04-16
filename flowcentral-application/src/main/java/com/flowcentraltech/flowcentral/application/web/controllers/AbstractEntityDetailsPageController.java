@@ -192,17 +192,18 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, table.getSourceObject())
                 .useGenerator(generator).useFormats(formats);
         if (table.isWithPreTableSummaryLines()) {
-            for (TableSummaryLine line: table.getPreTableSummaryLines()) {
+            for (TableSummaryLine line : table.getPreTableSummaryLines()) {
                 lb.addPreSummary(new Summary(line.getLabel(), line.values()));
             }
-       }
-       
+        }
+
         if (table.isWithPostTableSummaryLines()) {
-            for (TableSummaryLine line: table.getPostTableSummaryLines()) {
+            for (TableSummaryLine line : table.getPostTableSummaryLines()) {
                 lb.addPostSummary(new Summary(line.getLabel(), line.values()));
             }
-       }
-       
+        }
+
+        lb.summaryTitleColumn(table.getTotalLabelColumnIndex());
         return viewListingReport(lb.build());
     }
 

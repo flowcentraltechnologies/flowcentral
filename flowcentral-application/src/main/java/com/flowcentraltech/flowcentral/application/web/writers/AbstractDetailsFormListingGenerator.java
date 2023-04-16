@@ -95,7 +95,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         final SimpleDateFormat timestampFormat = new SimpleDateFormat(formats.getTimestampFormat());
         final List<TableColumnDef> tableColumns = tableDef.getVisibleColumnDefList();
         final boolean summaries = detailsFormListing.isWithSummaries();
-        final int summaryTitleColumns = detailsFormListing.getSummaryTitleColumns();
+        final int summaryTitleColumn = detailsFormListing.getSummaryTitleColumn();
         final int columns = tableColumns.size();
         final int columnWidth = 100 / columns;
         writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_NONE);
@@ -118,7 +118,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
         if (summaries) {
             ListingColumn column = new ListingColumn(HAlignType.RIGHT,
-                    isSerialNo ? summaryTitleColumns + 1 : summaryTitleColumns, ListingColumn.WidthType.COLUMNS);
+                    isSerialNo ? summaryTitleColumn + 2 : summaryTitleColumn + 1, ListingColumn.WidthType.COLUMNS);
             summaryColumns.add(column);
 
             ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
@@ -133,7 +133,8 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
             final EntityFieldDataType dataType = tableDef.getEntityDef().getFieldDef(tableColumns.get(i).getFieldName())
                     .getResolvedDataType();
-            listingColumns.add(new ListingColumn(dataType.alignType(), columnWidth));
+            ListingColumn column = new ListingColumn(dataType.alignType(), columnWidth);
+            listingColumns.add(column);
 
             ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
             if (dataType.isDecimal()) {
@@ -145,7 +146,8 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
             }
             rowCells.add(cell);
 
-            if (summaries && i >= summaryTitleColumns) {
+            if (summaries && i > summaryTitleColumn) {
+                summaryColumns.add(column);
                 summaryCells.add(cell);
             }
         }
@@ -156,7 +158,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
             writer.replaceTableColumns(summaryColumns);
             for (Summary summary : detailsFormListing.getPreSummaries()) {
                 summaryCells.get(0).setContent(summary.getLabel());
-                for (int i = summaryTitleColumns, j = 1; i < columns; i++, j++) {
+                for (int i = summaryTitleColumn + 1, j = 1; i < columns; i++, j++) {
                     summaryCells.get(j).setContent(summary.getContent(tableColumns.get(i).getFieldName()));
                 }
 
@@ -194,7 +196,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
             writer.replaceTableColumns(summaryColumns);
             for (Summary summary : detailsFormListing.getPostSummaries()) {
                 summaryCells.get(0).setContent(summary.getLabel());
-                for (int i = summaryTitleColumns, j = 1; i < columns; i++, j++) {
+                for (int i = summaryTitleColumn + 1, j = 1; i < columns; i++, j++) {
                     summaryCells.get(j).setContent(summary.getContent(tableColumns.get(i).getFieldName()));
                 }
                 writer.writeRow(summaryCells);
