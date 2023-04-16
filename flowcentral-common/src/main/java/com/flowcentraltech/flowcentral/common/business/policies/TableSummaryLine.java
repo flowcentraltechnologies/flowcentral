@@ -15,6 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import java.util.Map;
+
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.MapValues;
 import com.tcdng.unify.core.data.MapValuesStore;
@@ -49,6 +51,10 @@ public class TableSummaryLine {
         return label;
     }
 
+    public Map<String, Object> values() {
+        return values.values();
+    }
+    
     public ValueStore getValueStore() {
         if (valueStore == null) {
             synchronized(this) {

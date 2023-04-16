@@ -30,10 +30,14 @@ public class TableTotalSummary {
 
     private String totalLabelColumn;
 
+    private int totalLabelColumnIndex;
+
     private Map<String, EntityFieldTotalSummary> summaries;
 
-    public TableTotalSummary(String totalLabelColumn,  Map<String, EntityFieldTotalSummary> summaries) {
+    public TableTotalSummary(String totalLabelColumn, int totalLabelColumnIndex,
+            Map<String, EntityFieldTotalSummary> summaries) {
         this.totalLabelColumn = totalLabelColumn;
+        this.totalLabelColumnIndex = totalLabelColumnIndex;
         this.summaries = summaries;
     }
 
@@ -41,8 +45,12 @@ public class TableTotalSummary {
         return totalLabelColumn;
     }
 
+    public int getTotalLabelColumnIndex() {
+        return totalLabelColumnIndex;
+    }
+
     public Map<String, EntityFieldTotalSummary> getSummaries() {
         return summaries;
     }
-    
+
 }

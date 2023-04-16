@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNa
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.Formats;
+import com.flowcentraltech.flowcentral.application.web.data.Summary;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
@@ -191,9 +192,17 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, table.getSourceObject())
                 .useGenerator(generator).useFormats(formats);
         if (table.isWithPreTableSummaryLines()) {
-            
-        }
-        
+            for (TableSummaryLine line: table.getPreTableSummaryLines()) {
+                lb.addPreSummary(new Summary(line.getLabel(), line.values()));
+            }
+       }
+       
+        if (table.isWithPostTableSummaryLines()) {
+            for (TableSummaryLine line: table.getPostTableSummaryLines()) {
+                lb.addPostSummary(new Summary(line.getLabel(), line.values()));
+            }
+       }
+       
         return viewListingReport(lb.build());
     }
 
