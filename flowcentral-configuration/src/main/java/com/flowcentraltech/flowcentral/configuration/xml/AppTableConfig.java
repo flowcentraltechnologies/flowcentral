@@ -39,6 +39,8 @@ public class AppTableConfig extends BaseNameConfig {
     private int sortHistory;
 
     private int itemsPerPage;
+    
+    private int summaryTitleColumns;
 
     private Boolean serialNo;
 
@@ -121,6 +123,15 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute
     public void setItemsPerPage(int itemsPerPage) {
         this.itemsPerPage = itemsPerPage;
+    }
+
+    public int getSummaryTitleColumns() {
+        return summaryTitleColumns;
+    }
+
+    @XmlAttribute
+    public void setSummaryTitleColumns(int summaryTitleColumns) {
+        this.summaryTitleColumns = summaryTitleColumns;
     }
 
     public Boolean getSortable() {

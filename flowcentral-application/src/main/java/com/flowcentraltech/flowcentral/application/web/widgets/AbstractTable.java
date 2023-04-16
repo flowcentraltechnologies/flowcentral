@@ -138,7 +138,6 @@ public abstract class AbstractTable<T, U> {
 
     private List<TableSummaryLine> preTableSummaryLines;
 
-
     private List<TableSummaryLine> postTableSummaryLines;
 
     private int detailsIndex;
@@ -192,7 +191,6 @@ public abstract class AbstractTable<T, U> {
     public boolean isWithPreTableSummaryLines() {
         return preTableSummaryLines != null;
     }
-
 
     public void setPostTableSummaryLines(List<TableSummaryLine> postTableSummaryLines) {
         this.postTableSummaryLines = postTableSummaryLines;
@@ -471,7 +469,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public boolean isTotalLabelColumn(String fieldName) {
-        return fieldName.equals(tableTotalSummary.getTotalLabelColumn());
+        return tableTotalSummary != null && fieldName.equals(tableTotalSummary.getTotalLabelColumn());
+    }
+
+    public int getTotalLabelColumnIndex() {
+        return tableTotalSummary != null ? tableTotalSummary.getTotalLabelColumnIndex() : 0;
     }
 
     public String getTotalLabel() throws UnifyException {
@@ -774,7 +776,7 @@ public abstract class AbstractTable<T, U> {
         postTableSummaryLines = null;
     }
 
-    private void calcPageDimensions() { 
+    private void calcPageDimensions() {
         try {
             pageIndex = 0;
             totalItemCount = getSourceObjectSize(sourceObject);

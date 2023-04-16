@@ -114,9 +114,12 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
                 .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
+        final String additional = additionalStyleClass() != null ? " " + additionalStyleClass() : "";
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
-            writer.write("<div class=\"fc-formlisting\">");
+            writer.write("<div class=\"fc-formlisting");
+            writer.write(additional);
+            writer.write("\">");
             generateReportHeader(formBeanValueStore, listingReportProperties,
                     new ListingGeneratorWriter(listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
@@ -147,7 +150,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;
-
+    
     @Override
     protected void onInitialize() throws UnifyException {
 
@@ -164,6 +167,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     protected ApplicationModuleService application() {
         return au.application();
+    }
+
+    protected String additionalStyleClass() {
+        return null;
     }
 
     protected synchronized String retrieveFormattedDate(ValueStore valueStore, String propertyName)

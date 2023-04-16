@@ -529,6 +529,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                 appTableConfig.setDetailsPanelName(appTable.getDetailsPanelName());
                 appTableConfig.setSortHistory(appTable.getSortHistory());
                 appTableConfig.setItemsPerPage(appTable.getItemsPerPage());
+                appTableConfig.setSummaryTitleColumns(appTable.getSummaryTitleColumns());
                 appTableConfig.setSerialNo(appTable.isSerialNo());
                 appTableConfig.setSortable(appTable.isSortable());
                 appTableConfig.setHeaderToUpperCase(appTable.isHeaderToUpperCase());

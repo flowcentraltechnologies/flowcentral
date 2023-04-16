@@ -918,6 +918,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     tdb.detailsPanelName(appTable.getDetailsPanelName());
                     tdb.sortHistory(appTable.getSortHistory());
                     tdb.itemsPerPage(appTable.getItemsPerPage());
+                    tdb.summaryTitleColumns(appTable.getSummaryTitleColumns());
                     tdb.headerToUpperCase(appTable.isHeaderToUpperCase());
                     tdb.headerCenterAlign(appTable.isHeaderCenterAlign());
                     tdb.basicSearch(appTable.isBasicSearch());
@@ -3921,6 +3922,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                     appTable.setSortHistory(appTableConfig.getSortHistory());
                     appTable.setItemsPerPage(appTableConfig.getItemsPerPage());
+                    appTable.setSummaryTitleColumns(appTableConfig.getSummaryTitleColumns());
                     appTable.setSerialNo(appTableConfig.getSerialNo());
                     appTable.setSortable(appTableConfig.getSortable());
                     appTable.setHeaderToUpperCase(appTableConfig.getHeaderToUpperCase());
@@ -3945,6 +3947,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
                         oldAppTable.setSortHistory(appTableConfig.getSortHistory());
                         oldAppTable.setItemsPerPage(appTableConfig.getItemsPerPage());
+                        oldAppTable.setSummaryTitleColumns(appTableConfig.getSummaryTitleColumns());
                         oldAppTable.setSerialNo(appTableConfig.getSerialNo());
                         oldAppTable.setSortable(appTableConfig.getSortable());
                         oldAppTable.setHeaderToUpperCase(appTableConfig.getHeaderToUpperCase());

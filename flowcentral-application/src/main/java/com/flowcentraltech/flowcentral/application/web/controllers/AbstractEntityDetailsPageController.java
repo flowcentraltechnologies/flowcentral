@@ -23,9 +23,11 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
+import com.flowcentraltech.flowcentral.application.web.data.Formats;
+import com.flowcentraltech.flowcentral.application.web.data.Summary;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
-import com.flowcentraltech.flowcentral.application.web.writers.DetailsFormListing;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.FixedRowActionType;
 import com.flowcentraltech.flowcentral.common.business.policies.TableStateOverride;
@@ -151,45 +153,58 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final String viewListingReport() throws UnifyException {
         return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
-                Collections.emptyMap(), null, null);
+                Collections.emptyMap(), Formats.DEFAULT);
     }
 
     protected final String viewListingReport(String tableName) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
-                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), null, null);
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(),
+                Formats.DEFAULT);
     }
 
-    protected final String viewListingReport(String tableName, String dateFormat, String timestampFormat)
-            throws UnifyException {
+    protected final String viewListingReport(String tableName, Formats formats) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
-                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), dateFormat,
-                timestampFormat);
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats);
     }
 
     protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties)
             throws UnifyException {
-        return viewListingReport(au().getTableDef(tableName), generator, properties, null, null);
+        return viewListingReport(au().getTableDef(tableName), generator, properties, Formats.DEFAULT);
     }
 
     protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties,
-            String dateFormat, String timestampFormat) throws UnifyException {
-        return viewListingReport(au().getTableDef(tableName), generator, properties, dateFormat, timestampFormat);
+            Formats formats) throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName), generator, properties, formats);
     }
 
     protected final String viewListingReport(String generator, Map<String, Object> properties) throws UnifyException {
-        return viewListingReport(getTableDef(), generator, properties, null, null);
+        return viewListingReport(getTableDef(), generator, properties, Formats.DEFAULT);
     }
 
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties)
             throws UnifyException {
-        return viewListingReport(tableDef, generator, properties, null, null);
+        return viewListingReport(tableDef, generator, properties, Formats.DEFAULT);
     }
 
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
-            String dateFormat, String timestampFormat) throws UnifyException {
-        DetailsFormListing listing = DetailsFormListing.newBuilder(tableDef, getResultTable().getSourceObject())
-                .useGenerator(generator).useDateFormat(dateFormat).useTimestampFormat(timestampFormat).build();
-        return viewListingReport(listing);
+            Formats formats) throws UnifyException {
+        final EntityListTable table = getResultTable();
+        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, table.getSourceObject())
+                .useGenerator(generator).useFormats(formats);
+        if (table.isWithPreTableSummaryLines()) {
+            for (TableSummaryLine line : table.getPreTableSummaryLines()) {
+                lb.addPreSummary(new Summary(line.getLabel(), line.values()));
+            }
+        }
+
+        if (table.isWithPostTableSummaryLines()) {
+            for (TableSummaryLine line : table.getPostTableSummaryLines()) {
+                lb.addPostSummary(new Summary(line.getLabel(), line.values()));
+            }
+        }
+
+        lb.summaryTitleColumn(table.getTotalLabelColumnIndex());
+        return viewListingReport(lb.build());
     }
 
     protected String getDetailsAppletName() {

@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.web.data;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +37,11 @@ public class DetailsFormListing {
 
     private String generator;
 
-    private String dateFormat;
+    private Formats formats;
 
-    private String timestampFormat;
+    private List<Summary> preSummaries;
+
+    private List<Summary> postSummaries;
 
     private TableDef tableDef;
 
@@ -46,26 +49,27 @@ public class DetailsFormListing {
 
     private List<? extends Entity> details;
 
-    private DetailsFormListing(String generator, String dateFormat, String timestampFormat, TableDef tableDef,
-            Map<String, Object> properties, List<? extends Entity> details) {
+    private int summaryTitleColumn;
+
+    private DetailsFormListing(String generator, Formats formats, TableDef tableDef, Map<String, Object> properties,
+            List<? extends Entity> details, int summaryTitleColumn, List<Summary> preSummaries,
+            List<Summary> postSummaries) {
         this.generator = generator;
-        this.dateFormat = dateFormat;
-        this.timestampFormat = timestampFormat;
+        this.formats = formats;
         this.tableDef = tableDef;
         this.properties = properties;
         this.details = details;
+        this.summaryTitleColumn = summaryTitleColumn;
+        this.preSummaries = preSummaries;
+        this.postSummaries = postSummaries;
     }
 
     public String getGenerator() {
         return generator;
     }
 
-    public String getDateFormat() {
-        return dateFormat;
-    }
-
-    public String getTimestampFormat() {
-        return timestampFormat;
+    public Formats getFormats() {
+        return formats;
     }
 
     public TableDef getTableDef() {
@@ -88,6 +92,30 @@ public class DetailsFormListing {
         return tableDef.isSerialNo();
     }
 
+    public int getSummaryTitleColumn() {
+        return summaryTitleColumn;
+    }
+
+    public List<Summary> getPreSummaries() {
+        return preSummaries;
+    }
+
+    public List<Summary> getPostSummaries() {
+        return postSummaries;
+    }
+
+    public boolean isWithPreSummaries() {
+        return !DataUtils.isBlank(preSummaries);
+    }
+
+    public boolean isWithPostSummaries() {
+        return !DataUtils.isBlank(postSummaries);
+    }
+
+    public boolean isWithSummaries() {
+        return isWithPreSummaries() || isWithPostSummaries();
+    }
+    
     public static Builder newBuilder(TableDef tableDef, List<? extends Entity> details) {
         return new Builder(tableDef, details);
     }
@@ -96,20 +124,26 @@ public class DetailsFormListing {
 
         private String generator;
 
-        private String dateFormat;
-
-        private String timestampFormat;
+        private Formats formats;
 
         private TableDef tableDef;
 
         private Map<String, Object> properties;
 
+        private List<Summary> preSummaries;
+
+        private List<Summary> postSummaries;
+
         private List<? extends Entity> details;
+
+        private int summaryTitleColumn;
 
         public Builder(TableDef tableDef, List<? extends Entity> details) {
             this.properties = new HashMap<String, Object>();
             this.tableDef = tableDef;
             this.details = details;
+            this.preSummaries = new ArrayList<Summary>();
+            this.postSummaries = new ArrayList<Summary>();
         }
 
         public Builder useGenerator(String generator) throws UnifyException {
@@ -117,13 +151,23 @@ public class DetailsFormListing {
             return this;
         }
 
-        public Builder useDateFormat(String dateFormat) throws UnifyException {
-            this.dateFormat = dateFormat;
+        public Builder summaryTitleColumn(int summaryTitleColumn) throws UnifyException {
+            this.summaryTitleColumn = summaryTitleColumn;
             return this;
         }
 
-        public Builder useTimestampFormat(String timestampFormat) throws UnifyException {
-            this.timestampFormat = timestampFormat;
+        public Builder addPreSummary(Summary summary) throws UnifyException {
+            preSummaries.add(summary);
+            return this;
+        }
+
+        public Builder addPostSummary(Summary summary) throws UnifyException {
+            postSummaries.add(summary);
+            return this;
+        }
+
+        public Builder useFormats(Formats formats) throws UnifyException {
+            this.formats = formats;
             return this;
         }
 
@@ -142,9 +186,9 @@ public class DetailsFormListing {
                 throw new IllegalArgumentException("Generator is required!");
             }
 
-            return new DetailsFormListing(generator, dateFormat, timestampFormat, tableDef,
-                    Collections.unmodifiableMap(properties),
-                    Collections.unmodifiableList(details));
+            return new DetailsFormListing(generator, formats, tableDef, Collections.unmodifiableMap(properties),
+                    Collections.unmodifiableList(details), summaryTitleColumn,
+                    Collections.unmodifiableList(preSummaries), Collections.unmodifiableList(postSummaries));
         }
     }
 }

@@ -13,6 +13,9 @@
 .fc-formlisting .flsectionbodyrow {display:table-row;}
 .fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;vertical-align: top;}
 .fc-formlisting .flgray {background-color:#f4f4f4;}
+.fc-formlisting .flctable {table-layout:fixed;width:100%;border: 1px solid #c0c0c0; border-collapse: collapse;}
+.fc-formlisting .flctable tr {border: 1px solid #c0c0c0; border-collapse: collapse;}
+.fc-formlisting .flctable td {border: 1px solid #c0c0c0; border-collapse: collapse;padding:2px;vertical-align:top;word-wrap:break-word;}
 .fc-formlisting .fltable {display:table;width:100%;}
 .fc-formlisting .flrow {display:table-row;}
 .fc-formlisting .flbtop {border-top: 1px solid #c0c0c0;}
@@ -28,3 +31,9 @@
 .fc-formlisting .hacenter {text-align:center;}
 .fc-formlisting .haright {text-align:right;}
 .fc-formlisting .hajustified {text-align:justify;}
+
+/** Details Form Listing */
+.fc-detailsformlisting {font-size:10px;}
+.fc-detailsformlisting .flbody {border-left: none;border-right: none;}
+.fc-detailsformlisting .flsectionbodycell {padding-left: none;padding-right: none;}
+.fc-detailsformlisting .flcell {padding: 2px 2px;}

@@ -333,7 +333,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         T table = getTable();
         return table != null && table.isViewOnly();
     }
-    
+
     public Control[] getFixedCtrl() throws UnifyException {
         if (fixedCtrl == null) {
             List<Control> controls = new ArrayList<Control>();
@@ -491,6 +491,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                         : Collections.emptyMap();
                 Order defaultOrder = new Order();
                 String totalLabelColumn = null;
+                int totalLabelColumnIndex = -1;
                 for (TableColumnDef tableColumnDef : tableDef.getColumnDefList()) {
                     if (tableColumnDef.getOrder() != null) {
                         defaultOrder.add(tableColumnDef.getFieldName(), tableColumnDef.getOrder());
@@ -515,6 +516,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
                         if (summaries.isEmpty()) {
                             totalLabelColumn = entityFieldDef.getFieldName();
+                            totalLabelColumnIndex++;
                         }
                     }
                 }
@@ -525,7 +527,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                 }
 
                 if (totalSummary) {
-                    TableTotalSummary tableTotalSummary = new TableTotalSummary(totalLabelColumn, summaries);
+                    TableTotalSummary tableTotalSummary = new TableTotalSummary(totalLabelColumn, totalLabelColumnIndex,
+                            summaries);
                     table.setTableTotalSummary(tableTotalSummary);
                 }
             }
@@ -682,7 +685,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             for (int i = 0; i < actionSymbol.length; i++) {
                 String symbol = actionSymbol[i];
                 actionCtrl[i] = (Control) addInternalChildWidget(
-                        "!ui-symbol alwaysValueIndex:true styleClass:$e{mact} symbol:$s{" + symbol + "} ignoreParentState:true");
+                        "!ui-symbol alwaysValueIndex:true styleClass:$e{mact} symbol:$s{" + symbol
+                                + "} ignoreParentState:true");
             }
         }
 

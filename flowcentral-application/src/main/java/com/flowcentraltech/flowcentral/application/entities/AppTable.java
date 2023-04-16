@@ -46,6 +46,9 @@ public class AppTable extends BaseApplicationEntity {
     private int itemsPerPage;
 
     @Column
+    private int summaryTitleColumns;
+
+    @Column
     private boolean sortable;
 
     @Column
@@ -128,6 +131,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setItemsPerPage(int itemsPerPage) {
         this.itemsPerPage = itemsPerPage;
+    }
+
+    public int getSummaryTitleColumns() {
+        return summaryTitleColumns;
+    }
+
+    public void setSummaryTitleColumns(int summaryTitleColumns) {
+        this.summaryTitleColumns = summaryTitleColumns;
     }
 
     public boolean isSortable() {
