@@ -218,6 +218,16 @@ public class ListingGeneratorWriter {
         inSection = true;
     }
 
+    public void replaceTableColumns(List<ListingColumn> _columns) throws UnifyException {
+        replaceTableColumns(DataUtils.toArray(ListingColumn.class, _columns));
+    }
+
+    public void replaceTableColumns(ListingColumn... _columns) throws UnifyException {
+        if (columns == null) {
+            throw new RuntimeException("No table is started.");
+        }
+    }
+
     public void beginClassicTable(List<ListingColumn> _columns) throws UnifyException {
         beginClassicTable(DataUtils.toArray(ListingColumn.class, _columns));
     }
@@ -315,15 +325,21 @@ public class ListingGeneratorWriter {
             ListingCell cell = cells[cellIndex];
             if (classicTable) {
                 writer.write("<td");
+                if (column.isColumnsWidth()) {
+                    writer.write(" colspan=\"").write(column.getWidth()).write("\"");
+                }
             } else {
                 writer.write("<div class=\"flcell").write(ListingUtils.getBorderStyle(cell.getBorders())).write("\"");
             }
 
-            writer.write(" style=\"width:").write(column.getWidthPercent());
-            if (column.isWidthInPixels()) {
-                writer.write("px;");
-            } else {
-                writer.write("%;");
+            writer.write(" style=\"");
+            if (column.isStyleWidth()) {
+                writer.write("width:").write(column.getWidth());
+                if (column.isPixelsWidth()) {
+                    writer.write("px;");
+                } else if (column.isPercentWidth()) {
+                    writer.write("%;");
+                }
             }
 
             if (highlighting && cell.isWithCellColor()) {

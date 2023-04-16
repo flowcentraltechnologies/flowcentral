@@ -187,9 +187,14 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             Formats formats) throws UnifyException {
-        DetailsFormListing listing = DetailsFormListing.newBuilder(tableDef, getResultTable().getSourceObject())
-                .useGenerator(generator).useFormats(formats).build();
-        return viewListingReport(listing);
+        final EntityListTable table = getResultTable();
+        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, table.getSourceObject())
+                .useGenerator(generator).useFormats(formats);
+        if (table.isWithPreTableSummaryLines()) {
+            
+        }
+        
+        return viewListingReport(lb.build());
     }
 
     protected String getDetailsAppletName() {

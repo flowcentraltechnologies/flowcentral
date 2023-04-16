@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.data;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,20 +38,30 @@ public class DetailsFormListing {
     private String generator;
 
     private Formats formats;
-    
+
+    private List<Summary> preSummaries;
+
+    private List<Summary> postSummaries;
+
     private TableDef tableDef;
 
     private Map<String, Object> properties;
 
     private List<? extends Entity> details;
 
-    private DetailsFormListing(String generator,Formats formats, TableDef tableDef,
-            Map<String, Object> properties, List<? extends Entity> details) {
+    private int summaryTitleColumns;
+
+    private DetailsFormListing(String generator, Formats formats, TableDef tableDef, Map<String, Object> properties,
+            List<? extends Entity> details, int summaryTitleColumns, List<Summary> preSummaries,
+            List<Summary> postSummaries) {
         this.generator = generator;
         this.formats = formats;
         this.tableDef = tableDef;
         this.properties = properties;
         this.details = details;
+        this.summaryTitleColumns = summaryTitleColumns;
+        this.preSummaries = preSummaries;
+        this.postSummaries = postSummaries;
     }
 
     public String getGenerator() {
@@ -81,6 +92,30 @@ public class DetailsFormListing {
         return tableDef.isSerialNo();
     }
 
+    public int getSummaryTitleColumns() {
+        return summaryTitleColumns;
+    }
+
+    public List<Summary> getPreSummaries() {
+        return preSummaries;
+    }
+
+    public List<Summary> getPostSummaries() {
+        return postSummaries;
+    }
+
+    public boolean isWithPreSummaries() {
+        return !DataUtils.isBlank(preSummaries);
+    }
+
+    public boolean isWithPostSummaries() {
+        return !DataUtils.isBlank(postSummaries);
+    }
+
+    public boolean isWithSummaries() {
+        return isWithPreSummaries() || isWithPostSummaries();
+    }
+    
     public static Builder newBuilder(TableDef tableDef, List<? extends Entity> details) {
         return new Builder(tableDef, details);
     }
@@ -95,16 +130,39 @@ public class DetailsFormListing {
 
         private Map<String, Object> properties;
 
+        private List<Summary> preSummaries;
+
+        private List<Summary> postSummaries;
+
         private List<? extends Entity> details;
+
+        private int summaryTitleColumns;
 
         public Builder(TableDef tableDef, List<? extends Entity> details) {
             this.properties = new HashMap<String, Object>();
             this.tableDef = tableDef;
             this.details = details;
+            this.preSummaries = new ArrayList<Summary>();
+            this.postSummaries = new ArrayList<Summary>();
         }
 
         public Builder useGenerator(String generator) throws UnifyException {
             this.generator = generator;
+            return this;
+        }
+
+        public Builder summaryTitleColumns(int summaryTitleColumns) throws UnifyException {
+            this.summaryTitleColumns = summaryTitleColumns;
+            return this;
+        }
+
+        public Builder addPreSummary(Summary summary) throws UnifyException {
+            preSummaries.add(summary);
+            return this;
+        }
+
+        public Builder addPostSummary(Summary summary) throws UnifyException {
+            postSummaries.add(summary);
             return this;
         }
 
@@ -128,9 +186,9 @@ public class DetailsFormListing {
                 throw new IllegalArgumentException("Generator is required!");
             }
 
-            return new DetailsFormListing(generator, formats, tableDef,
-                    Collections.unmodifiableMap(properties),
-                    Collections.unmodifiableList(details));
+            return new DetailsFormListing(generator, formats, tableDef, Collections.unmodifiableMap(properties),
+                    Collections.unmodifiableList(details), summaryTitleColumns,
+                    Collections.unmodifiableList(preSummaries), Collections.unmodifiableList(postSummaries));
         }
     }
 }

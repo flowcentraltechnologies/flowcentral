@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.Formats;
+import com.flowcentraltech.flowcentral.application.web.data.Summary;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
@@ -93,56 +94,89 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         final SimpleDateFormat dateFormat = new SimpleDateFormat(formats.getDateFormat());
         final SimpleDateFormat timestampFormat = new SimpleDateFormat(formats.getTimestampFormat());
         final List<TableColumnDef> tableColumns = tableDef.getVisibleColumnDefList();
+        final boolean summaries = detailsFormListing.isWithSummaries();
+        final int summaryTitleColumns = detailsFormListing.getSummaryTitleColumns();
         final int columns = tableColumns.size();
         final int columnWidth = 100 / columns;
         writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_NONE);
+        List<ListingColumn> summaryColumns = new ArrayList<ListingColumn>();
+        List<ListingCell> summaryCells = new ArrayList<ListingCell>();
+        List<ListingColumn> headerListingColumns = new ArrayList<ListingColumn>();
+        List<ListingCell> headerRowCells = new ArrayList<ListingCell>();
         List<ListingColumn> listingColumns = new ArrayList<ListingColumn>();
         List<ListingCell> rowCells = new ArrayList<ListingCell>();
         if (isSerialNo) {
-            listingColumns.add(new ListingColumn(HAlignType.CENTER, 56, true));
-            rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT, "S/N", ListingCell.BORDER_ALL)); // TODO Get from
-                                                                                                     // messages
+            headerListingColumns.add(new ListingColumn(HAlignType.CENTER, 56, ListingColumn.WidthType.PIXELS));
+            headerRowCells.add(new ListingCell(ListingCellType.BOLD_TEXT, "S/N", ListingCell.BORDER_ALL));
+
+            ListingColumn column = new ListingColumn(HAlignType.LEFT, 56, ListingColumn.WidthType.PIXELS);
+            listingColumns.add(column);
+
+            ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
+            rowCells.add(cell);
+        }
+
+        if (summaries) {
+            ListingColumn column = new ListingColumn(HAlignType.RIGHT,
+                    isSerialNo ? summaryTitleColumns + 1 : summaryTitleColumns, ListingColumn.WidthType.COLUMNS);
+            summaryColumns.add(column);
+
+            ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
+            summaryCells.add(cell);
         }
 
         for (int i = 0; i < columns; i++) {
-            listingColumns.add(new ListingColumn(HAlignType.CENTER, columnWidth));
-            rowCells.add(new ListingCell(ListingCellType.BOLD_TEXT,
+            headerListingColumns.add(new ListingColumn(HAlignType.CENTER, columnWidth));
+            headerRowCells.add(new ListingCell(ListingCellType.BOLD_TEXT,
                     isHeaderToUpperCase ? tableDef.getFieldLabel(i).toUpperCase() : tableDef.getFieldLabel(i),
                     ListingCell.BORDER_ALL));
-        }
 
-        writer.beginClassicTable(listingColumns);
-        // Header
-        writer.writeRow(rowCells);
-
-        // Rows
-        int j = 0;
-        if (isSerialNo) {
-            listingColumns.get(j).setAlign(HAlignType.LEFT);
-            rowCells.get(j).setType(ListingCellType.TEXT);
-            j++;
-        }
-
-        for (int i = 0; i < columns; i++, j++) {
             final EntityFieldDataType dataType = tableDef.getEntityDef().getFieldDef(tableColumns.get(i).getFieldName())
                     .getResolvedDataType();
-            listingColumns.get(j).setAlign(dataType.alignType());
-            rowCells.get(j).setType(ListingCellType.TEXT);
+            listingColumns.add(new ListingColumn(dataType.alignType(), columnWidth));
+
+            ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
             if (dataType.isDecimal()) {
-                rowCells.get(j).setFormat(amountFormat);
+                cell.setFormat(amountFormat);
             } else if (dataType.isDate()) {
-                rowCells.get(j).setFormat(dateFormat);
+                cell.setFormat(dateFormat);
             } else if (dataType.isTimestamp()) {
-                rowCells.get(j).setFormat(timestampFormat);
+                cell.setFormat(timestampFormat);
+            }
+            rowCells.add(cell);
+
+            if (summaries && i >= summaryTitleColumns) {
+                summaryCells.add(cell);
             }
         }
+
+        writer.beginClassicTable(headerListingColumns);
+        // Pre-summaries
+        if (detailsFormListing.isWithPreSummaries()) {
+            writer.replaceTableColumns(summaryColumns);
+            for (Summary summary : detailsFormListing.getPreSummaries()) {
+                summaryCells.get(0).setContent(summary.getLabel());
+                for (int i = summaryTitleColumns, j = 1; i < columns; i++, j++) {
+                    summaryCells.get(j).setContent(summary.getContent(tableColumns.get(i).getFieldName()));
+                }
+
+                writer.writeRow(summaryCells);
+            }
+        }
+
+        // Header
+        writer.replaceTableColumns(headerListingColumns);
+        writer.writeRow(headerRowCells);
+
+        // Rows
+        writer.replaceTableColumns(listingColumns);
 
         final ValueStore detailsValueStore = new BeanValueListStore(detailsFormListing.getDetails());
         final int len = detailsValueStore.size();
         for (int k = 0; k < len;) {
             detailsValueStore.setDataIndex(k++);
 
-            j = 0;
+            int j = 0;
             if (isSerialNo) {
                 rowCells.get(j).setContent(String.valueOf(k));
                 j++;
@@ -153,6 +187,18 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
             }
 
             writer.writeRow(rowCells);
+        }
+
+        // Post-summaries
+        if (detailsFormListing.isWithPostSummaries()) {
+            writer.replaceTableColumns(summaryColumns);
+            for (Summary summary : detailsFormListing.getPostSummaries()) {
+                summaryCells.get(0).setContent(summary.getLabel());
+                for (int i = summaryTitleColumns, j = 1; i < columns; i++, j++) {
+                    summaryCells.get(j).setContent(summary.getContent(tableColumns.get(i).getFieldName()));
+                }
+                writer.writeRow(summaryCells);
+            }
         }
 
         writer.endTable();
@@ -169,5 +215,4 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
     protected abstract void generateReportFooter(DetailsFormListing detailsFormListing,
             ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
-
 }

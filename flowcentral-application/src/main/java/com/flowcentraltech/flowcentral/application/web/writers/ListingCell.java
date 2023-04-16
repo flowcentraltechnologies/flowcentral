@@ -53,6 +53,11 @@ public class ListingCell {
 
     private int borders;
 
+    public ListingCell() {
+        this.type = ListingCellType.TEXT;
+        this.borders = BORDER_ALL;
+    }
+
     public ListingCell(String content) {
         this.type = ListingCellType.TEXT;
         this.content = content;

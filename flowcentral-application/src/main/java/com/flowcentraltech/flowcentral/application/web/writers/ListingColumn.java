@@ -26,33 +26,39 @@ import com.tcdng.unify.core.constant.HAlignType;
  */
 public class ListingColumn {
 
-    private  HAlignType align;
-    
-    private int widthPercent;
+    public enum WidthType {
+        PERCENT,
+        PIXELS,
+        COLUMNS
+    };
 
-    private boolean widthInPixels;
+    private HAlignType align;
 
-    public ListingColumn(int widthPercent) {
+    private int width;
+
+    private WidthType widthType;
+
+    public ListingColumn(int width) {
         this.align = HAlignType.LEFT;
-        this.widthPercent = widthPercent;
-        this.widthInPixels = false;
+        this.width = width;
+        this.widthType = WidthType.PERCENT;
     }
 
-    public ListingColumn(HAlignType align, int widthPercent) {
+    public ListingColumn(HAlignType align, int width) {
         this.align = align;
-        this.widthPercent = widthPercent;
+        this.width = width;
     }
 
-    public ListingColumn(int widthPercent, boolean widthInPixels) {
+    public ListingColumn(int width, WidthType widthType) {
         this.align = HAlignType.LEFT;
-        this.widthPercent = widthPercent;
-        this.widthInPixels = widthInPixels;
+        this.width = width;
+        this.widthType = widthType;
     }
 
-    public ListingColumn(HAlignType align, int widthPercent, boolean widthInPixels) {
+    public ListingColumn(HAlignType align, int width, WidthType widthType) {
         this.align = align;
-        this.widthPercent = widthPercent;
-        this.widthInPixels = widthInPixels;
+        this.width = width;
+        this.widthType = widthType;
     }
 
     public HAlignType getAlign() {
@@ -63,11 +69,23 @@ public class ListingColumn {
         this.align = align;
     }
 
-    public int getWidthPercent() {
-        return widthPercent;
+    public int getWidth() {
+        return width;
     }
 
-    public boolean isWidthInPixels() {
-        return widthInPixels;
+    public boolean isPercentWidth() {
+        return WidthType.PERCENT.equals(widthType);
+    }
+
+    public boolean isPixelsWidth() {
+        return WidthType.PIXELS.equals(widthType);
+    }
+
+    public boolean isColumnsWidth() {
+        return WidthType.COLUMNS.equals(widthType);
+    }
+    
+    public boolean isStyleWidth() {
+        return isPercentWidth() || isPixelsWidth();
     }
 }
