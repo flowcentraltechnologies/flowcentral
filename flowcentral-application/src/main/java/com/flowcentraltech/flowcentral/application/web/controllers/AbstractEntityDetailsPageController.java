@@ -203,6 +203,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
             }
         }
 
+        lb.addProperties(properties);
         lb.summaryTitleColumn(table.getTotalLabelColumnIndex());
         return viewListingReport(lb.build());
     }
