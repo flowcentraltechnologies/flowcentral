@@ -154,6 +154,8 @@ public interface AppletPropertyConstants {
 
     String ENTRY_TABLE_POLICY = "entryTable.policy";
 
+    String LISTING_REDIRECT_POLICY = "listingRedirect.policy";
+
     String QUICK_EDIT_FORM = "quickEdit.form";
 
     String QUICK_EDIT_TABLE = "quickEdit.table";

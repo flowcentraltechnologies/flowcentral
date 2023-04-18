@@ -290,6 +290,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletchildlisteditpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletlistingredirectpolicylist"
+			description="$m{studio.widgettype.propertyappletlistingredirectpolicylist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletlistingredirectpolicylist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyapplettreetablegenlist"
 			description="$m{studio.widgettype.propertyapplettreetablegenlist}"
 			dataType="string" inputType="string"
@@ -4927,6 +4932,12 @@
 				<property name="maintainForm.attachments"
 					description="$m{studio.appappletprop.manageentity.maintainform.attachments}"
 					inputWidget="application.checkbox" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.redirections}">
+				<property name="listingRedirect.policy"
+					description="$m{studio.appappletprop.manageentity.listingredirectpolicy}"
+					inputWidget="studio.propertyappletlistingredirectpolicylist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.entrytablesettings}">
