@@ -60,4 +60,10 @@ public class LoadingParams {
     public <T> T getParam(Class<T> dataType, String name) throws UnifyException {
         return DataUtils.convert(dataType, values.get(name));
     }
+    
+    public void restore() {
+        if (restriction != null) {
+            restriction.reverseFieldSwap();
+        }
+    }
 }
