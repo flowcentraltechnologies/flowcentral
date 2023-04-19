@@ -130,8 +130,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         return super.isContainerDisabled() || isTableDisabled();
     }
 
-    @Override
-    public boolean isContainerEditable() throws UnifyException {
+    public boolean isNotViewOnlyAndIsContainerEditable() throws UnifyException {
         return super.isContainerEditable() && !isTableViewOnly();
     }
 

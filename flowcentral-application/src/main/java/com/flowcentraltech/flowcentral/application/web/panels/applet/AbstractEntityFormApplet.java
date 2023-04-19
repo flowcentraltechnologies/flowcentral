@@ -41,6 +41,8 @@ import com.flowcentraltech.flowcentral.application.data.FormRelatedListDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
+import com.flowcentraltech.flowcentral.application.policies.ListingRedirect;
+import com.flowcentraltech.flowcentral.application.policies.ListingRedirectionPolicy;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
@@ -329,7 +331,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             mIndex--;
             return loadScrollInst();
         }
-        
+
         return null;
     }
 
@@ -338,7 +340,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             mIndex++;
             return loadScrollInst();
         }
-        
+
         return null;
     }
 
@@ -353,7 +355,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 result = maintainInst(mIndex);
             }
         }
-        
+
         return result;
     }
 
@@ -365,7 +367,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             result.setOpenPath(true);
             return result;
         }
-        
+
         form = constructNewForm(FormMode.CREATE, null, false);
         viewMode = ViewMode.NEW_FORM;
         return new TableActionResult();
@@ -666,9 +668,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         this.mIndex = mIndex;
         Entity _inst = getEntitySearchItem(entitySearch, mIndex).getEntity();
         if (entitySearch.isViewItemsInSeparateTabs()) {
-            // TODO Re-direct listing
+            ListingRedirect listingRedirect = isRootAppletPropWithValue(AppletPropertyConstants.LISTING_REDIRECT_POLICY)
+                    ? au().getComponent(ListingRedirectionPolicy.class,
+                            getRootAppletProp(String.class, AppletPropertyConstants.LISTING_REDIRECT_POLICY))
+                            .evaluateRedirection(getAppletName(), (Long) _inst.getId())
+                    : new ListingRedirect(getAppletName(), (Long) _inst.getId());
             final String openPath = ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING,
-                    getAppletName(), _inst.getId());
+                    listingRedirect.getTargetAppletName(), listingRedirect.getTargetInstId());
             TableActionResult result = new TableActionResult(openPath);
             result.setOpenPath(true);
             return result;
@@ -1195,7 +1201,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
         saveCurrentForm(currFormTabDef);
     }
-    
+
     protected void saveCurrentForm(FormTabDef readOnlyFormTabDef) throws UnifyException {
         if (formStack == null) {
             formStack = new Stack<FormState>();

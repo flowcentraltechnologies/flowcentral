@@ -34,9 +34,9 @@ public class ListingColumn {
 
     private HAlignType align;
 
-    private int width;
+    private final int width;
 
-    private WidthType widthType;
+    private final WidthType widthType;
 
     public ListingColumn(int width) {
         this.align = HAlignType.LEFT;
@@ -47,6 +47,7 @@ public class ListingColumn {
     public ListingColumn(HAlignType align, int width) {
         this.align = align;
         this.width = width;
+        this.widthType = WidthType.PERCENT;
     }
 
     public ListingColumn(int width, WidthType widthType) {

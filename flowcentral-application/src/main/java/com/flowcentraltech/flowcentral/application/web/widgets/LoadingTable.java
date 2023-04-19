@@ -155,6 +155,7 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
         List<Section> sectionList = new ArrayList<Section>(len);
         int startItemIndex = 0;
         for (int i = 0; i < len; i++) {
+            restriction.restore();
             TableLoadingDef tableLoadingDef = tableDef.getTableLoadingDef(i);
             LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     tableLoadingDef.getProvider());
@@ -176,9 +177,11 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
             } else {
                 sectionList.add(new Section(label));
             }
+            
         }
 
         setSections(sectionList);
+        restriction.restore();
         return items;
     }
 }
