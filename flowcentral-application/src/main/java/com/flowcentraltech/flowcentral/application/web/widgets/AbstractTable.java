@@ -15,7 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -412,35 +411,6 @@ public abstract class AbstractTable<T, U> {
         return entryMessage;
     }
 
-    public void clearSummaries() throws UnifyException {
-        if (tableTotalSummary != null) {
-            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                summary.clear();
-            }
-        }
-    }
-
-    public void addTableColumnSummary(String fieldName, ValueStore itemValueStore) throws UnifyException {
-        if (tableTotalSummary != null && tableTotalSummary.getSummaries().containsKey(fieldName)) {
-            EntityFieldTotalSummary summary = tableTotalSummary.getSummaries().get(fieldName);
-            if (entryPolicy != null) {
-                Number val = entryPolicy.getTableColumnSummaryValue(parentReader, fieldName, itemValueStore);
-                summary.add(val);
-            } else {
-                summary.add((Number) itemValueStore.retrieve(fieldName));
-            }
-        }
-    }
-
-    private void addParentColumnSummary() throws UnifyException {
-        if (tableTotalSummary != null && entryPolicy != null) {
-            for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                Number val = entryPolicy.getParentColumnSummaryValue(parentReader, summary.getFieldName());
-                summary.add(val);
-            }
-        }
-    }
-
     public void setPreTableSummaryLines() throws UnifyException {
         if (tableTotalSummary != null) {
             preTableSummaryLines = entryPolicy != null && dispItemList != null
@@ -450,22 +420,11 @@ public abstract class AbstractTable<T, U> {
     }
 
     public void setPostTableSummaryLines() throws UnifyException {
-        addParentColumnSummary();
         if (tableTotalSummary != null) {
             postTableSummaryLines = entryPolicy != null && dispItemList != null
                     ? entryPolicy.getPostTableSummaryLines(parentReader, new BeanValueListStore(dispItemList))
                     : null;
-            if (DataUtils.isBlank(postTableSummaryLines)) {
-                TableSummaryLine line = new TableSummaryLine(getTotalLabel());
-                for (EntityFieldTotalSummary summary : tableTotalSummary.getSummaries().values()) {
-                    Class<?> numberType = tableDef.getFieldDef(summary.getFieldName()).getDataType().dataType()
-                            .javaClass();
-                    line.addSummary(summary.getFieldName(), numberType, summary.getTotal());
-                }
-
-                postTableSummaryLines = Arrays.asList(line);
-            }
-        }
+         }
     }
 
     public boolean isTotalLabelColumn(String fieldName) {

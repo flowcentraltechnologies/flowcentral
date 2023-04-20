@@ -38,35 +38,6 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public interface EntryTablePolicy extends UnifyComponent {
 
     /**
-     * Gets column summary value.
-     * 
-     * @param parentReader
-     *                     the parent reader
-     * @param fieldName
-     *                     the column field name
-     * @return the column summary value
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    Number getParentColumnSummaryValue(ValueStoreReader parentReader, String fieldName) throws UnifyException;
-
-    /**
-     * Gets column summary value.
-     * 
-     * @param parentReader
-     *                       the parent reader
-     * @param fieldName
-     *                       the column field name
-     * @param itemValueStore
-     *                       the item value store
-     * @return the column summary value
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    Number getTableColumnSummaryValue(ValueStoreReader parentReader, String fieldName, ValueStore itemValueStore)
-            throws UnifyException;
-
-    /**
      * Validate entries,
      * 
      * @param evaluationMode
