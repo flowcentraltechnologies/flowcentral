@@ -166,18 +166,6 @@ public abstract class AbstractEntityDetailsInlineChildListPageController<T exten
         }
 
         @Override
-        public Number getParentColumnSummaryValue(ValueStoreReader parentReader, String fieldName)
-                throws UnifyException {
-            return null;
-        }
-
-        @Override
-        public Number getTableColumnSummaryValue(ValueStoreReader parentReader, String fieldName,
-                ValueStore itemValueStore) throws UnifyException {
-            return null;
-        }
-
-        @Override
         public void validateEntries(EvaluationMode evaluationMode, ValueStoreReader parentReader,
                 ValueStore tableValueStore, FormValidationErrors errors) throws UnifyException {
         }

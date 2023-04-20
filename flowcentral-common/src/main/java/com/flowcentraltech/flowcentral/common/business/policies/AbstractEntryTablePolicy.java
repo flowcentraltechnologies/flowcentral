@@ -43,17 +43,6 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     }
 
     @Override
-    public Number getParentColumnSummaryValue(ValueStoreReader parentReader, String fieldName) throws UnifyException {
-        return null;
-    }
-
-    @Override
-    public Number getTableColumnSummaryValue(ValueStoreReader parentReader, String fieldName, ValueStore itemValueStore)
-            throws UnifyException {
-        return (Number) itemValueStore.retrieve(fieldName);
-    }
-
-    @Override
     public void applyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
             FixedRowActionType fixedActionType) throws UnifyException {
         if (!fixedActionType.fixed()) {

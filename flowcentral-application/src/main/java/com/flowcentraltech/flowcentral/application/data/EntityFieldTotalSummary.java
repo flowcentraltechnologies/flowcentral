@@ -16,10 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.data;
 
-import java.math.BigDecimal;
-
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
@@ -33,8 +30,6 @@ public class EntityFieldTotalSummary {
     private EntityFieldDef entityFieldDef;
 
     private Widget renderer;
-    
-    private Object total;
 
     public EntityFieldTotalSummary(EntityFieldDef entityFieldDef, Widget renderer) throws UnifyException {
         if (!entityFieldDef.isNumber()) {
@@ -44,7 +39,6 @@ public class EntityFieldTotalSummary {
 
         this.entityFieldDef = entityFieldDef;
         this.renderer = renderer;
-        clear();
     }
     
     public Widget getRenderer() {
@@ -53,48 +47,5 @@ public class EntityFieldTotalSummary {
 
     public String getFieldName() {
         return entityFieldDef.getFieldName();
-    }
-    
-    public Object getTotal() {
-        return total;
-    }
-
-    public void clear() throws UnifyException {
-        total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), 0);
-    }
-    
-    public void set(Number val) throws UnifyException {
-        if (val != null) {
-            total = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(), val);
-        } else {
-            clear();
-        }
-    }
-    
-    public void add(Number val) throws UnifyException {
-        if (val != null) {
-            switch(entityFieldDef.getDataType()) {
-                case DECIMAL:
-                    total = ((BigDecimal) total).add(DataUtils.convert(BigDecimal.class, val));
-                    break;
-                case DOUBLE:
-                    total = ((Double) total) + DataUtils.convert(Double.class, val);
-                    break;
-                case FLOAT:
-                    total = ((Float) total) + DataUtils.convert(Float.class, val);
-                    break;
-                case INTEGER:
-                    total = ((Integer) total) + DataUtils.convert(Integer.class, val);
-                    break;
-                case LONG:
-                    total = ((Long) total) + DataUtils.convert(Long.class, val);
-                    break;
-                case SHORT:
-                    total = ((Short) total) + DataUtils.convert(Short.class, val);
-                    break;
-                default:
-                    break;                
-            }
-        }
     }
 }

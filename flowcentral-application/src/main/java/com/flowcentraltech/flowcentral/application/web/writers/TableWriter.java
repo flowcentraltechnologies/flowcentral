@@ -536,7 +536,6 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
-            table.clearSummaries();
 
             List<ValueStore> valueList = tableWidget.getValueList();
             final int len = valueList.size();
@@ -681,11 +680,6 @@ public class TableWriter extends AbstractControlWriter {
                             }
 
                             writer.write("</td>");
-
-                            if (totalSummary) {
-                                table.addTableColumnSummary(fieldName, valueStore);
-                            }
-
                             index++;
                         }
                     }
