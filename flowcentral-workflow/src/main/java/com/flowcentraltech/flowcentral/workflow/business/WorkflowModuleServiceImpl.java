@@ -1149,13 +1149,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case END:
                     environment().delete(WfItem.class, wfItemId);
-                    wfEntityInst.setInWorkflow(false);
-                    wfEntityInst.setProcessingStatus(null);
-                    transitionItem.setUpdated();
                     final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                     if (originalCopyId != null) {
+                        // Remove original copy from workflow
                         environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(),
                                 originalCopyId, new Update().add("inWorkflow", Boolean.FALSE));
+                        
+                        // Delete update copy
+                        environment().delete(wfEntityInst.getClass(), wfEntityInst.getId());
+                        transitionItem.setDeleted();
+                    } else {
+                        wfEntityInst.setInWorkflow(false);
+                        wfEntityInst.setProcessingStatus(null);
+                        transitionItem.setUpdated();
                     }
                     break;
                 default:
