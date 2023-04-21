@@ -56,6 +56,7 @@ import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
@@ -2084,11 +2085,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
         Entity inst = (Entity) formContext.getInst();
-        if (formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
+        if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() == null && formAppletDef
+                .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
+            // Entire child records should be replicated
+            environment().findChildren(inst);
+
             // Create workflow copy
             EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
             ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
-            wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), "id");
+            wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
             final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
             if (!StringUtils.isBlank(wfCopySetValuesName)) {
@@ -2111,8 +2116,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
             copyInst.setOriginalCopyId((Long) inst.getId());
 
-            EntityActionResult entityActionResult = workItemUtilities().submitToWorkflowChannel(
-                    entityClassDef.getEntityDef(), channel, copyInst, policy);
+            EntityActionResult entityActionResult = workItemUtilities()
+                    .submitToWorkflowChannel(entityClassDef.getEntityDef(), channel, copyInst, policy);
 
             // Update original instance workflow flag
             environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(), inst.getId(),

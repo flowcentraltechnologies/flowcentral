@@ -43,6 +43,7 @@ import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
@@ -1101,6 +1102,22 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                         (Long) wfEntityInst.getId(), (Long) wfEntityInst.getId());
                             }
                                 break;
+                            case UPDATE_COPY: {
+                                transitionItem.setUpdated();
+                                final Long originalCopyId = wfEntityInst.getOriginalCopyId();
+                                if (originalCopyId != null) {
+                                    WorkEntity originalInst = (WorkEntity) environment().findLean(
+                                            (Class<? extends Entity>) entityClassDef.getEntityClass(), originalCopyId);
+
+                                    new BeanValueStore(originalInst).copyWithExclusions(
+                                            new BeanValueStore(wfEntityInst),
+                                            ApplicationEntityUtils.RESERVED_BASE_FIELDS);
+                                    environment().updateByIdVersion(originalInst);
+                                    fileAttachmentProvider.sychFileAttachments(WORK_CATEGORY, entityDef.getLongName(),
+                                            originalCopyId, (Long) wfEntityInst.getId());
+                                }
+                            }
+                                break;
                         }
                     }
                     break;
@@ -1135,6 +1152,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfEntityInst.setInWorkflow(false);
                     wfEntityInst.setProcessingStatus(null);
                     transitionItem.setUpdated();
+                    final Long originalCopyId = wfEntityInst.getOriginalCopyId();
+                    if (originalCopyId != null) {
+                        environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(),
+                                originalCopyId, new Update().add("inWorkflow", Boolean.FALSE));
+                    }
                     break;
                 default:
                     break;
