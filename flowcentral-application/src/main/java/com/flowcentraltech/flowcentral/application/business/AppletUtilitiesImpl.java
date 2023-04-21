@@ -109,6 +109,7 @@ import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAt
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.common.util.RestrictionUtils;
 import com.flowcentraltech.flowcentral.common.web.util.EntityConfigurationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityChildCategoryType;
@@ -824,8 +825,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle,
-            FormDef formDef, Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
+    public ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle, FormDef formDef,
+            Entity inst, BreadCrumbs breadCrumbs) throws UnifyException {
         logDebug("Constructing listing form for bean [{0}] using form definition [{1}]...", beanTitle,
                 formDef.getLongName());
         final AppletContext appletContext = applet != null ? applet.getCtx() : new AppletContext(applet, this);
@@ -2078,10 +2079,45 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
         Entity inst = (Entity) formContext.getInst();
+        if (formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
+            // Create workflow copy
+            EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
+            ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
+            wfCopyValueStore.copy(new BeanValueStore(inst));
+            final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
+            if (!StringUtils.isBlank(wfCopySetValuesName)) {
+                AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
+                appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(),
+                        wfCopyValueStore, Collections.emptyMap(), null);
+            }
+
+            // Sent to workflow
+            String channel = formAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);
+            String policy = formAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
+            if (StringUtils.isBlank(channel)) {
+                channel = formAppletDef.getPropValue(String.class,
+                        AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
+                policy = formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
+            }
+
+            EntityActionResult entityActionResult = workItemUtilities().submitToWorkflowChannel(
+                    entityClassDef.getEntityDef(), channel, (WorkEntity) wfCopyValueStore.getValueObject(), policy);
+
+            // Update original instance workflow flag
+            environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(), inst.getId(),
+                    new Update().add("inWorkflow", Boolean.TRUE));
+            entityActionResult.setWorkflowCopied(true);
+            return entityActionResult;
+        }
+
         String updatePolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
@@ -2107,11 +2143,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         boolean pseudoDelete = formAppletDef.getPropValue(boolean.class,
                 AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO, false);
         EntityActionResult entityActionResult = null;
-        String deletePolicy = formAppletDef != null
+        final String deletePolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY);
         if (pseudoDelete) {
-            String pseudoDeleteSetValuesName = formAppletDef.getPropValue(String.class,
+            final String pseudoDeleteSetValuesName = formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.MAINTAIN_FORM_DELETE_PSEUDO_SETVALUES);
             if (!StringUtils.isBlank(pseudoDeleteSetValuesName)) {
                 AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(pseudoDeleteSetValuesName);
