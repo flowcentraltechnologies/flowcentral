@@ -2088,7 +2088,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             // Create workflow copy
             EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
             ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
-            wfCopyValueStore.copy(new BeanValueStore(inst));
+            wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), "id");
             final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
             if (!StringUtils.isBlank(wfCopySetValuesName)) {
@@ -2108,8 +2108,11 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 policy = formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
             }
 
+            WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
+            copyInst.setOriginalCopyId((Long) inst.getId());
+
             EntityActionResult entityActionResult = workItemUtilities().submitToWorkflowChannel(
-                    entityClassDef.getEntityDef(), channel, (WorkEntity) wfCopyValueStore.getValueObject(), policy);
+                    entityClassDef.getEntityDef(), channel, copyInst, policy);
 
             // Update original instance workflow flag
             environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(), inst.getId(),
