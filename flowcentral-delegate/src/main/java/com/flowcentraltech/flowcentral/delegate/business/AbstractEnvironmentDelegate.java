@@ -558,7 +558,9 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
             BaseAuditEntity baseAuditEntity = (BaseAuditEntity) entity;
             Date now = getNow();
             baseAuditEntity.setUpdateDt(now);
-            baseAuditEntity.setUpdatedBy(userLoginId);
+            if (userLoginId != null) {
+                baseAuditEntity.setUpdatedBy(userLoginId);
+            }
         }
     }
 
@@ -569,7 +571,9 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
             String userLoginId = userToken != null ? userToken.getUserLoginId() : null;
             Date now = getNow();
             update.add("updateDt", now);
-            update.add("updatedBy", userLoginId);
+            if (userLoginId != null) {
+                update.add("updatedBy", userLoginId);
+            }
         }
     }
 
