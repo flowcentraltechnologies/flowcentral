@@ -59,6 +59,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
+import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
 import com.flowcentraltech.flowcentral.connect.springboot.SpringBootInterconnect;
 import com.tcdng.unify.convert.util.ConverterUtils;
@@ -252,37 +253,48 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                     case UPDATE:
                     case UPDATE_LEAN: {
                         Object reqBean = interconnect.getBeanFromJsonPayload(req);
-                        Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
-                        Object saveBean = em.find(entityInfo.getImplClass(), id);
-                        Object versionNo = req.version()
-                                ? PropertyUtils.getProperty(saveBean, entityInfo.getVersionNoFieldName())
-                                : null;
-                        // References
-                        interconnect.copy(entityInfo.getRefFieldList(), reqBean, saveBean);
-                        // Fields
-                        interconnect.copy(entityInfo.getFieldList(), reqBean, saveBean);
+                        if (reqBean != null) {
+                            Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
+                            Object saveBean = em.find(entityInfo.getImplClass(), id);
+                            Object versionNo = req.version()
+                                    ? PropertyUtils.getProperty(saveBean, entityInfo.getVersionNoFieldName())
+                                    : null;
+                            // References
+                            interconnect.copy(entityInfo.getRefFieldList(), saveBean, reqBean);
+                            // Fields
+                            interconnect.copy(entityInfo.getFieldList(), saveBean, reqBean);
 
-                        if (!req.getOperation().isLean()) {
-                            // Child
-                            interconnect.copy(entityInfo.getChildFieldList(), reqBean, saveBean);
-                            // Child list
-                            interconnect.copy(entityInfo.getChildListFieldList(), reqBean, saveBean);
+                            if (!req.getOperation().isLean()) {
+                                // Child
+                                interconnect.copy(entityInfo.getChildFieldList(), saveBean, reqBean);
+                                // Child list
+                                interconnect.copy(entityInfo.getChildListFieldList(), saveBean, reqBean);
+                            }
+
+                            if (req.version()) {
+                                PropertyUtils.setProperty(saveBean, entityInfo.getVersionNoFieldName(), versionNo);
+                            }
+
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePreAction(saveBean);
+                            }
+
+                            em.merge(saveBean);
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePostAction(saveBean);
+                            }
+
+                            result = new Object[] { 1L };
+                        } else if (req.getId() != null && req.getUpdate() != null) {
+                            Object saveBean = em.find(entityInfo.getImplClass(), req.getId());
+                            UpdateDef updateDef = interconnect.getUpdates(req);
+                            for (String fieldName : updateDef.getFieldNames()) {
+                                PropertyUtils.setProperty(saveBean, fieldName, updateDef.getUpdate(fieldName));
+                            }
+
+                            em.merge(saveBean);
+                            result = new Object[] { 1L };
                         }
-
-                        if (req.version()) {
-                            PropertyUtils.setProperty(saveBean, entityInfo.getVersionNoFieldName(), versionNo);
-                        }
-
-                        if (entityActionPolicy != null) {
-                            entityActionPolicy.executePreAction(saveBean);
-                        }
-
-                        em.merge(saveBean);
-                        if (entityActionPolicy != null) {
-                            entityActionPolicy.executePostAction(saveBean);
-                        }
-
-                        result = new Object[] { 1L };
                     }
                         break;
                     case UPDATE_ALL:
