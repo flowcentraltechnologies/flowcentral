@@ -29,6 +29,8 @@ import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
+import com.flowcentraltech.flowcentral.application.util.EntityImage;
+import com.flowcentraltech.flowcentral.application.util.EntityImageUtils;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -234,6 +236,29 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     protected String loadListingStyle(String resourceName) throws UnifyException {
         return ConfigurationUtils.readString(resourceName, getUnifyComponentContext().getWorkingPath());
+    }
+
+    protected final void writeSingleValue(ListingGeneratorWriter writer, ListingCellType cellType, Object val)
+            throws UnifyException {
+        ListingCell[] cell = new ListingCell[1];
+        cell[0] = new ListingCell(cellType, String.valueOf(val));
+        writer.writeRow(cell);
+    }
+
+    protected final void writeFileImage(ListingGeneratorWriter writer, String resourceName, String style)
+            throws UnifyException {
+        writer.writeRow(new ListingCell(ListingCellType.FILE_IMAGE, resourceName, style));
+    }
+
+    protected final void writeEntityImage(ListingGeneratorWriter writer, EntityImage entityImage, String style)
+            throws UnifyException {
+        final String resourceName = EntityImageUtils.encode(entityImage);
+        writer.writeRow(new ListingCell(ListingCellType.PROVIDER_IMAGE, resourceName, style));
+    }
+
+    protected final void writeProviderImage(ListingGeneratorWriter writer, String resourceName, String style)
+            throws UnifyException {
+        writer.writeRow(new ListingCell(ListingCellType.PROVIDER_IMAGE, resourceName, style));
     }
 
     private void generateListing(final String listingType, ValueStore formBeanValueStore,

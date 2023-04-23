@@ -26,6 +26,7 @@ import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.filter.ObjectFilter;
+import com.tcdng.unify.core.resource.ImageProvider;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
@@ -38,6 +39,8 @@ import com.tcdng.unify.web.ui.widget.ResponseWriter;
 public class ListingGeneratorWriter {
 
     private ResponseWriter writer;
+    
+    private ImageProvider imageProvider;
 
     private ListingColumn[] columns;
 
@@ -87,6 +90,10 @@ public class ListingGeneratorWriter {
 
     public void clearItemColorRules() {
         itemColorRules.clear();
+    }
+
+    public void setImageProvider(ImageProvider imageProvider) {
+        this.imageProvider = imageProvider;
     }
 
     public ListingColorType getItemColor(ValueStore valueStore) throws UnifyException {
@@ -353,9 +360,15 @@ public class ListingGeneratorWriter {
             writer.write("<span class=\"flcontent ").write(cell.getType().styleClass()).write(" ")
                     .write(column.getAlign().styleClass()).write("\">");
             if (cell.isWithContent()) {
-                if (cell.isFileImage()) {
+                if (cell.isFileImage() || (cell.isProviderImage() && imageProvider != null)) {
                     writer.write("<img src=\"");
-                    writer.writeFileImageContextURL(cell.getContent());
+                    if (cell.isFileImage()) {
+                        writer.writeFileImageContextURL(cell.getContent());
+                    } else {
+                        writer.write("data:image/*;base64,");
+                        writer.write(imageProvider.provideAsBase64String(cell.getContent()));
+                    }
+                    
                     writer.write("\"");
                     if (cell.isWithContentStyle()) {
                         writer.write(" style=\"");
