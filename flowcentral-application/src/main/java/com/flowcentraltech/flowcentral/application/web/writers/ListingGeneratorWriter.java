@@ -26,6 +26,7 @@ import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.filter.ObjectFilter;
+import com.tcdng.unify.core.resource.ImageProvider;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
@@ -38,6 +39,8 @@ import com.tcdng.unify.web.ui.widget.ResponseWriter;
 public class ListingGeneratorWriter {
 
     private ResponseWriter writer;
+
+    private ImageProvider entityImageProvider;
 
     private ListingColumn[] columns;
 
@@ -63,8 +66,9 @@ public class ListingGeneratorWriter {
 
     private Set<ListingColorType> pauseRowPrintColors;
 
-    public ListingGeneratorWriter(String listingType, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
-            boolean highlighting) {
+    public ListingGeneratorWriter(ImageProvider entityImageProvider, String listingType, ResponseWriter writer,
+            Set<ListingColorType> pausePrintColors, boolean highlighting) {
+        this.entityImageProvider = entityImageProvider;
         this.listingType = listingType;
         this.writer = writer;
         this.highlighting = highlighting;
@@ -226,7 +230,7 @@ public class ListingGeneratorWriter {
         if (columns == null) {
             throw new RuntimeException("No table is started.");
         }
-        
+
         columns = _columns;
     }
 
@@ -353,9 +357,15 @@ public class ListingGeneratorWriter {
             writer.write("<span class=\"flcontent ").write(cell.getType().styleClass()).write(" ")
                     .write(column.getAlign().styleClass()).write("\">");
             if (cell.isWithContent()) {
-                if (cell.isFileImage()) {
+                if (cell.isFileImage() || cell.isEntityProviderImage()) {
                     writer.write("<img src=\"");
-                    writer.writeFileImageContextURL(cell.getContent());
+                    if (cell.isFileImage()) {
+                        writer.writeFileImageContextURL(cell.getContent());
+                    } else {
+                        writer.write("data:image/*;base64,");
+                        writer.write(entityImageProvider.provideAsBase64String(cell.getContent()));
+                    }
+
                     writer.write("\"");
                     if (cell.isWithContentStyle()) {
                         writer.write(" style=\"");

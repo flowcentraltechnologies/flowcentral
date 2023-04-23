@@ -51,6 +51,8 @@ public class EntityActionResult {
     
     private boolean submitToWorkflow;
     
+    private boolean workflowCopied;
+    
     private boolean applyUserAction;
     
     private boolean refreshMenu;
@@ -128,6 +130,14 @@ public class EntityActionResult {
 
     public void setSubmitToWorkflow(boolean submitToWorkflow) {
         this.submitToWorkflow = submitToWorkflow;
+    }
+
+    public boolean isWorkflowCopied() {
+        return workflowCopied;
+    }
+
+    public void setWorkflowCopied(boolean workflowCopied) {
+        this.workflowCopied = workflowCopied;
     }
 
     public String getUserAction() {

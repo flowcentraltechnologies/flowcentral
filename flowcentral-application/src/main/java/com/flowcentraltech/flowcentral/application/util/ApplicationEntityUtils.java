@@ -69,15 +69,16 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(
-            new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy",
-                    "originWorkRecId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
+    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(new HashSet<String>(
+            Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy", "originWorkRecId",
+                    "originalCopyId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
 
     public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
             .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
                     EntityBaseType.BASE_WORK_TENANT_ENTITY, EntityBaseType.BASE_STATUS_WORK_TENANT_ENTITY));
 
-    public static final Restriction WORK_ENTITY_RESTRICTION = new Amongst("type", ApplicationEntityUtils.BASE_WORK_TYPES);
+    public static final Restriction WORK_ENTITY_RESTRICTION = new Amongst("type",
+            ApplicationEntityUtils.BASE_WORK_TYPES);
 
     private static final Map<String, String> baseFieldColumns;
 
@@ -472,6 +473,9 @@ public final class ApplicationEntityUtils {
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.BOOLEAN, "inWorkflow",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.inworkflow}"), null, null,
                         null, null, null, "application.checkbox", null, null, configType));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "originalCopyId",
+                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.originalcopyid}"), null, null,
+                        null, null, null, null, null, null, configType));
                 break;
             default:
                 break;

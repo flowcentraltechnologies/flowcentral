@@ -523,7 +523,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     private static final Set<String> RESERVED_SETVALUE_FIELDS = Collections
-            .unmodifiableSet(new HashSet<String>(Arrays.asList("inWorkflow")));
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("inWorkflow", "originalCopyId")));
 
     public List<EntityFieldDef> getSetValueFieldDefList() throws UnifyException {
         if (setValueFieldDefList == null) {

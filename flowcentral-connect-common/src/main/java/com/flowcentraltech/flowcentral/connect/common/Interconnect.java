@@ -49,6 +49,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
+import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.ApplicationConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
@@ -495,6 +496,31 @@ public class Interconnect {
 
         return null;
     }
+    
+    public UpdateDef getUpdates(DataSourceRequest req) throws Exception {
+        UpdateDef.Builder fdb = UpdateDef.newBuilder();
+        if (req.getUpdate() != null) {
+            EntityInfo entityInfo = getEntityInfo(req.getEntity());
+            BufferedReader reader = new BufferedReader(new StringReader(req.getUpdate()));
+            try {
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    String[] p = line.split("]");
+                    if (p.length == 2) {
+                        final String fieldName = p[0];
+                        final Object val = ConverterUtils.convert(entityInfo.getEntityFieldInfo(fieldName).getJavaClass(), p[1]);
+                        fdb.update(fieldName, val);
+                    }
+                 }
+            } finally {
+                if (reader != null) {
+                    reader.close();
+                }
+            }
+        }
+        
+        return fdb.build();
+    }
 
     public JsonDataSourceResponse createDataSourceResponse(Object[] result, DataSourceRequest req, String errorCode,
             String errorMsg) throws Exception {
@@ -581,7 +607,8 @@ public class Interconnect {
         return entityInfo;
     }
 
-    public void copy(List<EntityFieldInfo> fieldInfoList, Object srcBean, Object destBean) throws Exception {
+    public void copy(List<EntityFieldInfo> fieldInfoList, final Object destBean, final Object srcBean)
+            throws Exception {
         checkInitialized();
         for (EntityFieldInfo entityFieldInfo : fieldInfoList) {
             Object val = PropertyUtils.getProperty(srcBean, entityFieldInfo.getName());

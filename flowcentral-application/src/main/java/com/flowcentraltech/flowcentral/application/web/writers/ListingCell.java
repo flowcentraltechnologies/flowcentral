@@ -197,6 +197,10 @@ public class ListingCell {
         return type.isFileImage();
     }
 
+    public boolean isEntityProviderImage() {
+        return type.isEntityProviderImage();
+    }
+
     public boolean isScopeImage() {
         return type.isScopeImage();
     }

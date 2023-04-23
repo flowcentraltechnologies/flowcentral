@@ -80,6 +80,10 @@ public abstract class AbstractAppletPanel extends AbstractApplicationSwitchPanel
 
     protected void handleEntityActionResult(EntityActionResult entityActionResult, FormContext ctx)
             throws UnifyException {
+        if (entityActionResult.isWorkflowCopied()) {
+            entityActionResult.setSuccessHint("$m{entityformapplet.update.workflowcopy.success.hint}");
+        }
+        
         if (entityActionResult.isRefreshMenu()) {
             refreshApplicationMenu();
         }

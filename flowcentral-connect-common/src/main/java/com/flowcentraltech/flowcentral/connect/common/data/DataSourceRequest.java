@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
-import java.util.Arrays;
-
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
 
 /**
@@ -28,8 +26,6 @@ import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperat
 public class DataSourceRequest extends BaseRequest {
 
     private DataSourceOperation operation;
-    
-    private Long id;
     
     private String fieldName;
     
@@ -50,8 +46,8 @@ public class DataSourceRequest extends BaseRequest {
     public DataSourceRequest(DataSourceOperation operation, Long id, Long versionNo) {
         this();
         this.operation = operation;
-        this.id = id;
         this.versionNo = versionNo;
+        setId(id);
     }
 
     public DataSourceRequest(DataSourceOperation operation) {
@@ -69,14 +65,6 @@ public class DataSourceRequest extends BaseRequest {
 
     public void setOperation(DataSourceOperation operation) {
         this.operation = operation;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getFieldName() {
@@ -144,15 +132,15 @@ public class DataSourceRequest extends BaseRequest {
     }
     
     public boolean clause() {
-        return id != null || versionNo != null || query != null;
+        return getId() != null || versionNo != null || query != null;
     }
     
     public boolean byIdOnly() {
-        return id != null && versionNo == null;
+        return getId() != null && versionNo == null;
     }
     
     public boolean byIdVersion() {
-        return id != null && versionNo != null;
+        return getId() != null && versionNo != null;
     }
     
     public boolean byQuery() {
@@ -173,13 +161,5 @@ public class DataSourceRequest extends BaseRequest {
     
     public boolean delete() {
         return DataSourceOperation.DELETE_ALL.equals(operation);
-    }
-
-    @Override
-    public String toString() {
-        return "DataSourceRequest [operation=" + operation + ", id=" + id + ", fieldName=" + fieldName + ", update="
-                + update + ", query=" + query + ", order=" + order + ", versionNo=" + versionNo
-                + ", ignoreEmptyCriteria=" + ignoreEmptyCriteria + ", offset=" + offset + ", limit=" + limit
-                + ", getPayload()=" + Arrays.toString(getPayload()) + ", getEntity()=" + getEntity() + "]";
     }
 }

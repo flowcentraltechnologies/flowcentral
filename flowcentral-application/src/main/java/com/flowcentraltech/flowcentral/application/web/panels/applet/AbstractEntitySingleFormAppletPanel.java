@@ -79,6 +79,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         final EntitySingleForm form = applet.getForm();
         final Entity inst = form != null ? (Entity) form.getFormBean() : null;
         final boolean isInWorkflow = inst instanceof WorkEntity && ((WorkEntity) inst).isInWorkflow();
+        final boolean isUpdateCopy = inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null;
         appCtx.setInWorkflow(isInWorkflow);
 
         final boolean isContextEditable = appCtx.isContextEditable();
@@ -93,12 +94,12 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             enableCreateSubmit = applet
                     .formBeanMatchAppletPropertyCondition(AppletPropertyConstants.CREATE_FORM_SUBMIT_CONDITION);
         } else if (viewMode.isMaintainForm()) {
-            enableUpdate = isContextEditable
+            enableUpdate = isContextEditable && !isUpdateCopy
                     && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
                     && applet.formBeanMatchAppletPropertyCondition(
                             AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-            enableDelete = !isInWorkflow && isContextEditable
+            enableDelete = !isInWorkflow && isContextEditable && !isUpdateCopy
                     && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE, false)
                     && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
                     && applet.formBeanMatchAppletPropertyCondition(
@@ -122,7 +123,10 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
         if (form != null) {
             form.clearDisplayItem();
-            if (appCtx.isInWorkflow() && !appCtx.isReview()) {
+            if (isUpdateCopy) {
+                form.setDisplayItemCounterClass("fc-dispcounterorange");
+                form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
+            } else if (appCtx.isInWorkflow() && !appCtx.isReview()) {
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
             }

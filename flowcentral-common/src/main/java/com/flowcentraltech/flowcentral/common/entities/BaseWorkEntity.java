@@ -42,6 +42,9 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
     @Column(name = "WORK_DEPARTMENT_CD", length = 32, nullable = true)
     private String workDepartmentCode;
 
+    @Column(nullable = true)
+    private Long originalCopyId;
+    
     @Column
     private boolean inWorkflow;
 
@@ -89,6 +92,16 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
     @Override
     public final void setWorkDepartmentCode(String workDepartmentCode) {
         this.workDepartmentCode = workDepartmentCode;
+    }
+
+    @Override
+    public Long getOriginalCopyId() {
+        return originalCopyId;
+    }
+
+    @Override
+    public void setOriginalCopyId(Long originalCopyId) {
+        this.originalCopyId = originalCopyId;
     }
 
     @Override

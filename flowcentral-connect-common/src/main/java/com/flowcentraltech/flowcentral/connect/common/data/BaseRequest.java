@@ -26,6 +26,8 @@ public abstract class BaseRequest {
     private String[] payload;
     
     private String entity;
+    
+    private Long id;
 
     public String[] getPayload() {
         return payload;
@@ -42,5 +44,13 @@ public abstract class BaseRequest {
 	public void setEntity(String entity) {
 		this.entity = entity;
 	}
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

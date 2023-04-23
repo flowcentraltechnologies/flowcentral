@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
-import java.util.Arrays;
-
 /**
  * Procedure request.
  * 
@@ -26,19 +24,17 @@ import java.util.Arrays;
 public class ProcedureRequest extends BaseRequest {
 
     private String operation;
-    
-    private Long id;
-    
+
     private Long versionNo;
-    
+
     private boolean useRawPayload;
-    
+
     private boolean readOnly;
-    
+
     public ProcedureRequest(String operation, Long id, Long versionNo) {
         this.operation = operation;
-        this.id = id;
         this.versionNo = versionNo;
+        setId(id);
     }
 
     public ProcedureRequest(String operation) {
@@ -46,53 +42,39 @@ public class ProcedureRequest extends BaseRequest {
     }
 
     public ProcedureRequest() {
-        
+
     }
 
     public String getOperation() {
-		return operation;
-	}
+        return operation;
+    }
 
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getVersionNo() {
+        return versionNo;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setVersionNo(Long versionNo) {
+        this.versionNo = versionNo;
+    }
 
-	public Long getVersionNo() {
-		return versionNo;
-	}
+    public boolean isReadOnly() {
+        return readOnly;
+    }
 
-	public void setVersionNo(Long versionNo) {
-		this.versionNo = versionNo;
-	}
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
+    }
 
-	public boolean isReadOnly() {
-		return readOnly;
-	}
-
-	public void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
-	}
-
-	public boolean isUseRawPayload() {
+    public boolean isUseRawPayload() {
         return useRawPayload;
     }
 
     public void setUseRawPayload(boolean useRawPayload) {
         this.useRawPayload = useRawPayload;
     }
-
-    @Override
-	public String toString() {
-		return "ProcedureRequest [operation=" + operation + ", entity=" + getEntity() + ", id=" + id + ", versionNo="
-				+ versionNo + ", payload=" + Arrays.toString(getPayload()) + ", readOnly=" + readOnly + ", useRawPayload=" + useRawPayload + "]";
-	}
 
 }

@@ -46,4 +46,8 @@ public interface WorkEntity extends Entity {
     boolean isInWorkflow();
 
     void setInWorkflow(boolean inWorkflow);
+    
+    Long getOriginalCopyId();
+    
+    void setOriginalCopyId(Long originalCopyId);
 }
