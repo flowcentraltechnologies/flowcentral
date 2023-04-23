@@ -28,7 +28,7 @@ public enum ListingCellType {
     BOLD_TEXT("flboldtext"),
     TEXT(""),
     FILE_IMAGE("flimage"),
-    PROVIDER_IMAGE("flimage"),
+    ENTITY_PROVIDER_IMAGE("flimage"),
     SCOPE_IMAGE("flimage");
     
     private String styleClass;
@@ -45,8 +45,8 @@ public enum ListingCellType {
         return FILE_IMAGE.equals(this);
     }
     
-    public boolean isProviderImage() {
-        return PROVIDER_IMAGE.equals(this);
+    public boolean isEntityProviderImage() {
+        return ENTITY_PROVIDER_IMAGE.equals(this);
     }
     
     public boolean isScopeImage() {
