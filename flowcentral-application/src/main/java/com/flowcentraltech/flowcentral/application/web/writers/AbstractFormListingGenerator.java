@@ -259,6 +259,11 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         writer.writeRow(new ListingCell(ListingCellType.FILE_IMAGE, resourceName, style));
     }
 
+    protected final void writeEntityImage(ListingGeneratorWriter writer, String entity, Long instId, String fieldName,
+            String style) throws UnifyException {
+        writeEntityImage(writer, new EntityImage(entity, instId, fieldName), style);
+    }
+
     protected final void writeEntityImage(ListingGeneratorWriter writer, EntityImage entityImage, String style)
             throws UnifyException {
         final String resourceName = EntityImageUtils.encode(entityImage);
