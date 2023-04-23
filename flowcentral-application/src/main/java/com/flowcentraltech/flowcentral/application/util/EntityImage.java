@@ -56,4 +56,5 @@ public class EntityImage {
     public boolean isPresent() {
         return entity != null && fieldName != null && instId != null;
     }
+
 }
