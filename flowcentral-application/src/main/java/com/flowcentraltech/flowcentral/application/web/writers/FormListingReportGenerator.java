@@ -31,7 +31,7 @@ import com.tcdng.unify.core.report.Report;
 public interface FormListingReportGenerator extends UnifyComponent {
 
     /**
-     * Generates form report into writer.
+     * Generates form HTML report.
      * 
      * @param formBeanValueStore
      *                           the form bean value store
@@ -41,5 +41,5 @@ public interface FormListingReportGenerator extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateReport(ValueStore formBeanValueStore, FormListingOptions listingOptions) throws UnifyException;
+    Report generateHtmlReport(ValueStore formBeanValueStore, FormListingOptions listingOptions) throws UnifyException;
 }
