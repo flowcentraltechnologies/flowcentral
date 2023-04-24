@@ -41,7 +41,7 @@ public enum FormReviewType implements EnumConst {
     ON_UPDATE_CLOSE(
             "OUC", true),
     ON_DELETE(
-            "OND", true),
+            "OND", false),
    ON_SUBMIT(
             "ONB", true),
     ON_SUBMIT_NEXT(
