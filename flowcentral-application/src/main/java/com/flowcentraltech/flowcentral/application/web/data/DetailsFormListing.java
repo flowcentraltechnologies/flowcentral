@@ -51,8 +51,10 @@ public class DetailsFormListing {
 
     private int summaryTitleColumn;
 
+    private boolean spreadSheet;
+
     private DetailsFormListing(String generator, Formats formats, TableDef tableDef, Map<String, Object> properties,
-            List<? extends Entity> details, int summaryTitleColumn, List<Summary> preSummaries,
+            List<? extends Entity> details, int summaryTitleColumn, boolean spreadSheet, List<Summary> preSummaries,
             List<Summary> postSummaries) {
         this.generator = generator;
         this.formats = formats;
@@ -60,6 +62,7 @@ public class DetailsFormListing {
         this.properties = properties;
         this.details = details;
         this.summaryTitleColumn = summaryTitleColumn;
+        this.spreadSheet = spreadSheet;
         this.preSummaries = preSummaries;
         this.postSummaries = postSummaries;
     }
@@ -116,6 +119,10 @@ public class DetailsFormListing {
         return isWithPreSummaries() || isWithPostSummaries();
     }
     
+    public boolean isSpreadSheet() {
+        return spreadSheet;
+    }
+
     public static Builder newBuilder(TableDef tableDef, List<? extends Entity> details) {
         return new Builder(tableDef, details);
     }
@@ -138,6 +145,8 @@ public class DetailsFormListing {
 
         private int summaryTitleColumn;
 
+        private boolean spreadSheet;
+
         public Builder(TableDef tableDef, List<? extends Entity> details) {
             this.properties = new HashMap<String, Object>();
             this.tableDef = tableDef;
@@ -148,6 +157,11 @@ public class DetailsFormListing {
 
         public Builder useGenerator(String generator) throws UnifyException {
             this.generator = generator;
+            return this;
+        }
+
+        public Builder spreadSheet(boolean spreadSheet) throws UnifyException {
+            this.spreadSheet = spreadSheet;
             return this;
         }
 
@@ -187,7 +201,7 @@ public class DetailsFormListing {
             }
 
             return new DetailsFormListing(generator, formats, tableDef, Collections.unmodifiableMap(properties),
-                    Collections.unmodifiableList(details), summaryTitleColumn,
+                    Collections.unmodifiableList(details), summaryTitleColumn, spreadSheet,
                     Collections.unmodifiableList(preSummaries), Collections.unmodifiableList(postSummaries));
         }
     }

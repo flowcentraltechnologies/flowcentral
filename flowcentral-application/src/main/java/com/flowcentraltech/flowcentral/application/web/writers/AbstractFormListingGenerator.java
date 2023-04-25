@@ -163,6 +163,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             throws UnifyException {
         Workbook workbook = new HSSFWorkbook();
         ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
+        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
+                .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
@@ -170,8 +172,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                     listingReportProperties.getName(), sheet, pausePrintColors, false));
         }
         
-        // TODO Auto-generated method stub
-        return null;
+        rb.customObject(workbook);
+        return rb.build();
     }
 
     @Override
