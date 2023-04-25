@@ -522,6 +522,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                 wfStepAlert.setRecipientNameRule(wfAlertConfig.getRecipientNameRule());
                 wfStepAlert.setRecipientContactRule(wfAlertConfig.getRecipientContactRule());
                 wfStepAlert.setGenerator(wfAlertConfig.getGenerator());
+                wfStepAlert.setAlertHeldBy(wfAlertConfig.isAlertHeldBy());
+                wfStepAlert.setAlertWorkflowRoles(wfAlertConfig.isAlertWorkflowRoles());
                 wfStepAlert.setFireOnPrevStepName(wfAlertConfig.getFireOnPrevStepName());
                 wfStepAlert.setFireOnConditionName(wfAlertConfig.getFireOnCondition());
                 alertList.add(wfStepAlert);

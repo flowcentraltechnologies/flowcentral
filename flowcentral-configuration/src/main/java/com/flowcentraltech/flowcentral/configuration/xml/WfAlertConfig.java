@@ -44,6 +44,11 @@ public class WfAlertConfig extends BaseNameConfig {
 
     private String fireOnCondition;
 
+    private boolean alertHeldBy;
+
+    private boolean alertWorkflowRoles;
+
+
     public WorkflowAlertType getType() {
         return type;
     }
@@ -88,6 +93,24 @@ public class WfAlertConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setGenerator(String generator) {
         this.generator = generator;
+    }
+
+    public boolean isAlertHeldBy() {
+        return alertHeldBy;
+    }
+
+    @XmlAttribute
+    public void setAlertHeldBy(boolean alertHeldBy) {
+        this.alertHeldBy = alertHeldBy;
+    }
+
+    public boolean isAlertWorkflowRoles() {
+        return alertWorkflowRoles;
+    }
+
+    @XmlAttribute
+    public void setAlertWorkflowRoles(boolean alertWorkflowRoles) {
+        this.alertWorkflowRoles = alertWorkflowRoles;
     }
 
     public String getFireOnPrevStepName() {

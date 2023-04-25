@@ -52,6 +52,12 @@ public class WfStepAlert extends BaseNamedEntity {
     @Column(length = 64, nullable = true)
     private String generator;
 
+    @Column
+    private boolean alertHeldBy;
+
+    @Column
+    private boolean alertWorkflowRoles;
+
     @Column(name = "FIRE_ON_PREV_STEP_NM", length = 64, nullable = true)
     private String fireOnPrevStepName;
 
@@ -111,6 +117,22 @@ public class WfStepAlert extends BaseNamedEntity {
 
     public void setRecipientContactRule(String recipientContactRule) {
         this.recipientContactRule = recipientContactRule;
+    }
+
+    public boolean isAlertHeldBy() {
+        return alertHeldBy;
+    }
+
+    public void setAlertHeldBy(boolean alertHeldBy) {
+        this.alertHeldBy = alertHeldBy;
+    }
+
+    public boolean isAlertWorkflowRoles() {
+        return alertWorkflowRoles;
+    }
+
+    public void setAlertWorkflowRoles(boolean alertWorkflowRoles) {
+        this.alertWorkflowRoles = alertWorkflowRoles;
     }
 
     public String getGenerator() {
