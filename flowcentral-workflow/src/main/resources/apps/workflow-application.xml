@@ -43,7 +43,7 @@
 			<property name="baseRestriction" value="interactiveSteps" />
 			<filter name="interactiveSteps"
 				description="$m{workflow.steps.filter.interactive}">
-				<restriction type="amongst" field="type" paramA="USR|ERR" />
+				<restriction type="amongst" field="type" paramA="USR|ERR|SET|MRT|PRT|BRT|REC|ENR|PRC" />
 			</filter>
 		</applet>
 		<applet name="manageWfStepRoles"

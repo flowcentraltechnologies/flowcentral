@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.common.data;
 
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Recipient.
@@ -54,5 +55,10 @@ public class Recipient {
 
     public String getContact() {
         return contact;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 }

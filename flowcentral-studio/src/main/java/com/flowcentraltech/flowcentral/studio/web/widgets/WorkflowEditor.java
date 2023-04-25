@@ -471,6 +471,7 @@ public class WorkflowEditor {
                             case START:
                                 break;
                             case SET_VALUES:
+                                editTypes.add(StudioWorkflowEditType.ALERT.index());
                                 break;
                             case USER_ACTION:
                                 editTypes.add(StudioWorkflowEditType.ALERT.index());
@@ -862,6 +863,7 @@ public class WorkflowEditor {
                 census.add(step.getRoutingList().size());
                 break;
             case SET_VALUES:
+                census.add(step.getAlertList().size());
                 break;
             case USER_ACTION:
                 census.add(step.getAlertList().size());

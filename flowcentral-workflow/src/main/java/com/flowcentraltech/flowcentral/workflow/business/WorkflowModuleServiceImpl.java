@@ -1294,7 +1294,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final ValueStoreReader reader = transitionItem.getReader();
         final Date now = getNow();
         if (wfAlertDef.isWithFireAlertOnCondition()) {
-            if (wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
+            if (!wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
                     .getObjectFilter(wfDef.getEntityDef(), reader, now).matchReader(reader)) {
                 return;
             }
