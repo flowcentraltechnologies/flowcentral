@@ -25,6 +25,7 @@ import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
@@ -70,6 +71,8 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private int nextTableStartColumn;
 
+    private int maxSheetColumns;
+
     private List<Merge> mergeList;
 
     public ExcelListingGeneratorWriter(ImageProvider entityImageProvider, String listingType, Sheet sheet,
@@ -82,6 +85,7 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     @Override
     public void close() {
+        autoSizeColumns();
         mergeRegions();
     }
 
@@ -135,10 +139,11 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
                 cell.setCellStyle(style);
 
                 final int mergeColumns = _column.getMergeColumns();
-                writeColumn += mergeColumns;
                 if (mergeColumns > 1) {
-                    mergeList.add(new Merge(writeRow, writeRow, writeColumn, writeColumn - 1));
+                    mergeList.add(new Merge(writeRow, writeRow, writeColumn, writeColumn + mergeColumns - 1));
                 }
+
+                writeColumn += mergeColumns;
             } else {
                 writeColumn++;
             }
@@ -162,6 +167,10 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
     protected void doEndSection() throws UnifyException {
         if (nextSectionStartRow < writeRow) {
             nextSectionStartRow = writeRow;
+        }
+
+        if (maxSheetColumns < nextTableStartColumn) {
+            maxSheetColumns = nextTableStartColumn;
         }
     }
 
@@ -202,13 +211,21 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         }
     }
 
+    private void autoSizeColumns() {
+        for (int i = 0; i < maxSheetColumns; i++) {
+            sheet.autoSizeColumn(i);
+        }
+    }
+
     private Row getSheetWriteRow() {
         Row row = sheet.getRow(writeRow);
         return row == null ? sheet.createRow(writeRow) : row;
     }
 
     private CellStyle getCellStyle(ListingColumn column, ListingCell cell) {
-        final String key = column.getAlign().toString() + cell.isBold();
+        final String key = cell.getFormatPattern() != null
+                ? column.getAlign().toString() + cell.isBold() + cell.getFormatPattern()
+                : column.getAlign().toString() + cell.isBold();
         CellStyle style = cellStyles.get(key);
         if (style == null) {
             style = sheet.getWorkbook().createCellStyle();
@@ -217,6 +234,11 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
                 Font font = sheet.getWorkbook().createFont();
                 font.setBold(true);
                 style.setFont(font);
+            }
+
+            if (cell.getFormatPattern() != null) {
+                CreationHelper ch = sheet.getWorkbook().getCreationHelper();
+                style.setDataFormat(ch.createDataFormat().getFormat(cell.getFormatPattern()));
             }
 
             cellStyles.put(key, style);
