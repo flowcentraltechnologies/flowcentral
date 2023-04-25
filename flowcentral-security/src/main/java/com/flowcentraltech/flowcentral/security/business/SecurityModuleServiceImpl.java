@@ -403,10 +403,12 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
                     for (User user : userList) {
                         recipientList.add(new Recipient(user.getLoginId(), user.getEmail()));
                     }
+                    break;
                 case SMS:
                     for (User user : userList) {
                         recipientList.add(new Recipient(user.getLoginId(), user.getMobileNo()));
                     }
+                    break;
                 case SYSTEM:
                 default:
                     for (User user : userList) {
@@ -468,13 +470,13 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (!DataUtils.isBlank(roleCodes)) {
             userIds.addAll(environment().valueSet(Long.class, "userId",
                     new UserRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId)));
-        }
-
-        Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
-                new UserGroupRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId));
-        if (!DataUtils.isBlank(userGroupIds)) {
-            userIds.addAll(environment().valueSet(Long.class, "userId",
-                    new UserGroupMemberQuery().userGroupIdIn(userGroupIds)));
+            
+            Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
+                    new UserGroupRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId));
+            if (!DataUtils.isBlank(userGroupIds)) {
+                userIds.addAll(environment().valueSet(Long.class, "userId",
+                        new UserGroupMemberQuery().userGroupIdIn(userGroupIds)));
+            }
         }
 
         return userIds;

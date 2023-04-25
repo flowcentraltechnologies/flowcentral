@@ -261,6 +261,8 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                                 wfAlertConfig.setRecipientNameRule(wfStepAlert.getRecipientNameRule());
                                 wfAlertConfig.setRecipientContactRule(wfStepAlert.getRecipientContactRule());
                                 wfAlertConfig.setGenerator(wfStepAlert.getGenerator());
+                                wfAlertConfig.setAlertHeldBy(wfStepAlert.isAlertHeldBy());
+                                wfAlertConfig.setAlertWorkflowRoles(wfStepAlert.isAlertWorkflowRoles());
                                 wfAlertConfig.setFireOnPrevStepName(wfStepAlert.getFireOnPrevStepName());
                                 wfAlertConfig.setFireOnCondition(wfStepAlert.getFireOnConditionName());
                                 wfAlertConfigList.add(wfAlertConfig);
