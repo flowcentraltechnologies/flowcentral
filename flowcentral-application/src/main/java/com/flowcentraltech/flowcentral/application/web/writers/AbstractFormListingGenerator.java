@@ -23,6 +23,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
@@ -155,6 +159,22 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
+    public Report generateExcelReport(ValueStore formBeanValueStore, FormListingOptions listingOptions)
+            throws UnifyException {
+        Workbook workbook = new HSSFWorkbook();
+        ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
+        Set<ListingColorType> pausePrintColors = getPausePrintColors();
+        for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
+            Sheet sheet = workbook.createSheet(listingReportProperties.getName());
+            doGenerate(formBeanValueStore, listingReportProperties, new ExcelListingGeneratorWriter(entityImageProvider,
+                    listingReportProperties.getName(), sheet, pausePrintColors, false));
+        }
+        
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
     public final void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
         generateHtmlListing("", formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
@@ -278,8 +298,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     private void generateHtmlListing(final String listingType, ValueStore formBeanValueStore,
             ListingProperties listingProperties, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) throws UnifyException {
-        doGenerate(formBeanValueStore, listingProperties,
-                new HtmlListingGeneratorWriter(entityImageProvider, listingType, writer, pausePrintColors, highlighting));
+        doGenerate(formBeanValueStore, listingProperties, new HtmlListingGeneratorWriter(entityImageProvider,
+                listingType, writer, pausePrintColors, highlighting));
     }
 
     private String getDefaultListingStyle() throws UnifyException {

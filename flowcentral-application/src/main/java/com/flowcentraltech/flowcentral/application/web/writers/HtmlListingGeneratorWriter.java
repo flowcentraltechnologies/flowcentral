@@ -32,7 +32,7 @@ import com.tcdng.unify.web.ui.widget.ResponseWriter;
  */
 public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
 
-    private ResponseWriter writer;
+    private final ResponseWriter writer;
 
     public HtmlListingGeneratorWriter(ImageProvider entityImageProvider, String listingType, ResponseWriter writer,
             Set<ListingColorType> pausePrintColors, boolean highlighting) {

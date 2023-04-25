@@ -42,4 +42,17 @@ public interface FormListingReportGenerator extends UnifyComponent {
      *                        if an error occurs
      */
     Report generateHtmlReport(ValueStore formBeanValueStore, FormListingOptions listingOptions) throws UnifyException;
+
+    /**
+     * Generates form Excel report.
+     * 
+     * @param formBeanValueStore
+     *                           the form bean value store
+     * @param listingOptions
+     *                           form listing options
+     * @return report
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateExcelReport(ValueStore formBeanValueStore, FormListingOptions listingOptions) throws UnifyException;
 }
