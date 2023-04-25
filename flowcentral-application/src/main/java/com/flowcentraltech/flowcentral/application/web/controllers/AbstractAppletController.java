@@ -131,7 +131,7 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
     protected String viewListingReport(DetailsFormListing listing) throws UnifyException {
         DetailsFormListingGenerator generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
         final ValueStore instValueStore = new BeanValueStore(listing);
-        Report report = generator.generateReport(instValueStore, new FormListingOptions());
+        Report report = generator.generateHtmlReport(instValueStore, new FormListingOptions());
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, report);
         return FlowCentralResultMappingConstants.VIEW_LISTING_REPORT;
     }
