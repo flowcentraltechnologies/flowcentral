@@ -52,4 +52,8 @@ public enum ListingCellType {
     public boolean isScopeImage() {
         return SCOPE_IMAGE.equals(this);
     }
+    
+    public boolean isBold() {
+        return BOLD_LABEL.equals(this) || BOLD_TEXT.equals(this);
+    }
 }

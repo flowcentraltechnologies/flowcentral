@@ -24,8 +24,8 @@ import com.tcdng.unify.core.report.ReportFormat;
 import com.tcdng.unify.web.ui.AbstractOpenWindowPageControllerResponse;
 
 /**
- * Used for preparing the generation of a listing report and the presentation of the
- * report in a window.
+ * Used for preparing the generation of a listing report and the presentation of
+ * the report in a window.
  * <p>
  * Expects the report options be stored in the request scope using the key
  * {@link FlowCentralRequestAttributeConstants#REPORT}.
@@ -39,9 +39,17 @@ public class CommonListingReportResponse extends AbstractOpenWindowPageControlle
     @Override
     protected WindowResourceInfo prepareWindowResource() throws UnifyException {
         Report report = (Report) getRequestAttribute(FlowCentralRequestAttributeConstants.REPORT);
+        if (report.isWorkbookXLS()) {
+            String resourceName = getTimestampedResourceName(report.getTitle()) + ReportFormat.XLS.fileExt();
+            logDebug("Preparing window resource for listing report [{0}]...", resourceName);
+            return new WindowResourceInfo(report, "/common/resource/listingreport", resourceName,
+                    ReportFormat.XLS.mimeType().template(), true);
+        }
+
         String resourceName = getTimestampedResourceName(report.getTitle()) + ReportFormat.PDF.fileExt();
         logDebug("Preparing window resource for listing report [{0}]...", resourceName);
         return new WindowResourceInfo(report, "/common/resource/listingreport", resourceName,
-                ReportFormat.PDF.mimeType().template(), false);
+                ReportFormat.PDF.mimeType().template(),
+                false);
     }
 }

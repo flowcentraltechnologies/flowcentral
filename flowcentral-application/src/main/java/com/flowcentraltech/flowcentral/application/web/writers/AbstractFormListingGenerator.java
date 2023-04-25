@@ -163,15 +163,17 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             throws UnifyException {
         Workbook workbook = new HSSFWorkbook();
         ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
-        Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
+        Report.Builder rb = Report.newBuilder(ReportLayoutType.WORKBOOK_XLS, properties.getReportPageProperties())
                 .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
-            doGenerate(formBeanValueStore, listingReportProperties, new ExcelListingGeneratorWriter(entityImageProvider,
-                    listingReportProperties.getName(), sheet, pausePrintColors, false));
+            ListingGeneratorWriter generator = new ExcelListingGeneratorWriter(entityImageProvider,
+                    listingReportProperties.getName(), sheet, pausePrintColors, false);
+            doGenerate(formBeanValueStore, listingReportProperties, generator);
+            generator.close();
         }
-        
+
         rb.customObject(workbook);
         return rb.build();
     }
@@ -300,8 +302,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     private void generateHtmlListing(final String listingType, ValueStore formBeanValueStore,
             ListingProperties listingProperties, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) throws UnifyException {
-        doGenerate(formBeanValueStore, listingProperties, new HtmlListingGeneratorWriter(entityImageProvider,
-                listingType, writer, pausePrintColors, highlighting));
+        ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(entityImageProvider, listingType, writer,
+                pausePrintColors, highlighting);
+        doGenerate(formBeanValueStore, listingProperties, generator);
+        generator.close();
     }
 
     private String getDefaultListingStyle() throws UnifyException {

@@ -180,6 +180,10 @@ public class ListingCell {
     public Object getRawContent() {
         return rawContent;
     }
+    
+    public boolean isBold() {
+        return type.isBold();
+    }
 
     public boolean isDate() {
         return rawContent instanceof Date;
