@@ -52,6 +52,8 @@ public class ListingCell {
 
     private String contentStyle;
 
+    private String formatPattern;
+
     private Format format;
 
     private int borders;
@@ -168,7 +170,12 @@ public class ListingCell {
         return format;
     }
 
-    public void setFormat(Format format) {
+    public String getFormatPattern() {
+        return formatPattern;
+    }
+
+    public void setFormat(String formatPattern, Format format) {
+        this.formatPattern = formatPattern;
         this.format = format;
     }
 
@@ -181,6 +188,10 @@ public class ListingCell {
         return rawContent;
     }
 
+    public boolean isBold() {
+        return type.isBold();
+    }
+
     public boolean isDate() {
         return rawContent instanceof Date;
     }
@@ -188,15 +199,15 @@ public class ListingCell {
     public boolean isNumber() {
         return rawContent instanceof Number;
     }
-    
+
     public Date getDateContent() {
         return (Date) rawContent;
     }
-    
+
     public Number getNumberContent() {
         return (Number) rawContent;
     }
-    
+
     public int getBorders() {
         return borders;
     }

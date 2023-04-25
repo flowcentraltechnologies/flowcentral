@@ -41,6 +41,11 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
     }
 
     @Override
+    public void close() {
+        
+    }
+
+    @Override
     protected void doBeginSection(ListingSectionHeader header, int[] sectionColumnWidth, int widthPercent,
             HAlignType horizontalAlign, boolean alternatingColumn, int borders) throws UnifyException {
         // Begin section
