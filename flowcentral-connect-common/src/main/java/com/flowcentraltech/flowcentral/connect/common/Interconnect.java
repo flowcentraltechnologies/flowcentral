@@ -496,7 +496,7 @@ public class Interconnect {
 
         return null;
     }
-    
+
     public UpdateDef getUpdates(DataSourceRequest req) throws Exception {
         UpdateDef.Builder fdb = UpdateDef.newBuilder();
         if (req.getUpdate() != null) {
@@ -508,17 +508,18 @@ public class Interconnect {
                     String[] p = line.split("]");
                     if (p.length == 2) {
                         final String fieldName = p[0];
-                        final Object val = ConverterUtils.convert(entityInfo.getEntityFieldInfo(fieldName).getJavaClass(), p[1]);
+                        final Object val = ConverterUtils
+                                .convert(entityInfo.getEntityFieldInfo(fieldName).getJavaClass(), p[1]);
                         fdb.update(fieldName, val);
                     }
-                 }
+                }
             } finally {
                 if (reader != null) {
                     reader.close();
                 }
             }
         }
-        
+
         return fdb.build();
     }
 
@@ -616,6 +617,41 @@ public class Interconnect {
         }
     }
 
+    public void copyChild(List<EntityFieldInfo> fieldInfoList, final String parentEntity, final Object destBean,
+            final Object srcBean) throws Exception {
+        checkInitialized();
+        for (EntityFieldInfo entityFieldInfo : fieldInfoList) {
+            Object childBean = PropertyUtils.getProperty(srcBean, entityFieldInfo.getName());
+            setParentBean(destBean, childBean, parentEntity, entityFieldInfo);
+            PropertyUtils.setProperty(destBean, entityFieldInfo.getName(), childBean);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void copyChildList(List<EntityFieldInfo> fieldInfoList, final String parentEntity, final Object destBean,
+            final Object srcBean) throws Exception {
+        checkInitialized();
+        for (EntityFieldInfo entityFieldInfo : fieldInfoList) {
+            Object srcChildListBean = PropertyUtils.getProperty(srcBean, entityFieldInfo.getName());
+            Object destChildListBean = PropertyUtils.getProperty(destBean, entityFieldInfo.getName());
+            List<Object> destList = (List<Object>) destChildListBean;
+            if (destList == null) {
+                destList = new ArrayList<>();
+                PropertyUtils.setProperty(destBean, entityFieldInfo.getName(), destList);
+            } else {
+                destList.clear();
+            }
+            
+            if (srcChildListBean != null) {
+                List<Object> srcList = (List<Object>) srcChildListBean;
+                for (Object childBean: srcList) {
+                    setParentBean(destBean, childBean, parentEntity, entityFieldInfo);
+                    destList.add(childBean);
+                }
+            }
+        }
+    }
+
     private void checkInitialized() throws Exception {
         if (!initialized) {
             throw new RuntimeException("FlowCentral interconnect not initialized.");
@@ -677,7 +713,7 @@ public class Interconnect {
                 if (chbean != null) {
                     setParentBean(bean, chbean, entity, entityFieldInfo);
                 }
-                
+
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), chbean);
             }
         }
@@ -688,7 +724,7 @@ public class Interconnect {
             Object val = map.get(childListFieldName);
             if (val != null) {
                 Object[] chs = ConverterUtils.convert(Object[].class, val);
-                List<Object> list =  new ArrayList<>();
+                List<Object> list = new ArrayList<>();
                 for (int i = 0; i < chs.length; i++) {
                     Object ch = chs[i];
                     Object chbean = null;
@@ -702,7 +738,7 @@ public class Interconnect {
                     if (chbean != null) {
                         setParentBean(bean, chbean, entity, entityFieldInfo);
                         list.add(chbean);
-                    }                    
+                    }
                 }
 
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), list);
@@ -714,14 +750,16 @@ public class Interconnect {
 
     private void setParentBean(Object parentBean, Object bean, String parentEntity, EntityFieldInfo entityFieldInfo)
             throws Exception {
-        EntityInfo entityInfo = getEntityInfo(entityFieldInfo.getReferences());
-        EntityFieldInfo _refEntityFieldInfo = entityInfo.findRefToParent(parentEntity);
-        if (_refEntityFieldInfo != null) {
-            PropertyUtils.setProperty(bean, "id", null);
-            PropertyUtils.setProperty(bean, _refEntityFieldInfo.getName(), parentBean);
+        if (bean != null) {
+            EntityInfo entityInfo = getEntityInfo(entityFieldInfo.getReferences());
+            EntityFieldInfo _refEntityFieldInfo = entityInfo.findRefToParent(parentEntity);
+            if (_refEntityFieldInfo != null) {
+                PropertyUtils.setProperty(bean, "id", null);
+                PropertyUtils.setProperty(bean, _refEntityFieldInfo.getName(), parentBean);
+            }
         }
     }
-    
+
     private String[] toJsonResultStringValues(Object[] result, DataSourceOperation operation, String entity)
             throws Exception {
         if (result != null) {

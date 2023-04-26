@@ -186,7 +186,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                             entityActionPolicy.executePreAction(reqBean);
                         }
 
-                        //em.merge(reqBean);
+                        // em.merge(reqBean);
                         em.persist(reqBean);
                         em.flush();
                         if (entityActionPolicy != null) {
@@ -267,9 +267,11 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
                             if (!req.getOperation().isLean()) {
                                 // Child
-                                interconnect.copy(entityInfo.getChildFieldList(), saveBean, reqBean);
+                                interconnect.copyChild(entityInfo.getChildFieldList(), req.getEntity(), saveBean,
+                                        reqBean);
                                 // Child list
-                                interconnect.copy(entityInfo.getChildListFieldList(), saveBean, reqBean);
+                                interconnect.copyChildList(entityInfo.getChildListFieldList(), req.getEntity(),
+                                        saveBean, reqBean);
                             }
 
                             if (req.version()) {
