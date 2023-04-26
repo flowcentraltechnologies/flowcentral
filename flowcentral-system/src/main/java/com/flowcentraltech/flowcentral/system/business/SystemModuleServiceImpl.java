@@ -399,6 +399,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 }
             }
+        } else {
+            return Arrays.asList(Entity.PRIMARY_TENANT_ID);
         }
 
         return tenantIds;
