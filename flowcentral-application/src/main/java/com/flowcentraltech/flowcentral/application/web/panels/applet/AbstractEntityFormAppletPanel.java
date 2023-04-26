@@ -232,6 +232,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         boolean parentDisabled = false;
         if (form != null) {
+            form.getCtx().setUpdateEnabled(enableUpdate);
             form.clearDisplayItem();
 
             if (isCollaboration) {

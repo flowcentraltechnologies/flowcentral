@@ -157,22 +157,22 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         String errorCode = null;
         String errorMsg = null;
 
+        EntityManager em = null;
+        EntityTransaction tx = null;
         Object[] result = null;
         SpringBootInterconnectEntityDataSourceHandler handler = null;
-        if (entityInfo.isWithHandler() && (handler = context.getBean(entityInfo.getHandler(),
-                SpringBootInterconnectEntityDataSourceHandler.class)).supports(req)) {
-            result = handler.process(entityInfo.getImplClass(), req);
-        } else {
-            EntityManager em = null;
-            EntityTransaction tx = null;
-            EntityActionPolicy entityActionPolicy = entityInfo.isWithActionPolicy()
-                    ? context.getBean(entityInfo.getActionPolicy(), EntityActionPolicy.class)
-                    : null;
-            try {
-                em = platform.emf.createEntityManager();
-                tx = em.getTransaction();
-                tx.begin();
+        try {
+            em = platform.emf.createEntityManager();
+            tx = em.getTransaction();
+            tx.begin();
 
+            if (entityInfo.isWithHandler() && (handler = context.getBean(entityInfo.getHandler(),
+                    SpringBootInterconnectEntityDataSourceHandler.class)).supports(req)) {
+                result = handler.process(entityInfo.getImplClass(), req);
+            } else {
+                EntityActionPolicy entityActionPolicy = entityInfo.isWithActionPolicy()
+                        ? context.getBean(entityInfo.getActionPolicy(), EntityActionPolicy.class)
+                        : null;
                 switch (req.getOperation()) {
                     case COUNT_ALL: {
                         CriteriaQuery<Long> cq = createLongQuery(entityInfo.getImplClass(), em, req);
@@ -321,21 +321,26 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
                 }
 
+            }
+
+            return interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
+        } catch (Exception e) {
+            logSevere("Datasource request processing failure.", e);
+            errorMsg = e.getMessage();
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            if (tx != null) {
                 tx.commit();
+            }
+
+            if (em != null) {
                 em.close();
-            } catch (Exception e) {
-                logSevere("Datasource request processing failure.", e);
-                errorMsg = e.getMessage();
-                if (tx != null) {
-                    tx.rollback();
-                }
-            } finally {
-                if (em != null) {
-                    em.close();
-                }
             }
         }
 
+        result = null;
         return interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
     }
 

@@ -133,6 +133,8 @@ public class FormContext extends AbstractContext {
 
     private boolean formFocused;
 
+    private boolean updateEnabled;
+    
     private Mode mode;
 
     public FormContext(AppletContext appletContext) throws UnifyException {
@@ -517,6 +519,14 @@ public class FormContext extends AbstractContext {
 
     public boolean isReadOnly() throws UnifyException {
         return readOnly || appletContext.isReadOnly();
+    }
+
+    public boolean isUpdateEnabled() {
+        return updateEnabled;
+    }
+
+    public void setUpdateEnabled(boolean updateEnabled) {
+        this.updateEnabled = updateEnabled;
     }
 
     public List<FormReviewPolicyDef> getReviewPolicies(FormReviewType type) {
