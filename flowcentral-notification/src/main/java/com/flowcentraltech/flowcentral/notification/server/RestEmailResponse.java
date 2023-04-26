@@ -34,5 +34,13 @@ public class RestEmailResponse {
     public String getErrorMsg() {
         return errorMsg;
     }
+
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
+    }
         
 }
