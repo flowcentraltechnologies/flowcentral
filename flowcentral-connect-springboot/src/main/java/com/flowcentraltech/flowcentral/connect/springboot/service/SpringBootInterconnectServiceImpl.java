@@ -186,6 +186,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                             entityActionPolicy.executePreAction(reqBean);
                         }
 
+                        //em.merge(reqBean);
                         em.persist(reqBean);
                         em.flush();
                         if (entityActionPolicy != null) {
@@ -329,6 +330,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
             errorMsg = e.getMessage();
             if (tx != null) {
                 tx.rollback();
+                tx = null;
             }
         } finally {
             if (tx != null) {

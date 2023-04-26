@@ -634,7 +634,7 @@ public class Interconnect {
     @SuppressWarnings("unchecked")
     private Object getBeanFromMap(ObjectMapper objectMapper, Map<String, Object> map, String entity) throws Exception {
         EntityInfo entityInfo = getEntityInfo(entity);
-        Object bean = entityInfo.getImplClass().newInstance();
+        final Object bean = entityInfo.getImplClass().newInstance();
         // References
         if (refType.object()) {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
@@ -664,7 +664,8 @@ public class Interconnect {
 
         // Child
         for (EntityFieldInfo entityFieldInfo : entityInfo.getChildFieldList()) {
-            Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
+            final String childFieldName = entityInfo.getFieldNameFromLocal(entityFieldInfo.getName());
+            Object val = map.get(childFieldName);
             if (val != null) {
                 Object chbean = null;
                 if (val instanceof String) {
@@ -673,16 +674,21 @@ public class Interconnect {
                     chbean = getBeanFromMap(objectMapper, (Map<String, Object>) val, entityFieldInfo.getReferences());
                 }
 
+                if (chbean != null) {
+                    setParentBean(bean, chbean, entity, entityFieldInfo);
+                }
+                
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), chbean);
             }
         }
 
         // Child list
         for (EntityFieldInfo entityFieldInfo : entityInfo.getChildListFieldList()) {
-            Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
+            final String childListFieldName = entityInfo.getFieldNameFromLocal(entityFieldInfo.getName());
+            Object val = map.get(childListFieldName);
             if (val != null) {
                 Object[] chs = ConverterUtils.convert(Object[].class, val);
-                List<Object> list = new ArrayList<>();
+                List<Object> list =  new ArrayList<>();
                 for (int i = 0; i < chs.length; i++) {
                     Object ch = chs[i];
                     Object chbean = null;
@@ -693,7 +699,10 @@ public class Interconnect {
                                 entityFieldInfo.getReferences());
                     }
 
-                    list.add(chbean);
+                    if (chbean != null) {
+                        setParentBean(bean, chbean, entity, entityFieldInfo);
+                        list.add(chbean);
+                    }                    
                 }
 
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), list);
@@ -703,6 +712,16 @@ public class Interconnect {
         return bean;
     }
 
+    private void setParentBean(Object parentBean, Object bean, String parentEntity, EntityFieldInfo entityFieldInfo)
+            throws Exception {
+        EntityInfo entityInfo = getEntityInfo(entityFieldInfo.getReferences());
+        EntityFieldInfo _refEntityFieldInfo = entityInfo.findRefToParent(parentEntity);
+        if (_refEntityFieldInfo != null) {
+            PropertyUtils.setProperty(bean, "id", null);
+            PropertyUtils.setProperty(bean, _refEntityFieldInfo.getName(), parentBean);
+        }
+    }
+    
     private String[] toJsonResultStringValues(Object[] result, DataSourceOperation operation, String entity)
             throws Exception {
         if (result != null) {
