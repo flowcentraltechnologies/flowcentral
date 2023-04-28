@@ -1402,7 +1402,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     private boolean ensureSaveOnTabAction() throws UnifyException {
         if (!ctx.isStudioComponent() && isSaveHeaderFormOnTabAction()) {
             FormContext ctx = getResolvedForm().getCtx();
-            if (ctx.getFormDef().isInputForm()) {
+            if (ctx.isUpdateEnabled() && ctx.getFormDef().isInputForm()) {
                 au().formContextEvaluator().evaluateFormContext(ctx, EvaluationMode.UPDATE_TABACTION);
             } else {
                 ctx.clearValidationErrors();
@@ -1413,8 +1413,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 return false;
             }
 
-            final AppletDef _currFormAppletDef = getFormAppletDef();
-            au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(), this);
+            if (ctx.isUpdateEnabled()) {
+                final AppletDef _currFormAppletDef = getFormAppletDef();
+                au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(), this);
+            }
         }
 
         return true;
@@ -1513,7 +1515,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     private EntityActionResult updateInst(FormReviewType reviewType) throws UnifyException {
         final AppletDef _currFormAppletDef = getFormAppletDef();
-        EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
+        EntityActionResult entityActionResult = au.updateEntityInstByFormContextWithCopy(_currFormAppletDef, form.getCtx(),
                 this);
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 

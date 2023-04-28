@@ -119,6 +119,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private Set<String> auditFieldNames;
 
+    private List<String> childrenFieldNames;
+
     private Map<String, String> preferedColumnNames;
 
     private List<ListData> searchInputFields;
@@ -776,6 +778,25 @@ public class EntityDef extends BaseApplicationEntityDef {
         return auditFieldNames;
     }
 
+    public List<String> getChildrenFieldNames() {
+        if (childrenFieldNames == null) {
+            synchronized (EntityDef.class) {
+                if (childrenFieldNames == null) {
+                    childrenFieldNames = new ArrayList<String>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isChild() || entityFieldDef.isChildList()) {
+                            childrenFieldNames.add(entityFieldDef.getFieldName());
+                        }
+                    }
+
+                    childrenFieldNames = Collections.unmodifiableList(childrenFieldNames);
+                }
+            }
+        }
+
+        return childrenFieldNames;
+    }
+    
     public boolean isSingleFieldUniqueConstraint(String fieldName) {
         for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
             if (uniqueConstraintDef.isSingleFieldConstraint(fieldName)) {
