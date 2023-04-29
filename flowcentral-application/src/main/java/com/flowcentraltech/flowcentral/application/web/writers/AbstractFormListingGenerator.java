@@ -168,10 +168,13 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
-            ListingGeneratorWriter generator = new ExcelListingGeneratorWriter(entityImageProvider,
+            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(entityImageProvider,
                     listingReportProperties.getName(), sheet, pausePrintColors, false);
-            doGenerate(formBeanValueStore, listingReportProperties, generator);
-            generator.close();
+            generateReportHeader(formBeanValueStore, listingReportProperties, writer);
+            doGenerate(formBeanValueStore, listingReportProperties, writer);
+            generateReportAddendum(formBeanValueStore, listingReportProperties, writer);
+            generateReportFooter(formBeanValueStore, listingReportProperties, writer);
+            writer.close();
         }
 
         rb.customObject(workbook);
