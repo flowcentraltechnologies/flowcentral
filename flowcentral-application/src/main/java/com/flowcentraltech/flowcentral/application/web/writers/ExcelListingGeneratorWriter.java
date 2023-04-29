@@ -25,17 +25,22 @@ import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.resource.ImageProvider;
+import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.ImageUtils;
 
 /**
  * Excel Listing generator writer.
@@ -45,7 +50,10 @@ import com.tcdng.unify.core.resource.ImageProvider;
  */
 public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter {
 
-    final private Sheet sheet;
+    private final Sheet sheet;
+
+    @SuppressWarnings("rawtypes")
+    private Drawing drawing;
 
     @SuppressWarnings("serial")
     private static final Map<HAlignType, HorizontalAlignment> alignment = Collections
@@ -121,12 +129,14 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         }
 
         writeColumn = nextTableStartColumn;
+        CreationHelper ch = sheet.getWorkbook().getCreationHelper();
         for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             ListingColumn _column = columns[cellIndex];
             ListingCell _cell = cells[cellIndex];
-            // TODO Merge columns based on column width
+            Cell cell = row.createCell(writeColumn);
+            ClientAnchor imgAnchor = null;
+            int imgIndex = -1;
             if (_cell.isWithContent()) {
-                Cell cell = row.createCell(writeColumn);
                 if (_cell.isDate()) {
                     cell.setCellValue(_cell.getDateContent());
                 } else if (_cell.isNumber()) {
@@ -134,22 +144,75 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
                 } else {
                     cell.setCellValue(_cell.getContent());
                 }
-
-                CellStyle style = getCellStyle(_column, _cell);
-                cell.setCellStyle(style);
-
-                final int mergeColumns = _column.getMergeColumns();
-                if (mergeColumns > 1) {
-                    mergeList.add(new Merge(writeRow, writeRow, writeColumn, writeColumn + mergeColumns - 1));
+            } else if (_cell.isFileImage() || _cell.isEntityProviderImage()) {
+                final byte[] image = _cell.isFileImage() ? IOUtils.readFileResourceInputStream(_cell.getContent())
+                        : entityImageProvider.provideAsByteArray(_cell.getContent());
+                int imgTypeIndex = detectWorkbookImageType(image);
+                if (imgTypeIndex >= 0) {
+                    imgIndex = sheet.getWorkbook().addPicture(image, imgTypeIndex);
+                    imgAnchor = ch.createClientAnchor();
+                    imgAnchor.setCol1(writeColumn);
+                    imgAnchor.setCol2(writeColumn);
+                    imgAnchor.setRow1(writeRow);
+                    imgAnchor.setRow2(writeRow);
                 }
-
-                writeColumn += mergeColumns;
             } else {
-                writeColumn++;
+                cell.setCellValue("");
             }
+
+            CellStyle style = getCellStyle(_column, _cell);
+            cell.setCellStyle(style);
+
+            final int mergeColumns = _column.getMergeColumns();
+            if (mergeColumns > 1) {
+                mergeList.add(new Merge(writeRow, writeRow, writeColumn, writeColumn + mergeColumns - 1));
+                if (imgAnchor != null) {
+                    imgAnchor.setCol2(writeColumn + mergeColumns - 1);
+                }
+            }
+
+            if (imgIndex >= 0 && imgAnchor != null) {
+                getDrawing().createPicture(imgAnchor, imgIndex);
+            }
+
+            writeColumn += mergeColumns;
         }
 
         writeRow++;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private Drawing getDrawing() {
+        if (drawing == null) {
+            synchronized (this) {
+                if (drawing == null) {
+                    drawing = sheet.createDrawingPatriarch();
+                }
+            }
+        }
+
+        return drawing;
+    }
+
+    private int detectWorkbookImageType(byte[] image) {
+        ImageUtils.ImageType type = ImageUtils.detectImageType(image);
+        if (type != null) {
+            switch (type) {
+                case BMP:
+                    return Workbook.PICTURE_TYPE_DIB;
+                case GIF:
+                    break;
+                case JPEG:
+                    return Workbook.PICTURE_TYPE_JPEG;
+                case PNG:
+                    return Workbook.PICTURE_TYPE_PNG;
+                default:
+                    break;
+
+            }
+        }
+
+        return -1;
     }
 
     @Override
@@ -161,14 +224,14 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         if (nextTableStartColumn < writeColumn) {
             nextTableStartColumn = writeColumn;
         }
+
+        if (nextSectionStartRow < writeRow) {
+            nextSectionStartRow = writeRow;
+        }
     }
 
     @Override
     protected void doEndSection() throws UnifyException {
-        if (nextSectionStartRow < writeRow) {
-            nextSectionStartRow = writeRow;
-        }
-
         if (maxSheetColumns < nextTableStartColumn) {
             maxSheetColumns = nextTableStartColumn;
         }
