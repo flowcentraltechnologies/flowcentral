@@ -30,6 +30,7 @@ import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -53,9 +54,6 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private final Sheet sheet;
 
-    @SuppressWarnings("rawtypes")
-    private Drawing drawing;
-
     @SuppressWarnings("serial")
     private static final Map<HAlignType, HorizontalAlignment> alignment = Collections
             .unmodifiableMap(new HashMap<HAlignType, HorizontalAlignment>()
@@ -70,6 +68,8 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private Map<String, CellStyle> cellStyles;
 
+    private List<Pic> pictures;
+    
     private int writeRow;
 
     private int writeColumn;
@@ -90,11 +90,13 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         this.sheet = sheet;
         this.cellStyles = new HashMap<String, CellStyle>();
         this.mergeList = new ArrayList<Merge>();
+        this.pictures = new ArrayList<Pic>();
     }
 
     @Override
     public void close() {
         autoSizeColumns();
+        drawPictures();
         mergeRegions();
     }
 
@@ -174,47 +176,13 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
             }
 
             if (imgIndex >= 0 && imgAnchor != null) {
-                getDrawing().createPicture(imgAnchor, imgIndex);
+                pictures.add(new Pic(imgAnchor, imgIndex, mergeColumns, 1));
             }
 
             writeColumn += mergeColumns;
         }
 
         writeRow++;
-    }
-
-    @SuppressWarnings("rawtypes")
-    private Drawing getDrawing() {
-        if (drawing == null) {
-            synchronized (this) {
-                if (drawing == null) {
-                    drawing = sheet.createDrawingPatriarch();
-                }
-            }
-        }
-
-        return drawing;
-    }
-
-    private int detectWorkbookImageType(byte[] image) {
-        ImageUtils.ImageType type = ImageUtils.detectImageType(image);
-        if (type != null) {
-            switch (type) {
-                case BMP:
-                    return Workbook.PICTURE_TYPE_DIB;
-                case GIF:
-                    break;
-                case JPEG:
-                    return Workbook.PICTURE_TYPE_JPEG;
-                case PNG:
-                    return Workbook.PICTURE_TYPE_PNG;
-                default:
-                    break;
-
-            }
-        }
-
-        return -1;
     }
 
     @Override
@@ -239,6 +207,39 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         }
     }
 
+    private class Pic {
+        private final ClientAnchor imgAnchor;
+        
+        private final int imgIndex;
+        
+        private final int columns;
+        
+        private final int rows;
+        
+        public Pic(ClientAnchor imgAnchor, int imgIndex, int columns, int rows) {
+            this.imgAnchor = imgAnchor;
+            this.imgIndex = imgIndex;
+            this.columns = columns;
+            this.rows = rows;
+        }
+        
+        public ClientAnchor getImgAnchor() {
+            return imgAnchor;
+        }
+        
+        public int getImgIndex() {
+            return imgIndex;
+        }
+
+        public int getColumns() {
+            return columns;
+        }
+
+        public int getRows() {
+            return rows;
+        }
+    }
+    
     private class Merge {
         final int row1;
         final int row2;
@@ -269,6 +270,36 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         }
     }
 
+    private int detectWorkbookImageType(byte[] image) {
+        ImageUtils.ImageType type = ImageUtils.detectImageType(image);
+        if (type != null) {
+            switch (type) {
+                case BMP:
+                    return Workbook.PICTURE_TYPE_DIB;
+                case GIF:
+                    break;
+                case JPEG:
+                    return Workbook.PICTURE_TYPE_JPEG;
+                case PNG:
+                    return Workbook.PICTURE_TYPE_PNG;
+                default:
+                    break;
+
+            }
+        }
+
+        return -1;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private void drawPictures() {
+        Drawing drawing = sheet.createDrawingPatriarch();
+        for (Pic pic: pictures) {
+            Picture _pic = drawing.createPicture(pic.getImgAnchor(), pic.getImgIndex());
+            _pic.resize(pic.getColumns(), pic.getRows());
+        }
+    }
+    
     private void mergeRegions() {
         for (Merge merge : mergeList) {
             sheet.addMergedRegion(
