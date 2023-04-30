@@ -41,6 +41,7 @@ import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.resource.ImageProvider;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.ImageUtils;
+import com.tcdng.unify.web.ThemeManager;
 
 /**
  * Excel Listing generator writer.
@@ -83,9 +84,9 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private List<Merge> mergeList;
 
-    public ExcelListingGeneratorWriter(ImageProvider entityImageProvider, String listingType, Sheet sheet,
-            Set<ListingColorType> pausePrintColors, boolean highlighting) {
-        super(entityImageProvider, listingType, pausePrintColors, highlighting);
+    public ExcelListingGeneratorWriter(ThemeManager themeManager, ImageProvider entityImageProvider, String listingType,
+            Sheet sheet, Set<ListingColorType> pausePrintColors, boolean highlighting) {
+        super(themeManager, entityImageProvider, listingType, pausePrintColors, highlighting);
         this.sheet = sheet;
         this.cellStyles = new HashMap<String, CellStyle>();
         this.mergeList = new ArrayList<Merge>();
@@ -141,20 +142,21 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
                     cell.setCellValue(_cell.getDateContent());
                 } else if (_cell.isNumber()) {
                     cell.setCellValue(_cell.getNumberContent().doubleValue());
+                } else if (_cell.isFileImage() || _cell.isEntityProviderImage()) {
+                    final byte[] image = _cell.isFileImage()
+                            ? IOUtils.readFileResourceInputStream(themeManager.expandThemeTag(_cell.getContent()))
+                            : entityImageProvider.provideAsByteArray(_cell.getContent());
+                    int imgTypeIndex = detectWorkbookImageType(image);
+                    if (imgTypeIndex >= 0) {
+                        imgIndex = sheet.getWorkbook().addPicture(image, imgTypeIndex);
+                        imgAnchor = ch.createClientAnchor();
+                        imgAnchor.setCol1(writeColumn);
+                        imgAnchor.setCol2(writeColumn);
+                        imgAnchor.setRow1(writeRow);
+                        imgAnchor.setRow2(writeRow);
+                    }
                 } else {
                     cell.setCellValue(_cell.getContent());
-                }
-            } else if (_cell.isFileImage() || _cell.isEntityProviderImage()) {
-                final byte[] image = _cell.isFileImage() ? IOUtils.readFileResourceInputStream(_cell.getContent())
-                        : entityImageProvider.provideAsByteArray(_cell.getContent());
-                int imgTypeIndex = detectWorkbookImageType(image);
-                if (imgTypeIndex >= 0) {
-                    imgIndex = sheet.getWorkbook().addPicture(image, imgTypeIndex);
-                    imgAnchor = ch.createClientAnchor();
-                    imgAnchor.setCol1(writeColumn);
-                    imgAnchor.setCol2(writeColumn);
-                    imgAnchor.setRow1(writeRow);
-                    imgAnchor.setRow2(writeRow);
                 }
             } else {
                 cell.setCellValue("");
