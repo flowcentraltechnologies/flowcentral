@@ -28,6 +28,7 @@ import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.resource.ImageProvider;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ThemeManager;
 
 /**
  * Convenient abstract base class for listing generator writer.
@@ -42,6 +43,8 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
     private final String listingType;
 
     protected final ImageProvider entityImageProvider;
+
+    protected final ThemeManager themeManager;
 
     protected final boolean highlighting;
 
@@ -63,8 +66,9 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
 
     private Set<ListingColorType> pauseRowPrintColors;
 
-    public AbstractListingGeneratorWriter(ImageProvider entityImageProvider, String listingType,
-            Set<ListingColorType> pausePrintColors, boolean highlighting) {
+    public AbstractListingGeneratorWriter(ThemeManager themeManager, ImageProvider entityImageProvider,
+            String listingType, Set<ListingColorType> pausePrintColors, boolean highlighting) {
+        this.themeManager = themeManager;
         this.entityImageProvider = entityImageProvider;
         this.listingType = listingType;
         this.highlighting = highlighting;
@@ -290,7 +294,7 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
         }
 
     }
-    
+
     private void internalBeginSection(ListingSectionHeader header, int[] sectionColumnWidth, int widthPercent,
             HAlignType horizontalAlign, boolean alternatingColumn, int borders) throws UnifyException {
         if (sectionColumnWidth == null || sectionColumnWidth.length == 0) {
@@ -317,7 +321,7 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
         if (columns != null) {
             throw new RuntimeException("Table already begun.");
         }
-        
+
         doBeginTable(classicTable, _columns);
         this.classicTable = classicTable;
         this.columns = _columns;

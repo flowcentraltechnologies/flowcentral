@@ -25,17 +25,24 @@ import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.resource.ImageProvider;
+import com.tcdng.unify.core.util.IOUtils;
+import com.tcdng.unify.core.util.ImageUtils;
+import com.tcdng.unify.web.ThemeManager;
 
 /**
  * Excel Listing generator writer.
@@ -45,7 +52,7 @@ import com.tcdng.unify.core.resource.ImageProvider;
  */
 public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter {
 
-    final private Sheet sheet;
+    private final Sheet sheet;
 
     @SuppressWarnings("serial")
     private static final Map<HAlignType, HorizontalAlignment> alignment = Collections
@@ -61,6 +68,8 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private Map<String, CellStyle> cellStyles;
 
+    private List<Pic> pictures;
+    
     private int writeRow;
 
     private int writeColumn;
@@ -75,17 +84,19 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private List<Merge> mergeList;
 
-    public ExcelListingGeneratorWriter(ImageProvider entityImageProvider, String listingType, Sheet sheet,
-            Set<ListingColorType> pausePrintColors, boolean highlighting) {
-        super(entityImageProvider, listingType, pausePrintColors, highlighting);
+    public ExcelListingGeneratorWriter(ThemeManager themeManager, ImageProvider entityImageProvider, String listingType,
+            Sheet sheet, Set<ListingColorType> pausePrintColors, boolean highlighting) {
+        super(themeManager, entityImageProvider, listingType, pausePrintColors, highlighting);
         this.sheet = sheet;
         this.cellStyles = new HashMap<String, CellStyle>();
         this.mergeList = new ArrayList<Merge>();
+        this.pictures = new ArrayList<Pic>();
     }
 
     @Override
     public void close() {
         autoSizeColumns();
+        drawPictures();
         mergeRegions();
     }
 
@@ -121,32 +132,54 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         }
 
         writeColumn = nextTableStartColumn;
+        CreationHelper ch = sheet.getWorkbook().getCreationHelper();
         for (int cellIndex = 0; cellIndex < cells.length; cellIndex++) {
             ListingColumn _column = columns[cellIndex];
             ListingCell _cell = cells[cellIndex];
-            // TODO Merge columns based on column width
+            Cell cell = row.createCell(writeColumn);
+            ClientAnchor imgAnchor = null;
+            int imgIndex = -1;
             if (_cell.isWithContent()) {
-                Cell cell = row.createCell(writeColumn);
                 if (_cell.isDate()) {
                     cell.setCellValue(_cell.getDateContent());
                 } else if (_cell.isNumber()) {
                     cell.setCellValue(_cell.getNumberContent().doubleValue());
+                } else if (_cell.isFileImage() || _cell.isEntityProviderImage()) {
+                    final byte[] image = _cell.isFileImage()
+                            ? IOUtils.readFileResourceInputStream(themeManager.expandThemeTag(_cell.getContent()))
+                            : entityImageProvider.provideAsByteArray(_cell.getContent());
+                    int imgTypeIndex = detectWorkbookImageType(image);
+                    if (imgTypeIndex >= 0) {
+                        imgIndex = sheet.getWorkbook().addPicture(image, imgTypeIndex);
+                        imgAnchor = ch.createClientAnchor();
+                        imgAnchor.setCol1(writeColumn);
+                        imgAnchor.setCol2(writeColumn);
+                        imgAnchor.setRow1(writeRow);
+                        imgAnchor.setRow2(writeRow);
+                    }
                 } else {
                     cell.setCellValue(_cell.getContent());
                 }
-
-                CellStyle style = getCellStyle(_column, _cell);
-                cell.setCellStyle(style);
-
-                final int mergeColumns = _column.getMergeColumns();
-                if (mergeColumns > 1) {
-                    mergeList.add(new Merge(writeRow, writeRow, writeColumn, writeColumn + mergeColumns - 1));
-                }
-
-                writeColumn += mergeColumns;
             } else {
-                writeColumn++;
+                cell.setCellValue("");
             }
+
+            CellStyle style = getCellStyle(_column, _cell);
+            cell.setCellStyle(style);
+
+            final int mergeColumns = _column.getMergeColumns();
+            if (mergeColumns > 1) {
+                mergeList.add(new Merge(writeRow, writeRow, writeColumn, writeColumn + mergeColumns - 1));
+                if (imgAnchor != null) {
+                    imgAnchor.setCol2(writeColumn + mergeColumns - 1);
+                }
+            }
+
+            if (imgIndex >= 0 && imgAnchor != null) {
+                pictures.add(new Pic(imgAnchor, imgIndex, mergeColumns, 1));
+            }
+
+            writeColumn += mergeColumns;
         }
 
         writeRow++;
@@ -161,19 +194,52 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         if (nextTableStartColumn < writeColumn) {
             nextTableStartColumn = writeColumn;
         }
+
+        if (nextSectionStartRow < writeRow) {
+            nextSectionStartRow = writeRow;
+        }
     }
 
     @Override
     protected void doEndSection() throws UnifyException {
-        if (nextSectionStartRow < writeRow) {
-            nextSectionStartRow = writeRow;
-        }
-
         if (maxSheetColumns < nextTableStartColumn) {
             maxSheetColumns = nextTableStartColumn;
         }
     }
 
+    private class Pic {
+        private final ClientAnchor imgAnchor;
+        
+        private final int imgIndex;
+        
+        private final int columns;
+        
+        private final int rows;
+        
+        public Pic(ClientAnchor imgAnchor, int imgIndex, int columns, int rows) {
+            this.imgAnchor = imgAnchor;
+            this.imgIndex = imgIndex;
+            this.columns = columns;
+            this.rows = rows;
+        }
+        
+        public ClientAnchor getImgAnchor() {
+            return imgAnchor;
+        }
+        
+        public int getImgIndex() {
+            return imgIndex;
+        }
+
+        public int getColumns() {
+            return columns;
+        }
+
+        public int getRows() {
+            return rows;
+        }
+    }
+    
     private class Merge {
         final int row1;
         final int row2;
@@ -204,6 +270,36 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
         }
     }
 
+    private int detectWorkbookImageType(byte[] image) {
+        ImageUtils.ImageType type = ImageUtils.detectImageType(image);
+        if (type != null) {
+            switch (type) {
+                case BMP:
+                    return Workbook.PICTURE_TYPE_DIB;
+                case GIF:
+                    break;
+                case JPEG:
+                    return Workbook.PICTURE_TYPE_JPEG;
+                case PNG:
+                    return Workbook.PICTURE_TYPE_PNG;
+                default:
+                    break;
+
+            }
+        }
+
+        return -1;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private void drawPictures() {
+        Drawing drawing = sheet.createDrawingPatriarch();
+        for (Pic pic: pictures) {
+            Picture _pic = drawing.createPicture(pic.getImgAnchor(), pic.getImgIndex());
+            _pic.resize(pic.getColumns(), pic.getRows());
+        }
+    }
+    
     private void mergeRegions() {
         for (Merge merge : mergeList) {
             sheet.addMergedRegion(
