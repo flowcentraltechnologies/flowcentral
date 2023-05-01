@@ -2082,7 +2082,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @SuppressWarnings("unchecked")
     @Override
-    public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
+    public EntityActionResult updateEntityInstByFormContextWithCopy(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
         Entity inst = (Entity) formContext.getInst();
         if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() == null && formAppletDef
@@ -2125,7 +2125,14 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entityActionResult.setWorkflowCopied(true);
             return entityActionResult;
         }
+        
+        return updateEntityInstByFormContext(formAppletDef, formContext, scp);
+    }
 
+    @Override
+    public EntityActionResult updateEntityInstByFormContext(AppletDef formAppletDef, FormContext formContext,
+            SweepingCommitPolicy scp) throws UnifyException {
+        Entity inst = (Entity) formContext.getInst();
         String updatePolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);

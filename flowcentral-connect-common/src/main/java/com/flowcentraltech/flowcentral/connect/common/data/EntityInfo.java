@@ -155,6 +155,17 @@ public class EntityInfo {
         return implClass;
     }
 
+    public EntityFieldInfo findRefToParent(String parentEntity) {
+        // TODO Use map
+        for (EntityFieldInfo entityFieldInfo: refFieldList) {
+            if (entityFieldInfo.getReferences().equals(parentEntity)) {
+                return entityFieldInfo;
+            }
+        }
+        
+        return null;
+    }
+    
     public Map<String, EntityFieldInfo> getFieldsByName() {
         return fieldsByName;
     }

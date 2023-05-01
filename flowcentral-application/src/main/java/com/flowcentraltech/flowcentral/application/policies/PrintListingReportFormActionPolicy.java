@@ -52,7 +52,7 @@ public class PrintListingReportFormActionPolicy extends AbstractApplicationFormA
             final int optionFlags = generator.getOptionFlagsOverride(instValueStore);
             FormListingOptions options = optionFlags == 0 ? ctx.getListingOptions()
                     : new FormListingOptions(ctx.getListingOptions().getFormActionName(), optionFlags);
-            Report report = generator.generateReport(instValueStore, options);
+            Report report = generator.generateHtmlReport(instValueStore, options);
             ctx.setResult(report);
             result = new EntityActionResult(ctx);
             result.setDisplayListingReport(true);

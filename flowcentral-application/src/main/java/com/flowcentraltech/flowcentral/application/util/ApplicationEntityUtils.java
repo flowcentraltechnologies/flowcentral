@@ -475,7 +475,7 @@ public final class ApplicationEntityUtils {
                         null, null, null, "application.checkbox", null, null, configType));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "originalCopyId",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.originalcopyid}"), null, null,
-                        null, null, null, null, null, null, configType));
+                        null, null, null, "application.integer", null, null, configType));
                 break;
             default:
                 break;

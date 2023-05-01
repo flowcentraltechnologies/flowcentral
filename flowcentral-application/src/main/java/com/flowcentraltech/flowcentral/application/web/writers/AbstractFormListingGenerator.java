@@ -23,6 +23,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Set;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
@@ -44,6 +48,7 @@ import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportLayoutType;
 import com.tcdng.unify.core.resource.ImageProvider;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ThemeManager;
 import com.tcdng.unify.web.ui.WebUIApplicationComponents;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
@@ -63,6 +68,9 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     @Configurable
     private AppletUtilities au;
+
+    @Configurable
+    private ThemeManager themeManager;
 
     @Configurable(ApplicationModuleNameConstants.ENTITY_IMAGE_PROVIDER)
     private ImageProvider entityImageProvider;
@@ -112,12 +120,16 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         this.au = au;
     }
 
+    public final void setThemeManager(ThemeManager themeManager) {
+        this.themeManager = themeManager;
+    }
+
     public final void setEntityImageProvider(ImageProvider entityImageProvider) {
         this.entityImageProvider = entityImageProvider;
     }
 
     @Override
-    public final Report generateReport(ValueStore formBeanValueStore, FormListingOptions listingOptions)
+    public final Report generateHtmlReport(ValueStore formBeanValueStore, FormListingOptions listingOptions)
             throws UnifyException {
         ResponseWriter writer = getComponent(ResponseWriter.class,
                 WebUIApplicationComponents.APPLICATION_RESPONSEWRITER);
@@ -131,16 +143,19 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writer.write("<div class=\"fc-formlisting");
             writer.write(additional);
             writer.write("\">");
-            generateReportHeader(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(
-                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+            generateReportHeader(formBeanValueStore, listingReportProperties,
+                    new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
+                            writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateListing(listingReportProperties.getName(), formBeanValueStore, listingReportProperties, writer,
+            generateHtmlListing(listingReportProperties.getName(), formBeanValueStore, listingReportProperties, writer,
                     pausePrintColors, false);
-            generateReportAddendum(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(
-                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+            generateReportAddendum(formBeanValueStore, listingReportProperties,
+                    new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
+                            writer, pausePrintColors, false));
             writer.write("</div>");
-            generateReportFooter(formBeanValueStore, listingReportProperties, new ListingGeneratorWriter(
-                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+            generateReportFooter(formBeanValueStore, listingReportProperties,
+                    new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
+                            writer, pausePrintColors, false));
             writer.write("</div>");
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
@@ -155,9 +170,32 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
+    public Report generateExcelReport(ValueStore formBeanValueStore, FormListingOptions listingOptions)
+            throws UnifyException {
+        Workbook workbook = new HSSFWorkbook();
+        ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
+        Report.Builder rb = Report.newBuilder(ReportLayoutType.WORKBOOK_XLS, properties.getReportPageProperties())
+                .title("listingReport");
+        Set<ListingColorType> pausePrintColors = getPausePrintColors();
+        for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
+            Sheet sheet = workbook.createSheet(listingReportProperties.getName());
+            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(themeManager, entityImageProvider,
+                    listingReportProperties.getName(), sheet, pausePrintColors, false);
+            generateReportHeader(formBeanValueStore, listingReportProperties, writer);
+            doGenerate(formBeanValueStore, listingReportProperties, writer);
+            generateReportAddendum(formBeanValueStore, listingReportProperties, writer);
+            generateReportFooter(formBeanValueStore, listingReportProperties, writer);
+            writer.close();
+        }
+
+        rb.customObject(workbook);
+        return rb.build();
+    }
+
+    @Override
     public final void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        generateListing("", formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
+        generateHtmlListing("", formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
     }
 
     protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;
@@ -275,11 +313,13 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         writer.writeRow(new ListingCell(ListingCellType.ENTITY_PROVIDER_IMAGE, resourceName, style));
     }
 
-    private void generateListing(final String listingType, ValueStore formBeanValueStore,
+    private void generateHtmlListing(final String listingType, ValueStore formBeanValueStore,
             ListingProperties listingProperties, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) throws UnifyException {
-        doGenerate(formBeanValueStore, listingProperties,
-                new ListingGeneratorWriter(entityImageProvider, listingType, writer, pausePrintColors, highlighting));
+        ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(themeManager, entityImageProvider,
+                listingType, writer, pausePrintColors, highlighting);
+        doGenerate(formBeanValueStore, listingProperties, generator);
+        generator.close();
     }
 
     private String getDefaultListingStyle() throws UnifyException {

@@ -151,63 +151,79 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORTOPTIONS, reportOptions);
     }
 
-    protected final String viewListingReport() throws UnifyException {
+    protected final String viewListingHtmlReport() throws UnifyException {
         return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
-                Collections.emptyMap(), Formats.DEFAULT);
+                Collections.emptyMap(), Formats.DEFAULT, false);
     }
 
-    protected final String viewListingReport(String tableName) throws UnifyException {
+    protected final String viewListingHtmlReport(String tableName) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
                 ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(),
-                Formats.DEFAULT);
+                Formats.DEFAULT, false);
     }
 
-    protected final String viewListingReport(String tableName, Formats formats) throws UnifyException {
+    protected final String viewListingHtmlReport(String tableName, Formats formats) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
-                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats);
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats, false);
     }
 
-    protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties)
+    protected final String viewListingHtmlReport(String tableName, String generator, Map<String, Object> properties)
             throws UnifyException {
-        return viewListingReport(au().getTableDef(tableName), generator, properties, Formats.DEFAULT);
+        return viewListingReport(au().getTableDef(tableName), generator, properties, Formats.DEFAULT, false);
     }
 
-    protected final String viewListingReport(String tableName, String generator, Map<String, Object> properties,
+    protected final String viewListingHtmlReport(String tableName, String generator, Map<String, Object> properties,
             Formats formats) throws UnifyException {
-        return viewListingReport(au().getTableDef(tableName), generator, properties, formats);
+        return viewListingReport(au().getTableDef(tableName), generator, properties, formats, false);
     }
 
-    protected final String viewListingReport(String generator, Map<String, Object> properties) throws UnifyException {
-        return viewListingReport(getTableDef(), generator, properties, Formats.DEFAULT);
-    }
-
-    protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties)
+    protected final String viewListingHtmlReport(String generator, Map<String, Object> properties)
             throws UnifyException {
-        return viewListingReport(tableDef, generator, properties, Formats.DEFAULT);
+        return viewListingReport(getTableDef(), generator, properties, Formats.DEFAULT, false);
     }
 
-    protected final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
+    protected final String viewListingHtmlReport(TableDef tableDef, String generator, Map<String, Object> properties)
+            throws UnifyException {
+        return viewListingReport(tableDef, generator, properties, Formats.DEFAULT, false);
+    }
+
+
+    protected final String viewListingExcelReport() throws UnifyException {
+        return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
+                Collections.emptyMap(), Formats.DEFAULT, true);
+    }
+
+    protected final String viewListingExcelReport(String tableName) throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName),
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(),
+                Formats.DEFAULT, true);
+    }
+
+    protected final String viewListingExcelReport(String tableName, Formats formats) throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName),
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats, true);
+    }
+
+    protected final String viewListingExcelReport(String tableName, String generator, Map<String, Object> properties)
+            throws UnifyException {
+        return viewListingReport(au().getTableDef(tableName), generator, properties, Formats.DEFAULT, true);
+    }
+
+    protected final String viewListingExcelReport(String tableName, String generator, Map<String, Object> properties,
             Formats formats) throws UnifyException {
-        final EntityListTable table = getResultTable();
-        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, table.getSourceObject())
-                .useGenerator(generator).useFormats(formats);
-        if (table.isWithPreTableSummaryLines()) {
-            for (TableSummaryLine line : table.getPreTableSummaryLines()) {
-                lb.addPreSummary(new Summary(line.getLabel(), line.values()));
-            }
-        }
-
-        if (table.isWithPostTableSummaryLines()) {
-            for (TableSummaryLine line : table.getPostTableSummaryLines()) {
-                lb.addPostSummary(new Summary(line.getLabel(), line.values()));
-            }
-        }
-
-        lb.addProperties(properties);
-        lb.summaryTitleColumn(table.getTotalLabelColumnIndex());
-        return viewListingReport(lb.build());
+        return viewListingReport(au().getTableDef(tableName), generator, properties, formats, true);
     }
 
+    protected final String viewListingExcelReport(String generator, Map<String, Object> properties)
+            throws UnifyException {
+        return viewListingReport(getTableDef(), generator, properties, Formats.DEFAULT, true);
+    }
+
+    protected final String viewListingExcelReport(TableDef tableDef, String generator, Map<String, Object> properties)
+            throws UnifyException {
+        return viewListingReport(tableDef, generator, properties, Formats.DEFAULT, true);
+    }
+   
     protected String getDetailsAppletName() {
         return detailsAppletName;
     }
@@ -239,6 +255,29 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     protected abstract String onView(int rowIndex, Entity inst) throws UnifyException;
 
     protected abstract String onAction(int rowIndex, Entity inst, String action) throws UnifyException;
+
+    private final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
+            Formats formats, boolean spreadSheet) throws UnifyException {
+        final EntityListTable table = getResultTable();
+        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, table.getSourceObject())
+                .useGenerator(generator).useFormats(formats);
+        if (table.isWithPreTableSummaryLines()) {
+            for (TableSummaryLine line : table.getPreTableSummaryLines()) {
+                lb.addPreSummary(new Summary(line.getLabel(), line.values()));
+            }
+        }
+
+        if (table.isWithPostTableSummaryLines()) {
+            for (TableSummaryLine line : table.getPostTableSummaryLines()) {
+                lb.addPostSummary(new Summary(line.getLabel(), line.values()));
+            }
+        }
+
+        lb.addProperties(properties);
+        lb.summaryTitleColumn(table.getTotalLabelColumnIndex());
+        lb.spreadSheet(spreadSheet);
+        return viewListingReport(lb.build());
+    }
 
     protected final class DetailsEntryTablePolicy implements EntryTablePolicy {
 

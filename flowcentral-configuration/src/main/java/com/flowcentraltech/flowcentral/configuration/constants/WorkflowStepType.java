@@ -111,7 +111,7 @@ public enum WorkflowStepType implements EnumConst {
             "equals",
             WorkflowStepColor.PURPLE,
             true,
-            false,
+            true,
             false,
             8),
     ERROR(

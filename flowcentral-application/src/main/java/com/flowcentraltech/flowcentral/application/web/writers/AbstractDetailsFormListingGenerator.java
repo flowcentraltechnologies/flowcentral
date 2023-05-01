@@ -107,10 +107,10 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         List<ListingColumn> listingColumns = new ArrayList<ListingColumn>();
         List<ListingCell> rowCells = new ArrayList<ListingCell>();
         if (isSerialNo) {
-            headerListingColumns.add(new ListingColumn(HAlignType.CENTER, 56, ListingColumn.WidthType.PIXELS));
+            headerListingColumns.add(new ListingColumn(HAlignType.CENTER, 42, ListingColumn.WidthType.PIXELS));
             headerRowCells.add(new ListingCell(ListingCellType.BOLD_TEXT, "S/N", ListingCell.BORDER_ALL));
 
-            ListingColumn column = new ListingColumn(HAlignType.LEFT, 56, ListingColumn.WidthType.PIXELS);
+            ListingColumn column = new ListingColumn(HAlignType.LEFT, 42, ListingColumn.WidthType.PIXELS);
             listingColumns.add(column);
 
             ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
@@ -139,11 +139,11 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
             ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
             if (dataType.isDecimal()) {
-                cell.setFormat(amountFormat);
+                cell.setFormat(formats.getDecimalFormat(), amountFormat);
             } else if (dataType.isDate()) {
-                cell.setFormat(dateFormat);
+                cell.setFormat(formats.getDateFormat(), dateFormat);
             } else if (dataType.isTimestamp()) {
-                cell.setFormat(timestampFormat);
+                cell.setFormat(formats.getTimestampFormat(), timestampFormat);
             }
             rowCells.add(cell);
 

@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.workflow.business;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -322,7 +321,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepAlert.getDescription(), wfStepAlert.getRecipientPolicy(),
                                     wfStepAlert.getRecipientNameRule(), wfStepAlert.getRecipientContactRule(),
                                     wfStepAlert.getGenerator(), wfStepAlert.getFireOnPrevStepName(),
-                                    wfStepAlert.getFireOnConditionName());
+                                    wfStepAlert.getFireOnConditionName(), wfStepAlert.isAlertHeldBy(),
+                                    wfStepAlert.isAlertWorkflowRoles());
                         }
 
                         for (WfStepRole wfStepRole : wfStep.getRoleList()) {
@@ -1154,7 +1154,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         // Remove original copy from workflow
                         environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(),
                                 originalCopyId, new Update().add("inWorkflow", Boolean.FALSE));
-                        
+
                         // Delete update copy
                         environment().delete(wfEntityInst.getClass(), wfEntityInst.getId());
                         transitionItem.setDeleted();
@@ -1294,7 +1294,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final ValueStoreReader reader = transitionItem.getReader();
         final Date now = getNow();
         if (wfAlertDef.isWithFireAlertOnCondition()) {
-            if (wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
+            if (!wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
                     .getObjectFilter(wfDef.getEntityDef(), reader, now).matchReader(reader)) {
                 return;
             }
@@ -1303,17 +1303,29 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (!StringUtils.isBlank(wfAlertDef.getGenerator())) {
             NotificationAlertSender sender = getComponent(NotificationAlertSender.class, wfAlertDef.getGenerator());
             final Long tenantId = getTenantIdFromTransitionItem(transitionItem);
-            List<Recipient> recipientList = null;
+            List<Recipient> recipientList = new ArrayList<Recipient>();
             if (wfAlertDef.isWithRecipientPolicy()) {
-                recipientList = ((WfRecipientPolicy) getComponent(wfAlertDef.getRecipientPolicy()))
-                        .getRecipients(reader, wfAlertDef.getRecipientNameRule(), wfAlertDef.getRecipientContactRule());
-            } else {
-                if (!StringUtils.isBlank(wfItem.getHeldBy())) {
-                    recipientList = Arrays.asList(notifRecipientProvider.getRecipientByLoginId(tenantId,
-                            sender.getNotifType(), wfItem.getHeldBy()));
-                } else if (wfStepDef.isWithParticipatingRoles()) {
-                    recipientList = notifRecipientProvider.getRecipientsByRole(tenantId, sender.getNotifType(),
-                            wfStepDef.getRoleSet());
+                List<Recipient> policyRecipientList = ((WfRecipientPolicy) getComponent(
+                        wfAlertDef.getRecipientPolicy())).getRecipients(reader, wfAlertDef.getRecipientNameRule(),
+                                wfAlertDef.getRecipientContactRule());
+                if (!DataUtils.isBlank(policyRecipientList)) {
+                    recipientList.addAll(policyRecipientList);
+                }
+            }
+
+            if (wfAlertDef.isAlertHeldBy() && !StringUtils.isBlank(wfItem.getHeldBy())) {
+                Recipient recipient = notifRecipientProvider.getRecipientByLoginId(tenantId, sender.getNotifType(),
+                        wfItem.getHeldBy());
+                if (recipient != null) {
+                    recipientList.add(recipient);
+                }
+            }
+
+            if (wfAlertDef.isAlertWorkflowRoles()) {
+                List<Recipient> roleRecipientList = notifRecipientProvider.getRecipientsByRole(tenantId,
+                        sender.getNotifType(), wfStepDef.getRoleSet());
+                if (!DataUtils.isBlank(roleRecipientList)) {
+                    recipientList.addAll(roleRecipientList);
                 }
             }
 

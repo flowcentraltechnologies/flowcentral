@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.writers;
 
 import java.text.Format;
+import java.util.Date;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.util.StringUtils;
@@ -45,9 +46,13 @@ public class ListingCell {
 
     private ListingColorType cellColor;
 
+    private Object rawContent;
+
     private String content;
 
     private String contentStyle;
+
+    private String formatPattern;
 
     private Format format;
 
@@ -60,51 +65,51 @@ public class ListingCell {
 
     public ListingCell(String content) {
         this.type = ListingCellType.TEXT;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.borders = BORDER_ALL;
     }
 
     public ListingCell(ListingCellType type, String content, int borders) {
         this.type = type;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.borders = borders;
     }
 
     public ListingCell(ListingCellType type, String content, String contentStyle, int borders) {
         this.type = type;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
         this.borders = borders;
     }
 
     public ListingCell(String content, String contentStyle, int borders) {
         this.type = ListingCellType.TEXT;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
         this.borders = borders;
     }
 
     public ListingCell(ListingCellType type, String content) {
         this.type = type;
-        this.content = content;
+        this.rawContent = this.content = content;
     }
 
     public ListingCell(ListingCellType type, String content, String contentStyle) {
         this.type = type;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
     }
 
     public ListingCell(String content, String contentStyle) {
         this.type = ListingCellType.TEXT;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
     }
 
     public ListingCell(ListingCellType type, ListingColorType cellColor, String content, int borders) {
         this.type = type;
         this.cellColor = cellColor;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.borders = borders;
     }
 
@@ -112,7 +117,7 @@ public class ListingCell {
             int borders) {
         this.type = type;
         this.cellColor = cellColor;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
         this.borders = borders;
     }
@@ -120,7 +125,7 @@ public class ListingCell {
     public ListingCell(ListingColorType cellColor, String content, String contentStyle, int borders) {
         this.type = ListingCellType.TEXT;
         this.cellColor = cellColor;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
         this.borders = borders;
     }
@@ -128,20 +133,20 @@ public class ListingCell {
     public ListingCell(ListingCellType type, ListingColorType cellColor, String content) {
         this.type = type;
         this.cellColor = cellColor;
-        this.content = content;
+        this.rawContent = this.content = content;
     }
 
     public ListingCell(ListingCellType type, ListingColorType cellColor, String content, String contentStyle) {
         this.type = type;
         this.cellColor = cellColor;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
     }
 
     public ListingCell(ListingColorType cellColor, String content, String contentStyle) {
         this.type = ListingCellType.TEXT;
         this.cellColor = cellColor;
-        this.content = content;
+        this.rawContent = this.content = content;
         this.contentStyle = contentStyle;
     }
 
@@ -165,12 +170,42 @@ public class ListingCell {
         return format;
     }
 
-    public void setFormat(Format format) {
+    public String getFormatPattern() {
+        return formatPattern;
+    }
+
+    public void setFormat(String formatPattern, Format format) {
+        this.formatPattern = formatPattern;
         this.format = format;
     }
 
     public void setContent(Object content) {
+        this.rawContent = content;
         this.content = content != null ? (format != null ? format.format(content) : String.valueOf(content)) : null;
+    }
+
+    public Object getRawContent() {
+        return rawContent;
+    }
+
+    public boolean isBold() {
+        return type.isBold();
+    }
+
+    public boolean isDate() {
+        return rawContent instanceof Date;
+    }
+
+    public boolean isNumber() {
+        return rawContent instanceof Number;
+    }
+
+    public Date getDateContent() {
+        return (Date) rawContent;
+    }
+
+    public Number getNumberContent() {
+        return (Number) rawContent;
     }
 
     public int getBorders() {

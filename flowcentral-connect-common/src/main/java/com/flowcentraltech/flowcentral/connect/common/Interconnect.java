@@ -496,7 +496,7 @@ public class Interconnect {
 
         return null;
     }
-    
+
     public UpdateDef getUpdates(DataSourceRequest req) throws Exception {
         UpdateDef.Builder fdb = UpdateDef.newBuilder();
         if (req.getUpdate() != null) {
@@ -508,17 +508,18 @@ public class Interconnect {
                     String[] p = line.split("]");
                     if (p.length == 2) {
                         final String fieldName = p[0];
-                        final Object val = ConverterUtils.convert(entityInfo.getEntityFieldInfo(fieldName).getJavaClass(), p[1]);
+                        final Object val = ConverterUtils
+                                .convert(entityInfo.getEntityFieldInfo(fieldName).getJavaClass(), p[1]);
                         fdb.update(fieldName, val);
                     }
-                 }
+                }
             } finally {
                 if (reader != null) {
                     reader.close();
                 }
             }
         }
-        
+
         return fdb.build();
     }
 
@@ -616,6 +617,41 @@ public class Interconnect {
         }
     }
 
+    public void copyChild(List<EntityFieldInfo> fieldInfoList, final String parentEntity, final Object destBean,
+            final Object srcBean) throws Exception {
+        checkInitialized();
+        for (EntityFieldInfo entityFieldInfo : fieldInfoList) {
+            Object childBean = PropertyUtils.getProperty(srcBean, entityFieldInfo.getName());
+            setParentBean(destBean, childBean, parentEntity, entityFieldInfo);
+            PropertyUtils.setProperty(destBean, entityFieldInfo.getName(), childBean);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void copyChildList(List<EntityFieldInfo> fieldInfoList, final String parentEntity, final Object destBean,
+            final Object srcBean) throws Exception {
+        checkInitialized();
+        for (EntityFieldInfo entityFieldInfo : fieldInfoList) {
+            Object srcChildListBean = PropertyUtils.getProperty(srcBean, entityFieldInfo.getName());
+            Object destChildListBean = PropertyUtils.getProperty(destBean, entityFieldInfo.getName());
+            List<Object> destList = (List<Object>) destChildListBean;
+            if (destList == null) {
+                destList = new ArrayList<>();
+                PropertyUtils.setProperty(destBean, entityFieldInfo.getName(), destList);
+            } else {
+                destList.clear();
+            }
+            
+            if (srcChildListBean != null) {
+                List<Object> srcList = (List<Object>) srcChildListBean;
+                for (Object childBean: srcList) {
+                    setParentBean(destBean, childBean, parentEntity, entityFieldInfo);
+                    destList.add(childBean);
+                }
+            }
+        }
+    }
+
     private void checkInitialized() throws Exception {
         if (!initialized) {
             throw new RuntimeException("FlowCentral interconnect not initialized.");
@@ -634,7 +670,7 @@ public class Interconnect {
     @SuppressWarnings("unchecked")
     private Object getBeanFromMap(ObjectMapper objectMapper, Map<String, Object> map, String entity) throws Exception {
         EntityInfo entityInfo = getEntityInfo(entity);
-        Object bean = entityInfo.getImplClass().newInstance();
+        final Object bean = entityInfo.getImplClass().newInstance();
         // References
         if (refType.object()) {
             for (EntityFieldInfo entityFieldInfo : entityInfo.getRefFieldList()) {
@@ -664,7 +700,8 @@ public class Interconnect {
 
         // Child
         for (EntityFieldInfo entityFieldInfo : entityInfo.getChildFieldList()) {
-            Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
+            final String childFieldName = entityInfo.getFieldNameFromLocal(entityFieldInfo.getName());
+            Object val = map.get(childFieldName);
             if (val != null) {
                 Object chbean = null;
                 if (val instanceof String) {
@@ -673,13 +710,18 @@ public class Interconnect {
                     chbean = getBeanFromMap(objectMapper, (Map<String, Object>) val, entityFieldInfo.getReferences());
                 }
 
+                if (chbean != null) {
+                    setParentBean(bean, chbean, entity, entityFieldInfo);
+                }
+
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), chbean);
             }
         }
 
         // Child list
         for (EntityFieldInfo entityFieldInfo : entityInfo.getChildListFieldList()) {
-            Object val = map.get(entityInfo.getFieldNameFromLocal(entityFieldInfo.getName()));
+            final String childListFieldName = entityInfo.getFieldNameFromLocal(entityFieldInfo.getName());
+            Object val = map.get(childListFieldName);
             if (val != null) {
                 Object[] chs = ConverterUtils.convert(Object[].class, val);
                 List<Object> list = new ArrayList<>();
@@ -693,7 +735,10 @@ public class Interconnect {
                                 entityFieldInfo.getReferences());
                     }
 
-                    list.add(chbean);
+                    if (chbean != null) {
+                        setParentBean(bean, chbean, entity, entityFieldInfo);
+                        list.add(chbean);
+                    }
                 }
 
                 PropertyUtils.setProperty(bean, entityFieldInfo.getName(), list);
@@ -701,6 +746,18 @@ public class Interconnect {
         }
 
         return bean;
+    }
+
+    private void setParentBean(Object parentBean, Object bean, String parentEntity, EntityFieldInfo entityFieldInfo)
+            throws Exception {
+        if (bean != null) {
+            EntityInfo entityInfo = getEntityInfo(entityFieldInfo.getReferences());
+            EntityFieldInfo _refEntityFieldInfo = entityInfo.findRefToParent(parentEntity);
+            if (_refEntityFieldInfo != null) {
+                PropertyUtils.setProperty(bean, "id", null);
+                PropertyUtils.setProperty(bean, _refEntityFieldInfo.getName(), parentBean);
+            }
+        }
     }
 
     private String[] toJsonResultStringValues(Object[] result, DataSourceOperation operation, String entity)

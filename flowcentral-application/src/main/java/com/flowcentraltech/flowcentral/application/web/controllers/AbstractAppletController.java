@@ -49,7 +49,7 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         extends AbstractFlowCentralPageController<T> {
 
     private static final String RELAY_SESSION_OBJECT = "applet.RELAY_SESSION_OBJECT";
-    
+
     @Configurable
     private AppletUtilities appletUtilities;
 
@@ -84,15 +84,15 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         setSessionAttribute(backingBeanKey, backingBean);
         return resultMapping;
     }
-    
+
     protected final void setReloadOnSwitch() throws UnifyException {
         appletUtilities.setReloadOnSwitch();
     }
-    
+
     protected final boolean clearReloadOnSwitch() throws UnifyException {
         return appletUtilities.clearReloadOnSwitch();
     }
-    
+
     protected final boolean isReloadOnSwitch() throws UnifyException {
         return appletUtilities.isReloadOnSwitch();
     }
@@ -100,11 +100,11 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
     protected final String refreshContent() throws UnifyException {
         return ApplicationResultMappingConstants.REFRESH_CONTENT;
     }
-    
+
     protected final String openApplet(String appletName) throws UnifyException {
         return openApplet(appletName, null);
     }
-    
+
     protected final String openApplet(String appletName, Object relayObject) throws UnifyException {
         AppletDef appletDef = application().getAppletDef(appletName);
         String path = null;
@@ -115,23 +115,25 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         } else {
             path = appletDef.getOpenPath();
         }
-        
+
         if (relayObject != null) {
             setSessionAttribute(RELAY_SESSION_OBJECT, relayObject);
         }
-        
+
         return openPath(path);
     }
-    
+
     @SuppressWarnings("unchecked")
     protected <U> U getRelayObject(Class<U> type) throws UnifyException {
         return (U) removeSessionAttribute(RELAY_SESSION_OBJECT);
     }
-    
+
     protected String viewListingReport(DetailsFormListing listing) throws UnifyException {
         DetailsFormListingGenerator generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
         final ValueStore instValueStore = new BeanValueStore(listing);
-        Report report = generator.generateReport(instValueStore, new FormListingOptions());
+        Report report = listing.isSpreadSheet()
+                ? generator.generateExcelReport(instValueStore, new FormListingOptions())
+                : generator.generateHtmlReport(instValueStore, new FormListingOptions());
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, report);
         return FlowCentralResultMappingConstants.VIEW_LISTING_REPORT;
     }

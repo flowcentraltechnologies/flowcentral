@@ -89,4 +89,8 @@ public class ListingColumn {
     public boolean isStyleWidth() {
         return isPercentWidth() || isPixelsWidth();
     }
+    
+    public int getMergeColumns() {
+        return WidthType.COLUMNS.equals(widthType) ? width : 1;
+    }
 }

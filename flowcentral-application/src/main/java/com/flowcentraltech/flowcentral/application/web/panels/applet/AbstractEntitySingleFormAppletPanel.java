@@ -122,6 +122,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         }
 
         if (form != null) {
+            form.getCtx().setUpdateEnabled(enableUpdate);
             form.clearDisplayItem();
             if (isUpdateCopy) {
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
