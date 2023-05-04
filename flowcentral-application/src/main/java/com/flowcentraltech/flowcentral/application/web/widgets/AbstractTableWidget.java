@@ -338,7 +338,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             List<Control> controls = new ArrayList<Control>();
             for (FixedRowActionType fixedType : FixedRowActionType.values()) {
                 Control control = (Control) addInternalChildWidget(
-                        "!ui-button alwaysValueIndex:true styleClass:$e{mbtn} caption:" + fixedType.label());
+                        "!ui-button alwaysValueIndex:true styleClass:$e{mbtn} caption:" + fixedType.label()
+                        +  (fixedType.fixed() ? " disabled:true" : ""));
                 control.setGroupId(getPrefixedId(fixedType.prefix()));
                 controls.add(control);
             }
