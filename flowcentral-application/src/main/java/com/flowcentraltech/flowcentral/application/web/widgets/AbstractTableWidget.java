@@ -79,6 +79,14 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
+    public static final int ATTACH_SELECTED_INDEX = 0;
+    
+    public static final int REMOVE_SELECTED_INDEX = 1;
+
+    public static final int ATTACH_ALL_INDEX = 2;
+    
+    public static final int REMOVE_ALL_INDEX = 3;
+    
     private Class<T> tableClass;
 
     private Class<U> itemClass;
@@ -94,6 +102,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
     private Control[] actionCtrl;
 
     private Control[] fixedCtrl;
+
+    private Control[] fixedMultiCtrl;
 
     private Control viewCtrl;
 
@@ -253,6 +263,26 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         applyFixedAction(FixedRowActionType.DELETE);
     }
 
+    @Action
+    public void excludeSelect() throws UnifyException {
+        // TODO
+    }
+
+    @Action
+    public void excludeAll() throws UnifyException {
+        // TODO
+    }
+
+    @Action
+    public void includeSelect() throws UnifyException {
+        // TODO
+    }
+
+    @Action
+    public void includeAll() throws UnifyException {
+        // TODO
+    }
+
     public String resolveChildWidgetName(String transferId) throws UnifyException {
         String childId = DataTransferUtils.stripTransferDataIndexPart(transferId);
         ChildWidgetInfo childWidgetInfo = getChildWidgetInfo(childId);
@@ -337,11 +367,12 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (fixedCtrl == null) {
             List<Control> controls = new ArrayList<Control>();
             for (FixedRowActionType fixedType : FixedRowActionType.values()) {
-                Control control = (Control) addInternalChildWidget(
-                        "!ui-button alwaysValueIndex:true styleClass:$e{mbtn} caption:" + fixedType.label()
-                        +  (fixedType.fixed() ? " disabled:true" : ""));
-                control.setGroupId(getPrefixedId(fixedType.prefix()));
-                controls.add(control);
+                if (!fixedType.editable()) {
+                    Control control = (Control) addInternalChildWidget(
+                            "!ui-button alwaysValueIndex:true styleClass:$e{mbtn} caption:" + fixedType.label());
+                    control.setGroupId(getPrefixedId(fixedType.prefix()));
+                    controls.add(control);
+                }
             }
 
             fixedCtrl = DataUtils.toArray(Control.class, controls);
@@ -349,6 +380,26 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         }
 
         return fixedCtrl;
+    }
+
+    public Control[] getFixedMultiCtrl() throws UnifyException {
+        if (fixedMultiCtrl == null) {
+            List<Control> controls = new ArrayList<Control>();
+            controls.add((Control) addInternalChildWidget(
+                    "!ui-button styleClass:$e{mbtn} caption:$m{table.attach.selected}"));
+
+            controls.add((Control) addInternalChildWidget(
+                    "!ui-button styleClass:$e{mbtn} caption:$m{table.remove.selected}"));
+
+            controls.add((Control) addInternalChildWidget(
+                    "!ui-button styleClass:$e{mbtn} caption:$m{table.attach.all}"));
+
+            controls.add((Control) addInternalChildWidget(
+                    "!ui-button styleClass:$e{mbtn} caption:$m{table.remove.all}"));
+            fixedMultiCtrl = DataUtils.toArray(Control.class, controls);
+        }
+
+        return fixedMultiCtrl;
     }
 
     public Control getViewCtrl() throws UnifyException {
