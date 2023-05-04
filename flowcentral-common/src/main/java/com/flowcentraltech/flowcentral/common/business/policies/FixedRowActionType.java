@@ -46,6 +46,10 @@ public enum FixedRowActionType {
     DELETE(
             3,
             "del_",
+            "$m{table.row.delete}"),
+    DELETE_EDITABLE(
+            3,
+            "dele_",
             "$m{table.row.delete}");
 
     private final int index;
