@@ -23,46 +23,70 @@ package com.flowcentraltech.flowcentral.common.business.policies;
  * @since 1.0
  */
 public enum FixedRowActionType {
-    FIXED(0, "fix_", "$m{table.row.fixed}"),
-    REMOVE(1, "rem_", "$m{table.row.remove}"),
-    ATTACH(2, "add_", "$m{table.row.attach}"),
-    DELETE(3, "del_", "$m{table.row.delete}");
-    
+    FIXED(
+            0,
+            "fix_",
+            "$m{table.row.fixed}"),
+    REMOVE(
+            1,
+            "rem_",
+            "$m{table.row.remove}"),
+    REMOVE_EDITABLE(
+            1,
+            "reme_",
+            "$m{table.row.remove}"),
+    ATTACH(
+            2,
+            "add_",
+            "$m{table.row.attach}"),
+    ATTACH_EDITABLE(
+            2,
+            "adde_",
+            "$m{table.row.attach}"),
+    DELETE(
+            3,
+            "del_",
+            "$m{table.row.delete}");
+
     private final int index;
-    
+
     private final String prefix;
-    
+
     private final String label;
-    
+
     private FixedRowActionType(int index, String prefix, String label) {
         this.index = index;
         this.prefix = prefix;
         this.label = label;
     }
-    
+
     public int index() {
         return index;
     }
-    
+
     public String prefix() {
         return prefix;
     }
-    
+
     public String label() {
         return label;
     }
-    
+
     public boolean fixed() {
         return FIXED.equals(this);
     }
-    
-    public boolean updateLean() {
-        return ATTACH.equals(this) || REMOVE.equals(this);
+
+    public boolean editable() {
+        return REMOVE_EDITABLE.equals(this) || ATTACH_EDITABLE.equals(this);
     }
-    
+
+    public boolean updateLean() {
+        return ATTACH.equals(this) || REMOVE.equals(this) || REMOVE_EDITABLE.equals(this)
+                || ATTACH_EDITABLE.equals(this);
+    }
+
     public boolean delete() {
         return DELETE.equals(this);
     }
-    
-    
+
 }

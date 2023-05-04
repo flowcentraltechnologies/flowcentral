@@ -296,9 +296,10 @@ public class TableWriter extends AbstractControlWriter {
 
                 if (isCrudMode) {
                     FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
-                    Control _crudCtrl = table.isViewOnly() || (fixedType != null && fixedType.fixed())
-                            ? tableWidget.getViewCtrl()
-                            : tableWidget.getEditCtrl();
+                    Control _crudCtrl = table.isViewOnly()
+                            || (fixedType != null && (fixedType.fixed() || !fixedType.editable()))
+                                    ? tableWidget.getViewCtrl()
+                                    : tableWidget.getEditCtrl();
                     _crudCtrl.setValueStore(valueStore);
                     for (EventHandler eventHandler : crudActionHandlers) {
                         writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
@@ -701,9 +702,10 @@ public class TableWriter extends AbstractControlWriter {
 
                     if (isCrudMode) {
                         writer.write("<td>");
-                        Control _crudCtrl = table.isViewOnly() || (fixedType != null && fixedType.fixed())
-                                ? tableWidget.getViewCtrl()
-                                : tableWidget.getEditCtrl();
+                        Control _crudCtrl = table.isViewOnly()
+                                || (fixedType != null && (fixedType.fixed() || !fixedType.editable()))
+                                        ? tableWidget.getViewCtrl()
+                                        : tableWidget.getEditCtrl();
                         _crudCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_crudCtrl);
                         writer.write("</td>");
