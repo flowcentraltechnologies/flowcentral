@@ -152,7 +152,7 @@ public class TableWriter extends AbstractControlWriter {
                 }
 
                 if (isContainerEditable && tableWidget.isActionColumn()) {
-                        writer.write("<col class=\"cactionh\">");
+                    writer.write("<col class=\"cactionh\">");
                 }
 
                 writer.write("</colgroup>");
@@ -215,11 +215,6 @@ public class TableWriter extends AbstractControlWriter {
             WriteWork work = tableWidget.getWriteWork();
             String focusWidgetId = focusManagement ? (String) work.get("focusWidgetId") : null;
             TableStateOverride[] tableStateOverride = (TableStateOverride[]) work.get("overrides");
-
-            Control _crudCtrl = null;
-            if (isCrudMode) {
-                _crudCtrl = table.isViewOnly() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
-            }
 
             List<ValueStore> valueList = tableWidget.getValueList();
             int len = valueList.size();
@@ -300,6 +295,10 @@ public class TableWriter extends AbstractControlWriter {
                 }
 
                 if (isCrudMode) {
+                    FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
+                    Control _crudCtrl = table.isViewOnly() || (fixedType != null && fixedType.fixed())
+                            ? tableWidget.getViewCtrl()
+                            : tableWidget.getEditCtrl();
                     _crudCtrl.setValueStore(valueStore);
                     for (EventHandler eventHandler : crudActionHandlers) {
                         writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
@@ -493,9 +492,9 @@ public class TableWriter extends AbstractControlWriter {
             if (isFixedRows) {
                 writer.write("<th class=\"mfixedh\"></th>");
             }
-            
+
             if (isContainerEditable && tableWidget.isActionColumn()) {
-                    writer.write("<th class=\"mactionh\"></th>");
+                writer.write("<th class=\"mactionh\"></th>");
             }
 
             if (tableWidget.isCrudMode()) {
@@ -559,11 +558,6 @@ public class TableWriter extends AbstractControlWriter {
                 TableStateOverride[] tableStateOverride = entryMode ? new TableStateOverride[len] : null;
                 WriteWork work = tableWidget.getWriteWork();
                 work.set("overrides", tableStateOverride);
-
-                Control _crudCtrl = null;
-                if (isCrudMode) {
-                    _crudCtrl = table.isViewOnly() ? tableWidget.getViewCtrl() : tableWidget.getEditCtrl();
-                }
 
                 final List<Section> sections = table.getSections();
                 final int slen = sections.size();
@@ -688,14 +682,13 @@ public class TableWriter extends AbstractControlWriter {
                         writeRowMultiSelect(writer, tableWidget, id, i);
                     }
 
+                    FixedRowActionType fixedType = null;
                     if (isFixedRows) {
                         writer.write("<td>");
-                        FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
-                        if (!fixedType.fixed()) {
-                            Control _fixedCtrl = fixedCtrl[fixedType.index()];
-                            _fixedCtrl.setValueStore(valueStore);
-                            writer.writeStructureAndContent(_fixedCtrl);
-                        }
+                        fixedType = table.resolveFixedIndex(valueStore, i, len);
+                        Control _fixedCtrl = fixedCtrl[fixedType.index()];
+                        _fixedCtrl.setValueStore(valueStore);
+                        writer.writeStructureAndContent(_fixedCtrl);
                         writer.write("</td>");
                     } else if (isActionColumn) {
                         writer.write("<td>");
@@ -708,6 +701,9 @@ public class TableWriter extends AbstractControlWriter {
 
                     if (isCrudMode) {
                         writer.write("<td>");
+                        Control _crudCtrl = table.isViewOnly() || (fixedType != null && fixedType.fixed())
+                                ? tableWidget.getViewCtrl()
+                                : tableWidget.getEditCtrl();
                         _crudCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_crudCtrl);
                         writer.write("</td>");
