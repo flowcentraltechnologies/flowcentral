@@ -265,22 +265,22 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     @Action
     public void excludeSelect() throws UnifyException {
-        // TODO
+        applyFixedActionSelect(FixedRowActionType.REMOVE);
     }
 
     @Action
     public void excludeAll() throws UnifyException {
-        // TODO
+        applyFixedActionAll(FixedRowActionType.REMOVE);
     }
 
     @Action
     public void includeSelect() throws UnifyException {
-        // TODO
+        applyFixedActionSelect(FixedRowActionType.ATTACH);
     }
 
     @Action
     public void includeAll() throws UnifyException {
-        // TODO
+        applyFixedActionAll(FixedRowActionType.ATTACH);
     }
 
     public String resolveChildWidgetName(String transferId) throws UnifyException {
@@ -386,16 +386,16 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         if (fixedMultiCtrl == null) {
             List<Control> controls = new ArrayList<Control>();
             controls.add((Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{mbtn} caption:$m{table.attach.selected}"));
+                    "!ui-button styleClass:$e{mbtn mbtnr} caption:$m{table.attach.selected}"));
 
             controls.add((Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{mbtn} caption:$m{table.remove.selected}"));
+                    "!ui-button styleClass:$e{mbtn mbtnr} caption:$m{table.remove.selected}"));
 
             controls.add((Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{mbtn} caption:$m{table.attach.all}"));
+                    "!ui-button styleClass:$e{mbtn mbtnr} caption:$m{table.attach.all}"));
 
             controls.add((Control) addInternalChildWidget(
-                    "!ui-button styleClass:$e{mbtn} caption:$m{table.remove.all}"));
+                    "!ui-button styleClass:$e{mbtn mbtnr} caption:$m{table.remove.all}"));
             fixedMultiCtrl = DataUtils.toArray(Control.class, controls);
         }
 
@@ -779,6 +779,25 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         T table = getTable();
         if (table != null) {
             table.applyFixedAction(getValueList().get(target), target, fixedActionType);
+        }
+    }
+
+    private void applyFixedActionSelect(FixedRowActionType fixedActionType) throws UnifyException {
+        T table = getTable();
+        if (table != null) {
+            for (int i : table.getSelectedRows()) {
+                table.applyFixedAction(getValueList().get(i), i, fixedActionType);
+            }
+        }
+    }
+
+    private void applyFixedActionAll(FixedRowActionType fixedActionType) throws UnifyException {
+        T table = getTable();
+        if (table != null) {
+            final int len = getValueList().size();
+            for (int i = 0; i < len; i++) {
+                table.applyFixedAction(getValueList().get(i), i, fixedActionType);
+            }
         }
     }
 

@@ -649,8 +649,6 @@ fux.rigTable = function(rgp) {
     		
     		rgp.pMultiSelDepList.push(rgp.pAthCtrlId);
     		rgp.pMultiSelDepList.push(rgp.pRemCtrlId);
-    		rgp.pMultiSelDepList.push(rgp.pAthAllCtrlId);
-    		rgp.pMultiSelDepList.push(rgp.pRemAllCtrlId);
 		}
     }
     
