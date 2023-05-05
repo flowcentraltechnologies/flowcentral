@@ -296,9 +296,10 @@ public class TableWriter extends AbstractControlWriter {
 
                 if (isCrudMode) {
                     FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
-                    Control _crudCtrl = table.isViewOnly() || (fixedType != null && fixedType.fixed())
-                            ? tableWidget.getViewCtrl()
-                            : tableWidget.getEditCtrl();
+                    Control _crudCtrl = table.isViewOnly()
+                            || (fixedType != null && (fixedType.fixed() || !fixedType.editable()))
+                                    ? tableWidget.getViewCtrl()
+                                    : tableWidget.getEditCtrl();
                     _crudCtrl.setValueStore(valueStore);
                     for (EventHandler eventHandler : crudActionHandlers) {
                         writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
@@ -371,6 +372,14 @@ public class TableWriter extends AbstractControlWriter {
                 writer.writeParam("pfExcCtrlId", fixedCtrl[FixedRowActionType.REMOVE.index()].getGroupId());
                 writer.writeParam("pfIncCtrlId", fixedCtrl[FixedRowActionType.ATTACH.index()].getGroupId());
                 writer.writeParam("pfDelCtrlId", fixedCtrl[FixedRowActionType.DELETE.index()].getGroupId());
+                
+                if (supportSelect && multiSelect) {
+                    Control[] _fixedMultiCtrl = tableWidget.getFixedMultiCtrl();
+                    writer.writeParam("pAthCtrlId", _fixedMultiCtrl[AbstractTableWidget.ATTACH_SELECTED_INDEX].getId());
+                    writer.writeParam("pRemCtrlId", _fixedMultiCtrl[AbstractTableWidget.REMOVE_SELECTED_INDEX].getId());
+                    writer.writeParam("pAthAllCtrlId", _fixedMultiCtrl[AbstractTableWidget.ATTACH_ALL_INDEX].getId());
+                    writer.writeParam("pRemAllCtrlId", _fixedMultiCtrl[AbstractTableWidget.REMOVE_ALL_INDEX].getId());
+                }
             }
 
             boolean sortable = tableDef.isSortable() && table.getNumberOfPages() > 0;
@@ -534,12 +543,13 @@ public class TableWriter extends AbstractControlWriter {
             final boolean totalSummary = table.isTotalSummary();
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
-            final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
+            final boolean isMultiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
 
+            int columnCount = 0;
             List<ValueStore> valueList = tableWidget.getValueList();
             final int len = valueList.size();
             if (len == 0) {
-                writeNoRecordsFoundRow(writer, tableWidget, entryMode, multiSelect, isSerialNo);
+                writeNoRecordsFoundRow(writer, tableWidget, entryMode, isMultiSelect, isSerialNo);
             } else {
                 final Control[] fixedCtrl = isFixedRows ? tableWidget.getFixedCtrl() : null;
                 final Control[] actionCtrl = tableWidget.getActionCtrl();
@@ -626,7 +636,7 @@ public class TableWriter extends AbstractControlWriter {
 
                     writer.write(">");
 
-                    if (supportSelect && multiSelect && !entryMode) {
+                    if (supportSelect && isMultiSelect && !entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
                     }
 
@@ -634,6 +644,7 @@ public class TableWriter extends AbstractControlWriter {
                         writer.write("<td class=\"mseriald\"><span>");
                         writer.write(pageIndex + i);
                         writer.write(".</span></td>");
+                        columnCount++;
                     }
 
                     int index = 0;
@@ -677,8 +688,9 @@ public class TableWriter extends AbstractControlWriter {
                             index++;
                         }
                     }
-
-                    if (supportSelect && multiSelect && entryMode) {
+                    columnCount += index;
+                    
+                    if (supportSelect && isMultiSelect && entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
                     }
 
@@ -690,6 +702,7 @@ public class TableWriter extends AbstractControlWriter {
                         _fixedCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_fixedCtrl);
                         writer.write("</td>");
+                        columnCount++;
                     } else if (isActionColumn) {
                         writer.write("<td>");
                         int _index = table.resolveActionIndex(valueStore, i, len);
@@ -697,16 +710,19 @@ public class TableWriter extends AbstractControlWriter {
                         _actionCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_actionCtrl);
                         writer.write("</td>");
+                        columnCount++;
                     }
 
                     if (isCrudMode) {
                         writer.write("<td>");
-                        Control _crudCtrl = table.isViewOnly() || (fixedType != null && fixedType.fixed())
-                                ? tableWidget.getViewCtrl()
-                                : tableWidget.getEditCtrl();
+                        Control _crudCtrl = table.isViewOnly()
+                                || (fixedType != null && (fixedType.fixed() || !fixedType.editable()))
+                                        ? tableWidget.getViewCtrl()
+                                        : tableWidget.getEditCtrl();
                         _crudCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_crudCtrl);
                         writer.write("</td>");
+                        columnCount++;
                     }
                     writer.write("</tr>");
 
@@ -718,7 +734,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write(">");
 
                             int skip = 0;
-                            if (supportSelect && multiSelect && !entryMode) {
+                            if (supportSelect && isMultiSelect && !entryMode) {
                                 writer.write("<td class=\"mseld\"></td>");
                                 skip++;
                             }
@@ -739,7 +755,7 @@ public class TableWriter extends AbstractControlWriter {
                             writer.writeStructureAndContent(detailsPanel);
                             writer.write("</td>");
 
-                            if (supportSelect && multiSelect && entryMode) {
+                            if (supportSelect && isMultiSelect && entryMode) {
                                 writer.write("<td class=\"mseld\"></td>");
                             }
                             writer.write("</tr>");
@@ -802,8 +818,30 @@ public class TableWriter extends AbstractControlWriter {
                     table.setPostTableSummaryLines();
                 }
 
-                writeSummaryLines(writer, tableWidget, entryMode, multiSelect, isSerialNo,
+                writeSummaryLines(writer, tableWidget, entryMode, isMultiSelect, isSerialNo,
                         table.getPostTableSummaryLines());
+            }
+            
+            if (isFixedRows && supportSelect && isMultiSelect && columnCount > 0) {
+                writer.write("<tr>");
+                if (!entryMode) {
+                    writer.write("<td class=\"mseld\"><span></span></td>");
+                }
+
+                writer.write("<td colspan=\"");
+                writer.write(columnCount);
+                writer.write("\"><div>");
+                Control[] _fixedMultiCtrl = tableWidget.getFixedMultiCtrl();
+                for (int i = 0; i < _fixedMultiCtrl.length; i++) {
+                    writer.writeStructureAndContent(_fixedMultiCtrl[i]);
+                }
+                writer.write("</div></td>");
+                
+                if (entryMode) {
+                    writer.write("<td class=\"mseld\"><span></span></td>");
+                }
+                
+                writer.write("</tr>");
             }
         }
     }

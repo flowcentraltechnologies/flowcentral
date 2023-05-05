@@ -640,6 +640,16 @@ fux.rigTable = function(rgp) {
     	fux.wireGroupClick(rgp, rgp.pfExcCtrlId, "exclude");
     	fux.wireGroupClick(rgp, rgp.pfIncCtrlId, "include");
     	fux.wireGroupClick(rgp, rgp.pfDelCtrlId, "delete");
+    	
+		if (rgp.pMultiSel) {
+    		fux.tableFixedMultiClick(rgp, rgp.pAthCtrlId, "includeSelect")
+    		fux.tableFixedMultiClick(rgp, rgp.pRemCtrlId, "excludeSelect")
+    		fux.tableFixedMultiClick(rgp, rgp.pAthAllCtrlId, "includeAll")
+    		fux.tableFixedMultiClick(rgp, rgp.pRemAllCtrlId, "excludeAll")
+    		
+    		rgp.pMultiSelDepList.push(rgp.pAthCtrlId);
+    		rgp.pMultiSelDepList.push(rgp.pRemCtrlId);
+		}
     }
     
 	if (rgp.pMultiSel) {
@@ -740,6 +750,11 @@ fux.wireGroupClick = function(rgp, groupId, action) {
 	for (var _elem of elems) {
 		ux.addHdl(_elem, "click", ux.post, evp);
 	}
+}
+
+fux.tableFixedMultiClick = function(rgp, id, action) {
+	const evp = fux.newCmdEvPrm(rgp, action);
+	ux.addHdl(_id(id), "click", ux.post, evp);
 }
 
 fux.tableFocusTabMem = function(uEv) {
