@@ -52,7 +52,7 @@ public enum FormReviewType implements EnumConst {
     private final String code;
 
     private final boolean formClosedOrReplaced;
-    
+
     private FormReviewType(String code, boolean formClosedOrReplaced) {
         this.code = code;
         this.formClosedOrReplaced = formClosedOrReplaced;
@@ -71,7 +71,10 @@ public enum FormReviewType implements EnumConst {
     public boolean formClosedOrReplaced() {
         return formClosedOrReplaced;
     }
-    
+    public boolean formClosedOrReplacedAndNotDeleted() {
+        return formClosedOrReplaced && FormReviewType.ON_DELETE.equals(this);
+    }
+
     public static FormReviewType fromCode(String code) {
         return EnumUtils.fromCode(FormReviewType.class, code);
     }
