@@ -5395,7 +5395,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     private DynamicEntityInfo buildDynamicEntityInfo(final EntityDef entityDef,
             Map<String, DynamicEntityInfo> dynamicEntityInfoMap, String basePackage, boolean extension)
             throws UnifyException {
-//        logDebug("Constructing dynamic information for entity [{0}]...", entityDef.getLongName());
         DynamicEntityInfo _dynamicEntityInfo = dynamicEntityInfoMap.get(entityDef.getLongName());
         if (_dynamicEntityInfo == null) {
             DynamicEntityType dynamicEntityType = DynamicEntityType.INFO_ONLY;
@@ -5453,9 +5452,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         }
                     } else {
                         EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());
-//                        logDebug("Constructing dynamic information for entity [{0}] referenced by [{1}]...",
-//                                _refEntityDef.getLongName(),
-//                                entityDef.getLongName() + "." + entityFieldDef.getFieldName());
                         DynamicEntityInfo _refDynamicEntityInfo = entityDef.getLongName()
                                 .equals(_refEntityDef.getLongName()) ? DynamicEntityInfo.SELF_REFERENCE
                                         : buildDynamicEntityInfo(_refEntityDef, dynamicEntityInfoMap, basePackage,
