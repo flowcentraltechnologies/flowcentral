@@ -646,7 +646,6 @@ public abstract class AbstractTable<T, U> {
             throws UnifyException {
         if (entryPolicy != null) {
             entryPolicy.applyFixedAction(parentReader, valueStore, index, fixedActionType);
-            reset();
         }
     }
 
