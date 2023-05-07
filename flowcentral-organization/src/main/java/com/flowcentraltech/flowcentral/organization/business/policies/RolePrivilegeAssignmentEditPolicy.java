@@ -117,9 +117,9 @@ public class RolePrivilegeAssignmentEditPolicy extends AbstractChildListEditPoli
     }
 
     @Override
-    protected void doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
+    protected FixedRowActionType doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
             FixedRowActionType fixedActionType) throws UnifyException {
-        
+        return fixedActionType;
     }
 
     @Override

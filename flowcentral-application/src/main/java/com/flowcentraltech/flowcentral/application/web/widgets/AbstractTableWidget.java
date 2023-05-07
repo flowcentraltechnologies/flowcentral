@@ -778,7 +778,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         int target = getRequestTarget(int.class);
         T table = getTable();
         if (table != null) {
-            table.applyFixedAction(getValueList().get(target), target, fixedActionType);
+            table.applyFixedAction(getValueList().get(target), target, fixedActionType);            
+            table.reset();
         }
     }
 
@@ -788,6 +789,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             for (int i : table.getSelectedRows()) {
                 table.applyFixedAction(getValueList().get(i), i, fixedActionType);
             }
+            
+            table.reset();
         }
     }
 
@@ -798,6 +801,8 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             for (int i = 0; i < len; i++) {
                 table.applyFixedAction(getValueList().get(i), i, fixedActionType);
             }
+            
+            table.reset();
         }
     }
 

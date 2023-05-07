@@ -81,7 +81,7 @@ public enum FixedRowActionType {
     }
 
     public boolean editable() {
-        return REMOVE_EDITABLE.equals(this) || ATTACH_EDITABLE.equals(this);
+        return REMOVE_EDITABLE.equals(this) || ATTACH_EDITABLE.equals(this) || DELETE_EDITABLE.equals(this);
     }
 
     public boolean updateLean() {

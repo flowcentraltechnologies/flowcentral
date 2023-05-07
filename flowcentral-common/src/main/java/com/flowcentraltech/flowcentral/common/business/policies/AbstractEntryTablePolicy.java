@@ -46,11 +46,13 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     public void applyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
             FixedRowActionType fixedActionType) throws UnifyException {
         if (!fixedActionType.fixed()) {
-            doApplyFixedAction(parentReader, valueStore, index, fixedActionType);
-            if (fixedActionType.updateLean()) {
-                environmentService.updateLean((Entity) valueStore.getValueObject()); 
-            } else if (fixedActionType.delete()){
-                environmentService.delete((Entity) valueStore.getValueObject()); 
+            final FixedRowActionType _fixedActionType = doApplyFixedAction(parentReader, valueStore, index,
+                    fixedActionType);
+            FixedRowActionType _actFixedActionType = _fixedActionType != null ? _fixedActionType : fixedActionType;
+            if (_actFixedActionType.updateLean()) {
+                environmentService.updateLean((Entity) valueStore.getValueObject());
+            } else if (_actFixedActionType.delete()) {
+                environmentService.delete((Entity) valueStore.getValueObject());
             }
         }
     }
@@ -62,7 +64,8 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
     }
 
     @Override
-    public List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore) throws UnifyException {
+    public List<TableSummaryLine> getPostTableSummaryLines(ValueStoreReader parentReader, ValueStore tableValueStore)
+            throws UnifyException {
         return Collections.emptyList();
     }
 
@@ -80,6 +83,6 @@ public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent im
         return environmentService;
     }
 
-    protected abstract void doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
-            FixedRowActionType fixedActionType) throws UnifyException;
+    protected abstract FixedRowActionType doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore,
+            int index, FixedRowActionType fixedActionType) throws UnifyException;
 }
