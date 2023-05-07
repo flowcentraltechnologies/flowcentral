@@ -58,7 +58,7 @@ public class StudioAppEntityFieldEditTablePolicy extends AbstractChildListEditPo
     @Override
     public EntryActionType onEntryTableChange(ValueStoreReader parentReader, ValueStore tableValueStore,
             Set<Integer> selected, TableChangeType changeType) throws UnifyException {
-        
+
         return EntryActionType.NONE;
     }
 
@@ -90,7 +90,7 @@ public class StudioAppEntityFieldEditTablePolicy extends AbstractChildListEditPo
             tableStateOverride.setColumnDisabled("reportable", true);
             tableStateOverride.setColumnDisabled("auditable", true);
         } else {
-            EntityFieldDataType dataType =  rowValueStore.retrieve(EntityFieldDataType.class, "dataType");            
+            EntityFieldDataType dataType = rowValueStore.retrieve(EntityFieldDataType.class, "dataType");
             tableStateOverride.setColumnDisabled("minLen", !dataType.isString());
             tableStateOverride.setColumnDisabled("maxLen", !dataType.isString());
             tableStateOverride.setColumnDisabled("precision", !dataType.isNumber());
@@ -146,9 +146,9 @@ public class StudioAppEntityFieldEditTablePolicy extends AbstractChildListEditPo
     }
 
     @Override
-    protected void doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
+    protected FixedRowActionType doApplyFixedAction(ValueStoreReader parentReader, ValueStore valueStore, int index,
             FixedRowActionType fixedActionType) throws UnifyException {
-        
+        return fixedActionType;
     }
 
     @Override
