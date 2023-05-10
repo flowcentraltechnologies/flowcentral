@@ -347,7 +347,7 @@
 			<column field="attempts" renderWidget="application.integer"
 				widthRatio="2" />
 			<column field="createDt" renderWidget="application.datetime"
-				widthRatio="2" />
+				widthRatio="2" order="DESC"/>
 			<column field="nextAttemptDt"
 				renderWidget="application.datetime" widthRatio="2" />
 			<column field="sentDt" renderWidget="application.datetime"
