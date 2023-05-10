@@ -223,6 +223,7 @@ public class WorkflowEditor {
                         case START:
                         case ENRICHMENT:
                         case PROCEDURE:
+                        case NOTIFICATION:
                         case RECORD_ACTION:
                         case SET_VALUES: {
                             DesignWfStepRouting routingChange = routingChangeMap.get("always");
@@ -304,6 +305,7 @@ public class WorkflowEditor {
             case MULTI_ROUTING:
                 editStep.setRoutingList(new ArrayList<WfStepRouting>());
                 break;
+            case NOTIFICATION:
             case SET_VALUES:
                 break;
             case USER_ACTION:
@@ -469,6 +471,9 @@ public class WorkflowEditor {
                                 editTypes.add(StudioWorkflowEditType.MULTI_ROUTING.index());
                                 break;
                             case START:
+                                break;
+                            case NOTIFICATION:
+                                editTypes.add(StudioWorkflowEditType.ALERT.index());
                                 break;
                             case SET_VALUES:
                                 editTypes.add(StudioWorkflowEditType.ALERT.index());
@@ -862,6 +867,9 @@ public class WorkflowEditor {
                 census.add(step.getAlertList().size());
                 census.add(step.getRoutingList().size());
                 break;
+            case NOTIFICATION:
+                census.add(step.getAlertList().size());
+                break;
             case SET_VALUES:
                 census.add(step.getAlertList().size());
                 break;
@@ -894,6 +902,7 @@ public class WorkflowEditor {
             case ENRICHMENT:
             case PROCEDURE:
             case RECORD_ACTION:
+            case NOTIFICATION:
             case SET_VALUES:
                 routings.add(new DesignWfStepRouting("always", routingLabels.get("always"), step.getNextStepName()));
                 break;

@@ -1068,6 +1068,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case SET_VALUES:
                     break;
+                case NOTIFICATION:
+                    break;
                 case ENRICHMENT:
                     if (currWfStepDef.isWithPolicy()) {
                         WfEnrichmentPolicy policy = (WfEnrichmentPolicy) getComponent(currWfStepDef.getPolicy());

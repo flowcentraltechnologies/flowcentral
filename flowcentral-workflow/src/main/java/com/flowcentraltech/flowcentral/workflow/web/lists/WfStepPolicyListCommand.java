@@ -68,6 +68,7 @@ public class WfStepPolicyListCommand extends AbstractListCommand<WfStepPolicyPar
                 case SET_VALUES:
                 case START:
                 case USER_ACTION:
+                case NOTIFICATION:
                 default:
                     break;
             }

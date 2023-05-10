@@ -114,6 +114,15 @@ public enum WorkflowStepType implements EnumConst {
             true,
             false,
             8),
+    NOTIFICATION(
+            ProcessingStatus.NORMAL,
+            "NTF",
+            "mail",
+            WorkflowStepColor.GREEN,
+            false,
+            true,
+            true,
+            9),
     ERROR(
             ProcessingStatus.ERROR,
             "ERR",
@@ -122,7 +131,7 @@ public enum WorkflowStepType implements EnumConst {
             true,
             true,
             true,
-            9),
+            10),
     END(
             ProcessingStatus.NORMAL,
             "END",
@@ -131,10 +140,10 @@ public enum WorkflowStepType implements EnumConst {
             true,
             false,
             false,
-            10);
+            11);
 
     private final ProcessingStatus processingStatus;
-    
+
     private final String code;
 
     private final String icon;
@@ -219,6 +228,10 @@ public enum WorkflowStepType implements EnumConst {
 
     public boolean isBinaryRouting() {
         return BINARY_ROUTING.equals(this);
+    }
+
+    public boolean isNotification() {
+        return NOTIFICATION.equals(this);
     }
 
     public boolean isPolicy() {

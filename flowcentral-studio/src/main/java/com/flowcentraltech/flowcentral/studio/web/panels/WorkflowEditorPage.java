@@ -129,6 +129,7 @@ public class WorkflowEditorPage extends AbstractStudioEditorPage {
                     case MULTI_ROUTING:
                     case SET_VALUES:
                     case USER_ACTION:
+                    case NOTIFICATION:
                         steps.put(step.getName(), step);
                         break;
                     default:
