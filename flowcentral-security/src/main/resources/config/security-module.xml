@@ -25,7 +25,7 @@
 			editor="!ui-integer precision:3" type="number" editable="true" />
 		<sysParameter code="SEC-0005" defaultVal="true"
 			description="$m{security.sysparam.enableaccountlock}"
-			editor="!ui-select list:booleanlist" type="boolean" editable="false" />
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="SEC-0006" defaultVal="4"
 			description="$m{security.sysparam.maxlogintries}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
@@ -44,13 +44,13 @@
 			editor="!ui-select list:webapplicationlist" type="string" editable="true" />
 		<sysParameter code="SEC-000B" defaultVal="false"
 			description="$m{security.sysparam.enabletwofactorauthentication}"
-			editor="!ui-select list:booleanlist" type="boolean" />
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="SEC-000C" defaultVal="false"
 			description="$m{security.sysparam.enablesystemwidemultiloginrule}"
-			editor="!ui-select list:booleanlist" type="boolean" />
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="SEC-000D" defaultVal="false"
 			description="$m{security.sysparam.systemwidemultiloginrule}"
-			editor="!ui-select list:booleanlist" type="boolean" />
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 		<sysParameter code="SEC-000E" defaultVal="/application"
 			description="$m{security.sysparam.applicationkey}"
 			editor="!ui-text maxLen:48" type="string" editable="true" />
