@@ -34,17 +34,19 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     private String password;
 
-    private String token;
-
     private String oldPassword;
 
     private String newPassword;
 
     private String confirmPassword;
 
+    private String oneTimePasscode;
+
     private String loginMessage;
 
     private String chgPwdMessage;
+    
+    private String validateOTPMsg;
     
     private String languageTag;
 
@@ -60,8 +62,6 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     private boolean isLanguage;
 
-    private boolean is2FA;
-
     public String getUserName() {
         return userName;
     }
@@ -76,14 +76,6 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 
     public String getOldPassword() {
@@ -182,12 +174,20 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
         this.isLanguage = isLanguage;
     }
 
-    public boolean isIs2FA() {
-        return is2FA;
+    public String getOneTimePasscode() {
+        return oneTimePasscode;
     }
 
-    public void setIs2FA(boolean is2fa) {
-        is2FA = is2fa;
+    public void setOneTimePasscode(String oneTimePasscode) {
+        this.oneTimePasscode = oneTimePasscode;
+    }
+
+    public String getValidateOTPMsg() {
+        return validateOTPMsg;
+    }
+
+    public void setValidateOTPMsg(String validateOTPMsg) {
+        this.validateOTPMsg = validateOTPMsg;
     }
 
 }

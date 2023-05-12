@@ -42,7 +42,7 @@
 
 // Login sequence
 !ui-switchpanel:loginSequencePanel styleClass:$e{fc-loginsequencebox} layout:$d{!ui-vertical style:$s{width:100%;}}
-    components:$c{loginPanel changePasswordPanel}
+    components:$c{loginPanel changePasswordPanel validateOTPPanel}
 
 // Login
 !ui-panel:loginPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
@@ -58,6 +58,16 @@
 !ui-label:frmLoginMsg styleClass:$e{ui-loginmsg} binding:loginMessage
 !ui-button:frmLoginBtn caption:$m{security.application.signin} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{loginAct}}
+
+// 2FA
+!ui-panel:validateOTPPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
+	components:$c{frmOneTimePasscode frmValidateOTPMsg frmValidateOTPBtn}	
+!ui-text:frmOneTimePasscode caption:$m{security.application.onetimepassword}
+	styleClass:$e{fc-logintxt} binding:oneTimePasscode focus:true
+    eventHandler:$d{!ui-event event:onenter action:$c{validateOTPAct}}
+!ui-label:frmValidateOTPMsg styleClass:$e{ui-loginmsg} binding:validateOTPMsg
+!ui-button:frmValidateOTPBtn caption:$m{security.application.validateotp} styleClass:$e{fc-loginbtn}
+	eventHandler:$d{!ui-event event:onclick action:$c{validateOTPAct}}
 
 // Change password
 !ui-panel:changePasswordPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
@@ -79,6 +89,7 @@
 
 // Actions
 !ui-post:changePwdAct path:$n{/changeUserPassword} components:$c{oldPassword newPassword confirmPassword}
-!ui-post:cancelPwdAct path:$n{/cancelChangeUserPassword}
+!ui-post:cancelPwdAct path:$n{/revertLogin}
 !ui-post:loginAct path:$n{/login} components:$c{loginPanel}
+!ui-post:validateOTPAct path:$n{/validateOTP} components:$c{validateOTPPanel}
        
