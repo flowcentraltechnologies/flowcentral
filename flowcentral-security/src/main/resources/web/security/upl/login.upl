@@ -61,13 +61,15 @@
 
 // 2FA
 !ui-panel:validateOTPPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
-	components:$c{frmOneTimePasscode frmValidateOTPMsg frmValidateOTPBtn}	
+	components:$c{frmOneTimePasscode frmValidateOTPMsg frmValidateOTPBtn cancelValidateOTPBtn}	
 !ui-text:frmOneTimePasscode caption:$m{security.application.onetimepassword}
 	styleClass:$e{fc-logintxt} binding:oneTimePasscode focus:true
     eventHandler:$d{!ui-event event:onenter action:$c{validateOTPAct}}
 !ui-label:frmValidateOTPMsg styleClass:$e{ui-loginmsg} binding:validateOTPMsg
 !ui-button:frmValidateOTPBtn caption:$m{security.application.validateotp} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{validateOTPAct}}
+!ui-button:cancelValidateOTPBtn caption:$m{button.cancel} styleClass:$e{fc-logincancelbtn}
+	eventHandler:$d{!ui-event event:onclick action:$c{revertLoginAct}}
 
 // Change password
 !ui-panel:changePasswordPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
@@ -80,7 +82,7 @@
 !ui-button:changePwdBtn caption:$m{security.application.changepassword} styleClass:$e{fc-loginbtn}
 	eventHandler:$d{!ui-event event:onclick action:$c{changePwdAct}}
 !ui-button:cancelPwdBtn caption:$m{button.cancel} styleClass:$e{fc-logincancelbtn}
-	eventHandler:$d{!ui-event event:onclick action:$c{cancelPwdAct}}
+	eventHandler:$d{!ui-event event:onclick action:$c{revertLoginAct}}
 
 // Select user role popup
 !fc-selectrolepanel:selectRolePanel dialogCaption:$m{security.application.select.role}
@@ -88,8 +90,8 @@
 
 
 // Actions
-!ui-post:changePwdAct path:$n{/changeUserPassword} components:$c{oldPassword newPassword confirmPassword}
-!ui-post:cancelPwdAct path:$n{/revertLogin}
 !ui-post:loginAct path:$n{/login} components:$c{loginPanel}
+!ui-post:changePwdAct path:$n{/changeUserPassword} components:$c{oldPassword newPassword confirmPassword}
+!ui-post:revertLoginAct path:$n{/revertLogin}
 !ui-post:validateOTPAct path:$n{/validateOTP} components:$c{validateOTPPanel}
        
