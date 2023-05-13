@@ -21,12 +21,10 @@ import java.util.List;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.notification.Email;
 import com.tcdng.unify.core.notification.EmailRecipient;
 import com.tcdng.unify.core.notification.EmailServer;
 import com.tcdng.unify.core.notification.EmailServerConfig;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.IOUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -50,7 +48,7 @@ public abstract class AbstractRestEmailServer extends AbstractUnifyComponent imp
 
     @Override
     public void sendEmail(String configName, Email... emails) {
-        for (Email email: emails) {
+        for (Email email : emails) {
             send(email);
         }
     }
@@ -81,38 +79,36 @@ public abstract class AbstractRestEmailServer extends AbstractUnifyComponent imp
             List<String> to = new ArrayList<String>();
             List<String> cc = new ArrayList<String>();
             List<String> bcc = new ArrayList<String>();
-            for (EmailRecipient recipient: recipents) {
+            for (EmailRecipient recipient : recipents) {
                 switch (recipient.getType()) {
                     case BCC:
-                         bcc.add(recipient.getAddress());
+                        bcc.add(recipient.getAddress());
                         break;
                     case CC:
-                         cc.add(recipient.getAddress());
+                        cc.add(recipient.getAddress());
                         break;
                     case TO:
-                         to.add(recipient.getAddress());
+                        to.add(recipient.getAddress());
                         break;
                     default:
                         break;
 
                 }
             }
-            
+
             if (to.isEmpty()) {
                 throw new UnifyException(UnifyCoreErrorConstants.EMAIL_RECIPIENTS_REQUIRED);
-                            }
-            
+            }
+
             req.setTo(to);
             req.setCc(cc);
             req.setBcc(bcc);
             req.setSubject(email.getSubject());
             req.setBody(email.getMessage());
-            
+
             // Send REST request
-            String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
-            String respJSON = IOUtils.postJsonToEndpoint(getRestEndPoint(), reqJSON);
-            RestEmailResponse resp = DataUtils.fromJsonString(RestEmailResponse.class, respJSON);
-            
+            RestEmailResponse resp = IOUtils.postObjectToEndpointUsingJson(RestEmailResponse.class, getRestEndPoint(),
+                    req);
             if (resp.getErrorCode() == null) {
                 email.setSent(true);
             } else {
