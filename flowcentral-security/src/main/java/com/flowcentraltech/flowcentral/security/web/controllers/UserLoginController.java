@@ -103,6 +103,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
             User user = securityModuleService.loginUser(pageBean.getUserName(), pageBean.getPassword(), loginLocale,
                     pageBean.getLoginTenantId());
+            pageBean.setAllowLoginWithoutOtp(Boolean.TRUE.equals(user.getAllowLoginWithoutOtp()));
             pageBean.setUserName(null);
             pageBean.setPassword(null);
             pageBean.setLoginTenantId(null);
@@ -277,10 +278,11 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     }
 
     private String twoFactorAuthCheck() throws UnifyException {
+        UserLoginPageBean pageBean = getPageBean();
         UserToken userToken = getUserToken();
         // Check 2FA
-        if (!userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
-                SecurityModuleSysParamConstants.ENABLE_TWOFACTOR_AUTHENTICATION)) {
+        if (!userToken.isReservedUser() && !pageBean.isAllowLoginWithoutOtp() && system()
+                .getSysParameterValue(boolean.class, SecurityModuleSysParamConstants.ENABLE_TWOFACTOR_AUTHENTICATION)) {
             userToken.setAuthorized(false); // Remove authorization until 2FA passes
             TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) getComponent(
                     ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
