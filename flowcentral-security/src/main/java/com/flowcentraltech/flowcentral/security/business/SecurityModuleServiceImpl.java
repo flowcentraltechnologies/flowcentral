@@ -61,6 +61,7 @@ import com.flowcentraltech.flowcentral.security.templatewrappers.UserPasswordRes
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.system.entities.MappedTenant;
+import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.SessionContext;
 import com.tcdng.unify.core.UnifyCorePropertyConstants;
 import com.tcdng.unify.core.UnifyCoreSessionAttributeConstants;
@@ -74,6 +75,7 @@ import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.security.OneWayStringCryptograph;
+import com.tcdng.unify.core.security.PasswordAutenticationService;
 import com.tcdng.unify.core.security.PasswordGenerator;
 import com.tcdng.unify.core.system.UserSessionManager;
 import com.tcdng.unify.core.util.ColorUtils;
@@ -175,13 +177,22 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
             throw new UnifyException(SecurityModuleErrorConstants.USER_ACCOUNT_NOT_ACTIVE);
         }
 
-        password = passwordCryptograph.encrypt(password);
-        if (user.getPassword() == null || !user.getPassword().equals(password)) {
-            if (accountLockingEnabled && !user.isReserved()) { // No locking for reserved users
-                updateLoginAttempts(user);
+        if (!isSystem && systemModuleService.getSysParameterValue(boolean.class,
+                SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)) {
+            PasswordAutenticationService passwordAuthService = (PasswordAutenticationService)
+                    getComponent(ApplicationComponents.APPLICATION_PASSWORDAUTHENTICATIONSERVICE);
+            if (!passwordAuthService.authenticate(loginId, user.getEmail(), password)) {
+                throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
             }
+        } else {
+            password = passwordCryptograph.encrypt(password);
+            if (user.getPassword() == null || !user.getPassword().equals(password)) {
+                if (accountLockingEnabled && !user.isReserved()) { // No locking for reserved users
+                    updateLoginAttempts(user);
+                }
 
-            throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
+                throw new UnifyException(SecurityModuleErrorConstants.INVALID_LOGIN_ID_PASSWORD);
+            }
         }
 
         // Update login details
@@ -470,7 +481,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (!DataUtils.isBlank(roleCodes)) {
             userIds.addAll(environment().valueSet(Long.class, "userId",
                     new UserRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId)));
-            
+
             Set<Long> userGroupIds = environment().valueSet(Long.class, "userGroupId",
                     new UserGroupRoleQuery().roleCodeIn(roleCodes).tenantId(tenantId));
             if (!DataUtils.isBlank(userGroupIds)) {
@@ -549,7 +560,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         boolean globalAccess = user.isReserved();
         String colorScheme = ColorUtils.getConformingColorSchemeCode(
                 getContainerSetting(String.class, UnifyCorePropertyConstants.APPLICATION_COLORSCHEME));
-        return UserToken.newBuilder().userLoginId(user.getLoginId()).userName(user.getFullName())
+        return UserToken.newBuilder().userLoginId(user.getLoginId()).userName(user.getFullName()).userEmail(user.getEmail())
                 .userId((Long) user.getId()).tenantId(loginTenantId).ipAddress(getSessionContext().getRemoteAddress())
                 .branchCode(userBranch != null ? userBranch.getCode() : null)
                 .zoneCode(userBranch != null ? userBranch.getZoneCode() : null).colorScheme(colorScheme)

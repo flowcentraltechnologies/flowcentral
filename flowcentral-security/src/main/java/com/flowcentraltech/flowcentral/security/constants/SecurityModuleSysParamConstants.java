@@ -59,4 +59,6 @@ public interface SecurityModuleSysParamConstants {
 
     String KEEP_USER_LOGIN_EVENTS = "SEC-0012";
 
+    String ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION = "SEC-0013";
+
 }

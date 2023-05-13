@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
 import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleAuditConstants;
 import com.flowcentraltech.flowcentral.security.constants.SecurityModuleErrorConstants;
+import com.flowcentraltech.flowcentral.security.constants.SecurityModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.security.entities.User;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.tcdng.unify.core.ApplicationComponents;
@@ -61,6 +62,8 @@ import com.tcdng.unify.web.ui.widget.panel.SwitchPanel;
                 response = { "!hidepopupresponse", "!switchpanelresponse panels:$l{loginSequencePanel.loginPanel}" }),
         @ResultMapping(name = "switchchangepassword",
                 response = { "!switchpanelresponse panels:$l{loginSequencePanel.changePasswordPanel}" }),
+        @ResultMapping(name = "switchvalidateotp",
+                response = { "!switchpanelresponse panels:$l{loginSequencePanel.validateOTPPanel}" }),
         @ResultMapping(name = "switchrolepanel", response = { "!showpopupresponse popup:$s{selectRolePanel}" }) })
 public class UserLoginController extends AbstractApplicationForwarderController<UserLoginPageBean> {
 
@@ -104,14 +107,6 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             pageBean.setPassword(null);
             pageBean.setLoginTenantId(null);
 
-            if (!user.isReserved() && pageBean.isIs2FA()) {
-                TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) this
-                        .getComponent(ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
-                if (!twoFactorAuthService.authenticate(pageBean.getUserName(), pageBean.getToken())) {
-                    throw new UnifyException(SecurityModuleErrorConstants.INVALID_ONETIME_PASSWORD);
-                }
-            }
-
             logUserEvent(SecurityModuleAuditConstants.LOGIN);
             setLoginMessage(null);
 
@@ -123,7 +118,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
                 return "switchchangepassword";
             }
 
-            return selectRole();
+            return twoFactorAuthCheck();
         } catch (UnifyException e) {
             logError(e);
             UnifyError err = e.getUnifyError();
@@ -147,7 +142,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             } else {
                 securityModuleService.changeUserPassword(pageBean.getOldPassword(), pageBean.getNewPassword());
                 logUserEvent(SecurityModuleAuditConstants.CHANGE_PASSWORD);
-                return selectRole();
+                return twoFactorAuthCheck();
             }
         } catch (UnifyException e) {
             UnifyError err = e.getUnifyError();
@@ -162,12 +157,37 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     }
 
     @Action
-    public String cancelChangeUserPassword() throws UnifyException {
+    public String validateOTP() throws UnifyException {
+        UserLoginPageBean pageBean = getPageBean();
+        try {
+            setValidateOTPMsg(null);
+            UserToken userToken = getUserToken();
+            TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) getComponent(
+                    ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
+            if (!twoFactorAuthService.authenticate(userToken.getUserLoginId(), userToken.getUserEmail(),
+                    pageBean.getOneTimePasscode())) {
+                throw new UnifyException(SecurityModuleErrorConstants.INVALID_ONETIME_PASSWORD);
+            }
+
+            getUserToken().setAuthorized(true); // Restore authorization on 2FA pass
+            return selectRole();
+        } catch (UnifyException e) {
+            UnifyError err = e.getUnifyError();
+            setValidateOTPMsg(getSessionMessage(err.getErrorCode(), err.getErrorParams()));
+        }
+
+        pageBean.setOneTimePasscode(null);
+        return "switchvalidateotp";
+    }
+
+    @Action
+    public String revertLogin() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
         pageBean.setUserName(null);
         pageBean.setPassword(null);
         setLoginMessage(null);
         setChgPwdMessage(null);
+        setValidateOTPMsg(null);
         securityModuleService.logoutUser(false);
         return "switchlogin";
     }
@@ -194,7 +214,7 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 
     @Action
     public String cancelSelectUserRole() throws UnifyException {
-        return cancelChangeUserPassword();
+        return revertLogin();
     }
 
     @Action
@@ -223,12 +243,9 @@ public class UserLoginController extends AbstractApplicationForwarderController<
 //
 //        pageBean.setLanguage(isLanguage);
 //
-//        boolean is2FA = getSystemModuleService().getSysParameterValue(boolean.class,
-//                SecurityModuleSysParamConstants.ENABLE_TWOFACTOR_AUTHENTICATION);
-//        setPageWidgetVisible("loginPanel.tokenField", is2FA);
-//        pageBean.setIs2FA(is2FA);
         setLoginMessage(null);
         setChgPwdMessage(null);
+        setValidateOTPMsg(null);
     }
 
     @Override
@@ -242,10 +259,10 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         pageBean.setLoginTenantId(null);
         pageBean.setUserName(null);
         pageBean.setPassword(null);
-        pageBean.setToken(null);
         pageBean.setNewPassword(null);
         pageBean.setOldPassword(null);
         pageBean.setConfirmPassword(null);
+        pageBean.setOneTimePasscode(null);
         SwitchPanel switchPanel = (SwitchPanel) getPage().getPanelByShortName("loginSequencePanel");
         switchPanel.switchContent("loginPanel");
         loadUIOptions();
@@ -259,13 +276,36 @@ public class UserLoginController extends AbstractApplicationForwarderController<
                 system().getSysParameterValue(String.class, SystemModuleSysParamConstants.SYSTEM_LOGINPAGE_SUBTITLE));
     }
 
+    private String twoFactorAuthCheck() throws UnifyException {
+        UserToken userToken = getUserToken();
+        // Check 2FA
+        if (!userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
+                SecurityModuleSysParamConstants.ENABLE_TWOFACTOR_AUTHENTICATION)) {
+            userToken.setAuthorized(false); // Remove authorization until 2FA passes
+            TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) getComponent(
+                    ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
+            twoFactorAuthService.sendOneTimePasscode(userToken.getUserLoginId(), userToken.getUserEmail());
+            return "switchvalidateotp";
+        }
+
+        return selectRole();
+    }
+
     private String selectRole() throws UnifyException {
         UserLoginPageBean pageBean = getPageBean();
         setLoginMessage(null);
         setChgPwdMessage(null);
+        setValidateOTPMsg(null);
+
+        UserToken userToken = getUserToken();
+        // Check 2FA
+        if (!userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
+                SecurityModuleSysParamConstants.ENABLE_TWOFACTOR_AUTHENTICATION)) {
+            userToken.setAuthorized(false); // Remove authorization until 2FA passes
+            return "switchvalidateotp";
+        }
 
         // Get user roles that are active based on current time
-        UserToken userToken = getUserToken();
         List<UserRoleInfo> userRoleList = securityModuleService.findConsolidatedUserRoles(userToken.getUserLoginId(),
                 securityModuleService.getNow());
 
@@ -308,5 +348,10 @@ public class UserLoginController extends AbstractApplicationForwarderController<
     private void setChgPwdMessage(String msg) throws UnifyException {
         getPageBean().setChgPwdMessage(msg);
         setPageWidgetVisible("pwdChangeMsg", !StringUtils.isBlank(msg));
+    }
+
+    private void setValidateOTPMsg(String msg) throws UnifyException {
+        getPageBean().setValidateOTPMsg(msg);
+        setPageWidgetVisible("frmValidateOTPMsg", !StringUtils.isBlank(msg));
     }
 }
