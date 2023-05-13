@@ -162,19 +162,20 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         try {
             setValidateOTPMsg(null);
             UserToken userToken = getUserToken();
-            TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService)
-                    getComponent(ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
-            if (!twoFactorAuthService.authenticate(userToken.getUserLoginId(), pageBean.getOneTimePasscode())) {
+            TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) getComponent(
+                    ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
+            if (!twoFactorAuthService.authenticate(userToken.getUserLoginId(), userToken.getUserEmail(),
+                    pageBean.getOneTimePasscode())) {
                 throw new UnifyException(SecurityModuleErrorConstants.INVALID_ONETIME_PASSWORD);
             }
-            
+
             getUserToken().setAuthorized(true); // Restore authorization on 2FA pass
             return selectRole();
         } catch (UnifyException e) {
             UnifyError err = e.getUnifyError();
             setValidateOTPMsg(getSessionMessage(err.getErrorCode(), err.getErrorParams()));
         }
-        
+
         pageBean.setOneTimePasscode(null);
         return "switchvalidateotp";
     }
@@ -281,6 +282,9 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         if (!userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
                 SecurityModuleSysParamConstants.ENABLE_TWOFACTOR_AUTHENTICATION)) {
             userToken.setAuthorized(false); // Remove authorization until 2FA passes
+            TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) getComponent(
+                    ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
+            twoFactorAuthService.sendOneTimePasscode(userToken.getUserLoginId(), userToken.getUserEmail());
             return "switchvalidateotp";
         }
 
