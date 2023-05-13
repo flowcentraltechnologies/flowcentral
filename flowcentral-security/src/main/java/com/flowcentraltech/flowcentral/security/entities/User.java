@@ -77,6 +77,12 @@ public class User extends BaseStatusWorkTenantEntity {
     @Column(name = "ALLOW_MULTI_LOGIN_FG")
     private Boolean allowMultipleLogin;
 
+    @Column(name = "LOCAL_PASSWORD_ONLY_FG", nullable = true)
+    private Boolean localPasswordOnly;
+
+    @Column(name = "ALLOW_LOGIN_WITHOUT_OTP_FG", nullable = true)
+    private Boolean allowLoginWithoutOtp;
+
     @Column(nullable = true)
     private Date passwordExpiryDt;
 
@@ -227,6 +233,22 @@ public class User extends BaseStatusWorkTenantEntity {
 
     public void setAllowMultipleLogin(Boolean allowMultipleLogin) {
         this.allowMultipleLogin = allowMultipleLogin;
+    }
+
+    public Boolean getLocalPasswordOnly() {
+        return localPasswordOnly;
+    }
+
+    public void setLocalPasswordOnly(Boolean localPasswordOnly) {
+        this.localPasswordOnly = localPasswordOnly;
+    }
+
+    public Boolean getAllowLoginWithoutOtp() {
+        return allowLoginWithoutOtp;
+    }
+
+    public void setAllowLoginWithoutOtp(Boolean allowLoginWithoutOtp) {
+        this.allowLoginWithoutOtp = allowLoginWithoutOtp;
     }
 
     public Boolean getSupervisor() {

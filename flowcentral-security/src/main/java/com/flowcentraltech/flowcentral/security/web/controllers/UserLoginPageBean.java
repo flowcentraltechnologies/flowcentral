@@ -62,6 +62,8 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     private boolean isLanguage;
 
+    private boolean allowLoginWithoutOtp;
+
     public String getUserName() {
         return userName;
     }
@@ -188,6 +190,14 @@ public class UserLoginPageBean extends AbstractForwarderPageBean {
 
     public void setValidateOTPMsg(String validateOTPMsg) {
         this.validateOTPMsg = validateOTPMsg;
+    }
+
+    public boolean isAllowLoginWithoutOtp() {
+        return allowLoginWithoutOtp;
+    }
+
+    public void setAllowLoginWithoutOtp(boolean allowLoginWithoutOtp) {
+        this.allowLoginWithoutOtp = allowLoginWithoutOtp;
     }
 
 }
