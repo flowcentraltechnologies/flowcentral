@@ -162,8 +162,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         try {
             setValidateOTPMsg(null);
             UserToken userToken = getUserToken();
-            TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService) this
-                    .getComponent(ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
+            TwoFactorAutenticationService twoFactorAuthService = (TwoFactorAutenticationService)
+                    getComponent(ApplicationComponents.APPLICATION_TWOFACTORAUTHENTICATIONSERVICE);
             if (!twoFactorAuthService.authenticate(userToken.getUserLoginId(), pageBean.getOneTimePasscode())) {
                 throw new UnifyException(SecurityModuleErrorConstants.INVALID_ONETIME_PASSWORD);
             }

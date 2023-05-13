@@ -66,5 +66,8 @@
 		<sysParameter code="SEC-0012" defaultVal="false"
 			description="$m{security.sysparam.keeploginevents}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="SEC-0013" defaultVal="false"
+			description="$m{security.sysparam.enablethirdpartypasswordauthentication}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

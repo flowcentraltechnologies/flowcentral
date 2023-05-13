@@ -63,7 +63,7 @@
 !ui-panel:validateOTPPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 5px;}}
 	components:$c{frmOneTimePasscode frmValidateOTPMsg frmValidateOTPBtn cancelValidateOTPBtn}	
 !ui-text:frmOneTimePasscode caption:$m{security.application.onetimepassword}
-	styleClass:$e{fc-logintxt} binding:oneTimePasscode focus:true
+	styleClass:$e{fc-logintxt} binding:oneTimePasscode focus:true required:true
     eventHandler:$d{!ui-event event:onenter action:$c{validateOTPAct}}
 !ui-label:frmValidateOTPMsg styleClass:$e{ui-loginmsg} binding:validateOTPMsg
 !ui-button:frmValidateOTPBtn caption:$m{security.application.validateotp} styleClass:$e{fc-loginbtn}
