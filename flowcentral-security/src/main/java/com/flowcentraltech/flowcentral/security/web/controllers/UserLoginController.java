@@ -299,15 +299,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
         setChgPwdMessage(null);
         setValidateOTPMsg(null);
 
-        UserToken userToken = getUserToken();
-        // Check 2FA
-        if (!userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
-                SecurityModuleSysParamConstants.ENABLE_TWOFACTOR_AUTHENTICATION)) {
-            userToken.setAuthorized(false); // Remove authorization until 2FA passes
-            return "switchvalidateotp";
-        }
-
         // Get user roles that are active based on current time
+        UserToken userToken = getUserToken();
         List<UserRoleInfo> userRoleList = securityModuleService.findConsolidatedUserRoles(userToken.getUserLoginId(),
                 securityModuleService.getNow());
 
