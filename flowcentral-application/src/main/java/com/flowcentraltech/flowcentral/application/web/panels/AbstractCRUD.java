@@ -56,6 +56,8 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 
 	private final String addCaption;
 
+    private final boolean allowCreate;
+
     private int maintainIndex;
 
     private boolean allowUpdate;
@@ -65,7 +67,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 	private boolean create;
 
 	public AbstractCRUD(AppletUtilities au, SweepingCommitPolicy scp, String baseField, Object baseId, T table,
-			MiniForm createForm, MiniForm maintainForm, String addCaption) {
+			MiniForm createForm, MiniForm maintainForm, String addCaption, boolean allowCreate) {
 		this.au = au;
 		this.scp = scp;
 		this.baseField = baseField;
@@ -74,6 +76,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 		this.createForm = createForm;
 		this.maintainForm = maintainForm;
 		this.addCaption = addCaption;
+		this.allowCreate = allowCreate;
 	}
 
 	public AppletUtilities au() {
@@ -126,7 +129,11 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 		return !table.isViewOnly();
 	}
 
-	public boolean isAllowUpdate() {
+	public boolean isAllowCreate() {
+        return allowCreate;
+    }
+
+    public boolean isAllowUpdate() {
         return allowUpdate;
     }
 
@@ -140,6 +147,7 @@ public abstract class AbstractCRUD<T extends AbstractTable<?, ?>> {
 			Object _inst = createObject();
 			FormContext formContext = getForm().getCtx();
 			formContext.clearValidationErrors();
+            formContext.setReadOnly(!allowCreate);
 			formContext.setInst(_inst);
 			prepareCreate(formContext);
 			table.setHighlightedRow(-1);
