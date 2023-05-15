@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for entity list action policies.
@@ -26,6 +27,11 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public abstract class AbstractEntityListActionPolicy extends AbstractUnifyComponent implements EntityListActionPolicy {
+
+    @Override
+    public boolean isWidgetDisabled(ValueStoreReader parentReader) throws UnifyException {
+        return false;
+    }
 
     @Override
     protected void onInitialize() throws UnifyException {

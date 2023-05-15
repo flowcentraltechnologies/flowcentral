@@ -16,8 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.WidgetStatePolicy;
 
 /**
  * Entity list action policy.
@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EntityListActionPolicy extends UnifyComponent {
+public interface EntityListActionPolicy extends WidgetStatePolicy {
 
     /**
      * Executes action operation on list.
