@@ -66,6 +66,7 @@ import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
+import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
@@ -688,17 +689,23 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
+            final AppletDef stepAppletDef = appletUtil.getAppletDef(prevWfStepDef.getStepAppletName());
+            final EntityDef entityDef = appletUtil.getEntityDef(stepAppletDef.getEntity());
+            final String updatePolicy = stepAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
+            EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE, null,
+                    updatePolicy);
             if (wfReviewMode.lean()) {
                 if (emails != null) {
                     environment().findChildren(wfEntityInst);
                     updateEmails(wfDef, wfEntityInst, emails);
-                    environment().updateByIdVersion(wfEntityInst);
+                    environment().updateByIdVersion(eCtx);
                 } else {
-                    environment().updateLeanByIdVersion(wfEntityInst);
+                    environment().updateLean(eCtx);
                 }
             } else {
                 updateEmails(wfDef, wfEntityInst, emails);
-                environment().updateByIdVersion(wfEntityInst);
+                environment().updateByIdVersion(eCtx);
             }
 
             pushToWfTransitionQueue(wfDef, wfItemId);
