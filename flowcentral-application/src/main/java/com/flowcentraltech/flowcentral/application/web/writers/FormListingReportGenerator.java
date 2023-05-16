@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.Report;
 
 /**
@@ -33,26 +33,26 @@ public interface FormListingReportGenerator extends UnifyComponent {
     /**
      * Generates form HTML report.
      * 
-     * @param formBeanValueStore
-     *                           the form bean value store
+     * @param reader
+     *                           the form bean value store reader
      * @param listingOptions
      *                           form listing options
      * @return report
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateHtmlReport(ValueStore formBeanValueStore, FormListingOptions listingOptions) throws UnifyException;
+    Report generateHtmlReport(ValueStoreReader reader, FormListingOptions listingOptions) throws UnifyException;
 
     /**
      * Generates form Excel report.
      * 
-     * @param formBeanValueStore
-     *                           the form bean value store
+     * @param reader
+     *                           the form bean value store reader
      * @param listingOptions
      *                           form listing options
      * @return report
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateExcelReport(ValueStore formBeanValueStore, FormListingOptions listingOptions) throws UnifyException;
+    Report generateExcelReport(ValueStoreReader reader, FormListingOptions listingOptions) throws UnifyException;
 }

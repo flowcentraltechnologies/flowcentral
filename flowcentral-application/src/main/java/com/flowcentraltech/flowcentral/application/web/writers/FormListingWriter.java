@@ -44,7 +44,7 @@ public class FormListingWriter extends AbstractContainerWriter {
 
         FormListing formListing = formListingWidget.getFormListing();
         FormListingGenerator generator = (FormListingGenerator) getComponent(formListing.getListingGenerator());
-        generator.generateListing(formListing.getFormValueStore(), new ListingProperties(), writer);
+        generator.generateListing(formListing.getFormValueStore().getReader(), new ListingProperties(), writer);
         writer.write("</div>");
     }
 }

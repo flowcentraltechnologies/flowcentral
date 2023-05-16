@@ -2300,9 +2300,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());
-        final ValueStore instValueStore = new BeanValueStore(listing);
-        return listing.isSpreadSheet() ? _generator.generateExcelReport(instValueStore, new FormListingOptions())
-                : _generator.generateHtmlReport(instValueStore, new FormListingOptions());
+        final ValueStoreReader reader = new BeanValueStore(listing).getReader();
+        return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, new FormListingOptions())
+                : _generator.generateHtmlReport(reader, new FormListingOptions());
     }
 
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {

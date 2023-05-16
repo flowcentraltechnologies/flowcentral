@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.ReportPageProperties;
 
 /**
@@ -35,19 +35,19 @@ import com.tcdng.unify.core.report.ReportPageProperties;
 public abstract class AbstractFormListingReportGenerator extends AbstractUnifyComponent
         implements FormListingReportGenerator {
 
-    protected ListingReportGeneratorProperties getReportProperties(ValueStore formBeanValueStore,
+    protected ListingReportGeneratorProperties getReportProperties(ValueStoreReader reader,
             FormListingOptions listingOptions) throws UnifyException {
         return new ListingReportGeneratorProperties(
                 ReportPageProperties.newBuilder().resourceBaseUri(getSessionContext().getUriBase()).build(),
                 Arrays.asList(new ListingReportProperties("default_prop")));
     }
 
-    protected abstract void generateReportHeader(ValueStore formBeanValueStore, ListingReportProperties properties,
+    protected abstract void generateReportHeader(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void generateReportAddendum(ValueStore formBeanValueStore, ListingReportProperties properties,
+    protected abstract void generateReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void generateReportFooter(ValueStore formBeanValueStore, ListingReportProperties properties,
+    protected abstract void generateReportFooter(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 }

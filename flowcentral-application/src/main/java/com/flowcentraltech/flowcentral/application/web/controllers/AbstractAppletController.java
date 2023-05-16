@@ -33,7 +33,7 @@ import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
@@ -130,10 +130,10 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
 
     protected String viewListingReport(DetailsFormListing listing) throws UnifyException {
         DetailsFormListingGenerator generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
-        final ValueStore instValueStore = new BeanValueStore(listing);
+        final ValueStoreReader reader = new BeanValueStore(listing).getReader();
         Report report = listing.isSpreadSheet()
-                ? generator.generateExcelReport(instValueStore, new FormListingOptions())
-                : generator.generateHtmlReport(instValueStore, new FormListingOptions());
+                ? generator.generateExcelReport(reader, new FormListingOptions())
+                : generator.generateHtmlReport(reader, new FormListingOptions());
         return viewListingReport(report);
     }
 

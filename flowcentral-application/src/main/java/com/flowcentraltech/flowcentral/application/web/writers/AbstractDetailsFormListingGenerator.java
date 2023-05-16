@@ -35,6 +35,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for details form listing generators.
@@ -46,8 +47,8 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         implements DetailsFormListingGenerator {
 
     @Override
-    public final int getOptionFlagsOverride(ValueStore formBeanValueStore) throws UnifyException {
-        return getOptionFlagsOverride((DetailsFormListing) formBeanValueStore.getValueObject());
+    public final int getOptionFlagsOverride(ValueStoreReader reader) throws UnifyException {
+        return getOptionFlagsOverride((DetailsFormListing) reader.getValueObject());
     }
 
     @Override
@@ -61,27 +62,27 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     }
 
     @Override
-    protected final void doGenerate(ValueStore formBeanValueStore, ListingProperties listingProperties,
+    protected final void doGenerate(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
-        doGenerate((DetailsFormListing) formBeanValueStore.getValueObject(), listingProperties, writer);
+        doGenerate((DetailsFormListing) reader.getValueObject(), listingProperties, writer);
     }
 
     @Override
-    protected final void generateReportHeader(ValueStore formBeanValueStore, ListingReportProperties properties,
+    protected final void generateReportHeader(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
-        generateReportHeader((DetailsFormListing) formBeanValueStore.getValueObject(), properties, writer);
+        generateReportHeader((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     @Override
-    protected final void generateReportAddendum(ValueStore formBeanValueStore, ListingReportProperties properties,
+    protected final void generateReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
-        generateReportAddendum((DetailsFormListing) formBeanValueStore.getValueObject(), properties, writer);
+        generateReportAddendum((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     @Override
-    protected final void generateReportFooter(ValueStore formBeanValueStore, ListingReportProperties properties,
+    protected final void generateReportFooter(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
-        generateReportFooter((DetailsFormListing) formBeanValueStore.getValueObject(), properties, writer);
+        generateReportFooter((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     protected void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,

@@ -148,7 +148,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             if (item.isWithListingParams()) {
                 FormListingGenerator generator = au().getComponent(FormListingGenerator.class,
                         item.getListingGenerator());
-                Report report = generator.generateHtmlReport(new BeanValueStore(item.getEntity()),
+                Report report = generator.generateHtmlReport(new BeanValueStore(item.getEntity()).getReader(),
                         item.getListingOptions());
                 TableActionResult result = new TableActionResult(report);
                 result.setDisplayListingReport(true);

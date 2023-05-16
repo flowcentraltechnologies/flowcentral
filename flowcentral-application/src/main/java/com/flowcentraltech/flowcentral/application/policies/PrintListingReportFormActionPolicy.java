@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.BeanValueStore;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.Report;
 
 /**
@@ -48,11 +48,11 @@ public class PrintListingReportFormActionPolicy extends AbstractApplicationFormA
         EntityActionResult result = new EntityActionResult(ctx);
         if (ctx.isWithListingGenerator()) {
             FormListingGenerator generator = (FormListingGenerator) getComponent(ctx.getListingGenerator());
-            final ValueStore instValueStore = new BeanValueStore(ctx.getInst());
-            final int optionFlags = generator.getOptionFlagsOverride(instValueStore);
+            final ValueStoreReader reader = new BeanValueStore(ctx.getInst()).getReader();
+            final int optionFlags = generator.getOptionFlagsOverride(reader);
             FormListingOptions options = optionFlags == 0 ? ctx.getListingOptions()
                     : new FormListingOptions(ctx.getListingOptions().getFormActionName(), optionFlags);
-            Report report = generator.generateHtmlReport(instValueStore, options);
+            Report report = generator.generateHtmlReport(reader, options);
             ctx.setResult(report);
             result = new EntityActionResult(ctx);
             result.setDisplayListingReport(true);
