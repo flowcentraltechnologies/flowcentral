@@ -15,7 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.security.business.senders;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
+import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.notification.senders.AbstractNotificationTemplateAlertSender;
 import com.flowcentraltech.flowcentral.security.templatewrappers.UserWelcomeTemplateWrapper;
 import com.tcdng.unify.core.UnifyException;
@@ -37,10 +41,15 @@ public class UserWelcomeTemplateAlertSender extends AbstractNotificationTemplate
     }
 
     @Override
-    protected void compose(UserWelcomeTemplateWrapper notifWrapper, ValueStoreReader reader) throws UnifyException {
+    protected void setTemplateVariables(UserWelcomeTemplateWrapper notifWrapper, ValueStoreReader reader) throws UnifyException {
         notifWrapper.setFullName(reader.read(String.class, "fullName"));
         notifWrapper.setLoginId(reader.read(String.class, "loginId"));
         notifWrapper.setPlainPassword(reader.read(String.class, "plainPassword"));
+    }
+
+    @Override
+    protected List<Attachment> generateAttachment(ValueStoreReader reader) throws UnifyException {
+        return Collections.emptyList();
     }
 
 }
