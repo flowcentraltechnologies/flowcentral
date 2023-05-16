@@ -1866,10 +1866,10 @@ public interface AppletUtilities extends UnifyComponent {
     boolean isReloadOnSwitch() throws UnifyException;
 
     /**
-     * Generates a view listing report.
+     * Generates a view listing report as byte array.
      * 
-     * @param tableDef
-     *                    the table definition
+     * @param tableName
+     *                    the table name
      * @param dataList
      *                    the data list
      * @param generator
@@ -1884,14 +1884,66 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(TableDef tableDef, List<? extends Entity> dataList, String generator,
+    byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException;
+
+    /**
+     * Generates a view listing report as byte array.
+     * 
+     * @param tableName
+     *                           the table name
+     * @param dataList
+     *                           the data list
+     * @param generator
+     *                           the listing generator
+     * @param properties
+     *                           the report properties
+     * @param formats
+     *                           the formats
+     * @param spreadSheet
+     *                           indicates spread sheet
+     * @param preSummaryLines
+     *                           pre-table summary lines
+     * @param postSummaryLines
+     *                           post-table summary lines
+     * @param summaryTitleColumn
+     *                           summary title column
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet,
+            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
+            throws UnifyException;
+
+    /**
+     * Generates a view listing report.
+     * 
+     * @param tableName
+     *                    the table name
+     * @param dataList
+     *                    the data list
+     * @param generator
+     *                    the listing generator
+     * @param properties
+     *                    the report properties
+     * @param formats
+     *                    the formats
+     * @param spreadSheet
+     *                    indicates spread sheet
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
             Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException;
 
     /**
      * Generates a view listing report.
      * 
-     * @param tableDef
-     *                    the table definition
+     * @param tableName
+     *                    the table name
      * @param dataList
      *                    the data list
      * @param generator
@@ -1909,7 +1961,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(TableDef tableDef, List<? extends Entity> dataList, String generator,
+    Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
             Map<String, Object> properties, Formats formats, boolean spreadSheet,
             List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
             throws UnifyException;

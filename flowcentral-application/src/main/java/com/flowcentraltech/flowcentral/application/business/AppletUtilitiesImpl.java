@@ -2249,19 +2249,38 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public Report generateViewListingReport(TableDef tableDef, List<? extends Entity> dataList, String generator,
-            Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException {
-        return this.generateViewListingReport(tableDef, dataList, generator, properties, formats, spreadSheet,
+    public byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList,
+            String generator, Map<String, Object> properties, Formats formats, boolean spreadSheet)
+            throws UnifyException {
+        return generateViewListingReportAsByteArray(tableName, dataList, generator, properties, formats, spreadSheet,
                 Collections.emptyList(), Collections.emptyList(), 0);
     }
 
     @Override
-    public Report generateViewListingReport(TableDef tableDef, List<? extends Entity> dataList, String generator,
+    public byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList,
+            String generator, Map<String, Object> properties, Formats formats, boolean spreadSheet,
+            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
+            throws UnifyException {
+        final Report report = generateViewListingReport(tableName, dataList, generator, properties, formats,
+                spreadSheet, preSummaryLines, postSummaryLines, summaryTitleColumn);
+        return reportProvider.generateReportAsByteArray(report);
+    }
+
+    @Override
+    public Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException {
+        return this.generateViewListingReport(tableName, dataList, generator, properties, formats, spreadSheet,
+                Collections.emptyList(), Collections.emptyList(), 0);
+    }
+
+    @Override
+    public Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
             Map<String, Object> properties, Formats formats, boolean spreadSheet,
             List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
             throws UnifyException {
-        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, dataList)
-                .useGenerator(generator).useFormats(formats);
+        final TableDef tableDef = getTableDef(tableName);
+        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, dataList).useGenerator(generator)
+                .useFormats(formats);
         if (preSummaryLines != null) {
             for (TableSummaryLine line : preSummaryLines) {
                 lb.addPreSummary(new Summary(line.getLabel(), line.values()));
@@ -2277,12 +2296,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         lb.addProperties(properties);
         lb.summaryTitleColumn(summaryTitleColumn);
         lb.spreadSheet(spreadSheet);
-        
-        DetailsFormListing listing = lb.build();
-        DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
+
+        final DetailsFormListing listing = lb.build();
+        final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
+                listing.getGenerator());
         final ValueStore instValueStore = new BeanValueStore(listing);
-        return listing.isSpreadSheet()
-                ? _generator.generateExcelReport(instValueStore, new FormListingOptions())
+        return listing.isSpreadSheet() ? _generator.generateExcelReport(instValueStore, new FormListingOptions())
                 : _generator.generateHtmlReport(instValueStore, new FormListingOptions());
     }
 

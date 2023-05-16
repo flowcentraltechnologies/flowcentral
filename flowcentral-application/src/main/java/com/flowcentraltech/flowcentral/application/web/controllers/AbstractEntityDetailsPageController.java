@@ -259,8 +259,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     private final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             Formats formats, boolean spreadSheet) throws UnifyException {
         final EntityListTable table = getResultTable();
-        final Report report = au().generateViewListingReport(tableDef, table.getSourceObject(), generator, properties,
-                formats, spreadSheet, table.getPreTableSummaryLines(), table.getPostTableSummaryLines(),
+        final Report report = au().generateViewListingReport(tableDef.getLongName(), table.getSourceObject(), generator,
+                properties, formats, spreadSheet, table.getPreTableSummaryLines(), table.getPostTableSummaryLines(),
                 table.getTotalLabelColumnIndex());
         return viewListingReport(report);
     }

@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.report.business;
 
+import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -435,6 +436,14 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     public void generateReport(Report report, OutputStream outputStream) throws UnifyException {
         logDebug("Generating report [{0}]...", report.getTitle());
         reportServer.generateReport(report, outputStream);
+    }
+
+    @Override
+    public byte[] generateReportAsByteArray(Report report) throws UnifyException {
+        logDebug("Generating report [{0}]...", report.getTitle());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        reportServer.generateReport(report, baos);
+        return baos.toByteArray();
     }
 
     @Override
