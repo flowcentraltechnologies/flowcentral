@@ -23,9 +23,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
-import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.Formats;
-import com.flowcentraltech.flowcentral.application.web.data.Summary;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageEntityDetailsApplet;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListTable;
 import com.flowcentraltech.flowcentral.common.business.policies.EntryTablePolicy;
@@ -47,6 +45,7 @@ import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.annotation.ResultMapping;
 import com.tcdng.unify.web.annotation.ResultMappings;
@@ -164,7 +163,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final String viewListingHtmlReport(String tableName, Formats formats) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
-                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats, false);
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats,
+                false);
     }
 
     protected final String viewListingHtmlReport(String tableName, String generator, Map<String, Object> properties)
@@ -187,7 +187,6 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
         return viewListingReport(tableDef, generator, properties, Formats.DEFAULT, false);
     }
 
-
     protected final String viewListingExcelReport() throws UnifyException {
         return viewListingReport(getTableDef(), ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR,
                 Collections.emptyMap(), Formats.DEFAULT, true);
@@ -201,7 +200,8 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
 
     protected final String viewListingExcelReport(String tableName, Formats formats) throws UnifyException {
         return viewListingReport(au().getTableDef(tableName),
-                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats, true);
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(), formats,
+                true);
     }
 
     protected final String viewListingExcelReport(String tableName, String generator, Map<String, Object> properties)
@@ -223,7 +223,7 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
             throws UnifyException {
         return viewListingReport(tableDef, generator, properties, Formats.DEFAULT, true);
     }
-   
+
     protected String getDetailsAppletName() {
         return detailsAppletName;
     }
@@ -259,24 +259,10 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     private final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             Formats formats, boolean spreadSheet) throws UnifyException {
         final EntityListTable table = getResultTable();
-        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, table.getSourceObject())
-                .useGenerator(generator).useFormats(formats);
-        if (table.isWithPreTableSummaryLines()) {
-            for (TableSummaryLine line : table.getPreTableSummaryLines()) {
-                lb.addPreSummary(new Summary(line.getLabel(), line.values()));
-            }
-        }
-
-        if (table.isWithPostTableSummaryLines()) {
-            for (TableSummaryLine line : table.getPostTableSummaryLines()) {
-                lb.addPostSummary(new Summary(line.getLabel(), line.values()));
-            }
-        }
-
-        lb.addProperties(properties);
-        lb.summaryTitleColumn(table.getTotalLabelColumnIndex());
-        lb.spreadSheet(spreadSheet);
-        return viewListingReport(lb.build());
+        final Report report = au().generateViewListingReport(tableDef, table.getSourceObject(), generator, properties,
+                formats, spreadSheet, table.getPreTableSummaryLines(), table.getPostTableSummaryLines(),
+                table.getTotalLabelColumnIndex());
+        return viewListingReport(report);
     }
 
     protected final class DetailsEntryTablePolicy implements EntryTablePolicy {

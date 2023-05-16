@@ -134,6 +134,10 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         Report report = listing.isSpreadSheet()
                 ? generator.generateExcelReport(instValueStore, new FormListingOptions())
                 : generator.generateHtmlReport(instValueStore, new FormListingOptions());
+        return viewListingReport(report);
+    }
+
+    protected String viewListingReport(Report report) throws UnifyException {
         setRequestAttribute(FlowCentralRequestAttributeConstants.REPORT, report);
         return FlowCentralResultMappingConstants.VIEW_LISTING_REPORT;
     }

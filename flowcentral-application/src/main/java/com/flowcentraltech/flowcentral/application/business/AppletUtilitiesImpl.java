@@ -60,7 +60,10 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
+import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.data.Formats;
+import com.flowcentraltech.flowcentral.application.web.data.Summary;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
@@ -91,6 +94,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
+import com.flowcentraltech.flowcentral.application.web.writers.DetailsFormListingGenerator;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
@@ -105,9 +109,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionCont
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.ParamConfigListProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -147,6 +153,7 @@ import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.format.FormatHelper;
 import com.tcdng.unify.core.message.MessageResolver;
+import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.core.util.DataUtils;
@@ -2125,7 +2132,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             entityActionResult.setWorkflowCopied(true);
             return entityActionResult;
         }
-        
+
         return updateEntityInstByFormContext(formAppletDef, formContext, scp);
     }
 
@@ -2239,6 +2246,44 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                         variables, null);
             }
         }
+    }
+
+    @Override
+    public Report generateViewListingReport(TableDef tableDef, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException {
+        return this.generateViewListingReport(tableDef, dataList, generator, properties, formats, spreadSheet,
+                Collections.emptyList(), Collections.emptyList(), 0);
+    }
+
+    @Override
+    public Report generateViewListingReport(TableDef tableDef, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet,
+            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
+            throws UnifyException {
+        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, dataList)
+                .useGenerator(generator).useFormats(formats);
+        if (preSummaryLines != null) {
+            for (TableSummaryLine line : preSummaryLines) {
+                lb.addPreSummary(new Summary(line.getLabel(), line.values()));
+            }
+        }
+
+        if (postSummaryLines != null) {
+            for (TableSummaryLine line : postSummaryLines) {
+                lb.addPostSummary(new Summary(line.getLabel(), line.values()));
+            }
+        }
+
+        lb.addProperties(properties);
+        lb.summaryTitleColumn(summaryTitleColumn);
+        lb.spreadSheet(spreadSheet);
+        
+        DetailsFormListing listing = lb.build();
+        DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
+        final ValueStore instValueStore = new BeanValueStore(listing);
+        return listing.isSpreadSheet()
+                ? _generator.generateExcelReport(instValueStore, new FormListingOptions())
+                : _generator.generateHtmlReport(instValueStore, new FormListingOptions());
     }
 
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
