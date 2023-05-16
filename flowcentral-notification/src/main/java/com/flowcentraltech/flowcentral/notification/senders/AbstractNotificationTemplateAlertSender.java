@@ -59,7 +59,7 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
         setTemplateVariables(notifWrapper, reader);
 
         // Set attachments
-        List<Attachment> attachmentList = generateAttachment(reader);
+        List<Attachment> attachmentList = generateAttachments(reader);
         if (!DataUtils.isBlank(attachmentList)) {
             for (Attachment attachment : attachmentList) {
                 notifWrapper.addAttachment(attachment);
@@ -80,16 +80,5 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
      *                        if an error occurs
      */
     protected abstract void setTemplateVariables(T notifWrapper, ValueStoreReader reader) throws UnifyException;
-
-    /**
-     * Generates notification attachments using reader.
-     * 
-     * @param reader
-     *               the backing value store reader
-     * @return the list of generated attachments
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    protected abstract List<Attachment> generateAttachment(ValueStoreReader reader) throws UnifyException;
 
 }

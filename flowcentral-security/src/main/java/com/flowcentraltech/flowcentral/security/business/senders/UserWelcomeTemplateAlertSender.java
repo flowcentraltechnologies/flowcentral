@@ -48,7 +48,7 @@ public class UserWelcomeTemplateAlertSender extends AbstractNotificationTemplate
     }
 
     @Override
-    protected List<Attachment> generateAttachment(ValueStoreReader reader) throws UnifyException {
+    protected List<Attachment> generateAttachments(ValueStoreReader reader) throws UnifyException {
         return Collections.emptyList();
     }
 

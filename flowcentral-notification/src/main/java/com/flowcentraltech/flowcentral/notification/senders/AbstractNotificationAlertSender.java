@@ -29,6 +29,7 @@ import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 
 /**
@@ -73,6 +74,17 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
     protected final ApplicationModuleService application() {
         return appletUtilities.application();
     }
+
+    /**
+     * Generates notification attachments using reader.
+     * 
+     * @param reader
+     *               the backing value store reader
+     * @return the list of generated attachments
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected abstract List<Attachment> generateAttachments(ValueStoreReader reader) throws UnifyException;
 
     protected Attachment createPdfAttachmentFromDetailListing(String fileName, String tableName,
             List<? extends Entity> dataList) throws UnifyException {
