@@ -122,20 +122,22 @@ public interface LoadingTableProvider extends UnifyComponent {
      *                     the comment on this action
      * @param emails
      *                     the emails
+     * @param listing      the listing mode
      * @return if successful
      * @throws UnifyException
      *                        if an error occurs
      */
     boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
-            InputArrayEntries emails) throws UnifyException;
+            InputArrayEntries emails, boolean listing) throws UnifyException;
     
     /**
      * Commit change to entity
      * 
      * @param itemValueStore
      *                       the item value store
+    * @param listing      the listing mode
      * @throws UnifyException
      *                        if an error occurs
      */
-    void commitChange(ValueStore itemValueStore) throws UnifyException;
+    void commitChange(ValueStore itemValueStore, boolean listing) throws UnifyException;
 }

@@ -117,17 +117,18 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
 
     @Override
     public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
-            InputArrayEntries emails) throws UnifyException {
+            InputArrayEntries emails, boolean listing) throws UnifyException {
         return workflowModuleService.applyUserAction(wfEntityInst, sourceItemId, wfStepName, userAction, comment,
-                emails, wfReviewMode);
+                emails, wfReviewMode, listing);
     }
 
     @Override
-    public final void commitChange(ValueStore itemValueStore) throws UnifyException {
+    public final void commitChange(ValueStore itemValueStore, boolean listing) throws UnifyException {
         CommitChangeInfo commitChangeInfo = resolveCommitChangeInfo(itemValueStore);
         if (commitChangeInfo != null && commitChangeInfo.isPresent()) {
             workflowModuleService.applyUserAction(commitChangeInfo.getWorkEntity(), commitChangeInfo.getWfItemId(),
-                    wfStepName, commitChangeInfo.getActionName(), commitChangeInfo.getComment(), null, wfReviewMode);
+                    wfStepName, commitChangeInfo.getActionName(), commitChangeInfo.getComment(), null, wfReviewMode,
+                    listing);
         }
     }
 

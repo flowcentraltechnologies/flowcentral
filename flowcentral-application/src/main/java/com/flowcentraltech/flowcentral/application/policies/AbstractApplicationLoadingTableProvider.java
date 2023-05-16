@@ -72,7 +72,7 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractUn
 
     @Override
     public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
-            InputArrayEntries emails) throws UnifyException {
+            InputArrayEntries emails, boolean listing) throws UnifyException {
         return false;
     }
 

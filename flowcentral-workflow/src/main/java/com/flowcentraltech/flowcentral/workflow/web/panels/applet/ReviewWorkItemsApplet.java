@@ -165,7 +165,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         String comment = getNewComment();
         AbstractForm _form = getResolvedForm();
         wms.applyUserAction(currEntityInst, currWfItem.getId(), wfStepDef.getName(), actionName, comment,
-                _form.getEmails(), WfReviewMode.NORMAL);
+                _form.getEmails(), WfReviewMode.NORMAL, _form.isListing());
         navBackToSearch();
     }
 

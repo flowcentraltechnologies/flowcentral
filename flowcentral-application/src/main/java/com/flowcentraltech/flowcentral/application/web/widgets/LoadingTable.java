@@ -75,7 +75,7 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
 
             LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
                     currentTableLoadingDef.getProvider());
-            loadingTableProvider.commitChange(valueStore);
+            loadingTableProvider.commitChange(valueStore, true);
         }
     }
     
