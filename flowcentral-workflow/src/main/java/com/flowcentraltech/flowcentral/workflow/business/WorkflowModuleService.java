@@ -318,13 +318,15 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                     optional email update
      * @param wfReviewMode
      *                     the review mode
+     * @param listing
+     *                     indicates of listing
      * @return true if successfully applied otherwise false when workflow item is
      *         not in step
      * @throws UnifyException
      *                        if an error occurs
      */
     boolean applyUserAction(WorkEntity wfEntityInst, Long wfItemId, String stepName, String userAction, String comment,
-            InputArrayEntries emails, WfReviewMode wfReviewMode) throws UnifyException;
+            InputArrayEntries emails, WfReviewMode wfReviewMode, boolean listing) throws UnifyException;
 
     /**
      * Gets application workflow wizard definition.

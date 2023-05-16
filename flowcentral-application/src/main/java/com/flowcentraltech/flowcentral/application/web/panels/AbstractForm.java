@@ -332,4 +332,8 @@ public abstract class AbstractForm {
     public boolean isWithSectorIcon() {
         return sectorIcon != null;
     }
+
+    public boolean isListing() {
+        return false;
+    }
 }

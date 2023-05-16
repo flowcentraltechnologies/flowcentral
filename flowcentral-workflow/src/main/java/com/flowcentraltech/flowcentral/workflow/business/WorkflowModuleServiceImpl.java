@@ -651,8 +651,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public boolean applyUserAction(final WorkEntity wfEntityInst, final Long wfItemId, final String stepName,
-            final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode)
-            throws UnifyException {
+            final String userAction, final String comment, InputArrayEntries emails, WfReviewMode wfReviewMode,
+            final boolean listing) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
@@ -675,9 +675,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfItem.setHeldBy(getUserToken().getUserLoginId());
             environment().updateByIdVersion(wfItem);
 
-            wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
             final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
+            boolean update = !listing;
             if (userActionDef.isWithSetValues()) {
+                wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
                 final EntityDef entityDef = wfDef.getEntityDef();
                 final Date now = getNow();
                 final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
@@ -687,25 +688,39 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
                             Collections.emptyMap(), null);
                 }
+
+                update = true;
             }
 
-            final AppletDef stepAppletDef = appletUtil.getAppletDef(prevWfStepDef.getStepAppletName());
-            final EntityDef entityDef = appletUtil.getEntityDef(stepAppletDef.getEntity());
-            final String updatePolicy = stepAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
-            EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE, null,
-                    updatePolicy);
             if (wfReviewMode.lean()) {
                 if (emails != null) {
                     environment().findChildren(wfEntityInst);
                     updateEmails(wfDef, wfEntityInst, emails);
-                    environment().updateByIdVersion(eCtx);
-                } else {
-                    environment().updateLean(eCtx);
                 }
             } else {
                 updateEmails(wfDef, wfEntityInst, emails);
-                environment().updateByIdVersion(eCtx);
+            }
+
+            if (update) {
+                // Update
+                final AppletDef stepAppletDef = appletUtil.getAppletDef(prevWfStepDef.getStepAppletName());
+                final EntityDef entityDef = appletUtil.getEntityDef(stepAppletDef.getEntity());
+                final String updatePolicy = stepAppletDef.getPropValue(String.class,
+                        AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
+                EntityActionContext eCtx = new EntityActionContext(entityDef, wfEntityInst, RecordActionType.UPDATE,
+                        null, updatePolicy);
+                if (wfReviewMode.lean()) {
+                    if (emails != null) {
+                        environment().updateByIdVersion(eCtx);
+                    } else {
+                        environment().updateLean(eCtx);
+                    }
+                } else {
+                    environment().updateByIdVersion(eCtx);
+                }
+            } else {
+                environment().updateById(wfEntityInst.getClass(), wfEntityInst.getId(),
+                        new Update().add("processingStatus", nextWfStepDef.getProcessingStatus()));
             }
 
             pushToWfTransitionQueue(wfDef, wfItemId);
