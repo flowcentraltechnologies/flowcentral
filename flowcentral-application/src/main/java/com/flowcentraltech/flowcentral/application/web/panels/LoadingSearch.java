@@ -211,12 +211,12 @@ public class LoadingSearch {
     }
 
     public boolean applyUserAction(WorkEntity wfEntityInst, String userAction, String comment, InputArrayEntries emails,
-            int index) throws UnifyException {
+            int index, boolean listing) throws UnifyException {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
         LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
         return loadingTableProvider != null
                 ? loadingTableProvider.applyUserAction(wfEntityInst, (Long) loadingEntity.getId(), userAction, comment,
-                        emails)
+                        emails, listing)
                 : false;
     }
 

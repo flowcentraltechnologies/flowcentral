@@ -39,4 +39,9 @@ public class ListingForm extends AbstractForm {
     public FormListing getFormListing() {
         return formListing;
     }
+
+    @Override
+    public final boolean isListing() {
+        return true;
+    }
 }

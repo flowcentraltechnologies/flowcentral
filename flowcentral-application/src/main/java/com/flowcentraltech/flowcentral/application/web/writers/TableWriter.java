@@ -295,7 +295,7 @@ public class TableWriter extends AbstractControlWriter {
                 }
 
                 if (isCrudMode) {
-                    FixedRowActionType fixedType = table.resolveFixedIndex(valueStore, i, len);
+                    FixedRowActionType fixedType = isFixedRows ? table.resolveFixedIndex(valueStore, i, len) : null;
                     Control _crudCtrl = !tableWidget.isContainerEditable() || table.isViewOnly()
                             || (fixedType != null && (fixedType.fixed() || !fixedType.editable()))
                                     ? tableWidget.getViewCtrl()

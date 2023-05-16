@@ -110,7 +110,6 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
         return super.navBackToPrevious();
     }
 
-
     public EntityActionResult updateSingleFormInst() throws UnifyException {
         singleForm.unloadSingleFormBean();
         Entity inst = (Entity) singleForm.getFormBean();
@@ -147,8 +146,10 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             viewMode = ViewMode.MAINTAIN_FORM;
         } else if (item.isReport()) {
             if (item.isWithListingParams()) {
-                FormListingGenerator generator = au().getComponent(FormListingGenerator.class, item.getListingGenerator());
-                Report report = generator.generateHtmlReport(new BeanValueStore(item.getEntity()), item.getListingOptions());
+                FormListingGenerator generator = au().getComponent(FormListingGenerator.class,
+                        item.getListingGenerator());
+                Report report = generator.generateHtmlReport(new BeanValueStore(item.getEntity()),
+                        item.getListingOptions());
                 TableActionResult result = new TableActionResult(report);
                 result.setDisplayListingReport(true);
                 return result;
@@ -206,7 +207,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             setAltSubCaption(singleForm.getFormTitle());
             viewMode = ViewMode.SINGLE_FORM;
         }
- 
+
         TableActionResult result = new TableActionResult();
         result.setRefreshContent(true);
         return result;
@@ -216,7 +217,8 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
     public void applyUserAction(String actionName) throws UnifyException {
         final AbstractForm _form = getResolvedForm();
         WorkEntity currEntityInst = (WorkEntity) _form.getFormBean();
-        loadingSearch.applyUserAction(currEntityInst, actionName, _form.getNewComment(), _form.getEmails(), mIndex);
+        loadingSearch.applyUserAction(currEntityInst, actionName, _form.getNewComment(), _form.getEmails(), mIndex,
+                _form.isListing());
         navBackToSearch();
     }
 

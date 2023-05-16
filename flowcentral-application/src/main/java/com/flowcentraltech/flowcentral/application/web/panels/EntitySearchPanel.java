@@ -32,7 +32,6 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.PageRequestContextUtil;
-import com.tcdng.unify.web.ui.widget.data.ButtonGroupInfo;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 
@@ -117,17 +116,8 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
         if (entitySearch.isShowActionFooter()) {
             boolean buttonsForFooterAction = system().getSysParameterValue(boolean.class,
                     ApplicationModuleSysParamConstants.SHOW_BUTTONS_FOR_FOOTER_ACTION);
-            if (buttonsForFooterAction) {
-                ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
-                bgib.addItems(tableDef.getActionBtnInfos());
-                entitySearch.setAppTableActionButtonInfo(bgib.build());
-                setVisible("tblActionBtns", true);
-                setVisible("selFooterActionPanel", false);
-            } else {
-                entitySearch.setAppTableActionButtonInfo(null);
-                setVisible("tblActionBtns", false);
-                setVisible("selFooterActionPanel", true);
-            }
+            setVisible("tblActionBtns", buttonsForFooterAction);
+            setVisible("selFooterActionPanel", !buttonsForFooterAction);
         }
 
         setDisabled("fastBackBtn", entityTable.isAtFirstPage());

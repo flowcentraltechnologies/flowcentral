@@ -167,7 +167,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     public EntityActionResult updateInst() throws UnifyException {
         form.unloadSingleFormBean();
         Entity inst = (Entity) form.getFormBean();
-        String updatePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
+        final String updatePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
         EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst,
                 RecordActionType.UPDATE, null, updatePolicy);
         eCtx.setAll(form.getCtx());
@@ -190,7 +190,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
 
     public EntityActionResult deleteInst() throws UnifyException {
         Entity inst = (Entity) form.getFormBean();
-        String deletePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY);
+        final String deletePolicy = getRootAppletProp(String.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE_POLICY);
         EntityActionContext eCtx = new EntityActionContext(getEntityDef(), inst,
                 RecordActionType.DELETE, null, deletePolicy);
         eCtx.setAll(form.getCtx());

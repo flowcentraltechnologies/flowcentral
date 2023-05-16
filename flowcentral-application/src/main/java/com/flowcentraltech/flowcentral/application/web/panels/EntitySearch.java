@@ -108,7 +108,7 @@ public class EntitySearch extends AbstractPanelFormBinding {
     private OwnershipType saveFilterScope;
 
     private String appAppletFilterName;
-    
+
     private final boolean viewItemsInSeparateTabs;
 
     private int childTabIndex;
@@ -242,11 +242,23 @@ public class EntitySearch extends AbstractPanelFormBinding {
     }
 
     public ButtonGroupInfo getAppTableActionButtonInfo() {
-        return appTableActionButtonInfo;
-    }
+        if (appTableActionButtonInfo == null) {
+            synchronized (this) {
+                if (appTableActionButtonInfo == null) {
+                    ButtonGroupInfo.Builder bgib = ButtonGroupInfo.newBuilder();
+                    bgib.addItems(entityTable.getTableDef().getActionBtnInfos());
+                    appTableActionButtonInfo = bgib.build();
+                }
+            }
+        }
 
-    public void setAppTableActionButtonInfo(ButtonGroupInfo appTableActionButtonInfo) {
-        this.appTableActionButtonInfo = appTableActionButtonInfo;
+        FormContext ctx = getFormCtx();
+        if (ctx != null) {
+            appTableActionButtonInfo
+                    .setParentReader(ctx.getFormValueStore() != null ? ctx.getFormValueStore().getReader() : null);
+        }
+
+        return appTableActionButtonInfo;
     }
 
     public String getAppAppletFilterName() {

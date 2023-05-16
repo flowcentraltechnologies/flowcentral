@@ -1353,29 +1353,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 fgdb.addFilter(FilterType.TAB, _appletDef.getFilterDef(tabFilter));
             }
 
-            String baseCondition = _appletDef.getPropValue(String.class, AppletPropertyConstants.BASE_RESTRICTION);
-            if (!StringUtils.isBlank(baseCondition)) {
-                fgdb.addFilter(FilterType.BASE, _appletDef.getFilterDef(baseCondition));
-            }
-
-            String updateCondition = _appletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-            if (!StringUtils.isBlank(updateCondition)) {
-                fgdb.addFilter(FilterType.MAINTAIN_UPDATE, _appletDef.getFilterDef(updateCondition));
-            }
-
-            String deleteCondition = _appletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
-            if (!StringUtils.isBlank(deleteCondition)) {
-                fgdb.addFilter(FilterType.MAINTAIN_DELETE, _appletDef.getFilterDef(deleteCondition));
-            }
-
+            addFilterType(fgdb, FilterType.BASE, _appletDef, AppletPropertyConstants.BASE_RESTRICTION);
+            addFilterType(fgdb, FilterType.MAINTAIN_UPDATE, _appletDef, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+            addFilterType(fgdb, FilterType.MAINTAIN_DELETE, _appletDef, AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION); 
             return fgdb.build();
         }
 
         return null;
     }
 
+    private void addFilterType(FilterGroupDef.Builder fgdb, FilterType filterType, AppletDef _appletDef,
+            String propertyName) throws UnifyException {
+        final String condition = _appletDef.getPropValue(String.class, propertyName);
+        if (!StringUtils.isBlank(condition)) {
+            fgdb.addFilter(filterType, _appletDef.getFilterDef(condition));
+        }
+    }
+    
     @Override
     public EntityAuditInfo getEntityAuditInfo(Object entityDef) throws UnifyException {
         EntityDef _entityDef = (EntityDef) entityDef;

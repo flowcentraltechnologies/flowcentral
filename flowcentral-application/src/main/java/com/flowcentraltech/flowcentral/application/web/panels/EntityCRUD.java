@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
@@ -48,8 +49,9 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     public EntityCRUD(AppletUtilities au, SweepingCommitPolicy scp, AppletDef formAppletDef,
             EntityClassDef entityClassDef, String baseField, Object baseId, EntityTable table, MiniForm createForm,
-            MiniForm maintainForm, String childFieldName) {
-        super(au, scp, baseField, baseId, table, createForm, maintainForm, "$m{button.save}");
+            MiniForm maintainForm, String childFieldName) throws UnifyException {
+        super(au, scp, baseField, baseId, table, createForm, maintainForm, "$m{button.save}",
+                isAllowCreate(formAppletDef));
         this.entityClassDef = entityClassDef;
         this.formAppletDef = formAppletDef;
         this.childFieldName = childFieldName;
@@ -116,4 +118,9 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
         au().deleteEntityInstByFormContext(formAppletDef, formContext, scp);
     }
 
+    private static boolean isAllowCreate(AppletDef formAppletDef) throws UnifyException {
+        return formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SAVE)
+                || formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SAVE_NEXT)
+                || formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SAVE_CLOSE);
+    }
 }
