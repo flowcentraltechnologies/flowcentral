@@ -42,7 +42,6 @@ import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
-import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.report.Report;
@@ -223,21 +222,21 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return null;
     }
 
-    protected synchronized String retrieveFormattedDate(ValueStore valueStore, String propertyName)
+    protected synchronized String retrieveFormattedDate(ValueStoreReader reader, String propertyName)
             throws UnifyException {
-        return valueStore.retrieve(String.class, propertyName, dateFormatterMap.get(getSessionLocale()));
+        return reader.read(String.class, propertyName, dateFormatterMap.get(getSessionLocale()));
     }
 
     protected synchronized String formattedDate(Date date) throws UnifyException {
         return DataUtils.convert(String.class, date, dateFormatterMap.get(getSessionLocale()));
     }
 
-    protected synchronized String[] retrieveFormattedDates(ValueStore valueStore, String... propertyName)
+    protected synchronized String[] retrieveFormattedDates(ValueStoreReader reader, String... propertyName)
             throws UnifyException {
         Formatter<?> formatter = dateFormatterMap.get(getSessionLocale());
         String[] result = new String[propertyName.length];
         for (int i = 0; i < result.length; i++) {
-            result[i] = valueStore.retrieve(String.class, propertyName[i], formatter);
+            result[i] = reader.read(String.class, propertyName[i], formatter);
         }
         return result;
     }
@@ -250,25 +249,25 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return DataUtils.convert(String.class, amount, amountFormatterMap.get(getSessionLocale()));
     }
 
-    protected synchronized String[] retrieveFormattedAmounts(AmountFormat format, ValueStore valueStore,
+    protected synchronized String[] retrieveFormattedAmounts(AmountFormat format, ValueStoreReader reader,
             String... propertyName) throws UnifyException {
         Formatter<?> formatter = AmountFormat.WHOLE_NUMBER.equals(format)
                 ? wholeAmountFormatterMap.get(getSessionLocale())
                 : amountFormatterMap.get(getSessionLocale());
         String[] result = new String[propertyName.length];
         for (int i = 0; i < result.length; i++) {
-            result[i] = valueStore.retrieve(String.class, propertyName[i], formatter);
+            result[i] = reader.read(String.class, propertyName[i], formatter);
         }
         return result;
     }
 
-    protected synchronized String retrieveFormattedAmount(AmountFormat format, ValueStore valueStore,
+    protected synchronized String retrieveFormattedAmount(AmountFormat format, ValueStoreReader reader,
             String propertyName) throws UnifyException {
         if (AmountFormat.WHOLE_NUMBER.equals(format)) {
-            return valueStore.retrieve(String.class, propertyName, wholeAmountFormatterMap.get(getSessionLocale()));
+            return reader.read(String.class, propertyName, wholeAmountFormatterMap.get(getSessionLocale()));
         }
 
-        return valueStore.retrieve(String.class, propertyName, amountFormatterMap.get(getSessionLocale()));
+        return reader.read(String.class, propertyName, amountFormatterMap.get(getSessionLocale()));
     }
 
     @SuppressWarnings("unchecked")
