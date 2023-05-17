@@ -25,10 +25,12 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNa
 import com.flowcentraltech.flowcentral.application.web.data.Formats;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.AbstractTask;
 
@@ -66,6 +68,13 @@ public abstract class AbstractNotificationTask extends AbstractTask {
 
     protected final EnvironmentService environment() {
         return appletUtilities.environment();
+    }
+
+    protected Attachment createPdfAttachmentFromListing(String fileName, ValueStoreReader reader,
+            String generator, FormListingOptions options) throws UnifyException {
+        final byte[] report = appletUtilities.generateViewListingReportAsByteArray(reader, generator, options);
+        return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName)
+                .title(fileName).name(fileName).data(report).build();
     }
 
     protected Attachment createPdfAttachmentFromDetailListing(String fileName, String tableName,

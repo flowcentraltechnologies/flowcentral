@@ -95,6 +95,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
 import com.flowcentraltech.flowcentral.application.web.writers.DetailsFormListingGenerator;
+import com.flowcentraltech.flowcentral.application.web.writers.FormListingGenerator;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
@@ -2249,6 +2250,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, String generator,
+            FormListingOptions options) throws UnifyException {
+        final Report report = generateViewListingReport(reader, generator, options);
+        return reportProvider.generateReportAsByteArray(report);
+    }
+
+    @Override
     public byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList,
             String generator, Map<String, Object> properties, Formats formats, boolean spreadSheet)
             throws UnifyException {
@@ -2264,6 +2272,16 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final Report report = generateViewListingReport(tableName, dataList, generator, properties, formats,
                 spreadSheet, preSummaryLines, postSummaryLines, summaryTitleColumn);
         return reportProvider.generateReportAsByteArray(report);
+    }
+
+    @Override
+    public Report generateViewListingReport(ValueStoreReader reader, String generator, FormListingOptions options)
+            throws UnifyException {
+        final FormListingGenerator _generator = (FormListingGenerator) getComponent(generator);
+        final int optionFlags = _generator.getOptionFlagsOverride(reader);
+        FormListingOptions _options = optionFlags == 0 ? options
+                : new FormListingOptions(options.getFormActionName(), optionFlags);
+        return _generator.generateHtmlReport(reader, _options);
     }
 
     @Override

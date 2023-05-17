@@ -77,6 +77,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.util.StringToken;
@@ -1866,6 +1867,22 @@ public interface AppletUtilities extends UnifyComponent {
     boolean isReloadOnSwitch() throws UnifyException;
 
     /**
+     * Generates a listing report as byte array.
+     * 
+     * @param reader
+     *                  the source reader
+     * @param generator
+     *                  the listing generator
+     * @param options
+     *                  the listing options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, String generator, FormListingOptions options)
+            throws UnifyException;
+
+    /**
      * Generates a view listing report as byte array.
      * 
      * @param tableName
@@ -1888,7 +1905,7 @@ public interface AppletUtilities extends UnifyComponent {
             Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException;
 
     /**
-     * Generates a view listing report as byte array.
+     * Generates a listing report as byte array.
      * 
      * @param tableName
      *                           the table name
@@ -1918,7 +1935,23 @@ public interface AppletUtilities extends UnifyComponent {
             throws UnifyException;
 
     /**
-     * Generates a view listing report.
+     * Generates a listing report.
+     * 
+     * @param reader
+     *                  the source reader
+     * @param generator
+     *                  the listing generator
+     * @param options
+     *                  the listing options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateViewListingReport(ValueStoreReader reader, String generator, FormListingOptions options)
+            throws UnifyException;
+
+    /**
+     * Generates a listing report.
      * 
      * @param tableName
      *                    the table name
@@ -1940,7 +1973,7 @@ public interface AppletUtilities extends UnifyComponent {
             Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException;
 
     /**
-     * Generates a view listing report.
+     * Generates a listing report.
      * 
      * @param tableName
      *                    the table name

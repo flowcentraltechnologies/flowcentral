@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.policies;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
 import com.tcdng.unify.core.UnifyException;
@@ -31,10 +32,10 @@ import com.tcdng.unify.core.database.Entity;
 public abstract class AbstractApplicationFormActionPolicy extends AbstractFormActionPolicy {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities appletUtilities;
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -42,8 +43,12 @@ public abstract class AbstractApplicationFormActionPolicy extends AbstractFormAc
         return true;
     }
 
-    protected ApplicationModuleService application() {
-        return applicationModuleService;
+    protected final ApplicationModuleService application() {
+        return appletUtilities.application();
+    }
+
+    protected final AppletUtilities au() {
+        return appletUtilities;
     }
 
 }
