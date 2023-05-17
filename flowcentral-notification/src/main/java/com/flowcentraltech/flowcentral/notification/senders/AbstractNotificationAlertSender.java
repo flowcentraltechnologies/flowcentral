@@ -32,6 +32,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.IOUtils;
 
 /**
  * Convenient abstract base class for notification alert sender.
@@ -122,6 +123,12 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
                 properties, formats, true);
     }
 
+    protected Attachment createAttachmentFromFile(FileAttachmentType type, String fileName, String fullPathName) throws UnifyException {
+        final byte[] file = IOUtils.readFileResourceInputStream(fullPathName);
+        return Attachment.newBuilder(type).fileName(fileName)
+                .title(fileName).name(fileName).data(file).build();
+    }
+    
     private Attachment createAttachmentFromDetailListingReport(String fileName, String tableName,
             List<? extends Entity> dataList, String detailsListingGenerator, Map<String, Object> properties,
             Formats formats, boolean spreadSheet) throws UnifyException {

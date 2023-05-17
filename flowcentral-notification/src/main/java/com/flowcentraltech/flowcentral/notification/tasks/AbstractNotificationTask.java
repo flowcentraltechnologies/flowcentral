@@ -33,6 +33,7 @@ import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.AbstractTask;
+import com.tcdng.unify.core.util.IOUtils;
 
 /**
  * Convenient abstract base class for notification tasks.
@@ -103,6 +104,12 @@ public abstract class AbstractNotificationTask extends AbstractTask {
             Formats formats) throws UnifyException {
         return createAttachmentFromDetailListingReport(fileName, tableName, dataList, detailsListingGenerator,
                 properties, formats, true);
+    }
+
+    protected Attachment createAttachmentFromFile(FileAttachmentType type, String fileName, String fullPathName) throws UnifyException {
+        final byte[] file = IOUtils.readFileResourceInputStream(fullPathName);
+        return Attachment.newBuilder(type).fileName(fileName)
+                .title(fileName).name(fileName).data(file).build();
     }
 
     private Attachment createAttachmentFromDetailListingReport(String fileName, String tableName,
