@@ -553,7 +553,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public void crudToChildItem(int childTabIndex) throws UnifyException {
         if (ensureSaveOnTabAction()) {
             currFormTabDef = form.getFormDef().getFormTabDef(childTabIndex);
-            final boolean viewOnly = form.matchFormBean(currFormTabDef.getEditFormless());
+            final boolean viewOnly = form.matchFormBean(currFormTabDef.getEditViewOnly());
+            final boolean allowAddition = form.matchFormBean(currFormTabDef.getEditAllowAddition());
             final boolean fixedRows = form.matchFormBean(currFormTabDef.getEditFixedRows());
             final String baseField = au().getChildFkFieldName(form.getFormDef().getEntityDef(),
                     currFormTabDef.getReference());
@@ -561,7 +562,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             final String subTitle = ((Entity) form.getFormBean()).getDescription();
             saveCurrentForm(currFormTabDef);
             entityCrudPage = constructNewEntityCRUDPage(currFormTabDef.getApplet(), currFormTabDef.getFilterGroupDef(),
-                    baseField, baseId, subTitle, currFormTabDef.getReference(), viewOnly, fixedRows);
+                    baseField, baseId, subTitle, currFormTabDef.getReference(), viewOnly, allowAddition, fixedRows);
             entityCrudPage.loadCrudList();
             viewMode = ViewMode.ENTITY_CRUD_PAGE;
         }
@@ -1071,7 +1072,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     protected EntityCRUDPage constructNewEntityCRUDPage(String appletName, FilterGroupDef filterGroupDef,
-            String baseField, Object baseId, String subTitle, String childListName, boolean viewOnly, boolean fixedRows)
+            String baseField, Object baseId, String subTitle, String childListName, boolean viewOnly, boolean allowAddition, boolean fixedRows)
             throws UnifyException {
         SectorIcon sectorIcon = getSectorIcon();
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
@@ -1080,7 +1081,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         EntityDef parentEntityDef = form.getEntityDef();
         Entity parentInst = (Entity) form.getCtx().getInst();
         return new EntityCRUDPage(getCtx(), appletName, formEventHandlers, this, parentEntityDef, parentInst, baseField,
-                baseId, childListName, sectorIcon, breadCrumbs, filterGroupDef, viewOnly, fixedRows);
+                baseId, childListName, sectorIcon, breadCrumbs, filterGroupDef, viewOnly, allowAddition, fixedRows);
     }
 
     protected EditPropertyList constructNewEditPropertyList(PropertyRuleDef propertyRuleDef, Entity inst,

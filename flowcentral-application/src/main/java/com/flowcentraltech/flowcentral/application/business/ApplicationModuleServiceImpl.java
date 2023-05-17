@@ -434,7 +434,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             appApplet.getPseudoDeleteField(), appApplet.getDisplayIndex(), appApplet.isMenuAccess(),
                             appApplet.isAllowSecondaryTenants(), descriptiveButtons, _actLongName,
                             appApplet.getDescription(), appApplet.getId(), appApplet.getVersionNo());
-                     
+
                     for (AppAppletProp appAppletProp : appApplet.getPropList()) {
                         adb.addPropDef(appAppletProp.getName(), appAppletProp.getValue());
                     }
@@ -461,14 +461,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     adb.routeToApplet(appApplet.getRouteToApplet());
                     if (!StringUtils.isBlank(appApplet.getPath())) {
                         adb.openPath(appApplet.getPath());
-                     } else {
+                    } else {
                         adb.openPath(ApplicationPageUtils.constructAppletOpenPagePath(appApplet.getType(), longName));
                         if (type.isEntityList()) {
-                            adb.maintainOpenPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.CREATE_ENTITY, longName));
-                            adb.listingOpenPath(ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING, longName));
+                            adb.maintainOpenPath(ApplicationPageUtils
+                                    .constructAppletOpenPagePath(AppletType.CREATE_ENTITY, longName));
+                            adb.listingOpenPath(
+                                    ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING, longName));
                         }
                     }
-                    
+
                     adb.openWindow(appApplet.getType().isOpenWindow());
                     return adb.build();
                 }
@@ -969,10 +971,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                                     appFormElement.getTabApplet(), appFormElement.getTabReference(),
                                     appFormElement.getMappedFieldName(), appFormElement.getTabMappedForm(),
                                     appFormElement.getEditAction(), appFormElement.getEditFormless(),
-                                    appFormElement.getEditFixedRows(), appFormElement.isIgnoreParentCondition(),
-                                    appFormElement.isShowSearch(), appFormElement.isQuickEdit(),
-                                    appFormElement.isVisible(), appFormElement.isEditable(),
-                                    appFormElement.isDisabled());
+                                    appFormElement.getEditAllowAddition(), appFormElement.getEditFixedRows(),
+                                    appFormElement.isIgnoreParentCondition(), appFormElement.isShowSearch(),
+                                    appFormElement.isQuickEdit(), appFormElement.isVisible(),
+                                    appFormElement.isEditable(), appFormElement.isDisabled());
                         } else if (FormElementType.SECTION.equals(appFormElement.getType())) {
                             sectionIndex++;
                             fdb.addFormSection(tabIndex, appFormElement.getElementName(), appFormElement.getLabel(),
@@ -1354,8 +1356,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
 
             addFilterType(fgdb, FilterType.BASE, _appletDef, AppletPropertyConstants.BASE_RESTRICTION);
-            addFilterType(fgdb, FilterType.MAINTAIN_UPDATE, _appletDef, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-            addFilterType(fgdb, FilterType.MAINTAIN_DELETE, _appletDef, AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION); 
+            addFilterType(fgdb, FilterType.MAINTAIN_UPDATE, _appletDef,
+                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
+            addFilterType(fgdb, FilterType.MAINTAIN_DELETE, _appletDef,
+                    AppletPropertyConstants.MAINTAIN_FORM_DELETE_CONDITION);
             return fgdb.build();
         }
 
@@ -1369,7 +1373,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             fgdb.addFilter(filterType, _appletDef.getFilterDef(condition));
         }
     }
-    
+
     @Override
     public EntityAuditInfo getEntityAuditInfo(Object entityDef) throws UnifyException {
         EntityDef _entityDef = (EntityDef) entityDef;

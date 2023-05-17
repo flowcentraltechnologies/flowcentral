@@ -121,7 +121,8 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                 appFormElement.setMappedFieldName(formTab.getMappedFieldName());
                 appFormElement.setTabMappedForm(formTab.getMappedForm());
                 appFormElement.setEditAction(formTab.getEditAction());
-                appFormElement.setEditFormless(formTab.getEditFormless());
+                appFormElement.setEditFormless(formTab.getEditViewOnly());
+                appFormElement.setEditAllowAddition(formTab.getEditAllowAddition());
                 appFormElement.setEditFixedRows(formTab.getEditFixedRows());
                 appFormElement.setIgnoreParentCondition(formTab.isIgnoreParentCondition());
                 appFormElement.setShowSearch(formTab.isShowSearch());
@@ -196,10 +197,10 @@ public class FormEditorPage extends AbstractStudioEditorPage implements TabSheet
                             appFormElement.getLabel(), appFormElement.getTabApplet(), appFormElement.getTabReference(),
                             appFormElement.getFilter(), appFormElement.getMappedFieldName(),
                             appFormElement.getTabMappedForm(), appFormElement.getEditAction(),
-                            appFormElement.getEditFormless(), appFormElement.getEditFixedRows(),
-                            appFormElement.isIgnoreParentCondition(), appFormElement.isShowSearch(),
-                            appFormElement.isQuickEdit(), appFormElement.isVisible(), appFormElement.isEditable(),
-                            appFormElement.isDisabled());
+                            appFormElement.getEditFormless(), appFormElement.getEditAllowAddition(),
+                            appFormElement.getEditFixedRows(), appFormElement.isIgnoreParentCondition(),
+                            appFormElement.isShowSearch(), appFormElement.isQuickEdit(), appFormElement.isVisible(),
+                            appFormElement.isEditable(), appFormElement.isDisabled());
                     break;
                 default:
                     break;

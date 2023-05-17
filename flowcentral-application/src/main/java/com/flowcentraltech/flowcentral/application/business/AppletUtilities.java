@@ -1444,8 +1444,8 @@ public interface AppletUtilities extends UnifyComponent {
      */
     EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName, EntityFormEventHandlers formEventHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst, String baseField,
-            Object baseId, String childListName, FilterGroupDef filterGroupDef, final boolean viewOnly,
-            final boolean fixedRows) throws UnifyException;
+            Object baseId, String childListName, FilterGroupDef filterGroupDef, boolean viewOnly, boolean allowAddition,
+            boolean fixedRows) throws UnifyException;
 
     /**
      * Matches a form bean with applet condition property

@@ -237,12 +237,12 @@ public class FormEditor {
         }
 
         public Builder addTab(String contentType, String name, String label, String applet, String reference,
-                String filter, String mappedFieldName, String mappedForm, String editAction, String editFormless,
-                String editFixedRows, boolean ignoreParentCondition, boolean showSearch, boolean quickEdit,
-                boolean visible, boolean editable, boolean disabled) {
+                String filter, String mappedFieldName, String mappedForm, String editAction, String editViewOnly,
+                String editAllowAddition, String editFixedRows, boolean ignoreParentCondition, boolean showSearch,
+                boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
             currentTab = new FormTab(contentType, name, label, applet, reference, filter, mappedFieldName, mappedForm,
-                    editAction, editFormless, editFixedRows, ignoreParentCondition, showSearch, quickEdit, visible,
-                    editable, disabled);
+                    editAction, editViewOnly, editAllowAddition, editFixedRows, ignoreParentCondition, showSearch,
+                    quickEdit, visible, editable, disabled);
             tabs.add(currentTab);
             return this;
         }
@@ -388,7 +388,9 @@ public class FormEditor {
 
         private String editAction;
 
-        private String editFormless;
+        private String editViewOnly;
+
+        private String editAllowAddition;
 
         private String editFixedRows;
 
@@ -407,7 +409,7 @@ public class FormEditor {
         private List<FormSection> sections;
 
         public FormTab(String contentType, String name, String label, String applet, String reference, String filter,
-                String mappedFieldName, String mappedForm, String editAction, String editFormless, String editFixedRows,
+                String mappedFieldName, String mappedForm, String editAction, String editViewOnly, String editAllowAddition, String editFixedRows,
                 boolean ignoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible, boolean editable,
                 boolean disabled) {
             this();
@@ -420,7 +422,8 @@ public class FormEditor {
             this.mappedFieldName = mappedFieldName;
             this.mappedForm = mappedForm;
             this.editAction = editAction;
-            this.editFormless = editFormless;
+            this.editViewOnly = editViewOnly;
+            this.editAllowAddition = editAllowAddition;
             this.editFixedRows = editFixedRows;
             this.ignoreParentCondition = ignoreParentCondition;
             this.showSearch = showSearch;
@@ -538,12 +541,20 @@ public class FormEditor {
             this.editAction = editAction;
         }
 
-        public String getEditFormless() {
-            return editFormless;
+        public String getEditViewOnly() {
+            return editViewOnly;
         }
 
-        public void setEditFormless(String editFormless) {
-            this.editFormless = editFormless;
+        public void setEditViewOnly(String editViewOnly) {
+            this.editViewOnly = editViewOnly;
+        }
+
+        public String getEditAllowAddition() {
+            return editAllowAddition;
+        }
+
+        public void setEditAllowAddition(String editAllowAddition) {
+            this.editAllowAddition = editAllowAddition;
         }
 
         public String getEditFixedRows() {

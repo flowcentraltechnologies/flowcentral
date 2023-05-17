@@ -23,8 +23,8 @@
 	layout:$d{!ui-vertical style:$s{table-layout:fixed;}}
     formCaptionSuffix:$s{:} formBinding:$g{dialogFormBinding} formColumns:2
 	formSection:$d{!ui-section components:$c{frmContType frmName frmLabel
-		frmReference frmApplet frmFilter frmMappedField frmMappedForm frmEditAction frmEditFixedRows frmEditFormless frmIgnoreParentCondition frmShowSearch
-		frmQuickEdit frmVisible frmEditable frmDisabled}}
+		frmReference frmApplet frmFilter frmMappedField frmMappedForm frmEditAction frmEditFixedRows frmEditViewOnly frmEditAllowAddition
+		frmIgnoreParentCondition frmShowSearch frmQuickEdit frmVisible frmEditable frmDisabled}}
 
 !ui-select:frmContType styleClass:$e{fc-formfield} caption:$m{formeditor.tab.contenttype}
 	list:studiotabcontenttypelist blankOption:$s{} binding:contentType required:true
@@ -46,8 +46,10 @@
 	list:studiotabmappedformlist listParams:$l{entity mappedFieldName} blankOption:$s{} binding:mappedForm
 !ui-select:frmEditAction styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editaction}
 	list:childlisteditactionlist blankOption:$s{} binding:editAction
-!ui-select:frmEditFormless styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editformless}
-	list:studioformfilterlist listParams:$l{form} blankOption:$s{} binding:editFormless
+!ui-select:frmEditViewOnly styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editviewonly}
+	list:studioformfilterlist listParams:$l{form} blankOption:$s{} binding:editViewOnly
+!ui-select:frmEditAllowAddition styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editallowaddition}
+	list:studioformfilterlist listParams:$l{form} blankOption:$s{} binding:editAllowAddition
 !ui-select:frmEditFixedRows styleClass:$e{fc-formfield} caption:$m{formeditor.tab.editfixedrows}
 	list:studioformfilterlist listParams:$l{form} blankOption:$s{} binding:editFixedRows
 !ui-checkbox:frmIgnoreParentCondition caption:$m{formeditor.tab.ignoreparentcondition}

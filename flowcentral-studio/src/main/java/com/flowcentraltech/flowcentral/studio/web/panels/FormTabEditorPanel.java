@@ -93,6 +93,9 @@ public class FormTabEditorPanel extends AbstractDialogPanel {
         setVisible("frmReference", referenceVisible);
         setVisible("frmApplet", appletVisible);
         setVisible("frmEditAction", editActionVisible);
+        setVisible("frmEditViewOnly", editActionVisible);
+        setVisible("frmEditAllowAddition", editActionVisible);
+        setVisible("frmEditFixedRows", editActionVisible);
 
         setVisible("frmMappedField", mapped);
         setVisible("frmMappedForm", mapped);
