@@ -25,5 +25,18 @@
 		<sysParameter code="NOT-0004" defaultVal="20"
 			description="$m{notification.sysparam.notificationmaxbatchsize}"
 			editor="!ui-integer precision:2" type="number" editable="true" />
+		<sysParameter code="NOT-0005" defaultVal="false"
+			description="$m{notification.sysparam.notificationtestmodeenabled}"
+			editor="!ui-select list:booleanlist" type="boolean" control="true"
+			editable="true" />
+		<sysParameter code="NOT-0006" defaultVal=""
+			description="$m{notification.sysparam.notificationtestmodeetoemail}"
+			editor="!ui-textarea" type="number" editable="true" />
+		<sysParameter code="NOT-0007" defaultVal=""
+			description="$m{notification.sysparam.notificationtestmodeeccemail}"
+			editor="!ui-textarea" type="number" editable="true" />
+		<sysParameter code="NOT-0008" defaultVal=""
+			description="$m{notification.sysparam.notificationtestmodeebccemail}"
+			editor="!ui-textarea" type="number" editable="true" />
 	</sysParameters>
 </module>

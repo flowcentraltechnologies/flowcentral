@@ -16,8 +16,10 @@
 
 package com.flowcentraltech.flowcentral.notification.business;
 
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 
 /**
  * Convenient abstract base class for notification messaging channels.
@@ -27,6 +29,13 @@ import com.tcdng.unify.core.UnifyException;
  */
 public abstract class AbstractNotificationMessagingChannel extends AbstractUnifyComponent
         implements NotificationMessagingChannel {
+
+    @Configurable
+    private SystemModuleService systemModuleService;
+    
+    public final void setSystemModuleService(SystemModuleService systemModuleService) {
+        this.systemModuleService = systemModuleService;
+    }
 
     @Override
     protected void onInitialize() throws UnifyException {
@@ -38,4 +47,7 @@ public abstract class AbstractNotificationMessagingChannel extends AbstractUnify
 
     }
 
+    protected final SystemModuleService system() {
+        return systemModuleService;
+    }
 }
