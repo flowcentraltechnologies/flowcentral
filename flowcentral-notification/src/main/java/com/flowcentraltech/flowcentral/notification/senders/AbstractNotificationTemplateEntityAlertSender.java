@@ -37,10 +37,10 @@ public abstract class AbstractNotificationTemplateEntityAlertSender<T extends No
     }
 
     @Override
-    protected final void compose(T notifWrapper, ValueStoreReader reader) throws UnifyException {
+    protected final void setTemplateVariables(T notifWrapper, ValueStoreReader reader) throws UnifyException {
         U entityWrapper = application().wrapperOf(entityWrapperType, reader.getValueStore());
-        compose(notifWrapper, entityWrapper);
+        setTemplateVariables(notifWrapper, entityWrapper);
     }
 
-    protected abstract void compose(T notifWrapper, U entityWrapper) throws UnifyException;
+    protected abstract void setTemplateVariables(T notifWrapper, U entityWrapper) throws UnifyException;
 }

@@ -31,7 +31,23 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  */
 public interface NotificationAlertSender extends UnifyComponent {
 
+    /**
+     * Gets the notification type for this sender.
+     * 
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     NotifType getNotifType() throws UnifyException;
-    
+
+    /**
+     * Composes and sends a notification.
+     * 
+     * @param reader
+     *                      backing value store reader
+     * @param recipientList
+     *                      the recipient list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
     void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException;
 }

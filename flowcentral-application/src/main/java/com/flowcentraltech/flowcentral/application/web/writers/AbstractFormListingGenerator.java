@@ -42,7 +42,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportLayoutType;
@@ -129,11 +129,11 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
-    public final Report generateHtmlReport(ValueStore formBeanValueStore, FormListingOptions listingOptions)
+    public final Report generateHtmlReport(ValueStoreReader reader, FormListingOptions listingOptions)
             throws UnifyException {
         ResponseWriter writer = getComponent(ResponseWriter.class,
                 WebUIApplicationComponents.APPLICATION_RESPONSEWRITER);
-        ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
+        ListingReportGeneratorProperties properties = getReportProperties(reader, listingOptions);
         Report.Builder rb = Report.newBuilder(ReportLayoutType.MULTIDOCHTML_PDF, properties.getReportPageProperties())
                 .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
@@ -143,17 +143,17 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writer.write("<div class=\"fc-formlisting");
             writer.write(additional);
             writer.write("\">");
-            generateReportHeader(formBeanValueStore, listingReportProperties,
+            generateReportHeader(reader, listingReportProperties,
                     new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
                             writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateHtmlListing(listingReportProperties.getName(), formBeanValueStore, listingReportProperties, writer,
+            generateHtmlListing(listingReportProperties.getName(), reader, listingReportProperties, writer,
                     pausePrintColors, false);
-            generateReportAddendum(formBeanValueStore, listingReportProperties,
+            generateReportAddendum(reader, listingReportProperties,
                     new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
                             writer, pausePrintColors, false));
             writer.write("</div>");
-            generateReportFooter(formBeanValueStore, listingReportProperties,
+            generateReportFooter(reader, listingReportProperties,
                     new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
                             writer, pausePrintColors, false));
             writer.write("</div>");
@@ -170,10 +170,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
-    public Report generateExcelReport(ValueStore formBeanValueStore, FormListingOptions listingOptions)
+    public Report generateExcelReport(ValueStoreReader reader, FormListingOptions listingOptions)
             throws UnifyException {
         Workbook workbook = new HSSFWorkbook();
-        ListingReportGeneratorProperties properties = getReportProperties(formBeanValueStore, listingOptions);
+        ListingReportGeneratorProperties properties = getReportProperties(reader, listingOptions);
         Report.Builder rb = Report.newBuilder(ReportLayoutType.WORKBOOK_XLS, properties.getReportPageProperties())
                 .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
@@ -181,10 +181,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
             ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(themeManager, entityImageProvider,
                     listingReportProperties.getName(), sheet, pausePrintColors, false);
-            generateReportHeader(formBeanValueStore, listingReportProperties, writer);
-            doGenerate(formBeanValueStore, listingReportProperties, writer);
-            generateReportAddendum(formBeanValueStore, listingReportProperties, writer);
-            generateReportFooter(formBeanValueStore, listingReportProperties, writer);
+            generateReportHeader(reader, listingReportProperties, writer);
+            doGenerate(reader, listingReportProperties, writer);
+            generateReportAddendum(reader, listingReportProperties, writer);
+            generateReportFooter(reader, listingReportProperties, writer);
             writer.close();
         }
 
@@ -193,9 +193,9 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     }
 
     @Override
-    public final void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties,
+    public final void generateListing(ValueStoreReader reader, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        generateHtmlListing("", formBeanValueStore, listingProperties, writer, Collections.emptySet(), true);
+        generateHtmlListing("", reader, listingProperties, writer, Collections.emptySet(), true);
     }
 
     protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;
@@ -222,21 +222,21 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return null;
     }
 
-    protected synchronized String retrieveFormattedDate(ValueStore valueStore, String propertyName)
+    protected synchronized String retrieveFormattedDate(ValueStoreReader reader, String propertyName)
             throws UnifyException {
-        return valueStore.retrieve(String.class, propertyName, dateFormatterMap.get(getSessionLocale()));
+        return reader.read(String.class, propertyName, dateFormatterMap.get(getSessionLocale()));
     }
 
     protected synchronized String formattedDate(Date date) throws UnifyException {
         return DataUtils.convert(String.class, date, dateFormatterMap.get(getSessionLocale()));
     }
 
-    protected synchronized String[] retrieveFormattedDates(ValueStore valueStore, String... propertyName)
+    protected synchronized String[] retrieveFormattedDates(ValueStoreReader reader, String... propertyName)
             throws UnifyException {
         Formatter<?> formatter = dateFormatterMap.get(getSessionLocale());
         String[] result = new String[propertyName.length];
         for (int i = 0; i < result.length; i++) {
-            result[i] = valueStore.retrieve(String.class, propertyName[i], formatter);
+            result[i] = reader.read(String.class, propertyName[i], formatter);
         }
         return result;
     }
@@ -249,33 +249,33 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return DataUtils.convert(String.class, amount, amountFormatterMap.get(getSessionLocale()));
     }
 
-    protected synchronized String[] retrieveFormattedAmounts(AmountFormat format, ValueStore valueStore,
+    protected synchronized String[] retrieveFormattedAmounts(AmountFormat format, ValueStoreReader reader,
             String... propertyName) throws UnifyException {
         Formatter<?> formatter = AmountFormat.WHOLE_NUMBER.equals(format)
                 ? wholeAmountFormatterMap.get(getSessionLocale())
                 : amountFormatterMap.get(getSessionLocale());
         String[] result = new String[propertyName.length];
         for (int i = 0; i < result.length; i++) {
-            result[i] = valueStore.retrieve(String.class, propertyName[i], formatter);
+            result[i] = reader.read(String.class, propertyName[i], formatter);
         }
         return result;
     }
 
-    protected synchronized String retrieveFormattedAmount(AmountFormat format, ValueStore valueStore,
+    protected synchronized String retrieveFormattedAmount(AmountFormat format, ValueStoreReader reader,
             String propertyName) throws UnifyException {
         if (AmountFormat.WHOLE_NUMBER.equals(format)) {
-            return valueStore.retrieve(String.class, propertyName, wholeAmountFormatterMap.get(getSessionLocale()));
+            return reader.read(String.class, propertyName, wholeAmountFormatterMap.get(getSessionLocale()));
         }
 
-        return valueStore.retrieve(String.class, propertyName, amountFormatterMap.get(getSessionLocale()));
+        return reader.read(String.class, propertyName, amountFormatterMap.get(getSessionLocale()));
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> T[] retrieveValues(Class<T> typeClass, ValueStore valueStore, String... propertyNames)
+    protected <T> T[] retrieveValues(Class<T> typeClass, ValueStoreReader reader, String... propertyNames)
             throws UnifyException {
         T[] values = (T[]) Array.newInstance(typeClass, propertyNames.length);
         for (int i = 0; i < values.length; i++) {
-            values[i] = valueStore.retrieve(typeClass, propertyNames[i]);
+            values[i] = reader.read(typeClass, propertyNames[i]);
         }
 
         return values;
@@ -313,12 +313,12 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         writer.writeRow(new ListingCell(ListingCellType.ENTITY_PROVIDER_IMAGE, resourceName, style));
     }
 
-    private void generateHtmlListing(final String listingType, ValueStore formBeanValueStore,
+    private void generateHtmlListing(final String listingType, ValueStoreReader reader,
             ListingProperties listingProperties, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) throws UnifyException {
         ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(themeManager, entityImageProvider,
                 listingType, writer, pausePrintColors, highlighting);
-        doGenerate(formBeanValueStore, listingProperties, generator);
+        doGenerate(reader, listingProperties, generator);
         generator.close();
     }
 
@@ -334,6 +334,6 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return defaultListingReportStyle;
     }
 
-    protected abstract void doGenerate(ValueStore formBeanValueStore, ListingProperties listingProperties,
+    protected abstract void doGenerate(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException;
 }

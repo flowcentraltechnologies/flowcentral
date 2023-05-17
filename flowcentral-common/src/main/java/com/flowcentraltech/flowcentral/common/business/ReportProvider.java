@@ -85,6 +85,16 @@ public interface ReportProvider extends UnifyComponent {
     void generateReport(Report report, OutputStream outputStream) throws UnifyException;
 
     /**
+     * Generates a report to a byte array.
+     * 
+     * @param report
+     *                      the report to generate
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateReportAsByteArray(Report report) throws UnifyException;
+
+    /**
      * Finds report columns of a reportable.
      * 
      * @param reportableName

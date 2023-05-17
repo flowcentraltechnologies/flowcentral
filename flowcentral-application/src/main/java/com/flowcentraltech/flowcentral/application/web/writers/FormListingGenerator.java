@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
 /**
@@ -32,8 +32,8 @@ public interface FormListingGenerator extends FormListingReportGenerator {
     /**
      * Generates form listing into writer.
      * 
-     * @param formBeanValueStore
-     *                           the form bean value store
+     * @param reader
+     *                           the form bean value store reader
      * @param listingProperties
      *                           the listing properties
      * @param writer
@@ -41,17 +41,17 @@ public interface FormListingGenerator extends FormListingReportGenerator {
      * @throws UnifyException
      *                        if an error occurs
      */
-    void generateListing(ValueStore formBeanValueStore, ListingProperties listingProperties, ResponseWriter writer)
+    void generateListing(ValueStoreReader reader, ListingProperties listingProperties, ResponseWriter writer)
             throws UnifyException;
 
     /**
      * Gets options flag overrides
      * 
-     * @param formBeanValueStore
-     *                           the value store
+     * @param reader
+     *                           the value store reader
      * @return the options override. Override is ignored if zero is returned.
      * @throws UnifyException
      *                        is an error happens
      */
-    int getOptionFlagsOverride(ValueStore formBeanValueStore) throws UnifyException;
+    int getOptionFlagsOverride(ValueStoreReader reader) throws UnifyException;
 }

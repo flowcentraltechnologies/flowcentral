@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.notification.senders;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
@@ -47,15 +48,37 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
         T notifWrapper = notification().wrapperOf(notifWrapperType);
+        // Set recipients
         if (!DataUtils.isBlank(recipientList)) {
             for (Recipient recipient : recipientList) {
                 notifWrapper.addRecipient(recipient);
             }
         }
 
-        compose(notifWrapper, reader);
+        // Set template variables
+        setTemplateVariables(notifWrapper, reader);
+
+        // Set attachments
+        List<Attachment> attachmentList = generateAttachments(reader);
+        if (!DataUtils.isBlank(attachmentList)) {
+            for (Attachment attachment : attachmentList) {
+                notifWrapper.addAttachment(attachment);
+            }
+        }
+
         notification().sendNotification(notifWrapper.getMessage());
     }
 
-    protected abstract void compose(T notifWrapper, ValueStoreReader reader) throws UnifyException;
+    /**
+     * Sets the notification template variables.
+     * 
+     * @param notifWrapper
+     *                     the notification template wrapper
+     * @param reader
+     *                     the backing value store reader
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected abstract void setTemplateVariables(T notifWrapper, ValueStoreReader reader) throws UnifyException;
+
 }

@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -40,6 +41,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.application.web.data.Formats;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
 import com.flowcentraltech.flowcentral.application.web.panels.EntityCRUD;
@@ -73,7 +75,9 @@ import com.flowcentraltech.flowcentral.common.business.SequenceCodeGenerator;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.util.StringToken;
@@ -90,6 +94,7 @@ import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.format.FormatHelper;
+import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.upl.UplComponent;
 import com.tcdng.unify.web.ui.widget.Panel;
@@ -1861,4 +1866,136 @@ public interface AppletUtilities extends UnifyComponent {
      */
     boolean isReloadOnSwitch() throws UnifyException;
 
+    /**
+     * Generates a listing report as byte array.
+     * 
+     * @param reader
+     *                  the source reader
+     * @param generator
+     *                  the listing generator
+     * @param options
+     *                  the listing options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateViewListingReportAsByteArray(ValueStoreReader reader, String generator, FormListingOptions options)
+            throws UnifyException;
+
+    /**
+     * Generates a view listing report as byte array.
+     * 
+     * @param tableName
+     *                    the table name
+     * @param dataList
+     *                    the data list
+     * @param generator
+     *                    the listing generator
+     * @param properties
+     *                    the report properties
+     * @param formats
+     *                    the formats
+     * @param spreadSheet
+     *                    indicates spread sheet
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException;
+
+    /**
+     * Generates a listing report as byte array.
+     * 
+     * @param tableName
+     *                           the table name
+     * @param dataList
+     *                           the data list
+     * @param generator
+     *                           the listing generator
+     * @param properties
+     *                           the report properties
+     * @param formats
+     *                           the formats
+     * @param spreadSheet
+     *                           indicates spread sheet
+     * @param preSummaryLines
+     *                           pre-table summary lines
+     * @param postSummaryLines
+     *                           post-table summary lines
+     * @param summaryTitleColumn
+     *                           summary title column
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet,
+            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
+            throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param reader
+     *                  the source reader
+     * @param generator
+     *                  the listing generator
+     * @param options
+     *                  the listing options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateViewListingReport(ValueStoreReader reader, String generator, FormListingOptions options)
+            throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param tableName
+     *                    the table name
+     * @param dataList
+     *                    the data list
+     * @param generator
+     *                    the listing generator
+     * @param properties
+     *                    the report properties
+     * @param formats
+     *                    the formats
+     * @param spreadSheet
+     *                    indicates spread sheet
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param tableName
+     *                    the table name
+     * @param dataList
+     *                    the data list
+     * @param generator
+     *                    the listing generator
+     * @param properties
+     *                    the report properties
+     * @param formats
+     *                    the formats
+     * @param spreadSheet
+     *                    indicates spread sheet
+     * @param preSummaryLines pre-table summary lines
+     * @param postSummaryLines post-table summary lines
+     * @param summaryTitleColumn summary title column
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet,
+            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
+            throws UnifyException;
 }
