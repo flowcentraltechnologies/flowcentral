@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
 import com.tcdng.unify.core.UnifyException;
 
@@ -27,6 +28,8 @@ import com.tcdng.unify.core.UnifyException;
 public abstract class AbstractEntityFormAppletPageBean<T extends AbstractEntityFormApplet>
         extends AbstractAppletPageBean<T> {
 
+    private boolean oldPage;
+
     public T getApplet() {
         return super.getApplet();
     }
@@ -36,4 +39,16 @@ public abstract class AbstractEntityFormAppletPageBean<T extends AbstractEntityF
         super.setApplet(applet);
     }
 
+    public boolean isOldPage() {
+        return oldPage;
+    }
+
+    public void setOldPage(boolean oldPage) {
+        this.oldPage = oldPage;
+    }
+
+    public boolean isReloadOnSwitch() throws UnifyException {
+        return oldPage && ((AbstractEntityFormApplet) getApplet()).getRootAppletDef().getPropValue(boolean.class,
+                AppletPropertyConstants.SEARCH_TABLE_VIEW_ITEM_SEPARATE_TAB);
+    }
 }

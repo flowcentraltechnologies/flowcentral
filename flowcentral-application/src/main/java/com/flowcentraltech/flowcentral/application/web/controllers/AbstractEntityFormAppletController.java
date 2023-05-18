@@ -237,13 +237,16 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
+        AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         final boolean indicateHighLatency = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_HIGH_LATENCY_INDICATION);
-        if (indicateHighLatency) {
+        if (indicateHighLatency && !pageBean.isReloadOnSwitch()) {
             getPageRequestContextUtil().setLowLatencyRequest();
         } else {
             setReloadOnSwitch();
         }
+        
+        pageBean.setOldPage(true);
     }
 
     @Override
