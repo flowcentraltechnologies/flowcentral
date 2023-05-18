@@ -24,7 +24,7 @@ import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.resource.ImageProvider;
 import com.tcdng.unify.core.util.DataUtils;
@@ -98,9 +98,9 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
     }
 
     @Override
-    public ListingColorType getItemColor(ValueStore valueStore) throws UnifyException {
+    public ListingColorType getItemColor(ValueStoreReader reader) throws UnifyException {
         for (ItemColorRule rule : itemColorRules) {
-            if (rule.filter.matchReader(valueStore.getReader())) {
+            if (rule.filter.matchReader(reader)) {
                 return rule.color;
             }
         }
@@ -128,8 +128,8 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
     }
 
     @Override
-    public boolean isPausePrint(ValueStore valueStore) throws UnifyException {
-        ListingColorType color = getItemColor(valueStore);
+    public boolean isPausePrint(ValueStoreReader reader) throws UnifyException {
+        ListingColorType color = getItemColor(reader);
         return color != null && pauseRowPrintColors.contains(color);
     }
 

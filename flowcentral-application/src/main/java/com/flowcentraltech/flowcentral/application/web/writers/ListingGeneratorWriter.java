@@ -22,7 +22,7 @@ import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Restriction;
-import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Listing generator writer.
@@ -40,13 +40,13 @@ public interface ListingGeneratorWriter {
 
     void clearItemColorRules();
 
-    ListingColorType getItemColor(ValueStore valueStore) throws UnifyException;
+    ListingColorType getItemColor(ValueStoreReader reader) throws UnifyException;
 
     ListingColorType getItemColor(Object bean) throws UnifyException;
 
     void setRowColor(ListingColorType rowColor);
 
-    boolean isPausePrint(ValueStore valueStore) throws UnifyException;
+    boolean isPausePrint(ValueStoreReader reader) throws UnifyException;
 
     boolean isPausePrint(Object bean) throws UnifyException;
 
