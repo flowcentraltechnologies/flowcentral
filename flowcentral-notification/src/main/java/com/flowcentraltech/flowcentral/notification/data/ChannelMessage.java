@@ -188,7 +188,7 @@ public class ChannelMessage {
         }
 
         public Builder addAttachment(FileAttachmentType type, String name, String title, byte[] data) {
-            attachments.add(Attachment.newBuilder(type).name(name).title(title).data(data).build());
+            attachments.add(Attachment.newBuilder(type).name(name).fileName(name).title(title).data(data).build());
             return this;
         }
 
