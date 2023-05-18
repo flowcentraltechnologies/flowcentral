@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Order;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.web.ui.widget.data.ColorLegendInfo;
@@ -107,7 +108,7 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
 
     @Override
     protected void onLoadSourceObject(Restriction sourceObject, Set<Integer> selected) throws UnifyException {
-
+        
     }
 
     @Override
@@ -172,6 +173,12 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
             query.setSelect(tableDef.getSelect());
         }
 
-        return (List<Entity>) au.environment().listAll(query);
+        final List<Entity> entitylist = (List<Entity>) au.environment().listAll(query);
+        // Delayed on-table load
+        if (isWithEntryPolicy()) {
+            getEntryPolicy().onEntryTableLoad(getParentReader(), new BeanValueListStore(entitylist), Collections.emptySet());
+        }
+
+        return entitylist;
     }
 }
