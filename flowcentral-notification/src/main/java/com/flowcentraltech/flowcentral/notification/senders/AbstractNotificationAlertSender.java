@@ -123,8 +123,9 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
                 properties, formats, true);
     }
 
-    protected Attachment createAttachmentFromFile(FileAttachmentType type, String fileName, String fullPathName) throws UnifyException {
-        final byte[] file = IOUtils.readFileResourceInputStream(fullPathName);
+    protected Attachment createAttachmentFromFile(FileAttachmentType type, String absoluteFileName) throws UnifyException {
+        final String fileName = IOUtils.getActualFileName(absoluteFileName);
+        final byte[] file = IOUtils.readFileResourceInputStream(absoluteFileName);
         return Attachment.newBuilder(type).fileName(fileName)
                 .title(fileName).name(fileName).data(file).build();
     }
