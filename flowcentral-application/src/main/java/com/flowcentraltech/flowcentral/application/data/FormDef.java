@@ -600,21 +600,22 @@ public class FormDef extends BaseApplicationEntityDef {
         public Builder addFormTab(TabContentType contentType, String name, String tabLabel,
                 boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible,
                 boolean editable, boolean disabled) {
-            return addFormTab(contentType, null, name, tabLabel, null, null, null, null, null, null, null,
+            return addFormTab(contentType, null, name, tabLabel, null, null, null, null, null, null, null, null,
                     isIgnoreParentCondition, showSearch, quickEdit, visible, editable, disabled);
         }
 
         public Builder addFormTab(TabContentType contentType, FilterGroupDef filterGroupDef, String name,
                 String tabLabel, String tabApplet, String tabReference, String mappedFieldName, String tabMappedForm,
-                String editAction, String editFormless, String editFixedRows, boolean isIgnoreParentCondition,
-                boolean showSearch, boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
+                String editAction, String editViewOnly, String editAllowAddition, String editFixedRows,
+                boolean isIgnoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible,
+                boolean editable, boolean disabled) {
             if (tabLabels.contains(name)) {
                 throw new RuntimeException("Tab with name [" + name + "] already exists on this form.");
             }
 
             formTabDefList.add(new TempFormTabDef(contentType, filterGroupDef, name, tabLabel, tabApplet, tabReference,
-                    mappedFieldName, tabMappedForm, editAction, editFormless, editFixedRows, isIgnoreParentCondition,
-                    showSearch, quickEdit, visible, editable, disabled));
+                    mappedFieldName, tabMappedForm, editAction, editViewOnly, editAllowAddition, editFixedRows,
+                    isIgnoreParentCondition, showSearch, quickEdit, visible, editable, disabled));
             tabLabels.add(tabLabel);
             return this;
         }
@@ -834,10 +835,11 @@ public class FormDef extends BaseApplicationEntityDef {
                         tempFormTabDef.getName(), tempFormTabDef.getTabLabel(), tempFormTabDef.getTabApplet(),
                         tempFormTabDef.getTabReference(), tempFormTabDef.getMappedFieldName(),
                         tempFormTabDef.getTabMappedForm(), tempFormTabDef.getEditAction(),
-                        tempFormTabDef.getEditFormless(), tempFormTabDef.getEditFixedRows(),
-                        DataUtils.unmodifiableList(formSectionDefList), tempFormTabDef.isIgnoreParentCondition(),
-                        tempFormTabDef.isShowSearch(), tempFormTabDef.isQuickEdit(), tempFormTabDef.isVisible(),
-                        tempFormTabDef.isEditable(), tempFormTabDef.isDisabled()));
+                        tempFormTabDef.getEditViewOnly(), tempFormTabDef.getEditAllowAddition(),
+                        tempFormTabDef.getEditFixedRows(), DataUtils.unmodifiableList(formSectionDefList),
+                        tempFormTabDef.isIgnoreParentCondition(), tempFormTabDef.isShowSearch(),
+                        tempFormTabDef.isQuickEdit(), tempFormTabDef.isVisible(), tempFormTabDef.isEditable(),
+                        tempFormTabDef.isDisabled()));
             }
 
             if (formActionList != null) {
@@ -883,7 +885,9 @@ public class FormDef extends BaseApplicationEntityDef {
 
             private String editAction;
 
-            private String editFormless;
+            private String editViewOnly;
+
+            private String editAllowAddition;
 
             private String editFixedRows;
 
@@ -903,9 +907,9 @@ public class FormDef extends BaseApplicationEntityDef {
 
             public TempFormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name,
                     String tabLabel, String tabApplet, String tabReference, String mappedFieldName,
-                    String tabMappedForm, String editAction, String editFormless, String editFixedRows,
-                    boolean ignoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible,
-                    boolean editable, boolean disabled) {
+                    String tabMappedForm, String editAction, String editViewOnly, String editAllowAddition,
+                    String editFixedRows, boolean ignoreParentCondition, boolean showSearch, boolean quickEdit,
+                    boolean visible, boolean editable, boolean disabled) {
                 this.contentType = contentType;
                 this.filterGroupDef = filterGroupDef;
                 this.name = name;
@@ -915,7 +919,8 @@ public class FormDef extends BaseApplicationEntityDef {
                 this.mappedFieldName = mappedFieldName;
                 this.tabMappedForm = tabMappedForm;
                 this.editAction = editAction;
-                this.editFormless = editFormless;
+                this.editViewOnly = editViewOnly;
+                this.editAllowAddition = editAllowAddition;
                 this.editFixedRows = editFixedRows;
                 this.ignoreParentCondition = ignoreParentCondition;
                 this.showSearch = showSearch;
@@ -962,8 +967,12 @@ public class FormDef extends BaseApplicationEntityDef {
                 return editAction;
             }
 
-            public String getEditFormless() {
-                return editFormless;
+            public String getEditViewOnly() {
+                return editViewOnly;
+            }
+
+            public String getEditAllowAddition() {
+                return editAllowAddition;
             }
 
             public String getEditFixedRows() {

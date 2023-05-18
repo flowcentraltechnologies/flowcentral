@@ -1792,14 +1792,15 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     public EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName,
             EntityFormEventHandlers formEventHandlers, String baseField, Object baseId) throws UnifyException {
         return constructEntityCRUD(ctx, appletName, formEventHandlers, null, null, null, baseField, baseId, null, null,
-                false, false);
+                false, true, false);
     }
 
     @Override
     public EntityCRUD constructEntityCRUD(AppletContext ctx, String appletName,
             EntityFormEventHandlers formEventHandlers, SweepingCommitPolicy sweepingCommitPolicy,
             EntityDef parentEntityDef, Entity parentInst, String baseField, Object baseId, String childListName,
-            FilterGroupDef filterGroupDef, final boolean viewOnly, final boolean fixedRows) throws UnifyException {
+            FilterGroupDef filterGroupDef, final boolean viewOnly, final boolean allowAddition, final boolean fixedRows)
+            throws UnifyException {
         final AppletDef formAppletDef = getAppletDef(appletName);
         final String tableName = formAppletDef.isPropWithValue(AppletPropertyConstants.ENTRY_TABLE)
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.ENTRY_TABLE)
@@ -1839,7 +1840,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         MiniForm maintainForm = new MiniForm(MiniFormScope.MAIN_FORM, maintainFrmCtx,
                 maintainFrmCtx.getFormDef().getFormTabDef(0));
         return new EntityCRUD(ctx.au(), sweepingCommitPolicy, formAppletDef, entityClassDef, baseField, baseId,
-                entityTable, createForm, maintainForm, childListName);
+                entityTable, createForm, maintainForm, childListName, allowAddition);
     }
 
     @Override

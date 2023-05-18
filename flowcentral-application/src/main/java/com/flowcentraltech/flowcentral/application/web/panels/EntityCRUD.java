@@ -49,9 +49,9 @@ public class EntityCRUD extends AbstractCRUD<EntityTable> {
 
     public EntityCRUD(AppletUtilities au, SweepingCommitPolicy scp, AppletDef formAppletDef,
             EntityClassDef entityClassDef, String baseField, Object baseId, EntityTable table, MiniForm createForm,
-            MiniForm maintainForm, String childFieldName) throws UnifyException {
+            MiniForm maintainForm, String childFieldName, boolean allowAddition) throws UnifyException {
         super(au, scp, baseField, baseId, table, createForm, maintainForm, "$m{button.save}",
-                isAllowCreate(formAppletDef));
+                allowAddition && isAllowCreate(formAppletDef));
         this.entityClassDef = entityClassDef;
         this.formAppletDef = formAppletDef;
         this.childFieldName = childFieldName;

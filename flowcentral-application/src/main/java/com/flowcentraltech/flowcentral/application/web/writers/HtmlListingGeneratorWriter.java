@@ -53,7 +53,7 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
         writer.write("<div class=\"flsection").write(ListingUtils.getBorderStyle(borders)).write("\">");
         if (header != null) {
             writer.write("<div class=\"fltable flsectionheader\">");
-            doWriteRow(header.getColumns(), header.getCells());
+            doWriteRow(header.getColumns(), false, header.getCells());
             writer.write("</div>");
         }
 
@@ -91,6 +91,11 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
 
     @Override
     protected void doWriteRow(ListingColumn[] columns, ListingCell... cells) throws UnifyException {
+        doWriteRow(columns, true, cells);
+    }
+    
+    private void doWriteRow(ListingColumn[] columns,
+            boolean spaceOnEmptyContent, ListingCell... cells) throws UnifyException {
         if (classicTable) {
             writer.write("<tr");
         } else {
@@ -156,6 +161,10 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
                     writer.writeScopeImageContextURL(null); // TODO
                 } else {
                     writer.writeResolvedSessionMessage(cell.getContent());
+                }
+            } else {
+                if (spaceOnEmptyContent) {
+                    writer.write("&#160;"); // SAX failure on &nbsp;
                 }
             }
             writer.write("</span>");

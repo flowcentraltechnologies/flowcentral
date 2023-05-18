@@ -74,6 +74,9 @@ public class AppFormElement extends BaseConfigEntity {
     private String editFormless;
 
     @Column(length = 64, nullable = true)
+    private String editAllowAddition;
+
+    @Column(length = 64, nullable = true)
     private String editFixedRows;
 
     @Column(length = 128, nullable = true)
@@ -237,6 +240,14 @@ public class AppFormElement extends BaseConfigEntity {
 
     public void setEditFormless(String editFormless) {
         this.editFormless = editFormless;
+    }
+
+    public String getEditAllowAddition() {
+        return editAllowAddition;
+    }
+
+    public void setEditAllowAddition(String editAllowAddition) {
+        this.editAllowAddition = editAllowAddition;
     }
 
     public String getEditFixedRows() {

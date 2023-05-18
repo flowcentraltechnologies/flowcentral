@@ -53,7 +53,9 @@ public class FormTabDef {
 
     private String editAction;
 
-    private String editFormless;
+    private String editViewOnly;
+
+    private String editAllowAddition;
 
     private String editFixedRows;
 
@@ -78,9 +80,10 @@ public class FormTabDef {
     private int listOnlyCheck;
 
     public FormTabDef(TabContentType contentType, FilterGroupDef filterGroupDef, String name, String label,
-            String applet, String reference, String mappedFieldName, String mappedForm, String editAction, String editFormless, String editFixedRows,
-            List<FormSectionDef> formSectionDefList, boolean ignoreParentCondition, boolean showSearch,
-            boolean quickEdit, boolean visible, boolean editable, boolean disabled) {
+            String applet, String reference, String mappedFieldName, String mappedForm, String editAction,
+            String editViewOnly, String editAllowAddition, String editFixedRows, List<FormSectionDef> formSectionDefList,
+            boolean ignoreParentCondition, boolean showSearch, boolean quickEdit, boolean visible, boolean editable,
+            boolean disabled) {
         this.contentType = contentType;
         this.filterGroupDef = filterGroupDef;
         this.name = name;
@@ -90,7 +93,8 @@ public class FormTabDef {
         this.mappedFieldName = mappedFieldName;
         this.mappedForm = mappedForm;
         this.editAction = editAction;
-        this.editFormless = editFormless;
+        this.editViewOnly = editViewOnly;
+        this.editAllowAddition = editAllowAddition;
         this.editFixedRows = editFixedRows;
         this.formSectionDefList = formSectionDefList;
         this.ignoreParentCondition = ignoreParentCondition;
@@ -112,8 +116,9 @@ public class FormTabDef {
         this.reference = srcFormTabDef.reference;
         this.mappedFieldName = srcFormTabDef.mappedFieldName;
         this.mappedForm = srcFormTabDef.mappedForm;
-         this.editAction = srcFormTabDef.editAction;
-        this.editFormless = srcFormTabDef.editFormless;
+        this.editAction = srcFormTabDef.editAction;
+        this.editViewOnly = srcFormTabDef.editViewOnly;
+        this.editAllowAddition = srcFormTabDef.editAllowAddition;
         this.editFixedRows = srcFormTabDef.editFixedRows;
         this.ignoreParentCondition = srcFormTabDef.ignoreParentCondition;
         this.showSearch = srcFormTabDef.showSearch;
@@ -168,12 +173,20 @@ public class FormTabDef {
         return editAction;
     }
 
-    public String getEditFormless() {
-        return editFormless;
+    public String getEditViewOnly() {
+        return editViewOnly;
     }
 
-    public boolean isWithEditFormless() {
-        return !StringUtils.isBlank(editFormless);
+    public boolean isWithEditViewOnly() {
+        return !StringUtils.isBlank(editViewOnly);
+    }
+
+    public String getEditAllowAddition() {
+        return editAllowAddition;
+    }
+
+    public boolean isWithEditAllowAddition() {
+        return !StringUtils.isBlank(editAllowAddition);
     }
 
     public String getEditFixedRows() {

@@ -64,6 +64,8 @@ public class EntityCRUDPage {
 
     private final boolean viewOnly;
 
+    private final boolean allowAddition;
+    
     private final boolean fixedRows;
 
     private boolean disabled;
@@ -77,7 +79,7 @@ public class EntityCRUDPage {
     public EntityCRUDPage(AppletContext ctx, String appletName, EntityFormEventHandlers formEventHandlers,
             SweepingCommitPolicy sweepingCommitPolicy, EntityDef parentEntityDef, Entity parentInst, String baseField,
             Object baseId, String childFieldName, SectorIcon sectorIcon, BreadCrumbs breadCrumbs,
-            FilterGroupDef filterGroupDef, boolean viewOnly, boolean fixedRows) {
+            FilterGroupDef filterGroupDef, boolean viewOnly, boolean allowAddition, boolean fixedRows) {
         this.ctx = ctx;
         this.appletName = appletName;
         this.formEventHandlers = formEventHandlers;
@@ -91,6 +93,7 @@ public class EntityCRUDPage {
         this.breadCrumbs = breadCrumbs;
         this.filterGroupDef = filterGroupDef;
         this.viewOnly = viewOnly;
+        this.allowAddition = allowAddition;
         this.fixedRows = fixedRows;
     }
 
@@ -179,7 +182,7 @@ public class EntityCRUDPage {
         if (crud == null) {
             crud = ctx.au().constructEntityCRUD(ctx, appletName, formEventHandlers, sweepingCommitPolicy,
                     parentEntityDef, parentInst, baseField, baseId, childFieldName, filterGroupDef, viewOnly,
-                    fixedRows);
+                    allowAddition, fixedRows);
         }
 
         return crud;

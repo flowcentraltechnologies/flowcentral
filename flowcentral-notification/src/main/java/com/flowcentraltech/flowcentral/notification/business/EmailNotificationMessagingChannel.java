@@ -16,11 +16,18 @@
 
 package com.flowcentraltech.flowcentral.notification.business;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationHostServerConstants;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
+import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
 import com.tcdng.unify.core.UnifyException;
@@ -52,16 +59,19 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     public boolean sendMessage(NotifChannelDef notifChannelDef, ChannelMessage channelMessage) {
         try {
             ensureServerConfigured(notifChannelDef);
+            EmailContext ctx = getEmailContext();
+            if (ctx.isTestMode() && !ctx.isEmailsPresent()) {
+                return setError(channelMessage,
+                        "System is in nootification test mode. Test Mode TO email(s) is required.");
+            }
+
             Email email = null;
             try {
-                email = conctructEmail(notifChannelDef, channelMessage);
+                email = conctructEmail(ctx, notifChannelDef, channelMessage);
             } catch (Exception e) {
-                channelMessage.setError(StringUtils.getPrintableStackTrace(e));
-                channelMessage.setSent(false);
-                channelMessage.setRetry(false);
-                return false;
+                return setError(channelMessage, StringUtils.getPrintableStackTrace(e));
             }
-            
+
             emailServer.sendEmail(notifChannelDef.getName(), email);
             channelMessage.setError(email.getError());
             channelMessage.setSent(email.isSent());
@@ -75,29 +85,39 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     }
 
     @Override
-    public void sendMessages(NotifChannelDef notifChannelDef, ChannelMessage... channelMessage) {
+    public void sendMessages(NotifChannelDef notifChannelDef, ChannelMessage... channelMessages) {
         try {
+            EmailContext ctx = getEmailContext();
+            if (ctx.isTestMode() && !ctx.isEmailsPresent()) {
+                for (ChannelMessage channelMessage : channelMessages) {
+                    setError(channelMessage,
+                            "System is in nootification test mode. Test Mode TO email(s) is required.");
+                }
+
+                return;
+            }
+
             ensureServerConfigured(notifChannelDef);
-            Email[] email = new Email[channelMessage.length];
-            for (int i = 0; i < channelMessage.length; i++) {
+            Email[] email = new Email[channelMessages.length];
+            for (int i = 0; i < channelMessages.length; i++) {
                 try {
-                    email[i] = conctructEmail(notifChannelDef, channelMessage[i]);
+                    email[i] = conctructEmail(ctx, notifChannelDef, channelMessages[i]);
                 } catch (Exception e) {
                     email[i] = new Email(StringUtils.getPrintableStackTrace(e));
-                    channelMessage[i].setRetry(false);
+                    channelMessages[i].setRetry(false);
                 }
             }
 
             emailServer.sendEmail(notifChannelDef.getName(), email);
 
-            for (int i = 0; i < channelMessage.length; i++) {
-                channelMessage[i].setError(email[i].getError());
-                channelMessage[i].setSent(email[i].isSent());
+            for (int i = 0; i < channelMessages.length; i++) {
+                channelMessages[i].setError(email[i].getError());
+                channelMessages[i].setSent(email[i].isSent());
             }
         } catch (UnifyException e) {
             final String error = StringUtils.getPrintableStackTrace(e);
-            for (int i = 0; i < channelMessage.length; i++) {
-                channelMessage[i].setError(error);
+            for (int i = 0; i < channelMessages.length; i++) {
+                channelMessages[i].setError(error);
             }
             logError(e);
         }
@@ -123,22 +143,49 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         }
     }
 
-    private Email conctructEmail(NotifChannelDef notifChannelDef, ChannelMessage channelMessage)
+    private Email conctructEmail(EmailContext textCtx, NotifChannelDef notifChannelDef, ChannelMessage channelMessage)
             throws UnifyException {
         Email.Builder eb = Email.newBuilder();
         if (channelMessage.isWithFrom()) {
             eb.fromSender(channelMessage.getFrom());
         }
-        
-        for (Recipient recipient : channelMessage.getRecipients()) {
-            eb.toRecipient(recipient.getType().emailRecipientType(), recipient.getContact());
+
+        if (textCtx.isTestMode()) {
+            textCtx.resetUsed();
+            for (Recipient recipient : channelMessage.getRecipients()) {
+                final NotifRecipientType type = recipient.getType();
+                if (textCtx.checkUnused(type)) {
+                    List<String> emails = Collections.emptyList();
+                    switch (type) {
+                        case BCC:
+                            emails = textCtx.getBccEmails();
+                            break;
+                        case CC:
+                            emails = textCtx.getCcEmails();
+                            break;
+                        case TO:
+                            emails = textCtx.getToEmails();
+                            break;
+                        default:
+                            break;
+
+                    }
+
+                    for (String contact : emails) {
+                        eb.toRecipient(type.emailRecipientType(), contact);
+                    }
+                }
+            }
+        } else {
+            for (Recipient recipient : channelMessage.getRecipients()) {
+                eb.toRecipient(recipient.getType().emailRecipientType(), recipient.getContact());
+            }
         }
 
         final boolean isHTML = NotifMessageFormat.HTML.equals(channelMessage.getFormat());
         final String msg = isHTML ? formatHTML(channelMessage.getMessage()) : channelMessage.getMessage();
         eb.fromSender(notifChannelDef.getSenderContact()).withSubject(channelMessage.getSubject())
-                .containingMessage(msg)
-                .asHTML(isHTML);
+                .containingMessage(msg).asHTML(isHTML);
 
         for (Attachment attachment : channelMessage.getAttachments()) {
             eb.withAttachment(attachment.getFileName(), attachment.getData(), attachment.getType());
@@ -146,7 +193,97 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
 
         return eb.build();
     }
-    
+
+    private boolean setError(ChannelMessage channelMessage, String errorMsg) {
+        channelMessage.setError(errorMsg);
+        channelMessage.setSent(false);
+        channelMessage.setRetry(false);
+        return false;
+    }
+
+    private EmailContext getEmailContext() throws UnifyException {
+        final boolean testMode = system().getSysParameterValue(boolean.class,
+                NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_ENABLED);
+        if (testMode) {
+            String emails = system().getSysParameterValue(String.class,
+                    NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_TO_EMAILS);
+            List<String> toEmails = !StringUtils.isBlank(emails) ? StringUtils.charToListSplit(emails, ';')
+                    : Collections.emptyList();
+
+            emails = system().getSysParameterValue(String.class,
+                    NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_CC_EMAILS);
+            List<String> ccEmails = !StringUtils.isBlank(emails) ? StringUtils.charToListSplit(emails, ';')
+                    : Collections.emptyList();
+
+            emails = system().getSysParameterValue(String.class,
+                    NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_BCC_EMAILS);
+            List<String> bccEmails = !StringUtils.isBlank(emails) ? StringUtils.charToListSplit(emails, ';')
+                    : Collections.emptyList();
+            return new EmailContext(toEmails, ccEmails, bccEmails);
+        }
+
+        return EmailContext.TEST_MODE_OFF;
+    }
+
+    private static class EmailContext {
+
+        public static final EmailContext TEST_MODE_OFF = new EmailContext();
+
+        private final List<String> toEmails;
+
+        private final List<String> ccEmails;
+
+        private final List<String> bccEmails;
+
+        private final boolean testMode;
+
+        private Set<NotifRecipientType> used;
+
+        public EmailContext(List<String> toEmails, List<String> ccEmails, List<String> bccEmails) {
+            this.toEmails = toEmails;
+            this.ccEmails = ccEmails;
+            this.bccEmails = bccEmails;
+            this.testMode = true;
+            this.used = new HashSet<NotifRecipientType>();
+        }
+
+        private EmailContext() {
+            this.toEmails = Collections.emptyList();
+            this.ccEmails = Collections.emptyList();
+            this.bccEmails = Collections.emptyList();
+            this.testMode = false;
+            this.used = new HashSet<NotifRecipientType>();
+        }
+
+        public List<String> getToEmails() {
+            return toEmails;
+        }
+
+        public List<String> getCcEmails() {
+            return ccEmails;
+        }
+
+        public List<String> getBccEmails() {
+            return bccEmails;
+        }
+
+        public boolean isTestMode() {
+            return testMode;
+        }
+
+        public boolean isEmailsPresent() {
+            return !toEmails.isEmpty();
+        }
+
+        public boolean checkUnused(NotifRecipientType type) {
+            return used.add(type);
+        }
+
+        public void resetUsed() {
+            used.clear();
+        }
+    }
+
     private String formatHTML(String msg) {
         return msg.replace("\n", "<br>");
     }
