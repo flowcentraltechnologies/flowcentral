@@ -51,7 +51,7 @@ public abstract class AbstractApplicationPanel extends AbstractPanel {
     protected final TaskLauncher taskLauncher() {
         return appletUtilities.taskLauncher();
     }
-    
+
     protected final ApplicationModuleService application() {
         return appletUtilities.application();
     }
@@ -66,8 +66,8 @@ public abstract class AbstractApplicationPanel extends AbstractPanel {
 
     protected final CollaborationProvider collaborationProvider() {
         return appletUtilities.collaborationProvider();
-    }   
-    
+    }
+
     protected final AppletUtilities au() {
         return appletUtilities;
     }
@@ -99,17 +99,20 @@ public abstract class AbstractApplicationPanel extends AbstractPanel {
     protected void showReportOptionsBox(ReportOptions reportOptions) throws UnifyException {
         commandShowPopup(new Popup(FlowCentralResultMappingConstants.SHOW_APPLICATION_REPORT_OPTIONS, reportOptions));
     }
-    
+
     protected final void setReloadOnSwitch() throws UnifyException {
         appletUtilities.setReloadOnSwitch();
     }
 
     protected final boolean clearReloadOnSwitch() throws UnifyException {
-        return appletUtilities.clearReloadOnSwitch();
+        // Call both functions
+        final boolean result = appletUtilities.clearReloadOnSwitch();
+        return clearOtherPageClosedDetected() || result;
     }
-    
+
     protected final boolean isReloadOnSwitch() throws UnifyException {
-        return appletUtilities.isReloadOnSwitch();
+        return appletUtilities.isReloadOnSwitch()
+                || isOtherPageClosedDetected();
     }
-  
+
 }
