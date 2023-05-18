@@ -35,5 +35,4 @@ public abstract class AbstractEntityFormAppletPageBean<T extends AbstractEntityF
     public void setApplet(T applet) throws UnifyException {
         super.setApplet(applet);
     }
-
 }
