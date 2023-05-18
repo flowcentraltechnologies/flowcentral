@@ -173,10 +173,12 @@ public class EntityTable extends AbstractTable<Restriction, Entity> {
             query.setSelect(tableDef.getSelect());
         }
 
-        final List<Entity> entitylist = (List<Entity>) au.environment().listAll(query);
+        List<Entity> entitylist = (List<Entity>) au.environment().listAll(query);
         // Delayed on-table load
         if (isWithEntryPolicy()) {
             getEntryPolicy().onEntryTableLoad(getParentReader(), new BeanValueListStore(entitylist), Collections.emptySet());
+            // TODO Check if reload is required
+            entitylist = (List<Entity>) au.environment().listAll(query);
         }
 
         return entitylist;
