@@ -17,15 +17,15 @@ package com.flowcentraltech.flowcentral.notification.tasks;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.entities.EntityWrapper;
+import com.flowcentraltech.flowcentral.common.data.Attachment;
+import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.database.Query;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.task.TaskInput;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.task.TaskOutput;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Convenient abstract base class for notification template tasks.
@@ -43,39 +43,76 @@ public abstract class AbstractNotificationTemplateTask<T extends NotifTemplateWr
     }
 
     @Override
-    public void execute(TaskMonitor monitor, TaskInput input, TaskOutput output) throws UnifyException {
-        composeAndSend();
+    public final void execute(TaskMonitor monitor, TaskInput input, TaskOutput output) throws UnifyException {
+        final T notifWrapper = notification().wrapperOf(notifWrapperType);      
+        final ValueStoreReader reader = getReader(input);
+        
+        // Set recipients
+        List<Recipient> recipientList = getRecipientList(reader);
+        if (!DataUtils.isBlank(recipientList)) {
+            for (Recipient recipient : recipientList) {
+                notifWrapper.addRecipient(recipient);
+            }
+        }
+
+        // Set template variables
+        setTemplateVariables(notifWrapper, reader);
+
+        // Set attachments
+        List<Attachment> attachmentList = generateAttachments(reader);
+        if (!DataUtils.isBlank(attachmentList)) {
+            for (Attachment attachment : attachmentList) {
+                notifWrapper.addAttachment(attachment);
+            }
+        }
+
+        // Send notification
+        notification().sendNotification(notifWrapper.getMessage());
     }
 
-    protected abstract void composeAndSend() throws UnifyException;
+    /**
+     * Gets reader.
+     * 
+     * @param input
+     *              the task input
+     * @return the backing store reader for this task
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected abstract ValueStoreReader getReader(TaskInput input) throws UnifyException;
+    
+    /**
+     * Sets the notification template variables.
+     * 
+     * @param notifWrapper
+     *                     the notification template wrapper
+     * @param reader
+     *                     the backing value store reader
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected abstract void setTemplateVariables(T notifWrapper, ValueStoreReader reader) throws UnifyException;
 
-    protected final T getTemplateWrapper() throws UnifyException {
-        return notification().wrapperOf(notifWrapperType);
-    }
-
-    protected final void send(T templateWrapper) throws UnifyException {
-        notification().sendNotification(templateWrapper.getMessage());
-    }
-
-    protected final <U extends EntityWrapper> U wrapperOf(Class<U> wrapperType) throws UnifyException {
-        return application().wrapperOf(wrapperType);
-    }
-
-    protected final <U extends EntityWrapper> U wrapperOf(Class<U> wrapperType, Entity inst) throws UnifyException {
-        return application().wrapperOf(wrapperType, inst);
-    }
-
-    protected final <U extends EntityWrapper> U wrapperOf(Class<U> wrapperType, List<? extends Entity> instList)
-            throws UnifyException {
-        return application().wrapperOf(wrapperType, instList);
-    }
-
-    protected final <U extends EntityWrapper> U wrapperOf(Class<U> wrapperType, ValueStore valueStore) throws UnifyException {
-        return application().wrapperOf(wrapperType, valueStore);
-    }
-
-    protected final Query<? extends Entity> queryOf(Class<? extends EntityWrapper> wrapperType) throws UnifyException {
-        return application().queryOf(wrapperType);
-    }
+     /**
+     * Gets recipient list.
+     * 
+     * @param reader
+     *               the backing value store reader
+     * @return the list of recipients
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected abstract List<Recipient> getRecipientList(ValueStoreReader reader) throws UnifyException;
+    
+    /**
+     * Generates notification attachments using reader.
+     * 
+     * @param reader
+     *               the backing value store reader
+     * @return the list of generated attachments
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected abstract List<Attachment> generateAttachments(ValueStoreReader reader) throws UnifyException;
 
 }
