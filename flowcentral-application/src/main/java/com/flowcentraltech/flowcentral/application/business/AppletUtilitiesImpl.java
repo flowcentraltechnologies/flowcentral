@@ -2300,6 +2300,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         DetailsFormListing.Builder lb = DetailsFormListing.newBuilder().usingGenerator(generator)
                 .asSpreadSheet(spreadSheet);
         lb.beginCase();
+        lb.tableName(tableName);
+        lb.withContent(dataList);
         lb.usingFormats(formats);
         if (preSummaryLines != null) {
             for (TableSummaryLine line : preSummaryLines) {
