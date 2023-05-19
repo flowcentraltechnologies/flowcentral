@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -34,17 +35,29 @@ public class DetailsFormListing {
 
     private List<DetailsCase> caseList;
 
+    private Map<String, Object> properties;
+
     private String generator;
 
     private int columns;
 
     private boolean spreadSheet;
 
-    private DetailsFormListing(List<DetailsCase> caseList, String generator, int columns, boolean spreadSheet) {
+    private DetailsFormListing(List<DetailsCase> caseList, Map<String, Object> properties, String generator,
+            int columns, boolean spreadSheet) {
         this.caseList = caseList;
+        this.properties = properties;
         this.generator = generator;
         this.columns = columns;
         this.spreadSheet = spreadSheet;
+    }
+
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    public <T> T getProperty(Class<T> dataType, String name) throws UnifyException {
+        return DataUtils.convert(dataType, properties.get(name));
     }
 
     public List<DetailsCase> getCaseList() {
@@ -95,6 +108,7 @@ public class DetailsFormListing {
 
         protected Builder() {
             this.caseList = new ArrayList<DetailsCase>();
+            this.properties = new HashMap<String, Object>();
             this.columns = 1;
         }
 
@@ -103,7 +117,6 @@ public class DetailsFormListing {
                 throw new RuntimeException("Details case already started.");
             }
 
-            properties = new HashMap<String, Object>();
             preSummaries = new ArrayList<Summary>();
             postSummaries = new ArrayList<Summary>();
             formats = Formats.DEFAULT;
@@ -128,7 +141,6 @@ public class DetailsFormListing {
                     summaryTitleColumn));
             tableName = null;
             content = null;
-            properties = null;
             preSummaries = null;
             postSummaries = null;
             caseStarted = false;
@@ -139,11 +151,11 @@ public class DetailsFormListing {
             if (caseStarted) {
                 throw new RuntimeException("A details case is open.");
             }
-            
+
             caseList.add(_case);
             return this;
         }
-        
+
         public Builder usingGenerator(String generator) {
             this.generator = generator;
             return this;
@@ -156,6 +168,16 @@ public class DetailsFormListing {
 
         public Builder asSpreadSheet(boolean spreadSheet) {
             this.spreadSheet = spreadSheet;
+            return this;
+        }
+
+        public Builder addProperty(String name, Object val) {
+            properties.put(name, val);
+            return this;
+        }
+
+        public Builder addProperties(Map<String, Object> properties) {
+            this.properties.putAll(properties);
             return this;
         }
 
@@ -195,18 +217,6 @@ public class DetailsFormListing {
             return this;
         }
 
-        public Builder addProperty(String name, Object val) {
-            checkDetailsCaseStarted();
-            properties.put(name, val);
-            return this;
-        }
-
-        public Builder addProperties(Map<String, Object> properties) {
-            checkDetailsCaseStarted();
-            this.properties.putAll(properties);
-            return this;
-        }
-
         private void checkDetailsCaseStarted() {
             if (!caseStarted) {
                 throw new RuntimeException("Details case not open.");
@@ -226,7 +236,7 @@ public class DetailsFormListing {
                 throw new RuntimeException("Last details case is open.");
             }
 
-            return new DetailsFormListing(caseList, generator, columns, spreadSheet);
+            return new DetailsFormListing(caseList, properties, generator, columns, spreadSheet);
         }
     }
 }

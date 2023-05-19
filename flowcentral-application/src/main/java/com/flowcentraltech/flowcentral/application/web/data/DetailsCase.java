@@ -36,8 +36,6 @@ public class DetailsCase {
 
     private Formats formats;
 
-    private Map<String, Object> properties;
-
     private List<Summary> preSummaries;
 
     private List<Summary> postSummaries;
@@ -48,7 +46,6 @@ public class DetailsCase {
         this.tableName = tableName;
         this.content = content;
         this.formats = Formats.DEFAULT;
-        this.properties = Collections.emptyMap();
         this.preSummaries = Collections.emptyList();
         this.postSummaries = Collections.emptyList();
         this.summaryTitleColumn = 0;
@@ -58,7 +55,6 @@ public class DetailsCase {
         this.tableName = tableName;
         this.content = details;
         this.formats = formats;
-        this.properties = Collections.emptyMap();
         this.preSummaries = Collections.emptyList();
         this.postSummaries = Collections.emptyList();
         this.summaryTitleColumn = 0;
@@ -70,7 +66,6 @@ public class DetailsCase {
         this.tableName = tableName;
         this.content = details;
         this.formats = formats;
-        this.properties = properties;
         this.preSummaries = preSummaries;
         this.postSummaries = postSummaries;
         this.summaryTitleColumn = summaryTitleColumn;
@@ -86,10 +81,6 @@ public class DetailsCase {
 
     public Formats getFormats() {
         return formats;
-    }
-
-    public Map<String, Object> getProperties() {
-        return properties;
     }
 
     public boolean isWithPreSummaries() {
