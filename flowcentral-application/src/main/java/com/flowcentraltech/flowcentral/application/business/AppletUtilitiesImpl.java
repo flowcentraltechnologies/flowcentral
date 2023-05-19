@@ -2297,9 +2297,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             Map<String, Object> properties, Formats formats, boolean spreadSheet,
             List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
             throws UnifyException {
-        final TableDef tableDef = getTableDef(tableName);
-        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder(tableDef, dataList).useGenerator(generator)
-                .useFormats(formats);
+        DetailsFormListing.Builder lb = DetailsFormListing.newBuilder().usingGenerator(generator)
+                .asSpreadSheet(spreadSheet);
+        lb.beginCase();
+        lb.usingFormats(formats);
         if (preSummaryLines != null) {
             for (TableSummaryLine line : preSummaryLines) {
                 lb.addPreSummary(new Summary(line.getLabel(), line.values()));
@@ -2314,7 +2315,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
         lb.addProperties(properties);
         lb.summaryTitleColumn(summaryTitleColumn);
-        lb.spreadSheet(spreadSheet);
+        lb.endCase();
 
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(

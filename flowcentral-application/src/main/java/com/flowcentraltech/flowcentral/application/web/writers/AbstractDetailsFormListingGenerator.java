@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.Formats;
 import com.flowcentraltech.flowcentral.application.web.data.Summary;
@@ -87,20 +89,57 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
     protected void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
-        final TableDef tableDef = detailsFormListing.getTableDef();
+        final List<DetailsCase> detailsCaseList = detailsFormListing.getCaseList();
+        final int columns = detailsFormListing.getColumns();
+        final int[] sectionColumnWidth = new int[columns];
+        Arrays.fill(sectionColumnWidth, 100 / columns);
+        
+        final int numberOfCases = detailsCaseList.size();
+        final int rows = (numberOfCases / columns) + (numberOfCases % columns > 0 ? 1 : 0);
+        
+        int caseIndex = 0;
+        for (int i = 0; i < rows; i++) {
+            writer.beginSection(sectionColumnWidth, 100, HAlignType.CENTER, false, ListingCell.BORDER_NONE);
+            int j = 0;
+            for(; j < columns && caseIndex < numberOfCases; j++, caseIndex++) {
+                doGenerate(detailsCaseList.get(caseIndex), listingProperties, writer);
+            }
+            
+            while(j < columns) {
+                writer.beginClassicTable(new ListingColumn[0]);
+                writer.endTable();
+                j++;
+            }
+            writer.endSection();
+        }
+    }
+
+    protected abstract int getOptionFlagsOverride(DetailsFormListing detailsFormListing) throws UnifyException;
+
+    protected abstract void generateReportHeader(DetailsFormListing detailsFormListing,
+            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
+
+    protected abstract void generateReportAddendum(DetailsFormListing detailsFormListing,
+            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
+
+    protected abstract void generateReportFooter(DetailsFormListing detailsFormListing,
+            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
+
+    private void doGenerate(DetailsCase detailsCase, ListingProperties listingProperties,
+            ListingGeneratorWriter writer) throws UnifyException {
+        final TableDef tableDef = application().getTableDef(detailsCase.getTableName());
         final boolean isSerialNo = tableDef.isSerialNo();
         final boolean isHeaderToUpperCase = tableDef.isHeaderToUpperCase();
-        final Formats formats = detailsFormListing.getFormats();
+        final Formats formats = detailsCase.getFormats();
         final DecimalFormat amountFormat = new DecimalFormat(formats.getDecimalFormat());
         final SimpleDateFormat dateFormat = new SimpleDateFormat(formats.getDateFormat());
         final SimpleDateFormat timestampFormat = new SimpleDateFormat(formats.getTimestampFormat());
         final List<TableColumnDef> tableColumns = tableDef.getVisibleColumnDefList();
-        final boolean summaries = detailsFormListing.isWithSummaries();
+        final boolean summaries = detailsCase.isWithSummaries();
         final int summaryTitleColumns = tableDef.getSummaryTitleColumns() > 0 ? tableDef.getSummaryTitleColumns()
-                : detailsFormListing.getSummaryTitleColumn() + 1;
+                : detailsCase.getSummaryTitleColumn() + 1;
         final int columns = tableColumns.size();
         final int columnWidth = 100 / columns;
-        writer.beginSection(1, 100, HAlignType.CENTER, false, ListingCell.BORDER_NONE);
         List<ListingColumn> summaryColumns = new ArrayList<ListingColumn>();
         List<ListingCell> summaryCells = new ArrayList<ListingCell>();
         List<ListingColumn> headerListingColumns = new ArrayList<ListingColumn>();
@@ -156,9 +195,9 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
         writer.beginClassicTable(headerListingColumns);
         // Pre-summaries
-        if (detailsFormListing.isWithPreSummaries()) {
+        if (detailsCase.isWithPreSummaries()) {
             writer.replaceTableColumns(summaryColumns);
-            for (Summary summary : detailsFormListing.getPreSummaries()) {
+            for (Summary summary : detailsCase.getPreSummaries()) {
                 summaryCells.get(0).setContent(summary.getLabel());
                 for (int i = summaryTitleColumns, j = 1; i < columns; i++, j++) {
                     summaryCells.get(j).setContent(summary.getContent(tableColumns.get(i).getFieldName()));
@@ -175,7 +214,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         // Rows
         writer.replaceTableColumns(listingColumns);
 
-        final ValueStore detailsValueStore = new BeanValueListStore(detailsFormListing.getDetails());
+        final ValueStore detailsValueStore = new BeanValueListStore(detailsCase.getContent());
         final int len = detailsValueStore.size();
         for (int k = 0; k < len;) {
             detailsValueStore.setDataIndex(k++);
@@ -194,9 +233,9 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         }
 
         // Post-summaries
-        if (detailsFormListing.isWithPostSummaries()) {
+        if (detailsCase.isWithPostSummaries()) {
             writer.replaceTableColumns(summaryColumns);
-            for (Summary summary : detailsFormListing.getPostSummaries()) {
+            for (Summary summary : detailsCase.getPostSummaries()) {
                 summaryCells.get(0).setContent(summary.getLabel());
                 for (int i = summaryTitleColumns, j = 1; i < columns; i++, j++) {
                     summaryCells.get(j).setContent(summary.getContent(tableColumns.get(i).getFieldName()));
@@ -206,17 +245,5 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         }
 
         writer.endTable();
-        writer.endSection();
     }
-
-    protected abstract int getOptionFlagsOverride(DetailsFormListing detailsFormListing) throws UnifyException;
-
-    protected abstract void generateReportHeader(DetailsFormListing detailsFormListing,
-            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
-
-    protected abstract void generateReportAddendum(DetailsFormListing detailsFormListing,
-            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
-
-    protected abstract void generateReportFooter(DetailsFormListing detailsFormListing,
-            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
 }

@@ -16,15 +16,12 @@
 package com.flowcentraltech.flowcentral.application.web.data;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -35,105 +32,50 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public class DetailsFormListing {
 
+    private List<DetailsCase> caseList;
+
     private String generator;
 
-    private Formats formats;
-
-    private List<Summary> preSummaries;
-
-    private List<Summary> postSummaries;
-
-    private TableDef tableDef;
-
-    private Map<String, Object> properties;
-
-    private List<? extends Entity> details;
-
-    private int summaryTitleColumn;
+    private int columns;
 
     private boolean spreadSheet;
 
-    private DetailsFormListing(String generator, Formats formats, TableDef tableDef, Map<String, Object> properties,
-            List<? extends Entity> details, int summaryTitleColumn, boolean spreadSheet, List<Summary> preSummaries,
-            List<Summary> postSummaries) {
+    private DetailsFormListing(List<DetailsCase> caseList, String generator, int columns, boolean spreadSheet) {
+        this.caseList = caseList;
         this.generator = generator;
-        this.formats = formats;
-        this.tableDef = tableDef;
-        this.properties = properties;
-        this.details = details;
-        this.summaryTitleColumn = summaryTitleColumn;
+        this.columns = columns;
         this.spreadSheet = spreadSheet;
-        this.preSummaries = preSummaries;
-        this.postSummaries = postSummaries;
+    }
+
+    public List<DetailsCase> getCaseList() {
+        return caseList;
     }
 
     public String getGenerator() {
         return generator;
     }
 
-    public Formats getFormats() {
-        return formats;
+    public int getColumns() {
+        return columns;
     }
 
-    public TableDef getTableDef() {
-        return tableDef;
-    }
-
-    public Map<String, Object> getProperties() {
-        return properties;
-    }
-
-    public <T> T getProperty(Class<T> dataType, String name) throws UnifyException {
-        return DataUtils.convert(dataType, properties.get(name));
-    }
-
-    public List<? extends Entity> getDetails() {
-        return details;
-    }
-
-    public boolean isSerialNo() {
-        return tableDef.isSerialNo();
-    }
-
-    public int getSummaryTitleColumn() {
-        return summaryTitleColumn;
-    }
-
-    public List<Summary> getPreSummaries() {
-        return preSummaries;
-    }
-
-    public List<Summary> getPostSummaries() {
-        return postSummaries;
-    }
-
-    public boolean isWithPreSummaries() {
-        return !DataUtils.isBlank(preSummaries);
-    }
-
-    public boolean isWithPostSummaries() {
-        return !DataUtils.isBlank(postSummaries);
-    }
-
-    public boolean isWithSummaries() {
-        return isWithPreSummaries() || isWithPostSummaries();
-    }
-    
     public boolean isSpreadSheet() {
         return spreadSheet;
     }
 
-    public static Builder newBuilder(TableDef tableDef, List<? extends Entity> details) {
-        return new Builder(tableDef, details);
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     public static class Builder {
+
+        private List<DetailsCase> caseList;
 
         private String generator;
 
         private Formats formats;
 
-        private TableDef tableDef;
+        private String tableName;
 
         private Map<String, Object> properties;
 
@@ -141,58 +83,134 @@ public class DetailsFormListing {
 
         private List<Summary> postSummaries;
 
-        private List<? extends Entity> details;
+        private List<? extends Entity> content;
 
         private int summaryTitleColumn;
 
+        private int columns;
+
         private boolean spreadSheet;
 
-        public Builder(TableDef tableDef, List<? extends Entity> details) {
-            this.properties = new HashMap<String, Object>();
-            this.tableDef = tableDef;
-            this.details = details;
-            this.preSummaries = new ArrayList<Summary>();
-            this.postSummaries = new ArrayList<Summary>();
+        private boolean caseStarted;
+
+        protected Builder() {
+            this.caseList = new ArrayList<DetailsCase>();
+            this.columns = 1;
         }
 
-        public Builder useGenerator(String generator) throws UnifyException {
+        public Builder beginCase() {
+            if (caseStarted) {
+                throw new RuntimeException("Details case already started.");
+            }
+
+            properties = new HashMap<String, Object>();
+            preSummaries = new ArrayList<Summary>();
+            postSummaries = new ArrayList<Summary>();
+            formats = Formats.DEFAULT;
+            caseStarted = true;
+            return this;
+        }
+
+        public Builder endCase() {
+            if (!caseStarted) {
+                throw new RuntimeException("No details case started.");
+            }
+
+            if (StringUtils.isBlank(tableName)) {
+                throw new RuntimeException("Table name is required for details case.");
+            }
+
+            if (content == null) {
+                throw new RuntimeException("Content is required for details case.");
+            }
+
+            caseList.add(new DetailsCase(tableName, content, formats, properties, preSummaries, postSummaries,
+                    summaryTitleColumn));
+            tableName = null;
+            content = null;
+            properties = null;
+            preSummaries = null;
+            postSummaries = null;
+            caseStarted = false;
+            return this;
+        }
+
+        public Builder addCase(DetailsCase _case) {
+            if (caseStarted) {
+                throw new RuntimeException("A details case is open.");
+            }
+            
+            caseList.add(_case);
+            return this;
+        }
+        
+        public Builder usingGenerator(String generator) {
             this.generator = generator;
             return this;
         }
 
-        public Builder spreadSheet(boolean spreadSheet) throws UnifyException {
+        public Builder columns(int columns) {
+            this.columns = columns <= 0 ? 1 : columns;
+            return this;
+        }
+
+        public Builder asSpreadSheet(boolean spreadSheet) {
             this.spreadSheet = spreadSheet;
             return this;
         }
 
-        public Builder summaryTitleColumn(int summaryTitleColumn) throws UnifyException {
+        public Builder tableName(String tableName) throws UnifyException {
+            checkDetailsCaseStarted();
+            this.tableName = tableName;
+            return this;
+        }
+
+        public Builder withContent(List<? extends Entity> content) {
+            checkDetailsCaseStarted();
+            this.content = content;
+            return this;
+        }
+
+        public Builder summaryTitleColumn(int summaryTitleColumn) {
+            checkDetailsCaseStarted();
             this.summaryTitleColumn = summaryTitleColumn;
             return this;
         }
 
-        public Builder addPreSummary(Summary summary) throws UnifyException {
+        public Builder addPreSummary(Summary summary) {
+            checkDetailsCaseStarted();
             preSummaries.add(summary);
             return this;
         }
 
-        public Builder addPostSummary(Summary summary) throws UnifyException {
+        public Builder addPostSummary(Summary summary) {
+            checkDetailsCaseStarted();
             postSummaries.add(summary);
             return this;
         }
 
-        public Builder useFormats(Formats formats) throws UnifyException {
+        public Builder usingFormats(Formats formats) {
+            checkDetailsCaseStarted();
             this.formats = formats;
             return this;
         }
 
-        public Builder addProperty(String name, Object val) throws UnifyException {
+        public Builder addProperty(String name, Object val) {
+            checkDetailsCaseStarted();
             properties.put(name, val);
             return this;
         }
 
-        public Builder addProperties(Map<String, Object> properties) throws UnifyException {
+        public Builder addProperties(Map<String, Object> properties) {
+            checkDetailsCaseStarted();
             this.properties.putAll(properties);
             return this;
+        }
+
+        private void checkDetailsCaseStarted() {
+            if (!caseStarted) {
+                throw new RuntimeException("Details case not open.");
+            }
         }
 
         public DetailsFormListing build() {
@@ -200,9 +218,15 @@ public class DetailsFormListing {
                 throw new IllegalArgumentException("Generator is required!");
             }
 
-            return new DetailsFormListing(generator, formats, tableDef, Collections.unmodifiableMap(properties),
-                    Collections.unmodifiableList(details), summaryTitleColumn, spreadSheet,
-                    Collections.unmodifiableList(preSummaries), Collections.unmodifiableList(postSummaries));
+            if (caseList.isEmpty()) {
+                throw new IllegalArgumentException("There must be at least one details case.");
+            }
+
+            if (caseStarted) {
+                throw new RuntimeException("Last details case is open.");
+            }
+
+            return new DetailsFormListing(caseList, generator, columns, spreadSheet);
         }
     }
 }
