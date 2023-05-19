@@ -199,7 +199,7 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
     }
 
     @Override
-    protected void doEndSection() throws UnifyException {
+    protected void doEndSection(boolean addSectionSpacing) throws UnifyException {
         if (currentSectionColumn > 0 && currentSectionColumn < sectionColumnWidth.length) {
             for (; currentSectionColumn < sectionColumnWidth.length; currentSectionColumn++) {
                 writer.write("<div class=\"flsectionbodycell\" style=\"width:")
@@ -212,5 +212,9 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
 
         writer.write("</div>"); // End section body
         writer.write("</div>"); // End section
+        
+        if (addSectionSpacing) {
+            writer.write("<div class=\"flsectionspacing\"></div>");
+        }
     }
 }

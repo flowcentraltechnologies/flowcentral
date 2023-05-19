@@ -361,6 +361,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-formlisting .flsectionbody {display:table;padding-bottom:8px;box-sizing: border-box;}
 .fc-formlisting .flsectionbodyrow {display:table-row;}
 .fc-formlisting .flsectionbodycell {display:table-cell;padding-left: 8px;padding-right: 8px;padding-bottom: 5px;vertical-align: top;}
+.fc-formlisting .flsectionspacing {display: block; width:100%; margin-bottom: 24px;}
 .fc-formlisting .flgray {background-color:#f4f4f4;}
 .fc-formlisting .fltable {display:table;width:100%;table-layout: fixed;}
 .fc-formlisting .flrow {display:table-row;}

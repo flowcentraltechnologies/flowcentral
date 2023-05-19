@@ -278,7 +278,21 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
             throw new RuntimeException("No section started.");
         }
 
-        doEndSection();
+        doEndSection(false);
+        inSection = false;
+    }
+
+    @Override
+    public void endSectionWithSpacing() throws UnifyException {
+        if (columns != null) {
+            throw new RuntimeException("Current table is not ended.");
+        }
+
+        if (!inSection) {
+            throw new RuntimeException("No section started.");
+        }
+
+        doEndSection(true);
         inSection = false;
     }
 
@@ -336,5 +350,5 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
 
     protected abstract void doEndTable() throws UnifyException;
 
-    protected abstract void doEndSection() throws UnifyException;
+    protected abstract void doEndSection(boolean addSectionSpacing) throws UnifyException;
 }

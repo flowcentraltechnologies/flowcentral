@@ -85,6 +85,8 @@ public interface ListingGeneratorWriter {
     void endTable() throws UnifyException;
 
     void endSection() throws UnifyException;
+
+    void endSectionWithSpacing() throws UnifyException;
     
     void close();
 }

@@ -110,7 +110,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
                 writer.endTable();
                 j++;
             }
-            writer.endSection();
+            writer.endSectionWithSpacing();
         }
     }
 
@@ -200,7 +200,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
                     ListingColumn.WidthType.COLUMNS);
             List<ListingColumn> headerColumns = Arrays.asList(column);
 
-            ListingCell cell = new ListingCell(ListingCellType.TEXT,
+            ListingCell cell = new ListingCell(ListingCellType.BOLD_TEXT,
                     tableDef.isHeaderToUpperCase() ? tableDef.getLabel().toUpperCase() : tableDef.getLabel(),
                     ListingCell.BORDER_ALL);
             List<ListingCell> headerCells = Arrays.asList(cell);
