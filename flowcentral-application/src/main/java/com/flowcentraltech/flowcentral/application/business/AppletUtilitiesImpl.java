@@ -2278,8 +2278,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public byte[] generateViewListingReportAsByteArray(List<DetailsCase> caseList, String generator,
-            Map<String, Object> properties, boolean asSpreadSheet) throws UnifyException {
-        final Report report = generateViewListingReport(caseList, generator, properties, asSpreadSheet);
+            Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException {
+        final Report report = generateViewListingReport(caseList, generator, properties, columns, asSpreadSheet);
         return reportProvider.generateReportAsByteArray(report);
     }
 
@@ -2336,9 +2336,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
 
     @Override
     public Report generateViewListingReport(List<DetailsCase> caseList, String generator,
-            Map<String, Object> properties, boolean asSpreadSheet) throws UnifyException {
+            Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException {
         DetailsFormListing.Builder lb = DetailsFormListing.newBuilder().usingGenerator(generator)
-                .addProperties(properties).addCases(caseList).asSpreadSheet(asSpreadSheet);
+                .addProperties(properties).addCases(caseList).columns(columns).asSpreadSheet(asSpreadSheet);
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());

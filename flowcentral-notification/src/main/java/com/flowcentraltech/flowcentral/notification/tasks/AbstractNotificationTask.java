@@ -94,9 +94,15 @@ public abstract class AbstractNotificationTask extends AbstractTask {
     }
 
     protected Attachment createPdfAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
-            String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
+            int columns) throws UnifyException {
+        return createPdfAttachmentFromDetailListing(fileName, detailsCaseList, columns,
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap());
+    }
+
+    protected Attachment createPdfAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
+            int columns, String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
         return createAttachmentFromDetailListingReport(fileName, detailsCaseList, detailsListingGenerator, properties,
-                false);
+                columns, false);
     }
 
     protected Attachment createExcelAttachmentFromDetailListing(String fileName, String tableName,
@@ -114,9 +120,15 @@ public abstract class AbstractNotificationTask extends AbstractTask {
     }
 
     protected Attachment createExcelAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
-            String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
+            int columns) throws UnifyException {
+        return createExcelAttachmentFromDetailListing(fileName, detailsCaseList, columns,
+                ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap());
+    }
+
+    protected Attachment createExcelAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
+            int columns, String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
         return createAttachmentFromDetailListingReport(fileName, detailsCaseList, detailsListingGenerator, properties,
-                true);
+                columns, true);
     }
 
     protected Attachment createAttachmentFromFile(FileAttachmentType type, String absoluteFileName)
@@ -128,18 +140,18 @@ public abstract class AbstractNotificationTask extends AbstractTask {
 
     private Attachment createAttachmentFromDetailListingReport(String fileName, String tableName,
             List<? extends Entity> dataList, String detailsListingGenerator, Map<String, Object> properties,
-            Formats formats, boolean asSpreadSheet) throws UnifyException {
+            Formats formats, boolean spreadSheet) throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(tableName, dataList,
-                detailsListingGenerator, properties, formats, asSpreadSheet);
-        return Attachment.newBuilder(asSpreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF)
-                .fileName(fileName).title(fileName).name(fileName).data(report).build();
+                detailsListingGenerator, properties, formats, spreadSheet);
+        return Attachment.newBuilder(spreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF).fileName(fileName)
+                .title(fileName).name(fileName).data(report).build();
     }
 
     private Attachment createAttachmentFromDetailListingReport(String fileName, List<DetailsCase> detailsCaseList,
-            String detailsListingGenerator, Map<String, Object> properties, boolean asSpreadSheet)
+            String detailsListingGenerator, Map<String, Object> properties, int columns, boolean asSpreadSheet)
             throws UnifyException {
         final byte[] report = appletUtilities.generateViewListingReportAsByteArray(detailsCaseList,
-                detailsListingGenerator, properties, asSpreadSheet);
+                detailsListingGenerator, properties, columns, asSpreadSheet);
         return Attachment.newBuilder(asSpreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF)
                 .fileName(fileName).title(fileName).name(fileName).data(report).build();
     }

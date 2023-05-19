@@ -1021,8 +1021,8 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle,
-            FormDef formDef, Entity inst, BreadCrumbs breadCrumbs) throws UnifyException;
+    ListingForm constructListingForm(AbstractApplet applet, String rootTitle, String beanTitle, FormDef formDef,
+            Entity inst, BreadCrumbs breadCrumbs) throws UnifyException;
 
     /**
      * Constructs a header with tabs form.
@@ -1887,17 +1887,17 @@ public interface AppletUtilities extends UnifyComponent {
      * Generates a view listing report as byte array.
      * 
      * @param tableName
-     *                    the table name
+     *                      the table name
      * @param dataList
-     *                    the data list
+     *                      the data list
      * @param generator
-     *                    the listing generator
+     *                      the listing generator
      * @param properties
-     *                    the report properties
+     *                      the report properties
      * @param formats
-     *                    the formats
+     *                      the formats
      * @param asSpreadSheet
-     *                    indicates spread sheet
+     *                      indicates spread sheet
      * @return the generated report object
      * @throws UnifyException
      *                        if an error occurs
@@ -1944,6 +1944,8 @@ public interface AppletUtilities extends UnifyComponent {
      *                      the listing generator
      * @param properties
      *                      the report properties
+     * @param columns
+     *                      the number of columns
      * @param asSpreadSheet
      *                      indicates spread sheet
      * @return the generated report object
@@ -1951,7 +1953,7 @@ public interface AppletUtilities extends UnifyComponent {
      *                        if an error occurs
      */
     byte[] generateViewListingReportAsByteArray(List<DetailsCase> caseList, String generator,
-            Map<String, Object> properties, boolean asSpreadSheet) throws UnifyException;
+            Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException;
 
     /**
      * Generates a listing report.
@@ -1973,17 +1975,17 @@ public interface AppletUtilities extends UnifyComponent {
      * Generates a listing report.
      * 
      * @param tableName
-     *                    the table name
+     *                      the table name
      * @param dataList
-     *                    the data list
+     *                      the data list
      * @param generator
-     *                    the listing generator
+     *                      the listing generator
      * @param properties
-     *                    the report properties
+     *                      the report properties
      * @param formats
-     *                    the formats
+     *                      the formats
      * @param asSpreadSheet
-     *                    indicates spread sheet
+     *                      indicates spread sheet
      * @return the generated report object
      * @throws UnifyException
      *                        if an error occurs
@@ -1995,20 +1997,23 @@ public interface AppletUtilities extends UnifyComponent {
      * Generates a listing report.
      * 
      * @param tableName
-     *                    the table name
+     *                           the table name
      * @param dataList
-     *                    the data list
+     *                           the data list
      * @param generator
-     *                    the listing generator
+     *                           the listing generator
      * @param properties
-     *                    the report properties
+     *                           the report properties
      * @param formats
-     *                    the formats
+     *                           the formats
      * @param asSpreadSheet
-     *                    indicates spread sheet
-     * @param preSummaryLines pre-table summary lines
-     * @param postSummaryLines post-table summary lines
-     * @param summaryTitleColumn summary title column
+     *                           indicates spread sheet
+     * @param preSummaryLines
+     *                           pre-table summary lines
+     * @param postSummaryLines
+     *                           post-table summary lines
+     * @param summaryTitleColumn
+     *                           summary title column
      * @return the generated report object
      * @throws UnifyException
      *                        if an error occurs
@@ -2022,17 +2027,19 @@ public interface AppletUtilities extends UnifyComponent {
      * Generates a listing report.
      * 
      * @param caseList
-     *                    the details case list
+     *                      the details case list
      * @param generator
-     *                    the listing generator
+     *                      the listing generator
      * @param properties
-     *                    the report properties
+     *                      the report properties
+     * @param columns
+     *                      the number of columns
      * @param asSpreadSheet
-     *                    indicates spread sheet
+     *                      indicates spread sheet
      * @return the generated report object
      * @throws UnifyException
      *                        if an error occurs
      */
     Report generateViewListingReport(List<DetailsCase> caseList, String generator, Map<String, Object> properties,
-            boolean asSpreadSheet) throws UnifyException;
+            int columns, boolean asSpreadSheet) throws UnifyException;
 }
