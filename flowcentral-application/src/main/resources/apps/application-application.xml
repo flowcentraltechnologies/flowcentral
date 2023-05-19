@@ -1137,6 +1137,8 @@
 				label="$m{application.apptable.sortable}" type="boolean" />
 			<field name="serialNo"
 				label="$m{application.apptable.serialno}" type="boolean" />
+			<field name="showLabelHeader"
+				label="$m{application.apptable.showlabelheader}" type="boolean" />
 			<field name="headerToUpperCase"
 				label="$m{application.apptable.headertouppercase}" type="boolean" />
 			<field name="headerCenterAlign"

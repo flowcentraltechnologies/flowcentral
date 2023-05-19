@@ -3455,6 +3455,8 @@
 				<section name="tableFlags" columns="type_1_2">
 					<field name="headerless" inputWidget="application.checkbox"
 						column="1" />
+					<field name="showLabelHeader"
+						inputWidget="application.checkbox" column="1" />
 					<field name="headerToUpperCase"
 						inputWidget="application.checkbox" column="1" />
 					<field name="headerCenterAlign"

@@ -53,6 +53,9 @@ public class AppTable extends BaseApplicationEntity {
 
     @Column
     private boolean serialNo;
+    
+    @Column
+    private boolean showLabelHeader;
 
     @Column
     private boolean headerToUpperCase;
@@ -155,6 +158,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setSerialNo(boolean serialNo) {
         this.serialNo = serialNo;
+    }
+
+    public boolean isShowLabelHeader() {
+        return showLabelHeader;
+    }
+
+    public void setShowLabelHeader(boolean showLabelHeader) {
+        this.showLabelHeader = showLabelHeader;
     }
 
     public boolean isHeaderToUpperCase() {

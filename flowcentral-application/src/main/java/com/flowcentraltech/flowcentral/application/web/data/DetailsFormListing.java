@@ -156,6 +156,15 @@ public class DetailsFormListing {
             return this;
         }
 
+        public Builder addCases(List<DetailsCase> _cases) {
+            if (caseStarted) {
+                throw new RuntimeException("A details case is open.");
+            }
+
+            caseList.addAll(_cases);
+            return this;
+        }
+
         public Builder usingGenerator(String generator) {
             this.generator = generator;
             return this;

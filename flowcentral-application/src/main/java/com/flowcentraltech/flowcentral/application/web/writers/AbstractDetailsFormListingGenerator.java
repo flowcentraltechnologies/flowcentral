@@ -93,19 +93,19 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         final int columns = detailsFormListing.getColumns();
         final int[] sectionColumnWidth = new int[columns];
         Arrays.fill(sectionColumnWidth, 100 / columns);
-        
+
         final int numberOfCases = detailsCaseList.size();
         final int rows = (numberOfCases / columns) + (numberOfCases % columns > 0 ? 1 : 0);
-        
+
         int caseIndex = 0;
         for (int i = 0; i < rows; i++) {
             writer.beginSection(sectionColumnWidth, 100, HAlignType.CENTER, false, ListingCell.BORDER_NONE);
             int j = 0;
-            for(; j < columns && caseIndex < numberOfCases; j++, caseIndex++) {
+            for (; j < columns && caseIndex < numberOfCases; j++, caseIndex++) {
                 doGenerate(detailsCaseList.get(caseIndex), listingProperties, writer);
             }
-            
-            while(j < columns) {
+
+            while (j < columns) {
                 writer.beginClassicTable(new ListingColumn[0]);
                 writer.endTable();
                 j++;
@@ -125,8 +125,8 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     protected abstract void generateReportFooter(DetailsFormListing detailsFormListing,
             ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
 
-    private void doGenerate(DetailsCase detailsCase, ListingProperties listingProperties,
-            ListingGeneratorWriter writer) throws UnifyException {
+    private void doGenerate(DetailsCase detailsCase, ListingProperties listingProperties, ListingGeneratorWriter writer)
+            throws UnifyException {
         final TableDef tableDef = application().getTableDef(detailsCase.getTableName());
         final boolean isSerialNo = tableDef.isSerialNo();
         final boolean isHeaderToUpperCase = tableDef.isHeaderToUpperCase();
@@ -194,6 +194,21 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         }
 
         writer.beginClassicTable(headerListingColumns);
+        // Header Label
+        if (tableDef.isShowLabelHeader()) {
+            ListingColumn column = new ListingColumn(HAlignType.CENTER, isSerialNo ? columns + 1 : columns,
+                    ListingColumn.WidthType.COLUMNS);
+            List<ListingColumn> headerColumns = Arrays.asList(column);
+
+            ListingCell cell = new ListingCell(ListingCellType.TEXT,
+                    tableDef.isHeaderToUpperCase() ? tableDef.getLabel().toUpperCase() : tableDef.getLabel(),
+                    ListingCell.BORDER_ALL);
+            List<ListingCell> headerCells = Arrays.asList(cell);
+
+            writer.replaceTableColumns(headerColumns);
+            writer.writeRow(headerCells);
+        }
+
         // Pre-summaries
         if (detailsCase.isWithPreSummaries()) {
             writer.replaceTableColumns(summaryColumns);
