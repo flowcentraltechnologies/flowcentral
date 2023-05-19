@@ -22,6 +22,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.application.web.data.Formats;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
@@ -109,6 +110,12 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
                 properties, formats, false);
     }
 
+    protected Attachment createPdfAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
+            String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
+        return createAttachmentFromDetailListingReport(fileName, detailsCaseList, detailsListingGenerator, properties,
+                false);
+    }
+
     protected Attachment createExcelAttachmentFromDetailListing(String fileName, String tableName,
             List<? extends Entity> dataList) throws UnifyException {
         return createExcelAttachmentFromDetailListing(fileName, tableName, dataList,
@@ -121,6 +128,12 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
             Formats formats) throws UnifyException {
         return createAttachmentFromDetailListingReport(fileName, tableName, dataList, detailsListingGenerator,
                 properties, formats, true);
+    }
+
+    protected Attachment createExcelAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
+            String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
+        return createAttachmentFromDetailListingReport(fileName, detailsCaseList, detailsListingGenerator, properties,
+                true);
     }
 
     protected Attachment createAttachmentFromFile(FileAttachmentType type, String absoluteFileName) throws UnifyException {
@@ -137,5 +150,14 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
                 detailsListingGenerator, properties, formats, spreadSheet);
         return Attachment.newBuilder(spreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF).fileName(fileName)
                 .title(fileName).name(fileName).data(report).build();
+    }
+
+    private Attachment createAttachmentFromDetailListingReport(String fileName, List<DetailsCase> detailsCaseList,
+            String detailsListingGenerator, Map<String, Object> properties, boolean asSpreadSheet)
+            throws UnifyException {
+        final byte[] report = appletUtilities.generateViewListingReportAsByteArray(detailsCaseList,
+                detailsListingGenerator, properties, asSpreadSheet);
+        return Attachment.newBuilder(asSpreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF)
+                .fileName(fileName).title(fileName).name(fileName).data(report).build();
     }
 }
