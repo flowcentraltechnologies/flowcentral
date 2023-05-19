@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationModule
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
+import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -48,10 +49,10 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component(NotificationModuleNameConstants.EMAILMESSAGINGCHANNEL)
 public class EmailNotificationMessagingChannel extends AbstractNotificationMessagingChannel {
 
-    @Configurable
+    @Configurable(ApplicationComponents.APPLICATION_DEFAULTEMAILSERVER)
     private EmailServer emailServer;
 
-    public void setEmailServer(EmailServer emailServer) {
+    public final void setEmailServer(EmailServer emailServer) {
         this.emailServer = emailServer;
     }
 
