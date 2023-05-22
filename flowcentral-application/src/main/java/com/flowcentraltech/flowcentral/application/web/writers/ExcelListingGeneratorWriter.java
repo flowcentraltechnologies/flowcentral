@@ -201,7 +201,7 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
     }
 
     @Override
-    protected void doEndSection() throws UnifyException {
+    protected void doEndSection(boolean addSectionSpacing) throws UnifyException {
         if (maxSheetColumns < nextTableStartColumn) {
             maxSheetColumns = nextTableStartColumn;
         }

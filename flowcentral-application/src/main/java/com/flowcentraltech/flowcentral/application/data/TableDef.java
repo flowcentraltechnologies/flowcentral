@@ -75,6 +75,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
     private boolean sortable;
 
+    private boolean showLabelHeader;
+
     private boolean headerToUpperCase;
 
     private boolean headerCenterAlign;
@@ -104,10 +106,11 @@ public class TableDef extends BaseApplicationEntityDef {
     private TableDef(EntityDef entityDef, List<TableLoadingDef> loadingDefList, List<TableColumnDef> columnDefList,
             List<TableColumnDef> visibleColumnDefList, List<ButtonInfo> actionBtnInfos,
             Map<String, TableFilterDef> filterDefMap, String label, String detailsPanelName, int sortHistory,
-            int itemsPerPage, int summaryTitleColumns, boolean serialNo, boolean sortable, boolean headerToUpperCase,
-            boolean headerCenterAlign, boolean basicSearch, boolean totalSummary, boolean headerless,
-            boolean multiSelect, boolean nonConforming, boolean fixedRows, boolean limitSelectToColumns,
-            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
+            int itemsPerPage, int summaryTitleColumns, boolean serialNo, boolean sortable, boolean showLabelHeader,
+            boolean headerToUpperCase, boolean headerCenterAlign, boolean basicSearch, boolean totalSummary,
+            boolean headerless, boolean multiSelect, boolean nonConforming, boolean fixedRows,
+            boolean limitSelectToColumns, ApplicationEntityNameParts nameParts, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.entityDef = entityDef;
         this.loadingDefList = loadingDefList;
@@ -121,6 +124,7 @@ public class TableDef extends BaseApplicationEntityDef {
         this.summaryTitleColumns = summaryTitleColumns;
         this.serialNo = serialNo;
         this.sortable = sortable;
+        this.showLabelHeader = showLabelHeader;
         this.headerToUpperCase = headerToUpperCase;
         this.headerCenterAlign = headerCenterAlign;
         this.basicSearch = basicSearch;
@@ -321,6 +325,10 @@ public class TableDef extends BaseApplicationEntityDef {
         return sortable;
     }
 
+    public boolean isShowLabelHeader() {
+        return showLabelHeader;
+    }
+
     public boolean isHeaderToUpperCase() {
         return headerToUpperCase;
     }
@@ -419,6 +427,8 @@ public class TableDef extends BaseApplicationEntityDef {
 
         private boolean sortable;
 
+        private boolean showLabelHeader;
+
         private boolean headerToUpperCase;
 
         private boolean headerCenterAlign;
@@ -515,6 +525,11 @@ public class TableDef extends BaseApplicationEntityDef {
 
         public Builder summaryTitleColumns(int summaryTitleColumns) {
             this.summaryTitleColumns = summaryTitleColumns;
+            return this;
+        }
+
+        public Builder showLabelHeader(boolean showLabelHeader) {
+            this.showLabelHeader = showLabelHeader;
             return this;
         }
 
@@ -695,9 +710,9 @@ public class TableDef extends BaseApplicationEntityDef {
             return new TableDef(entityDef, DataUtils.unmodifiableList(loadingDefList),
                     DataUtils.unmodifiableList(columnDefList), DataUtils.unmodifiableList(_visibleColumnDefList),
                     DataUtils.unmodifiableList(actionBtnInfos), DataUtils.unmodifiableMap(filterDefMap), label,
-                    detailsPanelName, sortHistory, itemsPerPage, summaryTitleColumns, serialNo, sortable, headerToUpperCase,
-                    headerCenterAlign, basicSearch, totalSummary, headerless, multiSelect, nonConforming, fixedRows,
-                    limitSelectToColumns, nameParts, description, id, version);
+                    detailsPanelName, sortHistory, itemsPerPage, summaryTitleColumns, serialNo, sortable,
+                    showLabelHeader, headerToUpperCase, headerCenterAlign, basicSearch, totalSummary, headerless,
+                    multiSelect, nonConforming, fixedRows, limitSelectToColumns, nameParts, description, id, version);
         }
     }
 

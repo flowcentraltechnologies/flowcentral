@@ -45,6 +45,8 @@ public class AppTableConfig extends BaseNameConfig {
     private Boolean serialNo;
 
     private Boolean sortable;
+    
+    private Boolean showLabelHeader;
 
     private Boolean headerToUpperCase;
 
@@ -77,6 +79,7 @@ public class AppTableConfig extends BaseNameConfig {
     public AppTableConfig() {
         this.serialNo = Boolean.FALSE;
         this.sortable = Boolean.TRUE;
+        this.showLabelHeader = Boolean.FALSE;
         this.headerToUpperCase = Boolean.FALSE;
         this.headerCenterAlign = Boolean.FALSE;
         this.basicSearch = Boolean.FALSE;
@@ -152,6 +155,16 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute
     public void setSerialNo(Boolean serialNo) {
         this.serialNo = serialNo;
+    }
+
+    public Boolean getShowLabelHeader() {
+        return showLabelHeader;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setShowLabelHeader(Boolean showLabelHeader) {
+        this.showLabelHeader = showLabelHeader;
     }
 
     public Boolean getHeaderToUpperCase() {

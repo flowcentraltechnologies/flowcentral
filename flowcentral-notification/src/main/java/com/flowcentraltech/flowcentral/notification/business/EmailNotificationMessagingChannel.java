@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationModule
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
+import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -48,10 +49,10 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component(NotificationModuleNameConstants.EMAILMESSAGINGCHANNEL)
 public class EmailNotificationMessagingChannel extends AbstractNotificationMessagingChannel {
 
-    @Configurable
+    @Configurable(ApplicationComponents.APPLICATION_DEFAULTEMAILSERVER)
     private EmailServer emailServer;
 
-    public void setEmailServer(EmailServer emailServer) {
+    public final void setEmailServer(EmailServer emailServer) {
         this.emailServer = emailServer;
     }
 
@@ -61,6 +62,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
             ensureServerConfigured(notifChannelDef);
             EmailContext ctx = getEmailContext();
             if (ctx.isTestMode() && !ctx.isEmailsPresent()) {
+                logDebug("Aborting send email. Test mode system parameters not properly set.");
                 return setError(channelMessage,
                         "System is in nootification test mode. Test Mode TO email(s) is required.");
             }
@@ -89,6 +91,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         try {
             EmailContext ctx = getEmailContext();
             if (ctx.isTestMode() && !ctx.isEmailsPresent()) {
+                logDebug("Aborting send email. Test mode system parameters not properly set.");
                 for (ChannelMessage channelMessage : channelMessages) {
                     setError(channelMessage,
                             "System is in nootification test mode. Test Mode TO email(s) is required.");
@@ -204,6 +207,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
     private EmailContext getEmailContext() throws UnifyException {
         final boolean testMode = system().getSysParameterValue(boolean.class,
                 NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_ENABLED);
+        EmailContext ctx = EmailContext.TEST_MODE_OFF;
         if (testMode) {
             String emails = system().getSysParameterValue(String.class,
                     NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_TO_EMAILS);
@@ -219,10 +223,11 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
                     NotificationModuleSysParamConstants.NOTIFICATION_TEST_MODE_BCC_EMAILS);
             List<String> bccEmails = !StringUtils.isBlank(emails) ? StringUtils.charToListSplit(emails, ';')
                     : Collections.emptyList();
-            return new EmailContext(toEmails, ccEmails, bccEmails);
+            ctx = new EmailContext(toEmails, ccEmails, bccEmails);
         }
 
-        return EmailContext.TEST_MODE_OFF;
+        logDebug("Using email context [{0}]...", ctx);
+        return ctx;
     }
 
     private static class EmailContext {
@@ -281,6 +286,12 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
 
         public void resetUsed() {
             used.clear();
+        }
+
+        @Override
+        public String toString() {
+            return "EmailContext [toEmails=" + toEmails + ", ccEmails=" + ccEmails + ", bccEmails=" + bccEmails
+                    + ", testMode=" + testMode + ", used=" + used + "]";
         }
     }
 

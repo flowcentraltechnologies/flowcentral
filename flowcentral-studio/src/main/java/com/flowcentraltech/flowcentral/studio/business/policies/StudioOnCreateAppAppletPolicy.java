@@ -111,6 +111,7 @@ public class StudioOnCreateAppAppletPolicy extends StudioOnCreateComponentPolicy
                     appTable.setSortHistory(-1);
                     appTable.setItemsPerPage(20);
                     appTable.setSortable(true);
+                    appTable.setShowLabelHeader(false);
                     appTable.setHeaderToUpperCase(false);
                     appTable.setHeaderCenterAlign(false);
                     appTable.setBasicSearch(false);
