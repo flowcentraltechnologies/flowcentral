@@ -4,12 +4,12 @@
 
 	<groupId>com.flowcentraltech.flowcentral</groupId>
 	<artifactId>flowcentral</artifactId>
-	<version>1.0.62</version>
+	<version>1.0.63-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>flowcentral</name>
 	<description>Flow Central</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<licenses>
 		<license>
@@ -53,14 +53,15 @@
 		<module>flowcentral-integration</module>
 		<module>flowcentral-integration-activemq</module>
 		<module>flowcentral-integration-rabbitmq</module>
-	</modules>
+    	<module>flowcentral-tomcat</module>
+  	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<unify.version>2.1.62</unify.version>
+		<unify.version>2.1.63-SNAPSHOT</unify.version>
 	</properties>
 
 	<scm>
@@ -226,12 +227,6 @@
 			<artifactId>unify-web-ui</artifactId>
 			<version>${unify.version}</version>
 			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-jetty</artifactId>
-			<version>${unify.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

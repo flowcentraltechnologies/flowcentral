@@ -6,13 +6,13 @@
 	<parent>
 		<groupId>com.flowcentraltech.flowcentral</groupId>
 		<artifactId>flowcentral</artifactId>
-		<version>1.0.62</version>
+		<version>1.0.63-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>flowcentral-system</artifactId>
 	<name>flowcentral-system</name>
 	<description>Flowcentral System Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

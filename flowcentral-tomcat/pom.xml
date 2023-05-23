@@ -9,16 +9,16 @@
 		<version>1.0.63-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>flowcentral-javax</artifactId>
-	<name>flowcentral-javax</name>
-	<description>Flowcentral Javax Module</description>
+	<artifactId>flowcentral-tomcat</artifactId>
+	<name>flowcentral-tomcat</name>
+	<description>Flowcentral Tomcat Module</description>
 	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->
 		<dependency>
 			<groupId>com.tcdng.unify</groupId>
-			<artifactId>unify-web-javax</artifactId>
+			<artifactId>unify-tomcat</artifactId>
 			<version>${unify.version}</version>
 		</dependency>
 	</dependencies>
