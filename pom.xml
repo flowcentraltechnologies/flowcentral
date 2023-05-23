@@ -4,7 +4,7 @@
 
 	<groupId>com.flowcentraltech.flowcentral</groupId>
 	<artifactId>flowcentral</artifactId>
-	<version>1.0.62</version>
+	<version>1.0.63-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>flowcentral</name>
@@ -60,7 +60,7 @@
   		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<unify.version>2.1.62</unify.version>
+		<unify.version>2.1.63-SNAPSHOT</unify.version>
 	</properties>
 
 	<scm>
