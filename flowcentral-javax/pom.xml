@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-javax</artifactId>
 	<name>flowcentral-javax</name>
 	<description>Flowcentral Javax Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

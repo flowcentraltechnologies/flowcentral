@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-workspace</artifactId>
 	<name>flowcentral-workspace</name>
 	<description>Flowcentral Workspace Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

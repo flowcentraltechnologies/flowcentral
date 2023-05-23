@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-integration-rabbitmq</artifactId>
 	<name>flowcentral-integration-rabbitmq</name>
 	<description>Flowcentral Integration (RabbitMQ) Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

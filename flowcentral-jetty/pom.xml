@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-jetty</artifactId>
 	<name>flowcentral-jetty</name>
 	<description>Flowcentral Jetty Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-integration-activemq</artifactId>
 	<name>flowcentral-integration-activemq</name>
 	<description>Flowcentral Integration (ActiveMQ) Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

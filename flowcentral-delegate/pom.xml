@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-delegate</artifactId>
 	<name>flowcentral-delegate</name>
 	<description>Flowcentral Delegate Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

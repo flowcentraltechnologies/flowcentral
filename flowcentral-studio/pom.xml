@@ -11,7 +11,7 @@
 	<artifactId>flowcentral-studio</artifactId>
 	<name>flowcentral-studio</name>
 	<description>Flowcentral Studio Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

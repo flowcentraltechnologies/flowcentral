@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-collaboration</artifactId>
 	<name>flowcentral-collaboration</name>
 	<description>Flowcentral Collaboration Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

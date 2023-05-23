@@ -11,7 +11,7 @@
 	<artifactId>flowcentral-report</artifactId>
 	<name>flowcentral-report</name>
 	<description>Flowcentral Report Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

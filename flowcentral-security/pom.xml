@@ -11,7 +11,7 @@
 	<artifactId>flowcentral-security</artifactId>
 	<name>flowcentral-security</name>
 	<description>Flowcentral Security Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-configuration</artifactId>
 	<name>flowcentral-configuration</name>
 	<description>Flowcentral Configuration Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

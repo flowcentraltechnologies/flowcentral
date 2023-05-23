@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-codegeneration</artifactId>
 	<name>flowcentral-codegeneration</name>
 	<description>Flowcentral Code-generation Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

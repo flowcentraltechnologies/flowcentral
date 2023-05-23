@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-tomcat</artifactId>
 	<name>flowcentral-tomcat</name>
 	<description>Flowcentral Tomcat Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->

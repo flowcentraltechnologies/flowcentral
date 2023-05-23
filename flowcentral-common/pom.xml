@@ -12,7 +12,7 @@
 	<artifactId>flowcentral-common</artifactId>
 	<name>flowcentral-common</name>
 	<description>Flowcentral Common Module</description>
-	<url>http://www.flowcentraltechnologies.com</url>
+	<url>http://www.flowcentralplatform.com</url>
 
 	<dependencies>
 		<!-- Main dependencies -->
