@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralStatic
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
 import com.flowcentraltech.flowcentral.configuration.data.FlowCentralInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
+import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
 import com.flowcentraltech.flowcentral.configuration.data.ReportInstall;
 import com.flowcentraltech.flowcentral.configuration.data.WorkflowInstall;
@@ -105,13 +106,21 @@ public class ConfigurationLoaderImpl extends AbstractUnifyComponent implements C
         logDebug("Loading notification template definition from [{0}]...", configFile);
         NotifTemplateConfig notifTemplateConfig = ConfigurationUtils.readConfig(NotifTemplateConfig.class, configFile,
                 getUnifyComponentContext().getWorkingPath());
-        NotifLargeTextConfig notifLargeTextConfig = ConfigurationUtils.readConfig(NotifLargeTextConfig.class,
-                configFile, getUnifyComponentContext().getWorkingPath());
-        processConfigErrors(ConfigurationUtils.validateNotifTemplateConfig(notifTemplateConfig),
+         processConfigErrors(ConfigurationUtils.validateNotifTemplateConfig(notifTemplateConfig),
                 ConfigurationModuleErrorConstants.NOTIFTEMPLATECONFIG_VALIDATION_ERROR, configFile);
 
         logDebug("Loaded notification template definition from [{0}] successfully.", configFile);
-        return new NotifTemplateInstall(notifTemplateConfig, notifLargeTextConfig);
+        return new NotifTemplateInstall(notifTemplateConfig);
+    }
+
+    @Override
+    public NotifLargeTextInstall loadNotifLargeTextInstallation(String configFile) throws UnifyException {
+        logDebug("Loading notification large text definition from [{0}]...", configFile);
+        NotifLargeTextConfig notifLargeTextConfig = ConfigurationUtils.readConfig(NotifLargeTextConfig.class,
+                configFile, getUnifyComponentContext().getWorkingPath());
+ 
+        logDebug("Loaded notification large text definition from [{0}] successfully.", configFile);
+        return new NotifLargeTextInstall(notifLargeTextConfig);
     }
 
     @Override

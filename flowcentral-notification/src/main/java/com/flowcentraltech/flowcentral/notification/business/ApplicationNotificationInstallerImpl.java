@@ -26,8 +26,10 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationCo
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextParamConfig;
@@ -105,13 +107,22 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                         environment().updateByIdVersion(oldNotificationTemplate);
                     }
                 }
-
-                // Large Text
-                NotifLargeTextConfig notifLargeTextConfig = notifTemplateInstall.getNotifLargeTextConfig();
-                description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
-                entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
+            }
+        }      
+        
+        // Install configured notification large texts
+        if (applicationConfig.getNotifLargeTextsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
+            for (AppNotifLargeTextConfig applicationNotifLargeTextConfig : applicationConfig.getNotifLargeTextsConfig()
+                    .getNotifLargeTextList()) {
+                NotifLargeTextInstall notifLargeTextInstall = getConfigurationLoader()
+                        .loadNotifLargeTextInstallation(applicationNotifLargeTextConfig.getConfigFile());
+                 // Large Text
+                NotifLargeTextConfig notifLargeTextConfig = notifLargeTextInstall.getNotifLargeTextConfig();
+                String description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
                         notifLargeTextConfig.getEntity());
-                body = resolveApplicationMessage(notifLargeTextConfig.getBody());
+                String body = resolveApplicationMessage(notifLargeTextConfig.getBody());
                 logDebug(taskMonitor, "Installing configured notification large text [{0}]...", description);
 
                 NotificationLargeText oldNotificationLargeText = environment().findLean(new NotificationLargeTextQuery()
@@ -138,6 +149,8 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 }
             }
         }
+        
+        
     }
 
     @Override
