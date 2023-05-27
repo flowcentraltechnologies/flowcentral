@@ -223,10 +223,10 @@ public enum StudioAppComponentType implements EnumConst {
     NOTIFICATION_LARGETEXT(
             "ntl_",
             "notifLargeTextForm",
-            "$m{studio.application.component.type.notificationtlargetext}",
-            "$m{studio.application.component.type.notificationtlargetexts}",
+            "$m{studio.application.component.type.notificationlargetext}",
+            "$m{studio.application.component.type.notificationlargetexts}",
             "studio.menu.label.notificationlargetext",
-            "mail",
+            "text-a",
             "/studioappcomponentapplet",
             "studiooncreatecomponent-policy",
             null,

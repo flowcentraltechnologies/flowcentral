@@ -288,6 +288,8 @@ public final class InputWidgetUtils {
             case "application.textarea":
             case "application.textareamedium":
             case "application.textarealarge":
+            case "application.textareaxlarge":
+            case "application.textareaxxlarge":
                 // Deprecated? entityFieldDef.getRows()
                 editor = String.format(editor, efa.getMinLen(), efa.getMaxLen());
                 break;
