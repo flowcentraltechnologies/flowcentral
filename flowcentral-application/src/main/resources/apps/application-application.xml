@@ -194,6 +194,16 @@
 			dataType="string" inputType="string"
 			editor="!ui-textarea minLen:%s maxLen:%s rows:16"
 			renderer="!ui-label" />
+		<widgetType name="textareaxlarge" listOption="true"
+			description="$m{application.widgettype.textareaxlarge}"
+			dataType="string" inputType="string"
+			editor="!ui-textarea minLen:%s maxLen:%s rows:32"
+			renderer="!ui-label" />
+		<widgetType name="textareaxxlarge" listOption="true"
+			description="$m{application.widgettype.textareaxxlarge}"
+			dataType="string" inputType="string"
+			editor="!ui-textarea minLen:%s maxLen:%s rows:64"
+			renderer="!ui-label" />
 		<widgetType name="password" listOption="true"
 			description="$m{application.widgettype.password}" dataType="string"
 			inputType="string" editor="!ui-password minLen:%s maxLen:%s"

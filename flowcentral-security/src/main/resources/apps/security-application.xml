@@ -6,11 +6,11 @@
 	<!-- Notification Templates -->
 	<notifTemplates>
 		<notifTemplate
-			configFile="apps/notification/user-welcome.xml" />
+			configFile="apps/notification/template/user-welcome.xml" />
 		<notifTemplate
-			configFile="apps/notification/user-passwordreset.xml" />
+			configFile="apps/notification/template/user-passwordreset.xml" />
 		<notifTemplate
-			configFile="apps/notification/user-creation-approval.xml" />
+			configFile="apps/notification/template/user-creation-approval.xml" />
 	</notifTemplates>
 	<!-- Workflows -->
 	<workflows>
