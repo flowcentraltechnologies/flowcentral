@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplatesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardsConfig;
@@ -121,6 +122,10 @@ public class ExtensionModuleStaticFileBuilderContext {
         nextStaticApplicationConfig.setNotifTemplatesConfig(notifTemplatesConfig);
     }
 
+    public void setNotifLargeTextsConfig(AppNotifLargeTextsConfig notifLargeTextsConfig) {
+        nextStaticApplicationConfig.setNotifLargeTextsConfig(notifLargeTextsConfig);
+    }
+
     public void setWorkflowsConfig(AppWorkflowsConfig workflowsConfig) {
         nextStaticApplicationConfig.setWorkflowsConfig(workflowsConfig);
     }
@@ -159,6 +164,10 @@ public class ExtensionModuleStaticFileBuilderContext {
 
     public AppNotifTemplatesConfig getNotifTemplatesConfig() {
         return nextStaticApplicationConfig.getNotifTemplatesConfig();
+    }
+
+    public AppNotifLargeTextsConfig getNotifLargeTextsConfig() {
+        return nextStaticApplicationConfig.getNotifLargeTextsConfig();
     }
 
     public AppWorkflowsConfig getWorkflowsConfig() {

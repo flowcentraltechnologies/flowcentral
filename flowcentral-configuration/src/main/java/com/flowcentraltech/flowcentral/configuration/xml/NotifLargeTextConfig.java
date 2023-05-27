@@ -13,38 +13,38 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.notification.entities;
+
+package com.flowcentraltech.flowcentral.configuration.xml;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
-import com.tcdng.unify.core.annotation.ChildList;
-import com.tcdng.unify.core.annotation.Column;
-import com.tcdng.unify.core.annotation.ColumnType;
-import com.tcdng.unify.core.annotation.Table;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
- * Entity for storing notification large text information.
+ * Notification large text configuration.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Table(name = "FC_NOTIFLARGETEXT")
-public class NotificationLargeText extends BaseApplicationEntity {
+@XmlRootElement(name = "notifLargeText")
+public class NotifLargeTextConfig extends BaseNameConfig {
 
-    @Column(length = 128, nullable = true)
     private String entity;
 
-    @Column(type = ColumnType.CLOB)
     private String body;
 
-    @ChildList
-    private List<NotificationLargeTextParam> paramList;
+    private List<NotifLargeTextParamConfig> paramList;
 
     public String getEntity() {
         return entity;
     }
 
+    @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -53,15 +53,18 @@ public class NotificationLargeText extends BaseApplicationEntity {
         return body;
     }
 
+    @XmlJavaTypeAdapter(CDataXmlAdapter.class)
+    @XmlElement(required = true)
     public void setBody(String body) {
         this.body = body;
     }
 
-    public List<NotificationLargeTextParam> getParamList() {
+    public List<NotifLargeTextParamConfig> getParamList() {
         return paramList;
     }
 
-    public void setParamList(List<NotificationLargeTextParam> paramList) {
+    @XmlElement(name = "parameter", required = true)
+    public void setParamList(List<NotifLargeTextParamConfig> paramList) {
         this.paramList = paramList;
     }
 

@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
@@ -103,6 +104,28 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<Long> findNotificationTemplateIdList(String applicationName) throws UnifyException;
+
+    /**
+     * Finds notification large text by ID.
+     * 
+     * @param notifTemplateId
+     *                the notification large text ID
+     * @return the notification large text
+     * @throws UnifyException
+     *                        if notification large text with ID is not found. If an error occurs
+     */
+    NotificationLargeText findNotificationLargeText(Long notifLargeTextId) throws UnifyException;
+
+    /**
+     * Finds notification large text ID list for application.
+     * 
+     * @param applicationName
+     *                        the application name
+     * @return list of application notification template IDs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<Long> findNotificationLargeTextIdList(String applicationName) throws UnifyException;
 
     /**
      * Get notification template definition.

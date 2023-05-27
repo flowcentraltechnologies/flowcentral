@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.data;
 
+import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
 
 /**
@@ -27,12 +28,19 @@ public class NotifTemplateInstall {
 
     private NotifTemplateConfig notifTemplateConfig;
 
-    public NotifTemplateInstall(NotifTemplateConfig notifTemplateConfig) {
+    private NotifLargeTextConfig notifLargeTextConfig;
+
+    public NotifTemplateInstall(NotifTemplateConfig notifTemplateConfig, NotifLargeTextConfig notifLargeTextConfig) {
         this.notifTemplateConfig = notifTemplateConfig;
+        this.notifLargeTextConfig = notifLargeTextConfig;
     }
 
     public NotifTemplateConfig getNotifTemplateConfig() {
         return notifTemplateConfig;
+    }
+
+    public NotifLargeTextConfig getNotifLargeTextConfig() {
+        return notifLargeTextConfig;
     }
 
 }

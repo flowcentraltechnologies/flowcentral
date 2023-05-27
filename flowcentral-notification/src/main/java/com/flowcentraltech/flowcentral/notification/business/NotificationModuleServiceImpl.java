@@ -50,6 +50,8 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationChannel
 import com.flowcentraltech.flowcentral.notification.entities.NotificationChannelProp;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationChannelQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationInbox;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutbox;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxAttachment;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxError;
@@ -217,6 +219,17 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public List<Long> findNotificationTemplateIdList(String applicationName) throws UnifyException {
         return environment().valueList(Long.class, "id",
                 new NotificationTemplateQuery().applicationName(applicationName));
+    }
+
+    @Override
+    public NotificationLargeText findNotificationLargeText(Long notifLargeTextId) throws UnifyException {
+        return environment().find(NotificationLargeText.class, notifLargeTextId);
+    }
+
+    @Override
+    public List<Long> findNotificationLargeTextIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new NotificationLargeTextQuery().applicationName(applicationName));
     }
 
     @Override
