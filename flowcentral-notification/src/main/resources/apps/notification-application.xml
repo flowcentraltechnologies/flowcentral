@@ -91,6 +91,12 @@
 		<reference name="notifTemplateParamRef"
 			description="$m{notification.notificationtemplateparam.reference}"
 			entity="notifTemplateParam" searchField="name" />
+		<reference name="notifLargeTextRef"
+			description="$m{notification.notificationlargetext.reference}"
+			entity="notifLargeText" searchField="name" />
+		<reference name="notifLargeTextParamRef"
+			description="$m{notification.notificationlargetextparam.reference}"
+			entity="notifLargeTextParam" searchField="name" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -327,6 +333,37 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{notification.notificationtemplateparam.uc.name}"
 				fieldList="notificationTemplateId,name" />
+		</entity>
+		<entity name="notifLargeText"
+			description="$m{notification.notificationlargetext}"
+			label="$m{notification.notificationlargetext.label}"
+			type="com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText">
+			<field name="entity"
+				label="$m{notification.notificationlargetext.entity}" type="string"
+				maxLen="128" />
+			<field name="body"
+				label="$m{notification.notificationlargetext.body}" type="clob" />
+			<field name="paramList"
+				label="$m{notification.notificationlargetext.params}"
+				type="child_list" references="notifLargeTextParamRef" />
+		</entity>
+		<entity name="notifLargeTextParam"
+			description="$m{notification.notificationlargetextparam}"
+			label="$m{notification.notificationlargetextparam.label}"
+			type="com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextParam">
+			<field name="notifLargeTextId"
+				label="$m{notification.notificationlargetextparam.notificationlargetextid}"
+				type="ref" references="notifLargeTextRef"
+				inputWidget="application.entitylist" />
+			<field name="name"
+				label="$m{notification.notificationlargetextparam.name}"
+				type="string" maxLen="128" />
+			<field name="label"
+				label="$m{notification.notificationlargetextparam.llabel}"
+				type="string" maxLen="128" />
+			<uniqueConstraint name="nameUc"
+				description="$m{notification.notificationlargetextparam.uc.name}"
+				fieldList="notifLargeTextId,name" />
 		</entity>
 	</entities>
 	<!-- Tables -->
