@@ -2286,9 +2286,9 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public byte[] generateViewListingReportAsByteArray(String letterName, String letterGenerator,
+    public byte[] generateViewListingReportAsByteArray(String letterGenerator, String letterName,
             Map<String, Object> properties) throws UnifyException {
-        final Report report = generateViewListingReport(letterName, letterGenerator, properties);
+        final Report report = generateViewListingReport(letterGenerator, letterName, properties);
         return reportProvider.generateReportAsByteArray(report);
     }
 
@@ -2357,7 +2357,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public Report generateViewListingReport(String letterName, String letterGenerator, Map<String, Object> properties)
+    public Report generateViewListingReport(String letterGenerator, String letterName, Map<String, Object> properties)
             throws UnifyException {
         final LetterFormListing letterFormListing = new LetterFormListing(letterName, letterGenerator, properties);
         final LetterFormListingGenerator _generator = (LetterFormListingGenerator) getComponent(

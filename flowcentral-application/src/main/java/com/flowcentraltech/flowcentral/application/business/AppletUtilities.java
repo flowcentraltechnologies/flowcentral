@@ -1958,16 +1958,16 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Generates a listing report as byte array.
      * 
-     * @param letterName
-     *                        the letter name
      * @param letterGenerator
      *                        the letter generator
+     * @param letterName
+     *                        the letter name
      * @param properties
      *                        the letter properties
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] generateViewListingReportAsByteArray(String letterName, String letterGenerator,
+    byte[] generateViewListingReportAsByteArray(String letterGenerator, String letterName,
             Map<String, Object> properties) throws UnifyException;
 
     /**
@@ -2061,15 +2061,15 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Generates a listing report as byte array.
      * 
-     * @param letterName
-     *                        the letter name
      * @param letterGenerator
      *                        the letter generator
+     * @param letterName
+     *                        the letter name
      * @param properties
      *                        the letter properties
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(String letterName, String letterGenerator, Map<String, Object> properties)
+    Report generateViewListingReport(String letterGenerator, String letterName, Map<String, Object> properties)
             throws UnifyException;
 }
