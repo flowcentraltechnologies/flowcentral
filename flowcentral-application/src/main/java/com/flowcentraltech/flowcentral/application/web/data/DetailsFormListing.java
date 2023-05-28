@@ -57,7 +57,8 @@ public class DetailsFormListing {
     }
 
     public <T> T getProperty(Class<T> dataType, String name) throws UnifyException {
-        return DataUtils.convert(dataType, properties.get(name));
+        return properties != null ? DataUtils.convert(dataType, properties.get(name))
+                : DataUtils.convert(dataType, null);
     }
 
     public List<DetailsCase> getCaseList() {

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.notification.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
+import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
@@ -137,6 +138,17 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     NotifTemplateDef getNotifTemplateDef(String templateName) throws UnifyException;
+
+    /**
+     * Get notification large text definition.
+     * 
+     * @param largeTextName
+     *                     the large text name
+     * @return the large text definition
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    NotifLargeTextDef getNotifLargeTextDef(String largeTextName) throws UnifyException;
     
     /**
      * Sends a notification. This is an asynchronous call where message is pushed

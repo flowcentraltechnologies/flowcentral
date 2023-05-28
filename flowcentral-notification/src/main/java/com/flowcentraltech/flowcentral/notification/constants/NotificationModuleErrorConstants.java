@@ -38,4 +38,7 @@ public interface NotificationModuleErrorConstants {
     /** Can not construct message with no recipients. */
     String NOTIFICATION_CHANNEL_CONSTRUCT_NO_RECIPIENT = "NOTIF_0005";
 
+    /** Can not find notification large text {0}. */
+    String CANNOT_FIND_NOTIFICATION_LARGETEXT = "NOTIF_0006";
+
 }

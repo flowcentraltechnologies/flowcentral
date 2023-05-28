@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.listing;
 
 import java.util.Arrays;
 
@@ -42,12 +42,12 @@ public abstract class AbstractFormListingReportGenerator extends AbstractUnifyCo
                 Arrays.asList(new ListingReportProperties("default_prop")));
     }
 
-    protected abstract void generateReportHeader(ValueStoreReader reader, ListingReportProperties properties,
+    protected abstract void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void generateReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
+    protected abstract void writeReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void generateReportFooter(ValueStoreReader reader, ListingReportProperties properties,
+    protected abstract void writeReportFooter(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException;
 }

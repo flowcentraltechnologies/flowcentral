@@ -14,11 +14,12 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.listing;
 
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
+import com.flowcentraltech.flowcentral.application.util.ListingUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.resource.ImageProvider;
@@ -93,9 +94,9 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
     protected void doWriteRow(ListingColumn[] columns, ListingCell... cells) throws UnifyException {
         doWriteRow(columns, true, cells);
     }
-    
-    private void doWriteRow(ListingColumn[] columns,
-            boolean spaceOnEmptyContent, ListingCell... cells) throws UnifyException {
+
+    private void doWriteRow(ListingColumn[] columns, boolean spaceOnEmptyContent, ListingCell... cells)
+            throws UnifyException {
         if (classicTable) {
             writer.write("<tr");
         } else {
@@ -212,7 +213,7 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
 
         writer.write("</div>"); // End section body
         writer.write("</div>"); // End section
-        
+
         if (addSectionSpacing) {
             writer.write("<div class=\"flsectionspacing\"></div>");
         }

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.listing;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -55,6 +55,9 @@ import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.listing.DetailsFormListingGenerator;
+import com.flowcentraltech.flowcentral.application.listing.FormListingGenerator;
+import com.flowcentraltech.flowcentral.application.listing.LetterFormListingGenerator;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCollaborationUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -64,6 +67,7 @@ import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.Formats;
+import com.flowcentraltech.flowcentral.application.web.data.LetterFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.Summary;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm.FormMode;
@@ -95,8 +99,6 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
-import com.flowcentraltech.flowcentral.application.web.writers.DetailsFormListingGenerator;
-import com.flowcentraltech.flowcentral.application.web.writers.FormListingGenerator;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
@@ -2284,6 +2286,13 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
+    public byte[] generateViewListingReportAsByteArray(String letterName, String letterGenerator,
+            Map<String, Object> properties) throws UnifyException {
+        final Report report = generateViewListingReport(letterName, letterGenerator, properties);
+        return reportProvider.generateReportAsByteArray(report);
+    }
+
+    @Override
     public Report generateViewListingReport(ValueStoreReader reader, String generator, FormListingOptions options)
             throws UnifyException {
         final FormListingGenerator _generator = (FormListingGenerator) getComponent(generator);
@@ -2345,6 +2354,16 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final ValueStoreReader reader = new BeanValueStore(listing).getReader();
         return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, new FormListingOptions())
                 : _generator.generateHtmlReport(reader, new FormListingOptions());
+    }
+
+    @Override
+    public Report generateViewListingReport(String letterName, String letterGenerator, Map<String, Object> properties)
+            throws UnifyException {
+        final LetterFormListing letterFormListing = new LetterFormListing(letterName, letterGenerator, properties);
+        final LetterFormListingGenerator _generator = (LetterFormListingGenerator) getComponent(
+                letterFormListing.getGenerator());
+        return _generator.generateHtmlReport(new BeanValueStore(letterFormListing).getReader(),
+                new FormListingOptions());
     }
 
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {

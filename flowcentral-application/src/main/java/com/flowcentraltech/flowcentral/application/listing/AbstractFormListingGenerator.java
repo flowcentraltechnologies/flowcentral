@@ -14,12 +14,13 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.listing;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -39,9 +40,11 @@ import com.flowcentraltech.flowcentral.application.util.EntityImageUtils;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
+import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.report.Report;
@@ -143,17 +146,17 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writer.write("<div class=\"fc-formlisting");
             writer.write(additional);
             writer.write("\">");
-            generateReportHeader(reader, listingReportProperties,
+            writeReportHeader(reader, listingReportProperties,
                     new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
                             writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
             generateHtmlListing(listingReportProperties.getName(), reader, listingReportProperties, writer,
                     pausePrintColors, false);
-            generateReportAddendum(reader, listingReportProperties,
+            writeReportAddendum(reader, listingReportProperties,
                     new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
                             writer, pausePrintColors, false));
             writer.write("</div>");
-            generateReportFooter(reader, listingReportProperties,
+            writeReportFooter(reader, listingReportProperties,
                     new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
                             writer, pausePrintColors, false));
             writer.write("</div>");
@@ -181,10 +184,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
             ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(themeManager, entityImageProvider,
                     listingReportProperties.getName(), sheet, pausePrintColors, false);
-            generateReportHeader(reader, listingReportProperties, writer);
-            doGenerate(reader, listingReportProperties, writer);
-            generateReportAddendum(reader, listingReportProperties, writer);
-            generateReportFooter(reader, listingReportProperties, writer);
+            writeReportHeader(reader, listingReportProperties, writer);
+            doWriteBody(reader, listingReportProperties, writer);
+            writeReportAddendum(reader, listingReportProperties, writer);
+            writeReportFooter(reader, listingReportProperties, writer);
             writer.close();
         }
 
@@ -222,6 +225,11 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return null;
     }
 
+    protected ParameterizedStringGenerator getParameterizedStringGenerator(ValueStoreReader reader,
+            List<StringToken> tokenList) throws UnifyException {
+        return au.getStringGenerator(reader, tokenList);
+    }
+    
     protected synchronized String retrieveFormattedDate(ValueStoreReader reader, String propertyName)
             throws UnifyException {
         return reader.read(String.class, propertyName, dateFormatterMap.get(getSessionLocale()));
@@ -318,7 +326,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             boolean highlighting) throws UnifyException {
         ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(themeManager, entityImageProvider,
                 listingType, writer, pausePrintColors, highlighting);
-        doGenerate(reader, listingProperties, generator);
+        doWriteBody(reader, listingProperties, generator);
         generator.close();
     }
 
@@ -334,6 +342,6 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         return defaultListingReportStyle;
     }
 
-    protected abstract void doGenerate(ValueStoreReader reader, ListingProperties listingProperties,
+    protected abstract void doWriteBody(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException;
 }

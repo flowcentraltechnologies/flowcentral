@@ -42,6 +42,8 @@ import com.flowcentraltech.flowcentral.notification.constants.NotificationModule
 import com.flowcentraltech.flowcentral.notification.constants.NotificationOutboxStatus;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextParamDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateParamDef;
@@ -51,6 +53,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationChannel
 import com.flowcentraltech.flowcentral.notification.entities.NotificationChannelQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationInbox;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextParam;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutbox;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxAttachment;
@@ -108,6 +111,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
     private final FactoryMap<String, NotifTemplateDef> templates;
 
+    private final FactoryMap<String, NotifLargeTextDef> largeTexts;
+
     private final FactoryMap<Long, TenantChannelInfo> tenantChannelInfos;
 
     public NotificationModuleServiceImpl() {
@@ -141,6 +146,36 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                             notificationTemplate.getTemplate(), notificationTemplate.getMessageFormat(), paramList,
                             longName, notificationTemplate.getDescription(), notificationTemplate.getId(),
                             notificationTemplate.getVersionNo());
+                }
+
+            };
+
+        this.largeTexts = new FactoryMap<String, NotifLargeTextDef>(true)
+            {
+                @Override
+                protected boolean stale(String name, NotifLargeTextDef notifLargeTextDef) throws Exception {
+                    return (environment().value(long.class, "versionNo", new NotificationLargeTextQuery()
+                            .id(notifLargeTextDef.getId())) > notifLargeTextDef.getVersion());
+                }
+
+                @Override
+                protected NotifLargeTextDef create(String longName, Object... params) throws Exception {
+                    ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
+                    NotificationLargeText notificationLargeText = environment().list(new NotificationLargeTextQuery()
+                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    if (notificationLargeText == null) {
+                        throw new UnifyException(NotificationModuleErrorConstants.CANNOT_FIND_NOTIFICATION_LARGETEXT,
+                                longName);
+                    }
+
+                    List<NotifLargeTextParamDef> paramList = new ArrayList<NotifLargeTextParamDef>();
+                    for (NotificationLargeTextParam largeTextParam : notificationLargeText.getParamList()) {
+                        paramList.add(new NotifLargeTextParamDef(largeTextParam.getName(), largeTextParam.getLabel()));
+                    }
+
+                    return new NotifLargeTextDef(notificationLargeText.getEntity(), notificationLargeText.getBody(),
+                            paramList, longName, notificationLargeText.getDescription(), notificationLargeText.getId(),
+                            notificationLargeText.getVersionNo());
                 }
 
             };
@@ -235,6 +270,11 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public NotifTemplateDef getNotifTemplateDef(String templateName) throws UnifyException {
         return templates.get(templateName);
+    }
+
+    @Override
+    public NotifLargeTextDef getNotifLargeTextDef(String largeTextName) throws UnifyException {
+        return largeTexts.get(largeTextName);
     }
 
     @Override
