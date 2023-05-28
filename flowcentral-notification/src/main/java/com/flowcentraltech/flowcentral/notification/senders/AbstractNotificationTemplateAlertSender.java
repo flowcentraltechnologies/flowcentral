@@ -42,12 +42,12 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
 
     @Override
     public NotifType getNotifType() throws UnifyException {
-        return notification().wrapperOf(notifWrapperType).getNotifType();
+        return notification().wrapperOfNotifTemplate(notifWrapperType).getNotifType();
     }
 
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
-        T notifWrapper = notification().wrapperOf(notifWrapperType);
+        T notifWrapper = notification().wrapperOfNotifTemplate(notifWrapperType);
         // Set recipients
         if (!DataUtils.isBlank(recipientList)) {
             for (Recipient recipient : recipientList) {

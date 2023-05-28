@@ -44,6 +44,7 @@ import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextParamDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateParamDef;
@@ -54,6 +55,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationChannel
 import com.flowcentraltech.flowcentral.notification.entities.NotificationInbox;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextParam;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextParamQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutbox;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationOutboxAttachment;
@@ -64,6 +66,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplat
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParam;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParamQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
+import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
@@ -206,11 +209,19 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     private static final Class<?>[] WRAPPER_PARAMS_0 = { NotifTemplateDef.class };
 
     @Override
-    public <T extends NotifTemplateWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException {
+    public <T extends NotifTemplateWrapper> T wrapperOfNotifTemplate(Class<T> wrapperType) throws UnifyException {
         final String templateName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
                 NotificationCodeGenUtils.TEMPLATE_NAME);
         final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(templateName);
         return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, notifTemplateDef);
+    }
+
+    @Override
+    public <T extends NotifLargeTextWrapper> T wrapperOfNotifLargeText(Class<T> wrapperType) throws UnifyException {
+        final String largeTextName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                NotificationCodeGenUtils.LARGETEXT_NAME);
+        final NotifLargeTextDef notifLargeTextDef = getNotifLargeTextDef(largeTextName);
+        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, notifLargeTextDef);
     }
 
     @Override
@@ -222,7 +233,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     public List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException {
         List<NotificationTemplate> templates = environment().listAll(new NotificationTemplateQuery()
-                .moduleName(moduleName)/* .configType(ConfigType.CUSTOM) */.addSelect("applicationName", "name"));
+                .moduleName(moduleName).addSelect("applicationName", "name"));
         if (!DataUtils.isBlank(templates)) {
             List<DynamicNotifTemplateInfo> resultList = new ArrayList<DynamicNotifTemplateInfo>();
             for (NotificationTemplate template : templates) {
@@ -232,6 +243,28 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                         new NotificationTemplateParamQuery().notificationTemplateId(template.getId()));
                 resultList.add(new DynamicNotifTemplateInfo(ApplicationNameUtils.getApplicationEntityLongName(
                         template.getApplicationName(), template.getName()), templateClassName, paramNames));
+            }
+
+            return resultList;
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<DynamicNotifLargeTextInfo> generateNotifLargeTextInfos(String basePackage, String moduleName)
+            throws UnifyException {
+        List<NotificationLargeText> largeTexts = environment().listAll(new NotificationLargeTextQuery()
+                .moduleName(moduleName).addSelect("applicationName", "name"));
+        if (!DataUtils.isBlank(largeTexts)) {
+            List<DynamicNotifLargeTextInfo> resultList = new ArrayList<DynamicNotifLargeTextInfo>();
+            for (NotificationLargeText largeText : largeTexts) {
+                final String largeTextClassName = NotificationCodeGenUtils
+                        .generateUtilitiesLargeTextWrapperClassName(basePackage, moduleName, largeText.getName());
+                final List<String> paramNames = environment().valueList(String.class, "name",
+                        new NotificationLargeTextParamQuery().notifLargeTextId(largeText.getId()));
+                resultList.add(new DynamicNotifLargeTextInfo(ApplicationNameUtils.getApplicationEntityLongName(
+                        largeText.getApplicationName(), largeText.getName()), largeTextClassName, paramNames));
             }
 
             return resultList;

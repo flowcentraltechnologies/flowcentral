@@ -581,7 +581,7 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
         if (systemModuleService.getSysParameterValue(boolean.class,
                 SecurityModuleSysParamConstants.USER_PASSWORD_SEND_EMAIL)) {
             UserPasswordResetTemplateWrapper wrapper = notificationModuleService
-                    .wrapperOf(UserPasswordResetTemplateWrapper.class);
+                    .wrapperOfNotifTemplate(UserPasswordResetTemplateWrapper.class);
             wrapper.setFullName(user.getFullName());
             wrapper.setLoginId(user.getLoginId());
             wrapper.setPlainPassword(password);

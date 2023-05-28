@@ -282,6 +282,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                     generator = (StaticArtifactGenerator) getComponent(
                             "extension-module-templatewrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
+
+                    // Generate large text wrappers
+                    addTaskMessage(taskMonitor, "Generating large text wrapper classes for module [{0}]...",
+                            moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-largetextwrappers-java-generator");
+                    generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-largetextwrappers-java-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
                 }
             }
 

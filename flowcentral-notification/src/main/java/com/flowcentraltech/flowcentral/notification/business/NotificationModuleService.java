@@ -19,12 +19,14 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
+import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
+import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.tcdng.unify.core.UnifyException;
 
@@ -46,7 +48,19 @@ public interface NotificationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    <T extends NotifTemplateWrapper> T wrapperOf(Class<T> wrapperType) throws UnifyException;
+    <T extends NotifTemplateWrapper> T wrapperOfNotifTemplate(Class<T> wrapperType) throws UnifyException;
+
+    /**
+     * Creates a wrapper instance initialized with a new instance of wrapped large
+     * text type.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends NotifLargeTextWrapper> T wrapperOfNotifLargeText(Class<T> wrapperType) throws UnifyException;
 
     /**
      * Counts notification templates by module
@@ -71,6 +85,20 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
+            throws UnifyException;
+    
+    /**
+     * Generates dynamic notification large text information.
+     * 
+     * @param basePackage
+     *                    the base package
+     * @param moduleName
+     *                    the module name
+     * @return list of large text infos
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<DynamicNotifLargeTextInfo> generateNotifLargeTextInfos(String basePackage, String moduleName)
             throws UnifyException;
     
     /**
