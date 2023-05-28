@@ -72,19 +72,19 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     @Override
     protected final void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
-        generateReportHeader((DetailsFormListing) reader.getValueObject(), properties, writer);
+        writeReportHeader((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     @Override
     protected final void writeReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
-        generateReportAddendum((DetailsFormListing) reader.getValueObject(), properties, writer);
+        writeReportAddendum((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     @Override
     protected final void writeReportFooter(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
-        generateReportFooter((DetailsFormListing) reader.getValueObject(), properties, writer);
+        writeReportFooter((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     protected final void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
@@ -116,13 +116,13 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
     protected abstract int getOptionFlagsOverride(DetailsFormListing detailsFormListing) throws UnifyException;
 
-    protected abstract void generateReportHeader(DetailsFormListing detailsFormListing,
+    protected abstract void writeReportHeader(DetailsFormListing detailsFormListing,
             ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void generateReportAddendum(DetailsFormListing detailsFormListing,
+    protected abstract void writeReportAddendum(DetailsFormListing detailsFormListing,
             ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void generateReportFooter(DetailsFormListing detailsFormListing,
+    protected abstract void writeReportFooter(DetailsFormListing detailsFormListing,
             ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
 
     private void doGenerate(DetailsCase detailsCase, ListingProperties listingProperties, ListingGeneratorWriter writer)

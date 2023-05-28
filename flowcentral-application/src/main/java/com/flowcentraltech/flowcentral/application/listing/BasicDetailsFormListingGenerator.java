@@ -36,17 +36,17 @@ public class BasicDetailsFormListingGenerator extends AbstractDetailsFormListing
     }
 
     @Override
-    protected void generateReportHeader(DetailsFormListing detailsFormListing, ListingReportProperties properties,
+    protected void writeReportHeader(DetailsFormListing detailsFormListing, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
     }
 
     @Override
-    protected void generateReportAddendum(DetailsFormListing detailsFormListing, ListingReportProperties properties,
+    protected void writeReportAddendum(DetailsFormListing detailsFormListing, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
     }
 
     @Override
-    protected void generateReportFooter(DetailsFormListing detailsFormListing, ListingReportProperties properties,
+    protected void writeReportFooter(DetailsFormListing detailsFormListing, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
     }
 
