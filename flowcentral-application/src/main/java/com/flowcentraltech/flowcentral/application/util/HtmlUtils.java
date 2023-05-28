@@ -28,7 +28,7 @@ public final class HtmlUtils {
     }
     
     public static String formatHTML(String msg) {
-        return msg.replace("\n", "<br>");
+        return msg.replace("\n", "<br/>");
     }
 
 }
