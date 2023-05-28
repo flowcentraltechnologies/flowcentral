@@ -43,7 +43,7 @@ public class ExtensionModuleNotifLargeTextWrappersJavaGenerator extends Abstract
     private NotificationModuleService notificationModuleService;
 
     public ExtensionModuleNotifLargeTextWrappersJavaGenerator() {
-        super("src/main/java/{0}/utilities/{1}/templatewrappers/");
+        super("src/main/java/{0}/utilities/{1}/largetextwrappers/");
     }
 
     public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
@@ -52,7 +52,7 @@ public class ExtensionModuleNotifLargeTextWrappersJavaGenerator extends Abstract
 
     protected final boolean checkGeneration(ExtensionModuleStaticFileBuilderContext ctx, String entityName)
             throws UnifyException {
-        return notificationModuleService.countNotifTemplatesByModule(entityName) > 0;
+        return notificationModuleService.countNotifLargeTextsByModule(entityName) > 0;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class ExtensionModuleNotifLargeTextWrappersJavaGenerator extends Abstract
             try {
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(zos));
                 String src = CodeGenerationUtils.generateLargeTextWrapperJavaClassSource(NotificationCodeGenUtils
-                        .generateUtilitiesTemplateWrapperPackageName(ctx.getBasePackage(), moduleName),
+                        .generateUtilitiesLargeTextWrapperPackageName(ctx.getBasePackage(), moduleName),
                         dynamicLargeTextInfo);
                 bw.write(src);
                 bw.newLine();

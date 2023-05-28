@@ -161,7 +161,11 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
                 } else if (cell.isScopeImage()) {
                     writer.writeScopeImageContextURL(null); // TODO
                 } else {
-                    writer.writeResolvedSessionMessage(cell.getContent());
+                    if (cell.isNoHtmlEscape()) {
+                        writer.write(cell.getContent());
+                    } else {
+                        writer.writeResolvedSessionMessage(cell.getContent());
+                    }
                 }
             } else {
                 if (spaceOnEmptyContent) {

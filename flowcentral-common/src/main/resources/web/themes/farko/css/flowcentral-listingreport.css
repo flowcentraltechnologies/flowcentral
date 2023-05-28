@@ -44,3 +44,6 @@
 .fc-letterformlisting .flbody {border-left: none;border-right: none;}
 .fc-letterformlisting .flsectionbodycell {padding-left: none;padding-right: none;}
 .fc-letterformlisting .flcell {padding: 2px 2px;}
+.fc-letterformlisting .flctable {border: 0px;}
+.fc-letterformlisting .flctable tr {border: 0px;}
+.fc-letterformlisting .flctable td {border: 0px;}

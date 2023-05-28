@@ -33,6 +33,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
 import com.flowcentraltech.flowcentral.common.constants.ComponentType;
+import com.flowcentraltech.flowcentral.notification.data.BaseNotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
@@ -254,7 +255,7 @@ public final class CodeGenerationUtils {
         }
 
         // Construct class
-        TypeInfo baseEntityInfo = new TypeInfo(BaseNotifTemplateWrapper.class);
+        TypeInfo baseEntityInfo = new TypeInfo(BaseNotifLargeTextWrapper.class);
         TypeInfo typeInfo = new TypeInfo(dynamicLargeTextInfo.getLargeTextClassName() + "Wrapper");
         esb.append("package ").append(packageName).append(";\n");
         List<String> importList = new ArrayList<String>(importSet);

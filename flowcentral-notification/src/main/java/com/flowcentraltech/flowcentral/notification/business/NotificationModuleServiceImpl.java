@@ -206,14 +206,16 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         this.twoWayStringCryptograph = twoWayStringCryptograph;
     }
 
-    private static final Class<?>[] WRAPPER_PARAMS_0 = { NotifTemplateDef.class };
+    private static final Class<?>[] NOTIF_TEMPLATE_WRAPPER_PARAMS_0 = { NotifTemplateDef.class };
+
+    private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_0 = { NotifLargeTextDef.class };
 
     @Override
     public <T extends NotifTemplateWrapper> T wrapperOfNotifTemplate(Class<T> wrapperType) throws UnifyException {
         final String templateName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
                 NotificationCodeGenUtils.TEMPLATE_NAME);
         final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(templateName);
-        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, notifTemplateDef);
+        return ReflectUtils.newInstance(wrapperType, NOTIF_TEMPLATE_WRAPPER_PARAMS_0, notifTemplateDef);
     }
 
     @Override
@@ -221,12 +223,17 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
         final String largeTextName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
                 NotificationCodeGenUtils.LARGETEXT_NAME);
         final NotifLargeTextDef notifLargeTextDef = getNotifLargeTextDef(largeTextName);
-        return ReflectUtils.newInstance(wrapperType, WRAPPER_PARAMS_0, notifLargeTextDef);
+        return ReflectUtils.newInstance(wrapperType, NOTIF_LARGETEXT_WRAPPER_PARAMS_0, notifLargeTextDef);
     }
 
     @Override
     public int countNotifTemplatesByModule(String moduleName) throws UnifyException {
         return environment().countAll(new NotificationTemplateQuery().moduleName(moduleName));
+    }
+
+    @Override
+    public int countNotifLargeTextsByModule(String moduleName) throws UnifyException {
+        return environment().countAll(new NotificationLargeTextQuery().moduleName(moduleName));
     }
 
     @Override

@@ -72,6 +72,17 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     int countNotifTemplatesByModule(String moduleName) throws UnifyException;
+
+    /**
+     * Counts notification large texts by module
+     * 
+     * @param moduleName
+     *                   the module name
+     * @return the large text count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int countNotifLargeTextsByModule(String moduleName) throws UnifyException;
     
     /**
      * Generates dynamic notification template information.

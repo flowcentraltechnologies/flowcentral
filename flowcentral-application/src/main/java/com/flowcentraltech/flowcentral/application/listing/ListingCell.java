@@ -58,6 +58,8 @@ public class ListingCell {
 
     private int borders;
 
+    private boolean noHtmlEscape;
+
     public ListingCell() {
         this.type = ListingCellType.TEXT;
         this.borders = BORDER_ALL;
@@ -238,5 +240,13 @@ public class ListingCell {
 
     public boolean isScopeImage() {
         return type.isScopeImage();
+    }
+
+    public boolean isNoHtmlEscape() {
+        return noHtmlEscape;
+    }
+
+    public void setNoHtmlEscape(boolean noHtmlEscape) {
+        this.noHtmlEscape = noHtmlEscape;
     }
 }

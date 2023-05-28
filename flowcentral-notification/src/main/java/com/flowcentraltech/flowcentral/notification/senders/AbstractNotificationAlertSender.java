@@ -80,6 +80,11 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
         return appletUtilities.application();
     }
 
+    protected final <T extends NotifLargeTextWrapper> T getLargeTextWrapper(Class<T> notifWrapperType)
+            throws UnifyException {
+        return notification().wrapperOfNotifLargeText(notifWrapperType);
+    }
+
     /**
      * Generates notification attachments using reader.
      * 
