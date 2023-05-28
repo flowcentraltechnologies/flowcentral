@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
-import com.flowcentraltech.flowcentral.application.web.writers.FormListingGenerator;
+import com.flowcentraltech.flowcentral.application.listing.FormListingGenerator;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;

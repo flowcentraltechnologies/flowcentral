@@ -26,12 +26,19 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationCo
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.util.ConfigUtils;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
+import com.flowcentraltech.flowcentral.configuration.data.NotifLargeTextInstall;
 import com.flowcentraltech.flowcentral.configuration.data.NotifTemplateInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplateConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.NotifLargeTextParamConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.NotifTemplateParamConfig;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextParam;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeTextQuery;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateParam;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
@@ -63,6 +70,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     .getNotifTemplateList()) {
                 NotifTemplateInstall notifTemplateInstall = getConfigurationLoader()
                         .loadNotifTemplateInstallation(applicationNotifTemplateConfig.getConfigFile());
+                // Template
                 NotifTemplateConfig notifTemplateConfig = notifTemplateInstall.getNotifTemplateConfig();
                 String description = resolveApplicationMessage(notifTemplateConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
@@ -100,7 +108,49 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     }
                 }
             }
+        }      
+        
+        // Install configured notification large texts
+        if (applicationConfig.getNotifLargeTextsConfig() != null
+                && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
+            for (AppNotifLargeTextConfig applicationNotifLargeTextConfig : applicationConfig.getNotifLargeTextsConfig()
+                    .getNotifLargeTextList()) {
+                NotifLargeTextInstall notifLargeTextInstall = getConfigurationLoader()
+                        .loadNotifLargeTextInstallation(applicationNotifLargeTextConfig.getConfigFile());
+                 // Large Text
+                NotifLargeTextConfig notifLargeTextConfig = notifLargeTextInstall.getNotifLargeTextConfig();
+                String description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
+                String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
+                        notifLargeTextConfig.getEntity());
+                String body = resolveApplicationMessage(notifLargeTextConfig.getBody());
+                logDebug(taskMonitor, "Installing configured notification large text [{0}]...", description);
+
+                NotificationLargeText oldNotificationLargeText = environment().findLean(new NotificationLargeTextQuery()
+                        .applicationId(applicationId).name(notifLargeTextConfig.getName()));
+
+                if (oldNotificationLargeText == null) {
+                    NotificationLargeText notificationLargeText = new NotificationLargeText();
+                    notificationLargeText.setApplicationId(applicationId);
+                    notificationLargeText.setName(notifLargeTextConfig.getName());
+                    notificationLargeText.setDescription(description);
+                    notificationLargeText.setEntity(entity);
+                    notificationLargeText.setBody(body);
+                    notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    populateChildList(notificationLargeText, notifLargeTextConfig);
+                    environment().create(notificationLargeText);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldNotificationLargeText)) {
+                        oldNotificationLargeText.setDescription(description);
+                        oldNotificationLargeText.setEntity(entity);
+                        oldNotificationLargeText.setBody(body);
+                        populateChildList(oldNotificationLargeText, notifLargeTextConfig);
+                        environment().updateByIdVersion(oldNotificationLargeText);
+                    }
+                }
+            }
         }
+        
+        
     }
 
     @Override
@@ -143,6 +193,22 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
         }
 
         notificationTemplate.setParamList(paramList);
+    }
+
+    private void populateChildList(NotificationLargeText notificationLargeText,
+            NotifLargeTextConfig notifLargeTextConfig) throws UnifyException {
+        List<NotificationLargeTextParam> paramList = null;
+        if (!DataUtils.isBlank(notifLargeTextConfig.getParamList())) {
+            paramList = new ArrayList<NotificationLargeTextParam>();
+            for (NotifLargeTextParamConfig paramConfig : notifLargeTextConfig.getParamList()) {
+                NotificationLargeTextParam param = new NotificationLargeTextParam();
+                param.setName(paramConfig.getName());
+                param.setLabel(paramConfig.getLabel());
+                paramList.add(param);
+            }
+        }
+
+        notificationLargeText.setParamList(paramList);
     }
 
 }

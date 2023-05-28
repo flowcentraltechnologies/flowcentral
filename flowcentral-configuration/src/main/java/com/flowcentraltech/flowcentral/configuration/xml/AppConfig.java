@@ -46,6 +46,8 @@ public class AppConfig extends BaseNameConfig {
 
     private AppNotifTemplatesConfig notifTemplatesConfig;
 
+    private AppNotifLargeTextsConfig notifLargeTextsConfig;
+
     private AppWorkflowsConfig workflowsConfig;
 
     private AppWorkflowWizardsConfig workflowWizardsConfig;
@@ -146,6 +148,15 @@ public class AppConfig extends BaseNameConfig {
     @XmlElement(name = "notifTemplates")
     public void setNotifTemplatesConfig(AppNotifTemplatesConfig notifTemplatesConfig) {
         this.notifTemplatesConfig = notifTemplatesConfig;
+    }
+
+    public AppNotifLargeTextsConfig getNotifLargeTextsConfig() {
+        return notifLargeTextsConfig;
+    }
+
+    @XmlElement(name = "notifLargeTexts")
+    public void setNotifLargeTextsConfig(AppNotifLargeTextsConfig notifLargeTextsConfig) {
+        this.notifLargeTextsConfig = notifLargeTextsConfig;
     }
 
     public AppWorkflowsConfig getWorkflowsConfig() {

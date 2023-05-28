@@ -125,6 +125,8 @@ public abstract class AbstractStudioAppletActionPolicy extends AbstractAppletAct
                 break;
             case NOTIFICATION_TEMPLATE:
                 break;
+            case NOTIFICATION_LARGETEXT:
+                break;
             case REFERENCE:
                 break;
             case REPORT_CONFIGURATION:

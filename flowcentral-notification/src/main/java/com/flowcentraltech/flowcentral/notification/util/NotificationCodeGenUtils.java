@@ -28,6 +28,9 @@ public final class NotificationCodeGenUtils {
 
     public static final String TEMPLATE_NAME = "__TEMPLATE_NAME";
 
+
+    public static final String LARGETEXT_NAME = "__LARGETEXT_NAME";
+
     private NotificationCodeGenUtils() {
 
     }
@@ -41,5 +44,16 @@ public final class NotificationCodeGenUtils {
 
     public static String generateUtilitiesTemplateWrapperPackageName(String basePackage, String moduleName) {
         return basePackage + ".utilities." + moduleName.toLowerCase() + ".templatewrappers";
+    }
+
+    public static String generateUtilitiesLargeTextWrapperClassName(String basePackage, String moduleName,
+            String largeTextName) {
+        return StringUtils.isBlank(largeTextName) ? null
+                : NotificationCodeGenUtils.generateUtilitiesLargeTextWrapperPackageName(basePackage, moduleName) + "."
+                        + StringUtils.capitalizeFirstLetter(largeTextName);
+    }
+
+    public static String generateUtilitiesLargeTextWrapperPackageName(String basePackage, String moduleName) {
+        return basePackage + ".utilities." + moduleName.toLowerCase() + ".largetextwrappers";
     }
 }

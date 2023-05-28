@@ -67,16 +67,17 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             .unmodifiableList(Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.APPLICATION,
                     StudioAppComponentType.WIDGET, StudioAppComponentType.ENTITY, StudioAppComponentType.APPLET,
                     StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD,
-                    StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.REPORT_CONFIGURATION,
-                    StudioAppComponentType.TABLE, StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
+                    StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
+                    StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.TABLE,
+                    StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
 
     private static final List<StudioAppComponentType> collaborationMenuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
                     StudioAppComponentType.APPLICATION, StudioAppComponentType.WIDGET, StudioAppComponentType.ENTITY,
                     StudioAppComponentType.APPLET, StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART,
                     StudioAppComponentType.DASHBOARD, StudioAppComponentType.NOTIFICATION_TEMPLATE,
-                    StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.TABLE,
-                    StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
+                    StudioAppComponentType.NOTIFICATION_LARGETEXT, StudioAppComponentType.REPORT_CONFIGURATION,
+                    StudioAppComponentType.TABLE, StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
 
     public final void setStudioModuleService(StudioModuleService studioModuleService) {
         this.studioModuleService = studioModuleService;
@@ -235,7 +236,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         for (String appletName : applets) {
             AppletDef _appletDef = appletUtilities.application()
                     .getAppletDef(ApplicationNameUtils.addVestigialNamePart(appletName, applicationName));
-            if (appletUtilities.applicationPrivilegeManager().isRoleWithPrivilege(roleCode, _appletDef.getPrivilege())) {
+            if (appletUtilities.applicationPrivilegeManager().isRoleWithPrivilege(roleCode,
+                    _appletDef.getPrivilege())) {
                 appletDefList.add(_appletDef);
             }
         }

@@ -34,4 +34,6 @@ public interface NotificationModuleNameConstants {
     String EMAILMESSAGINGCHANNEL = "email-messagingchannel";
 
     String SMSMESSAGINGCHANNEL = "sms-messagingchannel";
+    
+    String BASIC_LETTERFORMLISTING_GENERATOR = "basic-letterformlistinggenerator";
 }

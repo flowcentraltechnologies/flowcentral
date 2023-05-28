@@ -33,8 +33,11 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo;
 import com.flowcentraltech.flowcentral.codegeneration.data.DynamicModuleInfo.ApplicationInfo;
 import com.flowcentraltech.flowcentral.common.constants.ComponentType;
+import com.flowcentraltech.flowcentral.notification.data.BaseNotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.BaseNotifTemplateWrapper;
+import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateDef;
+import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
@@ -228,6 +231,47 @@ public final class CodeGenerationUtils {
                 .append(dynamicTemplateInfo.getTemplateName()).append("\";\n");
         esb.append("public ").append(typeInfo.getSimpleName())
                 .append("(NotifTemplateDef notifTemplateDef) throws UnifyException {super(notifTemplateDef);}\n");
+        esb.append(msb);
+        esb.append("}\n");
+        return esb.toString();
+    }
+
+    public static String generateLargeTextWrapperJavaClassSource(String packageName,
+            DynamicNotifLargeTextInfo dynamicLargeTextInfo) throws UnifyException {
+        StringBuilder esb = new StringBuilder();
+        StringBuilder msb = new StringBuilder();
+        Set<String> importSet = new HashSet<String>();
+
+        TypeInfo notifLargeTextDefEntityInfo = new TypeInfo(NotifLargeTextDef.class);
+        TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
+        importSet.add(notifLargeTextDefEntityInfo.getCanonicalName());
+        importSet.add(exceptionEntityInfo.getCanonicalName());
+
+        // Evaluate parameters
+        for (final String param : dynamicLargeTextInfo.getParams()) {
+            final String capParam = StringUtils.capitalizeFirstLetter(param);
+            msb.append(" public void set").append(capParam)
+                    .append("(String val) throws UnifyException {properties.put(\"").append(param).append("\", val);}\n");
+        }
+
+        // Construct class
+        TypeInfo baseEntityInfo = new TypeInfo(BaseNotifLargeTextWrapper.class);
+        TypeInfo typeInfo = new TypeInfo(dynamicLargeTextInfo.getLargeTextClassName() + "Wrapper");
+        esb.append("package ").append(packageName).append(";\n");
+        List<String> importList = new ArrayList<String>(importSet);
+        Collections.sort(importList);
+        for (String imprt : importList) {
+            esb.append("import ").append(imprt).append(";\n");
+        }
+
+        esb.append("import ").append(baseEntityInfo.getCanonicalName()).append(";\n");
+
+        esb.append("public class ").append(typeInfo.getSimpleName()).append(" extends ")
+                .append(baseEntityInfo.getSimpleName()).append(" {\n");
+        esb.append("public static final String ").append(NotificationCodeGenUtils.LARGETEXT_NAME).append(" = \"")
+                .append(dynamicLargeTextInfo.getLargeTextName()).append("\";\n");
+        esb.append("public ").append(typeInfo.getSimpleName())
+                .append("(NotifLargeTextDef notifLargeTextDef) throws UnifyException {super(notifLargeTextDef);}\n");
         esb.append(msb);
         esb.append("}\n");
         return esb.toString();

@@ -22,6 +22,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.configuration.xml.AppChartsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppDashboardsConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppNotifLargeTextsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppNotifTemplatesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppReportsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppWorkflowWizardsConfig;
@@ -47,6 +48,8 @@ public class StaticApplicationConfig {
     private AppReportsConfig reportsConfig;
 
     private AppNotifTemplatesConfig notifTemplatesConfig;
+
+    private AppNotifLargeTextsConfig notifLargeTextsConfig;
 
     private AppWorkflowsConfig workflowsConfig;
 
@@ -102,6 +105,14 @@ public class StaticApplicationConfig {
 
     public void setNotifTemplatesConfig(AppNotifTemplatesConfig notifTemplatesConfig) {
         this.notifTemplatesConfig = notifTemplatesConfig;
+    }
+
+    public AppNotifLargeTextsConfig getNotifLargeTextsConfig() {
+        return notifLargeTextsConfig;
+    }
+
+    public void setNotifLargeTextsConfig(AppNotifLargeTextsConfig notifLargeTextsConfig) {
+        this.notifLargeTextsConfig = notifLargeTextsConfig;
     }
 
     public AppWorkflowsConfig getWorkflowsConfig() {

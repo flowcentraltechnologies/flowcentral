@@ -122,8 +122,9 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
         return codegenerationAppletList;
     }
 
-    private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections.unmodifiableList(
-            Arrays.asList("charts-xml-generator", "dashboards-xml-generator", "notifications-xml-generator",
+    private static final List<String> APPLICATION_ARTIFACT_GENERATORS = Collections
+            .unmodifiableList(Arrays.asList("charts-xml-generator", "dashboards-xml-generator",
+                    "notification-templates-xml-generator", "notification-largetexts-xml-generator",
                     "reports-xml-generator", "workflows-xml-generator", "application-xml-generator"));
 
     @Taskable(name = CodeGenerationTaskConstants.GENERATE_EXTENSION_MODULE_FILES_TASK_NAME,
@@ -256,7 +257,7 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
 
                     DynamicModuleInfo dynamicModuleInfo = getDynamicModuleInfo(moduleName);
                     moduleCtx.setDynamicModuleInfo(dynamicModuleInfo);
-                    
+
                     // Generate component name constants
                     addTaskMessage(taskMonitor, "Generating component name constants classes for module [{0}]...",
                             moduleName);
@@ -280,6 +281,15 @@ public class CodeGenerationModuleServiceImpl extends AbstractFlowCentralService
                             "extension-module-templatewrappers-java-generator");
                     generator = (StaticArtifactGenerator) getComponent(
                             "extension-module-templatewrappers-java-generator");
+                    generator.generate(moduleCtx, moduleName, zos);
+
+                    // Generate large text wrappers
+                    addTaskMessage(taskMonitor, "Generating large text wrapper classes for module [{0}]...",
+                            moduleName);
+                    addTaskMessage(taskMonitor, "Executing artifact generator [{0}]...",
+                            "extension-module-largetextwrappers-java-generator");
+                    generator = (StaticArtifactGenerator) getComponent(
+                            "extension-module-largetextwrappers-java-generator");
                     generator.generate(moduleCtx, moduleName, zos);
                 }
             }

@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.util;
+
+import com.flowcentraltech.flowcentral.application.listing.ListingCell;
 
 /**
  * Listing utilities.

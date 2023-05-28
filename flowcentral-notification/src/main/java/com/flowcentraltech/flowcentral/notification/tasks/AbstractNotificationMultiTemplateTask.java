@@ -43,7 +43,7 @@ public abstract class AbstractNotificationMultiTemplateTask extends AbstractNoti
     protected abstract void composeAndSend() throws UnifyException;
 
     protected final <T extends NotifTemplateWrapper> T getTemplateWrapper(Class<T> notifWrapperType) throws UnifyException {
-        return notification().wrapperOf(notifWrapperType);
+        return notification().wrapperOfNotifTemplate(notifWrapperType);
     }
 
     protected final void send(NotifTemplateWrapper templateWrapper) throws UnifyException {

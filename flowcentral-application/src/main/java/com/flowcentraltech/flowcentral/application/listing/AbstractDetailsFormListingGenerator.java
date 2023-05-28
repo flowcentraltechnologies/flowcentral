@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.listing;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -64,30 +64,30 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     }
 
     @Override
-    protected final void doGenerate(ValueStoreReader reader, ListingProperties listingProperties,
+    protected final void doWriteBody(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         doGenerate((DetailsFormListing) reader.getValueObject(), listingProperties, writer);
     }
 
     @Override
-    protected final void generateReportHeader(ValueStoreReader reader, ListingReportProperties properties,
+    protected final void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
         generateReportHeader((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     @Override
-    protected final void generateReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
+    protected final void writeReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
         generateReportAddendum((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
     @Override
-    protected final void generateReportFooter(ValueStoreReader reader, ListingReportProperties properties,
+    protected final void writeReportFooter(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
         generateReportFooter((DetailsFormListing) reader.getValueObject(), properties, writer);
     }
 
-    protected void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
+    protected final void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         final List<DetailsCase> detailsCaseList = detailsFormListing.getCaseList();
         final int columns = detailsFormListing.getColumns();

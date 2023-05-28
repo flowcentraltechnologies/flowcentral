@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.application.web.writers;
+package com.flowcentraltech.flowcentral.application.listing;
 
 import java.text.Format;
 import java.util.Date;
@@ -57,6 +57,8 @@ public class ListingCell {
     private Format format;
 
     private int borders;
+
+    private boolean noHtmlEscape;
 
     public ListingCell() {
         this.type = ListingCellType.TEXT;
@@ -238,5 +240,13 @@ public class ListingCell {
 
     public boolean isScopeImage() {
         return type.isScopeImage();
+    }
+
+    public boolean isNoHtmlEscape() {
+        return noHtmlEscape;
+    }
+
+    public void setNoHtmlEscape(boolean noHtmlEscape) {
+        this.noHtmlEscape = noHtmlEscape;
     }
 }

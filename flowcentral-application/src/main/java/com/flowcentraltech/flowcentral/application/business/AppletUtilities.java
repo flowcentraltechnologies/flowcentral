@@ -1956,6 +1956,21 @@ public interface AppletUtilities extends UnifyComponent {
             Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException;
 
     /**
+     * Generates a listing report as byte array.
+     * 
+     * @param letterGenerator
+     *                        the letter generator
+     * @param letterName
+     *                        the letter name
+     * @param properties
+     *                        the letter properties
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    byte[] generateViewListingReportAsByteArray(String letterGenerator, String letterName,
+            Map<String, Object> properties) throws UnifyException;
+
+    /**
      * Generates a listing report.
      * 
      * @param reader
@@ -2042,4 +2057,19 @@ public interface AppletUtilities extends UnifyComponent {
      */
     Report generateViewListingReport(List<DetailsCase> caseList, String generator, Map<String, Object> properties,
             int columns, boolean asSpreadSheet) throws UnifyException;
+
+    /**
+     * Generates a listing report as byte array.
+     * 
+     * @param letterGenerator
+     *                        the letter generator
+     * @param letterName
+     *                        the letter name
+     * @param properties
+     *                        the letter properties
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Report generateViewListingReport(String letterGenerator, String letterName, Map<String, Object> properties)
+            throws UnifyException;
 }

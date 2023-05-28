@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
@@ -186,7 +187,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         }
 
         final boolean isHTML = NotifMessageFormat.HTML.equals(channelMessage.getFormat());
-        final String msg = isHTML ? formatHTML(channelMessage.getMessage()) : channelMessage.getMessage();
+        final String msg = isHTML ? HtmlUtils.formatHTML(channelMessage.getMessage()) : channelMessage.getMessage();
         eb.fromSender(notifChannelDef.getSenderContact()).withSubject(channelMessage.getSubject())
                 .containingMessage(msg).asHTML(isHTML);
 
@@ -293,9 +294,5 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
             return "EmailContext [toEmails=" + toEmails + ", ccEmails=" + ccEmails + ", bccEmails=" + bccEmails
                     + ", testMode=" + testMode + ", used=" + used + "]";
         }
-    }
-
-    private String formatHTML(String msg) {
-        return msg.replace("\n", "<br>");
     }
 }

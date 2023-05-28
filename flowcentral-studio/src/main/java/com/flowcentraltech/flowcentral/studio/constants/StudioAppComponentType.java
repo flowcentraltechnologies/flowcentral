@@ -30,6 +30,7 @@ import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntit
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
+import com.flowcentraltech.flowcentral.notification.entities.NotificationLargeText;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
@@ -219,6 +220,21 @@ public enum StudioAppComponentType implements EnumConst {
                     | StudioAppComponentFlags.SUPPORTS_SAVEAS,
             AppletType.STUDIO_FC_COMPONENT,
             NotificationTemplate.class),
+    NOTIFICATION_LARGETEXT(
+            "ntl_",
+            "notifLargeTextForm",
+            "$m{studio.application.component.type.notificationlargetext}",
+            "$m{studio.application.component.type.notificationlargetexts}",
+            "studio.menu.label.notificationlargetext",
+            "text-a",
+            "/studioappcomponentapplet",
+            "studiooncreatecomponent-policy",
+            null,
+            null,
+            StudioAppComponentFlags.ENTITY_COMPONENT | StudioAppComponentFlags.SUPPORTS_NEW
+                    | StudioAppComponentFlags.SUPPORTS_SAVEAS,
+            AppletType.STUDIO_FC_COMPONENT,
+            NotificationLargeText.class),
     REPORT_CONFIGURATION(
             "rpc_",
             "reportConfigForm",
