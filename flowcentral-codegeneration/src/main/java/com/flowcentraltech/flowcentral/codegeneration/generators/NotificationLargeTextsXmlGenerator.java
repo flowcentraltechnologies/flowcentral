@@ -44,7 +44,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component("notification-largetexts-xml-generator")
 public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGenerator {
 
-    private static final String NOTIFICATION_LARGETEXT_FOLDER = "apps/notification/largetext";
+    private static final String NOTIFICATION_LARGETEXT_FOLDER = "apps/notification/largetext/";
 
     @Configurable
     private NotificationModuleService notificationModuleService;
