@@ -44,7 +44,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component("notification-templates-xml-generator")
 public class NotificationTemplatesXmlGenerator extends AbstractStaticArtifactGenerator {
 
-    private static final String NOTIFICATION_TEMPLATE_FOLDER = "apps/notification/template";
+    private static final String NOTIFICATION_TEMPLATE_FOLDER = "apps/notification/template/";
 
     @Configurable
     private NotificationModuleService notificationModuleService;
