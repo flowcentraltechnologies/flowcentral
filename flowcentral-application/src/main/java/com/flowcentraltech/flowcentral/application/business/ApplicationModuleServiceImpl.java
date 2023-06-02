@@ -173,7 +173,6 @@ import com.flowcentraltech.flowcentral.application.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
-import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils.EntityBaseTypeFieldSet;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
@@ -3817,8 +3816,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
             AppEntity appEntity = new AppEntity();
             appEntity.setApplicationId(applicationId);
-            EntityBaseTypeFieldSet entityBaseTypeFieldSet = ApplicationEntityUtils
-                    .getEntityBaseTypeFieldSet(messageResolver);
+//            EntityBaseTypeFieldSet entityBaseTypeFieldSet = ApplicationEntityUtils
+//                    .getEntityBaseTypeFieldSet(messageResolver);
             for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
                 AppEntity oldAppEntity = environment()
                         .findLean(new AppEntityQuery().applicationId(applicationId).name(appEntityConfig.getName()));
@@ -3846,7 +3845,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appEntity.setAuditable(appEntityConfig.getAuditable());
                     appEntity.setReportable(appEntityConfig.getReportable());
                     appEntity.setConfigType(ConfigType.STATIC_INSTALL);
-                    populateChildList(appEntity, entityBaseTypeFieldSet, applicationName, appEntityConfig);
+                    populateChildList(appEntity, applicationName, appEntityConfig);
                     entityId = (Long) environment().create(appEntity);
                 } else {
                     logDebug("Upgrading application entity [{0}]...", appEntityConfig.getName());
@@ -3867,7 +3866,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntity.setReportable(appEntityConfig.getReportable());
                     }
 
-                    populateChildList(oldAppEntity, entityBaseTypeFieldSet, applicationName, appEntityConfig);
+                    populateChildList(oldAppEntity, applicationName, appEntityConfig);
                     environment().updateByIdVersion(oldAppEntity);
                     entityId = oldAppEntity.getId();
                 }
@@ -4373,10 +4372,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
         return null;
     }
 
-    private void populateChildList(AppEntity appEntity, EntityBaseTypeFieldSet entityBaseTypeFieldSet,
-            String applicationName, AppEntityConfig appEntityConfig) throws UnifyException {
+    private void populateChildList(AppEntity appEntity, String applicationName, AppEntityConfig appEntityConfig)
+            throws UnifyException {
         List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
-        fieldList.addAll(entityBaseTypeFieldSet.getBaseFieldList(appEntity.getBaseType()));
+        fieldList.addAll(ApplicationEntityUtils.getEntityBaseTypeFieldList(messageResolver, appEntity.getBaseType(),
+                ConfigType.STATIC));
         Map<String, AppEntityField> map = appEntity.isIdBlank() ? Collections.emptyMap()
                 : environment().findAllMap(String.class, "name",
                         new AppEntityFieldQuery().appEntityId(appEntity.getId()));

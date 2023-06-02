@@ -488,35 +488,6 @@ public final class ApplicationEntityUtils {
         }
     }
 
-    public static EntityBaseTypeFieldSet getEntityBaseTypeFieldSet(MessageResolver msgResolver) throws UnifyException {
-        Map<EntityBaseType, List<AppEntityField>> baseEntityFieldSet = new EnumMap<EntityBaseType, List<AppEntityField>>(
-                EntityBaseType.class);
-        for (EntityBaseType type : EntityBaseType.values()) {
-            baseEntityFieldSet.put(type,
-                    ApplicationEntityUtils.getEntityBaseTypeFieldList(msgResolver, type, ConfigType.STATIC));
-        }
-
-        return new EntityBaseTypeFieldSet(baseEntityFieldSet);
-    }
-
-    public static class EntityBaseTypeFieldSet {
-
-        Map<EntityBaseType, List<AppEntityField>> baseEntityFieldSet;
-
-        public EntityBaseTypeFieldSet(Map<EntityBaseType, List<AppEntityField>> baseEntityFieldSet) {
-            this.baseEntityFieldSet = baseEntityFieldSet;
-        }
-
-        public List<AppEntityField> getBaseFieldList(EntityBaseType type) {
-            List<AppEntityField> resultList = baseEntityFieldSet.get(type);
-            for (AppEntityField appEntityField : resultList) {
-                appEntityField.setConfigType(ConfigType.STATIC_INSTALL);
-            }
-
-            return resultList;
-        }
-    }
-
     private static AppEntityField createBaseAppEntityField(EntityFieldDataType type, String name, String label,
             String references, String key, String property, String category, String inputLabel, String inputWidget,
             String inputListKey, Integer length, ConfigType configType) {
