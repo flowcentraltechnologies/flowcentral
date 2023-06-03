@@ -22,7 +22,8 @@
 	
 // Header    
 !ui-panel:topBanner styleClass:$e{fc-topbanner}
-	components:$c{topBannerImg navigationBand topBannerControl userImg topBannerSwitch}
+	components:$c{topBannerImgBdy navigationBand topBannerControl userImg topBannerSwitch}
+!ui-panel:topBannerImgBdy styleClass:$e{fc-topbannerimgbody} components:$c{topBannerImg}
 !ui-image:topBannerImg src:$s{web/images/applicationstudiobanner.png} styleClass:$e{fc-topbannerimg}
 !ui-panel:topBannerControl layout:$d{!ui-vertical style:$s{width:100%;}} styleClass:$e{fc-topbannercontrol}
     components:$c{businessUnitLabel upperInfoBand lowerInfoBand}
