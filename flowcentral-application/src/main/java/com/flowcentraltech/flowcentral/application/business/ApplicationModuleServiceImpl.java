@@ -4961,6 +4961,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             appFormElement.setEditAction(formTabConfig.getEditAction());
             appFormElement.setEditFormless(formTabConfig.getEditFormless());
             appFormElement.setEditFixedRows(formTabConfig.getEditFixedRows());
+            appFormElement.setEditAllowAddition(formTabConfig.getEditAllowAddition());
             appFormElement.setIgnoreParentCondition(formTabConfig.getIgnoreParentCondition());
             appFormElement.setShowSearch(formTabConfig.getShowSearch());
             appFormElement.setQuickEdit(formTabConfig.getQuickEdit());

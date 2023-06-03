@@ -55,6 +55,8 @@ public class FormTabConfig {
     private String editFormless;
 
     private String editFixedRows;
+    
+    private String editAllowAddition;
 
     private Boolean ignoreParentCondition;
 
@@ -177,6 +179,15 @@ public class FormTabConfig {
     @XmlAttribute
     public void setEditFixedRows(String editFixedRows) {
         this.editFixedRows = editFixedRows;
+    }
+
+    public String getEditAllowAddition() {
+        return editAllowAddition;
+    }
+
+    @XmlAttribute
+    public void setEditAllowAddition(String editAllowAddition) {
+        this.editAllowAddition = editAllowAddition;
     }
 
     public Boolean getIgnoreParentCondition() {
