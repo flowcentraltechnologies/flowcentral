@@ -54,6 +54,7 @@
 		<module>flowcentral-integration-activemq</module>
 		<module>flowcentral-integration-rabbitmq</module>
     	<module>flowcentral-tomcat</module>
+    	<module>flowcentral-undertow</module>
   	</modules>
 
 	<properties>
