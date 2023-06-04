@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
+import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -80,9 +81,14 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
         return appletUtilities.application();
     }
 
-    protected final <T extends NotifLargeTextWrapper> T getLargeTextWrapper(Class<T> notifWrapperType)
+    protected final <T extends NotifTemplateWrapper> T getTemplateWrapper(Class<T> wrapperType)
             throws UnifyException {
-        return notification().wrapperOfNotifLargeText(notifWrapperType);
+        return notification().wrapperOfNotifTemplate(wrapperType);
+    }
+
+    protected final <T extends NotifLargeTextWrapper> T getLargeTextWrapper(Class<T> wrapperType)
+            throws UnifyException {
+        return notification().wrapperOfNotifLargeText(wrapperType);
     }
 
     /**

@@ -239,8 +239,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException {
-        List<NotificationTemplate> templates = environment().listAll(new NotificationTemplateQuery()
-                .moduleName(moduleName).addSelect("applicationName", "name"));
+        List<NotificationTemplate> templates = environment()
+                .listAll(new NotificationTemplateQuery().moduleName(moduleName).addSelect("applicationName", "name"));
         if (!DataUtils.isBlank(templates)) {
             List<DynamicNotifTemplateInfo> resultList = new ArrayList<DynamicNotifTemplateInfo>();
             for (NotificationTemplate template : templates) {
@@ -261,8 +261,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public List<DynamicNotifLargeTextInfo> generateNotifLargeTextInfos(String basePackage, String moduleName)
             throws UnifyException {
-        List<NotificationLargeText> largeTexts = environment().listAll(new NotificationLargeTextQuery()
-                .moduleName(moduleName).addSelect("applicationName", "name"));
+        List<NotificationLargeText> largeTexts = environment()
+                .listAll(new NotificationLargeTextQuery().moduleName(moduleName).addSelect("applicationName", "name"));
         if (!DataUtils.isBlank(largeTexts)) {
             List<DynamicNotifLargeTextInfo> resultList = new ArrayList<DynamicNotifLargeTextInfo>();
             for (NotificationLargeText largeText : largeTexts) {

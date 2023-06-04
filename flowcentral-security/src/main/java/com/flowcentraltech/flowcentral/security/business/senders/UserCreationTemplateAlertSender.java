@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.annotation.EntityReferences;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
+import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.notification.senders.AbstractNotificationTemplateAlertSender;
 import com.flowcentraltech.flowcentral.security.templatewrappers.UserCreationTemplateWrapper;
 import com.tcdng.unify.core.UnifyException;
@@ -43,6 +44,11 @@ public class UserCreationTemplateAlertSender extends AbstractNotificationTemplat
     @Override
     protected void setTemplateVariables(UserCreationTemplateWrapper notifWrapper, ValueStoreReader reader) throws UnifyException {
 
+    }
+
+    @Override
+    protected List<Recipient> getAdditionalRecipients(ValueStoreReader reader) throws UnifyException {
+        return Collections.emptyList();
     }
 
     @Override

@@ -47,10 +47,18 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
 
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
-        T notifWrapper = notification().wrapperOfNotifTemplate(notifWrapperType);
+        T notifWrapper = getTemplateWrapper(notifWrapperType);
+
         // Set recipients
         if (!DataUtils.isBlank(recipientList)) {
             for (Recipient recipient : recipientList) {
+                notifWrapper.addRecipient(recipient);
+            }
+        }
+
+        List<Recipient> additionalRecipientList = getAdditionalRecipients(reader);
+        if (!DataUtils.isBlank(additionalRecipientList)) {
+            for (Recipient recipient : additionalRecipientList) {
                 notifWrapper.addRecipient(recipient);
             }
         }
@@ -68,6 +76,17 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
 
         notification().sendNotification(notifWrapper.getMessage());
     }
+
+    /**
+     * Gets additional notification recipients from reader.
+     * 
+     * @param reader
+     *               the reader
+     * @return list of additional recipients
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    protected abstract List<Recipient> getAdditionalRecipients(ValueStoreReader reader) throws UnifyException;
 
     /**
      * Sets the notification template variables.

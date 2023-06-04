@@ -656,15 +656,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-            WfStepDef prevWfStepDef = wfDef.getWfStepDef(stepName);
-            WfUserActionDef userActionDef = prevWfStepDef.getUserActionDef(userAction);
+            WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
+            WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
                     new Update().add("actor", getUserToken().getUserLoginId()).add("actionDt", getNow())
                             .add("comment", comment).add("wfAction", userActionDef.getLabel()));
 
-            // Prepare event for next step
-            WfStepDef nextWfStepDef = wfDef.getWfStepDef(userActionDef.getNextStepName());
+            // Prepare event for next step. If error step and next step is not specified
+            // jump to the work item previous step
+            final String nextStepName = currentWfStepDef.isError()
+                    && StringUtils.isBlank(userActionDef.getNextStepName()) ? wfItem.getPrevWfStepName()
+                            : userActionDef.getNextStepName();
+            WfStepDef nextWfStepDef = wfDef.getWfStepDef(nextStepName);
             final Long wfItemEventId = createWfItemEvent(nextWfStepDef, wfItem.getWfItemHistId(), stepName, null, null,
                     null, null);
 
@@ -703,7 +707,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             if (update) {
                 // Update
-                final AppletDef stepAppletDef = appletUtil.getAppletDef(prevWfStepDef.getStepAppletName());
+                final AppletDef stepAppletDef = appletUtil.getAppletDef(currentWfStepDef.getStepAppletName());
                 final EntityDef entityDef = appletUtil.getEntityDef(stepAppletDef.getEntity());
                 final String updatePolicy = stepAppletDef.getPropValue(String.class,
                         AppletPropertyConstants.MAINTAIN_FORM_UPDATE_POLICY);
