@@ -300,6 +300,7 @@ import com.tcdng.unify.core.format.Formatter;
 import com.tcdng.unify.core.list.ListManager;
 import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.security.TwoWayStringCryptograph;
+import com.tcdng.unify.core.system.SequenceNumberService;
 import com.tcdng.unify.core.task.TaskExecLimit;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.ArgumentTypeInfo;
@@ -359,6 +360,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
     @Configurable("application-usagelistprovider")
     private UsageListProvider usageListProvider;
 
+    @Configurable
+    private SequenceNumberService sequenceNumberService;
+    
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
 
     private List<ApplicationAppletDefProvider> applicationAppletDefProviderList;
@@ -1256,6 +1260,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     public final void setUsageListProvider(UsageListProvider usageListProvider) {
         this.usageListProvider = usageListProvider;
+    }
+
+    public final void setSequenceNumberService(SequenceNumberService sequenceNumberService) {
+        this.sequenceNumberService = sequenceNumberService;
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
@@ -3816,8 +3824,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 && !DataUtils.isBlank(applicationConfig.getEntitiesConfig().getEntityList())) {
             AppEntity appEntity = new AppEntity();
             appEntity.setApplicationId(applicationId);
-//            EntityBaseTypeFieldSet entityBaseTypeFieldSet = ApplicationEntityUtils
-//                    .getEntityBaseTypeFieldSet(messageResolver);
             for (AppEntityConfig appEntityConfig : applicationConfig.getEntitiesConfig().getEntityList()) {
                 AppEntity oldAppEntity = environment()
                         .findLean(new AppEntityQuery().applicationId(applicationId).name(appEntityConfig.getName()));
@@ -3871,6 +3877,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     entityId = oldAppEntity.getId();
                 }
 
+                sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
+                
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
                 entityIdByNameMap.put(entityLongName, entityId);
