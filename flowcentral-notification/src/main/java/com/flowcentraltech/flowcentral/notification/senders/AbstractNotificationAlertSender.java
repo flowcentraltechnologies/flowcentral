@@ -151,7 +151,7 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
 
     protected Attachment createPdfAttachmentFromLetterListing(String fileName, NotifLargeTextWrapper wrapper)
             throws UnifyException {
-        return this.createPdfAttachmentFromLetterListing(fileName,
+        return createPdfAttachmentFromLetterListing(fileName,
                 NotificationModuleNameConstants.BASIC_LETTERFORMLISTING_GENERATOR, wrapper);
     }
 
