@@ -37,6 +37,11 @@ public class FormListingOptions {
         this.optionFlags = ~0;
     }
 
+    public FormListingOptions(int optionFlags) {
+        this.formActionName = null;
+        this.optionFlags = optionFlags;
+    }
+
     public FormListingOptions(String formActionName, int optionFlags) {
         this.formActionName = formActionName;
         this.optionFlags = optionFlags;
