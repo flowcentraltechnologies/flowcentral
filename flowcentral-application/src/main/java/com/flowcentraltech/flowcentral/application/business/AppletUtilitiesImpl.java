@@ -2297,10 +2297,10 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             throws UnifyException {
         logDebug("Generating view listing report using generator [{0}] and options [{1}]...", generator, options);
         final FormListingGenerator _generator = (FormListingGenerator) getComponent(generator);
-        final int optionFlags = _generator.getOptionFlagsOverride(reader);
-        FormListingOptions _options = options.isImportant() || optionFlags == 0 ? options
+        final int optionFlags = options.isImportant() ? 0 : _generator.getOptionFlagsOverride(reader);
+        FormListingOptions _options = optionFlags == 0 ? options
                 : new FormListingOptions(options.getFormActionName(), optionFlags);
-        logDebug("Using resolved option [{0}]...", generator, _options);
+        logDebug("Using resolved option [{0}]...", _options);
         return _generator.generateHtmlReport(reader, _options);
     }
 

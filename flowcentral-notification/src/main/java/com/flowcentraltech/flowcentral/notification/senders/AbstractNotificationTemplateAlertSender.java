@@ -47,7 +47,7 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
 
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
-        logDebug("Composing and sending notification for value [{0}]...", reader.getValueObject());
+        logDebug("Composing and sending notification using type...");
         T notifWrapper = getTemplateWrapper(notifWrapperType);
 
         // Set recipients
