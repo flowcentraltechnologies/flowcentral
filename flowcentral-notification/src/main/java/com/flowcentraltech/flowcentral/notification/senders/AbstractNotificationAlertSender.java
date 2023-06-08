@@ -81,8 +81,7 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
         return appletUtilities.application();
     }
 
-    protected final <T extends NotifTemplateWrapper> T getTemplateWrapper(Class<T> wrapperType)
-            throws UnifyException {
+    protected final <T extends NotifTemplateWrapper> T getTemplateWrapper(Class<T> wrapperType) throws UnifyException {
         return notification().wrapperOfNotifTemplate(wrapperType);
     }
 
@@ -109,84 +108,86 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
                 .data(report).build();
     }
 
-    protected Attachment createPdfAttachmentFromDetailListing(String fileName, String tableName,
-            List<? extends Entity> dataList) throws UnifyException {
-        return createPdfAttachmentFromDetailListing(fileName, tableName, dataList,
+    protected Attachment createPdfAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            String tableName, List<? extends Entity> dataList) throws UnifyException {
+        return createPdfAttachmentFromDetailListing(fileName, reader, tableName, dataList,
                 ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(),
                 DEFAULT_REPORT_FORMATS);
     }
 
-    protected Attachment createPdfAttachmentFromDetailListing(String fileName, String tableName,
-            List<? extends Entity> dataList, String detailsListingGenerator, Map<String, Object> properties,
-            Formats formats) throws UnifyException {
-        return createAttachmentFromDetailListingReport(fileName, tableName, dataList, detailsListingGenerator,
+    protected Attachment createPdfAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            String tableName, List<? extends Entity> dataList, String detailsListingGenerator,
+            Map<String, Object> properties, Formats formats) throws UnifyException {
+        return createAttachmentFromDetailListingReport(fileName, reader, tableName, dataList, detailsListingGenerator,
                 properties, formats, false);
     }
 
-    protected Attachment createPdfAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
-            int columns) throws UnifyException {
-        return createPdfAttachmentFromDetailListing(fileName, detailsCaseList, columns,
+    protected Attachment createPdfAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            List<DetailsCase> detailsCaseList, int columns) throws UnifyException {
+        return createPdfAttachmentFromDetailListing(fileName, reader, detailsCaseList, columns,
                 ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap());
     }
 
-    protected Attachment createPdfAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
-            int columns, String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
-        return createAttachmentFromDetailListingReport(fileName, detailsCaseList, detailsListingGenerator, properties,
-                columns, false);
+    protected Attachment createPdfAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            List<DetailsCase> detailsCaseList, int columns, String detailsListingGenerator,
+            Map<String, Object> properties) throws UnifyException {
+        return createAttachmentFromDetailListingReport(fileName, reader, detailsCaseList, detailsListingGenerator,
+                properties, columns, false);
     }
 
-    protected Attachment createPdfAttachmentFromLetterListing(String fileName, String largeTextName,
-            Map<String, Object> properties) throws UnifyException {
-        return createPdfAttachmentFromLetterListing(fileName,
+    protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
+            String largeTextName, Map<String, Object> properties) throws UnifyException {
+        return createPdfAttachmentFromLetterListing(fileName, reader,
                 NotificationModuleNameConstants.BASIC_LETTERFORMLISTING_GENERATOR, largeTextName, properties);
     }
 
-    protected Attachment createPdfAttachmentFromLetterListing(String fileName, String letterGenerator,
-            String largeTextName, Map<String, Object> properties) throws UnifyException {
-        final byte[] report = appletUtilities.generateViewListingReportAsByteArray(letterGenerator, largeTextName,
-                properties);
+    protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
+            String letterGenerator, String largeTextName, Map<String, Object> properties) throws UnifyException {
+        final byte[] report = appletUtilities.generateLetterListingReportAsByteArray(reader, letterGenerator,
+                largeTextName, properties);
         return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();
     }
 
-    protected Attachment createPdfAttachmentFromLetterListing(String fileName, NotifLargeTextWrapper wrapper)
-            throws UnifyException {
-        return createPdfAttachmentFromLetterListing(fileName,
+    protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
+            NotifLargeTextWrapper wrapper) throws UnifyException {
+        return createPdfAttachmentFromLetterListing(fileName, reader,
                 NotificationModuleNameConstants.BASIC_LETTERFORMLISTING_GENERATOR, wrapper);
     }
 
-    protected Attachment createPdfAttachmentFromLetterListing(String fileName, String letterGenerator,
-            NotifLargeTextWrapper wrapper) throws UnifyException {
-        final byte[] report = appletUtilities.generateViewListingReportAsByteArray(letterGenerator,
+    protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
+            String letterGenerator, NotifLargeTextWrapper wrapper) throws UnifyException {
+        final byte[] report = appletUtilities.generateLetterListingReportAsByteArray(reader, letterGenerator,
                 wrapper.getLargeTextName(), wrapper.getProperties());
         return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();
     }
 
-    protected Attachment createExcelAttachmentFromDetailListing(String fileName, String tableName,
-            List<? extends Entity> dataList) throws UnifyException {
-        return createExcelAttachmentFromDetailListing(fileName, tableName, dataList,
+    protected Attachment createExcelAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            String tableName, List<? extends Entity> dataList) throws UnifyException {
+        return createExcelAttachmentFromDetailListing(fileName, reader, tableName, dataList,
                 ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap(),
                 DEFAULT_REPORT_FORMATS);
     }
 
-    protected Attachment createExcelAttachmentFromDetailListing(String fileName, String tableName,
-            List<? extends Entity> dataList, String detailsListingGenerator, Map<String, Object> properties,
-            Formats formats) throws UnifyException {
-        return createAttachmentFromDetailListingReport(fileName, tableName, dataList, detailsListingGenerator,
+    protected Attachment createExcelAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            String tableName, List<? extends Entity> dataList, String detailsListingGenerator,
+            Map<String, Object> properties, Formats formats) throws UnifyException {
+        return createAttachmentFromDetailListingReport(fileName, reader, tableName, dataList, detailsListingGenerator,
                 properties, formats, true);
     }
 
-    protected Attachment createExcelAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
-            int columns) throws UnifyException {
-        return createExcelAttachmentFromDetailListing(fileName, detailsCaseList, columns,
+    protected Attachment createExcelAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            List<DetailsCase> detailsCaseList, int columns) throws UnifyException {
+        return createExcelAttachmentFromDetailListing(fileName, reader, detailsCaseList, columns,
                 ApplicationModuleNameConstants.BASIC_DETAILSFORMLISTING_GENERATOR, Collections.emptyMap());
     }
 
-    protected Attachment createExcelAttachmentFromDetailListing(String fileName, List<DetailsCase> detailsCaseList,
-            int columns, String detailsListingGenerator, Map<String, Object> properties) throws UnifyException {
-        return createAttachmentFromDetailListingReport(fileName, detailsCaseList, detailsListingGenerator, properties,
-                columns, true);
+    protected Attachment createExcelAttachmentFromDetailListing(String fileName, ValueStoreReader reader,
+            List<DetailsCase> detailsCaseList, int columns, String detailsListingGenerator,
+            Map<String, Object> properties) throws UnifyException {
+        return createAttachmentFromDetailListingReport(fileName, reader, detailsCaseList, detailsListingGenerator,
+                properties, columns, true);
     }
 
     protected Attachment createAttachmentFromFile(FileAttachmentType type, String absoluteFileName)
@@ -196,19 +197,19 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
         return Attachment.newBuilder(type).fileName(fileName).title(fileName).name(fileName).data(file).build();
     }
 
-    private Attachment createAttachmentFromDetailListingReport(String fileName, String tableName,
-            List<? extends Entity> dataList, String detailsListingGenerator, Map<String, Object> properties,
-            Formats formats, boolean spreadSheet) throws UnifyException {
-        final byte[] report = appletUtilities.generateViewListingReportAsByteArray(tableName, dataList,
+    private Attachment createAttachmentFromDetailListingReport(String fileName, ValueStoreReader reader,
+            String tableName, List<? extends Entity> dataList, String detailsListingGenerator,
+            Map<String, Object> properties, Formats formats, boolean spreadSheet) throws UnifyException {
+        final byte[] report = appletUtilities.generateDetailListingReportAsByteArray(reader, tableName, dataList,
                 detailsListingGenerator, properties, formats, spreadSheet);
         return Attachment.newBuilder(spreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF).fileName(fileName)
                 .title(fileName).name(fileName).data(report).build();
     }
 
-    private Attachment createAttachmentFromDetailListingReport(String fileName, List<DetailsCase> detailsCaseList,
-            String detailsListingGenerator, Map<String, Object> properties, int columns, boolean asSpreadSheet)
-            throws UnifyException {
-        final byte[] report = appletUtilities.generateViewListingReportAsByteArray(detailsCaseList,
+    private Attachment createAttachmentFromDetailListingReport(String fileName, ValueStoreReader reader,
+            List<DetailsCase> detailsCaseList, String detailsListingGenerator, Map<String, Object> properties,
+            int columns, boolean asSpreadSheet) throws UnifyException {
+        final byte[] report = appletUtilities.generateDetailListingReportAsByteArray(reader, detailsCaseList,
                 detailsListingGenerator, properties, columns, asSpreadSheet);
         return Attachment.newBuilder(asSpreadSheet ? FileAttachmentType.EXCEL : FileAttachmentType.PDF)
                 .fileName(fileName).title(fileName).name(fileName).data(report).build();

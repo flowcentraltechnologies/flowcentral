@@ -21,7 +21,6 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
-import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.web.data.LetterFormListing;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
@@ -64,9 +63,8 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
     @Override
     protected final void doWriteBody(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
-        final LetterFormListing letterFormListing = (LetterFormListing) reader.getValueObject();
         ListingColumn[] columns = new ListingColumn[] { new ListingColumn(HAlignType.LEFT, 100) };
-        final String body = getLetterBody(letterFormListing);
+        final String body = getLetterBody(reader, writer.getFormListing(LetterFormListing.class));
         final String fmtBody = HtmlUtils.formatHTML(body);
         final ListingCell cell = new ListingCell(ListingCellType.TEXT, fmtBody, ListingCell.BORDER_NONE);
         cell.setNoHtmlEscape(true);
@@ -78,32 +76,6 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
         writer.endSection();
     }
 
-    @Override
-    protected final void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException {
-        writeLetterHeader((LetterFormListing) reader.getValueObject(), properties, writer);
-    }
-
-    @Override
-    protected final void writeReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException {
-        writeLetterAddendum((LetterFormListing) reader.getValueObject(), properties, writer);
-    }
-
-    @Override
-    protected final void writeReportFooter(ValueStoreReader reader, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException {
-        writeLetterFooter((LetterFormListing) reader.getValueObject(), properties, writer);
-    }
-
-    protected abstract String getLetterBody(LetterFormListing letterFormListing) throws UnifyException;
-
-    protected abstract void writeLetterHeader(LetterFormListing letterFormListing, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException;
-
-    protected abstract void writeLetterAddendum(LetterFormListing letterFormListing, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException;
-
-    protected abstract void writeLetterFooter(LetterFormListing letterFormListing, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException;
+    protected abstract String getLetterBody(ValueStoreReader reader, LetterFormListing letterFormListing)
+            throws UnifyException;
 }

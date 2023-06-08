@@ -32,7 +32,6 @@ import com.flowcentraltech.flowcentral.common.web.controllers.AbstractFlowCentra
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.web.constant.ReadOnly;
@@ -128,12 +127,12 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
         return (U) removeSessionAttribute(RELAY_SESSION_OBJECT);
     }
 
-    protected String viewListingReport(DetailsFormListing listing) throws UnifyException {
+    protected String viewListingReport(ValueStoreReader reader, DetailsFormListing listing) throws UnifyException {
         DetailsFormListingGenerator generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
-        final ValueStoreReader reader = new BeanValueStore(listing).getReader();
-        Report report = listing.isSpreadSheet()
-                ? generator.generateExcelReport(reader, new FormListingOptions())
-                : generator.generateHtmlReport(reader, new FormListingOptions());
+        FormListingOptions options = new FormListingOptions();
+        options.setFormListing(listing);
+        Report report = listing.isSpreadSheet() ? generator.generateExcelReport(reader, options)
+                : generator.generateHtmlReport(reader, options);
         return viewListingReport(report);
     }
 

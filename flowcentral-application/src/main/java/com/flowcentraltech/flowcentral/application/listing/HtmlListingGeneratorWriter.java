@@ -20,6 +20,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.util.ListingUtils;
+import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.resource.ImageProvider;
@@ -36,9 +37,10 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
 
     private final ResponseWriter writer;
 
-    public HtmlListingGeneratorWriter(ThemeManager themeManager, ImageProvider entityImageProvider, String listingType,
-            ResponseWriter writer, Set<ListingColorType> pausePrintColors, boolean highlighting) {
-        super(themeManager, entityImageProvider, listingType, pausePrintColors, highlighting);
+    public HtmlListingGeneratorWriter(FormListing formListing, ThemeManager themeManager,
+            ImageProvider entityImageProvider, String listingType, ResponseWriter writer,
+            Set<ListingColorType> pausePrintColors, boolean highlighting) {
+        super(formListing, themeManager, entityImageProvider, listingType, pausePrintColors, highlighting);
         this.writer = writer;
     }
 

@@ -23,6 +23,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for notification letter form listing
@@ -41,7 +42,8 @@ public abstract class AbstractNotificationLetterFormListingGenerator extends Abs
     }
 
     @Override
-    protected final String getLetterBody(LetterFormListing letterFormListing) throws UnifyException {
+    protected final String getLetterBody(ValueStoreReader reader, LetterFormListing letterFormListing)
+            throws UnifyException {
         NotifLargeTextDef notifLargeTextDef = notificationModuleService
                 .getNotifLargeTextDef(letterFormListing.getLetterName());
         ParameterizedStringGenerator generator = getParameterizedStringGenerator(

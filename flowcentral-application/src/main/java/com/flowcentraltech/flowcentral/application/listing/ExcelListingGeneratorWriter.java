@@ -37,6 +37,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
+import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.resource.ImageProvider;
@@ -69,7 +70,7 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
     private Map<String, CellStyle> cellStyles;
 
     private List<Pic> pictures;
-    
+
     private int writeRow;
 
     private int writeColumn;
@@ -84,9 +85,10 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private List<Merge> mergeList;
 
-    public ExcelListingGeneratorWriter(ThemeManager themeManager, ImageProvider entityImageProvider, String listingType,
-            Sheet sheet, Set<ListingColorType> pausePrintColors, boolean highlighting) {
-        super(themeManager, entityImageProvider, listingType, pausePrintColors, highlighting);
+    public ExcelListingGeneratorWriter(FormListing formListing, ThemeManager themeManager,
+            ImageProvider entityImageProvider, String listingType, Sheet sheet, Set<ListingColorType> pausePrintColors,
+            boolean highlighting) {
+        super(formListing, themeManager, entityImageProvider, listingType, pausePrintColors, highlighting);
         this.sheet = sheet;
         this.cellStyles = new HashMap<String, CellStyle>();
         this.mergeList = new ArrayList<Merge>();
@@ -209,24 +211,24 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
 
     private class Pic {
         private final ClientAnchor imgAnchor;
-        
+
         private final int imgIndex;
-        
+
         private final int columns;
-        
+
         private final int rows;
-        
+
         public Pic(ClientAnchor imgAnchor, int imgIndex, int columns, int rows) {
             this.imgAnchor = imgAnchor;
             this.imgIndex = imgIndex;
             this.columns = columns;
             this.rows = rows;
         }
-        
+
         public ClientAnchor getImgAnchor() {
             return imgAnchor;
         }
-        
+
         public int getImgIndex() {
             return imgIndex;
         }
@@ -239,7 +241,7 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
             return rows;
         }
     }
-    
+
     private class Merge {
         final int row1;
         final int row2;
@@ -294,12 +296,12 @@ public class ExcelListingGeneratorWriter extends AbstractListingGeneratorWriter 
     @SuppressWarnings("rawtypes")
     private void drawPictures() {
         Drawing drawing = sheet.createDrawingPatriarch();
-        for (Pic pic: pictures) {
+        for (Pic pic : pictures) {
             Picture _pic = drawing.createPicture(pic.getImgAnchor(), pic.getImgIndex());
             _pic.resize(pic.getColumns(), pic.getRows());
         }
     }
-    
+
     private void mergeRegions() {
         for (Merge merge : mergeList) {
             sheet.addMergedRegion(

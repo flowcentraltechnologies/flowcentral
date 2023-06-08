@@ -25,7 +25,6 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
-import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
@@ -49,11 +48,6 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         implements DetailsFormListingGenerator {
 
     @Override
-    public final int getOptionFlagsOverride(ValueStoreReader reader) throws UnifyException {
-        return getOptionFlagsOverride((DetailsFormListing) reader.getValueObject());
-    }
-
-    @Override
     protected Set<ListingColorType> getPausePrintColors() throws UnifyException {
         return Collections.emptySet();
     }
@@ -66,29 +60,12 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     @Override
     protected final void doWriteBody(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
-        doGenerate((DetailsFormListing) reader.getValueObject(), listingProperties, writer);
+        doGenerate(reader, listingProperties, writer);
     }
 
-    @Override
-    protected final void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
+    protected final void doGenerate(ValueStoreReader reader,  ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
-        writeReportHeader((DetailsFormListing) reader.getValueObject(), properties, writer);
-    }
-
-    @Override
-    protected final void writeReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException {
-        writeReportAddendum((DetailsFormListing) reader.getValueObject(), properties, writer);
-    }
-
-    @Override
-    protected final void writeReportFooter(ValueStoreReader reader, ListingReportProperties properties,
-            ListingGeneratorWriter writer) throws UnifyException {
-        writeReportFooter((DetailsFormListing) reader.getValueObject(), properties, writer);
-    }
-
-    protected final void doGenerate(DetailsFormListing detailsFormListing, ListingProperties listingProperties,
-            ListingGeneratorWriter writer) throws UnifyException {
+        final DetailsFormListing detailsFormListing = writer.getFormListing(DetailsFormListing.class);
         final List<DetailsCase> detailsCaseList = detailsFormListing.getCaseList();
         final int columns = detailsFormListing.getColumns();
         final int[] sectionColumnWidth = new int[columns];
@@ -114,18 +91,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         }
     }
 
-    protected abstract int getOptionFlagsOverride(DetailsFormListing detailsFormListing) throws UnifyException;
-
-    protected abstract void writeReportHeader(DetailsFormListing detailsFormListing,
-            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
-
-    protected abstract void writeReportAddendum(DetailsFormListing detailsFormListing,
-            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
-
-    protected abstract void writeReportFooter(DetailsFormListing detailsFormListing,
-            ListingReportProperties properties, ListingGeneratorWriter writer) throws UnifyException;
-
-    private void doGenerate(DetailsCase detailsCase, ListingProperties listingProperties, ListingGeneratorWriter writer)
+     private void doGenerate(DetailsCase detailsCase, ListingProperties listingProperties, ListingGeneratorWriter writer)
             throws UnifyException {
         final TableDef tableDef = application().getTableDef(detailsCase.getTableName());
         final boolean isSerialNo = tableDef.isSerialNo();

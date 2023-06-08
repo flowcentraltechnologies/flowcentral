@@ -29,6 +29,8 @@ public class FormListingOptions {
 
     private final boolean important;
     
+    private FormListing formListing;
+    
     public FormListingOptions() {
         this.formActionName = null;
         this.optionFlags = ~0;
@@ -69,9 +71,12 @@ public class FormListingOptions {
         return important;
     }
 
-    @Override
-    public String toString() {
-        return "[formActionName=" + formActionName + ", optionFlags=" + optionFlags + ", important="
-                + important + "]";
+    public FormListing getFormListing() {
+        return formListing;
     }
+
+    public void setFormListing(FormListing formListing) {
+        this.formListing = formListing;
+    }
+
 }

@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.listing;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
+import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -31,6 +32,8 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @since 1.0
  */
 public interface ListingGeneratorWriter {
+
+    <T extends FormListing> T getFormListing(Class<T> formListingType);
 
     String getListingType();
 

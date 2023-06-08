@@ -17,9 +17,9 @@ package com.flowcentraltech.flowcentral.application.listing;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
-import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Basic details form listing generator.
@@ -31,23 +31,26 @@ import com.tcdng.unify.core.annotation.Component;
 public class BasicDetailsFormListingGenerator extends AbstractDetailsFormListingGenerator {
 
     @Override
-    protected int getOptionFlagsOverride(DetailsFormListing detailsFormListing) throws UnifyException {
+    public int getOptionFlagsOverride(ValueStoreReader reader) throws UnifyException {
         return 0;
     }
 
     @Override
-    protected void writeReportHeader(DetailsFormListing detailsFormListing, ListingReportProperties properties,
+    protected void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
+        
     }
 
     @Override
-    protected void writeReportAddendum(DetailsFormListing detailsFormListing, ListingReportProperties properties,
+    protected void writeReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
+        
     }
 
     @Override
-    protected void writeReportFooter(DetailsFormListing detailsFormListing, ListingReportProperties properties,
+    protected void writeReportFooter(ValueStoreReader reader, ListingReportProperties properties,
             ListingGeneratorWriter writer) throws UnifyException {
+        
     }
 
 }

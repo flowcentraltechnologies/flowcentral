@@ -2261,34 +2261,36 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList,
-            String generator, Map<String, Object> properties, Formats formats, boolean asSpreadSheet)
-            throws UnifyException {
-        return generateViewListingReportAsByteArray(tableName, dataList, generator, properties, formats, asSpreadSheet,
-                Collections.emptyList(), Collections.emptyList(), 0);
+    public byte[] generateDetailListingReportAsByteArray(ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet) throws UnifyException {
+        return generateDetailListingReportAsByteArray(reader, tableName, dataList, generator, properties, formats,
+                asSpreadSheet, Collections.emptyList(), Collections.emptyList(), 0);
     }
 
     @Override
-    public byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList,
-            String generator, Map<String, Object> properties, Formats formats, boolean asSpreadSheet,
-            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
-            throws UnifyException {
-        final Report report = generateViewListingReport(tableName, dataList, generator, properties, formats,
+    public byte[] generateDetailListingReportAsByteArray(ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet, List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines,
+            int summaryTitleColumn) throws UnifyException {
+        final Report report = generateDetailListingReport(reader, tableName, dataList, generator, properties, formats,
                 asSpreadSheet, preSummaryLines, postSummaryLines, summaryTitleColumn);
         return reportProvider.generateReportAsByteArray(report);
     }
 
     @Override
-    public byte[] generateViewListingReportAsByteArray(List<DetailsCase> caseList, String generator,
-            Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException {
-        final Report report = generateViewListingReport(caseList, generator, properties, columns, asSpreadSheet);
+    public byte[] generateDetailListingReportAsByteArray(ValueStoreReader reader, List<DetailsCase> caseList,
+            String generator, Map<String, Object> properties, int columns, boolean asSpreadSheet)
+            throws UnifyException {
+        final Report report = generateDetailListingReport(reader, caseList, generator, properties, columns,
+                asSpreadSheet);
         return reportProvider.generateReportAsByteArray(report);
     }
 
     @Override
-    public byte[] generateViewListingReportAsByteArray(String letterGenerator, String letterName,
-            Map<String, Object> properties) throws UnifyException {
-        final Report report = generateViewListingReport(letterGenerator, letterName, properties);
+    public byte[] generateLetterListingReportAsByteArray(ValueStoreReader reader, String letterGenerator,
+            String letterName, Map<String, Object> properties) throws UnifyException {
+        final Report report = generateLetterListingReport(reader, letterGenerator, letterName, properties);
         return reportProvider.generateReportAsByteArray(report);
     }
 
@@ -2305,17 +2307,18 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     }
 
     @Override
-    public Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
-            Map<String, Object> properties, Formats formats, boolean asSpreadSheet) throws UnifyException {
-        return this.generateViewListingReport(tableName, dataList, generator, properties, formats, asSpreadSheet,
+    public Report generateDetailListingReport(ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet) throws UnifyException {
+        return generateDetailListingReport(reader, tableName, dataList, generator, properties, formats, asSpreadSheet,
                 Collections.emptyList(), Collections.emptyList(), 0);
     }
 
     @Override
-    public Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
-            Map<String, Object> properties, Formats formats, boolean asSpreadSheet,
-            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
-            throws UnifyException {
+    public Report generateDetailListingReport(ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet, List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines,
+            int summaryTitleColumn) throws UnifyException {
         DetailsFormListing.Builder lb = DetailsFormListing.newBuilder().usingGenerator(generator)
                 .addProperties(properties).asSpreadSheet(asSpreadSheet);
         lb.beginCase();
@@ -2340,32 +2343,35 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());
-        final ValueStoreReader reader = new BeanValueStore(listing).getReader();
-        return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, new FormListingOptions())
-                : _generator.generateHtmlReport(reader, new FormListingOptions());
+        final FormListingOptions options = new FormListingOptions();
+        options.setFormListing(listing);
+        return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, options)
+                : _generator.generateHtmlReport(reader, options);
     }
 
     @Override
-    public Report generateViewListingReport(List<DetailsCase> caseList, String generator,
+    public Report generateDetailListingReport(ValueStoreReader reader, List<DetailsCase> caseList, String generator,
             Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException {
         DetailsFormListing.Builder lb = DetailsFormListing.newBuilder().usingGenerator(generator)
                 .addProperties(properties).addCases(caseList).columns(columns).asSpreadSheet(asSpreadSheet);
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());
-        final ValueStoreReader reader = new BeanValueStore(listing).getReader();
-        return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, new FormListingOptions())
-                : _generator.generateHtmlReport(reader, new FormListingOptions());
+        final FormListingOptions options = new FormListingOptions();
+        options.setFormListing(listing);
+        return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, options)
+                : _generator.generateHtmlReport(reader, options);
     }
 
     @Override
-    public Report generateViewListingReport(String letterGenerator, String letterName, Map<String, Object> properties)
-            throws UnifyException {
+    public Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator, String letterName,
+            Map<String, Object> properties) throws UnifyException {
         final LetterFormListing letterFormListing = new LetterFormListing(letterName, letterGenerator, properties);
         final LetterFormListingGenerator _generator = (LetterFormListingGenerator) getComponent(
                 letterFormListing.getGenerator());
-        return _generator.generateHtmlReport(new BeanValueStore(letterFormListing).getReader(),
-                new FormListingOptions());
+        final FormListingOptions options = new FormListingOptions();
+        options.setFormListing(letterFormListing);
+        return _generator.generateHtmlReport(reader, options);
     }
 
     private void ensureAutoFormatFields(EntityDef _entityDef, Entity inst) throws UnifyException {
