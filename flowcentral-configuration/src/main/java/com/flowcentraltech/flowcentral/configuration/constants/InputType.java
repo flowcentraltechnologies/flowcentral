@@ -82,6 +82,10 @@ public enum InputType implements EnumConst {
             "LNA",
             true,
             DataType.LONG),
+    MAPPED(
+            "MPP",
+            false,
+            DataType.LONG),
     FLOAT(
             "FL",
             false,

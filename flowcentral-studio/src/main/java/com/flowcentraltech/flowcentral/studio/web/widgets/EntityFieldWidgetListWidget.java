@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.studio.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.util.ApplicationQueryUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityListWidget;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -39,6 +40,7 @@ import com.tcdng.unify.core.database.Query;
         @UplAttribute(name = "ref", type = String[].class, defaultVal = "application.appWidgetTypeRef") })
 public class EntityFieldWidgetListWidget extends EntityListWidget {
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void addMoreResultRestriction(Query<? extends Entity> query) throws UnifyException {
         super.addMoreResultRestriction(query);
@@ -48,7 +50,7 @@ public class EntityFieldWidgetListWidget extends EntityListWidget {
             type = application().resolveListOnlyEntityDataType(appEntityField);
         }
 
-        ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
+        ApplicationQueryUtils.addWidgetTypeCriteria((Query<AppWidgetType>) query, type);
     }
 
 }
