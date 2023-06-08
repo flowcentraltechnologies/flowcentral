@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
+import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.web.data.LetterFormListing;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
@@ -61,6 +62,25 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
     }
 
     @Override
+    protected final void writeReportAddendum(ValueStoreReader reader, ListingReportProperties listingProperties,
+            ListingGeneratorWriter wtiter) throws UnifyException {
+        writeLetterAddendum(reader, listingProperties, wtiter);
+
+    }
+
+    @Override
+    protected final void writeReportFooter(ValueStoreReader reader, ListingReportProperties listingProperties,
+            ListingGeneratorWriter wtiter) throws UnifyException {
+        writeLetterFooter(reader, listingProperties, wtiter);
+    }
+
+    @Override
+    protected final void writeReportHeader(ValueStoreReader reader, ListingReportProperties listingProperties,
+            ListingGeneratorWriter wtiter) throws UnifyException {
+        writeLetterHeader(reader, listingProperties, wtiter);
+    }
+
+    @Override
     protected final void doWriteBody(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         ListingColumn[] columns = new ListingColumn[] { new ListingColumn(HAlignType.LEFT, 100) };
@@ -78,4 +98,14 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
 
     protected abstract String getLetterBody(ValueStoreReader reader, LetterFormListing letterFormListing)
             throws UnifyException;
+
+    protected abstract void writeLetterAddendum(ValueStoreReader reader, ListingReportProperties listingProperties,
+            ListingGeneratorWriter writer) throws UnifyException;
+
+    protected abstract void writeLetterFooter(ValueStoreReader reader, ListingReportProperties listingProperties,
+            ListingGeneratorWriter writer) throws UnifyException;
+
+    protected abstract void writeLetterHeader(ValueStoreReader reader, ListingReportProperties listingProperties,
+            ListingGeneratorWriter writer) throws UnifyException;
+
 }

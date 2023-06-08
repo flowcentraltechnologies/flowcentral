@@ -32,19 +32,19 @@ import com.tcdng.unify.core.data.ValueStoreReader;
 public class BasicNotificationLetterFormListingGenerator extends AbstractNotificationLetterFormListingGenerator {
 
     @Override
-    protected void writeReportHeader(ValueStoreReader reader, ListingReportProperties properties,
+    protected void writeLetterAddendum(ValueStoreReader reader, ListingReportProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         
     }
 
     @Override
-    protected void writeReportAddendum(ValueStoreReader reader, ListingReportProperties properties,
+    protected void writeLetterFooter(ValueStoreReader reader, ListingReportProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         
     }
 
     @Override
-    protected void writeReportFooter(ValueStoreReader reader, ListingReportProperties properties,
+    protected void writeLetterHeader(ValueStoreReader reader, ListingReportProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         
     }
