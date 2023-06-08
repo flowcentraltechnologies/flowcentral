@@ -81,6 +81,7 @@ public final class CommonInputUtils {
         map.put(InputType.SHORT, ShortInput.class);
         map.put(InputType.INTEGER, IntegerInput.class);
         map.put(InputType.LONG, LongInput.class);
+        map.put(InputType.MAPPED, LongInput.class);
         map.put(InputType.FLOAT, FloatInput.class);
         map.put(InputType.DOUBLE, DoubleInput.class);
         map.put(InputType.DECIMAL, BigDecimalInput.class);
