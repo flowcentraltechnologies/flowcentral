@@ -47,6 +47,7 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
 
     @Override
     public final void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
+        logDebug("Composing and sending notification for value [{0}]...", reader.getValueObject());
         T notifWrapper = getTemplateWrapper(notifWrapperType);
 
         // Set recipients
@@ -63,18 +64,23 @@ public abstract class AbstractNotificationTemplateAlertSender<T extends NotifTem
             }
         }
 
-        // Set template variables
-        setTemplateVariables(notifWrapper, reader);
+        if (notifWrapper.isWithRecipients()) {
+            // Set template variables
+            setTemplateVariables(notifWrapper, reader);
 
-        // Set attachments
-        List<Attachment> attachmentList = generateAttachments(reader);
-        if (!DataUtils.isBlank(attachmentList)) {
-            for (Attachment attachment : attachmentList) {
-                notifWrapper.addAttachment(attachment);
+            // Set attachments
+            List<Attachment> attachmentList = generateAttachments(reader);
+            if (!DataUtils.isBlank(attachmentList)) {
+                for (Attachment attachment : attachmentList) {
+                    notifWrapper.addAttachment(attachment);
+                }
             }
-        }
 
-        notification().sendNotification(notifWrapper.getMessage());
+            notification().sendNotification(notifWrapper.getMessage());
+            logDebug("Notification successfully prepared for sending.");
+        } else {
+            logDebug("Send notifcation aborted because there are no recipients.");
+        }
     }
 
     /**

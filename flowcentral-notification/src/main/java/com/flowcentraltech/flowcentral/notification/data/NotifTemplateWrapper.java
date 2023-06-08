@@ -56,4 +56,6 @@ public interface NotifTemplateWrapper {
     void addAttachment(Attachment attachment);
 
     NotifMessage getMessage();
+    
+    boolean isWithRecipients();
 }

@@ -157,6 +157,10 @@ public class NotifMessage {
             return this;
         }
 
+        public boolean isWithRecipients() {
+            return !DataUtils.isBlank(recipients);
+        }
+        
         public NotifMessage build() {
             if (DataUtils.isBlank(recipients)) {
                 throw new IllegalArgumentException("At least one recipient is required.");

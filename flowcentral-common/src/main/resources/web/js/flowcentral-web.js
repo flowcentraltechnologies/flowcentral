@@ -465,6 +465,7 @@ fux.rigLineEntries = function(rgp) {
 	// Handle on change
 	var chgId = rgp.pOnChgId;
 	if (chgId && chgId.length) {
+		const previewId = rgp.pPreviewId;
 		const moveUpId = rgp.pMoveUpId;
 		const moveDownId = rgp.pMoveDownId;
 		const delId = rgp.pDelId;
@@ -489,6 +490,13 @@ fux.rigLineEntries = function(rgp) {
 		evpDel.uRef = [ id ];
 		evpDel.uPanels = [ rgp.pContId ];
 
+		const evpPreview = ux.newEvPrm(rgp);
+		evpPreview.uCmd = id + "->previewInput";
+		evpPreview.uRef = [ id ];
+		evpPreview.uPanels = [ rgp.pContId ];
+
+		ux.addHdl(_id(previewId), "change", ux.post, evpPreview);
+		
 		for (var i = 0; i < chgId.length; i++) {
 			var idx = "d" + i;
 			ux.addHdl(_id(chgId[i]), "change", ux.post, evpNorm);
