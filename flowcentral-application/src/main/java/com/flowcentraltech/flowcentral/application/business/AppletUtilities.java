@@ -1886,6 +1886,8 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Generates a view listing report as byte array.
      * 
+     * @param reader
+     *                      the source reader
      * @param tableName
      *                      the table name
      * @param dataList
@@ -1902,12 +1904,15 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList, String generator,
-            Map<String, Object> properties, Formats formats, boolean asSpreadSheet) throws UnifyException;
+    byte[] generateDetailListingReportAsByteArray(ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet) throws UnifyException;
 
     /**
      * Generates a listing report as byte array.
      * 
+     * @param reader
+     *                           the source reader
      * @param tableName
      *                           the table name
      * @param dataList
@@ -1930,14 +1935,16 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] generateViewListingReportAsByteArray(String tableName, List<? extends Entity> dataList, String generator,
-            Map<String, Object> properties, Formats formats, boolean asSpreadSheet,
-            List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
-            throws UnifyException;
+    byte[] generateDetailListingReportAsByteArray(ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet, List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines,
+            int summaryTitleColumn) throws UnifyException;
 
     /**
      * Generates a listing report as byte array.
      * 
+     * @param reader
+     *                      the source reader
      * @param caseList
      *                      the details case list
      * @param generator
@@ -1952,12 +1959,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] generateViewListingReportAsByteArray(List<DetailsCase> caseList, String generator,
+    byte[] generateDetailListingReportAsByteArray(ValueStoreReader reader, List<DetailsCase> caseList, String generator,
             Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException;
 
     /**
      * Generates a listing report as byte array.
      * 
+     * @param reader
+     *                        the source reader
      * @param letterGenerator
      *                        the letter generator
      * @param letterName
@@ -1967,7 +1976,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] generateViewListingReportAsByteArray(String letterGenerator, String letterName,
+    byte[] generateLetterListingReportAsByteArray(ValueStoreReader reader, String letterGenerator, String letterName,
             Map<String, Object> properties) throws UnifyException;
 
     /**
@@ -1989,6 +1998,8 @@ public interface AppletUtilities extends UnifyComponent {
     /**
      * Generates a listing report.
      * 
+     * @param reader
+     *                      the source reader
      * @param tableName
      *                      the table name
      * @param dataList
@@ -2005,12 +2016,15 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
-            Map<String, Object> properties, Formats formats, boolean asSpreadSheet) throws UnifyException;
+    Report generateDetailListingReport(ValueStoreReader reader, String tableName, List<? extends Entity> dataList,
+            String generator, Map<String, Object> properties, Formats formats, boolean asSpreadSheet)
+            throws UnifyException;
 
     /**
      * Generates a listing report.
      * 
+     * @param reader
+     *                           the source reader
      * @param tableName
      *                           the table name
      * @param dataList
@@ -2033,14 +2047,16 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(String tableName, List<? extends Entity> dataList, String generator,
-            Map<String, Object> properties, Formats formats, boolean asSpreadSheet,
+    Report generateDetailListingReport(ValueStoreReader reader, String tableName, List<? extends Entity> dataList,
+            String generator, Map<String, Object> properties, Formats formats, boolean asSpreadSheet,
             List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines, int summaryTitleColumn)
             throws UnifyException;
 
     /**
      * Generates a listing report.
      * 
+     * @param reader
+     *                      the source reader
      * @param caseList
      *                      the details case list
      * @param generator
@@ -2055,12 +2071,14 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(List<DetailsCase> caseList, String generator, Map<String, Object> properties,
-            int columns, boolean asSpreadSheet) throws UnifyException;
+    Report generateDetailListingReport(ValueStoreReader reader, List<DetailsCase> caseList, String generator,
+            Map<String, Object> properties, int columns, boolean asSpreadSheet) throws UnifyException;
 
     /**
      * Generates a listing report as byte array.
      * 
+     * @param reader
+     *                        the source reader
      * @param letterGenerator
      *                        the letter generator
      * @param letterName
@@ -2070,6 +2088,6 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateViewListingReport(String letterGenerator, String letterName, Map<String, Object> properties)
-            throws UnifyException;
+    Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator, String letterName,
+            Map<String, Object> properties) throws UnifyException;
 }

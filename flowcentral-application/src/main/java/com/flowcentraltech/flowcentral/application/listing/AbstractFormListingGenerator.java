@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.util.EntityImage;
 import com.flowcentraltech.flowcentral.application.util.EntityImageUtils;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
 import com.tcdng.unify.common.util.StringToken;
@@ -147,18 +148,18 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writer.write(additional);
             writer.write("\">");
             writeReportHeader(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
-                            writer, pausePrintColors, false));
+                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(), themeManager, entityImageProvider,
+                            listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateHtmlListing(listingReportProperties.getName(), reader, listingReportProperties, writer,
+            generateHtmlListing(listingOptions.getFormListing(), listingReportProperties.getName(), reader, listingReportProperties, writer,
                     pausePrintColors, false);
             writeReportAddendum(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
-                            writer, pausePrintColors, false));
+                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(), themeManager, entityImageProvider,
+                            listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
             writeReportFooter(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(themeManager, entityImageProvider, listingReportProperties.getName(),
-                            writer, pausePrintColors, false));
+                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(), themeManager, entityImageProvider,
+                            listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
@@ -182,8 +183,9 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
-            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(themeManager, entityImageProvider,
-                    listingReportProperties.getName(), sheet, pausePrintColors, false);
+            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(listingOptions.getFormListing(),
+                    themeManager, entityImageProvider, listingReportProperties.getName(), sheet, pausePrintColors,
+                    false);
             writeReportHeader(reader, listingReportProperties, writer);
             doWriteBody(reader, listingReportProperties, writer);
             writeReportAddendum(reader, listingReportProperties, writer);
@@ -198,7 +200,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     @Override
     public final void generateListing(ValueStoreReader reader, ListingProperties listingProperties,
             ResponseWriter writer) throws UnifyException {
-        generateHtmlListing("", reader, listingProperties, writer, Collections.emptySet(), true);
+        generateHtmlListing(null, "", reader, listingProperties, writer, Collections.emptySet(), true);
     }
 
     protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;
@@ -229,7 +231,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             List<StringToken> tokenList) throws UnifyException {
         return au.getStringGenerator(reader, tokenList);
     }
-    
+
     protected synchronized String retrieveFormattedDate(ValueStoreReader reader, String propertyName)
             throws UnifyException {
         return reader.read(String.class, propertyName, dateFormatterMap.get(getSessionLocale()));
@@ -321,10 +323,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         writer.writeRow(new ListingCell(ListingCellType.ENTITY_PROVIDER_IMAGE, resourceName, style));
     }
 
-    private void generateHtmlListing(final String listingType, ValueStoreReader reader,
+    private void generateHtmlListing(FormListing formListing, final String listingType, ValueStoreReader reader,
             ListingProperties listingProperties, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) throws UnifyException {
-        ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(themeManager, entityImageProvider,
+        ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(formListing, themeManager, entityImageProvider,
                 listingType, writer, pausePrintColors, highlighting);
         doWriteBody(reader, listingProperties, generator);
         generator.close();

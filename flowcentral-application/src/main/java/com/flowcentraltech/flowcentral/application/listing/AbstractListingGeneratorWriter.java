@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
+import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -48,6 +49,8 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
 
     protected final boolean highlighting;
 
+    protected final FormListing formListing;
+    
     protected ListingColorType rowColor;
 
     protected int[] sectionColumnWidth;
@@ -66,8 +69,9 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
 
     private Set<ListingColorType> pauseRowPrintColors;
 
-    public AbstractListingGeneratorWriter(ThemeManager themeManager, ImageProvider entityImageProvider,
+    public AbstractListingGeneratorWriter(FormListing formListing, ThemeManager themeManager, ImageProvider entityImageProvider,
             String listingType, Set<ListingColorType> pausePrintColors, boolean highlighting) {
+        this.formListing = formListing;
         this.themeManager = themeManager;
         this.entityImageProvider = entityImageProvider;
         this.listingType = listingType;
@@ -75,6 +79,11 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
         this.pauseRowPrinting = false;
         this.pauseRowPrintColors = pausePrintColors;
         this.itemColorRules = new ArrayList<ItemColorRule>();
+    }
+
+    @Override
+    public <T extends FormListing> T getFormListing(Class<T> formListingType) {
+        return (T) formListing;
     }
 
     @Override

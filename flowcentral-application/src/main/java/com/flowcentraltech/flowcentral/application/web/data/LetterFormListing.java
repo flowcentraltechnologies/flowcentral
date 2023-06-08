@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.data;
 
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -26,7 +27,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class LetterFormListing {
+public class LetterFormListing implements FormListing{
 
     private Map<String, Object> properties;
 

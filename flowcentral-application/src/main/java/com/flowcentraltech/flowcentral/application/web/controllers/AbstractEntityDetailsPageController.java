@@ -41,6 +41,7 @@ import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.tcdng.unify.core.UnifyComponentContext;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.IndexedTarget;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -259,9 +260,9 @@ public abstract class AbstractEntityDetailsPageController<T extends AbstractEnti
     private final String viewListingReport(TableDef tableDef, String generator, Map<String, Object> properties,
             Formats formats, boolean spreadSheet) throws UnifyException {
         final EntityListTable table = getResultTable();
-        final Report report = au().generateViewListingReport(tableDef.getLongName(), table.getSourceObject(), generator,
-                properties, formats, spreadSheet, table.getPreTableSummaryLines(), table.getPostTableSummaryLines(),
-                table.getTotalLabelColumnIndex());
+        final Report report = au().generateDetailListingReport(new BeanValueStore(getPageBean()).getReader(),
+                tableDef.getLongName(), table.getSourceObject(), generator, properties, formats, spreadSheet,
+                table.getPreTableSummaryLines(), table.getPostTableSummaryLines(), table.getTotalLabelColumnIndex());
         return viewListingReport(report);
     }
 

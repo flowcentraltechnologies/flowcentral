@@ -17,10 +17,10 @@ package com.flowcentraltech.flowcentral.notification.listing;
 
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.listing.ListingGeneratorWriter;
-import com.flowcentraltech.flowcentral.application.web.data.LetterFormListing;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Basic notification letter form listing generator.
@@ -32,21 +32,22 @@ import com.tcdng.unify.core.annotation.Component;
 public class BasicNotificationLetterFormListingGenerator extends AbstractNotificationLetterFormListingGenerator {
 
     @Override
-    protected void writeLetterHeader(LetterFormListing letterFormListing, ListingReportProperties properties,
+    protected void writeLetterAddendum(ValueStoreReader reader, ListingReportProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
- 
+        
     }
 
     @Override
-    protected void writeLetterAddendum(LetterFormListing letterFormListing, ListingReportProperties properties,
+    protected void writeLetterFooter(ValueStoreReader reader, ListingReportProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
- 
+        
     }
 
     @Override
-    protected void writeLetterFooter(LetterFormListing letterFormListing, ListingReportProperties properties,
+    protected void writeLetterHeader(ValueStoreReader reader, ListingReportProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
- 
+        
     }
+
 
 }
