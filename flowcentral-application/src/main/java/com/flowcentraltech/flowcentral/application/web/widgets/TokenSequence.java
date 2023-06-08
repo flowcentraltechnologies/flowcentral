@@ -150,7 +150,12 @@ public class TokenSequence {
     public void preview() throws UnifyException {
         preview = getParameterizedString();
     }
-        
+    
+    public void setPreview(String preview) throws UnifyException {
+        this.preview = preview;
+        loadEntryList(preview, editable);
+    }
+    
     public String getPreview() {
         return preview;
     }

@@ -51,18 +51,17 @@ public class TokenSequenceWriter extends AbstractControlWriter {
         writer.write("<table style=\"width:100%;height:100%;table-layout:fixed;\">");
         writer.write("<tr style=\"height:100%;\">");
 
+        final boolean disabled = tokenSequenceWidget.isContainerDisabled();
+        final boolean editable = tokenSequenceWidget.isContainerEditable();
+        final boolean disabledOrNotEditable = disabled || !editable;
+
         // Preview
         writer.write("<td class=\"previewfrm\">");
         writer.write("<span class=\"caption\">");
         writer.write(resolveSessionMessage("$m{tokensequence.template}"));
         writer.write("</span>");
-        writer.write("<div class=\"previewbox\" style=\"display:block;width:100%;overflow-y:auto;\">");
-        writer.write("<span class=\"previewbdy\">");
-        String preview = tokenSequenceWidget.getPreview();
-        if (!StringUtils.isBlank(preview)) {
-            writer.writeWithHtmlEscape(preview);
-        }
-        writer.write("</span>");
+        writer.write("<div class=\"previewbox\" style=\"display:block;width:100%;\">");
+        writer.writeStructureAndContent(tokenSequenceWidget.getPreviewTextCtrl());
         writer.write("</div>");
         writer.write("</td>");
 
@@ -80,6 +79,18 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             Control deleteCtrl = tokenSequenceWidget.getDeleteCtrl();
             final int len = valueStoreList.size();
             final int last = len - 1;
+
+            tokenSelectCtrl.setDisabled(disabled);
+            textCtrl.setDisabled(disabled);
+            fieldSelectCtrl.setDisabled(disabled);
+            paramCtrl.setDisabled(disabled);
+            generatorSelectCtrl.setDisabled(disabled);
+
+            tokenSelectCtrl.setEditable(editable);
+            textCtrl.setEditable(editable);
+            fieldSelectCtrl.setEditable(editable);
+            paramCtrl.setEditable(editable);
+            generatorSelectCtrl.setEditable(editable);
 
             final String typeLabel = resolveSessionMessage("$m{tokensequence.type}");
             final String textLabel = resolveSessionMessage("$m{tokensequence.text}");
@@ -129,11 +140,12 @@ public class TokenSequenceWriter extends AbstractControlWriter {
                 } else {
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
-                }               
+                }
 
                 writer.write("<td class=\"atab\">");
-                moveUpCtrl.setDisabled(i == 0);
-                moveDownCtrl.setDisabled(i >= (len - 2));
+                moveUpCtrl.setDisabled(disabledOrNotEditable || i == 0);
+                moveDownCtrl.setDisabled(disabledOrNotEditable || i >= (len - 2));
+                deleteCtrl.setDisabled(disabledOrNotEditable);
                 writeActionItem(writer, lineValueStore, moveUpCtrl);
                 writeActionItem(writer, lineValueStore, moveDownCtrl);
                 if (i < last) {
@@ -147,7 +159,7 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             writer.write("</div>");
         }
         writer.write("</td>");
-        
+
         writer.write("</tr>");
         writer.write("</table>");
 
@@ -204,15 +216,20 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             }
         }
 
-        writer.beginFunction("fux.rigLineEntries");
-        writer.writeParam("pId", tokenSequenceWidget.getId());
-        writer.writeCommandURLParam("pCmdURL");
-        writer.writeParam("pContId", tokenSequenceWidget.getContainerId());
-        writer.writeParam("pMoveUpId", tokenSequenceWidget.getMoveUpCtrl().getBaseId());
-        writer.writeParam("pMoveDownId", tokenSequenceWidget.getMoveDownCtrl().getBaseId());
-        writer.writeParam("pDelId", tokenSequenceWidget.getDeleteCtrl().getBaseId());
-        writer.writeParam("pOnChgId", DataUtils.toArray(String.class, csb));
-        writer.endFunction();
+        final boolean editableAndNotDisabled = tokenSequenceWidget.isContainerEditable()
+                && !tokenSequenceWidget.isContainerDisabled();
+        if (editableAndNotDisabled) {
+            writer.beginFunction("fux.rigLineEntries");
+            writer.writeParam("pId", tokenSequenceWidget.getId());
+            writer.writeCommandURLParam("pCmdURL");
+            writer.writeParam("pContId", tokenSequenceWidget.getContainerId());
+            writer.writeParam("pMoveUpId", tokenSequenceWidget.getMoveUpCtrl().getBaseId());
+            writer.writeParam("pMoveDownId", tokenSequenceWidget.getMoveDownCtrl().getBaseId());
+            writer.writeParam("pDelId", tokenSequenceWidget.getDeleteCtrl().getBaseId());
+            writer.writeParam("pOnChgId", DataUtils.toArray(String.class, csb));
+            writer.writeParam("pPreviewId", tokenSequenceWidget.getPreviewTextCtrl().getId());
+            writer.endFunction();
+        }
     }
 
     private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)

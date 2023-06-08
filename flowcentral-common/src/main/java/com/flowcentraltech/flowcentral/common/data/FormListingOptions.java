@@ -27,24 +27,30 @@ public class FormListingOptions {
     
     private final int optionFlags;
 
+    private final boolean important;
+    
     public FormListingOptions() {
         this.formActionName = null;
         this.optionFlags = ~0;
+        this.important = false;
     }
 
     public FormListingOptions(String formActionName) {
         this.formActionName = formActionName;
         this.optionFlags = ~0;
+        this.important = false;
     }
 
     public FormListingOptions(int optionFlags) {
         this.formActionName = null;
         this.optionFlags = optionFlags;
+        this.important = true;
     }
 
     public FormListingOptions(String formActionName, int optionFlags) {
         this.formActionName = formActionName;
         this.optionFlags = optionFlags;
+        this.important = true;
     }
 
     public String getFormActionName() {
@@ -57,5 +63,15 @@ public class FormListingOptions {
     
     public boolean isOption(int option) {
         return (optionFlags & option) ==  option; 
+    }
+
+    public boolean isImportant() {
+        return important;
+    }
+
+    @Override
+    public String toString() {
+        return "[formActionName=" + formActionName + ", optionFlags=" + optionFlags + ", important="
+                + important + "]";
     }
 }

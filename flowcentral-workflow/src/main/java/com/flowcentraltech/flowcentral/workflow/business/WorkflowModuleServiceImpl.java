@@ -1357,9 +1357,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 }
             }
 
-            if (!DataUtils.isBlank(recipientList)) {
-                sender.composeAndSend(reader, recipientList);
-            }
+            sender.composeAndSend(reader, recipientList);
         }
     }
 

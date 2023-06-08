@@ -32,7 +32,7 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
     protected final NotifTemplateDef notifTemplateDef;
     
     protected final NotifMessage.Builder nmb;
-
+    
     public BaseNotifTemplateWrapper(NotifTemplateDef notifTemplateDef) {
         this.notifTemplateDef = notifTemplateDef;
         this.nmb = NotifMessage.newBuilder(notifTemplateDef.getLongName());
@@ -106,6 +106,11 @@ public abstract class BaseNotifTemplateWrapper implements NotifTemplateWrapper {
     @Override
     public NotifMessage getMessage() {
         return nmb.build();
+    }
+
+    @Override
+    public boolean isWithRecipients() {
+        return nmb.isWithRecipients();
     }
 
 }

@@ -35,6 +35,8 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
 
     private Control tokenSelectCtrl;
 
+    private Control previewTextCtrl;
+
     private Control textCtrl;
 
     private Control fieldSelectCtrl;
@@ -51,6 +53,7 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
 
     @Override
     protected void doOnPageConstruct() throws UnifyException {
+        previewTextCtrl = (Control) addInternalChildWidget("!ui-textarea styleClass:$e{previewbdy} binding:preview");
         tokenSelectCtrl = (Control) addInternalChildWidget(
                 "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:stringtokentypelist binding:tokenType");
         textCtrl = (Control) addInternalChildWidget("!ui-textarea styleClass:$e{fc-tiny} rows:2 binding:param");
@@ -93,6 +96,15 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
         getTokenSequence().removeEntry(getRequestTarget(int.class));
     }
 
+    @Action
+    public void previewInput() throws UnifyException {
+
+    }
+      
+    public Control getPreviewTextCtrl() {
+        return previewTextCtrl;
+    }
+
     public Control getTokenSelectCtrl() {
         return tokenSelectCtrl;
     }
@@ -129,6 +141,11 @@ public class TokenSequenceWidget extends AbstractValueListWidget<TokenSequenceEn
         return getValue(TokenSequence.class);
     }
 
+    public void setPreview(String preview) throws UnifyException {
+        TokenSequence tokenSequence = getTokenSequence();
+        tokenSequence.setPreview(preview);
+    }
+    
     public String getPreview() throws UnifyException {
         TokenSequence tokenSequence = getTokenSequence();
         return tokenSequence != null ? tokenSequence.getPreview() : null;

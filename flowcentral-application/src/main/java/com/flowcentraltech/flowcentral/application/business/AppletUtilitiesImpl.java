@@ -2295,10 +2295,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public Report generateViewListingReport(ValueStoreReader reader, String generator, FormListingOptions options)
             throws UnifyException {
+        logDebug("Generating view listing report using generator [{0}] and options [{1}]...", generator, options);
         final FormListingGenerator _generator = (FormListingGenerator) getComponent(generator);
         final int optionFlags = _generator.getOptionFlagsOverride(reader);
-        FormListingOptions _options = optionFlags == 0 ? options
+        FormListingOptions _options = options.isImportant() || optionFlags == 0 ? options
                 : new FormListingOptions(options.getFormActionName(), optionFlags);
+        logDebug("Using resolved option [{0}]...", generator, _options);
         return _generator.generateHtmlReport(reader, _options);
     }
 
