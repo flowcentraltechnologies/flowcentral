@@ -108,16 +108,18 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     }
                 }
             }
-        }      
-        
+        }
+
         // Install configured notification large texts
         if (applicationConfig.getNotifLargeTextsConfig() != null
                 && !DataUtils.isBlank(applicationConfig.getNotifLargeTextsConfig().getNotifLargeTextList())) {
             for (AppNotifLargeTextConfig applicationNotifLargeTextConfig : applicationConfig.getNotifLargeTextsConfig()
                     .getNotifLargeTextList()) {
+                logDebug(taskMonitor, "Reading notification configuration file [{0}]...",
+                        applicationNotifLargeTextConfig.getConfigFile());
                 NotifLargeTextInstall notifLargeTextInstall = getConfigurationLoader()
                         .loadNotifLargeTextInstallation(applicationNotifLargeTextConfig.getConfigFile());
-                 // Large Text
+                // Large Text
                 NotifLargeTextConfig notifLargeTextConfig = notifLargeTextInstall.getNotifLargeTextConfig();
                 String description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
@@ -149,8 +151,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 }
             }
         }
-        
-        
+
     }
 
     @Override
