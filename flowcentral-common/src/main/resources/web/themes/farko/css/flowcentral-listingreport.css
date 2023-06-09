@@ -40,7 +40,7 @@
 .fc-detailsformlisting .flcell {padding: 2px 2px;}
 
 /** Letter Form Listing */
-.fc-letterformlisting {font-size:10px;}
+.fc-letterformlisting {font-size:12px;}
 .fc-letterformlisting .flbody {border-left: none;border-right: none;}
 .fc-letterformlisting .flsectionbodycell {padding-left: none;padding-right: none;}
 .fc-letterformlisting .flcell {padding: 2px 2px;}
