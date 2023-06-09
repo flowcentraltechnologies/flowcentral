@@ -460,55 +460,28 @@ fux.rigFilter = function(rgp) {
 
 /** Line entries*/
 fux.rigLineEntries = function(rgp) {
-	var id = rgp.pId;
-
-	// Handle on change
-	var chgId = rgp.pOnChgId;
-	if (chgId && chgId.length) {
+	const fldId = rgp.pOnFldId;
+	if (fldId && fldId.length) {
+		const id = rgp.pId;
 		const previewId = rgp.pPreviewId;
-		const moveUpId = rgp.pMoveUpId;
-		const moveDownId = rgp.pMoveDownId;
-		const delId = rgp.pDelId;
-
-		const evpNorm = ux.newEvPrm(rgp);
-		evpNorm.uCmd = id + "->normalize";
-		evpNorm.uRef = [ id ];
-		evpNorm.uPanels = [ rgp.pContId ];
-
-		const evpMoveUp = ux.newEvPrm(rgp);
-		evpMoveUp.uCmd = id + "->moveUp";
-		evpMoveUp.uRef = [ id ];
-		evpMoveUp.uPanels = [ rgp.pContId ];
-
-		const evpMoveDown = ux.newEvPrm(rgp);
-		evpMoveDown.uCmd = id + "->moveDown";
-		evpMoveDown.uRef = [ id ];
-		evpMoveDown.uPanels = [ rgp.pContId ];
-
-		const evpDel = ux.newEvPrm(rgp);
-		evpDel.uCmd = id + "->delete";
-		evpDel.uRef = [ id ];
-		evpDel.uPanels = [ rgp.pContId ];
-
 		const evpPreview = ux.newEvPrm(rgp);
 		evpPreview.uCmd = id + "->previewInput";
 		evpPreview.uRef = [ id ];
 		evpPreview.uPanels = [ rgp.pContId ];
-
 		ux.addHdl(_id(previewId), "change", ux.post, evpPreview);
 		
-		for (var i = 0; i < chgId.length; i++) {
-			var idx = "d" + i;
-			ux.addHdl(_id(chgId[i]), "change", ux.post, evpNorm);
-			if (i > 0) {
-				ux.addHdl(_id(moveUpId + idx), "click", ux.post, evpMoveUp);
-			}
-			if (i < (chgId.length - 2)) {
-				ux.addHdl(_id(moveDownId + idx), "click", ux.post, evpMoveDown);
-			}
-			ux.addHdl(_id(delId + idx), "click", ux.post, evpDel);
+		const evp = ux.newEvPrm(rgp);
+		evp.uId = id;
+		for (var i = 0; i < fldId.length; i++) {
+			ux.addHdl(_id(fldId[i]), "click", fux.rigLineClick , evp);
 		}
 	}
+}
+
+fux.rigLineClick = function(uEv) {
+	const evp = uEv.evp;
+	// TODO
+	console.log(uEv.uTrg.value);
 }
 
 /** Mini Form */
