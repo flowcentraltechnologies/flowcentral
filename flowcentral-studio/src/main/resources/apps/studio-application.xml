@@ -2346,9 +2346,6 @@
 						column="1" visible="false" />
 					<field name="inputListKey" inputWidget="application.text"
 						column="1" visible="false" />
-					<field name="mappedEntity"
-						inputWidget="studio.mappedentitybynamelist" column="1"
-						required="true" visible="false" />
 					<field name="minLen" inputWidget="application.integer"
 						column="1" visible="false" />
 					<field name="maxLen" inputWidget="application.integer"
@@ -2432,7 +2429,6 @@
 						editable="false" />
 				</setStates>
 			</formStatePolicy>
-			visible="false"
 			<formStatePolicy type="on_switch"
 				name="refFieldPolicy"
 				description="$m{studio.appentityfield.form.formstatepolicy.reffield}">
@@ -2443,17 +2439,6 @@
 				<setStates>
 					<setState type="field"
 						target="references,defaultVal,nullable,basicSearch" visible="true" />
-				</setStates>
-			</formStatePolicy>
-			<formStatePolicy type="on_switch"
-				name="mappedFieldPolicy"
-				description="$m{studio.appentityfield.form.formstatepolicy.mappedfield}">
-				<onCondition>
-					<restriction type="equals" field="dataType" paramA="MD" />
-				</onCondition>
-				<setStates>
-					<setState type="field" target="mappedEntity"
-						visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"

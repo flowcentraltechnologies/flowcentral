@@ -19,9 +19,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
-import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.util.ApplicationQueryUtils;
 import com.flowcentraltech.flowcentral.common.business.SearchInputRestrictionGenerator;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -61,9 +60,7 @@ public class SearchInputFieldWidgetListCommand extends AbstractApplicationListCo
                 type = generator.getInputType().dataType();
             }
 
-            EntityClassDef entityClassDef = au().getEntityClassDef("application.appWidgetType");
-            Query<? extends BaseApplicationEntity> query = Query
-                    .of((Class<? extends BaseApplicationEntity>) entityClassDef.getEntityClass());
+            Query<AppWidgetType> query = (Query<AppWidgetType>) au().application().queryOf("application.appWidgetType");
             ApplicationQueryUtils.addWidgetTypeCriteria(query, type);
             return au().getApplicationEntities(query);
         }

@@ -212,6 +212,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     /**
      * Creates query of wrapper entity type.
      * 
+     * @param entityName
+     *                    the entity name
+     * @return the query object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Query<? extends Entity> queryOf(String entityName) throws UnifyException;
+
+    /**
+     * Creates query of wrapper entity type.
+     * 
      * @param wrapperType
      *                    the wrapper type
      * @return the query object

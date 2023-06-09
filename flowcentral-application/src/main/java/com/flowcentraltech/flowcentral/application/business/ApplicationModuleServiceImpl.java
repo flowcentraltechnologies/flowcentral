@@ -1346,6 +1346,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @SuppressWarnings("unchecked")
     @Override
+    public Query<? extends Entity> queryOf(String entityName) throws UnifyException {
+        final EntityClassDef entityClassDef = getEntityClassDef(entityName);
+        return Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public Query<? extends Entity> queryOf(Class<? extends EntityWrapper> wrapperType) throws UnifyException {
         final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
                 ApplicationCodeGenUtils.ENTITY_NAME);

@@ -18,14 +18,15 @@ package com.flowcentraltech.flowcentral.application.util;
 
 import java.util.Arrays;
 
+import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
+import com.flowcentraltech.flowcentral.configuration.constants.InputType;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.criterion.Amongst;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.IsNull;
 import com.tcdng.unify.core.criterion.Or;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 
 /**
@@ -40,7 +41,7 @@ public final class ApplicationQueryUtils {
 
     }
 
-    public static void addWidgetTypeCriteria(Query<? extends Entity> query, EntityFieldDataType entityFieldDataType) {
+    public static void addWidgetTypeCriteria(Query<AppWidgetType> query, EntityFieldDataType entityFieldDataType) {
         if (entityFieldDataType == null) {
             query.addRestriction(new IsNull("dataType"));
         } else {
@@ -62,6 +63,8 @@ public final class ApplicationQueryUtils {
                                 new Amongst("name", Arrays.asList("enumlist", "enumreadonlytext", "enumlistlabel"))))
                         .add(new And().add(new Equals("dataType", DataType.STRING))
                                 .add(new Equals("enumOption", Boolean.TRUE)).add(new Equals("listOption", true))));
+            } else if (entityFieldDataType.isMapped()) {
+                query.addRestriction(new Equals("inputType", InputType.MAPPED));
             } else {
                 DataType dataType = entityFieldDataType.dataType();
                 if (dataType == null) {
