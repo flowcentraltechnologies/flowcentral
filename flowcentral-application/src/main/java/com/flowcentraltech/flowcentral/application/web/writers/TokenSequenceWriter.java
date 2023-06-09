@@ -18,14 +18,15 @@ package com.flowcentraltech.flowcentral.application.web.writers;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.web.widgets.TokenSequenceEntry;
+import com.flowcentraltech.flowcentral.application.web.widgets.TokenSequence;
 import com.flowcentraltech.flowcentral.application.web.widgets.TokenSequenceWidget;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.data.BeanValueListStore;
+import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
@@ -51,114 +52,31 @@ public class TokenSequenceWriter extends AbstractControlWriter {
         writer.write("<table style=\"width:100%;height:100%;table-layout:fixed;\">");
         writer.write("<tr style=\"height:100%;\">");
 
-        final boolean disabled = tokenSequenceWidget.isContainerDisabled();
-        final boolean editable = tokenSequenceWidget.isContainerEditable();
-        final boolean disabledOrNotEditable = disabled || !editable;
-
         // Preview
-        writer.write("<td class=\"previewfrm\">");
+        writer.write("<td class=\"editorfrm\">");
         writer.write("<span class=\"caption\">");
         writer.write(resolveSessionMessage("$m{tokensequence.template}"));
         writer.write("</span>");
-        writer.write("<div class=\"previewbox\" style=\"display:block;width:100%;\">");
+        writer.write("<div class=\"editorbox\" style=\"display:block;width:100%;\">");
         writer.writeStructureAndContent(tokenSequenceWidget.getPreviewTextCtrl());
         writer.write("</div>");
         writer.write("</td>");
 
         // Editor
-        writer.write("<td class=\"editorfrm\">");
-        List<ValueStore> valueStoreList = tokenSequenceWidget.getValueList();
-        if (valueStoreList != null) {
-            Control tokenSelectCtrl = tokenSequenceWidget.getTokenSelectCtrl();
-            Control textCtrl = tokenSequenceWidget.getTextCtrl();
+        writer.write("<td class=\"optionsfrm\"><div>");
+        TokenSequence tokenSequence = tokenSequenceWidget.getTokenSequence();
+        if (tokenSequence != null) {
             Control fieldSelectCtrl = tokenSequenceWidget.getFieldSelectCtrl();
-            Control paramCtrl = tokenSequenceWidget.getParamCtrl();
-            Control generatorSelectCtrl = tokenSequenceWidget.getGeneratorSelectCtrl();
-            Control moveUpCtrl = tokenSequenceWidget.getMoveUpCtrl();
-            Control moveDownCtrl = tokenSequenceWidget.getMoveDownCtrl();
-            Control deleteCtrl = tokenSequenceWidget.getDeleteCtrl();
-            final int len = valueStoreList.size();
-            final int last = len - 1;
-
-            tokenSelectCtrl.setDisabled(disabled);
-            textCtrl.setDisabled(disabled);
-            fieldSelectCtrl.setDisabled(disabled);
-            paramCtrl.setDisabled(disabled);
-            generatorSelectCtrl.setDisabled(disabled);
-
-            tokenSelectCtrl.setEditable(editable);
-            textCtrl.setEditable(editable);
-            fieldSelectCtrl.setEditable(editable);
-            paramCtrl.setEditable(editable);
-            generatorSelectCtrl.setEditable(editable);
-
-            final String typeLabel = resolveSessionMessage("$m{tokensequence.type}");
-            final String textLabel = resolveSessionMessage("$m{tokensequence.text}");
-            final String fieldLabel = resolveSessionMessage("$m{tokensequence.field}");
-            final String usesLabel = resolveSessionMessage("$m{tokensequence.usesformatter}");
-            final String generatorLabel = resolveSessionMessage("$m{tokensequence.usesgenerator}");
-            writer.write("<span class=\"caption\">");
-            writer.write(resolveSessionMessage("$m{tokensequence.editor}"));
-            writer.write("</span>");
-            writer.write("<div class=\"editorbox\" style=\"display:block;width:100%;overflow-y:auto;\">");
-            writer.write("<table class=\"editor\" style=\"display: block;width:100%;table-layout:fixed;\">");
-            for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                TokenSequenceEntry fso = (TokenSequenceEntry) lineValueStore.getValueObject();
-                writer.write("<tr class=\"line\">");
-                writeValuesItem(writer, lineValueStore, tokenSelectCtrl, typeLabel);
-                if (fso.isWithTokenType()) {
-                    switch (fso.getTokenType()) {
-                        case FORMATTED_PARAM:
-                            writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
-                            if (fso.isWithFieldName()) {
-                                writeValuesItem(writer, lineValueStore, paramCtrl, usesLabel);
-                            } else {
-                                writeBlankValuesItem(writer);
-                            }
-                            break;
-                        case GENERATOR_PARAM:
-                            writeValuesItem(writer, lineValueStore, generatorSelectCtrl, generatorLabel);
-                            writeBlankValuesItem(writer);
-                            break;
-                        case NEWLINE:
-                            writeBlankValuesItem(writer);
-                            writeBlankValuesItem(writer);
-                            break;
-                        case PARAM:
-                            writeValuesItem(writer, lineValueStore, fieldSelectCtrl, fieldLabel);
-                            writeBlankValuesItem(writer);
-                            break;
-                        case TEXT:
-                            writeValuesItem(writer, lineValueStore, textCtrl, textLabel);
-                            writeBlankValuesItem(writer);
-                            break;
-                        default:
-                            break;
-
-                    }
-                } else {
-                    writeBlankValuesItem(writer);
-                    writeBlankValuesItem(writer);
-                }
-
-                writer.write("<td class=\"atab\">");
-                moveUpCtrl.setDisabled(disabledOrNotEditable || i == 0);
-                moveDownCtrl.setDisabled(disabledOrNotEditable || i >= (len - 2));
-                deleteCtrl.setDisabled(disabledOrNotEditable);
-                writeActionItem(writer, lineValueStore, moveUpCtrl);
-                writeActionItem(writer, lineValueStore, moveDownCtrl);
-                if (i < last) {
-                    writeActionItem(writer, lineValueStore, deleteCtrl);
-                }
-                writer.write("</td>");
-                writer.write("</tr>");
-            }
-
-            writer.write("</table>");
-            writer.write("</div>");
+            fieldSelectCtrl.setDisabled(tokenSequenceWidget.isContainerDisabled());
+            fieldSelectCtrl.setEditable(tokenSequenceWidget.isContainerEditable());
+            List<? extends Listable> fieldParamList = tokenSequence.getEntityDef().getSortedFieldDefList();
+            ValueStore fieldValueStore = new BeanValueListStore(fieldParamList);
+            while (fieldValueStore.next()) {
+                 fieldSelectCtrl.setValueStore(fieldValueStore);
+                writer.writeStructureAndContent(fieldSelectCtrl);
+           }
         }
-        writer.write("</td>");
+        writer.write("</div></td>");
 
         writer.write("</tr>");
         writer.write("</table>");
@@ -170,50 +88,18 @@ public class TokenSequenceWriter extends AbstractControlWriter {
     protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
         super.doWriteBehavior(writer, widget);
         TokenSequenceWidget tokenSequenceWidget = (TokenSequenceWidget) widget;
-        List<ValueStore> valueStoreList = tokenSequenceWidget.getValueList();
-        List<String> csb = new ArrayList<String>();
-        if (valueStoreList != null) {
-            Control tokenSelectCtrl = tokenSequenceWidget.getTokenSelectCtrl();
+        List<String> fsb = new ArrayList<String>();
+        TokenSequence tokenSequence = tokenSequenceWidget.getTokenSequence();
+        if (tokenSequence != null) {
             Control fieldSelectCtrl = tokenSequenceWidget.getFieldSelectCtrl();
-            Control paramCtrl = tokenSequenceWidget.getParamCtrl();
-            Control textCtrl = tokenSequenceWidget.getTextCtrl();
-            Control generatorSelectCtrl = tokenSequenceWidget.getGeneratorSelectCtrl();
-            final int len = valueStoreList.size();
-            for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                TokenSequenceEntry fso = (TokenSequenceEntry) lineValueStore.getValueObject();
-                writeBehavior(writer, tokenSequenceWidget, lineValueStore, tokenSelectCtrl);
-                csb.add(tokenSelectCtrl.getId());
-                if (fso.isWithTokenType()) {
-                    switch (fso.getTokenType()) {
-                        case FORMATTED_PARAM:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, fieldSelectCtrl);
-                            csb.add(fieldSelectCtrl.getId());
-                            if (fso.isWithFieldName()) {
-                                writeBehavior(writer, tokenSequenceWidget, lineValueStore, paramCtrl);
-                                csb.add(paramCtrl.getId());
-                            }
-                            break;
-                        case GENERATOR_PARAM:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, generatorSelectCtrl);
-                            csb.add(generatorSelectCtrl.getId());
-                            break;
-                        case NEWLINE:
-                            break;
-                        case PARAM:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, fieldSelectCtrl);
-                            csb.add(fieldSelectCtrl.getId());
-                            break;
-                        case TEXT:
-                            writeBehavior(writer, tokenSequenceWidget, lineValueStore, textCtrl);
-                            csb.add(textCtrl.getId());
-                            break;
-                        default:
-                            break;
-
-                    }
-                }
-            }
+            fieldSelectCtrl.setDisabled(tokenSequenceWidget.isContainerDisabled());
+            fieldSelectCtrl.setEditable(tokenSequenceWidget.isContainerEditable());
+            List<? extends Listable> fieldParamList = tokenSequence.getEntityDef().getSortedFieldDefList();
+            ValueStore fieldValueStore = new BeanValueListStore(fieldParamList);
+            while (fieldValueStore.next()) {
+                 fieldSelectCtrl.setValueStore(fieldValueStore);
+                 writer.writeBehavior(fieldSelectCtrl);
+           }
         }
 
         final boolean editableAndNotDisabled = tokenSequenceWidget.isContainerEditable()
@@ -223,52 +109,9 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             writer.writeParam("pId", tokenSequenceWidget.getId());
             writer.writeCommandURLParam("pCmdURL");
             writer.writeParam("pContId", tokenSequenceWidget.getContainerId());
-            writer.writeParam("pMoveUpId", tokenSequenceWidget.getMoveUpCtrl().getBaseId());
-            writer.writeParam("pMoveDownId", tokenSequenceWidget.getMoveDownCtrl().getBaseId());
-            writer.writeParam("pDelId", tokenSequenceWidget.getDeleteCtrl().getBaseId());
-            writer.writeParam("pOnChgId", DataUtils.toArray(String.class, csb));
+            writer.writeParam("pOnFldId", DataUtils.toArray(String.class, fsb));
             writer.writeParam("pPreviewId", tokenSequenceWidget.getPreviewTextCtrl().getId());
             writer.endFunction();
-        }
-    }
-
-    private void writeValuesItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl, String label)
-            throws UnifyException {
-        writer.write("<td class=\"vitem\">");
-        writer.write("<div style=\"display:table;width:100%;\">");
-        writer.write("<div style=\"display:table-row;\">");
-        writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
-        writer.write("<span class=\"label\">");
-        writer.write(label);
-        writer.write("</span>");
-        writer.write("</div>");
-        writer.write("<div style=\"display:table-cell;vertical-align:top;\">");
-        ctrl.setValueStore(lineValueStore);
-        writer.writeStructureAndContent(ctrl);
-        writer.write("</div>");
-        writer.write("</div>");
-        writer.write("</div>");
-        writer.write("</td>");
-    }
-
-    private void writeBlankValuesItem(ResponseWriter writer) throws UnifyException {
-        writer.write("<td class=\"vitem\">");
-        writer.write("</td>");
-    }
-
-    private void writeActionItem(ResponseWriter writer, ValueStore lineValueStore, Control ctrl) throws UnifyException {
-        writer.write("<span style=\"display:inline-block;\">");
-        ctrl.setValueStore(lineValueStore);
-        writer.writeStructureAndContent(ctrl);
-        writer.write("</span>");
-    }
-
-    private void writeBehavior(ResponseWriter writer, TokenSequenceWidget tokenSequenceWidget,
-            ValueStore lineValueStore, Control ctrl) throws UnifyException {
-        ctrl.setValueStore(lineValueStore);
-        writer.writeBehavior(ctrl);
-        if (tokenSequenceWidget.isContainerEditable()) {
-            addPageAlias(tokenSequenceWidget.getId(), ctrl);
         }
     }
 }

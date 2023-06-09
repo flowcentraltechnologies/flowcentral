@@ -500,12 +500,13 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tokensequence .abutton:hover:enabled {color: #4c4c4c;background-color: #6080f0;}
 .fc-tokensequence .abutton:disabled {background: #eaeaea !important;cursor: default;}
 
-.fc-tokensequence .previewfrm {width:20%;padding:2px;}
-.fc-tokensequence .previewbox {border:1px solid #e8e8e8;height:240px;}
-.fc-tokensequence .previewbdy {display:block;padding:2px;white-space: pre-wrap;word-wrap: anywhere;font-size:8pt;height:100%;}
-.fc-tokensequence .editorfrm {width:80%;padding:2px;}
-.fc-tokensequence .editorbox {border:1px solid #e8e8e8;height:240px;max-height:240px;}
-.fc-tokensequence .editor {}
+.fc-tokensequence .editorfrm {width:60%;padding:2px;}
+.fc-tokensequence .editorbox {border:1px solid #e8e8e8;height:240px;}
+.fc-tokensequence .editorbdy {display:block;padding:2px;white-space: pre-wrap;word-wrap: anywhere;font-size:8pt;height:100%;}
+
+.fc-tokensequence .optionsfrm {width:40%;padding:2px;}
+.fc-tokensequence .optionsbox {border:1px solid #e8e8e8;height:240px;max-height:240px;}
+.fc-tokensequence .options {}
 
 /* Ref
 /* Search */

@@ -30,16 +30,16 @@ public final class EntityImageUtils {
     public static String encode(EntityImage image) {
         return image.getEntity() + ":" + image.getInstId() + ":" + image.getFieldName();
     }
-    
+
     public static EntityImage decode(String encoded) {
         try {
             String[] parts = encoded.split(":");
             if (parts.length == 3) {
-                return new EntityImage(parts[0], Long.valueOf(parts[1]), parts[2]);
+                return new EntityImage(parts[0], "null".equals(parts[1]) ? null : Long.valueOf(parts[1]), parts[2]);
             }
         } catch (Exception e) {
         }
-        
+
         return EntityImage.BLANK;
     }
 }

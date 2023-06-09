@@ -21,10 +21,10 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.util.ListingUtils;
 import com.flowcentraltech.flowcentral.common.data.FormListing;
+import com.tcdng.unify.core.ThemeManager;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.resource.ImageProvider;
-import com.tcdng.unify.web.ThemeManager;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
 /**
@@ -145,13 +145,8 @@ public class HtmlListingGeneratorWriter extends AbstractListingGeneratorWriter {
             if (cell.isWithContent()) {
                 if (cell.isFileImage() || cell.isEntityProviderImage()) {
                     writer.write("<img src=\"");
-                    if (cell.isFileImage()) {
-                        writer.writeFileImageContextURL(cell.getContent());
-                    } else {
-                        writer.write("data:image/*;base64,");
-                        writer.write(entityImageProvider.provideAsBase64String(cell.getContent()));
-                    }
-
+                    writer.write("data:image/*;base64,");
+                    writer.write(entityImageProvider.provideAsBase64String(cell.getContent()));
                     writer.write("\"");
                     if (cell.isWithContentStyle()) {
                         writer.write(" style=\"");
