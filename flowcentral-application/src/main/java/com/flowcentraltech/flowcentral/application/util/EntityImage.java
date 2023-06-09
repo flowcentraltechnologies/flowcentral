@@ -53,6 +53,10 @@ public class EntityImage {
         return instId;
     }
     
+    public boolean isNullInstance() {
+        return entity != null && fieldName != null && instId == null;
+    }
+    
     public boolean isPresent() {
         return entity != null && fieldName != null && instId != null;
     }

@@ -26,6 +26,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.resource.AbstractImageProvider;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Entity image provider.
@@ -51,6 +52,8 @@ public class EntityImageProvider extends AbstractImageProvider {
             EntityClassDef entityClassDef = appletUtilities.getEntityClassDef(image.getEntity());
             return appletUtilities.environment().value(byte[].class, image.getFieldName(), Query
                     .of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", image.getInstId()));
+        } else if (image.isNullInstance()) {
+            return DataUtils.ZEROLEN_BYTE_ARRAY;
         }
         
         return null;
