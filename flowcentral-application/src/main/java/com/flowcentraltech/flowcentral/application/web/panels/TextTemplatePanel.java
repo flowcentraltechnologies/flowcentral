@@ -16,9 +16,11 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.web.widgets.TokenSequence;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
@@ -32,14 +34,27 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
 @UplBinding("web/application/upl/texttemplatepanel.upl")
 public class TextTemplatePanel extends AbstractApplicationPanel {
 
+    @Override
+    public void switchState() throws UnifyException {
+        super.switchState();
+        TextTemplate textTemplate = getTextTemplate();
+        setWidgetVisible("errorMsg", !StringUtils.isBlank(textTemplate.getErrorMsg()));
+    }
+
     @Action
     public void set() throws UnifyException {
-        Popup popup = getCurrentPopup();
-        TextTemplate textTemplate = (TextTemplate) popup.getBackingBean();
-        textTemplate.set();
-        removeCurrentPopup();
-        setReloadOnSwitch();
-        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+        TextTemplate textTemplate = getTextTemplate();
+        TokenSequence.Error error = textTemplate.set();
+        if (error != null) {
+            String errorMsg = resolveSessionMessage(error.getMsg(), error.getParams());
+            textTemplate.setErrorMsg(errorMsg);
+            setWidgetVisible("errorMsg", true);
+        } else {
+            removeCurrentPopup();
+            setReloadOnSwitch();
+            setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+            setWidgetVisible("errorMsg", false);
+        }        
     }
 
     @Action
@@ -54,7 +69,8 @@ public class TextTemplatePanel extends AbstractApplicationPanel {
     }
 
     private TextTemplate getTextTemplate() throws UnifyException {
-        return getValue(TextTemplate.class);
+        Popup popup = getCurrentPopup();
+        return popup != null ? (TextTemplate) popup.getBackingBean() : getValue(TextTemplate.class);
     }
 
 }

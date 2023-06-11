@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -116,6 +117,8 @@ public class EntityDef extends BaseApplicationEntityDef {
     private EntityFieldDef fosterParentTypeDef;
 
     private EntityFieldDef categoryColumnDef;
+
+    private Set<String> fieldNames;
 
     private Set<String> auditFieldNames;
 
@@ -757,6 +760,27 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public String getAttachPrivilege() {
         return attachPrivilege;
+    }
+
+    public boolean isField(String fieldName) throws UnifyException {
+        return getFieldNames().contains(fieldName);
+    }
+    
+    public Set<String> getFieldNames() throws UnifyException {
+        if (fieldNames == null) {
+            synchronized (EntityDef.class) {
+                if (fieldNames == null) {
+                    fieldNames = new LinkedHashSet<String>();
+                    for (EntityFieldDef entityFieldDef : getSortedFieldDefList()) {
+                        fieldNames.add(entityFieldDef.getFieldName());
+                    }
+
+                    fieldNames = Collections.unmodifiableSet(fieldNames);
+                }
+            }
+        }
+
+        return fieldNames;
     }
 
     public Set<String> getAuditFieldNames() {

@@ -14,13 +14,16 @@
 // the License.
 
 !fc-texttemplatepanel layout:$d{!ui-vertical}
-	components:$c{titleBar editorPanel footerActionPanel}
+	components:$c{titleBar errorMsg editorPanel footerActionPanel}
 
 // Header
 !ui-titlebar:titleBar caption:$m{texttemplatepanel.title} captionBinding:title
 	components:$c{closeBtn} draggable:true
 !ui-image:closeBtn src:$t{images/cross_white.png} styleClass:$e{tbbutton}
      eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
+
+// Error
+!ui-label:errorMsg styleClass:$e{ui-loginmsg} style:$s{margin-left:4px;padding: 4px 8px;} binding:errorMsg
 
 // Editor panel
 !ui-panel:editorPanel layout:$d{!ui-vertical style:$s{width:100%;}} components:$c{tokenSequence}
@@ -37,7 +40,7 @@
     eventHandler:$d{!ui-event event:onclick action:$c{closeAct}}
 
 // Actions
-!ui-postcommand:setAct command:set debounce:true
+!ui-postcommand:setAct command:set components:$c{tokenSequence} debounce:true
 !ui-postcommand:clearAct command:clear
 !ui-postcommand:closeAct command:close
 

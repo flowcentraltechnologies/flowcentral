@@ -33,6 +33,8 @@ public class TextTemplate {
 
     private final String fieldName;
 
+    private String errorMsg;
+
     public TextTemplate(TokenSequence tokenSequence, ValueStore formValueStore, String fieldName) {
         this.tokenSequence = tokenSequence;
         this.formValueStore = formValueStore;
@@ -44,10 +46,25 @@ public class TextTemplate {
     }
 
     public void clear() throws UnifyException {
+        errorMsg = null;
         tokenSequence.clear();
     }
 
-    public void set() throws UnifyException {
-        formValueStore.store(fieldName, tokenSequence.getPreview());
+    public TokenSequence.Error set() throws UnifyException {
+        errorMsg = null;
+        TokenSequence.Error error = tokenSequence.validate();
+        if (error == null ) {
+            formValueStore.store(fieldName, tokenSequence.getPreview());
+        }
+        
+        return error;
+    }
+
+    public String getErrorMsg() {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg) {
+        this.errorMsg = errorMsg;
     }
 }
