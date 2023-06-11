@@ -18,8 +18,10 @@ package com.flowcentraltech.flowcentral.studio.web.lists;
 
 import com.flowcentraltech.flowcentral.application.listing.LetterFormListingGenerator;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
+import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.list.StringParam;
 
 /**
@@ -32,14 +34,21 @@ import com.tcdng.unify.core.list.StringParam;
 public class StudioReportableLetterGeneratorListCommand
         extends AbstractEntityTypeListCommand<LetterFormListingGenerator, StringParam> {
 
+    @Configurable
+    private ReportModuleService reportModuleService;
+
     public StudioReportableLetterGeneratorListCommand() {
         super(LetterFormListingGenerator.class, StringParam.class);
+    }
+
+    public final void setReportModuleService(ReportModuleService reportModuleService) {
+        this.reportModuleService = reportModuleService;
     }
 
     @Override
     protected String getEntityName(StringParam param) throws UnifyException {
         if (param.isPresent()) {
-            return param.getValue();
+            return reportModuleService.getReportableEntity(param.getValue());
         }
 
         return null;

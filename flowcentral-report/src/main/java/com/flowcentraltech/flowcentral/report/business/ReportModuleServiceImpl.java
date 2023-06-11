@@ -157,6 +157,13 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
+    public String getReportableEntity(String reportableName) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(reportableName);
+        return environment().value(String.class, "entity", new ReportableDefinitionQuery()
+                .applicationName(np.getApplicationName()).name(np.getEntityName()));
+    }
+
+    @Override
     public Long getReportConfigReportableDefinitionId(Long reportConfigurationId) throws UnifyException {
         String reportableName = environment().value(String.class, "reportable",
                 new ReportConfigurationQuery().id(reportConfigurationId));

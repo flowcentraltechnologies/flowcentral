@@ -22,6 +22,7 @@ import java.util.Locale;
 
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractFlowCentralListCommand;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
+import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -40,6 +41,9 @@ public class StudioReportableLargeTextListCommand extends AbstractFlowCentralLis
     @Configurable
     private NotificationModuleService notificationModuleService;
 
+    @Configurable
+    private ReportModuleService reportModuleService;
+    
     public StudioReportableLargeTextListCommand() {
         super(StringParam.class);
     }
@@ -48,10 +52,15 @@ public class StudioReportableLargeTextListCommand extends AbstractFlowCentralLis
         this.notificationModuleService = notificationModuleService;
     }
 
+    public final void setReportModuleService(ReportModuleService reportModuleService) {
+        this.reportModuleService = reportModuleService;
+    }
+
     @Override
     public List<? extends Listable> execute(Locale locale, StringParam params) throws UnifyException {
         if (params.isPresent()) {
-            return notificationModuleService.getEntityNotifLargeTexts(params.getValue());
+            final String entity = reportModuleService.getReportableEntity(params.getValue());
+            return notificationModuleService.getEntityNotifLargeTexts(entity);
         }
 
         return Collections.emptyList();
