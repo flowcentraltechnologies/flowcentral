@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -2292,6 +2293,47 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
             String letterName, Map<String, Object> properties) throws UnifyException {
         final Report report = generateLetterListingReport(reader, letterGenerator, letterName, properties);
         return reportProvider.generateReportAsByteArray(report);
+    }
+
+    @Override
+    public void generateViewListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            String generator, FormListingOptions options) throws UnifyException {
+        final Report report = generateViewListingReport(reader, generator, options);
+        reportProvider.generateReport(report, outputStream);
+    }
+
+    @Override
+    public void generateDetailListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            String tableName, List<? extends Entity> dataList, String generator, Map<String, Object> properties,
+            Formats formats, boolean asSpreadSheet) throws UnifyException {
+        generateDetailListingReportToOutputStream(outputStream, reader, tableName, dataList, generator, properties,
+                formats, asSpreadSheet, Collections.emptyList(), Collections.emptyList(), 0);
+    }
+
+    @Override
+    public void generateDetailListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            String tableName, List<? extends Entity> dataList, String generator, Map<String, Object> properties,
+            Formats formats, boolean asSpreadSheet, List<TableSummaryLine> preSummaryLines,
+            List<TableSummaryLine> postSummaryLines, int summaryTitleColumn) throws UnifyException {
+        final Report report = generateDetailListingReport(reader, tableName, dataList, generator, properties, formats,
+                asSpreadSheet, preSummaryLines, postSummaryLines, summaryTitleColumn);
+        reportProvider.generateReport(report, outputStream);
+    }
+
+    @Override
+    public void generateDetailListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            List<DetailsCase> caseList, String generator, Map<String, Object> properties, int columns,
+            boolean asSpreadSheet) throws UnifyException {
+        final Report report = generateDetailListingReport(reader, caseList, generator, properties, columns,
+                asSpreadSheet);
+        reportProvider.generateReport(report, outputStream);
+    }
+
+    @Override
+    public void generateLetterListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            String letterGenerator, String letterName, Map<String, Object> properties) throws UnifyException {
+        final Report report = generateLetterListingReport(reader, letterGenerator, letterName, properties);
+        reportProvider.generateReport(report, outputStream);
     }
 
     @Override

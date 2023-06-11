@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.business;
 
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -2090,4 +2091,124 @@ public interface AppletUtilities extends UnifyComponent {
      */
     Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator, String letterName,
             Map<String, Object> properties) throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param outputStream
+     *                     the output stream
+     * @param reader
+     *                     the source reader
+     * @param generator
+     *                     the listing generator
+     * @param options
+     *                     the listing options
+     * @return the generated report object
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateViewListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader, String generator,
+            FormListingOptions options) throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param outputStream
+     *                      the output stream
+     * @param reader
+     *                      the source reader
+     * @param tableName
+     *                      the table name
+     * @param dataList
+     *                      the data list
+     * @param generator
+     *                      the listing generator
+     * @param properties
+     *                      the report properties
+     * @param formats
+     *                      the formats
+     * @param asSpreadSheet
+     *                      indicates spread sheet
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateDetailListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet) throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param outputStream
+     *                           the output stream
+     * @param reader
+     *                           the source reader
+     * @param tableName
+     *                           the table name
+     * @param dataList
+     *                           the data list
+     * @param generator
+     *                           the listing generator
+     * @param properties
+     *                           the report properties
+     * @param formats
+     *                           the formats
+     * @param asSpreadSheet
+     *                           indicates spread sheet
+     * @param preSummaryLines
+     *                           pre-table summary lines
+     * @param postSummaryLines
+     *                           post-table summary lines
+     * @param summaryTitleColumn
+     *                           summary title column
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateDetailListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader, String tableName,
+            List<? extends Entity> dataList, String generator, Map<String, Object> properties, Formats formats,
+            boolean asSpreadSheet, List<TableSummaryLine> preSummaryLines, List<TableSummaryLine> postSummaryLines,
+            int summaryTitleColumn) throws UnifyException;
+
+    /**
+     * Generates a listing report.
+     * 
+     * @param outputStream
+     *                      the output stream
+     * @param reader
+     *                      the source reader
+     * @param caseList
+     *                      the details case list
+     * @param generator
+     *                      the listing generator
+     * @param properties
+     *                      the report properties
+     * @param columns
+     *                      the number of columns
+     * @param asSpreadSheet
+     *                      indicates spread sheet
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateDetailListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            List<DetailsCase> caseList, String generator, Map<String, Object> properties, int columns,
+            boolean asSpreadSheet) throws UnifyException;
+
+    /**
+     * Generates a listing report as byte array.
+     * 
+     * @param outputStream
+     *                        the output stream
+     * @param reader
+     *                        the source reader
+     * @param letterGenerator
+     *                        the letter generator
+     * @param letterName
+     *                        the letter name
+     * @param properties
+     *                        the letter properties
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void generateLetterListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
+            String letterGenerator, String letterName, Map<String, Object> properties) throws UnifyException;
 }
