@@ -81,6 +81,7 @@ public abstract class AbstractListingGeneratorWriter implements ListingGenerator
         this.itemColorRules = new ArrayList<ItemColorRule>();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends FormListing> T getFormListing(Class<T> formListingType) {
         return (T) formListing;

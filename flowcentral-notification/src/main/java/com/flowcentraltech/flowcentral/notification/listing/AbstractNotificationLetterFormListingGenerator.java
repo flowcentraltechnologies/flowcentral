@@ -47,7 +47,9 @@ public abstract class AbstractNotificationLetterFormListingGenerator extends Abs
         NotifLargeTextDef notifLargeTextDef = notificationModuleService
                 .getNotifLargeTextDef(letterFormListing.getLetterName());
         ParameterizedStringGenerator generator = getParameterizedStringGenerator(
-                new MapValueStore(letterFormListing.getProperties()).getReader(), notifLargeTextDef.getBodyTokenList());
+                letterFormListing.isEmptyProperties() ? reader
+                        : new MapValueStore(letterFormListing.getProperties()).getReader(),
+                notifLargeTextDef.getBodyTokenList());
         return generator.generate();
     }
 

@@ -58,4 +58,8 @@ public class LetterFormListing implements FormListing{
         return letterName;
     }
 
+    public boolean isEmptyProperties() {
+        return DataUtils.isBlank(properties);
+    }
+
 }
