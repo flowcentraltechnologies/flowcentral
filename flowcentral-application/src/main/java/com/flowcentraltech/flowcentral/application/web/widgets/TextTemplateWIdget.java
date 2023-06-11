@@ -22,7 +22,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.core.constant.Editable;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
@@ -41,8 +40,7 @@ public class TextTemplateWIdget extends AbstractPopupWindowTextField {
     protected Popup preparePopup() throws UnifyException {
         final EntityDef entityDef = au().getEntityDef(getUplAttribute(String.class, "entity", "entityBinding"));
         final String template = getValue(String.class);
-        TokenSequence tokenSequence = new TokenSequence(entityDef, template,
-                Editable.fromBoolean(isContainerEditable()));
+        TokenSequence tokenSequence = new TokenSequence(entityDef, template);
         return new Popup(ApplicationResultMappingConstants.SHOW_TEXT_TEMPLATE_EDITOR,
                 new TextTemplate(tokenSequence, getValueStore(), getBinding()));
     }

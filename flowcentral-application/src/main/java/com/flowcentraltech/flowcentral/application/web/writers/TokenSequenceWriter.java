@@ -63,7 +63,11 @@ public class TokenSequenceWriter extends AbstractControlWriter {
         writer.write("</td>");
 
         // Editor
-        writer.write("<td class=\"optionsfrm\"><div>");
+        writer.write("<td class=\"optionsfrm\">");
+        writer.write("<span class=\"caption\">");
+        writer.write(resolveSessionMessage("$m{tokensequence.availableparameters}"));
+        writer.write("</span>");
+        writer.write("<div class=\"optionsbox\" style=\"display:block;width:100%;\">");
         TokenSequence tokenSequence = tokenSequenceWidget.getTokenSequence();
         if (tokenSequence != null) {
             Control fieldSelectCtrl = tokenSequenceWidget.getFieldSelectCtrl();
@@ -72,9 +76,9 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             List<? extends Listable> fieldParamList = tokenSequence.getEntityDef().getSortedFieldDefList();
             ValueStore fieldValueStore = new BeanValueListStore(fieldParamList);
             while (fieldValueStore.next()) {
-                 fieldSelectCtrl.setValueStore(fieldValueStore);
+                fieldSelectCtrl.setValueStore(fieldValueStore);
                 writer.writeStructureAndContent(fieldSelectCtrl);
-           }
+            }
         }
         writer.write("</div></td>");
 
@@ -97,21 +101,18 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             List<? extends Listable> fieldParamList = tokenSequence.getEntityDef().getSortedFieldDefList();
             ValueStore fieldValueStore = new BeanValueListStore(fieldParamList);
             while (fieldValueStore.next()) {
-                 fieldSelectCtrl.setValueStore(fieldValueStore);
-                 writer.writeBehavior(fieldSelectCtrl);
-           }
+                fieldSelectCtrl.setValueStore(fieldValueStore);
+                writer.writeBehavior(fieldSelectCtrl);
+                fsb.add(fieldSelectCtrl.getId());
+            }
         }
 
-        final boolean editableAndNotDisabled = tokenSequenceWidget.isContainerEditable()
-                && !tokenSequenceWidget.isContainerDisabled();
-        if (editableAndNotDisabled) {
-            writer.beginFunction("fux.rigLineEntries");
-            writer.writeParam("pId", tokenSequenceWidget.getId());
-            writer.writeCommandURLParam("pCmdURL");
-            writer.writeParam("pContId", tokenSequenceWidget.getContainerId());
-            writer.writeParam("pOnFldId", DataUtils.toArray(String.class, fsb));
-            writer.writeParam("pPreviewId", tokenSequenceWidget.getPreviewTextCtrl().getId());
-            writer.endFunction();
-        }
+        writer.beginFunction("fux.rigLineEntries");
+        writer.writeParam("pId", tokenSequenceWidget.getId());
+        writer.writeCommandURLParam("pCmdURL");
+        writer.writeParam("pContId", tokenSequenceWidget.getContainerId());
+        writer.writeParam("pPreviewId", tokenSequenceWidget.getPreviewId());
+        writer.writeParam("pOnFldId", DataUtils.toArray(String.class, fsb));
+        writer.endFunction();
     }
 }

@@ -107,13 +107,11 @@ fux.menuCollapse = function(uEv) {
 fux.rigMenuSearch = function(rgp) {
 	const id = rgp.pId;
 	var evp = ux.newEvPrm(rgp);
-	evp.uId = id;
 	evp.uCmd = id + "->search";
 	evp.uIsReqTrg = true;
 	ux.addHdl(_id(rgp.pInpId), "input", ux.post, evp);
 
 	var evp = ux.newEvPrm(rgp);
-	evp.uId = id;
 	evp.uInpId = rgp.pInpId;
 	evp.uCmd = id + "->clear";
 	evp.uIsReqTrg = true;
@@ -175,7 +173,6 @@ fux.rigEntitySearch = function(rgp) {
 	const sel = _id(rgp.pFilId);
 	if (sel) {
 		const evp = ux.newEvPrm(rgp);
-		evp.uId = id;
 		evp.facId = rgp.pFacId;
 		evp.popupId = rgp.pPopId;
 		evp.frameId = rgp.pBrdId;
@@ -354,7 +351,6 @@ fux.rigEntitySelect = function(rgp) {
 	const sel = _id(rgp.pFilId);
 	if (sel) {
 		const evp = ux.newEvPrm(rgp);
-		evp.uId = id;
 		evp.uFacId = rgp.pFacId;
 		evp.uCmd = id + "->search";
 		if (rgp.pFormId) {
@@ -448,7 +444,6 @@ fux.rigFilter = function(rgp) {
 		for (var i = 0; i < chgId.length; i++) {
 			var idx = "d" + i;
 			ux.addHdl(_id(chgId[i]), "change", ux.post, evpNorm);
-
 			ux.addHdl(_id(swapId + idx), "click", ux.post, evpSwp);
 			ux.addHdl(_id(andId + idx), "click", ux.post, evpAnd);
 			ux.addHdl(_id(orId + idx), "click", ux.post, evpOr);
@@ -462,16 +457,8 @@ fux.rigFilter = function(rgp) {
 fux.rigLineEntries = function(rgp) {
 	const fldId = rgp.pOnFldId;
 	if (fldId && fldId.length) {
-		const id = rgp.pId;
-		const previewId = rgp.pPreviewId;
-		const evpPreview = ux.newEvPrm(rgp);
-		evpPreview.uCmd = id + "->previewInput";
-		evpPreview.uRef = [ id ];
-		evpPreview.uPanels = [ rgp.pContId ];
-		ux.addHdl(_id(previewId), "change", ux.post, evpPreview);
-		
 		const evp = ux.newEvPrm(rgp);
-		evp.uId = id;
+		evp.uPreviewId = rgp.pPreviewId;
 		for (var i = 0; i < fldId.length; i++) {
 			ux.addHdl(_id(fldId[i]), "click", fux.rigLineClick , evp);
 		}
@@ -480,8 +467,9 @@ fux.rigLineEntries = function(rgp) {
 
 fux.rigLineClick = function(uEv) {
 	const evp = uEv.evp;
-	// TODO
-	console.log(uEv.uTrg.value);
+	const pinput = _id(evp.uPreviewId);
+	ux.setTextAtCaret(pinput, "{{" + _id("trg_" + uEv.uTrg.id).value + "}}");
+	pinput.focus();
 }
 
 /** Mini Form */
@@ -537,7 +525,6 @@ fux.rigPopupWinText = function(rgp) {
 	if (elem) {
 		const id = rgp.pId;
 		const evp = ux.newEvPrm(rgp);
-		evp.uId = id;
 		evp.uCmd = id + "->popup";
 		evp.uRef = rgp.pRef;
 		evp.uIsDebounce = true;

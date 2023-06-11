@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 
@@ -39,15 +38,11 @@ public class TokenSequenceWidget extends AbstractMultiControl {
         previewTextCtrl = (Control) addInternalChildWidget("!ui-textarea styleClass:$e{editorbdy} binding:preview");
         fieldSelectCtrl = (Control) addInternalChildWidget(
                 "!ui-button styleClass:$e{abutton} captionBinding:listDecription binding:listKey");
-//        fieldSelectCtrl = (Control) addInternalChildWidget(
-//                "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:entityfielddeflist listParams:$l{entityDef} binding:fieldName");
-//        generatorSelectCtrl = (Control) addInternalChildWidget(
-//                "!ui-select styleClass:$e{fc-tiny} blankOption:$s{} list:paramgeneratorlist listParams:$s{entityDef} binding:param");
     }
 
-    @Action
-    public void previewInput() throws UnifyException {
-
+    @Override
+    public void addPageAliases() throws UnifyException {
+        addPageAlias(previewTextCtrl);
     }
       
     public Control getPreviewTextCtrl() {
@@ -58,6 +53,10 @@ public class TokenSequenceWidget extends AbstractMultiControl {
         return fieldSelectCtrl;
     }
 
+    public String getPreviewId() throws UnifyException {
+        return previewTextCtrl.getId();
+    }
+    
     public TokenSequence getTokenSequence() throws UnifyException {
         return getValue(TokenSequence.class);
     }
