@@ -247,6 +247,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 infos.add(new NotifLargeTextInfo(ApplicationNameUtils.getApplicationEntityLongName(
                         largeText.getApplicationName(), largeText.getName()), largeText.getDescription()));
             }
+            
+            return infos;
         }
         
         return Collections.emptyList();
