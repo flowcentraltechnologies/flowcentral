@@ -273,19 +273,23 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 .marginRight(reportOptions.getMarginRight()).marginTop(reportOptions.getMarginTop())
                 .pageWidth(reportOptions.getPageWidth()).pageHeight(reportOptions.getPageHeight())
                 .landscape(reportOptions.isLandscape()).build();
-        logDebug("Generating dynamic report  of type [{0}] using properties {1}...", reportOptions.getType(),
+        logDebug("Generating dynamic report of type [{0}] using properties [{1}]...", reportOptions.getType(),
                 pageProperties);
         // Letter
         if (reportOptions.isLetter()) {
+            logDebug("Generating letter report using generator [{0}] and large text [{1}]...",
+                    reportOptions.getLetterGenerator(), reportOptions.getLargeText());
             Query<? extends Entity> query = appletUtilities.application().queryOf(reportOptions.getEntity());
             query.addRestriction(reportOptions.getRestriction());
             Entity entity = environment().list(query);
             if (entity != null) {
+                logDebug("Backing entity record found for letter report...");
                 ValueStoreReader reader = new BeanValueStore(entity).getReader();
                 appletUtilities.generateLetterListingReportToOutputStream(outputStream, reader,
                         reportOptions.getLetterGenerator(), reportOptions.getLargeText(), Collections.emptyMap());
             } else {
                 // TODO Generate blank
+                logDebug("Could not find backing entity record letter report. Report generation aborted.");
             }
 
             return;
