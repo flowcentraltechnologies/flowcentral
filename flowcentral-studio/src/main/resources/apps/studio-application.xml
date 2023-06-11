@@ -125,6 +125,16 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioreportablebynamelist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="reportablelargetextlist"
+			description="$m{studio.widgettype.reportablelargetextlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioreportablelargetextlist listParams:$l{reportable} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
+		<widgetType name="reportablelettergeneratorlist"
+			description="$m{studio.widgettype.reportablelettergeneratorlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioreportablelettergeneratorlist listParams:$l{reportable} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="reffiltergeneratorrulelist"
 			description="$m{studio.widgettype.reffiltergeneratorrulelist}"
 			dataType="string" inputType="string"
@@ -3261,11 +3271,17 @@
 						column="1" disabled="true" required="true" />
 					<field name="reportable"
 						inputWidget="studio.reportablebynamelist" column="1"
-						required="true" />
+						required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
 					<field name="processor" inputWidget="application.text"
 						column="1" />
+					<field name="largeText"
+						inputWidget="studio.reportablelargetextlist" column="1"
+						required="true" visible="false"/>
+					<field name="letterGenerator"
+						inputWidget="studio.reportablelettergenerator" column="1"
+						required="true" visible="false"/>
 					<field name="showGrandFooter"
 						inputWidget="application.checkbox" column="1" />
 					<field name="invertGroupColors"
@@ -3344,7 +3360,7 @@
 					<setState type="field"
 						target="name,description,reportable" disabled="true" />
 				</setStates>
-			</formStatePolicy>
+			</formStatePolicy>LTR
 			<formStatePolicy type="on_switch"
 				name="onTabularPolicy"
 				description="$m{studio.reportconfiguration.form.formstatepolicy.tabular}">
@@ -3370,6 +3386,24 @@
 					<setState type="section" target="pageDetails"
 						visible="true" />
 					<setState type="tab" target="columns" visible="false" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="onLetterPolicy"
+				description="$m{studio.reportconfiguration.form.formstatepolicy.letter}">
+				<onCondition>
+					<restriction type="equals" field="type" paramA="LTR" />
+				</onCondition>
+				<setStates>
+					<setState type="field"
+						target="template,processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
+						visible="false" />
+					<setState type="field"
+						target="largeText,letterGenerator"
+						visible="true" />
+					<setState type="tab" target="placements" visible="false" />
+					<setState type="tab" target="columns" visible="false" />
+					<setState type="section" target="pageDetails" visible="false" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"
