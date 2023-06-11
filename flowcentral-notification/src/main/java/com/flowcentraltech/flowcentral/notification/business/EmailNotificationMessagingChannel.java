@@ -187,7 +187,7 @@ public class EmailNotificationMessagingChannel extends AbstractNotificationMessa
         }
 
         final boolean isHTML = NotifMessageFormat.HTML.equals(channelMessage.getFormat());
-        final String msg = isHTML ? HtmlUtils.formatHTML(channelMessage.getMessage()) : channelMessage.getMessage();
+        final String msg = isHTML ? HtmlUtils.formatEmailHTML(channelMessage.getMessage()) : channelMessage.getMessage();
         eb.fromSender(notifChannelDef.getSenderContact()).withSubject(channelMessage.getSubject())
                 .containingMessage(msg).asHTML(isHTML);
 

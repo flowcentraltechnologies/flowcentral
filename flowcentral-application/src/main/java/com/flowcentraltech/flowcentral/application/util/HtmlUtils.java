@@ -24,11 +24,27 @@ package com.flowcentraltech.flowcentral.application.util;
 public final class HtmlUtils {
 
     private HtmlUtils() {
-        
+
     }
-    
-    public static String formatHTML(String msg) {
-        return msg.replace("\n", "<br/>").replaceAll("&", "&#x26;");
+
+    public static String formatReportHTML(final String html) {
+        if (html != null) {
+            final String _revert_html = html.replaceAll("&amp;", "&").replaceAll("&nbsp;", " ").replaceAll("&lt;", "<")
+                    .replaceAll("&gt;", ">");
+            return _revert_html.replace("\n", "<br/>").replaceAll("&", "&#x26;").replaceAll(" ", "&#x160;")
+                    .replaceAll("<", "&#x3C;").replaceAll(">", "&#x3E;");
+        }
+
+        return null;
+    }
+
+    public static String formatEmailHTML(String html) {
+        if (html != null) {
+            return html.replaceAll("\n", "<br/>").replaceAll("\t", "&nbsp;&nbsp;&nbsp;&nbsp;").replaceAll(" ",
+                    "&nbsp;");
+        }
+
+        return null;
     }
 
 }

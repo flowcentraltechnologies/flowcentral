@@ -85,7 +85,7 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
             ListingGeneratorWriter writer) throws UnifyException {
         ListingColumn[] columns = new ListingColumn[] { new ListingColumn(HAlignType.LEFT, 100) };
         final String body = getLetterBody(reader, writer.getFormListing(LetterFormListing.class));
-        final String fmtBody = HtmlUtils.formatHTML(body);
+        final String fmtBody = HtmlUtils.formatReportHTML(body);
         final ListingCell cell = new ListingCell(ListingCellType.TEXT, fmtBody, ListingCell.BORDER_NONE);
         cell.setNoHtmlEscape(true);
         writer.beginSection(1, 100, HAlignType.LEFT, false, ListingCell.BORDER_NONE);
