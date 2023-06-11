@@ -3265,8 +3265,6 @@
 						column="0" required="true" saveAs="true" />
 					<field name="title" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="template" inputWidget="application.text"
-						column="0" />
 					<field name="configType" inputWidget="application.enumlist"
 						column="1" disabled="true" required="true" />
 					<field name="reportable"
@@ -3274,13 +3272,15 @@
 						required="true" switchOnChange="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange="true" />
+					<field name="template" inputWidget="application.text"
+						column="1" visible="false" />
 					<field name="processor" inputWidget="application.text"
 						column="1" />
 					<field name="largeText"
 						inputWidget="studio.reportablelargetextlist" column="1"
 						required="true" visible="false"/>
 					<field name="letterGenerator"
-						inputWidget="studio.reportablelettergenerator" column="1"
+						inputWidget="studio.reportablelettergeneratorlist" column="1"
 						required="true" visible="false"/>
 					<field name="showGrandFooter"
 						inputWidget="application.checkbox" column="1" />
@@ -3360,7 +3360,7 @@
 					<setState type="field"
 						target="name,description,reportable" disabled="true" />
 				</setStates>
-			</formStatePolicy>LTR
+			</formStatePolicy>
 			<formStatePolicy type="on_switch"
 				name="onTabularPolicy"
 				description="$m{studio.reportconfiguration.form.formstatepolicy.tabular}">
@@ -3370,6 +3370,7 @@
 				<setStates>
 					<setState type="field" target="sizeType,width,height"
 						visible="false" />
+					<setState type="field" target="template" visible="true" />
 					<setState type="tab" target="placements" visible="false" />
 				</setStates>
 			</formStatePolicy>
@@ -3381,7 +3382,7 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="template,processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
+						target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
 						visible="false" />
 					<setState type="section" target="pageDetails"
 						visible="true" />
@@ -3396,13 +3397,14 @@
 				</onCondition>
 				<setStates>
 					<setState type="field"
-						target="template,processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows"
+						target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows,landscape"
 						visible="false" />
 					<setState type="field"
 						target="largeText,letterGenerator"
 						visible="true" />
 					<setState type="tab" target="placements" visible="false" />
 					<setState type="tab" target="columns" visible="false" />
+					<setState type="tab" target="filter" visible="false" />
 					<setState type="section" target="pageDetails" visible="false" />
 				</setStates>
 			</formStatePolicy>
