@@ -277,8 +277,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 pageProperties);
         // Letter
         if (reportOptions.isLetter()) {
-            logDebug("Generating letter report using generator [{0}] and large text [{1}]...",
-                    reportOptions.getLetterGenerator(), reportOptions.getLargeText());
+            logDebug("Generating letter report for entity type [{0}] using generator [{1}] and large text [{2}]...",
+                    reportOptions.getEntity(), reportOptions.getLetterGenerator(), reportOptions.getLargeText());
             Query<? extends Entity> query = appletUtilities.application().queryOf(reportOptions.getEntity());
             query.addRestriction(reportOptions.getRestriction());
             Entity entity = environment().list(query);
@@ -711,17 +711,18 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         if (reportOptions.isLetter()) {
             reportOptions.setLargeText(reportConfiguration.getLargeText());
             reportOptions.setLetterGenerator(reportConfiguration.getLetterGenerator());
+        }
+
+        // Filter options
+        if (!reportOptions.isBeanCollection() && reportConfiguration.getFilter() != null) {
+            Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
+            Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
-            EntityDef entityDef = appletUtilities.application().getEntityDef(entity);
-            Restriction restriction = filterDef.getRestriction(entityDef, null, getNow());
-            reportOptions.setRestriction(restriction);
-        } else {
-            // Filter options
-            if (!reportOptions.isBeanCollection() && reportConfiguration.getFilter() != null) {
-                Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
-                Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
-                FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null,
-                        reportConfiguration.getFilter());
+            if (reportOptions.isLetter()) {
+                EntityDef entityDef = appletUtilities.application().getEntityDef(entity);
+                Restriction restriction = filterDef.getRestriction(entityDef, null, getNow(), parameters);
+                reportOptions.setRestriction(restriction);
+            } else {
                 ReportFilterOptions reportFilterOptions = createReportFilterOptions(sqlEntityInfo, null, parameters,
                         filterDef.getFilterRestrictionDefList(), new IndexInfo());
                 reportOptions.setFilterOptions(reportFilterOptions);
@@ -784,8 +785,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getFieldInfo(restrictionDef.getFieldName());
                     ColumnType columnType = sqlFieldInfo.getColumnType();
                     if (columnType.isDate() || columnType.isTimestamp()) {
-                        ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(now, type, param1, param2,
-                                columnType.isTimestamp());
+                        ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(
+                                restrictionDef.getFieldName(), now, type, param1, param2, columnType.isTimestamp());
                         type = condition.getType();
                         param1 = condition.getParamA();
                         param2 = condition.getParamB();

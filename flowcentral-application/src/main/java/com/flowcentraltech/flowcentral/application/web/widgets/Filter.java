@@ -380,14 +380,14 @@ public class Filter {
 
             EntityFieldDef entityFieldDef = fo.getEntityFieldDef();
             if (type.isLingual() && entityFieldDef.isString()) {
-                ResolvedCondition resolved = InputWidgetUtils.resolveLingualStringCondition(entityFieldDef, now, type,
-                        paramA, paramB);
+                ResolvedCondition resolved = InputWidgetUtils.resolveLingualStringCondition(fo.getFieldName(),
+                        entityFieldDef, now, type, paramA, paramB);
                 type = resolved.getType();
                 paramA = resolved.getParamA();
                 paramB = resolved.getParamB();
             } else if (entityFieldDef.isDate() || entityFieldDef.isTimestamp()) {
-                ResolvedCondition resolved = InputWidgetUtils.resolveDateCondition(entityFieldDef, now, type, paramA,
-                        paramB);
+                ResolvedCondition resolved = InputWidgetUtils.resolveDateCondition(fo.getFieldName(), entityFieldDef,
+                        now, type, paramA, paramB);
                 type = resolved.getType();
                 paramA = resolved.getParamA();
                 paramB = resolved.getParamB();
@@ -397,8 +397,8 @@ public class Filter {
                 paramA = DataUtils.convert(List.class, String.class,
                         Arrays.asList(CommonInputUtils.breakdownCollectionString((String) paramA)));
             }
-            
-            if (type != null) { 
+
+            if (type != null) {
                 type.addSimpleCriteria(cb, fo.getFieldName(), paramA, paramB);
             }
         }
