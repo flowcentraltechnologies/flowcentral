@@ -29,10 +29,8 @@ public final class HtmlUtils {
 
     public static String formatReportHTML(final String html) {
         if (html != null) {
-            final String _revert_html = html.replaceAll("&amp;", "&").replaceAll("&nbsp;", " ").replaceAll("&lt;", "<")
-                    .replaceAll("&gt;", ">");
-            return _revert_html.replace("\n", "<br/>").replaceAll("&", "&#x26;").replaceAll(" ", "&#x160;")
-                    .replaceAll("<", "&#x3C;").replaceAll(">", "&#x3E;");
+            return html.replaceAll("&nbsp;", "&#160;").replaceAll(" ", "&#160;")
+                    .replaceAll("\t", "&#160;&#160;&#160;&#160;").replaceAll("\n", "<br/>");
         }
 
         return null;

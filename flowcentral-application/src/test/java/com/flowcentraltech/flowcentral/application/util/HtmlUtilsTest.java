@@ -35,17 +35,9 @@ public class HtmlUtilsTest {
     public void testFormatReportHTML() throws UnifyException {
         assertNull(HtmlUtils.formatReportHTML(null));
         assertEquals("", HtmlUtils.formatReportHTML(""));
-        assertEquals("&#x26;", HtmlUtils.formatReportHTML("&"));
-        assertEquals("&#x26;", HtmlUtils.formatReportHTML("&amp;"));
-        assertEquals("&#x3C;", HtmlUtils.formatReportHTML("<"));
-        assertEquals("&#x3C;&#x3C;&#x3C;", HtmlUtils.formatReportHTML("<<<"));
-        assertEquals("&#x3C;", HtmlUtils.formatReportHTML("&lt;"));
-        assertEquals("&#x3E;", HtmlUtils.formatReportHTML(">"));
-        assertEquals("&#x3E;&#x3E;&#x3E;", HtmlUtils.formatReportHTML(">>>"));
-        assertEquals("&#x3E;", HtmlUtils.formatReportHTML("&gt;"));
-        assertEquals("&#x160;", HtmlUtils.formatReportHTML(" "));
-        assertEquals("&#x160;&#x160;&#x160;", HtmlUtils.formatReportHTML("   "));
-        assertEquals("&#x160;", HtmlUtils.formatReportHTML("&nbsp;"));
+        assertEquals("&#160;", HtmlUtils.formatReportHTML(" "));
+        assertEquals("&#160;&#160;&#160;", HtmlUtils.formatReportHTML("   "));
+        assertEquals("&#160;", HtmlUtils.formatReportHTML("&nbsp;"));
    }
 
     @Test

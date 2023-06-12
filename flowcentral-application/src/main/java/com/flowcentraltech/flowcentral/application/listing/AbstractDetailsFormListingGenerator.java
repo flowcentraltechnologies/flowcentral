@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.listing;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,12 +27,12 @@ import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
-import com.flowcentraltech.flowcentral.application.web.data.Formats;
 import com.flowcentraltech.flowcentral.application.web.data.Summary;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.data.BeanValueListStore;
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -96,10 +94,7 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
         final TableDef tableDef = application().getTableDef(detailsCase.getTableName());
         final boolean isSerialNo = tableDef.isSerialNo();
         final boolean isHeaderToUpperCase = tableDef.isHeaderToUpperCase();
-        final Formats formats = detailsCase.getFormats();
-        final DecimalFormat amountFormat = new DecimalFormat(formats.getDecimalFormat());
-        final SimpleDateFormat dateFormat = new SimpleDateFormat(formats.getDateFormat());
-        final SimpleDateFormat timestampFormat = new SimpleDateFormat(formats.getTimestampFormat());
+        final Formats.Instance formatsInstance = detailsCase.getFormatsInstance();
         final List<TableColumnDef> tableColumns = tableDef.getVisibleColumnDefList();
         final boolean summaries = detailsCase.isWithSummaries();
         final int summaryTitleColumns = tableDef.getSummaryTitleColumns() > 0 ? tableDef.getSummaryTitleColumns()
@@ -145,11 +140,11 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
 
             ListingCell cell = new ListingCell(ListingCellType.TEXT, "", ListingCell.BORDER_ALL);
             if (dataType.isDecimal()) {
-                cell.setFormat(formats.getDecimalFormat(), amountFormat);
+                cell.setFormat(formatsInstance.getDecimalFormat());
             } else if (dataType.isDate()) {
-                cell.setFormat(formats.getDateFormat(), dateFormat);
+                cell.setFormat(formatsInstance.getDateFormat());
             } else if (dataType.isTimestamp()) {
-                cell.setFormat(formats.getTimestampFormat(), timestampFormat);
+                cell.setFormat(formatsInstance.getTimestampFormat());
             }
             rowCells.add(cell);
 
