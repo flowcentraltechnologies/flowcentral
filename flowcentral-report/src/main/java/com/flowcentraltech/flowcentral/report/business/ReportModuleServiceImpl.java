@@ -77,10 +77,13 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.RestrictionType;
 import com.tcdng.unify.core.criterion.SingleParamRestriction;
 import com.tcdng.unify.core.criterion.ZeroParamRestriction;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.Input;
 import com.tcdng.unify.core.data.Inputs;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Database;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.database.sql.SqlDataSourceDialect;
 import com.tcdng.unify.core.database.sql.SqlEntityInfo;
 import com.tcdng.unify.core.database.sql.SqlFieldInfo;
@@ -154,6 +157,13 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(reportableName);
         return environment().value(Long.class, "id", new ReportableDefinitionQuery()
                 .applicationName(np.getApplicationName()).name(np.getEntityName()).mustMatch(false));
+    }
+
+    @Override
+    public String getReportableEntity(String reportableName) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(reportableName);
+        return environment().value(String.class, "entity",
+                new ReportableDefinitionQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
     }
 
     @Override
@@ -263,8 +273,29 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 .marginRight(reportOptions.getMarginRight()).marginTop(reportOptions.getMarginTop())
                 .pageWidth(reportOptions.getPageWidth()).pageHeight(reportOptions.getPageHeight())
                 .landscape(reportOptions.isLandscape()).build();
-        logDebug("Generating dynamic report  of type [{0}] using properties {1}...", reportOptions.getType(),
+        logDebug("Generating dynamic report of type [{0}] using properties [{1}]...", reportOptions.getType(),
                 pageProperties);
+        // Letter
+        if (reportOptions.isLetter()) {
+            logDebug("Generating letter report for entity type [{0}] using generator [{1}] and large text [{2}]...",
+                    reportOptions.getEntity(), reportOptions.getLetterGenerator(), reportOptions.getLargeText());
+            Query<? extends Entity> query = appletUtilities.application().queryOf(reportOptions.getEntity());
+            query.addRestriction(reportOptions.getRestriction());
+            Entity entity = environment().list(query);
+            if (entity != null) {
+                logDebug("Backing entity record found for letter report...");
+                ValueStoreReader reader = new BeanValueStore(entity).getReader();
+                appletUtilities.generateLetterListingReportToOutputStream(outputStream, reader,
+                        reportOptions.getLetterGenerator(), reportOptions.getLargeText(), Collections.emptyMap());
+            } else {
+                // TODO Generate blank
+                logDebug("Could not find backing entity record letter report. Report generation aborted.");
+            }
+
+            return;
+        }
+
+        // Other types
         Report.Builder rb = Report.newBuilder(reportOptions.getType().layout(), pageProperties);
         rb.code(reportOptions.getReportName());
         rb.title(reportOptions.getTitle());
@@ -546,12 +577,12 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     public void populateExtraConfigurationReportOptions(ReportOptions reportOptions) throws UnifyException {
         ApplicationEntityNameParts np = ApplicationNameUtils
                 .getApplicationEntityNameParts(reportOptions.getReportName());
-        ReportConfiguration reportConfiguration = environment()
+        final ReportConfiguration reportConfiguration = environment()
                 .list(new ReportConfigurationQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
 
         ApplicationEntityNameParts rnp = ApplicationNameUtils
                 .getApplicationEntityNameParts(reportConfiguration.getReportable());
-        String entity = environment().value(String.class, "entity",
+        final String entity = environment().value(String.class, "entity",
                 new ReportableDefinitionQuery().applicationName(rnp.getApplicationName()).name(rnp.getEntityName()));
 
         // Datasource
@@ -676,15 +707,28 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             }
         }
 
+        // Letter
+        if (reportOptions.isLetter()) {
+            reportOptions.setLargeText(reportConfiguration.getLargeText());
+            reportOptions.setLetterGenerator(reportConfiguration.getLetterGenerator());
+        }
+
         // Filter options
         if (!reportOptions.isBeanCollection() && reportConfiguration.getFilter() != null) {
             Map<String, Object> parameters = Inputs.getTypeValuesByName(reportOptions.getSystemInputList());
             Inputs.getTypeValuesByNameIntoMap(reportOptions.getUserInputList(), parameters);
             FilterDef filterDef = InputWidgetUtils.getFilterDef(appletUtilities, null, reportConfiguration.getFilter());
-            ReportFilterOptions reportFilterOptions = createReportFilterOptions(sqlEntityInfo, null, parameters,
-                    filterDef.getFilterRestrictionDefList(), new IndexInfo());
-            reportOptions.setFilterOptions(reportFilterOptions);
+            if (reportOptions.isLetter()) {
+                EntityDef entityDef = appletUtilities.application().getEntityDef(entity);
+                Restriction restriction = filterDef.getRestriction(entityDef, null, getNow(), parameters);
+                reportOptions.setRestriction(restriction);
+            } else {
+                ReportFilterOptions reportFilterOptions = createReportFilterOptions(sqlEntityInfo, null, parameters,
+                        filterDef.getFilterRestrictionDefList(), new IndexInfo());
+                reportOptions.setFilterOptions(reportFilterOptions);
+            }
         }
+
     }
 
     @Override
@@ -717,8 +761,10 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     }
                     indexInfo.subCompoundIndex--;
                 } else {
-                    Object param1 = appletUtilities.specialParamProvider().resolveSpecialParameter(restrictionDef.getParamA());
-                    Object param2 = appletUtilities.specialParamProvider().resolveSpecialParameter(restrictionDef.getParamB());
+                    Object param1 = appletUtilities.specialParamProvider()
+                            .resolveSpecialParameter(restrictionDef.getParamA());
+                    Object param2 = appletUtilities.specialParamProvider()
+                            .resolveSpecialParameter(restrictionDef.getParamB());
                     if (restrictionDef.isParameterVal()) {
                         if (param1 != null) {
                             param1 = parameters.get((String) param1);
@@ -739,8 +785,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     SqlFieldInfo sqlFieldInfo = sqlEntityInfo.getFieldInfo(restrictionDef.getFieldName());
                     ColumnType columnType = sqlFieldInfo.getColumnType();
                     if (columnType.isDate() || columnType.isTimestamp()) {
-                        ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(now, type, param1, param2,
-                                columnType.isTimestamp());
+                        ResolvedCondition condition = InputWidgetUtils.resolveDateCondition(
+                                restrictionDef.getFieldName(), now, type, param1, param2, columnType.isTimestamp());
                         type = condition.getType();
                         param1 = condition.getParamA();
                         param2 = condition.getParamB();
@@ -766,8 +812,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     private void setCommonReportParameters(Report report) throws UnifyException {
         report.setParameter(ReportParameterConstants.APPLICATION_TITLE, "Application Title",
                 getUnifyComponentContext().getInstanceName());
-        report.setParameter(ReportParameterConstants.CLIENT_TITLE, "Client Title",
-                appletUtilities.system().getSysParameterValue(String.class, SystemModuleSysParamConstants.CLIENT_TITLE));
+        report.setParameter(ReportParameterConstants.CLIENT_TITLE, "Client Title", appletUtilities.system()
+                .getSysParameterValue(String.class, SystemModuleSysParamConstants.CLIENT_TITLE));
         report.setParameter(ReportParameterConstants.REPORT_TITLE, "Report Title", report.getTitle());
 
         String imagePath = themeManager.expandThemeTag(appletUtilities.system().getSysParameterValue(String.class,

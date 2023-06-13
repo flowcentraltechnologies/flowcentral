@@ -102,6 +102,12 @@
 			<field name="processor"
 				label="$m{report.reportconfiguration.processor}" type="string"
 				maxLen="64" nullable="true" />
+			<field name="largeText"
+				label="$m{report.reportconfiguration.largetext}" type="string"
+				maxLen="128" nullable="true" />
+			<field name="letterGenerator"
+				label="$m{report.reportconfiguration.lettergenerator}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="showGrandFooter"
 				label="$m{report.reportconfiguration.showgrandfooter}"
 				type="boolean" />

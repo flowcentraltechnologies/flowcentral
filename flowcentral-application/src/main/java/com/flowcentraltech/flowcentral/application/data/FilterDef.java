@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.EntityBasedFilterGenerator;
@@ -89,10 +90,10 @@ public class FilterDef implements Listable {
             Restriction restriction = getRestriction(entityDef, null, now);
             return InputWidgetUtils.getFilterDef(au, name, description, restriction);
         }
-        
+
         return this;
     }
-    
+
     public String getFilterGenerator() {
         return filterGenerator;
     }
@@ -105,27 +106,27 @@ public class FilterDef implements Listable {
         return filterRestrictionDefList;
     }
 
-    public Restriction getRestriction(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now) throws UnifyException {
-        if (isWithFilterGenerator()) {
-            return au.getComponent(EntityBasedFilterGenerator.class, filterGenerator)
-                    .generate(valueStoreReader, null);
-        }
-        
-        return InputWidgetUtils.getRestriction(entityDef, this, au.specialParamProvider(), now);
+    public Restriction getRestriction(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now)
+            throws UnifyException {
+        return getRestriction(entityDef, valueStoreReader, now, null);
     }
 
-    public ObjectFilter getObjectFilter(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now) throws UnifyException {
+    public Restriction getRestriction(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now,
+            Map<String, Object> parameters) throws UnifyException {
+        if (isWithFilterGenerator()) {
+            return au.getComponent(EntityBasedFilterGenerator.class, filterGenerator).generate(valueStoreReader, null);
+        }
+
+        return InputWidgetUtils.getRestriction(entityDef, this, au.specialParamProvider(), now, parameters);
+    }
+
+    public ObjectFilter getObjectFilter(EntityDef entityDef, ValueStoreReader valueStoreReader, Date now)
+            throws UnifyException {
         return new ObjectFilter(getRestriction(entityDef, valueStoreReader, now));
     }
 
     public boolean isBlank() {
         return filterRestrictionDefList == null || filterRestrictionDefList.isEmpty();
-    }
-
-    @Override
-    public String toString() {
-        return "FilterDef [au=" + au + ", filterRestrictionDefList=" + filterRestrictionDefList + ", name=" + name
-                + ", description=" + description + ", filterGenerator=" + filterGenerator + "]";
     }
 
     public static Builder newBuilder(AppletUtilities au) {
@@ -146,7 +147,7 @@ public class FilterDef implements Listable {
 
         public Builder(AppletUtilities au) {
             this.au = au;
-             this.filterRestrictionDefList = new ArrayList<FilterRestrictionDef>();
+            this.filterRestrictionDefList = new ArrayList<FilterRestrictionDef>();
         }
 
         public Builder name(String name) {
@@ -171,7 +172,8 @@ public class FilterDef implements Listable {
         }
 
         public FilterDef build() throws UnifyException {
-            return new FilterDef(au, DataUtils.unmodifiableList(filterRestrictionDefList), name, description, filterGenerator);
+            return new FilterDef(au, DataUtils.unmodifiableList(filterRestrictionDefList), name, description,
+                    filterGenerator);
         }
     }
 

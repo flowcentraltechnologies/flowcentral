@@ -92,6 +92,17 @@ public interface ReportModuleService extends FlowCentralService, ReportProvider 
     Long getReportableDefinitionId(String reportableName) throws UnifyException;
 
     /**
+     * Gets the entity for reportable.
+     * 
+     * @param reportableName
+     *                       the reportable long name
+     * @return the entity name if found otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getReportableEntity(String reportableName) throws UnifyException;
+
+    /**
      * Gets the reportable definition ID for report configuration.
      * 
      * @param reportConfigurationId

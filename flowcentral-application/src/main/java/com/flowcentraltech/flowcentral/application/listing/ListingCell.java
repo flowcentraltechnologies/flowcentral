@@ -20,6 +20,7 @@ import java.text.Format;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -52,9 +53,7 @@ public class ListingCell {
 
     private String contentStyle;
 
-    private String formatPattern;
-
-    private Format format;
+    private Formats.Format format;
 
     private int borders;
 
@@ -169,21 +168,20 @@ public class ListingCell {
     }
 
     public Format getFormat() {
-        return format;
+        return format.getFormat();
     }
 
     public String getFormatPattern() {
-        return formatPattern;
+        return format.getPattern();
     }
 
-    public void setFormat(String formatPattern, Format format) {
-        this.formatPattern = formatPattern;
+    public void setFormat(Formats.Format format) {
         this.format = format;
     }
 
     public void setContent(Object content) {
         this.rawContent = content;
-        this.content = content != null ? (format != null ? format.format(content) : String.valueOf(content)) : null;
+        this.content = content != null ? (format != null ? format.getFormat().format(content) : String.valueOf(content)) : null;
     }
 
     public Object getRawContent() {

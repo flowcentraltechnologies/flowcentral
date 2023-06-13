@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -34,7 +35,7 @@ public class DetailsCase {
 
     private List<? extends Entity> content;
 
-    private Formats formats;
+    private Formats.Instance formatsInstance;
 
     private List<Summary> preSummaries;
 
@@ -45,7 +46,7 @@ public class DetailsCase {
     public DetailsCase(String tableName, List<? extends Entity> content) {
         this.tableName = tableName;
         this.content = content;
-        this.formats = Formats.DEFAULT;
+        this.formatsInstance = Formats.DEFAULT.createInstance();
         this.preSummaries = Collections.emptyList();
         this.postSummaries = Collections.emptyList();
         this.summaryTitleColumn = 0;
@@ -54,7 +55,7 @@ public class DetailsCase {
     public DetailsCase(String tableName, List<? extends Entity> details, Formats formats) {
         this.tableName = tableName;
         this.content = details;
-        this.formats = formats;
+        this.formatsInstance = formats.createInstance();
         this.preSummaries = Collections.emptyList();
         this.postSummaries = Collections.emptyList();
         this.summaryTitleColumn = 0;
@@ -65,7 +66,7 @@ public class DetailsCase {
             int summaryTitleColumn) {
         this.tableName = tableName;
         this.content = details;
-        this.formats = formats;
+        this.formatsInstance = formats.createInstance();
         this.preSummaries = preSummaries;
         this.postSummaries = postSummaries;
         this.summaryTitleColumn = summaryTitleColumn;
@@ -79,14 +80,14 @@ public class DetailsCase {
         return content;
     }
 
-    public Formats getFormats() {
-        return formats;
+    public Formats.Instance getFormatsInstance() {
+        return formatsInstance;
     }
 
     public boolean isWithPreSummaries() {
         return !DataUtils.isBlank(preSummaries);
     }
-    
+
     public List<Summary> getPreSummaries() {
         return preSummaries;
     }

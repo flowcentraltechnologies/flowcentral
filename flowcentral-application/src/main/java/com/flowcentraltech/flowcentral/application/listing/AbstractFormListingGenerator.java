@@ -45,6 +45,7 @@ import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.ThemeManager;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.LocaleFactoryMap;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -130,6 +131,11 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     public final void setEntityImageProvider(ImageProvider entityImageProvider) {
         this.entityImageProvider = entityImageProvider;
+    }
+
+    @Override
+    public Formats getFormats() {
+        return Formats.DEFAULT;
     }
 
     @Override

@@ -79,10 +79,17 @@ public class EntityFilter extends AbstractPanelFormBinding {
     }
 
     public void load(EntityDef entityDef) throws UnifyException {
-        FilterDef filterDef = getAppletCtx().au().retrieveFilterDef(category, ownerEntityDef.getLongName(),
-                ownerInstId, null);
-        filter = new Filter(ownerInstId, paramList, entityDef, filterDef, listType,
-                Editable.fromBoolean(isApplyButtonVisible()));
+        try {
+            FilterDef filterDef = getAppletCtx().au().retrieveFilterDef(category, ownerEntityDef.getLongName(),
+                    ownerInstId, null);
+            filter = new Filter(ownerInstId, paramList, entityDef, filterDef, listType,
+                    Editable.fromBoolean(isApplyButtonVisible()));
+        } catch (RuntimeException e) {
+            getAppletCtx().au().saveFilterDef(getSweepingCommitPolicy(), category, ownerEntityDef.getLongName(), ownerInstId, null);
+            FilterDef filterDef = null;
+            filter = new Filter(ownerInstId, paramList, entityDef, filterDef, listType,
+                    Editable.fromBoolean(isApplyButtonVisible()));
+        }
     }
 
     public void save() throws UnifyException {

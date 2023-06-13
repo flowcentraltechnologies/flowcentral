@@ -23,7 +23,6 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
-import com.flowcentraltech.flowcentral.application.web.data.Formats;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
@@ -34,6 +33,7 @@ import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.IOUtils;
@@ -47,7 +47,8 @@ import com.tcdng.unify.core.util.IOUtils;
 public abstract class AbstractNotificationAlertSender extends AbstractUnifyComponent
         implements NotificationAlertSender {
 
-    private final Formats DEFAULT_REPORT_FORMATS = new Formats("###,##0.00;(###,##0.00)", "dd-MM-yyyy", "dd-MM-yyyy");
+    private final Formats DEFAULT_REPORT_FORMATS = new Formats("###,##0;(###,##0)", "###,##0.00;(###,##0.00)",
+            "dd-MM-yyyy", "dd-MM-yyyy");
 
     @Configurable
     private NotificationModuleService notificationModuleService;

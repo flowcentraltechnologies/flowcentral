@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.FormListingWidget
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.writer.AbstractContainerWriter;
@@ -44,7 +45,9 @@ public class FormListingWriter extends AbstractContainerWriter {
 
         FormListing formListing = formListingWidget.getFormListing();
         FormListingGenerator generator = (FormListingGenerator) getComponent(formListing.getListingGenerator());
-        generator.generateListing(formListing.getFormValueStore().getReader(), new ListingProperties(), writer);
+        ValueStoreReader reader = formListing.getFormValueStore().getReader();
+        reader.setReadFormats(generator.getFormats());
+        generator.generateListing(reader, new ListingProperties(), writer);
         writer.write("</div>");
     }
 }

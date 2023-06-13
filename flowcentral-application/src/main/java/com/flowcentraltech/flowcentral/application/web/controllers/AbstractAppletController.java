@@ -129,8 +129,7 @@ public abstract class AbstractAppletController<T extends AbstractAppletPageBean<
 
     protected String viewListingReport(ValueStoreReader reader, DetailsFormListing listing) throws UnifyException {
         DetailsFormListingGenerator generator = (DetailsFormListingGenerator) getComponent(listing.getGenerator());
-        FormListingOptions options = new FormListingOptions();
-        options.setFormListing(listing);
+        FormListingOptions options = new FormListingOptions(listing);
         Report report = listing.isSpreadSheet() ? generator.generateExcelReport(reader, options)
                 : generator.generateHtmlReport(reader, options);
         return viewListingReport(report);

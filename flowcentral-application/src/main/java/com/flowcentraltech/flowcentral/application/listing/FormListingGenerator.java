@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.application.listing;
 
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.Formats;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 
@@ -28,6 +29,13 @@ import com.tcdng.unify.web.ui.widget.ResponseWriter;
  * @since 1.0
  */
 public interface FormListingGenerator extends FormListingReportGenerator {
+    
+    /**
+     * Gets listing formats.
+     * 
+     * @return the listing formats
+     */
+    Formats getFormats();
 
     /**
      * Generates form listing into writer.

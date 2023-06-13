@@ -214,7 +214,8 @@ public final class InputWidgetUtils {
         return editor;
     }
 
-    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa) throws UnifyException {
+    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldAttributes efa)
+            throws UnifyException {
         String renderer = InputWidgetUtils.resolveEditor(widgetTypeDef.getRenderer(), widgetTypeDef, efa, null, null);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(renderer);
@@ -225,7 +226,8 @@ public final class InputWidgetUtils {
         return renderer;
     }
 
-    public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) throws UnifyException {
+    public static String constructEditor(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
+            throws UnifyException {
         String editor = InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, false);
         if (widgetTypeDef.isStretch()) {
             StringBuilder esb = new StringBuilder(editor);
@@ -242,7 +244,8 @@ public final class InputWidgetUtils {
         return editor;
     }
 
-    public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) throws UnifyException {
+    public static String constructEditorWithBinding(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
+            throws UnifyException {
         return InputWidgetUtils.constructEditorWithBinding(widgetTypeDef, entityFieldDef, null, null);
     }
 
@@ -268,7 +271,8 @@ public final class InputWidgetUtils {
         return esb.toString();
     }
 
-    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef) throws UnifyException {
+    public static String constructRenderer(WidgetTypeDef widgetTypeDef, EntityFieldDef entityFieldDef)
+            throws UnifyException {
         return InputWidgetUtils.constructEditor(widgetTypeDef, entityFieldDef, null, true);
     }
 
@@ -795,8 +799,8 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static EntitySearchInputConfig getEntitySearchInputConfig(
-            AppEntitySearchInput appEntitySearchInput) throws UnifyException {
+    public static EntitySearchInputConfig getEntitySearchInputConfig(AppEntitySearchInput appEntitySearchInput)
+            throws UnifyException {
         if (appEntitySearchInput != null) {
             EntitySearchInputConfig entitySearchInputConfig = new EntitySearchInputConfig();
             InputWidgetUtils.getSearchInputsConfig(entitySearchInputConfig, appEntitySearchInput.getName(),
@@ -807,8 +811,8 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static SearchInputsConfig getSearchInputConfig(
-            AppEntitySearchInput appEntitySearchInput) throws UnifyException {
+    public static SearchInputsConfig getSearchInputConfig(AppEntitySearchInput appEntitySearchInput)
+            throws UnifyException {
         if (appEntitySearchInput != null && appEntitySearchInput.getSearchInput() != null) {
             SearchInputsConfig searchInputConfig = new SearchInputsConfig();
             InputWidgetUtils.getSearchInputsConfig(searchInputConfig, appEntitySearchInput.getName(),
@@ -819,11 +823,10 @@ public final class InputWidgetUtils {
         return null;
     }
 
-    public static void getSearchInputsConfig(SearchInputsConfig searchInputsConfig, String name,
-            String description, AppSearchInput appSearchInput) throws UnifyException {
+    public static void getSearchInputsConfig(SearchInputsConfig searchInputsConfig, String name, String description,
+            AppSearchInput appSearchInput) throws UnifyException {
         if (appSearchInput != null) {
-            SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(name, description,
-                    appSearchInput);
+            SearchInputsDef searchInputsDef = InputWidgetUtils.getSearchInputsDef(name, description, appSearchInput);
             searchInputsConfig.setName(name);
             searchInputsConfig.setDescription(description);
             List<SearchInputConfig> inputList = new ArrayList<SearchInputConfig>();
@@ -1261,60 +1264,105 @@ public final class InputWidgetUtils {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     public static Restriction getRestriction(EntityDef entityDef, FilterDef filterDef,
             SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
+        return InputWidgetUtils.getRestriction(entityDef, filterDef, specialParamProvider, now, null);
+    }
+
+    public static Restriction getRestriction(EntityDef entityDef, FilterDef filterDef,
+            SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
         List<FilterRestrictionDef> conditionList = filterDef.getFilterRestrictionDefList();
         if (!conditionList.isEmpty()) {
             FilterRestrictionDef fo = conditionList.get(0);
             if (conditionList.size() == 1 && !fo.getType().isCompound()) {
-                Object paramA = specialParamProvider.resolveSpecialParameter(fo.getParamA());
-                Object paramB = specialParamProvider.resolveSpecialParameter(fo.getParamB());
-                FilterConditionType type = fo.getType();
-                if (!type.isFieldVal() && !type.isParameterVal()) {
-                    EntityFieldDef entityFieldDef = entityDef.getFieldDef(fo.getFieldName());
-                    if (type.isLingual() && entityFieldDef.isString()) {
-                        ResolvedCondition resolved = InputWidgetUtils.resolveLingualStringCondition(entityFieldDef, now,
-                                type, paramA, paramB);
-                        type = resolved.getType();
-                        paramA = resolved.getParamA();
-                        paramB = resolved.getParamB();
-                    } else if (entityFieldDef.isDate() || entityFieldDef.isTimestamp()) {
-                        ResolvedCondition resolved = InputWidgetUtils.resolveDateCondition(entityFieldDef, now, type,
-                                paramA, paramB);
-                        type = resolved.getType();
-                        paramA = resolved.getParamA();
-                        paramB = resolved.getParamB();
-                    } else {
-                        Class<?> dataType = entityFieldDef.getDataType().dataType().javaClass();
-                        if (paramA != null) {
-                            if (type.isAmongst()) {
-                                paramA = DataUtils.convert(List.class, dataType,
-                                        Arrays.asList(CommonInputUtils.breakdownCollectionString((String) paramA)));
-                            } else {
-                                paramA = DataUtils.convert(dataType, paramA);
-                            }
-                        }
-
-                        if (paramB != null) {
-                            paramB = DataUtils.convert(dataType, paramB);
-                        }
-                    }
-                }
-
-                return type.createSimpleCriteria(fo.getFieldName(), paramA, paramB);
+                ResolvedCondition resolved = InputWidgetUtils.resolveFieldParam(entityDef, fo, specialParamProvider,
+                        now, parameters);
+                return resolved.createSimpleCriteria();
             }
 
             CriteriaBuilder cb = new CriteriaBuilder();
-            addCompoundCriteria(cb, entityDef, filterDef, fo, 1, specialParamProvider, now);
+            addCompoundCriteria(cb, entityDef, filterDef, fo, 1, specialParamProvider, now, parameters);
             return cb.build();
         }
 
         return null;
     }
 
-    public static ResolvedCondition resolveLingualStringCondition(EntityFieldDef entityFieldDef, Date now,
-            FilterConditionType type, Object paramA, Object paramB) throws UnifyException {
+    public static ResolvedCondition resolveParamCondition(String fieldName, FilterConditionType type, Object paramA,
+            Object paramB, Map<String, Object> parameters) throws UnifyException {
+        if (parameters != null && type.isParameterVal()) {
+            if (paramA != null) {
+                paramA = parameters.get((String) paramA);
+            }
+
+            if (paramB != null) {
+                paramB = parameters.get((String) paramB);
+            }
+
+            switch (type) {
+                case BEGINS_WITH_PARAM:
+                    type = FilterConditionType.BEGINS_WITH;
+                    break;
+                case BETWEEN_PARAM:
+                    type = FilterConditionType.BETWEEN;
+                    break;
+                case ENDS_WITH_PARAM:
+                    type = FilterConditionType.ENDS_WITH;
+                    break;
+                case EQUALS_PARAM:
+                    type = FilterConditionType.EQUALS;
+                    break;
+                case GREATER_OR_EQUAL_PARAM:
+                    type = FilterConditionType.GREATER_OR_EQUAL;
+                    break;
+                case GREATER_THAN_PARAM:
+                    type = FilterConditionType.GREATER_THAN;
+                    break;
+                case IBEGINS_WITH_PARAM:
+                    type = FilterConditionType.IBEGINS_WITH;
+                    break;
+                case IENDS_WITH_PARAM:
+                    type = FilterConditionType.IENDS_WITH;
+                    break;
+                case ILIKE_PARAM:
+                    type = FilterConditionType.ILIKE;
+                    break;
+                case LESS_OR_EQUAL_PARAM:
+                    type = FilterConditionType.LESS_OR_EQUAL;
+                    break;
+                case LESS_THAN_PARAM:
+                    type = FilterConditionType.LESS_THAN;
+                    break;
+                case LIKE_PARAM:
+                    type = FilterConditionType.LIKE;
+                    break;
+                case NOT_BEGIN_WITH_PARAM:
+                    type = FilterConditionType.NOT_BEGIN_WITH;
+                    break;
+                case NOT_BETWEEN_PARAM:
+                    type = FilterConditionType.NOT_BETWEEN;
+                    break;
+                case NOT_END_WITH_PARAM:
+                    type = FilterConditionType.NOT_END_WITH;
+                    break;
+                case NOT_EQUALS_PARAM:
+                    type = FilterConditionType.NOT_EQUALS;
+                    break;
+                case NOT_LIKE_PARAM:
+                    type = FilterConditionType.NOT_LIKE;
+                    break;
+                case OR:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        return new ResolvedCondition(fieldName, type, paramA, paramB);
+    }
+
+    public static ResolvedCondition resolveLingualStringCondition(String fieldName, EntityFieldDef entityFieldDef,
+            Date now, FilterConditionType type, Object paramA, Object paramB) throws UnifyException {
         if (type.isLingual()) {
             LingualStringType lingualType = DataUtils.convert(LingualStringType.class, (String) paramA);
             if (lingualType != null) {
@@ -1335,16 +1383,17 @@ public final class InputWidgetUtils {
             }
         }
 
-        return new ResolvedCondition(type, paramA, paramB);
+        return new ResolvedCondition(fieldName, type, paramA, paramB);
     }
 
-    public static ResolvedCondition resolveDateCondition(EntityFieldDef entityFieldDef, Date now,
+    public static ResolvedCondition resolveDateCondition(String fieldName, EntityFieldDef entityFieldDef, Date now,
             FilterConditionType type, Object paramA, Object paramB) throws UnifyException {
-        return InputWidgetUtils.resolveDateCondition(now, type, paramA, paramB, entityFieldDef.isTimestamp());
+        return InputWidgetUtils.resolveDateCondition(fieldName, now, type, paramA, paramB,
+                entityFieldDef.isTimestamp());
     }
 
-    public static ResolvedCondition resolveDateCondition(Date now, FilterConditionType type, Object paramA,
-            Object paramB, boolean timestamp) throws UnifyException {
+    public static ResolvedCondition resolveDateCondition(String fieldName, Date now, FilterConditionType type,
+            Object paramA, Object paramB, boolean timestamp) throws UnifyException {
         if (type.isLingual()) {
             if (type.isRange()) {
                 paramA = LingualDateUtils.getDateFromNow(now, (String) paramA);
@@ -1436,12 +1485,12 @@ public final class InputWidgetUtils {
             }
         }
 
-        return new ResolvedCondition(type, paramA, paramB);
+        return new ResolvedCondition(fieldName, type, paramA, paramB);
     }
 
     private static int addCompoundCriteria(CriteriaBuilder cb, EntityDef entityDef, FilterDef filterDef,
-            FilterRestrictionDef fo, int nIndex, SpecialParamProvider specialParamProvider, Date now)
-            throws UnifyException {
+            FilterRestrictionDef fo, int nIndex, SpecialParamProvider specialParamProvider, Date now,
+            Map<String, Object> parameters) throws UnifyException {
         if (FilterConditionType.AND.equals(fo.getType())) {
             cb.beginAnd();
         } else {
@@ -1456,9 +1505,10 @@ public final class InputWidgetUtils {
             FilterRestrictionDef sfo = conditionList.get(i);
             if (sfo.getDepth() > depth) {
                 if (sfo.getType().isCompound()) {
-                    i = addCompoundCriteria(cb, entityDef, filterDef, sfo, i + 1, specialParamProvider, now) - 1;
+                    i = addCompoundCriteria(cb, entityDef, filterDef, sfo, i + 1, specialParamProvider, now, parameters)
+                            - 1;
                 } else {
-                    addSimpleCriteria(cb, entityDef, filterDef, sfo, specialParamProvider, now);
+                    addSimpleCriteria(cb, entityDef, filterDef, sfo, specialParamProvider, now, parameters);
                 }
             } else {
                 break;
@@ -1469,9 +1519,17 @@ public final class InputWidgetUtils {
         return i;
     }
 
-    @SuppressWarnings("unchecked")
     private static void addSimpleCriteria(CriteriaBuilder cb, EntityDef entityDef, FilterDef filterDef,
-            FilterRestrictionDef fo, SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
+            FilterRestrictionDef fo, SpecialParamProvider specialParamProvider, Date now,
+            Map<String, Object> parameters) throws UnifyException {
+        ResolvedCondition condition = InputWidgetUtils.resolveFieldParam(entityDef, fo, specialParamProvider, now,
+                parameters);
+        condition.addSimpleCriteria(cb);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static ResolvedCondition resolveFieldParam(EntityDef entityDef, FilterRestrictionDef fo,
+            SpecialParamProvider specialParamProvider, Date now, Map<String, Object> parameters) throws UnifyException {
         FilterConditionType type = fo.getType();
         Object paramA = specialParamProvider.resolveSpecialParameter(fo.getParamA());
         Object paramB = specialParamProvider.resolveSpecialParameter(fo.getParamB());
@@ -1482,17 +1540,11 @@ public final class InputWidgetUtils {
             }
 
             if (type.isLingual() && _entityFieldDef.isString()) {
-                ResolvedCondition resolved = InputWidgetUtils.resolveLingualStringCondition(_entityFieldDef, now, type,
+                return InputWidgetUtils.resolveLingualStringCondition(fo.getFieldName(), _entityFieldDef, now, type,
                         paramA, paramB);
-                type = resolved.getType();
-                paramA = resolved.getParamA();
-                paramB = resolved.getParamB();
             } else if (_entityFieldDef.isDate() || _entityFieldDef.isTimestamp()) {
-                ResolvedCondition resolved = InputWidgetUtils.resolveDateCondition(_entityFieldDef, now, type, paramA,
+                return InputWidgetUtils.resolveDateCondition(fo.getFieldName(), _entityFieldDef, now, type, paramA,
                         paramB);
-                type = resolved.getType();
-                paramA = resolved.getParamA();
-                paramB = resolved.getParamB();
             } else {
                 EntityFieldDataType fieldDataType = _entityFieldDef.getDataType();
                 Class<?> dataType = fieldDataType.dataType().javaClass();
@@ -1511,7 +1563,10 @@ public final class InputWidgetUtils {
             }
         }
 
-        type.addSimpleCriteria(cb, fo.getFieldName(), paramA, paramB);
-    }
+        if (parameters != null && type.isParameterVal()) {
+            return InputWidgetUtils.resolveParamCondition(fo.getFieldName(), type, paramA, paramB, parameters);
+        }
 
+        return new ResolvedCondition(fo.getFieldName(), type, paramA, paramB);
+    }
 }

@@ -36,7 +36,10 @@ public enum ReportConfigType implements EnumConst {
             ReportLayoutType.TABULAR),
     PLACEMENT(
             "PLC",
-            ReportLayoutType.PLACEMENT_PDF);
+            ReportLayoutType.PLACEMENT_PDF),
+    LETTER(
+            "LTR",
+            ReportLayoutType.HTML_PDF);
 
     private final String code;
 
@@ -67,6 +70,10 @@ public enum ReportConfigType implements EnumConst {
 
     public boolean isPlacement() {
         return PLACEMENT.equals(this);
+    }
+
+    public boolean isLetter() {
+        return LETTER.equals(this);
     }
 
     public static ReportConfigType fromCode(String code) {

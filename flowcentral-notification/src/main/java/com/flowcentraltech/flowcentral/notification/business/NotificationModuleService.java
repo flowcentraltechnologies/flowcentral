@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplat
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
+import com.flowcentraltech.flowcentral.notification.util.NotifLargeTextInfo;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -83,6 +84,17 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     int countNotifLargeTextsByModule(String moduleName) throws UnifyException;
+    
+    /**
+     * Gets entity notification large texts.
+     * 
+     * @param entityName
+     *                   the entity name
+     * @return the information list
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<NotifLargeTextInfo> getEntityNotifLargeTexts(String entityName) throws UnifyException;
     
     /**
      * Generates dynamic notification template information.

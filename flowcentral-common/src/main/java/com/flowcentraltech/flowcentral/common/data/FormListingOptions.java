@@ -29,30 +29,41 @@ public class FormListingOptions {
 
     private final boolean important;
     
-    private FormListing formListing;
+    private final FormListing formListing;
     
     public FormListingOptions() {
         this.formActionName = null;
         this.optionFlags = ~0;
         this.important = false;
+        this.formListing = null;
+    }
+    
+    public FormListingOptions(FormListing formListing) {
+        this.formActionName = null;
+        this.optionFlags = ~0;
+        this.important = false;
+        this.formListing = formListing;
     }
 
     public FormListingOptions(String formActionName) {
         this.formActionName = formActionName;
         this.optionFlags = ~0;
         this.important = false;
+        this.formListing = null;
     }
 
     public FormListingOptions(int optionFlags) {
         this.formActionName = null;
         this.optionFlags = optionFlags;
         this.important = true;
+        this.formListing = null;
     }
 
     public FormListingOptions(String formActionName, int optionFlags) {
         this.formActionName = formActionName;
         this.optionFlags = optionFlags;
         this.important = true;
+        this.formListing = null;
     }
 
     public String getFormActionName() {
@@ -73,10 +84,6 @@ public class FormListingOptions {
 
     public FormListing getFormListing() {
         return formListing;
-    }
-
-    public void setFormListing(FormListing formListing) {
-        this.formListing = formListing;
     }
 
 }

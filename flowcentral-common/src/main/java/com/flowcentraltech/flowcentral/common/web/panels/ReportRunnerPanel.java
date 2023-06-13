@@ -42,6 +42,7 @@ public class ReportRunnerPanel extends BaseDialogPanel {
         setVisible("runnerTitlePanel", StringUtils.isNotBlank(reportOptions.getReportDescription()));
         setVisible("rptColumnOptionsPanel", !reportOptions.isUserInputOnly() && reportOptions.isWithColumnOptions());
         setVisible("rptParamsPanel", reportOptions.isWithUserInput());
+        setVisible("reportOptionsPanel", !reportOptions.isLetter());
     }
 
 }

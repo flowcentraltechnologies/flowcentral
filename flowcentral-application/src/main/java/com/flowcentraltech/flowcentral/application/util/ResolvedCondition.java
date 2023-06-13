@@ -16,7 +16,10 @@
 
 package com.flowcentraltech.flowcentral.application.util;
 
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.CriteriaBuilder;
 import com.tcdng.unify.core.criterion.FilterConditionType;
+import com.tcdng.unify.core.criterion.Restriction;
 
 /**
  * Resolve condition.
@@ -26,13 +29,16 @@ import com.tcdng.unify.core.criterion.FilterConditionType;
  */
 public class ResolvedCondition {
 
-    private FilterConditionType type;
-    
-    private Object paramA;
-    
-    private Object paramB;
+    private final String fieldName;
 
-    public ResolvedCondition(FilterConditionType type, Object paramA, Object paramB) {
+    private final FilterConditionType type;
+
+    private final Object paramA;
+
+    private final Object paramB;
+
+    public ResolvedCondition(String fieldName, FilterConditionType type, Object paramA, Object paramB) {
+        this.fieldName = fieldName;
         this.type = type;
         this.paramA = paramA;
         this.paramB = paramB;
@@ -49,5 +55,16 @@ public class ResolvedCondition {
     public Object getParamB() {
         return paramB;
     }
-   
+
+    public String getFieldName() {
+        return fieldName;
+    }
+
+    public void addSimpleCriteria(CriteriaBuilder cb) throws UnifyException {
+        type.addSimpleCriteria(cb, fieldName, paramA, paramB);
+    }
+    
+    public Restriction createSimpleCriteria() throws UnifyException {
+        return type.createSimpleCriteria(fieldName, paramA, paramB);
+    }
 }

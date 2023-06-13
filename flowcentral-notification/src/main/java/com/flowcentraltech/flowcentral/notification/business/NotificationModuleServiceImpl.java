@@ -68,6 +68,7 @@ import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplat
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplateQuery;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
+import com.flowcentraltech.flowcentral.notification.util.NotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -234,6 +235,23 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     @Override
     public int countNotifLargeTextsByModule(String moduleName) throws UnifyException {
         return environment().countAll(new NotificationLargeTextQuery().moduleName(moduleName));
+    }
+
+    @Override
+    public List<NotifLargeTextInfo> getEntityNotifLargeTexts(String entityName) throws UnifyException {
+        List<NotificationLargeText> largeTexts = environment().listAll(new NotificationLargeTextQuery()
+                .entity(entityName).addSelect("applicationName", "name", "description"));
+        if (!DataUtils.isBlank(largeTexts)) {
+            List<NotifLargeTextInfo> infos = new ArrayList<NotifLargeTextInfo>();
+            for (NotificationLargeText largeText: largeTexts) {
+                infos.add(new NotifLargeTextInfo(ApplicationNameUtils.getApplicationEntityLongName(
+                        largeText.getApplicationName(), largeText.getName()), largeText.getDescription()));
+            }
+            
+            return infos;
+        }
+        
+        return Collections.emptyList();
     }
 
     @Override

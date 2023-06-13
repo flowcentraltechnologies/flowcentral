@@ -49,6 +49,10 @@ public class ReportOptions {
 
     private String processor;
 
+    private String largeText;
+
+    private String letterGenerator;
+
     private String dataSource;
 
     private String title;
@@ -142,6 +146,10 @@ public class ReportOptions {
         return type.isPlacement();
     }
 
+    public boolean isLetter() {
+        return type.isLetter();
+    }
+
     public String getReportName() {
         return reportName;
     }
@@ -212,6 +220,22 @@ public class ReportOptions {
 
     public void setProcessor(String processor) {
         this.processor = processor;
+    }
+
+    public String getLargeText() {
+        return largeText;
+    }
+
+    public void setLargeText(String largeText) {
+        this.largeText = largeText;
+    }
+
+    public String getLetterGenerator() {
+        return letterGenerator;
+    }
+
+    public void setLetterGenerator(String letterGenerator) {
+        this.letterGenerator = letterGenerator;
     }
 
     public List<?> getContent() {

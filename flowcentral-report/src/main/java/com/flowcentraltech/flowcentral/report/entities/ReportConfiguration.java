@@ -55,6 +55,12 @@ public class ReportConfiguration extends BaseApplicationEntity {
     @Column(length = 64, nullable = true)
     private String processor;
 
+    @Column(length = 128, nullable = true)
+    private String largeText;
+
+    @Column(length = 64, nullable = true)
+    private String letterGenerator;
+
     @Column
     private int width;
 
@@ -155,6 +161,22 @@ public class ReportConfiguration extends BaseApplicationEntity {
 
     public void setProcessor(String processor) {
         this.processor = processor;
+    }
+
+    public String getLargeText() {
+        return largeText;
+    }
+
+    public void setLargeText(String largeText) {
+        this.largeText = largeText;
+    }
+
+    public String getLetterGenerator() {
+        return letterGenerator;
+    }
+
+    public void setLetterGenerator(String letterGenerator) {
+        this.letterGenerator = letterGenerator;
     }
 
     public boolean isShowGrandFooter() {
