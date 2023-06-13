@@ -28,7 +28,8 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(name = NotificationModuleNameConstants.BASIC_LETTERFORMLISTING_GENERATOR, description = "Basic Letter Generator")
+@Component(name = NotificationModuleNameConstants.BASIC_LETTERFORMLISTING_GENERATOR,
+    description = "Basic Letter Generator")
 public class BasicNotificationLetterFormListingGenerator extends AbstractNotificationLetterFormListingGenerator {
 
     @Override
