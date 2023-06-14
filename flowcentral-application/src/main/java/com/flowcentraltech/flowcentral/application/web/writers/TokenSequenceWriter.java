@@ -75,7 +75,9 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             fieldSelectCtrl.setEditable(tokenSequenceWidget.isContainerEditable());
             List<? extends Listable> fieldParamList = tokenSequence.getEntityDef().getSortedFieldDefList();
             ValueStore fieldValueStore = new BeanValueListStore(fieldParamList);
-            while (fieldValueStore.next()) {
+            final int len = fieldValueStore.size();
+            for (int i = 0; i < len; i++) {
+                fieldValueStore.setDataIndex(i);
                 fieldSelectCtrl.setValueStore(fieldValueStore);
                 writer.writeStructureAndContent(fieldSelectCtrl);
             }
@@ -100,7 +102,9 @@ public class TokenSequenceWriter extends AbstractControlWriter {
             fieldSelectCtrl.setEditable(tokenSequenceWidget.isContainerEditable());
             List<? extends Listable> fieldParamList = tokenSequence.getEntityDef().getSortedFieldDefList();
             ValueStore fieldValueStore = new BeanValueListStore(fieldParamList);
-            while (fieldValueStore.next()) {
+            final int len = fieldValueStore.size();
+            for (int i = 0; i < len; i++) {
+                fieldValueStore.setDataIndex(i);
                 fieldSelectCtrl.setValueStore(fieldValueStore);
                 writer.writeBehavior(fieldSelectCtrl);
                 fsb.add(fieldSelectCtrl.getId());
