@@ -813,6 +813,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
+        // Set recovery path on error to prevent possible manual duplication of record
+        getRequestContextUtil().setSystemErrorRecoveryPath("/application/refreshContent");
+        
         // Select first tab with review message TODO Move to method?
         TabSheetWidget tabSheetWidget = getWidgetByShortName(TabSheetWidget.class, "formPanel.formTabSheet");
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
