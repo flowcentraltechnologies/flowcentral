@@ -1592,7 +1592,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     break;
                 default:
             }
-
+            
             if (oldFormContext.isWithReviewErrors()) {
                 form.getCtx().copyReviewErrors(oldFormContext);
             }
