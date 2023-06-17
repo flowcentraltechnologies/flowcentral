@@ -65,6 +65,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
 @UplAttributes({ @UplAttribute(name = "contentDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class),
         @UplAttribute(name = "multiSelect", type = boolean.class),
+        @UplAttribute(name = "detached", type = boolean.class),
         @UplAttribute(name = "actionSymbol", type = String[].class),
         @UplAttribute(name = "actionHandler", type = EventHandler[].class),
         @UplAttribute(name = "switchOnChangeHandler", type = EventHandler.class),
@@ -305,6 +306,10 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
 
     public boolean isMultiSelect() throws UnifyException {
         return getUplAttribute(boolean.class, "multiSelect");
+    }
+
+    public boolean isDetached() throws UnifyException {
+        return getUplAttribute(boolean.class, "detached");
     }
 
     public boolean isAlternatingRows() throws UnifyException {

@@ -39,4 +39,4 @@
 
 // Entity CRUD panel
 !ui-panel:crudBodyPanel style:$s{width:980px; margin: 8px auto;} components:$c{crudEntityCrudPanel}
-!fc-entitycrudpanel:crudEntityCrudPanel style:$s{width:100%;} binding:crud
+!fc-entitycrudpanel:crudEntityCrudPanel style:$s{width:100%;} binding:crud tableDetached:true

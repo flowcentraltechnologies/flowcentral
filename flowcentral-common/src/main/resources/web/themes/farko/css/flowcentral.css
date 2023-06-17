@@ -593,6 +593,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-table .table .cserialh {width: 32px;}
 .fc-table .table .cactionh {width: 32px;}
 .fc-table .table .cfixedh {width: 48px;}
+.fc-table .table .ccrudh {width: 64px;}
 .fc-table .table .mselh {width: 22px;}
 .fc-table .table .mselh span {width:16px; height:16px;}
 .fc-table .table .mselh input {display:none;}
