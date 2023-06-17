@@ -151,6 +151,7 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</table></div></td></tr>");
             }
 
+            writeFixedActionRow(writer, tableWidget, columnCount);
             writer.write("</table></div>");
             if (sortable) {
                 writer.writeStructureAndContent(tableWidget.getSortColumnCtrl());
@@ -159,68 +160,6 @@ public class TableWriter extends AbstractControlWriter {
             writer.write("</div>");
         }
     }
-
-    private int writeColumnGroup(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget)
-            throws UnifyException {
-        int columnCount = 0;
-        final boolean isContainerEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();
-        final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
-        final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
-        final AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
-        final TableDef tableDef = table.getTableDef();
-        final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
-        final boolean isCrudMode = tableWidget.isCrudMode();
-
-        // Column widths
-        writer.write("<colgroup>");
-        final boolean entryMode = table.isEntryMode();
-        final boolean supportSelect = !table.isFixedAssignment();
-        if (supportSelect && multiSelect && !entryMode) {
-            writer.write("<col class=\"cselh\">");
-            columnCount++;
-        }
-
-        if (tableDef.isSerialNo()) {
-            writer.write("<col class=\"cserialh\">");
-            columnCount++;
-        }
-
-        int columnIndex = 0;
-        for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
-            if (widgetInfo.isExternal() && widgetInfo.isControl()) {
-                TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(columnIndex);
-                writer.write("<col ");
-                writeTagStyle(writer, tabelColumnDef.getHeaderStyle());
-                writer.write(">");
-                columnIndex++;
-            }
-        }
-        columnCount += columnIndex;
-
-        if (supportSelect && multiSelect && entryMode) {
-            writer.write("<col class=\"cselh\">");
-            columnCount++;
-        }
-
-        if (isFixedRows) {
-            writer.write("<col class=\"cfixedh\">");
-            columnCount++;
-        } else if (isActionColumn) {
-            writer.write("<col class=\"cactionh\">");
-            columnCount++;
-        }
-
-
-        if (isCrudMode) {
-            writer.write("<col class=\"ccrudh\">");
-            columnCount++;
-        }
-        
-        writer.write("</colgroup>");
-
-        return columnCount;
-    }
-
     @Override
     protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
         super.doWriteBehavior(writer, widget);
@@ -455,6 +394,67 @@ public class TableWriter extends AbstractControlWriter {
         }
     }
 
+    private int writeColumnGroup(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget)
+            throws UnifyException {
+        int columnCount = 0;
+        final boolean isContainerEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();
+        final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
+        final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
+        final AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
+        final TableDef tableDef = table.getTableDef();
+        final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
+        final boolean isCrudMode = tableWidget.isCrudMode();
+
+        // Column widths
+        writer.write("<colgroup>");
+        final boolean entryMode = table.isEntryMode();
+        final boolean supportSelect = !table.isFixedAssignment();
+        if (supportSelect && multiSelect && !entryMode) {
+            writer.write("<col class=\"cselh\">");
+            columnCount++;
+        }
+
+        if (tableDef.isSerialNo()) {
+            writer.write("<col class=\"cserialh\">");
+            columnCount++;
+        }
+
+        int columnIndex = 0;
+        for (ChildWidgetInfo widgetInfo : tableWidget.getChildWidgetInfos()) {
+            if (widgetInfo.isExternal() && widgetInfo.isControl()) {
+                TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(columnIndex);
+                writer.write("<col ");
+                writeTagStyle(writer, tabelColumnDef.getHeaderStyle());
+                writer.write(">");
+                columnIndex++;
+            }
+        }
+        columnCount += columnIndex;
+
+        if (supportSelect && multiSelect && entryMode) {
+            writer.write("<col class=\"cselh\">");
+            columnCount++;
+        }
+
+        if (isFixedRows) {
+            writer.write("<col class=\"cfixedh\">");
+            columnCount++;
+        } else if (isActionColumn) {
+            writer.write("<col class=\"cactionh\">");
+            columnCount++;
+        }
+
+
+        if (isCrudMode) {
+            writer.write("<col class=\"ccrudh\">");
+            columnCount++;
+        }
+        
+        writer.write("</colgroup>");
+
+        return columnCount;
+    }
+
     private int writeHeaderRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         int columnCount = 0;
         writer.write("<tr>");
@@ -592,7 +592,6 @@ public class TableWriter extends AbstractControlWriter {
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean isMultiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
 
-            int columnCount = 0;
             List<ValueStore> valueList = tableWidget.getValueList();
             final int len = valueList.size();
             if (len == 0) {
@@ -685,14 +684,12 @@ public class TableWriter extends AbstractControlWriter {
 
                     if (supportSelect && isMultiSelect && !entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
-                        columnCount++;
                     }
 
                     if (isSerialNo) {
                         writer.write("<td class=\"mseriald\"><span>");
                         writer.write(pageIndex + i);
                         writer.write(".</span></td>");
-                        columnCount++;
                     }
 
                     int columnIndex = 0;
@@ -736,11 +733,9 @@ public class TableWriter extends AbstractControlWriter {
                             columnIndex++;
                         }
                     }
-                    columnCount += columnIndex;
-
+ 
                     if (supportSelect && isMultiSelect && entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
-                        columnCount++;
                     }
 
                     FixedRowActionType fixedType = null;
@@ -751,7 +746,6 @@ public class TableWriter extends AbstractControlWriter {
                         _fixedCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_fixedCtrl);
                         writer.write("</td>");
-                        columnCount++;
                     } else if (isActionColumn) {
                         writer.write("<td>");
                         int _index = table.resolveActionIndex(valueStore, i, len);
@@ -759,7 +753,6 @@ public class TableWriter extends AbstractControlWriter {
                         _actionCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_actionCtrl);
                         writer.write("</td>");
-                        columnCount++;
                     }
 
                     if (isCrudMode) {
@@ -771,7 +764,6 @@ public class TableWriter extends AbstractControlWriter {
                         _crudCtrl.setValueStore(valueStore);
                         writer.writeStructureAndContent(_crudCtrl);
                         writer.write("</td>");
-                        columnCount++;
                     }
                     writer.write("</tr>");
 
@@ -871,30 +863,41 @@ public class TableWriter extends AbstractControlWriter {
                         table.getPostTableSummaryLines());
             }
 
-            if (isFixedRows && supportSelect && isMultiSelect && columnCount > 0) {
-                writer.write("<tr>");
-                if (!entryMode) {
-                    writer.write("<td class=\"mseld\"><span></span></td>");
-                }
-
-                writer.write("<td colspan=\"");
-                writer.write(columnCount);
-                writer.write("\"><div>");
-                Control[] _fixedMultiCtrl = tableWidget.getFixedMultiCtrl();
-                for (int i = 0; i < _fixedMultiCtrl.length; i++) {
-                    writer.writeStructureAndContent(_fixedMultiCtrl[i]);
-                }
-                writer.write("</div></td>");
-
-                if (entryMode) {
-                    writer.write("<td class=\"mseld\"><span></span></td>");
-                }
-
-                writer.write("</tr>");
-            }
         }
     }
 
+    private void writeFixedActionRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, int columnCount)
+            throws UnifyException {
+        final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
+        final AbstractTable<?, ?> table = tableWidget.getTable();
+        final TableDef tableDef = table.getTableDef();
+        final boolean entryMode = table.isEntryMode();
+        final boolean supportSelect = !table.isFixedAssignment();
+        final boolean isMultiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
+
+        if (isFixedRows && supportSelect && isMultiSelect && columnCount > 0) {
+            writer.write("<tr>");
+            if (!entryMode) {
+                writer.write("<td class=\"mseld\"><span></span></td>");
+            }
+
+            writer.write("<td colspan=\"");
+            writer.write(columnCount);
+            writer.write("\"><div>");
+            Control[] _fixedMultiCtrl = tableWidget.getFixedMultiCtrl();
+            for (int i = 0; i < _fixedMultiCtrl.length; i++) {
+                writer.writeStructureAndContent(_fixedMultiCtrl[i]);
+            }
+            writer.write("</div></td>");
+
+            if (entryMode) {
+                writer.write("<td class=\"mseld\"><span></span></td>");
+            }
+
+            writer.write("</tr>");
+        }
+    }
+    
     private void writeSummaryLines(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, boolean entryMode,
             boolean multiSelect, boolean isSerialNo, List<TableSummaryLine> summaryLines) throws UnifyException {
         if (!DataUtils.isBlank(summaryLines)) {
