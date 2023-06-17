@@ -44,7 +44,7 @@
 !ui-label:entryPanelCaption styleClass:$e{caption} binding:entryCaption
 !fc-formmessages:entryErrors binding:validationErrors
 !fc-beanlisttable:entryTableEntryTbl style:$s{width:100%;}
-	multiSelect:true binding:entryBeanTable
+	multiSelect:true binding:entryBeanTable detached:true
 	
 // Actions
 !ui-postcommand:saveEntryAct command:saveEntry components:$c{entryTableEntryTbl}

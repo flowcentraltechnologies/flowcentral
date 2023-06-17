@@ -13,7 +13,8 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!fc-entitycrudpanel crudTable:$c{crudTable}
+!fc-entitycrudpanel crudTable:$c{crudTable} tableDetached:false
 
 // Table
 !fc-entitytable:crudTable style:$s{width:100%;} binding:table
+	detached:$f{tableDetached}

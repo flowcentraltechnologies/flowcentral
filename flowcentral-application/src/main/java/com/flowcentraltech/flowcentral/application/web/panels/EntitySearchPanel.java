@@ -57,6 +57,9 @@ public class EntitySearchPanel extends AbstractApplicationPanel {
 
         EntitySearch entitySearch = getEntitySearch();
         setVisible("sectorIcon", entitySearch.isWithSectorIcon());
+        
+        // Makes sure edit button does not break on page scroll
+        setRequestAttribute(entitySearch.getEditActionKey(), entitySearch.getEditAction());
 
         entitySearch.ensureTableStruct();
         if (isReloadOnSwitch()) {

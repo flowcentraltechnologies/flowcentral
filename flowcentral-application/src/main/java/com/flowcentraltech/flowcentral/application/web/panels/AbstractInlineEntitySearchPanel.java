@@ -46,7 +46,6 @@ public abstract class AbstractInlineEntitySearchPanel extends AbstractStandalone
                 AppletRequestAttributeConstants.MAINFORM_PUSH_COMPONENTS);
         entitySearch.setPushFormIds(pushFormIds);
         entitySearch.setEditActionKey(editActionKey);
-        setRequestAttribute(editActionKey, entitySearch.getEditAction());
     }
 
     protected abstract String getEditActionKey();
