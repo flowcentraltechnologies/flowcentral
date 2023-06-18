@@ -48,6 +48,6 @@ public abstract class AbstractFormPanel extends AbstractApplicationPanel impleme
     }
 
     public EventHandler[] getSwitchOnChangeEventHandler() throws UnifyException {
-        return getWidgetByShortName("switchOnChangeLabel").getUplAttribute(EventHandler[].class, "eventHandler");
+        return getWidgetByShortName("switchOnChangeLabel").getEventHandlers();
     }
 }

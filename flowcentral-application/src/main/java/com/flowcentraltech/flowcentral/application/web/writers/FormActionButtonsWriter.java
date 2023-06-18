@@ -110,10 +110,10 @@ public class FormActionButtonsWriter extends AbstractControlWriter {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers) throws UnifyException {
         FormActionButtons formActionButtons = (FormActionButtons) widget;
         // All behavior should be tied to action control
-        EventHandler[] eventHandlers = formActionButtons.getUplAttribute(EventHandler[].class, "eventHandler");
+        EventHandler[] eventHandlers = formActionButtons.getEventHandlers();
         if (eventHandlers != null) {
             Control actionCtrl = formActionButtons.getActionCtrl();
             final Set<String> showActionSet = (Set<String>) formActionButtons.getWriteWork()

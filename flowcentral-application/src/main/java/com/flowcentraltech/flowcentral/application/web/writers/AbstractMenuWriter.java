@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.AbstractMenuWidget;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
@@ -34,7 +35,8 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractPanelWriter;
 public abstract class AbstractMenuWriter extends AbstractPanelWriter {
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
         AbstractMenuWidget appletMenuWidget = (AbstractMenuWidget) widget;
         WriteWork work = appletMenuWidget.getWriteWork();
         writer.beginFunction("fux.rigMenu");

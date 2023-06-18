@@ -125,8 +125,9 @@ public class MiniFormWriter extends AbstractControlWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
         final MiniFormWidget miniFormWidget = (MiniFormWidget) widget;
         final FormContext ctx = miniFormWidget.getCtx();
         final List<EventHandler> switchOnChangeHandlers = ctx.getFormSwitchOnChangeHandlers();

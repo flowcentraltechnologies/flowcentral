@@ -78,6 +78,7 @@
 !ui-panel:searchEntriesBody layout:$d{!ui-horizontal style:$s{width:100%;} widths:$l{85% none}}
 	components:$c{searchEntries searchEntriesAction}
 !fc-search:searchEntries binding:searchEntries
+    eventHandler:$d{!ui-event event:onenter action:$c{searchAct}}
 !ui-panel:searchEntriesAction style:$s{padding-left:8px;} layout:$d{!ui-horizontal}
 	components:$c{searchBtn clearBtn}
 !ui-button:searchBtn caption:$m{button.search} styleClass:$e{fc-bluebutton fc-tinybutton}

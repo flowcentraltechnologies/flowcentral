@@ -21,6 +21,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.web.ui.util.WebRegexUtils;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
@@ -38,8 +39,9 @@ import com.tcdng.unify.web.ui.widget.writer.control.AbstractPopupTextFieldWriter
 public class EntityTextSelectWriter extends AbstractPopupTextFieldWriter {
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
         EntityTextSelectWidget entityTextSelectWidget = (EntityTextSelectWidget) widget;
         writer.beginFunction("fux.rigEntitySelect");
         writer.writeParam("pId", entityTextSelectWidget.getId());

@@ -26,6 +26,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.json.JsonWriter;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
@@ -91,8 +92,8 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
                         .getListDescription();
                 writer.write("<div class=\"item\" id=\"").write(workflowEditorWidget.getChoiceId()).write(i)
                         .write("\">");
-                writer.write("<span class=\"symcat\">")
-                        .write(resolveSymbolHtmlHexCode(workflowStepType.icon())).write("</span>");
+                writer.write("<span class=\"symcat\">").write(resolveSymbolHtmlHexCode(workflowStepType.icon()))
+                        .write("</span>");
                 writer.write("<span class=\"labelcat\">").writeWithHtmlEscape(label).write("</span>");
                 writer.write("</div>");
 
@@ -126,8 +127,9 @@ public class WorkflowEditorWriter extends AbstractControlWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
 
         final WorkflowEditorWidget workflowEditorWidget = (WorkflowEditorWidget) widget;
         writer.writeBehavior(workflowEditorWidget.getValueCtrl());

@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.dashboard.web.widgets.DashboardSlateWidge
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
@@ -63,8 +64,9 @@ public class DashboardSlateWriter extends AbstractControlWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
         DashboardSlateWidget dashboardSlateWidget = (DashboardSlateWidget) widget;
         for (List<Widget> list : dashboardSlateWidget.getTileList()) {
             for (Widget tileWidget : list) {

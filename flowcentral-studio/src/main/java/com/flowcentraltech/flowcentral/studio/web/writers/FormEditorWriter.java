@@ -22,6 +22,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.util.json.JsonWriter;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
@@ -37,15 +38,9 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 @Component("fc-formeditor-writer")
 public class FormEditorWriter extends AbstractControlWriter {
 
-    private static final String[] TAB_PROPERTY_KEYS = {
-            "formeditor.tab.caption.prefix",
-            "formeditor.tab.contenttype",
-            "formeditor.tab.label",
-            "formeditor.tab.applet",
-            "formeditor.tab.reference",
-            "formeditor.tab.editaction",
-            "formeditor.tab.editable",
-            "formeditor.tab.disabled" };
+    private static final String[] TAB_PROPERTY_KEYS = { "formeditor.tab.caption.prefix", "formeditor.tab.contenttype",
+            "formeditor.tab.label", "formeditor.tab.applet", "formeditor.tab.reference", "formeditor.tab.editaction",
+            "formeditor.tab.editable", "formeditor.tab.disabled" };
 
     @Override
     protected void doWriteStructureAndContent(ResponseWriter writer, Widget widget) throws UnifyException {
@@ -129,8 +124,9 @@ public class FormEditorWriter extends AbstractControlWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
 
         final FormEditorWidget formEditorWidget = (FormEditorWidget) widget;
         writer.writeBehavior(formEditorWidget.getValueCtrl());
