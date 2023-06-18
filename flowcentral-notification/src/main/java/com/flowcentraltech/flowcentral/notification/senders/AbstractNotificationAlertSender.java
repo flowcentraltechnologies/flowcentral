@@ -26,7 +26,6 @@ import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
-import com.flowcentraltech.flowcentral.notification.constants.NotificationModuleNameConstants;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.tcdng.unify.core.AbstractUnifyComponent;
@@ -91,6 +90,11 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
         return notification().wrapperOfNotifLargeText(wrapperType);
     }
 
+    protected final <T extends NotifLargeTextWrapper> T getLargeTextWrapper(Class<T> wrapperType,
+            Map<String, Object> parameters) throws UnifyException {
+        return notification().wrapperOfNotifLargeText(wrapperType, parameters);
+    }
+
     /**
      * Generates notification attachments using reader.
      * 
@@ -137,29 +141,8 @@ public abstract class AbstractNotificationAlertSender extends AbstractUnifyCompo
     }
 
     protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
-            String largeTextName, Map<String, Object> properties) throws UnifyException {
-        return createPdfAttachmentFromLetterListing(fileName, reader,
-                NotificationModuleNameConstants.BASIC_LETTERFORMLISTING_GENERATOR, largeTextName, properties);
-    }
-
-    protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
-            String letterGenerator, String largeTextName, Map<String, Object> properties) throws UnifyException {
-        final byte[] report = appletUtilities.generateLetterListingReportAsByteArray(reader, letterGenerator,
-                largeTextName, properties);
-        return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
-                .data(report).build();
-    }
-
-    protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
-            NotifLargeTextWrapper wrapper) throws UnifyException {
-        return createPdfAttachmentFromLetterListing(fileName, reader,
-                NotificationModuleNameConstants.BASIC_LETTERFORMLISTING_GENERATOR, wrapper);
-    }
-
-    protected Attachment createPdfAttachmentFromLetterListing(String fileName, ValueStoreReader reader,
-            String letterGenerator, NotifLargeTextWrapper wrapper) throws UnifyException {
-        final byte[] report = appletUtilities.generateLetterListingReportAsByteArray(reader, letterGenerator,
-                wrapper.getLargeTextName(), wrapper.getProperties());
+            String letterGenerator) throws UnifyException {
+        final byte[] report = appletUtilities.generateLetterListingReportAsByteArray(reader, letterGenerator);
         return Attachment.newBuilder(FileAttachmentType.PDF).fileName(fileName).title(fileName).name(fileName)
                 .data(report).build();
     }

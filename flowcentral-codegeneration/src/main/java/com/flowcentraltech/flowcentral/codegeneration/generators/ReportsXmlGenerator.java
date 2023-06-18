@@ -102,7 +102,6 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                 reportConfig.setMarginRight(reportConfiguration.getMarginRight());
                 reportConfig.setMarginTop(reportConfiguration.getMarginTop());
                 reportConfig.setProcessor(reportConfiguration.getProcessor());
-                reportConfig.setLargeText(reportConfiguration.getLargeText());
                 reportConfig.setLetterGenerator(reportConfiguration.getLetterGenerator());
                 reportConfig.setShowGrandFooter(reportConfiguration.isShowGrandFooter());
                 reportConfig.setInvertGroupColors(reportConfiguration.isInvertGroupColors());

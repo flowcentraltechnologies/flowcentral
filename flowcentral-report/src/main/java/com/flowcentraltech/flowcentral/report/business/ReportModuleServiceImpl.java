@@ -277,8 +277,8 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 pageProperties);
         // Letter
         if (reportOptions.isLetter()) {
-            logDebug("Generating letter report for entity type [{0}] using generator [{1}] and large text [{2}]...",
-                    reportOptions.getEntity(), reportOptions.getLetterGenerator(), reportOptions.getLargeText());
+            logDebug("Generating letter report for entity type [{0}] using generator [{1}]...",
+                    reportOptions.getEntity(), reportOptions.getLetterGenerator());
             Query<? extends Entity> query = appletUtilities.application().queryOf(reportOptions.getEntity());
             query.addRestriction(reportOptions.getRestriction());
             Entity entity = environment().list(query);
@@ -286,7 +286,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 logDebug("Backing entity record found for letter report...");
                 ValueStoreReader reader = new BeanValueStore(entity).getReader();
                 appletUtilities.generateLetterListingReportToOutputStream(outputStream, reader,
-                        reportOptions.getLetterGenerator(), reportOptions.getLargeText(), Collections.emptyMap());
+                        reportOptions.getLetterGenerator());
             } else {
                 // TODO Generate blank
                 logDebug("Could not find backing entity record letter report. Report generation aborted.");
@@ -709,7 +709,6 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
         // Letter
         if (reportOptions.isLetter()) {
-            reportOptions.setLargeText(reportConfiguration.getLargeText());
             reportOptions.setLetterGenerator(reportConfiguration.getLetterGenerator());
         }
 

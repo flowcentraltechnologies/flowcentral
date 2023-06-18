@@ -1970,15 +1970,11 @@ public interface AppletUtilities extends UnifyComponent {
      *                        the source reader
      * @param letterGenerator
      *                        the letter generator
-     * @param letterName
-     *                        the letter name
-     * @param properties
-     *                        the letter properties
      * @throws UnifyException
      *                        if an error occurs
      */
-    byte[] generateLetterListingReportAsByteArray(ValueStoreReader reader, String letterGenerator, String letterName,
-            Map<String, Object> properties) throws UnifyException;
+    byte[] generateLetterListingReportAsByteArray(ValueStoreReader reader, String letterGenerator)
+            throws UnifyException;
 
     /**
      * Generates a listing report.
@@ -2082,15 +2078,10 @@ public interface AppletUtilities extends UnifyComponent {
      *                        the source reader
      * @param letterGenerator
      *                        the letter generator
-     * @param letterName
-     *                        the letter name
-     * @param properties
-     *                        the letter properties
      * @throws UnifyException
      *                        if an error occurs
      */
-    Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator, String letterName,
-            Map<String, Object> properties) throws UnifyException;
+    Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator) throws UnifyException;
 
     /**
      * Generates a listing report.
@@ -2197,18 +2188,14 @@ public interface AppletUtilities extends UnifyComponent {
      * Generates a listing report as byte array.
      * 
      * @param outputStream
-     *                        the output stream
+     *                     the output stream
      * @param reader
-     *                        the source reader
-     * @param letterGenerator
-     *                        the letter generator
+     *                     the source reader
      * @param letterName
-     *                        the letter name
-     * @param properties
-     *                        the letter properties
+     *                     the letter name
      * @throws UnifyException
      *                        if an error occurs
      */
     void generateLetterListingReportToOutputStream(OutputStream outputStream, ValueStoreReader reader,
-            String letterGenerator, String letterName, Map<String, Object> properties) throws UnifyException;
+            String letterGenerator) throws UnifyException;
 }

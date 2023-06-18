@@ -15,12 +15,15 @@
  */
 package com.flowcentraltech.flowcentral.application.listing;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
+import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.web.data.LetterFormListing;
@@ -29,6 +32,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.Report;
+import com.tcdng.unify.core.report.ReportPageProperties;
 
 /**
  * Convenient abstract base class for letter form listing generators.
@@ -49,6 +53,19 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
             throws UnifyException {
         throwUnsupportedOperationException();
         return null;
+    }
+
+    protected ListingReportGeneratorProperties getReportProperties(ValueStoreReader reader,
+            FormListingOptions listingOptions) throws UnifyException {
+        final int numberOfParts = ((LetterFormListing) listingOptions.getFormListing(0)).getNumberOfParts();
+        final List<ListingReportProperties> listingReportProperties = new ArrayList<ListingReportProperties>();
+        for (int i = 0; i < numberOfParts; i++) {
+            listingReportProperties.add(new ListingReportProperties("default_prop_" + i));
+        }
+
+        return new ListingReportGeneratorProperties(
+                ReportPageProperties.newBuilder().resourceBaseUri(getSessionContext().getUriBase()).build(),
+                listingReportProperties);
     }
 
     @Override

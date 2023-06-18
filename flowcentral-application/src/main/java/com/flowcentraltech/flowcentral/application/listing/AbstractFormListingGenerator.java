@@ -148,24 +148,25 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                 .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
         final String additional = additionalStyleClass() != null ? " " + additionalStyleClass() : "";
+        int listingIndex = 0;
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
             writer.write("<div class=\"fc-formlisting");
             writer.write(additional);
             writer.write("\">");
             writeReportHeader(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(), themeManager, entityImageProvider,
-                            listingReportProperties.getName(), writer, pausePrintColors, false));
+                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(listingIndex), themeManager,
+                            entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateHtmlListing(listingOptions.getFormListing(), listingReportProperties.getName(), reader, listingReportProperties, writer,
-                    pausePrintColors, false);
+            generateHtmlListing(listingOptions.getFormListing(listingIndex), listingReportProperties.getName(), reader,
+                    listingReportProperties, writer, pausePrintColors, false);
             writeReportAddendum(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(), themeManager, entityImageProvider,
-                            listingReportProperties.getName(), writer, pausePrintColors, false));
+                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(listingIndex), themeManager,
+                            entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
             writeReportFooter(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(), themeManager, entityImageProvider,
-                            listingReportProperties.getName(), writer, pausePrintColors, false));
+                    new HtmlListingGeneratorWriter(listingOptions.getFormListing(listingIndex), themeManager,
+                            entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
@@ -174,6 +175,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             }
 
             rb.addBodyContentHtml(listingReportProperties.getName(), style, bodyContent);
+            listingIndex++;
         }
 
         return rb.build();
@@ -187,9 +189,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         Report.Builder rb = Report.newBuilder(ReportLayoutType.WORKBOOK_XLS, properties.getReportPageProperties())
                 .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
+        int listingIndex = 0;
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
-            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(listingOptions.getFormListing(),
+            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(listingOptions.getFormListing(listingIndex),
                     themeManager, entityImageProvider, listingReportProperties.getName(), sheet, pausePrintColors,
                     false);
             writeReportHeader(reader, listingReportProperties, writer);
@@ -197,6 +200,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writeReportAddendum(reader, listingReportProperties, writer);
             writeReportFooter(reader, listingReportProperties, writer);
             writer.close();
+            listingIndex++;
         }
 
         rb.customObject(workbook);
@@ -332,8 +336,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     private void generateHtmlListing(FormListing formListing, final String listingType, ValueStoreReader reader,
             ListingProperties listingProperties, ResponseWriter writer, Set<ListingColorType> pausePrintColors,
             boolean highlighting) throws UnifyException {
-        ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(formListing, themeManager, entityImageProvider,
-                listingType, writer, pausePrintColors, highlighting);
+        ListingGeneratorWriter generator = new HtmlListingGeneratorWriter(formListing, themeManager,
+                entityImageProvider, listingType, writer, pausePrintColors, highlighting);
         doWriteBody(reader, listingProperties, generator);
         generator.close();
     }

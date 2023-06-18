@@ -82,7 +82,7 @@ public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGe
                 notifLargeTextConfig.setName(notifLargeText.getName());
                 notifLargeTextConfig.setDescription("$m{" + descKey + "}");
                 notifLargeTextConfig.setEntity(notifLargeText.getEntity());
-                 notifLargeTextConfig.setBody("$m{" + bodyKey + "}");
+                notifLargeTextConfig.setBody("$m{" + bodyKey + "}");
 
                 List<NotifLargeTextParamConfig> paramList = new ArrayList<NotifLargeTextParamConfig>();
                 for (NotificationLargeTextParam param: notifLargeText.getParamList()) {

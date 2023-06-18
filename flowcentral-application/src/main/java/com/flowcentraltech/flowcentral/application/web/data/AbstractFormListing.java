@@ -13,28 +13,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.data;
+package com.flowcentraltech.flowcentral.application.web.data;
+
+import com.flowcentraltech.flowcentral.common.data.FormListing;
 
 /**
- * Form listing interface.
+ * Convenient abstract base class for form listings.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FormListing {
+public abstract class AbstractFormListing implements FormListing{
 
-    /**
-     * Sets the current listing index (Zero based)
-     * 
-     * @param currentListingIndex
-     *                            the current index to set
-     */
-    void setCurrentListingIndex(int currentListingIndex);
+    private int currentListingIndex;
 
-    /**
-     * Gets the current listing index.
-     * 
-     * @return the listing index
-     */
-    int getCurrentListingIndex();
+    @Override
+    public int getCurrentListingIndex() {
+        return currentListingIndex;
+    }
+
+    @Override
+    public void setCurrentListingIndex(int currentListingIndex) {
+        this.currentListingIndex = currentListingIndex;
+    }
+    
 }

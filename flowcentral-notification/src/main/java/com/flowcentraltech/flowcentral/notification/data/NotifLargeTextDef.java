@@ -25,7 +25,6 @@ import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Notification large text definition.
@@ -41,11 +40,11 @@ public class NotifLargeTextDef extends BaseApplicationEntityDef {
 
     private Map<String, NotifLargeTextParamDef> params;
 
-    public NotifLargeTextDef(String entity, String body, List<NotifLargeTextParamDef> paramList, String longName,
-            String description, Long id, long version) throws UnifyException {
+    public NotifLargeTextDef(String entity, List<StringToken> bodyTokenList, List<NotifLargeTextParamDef> paramList,
+            String longName, String description, Long id, long version) throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         this.entity = entity;
-        this.bodyTokenList = StringUtils.breakdownParameterizedString(body);
+        this.bodyTokenList = bodyTokenList;
         this.params = new LinkedHashMap<String, NotifLargeTextParamDef>();
         for (NotifLargeTextParamDef param : paramList) {
             this.params.put(param.getName(), param);

@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.notification.business;
 
 import java.util.List;
+import java.util.Map;
 
 import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
@@ -64,6 +65,21 @@ public interface NotificationModuleService extends FlowCentralService {
     <T extends NotifLargeTextWrapper> T wrapperOfNotifLargeText(Class<T> wrapperType) throws UnifyException;
 
     /**
+     * Creates a wrapper instance initialized with a new instance of wrapped large
+     * text type.
+     * 
+     * @param wrapperType
+     *                    the wrapper type
+     * @param parameters
+     *                    the parameters
+     * @return the wrapper instance
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends NotifLargeTextWrapper> T wrapperOfNotifLargeText(Class<T> wrapperType, Map<String, Object> parameters)
+            throws UnifyException;
+
+    /**
      * Counts notification templates by module
      * 
      * @param moduleName
@@ -84,7 +100,7 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     int countNotifLargeTextsByModule(String moduleName) throws UnifyException;
-    
+
     /**
      * Gets entity notification large texts.
      * 
@@ -95,7 +111,7 @@ public interface NotificationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     List<NotifLargeTextInfo> getEntityNotifLargeTexts(String entityName) throws UnifyException;
-    
+
     /**
      * Generates dynamic notification template information.
      * 
@@ -109,7 +125,7 @@ public interface NotificationModuleService extends FlowCentralService {
      */
     List<DynamicNotifTemplateInfo> generateNotifTemplateInfos(String basePackage, String moduleName)
             throws UnifyException;
-    
+
     /**
      * Generates dynamic notification large text information.
      * 
@@ -123,7 +139,7 @@ public interface NotificationModuleService extends FlowCentralService {
      */
     List<DynamicNotifLargeTextInfo> generateNotifLargeTextInfos(String basePackage, String moduleName)
             throws UnifyException;
-    
+
     /**
      * Finds notification templates.
      * 
@@ -139,10 +155,11 @@ public interface NotificationModuleService extends FlowCentralService {
      * Finds notification template by ID.
      * 
      * @param notifTemplateId
-     *                the notification template ID
+     *                        the notification template ID
      * @return the notification template
      * @throws UnifyException
-     *                        if notification template with ID is not found. If an error occurs
+     *                        if notification template with ID is not found. If an
+     *                        error occurs
      */
     NotificationTemplate findNotificationTemplate(Long notifTemplateId) throws UnifyException;
 
@@ -161,10 +178,11 @@ public interface NotificationModuleService extends FlowCentralService {
      * Finds notification large text by ID.
      * 
      * @param notifTemplateId
-     *                the notification large text ID
+     *                        the notification large text ID
      * @return the notification large text
      * @throws UnifyException
-     *                        if notification large text with ID is not found. If an error occurs
+     *                        if notification large text with ID is not found. If an
+     *                        error occurs
      */
     NotificationLargeText findNotificationLargeText(Long notifLargeTextId) throws UnifyException;
 
@@ -194,20 +212,20 @@ public interface NotificationModuleService extends FlowCentralService {
      * Get notification large text definition.
      * 
      * @param largeTextName
-     *                     the large text name
+     *                      the large text name
      * @return the large text definition
      * @throws UnifyException
      *                        if an error occurs
      */
     NotifLargeTextDef getNotifLargeTextDef(String largeTextName) throws UnifyException;
-    
+
     /**
      * Sends a notification. This is an asynchronous call where message is pushed
      * into communication system that is left to do actual notification
      * transmission.
      * 
      * @param notifMessage
-     *                            the message to send
+     *                     the message to send
      * @throws UnifyException
      *                        if an error occurs
      */

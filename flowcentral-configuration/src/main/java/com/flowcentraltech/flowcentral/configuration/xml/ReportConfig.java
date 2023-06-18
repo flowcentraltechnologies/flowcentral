@@ -45,8 +45,6 @@ public class ReportConfig extends BaseNameConfig {
 
     private String template;
 
-    private String largeText;
-
     private String letterGenerator;
 
     private ReportColumnsConfig columns;
@@ -184,15 +182,6 @@ public class ReportConfig extends BaseNameConfig {
     @XmlAttribute
     public void setProcessor(String processor) {
         this.processor = processor;
-    }
-
-    public String getLargeText() {
-        return largeText;
-    }
-
-    @XmlAttribute
-    public void setLargeText(String largeText) {
-        this.largeText = largeText;
     }
 
     public String getLetterGenerator() {

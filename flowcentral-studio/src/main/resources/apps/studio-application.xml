@@ -3276,9 +3276,6 @@
 						column="1" visible="false" />
 					<field name="processor" inputWidget="application.text"
 						column="1" />
-					<field name="largeText"
-						inputWidget="studio.reportablelargetextlist" column="1"
-						required="true" visible="false"/>
 					<field name="letterGenerator"
 						inputWidget="studio.reportablelettergeneratorlist" column="1"
 						required="true" visible="false"/>
@@ -3400,7 +3397,7 @@
 						target="processor,showGrandFooter,invertGroupColors,underlineRows,shadeOddRows,landscape"
 						visible="false" />
 					<setState type="field"
-						target="largeText,letterGenerator"
+						target="letterGenerator"
 						visible="true" />
 					<setState type="tab" target="placements" visible="false" />
 					<setState type="tab" target="columns" visible="false" />
