@@ -37,7 +37,7 @@ public class NotificationLargeText extends BaseApplicationEntity {
 
     @Column(type = ColumnType.CLOB)
     private String body;
-
+    
     @ChildList
     private List<NotificationLargeTextParam> paramList;
 

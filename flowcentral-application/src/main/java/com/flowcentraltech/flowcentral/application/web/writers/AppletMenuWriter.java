@@ -39,6 +39,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.util.DataUtils;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.WriteWork;
@@ -203,7 +204,7 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                             writer.write(";\"");
                         }
                         writer.write(">");
-                        
+
                         if (indicateSectorLabels) {
                             writer.write("<span class=\"ind\" style=\"background-color:");
                             writer.write(color);
@@ -275,8 +276,9 @@ public class AppletMenuWriter extends AbstractMenuWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
         final AppletMenuWidget appletMenuWidget = (AppletMenuWidget) widget;
         final boolean searchable = appletMenuWidget.isSearchable();
         if (searchable) {

@@ -161,8 +161,9 @@ public class TableWriter extends AbstractControlWriter {
         }
     }
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget,
+            EventHandler[] handlers) throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
         AbstractTableWidget<?, ?, ?> tableWidget = (AbstractTableWidget<?, ?, ?>) widget;
         final String tableWidgetId = tableWidget.getId();
         final boolean isTableEditable = tableWidget.isNotViewOnlyAndIsContainerEditable();

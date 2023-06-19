@@ -45,7 +45,7 @@ public class QuickFormEditPanel extends AbstractApplicationPanel {
         FormContext formContext = quickFormEdit.getFormContext();
         if (!formContext.isQuickEditMode()) {
             EventHandler[] handlers = getWidgetByShortName(Widget.class, "switchOnChangeHolder")
-                    .getUplAttribute(EventHandler[].class, "eventHandler");
+                    .getEventHandlers();
             formContext.setQuickEditMode(
                     handlers != null ? Collections.unmodifiableList(Arrays.asList(handlers)) : Collections.emptyList());
         }

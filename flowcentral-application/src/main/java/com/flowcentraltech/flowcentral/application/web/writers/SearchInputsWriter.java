@@ -26,6 +26,7 @@ import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.ui.widget.Control;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
@@ -86,7 +87,7 @@ public class SearchInputsWriter extends AbstractControlWriter {
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
                     writeBlankValuesItem(writer);
-                }               
+                }
 
                 writer.write("<td class=\"atab\">");
                 moveUpCtrl.setDisabled(i == 0);
@@ -107,8 +108,9 @@ public class SearchInputsWriter extends AbstractControlWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
+        super.doWriteBehavior(writer, widget, handlers);
         SearchInputsWidget searchInputsWidget = (SearchInputsWidget) widget;
         List<ValueStore> valueStoreList = searchInputsWidget.getValueList();
         List<String> csb = new ArrayList<String>();
@@ -134,7 +136,7 @@ public class SearchInputsWriter extends AbstractControlWriter {
                             csb.add(conditionTypeCtrl.getId());
                         }
                     }
-                }               
+                }
             }
         }
 
@@ -180,8 +182,8 @@ public class SearchInputsWriter extends AbstractControlWriter {
         writer.write("</span>");
     }
 
-    private void writeBehavior(ResponseWriter writer, SearchInputsWidget tokenSequenceWidget,
-            ValueStore lineValueStore, Control ctrl) throws UnifyException {
+    private void writeBehavior(ResponseWriter writer, SearchInputsWidget tokenSequenceWidget, ValueStore lineValueStore,
+            Control ctrl) throws UnifyException {
         ctrl.setValueStore(lineValueStore);
         writer.writeBehavior(ctrl);
         if (tokenSequenceWidget.isContainerEditable()) {

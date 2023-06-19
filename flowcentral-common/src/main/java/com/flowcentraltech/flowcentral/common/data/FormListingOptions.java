@@ -82,7 +82,8 @@ public class FormListingOptions {
         return important;
     }
 
-    public FormListing getFormListing() {
+    public FormListing getFormListing(int currentListingIndex) {
+        formListing.setCurrentListingIndex(currentListingIndex);
         return formListing;
     }
 

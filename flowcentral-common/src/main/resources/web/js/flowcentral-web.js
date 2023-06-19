@@ -564,11 +564,6 @@ fux.rigSetValues = function(rgp) {
 	}
 }
 
-/** Search */
-fux.rigSearch = function(rgp) {
-	var id = rgp.pId;
-}
-
 /** Tab sheet */
 fux.rigTabSheet = function(rgp) {
 	var id = rgp.pId;

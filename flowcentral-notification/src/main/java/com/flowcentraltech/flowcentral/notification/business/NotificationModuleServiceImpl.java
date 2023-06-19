@@ -70,6 +70,7 @@ import com.flowcentraltech.flowcentral.notification.util.DynamicNotifLargeTextIn
 import com.flowcentraltech.flowcentral.notification.util.DynamicNotifTemplateInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotifLargeTextInfo;
 import com.flowcentraltech.flowcentral.notification.util.NotificationCodeGenUtils;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -87,6 +88,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.CalendarUtils;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.ReflectUtils;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Default notification business service implementation.
@@ -177,8 +179,10 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                         paramList.add(new NotifLargeTextParamDef(largeTextParam.getName(), largeTextParam.getLabel()));
                     }
 
-                    return new NotifLargeTextDef(notificationLargeText.getEntity(), notificationLargeText.getBody(),
-                            paramList, longName, notificationLargeText.getDescription(), notificationLargeText.getId(),
+                    final List<StringToken> bodyTokenList = StringUtils
+                            .breakdownParameterizedString(notificationLargeText.getBody());
+                    return new NotifLargeTextDef(notificationLargeText.getEntity(), bodyTokenList, paramList, longName,
+                            notificationLargeText.getDescription(), notificationLargeText.getId(),
                             notificationLargeText.getVersionNo());
                 }
 
@@ -211,6 +215,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
     private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_0 = { NotifLargeTextDef.class };
 
+    private static final Class<?>[] NOTIF_LARGETEXT_WRAPPER_PARAMS_1 = { NotifLargeTextDef.class, Map.class };
+
     @Override
     public <T extends NotifTemplateWrapper> T wrapperOfNotifTemplate(Class<T> wrapperType) throws UnifyException {
         final String templateName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
@@ -225,6 +231,15 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 NotificationCodeGenUtils.LARGETEXT_NAME);
         final NotifLargeTextDef notifLargeTextDef = getNotifLargeTextDef(largeTextName);
         return ReflectUtils.newInstance(wrapperType, NOTIF_LARGETEXT_WRAPPER_PARAMS_0, notifLargeTextDef);
+    }
+
+    @Override
+    public <T extends NotifLargeTextWrapper> T wrapperOfNotifLargeText(Class<T> wrapperType,
+            Map<String, Object> parameters) throws UnifyException {
+        final String largeTextName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
+                NotificationCodeGenUtils.LARGETEXT_NAME);
+        final NotifLargeTextDef notifLargeTextDef = getNotifLargeTextDef(largeTextName);
+        return ReflectUtils.newInstance(wrapperType, NOTIF_LARGETEXT_WRAPPER_PARAMS_1, notifLargeTextDef, parameters);
     }
 
     @Override
@@ -243,14 +258,14 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                 .entity(entityName).addSelect("applicationName", "name", "description"));
         if (!DataUtils.isBlank(largeTexts)) {
             List<NotifLargeTextInfo> infos = new ArrayList<NotifLargeTextInfo>();
-            for (NotificationLargeText largeText: largeTexts) {
+            for (NotificationLargeText largeText : largeTexts) {
                 infos.add(new NotifLargeTextInfo(ApplicationNameUtils.getApplicationEntityLongName(
                         largeText.getApplicationName(), largeText.getName()), largeText.getDescription()));
             }
-            
+
             return infos;
         }
-        
+
         return Collections.emptyList();
     }
 

@@ -15,6 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.application.listing;
 
+import java.util.List;
+import java.util.Map;
+
+import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.data.ValueStoreReader;
+
 /**
  * Letter form listing generator.
  * 
@@ -23,4 +29,24 @@ package com.flowcentraltech.flowcentral.application.listing;
  */
 public interface LetterFormListingGenerator extends FormListingGenerator {
 
+    /**
+     * Gets letter names.
+     * 
+     * @param reader
+     *               the backing reader
+     * @return the listing letter names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<String> getLetterNames(ValueStoreReader reader) throws UnifyException;
+
+    /**
+     * Gets listing parameters
+     * 
+     * @param reader
+     *               the backing reader
+     * @return the listing parameters
+     * @throws UnifyException
+     */
+    Map<String, Object> getParameters(ValueStoreReader reader) throws UnifyException;
 }

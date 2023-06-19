@@ -35,6 +35,11 @@ public abstract class BaseNotifLargeTextWrapper implements NotifLargeTextWrapper
         this.properties = new HashMap<String, Object>();
     }
 
+    public BaseNotifLargeTextWrapper(NotifLargeTextDef notifLargeTextDef, Map<String, Object> properties) {
+        this.notifLargeTextDef = notifLargeTextDef;
+        this.properties = properties;
+    }
+
     @Override
     public String getLargeTextName() {
         return notifLargeTextDef.getLongName();
@@ -46,12 +51,12 @@ public abstract class BaseNotifLargeTextWrapper implements NotifLargeTextWrapper
     }
 
     @Override
-    public void addParam(String name, Object val) {
+    public void addParameter(String name, Object val) {
         properties.put(name, val);
     }
 
     @Override
-    public Map<String, Object> getProperties() {
+    public Map<String, Object> getParameters() {
         return properties;
     }
 }

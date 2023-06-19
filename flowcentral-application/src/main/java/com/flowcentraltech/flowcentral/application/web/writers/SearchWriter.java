@@ -27,6 +27,7 @@ import com.tcdng.unify.core.annotation.Writes;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.widget.AbstractMultiControl.ChildWidgetInfo;
 import com.tcdng.unify.web.ui.widget.Control;
+import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.ResponseWriter;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.control.DynamicField;
@@ -84,25 +85,19 @@ public class SearchWriter extends AbstractControlWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget) throws UnifyException {
-        super.doWriteBehavior(writer, widget);
-
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
         SearchWidget searchWidget = (SearchWidget) widget;
         List<ValueStore> valueStoreList = searchWidget.getValueList();
         if (valueStoreList != null) {
+            final String searchId = searchWidget.getId();
             DynamicField paramCtrlA = searchWidget.getParamCtrl();
             final int len = valueStoreList.size();
             for (int i = 0; i < len; i++) {
-                ValueStore lineValueStore = valueStoreList.get(i);
-                writeBehavior(writer, searchWidget, lineValueStore, paramCtrlA);
+                ValueStore inputValueStore = valueStoreList.get(i);
+                writeBehavior(writer, searchId, handlers, inputValueStore, paramCtrlA);
             }
         }
-
-        writer.beginFunction("fux.rigSearch");
-        writer.writeParam("pId", searchWidget.getId());
-        writer.writeCommandURLParam("pCmdURL");
-        writer.writeParam("pContId", searchWidget.getContainerId());
-        writer.endFunction();
     }
 
     private void writeFieldCell(ResponseWriter writer, SearchEntries searchEntries, ValueStore lineValueStore,
@@ -146,11 +141,11 @@ public class SearchWriter extends AbstractControlWriter {
         writer.write("</div>");
     }
 
-    private void writeBehavior(ResponseWriter writer, SearchWidget searchWidget, ValueStore lineValueStore,
-            DynamicField ctrl) throws UnifyException {
-        ctrl.setValueStore(lineValueStore);
-        writer.writeBehavior(ctrl);
-        addPageAlias(searchWidget.getId(), ctrl);
+    private void writeBehavior(ResponseWriter writer, String searchId, EventHandler[] handlers,
+            ValueStore inputValueStore, DynamicField ctrl) throws UnifyException {
+        ctrl.setValueStore(inputValueStore);
+        writer.writeBehavior(ctrl, handlers);
+        addPageAlias(searchId, ctrl);
 
         if (!getRequestContextUtil().isFocusOnWidget()) {
             ChildWidgetInfo info = new ArrayList<ChildWidgetInfo>(ctrl.getChildWidgetInfos()).get(0);

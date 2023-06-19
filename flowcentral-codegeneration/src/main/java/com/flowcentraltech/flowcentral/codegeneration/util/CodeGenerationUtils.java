@@ -244,14 +244,17 @@ public final class CodeGenerationUtils {
 
         TypeInfo notifLargeTextDefEntityInfo = new TypeInfo(NotifLargeTextDef.class);
         TypeInfo exceptionEntityInfo = new TypeInfo(UnifyException.class);
+        TypeInfo mapEntityInfo = new TypeInfo(Map.class);
         importSet.add(notifLargeTextDefEntityInfo.getCanonicalName());
         importSet.add(exceptionEntityInfo.getCanonicalName());
+        importSet.add(mapEntityInfo.getCanonicalName());
 
         // Evaluate parameters
         for (final String param : dynamicLargeTextInfo.getParams()) {
             final String capParam = StringUtils.capitalizeFirstLetter(param);
             msb.append(" public void set").append(capParam)
-                    .append("(String val) throws UnifyException {properties.put(\"").append(param).append("\", val);}\n");
+                    .append("(String val) throws UnifyException {properties.put(\"").append(param)
+                    .append("\", val);}\n");
         }
 
         // Construct class
@@ -272,6 +275,8 @@ public final class CodeGenerationUtils {
                 .append(dynamicLargeTextInfo.getLargeTextName()).append("\";\n");
         esb.append("public ").append(typeInfo.getSimpleName())
                 .append("(NotifLargeTextDef notifLargeTextDef) throws UnifyException {super(notifLargeTextDef);}\n");
+        esb.append("public ").append(typeInfo.getSimpleName()).append(
+                "(NotifLargeTextDef notifLargeTextDef, Map<String, Object> parameters) throws UnifyException {super(notifLargeTextDef, parameters);}\n");
         esb.append(msb);
         esb.append("}\n");
         return esb.toString();
@@ -289,12 +294,12 @@ public final class CodeGenerationUtils {
             sb.append("String NAME = \"").append(applicationInfo.getApplicationName()).append("\";\n");
 
             for (Map.Entry<ComponentType, List<String>> entry : applicationInfo.getComponentNames().entrySet()) {
-                sb.append("interface ").append(StringUtils.capitalizeFirstLetter(entry.getKey().term()))
-                        .append(" {\n");
+                sb.append("interface ").append(StringUtils.capitalizeFirstLetter(entry.getKey().term())).append(" {\n");
                 for (String componentName : entry.getValue()) {
                     final String fieldNameConst = SqlUtils.generateSchemaElementName(componentName, true);
                     sb.append("String ").append(fieldNameConst).append(" = \"")
-                            .append(applicationInfo.getApplicationName()).append('.').append(componentName).append("\";\n");
+                            .append(applicationInfo.getApplicationName()).append('.').append(componentName)
+                            .append("\";\n");
                 }
 
                 sb.append("}\n");

@@ -29,7 +29,7 @@ public interface NotifLargeTextWrapper {
     
     String getEntity();
 
-    void addParam(String name, Object val);
+    void addParameter(String name, Object val);
 
-    Map<String, Object> getProperties();
+    Map<String, Object> getParameters();
 }

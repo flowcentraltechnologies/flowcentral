@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.data;
 
+import java.util.List;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -27,26 +27,26 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class LetterFormListing implements FormListing{
+public class LetterFormListing extends AbstractFormListing {
 
-    private Map<String, Object> properties;
+    private Map<String, Object> parameters;
 
-    private String letterName;
+    private List<String> letterNames;
 
     private String generator;
 
-    public LetterFormListing(String letterName, String generator, Map<String, Object> properties) {
-        this.letterName = letterName;
+    public LetterFormListing(List<String> letterNames, String generator, Map<String, Object> parameters) {
+        this.letterNames = letterNames;
         this.generator = generator;
-        this.properties = properties;
+        this.parameters = parameters;
     }
 
-    public Map<String, Object> getProperties() {
-        return properties;
+    public Map<String, Object> getParameters() {
+        return parameters;
     }
 
-    public <T> T getProperty(Class<T> dataType, String name) throws UnifyException {
-        return properties != null ? DataUtils.convert(dataType, properties.get(name))
+    public <T> T getParameter(Class<T> dataType, String name) throws UnifyException {
+        return parameters != null ? DataUtils.convert(dataType, parameters.get(name))
                 : DataUtils.convert(dataType, null);
     }
 
@@ -54,12 +54,15 @@ public class LetterFormListing implements FormListing{
         return generator;
     }
 
-    public String getLetterName() {
-        return letterName;
+    public String getLetterName(int index) {
+        return letterNames.get(index);
     }
 
-    public boolean isEmptyProperties() {
-        return DataUtils.isBlank(properties);
+    public int getNumberOfParts() {
+        return letterNames.size();
     }
 
+    public boolean isEmptyParameters() {
+        return DataUtils.isBlank(parameters);
+    }
 }
