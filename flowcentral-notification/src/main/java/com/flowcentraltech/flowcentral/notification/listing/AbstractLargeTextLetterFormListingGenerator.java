@@ -40,6 +40,8 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
     @Configurable
     private NotificationModuleService notificationModuleService;
 
+    private static final int DEFAULT_FONTSIZE_IN_PIXELS = 12;
+    
     public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
@@ -57,7 +59,8 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
     @Override
     protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
         NotifLargeTextDef notifLargeTextDef = notificationModuleService.getNotifLargeTextDef(getLetterName(reader));
-        return notifLargeTextDef.getFontSizeInPixels();
+        final int fontSizeInPixels = notifLargeTextDef.getFontSizeInPixels();
+        return fontSizeInPixels <= 0 ? DEFAULT_FONTSIZE_IN_PIXELS : fontSizeInPixels;
     }
 
     @Override
