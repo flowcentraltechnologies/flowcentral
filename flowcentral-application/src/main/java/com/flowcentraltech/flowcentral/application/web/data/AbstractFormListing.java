@@ -25,16 +25,16 @@ import com.flowcentraltech.flowcentral.common.data.FormListing;
  */
 public abstract class AbstractFormListing implements FormListing{
 
-    private int currentListingIndex;
+    private int listingIndex;
 
     @Override
-    public int getCurrentListingIndex() {
-        return currentListingIndex;
+    public void nextIndex() {
+        listingIndex++;
     }
 
     @Override
-    public void setCurrentListingIndex(int currentListingIndex) {
-        this.currentListingIndex = currentListingIndex;
+    public int getListingIndex() {
+        return listingIndex;
     }
     
 }

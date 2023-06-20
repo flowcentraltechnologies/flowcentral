@@ -36,14 +36,18 @@ public class NotifLargeTextDef extends BaseApplicationEntityDef {
 
     private String entity;
 
-    private List<StringToken> bodyTokenList;
+    private int fontSizeInPixels;
+
+    private List<List<StringToken>> bodyTokenList;
 
     private Map<String, NotifLargeTextParamDef> params;
 
-    public NotifLargeTextDef(String entity, List<StringToken> bodyTokenList, List<NotifLargeTextParamDef> paramList,
-            String longName, String description, Long id, long version) throws UnifyException {
+    public NotifLargeTextDef(String entity, int fontSizeInPixels, List<List<StringToken>> bodyTokenList,
+            List<NotifLargeTextParamDef> paramList, String longName, String description, Long id, long version)
+            throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         this.entity = entity;
+        this.fontSizeInPixels = fontSizeInPixels;
         this.bodyTokenList = bodyTokenList;
         this.params = new LinkedHashMap<String, NotifLargeTextParamDef>();
         for (NotifLargeTextParamDef param : paramList) {
@@ -55,8 +59,16 @@ public class NotifLargeTextDef extends BaseApplicationEntityDef {
         return entity;
     }
 
-    public List<StringToken> getBodyTokenList() {
-        return bodyTokenList;
+    public int getFontSizeInPixels() {
+        return fontSizeInPixels;
+    }
+
+    public List<StringToken> getBodyTokenList(int partIndex) {
+        return bodyTokenList.get(partIndex);
+    }
+
+    public int getNumberOfParts() {
+        return bodyTokenList.size();
     }
 
     public Set<String> getParamNames() {

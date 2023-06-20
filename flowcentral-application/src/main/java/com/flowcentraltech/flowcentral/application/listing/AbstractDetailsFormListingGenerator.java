@@ -56,6 +56,11 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     }
 
     @Override
+    protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
+        return 10;
+    }
+
+    @Override
     protected final void doWriteBody(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         doGenerate(reader, listingProperties, writer);

@@ -69,10 +69,11 @@ public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGe
             List<AppNotifLargeTextConfig> notifLargeTextList = new ArrayList<AppNotifLargeTextConfig>();
             for (Long notifLargeTextId : notifLargeTextIdList) {
                 AppNotifLargeTextConfig appNotifLargeTextConfig = new AppNotifLargeTextConfig();
-                NotificationLargeText notifLargeText = notificationModuleService.findNotificationLargeText(notifLargeTextId);
+                NotificationLargeText notifLargeText = notificationModuleService
+                        .findNotificationLargeText(notifLargeTextId);
                 final String filename = StringUtils.dashen(NameUtils.describeName(notifLargeText.getName())) + ".xml";
                 openEntry(filename, zos);
-                
+
                 NotifLargeTextConfig notifLargeTextConfig = new NotifLargeTextConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "notification", notifLargeText.getName());
                 String bodyKey = descKey + ".body";
@@ -82,21 +83,23 @@ public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGe
                 notifLargeTextConfig.setName(notifLargeText.getName());
                 notifLargeTextConfig.setDescription("$m{" + descKey + "}");
                 notifLargeTextConfig.setEntity(notifLargeText.getEntity());
+                notifLargeTextConfig.setLinesPerPage(notifLargeText.getLinesPerPage());
+                notifLargeTextConfig.setFontSizeInPixels(notifLargeText.getFontSizeInPixels());
                 notifLargeTextConfig.setBody("$m{" + bodyKey + "}");
 
                 List<NotifLargeTextParamConfig> paramList = new ArrayList<NotifLargeTextParamConfig>();
-                for (NotificationLargeTextParam param: notifLargeText.getParamList()) {
+                for (NotificationLargeTextParam param : notifLargeText.getParamList()) {
                     NotifLargeTextParamConfig pConfig = new NotifLargeTextParamConfig();
                     pConfig.setName(param.getName());
                     pConfig.setLabel(param.getLabel());
                     paramList.add(pConfig);
                 }
-                
+
                 notifLargeTextConfig.setParamList(paramList);
-                
+
                 ConfigurationUtils.writeConfigNoEscape(notifLargeTextConfig, zos);
                 closeEntry(zos);
-  
+
                 appNotifLargeTextConfig.setConfigFile(NOTIFICATION_LARGETEXT_FOLDER + filename);
                 notifLargeTextList.add(appNotifLargeTextConfig);
             }

@@ -57,7 +57,7 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
 
     protected ListingReportGeneratorProperties getReportProperties(ValueStoreReader reader,
             FormListingOptions listingOptions) throws UnifyException {
-        final int numberOfParts = ((LetterFormListing) listingOptions.getFormListing(0)).getNumberOfParts();
+        final int numberOfParts = getNumberOfParts(reader);
         final List<ListingReportProperties> listingReportProperties = new ArrayList<ListingReportProperties>();
         for (int i = 0; i < numberOfParts; i++) {
             listingReportProperties.add(new ListingReportProperties("default_prop_" + i));
@@ -79,22 +79,27 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
     }
 
     @Override
+    protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
+        return 12;
+    }
+
+    @Override
     protected final void writeReportAddendum(ValueStoreReader reader, ListingReportProperties listingProperties,
-            ListingGeneratorWriter wtiter) throws UnifyException {
-        writeLetterAddendum(reader, listingProperties, wtiter);
+            ListingGeneratorWriter writer) throws UnifyException {
+        writeLetterAddendum(reader, writer.getFormListing(LetterFormListing.class), listingProperties, writer);
 
     }
 
     @Override
     protected final void writeReportFooter(ValueStoreReader reader, ListingReportProperties listingProperties,
-            ListingGeneratorWriter wtiter) throws UnifyException {
-        writeLetterFooter(reader, listingProperties, wtiter);
+            ListingGeneratorWriter writer) throws UnifyException {
+        writeLetterFooter(reader, writer.getFormListing(LetterFormListing.class), listingProperties, writer);
     }
 
     @Override
     protected final void writeReportHeader(ValueStoreReader reader, ListingReportProperties listingProperties,
-            ListingGeneratorWriter wtiter) throws UnifyException {
-        writeLetterHeader(reader, listingProperties, wtiter);
+            ListingGeneratorWriter writer) throws UnifyException {
+        writeLetterHeader(reader, writer.getFormListing(LetterFormListing.class), listingProperties, writer);
     }
 
     @Override
@@ -113,16 +118,18 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
         writer.endSection();
     }
 
+    protected abstract int getNumberOfParts(ValueStoreReader reader) throws UnifyException;
+
     protected abstract String getLetterBody(ValueStoreReader reader, LetterFormListing letterFormListing)
             throws UnifyException;
 
-    protected abstract void writeLetterAddendum(ValueStoreReader reader, ListingReportProperties listingProperties,
-            ListingGeneratorWriter writer) throws UnifyException;
+    protected abstract void writeLetterAddendum(ValueStoreReader reader, LetterFormListing letterFormListing,
+            ListingReportProperties listingProperties, ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void writeLetterFooter(ValueStoreReader reader, ListingReportProperties listingProperties,
-            ListingGeneratorWriter writer) throws UnifyException;
+    protected abstract void writeLetterFooter(ValueStoreReader reader, LetterFormListing letterFormListing,
+            ListingReportProperties listingProperties, ListingGeneratorWriter writer) throws UnifyException;
 
-    protected abstract void writeLetterHeader(ValueStoreReader reader, ListingReportProperties listingProperties,
-            ListingGeneratorWriter writer) throws UnifyException;
+    protected abstract void writeLetterHeader(ValueStoreReader reader, LetterFormListing letterFormListing,
+            ListingReportProperties listingProperties, ListingGeneratorWriter writer) throws UnifyException;
 
 }

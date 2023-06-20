@@ -24,17 +24,15 @@ package com.flowcentraltech.flowcentral.common.data;
 public interface FormListing {
 
     /**
-     * Sets the current listing index (Zero based)
-     * 
-     * @param currentListingIndex
-     *                            the current index to set
+     * Increments to next listing index
+     *
      */
-    void setCurrentListingIndex(int currentListingIndex);
+    void nextIndex();
 
     /**
-     * Gets the current listing index.
+     * Gets the listing index.
      * 
      * @return the listing index
      */
-    int getCurrentListingIndex();
+    int getListingIndex();
 }

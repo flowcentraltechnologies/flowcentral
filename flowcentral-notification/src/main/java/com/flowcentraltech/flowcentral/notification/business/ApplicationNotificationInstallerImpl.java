@@ -129,13 +129,14 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
 
                 NotificationLargeText oldNotificationLargeText = environment().findLean(new NotificationLargeTextQuery()
                         .applicationId(applicationId).name(notifLargeTextConfig.getName()));
-
                 if (oldNotificationLargeText == null) {
                     NotificationLargeText notificationLargeText = new NotificationLargeText();
                     notificationLargeText.setApplicationId(applicationId);
                     notificationLargeText.setName(notifLargeTextConfig.getName());
                     notificationLargeText.setDescription(description);
                     notificationLargeText.setEntity(entity);
+                    notificationLargeText.setLinesPerPage(notifLargeTextConfig.getLinesPerPage());
+                    notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                     notificationLargeText.setBody(body);
                     notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(notificationLargeText, notifLargeTextConfig);
@@ -144,6 +145,8 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     if (ConfigUtils.isSetInstall(oldNotificationLargeText)) {
                         oldNotificationLargeText.setDescription(description);
                         oldNotificationLargeText.setEntity(entity);
+                        oldNotificationLargeText.setLinesPerPage(notifLargeTextConfig.getLinesPerPage());
+                        oldNotificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                         oldNotificationLargeText.setBody(body);
                         populateChildList(oldNotificationLargeText, notifLargeTextConfig);
                         environment().updateByIdVersion(oldNotificationLargeText);

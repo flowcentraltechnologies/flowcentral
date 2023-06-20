@@ -3172,6 +3172,10 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1"/>
+					<field name="linesPerPage" inputWidget="application.integer"
+						column="1"/>
+					<field name="fontSizeInPixels" inputWidget="application.integer"
+						column="1"/>
 				</section>
 				<section name="bodyDetails" columns="type_1">
 					<field name="body" inputWidget="application.textareaxxlarge"

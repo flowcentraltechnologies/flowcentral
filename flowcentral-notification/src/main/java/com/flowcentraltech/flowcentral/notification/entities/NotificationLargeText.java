@@ -38,6 +38,12 @@ public class NotificationLargeText extends BaseApplicationEntity {
     @Column(type = ColumnType.CLOB)
     private String body;
     
+    @Column(nullable = true)
+    private Integer linesPerPage;
+    
+    @Column(nullable = true)
+    private Integer fontSizeInPixels;
+    
     @ChildList
     private List<NotificationLargeTextParam> paramList;
 
@@ -55,6 +61,22 @@ public class NotificationLargeText extends BaseApplicationEntity {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public Integer getLinesPerPage() {
+        return linesPerPage;
+    }
+
+    public void setLinesPerPage(Integer linesPerPage) {
+        this.linesPerPage = linesPerPage;
+    }
+
+    public Integer getFontSizeInPixels() {
+        return fontSizeInPixels;
+    }
+
+    public void setFontSizeInPixels(Integer fontSizeInPixels) {
+        this.fontSizeInPixels = fontSizeInPixels;
     }
 
     public List<NotificationLargeTextParam> getParamList() {

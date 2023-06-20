@@ -27,10 +27,10 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.MapValueStore;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
- * Convenient abstract base class for large text letter form listing
- * generators.
+ * Convenient abstract base class for large text letter form listing generators.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -40,6 +40,8 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
     @Configurable
     private NotificationModuleService notificationModuleService;
 
+    private static final int DEFAULT_FONTSIZE_IN_PIXELS = 12;
+    
     public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
@@ -55,15 +57,31 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
     }
 
     @Override
+    protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
+        NotifLargeTextDef notifLargeTextDef = notificationModuleService.getNotifLargeTextDef(getLetterName(reader));
+        final int fontSizeInPixels = notifLargeTextDef.getFontSizeInPixels();
+        return fontSizeInPixels <= 0 ? DEFAULT_FONTSIZE_IN_PIXELS : fontSizeInPixels;
+    }
+
+    @Override
+    protected final int getNumberOfParts(ValueStoreReader reader) throws UnifyException {
+        NotifLargeTextDef notifLargeTextDef = notificationModuleService.getNotifLargeTextDef(getLetterName(reader));
+        return notifLargeTextDef.getNumberOfParts();
+    }
+
+    @Override
     protected final String getLetterBody(ValueStoreReader reader, LetterFormListing letterFormListing)
             throws UnifyException {
-        NotifLargeTextDef notifLargeTextDef = notificationModuleService
-                .getNotifLargeTextDef(letterFormListing.getLetterName(letterFormListing.getCurrentListingIndex()));
+        NotifLargeTextDef notifLargeTextDef = notificationModuleService.getNotifLargeTextDef(getLetterName(reader));
+        Map<String, Object> parameters = getParameters(reader);
         ParameterizedStringGenerator generator = getParameterizedStringGenerator(
-                letterFormListing.isEmptyParameters() ? reader
-                        : new MapValueStore(letterFormListing.getParameters()).getReader(),
-                notifLargeTextDef.getBodyTokenList());
+                DataUtils.isBlank(parameters) ? reader : new MapValueStore(parameters).getReader(),
+                notifLargeTextDef.getBodyTokenList(letterFormListing.getListingIndex()));
         return generator.generate();
     }
+
+    protected abstract String getLetterName(ValueStoreReader reader) throws UnifyException;
+
+    protected abstract Map<String, Object> getParameters(ValueStoreReader reader) throws UnifyException;
 
 }

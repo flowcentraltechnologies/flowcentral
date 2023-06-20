@@ -2345,7 +2345,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         FormListingOptions _options = optionFlags == 0 ? options
                 : new FormListingOptions(options.getFormActionName(), optionFlags);
         logDebug("Using resolved option [{0}]...", _options);
-        // reader.setReadFormats(_generator.getFormats());
+        reader.setFormats(_generator.getFormats());
         return _generator.generateHtmlReport(reader, _options);
     }
 
@@ -2386,7 +2386,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());
-        // reader.setReadFormats(_generator.getFormats());
+        reader.setFormats(_generator.getFormats());
         final FormListingOptions options = new FormListingOptions(listing);
         return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, options)
                 : _generator.generateHtmlReport(reader, options);
@@ -2400,7 +2400,7 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
         final DetailsFormListing listing = lb.build();
         final DetailsFormListingGenerator _generator = (DetailsFormListingGenerator) getComponent(
                 listing.getGenerator());
-        // reader.setReadFormats(_generator.getFormats());
+        reader.setFormats(_generator.getFormats());
         final FormListingOptions options = new FormListingOptions(listing);
         return listing.isSpreadSheet() ? _generator.generateExcelReport(reader, options)
                 : _generator.generateHtmlReport(reader, options);
@@ -2409,10 +2409,8 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @Override
     public Report generateLetterListingReport(ValueStoreReader reader, String letterGenerator) throws UnifyException {
         final LetterFormListingGenerator _generator = (LetterFormListingGenerator) getComponent(letterGenerator);
-        final List<String> letterNames = _generator.getLetterNames(reader);
-        final Map<String, Object> parameters = _generator.getParameters(reader);
-        final LetterFormListing letterFormListing = new LetterFormListing(letterNames, letterGenerator, parameters);
-        // reader.setReadFormats(_generator.getFormats());
+        final LetterFormListing letterFormListing = new LetterFormListing(letterGenerator);
+        reader.setFormats(_generator.getFormats());
         return _generator.generateHtmlReport(reader, new FormListingOptions(letterFormListing));
     }
 
