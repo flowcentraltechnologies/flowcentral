@@ -15,12 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.application.web.data;
 
-import java.util.List;
-import java.util.Map;
-
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.util.DataUtils;
-
 /**
  * Letter form listing.
  * 
@@ -29,40 +23,13 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class LetterFormListing extends AbstractFormListing {
 
-    private Map<String, Object> parameters;
-
-    private List<String> letterNames;
-
     private String generator;
 
-    public LetterFormListing(List<String> letterNames, String generator, Map<String, Object> parameters) {
-        this.letterNames = letterNames;
+    public LetterFormListing(String generator) {
         this.generator = generator;
-        this.parameters = parameters;
-    }
-
-    public Map<String, Object> getParameters() {
-        return parameters;
-    }
-
-    public <T> T getParameter(Class<T> dataType, String name) throws UnifyException {
-        return parameters != null ? DataUtils.convert(dataType, parameters.get(name))
-                : DataUtils.convert(dataType, null);
     }
 
     public String getGenerator() {
         return generator;
-    }
-
-    public String getLetterName(int index) {
-        return letterNames.get(index);
-    }
-
-    public int getNumberOfParts() {
-        return letterNames.size();
-    }
-
-    public boolean isEmptyParameters() {
-        return DataUtils.isBlank(parameters);
     }
 }

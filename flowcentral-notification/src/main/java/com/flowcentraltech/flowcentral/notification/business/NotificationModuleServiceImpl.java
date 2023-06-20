@@ -179,10 +179,13 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                         paramList.add(new NotifLargeTextParamDef(largeTextParam.getName(), largeTextParam.getLabel()));
                     }
 
-                    final List<StringToken> bodyTokenList = StringUtils
-                            .breakdownParameterizedString(notificationLargeText.getBody());
-                    return new NotifLargeTextDef(notificationLargeText.getEntity(), bodyTokenList, paramList, longName,
-                            notificationLargeText.getDescription(), notificationLargeText.getId(),
+                    final int linesPerPage = DataUtils.convert(int.class, notificationLargeText.getLinesPerPage());
+                    final int fontSizeInPixels = DataUtils.convert(int.class,
+                            notificationLargeText.getFontSizeInPixels());
+                    final List<List<StringToken>> bodyTokenList = StringUtils
+                            .breakdownParameterizedString(notificationLargeText.getBody(), linesPerPage);
+                    return new NotifLargeTextDef(notificationLargeText.getEntity(), fontSizeInPixels, bodyTokenList,
+                            paramList, longName, notificationLargeText.getDescription(), notificationLargeText.getId(),
                             notificationLargeText.getVersionNo());
                 }
 
