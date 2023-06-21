@@ -425,6 +425,7 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-inputarray .iacaption {}
 .fc-inputarray .iacaption span {display: block; padding: 5px 4px; margin-bottom: 8px; font-size: 11px;font-weight: bold;
 	background-color:#6e819d; color: #ffffff;}
+.fc-inputarray .ui-label {word-break: break-all;}
 
 /* Mini form */
 .fc-miniform {}
