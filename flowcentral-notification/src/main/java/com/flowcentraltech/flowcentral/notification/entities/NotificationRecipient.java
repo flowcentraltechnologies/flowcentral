@@ -40,7 +40,7 @@ public class NotificationRecipient extends BaseVersionTenantEntity {
     @Column(length = 64)
     private String recipientName;
 
-    @Column(length = 256)
+    @Column(length = 512)
     private String recipientContact;
 
     @ListOnly(key = "type", property = "description")
