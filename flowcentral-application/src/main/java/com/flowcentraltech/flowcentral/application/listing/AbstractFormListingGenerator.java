@@ -180,7 +180,9 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             }
 
             rb.addBodyContentHtml(listingReportProperties.getName(), style, bodyContent);
-            formListing.nextIndex();
+            if (formListing != null) {
+                formListing.nextIndex();
+            }
         }
 
         return rb.build();
@@ -205,7 +207,9 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
             writeReportAddendum(reader, listingReportProperties, writer);
             writeReportFooter(reader, listingReportProperties, writer);
             writer.close();
-            formListing.nextIndex();
+            if (formListing != null) {
+                formListing.nextIndex();
+            }
         }
 
         rb.customObject(workbook);
