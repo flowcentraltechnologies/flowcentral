@@ -183,7 +183,7 @@ public interface ApplicationModuleService extends FlowCentralService {
 
     /**
      * Creates a wrapper instance initialized with the entity list found by supplied
-     * query.
+     * query and list all method.
      * 
      * @param wrapperType
      *                    the wrapper type
