@@ -24,6 +24,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResu
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
+import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.business.BusinessService;
 import com.tcdng.unify.core.criterion.Aggregate;
@@ -141,6 +142,17 @@ public interface EnvironmentService extends BusinessService {
      *                        if an error occurs
      */
     Object create(Entity inst) throws UnifyException;
+
+    /**
+     * Creates a record in database.
+     * 
+     * @param wrapperInst
+     *             the wrapped record to persist
+     * @return the record ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Object create(EntityWrapper wrapperInst) throws UnifyException;
 
     /**
      * Creates a record in database and applies a policy if supplied.
@@ -392,6 +404,17 @@ public interface EnvironmentService extends BusinessService {
     int updateByIdVersion(Entity inst) throws UnifyException;
 
     /**
+     * Updates a record in database.
+     * 
+     * @param wrappedInst
+     *             the wrapped record to update
+     * @return the number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int updateByIdVersion(EntityWrapper wrappedInst) throws UnifyException;
+
+    /**
      * Updates a record in database using by ID and version and applies a policy if
      * supplied.
      * 
@@ -436,6 +459,40 @@ public interface EnvironmentService extends BusinessService {
      *                        If an error occurs
      */
     int updateLeanByIdVersion(Entity record) throws UnifyException;
+
+    /**
+     * Updates a record in database using lean rule.
+     * 
+     * @param wrappedInst
+     *             the wrapped record to update
+     * @return the number of records updated
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int updateLean(EntityWrapper wrappedInst) throws UnifyException;
+
+    /**
+     * Updates record in database by ID. Child records, if any, are not updated.
+     * 
+     * @param wrappedInst
+     *               the wrapped record to update
+     * @return the number of record updated. Always 1.
+     * @throws UnifyException
+     *                        if record with ID is not found. If an error occurs
+     */
+    int updateLeanById(EntityWrapper wrappedInst) throws UnifyException;
+
+    /**
+     * Updates record in database by ID and version number. Child records, if any,
+     * are not updated.
+     * 
+     * @param wrappedInst
+     *               the wrapped instance to update
+     * @return the number of record updated.
+     * @throws UnifyException
+     *                        If an error occurs
+     */
+    int updateLeanByIdVersion(EntityWrapper wrappedInst) throws UnifyException;
 
     /**
      * Updates a record in database using lean rule and applies a policy if
@@ -630,7 +687,7 @@ public interface EnvironmentService extends BusinessService {
      * Deletes a record by ID.
      * 
      * @param record
-     *               the record to modify
+     *               the record to delete
      * @return the number of record deleted. Always 1.
      * @throws UnifyException
      *                        if an error occurs during modify
@@ -641,12 +698,34 @@ public interface EnvironmentService extends BusinessService {
      * Deletes a record by ID and version number.
      * 
      * @param record
-     *               the record to modify
+     *               the record to delete
      * @return the number of record deleted. Always 1.
      * @throws UnifyException
      *                        if an error occurs during modify
      */
     int deleteByIdVersion(Entity record) throws UnifyException;
+
+    /**
+     * Deletes a record by ID.
+     * 
+     * @param wrappedInst
+     *               the wrapped record to delete
+     * @return the number of record deleted. Always 1.
+     * @throws UnifyException
+     *                        if an error occurs during modify
+     */
+    int deleteById(EntityWrapper wrappedInst) throws UnifyException;
+
+    /**
+     * Deletes a record by ID and version number.
+     * 
+     * @param wrappedInst
+     *               the wrapped record to delete
+     * @return the number of record deleted. Always 1.
+     * @throws UnifyException
+     *                        if an error occurs during modify
+     */
+    int deleteByIdVersion(EntityWrapper wrappedInst) throws UnifyException;
 
     /**
      * Executes an aggregate function for single selected field of records that

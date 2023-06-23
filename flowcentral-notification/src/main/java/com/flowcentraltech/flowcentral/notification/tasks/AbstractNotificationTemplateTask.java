@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.notification.tasks;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.application.entities.EntityWrapper;
+import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;

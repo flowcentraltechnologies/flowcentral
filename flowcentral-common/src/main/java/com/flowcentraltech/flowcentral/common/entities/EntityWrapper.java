@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.entities;
+package com.flowcentraltech.flowcentral.common.entities;
 
 import java.util.Collection;
 import java.util.List;
@@ -53,6 +53,11 @@ public interface EntityWrapper {
      */
     Entity getValueObjectAtDataIndex();
 
+    /**
+     * Returns true if wrapper is backed by indexed data.
+     */
+    boolean isIndexed();
+    
     /**
      * Returns the wrapper data index.
      */
