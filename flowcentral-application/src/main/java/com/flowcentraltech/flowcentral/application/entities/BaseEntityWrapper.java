@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueListStore;
 import com.tcdng.unify.core.data.BeanValueStore;
@@ -96,6 +97,11 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
     @Override
     public Entity getValueObjectAtDataIndex() {
         return (Entity) valueStore.getValueObjectAtDataIndex();
+    }
+
+    @Override
+    public boolean isIndexed() {
+        return valueStore.isIndexed();
     }
 
     @Override

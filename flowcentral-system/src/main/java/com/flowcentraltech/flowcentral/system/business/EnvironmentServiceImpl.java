@@ -36,6 +36,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.EntityListActionResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
+import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -215,6 +216,13 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
+    public Object create(EntityWrapper wrapperInst) throws UnifyException {
+        final Entity inst = wrapperInst.isIndexed() ? wrapperInst.getValueObjectAtDataIndex()
+                : wrapperInst.getValueObject();
+        return db(inst.getClass()).create(inst);
+    }
+
+    @Override
     public EntityActionResult create(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = executeEntityPreActionPolicy(ctx);
         if (result == null) {
@@ -330,6 +338,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
+    public int updateByIdVersion(EntityWrapper wrappedInst) throws UnifyException {
+        Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
+        return db(inst.getClass()).updateByIdVersion(inst);
+    }
+
+    @Override
+    public int updateLean(EntityWrapper wrappedInst) throws UnifyException {
+        Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
+        return db(inst.getClass()).updateLeanByIdVersion(inst);
+    }
+
+    @Override
     public EntityActionResult updateByIdVersion(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = executeEntityPreActionPolicy(ctx);
         if (result == null) {
@@ -402,6 +422,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
+    public int updateLeanById(EntityWrapper wrappedInst) throws UnifyException {
+        Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
+        return db(inst.getClass()).updateLeanById(inst);
+    }
+
+    @Override
+    public int updateLeanByIdVersion(EntityWrapper wrappedInst) throws UnifyException {
+        Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
+        return db(inst.getClass()).updateLeanByIdVersion(inst);
+    }
+
+    @Override
     public <T extends Number, U extends Entity> int add(Class<T> fieldClass, String fieldName, T val, Query<U> query)
             throws UnifyException {
         return db(query.getEntityClass()).add(fieldClass, fieldName, val, query);
@@ -426,12 +458,14 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     }
 
     @Override
-    public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query)
+            throws UnifyException {
         return db(query.getEntityClass()).min(fieldClass, fieldName, query);
     }
 
     @Override
-    public <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query)
+            throws UnifyException {
         return db(query.getEntityClass()).max(fieldClass, fieldName, query);
     }
 
@@ -470,6 +504,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
     @Override
     public int deleteById(Entity record) throws UnifyException {
         return db(record.getClass()).deleteById(record);
+    }
+
+    @Override
+    public int deleteById(EntityWrapper wrappedInst) throws UnifyException {
+        Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
+        return db(inst.getClass()).deleteById(inst);
+    }
+
+    @Override
+    public int deleteByIdVersion(EntityWrapper wrappedInst) throws UnifyException {
+        Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
+        return db(inst.getClass()).deleteByIdVersion(inst);
     }
 
     @Override
