@@ -168,11 +168,11 @@ public class ListingCell {
     }
 
     public Format getFormat() {
-        return format.getFormat();
+        return format != null ? format.getFormat() : null;
     }
 
     public String getFormatPattern() {
-        return format.getPattern();
+        return format != null ? format.getPattern() : null;
     }
 
     public void setFormat(Formats.Format format) {
@@ -181,7 +181,8 @@ public class ListingCell {
 
     public void setContent(Object content) {
         this.rawContent = content;
-        this.content = content != null ? (format != null ? format.getFormat().format(content) : String.valueOf(content)) : null;
+        this.content = content != null ? (format != null ? format.getFormat().format(content) : String.valueOf(content))
+                : null;
     }
 
     public Object getRawContent() {
