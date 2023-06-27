@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
@@ -104,6 +105,8 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
     private static final List<NotifType> NOTIFICATION_TYPE_LIST = Arrays.asList(NotifType.EMAIL, NotifType.SMS);
 
+    private static final String PAGE_BREAK = Pattern.quote("[page-break]");
+    
     @Configurable
     private AppletUtilities au;
 
@@ -179,11 +182,10 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                         paramList.add(new NotifLargeTextParamDef(largeTextParam.getName(), largeTextParam.getLabel()));
                     }
 
-                    final int linesPerPage = DataUtils.convert(int.class, notificationLargeText.getLinesPerPage());
                     final int fontSizeInPixels = DataUtils.convert(int.class,
                             notificationLargeText.getFontSizeInPixels());
                     final List<List<StringToken>> bodyTokenList = StringUtils
-                            .breakdownParameterizedString(notificationLargeText.getBody(), linesPerPage);
+                            .breakdownParameterizedString(notificationLargeText.getBody(), PAGE_BREAK);
                     return new NotifLargeTextDef(notificationLargeText.getEntity(), fontSizeInPixels, bodyTokenList,
                             paramList, longName, notificationLargeText.getDescription(), notificationLargeText.getId(),
                             notificationLargeText.getVersionNo());

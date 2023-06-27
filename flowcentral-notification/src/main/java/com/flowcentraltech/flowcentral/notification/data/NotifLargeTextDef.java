@@ -63,11 +63,11 @@ public class NotifLargeTextDef extends BaseApplicationEntityDef {
         return fontSizeInPixels;
     }
 
-    public List<StringToken> getBodyTokenList(int partIndex) {
-        return bodyTokenList.get(partIndex);
+    public List<StringToken> getBodyTokenList(int pageIndex) {
+        return bodyTokenList.get(pageIndex);
     }
 
-    public int getNumberOfParts() {
+    public int getNumberOfPages() {
         return bodyTokenList.size();
     }
 
