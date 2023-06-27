@@ -21,6 +21,7 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -40,17 +41,10 @@ import com.tcdng.unify.core.database.Query;
 public abstract class AbstractFieldSetValueGenerator extends AbstractUnifyComponent implements FieldSetValueGenerator {
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities appletUtilities;
 
-    @Configurable
-    private EnvironmentService environmentService;
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -63,12 +57,16 @@ public abstract class AbstractFieldSetValueGenerator extends AbstractUnifyCompon
 
     }
 
-    protected ApplicationModuleService application() {
-        return applicationModuleService;
+    protected final ApplicationModuleService application() {
+        return appletUtilities.application();
     }
 
-    protected EnvironmentService environment() {
-        return environmentService;
+    protected final EnvironmentService environment() {
+        return appletUtilities.environment();
+    }
+
+    protected final SystemModuleService system() {
+        return appletUtilities.system();
     }
 
     /**
@@ -87,10 +85,10 @@ public abstract class AbstractFieldSetValueGenerator extends AbstractUnifyCompon
     @SuppressWarnings("unchecked")
     protected ValueStore getChildValueStore(EntityDef parentEntityDef, ValueStore valueStore, String childFieldName)
             throws UnifyException {
-        EntityClassDef _childEntityClassDef = applicationModuleService.getEntityClassDef(applicationModuleService
-                .getRefDef(parentEntityDef.getFieldDef(childFieldName).getReferences()).getEntity());
-        Restriction _childRestriction = applicationModuleService.getChildRestriction(parentEntityDef, childFieldName,
-                (Entity) valueStore.getValueObject());
+        EntityClassDef _childEntityClassDef = appletUtilities.application().getEntityClassDef(appletUtilities
+                .application().getRefDef(parentEntityDef.getFieldDef(childFieldName).getReferences()).getEntity());
+        Restriction _childRestriction = appletUtilities.application().getChildRestriction(parentEntityDef,
+                childFieldName, (Entity) valueStore.getValueObject());
         Entity childEntity = environment().listLean(Query
                 .ofDefaultingToAnd((Class<? extends Entity>) _childEntityClassDef.getEntityClass(), _childRestriction));
         return new BeanValueStore(childEntity);
@@ -112,10 +110,10 @@ public abstract class AbstractFieldSetValueGenerator extends AbstractUnifyCompon
     @SuppressWarnings("unchecked")
     protected ValueStore getChildListValueStore(EntityDef parentEntityDef, ValueStore valueStore, String childFieldName)
             throws UnifyException {
-        EntityClassDef _childEntityClassDef = applicationModuleService.getEntityClassDef(applicationModuleService
-                .getRefDef(parentEntityDef.getFieldDef(childFieldName).getReferences()).getEntity());
-        Restriction _childRestriction = applicationModuleService.getChildRestriction(parentEntityDef, childFieldName,
-                (Entity) valueStore.getValueObject());
+        EntityClassDef _childEntityClassDef = appletUtilities.application().getEntityClassDef(appletUtilities
+                .application().getRefDef(parentEntityDef.getFieldDef(childFieldName).getReferences()).getEntity());
+        Restriction _childRestriction = appletUtilities.application().getChildRestriction(parentEntityDef,
+                childFieldName, (Entity) valueStore.getValueObject());
         List<? extends Entity> childEntityList = environment().listAll(Query
                 .ofDefaultingToAnd((Class<? extends Entity>) _childEntityClassDef.getEntityClass(), _childRestriction));
         return new BeanValueListStore(childEntityList);

@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -38,17 +39,10 @@ public abstract class AbstractEntityBasedFilterGenerator extends AbstractUnifyCo
     private static final Restriction ID_NOT_NULL_RESTRICTION = new IsNotNull("id");
     
     @Configurable
-    private ApplicationModuleService applicationModuleService;
+    private AppletUtilities appletUtilities;
     
-    @Configurable
-    private EnvironmentService environmentService;
-    
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -61,23 +55,27 @@ public abstract class AbstractEntityBasedFilterGenerator extends AbstractUnifyCo
 
     }
 
-    protected ApplicationModuleService application() {
-        return applicationModuleService;
+    protected final ApplicationModuleService application() {
+        return appletUtilities.application();
     }
 
-    protected EnvironmentService environment() {
-        return environmentService;
+    protected final EnvironmentService environment() {
+        return appletUtilities.environment();
     }
 
-    protected Restriction noRestriction() {
+    protected final SystemModuleService system() {
+        return appletUtilities.system();
+    }
+
+    protected final Restriction noRestriction() {
         return null;
     }
 
-    protected Restriction allRecordsRestriction() {
+    protected final Restriction allRecordsRestriction() {
         return ID_NOT_NULL_RESTRICTION;
     }
 
-    protected Restriction noRecordsRestriction() {
+    protected final Restriction noRecordsRestriction() {
         return ID_NULL_RESTRICTION;
     }
 }

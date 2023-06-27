@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -30,19 +31,12 @@ import com.tcdng.unify.core.annotation.Configurable;
  */
 public abstract class AbstractEntityInputValueListProducerConsumer extends AbstractUnifyComponent
         implements EntityInputValueListProducerConsumer {
-
+    
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private EnvironmentService environmentService;
-
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    private AppletUtilities appletUtilities;
+    
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -55,12 +49,16 @@ public abstract class AbstractEntityInputValueListProducerConsumer extends Abstr
 
     }
 
-    protected ApplicationModuleService application() {
-        return applicationModuleService;
+    protected final ApplicationModuleService application() {
+        return appletUtilities.application();
     }
 
-    protected EnvironmentService environment() {
-        return environmentService;
+    protected final EnvironmentService environment() {
+        return appletUtilities.environment();
+    }
+
+    protected final SystemModuleService system() {
+        return appletUtilities.system();
     }
 
 }

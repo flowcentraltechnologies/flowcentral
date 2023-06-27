@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
@@ -46,7 +45,6 @@ import com.flowcentraltech.flowcentral.studio.constants.StudioModuleNameConstant
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils.StudioAppletNameParts;
 import com.flowcentraltech.flowcentral.studio.web.util.StudioWidgetWriterUtils;
-import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
@@ -82,12 +80,6 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     private final AppFilter entityFormDeleteCondition = new AppFilter("EQ]0]configType]C]\r\n");
 
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private SystemModuleService systemModuleService;
-
-    @Configurable
     private AppletUtilities appletUtilities;
 
     private final FactoryMap<String, AppletDef> appletDefMap;
@@ -100,7 +92,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                     AppletDef appletDef = null;
                     StudioAppletNameParts np = StudioNameUtils.getStudioAppletNameParts(appletName);
                     final StudioAppComponentType type = np.getType();
-                    final boolean descriptiveButtons = systemModuleService.getSysParameterValue(boolean.class,
+                    final boolean descriptiveButtons = appletUtilities.system().getSysParameterValue(boolean.class,
                             SystemModuleSysParamConstants.SYSTEM_DESCRIPTIVE_BUTTONS_ENABLED);
                     switch (type.appletType()) {
                         case MANAGE_ENTITYLIST:
@@ -139,7 +131,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
 
                             final String form = ApplicationNameUtils.ensureLongNameReference(
                                     StudioModuleNameConstants.STUDIO_APPLICATION_NAME, type.form());
-                            final String entity = applicationModuleService.getFormDef(form).getEntityDef()
+                            final String entity = appletUtilities.application().getFormDef(form).getEntityDef()
                                     .getLongName();
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
@@ -196,14 +188,6 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
             };
     }
 
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setSystemModuleService(SystemModuleService systemModuleService) {
-        this.systemModuleService = systemModuleService;
-    }
-
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
     }
@@ -222,7 +206,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public List<AppletDef> findAppletDefs(String applicationName, StudioAppComponentType type) throws UnifyException {
         List<AppletDef> appletDefList = null;
-        List<Long> instIdList = applicationModuleService.findAppComponentIdList(applicationName, type.componentType());
+        List<Long> instIdList = appletUtilities.application().findAppComponentIdList(applicationName, type.componentType());
         if (!instIdList.isEmpty()) {
             appletDefList = new ArrayList<AppletDef>();
             for (Long instId : instIdList) {
@@ -233,7 +217,7 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         if (type.isSupportsNew() && !StringUtils.isBlank(applicationName)
-                && applicationModuleService.isApplicationDevelopable(applicationName)) {
+                && appletUtilities.application().isApplicationDevelopable(applicationName)) {
             if (appletDefList == null) {
                 appletDefList = new ArrayList<AppletDef>();
             }
