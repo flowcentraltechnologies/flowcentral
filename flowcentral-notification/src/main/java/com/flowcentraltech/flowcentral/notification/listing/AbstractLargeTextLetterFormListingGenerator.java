@@ -66,7 +66,7 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
     @Override
     protected final int getNumberOfParts(ValueStoreReader reader) throws UnifyException {
         NotifLargeTextDef notifLargeTextDef = notificationModuleService.getNotifLargeTextDef(getLetterName(reader));
-        return notifLargeTextDef.getNumberOfParts();
+        return notifLargeTextDef.getNumberOfPages();
     }
 
     @Override

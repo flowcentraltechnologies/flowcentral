@@ -341,9 +341,6 @@
 			<field name="entity"
 				label="$m{notification.notificationlargetext.entity}" type="string"
 				maxLen="128" />
-			<field name="linesPerPage"
-				label="$m{notification.notificationlargetext.linesperpage}" type="integer"
-				precision="3" nullable="true"/>
 			<field name="fontSizeInPixels"
 				label="$m{notification.notificationlargetext.fontsizeinpixels}" type="integer"
 				precision="2" nullable="true"/>

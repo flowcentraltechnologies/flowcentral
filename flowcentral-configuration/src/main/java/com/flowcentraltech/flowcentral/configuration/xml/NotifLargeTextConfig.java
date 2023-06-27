@@ -37,8 +37,6 @@ public class NotifLargeTextConfig extends BaseNameConfig {
     private String entity;
 
     private String body;
-
-    private Integer linesPerPage;
     
     private Integer fontSizeInPixels;
 
@@ -51,15 +49,6 @@ public class NotifLargeTextConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
-    }
-
-    public Integer getLinesPerPage() {
-        return linesPerPage;
-    }
-
-    @XmlAttribute
-    public void setLinesPerPage(Integer linesPerPage) {
-        this.linesPerPage = linesPerPage;
     }
 
     public Integer getFontSizeInPixels() {
