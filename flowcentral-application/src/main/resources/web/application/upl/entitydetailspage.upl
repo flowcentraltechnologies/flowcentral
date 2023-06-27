@@ -29,7 +29,7 @@
 // Result panel
 !ui-panel:resultPanel style:$s{width:100%;} layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{resultTbl} 
-!fc-entitylisttable:resultTbl style:$s{width:100%;} viewButtonClass:$f{detailsViewButtonClass}
+!fc-entitylisttable:resultTbl detached:true style:$s{width:100%;} viewButtonClass:$f{detailsViewButtonClass}
 	details:$f{detailsPanelName} multiSelect:$f{detailsMultiSelect} binding:resultTable
 	multiSelDependentList:$f{detailsMultiSelDependentList}
 

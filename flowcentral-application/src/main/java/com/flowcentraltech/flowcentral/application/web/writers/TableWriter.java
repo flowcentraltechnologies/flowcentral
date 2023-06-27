@@ -77,6 +77,9 @@ public class TableWriter extends AbstractControlWriter {
         AbstractTable<?, ?> table = tableWidget.getTable(); // Must call this here to initialize table
         if (table != null) {
             final TableDef tableDef = table.getTableDef();
+            final boolean entryMode = table.isEntryMode();
+            final boolean isSerialNo = tableDef.isSerialNo();
+            final boolean totalSummary = table.isTotalSummary();
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             if (multiSelect) {
                 writeHiddenPush(writer, tableWidget.getSelectCtrl(), PushType.CHECKBOX);
@@ -118,22 +121,19 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("</span></div>");
             }
 
-            int columnCount = 0;
-            if (tableDef.isHeaderless()) {
-                columnCount = writeColumnGroup(writer, tableWidget);
-            } else {
-                // Table summary
-                if (table.isTotalSummary()) {
-                    if (!table.isWithPreTableSummaryLines()) {
-                        table.setPreTableSummaryLines();
-                    }
-
-                    writeSummaryLines(writer, tableWidget, table.isEntryMode(), multiSelect, tableDef.isSerialNo(),
-                            table.getPreTableSummaryLines());
+            final int columnCount = writeColumnGroup(writer, tableWidget);
+            // Table summary
+            if (totalSummary) {
+                if (!table.isWithPreTableSummaryLines()) {
+                    table.setPreTableSummaryLines();
                 }
 
-                // Header
-                columnCount = writeHeaderRow(writer, tableWidget);
+                writeSummaryLines(writer, tableWidget, entryMode, multiSelect, isSerialNo,
+                        table.getPreTableSummaryLines());
+            }
+
+            if (!tableDef.isHeaderless()) {
+                writeHeaderRow(writer, tableWidget);
             }
 
             tableWidget.setActionBindings();
@@ -141,14 +141,24 @@ public class TableWriter extends AbstractControlWriter {
                 writer.write("<tr><td colspan=\"");
                 writer.write(columnCount);
                 writer.write(
-                        "\" style=\"padding:0px;\"><div style=\"display:block;width:100%;max-height:70vh;overflow-y:scroll;\"><table class=\"table\">");
-                columnCount = writeColumnGroup(writer, tableWidget);
+                        "\" style=\"padding:0px;\"><div class=\"detached\" style=\"display:block;width:100%;overflow-y:scroll;\"><table class=\"table\">");
+                writeColumnGroup(writer, tableWidget);
             }
 
             writeBodyRows(writer, tableWidget);
 
             if (detached) {
                 writer.write("</table></div></td></tr>");
+            }
+
+            // Table summary
+            if (totalSummary) {
+                if (!table.isWithPostTableSummaryLines()) {
+                    table.setPostTableSummaryLines();
+                }
+
+                writeSummaryLines(writer, tableWidget, entryMode, multiSelect, isSerialNo,
+                        table.getPostTableSummaryLines());
             }
 
             writeFixedActionRow(writer, tableWidget, columnCount);
@@ -160,9 +170,10 @@ public class TableWriter extends AbstractControlWriter {
             writer.write("</div>");
         }
     }
+
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget,
-            EventHandler[] handlers) throws UnifyException {
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
         super.doWriteBehavior(writer, widget, handlers);
         AbstractTableWidget<?, ?, ?> tableWidget = (AbstractTableWidget<?, ?, ?>) widget;
         final String tableWidgetId = tableWidget.getId();
@@ -445,19 +456,17 @@ public class TableWriter extends AbstractControlWriter {
             columnCount++;
         }
 
-
         if (isCrudMode) {
             writer.write("<col class=\"ccrudh\">");
             columnCount++;
         }
-        
+
         writer.write("</colgroup>");
 
         return columnCount;
     }
 
-    private int writeHeaderRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
-        int columnCount = 0;
+    private void writeHeaderRow(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget) throws UnifyException {
         writer.write("<tr>");
         final AbstractTable<?, ?> table = tableWidget.getTable();
         if (table != null) {
@@ -469,14 +478,12 @@ public class TableWriter extends AbstractControlWriter {
             final boolean multiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
             if (supportSelect && multiSelect && !entryMode) {
                 writeHeaderMultiSelect(writer, tableWidget);
-                columnCount++;
             }
 
             if (tableDef.isSerialNo()) {
                 writer.write("<th class=\"mserialh\"><span>");
                 writer.write(getSessionMessage("tablewidget.serialno"));
                 writer.write("</span></th>");
-                columnCount++;
             }
 
             final boolean sysHeaderUppercase = systemModuleService.getSysParameterValue(boolean.class,
@@ -491,10 +498,9 @@ public class TableWriter extends AbstractControlWriter {
                     TableColumnDef tabelColumnDef = tableDef.getVisibleColumnDef(columnIndex);
                     writer.write("<th");
                     if (sysHeaderCenterAlign || tableDef.isHeaderCenterAlign()) {
-                        writeTagStyle(writer, tabelColumnDef.getHeaderStyle() + "text-align:center;");
-                    } else {
-                        writeTagStyle(writer, tabelColumnDef.getHeaderStyle());
+                        writeTagStyle(writer, "text-align:center;");
                     }
+
                     writer.write("><span ");
                     boolean appendSortedSym = false;
                     if (sortable && tabelColumnDef.isSortable()) {
@@ -536,30 +542,23 @@ public class TableWriter extends AbstractControlWriter {
                     columnIndex++;
                 }
             }
-            columnCount += columnIndex;
-            
+
             if (supportSelect && multiSelect && entryMode) {
                 writeHeaderMultiSelect(writer, tableWidget);
-                columnCount++;
             }
 
             if (isFixedRows) {
                 writer.write("<th class=\"mfixedh\"></th>");
-                columnCount++;
             } else if (isContainerEditable && tableWidget.isActionColumn()) {
                 writer.write("<th class=\"mactionh\"></th>");
-                columnCount++;
             }
 
             if (tableWidget.isCrudMode()) {
                 writer.write("<th class=\"mcrudh\"></th>");
-                columnCount++;
             }
 
             writer.write("</tr>");
         }
-        
-        return columnCount;
     }
 
     private void writeHeaderMultiSelect(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget)
@@ -588,7 +587,6 @@ public class TableWriter extends AbstractControlWriter {
             final int pageIndex = table.getDispStartIndex() + 1;
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
-            final boolean totalSummary = table.isTotalSummary();
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
             final boolean isActionColumn = isContainerEditable && tableWidget.isActionColumn();
             final boolean isMultiSelect = tableDef.isMultiSelect() || tableWidget.isMultiSelect();
@@ -734,7 +732,7 @@ public class TableWriter extends AbstractControlWriter {
                             columnIndex++;
                         }
                     }
- 
+
                     if (supportSelect && isMultiSelect && entryMode) {
                         writeRowMultiSelect(writer, tableWidget, id, i);
                     }
@@ -840,16 +838,6 @@ public class TableWriter extends AbstractControlWriter {
                 }
             }
 
-            // Table summary
-            if (totalSummary) {
-                if (!table.isWithPostTableSummaryLines()) {
-                    table.setPostTableSummaryLines();
-                }
-
-                writeSummaryLines(writer, tableWidget, entryMode, isMultiSelect, isSerialNo,
-                        table.getPostTableSummaryLines());
-            }
-
         }
     }
 
@@ -884,7 +872,7 @@ public class TableWriter extends AbstractControlWriter {
             writer.write("</tr>");
         }
     }
-    
+
     private void writeSummaryLines(ResponseWriter writer, AbstractTableWidget<?, ?, ?> tableWidget, boolean entryMode,
             boolean multiSelect, boolean isSerialNo, List<TableSummaryLine> summaryLines) throws UnifyException {
         if (!DataUtils.isBlank(summaryLines)) {
