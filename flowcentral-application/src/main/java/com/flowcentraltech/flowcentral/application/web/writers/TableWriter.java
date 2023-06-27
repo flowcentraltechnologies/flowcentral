@@ -775,23 +775,16 @@ public class TableWriter extends AbstractControlWriter {
                             writer.write("<tr");
                             writer.write(">");
 
-                            int skip = 0;
                             if (supportSelect && isMultiSelect && !entryMode) {
                                 writer.write("<td class=\"mseld\"></td>");
-                                skip++;
                             }
 
                             if (isSerialNo) {
                                 writer.write("<td class=\"mseriald\"></td>");
-                                skip++;
-                            }
-
-                            if (tableWidget.isSummary()) {
-                                skip++;
                             }
 
                             writer.write("<td colspan=\"");
-                            writer.write(tableWidget.getChildWidgetInfos().size() - skip);
+                            writer.write(columnIndex);
                             writer.write("\">");
                             detailsPanel.loadDetails(valueStore);
                             writer.writeStructureAndContent(detailsPanel);
@@ -819,23 +812,16 @@ public class TableWriter extends AbstractControlWriter {
                         }
                         writer.write(">");
 
-                        int skip = 0;
                         if (supportSelect && !entryMode) {
                             writer.write("<td class=\"mseld\"></td>");
-                            skip++;
                         }
 
                         if (isSerialNo) {
                             writer.write("<td class=\"mseriald\"></td>");
-                            skip++;
-                        }
-
-                        if (tableWidget.isSummary()) {
-                            skip++;
                         }
 
                         writer.write("<td colspan=\"");
-                        writer.write(tableWidget.getChildWidgetInfos().size() - skip);
+                        writer.write(columnIndex);
                         writer.write("\">");
                         summaryPanel.setValueStore(valueStore);
                         try {
