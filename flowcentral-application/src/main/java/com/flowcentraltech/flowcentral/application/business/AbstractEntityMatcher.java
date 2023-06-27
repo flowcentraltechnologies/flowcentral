@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -28,19 +29,12 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @since 1.0
  */
 public abstract class AbstractEntityMatcher extends AbstractUnifyComponent implements EntityMatcher {
-
+    
     @Configurable
-    private ApplicationModuleService applicationModuleService;
-
-    @Configurable
-    private EnvironmentService environmentService;
-
-    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
-        this.applicationModuleService = applicationModuleService;
-    }
-
-    public final void setEnvironmentService(EnvironmentService environmentService) {
-        this.environmentService = environmentService;
+    private AppletUtilities appletUtilities;
+    
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -53,12 +47,16 @@ public abstract class AbstractEntityMatcher extends AbstractUnifyComponent imple
 
     }
 
-    protected ApplicationModuleService application() {
-        return applicationModuleService;
+    protected final ApplicationModuleService application() {
+        return appletUtilities.application();
     }
 
-    protected EnvironmentService environment() {
-        return environmentService;
+    protected final EnvironmentService environment() {
+        return appletUtilities.environment();
+    }
+
+    protected final SystemModuleService system() {
+        return appletUtilities.system();
     }
 
 }
