@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.data;
 
+import com.flowcentraltech.flowcentral.common.data.FontSetting;
 import com.flowcentraltech.flowcentral.common.data.FormListing;
 
 /**
@@ -23,9 +24,11 @@ import com.flowcentraltech.flowcentral.common.data.FormListing;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractFormListing implements FormListing{
+public abstract class AbstractFormListing implements FormListing {
 
     private int listingIndex;
+
+    private FontSetting workingFontSetting;
 
     @Override
     public void nextIndex() {
@@ -36,5 +39,15 @@ public abstract class AbstractFormListing implements FormListing{
     public int getListingIndex() {
         return listingIndex;
     }
-    
+
+    @Override
+    public FontSetting getWorkingFontSetting() {
+        return workingFontSetting;
+    }
+
+    @Override
+    public void setWorkingFontSetting(FontSetting workingFontSetting) {
+        this.workingFontSetting = workingFontSetting;
+    }
+
 }

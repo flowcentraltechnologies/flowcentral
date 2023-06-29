@@ -13,41 +13,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.common.data;
+package com.flowcentraltech.flowcentral.configuration.xml.adapter;
+
+import com.flowcentraltech.flowcentral.configuration.constants.FontFamilyType;
+import com.tcdng.unify.core.util.xml.AbstractEnumConstXmlAdapter;
 
 /**
- * Form listing interface.
+ * Font family type XML adapter.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FormListing {
+public class FontFamilyTypeXmlAdapter extends AbstractEnumConstXmlAdapter<FontFamilyType> {
 
-    /**
-     * Increments to next listing index
-     *
-     */
-    void nextIndex();
-
-    /**
-     * Gets the listing index.
-     * 
-     * @return the listing index
-     */
-    int getListingIndex();
-
-    /**
-     * Sets working font setting.
-     * 
-     * @param fontSetting
-     *                    the font setting to set
-     */
-    void setWorkingFontSetting(FontSetting fontSetting);
-
-    /**
-     * Gets working font setting.
-     * 
-     * @return the working font setting
-     */
-    FontSetting getWorkingFontSetting();
+    public FontFamilyTypeXmlAdapter() {
+        super(FontFamilyType.class);
+    }
 }

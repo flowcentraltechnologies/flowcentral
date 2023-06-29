@@ -23,6 +23,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.configuration.constants.FontFamilyType;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 
@@ -36,17 +37,20 @@ public class NotifLargeTextDef extends BaseApplicationEntityDef {
 
     private String entity;
 
+    private FontFamilyType fontFamily;
+
     private int fontSizeInPixels;
 
     private List<List<StringToken>> bodyTokenList;
 
     private Map<String, NotifLargeTextParamDef> params;
 
-    public NotifLargeTextDef(String entity, int fontSizeInPixels, List<List<StringToken>> bodyTokenList,
-            List<NotifLargeTextParamDef> paramList, String longName, String description, Long id, long version)
-            throws UnifyException {
+    public NotifLargeTextDef(String entity, FontFamilyType fontFamily, int fontSizeInPixels,
+            List<List<StringToken>> bodyTokenList, List<NotifLargeTextParamDef> paramList, String longName,
+            String description, Long id, long version) throws UnifyException {
         super(ApplicationNameUtils.getApplicationEntityNameParts(longName), description, id, version);
         this.entity = entity;
+        this.fontFamily = fontFamily;
         this.fontSizeInPixels = fontSizeInPixels;
         this.bodyTokenList = bodyTokenList;
         this.params = new LinkedHashMap<String, NotifLargeTextParamDef>();
@@ -57,6 +61,10 @@ public class NotifLargeTextDef extends BaseApplicationEntityDef {
 
     public String getEntity() {
         return entity;
+    }
+
+    public FontFamilyType getFontFamily() {
+        return fontFamily;
     }
 
     public int getFontSizeInPixels() {

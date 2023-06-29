@@ -341,6 +341,9 @@
 			<field name="entity"
 				label="$m{notification.notificationlargetext.entity}" type="string"
 				maxLen="128" />
+			<field name="fontFamily"
+				label="$m{notification.notificationlargetext.fontfamily}" type="enum"
+				references="fontfamilylist"  inputWidget="application.enumlist" nullable="true"/>
 			<field name="fontSizeInPixels"
 				label="$m{notification.notificationlargetext.fontsizeinpixels}" type="integer"
 				precision="2" nullable="true"/>

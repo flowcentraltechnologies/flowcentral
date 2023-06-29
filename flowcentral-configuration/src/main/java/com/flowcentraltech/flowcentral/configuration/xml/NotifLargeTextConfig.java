@@ -23,6 +23,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.flowcentraltech.flowcentral.configuration.constants.FontFamilyType;
+import com.flowcentraltech.flowcentral.configuration.xml.adapter.FontFamilyTypeXmlAdapter;
 import com.tcdng.unify.core.util.xml.adapter.CDataXmlAdapter;
 
 /**
@@ -37,7 +39,9 @@ public class NotifLargeTextConfig extends BaseNameConfig {
     private String entity;
 
     private String body;
-    
+
+    private FontFamilyType fontFamily;
+
     private Integer fontSizeInPixels;
 
     private List<NotifLargeTextParamConfig> paramList;
@@ -49,6 +53,16 @@ public class NotifLargeTextConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public FontFamilyType getFontFamily() {
+        return fontFamily;
+    }
+
+    @XmlJavaTypeAdapter(FontFamilyTypeXmlAdapter.class)
+    @XmlAttribute
+    public void setFontFamily(FontFamilyType fontFamily) {
+        this.fontFamily = fontFamily;
     }
 
     public Integer getFontSizeInPixels() {

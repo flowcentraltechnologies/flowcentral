@@ -5,6 +5,11 @@
 	label="$m{application.label}" module="application">
 	<!-- Widget Types -->
 	<widgetTypes>
+		<widgetType name="fontlist" listOption="true"
+			description="$m{application.widgettype.fontlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:fontfamilylist blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="emailproducerconsumerlist"
 			description="$m{application.widgettype.emailproducerconsumerlist}"
 			dataType="string" inputType="string"
