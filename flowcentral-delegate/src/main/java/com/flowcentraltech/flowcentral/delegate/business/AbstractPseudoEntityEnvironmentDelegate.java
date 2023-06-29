@@ -102,6 +102,8 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
                 break;
             case VALUE_LIST:
                 break;
+            case VALUE_SET:
+                break;
             default:
                 break;
 
