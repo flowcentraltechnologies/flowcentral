@@ -303,8 +303,10 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                     case UPDATE_ALL:
                         break;
                     case VALUE:
-                    case VALUE_LIST: {
+                    case VALUE_LIST:
+                    case VALUE_SET:{
                         CriteriaQuery<Tuple> cq = createTupleQuery(entityInfo.getImplClass(), em, req);
+                        cq.distinct(req.getOperation().isDistinct());
                         List<Tuple> tupleResult = em.createQuery(cq).getResultList();
                         if (!req.getOperation().isMultipleResult()) {
                             if (tupleResult.size() > 1) {

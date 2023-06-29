@@ -66,6 +66,9 @@ public enum DataSourceOperation {
             false),
     VALUE_LIST(
             false,
+            false),
+    VALUE_SET(
+            false,
             false);
 
     private final boolean entityResult;
@@ -91,11 +94,15 @@ public enum DataSourceOperation {
     }
 
     public boolean isMultipleResult() {
-        return this.equals(FIND_ALL) || this.equals(LIST_ALL) || this.equals(VALUE_LIST);
+        return this.equals(FIND_ALL) || this.equals(LIST_ALL) || this.equals(VALUE_LIST) || this.equals(VALUE_SET);
     }
 
     public boolean isSingleResult() {
         return this.equals(FIND) || this.equals(FIND_LEAN) || this.equals(LIST) || this.equals(LIST_LEAN);
+    }
+
+    public boolean isDistinct() {
+        return this.equals(VALUE_SET);
     }
 
     public boolean entityResult() {
