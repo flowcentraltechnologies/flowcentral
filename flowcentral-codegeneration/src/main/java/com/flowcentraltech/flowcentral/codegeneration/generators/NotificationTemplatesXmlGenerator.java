@@ -75,19 +75,15 @@ public class NotificationTemplatesXmlGenerator extends AbstractStaticArtifactGen
                 
                 NotifTemplateConfig notifTemplateConfig = new NotifTemplateConfig();
                 String descKey = getDescriptionKey(lowerCaseApplicationName, "notification", notifTemplate.getName());
-                String subjectKey = descKey + ".subject";
-                String bodyKey = descKey + ".body";
                 ctx.addMessage(StaticMessageCategoryType.NOTIFICATION, descKey, notifTemplate.getDescription());
-                ctx.addMessage(StaticMessageCategoryType.NOTIFICATION, subjectKey, notifTemplate.getSubject());
-                ctx.addMessage(StaticMessageCategoryType.NOTIFICATION, bodyKey, notifTemplate.getTemplate());
 
                 notifTemplateConfig.setNotifType(notifTemplate.getNotificationType());
                 notifTemplateConfig.setMessageFormat(notifTemplate.getMessageFormat());
                 notifTemplateConfig.setName(notifTemplate.getName());
                 notifTemplateConfig.setDescription("$m{" + descKey + "}");
                 notifTemplateConfig.setEntity(notifTemplate.getEntity());
-                notifTemplateConfig.setSubject("$m{" + subjectKey + "}");
-                notifTemplateConfig.setBody("$m{" + bodyKey + "}");
+                notifTemplateConfig.setSubject(notifTemplate.getSubject());
+                notifTemplateConfig.setBody(notifTemplate.getTemplate());
 
                 List<NotifTemplateParamConfig> paramList = new ArrayList<NotifTemplateParamConfig>();
                 for (NotificationTemplateParam param: notifTemplate.getParamList()) {
