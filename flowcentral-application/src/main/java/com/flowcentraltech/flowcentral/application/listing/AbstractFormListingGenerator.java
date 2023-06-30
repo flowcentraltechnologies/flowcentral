@@ -157,7 +157,10 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                 fontSetting.getFontSizeInPixels() < MIN_FONTSIZE_IN_PIZELS ? MIN_FONTSIZE_IN_PIZELS
                         : fontSetting.getFontSizeInPixels())
                 : null;
-        formListing.setWorkingFontSetting(workingFontSetting);
+        if (formListing != null) {
+            formListing.setWorkingFontSetting(workingFontSetting);
+        }
+
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
             writer.write("<div class=\"fc-formlisting");
