@@ -79,7 +79,7 @@ public class NotifLargeTextConfig extends BaseNameConfig {
     }
 
     @XmlJavaTypeAdapter(CDataXmlAdapter.class)
-    @XmlElement(required = true)
+    @XmlElement(required = true) 
     public void setBody(String body) {
         this.body = body;
     }

@@ -75,8 +75,6 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 String description = resolveApplicationMessage(notifTemplateConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
                         notifTemplateConfig.getEntity());
-                String subject = resolveApplicationMessage(notifTemplateConfig.getSubject());
-                String body = resolveApplicationMessage(notifTemplateConfig.getBody());
                 logDebug(taskMonitor, "Installing configured notification template [{0}]...", description);
 
                 NotificationTemplate oldNotificationTemplate = environment().findLean(new NotificationTemplateQuery()
@@ -90,8 +88,8 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationTemplate.setName(notifTemplateConfig.getName());
                     notificationTemplate.setDescription(description);
                     notificationTemplate.setEntity(entity);
-                    notificationTemplate.setSubject(subject);
-                    notificationTemplate.setTemplate(body);
+                    notificationTemplate.setSubject(notifTemplateConfig.getSubject());
+                    notificationTemplate.setTemplate(notifTemplateConfig.getBody());
                     notificationTemplate.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(notificationTemplate, notifTemplateConfig);
                     environment().create(notificationTemplate);
@@ -101,8 +99,8 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                         oldNotificationTemplate.setMessageFormat(notifTemplateConfig.getMessageFormat());
                         oldNotificationTemplate.setDescription(description);
                         oldNotificationTemplate.setEntity(entity);
-                        oldNotificationTemplate.setSubject(subject);
-                        oldNotificationTemplate.setTemplate(body);
+                        oldNotificationTemplate.setSubject(notifTemplateConfig.getSubject());
+                        oldNotificationTemplate.setTemplate(notifTemplateConfig.getBody());
                         populateChildList(oldNotificationTemplate, notifTemplateConfig);
                         environment().updateByIdVersion(oldNotificationTemplate);
                     }
@@ -124,7 +122,6 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                 String description = resolveApplicationMessage(notifLargeTextConfig.getDescription());
                 String entity = ApplicationNameUtils.ensureLongNameReference(applicationConfig.getName(),
                         notifLargeTextConfig.getEntity());
-                String body = resolveApplicationMessage(notifLargeTextConfig.getBody());
                 logDebug(taskMonitor, "Installing configured notification large text [{0}]...", description);
 
                 NotificationLargeText oldNotificationLargeText = environment().findLean(new NotificationLargeTextQuery()
@@ -137,7 +134,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationLargeText.setEntity(entity);
                     notificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                     notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
-                    notificationLargeText.setBody(body);
+                    notificationLargeText.setBody(notifLargeTextConfig.getBody());
                     notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
                     populateChildList(notificationLargeText, notifLargeTextConfig);
                     environment().create(notificationLargeText);
@@ -147,7 +144,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                         oldNotificationLargeText.setEntity(entity);
                         oldNotificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                         oldNotificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
-                        oldNotificationLargeText.setBody(body);
+                        oldNotificationLargeText.setBody(notifLargeTextConfig.getBody());
                         populateChildList(oldNotificationLargeText, notifLargeTextConfig);
                         environment().updateByIdVersion(oldNotificationLargeText);
                     }

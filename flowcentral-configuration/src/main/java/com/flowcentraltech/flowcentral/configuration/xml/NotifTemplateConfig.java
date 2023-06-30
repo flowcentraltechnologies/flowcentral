@@ -88,7 +88,7 @@ public class NotifTemplateConfig extends BaseNameConfig {
     }
 
     @XmlJavaTypeAdapter(CDataXmlAdapter.class)
-    @XmlElement(required = true)
+    @XmlElement(required = true) 
     public void setSubject(String subject) {
         this.subject = subject;
     }
