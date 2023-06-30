@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsFormListing;
 import com.flowcentraltech.flowcentral.application.web.data.Summary;
+import com.flowcentraltech.flowcentral.common.data.FontSetting;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
@@ -56,8 +57,8 @@ public abstract class AbstractDetailsFormListingGenerator extends AbstractFormLi
     }
 
     @Override
-    protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
-        return 10;
+    protected FontSetting getFontSetting(ValueStoreReader reader) throws UnifyException {
+        return FontSetting.DETAULT_FONT_SETTING;
     }
 
     @Override

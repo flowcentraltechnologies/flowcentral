@@ -83,6 +83,7 @@ public class NotificationLargeTextsXmlGenerator extends AbstractStaticArtifactGe
                 notifLargeTextConfig.setName(notifLargeText.getName());
                 notifLargeTextConfig.setDescription("$m{" + descKey + "}");
                 notifLargeTextConfig.setEntity(notifLargeText.getEntity());
+                notifLargeTextConfig.setFontFamily(notifLargeText.getFontFamily());
                 notifLargeTextConfig.setFontSizeInPixels(notifLargeText.getFontSizeInPixels());
                 notifLargeTextConfig.setBody("$m{" + bodyKey + "}");
 

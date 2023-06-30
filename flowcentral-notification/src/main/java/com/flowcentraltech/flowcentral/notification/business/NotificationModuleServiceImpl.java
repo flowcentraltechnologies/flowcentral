@@ -106,7 +106,7 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     private static final List<NotifType> NOTIFICATION_TYPE_LIST = Arrays.asList(NotifType.EMAIL, NotifType.SMS);
 
     private static final String PAGE_BREAK = Pattern.quote("[page-break]");
-    
+
     @Configurable
     private AppletUtilities au;
 
@@ -186,8 +186,9 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                             notificationLargeText.getFontSizeInPixels());
                     final List<List<StringToken>> bodyTokenList = StringUtils
                             .breakdownParameterizedString(notificationLargeText.getBody(), PAGE_BREAK);
-                    return new NotifLargeTextDef(notificationLargeText.getEntity(), fontSizeInPixels, bodyTokenList,
-                            paramList, longName, notificationLargeText.getDescription(), notificationLargeText.getId(),
+                    return new NotifLargeTextDef(notificationLargeText.getEntity(),
+                            notificationLargeText.getFontFamily(), fontSizeInPixels, bodyTokenList, paramList, longName,
+                            notificationLargeText.getDescription(), notificationLargeText.getId(),
                             notificationLargeText.getVersionNo());
                 }
 

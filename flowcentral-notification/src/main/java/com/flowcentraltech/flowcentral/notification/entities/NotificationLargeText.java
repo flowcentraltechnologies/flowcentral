@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.notification.entities;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.FontFamilyType;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ColumnType;
@@ -39,6 +40,9 @@ public class NotificationLargeText extends BaseApplicationEntity {
     private String body;
     
     @Column(nullable = true)
+    private FontFamilyType fontFamily;
+    
+    @Column(nullable = true)
     private Integer fontSizeInPixels;
     
     @ChildList
@@ -58,6 +62,14 @@ public class NotificationLargeText extends BaseApplicationEntity {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public FontFamilyType getFontFamily() {
+        return fontFamily;
+    }
+
+    public void setFontFamily(FontFamilyType fontFamily) {
+        this.fontFamily = fontFamily;
     }
 
     public Integer getFontSizeInPixels() {

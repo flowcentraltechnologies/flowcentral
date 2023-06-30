@@ -135,6 +135,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     notificationLargeText.setName(notifLargeTextConfig.getName());
                     notificationLargeText.setDescription(description);
                     notificationLargeText.setEntity(entity);
+                    notificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                     notificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                     notificationLargeText.setBody(body);
                     notificationLargeText.setConfigType(ConfigType.MUTABLE_INSTALL);
@@ -144,6 +145,7 @@ public class ApplicationNotificationInstallerImpl extends AbstractApplicationArt
                     if (ConfigUtils.isSetInstall(oldNotificationLargeText)) {
                         oldNotificationLargeText.setDescription(description);
                         oldNotificationLargeText.setEntity(entity);
+                        oldNotificationLargeText.setFontFamily(notifLargeTextConfig.getFontFamily());
                         oldNotificationLargeText.setFontSizeInPixels(notifLargeTextConfig.getFontSizeInPixels());
                         oldNotificationLargeText.setBody(body);
                         populateChildList(oldNotificationLargeText, notifLargeTextConfig);

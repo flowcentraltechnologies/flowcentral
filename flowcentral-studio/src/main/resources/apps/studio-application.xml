@@ -3172,6 +3172,7 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1"/>
+					<field name="fontFamily" column="1"/>
 					<field name="fontSizeInPixels" inputWidget="application.integer"
 						column="1"/>
 				</section>

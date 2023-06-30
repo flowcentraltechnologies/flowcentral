@@ -455,17 +455,62 @@ fux.rigFilter = function(rgp) {
 
 /** Line entries*/
 fux.rigLineEntries = function(rgp) {
+	var id = rgp.pId;
+
+	// Handle on change
+	var chgId = rgp.pOnChgId;
+	if (chgId && chgId.length) {
+		const moveUpId = rgp.pMoveUpId;
+		const moveDownId = rgp.pMoveDownId;
+		const delId = rgp.pDelId;
+
+		const evpNorm = ux.newEvPrm(rgp);
+		evpNorm.uCmd = id + "->normalize";
+		evpNorm.uRef = [ id ];
+		evpNorm.uPanels = [ rgp.pContId ];
+
+		const evpMoveUp = ux.newEvPrm(rgp);
+		evpMoveUp.uCmd = id + "->moveUp";
+		evpMoveUp.uRef = [ id ];
+		evpMoveUp.uPanels = [ rgp.pContId ];
+
+		const evpMoveDown = ux.newEvPrm(rgp);
+		evpMoveDown.uCmd = id + "->moveDown";
+		evpMoveDown.uRef = [ id ];
+		evpMoveDown.uPanels = [ rgp.pContId ];
+
+		const evpDel = ux.newEvPrm(rgp);
+		evpDel.uCmd = id + "->delete";
+		evpDel.uRef = [ id ];
+		evpDel.uPanels = [ rgp.pContId ];
+
+		for (var i = 0; i < chgId.length; i++) {
+			var idx = "d" + i;
+			ux.addHdl(_id(chgId[i]), "change", ux.post, evpNorm);
+			if (i > 0) {
+				ux.addHdl(_id(moveUpId + idx), "click", ux.post, evpMoveUp);
+			}
+			if (i < (chgId.length - 2)) {
+				ux.addHdl(_id(moveDownId + idx), "click", ux.post, evpMoveDown);
+			}
+			ux.addHdl(_id(delId + idx), "click", ux.post, evpDel);
+		}
+	}
+}
+
+/** Token entries*/
+fux.rigTokenEntries = function(rgp) {
 	const fldId = rgp.pOnFldId;
 	if (fldId && fldId.length) {
 		const evp = ux.newEvPrm(rgp);
 		evp.uPreviewId = rgp.pPreviewId;
 		for (var i = 0; i < fldId.length; i++) {
-			ux.addHdl(_id(fldId[i]), "click", fux.rigLineClick , evp);
+			ux.addHdl(_id(fldId[i]), "click", fux.rigTokenClick , evp);
 		}
 	}
 }
 
-fux.rigLineClick = function(uEv) {
+fux.rigTokenClick = function(uEv) {
 	const evp = uEv.evp;
 	const pinput = _id(evp.uPreviewId);
 	ux.setTextAtCaret(pinput, "{{" + _id("trg_" + uEv.uTrg.id).value + "}}");
@@ -919,6 +964,7 @@ fux.init = function() {
 	ux.setfn(fux.rigWidgetRules,"fux11");
 	ux.setfn(fux.rigInputArray,"fux12");  
 	ux.setfn(fux.rigPopupWinText,"fux13");  
+	ux.setfn(fux.rigTokenEntries,"fux14");  
 }
 
 fux.init();

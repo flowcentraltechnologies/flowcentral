@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -293,8 +294,10 @@ public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent
     @Override
     public <T, U extends Entity> Set<T> valueSet(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
-        // TODO
-        return null;
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.VALUE_SET);
+        setQueryDetails(req, query);
+        req.setFieldName(fieldName);
+        return new LinkedHashSet<T>(multipleValueResultOperation(fieldClass, query.getEntityClass(), req));
     }
 
     @Override

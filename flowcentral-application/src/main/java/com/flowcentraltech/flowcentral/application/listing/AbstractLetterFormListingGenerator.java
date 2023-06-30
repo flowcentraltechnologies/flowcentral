@@ -25,8 +25,8 @@ import com.flowcentraltech.flowcentral.application.constants.ListingColorType;
 import com.flowcentraltech.flowcentral.application.data.ListingProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
-import com.flowcentraltech.flowcentral.application.util.HtmlUtils;
 import com.flowcentraltech.flowcentral.application.web.data.LetterFormListing;
+import com.flowcentraltech.flowcentral.common.data.FontSetting;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.HAlignType;
@@ -79,8 +79,8 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
     }
 
     @Override
-    protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
-        return 12;
+    protected FontSetting getFontSetting(ValueStoreReader reader) throws UnifyException {
+        return new FontSetting(12);
     }
 
     @Override
@@ -106,9 +106,21 @@ public abstract class AbstractLetterFormListingGenerator extends AbstractFormLis
     protected final void doWriteBody(ValueStoreReader reader, ListingProperties listingProperties,
             ListingGeneratorWriter writer) throws UnifyException {
         ListingColumn[] columns = new ListingColumn[] { new ListingColumn(HAlignType.LEFT, 100) };
-        final String body = getLetterBody(reader, writer.getFormListing(LetterFormListing.class));
-        final String fmtBody = HtmlUtils.formatReportHTML(body);
-        final ListingCell cell = new ListingCell(ListingCellType.TEXT, fmtBody, ListingCell.BORDER_NONE);
+        final LetterFormListing letterFormListing = writer.getFormListing(LetterFormListing.class);
+        final FontSetting fontSetting = letterFormListing.getWorkingFontSetting();
+        final String body = getLetterBody(reader, letterFormListing);
+        StringBuilder sb = new StringBuilder();
+        sb.append("<pre");
+        if (fontSetting != null) {
+            sb.append(" style=\"");
+            sb.append(fontSetting.getFontStyle());
+            sb.append("\"");
+        }
+        sb.append(">");
+        sb.append(body);
+        sb.append("</pre>");
+
+        final ListingCell cell = new ListingCell(ListingCellType.TEXT, sb.toString(), ListingCell.BORDER_NONE);
         cell.setNoHtmlEscape(true);
         writer.beginSection(1, 100, HAlignType.LEFT, false, ListingCell.BORDER_NONE);
         writer.beginClassicTable(columns);

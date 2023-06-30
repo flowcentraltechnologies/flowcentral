@@ -38,6 +38,7 @@ import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
 import com.flowcentraltech.flowcentral.application.util.EntityImage;
 import com.flowcentraltech.flowcentral.application.util.EntityImageUtils;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.data.FontSetting;
 import com.flowcentraltech.flowcentral.common.data.FormListing;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -81,7 +82,7 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
     private ImageProvider entityImageProvider;
 
     private static final int MIN_FONTSIZE_IN_PIZELS = 8;
-    
+
     private final LocaleFactoryMap<Formatter<?>> dateFormatterMap;
 
     private final LocaleFactoryMap<Formatter<?>> amountFormatterMap;
@@ -150,28 +151,36 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
                 .title("listingReport");
         Set<ListingColorType> pausePrintColors = getPausePrintColors();
         final String additional = additionalStyleClass() != null ? " " + additionalStyleClass() : "";
-        final int listingFontSize = getFontSizeInPixels(reader);
+        final FontSetting fontSetting = getFontSetting(reader);
         final FormListing formListing = listingOptions.getFormListing();
+        final FontSetting workingFontSetting = fontSetting != null ? new FontSetting(fontSetting,
+                fontSetting.getFontSizeInPixels() < MIN_FONTSIZE_IN_PIZELS ? MIN_FONTSIZE_IN_PIZELS
+                        : fontSetting.getFontSizeInPixels())
+                : null;
+        formListing.setWorkingFontSetting(workingFontSetting);
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             writer.reset(Collections.emptyMap());
             writer.write("<div class=\"fc-formlisting");
             writer.write(additional);
-            writer.write("\" style=\"font-size:");
-            writer.write(listingFontSize < MIN_FONTSIZE_IN_PIZELS ? MIN_FONTSIZE_IN_PIZELS : listingFontSize);
-            writer.write("px;\">");
-            writeReportHeader(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(formListing, themeManager,
-                            entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+            writer.write("\"");
+            if (workingFontSetting != null) {
+                writer.write(" style=\"");
+                writer.write(workingFontSetting.getFontStyle());
+                writer.write("\"");
+            }
+
+            writer.write(">");
+            writeReportHeader(reader, listingReportProperties, new HtmlListingGeneratorWriter(formListing, themeManager,
+                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("<div class=\"flbody\">");
-            generateHtmlListing(formListing, listingReportProperties.getName(), reader,
-                    listingReportProperties, writer, pausePrintColors, false);
+            generateHtmlListing(formListing, listingReportProperties.getName(), reader, listingReportProperties, writer,
+                    pausePrintColors, false);
             writeReportAddendum(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(formListing, themeManager,
-                            entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+                    new HtmlListingGeneratorWriter(formListing, themeManager, entityImageProvider,
+                            listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
-            writeReportFooter(reader, listingReportProperties,
-                    new HtmlListingGeneratorWriter(formListing, themeManager,
-                            entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
+            writeReportFooter(reader, listingReportProperties, new HtmlListingGeneratorWriter(formListing, themeManager,
+                    entityImageProvider, listingReportProperties.getName(), writer, pausePrintColors, false));
             writer.write("</div>");
             String bodyContent = writer.toString();
             String style = listingReportProperties.getProperty(String.class, ListingReportProperties.PROPERTY_DOCSTYLE);
@@ -199,9 +208,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
         final FormListing formListing = listingOptions.getFormListing();
         for (ListingReportProperties listingReportProperties : properties.getReportProperties()) {
             Sheet sheet = workbook.createSheet(listingReportProperties.getName());
-            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(formListing,
-                    themeManager, entityImageProvider, listingReportProperties.getName(), sheet, pausePrintColors,
-                    false);
+            ListingGeneratorWriter writer = new ExcelListingGeneratorWriter(formListing, themeManager,
+                    entityImageProvider, listingReportProperties.getName(), sheet, pausePrintColors, false);
             writeReportHeader(reader, listingReportProperties, writer);
             doWriteBody(reader, listingReportProperties, writer);
             writeReportAddendum(reader, listingReportProperties, writer);
@@ -224,8 +232,8 @@ public abstract class AbstractFormListingGenerator extends AbstractFormListingRe
 
     protected abstract Set<ListingColorType> getPausePrintColors() throws UnifyException;
 
-    protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
-        return 10;
+    protected FontSetting getFontSetting(ValueStoreReader reader) throws UnifyException {
+        return new FontSetting(10);
     }
 
     @Override

@@ -19,6 +19,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.listing.AbstractLetterFormListingGenerator;
 import com.flowcentraltech.flowcentral.application.web.data.LetterFormListing;
+import com.flowcentraltech.flowcentral.common.data.FontSetting;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextDef;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
@@ -41,7 +42,7 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
     private NotificationModuleService notificationModuleService;
 
     private static final int DEFAULT_FONTSIZE_IN_PIXELS = 12;
-    
+
     public final void setNotificationModuleService(NotificationModuleService notificationModuleService) {
         this.notificationModuleService = notificationModuleService;
     }
@@ -57,10 +58,13 @@ public abstract class AbstractLargeTextLetterFormListingGenerator extends Abstra
     }
 
     @Override
-    protected int getFontSizeInPixels(ValueStoreReader reader) throws UnifyException {
+    protected FontSetting getFontSetting(ValueStoreReader reader) throws UnifyException {
         NotifLargeTextDef notifLargeTextDef = notificationModuleService.getNotifLargeTextDef(getLetterName(reader));
-        final int fontSizeInPixels = notifLargeTextDef.getFontSizeInPixels();
-        return fontSizeInPixels <= 0 ? DEFAULT_FONTSIZE_IN_PIXELS : fontSizeInPixels;
+        final int fontSizeInPixels = notifLargeTextDef.getFontSizeInPixels() <= 0 ? DEFAULT_FONTSIZE_IN_PIXELS
+                : notifLargeTextDef.getFontSizeInPixels();
+        return notifLargeTextDef.getFontFamily() != null
+                ? new FontSetting(notifLargeTextDef.getFontFamily(), fontSizeInPixels)
+                : new FontSetting(fontSizeInPixels);
     }
 
     @Override
