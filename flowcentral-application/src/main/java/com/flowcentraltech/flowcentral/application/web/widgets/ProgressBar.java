@@ -16,8 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
  * Progress bar widget.
@@ -26,6 +26,6 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
  * @since 1.0
  */
 @Component("fc-progressbar")
-public class ProgressBar extends AbstractControl {
+public class ProgressBar extends AbstractFlowCentralControl {
 
 }

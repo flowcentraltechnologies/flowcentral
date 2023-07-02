@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.database.Entity;
@@ -44,6 +46,11 @@ public class BaseEntityPolicy extends SequencedEntityPolicy {
         }
 
         return id;
+    }
+
+    protected final boolean isEnterprise() throws UnifyException {
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
 
 }

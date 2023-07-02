@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Headless tabs form panel.
@@ -27,6 +27,6 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-headlesstabsformpanel")
 @UplBinding("web/application/upl/headlesstabsformpanel.upl")
-public class HeadlessTabsFormPanel extends AbstractPanel {
+public class HeadlessTabsFormPanel extends AbstractFlowCentralPanel {
 
 }

@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletRequestAttributeConstants;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Convenient abstract base class for in-line entity search panel.
@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractInlineEntitySearchPanel extends AbstractStandalonePanel {
+public abstract class AbstractInlineEntitySearchPanel extends AbstractFlowCentralStandalonePanel {
 
     @Override
     public void onPageConstruct() throws UnifyException {

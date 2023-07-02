@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Entity set values panel.
@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-entitysetvaluespanel")
 @UplBinding("web/application/upl/entitysetvaluespanel.upl")
-public class EntitySetValuesPanel extends AbstractStandalonePanel {
+public class EntitySetValuesPanel extends AbstractFlowCentralStandalonePanel {
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;

@@ -17,10 +17,10 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityCRUDPage;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Entity CRUD page panel.
@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-entitycrudpagepanel")
 @UplBinding("web/application/upl/entitycrudpagepanel.upl")
-public class EntityCRUDPagePanel extends AbstractPanel {
+public class EntityCRUDPagePanel extends AbstractFlowCentralPanel {
 
     @Override
     public void switchState() throws UnifyException {

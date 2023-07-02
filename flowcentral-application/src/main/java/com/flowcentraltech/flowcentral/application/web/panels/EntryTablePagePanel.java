@@ -16,11 +16,11 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 
 /**
@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 @Component("fc-entrytablepagepanel")
 @UplBinding("web/application/upl/entrytablepagepanel.upl")
-public class EntryTablePagePanel extends AbstractPanel {
+public class EntryTablePagePanel extends AbstractFlowCentralPanel {
 
     @Override
     public void switchState() throws UnifyException {

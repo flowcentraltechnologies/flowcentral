@@ -19,10 +19,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStore;
-import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.WriteWork;
 
@@ -33,7 +33,7 @@ import com.tcdng.unify.web.ui.widget.WriteWork;
  * @since 1.0
  */
 @Component("fc-formactionbuttons")
-public class FormActionButtons extends AbstractValueListMultiControl<ValueStore, FormActionDef> {
+public class FormActionButtons extends AbstractFlowCentralValueListMultiControl<ValueStore, FormActionDef> {
 
     public static final String WORK_SHOWACTIONSET = "showActionSet";
 

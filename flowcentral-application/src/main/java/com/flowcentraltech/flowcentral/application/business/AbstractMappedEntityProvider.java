@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -42,7 +42,7 @@ import com.tcdng.unify.core.util.ReflectUtils;
  * @since 1.0
  */
 public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityProviderContext>
-        extends AbstractUnifyComponent implements MappedEntityProvider<U> {
+        extends AbstractFlowCentralComponent implements MappedEntityProvider<U> {
 
     @Configurable
     private AppletUtilities au;

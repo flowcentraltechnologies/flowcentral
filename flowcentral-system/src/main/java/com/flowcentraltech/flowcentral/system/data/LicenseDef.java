@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -108,7 +109,7 @@ public class LicenseDef {
     }
 
     public boolean isEnterpriseLicense() {
-        return "Enterprise".equalsIgnoreCase(type);
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(type);
     }
 
     public boolean isLicenseEntry(String featureCode) {

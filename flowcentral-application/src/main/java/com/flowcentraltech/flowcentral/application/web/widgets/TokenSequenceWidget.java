@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 
 /**
@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 1.0
  */
 @Component("fc-tokensequence")
-public class TokenSequenceWidget extends AbstractMultiControl {
+public class TokenSequenceWidget extends AbstractFlowCentralMultiControl {
 
     private Control previewTextCtrl;
 

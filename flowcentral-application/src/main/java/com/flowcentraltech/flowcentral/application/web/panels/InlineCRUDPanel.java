@@ -19,11 +19,11 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTableWidg
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Inline CRUD panel.
@@ -33,7 +33,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-inlinecrudpanel")
 @UplBinding("web/application/upl/inlinecrudpanel.upl")
-public class InlineCRUDPanel extends AbstractStandalonePanel {
+public class InlineCRUDPanel extends AbstractFlowCentralStandalonePanel {
 
     @Override
 	public void switchState() throws UnifyException {

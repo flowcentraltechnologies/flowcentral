@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntityListActionPolicy extends AbstractUnifyComponent implements EntityListActionPolicy {
+public abstract class AbstractEntityListActionPolicy extends AbstractFlowCentralComponent implements EntityListActionPolicy {
 
     @Override
     public boolean isWidgetDisabled(ValueStoreReader parentReader) throws UnifyException {

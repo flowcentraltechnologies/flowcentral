@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.Comment;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.format.Formatter;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
  * Comment listing.
@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
 @UplAttributes({ @UplAttribute(name = "userImageSrc", type = String.class, defaultVal = "$t{/images/user_comment.png}"),
         @UplAttribute(name = "timestampFormatter", type = Formatter.class,
                 defaultVal = "$d{!datetimeformat style:long}") })
-public class CommentListing extends AbstractControl {
+public class CommentListing extends AbstractFlowCentralControl {
 
     public Formatter<?> getTimestampFormatter() throws UnifyException {
         return getUplAttribute(Formatter.class, "timestampFormatter");

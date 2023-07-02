@@ -21,12 +21,12 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationCollaboration
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppComponentApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.database.Entity;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Convenient abstract base class for studio editor page panel.
@@ -35,7 +35,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  * @since 1.0
  */
 @UplBinding("web/studio/upl/studioeditorpagepanel.upl")
-public abstract class AbstractStudioEditorPagePanel extends AbstractPanel {
+public abstract class AbstractStudioEditorPagePanel extends AbstractFlowCentralPanel {
 
     @Configurable
     private CollaborationProvider collaborationProvider;

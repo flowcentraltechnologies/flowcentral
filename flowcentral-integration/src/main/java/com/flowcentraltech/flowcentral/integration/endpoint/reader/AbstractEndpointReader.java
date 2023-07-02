@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint.reader;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.integration.endpoint.Endpoint;
 import com.flowcentraltech.flowcentral.integration.endpoint.EndpointManager;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Singleton;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.annotation.Singleton;
  * @since 1.0
  */
 @Singleton(false)
-public abstract class AbstractEndpointReader extends AbstractUnifyComponent implements EndpointReader {
+public abstract class AbstractEndpointReader extends AbstractFlowCentralComponent implements EndpointReader {
 
     @Configurable
     private EndpointManager endpointManager;

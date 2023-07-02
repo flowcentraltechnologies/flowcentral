@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.application.business;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.criterion.IsNotNull;
@@ -31,7 +31,7 @@ import com.tcdng.unify.core.criterion.Restriction;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntityBasedFilterGenerator extends AbstractUnifyComponent
+public abstract class AbstractEntityBasedFilterGenerator extends AbstractFlowCentralComponent
         implements EntityBasedFilterGenerator {
 
     private static final Restriction ID_NULL_RESTRICTION = new IsNull("id");

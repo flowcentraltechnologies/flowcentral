@@ -17,10 +17,10 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.ui.DataTransferBlock;
-import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 
 /**
@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractValueListWidget<T> extends AbstractValueListMultiControl<ValueStore, T> {
+public abstract class AbstractValueListWidget<T> extends AbstractFlowCentralValueListMultiControl<ValueStore, T> {
 
     @Override
     public void populate(DataTransferBlock transferBlock) throws UnifyException {

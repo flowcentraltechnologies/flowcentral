@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.data.FormValidationPolicyDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormWidgetState;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormReviewPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormValidationPolicy;
@@ -42,7 +43,6 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.util.ValidationUtils;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -60,7 +60,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component(ApplicationModuleNameConstants.FORMCONTEXT_EVALUATOR)
-public class FormContextEvaluatorImpl extends AbstractUnifyComponent implements FormContextEvaluator {
+public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent implements FormContextEvaluator {
 
     @Configurable
     private EnvironmentService environmentService;

@@ -15,11 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Entity CRUD popup panel.
@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-entitycrudpopuppanel")
 @UplBinding("web/application/upl/entitycrudpopuppanel.upl")
-public class EntityCRUDPopupPanel extends AbstractPanel {
+public class EntityCRUDPopupPanel extends AbstractFlowCentralPanel {
 
 
     @Action

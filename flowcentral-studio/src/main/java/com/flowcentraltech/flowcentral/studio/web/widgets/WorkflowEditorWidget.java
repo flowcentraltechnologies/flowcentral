@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioWorkflowEditType;
 import com.flowcentraltech.flowcentral.studio.web.widgets.WorkflowEditor.DesignChange;
@@ -28,7 +29,6 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.stream.JsonObjectStreamer;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 
 /**
@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  */
 @Component("fc-workfloweditor")
 @UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "240px") })
-public class WorkflowEditorWidget extends AbstractMultiControl {
+public class WorkflowEditorWidget extends AbstractFlowCentralMultiControl {
 
     public static final String WORK_CONTENT = "content";
 

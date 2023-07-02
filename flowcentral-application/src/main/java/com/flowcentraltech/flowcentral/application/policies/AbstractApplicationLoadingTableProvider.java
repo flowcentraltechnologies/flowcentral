@@ -22,9 +22,9 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
@@ -35,7 +35,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationLoadingTableProvider extends AbstractUnifyComponent
+public abstract class AbstractApplicationLoadingTableProvider extends AbstractFlowCentralComponent
     implements LoadingTableProvider {
 
     @Configurable

@@ -15,11 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Entity field sequence panel.
@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-entityfieldsequencepanel")
 @UplBinding("web/application/upl/entityfieldsequencepanel.upl")
-public class EntityFieldSequencePanel extends AbstractStandalonePanel {
+public class EntityFieldSequencePanel extends AbstractFlowCentralStandalonePanel {
 
     @Override
     public void switchState() throws UnifyException {

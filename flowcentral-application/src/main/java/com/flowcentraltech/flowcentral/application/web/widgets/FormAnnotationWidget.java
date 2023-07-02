@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.FormAnnotationDef;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
  * Form annotation widget.
@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
  * @since 1.0
  */
 @Component("fc-formannotation")
-public class FormAnnotationWidget extends AbstractControl {
+public class FormAnnotationWidget extends AbstractFlowCentralControl {
 
     @SuppressWarnings("unchecked")
     public List<FormAnnotationDef> getFormAnnotationDef() throws UnifyException {

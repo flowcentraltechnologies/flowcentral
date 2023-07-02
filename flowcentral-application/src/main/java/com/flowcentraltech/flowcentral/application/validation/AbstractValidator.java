@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.validation;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractValidator extends AbstractUnifyComponent implements Validator {
+public abstract class AbstractValidator extends AbstractFlowCentralComponent implements Validator {
 
     private String failureMsg;
 

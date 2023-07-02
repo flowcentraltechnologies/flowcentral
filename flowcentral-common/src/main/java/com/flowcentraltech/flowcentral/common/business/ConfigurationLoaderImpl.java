@@ -13,11 +13,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.configuration.business;
+package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
+import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
 import com.flowcentraltech.flowcentral.configuration.constants.ConfigurationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.ConfigurationModuleNameConstants;
 import com.flowcentraltech.flowcentral.configuration.constants.FlowCentralStaticSettings;
@@ -37,7 +39,6 @@ import com.flowcentraltech.flowcentral.configuration.xml.ReportConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WfWizardConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyError;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UnifyStaticSettings;
@@ -52,7 +53,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component(ConfigurationModuleNameConstants.CONFIGURATION_LOADER)
-public class ConfigurationLoaderImpl extends AbstractUnifyComponent implements ConfigurationLoader {
+public class ConfigurationLoaderImpl extends AbstractFlowCentralComponent implements ConfigurationLoader {
 
     @Override
     public FlowCentralInstall loadMasterModuleInstallation() throws UnifyException {

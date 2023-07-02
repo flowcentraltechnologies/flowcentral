@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyException;
 
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractUsageListProvider extends AbstractUnifyComponent implements UsageListProvider {
+public abstract class AbstractUsageListProvider extends AbstractFlowCentralComponent implements UsageListProvider {
 
     private List<UsageProvider> providers;
 

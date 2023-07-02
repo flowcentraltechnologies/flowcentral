@@ -15,14 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.common.web.panels;
 
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
-
 /**
  * Convenient base class for panels in flowCentral context.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class BasePanel extends AbstractPanel {
+public abstract class BasePanel extends AbstractFlowCentralPanel {
 
 }

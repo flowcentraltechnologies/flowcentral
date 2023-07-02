@@ -27,8 +27,8 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.chart.business.ChartModuleService;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
@@ -40,7 +40,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractChartDataProvider extends AbstractUnifyComponent implements ChartDataProvider {
+public abstract class AbstractChartDataProvider extends AbstractFlowCentralComponent implements ChartDataProvider {
 
     @Configurable
     private ChartModuleService chartModuleService;

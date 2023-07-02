@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Singleton;
 
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.annotation.Singleton;
  * @since 1.0
  */
 @Singleton(false)
-public abstract class AbstractEndpoint extends AbstractUnifyComponent implements Endpoint {
+public abstract class AbstractEndpoint extends AbstractFlowCentralComponent implements Endpoint {
 
     @Override
     protected void onInitialize() throws UnifyException {

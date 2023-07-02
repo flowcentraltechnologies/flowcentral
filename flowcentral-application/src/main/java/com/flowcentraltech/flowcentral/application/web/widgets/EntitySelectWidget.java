@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralPopupTextField;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -39,7 +40,6 @@ import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
-import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
@@ -57,7 +57,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
         @UplAttribute(name = "fieldB", type = String.class),
         @UplAttribute(name = "space", type = boolean.class, defaultVal = "false"),
         @UplAttribute(name = "special", type = boolean.class, defaultVal = "false") })
-public class EntitySelectWidget extends AbstractPopupTextField {
+public class EntitySelectWidget extends AbstractFlowCentralPopupTextField {
 
     @Configurable
     private AppletUtilities au;

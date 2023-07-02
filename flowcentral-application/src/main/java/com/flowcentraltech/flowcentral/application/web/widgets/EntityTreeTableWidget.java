@@ -21,13 +21,13 @@ import com.flowcentraltech.flowcentral.application.data.TableColumnDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.EntityTreeItem;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.EntityTreeLevel;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable.TableColumnInfo;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.upl.UplElementReferences;
-import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.Widget;
 
@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  */
 @Component("fc-entitytreetable")
 @UplAttributes({ @UplAttribute(name = "multiSelDependentList", type = UplElementReferences.class) })
-public class EntityTreeTableWidget extends AbstractValueListMultiControl<ValueStore, EntityTreeItem> {
+public class EntityTreeTableWidget extends AbstractFlowCentralValueListMultiControl<ValueStore, EntityTreeItem> {
 
     private Control selectCtrl;
 

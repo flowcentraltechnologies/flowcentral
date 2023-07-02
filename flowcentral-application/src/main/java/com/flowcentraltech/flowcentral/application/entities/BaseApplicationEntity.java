@@ -15,9 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.DevelopmentVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
+import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.DefaultQueryRestrictions;
+import com.tcdng.unify.core.annotation.DefaultRestriction;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
+import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.UniqueConstraints;
 
@@ -27,12 +32,20 @@ import com.tcdng.unify.core.annotation.UniqueConstraints;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
+@Policy("baseapplication-entitypolicy")
+@DefaultQueryRestrictions({ @DefaultRestriction(field = "devVersionType", value = "CRN") })
 @UniqueConstraints({ @UniqueConstraint({ "applicationId", "name" }),
         @UniqueConstraint({ "applicationId", "description" }) })
 public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     @ForeignKey(Application.class)
     private Long applicationId;
+
+    @Column
+    private DevelopmentVersionType devVersionType;
+
+    @Column(length = 36, nullable = true)
+    private String devMergeVersionNo;
 
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
@@ -49,6 +62,22 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     public final void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public final DevelopmentVersionType getDevVersionType() {
+        return devVersionType;
+    }
+
+    public final void setDevVersionType(DevelopmentVersionType devVersionType) {
+        this.devVersionType = devVersionType;
+    }
+
+    public final String getDevMergeVersionNo() {
+        return devMergeVersionNo;
+    }
+
+    public final void setDevMergeVersionNo(String devMergeVersionNo) {
+        this.devMergeVersionNo = devMergeVersionNo;
     }
 
     public final String getApplicationName() {

@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Property list panel.
@@ -27,6 +27,6 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-propertylistpanel")
 @UplBinding("web/application/upl/propertylistpanel.upl")
-public class PropertyListPanel extends AbstractStandalonePanel {
+public class PropertyListPanel extends AbstractFlowCentralStandalonePanel {
 
 }

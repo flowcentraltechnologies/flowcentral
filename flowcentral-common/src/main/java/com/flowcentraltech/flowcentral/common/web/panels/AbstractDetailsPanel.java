@@ -20,7 +20,6 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Convenient abstract base class for details panels.
@@ -28,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractDetailsPanel<T> extends AbstractStandalonePanel implements DetailsPanel {
+public abstract class AbstractDetailsPanel<T> extends AbstractFlowCentralStandalonePanel implements DetailsPanel {
 
     @Override
     public void loadDetails(ValueStore valueStore) throws UnifyException {

@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Entity widget rules panel.
@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-entitywidgetrulespanel")
 @UplBinding("web/application/upl/entitywidgetrulespanel.upl")
-public class EntityWidgetRulesPanel extends AbstractStandalonePanel {
+public class EntityWidgetRulesPanel extends AbstractFlowCentralStandalonePanel {
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;

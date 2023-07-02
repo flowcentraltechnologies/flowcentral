@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.notification.server;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.notification.Email;
@@ -34,7 +34,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractRestEmailServer extends AbstractUnifyComponent implements EmailServer {
+public abstract class AbstractRestEmailServer extends AbstractFlowCentralComponent implements EmailServer {
 
     @Override
     public void configure(String configName, EmailServerConfig config) throws UnifyException {

@@ -19,10 +19,10 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 
 /**
@@ -32,7 +32,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 1.0
  */
 @Component("fc-assignmentpage")
-public class AssignmentPageWidget extends AbstractMultiControl {
+public class AssignmentPageWidget extends AbstractFlowCentralMultiControl {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;

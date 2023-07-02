@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -28,7 +29,6 @@ import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
  * Entity comma separated values text widget.
@@ -42,7 +42,7 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
     @UplAttribute(name = "property", type = String.class, defaultVal = "description"),
     @UplAttribute(name = "distinct", type = boolean.class, defaultVal = "true"),
     @UplAttribute(name = "entity", type = String.class, mandatory = true) })
-public class EntityCSVTextWidget extends AbstractControl {
+public class EntityCSVTextWidget extends AbstractFlowCentralControl {
 
     @Configurable
     private AppletUtilities au;

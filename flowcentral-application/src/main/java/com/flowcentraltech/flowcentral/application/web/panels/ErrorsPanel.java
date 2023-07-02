@@ -21,10 +21,10 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Errors panel.
@@ -34,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-errorspanel")
 @UplBinding("web/application/upl/errorspanel.upl")
-public class ErrorsPanel extends AbstractPanel implements FormPanel {
+public class ErrorsPanel extends AbstractFlowCentralPanel implements FormPanel {
 
     @Override
     public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {

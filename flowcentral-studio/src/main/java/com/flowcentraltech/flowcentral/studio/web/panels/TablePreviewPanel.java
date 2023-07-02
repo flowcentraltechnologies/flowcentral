@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Table preview panel.
@@ -27,6 +27,6 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-tablepreviewpanel")
 @UplBinding("web/studio/upl/tablepreviewpanel.upl")
-public class TablePreviewPanel extends AbstractStandalonePanel {
+public class TablePreviewPanel extends AbstractFlowCentralStandalonePanel {
 
 }

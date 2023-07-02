@@ -20,6 +20,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
 import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySelect;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralPopupTextField;
 import com.flowcentraltech.flowcentral.configuration.constants.TextType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -31,7 +32,6 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
-import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
@@ -55,7 +55,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
         @UplAttribute(name = "acceptMinus", type = boolean.class), @UplAttribute(name = "fieldA", type = String.class),
         @UplAttribute(name = "fieldB", type = String.class),
         @UplAttribute(name = "text", type = TextType.class, defaultVal = "text") })
-public class EntityTextSelectWidget extends AbstractPopupTextField {
+public class EntityTextSelectWidget extends AbstractFlowCentralPopupTextField {
 
     @Configurable
     private AppletUtilities appletUtilities;

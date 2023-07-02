@@ -15,10 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Child panel.
@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-childpanel")
 @UplBinding("web/application/upl/childpanel.upl")
-public class ChildPanel extends AbstractStandalonePanel {
+public class ChildPanel extends AbstractFlowCentralStandalonePanel {
 
     @Override
     public void onPageConstruct() throws UnifyException {

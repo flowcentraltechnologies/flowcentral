@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.business.ApplicationModuleSer
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
@@ -41,7 +42,6 @@ import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.PseudoDataSourceResponse;
 import com.tcdng.unify.common.constants.EnumConst;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -67,7 +67,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEnvironmentDelegate extends AbstractUnifyComponent implements EnvironmentDelegate {
+public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralComponent implements EnvironmentDelegate {
 
     @Configurable
     private AppletUtilities au;
