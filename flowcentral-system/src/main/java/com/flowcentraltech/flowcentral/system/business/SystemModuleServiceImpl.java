@@ -37,7 +37,6 @@ import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemParameterProvider;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
 import com.flowcentraltech.flowcentral.common.constants.SectorStatus;
@@ -481,9 +480,9 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
             StringWriter writer = new StringWriter();
             PrintWriter pw = new PrintWriter(writer);
-            if (FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
+            if ("Enterprise".equalsIgnoreCase(getContainerSetting(String.class,
                     FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE))) {
-                pw.println(FlowCentralEditionConstants.ENTERPRISE);
+                pw.println("Enterprise");
                 pw.println("Client Title");
                 Date issue = CalendarUtils.getMidnightDate(new Date(Long.valueOf(deploymentInitDate.getValue())));
                 Date expiry = new Date(
@@ -492,7 +491,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     pw.println(LicenseUtils.getLineFromLineItems(featureCode, issue, expiry, 0));
                 }
             } else {
-                pw.println(FlowCentralEditionConstants.STANDARD);
+                pw.println("Standard");
                 pw.println("Client Title");
             }
 
@@ -716,7 +715,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
 
             String clientTitle = reader.readLine();
             ldb.clientTitle(clientTitle);
-            if (FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(type)) {
+            if ("Enterprise".equalsIgnoreCase(type)) {
                 setSysParameterValue(SystemModuleSysParamConstants.CLIENT_TITLE, clientTitle);
             }
 

@@ -52,14 +52,14 @@ public class DashboardModuleServiceImpl extends AbstractFlowCentralService imple
 			@Override
 			protected boolean stale(String dashboardName, DashboardDef dashboardDef) throws Exception {
 				return environment().value(long.class, "versionNo",
-						((DashboardQuery) new DashboardQuery().id(dashboardDef.getId())).isCurrent()) > dashboardDef.getVersion();
+						new DashboardQuery().id(dashboardDef.getId())) > dashboardDef.getVersion();
 			}
 
 			@Override
 			protected DashboardDef create(String longName, Object... arg1) throws Exception {
 				ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-				Dashboard dashboard = environment().list(((DashboardQuery) new DashboardQuery()
-						.applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName())).isCurrent());
+				Dashboard dashboard = environment().list(new DashboardQuery()
+						.applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
 				if (dashboard == null) {
 					throw new UnifyException(DashboardModuleErrorConstants.CANNOT_FIND_APPLICATION_DASHBOARD, longName);
 				}

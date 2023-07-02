@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import java.util.Collection;
 
-import com.flowcentraltech.flowcentral.common.constants.VersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 
 /**
@@ -55,22 +54,6 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
 
     public final BaseApplicationEntityQuery<T> moduleName(String moduleName) {
         return (BaseApplicationEntityQuery<T>) addEquals("moduleName", moduleName);
-    }
-
-    public final BaseApplicationEntityQuery<T> versionType(VersionType versionType) {
-        return (BaseApplicationEntityQuery<T>) addEquals("versionType", versionType);
-    }
-
-    public final BaseApplicationEntityQuery<T> isCurrent() {
-        return (BaseApplicationEntityQuery<T>) addEquals("versionType", VersionType.CURRENT);
-    }
-
-    public final BaseApplicationEntityQuery<T> rootMergeVersionNo(String rootMergeVersionNo) {
-        return (BaseApplicationEntityQuery<T>) addEquals("rootMergeVersionNo", rootMergeVersionNo);
-    }
-
-    public final BaseApplicationEntityQuery<T> isNullRootMergeVersionNo() {
-        return (BaseApplicationEntityQuery<T>) addIsNull("rootMergeVersionNo");
     }
 
 }

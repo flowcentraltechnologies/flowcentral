@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -109,7 +108,7 @@ public class LicenseDef {
     }
 
     public boolean isEnterpriseLicense() {
-        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(type);
+        return "Enterprise".equalsIgnoreCase(type);
     }
 
     public boolean isLicenseEntry(String featureCode) {
@@ -132,6 +131,13 @@ public class LicenseDef {
 
     public long getVersionNo() {
         return versionNo;
+    }
+
+    @Override
+    public String toString() {
+        return "LicenseDef [id=" + id + ", type=" + type + ", clientTitle=" + clientTitle + ", clientAccount="
+                + clientAccount + ", requestTime=" + requestTime + ", deploymentId=" + deploymentId
+                + ", deploymentDate=" + deploymentDate + ", entryList=" + entryList + ", versionNo=" + versionNo + "]";
     }
 
     public static Builder newBuilder(Long id, String type, long versionNo) {

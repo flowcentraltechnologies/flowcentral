@@ -59,14 +59,14 @@ public class ChartModuleServiceImpl extends AbstractFlowCentralService implement
                 @Override
                 protected boolean stale(String chartName, ChartDef chartDef) throws Exception {
                     return environment().value(long.class, "versionNo",
-                            ((ChartQuery) new ChartQuery().id(chartDef.getId())).isCurrent()) > chartDef.getVersion();
+                            new ChartQuery().id(chartDef.getId())) > chartDef.getVersion();
                 }
 
                 @Override
                 protected ChartDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    Chart chart = environment().list(((ChartQuery) new ChartQuery().applicationName(nameParts.getApplicationName())
-                            .name(nameParts.getEntityName())).isCurrent());
+                    Chart chart = environment().list(new ChartQuery().applicationName(nameParts.getApplicationName())
+                            .name(nameParts.getEntityName()));
                     if (chart == null) {
                         throw new UnifyException(ChartModuleErrorConstants.CANNOT_FIND_APPLICATION_CHART, longName);
                     }
