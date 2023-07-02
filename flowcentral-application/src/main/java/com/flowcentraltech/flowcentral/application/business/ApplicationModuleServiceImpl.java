@@ -589,13 +589,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                             Class<? extends Entity> _entityClass = (Class<? extends Entity>) ReflectUtils
                                     .classForName(entry.getValue().getClassName());
                             registerDelegate(_entityDef, _entityClass);
-                            if ("underwriting.policy".equals(_longName)) {
-                                System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX INNER xxxxxxxxxxxxxxxxxxxxxxxxxx");
-                                System.out.println("@prime: this.hashCode() = " + this.hashCode());
-                                System.out.println("@prime: _longName = " + _longName);
-                                System.out.println("@prime: _entityClass = " + _entityClass);
-                                System.out.println("@prime: _entityClass.hashCode() = " + _entityClass.hashCode());
-                            }
                             put(_longName, new EntityClassDef(_entityDef, _entityClass));
                         }
                     }
@@ -603,14 +596,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     Class<? extends Entity> entityClass = (Class<? extends Entity>) ReflectUtils
                             .classForName(_originDynamicEntityInfo.getClassName());
                     registerDelegate(entityDef, entityClass);
-                    if ("underwriting.policy".equals(longName)) {
-                        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX OUTER xxxxxxxxxxxxxxxxxxxxxxxxxx");
-                        System.out.println("@prime: this.hashCode() = " + this.hashCode());
-                        System.out.println("@prime: longName = " + longName);
-                        System.out.println("@prime: entityClass = " + entityClass);
-                        System.out.println("@prime: entityClass.hashCode() = " + entityClass.hashCode());
-                    }
-                    
                     return new EntityClassDef(entityDef, entityClass);
                 }
 
