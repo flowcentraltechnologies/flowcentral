@@ -1322,7 +1322,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStore valueStore) throws UnifyException {
-        if (valueStore != null) {
+        if (valueStore != null) { 
             final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
                     ApplicationCodeGenUtils.ENTITY_NAME);
             final EntityClassDef entityClassDef = getEntityClassDef(entityName);

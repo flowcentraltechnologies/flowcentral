@@ -26,11 +26,8 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.BaseApplicationEntityDef;
-import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
-import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
@@ -43,7 +40,7 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class WfDef extends BaseApplicationEntityDef {
 
-    private EntityClassDef entityClassDef;
+    private final String entity;
 
     private Map<String, WfStepDef> steps;
 
@@ -63,26 +60,18 @@ public class WfDef extends BaseApplicationEntityDef {
 
     private Set<String> onEntrySetValuesFields;
     
-    private WfDef(EntityClassDef entityClassDef, WfStepDef startStepDef, WfStepDef errorStepDef,
+    private WfDef(String entity, WfStepDef startStepDef, WfStepDef errorStepDef,
             Map<String, WfStepDef> steps, Map<String, WfFilterDef> filterDefMap,
             Map<String, WfSetValuesDef> setValuesDefMap, List<StringToken> descFormat,
             ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
-        this.entityClassDef = entityClassDef;
+        this.entity = entity;
         this.startStepDef = startStepDef;
         this.errorStepDef = errorStepDef;
         this.steps = steps;
         this.filterDefMap = filterDefMap;
         this.setValuesDefMap = setValuesDefMap;
         this.descFormat = descFormat;
-    }
-
-    public EntityClassDef getEntityClassDef() {
-        return entityClassDef;
-    }
-
-    public EntityDef getEntityDef() {
-        return entityClassDef.getEntityDef();
     }
 
     public WfStepDef getStartStepDef() {
@@ -99,14 +88,6 @@ public class WfDef extends BaseApplicationEntityDef {
 
     public boolean isWithDescFormat() {
         return !descFormat.isEmpty();
-    }
-
-    public boolean isCompatible(WorkEntity inst) {
-        if (inst != null) {
-            return entityClassDef.getEntityClass().getName().equals(inst.getClass().getName());
-        }
-
-        return false;
     }
 
     public WfSetValuesDef getSetValuesDef(String name) {
@@ -161,7 +142,7 @@ public class WfDef extends BaseApplicationEntityDef {
     }
 
     public String getEntity() {
-        return entityClassDef.getEntityDef().getLongName();
+        return entity;
     }
 
     public AppletDef getAppletDef(String wfStepName) {
@@ -208,14 +189,14 @@ public class WfDef extends BaseApplicationEntityDef {
         return filterDef;
     }
 
-    public static Builder newBuilder(EntityClassDef entityClassDef, List<StringToken> descFormat, String longName,
+    public static Builder newBuilder(String entity, List<StringToken> descFormat, String longName,
             String description, Long id, long version) {
-        return new Builder(entityClassDef, descFormat, longName, description, id, version);
+        return new Builder(entity, descFormat, longName, description, id, version);
     }
 
     public static class Builder {
 
-        private EntityClassDef entityClassDef;
+        private String entity;
 
         private Map<String, WfStepDef> steps;
 
@@ -237,9 +218,9 @@ public class WfDef extends BaseApplicationEntityDef {
 
         private long version;
 
-        public Builder(EntityClassDef entityClassDef, List<StringToken> descFormat, String longName, String description,
+        public Builder(String entity, List<StringToken> descFormat, String longName, String description,
                 Long id, long version) {
-            this.entityClassDef = entityClassDef;
+            this.entity = entity;
             this.descFormat = descFormat;
             this.longName = longName;
             this.description = description;
@@ -309,7 +290,7 @@ public class WfDef extends BaseApplicationEntityDef {
                 throw new RuntimeException("Workflow has no error step.");
             }
 
-            return new WfDef(entityClassDef, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps), filterDefMap,
+            return new WfDef(entity, startStepDef, errorStepDef, DataUtils.unmodifiableMap(steps), filterDefMap,
                     setValuesDefMap, descFormat, ApplicationNameUtils.getApplicationEntityNameParts(longName),
                     description, id, version);
         }

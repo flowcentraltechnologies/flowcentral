@@ -194,10 +194,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             {
                 @Override
                 protected boolean stale(String wfName, WfDef wfDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new WorkflowQuery().id(wfDef.getId())) > wfDef
-                            .getVersion())
-                            || (wfDef.getEntityDef().getVersion() < appletUtil.application()
-                                    .getEntityDef(wfDef.getEntity()).getVersion());
+                    return environment().value(long.class, "versionNo", new WorkflowQuery().id(wfDef.getId())) > wfDef
+                            .getVersion();
                 }
 
                 @Override
@@ -210,11 +208,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 longName);
                     }
 
-                    EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(workflow.getEntity());
                     List<StringToken> descFormat = !StringUtils.isBlank(workflow.getDescFormat())
                             ? StringUtils.breakdownParameterizedString(workflow.getDescFormat())
                             : Collections.emptyList();
-                    WfDef.Builder wdb = WfDef.newBuilder(entityClassDef, descFormat, longName,
+                    WfDef.Builder wdb = WfDef.newBuilder(workflow.getEntity(), descFormat, longName,
                             workflow.getDescription(), workflow.getId(), workflow.getVersionNo());
 
                     Set<String> filterNames = new HashSet<String>();
@@ -591,12 +588,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public WorkEntityItem getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         WorkEntity workEntity = null;
         if (wfReviewMode.lean()) {
-            workEntity = environment().listLean(
-                    (Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(), wfItem.getWorkRecId());
+            workEntity = environment().listLean((Class<? extends WorkEntity>) entityClassDef.getEntityClass(),
+                    wfItem.getWorkRecId());
         } else {
-            workEntity = environment().list((Class<? extends WorkEntity>) wfDef.getEntityClassDef().getEntityClass(),
+            workEntity = environment().list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(),
                     wfItem.getWorkRecId());
         }
 
@@ -606,9 +604,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         InputArrayEntries emails = null;
         final boolean isEmails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtil, reader, wfDef,
                 wfStepDef.getEmails());
-        if (isEmails && wfDef.getEntityDef().emailProducerConsumer()) {
+        if (isEmails && entityClassDef.getEntityDef().emailProducerConsumer()) {
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
-                    wfDef.getEntityDef().getEmailProducerConsumer());
+                    entityClassDef.getEntityDef().getEmailProducerConsumer());
             WidgetTypeDef widgetTypeDef = appletUtil.application().getWidgetTypeDef("application.email");
             Validator validator = (Validator) getComponent("fc-emailvalidator");
             InputArrayEntries.Builder ieb = InputArrayEntries.newBuilder(widgetTypeDef);
@@ -617,7 +615,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             if (wfReviewMode.lean()) {
                 environment().findChildren(workEntity);
             }
-            List<InputValue> emailList = emailProducerConsumer.produce(wfDef.getEntityDef(), valueStore);
+            List<InputValue> emailList = emailProducerConsumer.produce(entityClassDef.getEntityDef(), valueStore);
             ieb.addEntries(emailList);
             emails = ieb.build();
         }
@@ -683,7 +681,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             boolean update = !listing;
             if (userActionDef.isWithSetValues()) {
                 wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
-                final EntityDef entityDef = wfDef.getEntityDef();
+                final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
                 final Date now = getNow();
                 final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
                 if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
@@ -939,9 +937,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @SuppressWarnings("unchecked")
     @Transactional(TransactionAttribute.REQUIRES_NEW)
     public boolean performWfTransition(WfTransitionQueue wfTransitionQueue) throws UnifyException {
-        WfItem wfItem = environment().list(WfItem.class, wfTransitionQueue.getWfItemId());
-        WfDef wfDef = getWfDef(wfItem.getWorkflowName());
-        EntityClassDef entityClassDef = wfDef.getEntityClassDef();
+        final WfItem wfItem = environment().list(WfItem.class, wfTransitionQueue.getWfItemId());
+        final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         WorkEntity wfEntityInst = (WorkEntity) environment()
                 .list((Class<? extends WorkEntity>) entityClassDef.getEntityClass(), wfItem.getWorkRecId());
         if (entityClassDef.isWithTenantId()) {
@@ -960,17 +958,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private void updateEmails(WfDef wfDef, WorkEntity wfEntityInst, InputArrayEntries emails) throws UnifyException {
         if (emails != null) {
+            final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
             EmailListProducerConsumer emailProducerConsumer = (EmailListProducerConsumer) getComponent(
-                    wfDef.getEntityDef().getEmailProducerConsumer());
+                    entityDef.getEmailProducerConsumer());
             Map<Object, InputValue> map = emails.getValueMap();
-            emailProducerConsumer.consume(wfDef.getEntityDef(), new BeanValueStore(wfEntityInst), map);
+            emailProducerConsumer.consume(entityDef, new BeanValueStore(wfEntityInst), map);
         }
     }
 
     private synchronized void submitToWorkflow(final WfDef wfDef, final WorkEntity workInst) throws UnifyException {
         logDebug("Submitting item to workflow [{0}]. Item payload [{1}]", wfDef.getLongName(),
                 workInst.getWorkflowItemDesc());
-        if (!wfDef.isCompatible(workInst)) {
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
+        if (!entityClassDef.isCompatible(workInst)) {
             Class<?> clazz = workInst != null ? workInst.getClass() : null;
             throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_SUBMIT_INST_TO_INCOMPATIBLE_WORKFLOW, clazz,
                     wfDef.getName(), wfDef.getApplicationName());
@@ -982,7 +982,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             final WfStepDef startStepDef = wfDef.getStartStepDef();
             // Set values on entry
             if (wfDef.isWithOnEntrySetValuesList()) {
-                final EntityDef entityDef = wfDef.getEntityDef();
+                final EntityDef entityDef = entityClassDef.getEntityDef();
                 final Date now = getNow();
                 instValueStore.save(wfDef.getOnEntrySetValuesFields());
                 for (WfSetValuesDef wfSetValuesDef : wfDef.getOnEntrySetValuesList()) {
@@ -1057,7 +1057,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private boolean doWfTransition(final TransitionItem transitionItem) throws UnifyException {
         final WfItem wfItem = transitionItem.getWfItem();
         final WfDef wfDef = transitionItem.getWfDef();
-        final EntityClassDef entityClassDef = wfDef.getEntityClassDef();
+        final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
         final EntityDef entityDef = entityClassDef.getEntityDef();
         final WfStepDef currWfStepDef = wfDef.getWfStepDef(wfItem.getWfStepName());
         final WorkEntity wfEntityInst = transitionItem.getWfEntityInst();
@@ -1151,7 +1151,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     break;
                 case BINARY_ROUTING:
                     if (wfDef.getFilterDef(currWfStepDef.getBinaryConditionName()).getFilterDef()
-                            .getObjectFilter(wfDef.getEntityDef(), wfInstReader, now).matchReader(wfInstReader)) {
+                            .getObjectFilter(entityClassDef.getEntityDef(), wfInstReader, now)
+                            .matchReader(wfInstReader)) {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getNextStepName());
                     } else {
                         nextWfStep = wfDef.getWfStepDef(currWfStepDef.getAltNextStepName());
@@ -1277,11 +1278,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private WfStepDef resolveMultiRouting(WfDef wfDef, WfStepDef currWfStepDef, ValueStoreReader reader)
             throws UnifyException {
         if (!DataUtils.isBlank(currWfStepDef.getRoutingList())) {
+            final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
             final Date now = getNow();
             for (WfRoutingDef wfRoutingDef : currWfStepDef.getRoutingList()) {
                 if (wfRoutingDef.isWithCondition()) {
                     if (wfDef.getFilterDef(wfRoutingDef.getCondition()).getFilterDef()
-                            .getObjectFilter(wfDef.getEntityDef(), reader, now).matchReader(reader)) {
+                            .getObjectFilter(entityClassDef.getEntityDef(), reader, now).matchReader(reader)) {
                         return wfDef.getWfStepDef(wfRoutingDef.getNextStepName());
                     }
                 } else {
@@ -1322,8 +1324,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final ValueStoreReader reader = transitionItem.getReader();
         final Date now = getNow();
         if (wfAlertDef.isWithFireAlertOnCondition()) {
+            final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
             if (!wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
-                    .getObjectFilter(wfDef.getEntityDef(), reader, now).matchReader(reader)) {
+                    .getObjectFilter(entityClassDef.getEntityDef(), reader, now).matchReader(reader)) {
                 return;
             }
         }
@@ -1363,8 +1366,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private Long getTenantIdFromTransitionItem(TransitionItem transitionItem) throws UnifyException {
         if (isTenancyEnabled()) {
+            final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(transitionItem.getWfDef().getEntity());
             SqlEntityInfo sqlEntityInfo = ((SqlDataSourceDialect) db().getDataSource().getDialect())
-                    .findSqlEntityInfo(transitionItem.getWfDef().getEntityClassDef().getEntityClass());
+                    .findSqlEntityInfo(entityClassDef.getEntityClass());
             if (sqlEntityInfo.isWithTenantId()) {
                 return transitionItem.getReader().read(Long.class, sqlEntityInfo.getTenantIdFieldInfo().getName());
             }
