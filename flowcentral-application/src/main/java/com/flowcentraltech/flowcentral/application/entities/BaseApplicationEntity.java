@@ -15,9 +15,12 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.VersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
+import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
+import com.tcdng.unify.core.annotation.Policy;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.UniqueConstraints;
 
@@ -27,13 +30,20 @@ import com.tcdng.unify.core.annotation.UniqueConstraints;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@UniqueConstraints({ @UniqueConstraint({ "applicationId", "name" }),
-        @UniqueConstraint({ "applicationId", "description" }) })
+@Policy("baseapplication-entitypolicy")
+@UniqueConstraints({ @UniqueConstraint({ "versionType", "applicationId", "name" }),
+        @UniqueConstraint({ "versionType", "applicationId", "description" }) })
 public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     @ForeignKey(Application.class)
     private Long applicationId;
-
+    
+    @Column
+    private VersionType versionType;
+    
+    @Column(length = 36, nullable = true)
+    private String rootMergeVersionNo;
+    
     @ListOnly(key = "applicationId", property = "name")
     private String applicationName;
 
@@ -49,6 +59,22 @@ public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     public final void setApplicationId(Long applicationId) {
         this.applicationId = applicationId;
+    }
+
+    public final VersionType getVersionType() {
+        return versionType;
+    }
+
+    public final void setVersionType(VersionType versionType) {
+        this.versionType = versionType;
+    }
+
+    public final String getRootMergeVersionNo() {
+        return rootMergeVersionNo;
+    }
+
+    public final void setRootMergeVersionNo(String rootMergeVersionNo) {
+        this.rootMergeVersionNo = rootMergeVersionNo;
     }
 
     public final String getApplicationName() {

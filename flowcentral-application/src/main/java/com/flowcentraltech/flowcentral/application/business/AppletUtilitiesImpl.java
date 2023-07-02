@@ -1869,7 +1869,12 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
                 Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id",
                         inst.getId());
                 long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
-                db.updateAll(query, new Update().add("versionNo", bumpedVersionNo));
+                Update update = new Update().add("versionNo", bumpedVersionNo);
+                if (BaseApplicationEntity.class.isAssignableFrom(entityClassDef.getEntityClass())) {
+                    update.add("rootMergeVersionNo", null);
+                }
+                
+                db.updateAll(query, update);
                 ((BaseVersionEntity) inst).setVersionNo(bumpedVersionNo);
             }
         }
