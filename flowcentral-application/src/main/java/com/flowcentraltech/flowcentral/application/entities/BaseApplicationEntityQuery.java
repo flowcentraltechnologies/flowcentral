@@ -61,8 +61,16 @@ public abstract class BaseApplicationEntityQuery<T extends BaseApplicationEntity
         return (BaseApplicationEntityQuery<T>) addEquals("versionType", versionType);
     }
 
-    public final BaseApplicationEntityQuery<T> rootCopy(Boolean rootCopy) {
-        return (BaseApplicationEntityQuery<T>) addEquals("rootCopy", rootCopy);
+    public final BaseApplicationEntityQuery<T> isCurrent() {
+        return (BaseApplicationEntityQuery<T>) addEquals("versionType", VersionType.CURRENT);
+    }
+
+    public final BaseApplicationEntityQuery<T> rootMergeVersionNo(String rootMergeVersionNo) {
+        return (BaseApplicationEntityQuery<T>) addEquals("rootMergeVersionNo", rootMergeVersionNo);
+    }
+
+    public final BaseApplicationEntityQuery<T> isNullRootMergeVersionNo() {
+        return (BaseApplicationEntityQuery<T>) addIsNull("rootMergeVersionNo");
     }
 
 }

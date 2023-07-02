@@ -194,8 +194,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             {
                 @Override
                 protected boolean stale(String wfName, WfDef wfDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new WorkflowQuery().id(wfDef.getId())) > wfDef
-                            .getVersion())
+                    return (environment().value(long.class, "versionNo",
+                            ((WorkflowQuery) new WorkflowQuery().id(wfDef.getId())).isCurrent()) > wfDef.getVersion())
                             || (wfDef.getEntityDef().getVersion() < appletUtil.application()
                                     .getEntityDef(wfDef.getEntity()).getVersion());
                 }
@@ -203,8 +203,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected WfDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    Workflow workflow = environment().list(new WorkflowQuery()
-                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    Workflow workflow = environment()
+                            .list(((WorkflowQuery) new WorkflowQuery().applicationName(nameParts.getApplicationName())
+                                    .name(nameParts.getEntityName())).isCurrent());
                     if (workflow == null) {
                         throw new UnifyException(WorkflowModuleErrorConstants.CANNOT_FIND_APPLICATION_WORKFLOW,
                                 longName);
@@ -344,14 +345,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, WfWizardDef formWizardDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
-                            new WfWizardQuery().id(formWizardDef.getId())) > formWizardDef.getVersion());
+                            ((WfWizardQuery) new WfWizardQuery().id(formWizardDef.getId())).isCurrent()) > formWizardDef
+                                    .getVersion());
                 }
 
                 @Override
                 protected WfWizardDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    WfWizard wfWizard = environment().list(new WfWizardQuery()
-                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    WfWizard wfWizard = environment()
+                            .list(((WfWizardQuery) new WfWizardQuery().applicationName(nameParts.getApplicationName())
+                                    .name(nameParts.getEntityName())).isCurrent());
                     WfWizardDef.Builder wwdb = WfWizardDef.newBuilder(wfWizard.getEntity(),
                             wfWizard.getSubmitWorkflow(), longName, wfWizard.getDescription(), wfWizard.getId(),
                             wfWizard.getVersionNo());
@@ -388,14 +391,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected boolean stale(String longName, WfChannelDef wfChannelDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
-                            new WfChannelQuery().id(wfChannelDef.getId())) > wfChannelDef.getVersion());
+                            ((WfChannelQuery) new WfChannelQuery().id(wfChannelDef.getId())).isCurrent()) > wfChannelDef
+                                    .getVersion());
                 }
 
                 @Override
                 protected WfChannelDef create(String longName, Object... arg1) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    WfChannel wfChannel = environment().list(new WfChannelQuery()
-                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    WfChannel wfChannel = environment()
+                            .list(((WfChannelQuery) new WfChannelQuery().applicationName(nameParts.getApplicationName())
+                                    .name(nameParts.getEntityName())).isCurrent());
                     if (wfChannel == null) {
                         throw new UnifyException(ApplicationModuleErrorConstants.CANNOT_FIND_APPLICATION_ENTITY,
                                 nameParts.getEntityName(), WfChannel.class, nameParts.getApplicationName());

@@ -189,6 +189,7 @@ import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.constants.VersionType;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
@@ -362,7 +363,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Configurable
     private SequenceNumberService sequenceNumberService;
-    
+
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
 
     private List<ApplicationAppletDefProvider> applicationAppletDefProviderList;
@@ -422,7 +423,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected boolean stale(String longName, AppletDef appletDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
-                            new AppAppletQuery().id(appletDef.getId())) > appletDef.getVersion());
+                            ((AppAppletQuery) new AppAppletQuery().id(appletDef.getId())).isCurrent()) > appletDef
+                                    .getVersion());
                 }
 
                 @Override
@@ -485,7 +487,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected boolean stale(String longName, WidgetTypeDef widgetTypeDef) throws Exception {
                     return environment().value(long.class, "versionNo",
-                            new AppWidgetTypeQuery().id(widgetTypeDef.getId())) > widgetTypeDef.getVersion();
+                            ((AppWidgetTypeQuery) new AppWidgetTypeQuery().id(widgetTypeDef.getId()))
+                                    .isCurrent()) > widgetTypeDef.getVersion();
                 }
 
                 @Override
@@ -501,16 +504,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
                 @Override
                 protected boolean stale(String longName, SuggestionTypeDef suggestionTypeDef) throws Exception {
-                    return environment().value(long.class, "versionNo", new AppSuggestionTypeQuery()
-                            .id(suggestionTypeDef.getId())) > suggestionTypeDef.getVersion();
+                    return environment().value(long.class, "versionNo",
+                            ((AppSuggestionTypeQuery) new AppSuggestionTypeQuery().id(suggestionTypeDef.getId()))
+                                    .isCurrent()) > suggestionTypeDef.getVersion();
                 }
 
                 @Override
                 protected SuggestionTypeDef create(String longName, Object... args) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
                     AppSuggestionType appSuggestionType = environment()
-                            .list(Query.of(AppSuggestionType.class).addEquals("name", nameParts.getEntityName())
-                                    .addEquals("applicationName", nameParts.getApplicationName()));
+                            .list(((AppSuggestionTypeQuery) new AppSuggestionTypeQuery()
+                                    .addEquals("name", nameParts.getEntityName())
+                                    .addEquals("applicationName", nameParts.getApplicationName())).isCurrent());
                     if (appSuggestionType == null) {
                         appSuggestionType = new AppSuggestionType();
                         Long applicationId = getApplicationDef(nameParts.getApplicationName()).getId();
@@ -533,7 +538,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 protected boolean stale(String longName, EntityClassDef entityClassDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
                         return environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityClassDef.getId())) > entityClassDef.getVersion();
+                                ((AppEntityQuery) new AppEntityQuery().id(entityClassDef.getId()))
+                                        .isCurrent()) > entityClassDef.getVersion();
                     }
 
                     return false;
@@ -632,7 +638,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 protected boolean stale(String longName, EntityDef entityDef) throws Exception {
                     if (!RESERVED_ENTITIES.contains(longName)) {
                         return environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion();
+                                ((AppEntityQuery) new AppEntityQuery().id(entityDef.getId())).isCurrent()) > entityDef
+                                        .getVersion();
                     }
 
                     return false;
@@ -791,7 +798,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 protected boolean stale(String entityClass, EntityDef entityDef) throws Exception {
                     if (!PropertyListItem.class.getName().equals(entityClass)) {
                         return (environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityDef.getId())) > entityDef.getVersion());
+                                ((AppEntityQuery) new AppEntityQuery().id(entityDef.getId())).isCurrent()) > entityDef
+                                        .getVersion());
                     }
 
                     return false;
@@ -799,7 +807,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected EntityDef create(String entityClass, Object... arg1) throws Exception {
-                    AppEntity appEntity = environment().find(new AppEntityQuery().entityClass(entityClass));
+                    AppEntity appEntity = environment()
+                            .find(((AppEntityQuery) new AppEntityQuery().entityClass(entityClass)).isCurrent());
                     return getEntityDef(ApplicationNameUtils
                             .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName()));
                 }
@@ -810,8 +819,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             {
                 @Override
                 protected boolean stale(String longName, RefDef refDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new AppRefQuery().id(refDef.getId())) > refDef
-                            .getVersion());
+                    return (environment().value(long.class, "versionNo",
+                            ((AppRefQuery) new AppRefQuery().id(refDef.getId())).isCurrent()) > refDef.getVersion());
                 }
 
                 @Override
@@ -835,8 +844,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected boolean stale(String longName, TableDef tableDef) throws Exception {
                     if (!RESERVED_TABLES.contains(longName)) {
-                        return (environment().value(long.class, "versionNo",
-                                new AppTableQuery().id(tableDef.getId())) > tableDef.getVersion())
+                        return (environment()
+                                .value(long.class, "versionNo",
+                                        ((AppTableQuery) new AppTableQuery().id(tableDef.getId()))
+                                                .isCurrent()) > tableDef.getVersion())
                                 || (tableDef.getEntityDef()
                                         .getVersion() != getEntityDef(tableDef.getEntityDef().getLongName())
                                                 .getVersion());
@@ -945,7 +956,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected boolean stale(String longName, FormDef formDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
-                            new AppFormQuery().id(formDef.getId())) > formDef.getVersion())
+                            ((AppFormQuery) new AppFormQuery().id(formDef.getId())).isCurrent()) > formDef.getVersion())
                             || (formDef.getEntityDef()
                                     .getVersion() != getEntityDef(formDef.getEntityDef().getLongName()).getVersion());
                 }
@@ -1140,8 +1151,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                 @Override
                 protected boolean stale(String longName, AssignmentPageDef assignmentPageDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new AppAssignmentPageQuery()
-                            .id(assignmentPageDef.getId())) > assignmentPageDef.getVersion());
+                    return (environment().value(long.class, "versionNo",
+                            ((AppAssignmentPageQuery) new AppAssignmentPageQuery().id(assignmentPageDef.getId()))
+                                    .isCurrent()) > assignmentPageDef.getVersion());
                 }
 
                 @Override
@@ -1166,7 +1178,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected boolean stale(String longName, PropertyListDef propertyListDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
-                            new AppPropertyListQuery().id(propertyListDef.getId())) > propertyListDef.getVersion());
+                            ((AppPropertyListQuery) new AppPropertyListQuery().id(propertyListDef.getId()))
+                                    .isCurrent()) > propertyListDef.getVersion());
                 }
 
                 @Override
@@ -1203,7 +1216,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 @Override
                 protected boolean stale(String longName, PropertyRuleDef propertyRuleDef) throws Exception {
                     return (environment().value(long.class, "versionNo",
-                            new AppPropertyRuleQuery().id(propertyRuleDef.getId())) > propertyRuleDef.getVersion());
+                            ((AppPropertyRuleQuery) new AppPropertyRuleQuery().id(propertyRuleDef.getId()))
+                                    .isCurrent()) > propertyRuleDef.getVersion());
                 }
 
                 @Override
@@ -3885,7 +3899,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 }
 
                 sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
-                
+
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
                 entityIdByNameMap.put(entityLongName, entityId);
@@ -5401,7 +5415,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             throws UnifyException {
         ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
         T inst = environment().list(Query.of(entityClazz).addEquals("name", nameParts.getEntityName())
-                .addEquals("applicationName", nameParts.getApplicationName()));
+                .addEquals("applicationName", nameParts.getApplicationName())
+                .addEquals("versionType", VersionType.CURRENT));
         if (inst == null) {
             throw new UnifyException(ApplicationModuleErrorConstants.CANNOT_FIND_APPLICATION_ENTITY,
                     nameParts.getEntityName(), entityClazz, nameParts.getApplicationName());

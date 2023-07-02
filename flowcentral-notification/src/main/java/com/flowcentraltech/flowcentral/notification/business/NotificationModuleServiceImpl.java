@@ -131,15 +131,18 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             {
                 @Override
                 protected boolean stale(String name, NotifTemplateDef notifTemplateDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new NotificationTemplateQuery()
-                            .id(notifTemplateDef.getId())) > notifTemplateDef.getVersion());
+                    return (environment().value(long.class, "versionNo",
+                            ((NotificationTemplateQuery) new NotificationTemplateQuery().id(notifTemplateDef.getId()))
+                                    .isCurrent()) > notifTemplateDef.getVersion());
                 }
 
                 @Override
                 protected NotifTemplateDef create(String longName, Object... params) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    NotificationTemplate notificationTemplate = environment().list(new NotificationTemplateQuery()
-                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    NotificationTemplate notificationTemplate = environment()
+                            .list(((NotificationTemplateQuery) new NotificationTemplateQuery()
+                                    .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()))
+                                            .isCurrent());
                     if (notificationTemplate == null) {
                         throw new UnifyException(NotificationModuleErrorConstants.CANNOT_FIND_NOTIFICATION_TEMPLATE,
                                 longName);
@@ -163,15 +166,20 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             {
                 @Override
                 protected boolean stale(String name, NotifLargeTextDef notifLargeTextDef) throws Exception {
-                    return (environment().value(long.class, "versionNo", new NotificationLargeTextQuery()
-                            .id(notifLargeTextDef.getId())) > notifLargeTextDef.getVersion());
+                    return (environment()
+                            .value(long.class, "versionNo",
+                                    ((NotificationLargeTextQuery) new NotificationLargeTextQuery()
+                                            .id(notifLargeTextDef.getId())).isCurrent()) > notifLargeTextDef
+                                                    .getVersion());
                 }
 
                 @Override
                 protected NotifLargeTextDef create(String longName, Object... params) throws Exception {
                     ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(longName);
-                    NotificationLargeText notificationLargeText = environment().list(new NotificationLargeTextQuery()
-                            .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));
+                    NotificationLargeText notificationLargeText = environment()
+                            .list(((NotificationLargeTextQuery) new NotificationLargeTextQuery()
+                                    .applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()))
+                                            .isCurrent());
                     if (notificationLargeText == null) {
                         throw new UnifyException(NotificationModuleErrorConstants.CANNOT_FIND_NOTIFICATION_LARGETEXT,
                                 longName);

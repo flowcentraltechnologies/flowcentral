@@ -31,8 +31,8 @@ import com.tcdng.unify.core.annotation.UniqueConstraints;
  * @since 1.0
  */
 @Policy("baseapplication-entitypolicy")
-@UniqueConstraints({ @UniqueConstraint({ "versionType", "applicationId", "name" }),
-        @UniqueConstraint({ "versionType", "applicationId", "description" }) })
+@UniqueConstraints({ @UniqueConstraint({ "applicationId", "name" }),
+        @UniqueConstraint({ "applicationId", "description" }) })
 public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     @ForeignKey(Application.class)
