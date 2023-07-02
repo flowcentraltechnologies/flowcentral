@@ -19,6 +19,7 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.ReflectUtils;
 
@@ -90,6 +91,14 @@ public class EntityClassDef {
 
     public boolean isWithTenantId() {
         return entityDef.isWithTenantId();
+    }
+
+    public boolean isCompatible(WorkEntity inst) {
+        if (inst != null) {
+            return entityClass.getName().equals(inst.getClass().getName());
+        }
+
+        return false;
     }
 
     private List<String> getCopyFields() {

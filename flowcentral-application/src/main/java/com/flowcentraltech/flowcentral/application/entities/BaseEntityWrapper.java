@@ -49,6 +49,10 @@ public abstract class BaseEntityWrapper implements EntityWrapper {
         Class<?> valueStoreClass = valueStore.getValueObject().getClass();
         if (!Collection.class.isAssignableFrom(valueStoreClass)
                 && !valueStoreClass.isAssignableFrom(entityClassDef.getEntityClass())) {
+            System.out.println(
+                    "@prime: valueStoreClass = " + valueStoreClass + ", hashCode = " + valueStoreClass.hashCode());
+            System.out.println("@prime: entityClassDef.getEntityClass() = " + entityClassDef.getEntityClass()
+                    + ", hashCode = " + entityClassDef.getEntityClass().hashCode());
             throw new IllegalArgumentException(
                     "Supplied value store entity instance is incompatible with entity class definition.");
         }
