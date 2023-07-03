@@ -99,6 +99,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniFormScope;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
@@ -129,7 +130,6 @@ import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.common.util.StringToken;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyComponentConfig;
 import com.tcdng.unify.core.UnifyCoreErrorConstants;
@@ -177,7 +177,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @since 1.0
  */
 @Component(ApplicationModuleNameConstants.APPLET_UTILITIES)
-public class AppletUtilitiesImpl extends AbstractUnifyComponent implements AppletUtilities {
+public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements AppletUtilities {
 
     @Configurable
     private RestrictionTranslator restrictionTranslator;
@@ -1864,13 +1864,20 @@ public class AppletUtilitiesImpl extends AbstractUnifyComponent implements Apple
     @SuppressWarnings("unchecked")
     public void bumpVersion(Database db, EntityDef entityDef, Entity inst) throws UnifyException {
         if (inst != null) {
-            final EntityClassDef entityClassDef = getEntityClassDef(entityDef.getLongName());
-            if (BaseVersionEntity.class.isAssignableFrom(entityClassDef.getEntityClass())) {
-                Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id",
-                        inst.getId());
+            final Class<?> entityClass = getEntityClassDef(entityDef.getLongName()).getEntityClass();
+            if (BaseVersionEntity.class.isAssignableFrom(entityClass)) {
+                final boolean isClearMergeVersion = BaseApplicationEntity.class.isAssignableFrom(entityClass)
+                        && !isEnterprise();
+                Query<?> query = Query.of((Class<? extends Entity>) entityClass).addEquals("id", inst.getId());
                 long bumpedVersionNo = db.value(long.class, "versionNo", query) + 1L;
-                db.updateAll(query, new Update().add("versionNo", bumpedVersionNo));
+                db.updateAll(query,
+                        isClearMergeVersion
+                                ? new Update().add("versionNo", bumpedVersionNo).add("devMergeVersionNo", null)
+                                : new Update().add("versionNo", bumpedVersionNo));
                 ((BaseVersionEntity) inst).setVersionNo(bumpedVersionNo);
+                if (isClearMergeVersion) {
+                    ((BaseApplicationEntity) inst).setDevMergeVersionNo(null);
+                }
             }
         }
     }

@@ -17,11 +17,11 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.widgets.AssignmentPage;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Assignment page panel.
@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-assignmentpagepanel")
 @UplBinding("web/application/upl/assignmentpagepanel.upl")
-public class AssignmentPagePanel extends AbstractPanel {
+public class AssignmentPagePanel extends AbstractFlowCentralPanel {
 
     @Override
     public void switchState() throws UnifyException {

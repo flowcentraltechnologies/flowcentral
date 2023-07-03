@@ -23,12 +23,12 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.flowcentraltech.flowcentral.common.web.widgets.Form;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Comments panel.
@@ -38,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-commentspanel")
 @UplBinding("web/application/upl/commentspanel.upl")
-public class CommentsPanel extends AbstractPanel implements FormPanel {
+public class CommentsPanel extends AbstractFlowCentralPanel implements FormPanel {
 
     @Override
     public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {

@@ -16,11 +16,11 @@
 
 package com.flowcentraltech.flowcentral.chart.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
  * Chart widget.
@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
  */
 @Component("fc-chart")
 @UplAttributes({ @UplAttribute(name = "sparkLine", type = boolean.class, defaultVal = "false") })
-public class ChartWidget extends AbstractControl {
+public class ChartWidget extends AbstractFlowCentralControl {
 
     public boolean isSparkLine() throws UnifyException {
         return getUplAttribute(boolean.class, "sparkLine");

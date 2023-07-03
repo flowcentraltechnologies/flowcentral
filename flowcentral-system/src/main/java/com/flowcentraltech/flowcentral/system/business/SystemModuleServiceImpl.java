@@ -36,7 +36,7 @@ import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
 import com.flowcentraltech.flowcentral.common.business.SystemParameterProvider;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseFeatureCodeConstants;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
 import com.flowcentraltech.flowcentral.common.constants.SectorStatus;
@@ -480,9 +480,8 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
             Feature deploymentInitDate = environment().find(new FeatureQuery().code("deploymentInitDate"));
             StringWriter writer = new StringWriter();
             PrintWriter pw = new PrintWriter(writer);
-            if ("Enterprise".equalsIgnoreCase(getContainerSetting(String.class,
-                    FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE))) {
-                pw.println("Enterprise");
+            if (isEnterprise()) {
+                pw.println(FlowCentralEditionConstants.ENTERPRISE);
                 pw.println("Client Title");
                 Date issue = CalendarUtils.getMidnightDate(new Date(Long.valueOf(deploymentInitDate.getValue())));
                 Date expiry = new Date(
@@ -491,7 +490,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                     pw.println(LicenseUtils.getLineFromLineItems(featureCode, issue, expiry, 0));
                 }
             } else {
-                pw.println("Standard");
+                pw.println(FlowCentralEditionConstants.STANDARD);
                 pw.println("Client Title");
             }
 

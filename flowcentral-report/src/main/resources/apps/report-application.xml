@@ -50,10 +50,14 @@
 				references="reportableFieldRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{report.reportabledefinition.uc.name}"
-				fieldList="applicationId,name" />
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{report.reportabledefinition.uc.description}"
-				fieldList="applicationId,description" />
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="reportableField"
 			description="$m{report.reportablefield}"
@@ -150,10 +154,14 @@
 				references="reportParameterRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{report.reportconfiguration.uc.name}"
-				fieldList="applicationId,name" />
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{report.reportconfiguration.uc.description}"
-				fieldList="applicationId,description" />
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="reportColumn"
 			description="$m{report.reportcolumn}"

@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.application.data;
 import java.util.Collections;
 import java.util.List;
 
+import com.tcdng.unify.core.util.DataUtils;
+
 /**
  * Unique constraint definition.
  * 
@@ -32,12 +34,16 @@ public class UniqueConstraintDef {
 
     private List<String> fieldList;
 
+    private List<UniqueConditionDef> conditionList;
+    
     private boolean caseInsensitive;
     
-    public UniqueConstraintDef(String name, String description, List<String> fieldList, boolean caseInsensitive) {
+    public UniqueConstraintDef(String name, String description, List<String> fieldList,
+            List<UniqueConditionDef> conditionList, boolean caseInsensitive) {
         this.name = name;
         this.description = description;
         this.fieldList = Collections.unmodifiableList(fieldList);
+        this.conditionList = DataUtils.unmodifiableList(conditionList);
         this.caseInsensitive = caseInsensitive;
     }
 
@@ -61,6 +67,14 @@ public class UniqueConstraintDef {
         return fieldList != null && fieldList.size() == 1 && fieldList.get(0).equals(fieldName);
     }
     
+    public boolean isWithConditionList() {
+        return !conditionList.isEmpty();
+    }
+    
+    public List<UniqueConditionDef> getConditionList() {
+        return conditionList;
+    }
+
     public boolean isCaseInsensitive() {
         return caseInsensitive;
     }

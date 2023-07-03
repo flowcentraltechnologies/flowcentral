@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Form preview panel.
@@ -27,6 +27,6 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  */
 @Component("fc-formpreviewpanel")
 @UplBinding("web/studio/upl/formpreviewpanel.upl")
-public class FormPreviewPanel extends AbstractStandalonePanel {
+public class FormPreviewPanel extends AbstractFlowCentralStandalonePanel {
 
 }

@@ -17,11 +17,11 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Property search panel.
@@ -31,7 +31,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-propertysearchpanel")
 @UplBinding("web/application/upl/propertysearchpanel.upl")
-public class PropertySearchPanel extends AbstractPanel {
+public class PropertySearchPanel extends AbstractFlowCentralPanel {
 
     @Configurable
     private ApplicationPrivilegeManager applicationPrivilegeManager;

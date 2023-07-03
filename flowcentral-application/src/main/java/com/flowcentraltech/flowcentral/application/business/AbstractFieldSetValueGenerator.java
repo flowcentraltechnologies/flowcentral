@@ -20,9 +20,9 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.criterion.Restriction;
@@ -38,7 +38,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractFieldSetValueGenerator extends AbstractUnifyComponent implements FieldSetValueGenerator {
+public abstract class AbstractFieldSetValueGenerator extends AbstractFlowCentralComponent implements FieldSetValueGenerator {
 
     @Configurable
     private AppletUtilities appletUtilities;

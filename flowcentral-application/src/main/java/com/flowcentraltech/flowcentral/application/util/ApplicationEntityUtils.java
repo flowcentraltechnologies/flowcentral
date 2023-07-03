@@ -85,8 +85,9 @@ public final class ApplicationEntityUtils {
     private static final Set<String> nonReportables = Collections.unmodifiableSet(
             new HashSet<String>(Arrays.asList("id", "versionNo", "tenantId", "applicationId", "originWorkRecId")));
 
-    private static final Set<String> nullables = Collections.unmodifiableSet(new HashSet<String>(
-            Arrays.asList("originWorkRecId", "workBranchCode", "workDepartmentCode", "processingStatus")));
+    private static final Set<String> nullables = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("originWorkRecId", "workBranchCode",
+                    "workDepartmentCode", "processingStatus", "devMergeVersionNo")));
 
     private static final Set<String> maintainLinks = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList("name", "description")));
@@ -399,6 +400,15 @@ public final class ApplicationEntityUtils {
                         "applicationDesc",
                         msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.applicationdesc}"),
                         null, "applicationId", "description", null, null, null, null, null, configType));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "devVersionType",
+                        msgResolver.resolveApplicationMessage("$m{baseapplicationentity.field.label.devversiontype}"),
+                        "developmentversiontypelist", null, null, null, null, "application.enumlist", null, null,
+                        configType));
+                list.add(
+                        ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.STRING, "devMergeVersionNo",
+                                msgResolver.resolveApplicationMessage(
+                                        "$m{baseapplicationentity.field.label.devmergeversionno}"),
+                                null, null, null, null, null, "application.text", null, 32, configType));
                 break;
             case BASE_AUDIT_ENTITY:
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.TIMESTAMP_UTC, "createDt",
@@ -474,8 +484,8 @@ public final class ApplicationEntityUtils {
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.inworkflow}"), null, null,
                         null, null, null, "application.checkbox", null, null, configType));
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "originalCopyId",
-                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.originalcopyid}"), null, null,
-                        null, null, null, "application.integer", null, null, configType));
+                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.originalcopyid}"), null,
+                        null, null, null, null, "application.integer", null, null, configType));
                 break;
             default:
                 break;

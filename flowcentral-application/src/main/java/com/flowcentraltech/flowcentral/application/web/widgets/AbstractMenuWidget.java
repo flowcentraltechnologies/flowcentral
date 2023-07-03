@@ -15,8 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Convenient abstract base class for menu widgets.
@@ -24,7 +24,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractMenuWidget extends AbstractPanel {
+public abstract class AbstractMenuWidget extends AbstractFlowCentralPanel {
 
     public static final String WORK_MENUIDS = "menuIds";
 

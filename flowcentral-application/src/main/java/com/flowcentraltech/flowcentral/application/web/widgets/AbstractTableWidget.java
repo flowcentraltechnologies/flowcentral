@@ -35,6 +35,7 @@ import com.flowcentraltech.flowcentral.common.data.FormMessage;
 import com.flowcentraltech.flowcentral.common.data.FormValidationErrors;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.web.panels.DetailsPanel;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
@@ -49,7 +50,6 @@ import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.ui.DataTransferBlock;
 import com.tcdng.unify.web.ui.util.DataTransferUtils;
-import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Page;
@@ -78,7 +78,7 @@ import com.tcdng.unify.web.ui.widget.panel.StandalonePanel;
         @UplAttribute(name = "alternatingRows", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "focusManagement", type = boolean.class, defaultVal = "true") })
 public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
-        extends AbstractValueListMultiControl<ValueStore, U> implements TableSelect<U> {
+        extends AbstractFlowCentralValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
     public static final int ATTACH_SELECTED_INDEX = 0;
     

@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
  * Sector icon widget.
@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
  * @since 1.0
  */
 @Component("fc-sectoricon")
-public class SectorIconWidget extends AbstractControl {
+public class SectorIconWidget extends AbstractFlowCentralControl {
 
     public SectorIcon icon() throws UnifyException {
         return getValue(SectorIcon.class);

@@ -315,6 +315,16 @@
 			<field name="paramList"
 				label="$m{notification.notificationtemplate.params}"
 				type="child_list" references="notifTemplateParamRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{notification.notificationtemplate.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{notification.notificationtemplate.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="notifTemplateParam"
 			description="$m{notification.notificationtemplateparam}"
@@ -352,6 +362,16 @@
 			<field name="paramList"
 				label="$m{notification.notificationlargetext.params}"
 				type="child_list" references="notifLargeTextParamRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{notification.notificationlargetext.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{notification.notificationlargetext.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="notifLargeTextParam"
 			description="$m{notification.notificationlargetextparam}"

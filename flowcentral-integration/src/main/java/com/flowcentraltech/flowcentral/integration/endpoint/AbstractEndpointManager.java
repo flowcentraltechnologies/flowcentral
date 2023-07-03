@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -24,7 +24,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEndpointManager extends AbstractUnifyComponent implements EndpointManager {
+public abstract class AbstractEndpointManager extends AbstractFlowCentralComponent implements EndpointManager {
 
     @Override
     protected void onInitialize() throws UnifyException {

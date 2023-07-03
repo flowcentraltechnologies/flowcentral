@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.util.RefDecodedValue;
 import com.flowcentraltech.flowcentral.application.util.RefEncodingUtils;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralPopupTextField;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
@@ -38,7 +39,6 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.constant.ExtensionType;
-import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 
 /**
  * Convenient abstract base class for entity lists.
@@ -49,7 +49,7 @@ import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 @UplAttributes({ @UplAttribute(name = "ref", type = String[].class, mandatory = true),
         @UplAttribute(name = "direct", type = boolean.class, defaultVal = "true"),
         @UplAttribute(name = "listKey", type = String.class) })
-public abstract class AbstractEntityListWidget extends AbstractPopupTextField {
+public abstract class AbstractEntityListWidget extends AbstractFlowCentralPopupTextField {
 
     public static final String WORK_RESULTLIST = "resultList";
 

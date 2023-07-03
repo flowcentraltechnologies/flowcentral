@@ -22,7 +22,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Singleton;
@@ -35,7 +35,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Singleton(false)
-public abstract class AbstractStaticArtifactGenerator extends AbstractUnifyComponent
+public abstract class AbstractStaticArtifactGenerator extends AbstractFlowCentralComponent
         implements StaticArtifactGenerator {
 
     @Configurable

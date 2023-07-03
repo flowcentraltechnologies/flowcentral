@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.application.web.widgets;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.data.FormMessage;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.ui.widget.AbstractControl;
 
 /**
  * Form messages widget.
@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.AbstractControl;
  * @since 1.0
  */
 @Component("fc-formmessages")
-public class FormMessagesWidget extends AbstractControl {
+public class FormMessagesWidget extends AbstractFlowCentralControl {
 
     @SuppressWarnings("unchecked")
     public List<FormMessage> getMessages() throws UnifyException {

@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.application.business;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.QueryEncoder;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -41,7 +41,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @since 1.0
  */
 @Component("application-queryencoder")
-public class ApplicationQueryEncoder extends AbstractUnifyComponent implements QueryEncoder {
+public class ApplicationQueryEncoder extends AbstractFlowCentralComponent implements QueryEncoder {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;

@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.studio.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.flowcentraltech.flowcentral.studio.web.widgets.TableEditor.Design;
 import com.tcdng.unify.core.ApplicationComponents;
 import com.tcdng.unify.core.UnifyException;
@@ -26,7 +27,6 @@ import com.tcdng.unify.core.annotation.UplAttributes;
 import com.tcdng.unify.core.stream.JsonObjectStreamer;
 import com.tcdng.unify.core.util.StringUtils;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 
 /**
@@ -37,7 +37,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  */
 @Component("fc-tableeditor")
 @UplAttributes({ @UplAttribute(name = "choiceWidth", type = String.class, defaultVal = "200px") })
-public class TableEditorWidget extends AbstractMultiControl {
+public class TableEditorWidget extends AbstractFlowCentralMultiControl {
 
     public static final String WORK_CONTENT = "content";
 

@@ -15,10 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.Control;
 
 /**
@@ -28,7 +28,7 @@ import com.tcdng.unify.web.ui.widget.Control;
  * @since 1.0
  */
 @Component("fc-studiomenu")
-public class StudioMenuWidget extends AbstractPanel {
+public class StudioMenuWidget extends AbstractFlowCentralPanel {
 
     public static final String WORK_MENU_CATEGORIES = "menuCats";
 

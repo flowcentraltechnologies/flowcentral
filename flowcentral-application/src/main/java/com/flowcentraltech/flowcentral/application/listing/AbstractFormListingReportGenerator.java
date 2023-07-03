@@ -20,8 +20,8 @@ import java.util.Arrays;
 
 import com.flowcentraltech.flowcentral.application.data.ListingReportGeneratorProperties;
 import com.flowcentraltech.flowcentral.application.data.ListingReportProperties;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.ReportPageProperties;
@@ -32,7 +32,7 @@ import com.tcdng.unify.core.report.ReportPageProperties;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractFormListingReportGenerator extends AbstractUnifyComponent
+public abstract class AbstractFormListingReportGenerator extends AbstractFlowCentralComponent
         implements FormListingReportGenerator {
 
     protected ListingReportGeneratorProperties getReportProperties(ValueStoreReader reader,

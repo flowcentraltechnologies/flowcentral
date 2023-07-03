@@ -20,6 +20,8 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -45,6 +47,11 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         for (ModuleInstall moduleInstall : moduleInstallList) {
             doInstallModuleFeatures(moduleInstall);
         }
+    }
+
+    protected final boolean isEnterprise() throws UnifyException {
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
 
     protected final EnvironmentService environment() {

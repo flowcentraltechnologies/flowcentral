@@ -16,6 +16,9 @@
 package com.flowcentraltech.flowcentral.common.web.lists;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.list.AbstractListCommand;
 import com.tcdng.unify.core.list.ListParam;
@@ -37,6 +40,11 @@ public abstract class AbstractFlowCentralListCommand<T extends ListParam> extend
 
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
+    }
+
+    protected final boolean isEnterprise() throws UnifyException {
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
 
     protected final EnvironmentService environment() {

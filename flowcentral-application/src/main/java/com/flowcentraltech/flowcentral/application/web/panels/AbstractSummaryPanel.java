@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Convenient base class for summary panels.
@@ -25,7 +25,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractSummaryPanel extends AbstractStandalonePanel implements SummaryPanel {
+public abstract class AbstractSummaryPanel extends AbstractFlowCentralStandalonePanel implements SummaryPanel {
 
     /**
      * Get value from parent reader stored as temporary value

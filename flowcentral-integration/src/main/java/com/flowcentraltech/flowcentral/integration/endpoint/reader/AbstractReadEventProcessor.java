@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint.reader;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -24,7 +24,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractReadEventProcessor extends AbstractUnifyComponent implements ReadEventProcessor {
+public abstract class AbstractReadEventProcessor extends AbstractFlowCentralComponent implements ReadEventProcessor {
 
     @Override
     protected void onInitialize() throws UnifyException {

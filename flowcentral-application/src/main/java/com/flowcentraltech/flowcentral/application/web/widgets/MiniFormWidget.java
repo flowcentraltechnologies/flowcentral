@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedForm
 import com.flowcentraltech.flowcentral.common.data.FormStateRule;
 import com.flowcentraltech.flowcentral.common.data.TargetFormState;
 import com.flowcentraltech.flowcentral.common.data.TargetFormWidgetStates;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.flowcentraltech.flowcentral.configuration.constants.FormColumnsType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -52,7 +53,6 @@ import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.filter.ObjectFilter;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
-import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Widget;
 import com.tcdng.unify.web.ui.widget.control.CheckBox;
 import com.tcdng.unify.web.ui.widget.control.TextArea;
@@ -66,7 +66,7 @@ import com.tcdng.unify.web.ui.widget.control.TextField;
  */
 @Component("fc-miniform")
 @UplAttributes({ @UplAttribute(name = "strictRows", type = boolean.class) })
-public class MiniFormWidget extends AbstractMultiControl implements FormTriggerEvaluator {
+public class MiniFormWidget extends AbstractFlowCentralMultiControl implements FormTriggerEvaluator {
 
     @Configurable
     private AppletUtilities appletUtilities;

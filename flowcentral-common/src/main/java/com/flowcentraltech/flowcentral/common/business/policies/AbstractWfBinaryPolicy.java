@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractWfBinaryPolicy extends AbstractUnifyComponent implements WfBinaryPolicy {
+public abstract class AbstractWfBinaryPolicy extends AbstractFlowCentralComponent implements WfBinaryPolicy {
 
     @Override
     protected void onInitialize() throws UnifyException {

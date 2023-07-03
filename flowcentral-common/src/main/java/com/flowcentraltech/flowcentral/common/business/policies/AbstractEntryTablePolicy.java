@@ -19,8 +19,8 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
@@ -33,7 +33,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntryTablePolicy extends AbstractUnifyComponent implements EntryTablePolicy {
+public abstract class AbstractEntryTablePolicy extends AbstractFlowCentralComponent implements EntryTablePolicy {
 
     @Configurable
     private EnvironmentService environmentService;

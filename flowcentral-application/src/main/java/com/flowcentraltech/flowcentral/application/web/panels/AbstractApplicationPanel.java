@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -29,7 +30,6 @@ import com.tcdng.unify.core.task.TaskLauncher;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.web.UnifyWebSessionAttributeConstants;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
 
@@ -39,7 +39,7 @@ import com.tcdng.unify.web.ui.widget.data.TaskMonitorInfo;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationPanel extends AbstractPanel {
+public abstract class AbstractApplicationPanel extends AbstractFlowCentralPanel {
 
     @Configurable
     private AppletUtilities appletUtilities;

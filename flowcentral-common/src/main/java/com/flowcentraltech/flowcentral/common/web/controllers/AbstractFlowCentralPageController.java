@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.common.web.controllers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
@@ -47,6 +49,11 @@ public abstract class AbstractFlowCentralPageController<T extends AbstractPageBe
 
     public final void setEnvironmentService(EnvironmentService environmentService) {
         this.environmentService = environmentService;
+    }
+
+    protected final boolean isEnterprise() throws UnifyException {
+        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
     }
 
     protected EnvironmentService environment() {

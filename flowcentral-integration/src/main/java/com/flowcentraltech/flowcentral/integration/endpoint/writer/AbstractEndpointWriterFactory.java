@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint.writer;
 
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -24,7 +24,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEndpointWriterFactory extends AbstractUnifyComponent implements EndpointWriterFactory {
+public abstract class AbstractEndpointWriterFactory extends AbstractFlowCentralComponent implements EndpointWriterFactory {
 
     @Override
     protected void onInitialize() throws UnifyException {

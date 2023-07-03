@@ -16,11 +16,11 @@
 package com.flowcentraltech.flowcentral.application.web.widgets;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralPopupTextField;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ExtensionType;
-import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractPopupWindowTextField extends AbstractPopupTextField {
+public abstract class AbstractPopupWindowTextField extends AbstractFlowCentralPopupTextField {
 
     @Configurable
     private AppletUtilities au;

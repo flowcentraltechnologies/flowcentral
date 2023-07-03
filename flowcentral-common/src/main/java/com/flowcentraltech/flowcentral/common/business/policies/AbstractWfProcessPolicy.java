@@ -16,8 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -27,7 +27,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractWfProcessPolicy extends AbstractUnifyComponent implements WfProcessPolicy {
+public abstract class AbstractWfProcessPolicy extends AbstractFlowCentralComponent implements WfProcessPolicy {
 
     @Override
     protected void onInitialize() throws UnifyException {

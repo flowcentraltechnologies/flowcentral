@@ -21,6 +21,7 @@ import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemLoadLicenseTaskConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -110,8 +111,7 @@ public class LicensingPageController extends AbstractSystemPageController<Licens
         super.onOpenPage();
         LicensingPageBean pageBean = getPageBean();
         pageBean.setLicenseDef(system().getInstanceLicensing());
-        boolean isEnterprise = "Enterprise".equalsIgnoreCase(getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
+        boolean isEnterprise = isEnterprise();
         setPageWidgetVisible("licenceRequestBtn", isEnterprise);
         setPageWidgetVisible("loadLicenceBtn", isEnterprise);
     }

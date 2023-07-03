@@ -16,12 +16,12 @@
 
 package com.flowcentraltech.flowcentral.system.web.widgets;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplAttribute;
 import com.tcdng.unify.core.annotation.UplAttributes;
-import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Control;
 
 /**
@@ -34,7 +34,7 @@ import com.tcdng.unify.web.ui.widget.Control;
 @UplAttributes({ @UplAttribute(name = "category", type = String.class, mandatory = true),
         @UplAttribute(name = "entityName", type = String.class, mandatory = true),
         @UplAttribute(name = "attachmentName", type = String.class, mandatory = true) })
-public class FileAttachmentImageWidget extends AbstractMultiControl {
+public class FileAttachmentImageWidget extends AbstractFlowCentralMultiControl {
 
     @Configurable
     private FileAttachmentImageGenerator imageGenerator;

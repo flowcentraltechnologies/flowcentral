@@ -19,12 +19,12 @@ package com.flowcentraltech.flowcentral.application.policies;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormValidationPolicy;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessages;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
@@ -35,7 +35,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationConsolidatedFormValidationPolicy extends AbstractUnifyComponent
+public abstract class AbstractApplicationConsolidatedFormValidationPolicy extends AbstractFlowCentralComponent
         implements ConsolidatedFormValidationPolicy {
 
     @Configurable

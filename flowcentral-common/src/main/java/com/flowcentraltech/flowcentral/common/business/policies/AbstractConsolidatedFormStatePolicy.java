@@ -16,10 +16,10 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
 import com.flowcentraltech.flowcentral.common.data.TargetFormWidgetStates;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractConsolidatedFormStatePolicy extends AbstractUnifyComponent
+public abstract class AbstractConsolidatedFormStatePolicy extends AbstractFlowCentralComponent
         implements ConsolidatedFormStatePolicy {
 
     @Configurable

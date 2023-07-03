@@ -23,12 +23,12 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.web.data.DetailsCase;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.notification.business.NotificationModuleService;
 import com.flowcentraltech.flowcentral.notification.data.NotifLargeTextWrapper;
 import com.flowcentraltech.flowcentral.notification.data.NotifTemplateWrapper;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.FileAttachmentType;
@@ -43,7 +43,7 @@ import com.tcdng.unify.core.util.IOUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractNotificationAlertSender extends AbstractUnifyComponent
+public abstract class AbstractNotificationAlertSender extends AbstractFlowCentralComponent
         implements NotificationAlertSender {
 
     private final Formats DEFAULT_REPORT_FORMATS = new Formats("###,##0;(###,##0)", "###,##0.00;(###,##0.00)",

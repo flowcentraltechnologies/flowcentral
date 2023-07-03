@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralStandalonePanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.DataUtils;
-import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
 
 /**
  * Convenient abstract base class for single form panels.
@@ -26,7 +26,7 @@ import com.tcdng.unify.web.ui.widget.panel.AbstractStandalonePanel;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractSingleFormPanel<T extends AbstractSingleFormBean> extends AbstractStandalonePanel
+public abstract class AbstractSingleFormPanel<T extends AbstractSingleFormBean> extends AbstractFlowCentralStandalonePanel
         implements SingleFormPanel<T> {
 
     @Override

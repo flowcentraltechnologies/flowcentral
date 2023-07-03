@@ -19,10 +19,10 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntityQuery;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.configuration.business.ConfigurationLoader;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.task.TaskMonitor;
@@ -33,7 +33,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationArtifactInstaller extends AbstractUnifyComponent
+public abstract class AbstractApplicationArtifactInstaller extends AbstractFlowCentralComponent
         implements ApplicationArtifactInstaller {
 
     @Configurable

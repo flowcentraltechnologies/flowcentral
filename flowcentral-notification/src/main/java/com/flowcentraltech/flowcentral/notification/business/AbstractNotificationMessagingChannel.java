@@ -16,8 +16,8 @@
 
 package com.flowcentraltech.flowcentral.notification.business;
 
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 
@@ -27,7 +27,7 @@ import com.tcdng.unify.core.annotation.Configurable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractNotificationMessagingChannel extends AbstractUnifyComponent
+public abstract class AbstractNotificationMessagingChannel extends AbstractFlowCentralComponent
         implements NotificationMessagingChannel {
 
     @Configurable

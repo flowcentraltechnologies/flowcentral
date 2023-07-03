@@ -20,12 +20,12 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.ConsolidatedFormReviewPolicy;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessages;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
-import com.tcdng.unify.core.AbstractUnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
@@ -38,7 +38,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationConsolidatedFormReviewPolicy extends AbstractUnifyComponent
+public abstract class AbstractApplicationConsolidatedFormReviewPolicy extends AbstractFlowCentralComponent
         implements ConsolidatedFormReviewPolicy {
 
     @Configurable

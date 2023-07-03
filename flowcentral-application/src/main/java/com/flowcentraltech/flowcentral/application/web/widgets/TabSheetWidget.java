@@ -22,13 +22,13 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.TabSheetDef;
 import com.flowcentraltech.flowcentral.application.web.widgets.TabSheet.TabSheetItem;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralValueListMultiControl;
 import com.flowcentraltech.flowcentral.configuration.constants.RendererType;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractValueListMultiControl;
 import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
@@ -38,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * @since 1.0
  */
 @Component("fc-tabsheet")
-public class TabSheetWidget extends AbstractValueListMultiControl<ValueStore, TabSheetItem> {
+public class TabSheetWidget extends AbstractFlowCentralValueListMultiControl<ValueStore, TabSheetItem> {
 
     @Configurable
     private AppletUtilities appletUtilities;

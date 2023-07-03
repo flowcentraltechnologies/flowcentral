@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.data.RefDef;
 import com.flowcentraltech.flowcentral.common.annotation.LongName;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SpecialParamProvider;
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralPopupTextField;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -48,7 +49,6 @@ import com.tcdng.unify.web.constant.ExtensionType;
 import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.constant.UnifyWebRequestAttributeConstants;
 import com.tcdng.unify.web.ui.widget.WriteWork;
-import com.tcdng.unify.web.ui.widget.control.AbstractPopupTextField;
 import com.tcdng.unify.web.ui.widget.data.RefreshSection;
 
 /**
@@ -66,7 +66,7 @@ import com.tcdng.unify.web.ui.widget.data.RefreshSection;
         @UplAttribute(name = "buttonImgSrc", type = String.class, defaultVal = "$t{images/search.png}"),
         @UplAttribute(name = "buttonSymbol", type = String.class, defaultVal = "ellipsis-h"),
         @UplAttribute(name = "caseInsensitive", type = boolean.class, defaultVal = "true") })
-public class EntityTextSearchWidget extends AbstractPopupTextField {
+public class EntityTextSearchWidget extends AbstractFlowCentralPopupTextField {
 
     public static final String WORK_RESULTLIST = "resultList";
 

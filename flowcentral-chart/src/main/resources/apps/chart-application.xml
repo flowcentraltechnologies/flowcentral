@@ -71,6 +71,16 @@
 				key="type" property="description" />
 			<field name="paletteTypeDesc" label="$m{chart.chart.palettetypedesc}"
 				type="list_only" key="paletteType" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{chart.chart.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{chart.chart.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 	</entities>
 </application>

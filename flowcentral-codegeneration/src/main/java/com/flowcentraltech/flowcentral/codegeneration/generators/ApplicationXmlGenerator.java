@@ -58,6 +58,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppTableColumn;
 import com.flowcentraltech.flowcentral.application.entities.AppTableFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppTableLoading;
 import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
 import com.flowcentraltech.flowcentral.application.entities.AppWidgetType;
 import com.flowcentraltech.flowcentral.application.entities.Application;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -116,6 +117,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.TableColumnConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.TableLoadingConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypeConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.WidgetTypesConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -444,6 +446,18 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         entityUniqueConstraintConfig.setName(appEntityUniqueConstraint.getName());
                         entityUniqueConstraintConfig.setDescription("$m{" + descKey + "}");
                         entityUniqueConstraintConfig.setFieldList(appEntityUniqueConstraint.getFieldList());
+                        if (!DataUtils.isBlank(appEntityUniqueConstraint.getConditionList())) {
+                            List<EntityUniqueConditionConfig> conditionConfigList = new ArrayList<EntityUniqueConditionConfig>();
+                            for (AppEntityUniqueCondition entityUniqueCondition: appEntityUniqueConstraint.getConditionList()) {
+                                EntityUniqueConditionConfig entityUniqueConditionConfig = new EntityUniqueConditionConfig();
+                                entityUniqueConditionConfig.setField(entityUniqueCondition.getField());
+                                entityUniqueConditionConfig.setValue(entityUniqueCondition.getValue());
+                                conditionConfigList.add(entityUniqueConditionConfig);
+                            }
+
+                            entityUniqueConstraintConfig.setConditionList(conditionConfigList);
+                        }
+
                         uniqueConstraintList.add(entityUniqueConstraintConfig);
                     }
 

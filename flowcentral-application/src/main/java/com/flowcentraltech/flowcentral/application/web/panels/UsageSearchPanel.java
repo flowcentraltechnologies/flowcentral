@@ -16,11 +16,11 @@
 package com.flowcentraltech.flowcentral.application.web.panels;
 
 import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Usage search panel.
@@ -30,7 +30,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  */
 @Component("fc-usagesearchpanel")
 @UplBinding("web/application/upl/usagesearchpanel.upl")
-public class UsageSearchPanel extends AbstractPanel {
+public class UsageSearchPanel extends AbstractFlowCentralPanel {
 
     @Override
     public void switchState() throws UnifyException {

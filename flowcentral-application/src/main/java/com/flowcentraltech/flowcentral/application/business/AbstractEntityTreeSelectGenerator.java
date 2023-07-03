@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.application.web.panels.EntityTreeSelect;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntityTreeTable;
-import com.tcdng.unify.core.AbstractUnifyComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntityTreeSelectGenerator extends AbstractUnifyComponent
+public abstract class AbstractEntityTreeSelectGenerator extends AbstractFlowCentralComponent
         implements EntityTreeSelectGenerator {
 
     private String selectHandlerName;

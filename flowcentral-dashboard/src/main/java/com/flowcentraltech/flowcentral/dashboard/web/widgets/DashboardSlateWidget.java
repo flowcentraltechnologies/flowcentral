@@ -19,11 +19,11 @@ package com.flowcentraltech.flowcentral.dashboard.web.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.web.widgets.AbstractFlowCentralMultiControl;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardDef;
 import com.flowcentraltech.flowcentral.dashboard.data.DashboardTileDef;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.web.ui.widget.AbstractMultiControl;
 import com.tcdng.unify.web.ui.widget.Widget;
 
 /**
@@ -33,7 +33,7 @@ import com.tcdng.unify.web.ui.widget.Widget;
  * @since 1.0
  */
 @Component("fc-dashboardslate")
-public class DashboardSlateWidget extends AbstractMultiControl {
+public class DashboardSlateWidget extends AbstractFlowCentralMultiControl {
 
     private DashboardSlate oldSlate;
 

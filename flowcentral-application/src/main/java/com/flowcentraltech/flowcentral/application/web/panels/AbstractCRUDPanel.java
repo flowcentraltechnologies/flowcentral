@@ -15,10 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.web.panels;
 
+import com.flowcentraltech.flowcentral.common.web.panels.AbstractFlowCentralPanel;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.UplBinding;
 import com.tcdng.unify.web.annotation.Action;
-import com.tcdng.unify.web.ui.widget.AbstractPanel;
 
 /**
  * Convenient abstract base class for CRUD panels.
@@ -27,7 +27,7 @@ import com.tcdng.unify.web.ui.widget.AbstractPanel;
  * @since 1.0
  */
 @UplBinding("web/application/upl/crudpanel.upl")
-public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractPanel {
+public class AbstractCRUDPanel<T extends AbstractCRUD<?>> extends AbstractFlowCentralPanel {
 
     @Override
     public void switchState() throws UnifyException {
