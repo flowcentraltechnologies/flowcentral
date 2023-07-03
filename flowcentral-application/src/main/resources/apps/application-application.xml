@@ -706,10 +706,14 @@
 				label="$m{application.appapplet.setvalues}" type="child_list"
 				references="appAppletSetValuesRef" />
 			<uniqueConstraint name="nameUc"
-				description="$m{application.appapplet.uc.name}" fieldList="name" />
+				description="$m{application.appapplet.uc.name}" fieldList="name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appapplet.uc.description}"
-				fieldList="description" />
+				fieldList="description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="appAppletProp"
 			description="$m{application.appappletprop}"
@@ -851,13 +855,18 @@
 				label="$m{application.appentity.searchinputs}" type="child_list"
 				references="appEntitySearchInputRef" />
 			<uniqueConstraint name="nameUc"
-				description="$m{application.appentity.uc.name}" fieldList="name" />
+				description="$m{application.appentity.uc.name}" fieldList="name">
+			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appentity.uc.description}"
-				fieldList="description" />
+				fieldList="description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 			<uniqueConstraint name="tableNameUc"
 				description="$m{application.appentity.uc.tablename}"
-				fieldList="tableName" />
+				fieldList="tableName">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="appEntityField"
 			description="$m{application.appentityfield}"
@@ -1059,10 +1068,14 @@
 				type="string" nullable="true" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appref.uc.name}"
-				fieldList="applicationId,name" />
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appref.uc.description}"
-				fieldList="applicationId,description" />
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="appFilter"
 			description="$m{application.appfilter}"
@@ -1190,10 +1203,14 @@
 				references="appTableFilterRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.apptable.uc.name}"
-				fieldList="applicationId,name" />
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.apptable.uc.description}"
-				fieldList="applicationId,description" />
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="appTableColumn"
 			description="$m{application.apptablecolumn}"
@@ -1353,10 +1370,14 @@
 				references="appFormReviewPolicyRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appform.uc.name}"
-				fieldList="applicationId,name" />
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appform.uc.description}"
-				fieldList="applicationId,description" />
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="appFormFilter"
 			description="$m{application.appformfilter}"

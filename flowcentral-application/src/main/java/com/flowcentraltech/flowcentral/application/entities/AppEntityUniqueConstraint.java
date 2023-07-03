@@ -15,7 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.application.entities;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
+import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -36,6 +39,9 @@ public class AppEntityUniqueConstraint extends BaseConfigNamedEntity {
     @Column(length = 512)
     private String fieldList;
 
+    @ChildList
+    private List<AppEntityUniqueCondition> conditionList;
+    
     @ListOnly(key = "appEntityId", property = "applicationName")
     private String applicationName;
 
@@ -56,6 +62,14 @@ public class AppEntityUniqueConstraint extends BaseConfigNamedEntity {
 
     public void setFieldList(String fieldList) {
         this.fieldList = fieldList;
+    }
+
+    public List<AppEntityUniqueCondition> getConditionList() {
+        return conditionList;
+    }
+
+    public void setConditionList(List<AppEntityUniqueCondition> conditionList) {
+        this.conditionList = conditionList;
     }
 
     public String getApplicationName() {

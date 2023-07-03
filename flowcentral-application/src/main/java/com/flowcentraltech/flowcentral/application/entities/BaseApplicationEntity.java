@@ -19,10 +19,10 @@ import com.flowcentraltech.flowcentral.common.constants.DevelopmentVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.DefaultQueryRestrictions;
-import com.tcdng.unify.core.annotation.DefaultRestriction;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Policy;
+import com.tcdng.unify.core.annotation.QueryRestriction;
 import com.tcdng.unify.core.annotation.UniqueConstraint;
 import com.tcdng.unify.core.annotation.UniqueConstraints;
 
@@ -33,9 +33,12 @@ import com.tcdng.unify.core.annotation.UniqueConstraints;
  * @since 1.0
  */
 @Policy("baseapplication-entitypolicy")
-@DefaultQueryRestrictions({ @DefaultRestriction(field = "devVersionType", value = "CRN") })
-@UniqueConstraints({ @UniqueConstraint({ "applicationId", "name" }),
-        @UniqueConstraint({ "applicationId", "description" }) })
+@DefaultQueryRestrictions({ @QueryRestriction(field = "devVersionType", value = "CRN") })
+@UniqueConstraints({
+        @UniqueConstraint(value = { "applicationId", "name" },
+                condition = { @QueryRestriction(field = "devVersionType", value = "CRN") }),
+        @UniqueConstraint(value = { "applicationId", "description" },
+                condition = { @QueryRestriction(field = "devVersionType", value = "CRN") }) })
 public abstract class BaseApplicationEntity extends BaseConfigNamedEntity {
 
     @ForeignKey(Application.class)

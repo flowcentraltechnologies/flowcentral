@@ -76,6 +76,7 @@ import com.flowcentraltech.flowcentral.application.data.SuggestionTypeDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableFilterDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
+import com.flowcentraltech.flowcentral.application.data.UniqueConditionDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
@@ -103,6 +104,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityIndexQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInput;
 import com.flowcentraltech.flowcentral.application.entities.AppEntitySearchInputQuery;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueCondition;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraint;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUniqueConstraintQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityUpload;
@@ -229,6 +231,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.EntityExpressionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityIndexConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntitySearchInputConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConditionConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUniqueConstraintConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.EntityUploadConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.FieldSequenceConfig;
@@ -362,7 +365,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Configurable
     private SequenceNumberService sequenceNumberService;
-    
+
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
 
     private List<ApplicationAppletDefProvider> applicationAppletDefProviderList;
@@ -755,9 +758,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
                     for (AppEntityUniqueConstraint appUniqueConstraint : appEntity.getUniqueConstraintList()) {
                         boolean caseInsensitive = true; // TODO Get from appUniqueConstraint
+                        List<UniqueConditionDef> conditionList = null;
+                        if (!DataUtils.isBlank(appUniqueConstraint.getConditionList())) {
+                            conditionList = new ArrayList<UniqueConditionDef>();
+                            for (AppEntityUniqueCondition appEntityUniqueCondition : appUniqueConstraint
+                                    .getConditionList()) {
+                                EntityFieldDef entityFieldDef = edb
+                                        .getEntityFieldDef(appEntityUniqueCondition.getField());
+                                Object val = DataUtils.convert(entityFieldDef.getDataType().dataType().javaClass(),
+                                        appEntityUniqueCondition.getValue());
+                                conditionList.add(new UniqueConditionDef(appEntityUniqueCondition.getField(),
+                                        new Equals(appEntityUniqueCondition.getField(), val)));
+                            }
+                        }
+
                         edb.addUniqueConstraintDef(appUniqueConstraint.getName(), appUniqueConstraint.getDescription(),
                                 DataUtils.convert(List.class, String.class, appUniqueConstraint.getFieldList(), null),
-                                caseInsensitive);
+                                conditionList, caseInsensitive);
                     }
 
                     for (AppEntityIndex appIndex : appEntity.getIndexList()) {
@@ -1322,7 +1339,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
     @Override
     public <T extends EntityWrapper> T wrapperOf(Class<T> wrapperType, ValueStore valueStore) throws UnifyException {
-        if (valueStore != null) { 
+        if (valueStore != null) {
             final String entityName = ReflectUtils.getPublicStaticStringConstant(wrapperType,
                     ApplicationCodeGenUtils.ENTITY_NAME);
             final EntityClassDef entityClassDef = getEntityClassDef(entityName);
@@ -2943,6 +2960,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
 
             for (AppEntityUniqueConstraint constraint : srcAppEntity.getUniqueConstraintList()) {
                 constraint.setFieldList(ctx.fieldSwap(constraint.getFieldList()));
+                if (!DataUtils.isBlank(constraint.getConditionList())) {
+                    for (AppEntityUniqueCondition appEntityUniqueCondition : constraint.getConditionList()) {
+                        appEntityUniqueCondition.setField(ctx.fieldSwap(appEntityUniqueCondition.getField()));
+                    }
+                }
             }
 
             for (AppEntityIndex index : srcAppEntity.getIndexList()) {
@@ -3328,6 +3350,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         Query<?> query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                         for (String fieldName : constDef.getFieldList()) {
                             query.addEquals(fieldName, recMap.get(fieldName).getVal());
+                        }
+
+                        if (constDef.isWithConditionList()) {
+                            for (UniqueConditionDef ucd : constDef.getConditionList()) {
+                                query.addRestriction(ucd.getRestriction());
+                            }
                         }
 
                         _inst = environment().findLean(query);
@@ -3885,7 +3913,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                 }
 
                 sequenceNumberService.ensureCachedBlockSequence(appEntityConfig.getType());
-                
+
                 final String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(applicationName,
                         appEntityConfig.getName());
                 entityIdByNameMap.put(entityLongName, entityId);
@@ -4580,6 +4608,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                     appUniqueConstraint
                             .setDescription(resolveApplicationMessage(uniqueConstraintConfig.getDescription()));
                     appUniqueConstraint.setFieldList(uniqueConstraintConfig.getFieldList());
+                    populateChildList(appUniqueConstraint, applicationName, uniqueConstraintConfig);
                     appUniqueConstraint.setConfigType(ConfigType.STATIC_INSTALL);
                     uniqueConstraintList.add(appUniqueConstraint);
                 } else {
@@ -4587,6 +4616,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
                         oldAppEntityUniqueConstraint
                                 .setDescription(resolveApplicationMessage(uniqueConstraintConfig.getDescription()));
                         oldAppEntityUniqueConstraint.setFieldList(uniqueConstraintConfig.getFieldList());
+                        populateChildList(oldAppEntityUniqueConstraint, applicationName, uniqueConstraintConfig);
                     }
 
                     uniqueConstraintList.add(oldAppEntityUniqueConstraint);
@@ -4690,6 +4720,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService imp
             }
         }
         appEntity.setSearchInputList(searchInputList);
+    }
+
+    private void populateChildList(AppEntityUniqueConstraint appUniqueConstraint, String applicationName,
+            EntityUniqueConstraintConfig uniqueConstraintConfig) throws UnifyException {
+        List<AppEntityUniqueCondition> conditionList = new ArrayList<AppEntityUniqueCondition>();
+        if (!DataUtils.isBlank(uniqueConstraintConfig.getConditionList())) {
+            for (EntityUniqueConditionConfig entityUniqueConditionConfig : uniqueConstraintConfig.getConditionList()) {
+                AppEntityUniqueCondition entityUniqueCondition = new AppEntityUniqueCondition();
+                entityUniqueCondition.setField(entityUniqueConditionConfig.getField());
+                entityUniqueCondition.setValue(entityUniqueConditionConfig.getValue());
+                conditionList.add(entityUniqueCondition);
+            }
+        }
+
+        appUniqueConstraint.setConditionList(conditionList);
     }
 
     private void populateChildList(AppTable appTable, String applicationName, AppTableConfig appTableConfig)

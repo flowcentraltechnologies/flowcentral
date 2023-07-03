@@ -40,6 +40,7 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormRelatedListDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
+import com.flowcentraltech.flowcentral.application.data.UniqueConditionDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.policies.ListingRedirect;
 import com.flowcentraltech.flowcentral.application.policies.ListingRedirectionPolicy;
@@ -1269,6 +1270,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             Query<? extends Entity> query = Query.of((Class<? extends Entity>) _inst.getClass());
             for (String fieldName : currUniqueConstraintDef.getFieldList()) {
                 query.addEquals(fieldName, ReflectUtils.getBeanProperty(_inst, fieldName));
+            }
+
+            if (currUniqueConstraintDef.isWithConditionList()) {
+                for (UniqueConditionDef ucd: currUniqueConstraintDef.getConditionList()) {
+                    query.addRestriction(ucd.getRestriction());
+                }
             }
 
             return au().environment().listLean(query);

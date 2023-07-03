@@ -142,6 +142,16 @@
 				type="child_list" references="workflowSetValuesRef" />
 			<field name="stepList" label="$m{workflow.workflow.steps}"
 				type="child_list" references="wfStepRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{workflow.workflow.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{workflow.workflow.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 		<entity name="workflowFilter"
 			description="$m{workflow.workflowfilter}"
@@ -545,6 +555,16 @@
 			<field name="statusDesc"
 				label="$m{workflow.workflowchannel.statusdesc}" type="list_only"
 				key="status" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{workflow.workflowchannel.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
+			<uniqueConstraint name="descUc"
+				description="$m{workflow.workflowchannel.uc.description}"
+				fieldList="applicationId,description">
+				<condition field="devVersionType" value="CRN"/>
+			</uniqueConstraint>
 		</entity>
 	</entities>
 	<!-- Tables -->

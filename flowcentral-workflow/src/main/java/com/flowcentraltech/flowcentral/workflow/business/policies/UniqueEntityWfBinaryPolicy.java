@@ -23,6 +23,7 @@ import java.util.Locale;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.UniqueConditionDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfBinaryPolicy;
@@ -72,6 +73,12 @@ public class UniqueEntityWfBinaryPolicy extends AbstractWfBinaryPolicy {
 
                 for (String fieldName : uniqueConstraintDef.getFieldList()) {
                     query.addEquals(fieldName, wfItemReader.read(fieldName));
+                }
+
+                if (uniqueConstraintDef.isWithConditionList()) {
+                    for (UniqueConditionDef ucd: uniqueConstraintDef.getConditionList()) {
+                        query.addRestriction(ucd.getRestriction());
+                    }
                 }
 
                 if (!query.isEmptyCriteria() && environmentService.countAll(query) > 0) {

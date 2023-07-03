@@ -15,7 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.configuration.xml;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Entity unique constraint configuration.
@@ -31,6 +34,8 @@ public class EntityUniqueConstraintConfig {
 
     private String fieldList;
 
+    private List<EntityUniqueConditionConfig> conditionList;
+    
     public String getFieldList() {
         return fieldList;
     }
@@ -56,6 +61,15 @@ public class EntityUniqueConstraintConfig {
     @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<EntityUniqueConditionConfig> getConditionList() {
+        return conditionList;
+    }
+
+    @XmlElement(name = "condition")
+    public void setConditionList(List<EntityUniqueConditionConfig> conditionList) {
+        this.conditionList = conditionList;
     }
 
 }

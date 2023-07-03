@@ -31,6 +31,7 @@ import com.flowcentraltech.flowcentral.application.data.FieldValidationPolicyDef
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormReviewPolicyDef;
 import com.flowcentraltech.flowcentral.application.data.FormValidationPolicyDef;
+import com.flowcentraltech.flowcentral.application.data.UniqueConditionDef;
 import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext.FormWidgetState;
@@ -187,6 +188,12 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                         query.addIEquals(fieldName, (String) val);
                                     } else {
                                         query.addEquals(fieldName, val);
+                                    }
+                                }
+
+                                if (constDef.isWithConditionList()) {
+                                    for (UniqueConditionDef ucd: constDef.getConditionList()) {
+                                        query.addRestriction(ucd.getRestriction());
                                     }
                                 }
 

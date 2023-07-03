@@ -216,7 +216,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             if (entityFieldDef.isTenantId()) {
                 tenantIdDef = entityFieldDef;
             }
-            
+
             this.withSuggestionFields |= entityFieldDef.isWithSuggestionType();
             this.withListOnly |= entityFieldDef.isListOnly();
             this.withCustomFields |= entityFieldDef.isCustom();
@@ -338,10 +338,10 @@ public class EntityDef extends BaseApplicationEntityDef {
                     sortedFieldDefList = new ArrayList<EntityFieldDef>(fieldDefList);
                     DataUtils.sortAscending(sortedFieldDefList, EntityFieldDef.class, "fieldLabel");
                     sortedFieldDefList = DataUtils.unmodifiableList(sortedFieldDefList);
-                }                
+                }
             }
         }
-        
+
         return sortedFieldDefList;
     }
 
@@ -514,7 +514,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 if (mappedFieldDefList == null) {
                     List<EntityFieldDef> list = new ArrayList<EntityFieldDef>();
                     for (EntityFieldDef entityFieldDef : fieldDefList) {
-                         if (entityFieldDef.isWithMapping()) {
+                        if (entityFieldDef.isWithMapping()) {
                             list.add(entityFieldDef);
                         }
                     }
@@ -660,16 +660,16 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public UniqueConstraintDef getUniqueConstraint(String name) {
         if (uniqueConstraintList != null) {
-            for (UniqueConstraintDef uniqueConstraintDef: uniqueConstraintList) {
+            for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
                 if (uniqueConstraintDef.getName().equals(name)) {
                     return uniqueConstraintDef;
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     public List<IndexDef> getIndexList() {
         return indexList;
     }
@@ -765,7 +765,7 @@ public class EntityDef extends BaseApplicationEntityDef {
     public boolean isField(String fieldName) throws UnifyException {
         return getFieldNames().contains(fieldName);
     }
-    
+
     public Set<String> getFieldNames() throws UnifyException {
         if (fieldNames == null) {
             synchronized (EntityDef.class) {
@@ -820,7 +820,7 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         return childrenFieldNames;
     }
-    
+
     public boolean isSingleFieldUniqueConstraint(String fieldName) {
         for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
             if (uniqueConstraintDef.isSingleFieldConstraint(fieldName)) {
@@ -1010,6 +1010,10 @@ public class EntityDef extends BaseApplicationEntityDef {
             this.id = id;
             this.version = version;
         }
+        
+        public EntityFieldDef getEntityFieldDef(String fieldName) {
+            return fieldDefMap.get(fieldName);
+        }
 
         public Builder className(String className) {
             this.originClassName = className;
@@ -1134,12 +1138,13 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         public Builder addUniqueConstraintDef(String name, String description, List<String> fieldList,
-                boolean caseInsensitive) {
+                List<UniqueConditionDef> conditionList, boolean caseInsensitive) {
             if (uniqueConstraintList == null) {
                 uniqueConstraintList = new ArrayList<UniqueConstraintDef>();
             }
 
-            uniqueConstraintList.add(new UniqueConstraintDef(name, description, fieldList, caseInsensitive));
+            uniqueConstraintList
+                    .add(new UniqueConstraintDef(name, description, fieldList, conditionList, caseInsensitive));
             return this;
         }
 
