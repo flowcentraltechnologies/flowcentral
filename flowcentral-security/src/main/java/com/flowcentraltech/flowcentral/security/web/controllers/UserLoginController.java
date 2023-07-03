@@ -111,7 +111,8 @@ public class UserLoginController extends AbstractApplicationForwarderController<
             logUserEvent(SecurityModuleAuditConstants.LOGIN);
             setLoginMessage(null);
 
-            if (user.isChangeUserPassword()) {
+            if (user.isChangeUserPassword() && !system().getSysParameterValue(boolean.class,
+                    SecurityModuleSysParamConstants.ENABLE_THIRDPARTY_PASSWORD_AUTHENTICATION)) {
                 pageBean.setOldPassword(null);
                 pageBean.setNewPassword(null);
                 pageBean.setConfirmPassword(null);
