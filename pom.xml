@@ -53,13 +53,14 @@
 		<module>flowcentral-integration</module>
 		<module>flowcentral-integration-activemq</module>
 		<module>flowcentral-integration-rabbitmq</module>
-    	<module>flowcentral-tomcat</module>
-    	<module>flowcentral-undertow</module>
-  	</modules>
+		<module>flowcentral-tomcat</module>
+		<module>flowcentral-undertow</module>
+		<module>flowcentral-gateway</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  		<java.version>1.8</java.version>
+		<java.version>1.8</java.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<unify.version>2.1.63-SNAPSHOT</unify.version>
