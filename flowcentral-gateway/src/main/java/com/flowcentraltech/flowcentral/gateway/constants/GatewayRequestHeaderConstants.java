@@ -13,21 +13,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.gateway.data;
+package com.flowcentraltech.flowcentral.gateway.constants;
 
 /**
- * Gateway error response.
- * 
- * @author FlowCentral Technologies Limited
- * @since 1.0
- */
-public class GatewayErrorResponse extends BaseGatewayResponse {
+* Gateway request header constants.
+* 
+* @author FlowCentral Technologies Limited
+* @since 1.0
+*/
+public interface GatewayRequestHeaderConstants {
 
-    public GatewayErrorResponse(String errorCode, String errorMessage) {
-        super(errorCode, errorMessage);
-    }
-
-    public GatewayErrorResponse() {
-
-    }
+    String GATEWAY_PROCESSOR = "Gateway-Processor";
 }

@@ -21,7 +21,9 @@ import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
 import com.flowcentraltech.flowcentral.gateway.data.GatewayErrorResponse;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
+import com.tcdng.unify.core.stream.JsonObjectStreamer;
 import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
@@ -35,8 +37,24 @@ public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U 
 
     private final Class<T> responseClass;
 
-    public AbstractGatewayProcessor(Class<T> responseClass) {
+    private final Class<U> requestClass;
+
+    @Configurable
+    private JsonObjectStreamer jsonObjectStreamer;
+
+    public final void setJsonObjectStreamer(JsonObjectStreamer jsonObjectStreamer) {
+        this.jsonObjectStreamer = jsonObjectStreamer;
+    }
+
+    public AbstractGatewayProcessor(Class<T> responseClass, Class<U> requestClass) {
         this.responseClass = responseClass;
+        this.requestClass = requestClass;
+    }
+
+    @Override
+    public T processFromJson(String requestJson) throws UnifyException {
+        U request = jsonObjectStreamer.unmarshal(requestClass, requestJson);
+        return process(request);
     }
 
     @Override
@@ -44,11 +62,11 @@ public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U 
         GatewayErrorResponse error = null;
         try {
             error = checkAccess(request);
-            if (error != null) {
+            if (error == null) {
                 error = validateRequest(request);
             }
 
-            if (error != null) {
+            if (error == null) {
                 return doProcess(request);
             }
         } catch (Exception e) {

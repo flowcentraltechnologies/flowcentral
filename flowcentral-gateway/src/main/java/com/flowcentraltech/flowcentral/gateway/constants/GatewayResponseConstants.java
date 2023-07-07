@@ -29,5 +29,7 @@ public interface GatewayResponseConstants {
 
     String PROCESSOR_UNKNOWN = "GP01";
 
-    String PROCESSING_EXCEPTION = "GP02";
+    String NO_PROCESSOR_SPECIFIED = "GP02";
+
+    String PROCESSING_EXCEPTION = "GP03";
 }

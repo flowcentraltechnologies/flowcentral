@@ -27,7 +27,18 @@ import com.tcdng.unify.core.UnifyException;
  * @since 1.0
  */
 public interface GatewayProcessor<T extends BaseGatewayResponse, U extends BaseGatewayRequest> extends UnifyComponent {
-
+    
+    /**
+     * Processes a gateway request from a JSON String.
+     * 
+     * @param requestJson
+     *                the request to process
+     * @return the gateway response
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    T processFromJson(String requestJson) throws UnifyException;
+    
     /**
      * Processes a gateway request.
      * 
@@ -38,4 +49,5 @@ public interface GatewayProcessor<T extends BaseGatewayResponse, U extends BaseG
      *                        if an error occurs
      */
     T process(U request) throws UnifyException;
+
 }

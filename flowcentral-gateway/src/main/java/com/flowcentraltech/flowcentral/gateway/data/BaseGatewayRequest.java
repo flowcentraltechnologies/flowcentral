@@ -27,8 +27,6 @@ public abstract class BaseGatewayRequest {
 
     private String application;
 
-    private String processor;
-
     public String getApplication() {
         return application;
     }
@@ -36,15 +34,6 @@ public abstract class BaseGatewayRequest {
     @XmlElement
     public void setApplication(String application) {
         this.application = application;
-    }
-
-    public String getProcessor() {
-        return processor;
-    }
-
-    @XmlElement
-    public void setProcessor(String processor) {
-        this.processor = processor;
     }
 
 }
