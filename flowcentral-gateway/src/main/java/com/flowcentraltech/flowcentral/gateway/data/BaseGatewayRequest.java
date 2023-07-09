@@ -15,8 +15,6 @@
  */
 package com.flowcentraltech.flowcentral.gateway.data;
 
-import javax.xml.bind.annotation.XmlElement;
-
 /**
  * Abstract base class for gateway requests.
  * 
@@ -31,7 +29,6 @@ public abstract class BaseGatewayRequest {
         return application;
     }
 
-    @XmlElement
     public void setApplication(String application) {
         this.application = application;
     }

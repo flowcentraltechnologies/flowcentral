@@ -15,33 +15,42 @@
  */
 package com.flowcentraltech.flowcentral.gateway.business;
 
-import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
-import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
+import com.flowcentraltech.flowcentral.gateway.data.GatewayErrorResponse;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
- * Gateway processor.
+ * Gateway access manager.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface GatewayProcessor<T extends BaseGatewayResponse, U extends BaseGatewayRequest> extends UnifyComponent {
-     
+public interface GatewayAccessManager extends UnifyComponent {
+
     /**
-     * Gets the processor request class.
-     */
-    Class<? extends BaseGatewayRequest> getRequestClass();
-    
-    /**
-     * Processes a gateway request.
+     * Checks if application has gateway access.
      * 
-     * @param request
-     *                the request to process
-     * @return the gateway response
+     * @param application
+     *                      the application name
+     * @param authorization
+     *                      the access authentication
+     * @return response on error otherwise null
      * @throws UnifyException
      *                        if an error occurs
      */
-    T process(U request) throws UnifyException;
+    GatewayErrorResponse checkAccess(String application, String authorization) throws UnifyException;
 
+    /**
+     * Logs gateway access.
+     * 
+     * @param application
+     *                    the application
+     * @param response
+     *                    the access response
+     * @param request
+     *                    the access request
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void logAccess(String application, String response, String request) throws UnifyException;
 }

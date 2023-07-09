@@ -23,5 +23,7 @@ package com.flowcentraltech.flowcentral.gateway.constants;
 */
 public interface GatewayRequestHeaderConstants {
 
+    String GATEWAY_APPLICATION = "Gateway-Application";
+
     String GATEWAY_PROCESSOR = "Gateway-Processor";
 }

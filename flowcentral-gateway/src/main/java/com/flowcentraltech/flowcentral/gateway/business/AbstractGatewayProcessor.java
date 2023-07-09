@@ -21,9 +21,7 @@ import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
 import com.flowcentraltech.flowcentral.gateway.data.GatewayErrorResponse;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.LocaleType;
-import com.tcdng.unify.core.stream.JsonObjectStreamer;
 import com.tcdng.unify.core.util.ReflectUtils;
 
 /**
@@ -39,33 +37,21 @@ public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U 
 
     private final Class<U> requestClass;
 
-    @Configurable
-    private JsonObjectStreamer jsonObjectStreamer;
-
-    public final void setJsonObjectStreamer(JsonObjectStreamer jsonObjectStreamer) {
-        this.jsonObjectStreamer = jsonObjectStreamer;
-    }
-
     public AbstractGatewayProcessor(Class<T> responseClass, Class<U> requestClass) {
         this.responseClass = responseClass;
         this.requestClass = requestClass;
     }
 
     @Override
-    public T processFromJson(String requestJson) throws UnifyException {
-        U request = jsonObjectStreamer.unmarshal(requestClass, requestJson);
-        return process(request);
+    public final Class<? extends BaseGatewayRequest> getRequestClass() {
+        return requestClass;
     }
 
     @Override
     public final T process(U request) throws UnifyException {
         GatewayErrorResponse error = null;
         try {
-            error = checkAccess(request);
-            if (error == null) {
-                error = validateRequest(request);
-            }
-
+            error = validateRequest(request);
             if (error == null) {
                 return doProcess(request);
             }
@@ -89,8 +75,6 @@ public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U 
     protected void onTerminate() throws UnifyException {
 
     }
-
-    protected abstract GatewayErrorResponse checkAccess(U request) throws UnifyException;
 
     protected abstract GatewayErrorResponse validateRequest(U request) throws UnifyException;
 
