@@ -16,18 +16,28 @@
 package com.flowcentraltech.flowcentral.gateway.data;
 
 /**
- * Gateway error response.
+ * Gateway error.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class GatewayErrorResponse extends BaseGatewayResponse {
+public class GatewayError {
 
-    public GatewayErrorResponse(GatewayError error) {
-        super(error.getErrorCode(), error.getErrorMessage());
+    private String errorCode;
+    
+    private String errorMessage;
+    
+    public GatewayError(String errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
     }
 
-    public GatewayErrorResponse() {
-
+    public String getErrorCode() {
+        return errorCode;
     }
-}
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+ }

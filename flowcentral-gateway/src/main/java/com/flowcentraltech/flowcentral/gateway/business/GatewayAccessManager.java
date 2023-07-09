@@ -15,7 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.gateway.business;
 
-import com.flowcentraltech.flowcentral.gateway.data.GatewayErrorResponse;
+import com.flowcentraltech.flowcentral.gateway.data.GatewayAccess;
+import com.flowcentraltech.flowcentral.gateway.data.GatewayError;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
@@ -29,28 +30,22 @@ public interface GatewayAccessManager extends UnifyComponent {
 
     /**
      * Checks if application has gateway access.
-     * 
-     * @param application
-     *                      the application name
-     * @param authorization
-     *                      the access authentication
+    * 
+     * @param access
+     *                    the access object
      * @return response on error otherwise null
      * @throws UnifyException
      *                        if an error occurs
      */
-    GatewayErrorResponse checkAccess(String application, String authorization) throws UnifyException;
+    GatewayError checkAccess(GatewayAccess access) throws UnifyException;
 
     /**
      * Logs gateway access.
      * 
-     * @param application
-     *                    the application
-     * @param response
-     *                    the access response
-     * @param request
-     *                    the access request
+     * @param access
+     *                    the access object
      * @throws UnifyException
      *                        if an error occurs
      */
-    void logAccess(String application, String response, String request) throws UnifyException;
+    void logAccess(GatewayAccess access) throws UnifyException;
 }

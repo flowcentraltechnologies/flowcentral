@@ -19,7 +19,7 @@ import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.gateway.constants.GatewayResponseConstants;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
-import com.flowcentraltech.flowcentral.gateway.data.GatewayErrorResponse;
+import com.flowcentraltech.flowcentral.gateway.data.GatewayError;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.LocaleType;
 import com.tcdng.unify.core.util.ReflectUtils;
@@ -49,20 +49,20 @@ public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U 
 
     @Override
     public final T process(U request) throws UnifyException {
-        GatewayErrorResponse error = null;
+        GatewayError error = null;
         try {
             error = validateRequest(request);
             if (error == null) {
                 return doProcess(request);
             }
         } catch (Exception e) {
-            error = new GatewayErrorResponse(GatewayResponseConstants.PROCESSING_EXCEPTION,
+            error = new GatewayError(GatewayResponseConstants.PROCESSING_EXCEPTION,
                     getExceptionMessage(LocaleType.APPLICATION, e));
         }
 
         T resp = ReflectUtils.newInstance(responseClass);
-        resp.setResponseCode(error.getResponseCode());
-        resp.setResponseMessage(error.getResponseMessage());
+        resp.setResponseCode(error.getErrorCode());
+        resp.setResponseMessage(error.getErrorMessage());
         return resp;
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractGatewayProcessor<T extends BaseGatewayResponse, U 
 
     }
 
-    protected abstract GatewayErrorResponse validateRequest(U request) throws UnifyException;
+    protected abstract GatewayError validateRequest(U request) throws UnifyException;
 
     protected abstract T doProcess(U request) throws UnifyException;
 }

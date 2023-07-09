@@ -21,6 +21,8 @@ import com.flowcentraltech.flowcentral.gateway.constants.GatewayRequestHeaderCon
 import com.flowcentraltech.flowcentral.gateway.constants.GatewayResponseConstants;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
+import com.flowcentraltech.flowcentral.gateway.data.GatewayAccess;
+import com.flowcentraltech.flowcentral.gateway.data.GatewayError;
 import com.flowcentraltech.flowcentral.gateway.data.GatewayErrorResponse;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -46,43 +48,59 @@ public class GatewayController extends AbstractPlainJsonController {
     @SuppressWarnings("unchecked")
     @Override
     protected final String doExecute(String requestJson) throws UnifyException {
+        long startTime = System.currentTimeMillis();
+        GatewayError error = null;
         BaseGatewayResponse response = null;
         HttpRequestHeaders headers = getHttpRequestHeaders();
         final String application = headers.getHeader(GatewayRequestHeaderConstants.GATEWAY_APPLICATION);
-        final String processorName = headers.getHeader(GatewayRequestHeaderConstants.GATEWAY_PROCESSOR);
+        final String processor = headers.getHeader(GatewayRequestHeaderConstants.GATEWAY_PROCESSOR);
         final String authorization = headers.getHeader(HttpRequestHeaderConstants.AUTHORIZATION);
 
+        GatewayAccess gatewayAccess = new GatewayAccess();
+        gatewayAccess.setApplication(application);
+        gatewayAccess.setAuthorization(authorization);
+        gatewayAccess.setProcessor(processor);
         try {
+            
             if (StringUtils.isBlank(application)) {
-                response = new GatewayErrorResponse(GatewayResponseConstants.NO_APPLICATION_SPECIFIED,
+                error = new GatewayError(GatewayResponseConstants.NO_APPLICATION_SPECIFIED,
                         "No gateway application specified in request headers.");
-            } else if (StringUtils.isBlank(processorName)) {
-                response = new GatewayErrorResponse(GatewayResponseConstants.NO_PROCESSOR_SPECIFIED,
+            } else if (StringUtils.isBlank(processor)) {
+                error = new GatewayError(GatewayResponseConstants.NO_PROCESSOR_SPECIFIED,
                         "No gateway processor specified in request headers.");
-            } else if (!isComponent(processorName)) {
-                response = new GatewayErrorResponse(GatewayResponseConstants.PROCESSOR_UNKNOWN,
+            } else if (!isComponent(processor)) {
+                error = new GatewayError(GatewayResponseConstants.PROCESSOR_UNKNOWN,
                         "Gateway processor with name is unknown.");
             } else {
                 if (gatewayAccessManager != null) {
-                    response = gatewayAccessManager.checkAccess(application, authorization);
+                    error = gatewayAccessManager.checkAccess(gatewayAccess);
                 }
             }
 
-            if (response == null) {
-                GatewayProcessor<BaseGatewayResponse, BaseGatewayRequest> processor = getComponent(
-                        GatewayProcessor.class, processorName);
-                BaseGatewayRequest request = getObjectFromRequestJson(processor.getRequestClass(), requestJson);
+            if (error == null) {
+                final GatewayProcessor<BaseGatewayResponse, BaseGatewayRequest> _processor = getComponent(
+                        GatewayProcessor.class, processor);
+                BaseGatewayRequest request = getObjectFromRequestJson(_processor.getRequestClass(), requestJson);
                 request.setApplication(application);
-                response = processor.process((BaseGatewayRequest) request);
+                response = _processor.process((BaseGatewayRequest) request);
             }
         } catch (UnifyException e) {
-            response = new GatewayErrorResponse(GatewayResponseConstants.PROCESSING_EXCEPTION,
+            error = new GatewayError(GatewayResponseConstants.PROCESSING_EXCEPTION,
                     getExceptionMessage(LocaleType.APPLICATION, e));
         }
 
+        if (error != null) {
+            response = new GatewayErrorResponse(error);
+        }
+        
         final String responseJson = getResponseJsonFromObject(response);
         if (gatewayAccessManager != null) {
-            gatewayAccessManager.logAccess(application, responseJson, requestJson);
+            gatewayAccess.setResponseCode(response.getResponseCode());
+            gatewayAccess.setResponseMessage(response.getResponseMessage());
+            gatewayAccess.setRequestBody(requestJson);
+            gatewayAccess.setResponseBody(responseJson);
+            gatewayAccess.setRuntimeInMilliSec(System.currentTimeMillis() - startTime);
+            gatewayAccessManager.logAccess(gatewayAccess);
         }
 
         return responseJson;

@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionPolicy;
@@ -49,6 +50,10 @@ public abstract class AbstractFlowCentralService extends AbstractBusinessService
         }
     }
 
+    protected final String generateRandomUUID() {
+        return UUID.randomUUID().toString();
+    }
+    
     protected final boolean isEnterprise() throws UnifyException {
         return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
