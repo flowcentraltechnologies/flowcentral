@@ -31,7 +31,7 @@ import com.tcdng.unify.core.UnifyCoreErrorConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.web.AbstractPlainJsonController;
+import com.tcdng.unify.web.AbstractBeanJsonController;
 
 /**
  * Workflow channel submission controller.
@@ -40,7 +40,7 @@ import com.tcdng.unify.web.AbstractPlainJsonController;
  * @since 1.0
  */
 @Component("/workflowchannel/submit")
-public class WfChannelSubmissionController extends AbstractPlainJsonController {
+public class WfChannelSubmissionController extends AbstractBeanJsonController<WfChannelSubmissionResult, WfChannelSubmission> {
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
@@ -48,20 +48,23 @@ public class WfChannelSubmissionController extends AbstractPlainJsonController {
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
-    public void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+    public WfChannelSubmissionController() {
+        super(WfChannelSubmissionResult.class, WfChannelSubmission.class);
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
     }
 
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
+    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
     }
 
     @Override
-    protected Object doExecute(String jsonRequest) throws UnifyException {
+    protected WfChannelSubmissionResult doExecute(WfChannelSubmission wfChannelSubmission) throws UnifyException {
         int errorCode = WfChannelErrorConstants.NO_ERROR;
         String errorMsg = null;
         try {
-            WfChannelSubmission wfChannelSubmission = getObjectFromRequestJson(WfChannelSubmission.class, jsonRequest);
             WfChannelDef wfChannelDef = workflowModuleService.getWfChannelDef(wfChannelSubmission.getChannel());
             EntityClassDef entityClassDef = applicationModuleService.getEntityClassDef(wfChannelDef.getEntity());
             List<WorkEntity> workEntityList = new ArrayList<WorkEntity>();
