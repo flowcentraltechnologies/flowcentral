@@ -479,7 +479,7 @@
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="sortCode" renderWidget="application.text"
-				widthRatio="1" />zoneDesc
+				widthRatio="1" />
 			<column field="zoneDesc" renderWidget="application.text"
 				label="$m{organization.branch.zone}" widthRatio="1" />
 			<column field="statusDesc" renderWidget="application.text"
