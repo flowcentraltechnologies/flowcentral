@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.entities;
 
 import java.util.Date;
 
-import com.flowcentraltech.flowcentral.common.constants.DevelopmentVersionType;
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityPolicy;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
@@ -31,17 +30,6 @@ import com.tcdng.unify.core.database.Entity;
  */
 @Component("baseapplication-entitypolicy")
 public class BaseApplicationEntityPolicy extends BaseConfigNamedEntityPolicy {
-
-    @Override
-    public Object preCreate(Entity record, Date now) throws UnifyException {
-        if (isEnterprise()) {
-            ((BaseApplicationEntity) record).setDevVersionType(DevelopmentVersionType.NEW);
-        } else {
-            ((BaseApplicationEntity) record).setDevVersionType(DevelopmentVersionType.CURRENT);
-        }
-        
-        return super.preCreate(record, now);
-    }
 
     @Override
     public void preUpdate(Entity record, Date now) throws UnifyException {
