@@ -54,4 +54,6 @@ public interface ApplicationModuleNameConstants {
     String BASIC_DETAILSFORMLISTING_GENERATOR = "basic-detailsformlistinggenerator";
     
     String ENTITY_IMAGE_PROVIDER= "entity-imageprovider";
+    
+    String ENVIRONMENT_DELEGATE_UTILITIES= "environment-delegateutilities";
 }

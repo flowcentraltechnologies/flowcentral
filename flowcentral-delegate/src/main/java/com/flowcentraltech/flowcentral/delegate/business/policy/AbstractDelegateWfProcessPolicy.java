@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfProcessPolicy;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
@@ -44,6 +45,9 @@ public abstract class AbstractDelegateWfProcessPolicy extends AbstractWfProcessP
     @Configurable
     private EnvironmentDelegateUtilities utilities;
 
+    @Configurable
+    private EnvironmentDelegateRegistrar registrar;
+
     private String operation;
     
     public AbstractDelegateWfProcessPolicy(String operation) {
@@ -54,11 +58,15 @@ public abstract class AbstractDelegateWfProcessPolicy extends AbstractWfProcessP
         this.utilities = utilities;
     }
 
+    public final void setRegistrar(EnvironmentDelegateRegistrar registrar) {
+        this.registrar = registrar;
+    }
+
     @Override
     public void execute(ValueStoreReader wfItemReader, String rule) throws UnifyException {
         Entity inst = (Entity) wfItemReader.getValueObject();
         ProcedureRequest req = new ProcedureRequest(operation);
-        req.setEntity(utilities.resolveLongName(inst.getClass()));
+        req.setEntity(registrar.resolveLongName(inst.getClass()));
         req.setPayload(utilities.encodeDelegateEntity(inst));
         req.setReadOnly(true);
         sendToDelegateProcedureService(req);

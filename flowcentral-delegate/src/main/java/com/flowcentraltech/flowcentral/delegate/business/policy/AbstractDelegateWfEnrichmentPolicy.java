@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractWfEnrichmentPolicy;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
@@ -45,6 +46,9 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
     @Configurable
     private EnvironmentDelegateUtilities utilities;
 
+    @Configurable
+    private EnvironmentDelegateRegistrar registrar;
+
     private String operation;
     
     public AbstractDelegateWfEnrichmentPolicy(String operation) {
@@ -55,12 +59,16 @@ public abstract class AbstractDelegateWfEnrichmentPolicy extends AbstractWfEnric
         this.utilities = utilities;
     }
 
+    public final void setRegistrar(EnvironmentDelegateRegistrar registrar) {
+        this.registrar = registrar;
+    }
+
     @Override
     public void enrich(ValueStoreWriter wfItemWriter, ValueStoreReader wfItemReader, String rule)
             throws UnifyException {
         Entity inst = (Entity) wfItemReader.getValueObject();
         ProcedureRequest req = new ProcedureRequest(operation);
-        req.setEntity(utilities.resolveLongName(inst.getClass()));
+        req.setEntity(registrar.resolveLongName(inst.getClass()));
         req.setPayload(utilities.encodeDelegateEntity(inst));
         JsonProcedureResponse resp =  sendToDelegateProcedureService(req);
         Object[] payload = resp.getPayload();

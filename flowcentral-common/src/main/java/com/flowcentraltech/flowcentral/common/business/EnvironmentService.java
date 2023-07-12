@@ -45,31 +45,6 @@ import com.tcdng.unify.core.database.Query;
 public interface EnvironmentService extends BusinessService {
 
     /**
-     * Registers or replaces an environment delegate.
-     * 
-     * @param entityClass
-     *                       the entity class
-     * @param entityLongName
-     *                       the entity long name
-     * @param delegateName
-     *                       the delegate name
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void registerDelegate(Class<? extends Entity> entityClass, String entityLongName, String delegateName)
-            throws UnifyException;
-
-    /**
-     * Unregisters and entity's delegate if present.
-     * 
-     * @param entityLongName
-     *                       the entity long name
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    void unregisterDelegate(String entityLongName) throws UnifyException;
-
-    /**
      * Gets the environment database.
      * 
      * @return the environment database

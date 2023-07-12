@@ -184,7 +184,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     public <T extends Entity> void findChildren(T record) throws UnifyException {
         Class<T> entityClass = (Class<T>) record.getClass();
         Entity srcRecord = find(entityClass, record.getId());
-        EntityDef entityDef = au.getEntityDef(au.delegateUtilities().resolveLongName(entityClass));
+        EntityDef entityDef = au.getEntityDef(au.delegateRegistrar().resolveLongName(entityClass));
         if (!DataUtils.isBlank(entityDef.getChildrenFieldNames())) {
             new BeanValueStore(record).copyWithInclusions(new BeanValueStore(srcRecord),
                     entityDef.getChildrenFieldNames());
@@ -533,7 +533,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     protected String getLongName(Class<? extends Entity> entityClass) throws UnifyException {
-        return au.delegateUtilities().resolveLongName(entityClass);
+        return au.delegateRegistrar().resolveLongName(entityClass);
     }
 
     protected abstract BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException;
@@ -589,7 +589,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     private <T extends Entity, U> U singleValueResultOperation(Class<U> resultClass, Class<T> entityClass,
             DataSourceRequest req) throws UnifyException {
-        req.setEntity(au.delegateUtilities().resolveLongName(entityClass));
+        req.setEntity(au.delegateRegistrar().resolveLongName(entityClass));
         BaseResponse resp = sendToDelegateDatasourceService(req);
         Object[] payload = resp instanceof JsonDataSourceResponse ? ((JsonDataSourceResponse) resp).getPayload()
                 : ((PseudoDataSourceResponse) resp).getPayload();
@@ -600,7 +600,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @SuppressWarnings("unchecked")
     private <T extends Entity, U> List<U> multipleValueResultOperation(Class<U> resultClass, Class<T> entityClass,
             DataSourceRequest req) throws UnifyException {
-        req.setEntity(au.delegateUtilities().resolveLongName(entityClass));
+        req.setEntity(au.delegateRegistrar().resolveLongName(entityClass));
         BaseResponse resp = sendToDelegateDatasourceService(req);
         Object[] payload = resp instanceof JsonDataSourceResponse ? ((JsonDataSourceResponse) resp).getPayload()
                 : ((PseudoDataSourceResponse) resp).getPayload();
@@ -614,7 +614,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @SuppressWarnings("unchecked")
     private <T extends Entity> T singleEntityResultOperation(Class<T> entityClass, DataSourceRequest req)
             throws UnifyException {
-        req.setEntity(au.delegateUtilities().resolveLongName(entityClass));
+        req.setEntity(au.delegateRegistrar().resolveLongName(entityClass));
         BaseResponse resp = sendToDelegateDatasourceService(req);
         if (resp instanceof JsonDataSourceResponse) {
             String[] payload = ((JsonDataSourceResponse) resp).getPayload();
@@ -634,7 +634,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @SuppressWarnings("unchecked")
     private <T extends Entity> List<T> multipleEntityResultOperation(Class<T> entityClass, DataSourceRequest req)
             throws UnifyException {
-        req.setEntity(au.delegateUtilities().resolveLongName(entityClass));
+        req.setEntity(au.delegateRegistrar().resolveLongName(entityClass));
         BaseResponse resp = sendToDelegateDatasourceService(req);
         if (resp instanceof JsonDataSourceResponse) {
             String[] payload = ((JsonDataSourceResponse) resp).getPayload();
@@ -671,7 +671,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
             DataSourceRequest req) throws UnifyException {
         T entity = DataUtils.fromJsonString(entityClass, json);
         if (req.getOperation().isList()) {
-            String entityName = au.delegateUtilities().resolveLongName(entityClass);
+            String entityName = au.delegateRegistrar().resolveLongName(entityClass);
             EntityDef entityDef = au.application().getEntityDef(entityName);
             if (entityDef.isWithListOnly()) {
                 LocalKeyObjects localKeyObjects = new LocalKeyObjects();

@@ -103,6 +103,7 @@ import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.annotation.BeanBinding;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.ReportProvider;
@@ -204,7 +205,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     private ApplicationWorkItemUtilities applicationWorkItemUtilies;
 
     @Configurable
-    private EnvironmentDelegateUtilities environmentDeledateUtilities;
+    private EnvironmentDelegateUtilities environmentDelegateUtilities;
+
+    @Configurable
+    private EnvironmentDelegateRegistrar environmentDelegateRegistrar;
 
     @Configurable
     private FontSymbolManager fontSymbolManager;
@@ -287,8 +291,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         this.applicationWorkItemUtilies = applicationWorkItemUtilies;
     }
 
-    public final void setEnvironmentDeledateUtilities(EnvironmentDelegateUtilities environmentDeledateUtilities) {
-        this.environmentDeledateUtilities = environmentDeledateUtilities;
+    public final void setEnvironmentDelegateUtilities(EnvironmentDelegateUtilities environmentDelegateUtilities) {
+        this.environmentDelegateUtilities = environmentDelegateUtilities;
+    }
+
+    public final void setEnvironmentDelegateRegistrar(EnvironmentDelegateRegistrar environmentDelegateRegistrar) {
+        this.environmentDelegateRegistrar = environmentDelegateRegistrar;
     }
 
     public final void setFontSymbolManager(FontSymbolManager fontSymbolManager) {
@@ -608,7 +616,12 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public EnvironmentDelegateUtilities delegateUtilities() {
-        return environmentDeledateUtilities;
+        return environmentDelegateUtilities;
+    }
+
+    @Override
+    public EnvironmentDelegateRegistrar delegateRegistrar() {
+        return environmentDelegateRegistrar;
     }
 
     @Override
@@ -2504,7 +2517,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
         private Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providersByName;
 
-        private Map<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providersByType;
+        private Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providersByType;
 
         public MappedEntityProviderInfo(
                 Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> providers)
@@ -2521,24 +2534,23 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
 
         public boolean isProviderPresent(Class<? extends Entity> destEntityClass) throws UnifyException {
-            return getProvidersbyType().containsKey(destEntityClass);
+            return getProvidersbyType().containsKey(destEntityClass.getName());
         }
 
         public MappedEntityProvider<? extends BaseMappedEntityProviderContext> getProvider(
                 Class<? extends Entity> destEntityClass) throws UnifyException {
-            return getProvidersbyType().get(destEntityClass);
+            return getProvidersbyType().get(destEntityClass.getName());
         }
 
-        @SuppressWarnings("unchecked")
-        private Map<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> getProvidersbyType()
+        private Map<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>> getProvidersbyType()
                 throws UnifyException {
             if (providersByType == null) {
                 synchronized (this) {
                     if (providersByType == null) {
-                        providersByType = new HashMap<Class<? extends Entity>, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
+                        providersByType = new HashMap<String, MappedEntityProvider<? extends BaseMappedEntityProviderContext>>();
                         for (String destEntity : providersByName.keySet()) {
                             EntityClassDef entityClassDef = getEntityClassDef(destEntity);
-                            providersByType.put((Class<? extends Entity>) entityClassDef.getEntityClass(),
+                            providersByType.put(entityClassDef.getEntityClass().getName(),
                                     providersByName.get(destEntity));
                         }
 

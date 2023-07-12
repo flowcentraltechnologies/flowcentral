@@ -154,6 +154,9 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> List<T> listAll(Query<T> query) throws UnifyException {
+        System.out.println("@prime: MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
+        System.out.println("@prime: delegate.listAll()");
+        System.out.println("@prime: query.getEntityClass() = " + query.getEntityClass());
         return au().isMappingProviderPresent(query) ? (List<T>) au().getProvider(query).listAll(query)
                 : Collections.emptyList();
     }
