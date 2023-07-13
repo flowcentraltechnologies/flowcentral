@@ -393,8 +393,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private FactoryMap<String, EntityClassDef> entityClassDefFactoryMap;
 
-    private FactoryMap<String, EntityClassDef> entityClassDefByClassFactoryMap;
-
     private FactoryMap<String, EntityDef> entityDefFactoryMap;
 
     private FactoryMap<String, EntityDef> entityDefByClassFactoryMap;
@@ -642,27 +640,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     return true;
-                }
-
-            };
-
-        this.entityClassDefByClassFactoryMap = new FactoryMap<String, EntityClassDef>(true)
-            {
-                @Override
-                protected boolean stale(String entityClass, EntityClassDef entityClassDef) throws Exception {
-                    if (!PropertyListItem.class.getName().equals(entityClass)) {
-                        return (environment().value(long.class, "versionNo",
-                                new AppEntityQuery().id(entityClassDef.getId())) > entityClassDef.getVersion());
-                    }
-
-                    return false;
-                }
-
-                @Override
-                protected EntityClassDef create(String entityClass, Object... arg1) throws Exception {
-                    AppEntity appEntity = environment().find(new AppEntityQuery().entityClass(entityClass));
-                    return getEntityClassDef(ApplicationNameUtils
-                            .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName()));
                 }
 
             };
@@ -1333,8 +1310,6 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public EnvironmentDelegateInfo getEnvironmentDelegateInfo(Class<? extends Entity> entityClass)
             throws UnifyException {
-        entityClassDefByClassFactoryMap.get(entityClass.getName()); // Force delegate information to be updated if
-                                                                    // necessary.
         return delegateInfoByEntityClass.get(entityClass.getName());
     }
 
@@ -2177,9 +2152,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 .listAll(new AppEntityQuery().isDelegated().addSelect("applicationName", "name", "delegate"));
         if (!entityList.isEmpty()) {
             List<Class<?>> delegateList = new ArrayList<Class<?>>();
-            for (AppEntity entity : entityList) {
-                String entityLongName = ApplicationNameUtils.getApplicationEntityLongName(entity.getApplicationName(),
-                        entity.getName());
+            for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
                 logDebug("Resolving delegate entities for [{0}]...", entityLongName);
                 EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
                 if (dataSourceName.equals(environment().getEntityDataSourceName(entityLongName))) {
@@ -3515,6 +3488,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
 
         }
+        
+        resolveMappedEntities();
     }
 
     @SuppressWarnings("unchecked")
@@ -3705,6 +3680,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         entityDef.setListOnlyTypesResolved();
     }
 
+    private void resolveMappedEntities() throws UnifyException {
+        List<AppEntity> entityList = environment()
+                .listAll(new AppEntityQuery().delegate(ApplicationModuleNameConstants.MAPPEDENTITY_ENVIRONMENT_DELEGATE)
+                        .addSelect("applicationName", "name"));
+        for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
+            getEntityClassDef(entityLongName);
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     private boolean installApplication(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
             throws UnifyException {
@@ -5490,26 +5474,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     private void registerDelegate(EntityDef entityDef, Class<? extends Entity> entityClass) throws UnifyException {
         if (entityDef.delegated()) {
-            registerDelegate(entityClass, entityDef.getLongName(), entityDef.getDelegate());
+            if (isComponent(entityDef.getDelegate())) {
+                final String entityClassName = entityClass.getName(); 
+                unregisterDelegate(entityDef.getLongName());
+                EnvironmentDelegate environmentDelegate = (EnvironmentDelegate) getComponent(entityDef.getDelegate());
+                EnvironmentDelegateInfo delegateInfo = new EnvironmentDelegateInfo(entityDef.getLongName(), entityClassName,
+                        environmentDelegate);
+                delegateInfoByEntityClass.put(entityClassName, delegateInfo);
+                delegateInfoByLongName.put(entityDef.getLongName(), delegateInfo);
+            }
         } else {
             unregisterDelegate(entityDef.getLongName());
         }
     }
 
-    private void registerDelegate(Class<? extends Entity> entityClass, String entityLongName, String delegateName)
-            throws UnifyException {
-        unregisterDelegate(entityLongName);
-        EnvironmentDelegate environmentDelegate = (EnvironmentDelegate) getComponent(delegateName);
-        EnvironmentDelegateInfo delegateInfo = new EnvironmentDelegateInfo(entityLongName, entityClass,
-                environmentDelegate);
-        delegateInfoByEntityClass.put(entityClass.getName(), delegateInfo);
-        delegateInfoByLongName.put(entityLongName, delegateInfo);
-    }
-
     private void unregisterDelegate(String entityLongName) throws UnifyException {
         EnvironmentDelegateInfo delegateInfo = delegateInfoByLongName.remove(entityLongName);
         if (delegateInfo != null) {
-            delegateInfoByEntityClass.remove(delegateInfo.getEntityClass().getName());
+            delegateInfoByEntityClass.remove(delegateInfo.getEntityClassName());
         }
     }
 

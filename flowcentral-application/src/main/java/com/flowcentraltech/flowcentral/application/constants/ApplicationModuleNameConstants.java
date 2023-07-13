@@ -56,4 +56,6 @@ public interface ApplicationModuleNameConstants {
     String ENTITY_IMAGE_PROVIDER= "entity-imageprovider";
     
     String ENVIRONMENT_DELEGATE_UTILITIES= "environment-delegateutilities";
+    
+    String MAPPEDENTITY_ENVIRONMENT_DELEGATE = "mappedentity-environmentdelegate";
 }

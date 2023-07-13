@@ -157,9 +157,6 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
 
     @Override
     public List<? extends Entity> listAll(Query<? extends Entity> query) throws UnifyException {
-        System.out.println("@prime: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        System.out.println("@prime: provider.listAll()");
-        System.out.println("@prime: query.getEntityClass() = " + query.getEntityClass());
         List<? extends Entity> instList = environment().listAll(convertQuery(query));
         return createList(instList);
     }
@@ -229,7 +226,6 @@ public abstract class AbstractMappedEntityProvider<U extends BaseMappedEntityPro
     }
 
     private Query<? extends Entity> convertQuery(Query<? extends Entity> query) throws UnifyException {
-        System.out.println("@prime: getSrcEntityClass() = " + getSrcEntityClass());
         final Query<? extends Entity> _query = Query.of(getSrcEntityClass());
         _query.ignoreEmptyCriteria(query.isIgnoreEmptyCriteria());
         _query.ignoreTenancy(query.isIgnoreTenancy());
