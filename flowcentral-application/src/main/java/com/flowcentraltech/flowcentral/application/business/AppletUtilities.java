@@ -69,6 +69,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.ReportProvider;
@@ -439,6 +440,13 @@ public interface AppletUtilities extends UnifyComponent {
      * @return the environment delegate utilities
      */
     EnvironmentDelegateUtilities delegateUtilities();
+
+    /**
+     * Gets the environment delegate registrar.
+     * 
+     * @return the environment delegate registrar
+     */
+    EnvironmentDelegateRegistrar delegateRegistrar();
 
     /**
      * Gets the application service.

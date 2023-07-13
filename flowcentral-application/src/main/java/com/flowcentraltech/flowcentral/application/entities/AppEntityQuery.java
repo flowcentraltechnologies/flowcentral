@@ -37,6 +37,10 @@ public class AppEntityQuery extends BaseApplicationEntityQuery<AppEntity> {
         return (AppEntityQuery) addAmongst("baseType", ApplicationEntityUtils.BASE_WORK_TYPES);
     }
 
+    public AppEntityQuery delegate(String delegate) {
+        return (AppEntityQuery) addEquals("delegate", delegate);
+    }
+
     public AppEntityQuery isDelegated() {
         return (AppEntityQuery) addIsNotNull("delegate");
     }

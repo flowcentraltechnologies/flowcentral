@@ -45,6 +45,10 @@ public class GatewayController extends AbstractPlainJsonController {
     @Configurable
     private GatewayAccessManager gatewayAccessManager;
 
+    public final void setGatewayAccessManager(GatewayAccessManager gatewayAccessManager) {
+        this.gatewayAccessManager = gatewayAccessManager;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected final String doExecute(String requestJson) throws UnifyException {

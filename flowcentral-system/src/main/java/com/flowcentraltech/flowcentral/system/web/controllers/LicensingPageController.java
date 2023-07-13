@@ -20,8 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.flowcentraltech.flowcentral.common.business.LicenseProvider;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
 import com.flowcentraltech.flowcentral.system.constants.SystemLoadLicenseTaskConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;

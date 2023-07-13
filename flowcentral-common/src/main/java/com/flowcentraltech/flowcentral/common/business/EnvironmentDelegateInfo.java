@@ -17,7 +17,6 @@
 package com.flowcentraltech.flowcentral.common.business;
 
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
@@ -30,14 +29,14 @@ public class EnvironmentDelegateInfo {
 
     private String entityLongName;
 
-    private Class<? extends Entity> entityClass;
+    private String entityClassName;
 
     private EnvironmentDelegate environmentDelegate;
 
-    public EnvironmentDelegateInfo(String entityLongName, Class<? extends Entity> entityClass,
+    public EnvironmentDelegateInfo(String entityLongName, String entityClassName,
             EnvironmentDelegate environmentDelegate) {
         this.entityLongName = entityLongName;
-        this.entityClass = entityClass;
+        this.entityClassName = entityClassName;
         this.environmentDelegate = environmentDelegate;
     }
 
@@ -45,14 +44,14 @@ public class EnvironmentDelegateInfo {
         return entityLongName;
     }
 
-    public Class<? extends Entity> getEntityClass() {
-        return entityClass;
+    public String getEntityClassName() {
+        return entityClassName;
     }
 
     public EnvironmentDelegate getEnvironmentDelegate() {
         return environmentDelegate;
     }
-    
+
     public String getDataSourceName() throws UnifyException {
         return environmentDelegate.getDataSourceName(entityLongName);
     }

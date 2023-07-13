@@ -31,12 +31,10 @@ import com.tcdng.unify.core.database.Entity;
  */
 @Component("baseapplication-entitypolicy")
 public class BaseApplicationEntityPolicy extends BaseConfigNamedEntityPolicy {
-
+    
     @Override
     public Object preCreate(Entity record, Date now) throws UnifyException {
-        if (isEnterprise()) {
-            ((BaseApplicationEntity) record).setDevVersionType(DevelopmentVersionType.NEW);
-        } else {
+        if (((BaseApplicationEntity) record).getDevVersionType() == null) {
             ((BaseApplicationEntity) record).setDevVersionType(DevelopmentVersionType.CURRENT);
         }
         

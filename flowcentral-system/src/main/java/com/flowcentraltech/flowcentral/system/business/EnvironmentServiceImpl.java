@@ -18,14 +18,11 @@ package com.flowcentraltech.flowcentral.system.business;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateInfo;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
-import com.flowcentraltech.flowcentral.common.business.QueryEncoder;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
 import com.flowcentraltech.flowcentral.common.business.policies.ChildListEditPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -44,7 +41,6 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.business.AbstractBusinessService;
-import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.criterion.Aggregate;
 import com.tcdng.unify.core.criterion.AggregateFunction;
 import com.tcdng.unify.core.criterion.Update;
@@ -67,31 +63,17 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 @Transactional
 @Component(SystemModuleNameConstants.ENVIRONMENT_SERVICE)
-public class EnvironmentServiceImpl extends AbstractBusinessService
-        implements EnvironmentService, EnvironmentDelegateUtilities {
-
-    private Map<Class<? extends Entity>, EnvironmentDelegateInfo> delegateInfoByEntityClass;
-
-    private Map<String, EnvironmentDelegateInfo> delegateInfoByLongName;
-
-    @Configurable
-    private QueryEncoder queryEncoder;
-
+public class EnvironmentServiceImpl extends AbstractBusinessService implements EnvironmentService {
+    
     @Configurable
     private SuggestionProvider suggestionProvider;
 
     @Configurable
     private EntityAuditInfoProvider entityAuditInfoProvider;
 
-    public EnvironmentServiceImpl() {
-        this.delegateInfoByEntityClass = new ConcurrentHashMap<Class<? extends Entity>, EnvironmentDelegateInfo>();
-        this.delegateInfoByLongName = new ConcurrentHashMap<String, EnvironmentDelegateInfo>();
-    }
-
-    public final void setQueryEncoder(QueryEncoder queryEncoder) {
-        this.queryEncoder = queryEncoder;
-    }
-
+    @Configurable
+    private EnvironmentDelegateRegistrar environmentDelegateRegistrar;
+    
     public final void setSuggestionProvider(SuggestionProvider suggestionProvider) {
         this.suggestionProvider = suggestionProvider;
     }
@@ -100,70 +82,8 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
         this.entityAuditInfoProvider = entityAuditInfoProvider;
     }
 
-    @Override
-    public void registerDelegate(Class<? extends Entity> entityClass, String entityLongName, String delegateName)
-            throws UnifyException {
-        unregisterDelegate(entityLongName);
-        EnvironmentDelegate environmentDelegate = (EnvironmentDelegate) getComponent(delegateName);
-        EnvironmentDelegateInfo delegateInfo = new EnvironmentDelegateInfo(entityLongName, entityClass,
-                environmentDelegate);
-        delegateInfoByEntityClass.put(entityClass, delegateInfo);
-        delegateInfoByLongName.put(entityLongName, delegateInfo);
-    }
-
-    @Override
-    public void unregisterDelegate(String entityLongName) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = delegateInfoByLongName.remove(entityLongName);
-        if (delegateInfo != null) {
-            delegateInfoByEntityClass.remove(delegateInfo.getEntityClass());
-        }
-    }
-
-    @Override
-    public Long encodeDelegateObjectId(Object id) throws UnifyException {
-        return (Long) id;
-    }
-
-    @Override
-    public Long encodeDelegateVersionNo(Object versionNo) throws UnifyException {
-        return (Long) versionNo;
-    }
-
-    @Override
-    public String encodeDelegateQuery(Query<? extends Entity> query) throws UnifyException {
-        return queryEncoder.encodeQueryFilter(query);
-    }
-
-    @Override
-    public String encodeDelegateOrder(Query<? extends Entity> query) throws UnifyException {
-        return queryEncoder.encodeQueryOrder(query);
-    }
-
-    @Override
-    public String encodeDelegateUpdate(Update update) throws UnifyException {
-        return queryEncoder.encodeUpdate(update);
-    }
-
-    @Override
-    public String[] encodeDelegateEntity(Entity inst) throws UnifyException {
-        String json = DataUtils.asJsonString(inst, PrintFormat.NONE);
-        return new String[] { json };
-    }
-
-    @Override
-    public Query<? extends Entity> decodeDelegateQuery(String entity, String query, String order)
-            throws UnifyException {
-        return queryEncoder.decodeQuery(entity, query, order);
-    }
-
-    @Override
-    public String resolveLongName(Class<? extends Entity> entityClass) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = delegateInfoByEntityClass.get(entityClass);
-        if (delegateInfo == null) {
-            // TODO Throw exception
-        }
-
-        return delegateInfo.getEntityLongName();
+    public final void setEnvironmentDelegateRegistrar(EnvironmentDelegateRegistrar environmentDelegateRegistrar) {
+        this.environmentDelegateRegistrar = environmentDelegateRegistrar;
     }
 
     @Override
@@ -721,18 +641,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService
 
     @Override
     public String getEntityDataSourceName(String entityLongName) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = delegateInfoByLongName.get(entityLongName);
+        EnvironmentDelegateInfo delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityLongName);
         return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
     }
 
     @Override
     public String getEntityDataSourceName(Class<? extends Entity> entityClass) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = delegateInfoByEntityClass.get(entityClass);
+        EnvironmentDelegateInfo delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
     }
 
     private Database db(Class<? extends Entity> entityClass) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = delegateInfoByEntityClass.get(entityClass);
+        EnvironmentDelegateInfo delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? (delegateInfo.isDirect() ? db(delegateInfo.getDataSourceName())
                 : delegateInfo.getEnvironmentDelegate()) : db();
     }

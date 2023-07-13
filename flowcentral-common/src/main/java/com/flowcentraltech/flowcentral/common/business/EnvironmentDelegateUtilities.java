@@ -29,7 +29,7 @@ import com.tcdng.unify.core.database.Query;
  * @since 1.0
  */
 public interface EnvironmentDelegateUtilities extends UnifyComponent {
-
+    
     /**
      * Encode object ID
      * 
@@ -94,17 +94,6 @@ public interface EnvironmentDelegateUtilities extends UnifyComponent {
      * @throws UnifyException
      */
     String[] encodeDelegateEntity(Entity inst) throws UnifyException;
-
-    /**
-     * Resolves long name for supplied entity class.
-     * 
-     * @param entityClass
-     *                    the entity class
-     * @return the long name
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    String resolveLongName(Class<? extends Entity> entityClass) throws UnifyException;
 
     /**
      * Decode entity query

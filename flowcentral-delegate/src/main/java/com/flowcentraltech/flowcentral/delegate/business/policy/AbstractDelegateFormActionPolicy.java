@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.delegate.business.policy;
 import java.util.Collection;
 import java.util.Collections;
 
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.policies.AbstractFormActionPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
@@ -42,6 +43,9 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
     @Configurable
     private EnvironmentDelegateUtilities utilities;
 
+    @Configurable
+    private EnvironmentDelegateRegistrar registrar;
+
     private final Collection<String> copyExclusions;
 
     private final String operation;
@@ -64,11 +68,15 @@ public abstract class AbstractDelegateFormActionPolicy extends AbstractFormActio
         this.utilities = utilities;
     }
 
+    public final void setRegistrar(EnvironmentDelegateRegistrar registrar) {
+        this.registrar = registrar;
+    }
+
     @Override
     protected final EntityActionResult doExecutePreAction(EntityActionContext ctx) throws UnifyException {
         Entity inst = ctx.getInst();
         ProcedureRequest req = new ProcedureRequest(operation);
-        req.setEntity(utilities.resolveLongName(inst.getClass()));
+        req.setEntity(registrar.resolveLongName(inst.getClass()));
         req.setPayload(utilities.encodeDelegateEntity(inst));
         JsonProcedureResponse resp = sendToDelegateProcedureService(req);
         Object[] payload = resp.getPayload();
