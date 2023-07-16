@@ -54,6 +54,8 @@ public class AppletContext extends AbstractContext {
 
     private boolean readOnly;
 
+    private boolean inWorkflowPromptViewMode;
+
     private boolean inWorkflow;
 
     private boolean review;
@@ -146,6 +148,14 @@ public class AppletContext extends AbstractContext {
 
     public boolean isReadOnly() {
         return readOnly;
+    }
+
+    public boolean isInWorkflowPromptViewMode() {
+        return inWorkflowPromptViewMode;
+    }
+
+    public void setInWorkflowPromptViewMode(boolean inWorkflowPromptViewMode) {
+        this.inWorkflowPromptViewMode = inWorkflowPromptViewMode;
     }
 
     public boolean isReview() {

@@ -970,7 +970,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
-        return isRootForm() && isUpdateWorkflowCopy();
+        return isRootForm() && isUpdateWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode();
     }
     
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
@@ -1241,6 +1241,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     getCtx().decTabReadOnlyCounter();
                 }
 
+                if (isRootForm()) {
+                    getCtx().setInWorkflowPromptViewMode(false); 
+                }
+                
                 return true;
             }
         }

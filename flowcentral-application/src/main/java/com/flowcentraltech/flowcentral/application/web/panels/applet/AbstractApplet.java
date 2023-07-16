@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
+import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -71,6 +72,8 @@ public abstract class AbstractApplet {
 
     private String altSubCaption;
 
+    private WorkflowDraftInfo workflowDraftInfo;
+    
     public AbstractApplet(AppletUtilities au, String appletName) throws UnifyException {
         this.appletName = ApplicationNameUtils.removeVestigialNamePart(appletName);
         this.au = au;
@@ -150,6 +153,24 @@ public abstract class AbstractApplet {
 
     public boolean isContextEditable() {
         return ctx.isContextEditable();
+    }
+
+    public WorkflowDraftInfo getWorkflowDraftInfo() {
+        return workflowDraftInfo;
+    }
+
+    public WorkflowDraftInfo removeWorkflowDraftInfo() {
+        final WorkflowDraftInfo _workflowDraftInfo = workflowDraftInfo;
+        workflowDraftInfo = null;
+        return _workflowDraftInfo;
+    }
+
+    public void setWorkflowDraftInfo(WorkflowDraftInfo workflowDraftInfo) {
+        this.workflowDraftInfo = workflowDraftInfo;
+    }
+
+    public boolean isWithWorkflowDraftInfo() {
+        return workflowDraftInfo != null;
     }
 
     protected void setAltCaption(String altCaption) {

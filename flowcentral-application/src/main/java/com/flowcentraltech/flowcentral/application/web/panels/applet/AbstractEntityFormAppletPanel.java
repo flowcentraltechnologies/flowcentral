@@ -21,12 +21,14 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
+import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
@@ -261,6 +263,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             resolveSessionMessage("$m{entityformapplet.form.parentinworkflow.viewonly}"));
                     parentDisabled = true;
                 }
+            }
+
+            if (!isRootForm && appCtx.isInWorkflowPromptViewMode()) {
+                enableUpdate = false;
+                enableDelete = false;
+                parentDisabled = true;
             }
         }
 
@@ -754,7 +762,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
             if (getEntityFormApplet().isPromptEnterWorkflowDraft()) {
-                showPromptWorkflowDraft("maintain");
+                showPromptWorkflowDraft(WorkflowDraftType.MAINTAIN, target);
             } else {
                 getRequestContextUtil().setContentScrollReset();
                 switch (target.getTarget()) {
@@ -821,7 +829,20 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     @Action
     public void openWorkflowDraft() throws UnifyException {
         MessageResult result = getMessageResult();
-        // TODO
+        switch (result) {
+            case NO:
+                performNormalViewMode();
+                break;
+            case YES:
+                performEditModeWorkflowDraft();
+                break;
+            case CANCEL:
+            case OK:
+            case RETRY:
+            default:
+                break;
+        }
+        
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
 
@@ -868,6 +889,41 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             showMessageBox(MessageIcon.WARNING, MessageMode.OK, "$m{entityformapplet.formreview}",
                     "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
         }
+    }
+
+    @Override
+    protected <W> W getRequestTarget(Class<W> clazz) throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        return applet.isWithWorkflowDraftInfo()
+                ? DataUtils.convert(clazz, applet.removeWorkflowDraftInfo().getRequestTarget())
+                : super.getRequestTarget(clazz);
+    }
+
+    private void performNormalViewMode() throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        applet.getCtx().setInWorkflowPromptViewMode(true);
+        WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
+        switch (workflowDraftInfo.getType()) {
+            case MAINTAIN:
+                maintain();
+                break;
+            case ASSIGN_TO_CHILD_ITEM:
+            case CRUD_TO_CHILD_ITEM:
+            case EDIT_CHILD_ITEM:
+            case ENTRY_TO_CHILD_ITEM:
+            case NEW_CHILDLIST_ITEM:
+            case NEW_CHILD_ITEM:
+            case QUICK_FORM_EDIT:
+            case QUICK_TABLE_EDIT:
+            default:
+                applet.getCtx().setInWorkflowPromptViewMode(false);
+                break;
+        }
+    }
+
+    private void performEditModeWorkflowDraft() throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        // TODO
     }
 
     private void processTableActionResult(TableActionResult result) throws UnifyException {
@@ -949,7 +1005,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         return ctx;
     }
 
-    private void showPromptWorkflowDraft(String action) throws UnifyException {
+    private void showPromptWorkflowDraft(WorkflowDraftType type, IndexedTarget target) throws UnifyException {
+        getEntityFormApplet().setWorkflowDraftInfo(new WorkflowDraftInfo(type, target));
         final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
         final String prompt = resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
         final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
