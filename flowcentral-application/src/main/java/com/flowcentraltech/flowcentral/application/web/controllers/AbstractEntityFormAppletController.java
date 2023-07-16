@@ -66,7 +66,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String newChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.NEW_CHILD_ITEM, childTabIndex);
         }
@@ -83,7 +83,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String quickTableEdit() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.QUICK_TABLE_EDIT, childTabIndex);
         }
@@ -103,7 +103,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String quickFormEdit() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.QUICK_FORM_EDIT, childTabIndex);
         }
@@ -123,7 +123,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String newChildListItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.NEW_CHILDLIST_ITEM, childTabIndex);
         }
@@ -169,7 +169,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String editChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.EDIT_CHILD_ITEM, childTabIndex);
         }
@@ -186,7 +186,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String assignToChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.ASSIGN_TO_CHILD_ITEM, childTabIndex);
         }
@@ -203,7 +203,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String entryToChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.ENTRY_TO_CHILD_ITEM, childTabIndex);
         }
@@ -220,7 +220,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     public String crudToChildItem() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        final int childTabIndex = getRequestTarget(int.class);
+        final int childTabIndex = getChildTabIndex();
         if (applet.isPromptEnterWorkflowDraft()) {
             return showPromptWorkflowDraft(WorkflowDraftType.CRUD_TO_CHILD_ITEM, childTabIndex);
         }
@@ -317,13 +317,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         setReloadOnSwitch();
     }
 
-    @Override
-    protected <W> W getRequestTarget(Class<W> clazz) throws UnifyException {
+    private int getChildTabIndex() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         return applet.isWithWorkflowDraftInfo()
-                ? DataUtils.convert(clazz, applet.removeWorkflowDraftInfo().getRequestTarget())
-                : super.getRequestTarget(clazz);
+                ? DataUtils.convert(int.class, applet.removeWorkflowDraftInfo().getRequestTarget())
+                : super.getRequestTarget(int.class);
     }
 
     protected AppletWidgetReferences getAppletWidgetReferences() throws UnifyException {

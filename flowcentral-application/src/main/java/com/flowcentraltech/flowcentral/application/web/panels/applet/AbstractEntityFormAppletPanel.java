@@ -30,7 +30,6 @@ import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
-import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -759,7 +758,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void maintain() throws UnifyException {
-        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        IndexedTarget target = getIndexedTarget();
         if (target.isValidIndex()) {
             if (getEntityFormApplet().isPromptEnterWorkflowDraft()) {
                 showPromptWorkflowDraft(WorkflowDraftType.MAINTAIN, target);
@@ -891,12 +890,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
-    @Override
-    protected <W> W getRequestTarget(Class<W> clazz) throws UnifyException {
+    private IndexedTarget getIndexedTarget() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         return applet.isWithWorkflowDraftInfo()
-                ? DataUtils.convert(clazz, applet.removeWorkflowDraftInfo().getRequestTarget())
-                : super.getRequestTarget(clazz);
+                ? DataUtils.convert(IndexedTarget.class, applet.removeWorkflowDraftInfo().getRequestTarget())
+                : getRequestTarget(IndexedTarget.class);
     }
 
     private void performNormalViewMode() throws UnifyException {
