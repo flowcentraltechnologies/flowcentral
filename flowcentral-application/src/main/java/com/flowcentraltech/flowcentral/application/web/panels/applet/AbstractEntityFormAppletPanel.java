@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
+import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.AbstractForm;
@@ -63,6 +64,7 @@ import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
+import com.tcdng.unify.web.ui.widget.data.MessageBoxCaptions;
 import com.tcdng.unify.web.ui.widget.data.MessageIcon;
 import com.tcdng.unify.web.ui.widget.data.MessageMode;
 import com.tcdng.unify.web.ui.widget.data.MessageResult;
@@ -88,7 +90,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private String tabMemoryId;
 
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {        
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
     }
 
@@ -248,19 +250,20 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
             if (isUpdateCopy) {
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
-                form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
+                form.setDisplayItemCounter(
+                        resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
             } else if (appCtx.isInWorkflow() && !appCtx.isReview()) {
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 if (isRootForm) {
                     form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
-                 } else {
+                } else {
                     form.setDisplayItemCounter(
                             resolveSessionMessage("$m{entityformapplet.form.parentinworkflow.viewonly}"));
                     parentDisabled = true;
-               }
+                }
             }
         }
-        
+
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
                 switchContent("entityCrudPanel");
@@ -750,22 +753,26 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void maintain() throws UnifyException {
         IndexedTarget target = getRequestTarget(IndexedTarget.class);
         if (target.isValidIndex()) {
-            getRequestContextUtil().setContentScrollReset();
-            switch (target.getTarget()) {
-                case EntitySearchValueMarkerConstants.CHILD_LIST:
-                    getEntityFormApplet().maintainChildInst(target.getIndex());
-                    return;
-                case EntitySearchValueMarkerConstants.RELATED_LIST:
-                    getEntityFormApplet().maintainRelatedInst(target.getIndex());
-                    return;
-                case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                    getEntityFormApplet().maintainHeadlessInst(target.getIndex());
-                    return;
-                default:
-            }
+            if (getEntityFormApplet().isPromptEnterWorkflowDraft()) {
+                showPromptWorkflowDraft("maintain");
+            } else {
+                getRequestContextUtil().setContentScrollReset();
+                switch (target.getTarget()) {
+                    case EntitySearchValueMarkerConstants.CHILD_LIST:
+                        getEntityFormApplet().maintainChildInst(target.getIndex());
+                        return;
+                    case EntitySearchValueMarkerConstants.RELATED_LIST:
+                        getEntityFormApplet().maintainRelatedInst(target.getIndex());
+                        return;
+                    case EntitySearchValueMarkerConstants.HEADLESS_LIST:
+                        getEntityFormApplet().maintainHeadlessInst(target.getIndex());
+                        return;
+                    default:
+                }
 
-            TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
-            processTableActionResult(result);
+                TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
+                processTableActionResult(result);
+            }
         } else {
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
@@ -790,7 +797,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             processTableActionResult(result);
         }
     }
-    
+
     @Action
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();
@@ -811,11 +818,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+    @Action
+    public void openWorkflowDraft() throws UnifyException {
+        MessageResult result = getMessageResult();
+        // TODO
+        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+    }
+
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
         // Set recovery path on error to prevent possible manual duplication of record
         getRequestContextUtil().setSystemErrorRecoveryPath("/application/refreshContent");
-        
+
         // Select first tab with review message TODO Move to method?
         TabSheetWidget tabSheetWidget = getWidgetByShortName(TabSheetWidget.class, "formPanel.formTabSheet");
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
@@ -855,7 +869,6 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     "$m{entityformapplet.formreview.failure}", "/application/refreshContent");
         }
     }
-
 
     private void processTableActionResult(TableActionResult result) throws UnifyException {
         if (result != null) {
@@ -934,6 +947,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         return ctx;
+    }
+
+    private void showPromptWorkflowDraft(String action) throws UnifyException {
+        final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
+        final String prompt = resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
+        final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
+        final String editMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
+        MessageBoxCaptions captions = new MessageBoxCaptions(caption);
+        captions.setYesCaption(editMessage);
+        captions.setNoCaption(viewMessage);
+        final String commandPath = getCommandFullPath("openWorkflowDraft");
+        showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, commandPath);
     }
 
     private FormContext evaluateCurrentFormContext(final FormContext ctx, EvaluationMode evaluationMode)

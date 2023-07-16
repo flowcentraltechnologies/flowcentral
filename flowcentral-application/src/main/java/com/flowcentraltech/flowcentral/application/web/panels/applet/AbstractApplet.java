@@ -113,6 +113,11 @@ public abstract class AbstractApplet {
         return rootAppletDef;
     }
     
+    public boolean isUpdateWorkflowCopy() throws UnifyException {
+        return getRootAppletDef().getPropValue(boolean.class,
+                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY);
+    }
+    
     public boolean navBackToPrevious() throws UnifyException {
         return false;
     }
@@ -141,6 +146,10 @@ public abstract class AbstractApplet {
                 rootAppletDef = _nAppletDef;
             }
         }
+    }
+
+    public boolean isContextEditable() {
+        return ctx.isContextEditable();
     }
 
     protected void setAltCaption(String altCaption) {

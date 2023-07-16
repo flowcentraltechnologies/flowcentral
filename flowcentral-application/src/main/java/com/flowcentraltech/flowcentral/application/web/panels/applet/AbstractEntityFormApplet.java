@@ -498,7 +498,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             viewMode = childList ? ViewMode.NEW_CHILDLIST_FORM : ViewMode.NEW_CHILD_FORM;
         }
     }
-
+ 
     public void editChildItem(int childTabIndex) throws UnifyException {
         if (ensureSaveOnTabAction()) {
             EntityChild _entityChild = (EntityChild) form.getTabSheet().getCurrentItem().getValObject();
@@ -969,6 +969,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return form == null;
     }
 
+    public boolean isPromptEnterWorkflowDraft() throws UnifyException {
+        return isRootForm() && isUpdateWorkflowCopy();
+    }
+    
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
         return au.formBeanMatchAppletPropertyCondition(getFormAppletDef(), form, conditionPropName);
     }

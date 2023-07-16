@@ -37,6 +37,10 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 import com.tcdng.unify.web.ui.widget.EventHandler;
 import com.tcdng.unify.web.ui.widget.Widget;
+import com.tcdng.unify.web.ui.widget.data.MessageBoxCaptions;
+import com.tcdng.unify.web.ui.widget.data.MessageIcon;
+import com.tcdng.unify.web.ui.widget.data.MessageMode;
+import com.tcdng.unify.web.ui.widget.data.MessageResult;
 import com.tcdng.unify.web.ui.widget.data.Popup;
 
 /**
@@ -60,6 +64,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/newChildItem");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             applet.newChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
@@ -73,11 +81,15 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/quickTableEdit");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             QuickTableEdit quickTableEdit = applet.quickTableEdit(childTabIndex);
             if (quickTableEdit != null) {
-                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_TABLE_EDIT,
-                        quickTableEdit, quickTableEdit.getWidth(), quickTableEdit.getHeight()));
+                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_TABLE_EDIT, quickTableEdit,
+                        quickTableEdit.getWidth(), quickTableEdit.getHeight()));
             }
         }
 
@@ -89,11 +101,15 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/quickFormEdit");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             QuickFormEdit quickFormEdit = applet.quickFormEdit(childTabIndex);
             if (quickFormEdit != null) {
-                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_FORM_EDIT,
-                        quickFormEdit, quickFormEdit.getWidth(), quickFormEdit.getHeight()));
+                return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_QUICK_FORM_EDIT, quickFormEdit,
+                        quickFormEdit.getWidth(), quickFormEdit.getHeight()));
             }
         }
 
@@ -105,6 +121,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/newChildListItem");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             ShowPopupInfo showPopupInfo = applet.newChildShowPopup(childTabIndex);
             if (showPopupInfo != null) {
@@ -119,8 +139,8 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                         String title = resolveSessionMessage("$m{entitymultiselectpanel.select.entity}",
                                 entitySelect.getEntityTable().getEntityDef().getLabel());
                         entitySelect.setTitle(title);
-                        return showPopup(new Popup(ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT,
-                                entitySelect));
+                        return showPopup(
+                                new Popup(ApplicationResultMappingConstants.SHOW_ENTITY_MULTISELECT, entitySelect));
                     }
                     case SHOW_TREEMULTISELECT: {
                         EntityTreeSelectGenerator generator = au().getComponent(EntityTreeSelectGenerator.class,
@@ -147,6 +167,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/editChildItem");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             applet.editChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
@@ -160,6 +184,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/assignToChildItem");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             applet.assignToChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
@@ -173,6 +201,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/entryToChildItem");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             applet.entryToChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
@@ -186,6 +218,10 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         if (saveFormState(applet)) {
+            if (applet.isPromptEnterWorkflowDraft()) {
+                return showPromptWorkflowDraft("/crudToChildItem");
+            }
+
             int childTabIndex = getRequestTarget(int.class);
             applet.crudToChildItem(childTabIndex);
             getPageRequestContextUtil().setContentScrollReset();
@@ -234,6 +270,15 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         return "refreshapplet";
     }
 
+    @Action
+    public String openWorkflowDraft() throws UnifyException {
+        AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
+        AbstractEntityFormApplet applet = pageBean.getApplet();
+        MessageResult result = getMessageResult();
+        // TODO
+        return "refreshapplet";
+    }
+
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
@@ -254,7 +299,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         if (indicateHighLatency) {
             getPageRequestContextUtil().setLowLatencyRequest();
         }
-        
+
         setReloadOnSwitch();
     }
 
@@ -288,6 +333,18 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         return new EntityFormEventHandlers(formSwitchOnChangeHandlers, assnSwitchOnChangeHandlers,
                 entrySwitchOnChangeHandlers, crudActionHandlers, crudSwitchOnChangeHandlers,
                 saveAsSwitchOnChangeHandlers, maintainActHandlers);
+    }
+
+    private String showPromptWorkflowDraft(String action) throws UnifyException {
+        final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
+        final String prompt = resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
+        final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
+        final String editMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
+        MessageBoxCaptions captions = new MessageBoxCaptions(caption);
+        captions.setYesCaption(editMessage);
+        captions.setNoCaption(viewMessage);
+        final String openWorkflowDraftPath = getVariableActionPath("/openWorkflowDraft");
+        return showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, openWorkflowDraftPath);
     }
 
     private boolean saveFormState(AbstractEntityFormApplet applet) throws UnifyException {
