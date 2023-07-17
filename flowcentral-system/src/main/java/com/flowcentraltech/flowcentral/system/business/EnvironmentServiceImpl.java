@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.EntityListAction
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
 import com.flowcentraltech.flowcentral.common.entities.EntityWrapper;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
@@ -150,6 +151,12 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
             ctx.setResult(create(inst));
             if (suggestionProvider != null) {
                 suggestionProvider.saveSuggestions(ctx.getEntityDef(), inst);
+            }
+
+            if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null) {
+                // Update original instance workflow flag
+                updateById((Class<? extends Entity>) inst.getClass(), ((WorkEntity) inst).getOriginalCopyId(),
+                        new Update().add("inWorkflow", Boolean.TRUE));
             }
 
             return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
@@ -400,6 +407,13 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         if (result == null) {
             Entity inst = ctx.getInst();
             ctx.setResult(db(inst.getClass()).deleteByIdVersion(inst));
+
+            if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null) {
+                // Update original instance workflow flag
+                updateById((Class<? extends Entity>) inst.getClass(), ((WorkEntity) inst).getOriginalCopyId(),
+                        new Update().add("inWorkflow", Boolean.FALSE));
+            }
+
             return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
