@@ -2121,7 +2121,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() == null && formAppletDef
                 .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
             // Entire child records should be replicated
-            environment().findChildren(inst);
+            environment().findEditableChildren(inst);
 
             // Create workflow copy
             EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());

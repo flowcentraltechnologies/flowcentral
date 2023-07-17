@@ -259,6 +259,26 @@ public interface EnvironmentService extends BusinessService {
     <T extends Entity> void findChildren(T record) throws UnifyException;
 
     /**
+     * Finds editable child records into supplied record.
+     * 
+     * @param record
+     *               the record to find children into
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Entity> void findEditableChildren(T record) throws UnifyException;
+
+    /**
+     * Finds read-only child records into supplied record.
+     * 
+     * @param record
+     *               the record to find children into
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Entity> void findReadOnlyChildren(T record) throws UnifyException;
+
+    /**
      * Lists a persistent record by ID. Child and child list properties are
      * populated.
      * 
@@ -350,6 +370,37 @@ public interface EnvironmentService extends BusinessService {
     <T extends Entity> List<T> listAllWithChildren(Query<T> query) throws UnifyException;
 
     /**
+     * Lists child records into supplied record.
+     * 
+     * @param record
+     *               the record to list children into
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Entity> void listChildren(T record) throws UnifyException;
+
+    /**
+     * Lists editable child records into supplied record.
+     * 
+     * @param record
+     *               the record to list children into
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Entity> void listEditableChildren(T record) throws UnifyException;
+
+
+    /**
+     * Lists read-only child records into supplied record.
+     * 
+     * @param record
+     *               the record to list children into
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T extends Entity> void listReadOnlyChildren(T record) throws UnifyException;
+
+    /**
      * Lists the value of a record's property.
      * 
      * @param valueClazz
@@ -388,6 +439,17 @@ public interface EnvironmentService extends BusinessService {
      *                        if an error occurs
      */
     int updateByIdVersion(EntityWrapper wrappedInst) throws UnifyException;
+
+    /**
+     * Updates a record by ID and version number. Only editable children are updated.
+     * 
+     * @param record
+     *            the record to modify
+     * @return the number of record updated. Always 1.
+     * @throws UnifyException
+     *             if an error occurs during modify
+     */
+    int updateByIdVersionEditableChildren(Entity record) throws UnifyException;
 
     /**
      * Updates a record in database using by ID and version and applies a policy if

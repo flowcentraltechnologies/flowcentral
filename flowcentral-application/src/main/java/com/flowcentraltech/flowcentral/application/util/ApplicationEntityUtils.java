@@ -69,9 +69,10 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(new HashSet<String>(
-            Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy", "originWorkRecId",
-                    "originalCopyId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
+    public static final Set<String> RESERVED_BASE_FIELDS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow",
+                    "workBranchCode", "workDepartmentCode", "processingStatus", "devVersionType")));
 
     public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
             .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,

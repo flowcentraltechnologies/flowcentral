@@ -213,6 +213,16 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public <T extends Entity> void findEditableChildren(T record) throws UnifyException {
+        db(record.getClass()).findEditableChildren(record);
+    }
+
+    @Override
+    public <T extends Entity> void findReadOnlyChildren(T record) throws UnifyException {
+        db(record.getClass()).findReadOnlyChildren(record);
+    }
+
+    @Override
     public <T extends Entity> T list(Class<T> clazz, Object id) throws UnifyException {
         return (T) db(clazz).list(Query.of(clazz).addEquals("id", id));
     }
@@ -243,6 +253,21 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public <T extends Entity> void listChildren(T record) throws UnifyException {
+        db(record.getClass()).listChildren(record);
+    }
+
+    @Override
+    public <T extends Entity> void listEditableChildren(T record) throws UnifyException {
+        db(record.getClass()).listEditableChildren(record);
+    }
+
+    @Override
+    public <T extends Entity> void listReadOnlyChildren(T record) throws UnifyException {
+        db(record.getClass()).listReadOnlyChildren(record);
+    }
+
+    @Override
     public <T, U extends Entity> T listValue(Class<T> valueClazz, Class<U> recordClazz, Object id, String property)
             throws UnifyException {
         return db(recordClazz).value(valueClazz, property, Query.of(recordClazz).addEquals("id", id));
@@ -257,6 +282,11 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     @Override
     public int updateByIdVersion(Entity record) throws UnifyException {
         return db(record.getClass()).updateByIdVersion(record);
+    }
+
+    @Override
+    public int updateByIdVersionEditableChildren(Entity record) throws UnifyException {
+        return db(record.getClass()).updateByIdVersionEditableChildren(record);
     }
 
     @Override

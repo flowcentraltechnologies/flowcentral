@@ -1140,7 +1140,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     new BeanValueStore(originalInst).copyWithExclusions(
                                             new BeanValueStore(wfEntityInst),
                                             ApplicationEntityUtils.RESERVED_BASE_FIELDS);
-                                    environment().updateByIdVersion(originalInst);
+                                    environment().updateByIdVersionEditableChildren(originalInst);
                                     fileAttachmentProvider.sychFileAttachments(WORK_CATEGORY, entityDef.getLongName(),
                                             originalCopyId, (Long) wfEntityInst.getId());
                                 }
@@ -1180,10 +1180,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     environment().delete(WfItem.class, wfItemId);
                     final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                     if (originalCopyId != null) {
-                        // Remove original copy from workflow
-                        environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(),
-                                originalCopyId, new Update().add("inWorkflow", Boolean.FALSE));
-
                         // Delete update copy
                         environment().delete(wfEntityInst.getClass(), wfEntityInst.getId());
                         transitionItem.setDeleted();
