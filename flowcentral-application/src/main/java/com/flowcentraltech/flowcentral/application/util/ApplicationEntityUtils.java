@@ -486,6 +486,10 @@ public final class ApplicationEntityUtils {
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "originalCopyId",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.originalcopyid}"), null,
                         null, null, null, null, "application.integer", null, null, configType));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "wfItemVersionType",
+                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.wfversiontype}"),
+                        "wfitemversiontypelist", null, null, null, null, "application.enumlist", null, null,
+                        configType));
                 break;
             default:
                 break;

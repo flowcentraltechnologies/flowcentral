@@ -17,12 +17,17 @@ package com.flowcentraltech.flowcentral.common.entities;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.tcdng.unify.core.annotation.ChildList;
 import com.tcdng.unify.core.annotation.Column;
+import com.tcdng.unify.core.annotation.DefaultQueryRestrictions;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
 import com.tcdng.unify.core.annotation.Policy;
+import com.tcdng.unify.core.annotation.QueryRestriction;
+import com.tcdng.unify.core.annotation.UniqueConstraint;
+import com.tcdng.unify.core.annotation.UniqueConstraints;
 
 /**
  * Base class for all work entity.
@@ -31,10 +36,16 @@ import com.tcdng.unify.core.annotation.Policy;
  * @since 1.0
  */
 @Policy("basework-entitypolicy")
+@DefaultQueryRestrictions({ @QueryRestriction(field = "wfItemVersionType", value = "ORN") })
+@UniqueConstraints({
+        @UniqueConstraint(value = { "originalCopyId", "wfItemVersionType" })})
 public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEntity {
 
     @ForeignKey(name = "PROCESSING_STATUS", nullable = true)
     private ProcessingStatus processingStatus;
+
+    @Column
+    private WfItemVersionType wfItemVersionType;
     
     @Column(name = "WORK_BRANCH_CD", length = 32, nullable = true)
     private String workBranchCode;
@@ -72,6 +83,16 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
     @Override
     public final void setProcessingStatus(ProcessingStatus processingStatus) {
         this.processingStatus = processingStatus;
+    }
+
+    @Override
+    public final WfItemVersionType getWfItemVersionType() {
+        return wfItemVersionType;
+    }
+
+    @Override
+    public final void setWfItemVersionType(WfItemVersionType wfItemVersionType) {
+        this.wfItemVersionType = wfItemVersionType;
     }
 
     @Override

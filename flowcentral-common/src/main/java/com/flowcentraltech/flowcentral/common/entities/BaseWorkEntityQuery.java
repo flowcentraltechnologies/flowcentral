@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.common.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 
 /**
@@ -55,5 +56,17 @@ public abstract class BaseWorkEntityQuery<T extends BaseWorkEntity> extends Base
 
     public final BaseWorkEntityQuery<T> processingStatus(ProcessingStatus processingStatus) {
         return (BaseWorkEntityQuery<T>) addEquals("processingStatus", processingStatus);
+    }
+
+    public final BaseWorkEntityQuery<T> originalCopyId(Long originalCopyId) {
+        return (BaseWorkEntityQuery<T>) addEquals("originalCopyId", originalCopyId);
+    }
+    
+    public final BaseWorkEntityQuery<T> isOriginalVersion() {
+        return (BaseWorkEntityQuery<T>) addEquals("wfItemVersionType", WfItemVersionType.ORIGINAL);
+    }
+    
+    public final BaseWorkEntityQuery<T> isDraftVersion() {
+        return (BaseWorkEntityQuery<T>) addEquals("wfItemVersionType", WfItemVersionType.DRAFT);
     }
 }
