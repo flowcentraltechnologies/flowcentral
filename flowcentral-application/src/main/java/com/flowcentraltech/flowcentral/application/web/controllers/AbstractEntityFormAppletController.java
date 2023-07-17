@@ -57,6 +57,8 @@ import com.tcdng.unify.web.ui.widget.data.Popup;
 public abstract class AbstractEntityFormAppletController<T extends AbstractEntityFormApplet, U extends AbstractEntityFormAppletPageBean<T>>
         extends AbstractAppletController<U> {
 
+    private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
+    
     public AbstractEntityFormAppletController(Class<U> pageBeanClass, Secured secured, ReadOnly readOnly,
             ResetOnWrite resetOnWrite) {
         super(pageBeanClass, secured, readOnly, resetOnWrite);
@@ -280,12 +282,12 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             case NO:
                 performNormalViewMode();
                 break;
+            case OK:
             case YES:
                 performEditModeWorkflowDraft();
                 break;
             case CANCEL:
-            case OK:
-            case RETRY:
+             case RETRY:
             default:
                 break;
         }
@@ -320,7 +322,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     private int getChildTabIndex() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        return applet.isWithWorkflowDraftInfo()
+        return getRequestAttribute(boolean.class, IN_WORKFLOW_DRAFT_LOOP_FLAG)
                 ? DataUtils.convert(int.class, applet.removeWorkflowDraftInfo().getRequestTarget())
                 : super.getRequestTarget(int.class);
     }
@@ -361,6 +363,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
         applet.getCtx().setInWorkflowPromptViewMode(true);
+        setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.TRUE);
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
         switch (workflowDraftInfo.getType()) {
             case ASSIGN_TO_CHILD_ITEM:
@@ -390,6 +393,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
             case MAINTAIN:
             default:
                 applet.getCtx().setInWorkflowPromptViewMode(false);
+                setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.FALSE);
                 break;
         }
     }
@@ -402,15 +406,21 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
 
     private String showPromptWorkflowDraft(WorkflowDraftType type, int requestTarget) throws UnifyException {
         getPageBean().getApplet().setWorkflowDraftInfo(new WorkflowDraftInfo(type, requestTarget));
-
         final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
         final String prompt = resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
         final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
         final String editMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
+        final String cancelMessage = resolveSessionMessage("$m{formapplet.workflowdraft.cancel}");
+        final String openWorkflowDraftPath = getVariableActionPath("/openWorkflowDraft");
         MessageBoxCaptions captions = new MessageBoxCaptions(caption);
+        if (type.isNewOnly()) {
+            captions.setOkCaption(editMessage);
+            captions.setCancelCaption(cancelMessage);
+            return showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, openWorkflowDraftPath);
+        }
+
         captions.setYesCaption(editMessage);
         captions.setNoCaption(viewMessage);
-        final String openWorkflowDraftPath = getVariableActionPath("/openWorkflowDraft");
         return showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, openWorkflowDraftPath);
     }
 

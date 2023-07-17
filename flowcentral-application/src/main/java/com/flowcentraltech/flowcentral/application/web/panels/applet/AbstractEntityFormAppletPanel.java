@@ -81,6 +81,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private static final String WORK_CATEGORY = "work";
 
+    private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
+
     @Configurable
     protected ApplicationPrivilegeManager applicationPrivilegeManager;
 
@@ -832,11 +834,11 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case NO:
                 performNormalViewMode();
                 break;
+            case OK:
             case YES:
                 performEditModeWorkflowDraft();
                 break;
             case CANCEL:
-            case OK:
             case RETRY:
             default:
                 break;
@@ -892,7 +894,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private IndexedTarget getIndexedTarget() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
-        return applet.isWithWorkflowDraftInfo()
+        return getRequestAttribute(boolean.class, IN_WORKFLOW_DRAFT_LOOP_FLAG)
                 ? DataUtils.convert(IndexedTarget.class, applet.removeWorkflowDraftInfo().getRequestTarget())
                 : getRequestTarget(IndexedTarget.class);
     }
@@ -900,6 +902,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     private void performNormalViewMode() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         applet.getCtx().setInWorkflowPromptViewMode(true);
+        setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.TRUE);
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
         switch (workflowDraftInfo.getType()) {
             case MAINTAIN:
@@ -915,6 +918,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case QUICK_TABLE_EDIT:
             default:
                 applet.getCtx().setInWorkflowPromptViewMode(false);
+                setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.FALSE);
                 break;
         }
     }
@@ -1009,10 +1013,18 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final String prompt = resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
         final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
         final String editMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
+        final String cancelMessage = resolveSessionMessage("$m{formapplet.workflowdraft.cancel}");
+        final String commandPath = getCommandFullPath("openWorkflowDraft");
         MessageBoxCaptions captions = new MessageBoxCaptions(caption);
+        if (type.isNewOnly()) {
+            captions.setOkCaption(editMessage);
+            captions.setCancelCaption(cancelMessage);
+            showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, commandPath);
+            return;
+        }
+
         captions.setYesCaption(editMessage);
         captions.setNoCaption(viewMessage);
-        final String commandPath = getCommandFullPath("openWorkflowDraft");
         showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, commandPath);
     }
 

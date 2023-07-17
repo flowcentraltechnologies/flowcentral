@@ -32,4 +32,8 @@ public enum WorkflowDraftType {
     QUICK_TABLE_EDIT,
     QUICK_FORM_EDIT,
     MAINTAIN;
+    
+    public boolean isNewOnly() {
+        return NEW_CHILD_ITEM.equals(this) || NEW_CHILDLIST_ITEM.equals(this);
+    }
 }
