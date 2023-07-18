@@ -93,6 +93,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     private boolean allowNegative;
 
+    private boolean editable;
+
     private boolean nullable;
 
     private boolean auditable;
@@ -123,8 +125,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             String columnName, String references, String category, String suggestionType, String inputLabel,
             String inputListKey, String lingualListKey, String autoFormat, String defaultVal, String key,
             String property, int rows, int columns, int minLen, int maxLen, int precision, int scale,
-            boolean allowNegative, boolean nullable, boolean auditable, boolean reportable, boolean maintainLink,
-            boolean basicSearch, boolean descriptive) {
+            boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
+            boolean maintainLink, boolean basicSearch, boolean descriptive) {
         this.textWidgetTypeDef = textWidgetTypeDef;
         this.inputWidgetTypeDef = inputWidgetTypeDef;
         this.ligualWidgetTypeDef = ligualWidgetTypeDef;
@@ -154,6 +156,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
         this.precision = precision;
         this.scale = scale;
         this.allowNegative = allowNegative;
+        this.editable = editable;
         this.nullable = nullable;
         this.auditable = auditable;
         this.reportable = reportable;
@@ -260,7 +263,7 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
     public EntityFieldDataType getResolvedDataType() {
         return isWithResolvedTypeFieldDef() ? resolvedTypeFieldDef.getDataType() : dataType;
     }
-    
+
     public boolean isWithResolvedTypeFieldDef() {
         return resolvedTypeFieldDef != null;
     }
@@ -368,6 +371,10 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
     public boolean isPrimaryKey() {
         return "id".equals(fieldName);
+    }
+
+    public boolean isEditable() {
+        return editable;
     }
 
     public boolean isNullable() {
@@ -652,6 +659,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
 
         private boolean allowNegative;
 
+        private boolean editable;
+
         private boolean nullable;
 
         private boolean auditable;
@@ -798,6 +807,11 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             return this;
         }
 
+        public Builder editable(boolean editable) throws UnifyException {
+            this.editable = editable;
+            return this;
+        }
+
         public Builder nullable(boolean nullable) throws UnifyException {
             this.nullable = nullable;
             return this;
@@ -844,8 +858,8 @@ public class EntityFieldDef implements Listable, EntityFieldAttributes {
             return new EntityFieldDef(textWidgetTypeDef, inputWidgetTypeDef, ligualWidgetTypeDef, refDef, dataType,
                     type, textCase, entityLongName, fieldName, mapped, fieldLabel, columnName, references, category,
                     suggestionType, inputLabel, inputListKey, lingualListKey, autoFormat, defaultVal, key, property,
-                    rows, columns, minLen, maxLen, precision, scale, allowNegative, nullable, auditable, reportable,
-                    maintainLink, basicSearch, descriptive);
+                    rows, columns, minLen, maxLen, precision, scale, allowNegative, editable, nullable, auditable,
+                    reportable, maintainLink, basicSearch, descriptive);
         }
     }
 

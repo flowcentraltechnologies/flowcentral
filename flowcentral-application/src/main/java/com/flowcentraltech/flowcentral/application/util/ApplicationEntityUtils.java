@@ -331,8 +331,9 @@ public final class ApplicationEntityUtils {
                 DataUtils.convert(int.class, appEntityField.getMaxLen()),
                 DataUtils.convert(int.class, appEntityField.getPrecision()),
                 DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isAllowNegative(),
-                appEntityField.isNullable(), appEntityField.isAuditable(), appEntityField.isReportable(),
-                appEntityField.isMaintainLink(), appEntityField.isBasicSearch(), appEntityField.isDescriptive());
+                !appEntityField.isReadOnly(), appEntityField.isNullable(), appEntityField.isAuditable(),
+                appEntityField.isReportable(), appEntityField.isMaintainLink(), appEntityField.isBasicSearch(),
+                appEntityField.isDescriptive());
     }
 
     public static void addChangeLogFormElements(List<AppFormElement> elementList) {
@@ -510,11 +511,12 @@ public final class ApplicationEntityUtils {
         boolean reportable = !nonReportables.contains(name);
         boolean maintainLink = maintainLinks.contains(name);
         boolean allowNegative = false;
+        boolean readOnly = false;
         boolean auditable = false;
         String suggestionType = null;
         AppEntityField field = new AppEntityField(type, name, label, references, key, property, category, inputLabel,
-                inputWidget, suggestionType, inputListKey, length, allowNegative, nullable, auditable, reportable,
-                maintainLink);
+                inputWidget, suggestionType, inputListKey, length, allowNegative, readOnly, nullable, auditable,
+                reportable, maintainLink);
         if (type.isDate() || type.isTimestamp()) {
             field.setLingualWidget("application.lingualdatetypelist");
         }

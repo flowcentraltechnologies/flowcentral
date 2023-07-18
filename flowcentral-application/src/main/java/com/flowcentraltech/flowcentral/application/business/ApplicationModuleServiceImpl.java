@@ -737,10 +737,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.getProperty(), appEntityField.getRows(), appEntityField.getColumns(),
                                     appEntityField.getMinLen(), appEntityField.getMaxLen(),
                                     appEntityField.getPrecision(), appEntityField.getScale(),
-                                    appEntityField.isAllowNegative(), appEntityField.isNullable(),
-                                    appEntityField.isAuditable(), appEntityField.isReportable(),
-                                    appEntityField.isMaintainLink(), appEntityField.isBasicSearch(),
-                                    appEntityField.isDescriptive());
+                                    appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
+                                    appEntityField.isNullable(), appEntityField.isAuditable(),
+                                    appEntityField.isReportable(), appEntityField.isMaintainLink(),
+                                    appEntityField.isBasicSearch(), appEntityField.isDescriptive());
                         } else {
                             edb.addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef,
                                     appEntityField.getDataType(), appEntityField.getType(),
@@ -753,10 +753,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     appEntityField.getProperty(), appEntityField.getRows(), appEntityField.getColumns(),
                                     appEntityField.getMinLen(), appEntityField.getMaxLen(),
                                     appEntityField.getPrecision(), appEntityField.getScale(),
-                                    appEntityField.isAllowNegative(), appEntityField.isNullable(),
-                                    appEntityField.isAuditable(), appEntityField.isReportable(),
-                                    appEntityField.isMaintainLink(), appEntityField.isBasicSearch(),
-                                    appEntityField.isDescriptive());
+                                    appEntityField.isAllowNegative(), !appEntityField.isReadOnly(),
+                                    appEntityField.isNullable(), appEntityField.isAuditable(),
+                                    appEntityField.isReportable(), appEntityField.isMaintainLink(),
+                                    appEntityField.isBasicSearch(), appEntityField.isDescriptive());
                         }
 
                     }
@@ -3488,7 +3488,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
 
         }
-        
+
         resolveMappedEntities();
     }
 
@@ -3688,7 +3688,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             getEntityClassDef(entityLongName);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private boolean installApplication(final TaskMonitor taskMonitor, final ApplicationInstall applicationInstall)
             throws UnifyException {
@@ -4514,6 +4514,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntityField.setPrecision(entityFieldConfig.getPrecision());
                     appEntityField.setScale(entityFieldConfig.getScale());
                     appEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
+                    appEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                     appEntityField.setNullable(entityFieldConfig.getNullable());
                     appEntityField.setAuditable(entityFieldConfig.getAuditable());
                     appEntityField.setReportable(entityFieldConfig.getReportable());
@@ -4560,6 +4561,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntityField.setPrecision(entityFieldConfig.getPrecision());
                         oldAppEntityField.setScale(entityFieldConfig.getScale());
                         oldAppEntityField.setAllowNegative(entityFieldConfig.getAllowNegative());
+                        oldAppEntityField.setReadOnly(entityFieldConfig.getReadOnly());
                         oldAppEntityField.setNullable(entityFieldConfig.getNullable());
                         oldAppEntityField.setAuditable(entityFieldConfig.getAuditable());
                         oldAppEntityField.setReportable(entityFieldConfig.getReportable());
@@ -5475,11 +5477,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     private void registerDelegate(EntityDef entityDef, Class<? extends Entity> entityClass) throws UnifyException {
         if (entityDef.delegated()) {
             if (isComponent(entityDef.getDelegate())) {
-                final String entityClassName = entityClass.getName(); 
+                final String entityClassName = entityClass.getName();
                 unregisterDelegate(entityDef.getLongName());
                 EnvironmentDelegate environmentDelegate = (EnvironmentDelegate) getComponent(entityDef.getDelegate());
-                EnvironmentDelegateInfo delegateInfo = new EnvironmentDelegateInfo(entityDef.getLongName(), entityClassName,
-                        environmentDelegate);
+                EnvironmentDelegateInfo delegateInfo = new EnvironmentDelegateInfo(entityDef.getLongName(),
+                        entityClassName, environmentDelegate);
                 delegateInfoByEntityClass.put(entityClassName, delegateInfo);
                 delegateInfoByLongName.put(entityDef.getLongName(), delegateInfo);
             }
@@ -5572,9 +5574,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         DynamicEntityInfo _childDynamicEntityInfo = buildDynamicEntityInfo(_refEntityDef,
                                 dynamicEntityInfoMap, basePackage, extension);
                         if (entityFieldDef.isChild() || entityFieldDef.isRefFileUpload()) {
-                            deib.addChildField(fieldType, _childDynamicEntityInfo, entityFieldDef.getFieldName());
+                            deib.addChildField(fieldType, _childDynamicEntityInfo, entityFieldDef.getFieldName(),
+                                    entityFieldDef.isEditable());
                         } else {// Child list
-                            deib.addChildListField(fieldType, _childDynamicEntityInfo, entityFieldDef.getFieldName());
+                            deib.addChildListField(fieldType, _childDynamicEntityInfo, entityFieldDef.getFieldName(),
+                                    entityFieldDef.isEditable());
                         }
                     } else {
                         EntityDef _refEntityDef = getEntityDef(entityFieldDef.getRefDef().getEntity());

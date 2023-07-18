@@ -98,7 +98,7 @@ public class User extends BaseStatusWorkTenantEntity {
     @ChildList
     private List<UserRole> userRoleList;
 
-    @ChildList
+    @ChildList(editable = false)
     private List<UserLoginEvent> userLoginEventList;
     
     public User(Long id, String fullName, String loginId, String email, Boolean passwordExpires) {

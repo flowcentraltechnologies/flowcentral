@@ -124,6 +124,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private List<String> childrenFieldNames;
 
+    private List<String> editableChildrenFieldNames;
+
+    private List<String> readOnlyChildrenFieldNames;
+
     private Map<String, String> preferedColumnNames;
 
     private List<ListData> searchInputFields;
@@ -821,6 +825,45 @@ public class EntityDef extends BaseApplicationEntityDef {
         return childrenFieldNames;
     }
 
+    public List<String> getEditableChildrenFieldNames() {
+        if (editableChildrenFieldNames == null) {
+            synchronized (EntityDef.class) {
+                if (editableChildrenFieldNames == null) {
+                    editableChildrenFieldNames = new ArrayList<String>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (entityFieldDef.isEditable() && (entityFieldDef.isChild() || entityFieldDef.isChildList())) {
+                            editableChildrenFieldNames.add(entityFieldDef.getFieldName());
+                        }
+                    }
+
+                    editableChildrenFieldNames = Collections.unmodifiableList(editableChildrenFieldNames);
+                }
+            }
+        }
+
+        return editableChildrenFieldNames;
+    }
+
+    public List<String> getReadOnlyChildrenFieldNames() {
+        if (readOnlyChildrenFieldNames == null) {
+            synchronized (EntityDef.class) {
+                if (readOnlyChildrenFieldNames == null) {
+                    readOnlyChildrenFieldNames = new ArrayList<String>();
+                    for (EntityFieldDef entityFieldDef : fieldDefList) {
+                        if (!entityFieldDef.isEditable()
+                                && (entityFieldDef.isChild() || entityFieldDef.isChildList())) {
+                            readOnlyChildrenFieldNames.add(entityFieldDef.getFieldName());
+                        }
+                    }
+
+                    readOnlyChildrenFieldNames = Collections.unmodifiableList(readOnlyChildrenFieldNames);
+                }
+            }
+        }
+
+        return readOnlyChildrenFieldNames;
+    }
+
     public boolean isSingleFieldUniqueConstraint(String fieldName) {
         for (UniqueConstraintDef uniqueConstraintDef : uniqueConstraintList) {
             if (uniqueConstraintDef.isSingleFieldConstraint(fieldName)) {
@@ -1010,7 +1053,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             this.id = id;
             this.version = version;
         }
-        
+
         public EntityFieldDef getEntityFieldDef(String fieldName) {
             return fieldDefMap.get(fieldName);
         }
@@ -1060,7 +1103,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 throws UnifyException {
             return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, null, dataType, type, null, fieldName, null,
                     fieldLabel, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                    null, null, null, false, false, false, false, false, false, false);
+                    null, null, null, false, true, false, false, false, false, false, false);
         }
 
         public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
@@ -1069,13 +1112,13 @@ public class EntityDef extends BaseApplicationEntityDef {
                 String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
                 String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
                 Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale,
-                boolean allowNegative, boolean nullable, boolean auditable, boolean reportable, boolean maintainLink,
-                boolean basicSearch, boolean descriptive) throws UnifyException {
+                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
+                boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
             return addFieldDef(textWidgetTypeDef, inputWidgetTypeDef, lingualWidgetTypeDef, null, dataType, type,
                     textCase, fieldName, mapped, fieldLabel, columnName, category, suggestionType, inputLabel,
                     inputListKey, lingualListKey, autoFormat, defaultVal, references, key, property, rows, columns,
-                    minLen, maxLen, precision, scale, allowNegative, nullable, auditable, reportable, maintainLink,
-                    basicSearch, descriptive);
+                    minLen, maxLen, precision, scale, allowNegative, editable, nullable, auditable, reportable,
+                    maintainLink, basicSearch, descriptive);
         }
 
         public Builder addFieldDef(WidgetTypeDef textWidgetTypeDef, WidgetTypeDef inputWidgetTypeDef,
@@ -1084,8 +1127,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                 String category, String suggestionType, String inputLabel, String inputListKey, String lingualListKey,
                 String autoFormat, String defaultVal, String references, String key, String property, Integer rows,
                 Integer columns, Integer minLen, Integer maxLen, Integer precision, Integer scale,
-                boolean allowNegative, boolean nullable, boolean auditable, boolean reportable, boolean maintainLink,
-                boolean basicSearch, boolean descriptive) throws UnifyException {
+                boolean allowNegative, boolean editable, boolean nullable, boolean auditable, boolean reportable,
+                boolean maintainLink, boolean basicSearch, boolean descriptive) throws UnifyException {
             if (fieldDefMap.containsKey(fieldName)) {
                 throw new RuntimeException("Field with name [" + fieldName + "] already exists in this definition.");
             }
@@ -1097,7 +1140,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                             property, DataUtils.convert(int.class, rows), DataUtils.convert(int.class, columns),
                             DataUtils.convert(int.class, minLen), DataUtils.convert(int.class, maxLen),
                             DataUtils.convert(int.class, precision), DataUtils.convert(int.class, scale), allowNegative,
-                            nullable, auditable, reportable, maintainLink, basicSearch, descriptive));
+                            editable, nullable, auditable, reportable, maintainLink, basicSearch, descriptive));
             return this;
         }
 

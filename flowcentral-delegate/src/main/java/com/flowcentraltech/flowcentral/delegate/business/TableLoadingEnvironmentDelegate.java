@@ -100,6 +100,16 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
+    public <T extends Entity> void findEditableChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> void findReadOnlyChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id) throws UnifyException {
         return null;
     }
@@ -153,6 +163,16 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public <T extends Entity> void listChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> void listEditableChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> void listReadOnlyChildren(T record) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
@@ -212,6 +232,16 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public int updateByIdVersion(Entity record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int updateByIdEditableChildren(Entity record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int updateByIdVersionEditableChildren(Entity record) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 

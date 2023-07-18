@@ -83,6 +83,8 @@ public class EntityFieldConfig {
 
     private Boolean allowNegative;
 
+    private Boolean readOnly;
+
     private Boolean nullable;
 
     private Boolean auditable;
@@ -97,6 +99,7 @@ public class EntityFieldConfig {
 
     public EntityFieldConfig() {
         this.allowNegative = Boolean.FALSE;
+        this.readOnly = Boolean.FALSE;
         this.nullable = Boolean.FALSE;
         this.auditable = Boolean.TRUE;
         this.reportable = Boolean.TRUE;
@@ -331,6 +334,16 @@ public class EntityFieldConfig {
     @XmlAttribute
     public void setAllowNegative(Boolean allowNegative) {
         this.allowNegative = allowNegative;
+    }
+
+    public Boolean getReadOnly() {
+        return readOnly;
+    }
+
+    @XmlJavaTypeAdapter(MarshalFalseToNullXmlAdapter.class)
+    @XmlAttribute
+    public void setReadOnly(Boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     public Boolean getNullable() {
