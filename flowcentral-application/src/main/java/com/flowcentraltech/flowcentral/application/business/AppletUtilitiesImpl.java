@@ -2144,7 +2144,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 createPolicy);
         eCtx.setAll(formContext);
         EntityActionResult entityActionResult = environment().create(eCtx);
-        entityActionResult.setInst(copyInst);
         entityActionResult.setWorkflowCopied(true);
         return entityActionResult;
     }

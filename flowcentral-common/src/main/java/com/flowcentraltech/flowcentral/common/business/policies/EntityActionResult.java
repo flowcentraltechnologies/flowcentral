@@ -170,10 +170,6 @@ public class EntityActionResult {
         return result;
     }
 
-    public void setInst(Entity inst) {
-        this.inst = inst;
-    }
-
     public Entity getInst() {
         return inst;
     }

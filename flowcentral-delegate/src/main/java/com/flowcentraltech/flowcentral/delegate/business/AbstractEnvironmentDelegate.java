@@ -399,7 +399,9 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.CREATE);
         setCreateAuditInformation(record);
         req.setPayload(au.delegateUtilities().encodeDelegateEntity(record));
-        return singleValueResultOperation(Long.class, record.getClass(), req);
+        Long id = singleValueResultOperation(Long.class, record.getClass(), req);
+        record.setPreferredId(id);
+        return id;
     }
 
     @Override
