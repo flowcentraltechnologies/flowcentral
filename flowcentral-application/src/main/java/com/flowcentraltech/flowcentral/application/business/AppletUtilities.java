@@ -1659,7 +1659,7 @@ public interface AppletUtilities extends UnifyComponent {
     void revertAutoFormatFields(EntityDef entityDef, Entity inst) throws UnifyException;
 
     /**
-     * Updates an entity by form context with copy option.
+     * Creates an entity instance workflow draft.
      * 
      * @param formAppletDef
      *                      the form applet definition
@@ -1671,7 +1671,7 @@ public interface AppletUtilities extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EntityActionResult updateEntityInstByFormContextWithCopy(AppletDef formAppletDef, FormContext formContext,
+    EntityActionResult createEntityInstWorkflowDraftByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException;
 
     /**

@@ -391,6 +391,8 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
                 quickTableEdit();
                 break;
             case MAINTAIN:
+            case UPDATE:
+            case UPDATE_CLOSE:
             default:
                 applet.getCtx().setInWorkflowPromptViewMode(false);
                 setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.FALSE);
@@ -401,7 +403,8 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     private void performEditModeWorkflowDraft() throws UnifyException {
         AbstractEntityFormAppletPageBean<T> pageBean = getPageBean();
         AbstractEntityFormApplet applet = pageBean.getApplet();
-        // TODO
+        WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
+        applet.enterWorkflowDraft(workflowDraftInfo.getType());
     }
 
     private String showPromptWorkflowDraft(WorkflowDraftType type, int requestTarget) throws UnifyException {
@@ -413,7 +416,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
         final String cancelMessage = resolveSessionMessage("$m{formapplet.workflowdraft.cancel}");
         final String openWorkflowDraftPath = getVariableActionPath("/openWorkflowDraft");
         MessageBoxCaptions captions = new MessageBoxCaptions(caption);
-        if (type.isNewOnly()) {
+        if (type.isNew() || type.isUpdate()) {
             captions.setOkCaption(editMessage);
             captions.setCancelCaption(cancelMessage);
             return showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, openWorkflowDraftPath);

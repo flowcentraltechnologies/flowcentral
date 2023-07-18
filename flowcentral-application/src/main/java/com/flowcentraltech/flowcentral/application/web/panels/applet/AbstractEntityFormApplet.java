@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -697,6 +698,14 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
     }
 
+    public void enterWorkflowDraft(WorkflowDraftType type) throws UnifyException {
+        final AppletDef _currFormAppletDef = getFormAppletDef();
+        EntityActionResult entityActionResult = au.createEntityInstWorkflowDraftByFormContext(_currFormAppletDef,
+                form.getCtx(), this);
+        // TODO Check if full replacement is required for tabbed child windows
+        updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity(entityActionResult.getInst(), false));
+    }
+
     private void maintainChildInst(Entity _inst, int tabIndex) throws UnifyException {
         FormTabDef _currFormTabDef = form.getFormDef().getFormTabDef(tabIndex);
         AppletDef childAppletDef = getAppletDef(_currFormTabDef.getApplet());
@@ -913,6 +922,18 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public AppletDef getFormAppletDef() throws UnifyException {
         return currFormAppletDef != null ? currFormAppletDef : getAlternateFormAppletDef();
     }
+    
+    public <T> T getFormAppletPropValue(Class<T> dataClazz, String name) throws UnifyException {
+        return getFormAppletDef().getPropValue(dataClazz, name);
+    }
+
+    public <T> T getFormAppletPropValue(Class<T> dataClazz, String name, T defVal) throws UnifyException {
+        return getFormAppletDef().getPropValue(dataClazz, name, defVal);
+    }
+
+    public boolean isFormAppletProp(String name) throws UnifyException {
+        return getFormAppletDef().isProp(name);
+    }
 
     public AbstractForm getForm() {
         return form;
@@ -970,7 +991,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
-        return isRootForm() && isUpdateWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode();
+        return isRootForm() && isUpdateWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
+                && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null;
     }
     
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
@@ -1531,7 +1553,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     private EntityActionResult updateInst(FormReviewType reviewType) throws UnifyException {
         final AppletDef _currFormAppletDef = getFormAppletDef();
-        EntityActionResult entityActionResult = au.updateEntityInstByFormContextWithCopy(_currFormAppletDef, form.getCtx(),
+        EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
                 this);
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 

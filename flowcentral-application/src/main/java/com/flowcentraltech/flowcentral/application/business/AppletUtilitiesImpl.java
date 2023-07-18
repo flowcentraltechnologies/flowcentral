@@ -2115,42 +2115,38 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public EntityActionResult updateEntityInstByFormContextWithCopy(AppletDef formAppletDef, FormContext formContext,
+    public EntityActionResult createEntityInstWorkflowDraftByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
         Entity inst = (Entity) formContext.getInst();
-        if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() == null && formAppletDef
-                .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
-            // Entire child records should be replicated
-            environment().findEditableChildren(inst);
+        // Editable child records should be replicated
+        environment().findEditableChildren(inst);
 
-            // Create workflow copy
-            EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
-            ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
-            wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
-            final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
-            if (!StringUtils.isBlank(wfCopySetValuesName)) {
-                AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
-                appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(),
-                        wfCopyValueStore, Collections.emptyMap(), null);
-            }
-
-            WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
-            copyInst.setWfItemVersionType(WfItemVersionType.DRAFT);
-            copyInst.setOriginalCopyId((Long) inst.getId());           
-            
-            final String createPolicy = formAppletDef != null
-                    ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY)
-                    : formContext.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
-            EntityActionContext eCtx = new EntityActionContext(entityClassDef.getEntityDef(), copyInst, RecordActionType.CREATE, scp,
-                    createPolicy);
-            eCtx.setAll(formContext);
-            EntityActionResult entityActionResult = environment().create(eCtx);
-            entityActionResult.setWorkflowCopied(true);
-            return entityActionResult;
+        // Create workflow copy
+        EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
+        ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
+        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
+        final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
+        if (!StringUtils.isBlank(wfCopySetValuesName)) {
+            AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
+            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(),
+                    wfCopyValueStore, Collections.emptyMap(), null);
         }
 
-        return updateEntityInstByFormContext(formAppletDef, formContext, scp);
+        WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
+        copyInst.setWfItemVersionType(WfItemVersionType.DRAFT);
+        copyInst.setOriginalCopyId((Long) inst.getId());           
+        
+        final String createPolicy = formAppletDef != null
+                ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY)
+                : formContext.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
+        EntityActionContext eCtx = new EntityActionContext(entityClassDef.getEntityDef(), copyInst, RecordActionType.CREATE, scp,
+                createPolicy);
+        eCtx.setAll(formContext);
+        EntityActionResult entityActionResult = environment().create(eCtx);
+        entityActionResult.setInst(copyInst);
+        entityActionResult.setWorkflowCopied(true);
+        return entityActionResult;
     }
 
     @Override
