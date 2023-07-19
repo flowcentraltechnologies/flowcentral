@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -29,6 +30,17 @@ import com.tcdng.unify.core.database.Query;
  * @since 1.0
  */
 public interface QueryEncoder extends UnifyComponent {
+
+    /**
+     * Encodes a query filter.
+     * 
+     * @param restriction
+     *              the restriction to encode
+     * @return the encoded filter
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String encodeQueryFilter(Restriction restriction) throws UnifyException;
 
     /**
      * Encodes a query filter.
