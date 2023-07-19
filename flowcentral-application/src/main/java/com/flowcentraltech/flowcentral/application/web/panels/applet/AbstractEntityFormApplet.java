@@ -991,7 +991,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
         return isRootForm() && isUpdateWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
-                && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null;
+                && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null
+                && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
     
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {

@@ -52,45 +52,44 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
     protected void writeMenuAppletDef(ResponseWriter writer, StringBuilder misb, AppletDef appletDef,
             boolean appendISym, boolean multiPage) throws UnifyException {
         writer.write("<div id=\"item_").write(appletDef.getViewId()).write("\">");
-        writeLabelWithIcon(writer, appletDef);
+        writeLabelWithIcon(writer, appletDef, false);
         writer.write("</div>");
-        writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage);
+        writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage, false);
     }
 
     protected void writeSubMenuAppletDef(ResponseWriter writer, StringBuilder misb, AppletDef appletDef,
             boolean appendISym, boolean multiPage) throws UnifyException {
         writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
-        writeLabelWithIcon(writer, appletDef);
+        writeLabelWithIcon(writer, appletDef, false);
         writer.write("</li>");
-        writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage);
+        writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage, false);
 
         if (appletDef.isWithOpenDraftPath()) {
             writer.write("<li id=\"item_").write(appletDef.getDraftViewId()).write("\">");
-            writeLabelWithIcon(writer, appletDef);
+            writeLabelWithIcon(writer, appletDef, true);
             writer.write("</li>");
-            writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage);
+            writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage, true);
         }
     }
 
-    private void writeLabelWithIcon(ResponseWriter writer, AppletDef appletDef) throws UnifyException {
+    private void writeLabelWithIcon(ResponseWriter writer, AppletDef appletDef, boolean draft) throws UnifyException {
         writer.write("<span class=\"icon\">");
         final String icon = appletDef.isWithIcon() ? appletDef.getIcon() : "window-maximize";
         writer.write(resolveSymbolHtmlHexCode(icon));
         writer.write("</span>");
         writer.write("<span class=\"acl\">")
-                .writeWithHtmlEscape(appletDef.isWithOpenDraftPath()
+                .writeWithHtmlEscape(draft
                         ? resolveSessionMessage("$m{menu.applet.updatedraft.label}", appletDef.getLabel())
                         : appletDef.getLabel())
                 .write("</span>");
     }
 
     private void writeAppletDefJs(ResponseWriter writer, StringBuilder misb, AppletDef appletDef, boolean appendISym,
-            boolean multiPage) throws UnifyException {
+            boolean multiPage, boolean isUpdateDraft) throws UnifyException {
         if (appendISym) {
             misb.append(",");
         }
 
-        final boolean isUpdateDraft = appletDef.isWithOpenDraftPath();
         misb.append("{\"id\":\"item_").append(isUpdateDraft ? appletDef.getDraftViewId() : appletDef.getViewId())
                 .append('"');
         misb.append(",\"path\":\"");
