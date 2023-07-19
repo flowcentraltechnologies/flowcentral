@@ -702,7 +702,6 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currFormAppletDef = getFormAppletDef();
         EntityActionResult entityActionResult = au.createEntityInstWorkflowDraftByFormContext(_currFormAppletDef,
                 form.getCtx(), this);
-        // TODO Check if full replacement is required for tabbed child windows
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity(entityActionResult.getInst(), false));
     }
 

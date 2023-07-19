@@ -26,6 +26,8 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.criterion.CompoundRestriction;
 import com.tcdng.unify.core.criterion.Equals;
+import com.tcdng.unify.core.criterion.IsNull;
+import com.tcdng.unify.core.criterion.Or;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -60,13 +62,14 @@ public class EnvironmentDelegateUtilitiesImpl extends AbstractEnvironmentDelegat
     @Override
     public String encodeDelegateQuery(Query<? extends Entity> query) throws UnifyException {
         if (BaseWorkEntity.class.isAssignableFrom(query.getEntityClass())) {
-            if (!query.isRestrictedField("wfItemVersionType")) {
+            if (!query.isRestrictedField("id") && !query.isRestrictedField("wfItemVersionType")) {
                 CompoundRestriction restriction = query.getRestrictions();
-                restriction.add(new Equals("wfItemVersionType", WfItemVersionType.ORIGINAL));
+                restriction.add(new Or().add(new Equals("wfItemVersionType", WfItemVersionType.ORIGINAL))
+                        .add(new IsNull("wfItemVersionType")));
                 return queryEncoder.encodeQueryFilter(restriction);
             }
         }
-        
+
         return queryEncoder.encodeQueryFilter(query);
     }
 
@@ -87,7 +90,7 @@ public class EnvironmentDelegateUtilitiesImpl extends AbstractEnvironmentDelegat
                 ((BaseWorkEntity) inst).setWfItemVersionType(WfItemVersionType.ORIGINAL);
             }
         }
-        
+
         String json = DataUtils.asJsonString(inst, PrintFormat.NONE);
         return new String[] { json };
     }
