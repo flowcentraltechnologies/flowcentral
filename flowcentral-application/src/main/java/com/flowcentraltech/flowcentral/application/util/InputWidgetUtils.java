@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -84,6 +85,7 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UnifyOperationException;
 import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.constant.TextCase;
+import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.CompoundRestriction;
 import com.tcdng.unify.core.criterion.CriteriaBuilder;
 import com.tcdng.unify.core.criterion.DoubleParamRestriction;
@@ -1045,6 +1047,23 @@ public final class InputWidgetUtils {
 
     public static FilterDef getFilterDef(AppletUtilities au, Restriction restriction) throws UnifyException {
         return InputWidgetUtils.getFilterDef(au, null, null, restriction);
+    }
+    
+    public static FilterDef getFilterDef(AppletUtilities au, AppletDef appletDef, FilterDef filterDef,
+            Restriction restriction, SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
+        EntityDef entityDef = au.getEntityDef(appletDef.getEntity());
+        return InputWidgetUtils.getFilterDef(au, entityDef, filterDef, restriction, specialParamProvider, now);
+    }
+
+    public static FilterDef getFilterDef(AppletUtilities au, EntityDef entityDef, FilterDef filterDef,
+            Restriction restriction, SpecialParamProvider specialParamProvider, Date now) throws UnifyException {
+        if (restriction == null) {
+            return new FilterDef(filterDef);
+        }
+
+        return InputWidgetUtils.getFilterDef(au, null, null,
+                new And().add(InputWidgetUtils.getRestriction(entityDef, filterDef, specialParamProvider, now))
+                        .add(restriction));
     }
 
     public static FilterDef getFilterDef(AppletUtilities au, String name, String description, Restriction restriction)

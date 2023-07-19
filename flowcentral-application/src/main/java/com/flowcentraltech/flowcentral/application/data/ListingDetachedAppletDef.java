@@ -47,4 +47,21 @@ public class ListingDetachedAppletDef extends AbstractDetachedAppletDef {
         return null;
     }
 
+    @Override
+    public String getOpenDraftPath() {
+        // Nor this
+        return null;
+    }
+
+    @Override
+    public String getDraftViewId() {
+        // Nor this
+        return null;
+    }
+
+    @Override
+    public boolean isWithOpenDraftPath() {
+        return false;
+    }
+
 }

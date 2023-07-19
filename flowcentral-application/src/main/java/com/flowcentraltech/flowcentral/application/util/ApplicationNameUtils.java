@@ -38,6 +38,8 @@ public final class ApplicationNameUtils {
 
     public static final String VESTIGIAL_INFIX = "_0_";
 
+    public static final String UPDATE_DRAFT_SUFFIX = "uds";
+
     private static final FactoryMap<String, ApplicationEntityNameParts> applicationNameParts;
 
     private static final FactoryMap<String, EntityAssignRuleNameParts> assignRuleNameParts;

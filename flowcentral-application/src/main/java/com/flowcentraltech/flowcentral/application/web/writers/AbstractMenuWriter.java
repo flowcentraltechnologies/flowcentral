@@ -63,6 +63,13 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         writeLabelWithIcon(writer, appletDef);
         writer.write("</li>");
         writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage);
+
+        if (appletDef.isWithOpenDraftPath()) {
+            writer.write("<li id=\"item_").write(appletDef.getDraftViewId()).write("\">");
+            writeLabelWithIcon(writer, appletDef);
+            writer.write("</li>");
+            writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage);
+        }
     }
 
     private void writeLabelWithIcon(ResponseWriter writer, AppletDef appletDef) throws UnifyException {
@@ -70,7 +77,11 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         final String icon = appletDef.isWithIcon() ? appletDef.getIcon() : "window-maximize";
         writer.write(resolveSymbolHtmlHexCode(icon));
         writer.write("</span>");
-        writer.write("<span class=\"acl\">").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
+        writer.write("<span class=\"acl\">")
+                .writeWithHtmlEscape(appletDef.isWithOpenDraftPath()
+                        ? resolveSessionMessage("$m{menu.applet.updatedraft.label}", appletDef.getLabel())
+                        : appletDef.getLabel())
+                .write("</span>");
     }
 
     private void writeAppletDefJs(ResponseWriter writer, StringBuilder misb, AppletDef appletDef, boolean appendISym,
@@ -79,13 +90,15 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
             misb.append(",");
         }
 
-        misb.append("{\"id\":\"item_").append(appletDef.getViewId()).append('"');
+        final boolean isUpdateDraft = appletDef.isWithOpenDraftPath();
+        misb.append("{\"id\":\"item_").append(isUpdateDraft ? appletDef.getDraftViewId() : appletDef.getViewId())
+                .append('"');
         misb.append(",\"path\":\"");
         if (multiPage && appletDef.getPropValue(boolean.class, AppletPropertyConstants.PAGE_MULTIPLE)) {
-            writer.writeContextURL(misb,
-                    ApplicationPageUtils.constructMultiPageAppletOpenPagePath(appletDef.getOpenPath()));
+            writer.writeContextURL(misb, ApplicationPageUtils.constructMultiPageAppletOpenPagePath(
+                    isUpdateDraft ? appletDef.getOpenDraftPath() : appletDef.getOpenPath()));
         } else {
-            writer.writeContextURL(misb, appletDef.getOpenPath());
+            writer.writeContextURL(misb, isUpdateDraft ? appletDef.getOpenDraftPath() : appletDef.getOpenPath());
         }
 
         misb.append('"');
