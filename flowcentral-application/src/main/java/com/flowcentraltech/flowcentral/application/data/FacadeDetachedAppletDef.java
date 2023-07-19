@@ -48,6 +48,11 @@ public class FacadeDetachedAppletDef extends AbstractDetachedAppletDef {
     }
 
     @Override
+    public String getOpenDraftWorkflow() {
+        return parentAppletDef.getOpenDraftWorkflow();
+    }
+
+    @Override
     public String getDraftViewId() {
         return parentAppletDef.getDraftViewId();
     }

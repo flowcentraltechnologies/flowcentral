@@ -424,7 +424,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 @Override
-                protected ApplicationDef create(String name, Object... arg1) throws Exception {
+                protected ApplicationDef create(String name, Object... params) throws Exception {
                     Application application = environment().list(new ApplicationQuery().name(name));
                     return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
                             application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
@@ -444,7 +444,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 @Override
-                protected AppletDef create(String longName, Object... arg1) throws Exception {
+                protected AppletDef create(String longName, Object... params) throws Exception {
                     String _actLongName = ApplicationNameUtils.removeVestigialNamePart(longName);
                     AppApplet appApplet = getApplicationEntity(AppApplet.class, _actLongName);
                     final boolean descriptiveButtons = appletUtilities.system().getSysParameterValue(boolean.class,
@@ -494,6 +494,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
                                 adb.openDraftPath(ApplicationPageUtils.constructAppletOpenPagePath(type, longName,
                                         ApplicationNameUtils.UPDATE_DRAFT_SUFFIX));
+                                adb.openDraftWorkflow(
+                                        ApplicationNameUtils.getUpdateDraftWorkflowNameFromAppletName(longName));
+                                appletUtilities.ensureUpdateDraftWorkflow(longName);
                             }
                         }
                     }
@@ -1521,6 +1524,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public Long getApplicationId(String applicationName) throws UnifyException {
+        return environment().value(Long.class, "id", new ApplicationQuery().name(applicationName));
+    }
+
+    @Override
     public String getAppEntity(Long appEntityId) throws UnifyException {
         AppEntity appEntity = environment()
                 .listLean(new AppEntityQuery().id(appEntityId).addSelect("applicationName", "name"));
@@ -1642,8 +1650,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean isAppletRequiresUpdateDraftWorkflow(String appletName) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
+        return environment().countAll(new AppAppletPropQuery().applicationName(np.getApplicationName())
+                .appletName(np.getEntityName()).value("true")) > 0;
+    }
+
+    @Override
     public String getAppAppletEntity(Long appAppletId) throws UnifyException {
         return environment().value(String.class, "entity", new AppAppletQuery().id(appAppletId));
+    }
+
+    @Override
+    public String getAppAppletEntity(String appletName) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
+        return environment().value(String.class, "entity",
+                new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
     }
 
     @Override
@@ -2194,6 +2216,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public EntityDef getEntityDefByClass(String entityClass) throws UnifyException {
         return entityDefByClassFactoryMap.get(entityClass);
+    }
+
+    @Override
+    public EntityDef getAppletEntityDef(String appletName) throws UnifyException {
+        return getEntityDef(getAppAppletEntity(appletName));
+    }
+
+    @Override
+    public EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException {
+        return getEntityClassDef(getAppAppletEntity(appletName));
     }
 
     @Override
@@ -2828,8 +2860,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             return 0;
         }
 
-        if (environment()
-                .countAll(new AppEntityQuery().applicationId(srcApplication.getId()).configTypeIsNotCustom()) > 0) {
+        if (environment().countAll(new AppEntityQuery().applicationId(srcApplication.getId()).isNotCustom()) > 0) {
             logDebug(taskMonitor, "Some source application entities are static. Replication terminated.");
             taskMonitor.cancel();
             return 0;

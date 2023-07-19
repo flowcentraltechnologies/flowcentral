@@ -87,6 +87,8 @@ public interface AppletDef {
 
     String getOpenDraftPath();
 
+    String getOpenDraftWorkflow();
+
     String getMaintainOpenPath();
 
     String getListingOpenPath();

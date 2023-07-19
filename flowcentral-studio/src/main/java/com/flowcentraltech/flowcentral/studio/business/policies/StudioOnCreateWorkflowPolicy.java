@@ -16,21 +16,16 @@
 
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.configuration.constants.ChannelDirectionType;
-import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
-import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelStatus;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
-import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
 import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils;
 import com.tcdng.unify.core.UnifyException;
@@ -60,41 +55,11 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
         super.doExecutePreAction(ctx);
         Workflow workflow = (Workflow) ctx.getInst();
         if (DataUtils.isBlank(workflow.getStepList())) {
-            List<WfStep> stepList = new ArrayList<WfStep>();
-
-            // Add start step
-            WfStep wfStep = new WfStep();
-            wfStep.setType(WorkflowStepType.START);
-            wfStep.setPriority(WorkflowStepPriority.NORMAL);
-            wfStep.setName("start");
-            wfStep.setDescription("Start");
-            wfStep.setLabel("Start");
-            wfStep.setNextStepName("end");
-            stepList.add(wfStep);
-
-            // Add end step
-            wfStep = new WfStep();
-            wfStep.setType(WorkflowStepType.END);
-            wfStep.setPriority(WorkflowStepPriority.NORMAL);
-            wfStep.setName("end");
-            wfStep.setDescription("End");
-            wfStep.setLabel("End");
-            stepList.add(wfStep);
-
-            // Add error step
-            wfStep = new WfStep();
-            wfStep.setType(WorkflowStepType.ERROR);
-            wfStep.setPriority(WorkflowStepPriority.NORMAL);
-            wfStep.setName("error");
-            wfStep.setDescription("Error");
-            wfStep.setLabel(workflow.getLabel() + " Error");
-            WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(null);
-            wfStep.setUserActionList(Arrays.asList(recoverUserAction));
-            stepList.add(wfStep);
-
+            List<WfStep> stepList = WorkflowDesignUtils
+                    .generateWorkflowSteps(WorkflowDesignUtils.DesignType.DEFAULT_WORKFLOW, workflow.getLabel());
             workflow.setStepList(stepList);
         }
-        
+
         return null;
     }
 

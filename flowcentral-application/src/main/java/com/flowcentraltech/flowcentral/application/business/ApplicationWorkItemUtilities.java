@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.application.business;
 
+import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -47,4 +48,26 @@ public interface ApplicationWorkItemUtilities extends UnifyComponent {
      */
     EntityActionResult submitToWorkflowChannel(EntityDef entityDef, String workflowChannelName, WorkEntity inst,
             String policyName) throws UnifyException;
+
+    /**
+     * Ensures update draft workflow is defined for supplied applet if applet has
+     * its workflow copy flag set.
+     * 
+     * @param appletDef
+     *                  the applet definition
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    void ensureUpdateDraftWorkflow(AppletDef appletDef) throws UnifyException;
+
+    /**
+     * Ensures update draft workflow is defined for applet if applet has its
+     * workflow copy flag set.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    void ensureUpdateDraftWorkflow(String appletName) throws UnifyException;
 }

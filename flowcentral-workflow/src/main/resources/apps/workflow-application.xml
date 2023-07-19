@@ -133,6 +133,7 @@
 			auditable="true">
 			<field name="label" label="$m{workflow.workflow.label}" type="string" maxLen="64"  />
 			<field name="entity" label="$m{workflow.workflow.entity}" type="string" maxLen="128"  />
+			<field name="appletVersionNo" label="$m{workflow.workflow.appletversionno}" type="long" />
 			<field name="descFormat"
 				label="$m{workflow.workflow.itemdescformat}" type="string"
 				nullable="true" />

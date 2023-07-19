@@ -657,13 +657,27 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
 
     @Override
     public EntityDef getAppletEntityDef(String appletName) throws UnifyException {
-        return applicationModuleService.getEntityDef(applicationModuleService.getAppletDef(appletName).getEntity());
+        return applicationModuleService.getAppletEntityDef(appletName);
     }
 
     @Override
     public EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException {
-        return applicationModuleService
-                .getEntityClassDef(applicationModuleService.getAppletDef(appletName).getEntity());
+        return applicationModuleService.getAppletEntityClassDef(appletName);
+    }
+
+    @Override
+    public void ensureUpdateDraftWorkflow(AppletDef appletDef) throws UnifyException {
+        applicationWorkItemUtilies.ensureUpdateDraftWorkflow(appletDef);
+    }
+
+    @Override
+    public void ensureUpdateDraftWorkflow(String appletName) throws UnifyException {
+        applicationWorkItemUtilies.ensureUpdateDraftWorkflow(appletName);
+    }
+
+    @Override
+    public boolean isAppletRequiresUpdateDraftWorkflow(String appletName) throws UnifyException {
+        return applicationModuleService.isAppletRequiresUpdateDraftWorkflow(appletName);
     }
 
     @Override
@@ -2115,8 +2129,8 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public EntityActionResult createEntityInstWorkflowDraftByFormContext(AppletDef formAppletDef, FormContext formContext,
-            SweepingCommitPolicy scp) throws UnifyException {
+    public EntityActionResult createEntityInstWorkflowDraftByFormContext(AppletDef formAppletDef,
+            FormContext formContext, SweepingCommitPolicy scp) throws UnifyException {
         Entity inst = (Entity) formContext.getInst();
         // Editable child records should be replicated
         environment().findEditableChildren(inst);
@@ -2129,19 +2143,19 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
                 AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
         if (!StringUtils.isBlank(wfCopySetValuesName)) {
             AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
-            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(),
-                    wfCopyValueStore, Collections.emptyMap(), null);
+            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore,
+                    Collections.emptyMap(), null);
         }
 
         WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
         copyInst.setWfItemVersionType(WfItemVersionType.DRAFT);
-        copyInst.setOriginalCopyId((Long) inst.getId());           
-        
+        copyInst.setOriginalCopyId((Long) inst.getId());
+
         final String createPolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
-        EntityActionContext eCtx = new EntityActionContext(entityClassDef.getEntityDef(), copyInst, RecordActionType.CREATE, scp,
-                createPolicy);
+        EntityActionContext eCtx = new EntityActionContext(entityClassDef.getEntityDef(), copyInst,
+                RecordActionType.CREATE, scp, createPolicy);
         eCtx.setAll(formContext);
         EntityActionResult entityActionResult = environment().create(eCtx);
         entityActionResult.setWorkflowCopied(true);

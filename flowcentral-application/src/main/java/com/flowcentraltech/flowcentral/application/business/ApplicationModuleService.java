@@ -437,6 +437,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppApplet findAppApplet(Long appletId) throws UnifyException;
 
     /**
+     * Checks if an applet requires an update draft workflow.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return true if applet requires update draft workflow otherwise false.
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    boolean isAppletRequiresUpdateDraftWorkflow(String appletName) throws UnifyException;
+
+    /**
      * Gets application name.
      * 
      * @param applicationId
@@ -448,6 +459,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     String getApplicationName(Long applicationId) throws UnifyException;
 
     /**
+     * Gets application ID.
+     * 
+     * @param applicationName
+     *                      the application name
+     * @return the application ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Long getApplicationId(String applicationName) throws UnifyException;
+
+    /**
      * Gets an application applet entity.
      * 
      * @param appAppletId
@@ -457,6 +479,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     String getAppAppletEntity(Long appAppletId) throws UnifyException;
+
+    /**
+     * Gets an application applet entity.
+     * 
+     * @param appletName
+     *                    the applet name
+     * @return the entity name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getAppAppletEntity(String appletName) throws UnifyException;
 
     /**
      * Gets an application table entity.
@@ -1081,6 +1114,28 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     EntityDef getEntityDef(String entityName) throws UnifyException;
+
+    /**
+     * Gets a application entity definition.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the entity definition.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityDef getAppletEntityDef(String appletName) throws UnifyException;
+
+    /**
+     * Gets a application entity class definition.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the entity class definition.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException;
 
     /**
      * Gets a application entity definition by class name.

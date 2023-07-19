@@ -41,6 +41,9 @@ public class Workflow extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String descFormat;
     
+    @Column
+    private long appletVersionNo;
+   
     @ChildList
     private List<WorkflowFilter> filterList;
     
@@ -72,6 +75,14 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setDescFormat(String descFormat) {
         this.descFormat = descFormat;
+    }
+
+    public long getAppletVersionNo() {
+        return appletVersionNo;
+    }
+
+    public void setAppletVersionNo(long appletVersionNo) {
+        this.appletVersionNo = appletVersionNo;
     }
 
     public List<WorkflowFilter> getFilterList() {

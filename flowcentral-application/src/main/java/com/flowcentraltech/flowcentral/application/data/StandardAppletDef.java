@@ -56,6 +56,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private String openDraftPath;
 
+    private String openDraftWorkflow;
+
     private String maintainOpenPath;
 
     private String listingOpenPath;
@@ -101,10 +103,10 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     private StandardAppletDef(AppletType type, List<AppletPropDef> propDefList, Map<String, AppletPropDef> propDefMap,
             Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
             String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
-            String openPath, String openDraftPath, String maintainOpenPath, String listingOpenPath, String originApplicationName,
-            String originName, int displayIndex, boolean openWindow, boolean menuAccess, boolean allowSecondaryTenants,
-            boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
-            long version) {
+            String openPath, String openDraftPath, String openDraftWorkflow, String maintainOpenPath,
+            String listingOpenPath, String originApplicationName, String originName, int displayIndex,
+            boolean openWindow, boolean menuAccess, boolean allowSecondaryTenants, boolean descriptiveButtons,
+            ApplicationEntityNameParts nameParts, String description, Long id, long version) {
         super(nameParts, description, id, version);
         this.type = type;
         this.entity = entity;
@@ -116,6 +118,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         this.routeToApplet = routeToApplet;
         this.openPath = openPath;
         this.openDraftPath = openDraftPath;
+        this.openDraftWorkflow = openDraftWorkflow;
         this.maintainOpenPath = maintainOpenPath;
         this.listingOpenPath = listingOpenPath;
         this.originApplicationName = originApplicationName;
@@ -278,6 +281,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     @Override
     public String getOpenDraftPath() {
         return openDraftPath;
+    }
+
+    @Override
+    public String getOpenDraftWorkflow() {
+        return openDraftWorkflow;
     }
 
     @Override
@@ -473,6 +481,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private String openDraftPath;
 
+        private String openDraftWorkflow;
+
         private String maintainOpenPath;
 
         private String listingOpenPath;
@@ -536,6 +546,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             return this;
         }
 
+        public Builder openDraftWorkflow(String openDraftWorkflow) {
+            this.openDraftWorkflow = openDraftWorkflow;
+            return this;
+        }
+
         public Builder listingOpenPath(String listingOpenPath) {
             this.listingOpenPath = listingOpenPath;
             return this;
@@ -569,7 +584,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             propDefMap.put(name, new AppletPropDef(name, value));
             return this;
         }
-        
+
         @SuppressWarnings("unchecked")
         public <T> T getPropValue(Class<T> dataClazz, String name) throws UnifyException {
             AppletPropDef appletPropDef = propDefMap.get(name);
@@ -611,9 +626,9 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
                     DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())),
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
                     DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
-                    routeToApplet, openPath, openDraftPath, maintainOpenPath, listingOpenPath, originApplicationName, originName,
-                    displayIndex, openWindow, menuAccess, allowSecondaryTenants, descriptiveButtons, nameParts,
-                    description, id, version);
+                    routeToApplet, openPath, openDraftPath, openDraftWorkflow, maintainOpenPath, listingOpenPath,
+                    originApplicationName, originName, displayIndex, openWindow, menuAccess, allowSecondaryTenants,
+                    descriptiveButtons, nameParts, description, id, version);
         }
     }
 

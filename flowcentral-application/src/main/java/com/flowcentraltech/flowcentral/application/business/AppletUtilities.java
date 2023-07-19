@@ -570,6 +570,39 @@ public interface AppletUtilities extends UnifyComponent {
     EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException;
 
     /**
+     * Ensures update draft workflow is defined for supplied applet if applet has
+     * its workflow copy flag set.
+     * 
+     * @param appletDef
+     *                  the applet definition
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    void ensureUpdateDraftWorkflow(AppletDef appletDef) throws UnifyException;
+
+    /**
+     * Ensures update draft workflow is defined for applet if applet has its
+     * workflow copy flag set.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    void ensureUpdateDraftWorkflow(String appletName) throws UnifyException;
+
+    /**
+     * Checks if an applet requires an update draft workflow.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return true if applet requires update draft workflow otherwise false.
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    boolean isAppletRequiresUpdateDraftWorkflow(String appletName) throws UnifyException;
+
+    /**
      * Gets a application entity class definition.
      * 
      * @param entityName

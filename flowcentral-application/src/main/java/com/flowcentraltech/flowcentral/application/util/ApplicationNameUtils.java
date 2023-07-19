@@ -40,6 +40,8 @@ public final class ApplicationNameUtils {
 
     public static final String UPDATE_DRAFT_SUFFIX = "uds";
 
+    public static final String UPDATE_DRAFT_WORKFLOW_NAME = "_udw";
+
     private static final FactoryMap<String, ApplicationEntityNameParts> applicationNameParts;
 
     private static final FactoryMap<String, EntityAssignRuleNameParts> assignRuleNameParts;
@@ -141,6 +143,10 @@ public final class ApplicationNameUtils {
         }
 
         return Collections.emptyList();
+    }
+    
+    public static String getUpdateDraftWorkflowNameFromAppletName(String appletName) {
+        return appletName + UPDATE_DRAFT_WORKFLOW_NAME;
     }
     
     public static String addVestigialNamePart(String longName, String vestigial) {

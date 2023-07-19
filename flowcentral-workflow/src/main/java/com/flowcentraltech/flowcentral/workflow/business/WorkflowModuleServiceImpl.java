@@ -60,6 +60,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPoli
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
@@ -117,6 +118,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
@@ -127,6 +129,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Periodic;
 import com.tcdng.unify.core.annotation.PeriodicType;
+import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
@@ -166,6 +169,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private static final String WFTRANSITION_QUEUE_LOCK = "wf::transitionqueue-lock";
 
     private static final String WFAUTOLOADING_LOCK = "wf::autoloading-lock";
+
+    private static final String WFUPDATEDRAFT_LOCK = "wf::updatedraft-lock";
 
     private static final String WORKFLOW_APPLICATION = "workflow";
 
@@ -438,6 +443,50 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         return executeEntityPostActionPolicy(ctx);
     }
 
+    @Override
+    public void ensureUpdateDraftWorkflow(AppletDef appletDef) throws UnifyException {
+        ensureUpdateDraftWorkflow(appletDef.getLongName());
+    }
+
+    @Synchronized(WFUPDATEDRAFT_LOCK)
+    @Override
+    public void ensureUpdateDraftWorkflow(String appletName) throws UnifyException {
+        if (appletUtil.isAppletRequiresUpdateDraftWorkflow(appletName)) {
+            final String updateDraftWorkflowName = ApplicationNameUtils
+                    .getUpdateDraftWorkflowNameFromAppletName(appletName);
+            ApplicationEntityNameParts wnp = ApplicationNameUtils
+                    .getApplicationEntityNameParts(updateDraftWorkflowName);
+            final long appletVersionNo = 0; // TODO 
+            Workflow workflow = environment().findLean(
+                    new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
+            if (workflow == null) {
+                final Long applicationId = appletUtil.application().getApplicationId(wnp.getApplicationName());
+                EntityDef entityDef = appletUtil.getAppletEntityDef(appletName);
+                workflow = new Workflow();
+                workflow.setApplicationId(applicationId);
+                workflow.setConfigType(ConfigType.STATIC_INSTALL);
+                workflow.setName(wnp.getEntityName());
+                workflow.setDescription(entityDef.getLabel() + " Update");
+                workflow.setLabel(entityDef.getLabel() + " Update");
+                workflow.setEntity(entityDef.getLongName());
+                workflow.setDescFormat(null); // TODO
+                workflow.setAppletVersionNo(appletVersionNo);
+                List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(
+                        WorkflowDesignUtils.DesignType.UPDATE_DRAFT_WORKFLOW, workflow.getLabel());
+                workflow.setStepList(stepList);
+                environment().create(workflow);
+            } else {
+                if (workflow.getAppletVersionNo() < appletVersionNo) {
+                    workflow.setAppletVersionNo(appletVersionNo);
+                    List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(
+                            WorkflowDesignUtils.DesignType.UPDATE_DRAFT_WORKFLOW, workflow.getLabel());
+                    workflow.setStepList(stepList);
+                    environment().updateByIdVersion(workflow);
+               }
+            }
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void submitToWorkflowByName(String workflowName, String entity, Long id) throws UnifyException {
@@ -524,8 +573,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Long> findWorkflowIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new WorkflowQuery().applicationName(applicationName));
+    public List<Long> findCustomWorkflowIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new WorkflowQuery().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -1130,7 +1180,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                         (Long) wfEntityInst.getId(), (Long) wfEntityInst.getId());
                             }
                                 break;
-                            case UPDATE_COPY: {
+                            case UPDATE_ORIGINAL: {
                                 transitionItem.setUpdated();
                                 final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                                 if (originalCopyId != null) {
