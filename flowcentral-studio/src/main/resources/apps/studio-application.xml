@@ -2372,6 +2372,8 @@
 				<section name="optionDetails" columns="type_1_2">
 					<field name="allowNegative"
 						inputWidget="application.checkbox" column="1" visible="false" />
+					<field name="readOnly" inputWidget="application.checkbox"
+						column="1" visible="false" />
 					<field name="nullable" inputWidget="application.checkbox"
 						column="1" visible="false" />
 					<field name="auditable" inputWidget="application.checkbox"
@@ -2459,7 +2461,7 @@
 						paramA="CD|CL|CU" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="references" visible="true" />
+					<setState type="field" target="references,readOnly" visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"

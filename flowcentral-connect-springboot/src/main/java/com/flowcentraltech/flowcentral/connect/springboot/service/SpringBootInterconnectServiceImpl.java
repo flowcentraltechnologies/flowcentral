@@ -304,7 +304,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                         break;
                     case VALUE:
                     case VALUE_LIST:
-                    case VALUE_SET:{
+                    case VALUE_SET: {
                         CriteriaQuery<Tuple> cq = createTupleQuery(entityInfo.getImplClass(), em, req);
                         cq.distinct(req.getOperation().isDistinct());
                         List<Tuple> tupleResult = em.createQuery(cq).getResultList();
@@ -328,7 +328,9 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
             }
 
-            return interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
+            JsonDataSourceResponse resp = interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
+            logInfo("Returning response [{0}]...", interconnect.prettyJSON(resp));
+            return resp;
         } catch (Exception e) {
             logSevere("Datasource request processing failure.", e);
             errorMsg = e.getMessage();
@@ -347,7 +349,9 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         }
 
         result = null;
-        return interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
+        JsonDataSourceResponse resp = interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
+        logInfo("Returning response [{0}]...", interconnect.prettyJSON(resp));
+        return resp;
     }
 
     private <T> CriteriaQuery<T> createQuery(Class<T> entityClass, EntityManager em, DataSourceRequest req)

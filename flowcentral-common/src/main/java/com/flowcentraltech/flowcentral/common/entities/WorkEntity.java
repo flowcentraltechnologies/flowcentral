@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.entities;
 
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.ProcessingStatus;
 import com.tcdng.unify.core.database.Entity;
 
@@ -32,6 +33,10 @@ public interface WorkEntity extends Entity {
     ProcessingStatus getProcessingStatus();
     
     void setProcessingStatus(ProcessingStatus processingStatus);
+     
+    WfItemVersionType getWfItemVersionType();
+
+    void setWfItemVersionType(WfItemVersionType wfItemVersionType);
     
     String getWorkBranchCode();
 

@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.task.TaskSetup;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -43,6 +44,8 @@ public class EntityActionResult {
 
     private Object result;
 
+    private Entity inst;
+
     private ReviewResult reviewResult;
     
     private ActionMode actionMode;
@@ -69,15 +72,18 @@ public class EntityActionResult {
         this.resultTaskSetup = resultTaskSetup;
         this.resultTaskCaption = resultTaskCaption;
         this.result = ctx.getResult();
+        this.inst = ctx.getInst();
     }
 
     public EntityActionResult(EntityActionContext ctx, String resultPath) {
         this.resultPath = resultPath;
         this.result = ctx.getResult();
+        this.inst = ctx.getInst();
     }
 
     public EntityActionResult(EntityActionContext ctx) {
         this.result = ctx.getResult();
+        this.inst = ctx.getInst();
     }
 
     public EntityActionResult() {
@@ -162,6 +168,10 @@ public class EntityActionResult {
 
     public Object getResult() {
         return result;
+    }
+
+    public Entity getInst() {
+        return inst;
     }
 
     public ReviewResult getReviewResult() {

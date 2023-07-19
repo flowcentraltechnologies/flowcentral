@@ -20,11 +20,14 @@ import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConst
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
-import com.flowcentraltech.flowcentral.application.data.FilterDef;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
+import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
 import com.flowcentraltech.flowcentral.application.web.panels.EntitySearch;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.criterion.Equals;
 
 /**
  * Manage entity list applet object.
@@ -38,13 +41,24 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
-        setCurrFormAppletDef(getRootAppletDef());
-        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null,
-                getRootAppletDef().getDescription(), getCurrFormAppletDef(), null, EntitySearch.ENABLE_ALL, false,
-                false);
+        final AppletDef _rootAppletDef = getRootAppletDef();
+        setCurrFormAppletDef(_rootAppletDef);
+        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null, _rootAppletDef.getDescription(),
+                getCurrFormAppletDef(), null, EntitySearch.ENABLE_ALL, false, false);
+        final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariable);
+        final boolean isUpdateDraft = ApplicationNameUtils.UPDATE_DRAFT_SUFFIX.equals(vestigial);
+
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);
-            entitySearch.setBaseFilter(new FilterDef(appletFilterDef.getFilterDef()), au.specialParamProvider());
+            entitySearch.setBaseFilter(InputWidgetUtils.getFilterDef(au, _rootAppletDef, appletFilterDef.getFilterDef(),
+                    isUpdateDraft ? new Equals("wfItemVersionType", WfItemVersionType.DRAFT) : null,
+                    au.specialParamProvider(), au.getNow()), au.specialParamProvider());
+        } else {
+            if (isUpdateDraft) {
+                entitySearch.setBaseFilter(
+                        InputWidgetUtils.getFilterDef(au, new Equals("wfItemVersionType", WfItemVersionType.DRAFT)),
+                        au.specialParamProvider());
+            }
         }
 
         navBackToSearch();

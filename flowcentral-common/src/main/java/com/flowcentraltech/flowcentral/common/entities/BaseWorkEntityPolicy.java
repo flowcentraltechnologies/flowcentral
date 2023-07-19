@@ -16,7 +16,12 @@
 
 package com.flowcentraltech.flowcentral.common.entities;
 
+import java.util.Date;
+
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
+import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.database.Entity;
 
 /**
  * Base status work entity policy.
@@ -26,5 +31,14 @@ import com.tcdng.unify.core.annotation.Component;
  */
 @Component("basework-entitypolicy")
 public class BaseWorkEntityPolicy extends BaseAuditEntityPolicy {
+    
+    @Override
+    public Object preCreate(Entity record, Date now) throws UnifyException {
+        if (((BaseWorkEntity) record).getWfItemVersionType() == null) {
+            ((BaseWorkEntity) record).setWfItemVersionType(WfItemVersionType.ORIGINAL);
+        }
+        
+        return super.preCreate(record, now);
+    }
 
 }

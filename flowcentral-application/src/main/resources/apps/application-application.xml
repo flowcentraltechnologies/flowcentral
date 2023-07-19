@@ -933,6 +933,8 @@
 				nullable="true" />
 			<field name="allowNegative"
 				label="$m{application.appentityfield.allownegative}" type="boolean" />
+			<field name="readOnly"
+				label="$m{application.appentityfield.readonly}" type="boolean" />
 			<field name="nullable"
 				label="$m{application.appentityfield.nullable}" type="boolean" />
 			<field name="auditable"

@@ -116,6 +116,16 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public <T extends Entity> void findEditableChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> void findReadOnlyChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id) throws UnifyException {
@@ -187,6 +197,16 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
+    public <T extends Entity> void listEditableChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <T extends Entity> void listReadOnlyChildren(T record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public <T, U extends Entity> List<T> valueList(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
         return au().isMappingProviderPresent(query)
@@ -252,6 +272,16 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
 
     @Override
     public int updateByIdVersion(Entity record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int updateByIdEditableChildren(Entity record) throws UnifyException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int updateByIdVersionEditableChildren(Entity record) throws UnifyException {
         throw new UnsupportedOperationException();
     }
 

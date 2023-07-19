@@ -94,11 +94,11 @@ public class AppEntityField extends BaseConfigEntity {
     private String autoFormat;
 
     @Column(length = 64, nullable = true)
-    private String mapped;   
+    private String mapped;
 
     @Column(length = 32, nullable = true)
     private String defaultVal;
-    
+
     @Column(name = "FIELD_COLUMNS", nullable = true)
     private Integer columns;
 
@@ -119,6 +119,9 @@ public class AppEntityField extends BaseConfigEntity {
 
     @Column(name = "ALLOW_NEGATIVE_FG")
     private boolean allowNegative;
+
+    @Column(name = "READONLY_FG")
+    private boolean readOnly;
 
     @Column(name = "NULLABLE_FG")
     private boolean nullable;
@@ -151,8 +154,9 @@ public class AppEntityField extends BaseConfigEntity {
     private String typeDesc;
 
     public AppEntityField(EntityFieldDataType dataType, String name, String label, String references, String key,
-            String property, String category, String inputLabel, String inputWidget, String suggestionType, String inputListKey,
-            Integer maxLen, boolean allowNegative, boolean nullable, boolean auditable, boolean reportable, boolean maintainLink) {
+            String property, String category, String inputLabel, String inputWidget, String suggestionType,
+            String inputListKey, Integer maxLen, boolean allowNegative, boolean readOnly, boolean nullable,
+            boolean auditable, boolean reportable, boolean maintainLink) {
         setConfigType(ConfigType.STATIC);
         this.dataType = dataType;
         this.name = name;
@@ -167,6 +171,7 @@ public class AppEntityField extends BaseConfigEntity {
         this.inputListKey = inputListKey;
         this.maxLen = maxLen;
         this.allowNegative = allowNegative;
+        this.readOnly = readOnly;
         this.nullable = nullable;
         this.auditable = auditable;
         this.reportable = reportable;
@@ -388,6 +393,14 @@ public class AppEntityField extends BaseConfigEntity {
 
     public void setAllowNegative(boolean allowNegative) {
         this.allowNegative = allowNegative;
+    }
+
+    public boolean isReadOnly() {
+        return readOnly;
+    }
+
+    public void setReadOnly(boolean readOnly) {
+        this.readOnly = readOnly;
     }
 
     public boolean isNullable() {

@@ -21,12 +21,14 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationResultMappingConstants;
+import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.FormActionDef;
 import com.flowcentraltech.flowcentral.application.data.FormDef;
 import com.flowcentraltech.flowcentral.application.data.FormTabDef;
 import com.flowcentraltech.flowcentral.application.data.TabDef;
+import com.flowcentraltech.flowcentral.application.data.WorkflowDraftInfo;
 import com.flowcentraltech.flowcentral.application.entities.BaseApplicationEntity;
 import com.flowcentraltech.flowcentral.application.web.data.AppletContext;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -63,6 +65,7 @@ import com.tcdng.unify.web.constant.ResultMappingConstants;
 import com.tcdng.unify.web.ui.constant.MessageType;
 import com.tcdng.unify.web.ui.widget.Panel;
 import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
+import com.tcdng.unify.web.ui.widget.data.MessageBoxCaptions;
 import com.tcdng.unify.web.ui.widget.data.MessageIcon;
 import com.tcdng.unify.web.ui.widget.data.MessageMode;
 import com.tcdng.unify.web.ui.widget.data.MessageResult;
@@ -78,6 +81,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private static final String WORK_CATEGORY = "work";
 
+    private static final String IN_WORKFLOW_DRAFT_LOOP_FLAG = "IN_WORKFLOW_DRAFT_LOOP_FLAG";
+
     @Configurable
     protected ApplicationPrivilegeManager applicationPrivilegeManager;
 
@@ -88,7 +93,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     private String tabMemoryId;
 
-    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {        
+    public final void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
         this.applicationPrivilegeManager = applicationPrivilegeManager;
     }
 
@@ -144,12 +149,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             if (form.isSingleFormType()) {
                 final AppletDef _appletDef = applet.getRootAppletDef();
                 final EntityDef _entityDef = applet.getEntityDef();
-                enableUpdate = isContextEditable && !isUpdateCopy
+                enableUpdate = isContextEditable
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE, false)
                         && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getEditPrivilege())
                         && applet.formBeanMatchAppletPropertyCondition(
                                 AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-                enableDelete = !isInWorkflow && isContextEditable && !isUpdateCopy
+                enableDelete = !isInWorkflow && isContextEditable
                         && _appletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE, false)
                         && applicationPrivilegeManager.isRoleWithPrivilege(roleCode, _entityDef.getDeletePrivilege())
                         && applet.formBeanMatchAppletPropertyCondition(
@@ -163,14 +168,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                             AppletPropertyConstants.MAINTAIN_FORM_SAVEAS, false)
                             && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
                                     formEntityDef.getAddPrivilege());
-                    enableUpdate = isContextEditable && !isUpdateCopy
+                    enableUpdate = isContextEditable
                             && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE,
                                     false)
                             && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
                                     formEntityDef.getEditPrivilege())
                             && applet.formBeanMatchAppletPropertyCondition(
                                     AppletPropertyConstants.MAINTAIN_FORM_UPDATE_CONDITION);
-                    enableDelete = !isInWorkflow && isContextEditable && !isUpdateCopy
+                    enableDelete = !isInWorkflow && isContextEditable
                             && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_DELETE,
                                     false)
                             && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
@@ -187,7 +192,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                                 formEntityDef.getAttachPrivilege()));
                     }
                 } else {
-                    enableUpdate = isContextEditable && !isUpdateCopy
+                    enableUpdate = isContextEditable
                             && applicationPrivilegeManager.isRoleWithPrivilege(roleCode,
                                     formEntityDef.getEditPrivilege())
                             && applet.formBeanMatchAppletPropertyCondition(
@@ -246,21 +251,28 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 }
             }
 
-            if (isUpdateCopy) {
-                form.setDisplayItemCounterClass("fc-dispcounterorange");
-                form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
+            if (isUpdateCopy && !appCtx.isInWorkflow()) {
+                form.setDisplayItemCounterClass("fc-dispcounterfrozen");
+                form.setDisplayItemCounter(
+                        resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
             } else if (appCtx.isInWorkflow() && !appCtx.isReview()) {
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 if (isRootForm) {
                     form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
-                 } else {
+                } else {
                     form.setDisplayItemCounter(
                             resolveSessionMessage("$m{entityformapplet.form.parentinworkflow.viewonly}"));
                     parentDisabled = true;
-               }
+                }
+            }
+
+            if (!isRootForm && appCtx.isInWorkflowPromptViewMode()) {
+                enableUpdate = false;
+                enableDelete = false;
+                parentDisabled = true;
             }
         }
-        
+
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
                 switchContent("entityCrudPanel");
@@ -703,9 +715,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void update() throws UnifyException {
         FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE);
         if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = getEntityFormApplet().updateInst();
-            entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
-            handleEntityActionResult(entityActionResult, ctx);
+            final AbstractEntityFormApplet applet = getEntityFormApplet();
+            if (applet.isPromptEnterWorkflowDraft()) {
+                showPromptWorkflowDraft(WorkflowDraftType.UPDATE, IndexedTarget.BLANK);
+            } else {
+                EntityActionResult entityActionResult = applet.updateInst();
+                entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
+                handleEntityActionResult(entityActionResult, ctx);
+            }
         }
     }
 
@@ -713,9 +730,14 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void updateAndClose() throws UnifyException {
         FormContext ctx = evaluateCurrentFormContext(EvaluationMode.UPDATE);
         if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = getEntityFormApplet().updateInstAndClose();
-            entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
-            handleEntityActionResult(entityActionResult, ctx);
+            final AbstractEntityFormApplet applet = getEntityFormApplet();
+            if (applet.isPromptEnterWorkflowDraft()) {
+                showPromptWorkflowDraft(WorkflowDraftType.UPDATE_CLOSE, IndexedTarget.BLANK);
+            } else {
+                EntityActionResult entityActionResult = applet.updateInstAndClose();
+                entityActionResult.setSuccessHint("$m{entityformapplet.update.success.hint}");
+                handleEntityActionResult(entityActionResult, ctx);
+            }
         }
     }
 
@@ -748,24 +770,28 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
     @Action
     public void maintain() throws UnifyException {
-        IndexedTarget target = getRequestTarget(IndexedTarget.class);
+        IndexedTarget target = getIndexedTarget();
         if (target.isValidIndex()) {
-            getRequestContextUtil().setContentScrollReset();
-            switch (target.getTarget()) {
-                case EntitySearchValueMarkerConstants.CHILD_LIST:
-                    getEntityFormApplet().maintainChildInst(target.getIndex());
-                    return;
-                case EntitySearchValueMarkerConstants.RELATED_LIST:
-                    getEntityFormApplet().maintainRelatedInst(target.getIndex());
-                    return;
-                case EntitySearchValueMarkerConstants.HEADLESS_LIST:
-                    getEntityFormApplet().maintainHeadlessInst(target.getIndex());
-                    return;
-                default:
-            }
+            if (getEntityFormApplet().isPromptEnterWorkflowDraft()) {
+                showPromptWorkflowDraft(WorkflowDraftType.MAINTAIN, target);
+            } else {
+                getRequestContextUtil().setContentScrollReset();
+                switch (target.getTarget()) {
+                    case EntitySearchValueMarkerConstants.CHILD_LIST:
+                        getEntityFormApplet().maintainChildInst(target.getIndex());
+                        return;
+                    case EntitySearchValueMarkerConstants.RELATED_LIST:
+                        getEntityFormApplet().maintainRelatedInst(target.getIndex());
+                        return;
+                    case EntitySearchValueMarkerConstants.HEADLESS_LIST:
+                        getEntityFormApplet().maintainHeadlessInst(target.getIndex());
+                        return;
+                    default:
+                }
 
-            TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
-            processTableActionResult(result);
+                TableActionResult result = getEntityFormApplet().maintainInst(target.getIndex());
+                processTableActionResult(result);
+            }
         } else {
             setCommandResultMapping(ResultMappingConstants.NONE);
         }
@@ -790,7 +816,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             processTableActionResult(result);
         }
     }
-    
+
     @Action
     public void reviewConfirm() throws UnifyException {
         MessageResult messageResult = getMessageResult();
@@ -811,11 +837,31 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+    @Action
+    public void openWorkflowDraft() throws UnifyException {
+        MessageResult result = getMessageResult();
+        switch (result) {
+            case NO:
+                performNormalViewMode();
+                break;
+            case OK:
+            case YES:
+                performEditModeWorkflowDraft();
+                break;
+            case CANCEL:
+            case RETRY:
+            default:
+                break;
+        }
+
+        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+    }
+
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
         // Set recovery path on error to prevent possible manual duplication of record
         getRequestContextUtil().setSystemErrorRecoveryPath("/application/refreshContent");
-        
+
         // Select first tab with review message TODO Move to method?
         TabSheetWidget tabSheetWidget = getWidgetByShortName(TabSheetWidget.class, "formPanel.formTabSheet");
         TabSheet tabSheet = tabSheetWidget.getTabSheet();
@@ -856,6 +902,44 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+    private IndexedTarget getIndexedTarget() throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        return getRequestAttribute(boolean.class, IN_WORKFLOW_DRAFT_LOOP_FLAG)
+                ? DataUtils.convert(IndexedTarget.class, applet.removeWorkflowDraftInfo().getRequestTarget())
+                : getRequestTarget(IndexedTarget.class);
+    }
+
+    private void performNormalViewMode() throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        applet.getCtx().setInWorkflowPromptViewMode(true);
+        setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.TRUE);
+        WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
+        switch (workflowDraftInfo.getType()) {
+            case MAINTAIN:
+                maintain();
+                break;
+            case ASSIGN_TO_CHILD_ITEM:
+            case CRUD_TO_CHILD_ITEM:
+            case EDIT_CHILD_ITEM:
+            case ENTRY_TO_CHILD_ITEM:
+            case NEW_CHILDLIST_ITEM:
+            case NEW_CHILD_ITEM:
+            case QUICK_FORM_EDIT:
+            case QUICK_TABLE_EDIT:
+            case UPDATE:
+            case UPDATE_CLOSE:
+            default:
+                applet.getCtx().setInWorkflowPromptViewMode(false);
+                setRequestAttribute(IN_WORKFLOW_DRAFT_LOOP_FLAG, Boolean.FALSE);
+                break;
+        }
+    }
+
+    private void performEditModeWorkflowDraft() throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
+        applet.enterWorkflowDraft(workflowDraftInfo.getType());
+    }
 
     private void processTableActionResult(TableActionResult result) throws UnifyException {
         if (result != null) {
@@ -934,6 +1018,27 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         return ctx;
+    }
+
+    private void showPromptWorkflowDraft(WorkflowDraftType type, IndexedTarget target) throws UnifyException {
+        getEntityFormApplet().setWorkflowDraftInfo(new WorkflowDraftInfo(type, target));
+        final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
+        final String prompt = resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
+        final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
+        final String editMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
+        final String cancelMessage = resolveSessionMessage("$m{formapplet.workflowdraft.cancel}");
+        final String commandPath = getCommandFullPath("openWorkflowDraft");
+        MessageBoxCaptions captions = new MessageBoxCaptions(caption);
+        if (type.isNew() || type.isUpdate()) {
+            captions.setOkCaption(editMessage);
+            captions.setCancelCaption(cancelMessage);
+            showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, commandPath);
+            return;
+        }
+
+        captions.setYesCaption(editMessage);
+        captions.setNoCaption(viewMessage);
+        showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, commandPath);
     }
 
     private FormContext evaluateCurrentFormContext(final FormContext ctx, EvaluationMode evaluationMode)

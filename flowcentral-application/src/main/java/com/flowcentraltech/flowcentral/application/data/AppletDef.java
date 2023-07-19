@@ -85,6 +85,8 @@ public interface AppletDef {
 
     String getOpenPath();
 
+    String getOpenDraftPath();
+
     String getMaintainOpenPath();
 
     String getListingOpenPath();
@@ -93,7 +95,11 @@ public interface AppletDef {
 
     String getViewId();
 
+    String getDraftViewId();
+
     int getDisplayIndex();
+
+    boolean isWithOpenDraftPath();
 
     boolean isOpenWindow();
 

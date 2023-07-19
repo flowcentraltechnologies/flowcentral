@@ -119,6 +119,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.TableSummaryLine
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralApplicationAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.OwnershipType;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.ParamValuesDef;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
@@ -2057,7 +2058,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final Entity inst = (Entity) formContext.getInst();
         final FormDef _formDef = formContext.getFormDef();
         final EntityDef _entityDef = _formDef.getEntityDef();
-        String createPolicy = formAppletDef != null
+        final String createPolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
         EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.CREATE, scp,
@@ -2113,53 +2114,38 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public EntityActionResult updateEntityInstByFormContextWithCopy(AppletDef formAppletDef, FormContext formContext,
+    public EntityActionResult createEntityInstWorkflowDraftByFormContext(AppletDef formAppletDef, FormContext formContext,
             SweepingCommitPolicy scp) throws UnifyException {
         Entity inst = (Entity) formContext.getInst();
-        if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() == null && formAppletDef
-                .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
-            // Entire child records should be replicated
-            environment().findChildren(inst);
+        // Editable child records should be replicated
+        environment().findEditableChildren(inst);
 
-            // Create workflow copy
-            EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
-            ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
-            wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
-            final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
-            if (!StringUtils.isBlank(wfCopySetValuesName)) {
-                AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
-                appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(),
-                        wfCopyValueStore, Collections.emptyMap(), null);
-            }
-
-            // Sent to workflow
-            String channel = formAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);
-            String policy = formAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
-            if (StringUtils.isBlank(channel)) {
-                channel = formAppletDef.getPropValue(String.class,
-                        AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
-                policy = formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
-            }
-
-            WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
-            copyInst.setOriginalCopyId((Long) inst.getId());
-
-            EntityActionResult entityActionResult = workItemUtilities()
-                    .submitToWorkflowChannel(entityClassDef.getEntityDef(), channel, copyInst, policy);
-
-            // Update original instance workflow flag
-            environment().updateById((Class<? extends Entity>) entityClassDef.getEntityClass(), inst.getId(),
-                    new Update().add("inWorkflow", Boolean.TRUE));
-            entityActionResult.setWorkflowCopied(true);
-            return entityActionResult;
+        // Create workflow copy
+        EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
+        ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
+        wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
+        final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
+                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
+        if (!StringUtils.isBlank(wfCopySetValuesName)) {
+            AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
+            appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(),
+                    wfCopyValueStore, Collections.emptyMap(), null);
         }
 
-        return updateEntityInstByFormContext(formAppletDef, formContext, scp);
+        WorkEntity copyInst = (WorkEntity) wfCopyValueStore.getValueObject();
+        copyInst.setWfItemVersionType(WfItemVersionType.DRAFT);
+        copyInst.setOriginalCopyId((Long) inst.getId());           
+        
+        final String createPolicy = formAppletDef != null
+                ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY)
+                : formContext.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
+        EntityActionContext eCtx = new EntityActionContext(entityClassDef.getEntityDef(), copyInst, RecordActionType.CREATE, scp,
+                createPolicy);
+        eCtx.setAll(formContext);
+        EntityActionResult entityActionResult = environment().create(eCtx);
+        entityActionResult.setWorkflowCopied(true);
+        return entityActionResult;
     }
 
     @Override
@@ -2211,7 +2197,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
             EntityActionContext eCtx = new EntityActionContext(_entityDef, inst, RecordActionType.DELETE, scp,
                     deletePolicy);
             eCtx.setAll(formContext);
-
             entityActionResult = environment().delete(eCtx);
         }
 

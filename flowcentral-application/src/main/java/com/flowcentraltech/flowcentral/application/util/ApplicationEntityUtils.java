@@ -69,9 +69,10 @@ import com.tcdng.unify.core.util.StringUtils;
  */
 public final class ApplicationEntityUtils {
 
-    public static final Set<String> RESERVED_BASE_FIELDS = Collections.unmodifiableSet(new HashSet<String>(
-            Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt", "updatedBy", "originWorkRecId",
-                    "originalCopyId", "inWorkflow", "workBranchCode", "workDepartmentCode", "processingStatus")));
+    public static final Set<String> RESERVED_BASE_FIELDS = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList("id", "versionNo", "createDt", "createdBy", "updateDt",
+                    "updatedBy", "originWorkRecId", "originalCopyId", "wfItemVersionType", "inWorkflow",
+                    "workBranchCode", "workDepartmentCode", "processingStatus", "devVersionType")));
 
     public static final List<EntityBaseType> BASE_WORK_TYPES = Collections
             .unmodifiableList(Arrays.asList(EntityBaseType.BASE_WORK_ENTITY, EntityBaseType.BASE_STATUS_WORK_ENTITY,
@@ -330,8 +331,9 @@ public final class ApplicationEntityUtils {
                 DataUtils.convert(int.class, appEntityField.getMaxLen()),
                 DataUtils.convert(int.class, appEntityField.getPrecision()),
                 DataUtils.convert(int.class, appEntityField.getScale()), appEntityField.isAllowNegative(),
-                appEntityField.isNullable(), appEntityField.isAuditable(), appEntityField.isReportable(),
-                appEntityField.isMaintainLink(), appEntityField.isBasicSearch(), appEntityField.isDescriptive());
+                !appEntityField.isReadOnly(), appEntityField.isNullable(), appEntityField.isAuditable(),
+                appEntityField.isReportable(), appEntityField.isMaintainLink(), appEntityField.isBasicSearch(),
+                appEntityField.isDescriptive());
     }
 
     public static void addChangeLogFormElements(List<AppFormElement> elementList) {
@@ -486,6 +488,10 @@ public final class ApplicationEntityUtils {
                 list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.LONG, "originalCopyId",
                         msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.originalcopyid}"), null,
                         null, null, null, null, "application.integer", null, null, configType));
+                list.add(ApplicationEntityUtils.createBaseAppEntityField(EntityFieldDataType.ENUM, "wfItemVersionType",
+                        msgResolver.resolveApplicationMessage("$m{baseworkentity.field.label.wfversiontype}"),
+                        "wfitemversiontypelist", null, null, null, null, "application.enumlist", null, null,
+                        configType));
                 break;
             default:
                 break;
@@ -505,11 +511,12 @@ public final class ApplicationEntityUtils {
         boolean reportable = !nonReportables.contains(name);
         boolean maintainLink = maintainLinks.contains(name);
         boolean allowNegative = false;
+        boolean readOnly = false;
         boolean auditable = false;
         String suggestionType = null;
         AppEntityField field = new AppEntityField(type, name, label, references, key, property, category, inputLabel,
-                inputWidget, suggestionType, inputListKey, length, allowNegative, nullable, auditable, reportable,
-                maintainLink);
+                inputWidget, suggestionType, inputListKey, length, allowNegative, readOnly, nullable, auditable,
+                reportable, maintainLink);
         if (type.isDate() || type.isTimestamp()) {
             field.setLingualWidget("application.lingualdatetypelist");
         }

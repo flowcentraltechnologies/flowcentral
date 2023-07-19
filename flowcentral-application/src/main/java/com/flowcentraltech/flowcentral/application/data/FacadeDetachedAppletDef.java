@@ -42,4 +42,19 @@ public class FacadeDetachedAppletDef extends AbstractDetachedAppletDef {
         return parentAppletDef.getListingOpenPath();
     }
 
+    @Override
+    public String getOpenDraftPath() {
+        return parentAppletDef.getOpenDraftPath();
+    }
+
+    @Override
+    public String getDraftViewId() {
+        return parentAppletDef.getDraftViewId();
+    }
+
+    @Override
+    public boolean isWithOpenDraftPath() {
+        return parentAppletDef.isWithOpenDraftPath();
+    }
+
 }

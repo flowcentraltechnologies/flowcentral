@@ -54,6 +54,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
     private String openPath;
 
+    private String openDraftPath;
+
     private String maintainOpenPath;
 
     private String listingOpenPath;
@@ -99,7 +101,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     private StandardAppletDef(AppletType type, List<AppletPropDef> propDefList, Map<String, AppletPropDef> propDefMap,
             Map<String, AppletSetValuesDef> setValuesDefMap, Map<String, AppletFilterDef> filterDefMap, String entity,
             String label, String icon, String assignDescField, String pseudoDeleteField, String routeToApplet,
-            String openPath, String maintainOpenPath, String listingOpenPath, String originApplicationName,
+            String openPath, String openDraftPath, String maintainOpenPath, String listingOpenPath, String originApplicationName,
             String originName, int displayIndex, boolean openWindow, boolean menuAccess, boolean allowSecondaryTenants,
             boolean descriptiveButtons, ApplicationEntityNameParts nameParts, String description, Long id,
             long version) {
@@ -113,6 +115,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
         this.pseudoDeleteField = pseudoDeleteField;
         this.routeToApplet = routeToApplet;
         this.openPath = openPath;
+        this.openDraftPath = openDraftPath;
         this.maintainOpenPath = maintainOpenPath;
         this.listingOpenPath = listingOpenPath;
         this.originApplicationName = originApplicationName;
@@ -273,6 +276,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
+    public String getOpenDraftPath() {
+        return openDraftPath;
+    }
+
+    @Override
     public String getMaintainOpenPath() {
         return maintainOpenPath;
     }
@@ -301,8 +309,18 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
     }
 
     @Override
+    public String getDraftViewId() {
+        return getViewId() + "_dft";
+    }
+
+    @Override
     public int getDisplayIndex() {
         return displayIndex;
+    }
+
+    @Override
+    public boolean isWithOpenDraftPath() {
+        return !StringUtils.isBlank(openDraftPath);
     }
 
     @Override
@@ -453,6 +471,8 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
 
         private String openPath;
 
+        private String openDraftPath;
+
         private String maintainOpenPath;
 
         private String listingOpenPath;
@@ -511,6 +531,11 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             return this;
         }
 
+        public Builder openDraftPath(String openDraftPath) {
+            this.openDraftPath = openDraftPath;
+            return this;
+        }
+
         public Builder listingOpenPath(String listingOpenPath) {
             this.listingOpenPath = listingOpenPath;
             return this;
@@ -544,6 +569,16 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
             propDefMap.put(name, new AppletPropDef(name, value));
             return this;
         }
+        
+        @SuppressWarnings("unchecked")
+        public <T> T getPropValue(Class<T> dataClazz, String name) throws UnifyException {
+            AppletPropDef appletPropDef = propDefMap.get(name);
+            if (appletPropDef != null) {
+                return appletPropDef.getValue(dataClazz);
+            }
+
+            return (T) ConverterUtils.getNullValue(dataClazz);
+        }
 
         public Builder addSetValuesDef(String name, String description, SetValuesDef setValuesDef) {
             if (setValuesDefMap.containsKey(name)) {
@@ -576,7 +611,7 @@ public class StandardAppletDef extends BaseApplicationEntityDef implements Apple
                     DataUtils.unmodifiableList(new ArrayList<AppletPropDef>(propDefMap.values())),
                     DataUtils.unmodifiableMap(propDefMap), DataUtils.unmodifiableMap(setValuesDefMap),
                     DataUtils.unmodifiableMap(filterDefMap), entity, label, icon, assignDescField, pseudoDeleteField,
-                    routeToApplet, openPath, maintainOpenPath, listingOpenPath, originApplicationName, originName,
+                    routeToApplet, openPath, openDraftPath, maintainOpenPath, listingOpenPath, originApplicationName, originName,
                     displayIndex, openWindow, menuAccess, allowSecondaryTenants, descriptiveButtons, nameParts,
                     description, id, version);
         }

@@ -65,8 +65,15 @@ public class ApplicationQueryEncoder extends AbstractFlowCentralComponent implem
     }
 
     @Override
+    public String encodeQueryFilter(Restriction restriction) throws UnifyException {
+        return restriction != null && !restriction.isEmpty()
+                ? InputWidgetUtils.getFilterDefinition(appletUtilities, restriction)
+                : null;
+    }
+
+    @Override
     public String encodeQueryFilter(Query<? extends Entity> query) throws UnifyException {
-        return !query.isEmptyCriteria() ? InputWidgetUtils.getFilterDefinition(appletUtilities, query.getRestrictions()) : null;
+        return encodeQueryFilter(query.getRestrictions());
     }
 
     @Override

@@ -191,6 +191,30 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Entity> void findEditableChildren(T record) throws UnifyException {
+        Class<T> entityClass = (Class<T>) record.getClass();
+        Entity srcRecord = find(entityClass, record.getId());
+        EntityDef entityDef = au.getEntityDef(au.delegateRegistrar().resolveLongName(entityClass));
+        if (!DataUtils.isBlank(entityDef.getEditableChildrenFieldNames())) {
+            new BeanValueStore(record).copyWithInclusions(new BeanValueStore(srcRecord),
+                    entityDef.getEditableChildrenFieldNames());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends Entity> void findReadOnlyChildren(T record) throws UnifyException {
+        Class<T> entityClass = (Class<T>) record.getClass();
+        Entity srcRecord = find(entityClass, record.getId());
+        EntityDef entityDef = au.getEntityDef(au.delegateRegistrar().resolveLongName(entityClass));
+        if (!DataUtils.isBlank(entityDef.getReadOnlyChildrenFieldNames())) {
+            new BeanValueStore(record).copyWithInclusions(new BeanValueStore(srcRecord),
+                    entityDef.getReadOnlyChildrenFieldNames());
+        }
+    }
+
     @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST, au.delegateUtilities().encodeDelegateObjectId(id),
@@ -263,6 +287,17 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     public <T extends Entity> void listChildren(T record) throws UnifyException {
 
     }
+
+    @Override
+    public <T extends Entity> void listEditableChildren(T record) throws UnifyException {
+
+    }
+
+    @Override
+    public <T extends Entity> void listReadOnlyChildren(T record) throws UnifyException {
+
+    }
+
 
     @Override
     public <T, U extends Entity> List<T> valueList(Class<T> fieldClass, String fieldName, Query<U> query)
@@ -364,7 +399,9 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.CREATE);
         setCreateAuditInformation(record);
         req.setPayload(au.delegateUtilities().encodeDelegateEntity(record));
-        return singleValueResultOperation(Long.class, record.getClass(), req);
+        Long id = singleValueResultOperation(Long.class, record.getClass(), req);
+        record.setPreferredId(id);
+        return id;
     }
 
     @Override
@@ -384,6 +421,18 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
         setUpdateAuditInformation(record);
         req.setPayload(au.delegateUtilities().encodeDelegateEntity(record));
         return singleValueResultOperation(int.class, record.getClass(), req);
+    }
+
+    @Override
+    public int updateByIdEditableChildren(Entity record) throws UnifyException {
+        throwUnsupportedOperationException();
+        return 0;
+    }
+
+    @Override
+    public int updateByIdVersionEditableChildren(Entity record) throws UnifyException {
+        throwUnsupportedOperationException();
+        return 0;
     }
 
     @Override

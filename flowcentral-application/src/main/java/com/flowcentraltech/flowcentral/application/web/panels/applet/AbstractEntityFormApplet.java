@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.constants.WorkflowDraftType;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -498,7 +499,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             viewMode = childList ? ViewMode.NEW_CHILDLIST_FORM : ViewMode.NEW_CHILD_FORM;
         }
     }
-
+ 
     public void editChildItem(int childTabIndex) throws UnifyException {
         if (ensureSaveOnTabAction()) {
             EntityChild _entityChild = (EntityChild) form.getTabSheet().getCurrentItem().getValObject();
@@ -695,6 +696,13 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             Entity _inst = getEntitySearchItem(_entitySearch, mIndex).getEntity();
             maintainChildInst(_inst, _entitySearch.getChildTabIndex());
         }
+    }
+
+    public void enterWorkflowDraft(WorkflowDraftType type) throws UnifyException {
+        final AppletDef _currFormAppletDef = getFormAppletDef();
+        EntityActionResult entityActionResult = au.createEntityInstWorkflowDraftByFormContext(_currFormAppletDef,
+                form.getCtx(), this);
+        updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity(entityActionResult.getInst(), false));
     }
 
     private void maintainChildInst(Entity _inst, int tabIndex) throws UnifyException {
@@ -913,6 +921,18 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public AppletDef getFormAppletDef() throws UnifyException {
         return currFormAppletDef != null ? currFormAppletDef : getAlternateFormAppletDef();
     }
+    
+    public <T> T getFormAppletPropValue(Class<T> dataClazz, String name) throws UnifyException {
+        return getFormAppletDef().getPropValue(dataClazz, name);
+    }
+
+    public <T> T getFormAppletPropValue(Class<T> dataClazz, String name, T defVal) throws UnifyException {
+        return getFormAppletDef().getPropValue(dataClazz, name, defVal);
+    }
+
+    public boolean isFormAppletProp(String name) throws UnifyException {
+        return getFormAppletDef().isProp(name);
+    }
 
     public AbstractForm getForm() {
         return form;
@@ -969,6 +989,12 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         return form == null;
     }
 
+    public boolean isPromptEnterWorkflowDraft() throws UnifyException {
+        return isRootForm() && isUpdateWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
+                && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null
+                && !((WorkEntity) form.getFormBean()).isInWorkflow();
+    }
+    
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
         return au.formBeanMatchAppletPropertyCondition(getFormAppletDef(), form, conditionPropName);
     }
@@ -1237,6 +1263,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     getCtx().decTabReadOnlyCounter();
                 }
 
+                if (isRootForm()) {
+                    getCtx().setInWorkflowPromptViewMode(false); 
+                }
+                
                 return true;
             }
         }
@@ -1523,7 +1553,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     private EntityActionResult updateInst(FormReviewType reviewType) throws UnifyException {
         final AppletDef _currFormAppletDef = getFormAppletDef();
-        EntityActionResult entityActionResult = au.updateEntityInstByFormContextWithCopy(_currFormAppletDef, form.getCtx(),
+        EntityActionResult entityActionResult = au.updateEntityInstByFormContext(_currFormAppletDef, form.getCtx(),
                 this);
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity((Entity) form.getFormBean(), false));
 
