@@ -81,6 +81,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
         final String appletName = _appletDef.getPropValue(String.class, WfAppletPropertyConstants.WORKFLOW_STEP_APPLET);
         AndBuilder ab = (AndBuilder) new AndBuilder().equals("applicationName", originApplicationName)
                 .equals("workflowName", workflowName).equals("wfStepName", wfStepName);
+        entitySearch.setBasicSearchOnly(true);
         entitySearch.setBaseRestriction(ab.build(), au.specialParamProvider());
         entitySearch.getEntityTable().setLimitSelectToColumns(false);
         instAppletDef = au.getAppletDef(appletName);

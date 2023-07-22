@@ -40,9 +40,9 @@ public final class ApplicationNameUtils {
 
     public static final String WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX = "wcuds";
 
-    private static final String WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX = "_wccw";
+    private static final String WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX = "wccw";
 
-    private static final String WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX = "_wcuw";
+    private static final String WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX = "wcuw";
 
     private static final FactoryMap<String, ApplicationEntityNameParts> applicationNameParts;
 

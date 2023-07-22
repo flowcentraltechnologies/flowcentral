@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
@@ -125,7 +126,7 @@ public final class WorkflowDesignUtils {
             wfStep.setAlertList(Arrays.asList(wfStepAlert));
             stepList.add(wfStep);
 
-            // Add draft approval step
+            // Add draft approval step in read-only mode
             wfStep = new WfStep();
             wfStep.setType(WorkflowStepType.USER_ACTION);
             wfStep.setPriority(WorkflowStepPriority.NORMAL);
@@ -133,6 +134,7 @@ public final class WorkflowDesignUtils {
             wfStep.setDescription(workflowLabel + " Approval");
             wfStep.setLabel(workflowLabel + " Approval");
             wfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
+            wfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
 
             WfStepUserAction approveUserAction = new WfStepUserAction();
             approveUserAction.setName("approve");
