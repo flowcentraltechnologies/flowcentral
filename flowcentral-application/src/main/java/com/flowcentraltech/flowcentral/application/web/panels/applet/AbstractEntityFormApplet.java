@@ -164,6 +164,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             return rootEntityModes.contains(this);
         }
 
+        public boolean isScroll() {
+            return MAINTAIN_FORM_SCROLL.equals(this);
+        }
+
         public boolean isPrimary() {
             return NEW_PRIMARY_FORM.equals(this) || MAINTAIN_PRIMARY_FORM_NO_SCROLL.equals(this);
         }
@@ -990,7 +994,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
-        return isRootForm() && isUpdateWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
+        return isRootForm() && isWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
                 && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null
                 && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
