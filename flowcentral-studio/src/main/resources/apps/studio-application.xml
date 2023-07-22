@@ -5260,6 +5260,12 @@
 				<property name="workflowCopy.update.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.updatesetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.create.approval.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createapprovalsetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.update.approval.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updateapprovalsetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentitysingleform.workflowproperties}">
