@@ -434,6 +434,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst,
+            String policyName) throws UnifyException {
+        EntityActionContext ctx = new EntityActionContext(entityDef, inst, policyName);
+        executeEntityPreActionPolicy(ctx);
+        submitToWorkflowByName(workflowName, inst);
+        return executeEntityPostActionPolicy(ctx);
+    }
+
+    @Override
     public EntityActionResult submitToWorkflowChannel(EntityDef entityDef, String workflowChannelName, WorkEntity inst,
             String policyName) throws UnifyException {
         EntityActionContext ctx = new EntityActionContext(entityDef, inst, policyName);

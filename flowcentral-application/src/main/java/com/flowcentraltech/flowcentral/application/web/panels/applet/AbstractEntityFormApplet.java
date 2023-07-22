@@ -46,6 +46,7 @@ import com.flowcentraltech.flowcentral.application.data.UniqueConstraintDef;
 import com.flowcentraltech.flowcentral.application.policies.ListingRedirect;
 import com.flowcentraltech.flowcentral.application.policies.ListingRedirectionPolicy;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.validation.FormContextEvaluator;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
@@ -503,7 +504,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             viewMode = childList ? ViewMode.NEW_CHILDLIST_FORM : ViewMode.NEW_CHILD_FORM;
         }
     }
- 
+
     public void editChildItem(int childTabIndex) throws UnifyException {
         if (ensureSaveOnTabAction()) {
             EntityChild _entityChild = (EntityChild) form.getTabSheet().getCurrentItem().getValObject();
@@ -791,18 +792,33 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final Entity inst = (Entity) form.getFormBean();
         final AppletDef _currFormAppletDef = getFormAppletDef();
         final EntityDef _entityDef = form.getFormDef().getEntityDef();
-        String channel = _currFormAppletDef.getPropValue(String.class,
-                AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);
-        String policy = _currFormAppletDef.getPropValue(String.class,
-                AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
-        if (StringUtils.isBlank(channel)) {
-            channel = _currFormAppletDef.getPropValue(String.class,
-                    AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
-            policy = _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
+        EntityActionResult entityActionResult = null;
+        if (isWorkflowCopy()) {
+            final String workflowName = viewMode.isCreateForm()
+                    ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(_currFormAppletDef.getLongName())
+                    : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(_currFormAppletDef.getLongName());
+            final String policy = viewMode.isCreateForm()
+                    ? _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY)
+                    : _currFormAppletDef.getPropValue(String.class,
+                            AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
+            entityActionResult = au().workItemUtilities().submitToWorkflow(_entityDef, workflowName,
+                    (WorkEntity) inst, policy);
+        } else {
+            String channel = _currFormAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);
+            String policy = _currFormAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
+            if (StringUtils.isBlank(channel)) {
+                channel = _currFormAppletDef.getPropValue(String.class,
+                        AppletPropertyConstants.CREATE_FORM_SUBMIT_WORKFLOW_CHANNEL);
+                policy = _currFormAppletDef.getPropValue(String.class,
+                        AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY);
+            }
+
+            entityActionResult = au().workItemUtilities().submitToWorkflowChannel(_entityDef, channel,
+                    (WorkEntity) inst, policy);
         }
 
-        EntityActionResult entityActionResult = au().workItemUtilities().submitToWorkflowChannel(_entityDef, channel,
-                (WorkEntity) inst, policy);
         if (actionMode.isWithNext()) {
             enterNextForm();
         } else {
@@ -925,7 +941,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     public AppletDef getFormAppletDef() throws UnifyException {
         return currFormAppletDef != null ? currFormAppletDef : getAlternateFormAppletDef();
     }
-    
+
     public <T> T getFormAppletPropValue(Class<T> dataClazz, String name) throws UnifyException {
         return getFormAppletDef().getPropValue(dataClazz, name);
     }
@@ -998,7 +1014,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null
                 && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
-    
+
     public boolean formBeanMatchAppletPropertyCondition(String conditionPropName) throws UnifyException {
         return au.formBeanMatchAppletPropertyCondition(getFormAppletDef(), form, conditionPropName);
     }
@@ -1103,8 +1119,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
     }
 
     protected EntityCRUDPage constructNewEntityCRUDPage(String appletName, FilterGroupDef filterGroupDef,
-            String baseField, Object baseId, String subTitle, String childListName, boolean viewOnly, boolean allowAddition, boolean fixedRows)
-            throws UnifyException {
+            String baseField, Object baseId, String subTitle, String childListName, boolean viewOnly,
+            boolean allowAddition, boolean fixedRows) throws UnifyException {
         SectorIcon sectorIcon = getSectorIcon();
         BreadCrumbs breadCrumbs = form.getBreadCrumbs().advance();
         breadCrumbs.setLastCrumbTitle(getAppletEntityDef(appletName).getDescription());
@@ -1268,9 +1284,9 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                 }
 
                 if (isRootForm()) {
-                    getCtx().setInWorkflowPromptViewMode(false); 
+                    getCtx().setInWorkflowPromptViewMode(false);
                 }
-                
+
                 return true;
             }
         }
@@ -1307,7 +1323,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
             }
 
             if (currUniqueConstraintDef.isWithConditionList()) {
-                for (UniqueConditionDef ucd: currUniqueConstraintDef.getConditionList()) {
+                for (UniqueConditionDef ucd : currUniqueConstraintDef.getConditionList()) {
                     query.addRestriction(ucd.getRestriction());
                 }
             }
@@ -1633,7 +1649,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                     break;
                 default:
             }
-            
+
             if (oldFormContext.isWithReviewErrors()) {
                 form.getCtx().copyReviewErrors(oldFormContext);
             }

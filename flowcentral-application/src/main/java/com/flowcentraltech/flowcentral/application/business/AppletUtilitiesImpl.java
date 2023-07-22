@@ -2067,6 +2067,17 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         final Entity inst = (Entity) formContext.getInst();
         final FormDef _formDef = formContext.getFormDef();
         final EntityDef _entityDef = _formDef.getEntityDef();
+
+        if (formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY)) {
+            final String wfCopyCreateSetValuesName = formAppletDef.getPropValue(String.class,
+                    AppletPropertyConstants.WORKFLOWCOPY_CREATE_SETVALUES);
+            if (!StringUtils.isBlank(wfCopyCreateSetValuesName)) {
+                AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyCreateSetValuesName);
+                appletSetValuesDef.getSetValuesDef().apply(this, _entityDef, getNow(), inst, Collections.emptyMap(),
+                        null);
+            }
+        }
+
         final String createPolicy = formAppletDef != null
                 ? formAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY)
                 : formContext.getAttribute(String.class, AppletPropertyConstants.CREATE_FORM_NEW_POLICY);
@@ -2134,10 +2145,10 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         EntityClassDef entityClassDef = getEntityClassDef(formAppletDef.getEntity());
         ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
         wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
-        final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
+        final String wfCopyUpdateSetValuesName = formAppletDef.getPropValue(String.class,
                 AppletPropertyConstants.WORKFLOWCOPY_UPDATE_SETVALUES);
-        if (!StringUtils.isBlank(wfCopySetValuesName)) {
-            AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
+        if (!StringUtils.isBlank(wfCopyUpdateSetValuesName)) {
+            AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopyUpdateSetValuesName);
             appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore,
                     Collections.emptyMap(), null);
         }
