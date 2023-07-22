@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -437,15 +438,26 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppApplet findAppApplet(Long appletId) throws UnifyException;
 
     /**
-     * Checks if an applet requires an update draft workflow.
+     * Checks if an applet is with workflow copy.
      * 
      * @param appletName
      *                   the applet name
-     * @return true if applet requires update draft workflow otherwise false.
+     * @return true if applet is with workflow copy otherwise false.
      * @throws UnifyException
      *                        if an error occurs.
      */
-    boolean isAppletRequiresUpdateDraftWorkflow(String appletName) throws UnifyException;
+    boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException;
+
+    /**
+     * Gets applet workflow copy information.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the applet workflow copy information
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    AppletWorkflowCopyInfo getAppletWorkflowCopyInfo(String appletName) throws UnifyException;
 
     /**
      * Gets application name.

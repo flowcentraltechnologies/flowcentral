@@ -46,7 +46,7 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
         entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null, _rootAppletDef.getDescription(),
                 getCurrFormAppletDef(), null, EntitySearch.ENABLE_ALL, false, false);
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariable);
-        final boolean isUpdateDraft = ApplicationNameUtils.UPDATE_DRAFT_SUFFIX.equals(vestigial);
+        final boolean isUpdateDraft = ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX.equals(vestigial);
 
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);

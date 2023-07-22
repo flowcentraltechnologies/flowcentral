@@ -45,7 +45,9 @@ public class WfUserActionDef {
     private String nextStepName;
 
     private String setValuesName;
-    
+
+    private String appletSetValuesName;
+
     private int orderIndex;
 
     private boolean formReview;
@@ -55,8 +57,9 @@ public class WfUserActionDef {
     private boolean forwarderPreferred;
 
     public WfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
-            String description, String label, String symbol, String styleClass, String nextStepName, String setValuesName, int orderIndex,
-            boolean formReview, boolean validatePage, boolean forwarderPreferred) {
+            String description, String label, String symbol, String styleClass, String nextStepName,
+            String setValuesName, String appletSetValuesName, int orderIndex, boolean formReview, boolean validatePage,
+            boolean forwarderPreferred) {
         this.commentRequirement = commentRequirement;
         this.highlightType = highlightType;
         this.name = name;
@@ -66,6 +69,7 @@ public class WfUserActionDef {
         this.styleClass = styleClass;
         this.nextStepName = nextStepName;
         this.setValuesName = setValuesName;
+        this.appletSetValuesName = appletSetValuesName;
         this.orderIndex = orderIndex;
         this.formReview = formReview;
         this.validatePage = validatePage;
@@ -108,6 +112,10 @@ public class WfUserActionDef {
         return setValuesName;
     }
 
+    public String getAppletSetValuesName() {
+        return appletSetValuesName;
+    }
+
     public int getOrderIndex() {
         return orderIndex;
     }
@@ -126,6 +134,11 @@ public class WfUserActionDef {
 
     public boolean isWithSetValues() {
         return !StringUtils.isBlank(setValuesName);
+    }
+
+
+    public boolean isWithAppletSetValues() {
+        return !StringUtils.isBlank(appletSetValuesName);
     }
 
 }

@@ -18,6 +18,7 @@ package com.flowcentraltech.flowcentral.studio.business.policies;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
@@ -55,8 +56,8 @@ public class StudioOnCreateWorkflowPolicy extends StudioOnCreateComponentPolicy 
         super.doExecutePreAction(ctx);
         Workflow workflow = (Workflow) ctx.getInst();
         if (DataUtils.isBlank(workflow.getStepList())) {
-            List<WfStep> stepList = WorkflowDesignUtils
-                    .generateWorkflowSteps(WorkflowDesignUtils.DesignType.DEFAULT_WORKFLOW, workflow.getLabel());
+            List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(
+                    WorkflowDesignUtils.DesignType.DEFAULT_WORKFLOW, workflow.getLabel(), new AppletWorkflowCopyInfo());
             workflow.setStepList(stepList);
         }
 

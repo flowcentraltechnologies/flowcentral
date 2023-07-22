@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
@@ -41,7 +42,9 @@ public final class WorkflowDesignUtils {
     public enum DesignType {
         DEFAULT_WORKFLOW(
                 "end"),
-        UPDATE_DRAFT_WORKFLOW(
+        WORKFLOW_COPY_CREATE(
+                "notifyRoleOnDraft"),
+        WORKFLOW_COPY_UPDATE(
                 "notifyRoleOnDraft");
 
         private final String startNext;
@@ -54,8 +57,12 @@ public final class WorkflowDesignUtils {
             return startNext;
         }
 
-        public boolean isDraft() {
-            return UPDATE_DRAFT_WORKFLOW.equals(this);
+        public boolean isWorkflowCopyCreate() {
+            return WORKFLOW_COPY_CREATE.equals(this);
+        }
+
+        public boolean isWorkflowCopyUpdate() {
+            return WORKFLOW_COPY_UPDATE.equals(this);
         }
     }
 
@@ -63,7 +70,8 @@ public final class WorkflowDesignUtils {
 
     }
 
-    public static List<WfStep> generateWorkflowSteps(DesignType type, String workflowLabel) {
+    public static List<WfStep> generateWorkflowSteps(final DesignType type, final String workflowLabel,
+            final AppletWorkflowCopyInfo appletWorkflowCopyInfo) {
         List<WfStep> stepList = new ArrayList<WfStep>();
 
         // Add start step
@@ -96,7 +104,7 @@ public final class WorkflowDesignUtils {
         wfStep.setUserActionList(Arrays.asList(recoverUserAction));
         stepList.add(wfStep);
 
-        if (type.isDraft()) {
+        if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) {
             // Add draft notification step
             wfStep = new WfStep();
             wfStep.setType(WorkflowStepType.NOTIFICATION);
@@ -110,7 +118,9 @@ public final class WorkflowDesignUtils {
             wfStepAlert.setType(WorkflowAlertType.PASS_THROUGH);
             wfStepAlert.setName("draftAlert");
             wfStepAlert.setDescription("Draft Alert");
-            wfStepAlert.setGenerator(WorkflowModuleNameConstants.UPDATE_DRAFT_APPROVAL_EMAIL_SENDER);
+            wfStepAlert.setGenerator(type.isWorkflowCopyCreate()
+                    ? WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER
+                    : WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER);
             wfStepAlert.setAlertWorkflowRoles(true);
             wfStep.setAlertList(Arrays.asList(wfStepAlert));
             stepList.add(wfStep);
@@ -122,6 +132,7 @@ public final class WorkflowDesignUtils {
             wfStep.setName("draftApproval");
             wfStep.setDescription(workflowLabel + " Approval");
             wfStep.setLabel(workflowLabel + " Approval");
+            wfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
 
             WfStepUserAction approveUserAction = new WfStepUserAction();
             approveUserAction.setName("approve");
@@ -129,7 +140,10 @@ public final class WorkflowDesignUtils {
             approveUserAction.setLabel("Approve");
             approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             approveUserAction.setHighlightType(HighlightType.GREEN);
-            approveUserAction.setNextStepName("updateOriginal");
+            approveUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "deleteOriginal" : "updateOriginal");
+            approveUserAction.setAppletSetValuesName(
+                    type.isWorkflowCopyCreate() ? appletWorkflowCopyInfo.getCreateApprovalSetValuesName()
+                            : appletWorkflowCopyInfo.getUpdateApprovalSetValuesName());
 
             WfStepUserAction rejectUserAction = new WfStepUserAction();
             rejectUserAction.setName("reject");
@@ -138,19 +152,33 @@ public final class WorkflowDesignUtils {
             rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             rejectUserAction.setHighlightType(HighlightType.RED);
             rejectUserAction.setNextStepName("end");
+
             wfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
             stepList.add(wfStep);
 
-            // Add update original step
-            wfStep = new WfStep();
-            wfStep.setType(WorkflowStepType.RECORD_ACTION);
-            wfStep.setRecordActionType(RecordActionType.UPDATE_ORIGINAL);
-            wfStep.setPriority(WorkflowStepPriority.NORMAL);
-            wfStep.setName("updateOriginal");
-            wfStep.setDescription("Update Original");
-            wfStep.setLabel("Update Original");
-            wfStep.setNextStepName("end");
-            stepList.add(wfStep);
+            if (type.isWorkflowCopyCreate()) {
+                // Add delete original step
+                wfStep = new WfStep();
+                wfStep.setType(WorkflowStepType.RECORD_ACTION);
+                wfStep.setRecordActionType(RecordActionType.DELETE);
+                wfStep.setPriority(WorkflowStepPriority.NORMAL);
+                wfStep.setName("deleteOriginal");
+                wfStep.setDescription("Delete Original");
+                wfStep.setLabel("Delete Original");
+                wfStep.setNextStepName("end");
+                stepList.add(wfStep);
+            } else {
+                // Add update original step
+                wfStep = new WfStep();
+                wfStep.setType(WorkflowStepType.RECORD_ACTION);
+                wfStep.setRecordActionType(RecordActionType.UPDATE_ORIGINAL);
+                wfStep.setPriority(WorkflowStepPriority.NORMAL);
+                wfStep.setName("updateOriginal");
+                wfStep.setDescription("Update Original");
+                wfStep.setLabel("Update Original");
+                wfStep.setNextStepName("end");
+                stepList.add(wfStep);
+            }
         }
 
         return stepList;

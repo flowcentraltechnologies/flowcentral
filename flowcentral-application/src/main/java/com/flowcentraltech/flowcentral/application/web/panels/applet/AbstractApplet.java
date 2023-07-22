@@ -118,7 +118,7 @@ public abstract class AbstractApplet {
     
     public boolean isUpdateWorkflowCopy() throws UnifyException {
         return getRootAppletDef().getPropValue(boolean.class,
-                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY);
+                AppletPropertyConstants.WORKFLOWCOPY);
     }
     
     public boolean navBackToPrevious() throws UnifyException {

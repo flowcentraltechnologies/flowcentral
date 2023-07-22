@@ -59,6 +59,9 @@ public class WfStepUserAction extends BaseNamedEntity {
     @Column(name = "SET_VALUES_NM", length = 64, nullable = true)
     private String setValuesName;
 
+    @Column(name = "APPLET_SET_VALUES_NM", length = 64, nullable = true)
+    private String appletSetValuesName;
+
     @Column
     private int orderIndex;
 
@@ -134,6 +137,14 @@ public class WfStepUserAction extends BaseNamedEntity {
 
     public void setSetValuesName(String setValuesName) {
         this.setValuesName = setValuesName;
+    }
+
+    public String getAppletSetValuesName() {
+        return appletSetValuesName;
+    }
+
+    public void setAppletSetValuesName(String appletSetValuesName) {
+        this.appletSetValuesName = appletSetValuesName;
     }
 
     public int getOrderIndex() {

@@ -38,16 +38,20 @@ public class AppAppletPropQuery extends BaseConfigEntityQuery<AppAppletProp> {
         return (AppAppletPropQuery) addNotEquals("applicationName", applicationName);
     }
 
-    public AppAppletPropQuery valueBeginsWith(String value) {
-        return (AppAppletPropQuery) addBeginsWith("value", value);
-    }
-
     public AppAppletPropQuery applicationName(String applicationName) {
         return (AppAppletPropQuery) addEquals("applicationName", applicationName);
     }
 
     public AppAppletPropQuery appletName(String appletName) {
         return (AppAppletPropQuery) addEquals("appletName", appletName);
+    }
+
+    public AppAppletPropQuery name(String name) {
+        return (AppAppletPropQuery) addEquals("name", name);
+    }
+
+    public AppAppletPropQuery valueBeginsWith(String value) {
+        return (AppAppletPropQuery) addBeginsWith("value", value);
     }
 
     public AppAppletPropQuery value(String value) {

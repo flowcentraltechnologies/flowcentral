@@ -5042,9 +5042,6 @@
 				<property name="maintainForm.update.condition"
 					description="$m{studio.appappletprop.manageentity.maintain.updatecondition}"
 					inputWidget="studio.propertyappletfilterlist" />
-				<property name="maintainForm.update.workflowcopy.setvalues"
-					description="$m{studio.appappletprop.manageentity.maintain.updateworkflowcopysetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="maintainForm.delete.policy"
 					description="$m{studio.appappletprop.manageentity.maintain.deletepolicy}"
 					inputWidget="studio.propertyentityactionpolicylist" />
@@ -5068,9 +5065,6 @@
 					inputWidget="application.checkbox" />
 				<property name="maintainForm.update"
 					description="$m{studio.appappletprop.manageentity.maintainform.update}"
-					inputWidget="application.checkbox" />
-				<property name="maintainForm.update.workflowcopy"
-					description="$m{studio.appappletprop.manageentity.maintainform.update.workflowcopy}"
 					inputWidget="application.checkbox" />
 				<property name="maintainForm.delete"
 					description="$m{studio.appappletprop.manageentity.maintainform.delete}"
@@ -5254,6 +5248,18 @@
 				<property name="maintainForm.delete"
 					description="$m{studio.appappletprop.manageentitysingleform.maintainform.delete}"
 					inputWidget="application.checkbox" />
+			</propertySet>
+			<propertySet
+				label="$m{studio.appappletprop.manageentity.workflowcopyproperties}">
+				<property name="workflowCopy"
+					description="$m{studio.appappletprop.manageentity.workflowcopy}"
+					inputWidget="application.checkbox" />
+				<property name="workflowCopy.create.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createsetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.update.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updatesetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentitysingleform.workflowproperties}">

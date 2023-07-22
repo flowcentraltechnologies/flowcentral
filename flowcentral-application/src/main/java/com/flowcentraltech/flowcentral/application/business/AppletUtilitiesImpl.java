@@ -666,18 +666,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public void ensureUpdateDraftWorkflow(AppletDef appletDef) throws UnifyException {
-        applicationWorkItemUtilies.ensureUpdateDraftWorkflow(appletDef);
+    public void ensureWorkflowCopyWorkflows(String appletName) throws UnifyException {
+        applicationWorkItemUtilies.ensureWorkflowCopyWorkflows(appletName);
     }
 
     @Override
-    public void ensureUpdateDraftWorkflow(String appletName) throws UnifyException {
-        applicationWorkItemUtilies.ensureUpdateDraftWorkflow(appletName);
-    }
-
-    @Override
-    public boolean isAppletRequiresUpdateDraftWorkflow(String appletName) throws UnifyException {
-        return applicationModuleService.isAppletRequiresUpdateDraftWorkflow(appletName);
+    public boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException {
+        return applicationModuleService.isAppletWithWorkflowCopy(appletName);
     }
 
     @Override
@@ -2140,7 +2135,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         ValueStore wfCopyValueStore = new BeanValueStore(entityClassDef.newInst());
         wfCopyValueStore.copyWithExclusions(new BeanValueStore(inst), ApplicationEntityUtils.RESERVED_BASE_FIELDS);
         final String wfCopySetValuesName = formAppletDef.getPropValue(String.class,
-                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES);
+                AppletPropertyConstants.WORKFLOWCOPY_UPDATE_SETVALUES);
         if (!StringUtils.isBlank(wfCopySetValuesName)) {
             AppletSetValuesDef appletSetValuesDef = formAppletDef.getSetValues(wfCopySetValuesName);
             appletSetValuesDef.getSetValuesDef().apply(this, entityClassDef.getEntityDef(), getNow(), wfCopyValueStore,
