@@ -37,16 +37,27 @@ import com.tcdng.unify.core.criterion.Equals;
  */
 public class ManageEntityListApplet extends AbstractEntityFormApplet {
 
+    private String appletDescription;
+
     public ManageEntityListApplet(AppletUtilities au, String pathVariable,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
         final AppletDef _rootAppletDef = getRootAppletDef();
         setCurrFormAppletDef(_rootAppletDef);
-        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null, _rootAppletDef.getDescription(),
-                getCurrFormAppletDef(), null, EntitySearch.ENABLE_ALL, false, false);
         final String vestigial = ApplicationNameUtils.getVestigialNamePart(pathVariable);
         final boolean isUpdateDraft = ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX.equals(vestigial);
+        entitySearch = au.constructEntitySearch(new FormContext(getCtx()), this, null, _rootAppletDef.getDescription(),
+                getCurrFormAppletDef(), null,
+                isUpdateDraft ? EntitySearch.ENABLE_ALL & ~EntitySearch.SHOW_NEW_BUTTON : EntitySearch.ENABLE_ALL,
+                false, false);
+        if (isUpdateDraft) {
+            entitySearch.setAltTableLabel(au.resolveSessionMessage("$m{pagetitle.updatedraft}",
+                    entitySearch.getEntityTable().getTableDef().getLabel()));
+            appletDescription = au.resolveSessionMessage("$m{pagetitle.updatedraft}", super.getAppletDescription());
+        } else {
+            appletDescription = super.getAppletDescription();
+        }
 
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);
@@ -62,6 +73,11 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
         }
 
         navBackToSearch();
+    }
+
+    @Override
+    public String getAppletDescription() throws UnifyException {
+        return appletDescription;
     }
 
     @Override

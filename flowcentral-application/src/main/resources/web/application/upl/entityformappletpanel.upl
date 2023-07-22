@@ -23,9 +23,9 @@
 	moreCenterComponents:$c{displayCounterLabel}
 	moreActionButtons:$f{moreActionButtons}
 	moreActionButtons:$c{formAttachmentBtn frmActionBtns saveAsBtn saveBtn saveNextBtn saveCloseBtn}
-	moreActionButtons:$c{updateBtn updateCloseBtn submitNextBtn submitCloseBtn deleteBtn cancelBtn prevBtn nextBtn}
+	moreActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn prevBtn nextBtn}
 	altActionButtons:$c{frmActionBtns saveBtn saveNextBtn saveCloseBtn}
-	altActionButtons:$c{updateBtn updateCloseBtn submitNextBtn submitCloseBtn deleteBtn cancelBtn}
+	altActionButtons:$c{submitNextBtn submitCloseBtn updateBtn updateCloseBtn deleteBtn cancelBtn}
 	moreMemoryComponents:$c{focusMemory tabMemory}
 	switchOnChangeEventHandler:$d{!ui-event event:onchange action:$c{switchOnChangeAct}}
 !ui-hidden:focusMemory binding:focusWidgetId	

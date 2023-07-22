@@ -109,6 +109,8 @@ public class EntitySearch extends AbstractPanelFormBinding {
 
     private String appAppletFilterName;
 
+    private String altTableLabel;
+
     private final boolean viewItemsInSeparateTabs;
 
     private int childTabIndex;
@@ -201,15 +203,25 @@ public class EntitySearch extends AbstractPanelFormBinding {
         return entityTable;
     }
 
-    public String getEntityTitle() {
-        return entityTable.getTableDef().getLabel();
+    public String getAltTableLabel() {
+        return altTableLabel;
+    }
+
+    public void setAltTableLabel(String altTableLabel) {
+        this.altTableLabel = altTableLabel;
+    }
+
+    public String getEntityTitle() throws UnifyException {
+        return altTableLabel != null
+                ? altTableLabel
+                : entityTable.getTableDef().getLabel();
     }
 
     public EntityDef getEntityDef() {
         return entityTable.getTableDef().getEntityDef();
     }
 
-    public String getEntitySubTitle() {
+    public String getEntitySubTitle() throws UnifyException {
         return entitySubTitle;
     }
 
