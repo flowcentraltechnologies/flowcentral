@@ -464,7 +464,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final EntityDef entityDef = appletUtil.getAppletEntityDef(appletName);
         final AppletWorkflowCopyInfo appletWorkflowCopyInfo = appletUtil.application()
                 .getAppletWorkflowCopyInfo(appletName);
-        final String workflowLabel = entityDef.getLabel() + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
+        final String workflowLabel = entityDef.getLabel()
+                + (designType.isWorkflowCopyCreate() ? " Create (Workflow Copy)" : " Update (Workflow Copy)");
         Workflow workflow = environment()
                 .findLean(new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
         if (workflow == null) {
