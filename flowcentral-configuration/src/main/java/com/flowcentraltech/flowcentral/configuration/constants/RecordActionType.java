@@ -34,7 +34,7 @@ public enum RecordActionType implements EnumConst {
             "C"),
     UPDATE(
             "U"),
-    UPDATE_COPY(
+    UPDATE_ORIGINAL(
             "Y"),
     DELETE(
             "D");
@@ -56,7 +56,7 @@ public enum RecordActionType implements EnumConst {
     }
 
     public boolean isUpdate() {
-        return CREATE.equals(this) || UPDATE.equals(this) || UPDATE_COPY.equals(this);
+        return CREATE.equals(this) || UPDATE.equals(this) || UPDATE_ORIGINAL.equals(this);
     }
 
     public static RecordActionType fromCode(String code) {

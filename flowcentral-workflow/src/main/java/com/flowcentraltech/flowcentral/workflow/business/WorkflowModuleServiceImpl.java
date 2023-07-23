@@ -32,6 +32,8 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleEr
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -60,6 +62,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfEnrichmentPoli
 import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
+import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
@@ -117,6 +120,7 @@ import com.flowcentraltech.flowcentral.workflow.entities.WorkflowFilterQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValues;
 import com.flowcentraltech.flowcentral.workflow.entities.WorkflowSetValuesQuery;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowDesignUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils;
 import com.flowcentraltech.flowcentral.workflow.util.WorkflowNameUtils.WfAppletNameParts;
@@ -127,6 +131,7 @@ import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Periodic;
 import com.tcdng.unify.core.annotation.PeriodicType;
+import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.annotation.TransactionAttribute;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.constant.FrequencyUnit;
@@ -166,6 +171,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     private static final String WFTRANSITION_QUEUE_LOCK = "wf::transitionqueue-lock";
 
     private static final String WFAUTOLOADING_LOCK = "wf::autoloading-lock";
+
+    private static final String WFWORKFLOWCOPY_LOCK = "wf::workflowcopy-lock";
 
     private static final String WORKFLOW_APPLICATION = "workflow";
 
@@ -303,8 +310,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     wfStepUserAction.getDescription(), wfStepUserAction.getLabel(),
                                     wfStepUserAction.getSymbol(), wfStepUserAction.getStyleClass(),
                                     wfStepUserAction.getNextStepName(), wfStepUserAction.getSetValuesName(),
-                                    wfStepUserAction.getOrderIndex(), wfStepUserAction.isFormReview(),
-                                    wfStepUserAction.isValidatePage(), wfStepUserAction.isForwarderPreferred());
+                                    wfStepUserAction.getAppletSetValuesName(), wfStepUserAction.getOrderIndex(),
+                                    wfStepUserAction.isFormReview(), wfStepUserAction.isValidatePage(),
+                                    wfStepUserAction.isForwarderPreferred());
                         }
 
                         for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
@@ -426,6 +434,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst,
+            String policyName) throws UnifyException {
+        EntityActionContext ctx = new EntityActionContext(entityDef, inst, policyName);
+        executeEntityPreActionPolicy(ctx);
+        submitToWorkflowByName(workflowName, inst);
+        return executeEntityPostActionPolicy(ctx);
+    }
+
+    @Override
     public EntityActionResult submitToWorkflowChannel(EntityDef entityDef, String workflowChannelName, WorkEntity inst,
             String policyName) throws UnifyException {
         EntityActionContext ctx = new EntityActionContext(entityDef, inst, policyName);
@@ -436,6 +453,55 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return executeEntityPostActionPolicy(ctx);
+    }
+
+    @Synchronized(WFWORKFLOWCOPY_LOCK)
+    @Override
+    public void ensureWorkflowCopyWorkflows(String appletName, boolean forceUpdate) throws UnifyException {
+        if (appletUtil.isAppletWithWorkflowCopy(appletName)) {
+            updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_CREATE, appletName, forceUpdate);
+            updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_UPDATE, appletName, forceUpdate);
+        }
+    }
+
+    private void updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType designType, String appletName,
+            boolean forceUpdate) throws UnifyException {
+        final String workflowName = designType.isWorkflowCopyCreate()
+                ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(appletName)
+                : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(appletName);
+        final ApplicationEntityNameParts wnp = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
+        final EntityDef entityDef = appletUtil.getAppletEntityDef(appletName);
+        final AppletWorkflowCopyInfo appletWorkflowCopyInfo = appletUtil.application()
+                .getAppletWorkflowCopyInfo(appletName);
+        final String workflowLabel = entityDef.getLabel()
+                + (designType.isWorkflowCopyCreate() ? " Create (Workflow Copy)" : " Update (Workflow Copy)");
+        Workflow workflow = environment()
+                .findLean(new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
+        if (workflow == null) {
+            final Long applicationId = appletUtil.application().getApplicationId(wnp.getApplicationName());
+            workflow = new Workflow();
+            workflow.setApplicationId(applicationId);
+            workflow.setConfigType(ConfigType.STATIC_INSTALL);
+            workflow.setName(wnp.getEntityName());
+            workflow.setDescription(workflowLabel);
+            workflow.setLabel(workflowLabel);
+            workflow.setEntity(entityDef.getLongName());
+            workflow.setDescFormat(null); // TODO
+            workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
+            List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, workflowLabel,
+                    appletWorkflowCopyInfo);
+            workflow.setStepList(stepList);
+            environment().create(workflow);
+        } else {
+            if (forceUpdate || workflow.getAppletVersionNo() < appletWorkflowCopyInfo.getAppletVersionNo()) {
+                workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
+                workflow.setConfigType(ConfigType.STATIC_INSTALL);
+                List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, workflowLabel,
+                        appletWorkflowCopyInfo);
+                workflow.setStepList(stepList);
+                environment().updateByIdVersion(workflow);
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -524,8 +590,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Long> findWorkflowIdList(String applicationName) throws UnifyException {
-        return environment().valueList(Long.class, "id", new WorkflowQuery().applicationName(applicationName));
+    public List<Long> findCustomWorkflowIdList(String applicationName) throws UnifyException {
+        return environment().valueList(Long.class, "id",
+                new WorkflowQuery().applicationName(applicationName).isCustom());
     }
 
     @Override
@@ -679,15 +746,25 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
             final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
             boolean update = !listing;
-            if (userActionDef.isWithSetValues()) {
+            if (userActionDef.isWithSetValues() || userActionDef.isWithAppletSetValues()) {
                 wfEntityInst.setProcessingStatus(nextWfStepDef.getProcessingStatus());
                 final EntityDef entityDef = appletUtil.getEntityDef(wfDef.getEntity());
                 final Date now = getNow();
-                final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
-                if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
-                        .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
-                        .matchReader(wfEntityInstValueStore.getReader())) {
-                    wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
+                if (userActionDef.isWithSetValues()) {
+                    final WfSetValuesDef wfSetValuesDef = wfDef.getSetValuesDef(userActionDef.getSetValuesName());
+                    if (!wfSetValuesDef.isWithOnCondition() || wfSetValuesDef.getOnCondition()
+                            .getObjectFilter(entityDef, wfEntityInstValueStore.getReader(), now)
+                            .matchReader(wfEntityInstValueStore.getReader())) {
+                        wfSetValuesDef.getSetValues().apply(appletUtil, entityDef, now, wfEntityInst,
+                                Collections.emptyMap(), null);
+                    }
+                }
+
+                if (userActionDef.isWithAppletSetValues()) {
+                    final AppletDef appletDef = appletUtil.getAppletDef(currentWfStepDef.getStepAppletName());
+                    final AppletSetValuesDef appletSetValuesDef = appletDef
+                            .getSetValues(userActionDef.getAppletSetValuesName());
+                    appletSetValuesDef.getSetValuesDef().apply(appletUtil, entityDef, now, wfEntityInst,
                             Collections.emptyMap(), null);
                 }
 
@@ -1130,7 +1207,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                         (Long) wfEntityInst.getId(), (Long) wfEntityInst.getId());
                             }
                                 break;
-                            case UPDATE_COPY: {
+                            case UPDATE_ORIGINAL: {
                                 transitionItem.setUpdated();
                                 final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                                 if (originalCopyId != null) {
@@ -1176,18 +1253,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfItem.setForwardTo(null);
                     environment().updateByIdVersion(wfItem);
                     break;
-                case END:
+                case END: {
                     environment().delete(WfItem.class, wfItemId);
                     final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                     if (originalCopyId != null) {
                         // Delete update copy
-                        environment().delete(wfEntityInst.getClass(), wfEntityInst.getId());
+                        environment().deleteByIdVersion(wfEntityInst);
                         transitionItem.setDeleted();
                     } else {
                         wfEntityInst.setInWorkflow(false);
                         wfEntityInst.setProcessingStatus(null);
                         transitionItem.setUpdated();
                     }
+                }
                     break;
                 default:
                     break;

@@ -94,6 +94,8 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
                 break;
             case UPDATE:
                 break;
+            case UPDATE_EDITABLE_CHILD:
+                break;
             case UPDATE_LEAN:
                 break;
             case UPDATE_ALL:

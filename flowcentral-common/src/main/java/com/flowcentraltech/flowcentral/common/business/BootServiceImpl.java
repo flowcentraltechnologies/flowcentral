@@ -59,11 +59,11 @@ public class BootServiceImpl extends AbstractBootService<ModuleInstall> {
     }
 
     @Override
-    protected void onStartup() throws UnifyException {
+    protected void onStartup(boolean isInstallationPerformed) throws UnifyException {
         WidgetWriterUtils.registerJSAliases();
         for (UnifyComponentConfig config : getComponentConfigs(PostBootSetup.class)) {
             PostBootSetup postBootSetup = (PostBootSetup) getComponent(config.getName());
-            postBootSetup.performPostBootSetup();
+            postBootSetup.performPostBootSetup(isInstallationPerformed);
         }
     }
 

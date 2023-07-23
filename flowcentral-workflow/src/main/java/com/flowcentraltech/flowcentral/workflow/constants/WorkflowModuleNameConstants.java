@@ -36,4 +36,8 @@ public interface WorkflowModuleNameConstants {
     String REVIEW_WIZARD_UPDATE_ACTION_POLICY = "reviewwizard-updateactionpolicy";
 
     String REVIEW_WIZARD_SUBMIT_ACTION_POLICY = "reviewwizard-submitactionpolicy";
+
+    String WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopycreateapproval-emailsender";
+
+    String WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopyupdateapproval-emailsender";
 }

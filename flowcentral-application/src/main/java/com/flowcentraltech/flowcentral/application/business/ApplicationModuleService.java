@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -437,6 +438,28 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppApplet findAppApplet(Long appletId) throws UnifyException;
 
     /**
+     * Checks if an applet is with workflow copy.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return true if applet is with workflow copy otherwise false.
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException;
+
+    /**
+     * Gets applet workflow copy information.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the applet workflow copy information
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    AppletWorkflowCopyInfo getAppletWorkflowCopyInfo(String appletName) throws UnifyException;
+
+    /**
      * Gets application name.
      * 
      * @param applicationId
@@ -448,6 +471,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     String getApplicationName(Long applicationId) throws UnifyException;
 
     /**
+     * Gets application ID.
+     * 
+     * @param applicationName
+     *                      the application name
+     * @return the application ID
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    Long getApplicationId(String applicationName) throws UnifyException;
+
+    /**
      * Gets an application applet entity.
      * 
      * @param appAppletId
@@ -457,6 +491,17 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     String getAppAppletEntity(Long appAppletId) throws UnifyException;
+
+    /**
+     * Gets an application applet entity.
+     * 
+     * @param appletName
+     *                    the applet name
+     * @return the entity name
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getAppAppletEntity(String appletName) throws UnifyException;
 
     /**
      * Gets an application table entity.
@@ -1081,6 +1126,28 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     EntityDef getEntityDef(String entityName) throws UnifyException;
+
+    /**
+     * Gets a application entity definition.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the entity definition.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityDef getAppletEntityDef(String appletName) throws UnifyException;
+
+    /**
+     * Gets a application entity class definition.
+     * 
+     * @param appletName
+     *                   the applet name
+     * @return the entity class definition.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException;
 
     /**
      * Gets a application entity definition by class name.

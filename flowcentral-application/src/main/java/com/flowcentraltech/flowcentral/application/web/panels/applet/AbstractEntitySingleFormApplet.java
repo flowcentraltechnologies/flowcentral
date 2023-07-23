@@ -225,7 +225,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
     }
 
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
-        return isUpdateWorkflowCopy();
+        return isWorkflowCopy();
     }
 
     public EntityActionResult saveNewInst() throws UnifyException {

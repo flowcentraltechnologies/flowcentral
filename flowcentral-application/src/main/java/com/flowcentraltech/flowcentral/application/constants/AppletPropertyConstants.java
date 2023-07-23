@@ -112,10 +112,6 @@ public interface AppletPropertyConstants {
 
     String MAINTAIN_FORM_UPDATE_CONDITION = "maintainForm.update.condition";
 
-    String MAINTAIN_FORM_UPDATE_WORKFLOWCOPY = "maintainForm.update.workflowcopy";
-
-    String MAINTAIN_FORM_UPDATE_WORKFLOWCOPY_SETVALUES = "maintainForm.update.workflowcopy.setvalues";
-
     String MAINTAIN_FORM_SUBMIT = "maintainForm.submit";
 
     String MAINTAIN_FORM_SUBMIT_POLICY = "maintainForm.submit.policy";
@@ -187,4 +183,14 @@ public interface AppletPropertyConstants {
     String SINGLE_FORM_PANEL = "singleForm.panel";
 
     String PAGE_MULTIPLE = "page.multiple";
+    
+    String WORKFLOWCOPY = "workflowCopy";
+
+    String WORKFLOWCOPY_CREATE_SETVALUES = "workflowCopy.create.setvalues";
+
+    String WORKFLOWCOPY_UPDATE_SETVALUES = "workflowCopy.update.setvalues";
+
+    String WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES = "workflowCopy.create.approval.setvalues";
+
+    String WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES = "workflowCopy.update.approval.setvalues";
 }

@@ -48,7 +48,11 @@ public abstract class BaseConfigNamedEntityQuery<T extends BaseConfigNamedEntity
         return (BaseConfigNamedEntityQuery<T>) addEquals("configType", configType);
     }
 
-    public final BaseConfigNamedEntityQuery<T> configTypeIsNotCustom() {
+    public final BaseConfigNamedEntityQuery<T> isCustom() {
+        return (BaseConfigNamedEntityQuery<T>) addAmongst("configType", CUSTOM_CONFIG_TYPES);
+    }
+
+    public final BaseConfigNamedEntityQuery<T> isNotCustom() {
         return (BaseConfigNamedEntityQuery<T>) addNotAmongst("configType", CUSTOM_CONFIG_TYPES);
     }
 

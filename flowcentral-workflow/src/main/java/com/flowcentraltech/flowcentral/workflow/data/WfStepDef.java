@@ -486,8 +486,8 @@ public class WfStepDef {
 
         public Builder addWfUserActionDef(RequirementType commentRequirement, HighlightType highlightType, String name,
                 String description, String label, String symbol, String styleClass, String nextStepName,
-                String setValuesName, int orderIndex, boolean formReview, boolean validatePage,
-                boolean forwarderPreferred) {
+                String setValuesName, String appletSetValuesName, int orderIndex, boolean formReview,
+                boolean validatePage, boolean forwarderPreferred) {
             if (userActionList == null) {
                 userActionList = new LinkedHashMap<String, WfUserActionDef>();
             }
@@ -502,7 +502,8 @@ public class WfStepDef {
 
             userActionList.put(name,
                     new WfUserActionDef(commentRequirement, highlightType, name, description, label, symbol, styleClass,
-                            nextStepName, setValuesName, orderIndex, formReview, validatePage, forwarderPreferred));
+                            nextStepName, setValuesName, appletSetValuesName, orderIndex, formReview, validatePage,
+                            forwarderPreferred));
             return this;
         }
 
@@ -543,8 +544,9 @@ public class WfStepDef {
                 throw new RuntimeException("Alert with name [" + name + "] already exists in this step.");
             }
 
-            alertList.put(name, new WfAlertDef(type, name, description, recipientPolicy, recipientNameRule,
-                    recipientContactRule, generator, fireOnPrevStepName, fireOnCondition, alertHeldBy, alertWorkflowRoles));
+            alertList.put(name,
+                    new WfAlertDef(type, name, description, recipientPolicy, recipientNameRule, recipientContactRule,
+                            generator, fireOnPrevStepName, fireOnCondition, alertHeldBy, alertWorkflowRoles));
             return this;
         }
 

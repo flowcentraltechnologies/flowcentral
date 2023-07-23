@@ -252,6 +252,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                     }
                         break;
                     case UPDATE:
+                    case UPDATE_EDITABLE_CHILD:
                     case UPDATE_LEAN: {
                         Object reqBean = interconnect.getBeanFromJsonPayload(req);
                         if (reqBean != null) {

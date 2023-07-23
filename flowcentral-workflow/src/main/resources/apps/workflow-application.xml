@@ -11,13 +11,13 @@
 			editor="!ui-select list:wfchanneldestinationlist listParams:$l{direction entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfsteppolicylist"
-			description="$m{workflow.widgettype.wfsteppolicylist}" dataType="string"
-			inputType="string"
+			description="$m{workflow.widgettype.wfsteppolicylist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:wfsteppolicylist listParams:$l{type} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="wfsteprulelist"
-			description="$m{workflow.widgettype.wfsteprulelist}" dataType="string"
-			inputType="string"
+			description="$m{workflow.widgettype.wfsteprulelist}"
+			dataType="string" inputType="string"
 			editor="!ui-select list:rulelist listParams:$l{policy} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 	</widgetTypes>
@@ -34,8 +34,8 @@
 		</applet>
 		<applet name="manageInteractiveSteps"
 			description="$m{workflow.step.interactive.manage}"
-			label="$m{workflow.step.interactive.manage.label}" type="manage_entitylist"
-			entity="wfStep" menuAccess="false">
+			label="$m{workflow.step.interactive.manage.label}"
+			type="manage_entitylist" entity="wfStep" menuAccess="false">
 			<property name="searchTable" value="wfStepTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="false" />
@@ -43,13 +43,15 @@
 			<property name="baseRestriction" value="interactiveSteps" />
 			<filter name="interactiveSteps"
 				description="$m{workflow.steps.filter.interactive}">
-				<restriction type="amongst" field="type" paramA="USR|ERR|SET|MRT|PRT|BRT|REC|ENR|PRC|NTF" />
+				<restriction type="amongst" field="type"
+					paramA="USR|ERR|SET|MRT|PRT|BRT|REC|ENR|PRC|NTF" />
 			</filter>
 		</applet>
 		<applet name="manageWfStepRoles"
 			description="$m{workflow.steprole.manage}"
-			label="$m{workflow.steprole.manage.label}" type="manage_entitylist_assign"
-			entity="wfStepRole" menuAccess="false">
+			label="$m{workflow.steprole.manage.label}"
+			type="manage_entitylist_assign" entity="wfStepRole"
+			menuAccess="false">
 			<property name="searchTable" value="wfStepRoleTable" />
 			<property name="searchTable.edit" value="true" />
 			<property name="searchTable.report" value="false" />
@@ -57,8 +59,9 @@
 		</applet>
 		<applet name="manageWorkflowChannel"
 			description="$m{workflow.workflowchannel.manage}"
-			label="$m{workflow.workflowchannel.manage.label}" icon="project-diagram"
-			type="manage_entitylist" entity="workflowChannel" menuAccess="true">
+			label="$m{workflow.workflowchannel.manage.label}"
+			icon="project-diagram" type="manage_entitylist"
+			entity="workflowChannel" menuAccess="true">
 			<property name="searchTable" value="workflowChannelTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -77,9 +80,10 @@
 				<restriction type="equals" field="configType" paramA="C" />
 			</filter>
 		</applet>
-		<applet name="workflowItem" description="$m{workflow.wfitem.manage}"
-			label="$m{workflow.wfitem.manage.label}" icon="list" type="manage_entitylist"
-			entity="wfItem" menuAccess="true">
+		<applet name="workflowItem"
+			description="$m{workflow.wfitem.manage}"
+			label="$m{workflow.wfitem.manage.label}" icon="list"
+			type="manage_entitylist" entity="wfItem" menuAccess="true">
 			<property name="searchTable" value="wfItemTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="true" />
@@ -101,14 +105,14 @@
 			description="$m{workflow.step.reference}" entity="wfStep"
 			searchField="description" />
 		<reference name="wfStepSetValuesRef"
-			description="$m{workflow.stepsetvalues.reference}" entity="wfStepSetValues"
-			searchField="description" />
+			description="$m{workflow.stepsetvalues.reference}"
+			entity="wfStepSetValues" searchField="description" />
 		<reference name="wfStepRoutingRef"
-			description="$m{workflow.steprouting.reference}" entity="wfStepRouting"
-			searchField="description" />
+			description="$m{workflow.steprouting.reference}"
+			entity="wfStepRouting" searchField="description" />
 		<reference name="wfStepUserActionRef"
-			description="$m{workflow.stepuseraction.reference}" entity="wfStepUserAction"
-			searchField="description" />
+			description="$m{workflow.stepuseraction.reference}"
+			entity="wfStepUserAction" searchField="description" />
 		<reference name="wfStepAlertRef"
 			description="$m{workflow.stepalert.reference}" entity="wfStepAlert"
 			searchField="description" />
@@ -122,35 +126,40 @@
 		<reference name="wfItemRef"
 			description="$m{workflow.wfitem.reference}" entity="wfItem" />
 		<reference name="workflowChannelRef"
-			description="$m{workflow.workflowchannel.reference}" entity="workflowChannel"
-			searchField="description" />
+			description="$m{workflow.workflowchannel.reference}"
+			entity="workflowChannel" searchField="description" />
 	</references>
 	<!-- Entities -->
 	<entities>
 		<entity name="workflow" description="$m{workflow.workflow}"
 			label="$m{workflow.workflow}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.Workflow" reportable="true"
-			auditable="true">
-			<field name="label" label="$m{workflow.workflow.label}" type="string" maxLen="64"  />
-			<field name="entity" label="$m{workflow.workflow.entity}" type="string" maxLen="128"  />
+			type="com.flowcentraltech.flowcentral.workflow.entities.Workflow"
+			reportable="true" auditable="true">
+			<field name="label" label="$m{workflow.workflow.label}"
+				type="string" maxLen="64" />
+			<field name="entity" label="$m{workflow.workflow.entity}"
+				type="string" maxLen="128" />
+			<field name="appletVersionNo"
+				label="$m{workflow.workflow.appletversionno}" type="long" />
 			<field name="descFormat"
 				label="$m{workflow.workflow.itemdescformat}" type="string"
 				nullable="true" />
 			<field name="filterList" label="$m{workflow.workflow.filters}"
 				type="child_list" references="workflowFilterRef" />
-			<field name="setValuesList" label="$m{workflow.workflow.setvalues}"
-				type="child_list" references="workflowSetValuesRef" />
+			<field name="setValuesList"
+				label="$m{workflow.workflow.setvalues}" type="child_list"
+				references="workflowSetValuesRef" />
 			<field name="stepList" label="$m{workflow.workflow.steps}"
 				type="child_list" references="wfStepRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{workflow.workflow.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{workflow.workflow.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="workflowFilter"
@@ -164,10 +173,11 @@
 				label="$m{workflow.workflowfilter.filtergenerator}" type="string"
 				nullable="true" />
 			<field name="filterGeneratorRule"
-				label="$m{workflow.workflowfilter.filtergeneratorrule}" type="string"
-				nullable="true" />
+				label="$m{workflow.workflowfilter.filtergeneratorrule}"
+				type="string" nullable="true" />
 			<field name="filter" label="$m{workflow.workflowfilter.filter}"
-				type="child" category="workflow" references="application.appFilterRef" />
+				type="child" category="workflow"
+				references="application.appFilterRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{workflow.workflowfilter.uc.name}"
 				fieldList="workflowId,name" />
@@ -182,14 +192,15 @@
 			<field name="workflowId"
 				label="$m{workflow.workflowsetvalues.workflowid}" type="ref"
 				references="workflowRef" inputWidget="application.entitylist" />
-			<field name="type"
-				label="$m{workflow.workflowsetvalues.type}" type="enum_ref"
-				references="wfsetvaluestypelist"
+			<field name="type" label="$m{workflow.workflowsetvalues.type}"
+				type="enum_ref" references="wfsetvaluestypelist"
 				inputWidget="application.enumlist" />
-			<field name="onCondition" label="$m{workflow.workflowsetvalues.oncondition}"
-				type="child" category="workflow" references="application.appFilterRef" />
-			<field name="valueGenerator" label="$m{workflow.workflowsetvalues.valuegenerator}"
-				type="string" nullable = "true" />
+			<field name="onCondition"
+				label="$m{workflow.workflowsetvalues.oncondition}" type="child"
+				category="workflow" references="application.appFilterRef" />
+			<field name="valueGenerator"
+				label="$m{workflow.workflowsetvalues.valuegenerator}" type="string"
+				nullable="true" />
 			<field name="setValues"
 				label="$m{workflow.workflowsetvalues.setvalue}" type="child"
 				category="workflow" references="application.appSetValuesRef" />
@@ -205,81 +216,97 @@
 		</entity>
 		<entity name="wfStep" description="$m{workflow.step}"
 			label="$m{workflow.step}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.WfStep" reportable="false"
-			auditable="false">
+			type="com.flowcentraltech.flowcentral.workflow.entities.WfStep"
+			reportable="false" auditable="false">
 			<field name="workflowId" label="$m{workflow.step.workflowid}"
-				type="ref" references="workflowRef" inputLabel="$m{workflow.step.workflow}"
+				type="ref" references="workflowRef"
+				inputLabel="$m{workflow.step.workflow}"
 				inputWidget="application.entitysearch" />
-			<field name="type" label="$m{workflow.step.type}" type="enum_ref"
-				references="wfsteptypelist" inputWidget="application.enumlist" />
-			<field name="valueGenerator" label="$m{workflow.step.valuegenerator}"
-				type="string" nullable = "true" />
+			<field name="type" label="$m{workflow.step.type}"
+				type="enum_ref" references="wfsteptypelist"
+				inputWidget="application.enumlist" />
+			<field name="valueGenerator"
+				label="$m{workflow.step.valuegenerator}" type="string"
+				nullable="true" />
 			<field name="priority" label="$m{workflow.step.priority}"
 				type="enum_ref" references="wfstepprioritylist"
 				inputWidget="application.enumlist" />
 			<field name="recordActionType"
 				label="$m{workflow.step.recordactiontype}" type="enum_ref"
 				references="recordactiontypelist" inputWidget="application.enumlist" />
-			<field name="label" label="$m{workflow.step.label}" type="string" maxLen="64"  />
-			<field name="nextStepName" label="$m{workflow.step.nextstepname}"
-				type="string" nullable="true" />
-			<field name="policy" label="$m{workflow.step.policy}" type="string"
-				 maxLen="64" nullable="true" inputWidget="wfsteppolicylist" />
+			<field name="label" label="$m{workflow.step.label}"
+				type="string" maxLen="64" />
+			<field name="nextStepName"
+				label="$m{workflow.step.nextstepname}" type="string" nullable="true" />
+			<field name="policy" label="$m{workflow.step.policy}"
+				type="string" maxLen="64" nullable="true"
+				inputWidget="wfsteppolicylist" />
 			<field name="rule" label="$m{workflow.step.rule}" type="string"
-				 maxLen="64" nullable="true" inputWidget="wfsteprulelist" />
-			<field name="criticalMinutes" label="$m{workflow.step.criticalminutes}"
-				type="integer" />
-			<field name="expiryMinutes" label="$m{workflow.step.expiryminutes}"
-				type="integer" />
-			<field name="audit" label="$m{workflow.step.audit}" type="boolean" />
+				maxLen="64" nullable="true" inputWidget="wfsteprulelist" />
+			<field name="criticalMinutes"
+				label="$m{workflow.step.criticalminutes}" type="integer" />
+			<field name="expiryMinutes"
+				label="$m{workflow.step.expiryminutes}" type="integer" />
+			<field name="audit" label="$m{workflow.step.audit}"
+				type="boolean" />
 			<field name="branchOnly" label="$m{workflow.step.branchonly}"
 				type="boolean" />
 			<field name="includeForwarder"
 				label="$m{workflow.step.includeforwarder}" type="boolean" />
 			<field name="forwarderPreffered"
 				label="$m{workflow.step.forwarderpreffered}" type="boolean" />
-			<field name="emails"
-				label="$m{workflow.step.emails}" type="string" />
-			<field name="comments"
-				label="$m{workflow.step.comments}" type="string" />
+			<field name="emails" label="$m{workflow.step.emails}"
+				type="string" />
+			<field name="comments" label="$m{workflow.step.comments}"
+				type="string" />
 			<field name="typeDesc" label="$m{workflow.step.typedesc}"
 				type="list_only" key="type" property="description" />
-			<field name="priorityDesc" label="$m{workflow.step.prioritydesc}"
-				type="list_only" key="priority" property="description" />
+			<field name="priorityDesc"
+				label="$m{workflow.step.prioritydesc}" type="list_only"
+				key="priority" property="description" />
 			<field name="recordActionTypeDesc"
 				label="$m{workflow.step.recordactiontypedesc}" type="list_only"
 				key="recordActionType" property="description" />
-			<field name="workflowName" label="$m{workflow.step.workflowname}"
-				type="list_only" key="workflowId" property="name" />
-			<field name="workflowDesc" label="$m{workflow.step.workflowdesc}"
-				type="list_only" key="workflowId" property="description" />
-			<field name="applicationName" label="$m{workflow.step.applicationname}"
-				type="list_only" key="workflowId" property="applicationName" />
-			<field name="applicationDesc" label="$m{workflow.step.applicationdesc}"
-				type="list_only" key="workflowId" property="applicationDesc" />
+			<field name="workflowName"
+				label="$m{workflow.step.workflowname}" type="list_only"
+				key="workflowId" property="name" />
+			<field name="workflowDesc"
+				label="$m{workflow.step.workflowdesc}" type="list_only"
+				key="workflowId" property="description" />
+			<field name="applicationName"
+				label="$m{workflow.step.applicationname}" type="list_only"
+				key="workflowId" property="applicationName" />
+			<field name="applicationDesc"
+				label="$m{workflow.step.applicationdesc}" type="list_only"
+				key="workflowId" property="applicationDesc" />
 			<field name="routingList" label="$m{workflow.step.routings}"
 				type="child_list" references="wfStepRoutingRef" />
-			<field name="userActionList" label="$m{workflow.step.useractions}"
-				type="child_list" references="wfStepUserActionRef" />
+			<field name="userActionList"
+				label="$m{workflow.step.useractions}" type="child_list"
+				references="wfStepUserActionRef" />
 			<field name="alertList" label="$m{workflow.step.alerts}"
 				type="child_list" references="wfStepAlertRef" />
 			<field name="roleList" label="$m{workflow.step.roles}"
 				type="child_list" references="wfStepRoleRef" />
 		</entity>
-		<entity name="wfStepSetValues" description="$m{workflow.stepsetvalues}"
+		<entity name="wfStepSetValues"
+			description="$m{workflow.stepsetvalues}"
 			label="$m{workflow.stepsetvalues.label}"
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepSetValues"
 			reportable="false" auditable="false">
-			<field name="wfStepId" label="$m{workflow.stepsetvalues.stepid}"
-				type="ref" references="wfStepRef"
-				inputLabel="$m{workflow.stepsetvalues.step}"
+			<field name="wfStepId"
+				label="$m{workflow.stepsetvalues.stepid}" type="ref"
+				references="wfStepRef" inputLabel="$m{workflow.stepsetvalues.step}"
 				inputWidget="application.entitylist" />
-			<field name="wfStepDesc" label="$m{workflow.stepsetvalues.stepdesc}"
-				type="list_only" key="wfStepId" property="description" />
-			<field name="setValues" label="$m{workflow.stepsetvalues.values}"
-				type="child" category="wfstep" references="application.appSetValuesRef" />
+			<field name="wfStepDesc"
+				label="$m{workflow.stepsetvalues.stepdesc}" type="list_only"
+				key="wfStepId" property="description" />
+			<field name="setValues"
+				label="$m{workflow.stepsetvalues.values}" type="child"
+				category="wfstep" references="application.appSetValuesRef" />
 		</entity>
-		<entity name="wfStepRouting" description="$m{workflow.steprouting}"
+		<entity name="wfStepRouting"
+			description="$m{workflow.steprouting}"
 			label="$m{workflow.steprouting.label}"
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepRouting"
 			reportable="false" auditable="false">
@@ -288,74 +315,92 @@
 				inputLabel="$m{workflow.steprouting.step}"
 				inputWidget="application.entitylist" />
 			<field name="nextStepName"
-				label="$m{workflow.steprouting.nextstepname}" type="string"  maxLen="64" />
+				label="$m{workflow.steprouting.nextstepname}" type="string"
+				maxLen="64" />
 			<field name="conditionName"
-				label="$m{workflow.steprouting.filter}" type="string"  maxLen="64" />
-			<field name="wfStepDesc" label="$m{workflow.steprouting.stepdesc}"
-				type="list_only" key="wfStepId" property="description" />
+				label="$m{workflow.steprouting.filter}" type="string" maxLen="64" />
+			<field name="wfStepDesc"
+				label="$m{workflow.steprouting.stepdesc}" type="list_only"
+				key="wfStepId" property="description" />
 		</entity>
 		<entity name="wfStepUserAction"
 			description="$m{workflow.stepuseraction}"
 			label="$m{workflow.stepuseraction.label}"
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction"
 			reportable="false" auditable="false">
-			<field name="wfStepId" label="$m{workflow.stepuseraction.stepid}"
-				type="ref" references="wfStepRef"
-				inputLabel="$m{workflow.stepuseraction.step}"
+			<field name="wfStepId"
+				label="$m{workflow.stepuseraction.stepid}" type="ref"
+				references="wfStepRef" inputLabel="$m{workflow.stepuseraction.step}"
 				inputWidget="application.entitylist" />
 			<field name="commentRequirement"
-				label="$m{workflow.stepuseraction.commentrequirement}" type="enum_ref"
-				references="requirementtypelist" inputWidget="application.enumlist" />
+				label="$m{workflow.stepuseraction.commentrequirement}"
+				type="enum_ref" references="requirementtypelist"
+				inputWidget="application.enumlist" />
 			<field name="highlightType"
 				label="$m{workflow.stepuseraction.highlighttype}" type="enum_ref"
-				references="highlighttypelist" inputWidget="application.enumlist" nullable = "true" />
+				references="highlighttypelist" inputWidget="application.enumlist"
+				nullable="true" />
 			<field name="label" label="$m{workflow.stepuseraction.label}"
-				type="string" maxLen="96"  />
+				type="string" maxLen="96" />
 			<field name="nextStepName"
-				label="$m{workflow.stepuseraction.nextstepname}" type="string" maxLen="64"  />
-			<field name="orderIndex" label="$m{workflow.stepuseraction.orderindex}"
-				type="integer" />
+				label="$m{workflow.stepuseraction.nextstepname}" type="string"
+				maxLen="64" />
+			<field name="setValuesName"
+				label="$m{workflow.stepuseraction.setvaluesname}" type="string"
+				maxLen="64" nullable="true" />
+			<field name="appletSetValuesName"
+				label="$m{workflow.stepuseraction.appletsetvaluesname}"
+				type="string" maxLen="64" nullable="true" />
+			<field name="orderIndex"
+				label="$m{workflow.stepuseraction.orderindex}" type="integer" />
 			<field name="formReview"
 				label="$m{workflow.stepuseraction.formreview}" type="boolean" />
 			<field name="validatePage"
 				label="$m{workflow.stepuseraction.validatepage}" type="boolean" />
-			<field name="wfStepDesc" label="$m{workflow.stepuseraction.stepdesc}"
-				type="list_only" key="wfStepId" property="description" />
+			<field name="wfStepDesc"
+				label="$m{workflow.stepuseraction.stepdesc}" type="list_only"
+				key="wfStepId" property="description" />
 			<field name="commentRequirementDesc"
-				label="$m{workflow.stepuseraction.commentrequirementdesc}" type="list_only"
-				key="commentRequirement" property="description" />
+				label="$m{workflow.stepuseraction.commentrequirementdesc}"
+				type="list_only" key="commentRequirement" property="description" />
 			<field name="highlightTypeDesc"
-				label="$m{workflow.stepuseraction.highlighttypedesc}" type="list_only"
-				key="highlightType" property="description" />
+				label="$m{workflow.stepuseraction.highlighttypedesc}"
+				type="list_only" key="highlightType" property="description" />
 		</entity>
 		<entity name="wfStepAlert" description="$m{workflow.stepalert}"
 			label="$m{workflow.stepalert.label}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert" reportable="false"
-			auditable="false">
-			<field name="wfStepId" label="$m{workflow.stepalert.stepid}" type="ref"
-				references="wfStepRef" inputLabel="$m{workflow.stepalert.step}"
+			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert"
+			reportable="false" auditable="false">
+			<field name="wfStepId" label="$m{workflow.stepalert.stepid}"
+				type="ref" references="wfStepRef"
+				inputLabel="$m{workflow.stepalert.step}"
 				inputWidget="application.entitylist" />
-			<field name="type" label="$m{workflow.stepalert.type}" type="enum_ref"
-				references="wfalerttypelist" inputWidget="application.enumlist" />
+			<field name="type" label="$m{workflow.stepalert.type}"
+				type="enum_ref" references="wfalerttypelist"
+				inputWidget="application.enumlist" />
 			<field name="notificationType"
 				label="$m{workflow.stepalert.notificationtype}" type="enum_ref"
 				references="notificationtypelist" inputWidget="application.enumlist" />
 			<field name="recipientPolicy"
-				label="$m{workflow.stepalert.recipientpolicy}" type="string" maxLen="64"  nullable="true" />
+				label="$m{workflow.stepalert.recipientpolicy}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="recipientNameRule"
-				label="$m{workflow.stepalert.recipientnamerule}" type="string" maxLen="64"  nullable="true" />
+				label="$m{workflow.stepalert.recipientnamerule}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="recipientContactRule"
-				label="$m{workflow.stepalert.recipientcontactrule}" type="string" maxLen="64"  nullable="true" />
-			<field name="generator" label="$m{workflow.stepalert.generator}"
-				type="string"  maxLen="128" />
+				label="$m{workflow.stepalert.recipientcontactrule}" type="string"
+				maxLen="64" nullable="true" />
+			<field name="generator"
+				label="$m{workflow.stepalert.generator}" type="string" maxLen="128" />
 			<field name="fireOnPrevStepName"
 				label="$m{workflow.stepalert.fireonprevstepname}" type="string"
-				nullable="true" maxLen="64"  />
+				nullable="true" maxLen="64" />
 			<field name="fireOnConditionName"
 				label="$m{workflow.stepalert.fireonfilter}" type="string"
-				nullable="true" maxLen="64"  />
-			<field name="wfStepDesc" label="$m{workflow.stepalert.stepdesc}"
-				type="list_only" key="wfStepId" property="description" />
+				nullable="true" maxLen="64" />
+			<field name="wfStepDesc"
+				label="$m{workflow.stepalert.stepdesc}" type="list_only"
+				key="wfStepId" property="description" />
 			<field name="notificationTypeDesc"
 				label="$m{workflow.stepalert.notificationtypedesc}" type="list_only"
 				key="notificationType" property="description" />
@@ -364,22 +409,26 @@
 		</entity>
 		<entity name="wfStepRole" description="$m{workflow.steprole}"
 			label="$m{workflow.steprole.label}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepRole" reportable="false"
-			auditable="false">
-			<field name="wfStepId" label="$m{workflow.steprole.stepid}" type="ref"
-				references="wfStepRef" inputLabel="$m{workflow.steprole.step}"
+			type="com.flowcentraltech.flowcentral.workflow.entities.WfStepRole"
+			reportable="false" auditable="false">
+			<field name="wfStepId" label="$m{workflow.steprole.stepid}"
+				type="ref" references="wfStepRef"
+				inputLabel="$m{workflow.steprole.step}"
 				inputWidget="application.entitylist" />
-			<field name="roleId" label="$m{workflow.steprole.roleid}" type="ref"
-				references="organization.roleRef" inputLabel="$m{workflow.steprole.role}"
+			<field name="roleId" label="$m{workflow.steprole.roleid}"
+				type="ref" references="organization.roleRef"
+				inputLabel="$m{workflow.steprole.role}"
 				inputWidget="application.entitysearch" />
 			<field name="wfStepName" label="$m{workflow.steprole.stepname}"
 				type="list_only" key="wfStepId" property="name" />
 			<field name="wfStepDesc" label="$m{workflow.steprole.stepdesc}"
 				type="list_only" key="wfStepId" property="description" />
-			<field name="workflowName" label="$m{workflow.steprole.workflowname}"
-				type="list_only" key="wfStepId" property="workflowName" />
-			<field name="workflowDesc" label="$m{workflow.steprole.workflowdesc}"
-				type="list_only" key="wfStepId" property="workflowDesc" />
+			<field name="workflowName"
+				label="$m{workflow.steprole.workflowname}" type="list_only"
+				key="wfStepId" property="workflowName" />
+			<field name="workflowDesc"
+				label="$m{workflow.steprole.workflowdesc}" type="list_only"
+				key="wfStepId" property="workflowDesc" />
 			<field name="applicationName"
 				label="$m{workflow.steprole.applicationname}" type="list_only"
 				key="wfStepId" property="applicationName" />
@@ -395,58 +444,75 @@
 			label="$m{workflow.wfitemhist.label}"
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfItemHist">
 			<field name="applicationName"
-				label="$m{workflow.wfitemhist.applicationname}" type="string"  maxLen="64" />
-			<field name="workflowName" label="$m{workflow.wfitemhist.workflowname}"
-				type="string"  maxLen="128" />
+				label="$m{workflow.wfitemhist.applicationname}" type="string"
+				maxLen="64" />
+			<field name="workflowName"
+				label="$m{workflow.wfitemhist.workflowname}" type="string"
+				maxLen="128" />
 			<field name="entity" label="$m{workflow.wfitemhist.entity}"
-				type="string"  maxLen="128" />
+				type="string" maxLen="128" />
 			<field name="originWorkRecId"
-				label="$m{workflow.wfitemhist.originworkrecid}" type="long" nullable="true" />
-			<field name="branchCode" label="$m{workflow.wfitemhist.branchcode}"
-				type="string" maxLen="32"  nullable="true" />
+				label="$m{workflow.wfitemhist.originworkrecid}" type="long"
+				nullable="true" />
+			<field name="branchCode"
+				label="$m{workflow.wfitemhist.branchcode}" type="string" maxLen="32"
+				nullable="true" />
 			<field name="departmentCode"
-				label="$m{workflow.wfitemhist.departmentcode}" type="string" maxLen="32"  nullable="true" />
-			<field name="itemDesc" label="$m{workflow.wfitemhist.wfitemdesc}"
-				type="string"  maxLen="196" />
-			<field name="initiatedBy" label="$m{workflow.wfitemhist.initiatedby}"
-				type="string"  maxLen="96" />
+				label="$m{workflow.wfitemhist.departmentcode}" type="string"
+				maxLen="32" nullable="true" />
+			<field name="itemDesc"
+				label="$m{workflow.wfitemhist.wfitemdesc}" type="string"
+				maxLen="196" />
+			<field name="initiatedBy"
+				label="$m{workflow.wfitemhist.initiatedby}" type="string"
+				maxLen="96" />
 		</entity>
-		<entity name="wfItemEvent" description="$m{workflow.wfitemevent}"
+		<entity name="wfItemEvent"
+			description="$m{workflow.wfitemevent}"
 			label="$m{workflow.wfitemevent.label}"
 			type="com.flowcentraltech.flowcentral.workflow.entities.WfItemEvent">
 			<field name="wfItemHistId"
 				label="$m{workflow.wfitemevent.wfitemhistid}" type="ref"
 				references="wfItemHistRef" inputWidget="application.entitylist" />
-			<field name="priority" label="$m{workflow.wfitemevent.priority}"
-				type="enum_ref" references="wfstepprioritylist"
-				inputWidget="application.enumlist" />
-			<field name="wfStepName" label="$m{workflow.wfitemevent.wfstepname}"
-				type="string" maxLen="64"  />
+			<field name="priority"
+				label="$m{workflow.wfitemevent.priority}" type="enum_ref"
+				references="wfstepprioritylist" inputWidget="application.enumlist" />
+			<field name="wfStepName"
+				label="$m{workflow.wfitemevent.wfstepname}" type="string"
+				maxLen="64" />
 			<field name="stepDt" label="$m{workflow.wfitemevent.stepdt}"
 				type="timestamp_utc" />
-			<field name="expectedDt" label="$m{workflow.wfitemevent.expecteddt}"
-				type="timestamp_utc" nullable="true" />
-			<field name="criticalDt" label="$m{workflow.wfitemevent.criticaldt}"
-				type="timestamp_utc" nullable="true" />
-			<field name="actionDt" label="$m{workflow.wfitemevent.actiondt}"
-				type="timestamp_utc" nullable="true" />
+			<field name="expectedDt"
+				label="$m{workflow.wfitemevent.expecteddt}" type="timestamp_utc"
+				nullable="true" />
+			<field name="criticalDt"
+				label="$m{workflow.wfitemevent.criticaldt}" type="timestamp_utc"
+				nullable="true" />
+			<field name="actionDt"
+				label="$m{workflow.wfitemevent.actiondt}" type="timestamp_utc"
+				nullable="true" />
 			<field name="actor" label="$m{workflow.wfitemevent.actor}"
-				type="string"  maxLen="64" nullable="true" />
-			<field name="wfAction" label="$m{workflow.wfitemevent.wfaction}"
-				type="string" maxLen="32"  nullable="true" />
+				type="string" maxLen="64" nullable="true" />
+			<field name="wfAction"
+				label="$m{workflow.wfitemevent.wfaction}" type="string" maxLen="32"
+				nullable="true" />
 			<field name="comment" label="$m{workflow.wfitemevent.comment}"
-				type="string" maxLen="512"  nullable="true" />
+				type="string" maxLen="512" nullable="true" />
 			<field name="prevWfStepName"
 				label="$m{workflow.wfitemevent.prevwfstepname}" type="string"
-				 maxLen="64" nullable="true" />
-			<field name="errorCode" label="$m{workflow.wfitemevent.errorcode}"
-				type="string" maxLen="32"  nullable="true" />
-			<field name="errorMsg" label="$m{workflow.wfitemevent.errormsg}"
-				type="string" nullable="true" />
-			<field name="errorTrace" label="$m{workflow.wfitemevent.errortrace}"
-				type="string" nullable="true" />
-			<field name="errorDoc" label="$m{workflow.wfitemevent.errordoc}"
-				type="string" nullable="true" />
+				maxLen="64" nullable="true" />
+			<field name="errorCode"
+				label="$m{workflow.wfitemevent.errorcode}" type="string" maxLen="32"
+				nullable="true" />
+			<field name="errorMsg"
+				label="$m{workflow.wfitemevent.errormsg}" type="string"
+				nullable="true" />
+			<field name="errorTrace"
+				label="$m{workflow.wfitemevent.errortrace}" type="string"
+				nullable="true" />
+			<field name="errorDoc"
+				label="$m{workflow.wfitemevent.errordoc}" type="string"
+				nullable="true" />
 			<field name="applicationName"
 				label="$m{workflow.wfitemevent.applicationname}" type="list_only"
 				key="wfItemHistId" property="applicationName" />
@@ -458,10 +524,12 @@
 			<field name="originWorkRecId"
 				label="$m{workflow.wfitemevent.originworkrecid}" type="list_only"
 				key="wfItemHistId" property="originWorkRecId" />
-			<field name="wfItemDesc" label="$m{workflow.wfitemevent.wfitemdesc}"
-				type="list_only" key="wfItemHistId" property="itemDesc" />
-			<field name="branchCode" label="$m{workflow.wfitemevent.branchcode}"
-				type="list_only" key="wfItemHistId" property="branchCode" />
+			<field name="wfItemDesc"
+				label="$m{workflow.wfitemevent.wfitemdesc}" type="list_only"
+				key="wfItemHistId" property="itemDesc" />
+			<field name="branchCode"
+				label="$m{workflow.wfitemevent.branchcode}" type="list_only"
+				key="wfItemHistId" property="branchCode" />
 			<field name="departmentCode"
 				label="$m{workflow.wfitemevent.departmentcode}" type="list_only"
 				key="wfItemHistId" property="departmentCode" />
@@ -471,13 +539,16 @@
 		</entity>
 		<entity name="wfItem" description="$m{workflow.wfitem}"
 			label="$m{workflow.wfitem.label}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.WfItem" reportable="true"
-			auditable="true">
-			<field name="wfItemEventId" label="$m{workflow.wfitem.wfitemeventid}"
-				type="ref" references="wfItemEventRef" inputWidget="application.entitylist" />
-			<field name="heldBy" label="$m{workflow.wfitem.heldby}" maxLen="64" nullable="true"  type="string" />
-			<field name="forwardedBy" label="$m{workflow.wfitem.forwardedby}"
-				type="string" maxLen="64" nullable="true" />
+			type="com.flowcentraltech.flowcentral.workflow.entities.WfItem"
+			reportable="true" auditable="true">
+			<field name="wfItemEventId"
+				label="$m{workflow.wfitem.wfitemeventid}" type="ref"
+				references="wfItemEventRef" inputWidget="application.entitylist" />
+			<field name="heldBy" label="$m{workflow.wfitem.heldby}"
+				maxLen="64" nullable="true" type="string" />
+			<field name="forwardedBy"
+				label="$m{workflow.wfitem.forwardedby}" type="string" maxLen="64"
+				nullable="true" />
 			<field name="criticalAlertSent"
 				label="$m{workflow.wfitem.criticalalertsent}" type="boolean" />
 			<field name="expirationAlertSent"
@@ -498,14 +569,16 @@
 				references="organization.branchRef" />
 			<field name="workflowName" label="$m{workflow.wfitem.workflow}"
 				type="list_only" key="wfItemEventId" property="workflowName" />
-			<field name="applicationName" label="$m{workflow.wfitem.application}"
-				type="list_only" key="wfItemEventId" property="applicationName" />
+			<field name="applicationName"
+				label="$m{workflow.wfitem.application}" type="list_only"
+				key="wfItemEventId" property="applicationName" />
 			<field name="priority" label="$m{workflow.wfitem.priority}"
 				type="list_only" key="wfItemEventId" property="priority" />
 			<field name="priorityDesc" label="$m{workflow.wfitem.priority}"
 				type="list_only" key="wfItemEventId" property="priorityDesc" />
-			<field name="prevWfStepName" label="$m{workflow.wfitem.prevwfstepname}"
-				type="list_only" key="wfItemEventId" property="prevWfStepName" />
+			<field name="prevWfStepName"
+				label="$m{workflow.wfitem.prevwfstepname}" type="list_only"
+				key="wfItemEventId" property="prevWfStepName" />
 			<field name="errorCode" label="$m{workflow.wfitem.errorcode}"
 				type="list_only" key="wfItemEventId" property="errorCode" />
 			<field name="errorMsg" label="$m{workflow.wfitem.errormsg}"
@@ -515,38 +588,42 @@
 			<field name="errorDoc" label="$m{workflow.wfitem.errordoc}"
 				type="list_only" key="wfItemEventId" property="errorDoc" />
 		</entity>
-		<entity name="wfWizardItem" description="$m{workflow.wfwizarditem}"
+		<entity name="wfWizardItem"
+			description="$m{workflow.wfwizarditem}"
 			label="$m{workflow.wfwizarditem.label}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.WfWizardItem" reportable="true"
-			auditable="true">
+			type="com.flowcentraltech.flowcentral.workflow.entities.WfWizardItem"
+			reportable="true" auditable="true">
 			<field name="primaryEntityId"
 				label="$m{workflow.wfwizarditem.primaryentityid}" type="long" />
 			<field name="wizard" label="$m{workflow.wfwizarditem.wizard}"
-				type="string" maxLen="128"  />
+				type="string" maxLen="128" />
 			<field name="title" label="$m{workflow.wfwizarditem.title}"
-				type="string" maxLen="96"  />
+				type="string" maxLen="96" />
 			<field name="ownerId" label="$m{workflow.wfwizarditem.ownerid}"
-				type="string" maxLen="64"  />
+				type="string" maxLen="64" />
 			<field name="percentCompleted"
 				label="$m{workflow.wfwizarditem.percentcompleted}" type="integer" />
 		</entity>
 		<entity name="workflowChannel"
 			description="$m{workflow.workflowchannel}"
 			label="$m{workflow.workflowchannel}"
-			type="com.flowcentraltech.flowcentral.workflow.entities.WfChannel" reportable="true"
-			auditable="true">
-			<field name="direction" label="$m{workflow.workflowchannel.direction}"
-				type="enum_ref" references="channeldirectiontypelist"
+			type="com.flowcentraltech.flowcentral.workflow.entities.WfChannel"
+			reportable="true" auditable="true">
+			<field name="direction"
+				label="$m{workflow.workflowchannel.direction}" type="enum_ref"
+				references="channeldirectiontypelist"
 				inputWidget="application.enumlist" />
-			<field name="status" label="$m{workflow.workflowchannel.status}"
-				type="enum_ref" references="wfchannelstatuslist"
-				inputWidget="application.enumlist" />
+			<field name="status"
+				label="$m{workflow.workflowchannel.status}" type="enum_ref"
+				references="wfchannelstatuslist" inputWidget="application.enumlist" />
 			<field name="label" label="$m{workflow.workflowchannel.label}"
-				type="string" inputWidget="application.text"  maxLen="64" />
-			<field name="entity" label="$m{workflow.workflowchannel.entity}"
-				type="string"  maxLen="128" />
+				type="string" inputWidget="application.text" maxLen="64" />
+			<field name="entity"
+				label="$m{workflow.workflowchannel.entity}" type="string"
+				maxLen="128" />
 			<field name="destination"
-				label="$m{workflow.workflowchannel.destination}" type="string"  maxLen="128" />
+				label="$m{workflow.workflowchannel.destination}" type="string"
+				maxLen="128" />
 			<field name="rule" label="$m{workflow.workflowchannel.rule}"
 				type="string" nullable="true" />
 			<field name="directionDesc"
@@ -558,20 +635,23 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{workflow.workflowchannel.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{workflow.workflowchannel.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 	</entities>
 	<!-- Tables -->
 	<tables>
-		<table name="workflowTable" description="$m{workflow.workflow.table}"
-			label="$m{workflow.workflow.table.label}" entity="workflow" itemsPerPage="20"  serialNo="true">
-			<column field="applicationDesc" renderWidget="application.text"
+		<table name="workflowTable"
+			description="$m{workflow.workflow.table}"
+			label="$m{workflow.workflow.table.label}" entity="workflow"
+			itemsPerPage="20" serialNo="true">
+			<column field="applicationDesc"
+				renderWidget="application.text"
 				label="$m{workflow.workflow.application}" widthRatio="2" />
 			<column field="name" renderWidget="application.text"
 				widthRatio="2" linkAct="maintainAct" />
@@ -585,7 +665,8 @@
 				widthRatio="1" />
 		</table>
 		<table name="wfStepTable" description="$m{workflow.step.table}"
-			label="$m{workflow.step.table.label}" entity="wfStep" itemsPerPage="20"  serialNo="true">
+			label="$m{workflow.step.table.label}" entity="wfStep"
+			itemsPerPage="20" serialNo="true">
 			<column field="workflowDesc" renderWidget="application.text"
 				label="$m{workflow.step.workflow}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
@@ -597,9 +678,10 @@
 			<column field="priorityDesc" renderWidget="application.text"
 				label="$m{workflow.step.priority}" widthRatio="1" />
 		</table>
-		<table name="wfStepRoleTable" description="$m{workflow.steprole.table}"
+		<table name="wfStepRoleTable"
+			description="$m{workflow.steprole.table}"
 			label="$m{workflow.steprole.table.label}" entity="wfStepRole"
-			itemsPerPage="20"  serialNo="true">
+			itemsPerPage="20" serialNo="true">
 			<column field="wfStepDesc" renderWidget="application.text"
 				label="$m{workflow.steprole.step}" widthRatio="1" />
 			<column field="roleDesc" renderWidget="application.text"
@@ -611,10 +693,12 @@
 			<column field="updateDt" renderWidget="application.datetime"
 				label="$m{workflow.steprole.assignedon}" widthRatio="1" />
 		</table>
-		<table name="wfItemTable" description="$m{workflow.wfitem.table}"
-			label="$m{workflow.wfitem.table.label}" entity="wfItem" itemsPerPage="20"  serialNo="true">
-			<column field="applicationName" renderWidget="application.text"
-				widthRatio="2" />
+		<table name="wfItemTable"
+			description="$m{workflow.wfitem.table}"
+			label="$m{workflow.wfitem.table.label}" entity="wfItem"
+			itemsPerPage="20" serialNo="true">
+			<column field="applicationName"
+				renderWidget="application.text" widthRatio="2" />
 			<column field="workflowName" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="wfItemDesc" renderWidget="application.text"
@@ -633,13 +717,13 @@
 		<table name="wfItemReviewTable"
 			description="$m{workflow.wfitem.review.table}"
 			label="$m{workflow.wfitem.review.table.label}" entity="wfItem"
-			itemsPerPage="20"  serialNo="true">
+			itemsPerPage="20" serialNo="true">
 			<column field="wfItemDesc" renderWidget="application.text"
 				widthRatio="2" linkAct="decisionAct" />
 			<column field="wfStepName" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="stepDt" renderWidget="application.datetime"
-				widthRatio="2" order="DESC"/>
+				widthRatio="2" order="DESC" />
 			<column field="forwardedBy" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="heldBy" renderWidget="application.text"
@@ -650,13 +734,13 @@
 		<table name="wfItemRecoveryTable"
 			description="$m{workflow.wfitem.recovery.table}"
 			label="$m{workflow.wfitem.recovery.table.label}" entity="wfItem"
-			itemsPerPage="20"  serialNo="true">
+			itemsPerPage="20" serialNo="true">
 			<column field="wfItemDesc" renderWidget="application.text"
 				widthRatio="2" linkAct="decisionAct" />
 			<column field="prevWfStepName" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="stepDt" renderWidget="application.datetime"
-				widthRatio="2" order="DESC"/>
+				widthRatio="2" order="DESC" />
 			<column field="errorMsg" renderWidget="application.text"
 				widthRatio="3" />
 			<column field="heldBy" renderWidget="application.text"
@@ -666,8 +750,8 @@
 		</table>
 		<table name="wfWizardItemReviewTable"
 			description="$m{workflow.wfwizarditem.review.table}"
-			label="$m{workflow.wfwizarditem.review.table.label}" entity="wfWizardItem"
-			itemsPerPage="20"  serialNo="true">
+			label="$m{workflow.wfwizarditem.review.table.label}"
+			entity="wfWizardItem" itemsPerPage="20" serialNo="true">
 			<column field="wizard" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="title" renderWidget="application.text"
@@ -683,9 +767,10 @@
 		</table>
 		<table name="workflowChannelTable"
 			description="$m{workflow.workflowchannel.table}"
-			label="$m{workflow.workflowchannel.table.label}" entity="workflowChannel"
-			itemsPerPage="20"  serialNo="true">
-			<column field="applicationDesc" renderWidget="application.text"
+			label="$m{workflow.workflowchannel.table.label}"
+			entity="workflowChannel" itemsPerPage="20" serialNo="true">
+			<column field="applicationDesc"
+				renderWidget="application.text"
 				label="$m{workflow.workflowchannel.application}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
@@ -705,31 +790,36 @@
 	</tables>
 	<!-- Forms -->
 	<forms>
-		<form name="workflowForm" description="$m{workflow.workflow.form}"
-			entity="workflow">
-			<tab name="basicDetails" label="$m{workflow.workflow.form.basicdetails}"
+		<form name="workflowForm"
+			description="$m{workflow.workflow.form}" entity="workflow">
+			<tab name="basicDetails"
+				label="$m{workflow.workflow.form.basicdetails}"
 				contentType="miniform" editable="false">
 				<section name="workflowDetails" columns="type_2">
-					<field name="applicationId" inputWidget="application.entitylist"
-						column="0" label="$m{workflow.workflow.application}" required="true" />
+					<field name="applicationId"
+						inputWidget="application.entitylist" column="0"
+						label="$m{workflow.workflow.application}" required="true" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="entity" inputWidget="application.appworkappentitylist"
-						column="1" required="true" />
+					<field name="entity"
+						inputWidget="application.appworkappentitylist" column="1"
+						required="true" />
 				</section>
 			</tab>
 			<tab name="interactiveSteps"
-				label="$m{workflow.workflow.form.interactivesteps}" contentType="child_list"
-				applet="manageInteractiveSteps" reference="stepList" />
+				label="$m{workflow.workflow.form.interactivesteps}"
+				contentType="child_list" applet="manageInteractiveSteps"
+				reference="stepList" />
 		</form>
 		<form name="wfStepForm" description="$m{workflow.step.form}"
 			entity="wfStep">
-			<tab name="basicDetails" label="$m{workflow.step.form.basicdetails}"
-				contentType="miniform" editable="false">
+			<tab name="basicDetails"
+				label="$m{workflow.step.form.basicdetails}" contentType="miniform"
+				editable="false">
 				<section name="stepDetails" columns="type_2">
 					<field name="workflowId" inputWidget="application.entitylist"
 						column="0" label="$m{workflow.step.workflow}" required="true" />
@@ -739,27 +829,32 @@
 						column="0" required="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="type" inputWidget="application.enumlist" column="1"
-						required="true" />
-					<field name="recordActionType" inputWidget="application.enumlist"
-						column="1" required="true" visible="false" />
-					<field name="policy" column="1" required="true" visible="false" />
+					<field name="type" inputWidget="application.enumlist"
+						column="1" required="true" />
+					<field name="recordActionType"
+						inputWidget="application.enumlist" column="1" required="true"
+						visible="false" />
+					<field name="policy" column="1" required="true"
+						visible="false" />
 					<field name="rule" column="1" visible="false" />
-					<field name="priority" inputWidget="application.enumlist" column="1"
-						required="true" />
-					<field name="criticalMinutes" inputWidget="application.integer"
-						column="1" />
+					<field name="priority" inputWidget="application.enumlist"
+						column="1" required="true" />
+					<field name="criticalMinutes"
+						inputWidget="application.integer" column="1" />
 					<field name="expiryMinutes" inputWidget="application.integer"
 						column="1" />
-					<field name="audit" inputWidget="application.checkbox" column="1" />
+					<field name="audit" inputWidget="application.checkbox"
+						column="1" />
 					<field name="branchOnly" inputWidget="application.checkbox"
 						column="1" />
-					<field name="includeForwarder" inputWidget="application.checkbox"
-						column="1" />
+					<field name="includeForwarder"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
-			<tab name="assignedRoles" label="$m{workflow.step.form.assignedroles}"
-				contentType="child_list" applet="manageWfStepRoles" reference="roleList" />
+			<tab name="assignedRoles"
+				label="$m{workflow.step.form.assignedroles}"
+				contentType="child_list" applet="manageWfStepRoles"
+				reference="roleList" />
 			<formStatePolicy type="on_switch" name="policyPolicy"
 				description="$m{workflow.step.form.fieldstatepolicy.policy}">
 				<onCondition>
@@ -769,20 +864,23 @@
 					<setState type="field" target="policy,rule" visible="true" />
 				</setStates>
 			</formStatePolicy>
-			<formStatePolicy type="on_switch" name="recordActionPolicy"
+			<formStatePolicy type="on_switch"
+				name="recordActionPolicy"
 				description="$m{workflow.step.form.fieldstatepolicy.recordactiontype}">
 				<onCondition>
 					<restriction type="equals" field="type" paramA="R" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="recordActionType" visible="true" />
+					<setState type="field" target="recordActionType"
+						visible="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
 		<form name="wfItemForm" description="$m{workflow.wfitem.form}"
 			entity="wfItem">
-			<tab name="basicDetails" label="$m{workflow.wfitem.form.basicdetails}"
-				contentType="miniform" editable="false">
+			<tab name="basicDetails"
+				label="$m{workflow.wfitem.form.basicdetails}" contentType="miniform"
+				editable="false">
 				<section name="wfItemDetails" columns="type_2">
 					<field name="applicationName" inputWidget="application.text"
 						column="0" required="true" />
@@ -794,19 +892,20 @@
 						column="0" required="true" />
 					<field name="forwardedBy" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="heldBy" inputWidget="application.text" column="0" />
+					<field name="heldBy" inputWidget="application.text"
+						column="0" />
 					<field name="priorityDesc" inputWidget="application.text"
 						column="1" required="true" />
-					<field name="stepDt" inputWidget="application.datetime" column="1"
-						required="true" />
+					<field name="stepDt" inputWidget="application.datetime"
+						column="1" required="true" />
 					<field name="criticalDt" inputWidget="application.datetime"
 						column="1" />
 					<field name="expectedDt" inputWidget="application.datetime"
 						column="1" />
-					<field name="criticalAlertSent" inputWidget="application.checkbox"
-						column="1" />
-					<field name="expirationAlertSent" inputWidget="application.checkbox"
-						column="1" />
+					<field name="criticalAlertSent"
+						inputWidget="application.checkbox" column="1" />
+					<field name="expirationAlertSent"
+						inputWidget="application.checkbox" column="1" />
 				</section>
 				<section name="errorDetails" columns="type_1">
 					<field name="errorCode" inputWidget="application.text"
@@ -817,13 +916,15 @@
 			</tab>
 		</form>
 		<form name="workflowChannelForm"
-			description="$m{workflow.workflowchannel.form}" entity="workflowChannel">
+			description="$m{workflow.workflowchannel.form}"
+			entity="workflowChannel">
 			<tab name="basicDetails"
 				label="$m{workflow.workflowchannel.form.basicdetails}"
 				contentType="miniform">
 				<section name="workflowChannelDetails" columns="type_2">
-					<field name="applicationId" inputWidget="application.entitylist"
-						column="0" label="$m{workflow.workflowchannel.application}"
+					<field name="applicationId"
+						inputWidget="application.entitylist" column="0"
+						label="$m{workflow.workflowchannel.application}"
 						switchOnChange="true" required="true" disabled="false" />
 					<field name="name" inputWidget="application.name" column="0"
 						required="true" disabled="true" />
@@ -831,15 +932,16 @@
 						column="0" required="true" disabled="true" />
 					<field name="label" inputWidget="application.text" column="0"
 						required="true" />
-					<field name="direction" inputWidget="application.enumlist" column="1"
-						required="true" disabled="true" />
-					<field name="entity" inputWidget="application.appworkappentitylist"
-						column="1" required="true" disabled="true" switchOnChange="true" />
-					<field name="destination" inputWidget="wfchanneldestinationlist"
-						column="1" required="true" />
+					<field name="direction" inputWidget="application.enumlist"
+						column="1" required="true" disabled="true" />
+					<field name="entity"
+						inputWidget="application.appworkappentitylist" column="1"
+						required="true" disabled="true" switchOnChange="true" />
+					<field name="destination"
+						inputWidget="wfchanneldestinationlist" column="1" required="true" />
 					<field name="rule" inputWidget="application.text" column="1" />
-					<field name="status" inputWidget="application.enumlist" column="1"
-						required="true" />
+					<field name="status" inputWidget="application.enumlist"
+						column="1" required="true" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
@@ -847,10 +949,13 @@
 			<formStatePolicy type="on_switch" name="editPolicy"
 				description="$m{workflow.workflowchannel.form.fieldstatepolicy.editpolicy}">
 				<onCondition>
-					<restriction type="equals" field="configType" paramA="C" />
+					<restriction type="equals" field="configType"
+						paramA="C" />
 				</onCondition>
 				<setStates>
-					<setState type="field" target="applicationId,name,description,direction,entity" disabled="false" />
+					<setState type="field"
+						target="applicationId,name,description,direction,entity"
+						disabled="false" />
 				</setStates>
 			</formStatePolicy>
 		</form>
@@ -862,7 +967,7 @@
 			label="$m{workflow.step.role.assignment}" entity="wfStepRole"
 			baseField="wfStepId" assignField="roleId"
 			assignCaption="$m{workflow.step.role.assigned}"
-			unassignCaption="$m{workflow.step.role.available}" assignList="roleinlist"
-			unassignList="rolenotinlist" />
+			unassignCaption="$m{workflow.step.role.available}"
+			assignList="roleinlist" unassignList="rolenotinlist" />
 	</assignmentPages>
 </application>

@@ -48,6 +48,7 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivileg
 import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
+import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
@@ -424,7 +425,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 @Override
-                protected ApplicationDef create(String name, Object... arg1) throws Exception {
+                protected ApplicationDef create(String name, Object... params) throws Exception {
                     Application application = environment().list(new ApplicationQuery().name(name));
                     return new ApplicationDef(application.getName(), application.getDescription(), application.getId(),
                             application.getVersionNo(), application.isDevelopable(), application.isMenuAccess(),
@@ -444,7 +445,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 }
 
                 @Override
-                protected AppletDef create(String longName, Object... arg1) throws Exception {
+                protected AppletDef create(String longName, Object... params) throws Exception {
                     String _actLongName = ApplicationNameUtils.removeVestigialNamePart(longName);
                     AppApplet appApplet = getApplicationEntity(AppApplet.class, _actLongName);
                     final boolean descriptiveButtons = appletUtilities.system().getSysParameterValue(boolean.class,
@@ -490,10 +491,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             adb.listingOpenPath(
                                     ApplicationPageUtils.constructAppletOpenPagePath(AppletType.LISTING, longName));
 
-                            if (adb.getPropValue(boolean.class,
-                                    AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY)) {
+                            if (adb.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY)) {
                                 adb.openDraftPath(ApplicationPageUtils.constructAppletOpenPagePath(type, longName,
-                                        ApplicationNameUtils.UPDATE_DRAFT_SUFFIX));
+                                        ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX));
+                                adb.openDraftWorkflow(ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(longName));
+                                appletUtilities.ensureWorkflowCopyWorkflows(longName, false);
                             }
                         }
                     }
@@ -1521,6 +1523,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public Long getApplicationId(String applicationName) throws UnifyException {
+        return environment().value(Long.class, "id", new ApplicationQuery().name(applicationName));
+    }
+
+    @Override
     public String getAppEntity(Long appEntityId) throws UnifyException {
         AppEntity appEntity = environment()
                 .listLean(new AppEntityQuery().id(appEntityId).addSelect("applicationName", "name"));
@@ -1642,8 +1649,37 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
+        return environment().countAll(new AppAppletPropQuery().applicationName(np.getApplicationName())
+                .appletName(np.getEntityName()).name(AppletPropertyConstants.WORKFLOWCOPY).value("true")) > 0;
+    }
+
+    @Override
+    public AppletWorkflowCopyInfo getAppletWorkflowCopyInfo(String appletName) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
+        final long appletVersionNo = environment().value(long.class, "versionNo",
+                new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
+        final String createApprovalSetValuesName = environment().value(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES));
+        final String updateApprovalSetValuesName = environment().value(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
+        return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
+                appletVersionNo);
+    }
+
+    @Override
     public String getAppAppletEntity(Long appAppletId) throws UnifyException {
         return environment().value(String.class, "entity", new AppAppletQuery().id(appAppletId));
+    }
+
+    @Override
+    public String getAppAppletEntity(String appletName) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
+        return environment().value(String.class, "entity",
+                new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
     }
 
     @Override
@@ -2194,6 +2230,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public EntityDef getEntityDefByClass(String entityClass) throws UnifyException {
         return entityDefByClassFactoryMap.get(entityClass);
+    }
+
+    @Override
+    public EntityDef getAppletEntityDef(String appletName) throws UnifyException {
+        return getEntityDef(getAppAppletEntity(appletName));
+    }
+
+    @Override
+    public EntityClassDef getAppletEntityClassDef(String appletName) throws UnifyException {
+        return getEntityClassDef(getAppAppletEntity(appletName));
     }
 
     @Override
@@ -2828,8 +2874,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             return 0;
         }
 
-        if (environment()
-                .countAll(new AppEntityQuery().applicationId(srcApplication.getId()).configTypeIsNotCustom()) > 0) {
+        if (environment().countAll(new AppEntityQuery().applicationId(srcApplication.getId()).isNotCustom()) > 0) {
             logDebug(taskMonitor, "Some source application entities are static. Replication terminated.");
             taskMonitor.cancel();
             return 0;
@@ -3464,7 +3509,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Synchronized("app:postbootsetup")
     @Override
-    public void performPostBootSetup() throws UnifyException {
+    public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
         if (isTenancyEnabled()) {
             // Detect primary tenant and also possible improper primary tenant change
             final Long actualPrimaryTenantId = appletUtilities.system().getSysParameterValue(Long.class,
@@ -3496,6 +3541,19 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         resolveMappedEntities();
+
+        // Ensure workflow copy workflow
+        List<String> updateDraftApplets = new ArrayList<String>();
+        List<AppAppletProp> appAppletPropList = environment().listAll(new AppAppletPropQuery()
+                .name(AppletPropertyConstants.WORKFLOWCOPY).value("true").addSelect("applicationName", "appletName"));
+        for (AppAppletProp appAppletProp : appAppletPropList) {
+            updateDraftApplets.add(ApplicationNameUtils.getApplicationEntityLongName(appAppletProp.getApplicationName(),
+                    appAppletProp.getAppletName()));
+        }
+
+        for (String appletName : updateDraftApplets) {
+            appletUtilities.ensureWorkflowCopyWorkflows(appletName, isInstallationPerformed);
+        }
     }
 
     @SuppressWarnings("unchecked")

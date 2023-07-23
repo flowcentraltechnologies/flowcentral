@@ -46,6 +46,9 @@ public enum DataSourceOperation {
     UPDATE(
             false,
             true),
+    UPDATE_EDITABLE_CHILD(
+            false,
+            true),
     UPDATE_LEAN(
             false,
             true),
@@ -103,6 +106,10 @@ public enum DataSourceOperation {
 
     public boolean isDistinct() {
         return this.equals(VALUE_SET);
+    }
+
+    public boolean isEditableChildren() {
+        return this.equals(UPDATE_EDITABLE_CHILD);
     }
 
     public boolean entityResult() {

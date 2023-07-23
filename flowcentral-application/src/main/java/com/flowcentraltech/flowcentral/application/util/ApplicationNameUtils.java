@@ -38,7 +38,11 @@ public final class ApplicationNameUtils {
 
     public static final String VESTIGIAL_INFIX = "_0_";
 
-    public static final String UPDATE_DRAFT_SUFFIX = "uds";
+    public static final String WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX = "wcuds";
+
+    private static final String WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX = "wccw";
+
+    private static final String WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX = "wcuw";
 
     private static final FactoryMap<String, ApplicationEntityNameParts> applicationNameParts;
 
@@ -141,6 +145,14 @@ public final class ApplicationNameUtils {
         }
 
         return Collections.emptyList();
+    }
+    
+    public static String getWorkflowCopyCreateWorkflowName(String appletName) {
+        return appletName + WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX;
+    }
+    
+    public static String getWorkflowCopyUpdateWorkflowName(String appletName) {
+        return appletName + WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX;
     }
     
     public static String addVestigialNamePart(String longName, String vestigial) {

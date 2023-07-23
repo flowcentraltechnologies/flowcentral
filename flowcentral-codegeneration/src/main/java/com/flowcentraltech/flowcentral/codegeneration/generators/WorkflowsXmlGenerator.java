@@ -87,15 +87,14 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
     protected void doGenerate(ExtensionModuleStaticFileBuilderContext ctx, String applicationName, ZipOutputStream zos)
             throws UnifyException {
         // Workflows
-        List<Long> workflowIdList = workflowModuleService.findWorkflowIdList(applicationName);
+        List<Long> workflowIdList = workflowModuleService.findCustomWorkflowIdList(applicationName);
         if (!DataUtils.isBlank(workflowIdList)) {
             final String lowerCaseApplicationName = applicationName.toLowerCase();
-
             AppWorkflowsConfig workflowsConfig = new AppWorkflowsConfig();
             List<AppWorkflowConfig> workflowConfigList = new ArrayList<AppWorkflowConfig>();
-            for (Long reportConfigId : workflowIdList) {
+            for (Long workflowId : workflowIdList) {
                 AppWorkflowConfig appWorkflowConfig = new AppWorkflowConfig();
-                Workflow workflow = workflowModuleService.findWorkflow(reportConfigId);
+                Workflow workflow = workflowModuleService.findWorkflow(workflowId);
                 final String filename = StringUtils.dashen(NameUtils.describeName(workflow.getName())) + ".xml";
                 openEntry(filename, zos);
 

@@ -54,6 +54,12 @@ public class CreateEntityDetachedAppletDef extends AbstractDetachedAppletDef {
     }
 
     @Override
+    public String getOpenDraftWorkflow() {
+        // Nor this
+        return null;
+    }
+
+    @Override
     public String getDraftViewId() {
         // Nor this
         return null;

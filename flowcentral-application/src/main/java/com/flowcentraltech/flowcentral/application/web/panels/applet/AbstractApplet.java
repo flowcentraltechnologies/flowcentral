@@ -73,7 +73,7 @@ public abstract class AbstractApplet {
     private String altSubCaption;
 
     private WorkflowDraftInfo workflowDraftInfo;
-    
+
     public AbstractApplet(AppletUtilities au, String appletName) throws UnifyException {
         this.appletName = ApplicationNameUtils.removeVestigialNamePart(appletName);
         this.au = au;
@@ -99,7 +99,7 @@ public abstract class AbstractApplet {
     public String getPageAltCaption() throws UnifyException {
         return !StringUtils.isBlank(altCaption) ? altCaption
                 : au.resolveSessionMessage(
-                getRootAppletDef().getPropValue(String.class, AppletPropertyConstants.PAGE_ALTERNATE_CAPTION));
+                        getRootAppletDef().getPropValue(String.class, AppletPropertyConstants.PAGE_ALTERNATE_CAPTION));
     }
 
     public String getPageAltSubCaption() throws UnifyException {
@@ -115,16 +115,15 @@ public abstract class AbstractApplet {
 
         return rootAppletDef;
     }
-    
-    public boolean isUpdateWorkflowCopy() throws UnifyException {
-        return getRootAppletDef().getPropValue(boolean.class,
-                AppletPropertyConstants.MAINTAIN_FORM_UPDATE_WORKFLOWCOPY);
+
+    public boolean isWorkflowCopy() throws UnifyException {
+        return getRootAppletDef().getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY);
     }
-    
+
     public boolean navBackToPrevious() throws UnifyException {
         return false;
     }
-    
+
     public AppletDef getSingleFormAppletDef() throws UnifyException {
         return null;
     }
@@ -206,8 +205,7 @@ public abstract class AbstractApplet {
             final ValueStoreReader reader = new BeanValueStore(inst).getReader();
             EntityDef _entityDef = getEntityClassDef(appletDef.getEntity()).getEntityDef();
             for (AppletFilterDef filterDef : appletDef.getPreferredFormFilterList()) {
-                if (filterDef.getFilterDef().getObjectFilter(_entityDef, reader, now)
-                        .matchReader(reader)) {
+                if (filterDef.getFilterDef().getObjectFilter(_entityDef, reader, now).matchReader(reader)) {
                     String formName = filterDef.getPreferredForm();
                     FormDef formDef = au.getFormDef(formName);
                     if (type.supports(formDef)) {
@@ -297,7 +295,8 @@ public abstract class AbstractApplet {
         return constructSingleForm(inst, formMode, beanTitle);
     }
 
-    protected EntitySingleForm constructSingleForm(Entity inst, FormMode formMode, String beanTitle) throws UnifyException {
+    protected EntitySingleForm constructSingleForm(Entity inst, FormMode formMode, String beanTitle)
+            throws UnifyException {
         EntitySingleForm form = au.constructEntitySingleForm(this, getRootAppletDef().getDescription(), beanTitle, inst,
                 formMode, makeSingleFormBreadCrumbs());
         if (formMode.isCreate()) {
@@ -308,7 +307,7 @@ public abstract class AbstractApplet {
         setFormProperties(getRootAppletDef(), form);
         return form;
     }
-    
+
     protected void updateSingleForm(EntitySingleForm.UpdateType updateType, EntitySingleForm form, Entity inst)
             throws UnifyException {
         form.getCtx().resetTabIndex();
@@ -319,7 +318,8 @@ public abstract class AbstractApplet {
 
     private BreadCrumbs makeSingleFormBreadCrumbs() {
         BreadCrumbs.Builder bcb = BreadCrumbs.newBuilder();
-        //bcb.addHistoryCrumb(form.getFormTitle(), form.getBeanTitle(), form.getFormStepIndex());
+        // bcb.addHistoryCrumb(form.getFormTitle(), form.getBeanTitle(),
+        // form.getFormStepIndex());
         return bcb.build();
     }
 }
