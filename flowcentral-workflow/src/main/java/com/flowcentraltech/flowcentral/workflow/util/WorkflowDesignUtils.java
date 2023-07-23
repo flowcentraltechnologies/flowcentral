@@ -99,7 +99,7 @@ public final class WorkflowDesignUtils {
         wfStep.setType(WorkflowStepType.ERROR);
         wfStep.setPriority(WorkflowStepPriority.NORMAL);
         wfStep.setName("error");
-        wfStep.setDescription("Error");
+        wfStep.setDescription(workflowLabel + " Error");
         wfStep.setLabel(workflowLabel + " Error");
         WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(null);
         wfStep.setUserActionList(Arrays.asList(recoverUserAction));

@@ -65,7 +65,7 @@ import com.tcdng.unify.core.util.StringUtils;
 @Transactional
 @Component(SystemModuleNameConstants.ENVIRONMENT_SERVICE)
 public class EnvironmentServiceImpl extends AbstractBusinessService implements EnvironmentService {
-    
+
     @Configurable
     private SuggestionProvider suggestionProvider;
 
@@ -74,7 +74,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Configurable
     private EnvironmentDelegateRegistrar environmentDelegateRegistrar;
-    
+
     public final void setSuggestionProvider(SuggestionProvider suggestionProvider) {
         this.suggestionProvider = suggestionProvider;
     }
@@ -437,13 +437,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
         if (result == null) {
             Entity inst = ctx.getInst();
             ctx.setResult(db(inst.getClass()).deleteByIdVersion(inst));
-
-            if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null) {
-                // Update original instance workflow flag
-                updateById((Class<? extends Entity>) inst.getClass(), ((WorkEntity) inst).getOriginalCopyId(),
-                        new Update().add("inWorkflow", Boolean.FALSE));
-            }
-
+            releaseOriginalCopy(inst);
             return executeEntityPostActionPolicy(db(inst.getClass()), ctx);
         }
 
@@ -452,6 +446,7 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public <T extends Entity> int delete(Class<T> clazz, Object id) throws UnifyException {
+        // TODO Release original copy
         return db(clazz).delete(clazz, id);
     }
 
@@ -462,24 +457,42 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public int deleteByIdVersion(Entity record) throws UnifyException {
-        return db(record.getClass()).deleteByIdVersion(record);
+        int result = db(record.getClass()).deleteByIdVersion(record);
+        releaseOriginalCopy(record);
+        return result;
     }
 
     @Override
     public int deleteById(Entity record) throws UnifyException {
-        return db(record.getClass()).deleteById(record);
+        int result = db(record.getClass()).deleteById(record);
+        releaseOriginalCopy(record);
+        return result;
     }
 
     @Override
     public int deleteById(EntityWrapper wrappedInst) throws UnifyException {
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
-        return db(inst.getClass()).deleteById(inst);
+        int result = db(inst.getClass()).deleteById(inst);
+        releaseOriginalCopy(inst);
+        return result;
     }
 
     @Override
     public int deleteByIdVersion(EntityWrapper wrappedInst) throws UnifyException {
         Entity inst = wrappedInst.isIndexed() ? wrappedInst.getValueObjectAtDataIndex() : wrappedInst.getValueObject();
-        return db(inst.getClass()).deleteByIdVersion(inst);
+        int result = db(inst.getClass()).deleteByIdVersion(inst);
+        return result;
+    }
+
+    private int releaseOriginalCopy(Entity inst) throws UnifyException {
+        // TODO Put this in a policy
+        if (inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null) {
+            // Update original instance workflow flag
+            return updateById((Class<? extends Entity>) inst.getClass(), ((WorkEntity) inst).getOriginalCopyId(),
+                    new Update().add("inWorkflow", Boolean.FALSE));
+        }
+
+        return 0;
     }
 
     @Override
