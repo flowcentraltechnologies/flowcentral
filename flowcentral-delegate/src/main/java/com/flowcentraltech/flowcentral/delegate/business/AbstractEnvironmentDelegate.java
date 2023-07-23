@@ -108,14 +108,15 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     @Override
     public <T extends Entity> T find(Class<T> entityClass, Object id) throws UnifyException {
-        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.FIND, au.delegateUtilities().encodeDelegateObjectId(id),
-                null);
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.FIND,
+                au.delegateUtilities().encodeDelegateObjectId(id), null);
         return singleEntityResultOperation(entityClass, req);
     }
 
     @Override
     public <T extends Entity> T find(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.FIND, au.delegateUtilities().encodeDelegateObjectId(id),
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.FIND,
+                au.delegateUtilities().encodeDelegateObjectId(id),
                 au.delegateUtilities().encodeDelegateVersionNo(versionNo));
         return singleEntityResultOperation(entityClass, req);
     }
@@ -137,7 +138,8 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Override
     public <T extends Entity> T findLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.FIND_LEAN,
-                au.delegateUtilities().encodeDelegateObjectId(id), au.delegateUtilities().encodeDelegateVersionNo(versionNo));
+                au.delegateUtilities().encodeDelegateObjectId(id),
+                au.delegateUtilities().encodeDelegateVersionNo(versionNo));
         return singleEntityResultOperation(entityClass, req);
     }
 
@@ -217,14 +219,15 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id) throws UnifyException {
-        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST, au.delegateUtilities().encodeDelegateObjectId(id),
-                null);
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST,
+                au.delegateUtilities().encodeDelegateObjectId(id), null);
         return singleEntityResultOperation(entityClass, req);
     }
 
     @Override
     public <T extends Entity> T list(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
-        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST, au.delegateUtilities().encodeDelegateObjectId(id),
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST,
+                au.delegateUtilities().encodeDelegateObjectId(id),
                 au.delegateUtilities().encodeDelegateVersionNo(versionNo));
         return singleEntityResultOperation(entityClass, req);
     }
@@ -246,7 +249,8 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Override
     public <T extends Entity> T listLean(Class<T> entityClass, Object id, Object versionNo) throws UnifyException {
         DataSourceRequest req = new DataSourceRequest(DataSourceOperation.LIST_LEAN,
-                au.delegateUtilities().encodeDelegateObjectId(id), au.delegateUtilities().encodeDelegateVersionNo(versionNo));
+                au.delegateUtilities().encodeDelegateObjectId(id),
+                au.delegateUtilities().encodeDelegateVersionNo(versionNo));
         return singleEntityResultOperation(entityClass, req);
     }
 
@@ -298,7 +302,6 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     }
 
-
     @Override
     public <T, U extends Entity> List<T> valueList(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
@@ -317,12 +320,14 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
-    public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query)
+            throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+    public <T extends Number, U extends Entity> T max(Class<T> fieldClass, String fieldName, Query<U> query)
+            throws UnifyException {
         throw new UnsupportedOperationException();
     }
 
@@ -425,14 +430,21 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     @Override
     public int updateByIdEditableChildren(Entity record) throws UnifyException {
-        throwUnsupportedOperationException();
-        return 0;
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.UPDATE_EDITABLE_CHILD,
+                au.delegateUtilities().encodeDelegateObjectId(record.getId()), null);
+        setUpdateAuditInformation(record);
+        req.setPayload(au.delegateUtilities().encodeDelegateEntity(record));
+        return singleValueResultOperation(int.class, record.getClass(), req);
     }
 
     @Override
     public int updateByIdVersionEditableChildren(Entity record) throws UnifyException {
-        throwUnsupportedOperationException();
-        return 0;
+        long versionNo = record instanceof BaseVersionEntity ? ((BaseVersionEntity) record).getVersionNo() : 0;
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.UPDATE_EDITABLE_CHILD,
+                au.delegateUtilities().encodeDelegateObjectId(record.getId()), versionNo);
+        setUpdateAuditInformation(record);
+        req.setPayload(au.delegateUtilities().encodeDelegateEntity(record));
+        return singleValueResultOperation(int.class, record.getClass(), req);
     }
 
     @Override
@@ -456,8 +468,8 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     @Override
     public int updateById(Class<? extends Entity> entityClass, Object id, Update update) throws UnifyException {
-        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.UPDATE, au.delegateUtilities().encodeDelegateObjectId(id),
-                null);
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.UPDATE,
+                au.delegateUtilities().encodeDelegateObjectId(id), null);
         setUpdateAuditInformation(entityClass, id, update);
         req.setUpdate(au.delegateUtilities().encodeDelegateUpdate(update));
         return singleValueResultOperation(int.class, entityClass, req);
@@ -513,8 +525,8 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     @Override
     public int delete(Class<? extends Entity> entityClass, Object id) throws UnifyException {
-        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.DELETE, au.delegateUtilities().encodeDelegateObjectId(id),
-                null);
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.DELETE,
+                au.delegateUtilities().encodeDelegateObjectId(id), null);
         return singleValueResultOperation(int.class, entityClass, req);
     }
 
