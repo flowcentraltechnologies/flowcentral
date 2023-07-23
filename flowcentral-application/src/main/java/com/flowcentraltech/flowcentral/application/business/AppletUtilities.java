@@ -575,10 +575,11 @@ public interface AppletUtilities extends UnifyComponent {
      * 
      * @param appletName
      *                   the applet name
+     * @param forceUpdate force workflow update
      * @throws UnifyException
      *                        if an error occurs.
      */
-    void ensureWorkflowCopyWorkflows(String appletName) throws UnifyException;
+    void ensureWorkflowCopyWorkflows(String appletName, boolean forceUpdate) throws UnifyException;
 
     /**
      * Checks if an applet is with workflow copy.

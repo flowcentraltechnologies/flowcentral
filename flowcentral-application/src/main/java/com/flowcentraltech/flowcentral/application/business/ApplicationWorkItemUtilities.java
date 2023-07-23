@@ -52,28 +52,30 @@ public interface ApplicationWorkItemUtilities extends UnifyComponent {
      * Submit entity instance to workflow.
      * 
      * @param entityDef
-     *                            the entity definition
+     *                     the entity definition
      * @param workflowName
-     *                            the application workflow name
+     *                     the application workflow name
      * @param inst
-     *                            the entity instance to submit to workflow
+     *                     the entity instance to submit to workflow
      * @param policyName
-     *                            an optional entity action policy name
+     *                     an optional entity action policy name
      * @throws UnifyException
      *                        if workflow is unknown. If instance type does not
      *                        match workflow entity definition. If an error occurs
      */
-    EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst,
-            String policyName) throws UnifyException;
+    EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst, String policyName)
+            throws UnifyException;
 
     /**
-     * Ensures workflows are defined for applet if applet has its
-     * workflow copy flag set.
+     * Ensures workflows are defined for applet if applet has its workflow copy flag
+     * set.
      * 
      * @param appletName
-     *                   the applet name
+     *                    the applet name
+     * @param forceUpdate
+     *                    force workflow update
      * @throws UnifyException
      *                        if an error occurs.
      */
-    void ensureWorkflowCopyWorkflows(String appletName) throws UnifyException;
+    void ensureWorkflowCopyWorkflows(String appletName, boolean forceUpdate) throws UnifyException;
 }

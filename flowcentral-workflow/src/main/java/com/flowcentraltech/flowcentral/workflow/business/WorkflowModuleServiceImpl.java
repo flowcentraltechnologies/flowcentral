@@ -457,15 +457,15 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Synchronized(WFWORKFLOWCOPY_LOCK)
     @Override
-    public void ensureWorkflowCopyWorkflows(String appletName) throws UnifyException {
+    public void ensureWorkflowCopyWorkflows(String appletName, boolean forceUpdate) throws UnifyException {
         if (appletUtil.isAppletWithWorkflowCopy(appletName)) {
-            updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_CREATE, appletName);
-            updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_UPDATE, appletName);
+            updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_CREATE, appletName, forceUpdate);
+            updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_UPDATE, appletName, forceUpdate);
         }
     }
 
-    private void updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType designType, String appletName)
-            throws UnifyException {
+    private void updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType designType, String appletName,
+            boolean forceUpdate) throws UnifyException {
         final String workflowName = designType.isWorkflowCopyCreate()
                 ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(appletName)
                 : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(appletName);
@@ -493,8 +493,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setStepList(stepList);
             environment().create(workflow);
         } else {
-            if (workflow.getAppletVersionNo() < appletWorkflowCopyInfo.getAppletVersionNo()) {
+            if (forceUpdate || workflow.getAppletVersionNo() < appletWorkflowCopyInfo.getAppletVersionNo()) {
                 workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
+                workflow.setConfigType(ConfigType.STATIC_INSTALL);
                 List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, workflowLabel,
                         appletWorkflowCopyInfo);
                 workflow.setStepList(stepList);
@@ -1258,6 +1259,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     if (originalCopyId != null) {
                         // Delete update copy
                         environment().delete(wfEntityInst.getClass(), wfEntityInst.getId());
+                        if (entityDef.delegated()) {
+                            environment().updateAll(Query.of(wfEntityInst.getClass()).addEquals("id", originalCopyId),
+                                    new Update().add("inWorkflow", Boolean.FALSE));
+                        }
+
                         transitionItem.setDeleted();
                     } else {
                         wfEntityInst.setInWorkflow(false);

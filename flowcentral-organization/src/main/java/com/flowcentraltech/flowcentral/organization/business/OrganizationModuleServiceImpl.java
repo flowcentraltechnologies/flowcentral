@@ -254,7 +254,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public void performPostBootSetup() throws UnifyException {
+    public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
         if (studioProvider != null && studioProvider.isInstallDefaultDeveloperRoles()) {
             // Ensure DevOps department
             Department department = environment().find(new DepartmentQuery().code(DEVOPS_DEPARTMENT_CODE));

@@ -30,8 +30,10 @@ public interface PostBootSetup extends UnifyComponent {
     /**
      * Performs independent post-boot setup.
      * 
+     * @param isInstallationPerformed
+     *                                indicates installation was perform during boot
      * @throws UnifyException
      *                        if an error occurs
      */
-    void performPostBootSetup() throws UnifyException;
+    void performPostBootSetup(boolean isInstallationPerformed) throws UnifyException;
 }

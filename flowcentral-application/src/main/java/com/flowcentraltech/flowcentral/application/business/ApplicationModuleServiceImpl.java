@@ -495,7 +495,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 adb.openDraftPath(ApplicationPageUtils.constructAppletOpenPagePath(type, longName,
                                         ApplicationNameUtils.WORKFLOW_COPY_UPDATE_DRAFT_PATH_SUFFIX));
                                 adb.openDraftWorkflow(ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(longName));
-                                appletUtilities.ensureWorkflowCopyWorkflows(longName);
+                                appletUtilities.ensureWorkflowCopyWorkflows(longName, false);
                             }
                         }
                     }
@@ -3509,7 +3509,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     @Synchronized("app:postbootsetup")
     @Override
-    public void performPostBootSetup() throws UnifyException {
+    public void performPostBootSetup(final boolean isInstallationPerformed) throws UnifyException {
         if (isTenancyEnabled()) {
             // Detect primary tenant and also possible improper primary tenant change
             final Long actualPrimaryTenantId = appletUtilities.system().getSysParameterValue(Long.class,
@@ -3552,7 +3552,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         for (String appletName : updateDraftApplets) {
-            appletUtilities.ensureWorkflowCopyWorkflows(appletName);
+            appletUtilities.ensureWorkflowCopyWorkflows(appletName, isInstallationPerformed);
         }
     }
 
