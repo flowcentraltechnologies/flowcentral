@@ -97,10 +97,13 @@ public final class ApplicationNameUtils {
         return StringUtils.dotify(applicationName, entityName);
     }
 
+    public static String getApplicationEntityLongName(String applicationName, String entityName, String minorName) {
+        return StringUtils.dotify(applicationName, entityName, minorName);
+    }
+
     public static boolean isLongName(String longName) throws UnifyException {
         return longName.indexOf('.') > 0;
     }
-
 
     public static ApplicationEntityNameParts getApplicationEntityNameParts(String longName) throws UnifyException {
         return applicationNameParts.get(longName);
@@ -132,7 +135,8 @@ public final class ApplicationNameUtils {
         return Collections.emptyList();
     }
 
-    public static List<ListData> getListableList(List<? extends BaseApplicationEntity> appEntityList) throws UnifyException {
+    public static List<ListData> getListableList(List<? extends BaseApplicationEntity> appEntityList)
+            throws UnifyException {
         if (!DataUtils.isBlank(appEntityList)) {
             List<ListData> list = new ArrayList<ListData>();
             for (BaseApplicationEntity appEntity : appEntityList) {
@@ -146,34 +150,34 @@ public final class ApplicationNameUtils {
 
         return Collections.emptyList();
     }
-    
+
     public static String getWorkflowCopyCreateWorkflowName(String appletName) {
         return appletName + WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX;
     }
-    
+
     public static String getWorkflowCopyUpdateWorkflowName(String appletName) {
         return appletName + WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX;
     }
-    
+
     public static String addVestigialNamePart(String longName, String vestigial) {
         return longName + VESTIGIAL_INFIX + vestigial;
     }
-    
+
     public static String removeVestigialNamePart(String longName) {
         int index = longName.indexOf(VESTIGIAL_INFIX);
         if (index > 0) {
             return longName.substring(0, index);
         }
-        
+
         return longName;
     }
-    
+
     public static String getVestigialNamePart(String longName) {
         int index = longName.indexOf(VESTIGIAL_INFIX);
         if (index > 0) {
             return longName.substring(index + VESTIGIAL_INFIX.length());
         }
-        
+
         return null;
     }
 }

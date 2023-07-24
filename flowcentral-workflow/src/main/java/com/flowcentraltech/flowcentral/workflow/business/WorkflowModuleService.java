@@ -26,6 +26,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
+import com.flowcentraltech.flowcentral.workflow.data.WorkItemStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
@@ -277,6 +278,17 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      */
     List<WfStep> findWorkflowSteps(WfStepQuery query) throws UnifyException;
 
+    /**
+     * Finds workflow work item steps by role.
+     * 
+     * @param roleCode
+     *             the role code
+     * @return list of work item steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkItemStep> findWorkItemStepsByRole(String roleCode) throws UnifyException;
+    
     /**
      * Gets an application workflow definition.
      * 

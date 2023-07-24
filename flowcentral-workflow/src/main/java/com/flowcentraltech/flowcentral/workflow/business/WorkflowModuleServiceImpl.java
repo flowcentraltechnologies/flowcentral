@@ -95,6 +95,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntitySingleFormItem;
+import com.flowcentraltech.flowcentral.workflow.data.WorkItemStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
@@ -643,6 +644,29 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<WfStep> findWorkflowSteps(WfStepQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public List<WorkItemStep> findWorkItemStepsByRole(String roleCode) throws UnifyException {
+        List<WfStepRole> wfRoleList = environment()
+                .listAll((!StringUtils.isBlank(roleCode) ? new WfStepRoleQuery().roleCode(roleCode)
+                        : new WfStepRoleQuery().ignoreEmptyCriteria(true)).addSelect("applicationName", "workflowName",
+                                "wfStepName", "workflowDesc", "wfStepDesc"));
+        if (!DataUtils.isBlank(wfRoleList)) {
+            List<WorkItemStep> stepList = new ArrayList<WorkItemStep>();
+            for (WfStepRole wfStepRole : wfRoleList) {
+                final String longName = ApplicationNameUtils.getApplicationEntityLongName(
+                        wfStepRole.getApplicationName(), wfStepRole.getWorkflowName(), wfStepRole.getWfStepName());
+                final String description = resolveSessionMessage("$m{workflowmyworkitems.step.description}",
+                        wfStepRole.getWorkflowDesc(), wfStepRole.getWfStepDesc());
+                stepList.add(new WorkItemStep(longName, description));
+            }
+
+            DataUtils.sortAscending(stepList, WorkItemStep.class, "description");
+            return stepList;
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
