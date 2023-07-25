@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.workflow.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -168,6 +169,9 @@ import com.tcdng.unify.core.util.StringUtils;
 @Component(WorkflowModuleNameConstants.WORKFLOW_MODULE_SERVICE)
 public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         implements WorkflowModuleService, ApplicationAppletDefProvider {
+
+    private static final List<WorkflowStepType> USER_INTERACTIVE_STEP_TYPES = Arrays
+            .asList(WorkflowStepType.USER_ACTION, WorkflowStepType.ERROR);
 
     private static final String WFTRANSITION_QUEUE_LOCK = "wf::transitionqueue-lock";
 
@@ -476,6 +480,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 .getAppletWorkflowCopyInfo(appletName);
         final String workflowLabel = entityDef.getLabel()
                 + (designType.isWorkflowCopyCreate() ? " Create (Workflow Copy)" : " Update (Workflow Copy)");
+        final String stepLabel = entityDef.getLabel() + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
         Workflow workflow = environment()
                 .findLean(new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
         if (workflow == null) {
@@ -489,7 +494,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setEntity(entityDef.getLongName());
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
-            List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, workflowLabel,
+            List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                     appletWorkflowCopyInfo);
             workflow.setStepList(stepList);
             environment().create(workflow);
@@ -497,7 +502,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             if (forceUpdate || workflow.getAppletVersionNo() < appletWorkflowCopyInfo.getAppletVersionNo()) {
                 workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
                 workflow.setConfigType(ConfigType.STATIC_INSTALL);
-                List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, workflowLabel,
+                List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                         appletWorkflowCopyInfo);
                 workflow.setStepList(stepList);
                 environment().updateByIdVersion(workflow);
@@ -648,22 +653,39 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<WorkItemStep> findWorkItemStepsByRole(String roleCode) throws UnifyException {
-        List<WfStepRole> wfRoleList = environment()
-                .listAll((!StringUtils.isBlank(roleCode) ? new WfStepRoleQuery().roleCode(roleCode)
-                        : new WfStepRoleQuery().ignoreEmptyCriteria(true)).addSelect("applicationName", "workflowName",
-                                "wfStepName", "workflowDesc", "wfStepDesc"));
-        if (!DataUtils.isBlank(wfRoleList)) {
-            List<WorkItemStep> stepList = new ArrayList<WorkItemStep>();
-            for (WfStepRole wfStepRole : wfRoleList) {
-                final String longName = ApplicationNameUtils.getApplicationEntityLongName(
-                        wfStepRole.getApplicationName(), wfStepRole.getWorkflowName(), wfStepRole.getWfStepName());
-                final String description = resolveSessionMessage("$m{workflowmyworkitems.step.description}",
-                        wfStepRole.getWorkflowDesc(), wfStepRole.getWfStepDesc());
-                stepList.add(new WorkItemStep(longName, description));
-            }
+        if (roleCode == null) {
+            List<WfStep> wfStepList = environment().listAll(new WfStepQuery().typeIn(USER_INTERACTIVE_STEP_TYPES)
+                    .addSelect("applicationName", "workflowName", "name", "description"));
+            if (!DataUtils.isBlank(wfStepList)) {
+                List<WorkItemStep> stepList = new ArrayList<WorkItemStep>();
+                for (WfStep wfStep : wfStepList) {
+                    final String longName = ApplicationNameUtils.getApplicationEntityLongName(
+                            wfStep.getApplicationName(), wfStep.getWorkflowName(), wfStep.getName());
+                    final String description = resolveSessionMessage("$m{workflowmyworkitems.step.description}",
+                            wfStep.getDescription());
+                    stepList.add(new WorkItemStep(longName, description));
+                }
 
-            DataUtils.sortAscending(stepList, WorkItemStep.class, "description");
-            return stepList;
+                DataUtils.sortAscending(stepList, WorkItemStep.class, "description");
+                return stepList;
+            }
+        } else {
+            List<WfStepRole> wfStepRoleList = environment()
+                    .listAll(new WfStepRoleQuery().wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES)
+                            .addSelect("applicationName", "workflowName", "wfStepName", "wfStepDesc"));
+            if (!DataUtils.isBlank(wfStepRoleList)) {
+                List<WorkItemStep> stepList = new ArrayList<WorkItemStep>();
+                for (WfStepRole wfStepRole : wfStepRoleList) {
+                    final String longName = ApplicationNameUtils.getApplicationEntityLongName(
+                            wfStepRole.getApplicationName(), wfStepRole.getWorkflowName(), wfStepRole.getWfStepName());
+                    final String description = resolveSessionMessage("$m{workflowmyworkitems.step.description}",
+                            wfStepRole.getWfStepDesc());
+                    stepList.add(new WorkItemStep(longName, description));
+                }
+
+                DataUtils.sortAscending(stepList, WorkItemStep.class, "description");
+                return stepList;
+            }
         }
 
         return Collections.emptyList();

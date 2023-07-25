@@ -35,11 +35,11 @@ public abstract class AbstractWorkflowListCommand<T extends ListParam> extends A
         super(paramType);
     }
 
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
+    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
     }
 
-    protected WorkflowModuleService getWorkflowModuleService() {
+    protected WorkflowModuleService workflow() {
         return workflowModuleService;
     }
 

@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntityQuery;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.tcdng.unify.core.criterion.And;
@@ -52,6 +54,14 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
     public WfStepQuery supportsAutoload() {
         return (WfStepQuery) addRestriction(
                 new And().add(new Equals("type", WorkflowStepType.START)).add(new IsNotNull("autoLoadConditionName")));
+    }
+
+    public WfStepQuery type(WorkflowStepType type) {
+        return (WfStepQuery) addEquals("type", type);
+    }
+
+    public WfStepQuery typeIn(List<WorkflowStepType> type) {
+        return (WfStepQuery) addAmongst("type", type);
     }
 
     public WfStepQuery applicationNameNot(String applicationName) {

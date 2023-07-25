@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -37,6 +38,9 @@ public class WfStepRole extends BaseAuditEntity {
 
     @ForeignKey(Role.class)
     private Long roleId;
+    
+    @ListOnly(key = "wfStepId", property = "type")
+    private WorkflowStepType wfStepType;
 
     @ListOnly(key = "wfStepId", property = "name")
     private String wfStepName;
@@ -81,6 +85,14 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public WorkflowStepType getWfStepType() {
+        return wfStepType;
+    }
+
+    public void setWfStepType(WorkflowStepType wfStepType) {
+        this.wfStepType = wfStepType;
     }
 
     public String getWfStepName() {

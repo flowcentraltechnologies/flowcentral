@@ -23,6 +23,12 @@
 	</widgetTypes>
 	<!-- Applets -->
 	<applets>
+		<applet name="myWorkItems"
+			description="$m{workflowmyworkitems.application.workitems}"
+			label="$m{workflowmyworkitems.application.workitems.label}" icon="copy"
+			type="path_page" path="/workflow/myworkitems/openPage"
+			menuAccess="true" allowSecondaryTenants="true">
+		</applet>
 		<applet name="manageWorkflow"
 			description="$m{workflow.workflow.manage}"
 			label="$m{workflow.workflow.manage.label}" icon="project-diagram"

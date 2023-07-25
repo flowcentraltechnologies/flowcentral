@@ -44,7 +44,7 @@ import com.tcdng.unify.web.ui.AbstractPageController;
 @Component("/workflow/myworkitems")
 @UplBinding("web/workflow/upl/myworkitems.upl")
 @ResultMappings({ @ResultMapping(name = "refreshSlate",
-        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{myWorkItemsSlatePanel}" }) })
+        response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{workItemsSlatePanel}" }) })
 public class MyWorkItemsController extends AbstractPageController<MyWorkItemsPageBean> {
 
     @Configurable
