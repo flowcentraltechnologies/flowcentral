@@ -17,10 +17,13 @@ package com.flowcentraltech.flowcentral.workflow.web.controllers;
 
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
+import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
+import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.data.WorkItemStep;
 import com.flowcentraltech.flowcentral.workflow.data.WorkItemsSlate;
+import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
@@ -33,7 +36,6 @@ import com.tcdng.unify.web.annotation.ResultMappings;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
-import com.tcdng.unify.web.ui.AbstractPageController;
 
 /**
  * Workflow my work items controller.
@@ -45,23 +47,20 @@ import com.tcdng.unify.web.ui.AbstractPageController;
 @UplBinding("web/workflow/upl/myworkitems.upl")
 @ResultMappings({ @ResultMapping(name = "refreshSlate",
         response = { "!hidepopupresponse", "!refreshpanelresponse panels:$l{workItemsSlatePanel}" }) })
-public class MyWorkItemsController extends AbstractPageController<MyWorkItemsPageBean> {
-
-    @Configurable
-    private ApplicationPrivilegeManager applicationPrivilegeManager;
+public class MyWorkItemsController extends AbstractEntityFormAppletController<MyWorkItemsApplet, MyWorkItemsPageBean> {
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
+
+    private AppletWidgetReferences appletWidgetReferences;
+
+    private EntityFormEventHandlers formEventHandlers;
 
     public MyWorkItemsController() {
         super(MyWorkItemsPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
-    public void setApplicationPrivilegeManager(ApplicationPrivilegeManager applicationPrivilegeManager) {
-        this.applicationPrivilegeManager = applicationPrivilegeManager;
-    }
-
-    public void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
+    public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
     }
 
@@ -78,6 +77,12 @@ public class MyWorkItemsController extends AbstractPageController<MyWorkItemsPag
             WorkItemsSlate workItemsSlate = null;
             // TODO
             pageBean.setWorkItemsSlate(workItemsSlate);
+
+            MyWorkItemsApplet applet = new MyWorkItemsApplet(au(), getPathVariable(), appletWidgetReferences,
+                    formEventHandlers);
+            pageBean.setApplet(applet);
+        } else {
+            pageBean.setApplet(null);
         }
 
         return refreshSlate();
@@ -94,10 +99,16 @@ public class MyWorkItemsController extends AbstractPageController<MyWorkItemsPag
         super.onOpenPage();
         getPageRequestContextUtil().considerDefaultFocusOnWidget();
         MyWorkItemsPageBean pageBean = getPageBean();
+
         if (StringUtils.isBlank(pageBean.getSelStepName())) {
             UserToken userToken = getUserToken();
             List<WorkItemStep> stepList = workflowModuleService.findWorkItemStepsByRole(userToken.getRoleCode());
             pageBean.setSelStepName(!stepList.isEmpty() ? stepList.get(0).getLongName() : null);
+        }
+
+        if (appletWidgetReferences == null) {
+            appletWidgetReferences = getAppletWidgetReferences();
+            formEventHandlers = getEntityFormEventHandlers();
         }
 
         loadWorkItemsSlate();
