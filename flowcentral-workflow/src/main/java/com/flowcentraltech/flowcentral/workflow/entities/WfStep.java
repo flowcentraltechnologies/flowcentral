@@ -127,6 +127,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @ListOnly(key = "workflowId", property = "description")
     private String workflowDesc;
 
+    @ListOnly(key = "workflowId", property = "label")
+    private String workflowLabel;
+
     @ListOnly(key = "workflowId", property = "loadingTable")
     private String workflowLoadingTable;
 
@@ -390,6 +393,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setWorkflowDesc(String workflowDesc) {
         this.workflowDesc = workflowDesc;
+    }
+
+    public String getWorkflowLabel() {
+        return workflowLabel;
+    }
+
+    public void setWorkflowLabel(String workflowLabel) {
+        this.workflowLabel = workflowLabel;
     }
 
     public String getWorkflowLoadingTable() {

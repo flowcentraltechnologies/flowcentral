@@ -481,8 +481,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final EntityDef entityDef = appletUtil.getAppletEntityDef(appletName);
         final AppletWorkflowCopyInfo appletWorkflowCopyInfo = appletUtil.application()
                 .getAppletWorkflowCopyInfo(appletName);
-        final String workflowLabel = entityDef.getLabel()
+        final String workflowDesc = entityDef.getLabel()
                 + (designType.isWorkflowCopyCreate() ? " Create (Workflow Copy)" : " Update (Workflow Copy)");
+        final String workflowLabel = entityDef.getLabel()
+                + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
         final String stepLabel = entityDef.getLabel() + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
         Workflow workflow = environment()
                 .findLean(new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
@@ -492,7 +494,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setApplicationId(applicationId);
             workflow.setConfigType(ConfigType.STATIC_INSTALL);
             workflow.setName(wnp.getEntityName());
-            workflow.setDescription(workflowLabel);
+            workflow.setDescription(workflowDesc);
             workflow.setLabel(workflowLabel);
             workflow.setEntity(entityDef.getLongName());
             workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
@@ -507,6 +509,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             if (forceUpdate || workflow.getAppletVersionNo() < appletWorkflowCopyInfo.getAppletVersionNo()) {
                 workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
                 workflow.setConfigType(ConfigType.STATIC_INSTALL);
+                workflow.setDescription(workflowDesc);
+                workflow.setLabel(workflowLabel);
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 workflow.setLoadingSearchInput(appletWorkflowCopyInfo.getAppletSearchInput());
                 final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
@@ -708,13 +712,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     public List<WorkflowInfo> findWorkflowInfoByRole(String roleCode) throws UnifyException {
         if (roleCode == null) {
             List<Workflow> workflowList = environment().listAll(
-                    new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "description"));
+                    new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "label"));
             if (!DataUtils.isBlank(workflowList)) {
                 List<WorkflowInfo> workflowInfoList = new ArrayList<WorkflowInfo>();
                 for (Workflow workflow : workflowList) {
                     final String longName = ApplicationNameUtils
                             .getApplicationEntityLongName(workflow.getApplicationName(), workflow.getName());
-                    workflowInfoList.add(new WorkflowInfo(longName, workflow.getDescription()));
+                    workflowInfoList.add(new WorkflowInfo(longName, workflow.getLabel()));
                 }
 
                 DataUtils.sortAscending(workflowInfoList, WorkflowInfo.class, "description");
@@ -723,13 +727,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         } else {
             List<WfStepRole> wfStepRoleList = environment()
                     .listAll(new WfStepRoleQuery().wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).isWithLoadingTable()
-                            .addSelect("applicationName", "workflowName", "workflowDesc").setDistinct(true));
+                            .addSelect("applicationName", "workflowName", "workflowLabel").setDistinct(true));
             if (!DataUtils.isBlank(wfStepRoleList)) {
                 List<WorkflowInfo> workflowInfoList = new ArrayList<WorkflowInfo>();
                 for (WfStepRole wfStepRole : wfStepRoleList) {
                     final String longName = ApplicationNameUtils.getApplicationEntityLongName(
                             wfStepRole.getApplicationName(), wfStepRole.getWorkflowName());
-                    workflowInfoList.add(new WorkflowInfo(longName, wfStepRole.getWorkflowDesc()));
+                    workflowInfoList.add(new WorkflowInfo(longName, wfStepRole.getWorkflowLabel()));
                 }
 
                 DataUtils.sortAscending(workflowInfoList, WorkflowInfo.class, "description");

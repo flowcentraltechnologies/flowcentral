@@ -24,7 +24,6 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntit
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.data.WorkflowInfo;
-import com.flowcentraltech.flowcentral.workflow.data.WorkItemsSlate;
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -74,12 +73,7 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
     @Action
     public String loadWorkItemsSlate() throws UnifyException {
         MyWorkItemsPageBean pageBean = getPageBean();
-        pageBean.setWorkItemsSlate(null);
         if (!StringUtils.isBlank(pageBean.getSelWorkflowName())) {
-            WorkItemsSlate workItemsSlate = null;
-            // TODO
-            pageBean.setWorkItemsSlate(workItemsSlate);
-
             final ApplicationEntityNameParts np = ApplicationNameUtils
                     .getApplicationEntityNameParts(pageBean.getSelWorkflowName());
             final String loadinAppletName = ApplicationNameUtils.getWorkflowLoadingAppletName(np.getApplicationName(),

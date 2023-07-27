@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.workflow.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
-import com.flowcentraltech.flowcentral.workflow.data.WorkItemsSlate;
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
 
@@ -29,8 +28,6 @@ import com.tcdng.unify.core.UnifyException;
 public class MyWorkItemsPageBean extends AbstractEntityFormAppletPageBean<MyWorkItemsApplet> {
 
     private String selWorkflowName;
-
-    private WorkItemsSlate workItemsSlate;
     
 
     public MyWorkItemsApplet getApplet() {
@@ -51,12 +48,5 @@ public class MyWorkItemsPageBean extends AbstractEntityFormAppletPageBean<MyWork
         this.selWorkflowName = selWorkflowName;
     }
 
-    public WorkItemsSlate getWorkItemsSlate() {
-        return workItemsSlate;
-    }
-
-    public void setWorkItemsSlate(WorkItemsSlate workItemsSlate) {
-        this.workItemsSlate = workItemsSlate;
-    }
 }
 
