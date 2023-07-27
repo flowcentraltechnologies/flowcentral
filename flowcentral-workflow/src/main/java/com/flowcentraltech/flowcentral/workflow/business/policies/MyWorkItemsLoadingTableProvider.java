@@ -13,22 +13,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.workflow.business;
+package com.flowcentraltech.flowcentral.workflow.business.policies;
 
 import java.util.Collections;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
+import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItemQuery;
+import com.flowcentraltech.flowcentral.workflow.util.WorkflowEntityUtils;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.ValueStore;
+import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
 import com.tcdng.unify.core.util.DataUtils;
@@ -45,8 +52,16 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     @Configurable
     private WorkflowModuleService workflowModuleService;
 
+    @Configurable
+    private AppletUtilities appletUtilities;
+
+
     public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
+    }
+
+    public final void setAppletUtilities(AppletUtilities appletUtilities) {
+        this.appletUtilities = appletUtilities;
     }
 
     @Override
@@ -58,6 +73,22 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     @Override
     public String getLoadingLabel() throws UnifyException {
         return getParameter(WorkflowStepInfo.class).getStepLabel();
+    }
+
+    @Override
+    public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst) throws UnifyException {
+        WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
+        WfDef wfDef = workflowModuleService.getWfDef(workflowStepInfo.getWorkflowLongName());
+        WfStepDef wfStepDef = wfDef.getWfStepDef(workflowStepInfo.getStepName());
+        ValueStoreReader reader = new BeanValueStore(inst).getReader();
+        final boolean comments = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
+                wfStepDef.getComments());
+        final boolean emails = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
+                wfStepDef.getEmails());
+        final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
+                wfStepDef.getReadOnlyConditionName());
+        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), readOnly, comments, emails,
+                wfStepDef.isError());
     }
 
     @Override
