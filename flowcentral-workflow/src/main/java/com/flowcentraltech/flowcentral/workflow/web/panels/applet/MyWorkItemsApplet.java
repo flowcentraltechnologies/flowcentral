@@ -15,10 +15,17 @@
  */
 package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingListApplet;
+import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
+import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowStepInfo;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -29,9 +36,21 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class MyWorkItemsApplet extends ManageLoadingListApplet {
 
-    public MyWorkItemsApplet(AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
-            EntityFormEventHandlers formEventHandlers) throws UnifyException {
+    public MyWorkItemsApplet(WorkflowModuleService workflowModuleService, String workflowName, AppletUtilities au,
+            String pathVariable, AppletWidgetReferences appletWidgetReferences,
+            EntityFormEventHandlers formEventHandlers, String roleCode) throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
+        List<TableLoadingDef> altTableLoadingDefList = new ArrayList<TableLoadingDef>();
+        List<WorkflowStepInfo> stepList = workflowModuleService.findLoadingWorkflowStepInfoByRole(workflowName,
+                roleCode);
+        int orderIndex = 0;
+        for (WorkflowStepInfo workflowStepInfo : stepList) {
+            altTableLoadingDefList.add(new TableLoadingDef(workflowStepInfo.getStepName(),
+                    workflowStepInfo.getStepDesc(), workflowStepInfo.getStepLabel(),
+                    WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER, orderIndex++));
+        }
+
+        getLoadingSearch().getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefList);
     }
 
 }

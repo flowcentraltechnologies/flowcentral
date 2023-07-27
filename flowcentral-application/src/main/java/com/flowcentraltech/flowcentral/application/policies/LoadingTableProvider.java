@@ -32,8 +32,18 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface LoadingTableProvider extends UnifyComponent {
+public interface LoadingTableProvider<T> extends UnifyComponent {
 
+    /**
+     * Sets the provider working parameter.
+     * 
+     * @param parameter
+     *             the parameter to set
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+     void setWorkingParameter(T parameter) throws UnifyException;
+    
     /**
      * Gets the loading label
      * 

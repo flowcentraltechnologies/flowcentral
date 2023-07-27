@@ -100,6 +100,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntitySingleFormItem;
 import com.flowcentraltech.flowcentral.workflow.data.WorkflowInfo;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
@@ -483,8 +484,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 .getAppletWorkflowCopyInfo(appletName);
         final String workflowDesc = entityDef.getLabel()
                 + (designType.isWorkflowCopyCreate() ? " Create (Workflow Copy)" : " Update (Workflow Copy)");
-        final String workflowLabel = entityDef.getLabel()
-                + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
+        final String workflowLabel = entityDef.getLabel() + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
         final String stepLabel = entityDef.getLabel() + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
         Workflow workflow = environment()
                 .findLean(new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
@@ -711,10 +711,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<WorkflowInfo> findWorkflowInfoByRole(String roleCode) throws UnifyException {
+    public List<WorkflowInfo> findLoadingWorkflowInfoByRole(String roleCode) throws UnifyException {
         if (roleCode == null) {
-            List<Workflow> workflowList = environment().listAll(
-                    new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "label"));
+            List<Workflow> workflowList = environment()
+                    .listAll(new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "label"));
             if (!DataUtils.isBlank(workflowList)) {
                 List<WorkflowInfo> workflowInfoList = new ArrayList<WorkflowInfo>();
                 for (Workflow workflow : workflowList) {
@@ -727,9 +727,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 return workflowInfoList;
             }
         } else {
-            List<WfStepRole> wfStepRoleList = environment()
-                    .listAll(new WfStepRoleQuery().wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).isWithLoadingTable()
-                            .addSelect("applicationName", "workflowName", "workflowLabel").setDistinct(true));
+            List<WfStepRole> wfStepRoleList = environment().listAll(new WfStepRoleQuery().roleCode(roleCode)
+                    .wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).isWithLoadingTable()
+                    .addSelect("applicationName", "workflowName", "workflowLabel").setDistinct(true));
             if (!DataUtils.isBlank(wfStepRoleList)) {
                 List<WorkflowInfo> workflowInfoList = new ArrayList<WorkflowInfo>();
                 for (WfStepRole wfStepRole : wfStepRoleList) {
@@ -741,6 +741,30 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 DataUtils.sortAscending(workflowInfoList, WorkflowInfo.class, "description");
                 return workflowInfoList;
             }
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<WorkflowStepInfo> findLoadingWorkflowStepInfoByRole(String workflowName, String roleCode)
+            throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
+        List<WfStepRole> wfStepRoleList = environment()
+                .listAll((roleCode == null ? new WfStepRoleQuery() : new WfStepRoleQuery().roleCode(roleCode))
+                        .applicationName(np.getApplicationName()).workflowName(np.getEntityName())
+                        .wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).isWithLoadingTable()
+                        .addSelect("wfStepName", "wfStepDesc", "wfStepLabel"));
+        if (!DataUtils.isBlank(wfStepRoleList)) {
+            List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
+            for (WfStepRole wfStepRole : wfStepRoleList) {
+                workflowStepInfoList.add(new WorkflowStepInfo(workflowName, np.getApplicationName(), np.getEntityName(),
+                        wfStepRole.getWorkflowEntity(), wfStepRole.getWfStepName(), wfStepRole.getWfStepDesc(),
+                        wfStepRole.getWfStepLabel()));
+            }
+
+            DataUtils.sortAscending(workflowStepInfoList, WorkflowStepInfo.class, "label");
+            return workflowStepInfoList;
         }
 
         return Collections.emptyList();

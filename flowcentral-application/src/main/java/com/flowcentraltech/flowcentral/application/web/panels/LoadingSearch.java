@@ -187,25 +187,25 @@ public class LoadingSearch {
         loadingTable.commitChange();
     }
 
-    public LoadingTableProvider getLoadingTableProvider(int itemIndex) throws UnifyException {
+    public LoadingTableProvider<?> getLoadingTableProvider(int itemIndex) throws UnifyException {
         return loadingTable.getLoadingTableProvider(itemIndex);
     }
 
     public EntityItem getSourceItem(int index) throws UnifyException {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
-        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        LoadingTableProvider<?> loadingTableProvider = getLoadingTableProvider(index);
         int options = loadingTableProvider.getSourceItemOptions(loadingEntity);
         return loadingTableProvider != null ? loadingTableProvider.getSourceItem((Long) loadingEntity.getId(), options)
                 : null;
     }
 
     public String getSourceItemFormApplet(int index) throws UnifyException {
-        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        LoadingTableProvider<?> loadingTableProvider = getLoadingTableProvider(index);
         return loadingTableProvider != null ? loadingTableProvider.getSourceItemFormApplet() : null;
     }
 
     public LoadingWorkItemInfo getLoadingWorkItemInfo(WorkEntity inst, int index) throws UnifyException {
-        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        LoadingTableProvider<?> loadingTableProvider = getLoadingTableProvider(index);
         return loadingTableProvider != null ? loadingTableProvider.getLoadingWorkItemInfo(inst)
                 : new LoadingWorkItemInfo();
     }
@@ -213,7 +213,7 @@ public class LoadingSearch {
     public boolean applyUserAction(WorkEntity wfEntityInst, String userAction, String comment, InputArrayEntries emails,
             int index, boolean listing) throws UnifyException {
         Entity loadingEntity = loadingTable.getDispItemList().get(index);
-        LoadingTableProvider loadingTableProvider = getLoadingTableProvider(index);
+        LoadingTableProvider<?> loadingTableProvider = getLoadingTableProvider(index);
         return loadingTableProvider != null
                 ? loadingTableProvider.applyUserAction(wfEntityInst, (Long) loadingEntity.getId(), userAction, comment,
                         emails, listing)

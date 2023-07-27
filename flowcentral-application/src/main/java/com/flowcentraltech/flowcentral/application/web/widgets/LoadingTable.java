@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
 import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
@@ -48,6 +49,8 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
 
     private static final Order DEFAULT_TABLE_ORDER = new Order().add("id");
 
+    private List<TableLoadingDef> altTableLoadingDefs;
+
     public LoadingTable(AppletUtilities au, TableDef tableDef) {
         this(au, tableDef, null);
     }
@@ -56,9 +59,12 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
         super(au, tableDef, filterGroupDef, DEFAULT_TABLE_ORDER, 0);
         this.setFixedRows(tableDef.isFixedRows());
     }
-    
+
+    public void setAltTableLoadingDefs(List<TableLoadingDef> altTableLoadingDefs) {
+        this.altTableLoadingDefs = altTableLoadingDefs;
+    }
+
     public void commitChange() throws UnifyException {
-        TableDef _tableDef = getTableDef();
         List<Section> sections = getSections();
         final int slen = sections.size();
         Section currentSection = null;
@@ -70,35 +76,32 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
             valueStore.setDataIndex(i);
             while ((currentSection == null || !currentSection.isIndexWithin(i)) && ((++sectionIndex) < slen)) {
                 currentSection = sections.get(sectionIndex);
-                currentTableLoadingDef = _tableDef.getTableLoadingDef(sectionIndex);
+                currentTableLoadingDef = getTableLoadingDef(sectionIndex);
             }
 
-            LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
-                    currentTableLoadingDef.getProvider());
+            LoadingTableProvider<?> loadingTableProvider = getLoadingTableProvider(currentTableLoadingDef);
             loadingTableProvider.commitChange(valueStore, true);
         }
     }
-    
-    public LoadingTableProvider getLoadingTableProvider(int itemIndex) throws UnifyException {
-        TableDef _tableDef = getTableDef();
+
+    public LoadingTableProvider<?> getLoadingTableProvider(int itemIndex) throws UnifyException {
         List<Section> sections = getSections();
         final int len = sections.size();
         for (int i = 0; i < len; i++) {
-            Section section =  sections.get(i);
+            Section section = sections.get(i);
             if (section.isIndexWithin(itemIndex)) {
-                TableLoadingDef currentTableLoadingDef = _tableDef.getTableLoadingDef(i);
-                return au.getComponent(LoadingTableProvider.class,
-                        currentTableLoadingDef.getProvider());
+                TableLoadingDef currentTableLoadingDef = getTableLoadingDef(i);
+                return getLoadingTableProvider(currentTableLoadingDef);
             }
         }
-        
+
         return null;
     }
-    
+
     public ColorLegendInfo getColorLegendInfo() {
         return getTableDef().getColorLegendInfo();
     }
-    
+
     public boolean isWithColorLegendInfo() {
         return getTableDef().getColorLegendInfo() != null && !getTableDef().getColorLegendInfo().isEmpty();
     }
@@ -133,13 +136,11 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
 
     @Override
     protected int getSourceObjectSize(LoadingParams restriction) throws UnifyException {
-        final TableDef tableDef = getTableDef();
-        final int len = tableDef.getLoadingDefCount();
+        final int len = getLoadingDefCount();
         int count = 0;
         for (int i = 0; i < len; i++) {
-            TableLoadingDef tableLoadingDef = tableDef.getTableLoadingDef(i);
-            LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
-                    tableLoadingDef.getProvider());
+            TableLoadingDef tableLoadingDef = getTableLoadingDef(i);
+            LoadingTableProvider<?> loadingTableProvider = getLoadingTableProvider(tableLoadingDef);
             count += loadingTableProvider.countLoadingItems(restriction);
         }
 
@@ -149,24 +150,22 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
     @Override
     protected List<Entity> getDisplayItems(LoadingParams restriction, int dispStartIndex, int dispEndIndex)
             throws UnifyException {
-        final TableDef tableDef = getTableDef();
-        final int len = tableDef.getLoadingDefCount();
+        final EntityClassDef _entityClassDef = au().getEntityClassDef(getTableDef().getEntityDef().getLongName());
+        final int len = getLoadingDefCount();
         List<Entity> items = new ArrayList<Entity>();
         List<Section> sectionList = new ArrayList<Section>(len);
         int startItemIndex = 0;
         for (int i = 0; i < len; i++) {
             restriction.restore();
-            TableLoadingDef tableLoadingDef = tableDef.getTableLoadingDef(i);
-            LoadingTableProvider loadingTableProvider = au.getComponent(LoadingTableProvider.class,
-                    tableLoadingDef.getProvider());
+            TableLoadingDef tableLoadingDef = getTableLoadingDef(i);
+            LoadingTableProvider<?> loadingTableProvider = getLoadingTableProvider(tableLoadingDef);
             String label = loadingTableProvider.getLoadingLabel();
             List<? extends Entity> _items = loadingTableProvider.getLoadingItems(restriction);
             Order order = getOrder();
             if (order == null) {
                 DataUtils.sortAscending(_items, Entity.class, "id");
             } else {
-                DataUtils.sort(_items, au().getEntityClassDef(tableDef.getEntityDef().getLongName()).getEntityClass(),
-                        order);
+                DataUtils.sort(_items, _entityClassDef.getEntityClass(), order);
             }
 
             if (!DataUtils.isBlank(_items)) {
@@ -177,11 +176,27 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
             } else {
                 sectionList.add(new Section(label));
             }
-            
         }
 
         setSections(sectionList);
         restriction.restore();
         return items;
+    }
+
+    @SuppressWarnings("unchecked")
+    private LoadingTableProvider<?> getLoadingTableProvider(TableLoadingDef tableLoadingDef) throws UnifyException {
+        LoadingTableProvider<Object> loadingTableProvider = au.getComponent(LoadingTableProvider.class,
+                tableLoadingDef.getProvider());
+        loadingTableProvider.setWorkingParameter(tableLoadingDef.getParameter());
+        return loadingTableProvider;
+    }
+
+    private TableLoadingDef getTableLoadingDef(int index) {
+        return !DataUtils.isBlank(altTableLoadingDefs) ? altTableLoadingDefs.get(index)
+                : getTableDef().getTableLoadingDef(index);
+    }
+
+    private int getLoadingDefCount() {
+        return !DataUtils.isBlank(altTableLoadingDefs) ? altTableLoadingDefs.size() : getLoadingDefCount();
     }
 }

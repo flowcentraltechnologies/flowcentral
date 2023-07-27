@@ -42,7 +42,7 @@ import com.tcdng.unify.core.util.StringUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplicationLoadingTableProvider {
+public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplicationLoadingTableProvider<String> {
 
     @Configurable
     private WorkflowModuleService workflowModuleService;

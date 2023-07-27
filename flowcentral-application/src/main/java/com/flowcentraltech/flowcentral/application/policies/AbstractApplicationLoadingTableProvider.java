@@ -35,16 +35,22 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationLoadingTableProvider extends AbstractFlowCentralComponent
-    implements LoadingTableProvider {
+public abstract class AbstractApplicationLoadingTableProvider<T> extends AbstractFlowCentralComponent
+    implements LoadingTableProvider<T> {
 
     @Configurable
     private AppletUtilities au;
 
-    private final String sourceEntity;
+    private String sourceEntity;
+    
+    private T parameter;
     
     public AbstractApplicationLoadingTableProvider(String sourceEntity) {
         this.sourceEntity = sourceEntity;
+    }
+
+    public AbstractApplicationLoadingTableProvider() {
+
     }
 
     public final void setAu(AppletUtilities au) {
@@ -76,6 +82,11 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
         return false;
     }
 
+    @Override
+    public void setWorkingParameter(T parameter) throws UnifyException {
+        this.parameter = parameter;
+    }
+
     protected EnvironmentService environment() {
         return au.environment();
     }
@@ -86,6 +97,14 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
 
     protected String getSourceEntity() {
         return sourceEntity;
+    }
+
+    protected T getParameter() {
+        return parameter;
+    }
+
+    protected void setSourceEntity(String sourceEntity) {
+        this.sourceEntity = sourceEntity;
     }
 
     @Override
