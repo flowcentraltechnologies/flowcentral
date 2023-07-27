@@ -19,11 +19,14 @@ import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.policies.AbstractApplicationLoadingTableProvider;
 import com.flowcentraltech.flowcentral.application.policies.LoadingParams;
+import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
+import com.flowcentraltech.flowcentral.workflow.constants.WfReviewMode;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfStepDef;
@@ -54,7 +57,6 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
 
     @Configurable
     private AppletUtilities appletUtilities;
-
 
     public final void setWorkflowModuleService(WorkflowModuleService workflowModuleService) {
         this.workflowModuleService = workflowModuleService;
@@ -115,11 +117,29 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     }
 
     @Override
+    public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
+        final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
+        final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId(sourceItemId)
+                .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));
+        return workflowModuleService.getWfItemWorkEntityFromWorkItemId(workItemId, WfReviewMode.NORMAL);
+    }
+
+    @Override
     public String getSourceItemFormApplet() throws UnifyException {
         WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         WfDef wfDef = workflowModuleService.getWfDef(workflowStepInfo.getWorkflowLongName());
         WfStepDef wfStepDef = wfDef.getWfStepDef(workflowStepInfo.getStepName());
         return wfStepDef.getStepAppletName();
+    }
+
+    @Override
+    public boolean applyUserAction(WorkEntity wfEntityInst, Long sourceItemId, String userAction, String comment,
+            InputArrayEntries emails, boolean listing) throws UnifyException {
+        final WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
+        final Long workItemId = environment().value(Long.class, "id", new WfItemQuery().workRecId(sourceItemId)
+                .workflowName(workflowStepInfo.getWorkflowLongName()).wfStepName(workflowStepInfo.getStepName()));
+        return workflowModuleService.applyUserAction(wfEntityInst, workItemId, workflowStepInfo.getStepName(),
+                userAction, comment, emails, WfReviewMode.NORMAL, listing);
     }
 
     @Override

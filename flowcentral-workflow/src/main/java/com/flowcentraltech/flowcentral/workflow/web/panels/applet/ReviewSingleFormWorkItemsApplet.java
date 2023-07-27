@@ -120,7 +120,7 @@ public class ReviewSingleFormWorkItemsApplet extends AbstractReviewSingleFormWor
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         if (isNoForm()) {
             currWfItem = (WfItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
-            WorkEntityItem _workEntityItem = wms.getWfItemWorkEntity(currWfItem.getId(), WfReviewMode.SINGLEFORM);
+            WorkEntityItem _workEntityItem = wms.getWfItemWorkEntityFromWorkItemId(currWfItem.getId(), WfReviewMode.SINGLEFORM);
             currEntityInst = _workEntityItem.getWorkEntity();
             final String currentUser = au.getSessionUserLoginId();
             if (StringUtils.isBlank(currWfItem.getHeldBy())) { // Current user should hold current item if it is unheld
