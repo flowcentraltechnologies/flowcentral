@@ -557,6 +557,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 if (forceUpdate || loadingApplet.getWorkflowVersionNo() < workflowVersionNo) {
                     loadingApplet.setWorkflowVersionNo(workflowVersionNo);
                     loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
+                    loadingApplet.setDescription(loadingAppletDesc);
+                    loadingApplet.setLabel(loadingAppletLabel);
                     final List<AppAppletProp> propList = WorkflowDesignUtils.generateLoadingAppletProperties(
                             workflow.getLoadingTable(), workflow.getLoadingSearchInput());
                     loadingApplet.setPropList(propList);

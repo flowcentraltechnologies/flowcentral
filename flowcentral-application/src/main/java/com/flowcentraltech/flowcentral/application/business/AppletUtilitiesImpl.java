@@ -1696,7 +1696,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 searchConfigName, searchColumns, loadingSearchMode, showConditions);
 
-        loadingSearch.setEntitySubTitle(_rootAppletDef.getDescription());
+        loadingSearch.setEntitySubTitle(_rootAppletDef.getLabel());
         return loadingSearch;
     }
 
