@@ -47,7 +47,8 @@ public class MyWorkItemsApplet extends ManageLoadingListApplet {
         for (WorkflowStepInfo workflowStepInfo : workflowStepList) {
             altTableLoadingDefs.add(new TableLoadingDef(workflowStepInfo.getStepName(), workflowStepInfo.getStepDesc(),
                     workflowStepInfo.getStepLabel(),
-                    WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER, orderIndex++));
+                    WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER, workflowStepInfo,
+                    orderIndex++));
         }
 
         getLoadingSearch().getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefs);

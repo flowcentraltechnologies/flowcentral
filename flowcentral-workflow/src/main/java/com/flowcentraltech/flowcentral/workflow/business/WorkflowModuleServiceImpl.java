@@ -712,7 +712,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public List<WorkflowInfo> findLoadingWorkflowInfoByRole(String roleCode) throws UnifyException {
-        if (roleCode == null) {
+        if (StringUtils.isBlank(roleCode)) {
             List<Workflow> workflowList = environment()
                     .listAll(new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "label"));
             if (!DataUtils.isBlank(workflowList)) {
@@ -749,22 +749,38 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<WorkflowStepInfo> findLoadingWorkflowStepInfoByRole(String workflowName, String roleCode)
             throws UnifyException {
-        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
-        List<WfStepRole> wfStepRoleList = environment()
-                .listAll((roleCode != null ? new WfStepRoleQuery().roleCode(roleCode) : new WfStepRoleQuery())
-                        .applicationName(np.getApplicationName()).workflowName(np.getEntityName())
-                        .wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).isWithLoadingTable()
-                        .addSelect("wfStepName", "wfStepDesc", "wfStepLabel", "entityName"));
-        if (!DataUtils.isBlank(wfStepRoleList)) {
-            List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
-            for (WfStepRole wfStepRole : wfStepRoleList) {
-                workflowStepInfoList.add(new WorkflowStepInfo(workflowName, np.getApplicationName(), np.getEntityName(),
-                        wfStepRole.getEntityName(), wfStepRole.getWfStepName(), wfStepRole.getWfStepDesc(),
-                        wfStepRole.getWfStepLabel()));
-            }
+        final ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
+        if (StringUtils.isBlank(roleCode)) {
+            List<WfStep> wfStepList = environment().listAll(new WfStepQuery().applicationName(np.getApplicationName())
+                    .workflowName(np.getEntityName()).typeIn(USER_INTERACTIVE_STEP_TYPES).isWithLoadingTable()
+                    .addSelect("name", "description", "label", "entityName"));
+            if (!DataUtils.isBlank(wfStepList)) {
+                List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
+                for (WfStep wfStep : wfStepList) {
+                    workflowStepInfoList.add(new WorkflowStepInfo(workflowName, np.getApplicationName(),
+                            np.getEntityName(), wfStep.getEntityName(), wfStep.getName(), wfStep.getDescription(),
+                            wfStep.getLabel()));
+                }
 
-            DataUtils.sortAscending(workflowStepInfoList, WorkflowInfo.class, "label");
-            return workflowStepInfoList;
+                DataUtils.sortAscending(workflowStepInfoList, WorkflowStepInfo.class, "stepLabel");
+                return workflowStepInfoList;
+            }
+        } else {
+            List<WfStepRole> wfStepRoleList = environment()
+                    .listAll(new WfStepRoleQuery().roleCode(roleCode).applicationName(np.getApplicationName())
+                            .workflowName(np.getEntityName()).wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES)
+                            .isWithLoadingTable().addSelect("wfStepName", "wfStepDesc", "wfStepLabel", "entityName"));
+            if (!DataUtils.isBlank(wfStepRoleList)) {
+                List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
+                for (WfStepRole wfStepRole : wfStepRoleList) {
+                    workflowStepInfoList.add(new WorkflowStepInfo(workflowName, np.getApplicationName(),
+                            np.getEntityName(), wfStepRole.getEntityName(), wfStepRole.getWfStepName(),
+                            wfStepRole.getWfStepDesc(), wfStepRole.getWfStepLabel()));
+                }
+
+                DataUtils.sortAscending(workflowStepInfoList, WorkflowStepInfo.class, "stepLabel");
+                return workflowStepInfoList;
+            }
         }
 
         return Collections.emptyList();

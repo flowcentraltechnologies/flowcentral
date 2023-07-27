@@ -68,7 +68,19 @@ public class WfStepQuery extends BaseConfigNamedEntityQuery<WfStep> {
         return (WfStepQuery) addNotEquals("applicationName", applicationName);
     }
 
+    public WfStepQuery applicationName(String applicationName) {
+        return (WfStepQuery) addEquals("applicationName", applicationName);
+    }
+
+    public WfStepQuery workflowName(String workflowName) {
+        return (WfStepQuery) addEquals("workflowName", workflowName);
+    }
+
     public WfStepQuery appletNameBeginsWith(String appletName) {
         return (WfStepQuery) addBeginsWith("appletName", appletName);
+    }
+    
+    public WfStepQuery isWithLoadingTable() {
+        return (WfStepQuery) addIsNotNull("workflowLoadingTable");
     }
 }

@@ -25,6 +25,7 @@
 	components:$c{workItemLabel actionPanel} 
 	
 !ui-label:workItemLabel styleClass:$e{fc-largelabel} caption:$m{workflowmyworkitems.workitems}
+	textUppercase:true
 !ui-panel:actionPanel 
 	layout:$d{!ui-horizontal style:$s{float:right;} showCaption:true inlineCaption:true captionSuffix:$s{:} cellType:middle}
 	components:$c{stepSelect refreshBtn}
