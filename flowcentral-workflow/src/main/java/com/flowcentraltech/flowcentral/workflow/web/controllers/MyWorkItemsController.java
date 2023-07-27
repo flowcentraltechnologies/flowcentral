@@ -74,13 +74,13 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
     public String loadWorkItemsSlate() throws UnifyException {
         MyWorkItemsPageBean pageBean = getPageBean();
         if (!StringUtils.isBlank(pageBean.getSelWorkflowName())) {
-            UserToken userToken = getUserToken();
             final ApplicationEntityNameParts np = ApplicationNameUtils
                     .getApplicationEntityNameParts(pageBean.getSelWorkflowName());
             final String loadinAppletName = ApplicationNameUtils.getWorkflowLoadingAppletName(np.getApplicationName(),
                     np.getEntityName());
-            MyWorkItemsApplet applet = new MyWorkItemsApplet(workflowModuleService, pageBean.getSelWorkflowName(), au(),
-                    loadinAppletName, appletWidgetReferences, formEventHandlers, userToken.getRoleCode());
+            UserToken userToken = getUserToken();
+            MyWorkItemsApplet applet = new MyWorkItemsApplet(workflowModuleService, pageBean.getSelWorkflowName(),
+                    userToken.getRoleCode(), au(), loadinAppletName, appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
         } else {
             pageBean.setApplet(null);

@@ -25,30 +25,29 @@ import com.tcdng.unify.core.data.Listable;
  */
 public class TableLoadingDef implements Listable {
 
-    private final String name;
+    private String name;
 
-    private final String description;
+    private String description;
 
-    private final String label;
+    private String label;
 
-    private final String provider;
+    private String provider;
 
-    private final Object parameter;
+    private Object parameter;
 
-    private final int orderIndex;
-
+    private int orderIndex;
+    
     public TableLoadingDef(String name, String description, String label, String provider, int orderIndex) {
         this.name = name;
         this.description = description;
         this.label = label;
         this.provider = provider;
-        this.parameter = null;
         this.orderIndex = orderIndex;
     }
 
     public TableLoadingDef(String name, String description, String label, String provider, Object parameter,
             int orderIndex) {
-        this.name = name;
+         this.name = name;
         this.description = description;
         this.label = label;
         this.provider = provider;
@@ -70,6 +69,10 @@ public class TableLoadingDef implements Listable {
         return name;
     }
 
+    public Object getParameter() {
+        return parameter;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -80,10 +83,6 @@ public class TableLoadingDef implements Listable {
 
     public String getProvider() {
         return provider;
-    }
-
-    public Object getParameter() {
-        return parameter;
     }
 
     public int getOrderIndex() {

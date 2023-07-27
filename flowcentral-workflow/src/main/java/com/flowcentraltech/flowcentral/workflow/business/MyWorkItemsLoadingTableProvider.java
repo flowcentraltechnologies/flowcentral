@@ -40,7 +40,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @since 1.0
  */
 @Component(WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER)
-public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingTableProvider<WorkflowStepInfo> {
+public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingTableProvider {
 
     @Configurable
     private WorkflowModuleService workflowModuleService;
@@ -50,19 +50,19 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
     }
 
     @Override
-    public void setWorkingParameter(WorkflowStepInfo parameter) throws UnifyException {
+    public void setWorkingParameter(Object parameter) throws UnifyException {
         super.setWorkingParameter(parameter);
-        setSourceEntity(parameter.getEntity());
+        setSourceEntity(getParameter(WorkflowStepInfo.class).getEntity());
     }
 
     @Override
     public String getLoadingLabel() throws UnifyException {
-        return getParameter().getStepLabel();
+        return getParameter(WorkflowStepInfo.class).getStepLabel();
     }
 
     @Override
     public List<? extends Entity> getLoadingItems(LoadingParams params) throws UnifyException {
-        WorkflowStepInfo workflowStepInfo = getParameter();
+        WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         List<Long> workItemIdList = environment().valueList(Long.class, "workRecId",
                 new WfItemQuery().applicationName(workflowStepInfo.getApplicationName())
                         .workflowName(workflowStepInfo.getWorkflowName()).wfStepName(workflowStepInfo.getStepName()));
@@ -86,7 +86,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
 
     @Override
     public String getSourceItemFormApplet() throws UnifyException {
-        WorkflowStepInfo workflowStepInfo = getParameter();
+        WorkflowStepInfo workflowStepInfo = getParameter(WorkflowStepInfo.class);
         WfDef wfDef = workflowModuleService.getWfDef(workflowStepInfo.getWorkflowLongName());
         WfStepDef wfStepDef = wfDef.getWfStepDef(workflowStepInfo.getStepName());
         return wfStepDef.getStepAppletName();

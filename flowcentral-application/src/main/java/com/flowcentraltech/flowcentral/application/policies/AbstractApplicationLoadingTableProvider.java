@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Convenient abstract base class for application table loading providers..
@@ -35,15 +36,15 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractApplicationLoadingTableProvider<T> extends AbstractFlowCentralComponent
-    implements LoadingTableProvider<T> {
+public abstract class AbstractApplicationLoadingTableProvider extends AbstractFlowCentralComponent
+    implements LoadingTableProvider {
 
     @Configurable
     private AppletUtilities au;
 
     private String sourceEntity;
-    
-    private T parameter;
+
+    private Object parameter;
     
     public AbstractApplicationLoadingTableProvider(String sourceEntity) {
         this.sourceEntity = sourceEntity;
@@ -67,6 +68,11 @@ public abstract class AbstractApplicationLoadingTableProvider<T> extends Abstrac
         return new LoadingWorkItemInfo();
     }
     
+    @Override
+    public void setWorkingParameter(Object parameter) throws UnifyException {
+        this.parameter = parameter;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
@@ -82,11 +88,6 @@ public abstract class AbstractApplicationLoadingTableProvider<T> extends Abstrac
         return false;
     }
 
-    @Override
-    public void setWorkingParameter(T parameter) throws UnifyException {
-        this.parameter = parameter;
-    }
-
     protected EnvironmentService environment() {
         return au.environment();
     }
@@ -99,12 +100,12 @@ public abstract class AbstractApplicationLoadingTableProvider<T> extends Abstrac
         return sourceEntity;
     }
 
-    protected T getParameter() {
-        return parameter;
-    }
-
     protected void setSourceEntity(String sourceEntity) {
         this.sourceEntity = sourceEntity;
+    }
+
+    protected <T> T getParameter(Class<T> targetClass) throws UnifyException {
+        return DataUtils.convert(targetClass, parameter);
     }
 
     @Override

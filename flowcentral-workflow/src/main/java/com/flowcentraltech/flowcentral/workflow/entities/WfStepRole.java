@@ -51,14 +51,14 @@ public class WfStepRole extends BaseAuditEntity {
     @ListOnly(key = "wfStepId", property = "label")
     private String wfStepLabel;
 
-    @ListOnly(key = "wfStepId", property = "entityName")
-    private String workflowEntity;
-
     @ListOnly(key = "wfStepId", property = "workflowName")
     private String workflowName;
 
     @ListOnly(key = "wfStepId", property = "workflowDesc")
     private String workflowDesc;
+
+    @ListOnly(key = "wfStepId", property = "entityName")
+    private String entityName;
 
     @ListOnly(key = "wfStepId", property = "workflowLabel")
     private String workflowLabel;
@@ -131,14 +131,6 @@ public class WfStepRole extends BaseAuditEntity {
         this.wfStepLabel = wfStepLabel;
     }
 
-    public String getWorkflowEntity() {
-        return workflowEntity;
-    }
-
-    public void setWorkflowEntity(String workflowEntity) {
-        this.workflowEntity = workflowEntity;
-    }
-
     public String getWorkflowName() {
         return workflowName;
     }
@@ -169,6 +161,14 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setWorkflowLoadingTable(String workflowLoadingTable) {
         this.workflowLoadingTable = workflowLoadingTable;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public String getApplicationName() {

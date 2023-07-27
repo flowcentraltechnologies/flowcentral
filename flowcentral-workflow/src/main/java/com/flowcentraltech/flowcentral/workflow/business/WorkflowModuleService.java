@@ -280,7 +280,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     List<WfStep> findWorkflowSteps(WfStepQuery query) throws UnifyException;
 
     /**
-     * Finds workflows by role.
+     * Finds loading workflows by role.
      * 
      * @param roleCode
      *             the role code
@@ -289,9 +289,9 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      *                        if an error occurs
      */
     List<WorkflowInfo> findLoadingWorkflowInfoByRole(String roleCode) throws UnifyException;
-
+    
     /**
-     * Finds workflow steps by role.
+     * Finds loading workflow steps by role.
      * 
      * @param workflowName
      *                     the workflow name

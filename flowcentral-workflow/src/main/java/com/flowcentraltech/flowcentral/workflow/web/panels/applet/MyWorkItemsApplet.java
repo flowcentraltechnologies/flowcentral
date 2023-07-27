@@ -36,21 +36,21 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class MyWorkItemsApplet extends ManageLoadingListApplet {
 
-    public MyWorkItemsApplet(WorkflowModuleService workflowModuleService, String workflowName, AppletUtilities au,
-            String pathVariable, AppletWidgetReferences appletWidgetReferences,
-            EntityFormEventHandlers formEventHandlers, String roleCode) throws UnifyException {
+    public MyWorkItemsApplet(WorkflowModuleService workflowModuleService, String workflowName, String roleCode,
+            AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
+            EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
-        List<TableLoadingDef> altTableLoadingDefList = new ArrayList<TableLoadingDef>();
-        List<WorkflowStepInfo> stepList = workflowModuleService.findLoadingWorkflowStepInfoByRole(workflowName,
+        List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
+        List<WorkflowStepInfo> workflowStepList = workflowModuleService.findLoadingWorkflowStepInfoByRole(workflowName,
                 roleCode);
         int orderIndex = 0;
-        for (WorkflowStepInfo workflowStepInfo : stepList) {
-            altTableLoadingDefList.add(new TableLoadingDef(workflowStepInfo.getStepName(),
-                    workflowStepInfo.getStepDesc(), workflowStepInfo.getStepLabel(),
+        for (WorkflowStepInfo workflowStepInfo : workflowStepList) {
+            altTableLoadingDefs.add(new TableLoadingDef(workflowStepInfo.getStepName(), workflowStepInfo.getStepDesc(),
+                    workflowStepInfo.getStepLabel(),
                     WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER, orderIndex++));
         }
 
-        getLoadingSearch().getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefList);
+        getLoadingSearch().getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefs);
     }
 
 }
