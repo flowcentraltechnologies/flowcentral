@@ -22,6 +22,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
+import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingListApplet;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
@@ -51,7 +52,9 @@ public class MyWorkItemsApplet extends ManageLoadingListApplet {
                     orderIndex++));
         }
 
-        getLoadingSearch().getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefs);
+        final LoadingSearch loadingSearch = getLoadingSearch();
+        loadingSearch.getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefs);
+        loadingSearch.applySearchEntriesToSearch();
     }
 
 }
