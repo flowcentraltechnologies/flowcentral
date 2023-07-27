@@ -3565,6 +3565,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (String appletName : updateDraftApplets) {
             appletUtilities.ensureWorkflowCopyWorkflows(appletName, isInstallationPerformed);
         }
+        
+        appletUtilities.ensureWorkflowUserInteractionLoadingApplets(isInstallationPerformed);
     }
 
     @SuppressWarnings("unchecked")
