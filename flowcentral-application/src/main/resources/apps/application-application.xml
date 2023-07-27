@@ -693,6 +693,8 @@
 				label="$m{application.appapplet.allowsecondarytenants}" type="boolean" />
 			<field name="displayIndex"
 				label="$m{application.appapplet.displayindex}" type="integer" />
+			<field name="workflowVersionNo"
+				label="$m{application.appapplet.workflowversionno}" type="long" />
 			<field name="typeDesc"
 				label="$m{application.appapplet.typedesc}" type="list_only"
 				key="type" property="description" />

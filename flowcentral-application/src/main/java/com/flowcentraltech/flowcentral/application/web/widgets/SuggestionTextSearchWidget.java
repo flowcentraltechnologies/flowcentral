@@ -61,8 +61,8 @@ public class SuggestionTextSearchWidget extends EntityTextSearchWidget {
                         parts.getEntityName());
             }
             
-            if (parts.isWithFieldName()) {
-                query.addEquals("fieldName", parts.getFieldName());
+            if (parts.isWithMinorName()) {
+                query.addEquals("fieldName", parts.getMinorName());
             }
         }
     }

@@ -29,20 +29,27 @@ public class AppletWorkflowCopyInfo {
 
     private String updateApprovalSetValuesName;
 
+    private String appletSearchTable;
+
+    private String appletSearchInput;
+
     private long appletVersionNo;
 
     public AppletWorkflowCopyInfo(String appletName, String createApprovalSetValuesName,
-            String updateApprovalSetValuesName, long appletVersionNo) {
+            String updateApprovalSetValuesName, String appletSearchTable, String appletSearchInput,
+            long appletVersionNo) {
         this.appletName = appletName;
         this.createApprovalSetValuesName = createApprovalSetValuesName;
         this.updateApprovalSetValuesName = updateApprovalSetValuesName;
+        this.appletSearchTable = appletSearchTable;
+        this.appletSearchInput = appletSearchInput;
         this.appletVersionNo = appletVersionNo;
     }
 
     public AppletWorkflowCopyInfo() {
-        
+
     }
-    
+
     public String getAppletName() {
         return appletName;
     }
@@ -53,6 +60,14 @@ public class AppletWorkflowCopyInfo {
 
     public String getUpdateApprovalSetValuesName() {
         return updateApprovalSetValuesName;
+    }
+
+    public String getAppletSearchTable() {
+        return appletSearchTable;
+    }
+
+    public String getAppletSearchInput() {
+        return appletSearchInput;
     }
 
     public long getAppletVersionNo() {

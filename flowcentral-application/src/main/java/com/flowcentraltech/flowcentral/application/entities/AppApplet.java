@@ -71,6 +71,9 @@ public class AppApplet extends BaseApplicationEntity {
 
     @Column
     private int displayIndex;
+    
+    @Column
+    private long workflowVersionNo;
 
     @ListOnly(key = "type", property = "description")
     private String typeDesc;
@@ -186,6 +189,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setDisplayIndex(int displayIndex) {
         this.displayIndex = displayIndex;
+    }
+
+    public long getWorkflowVersionNo() {
+        return workflowVersionNo;
+    }
+
+    public void setWorkflowVersionNo(long workflowVersionNo) {
+        this.workflowVersionNo = workflowVersionNo;
     }
 
     public String getTypeDesc() {

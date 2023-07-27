@@ -127,6 +127,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @ListOnly(key = "workflowId", property = "description")
     private String workflowDesc;
 
+    @ListOnly(key = "workflowId", property = "versionNo")
+    private long workflowVersionNo;
+
     @ListOnly(key = "workflowId", property = "entity")
     private String entityName;
 
@@ -384,6 +387,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setWorkflowDesc(String workflowDesc) {
         this.workflowDesc = workflowDesc;
+    }
+
+    public long getWorkflowVersionNo() {
+        return workflowVersionNo;
+    }
+
+    public void setWorkflowVersionNo(long workflowVersionNo) {
+        this.workflowVersionNo = workflowVersionNo;
     }
 
     public String getRecordActionTypeDesc() {

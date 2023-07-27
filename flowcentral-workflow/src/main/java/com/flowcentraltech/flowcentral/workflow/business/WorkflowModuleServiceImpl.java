@@ -44,6 +44,9 @@ import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.entities.AppApplet;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
@@ -492,9 +495,11 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             workflow.setDescription(workflowLabel);
             workflow.setLabel(workflowLabel);
             workflow.setEntity(entityDef.getLongName());
+            workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
+            workflow.setLoadingSearchInput(appletWorkflowCopyInfo.getAppletSearchInput());
             workflow.setDescFormat(null); // TODO
             workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
-            List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
+            final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                     appletWorkflowCopyInfo);
             workflow.setStepList(stepList);
             environment().create(workflow);
@@ -502,11 +507,57 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             if (forceUpdate || workflow.getAppletVersionNo() < appletWorkflowCopyInfo.getAppletVersionNo()) {
                 workflow.setAppletVersionNo(appletWorkflowCopyInfo.getAppletVersionNo());
                 workflow.setConfigType(ConfigType.STATIC_INSTALL);
-                List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
+                workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
+                workflow.setLoadingSearchInput(appletWorkflowCopyInfo.getAppletSearchInput());
+                final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                         appletWorkflowCopyInfo);
                 workflow.setStepList(stepList);
                 environment().updateByIdVersion(workflow);
             }
+        }
+    }
+
+    @Override
+    public void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException {
+        final List<Workflow> workflowList = environment().listAll(new WorkflowQuery().isWithLoadingTable().addSelect(
+                "applicationName", "name", "description", "versionNo", "entity", "loadingTable", "loadingSearchInput"));
+        for (Workflow workflow : workflowList) {
+            final String loadinAppletName = ApplicationNameUtils
+                    .getWorkflowLoadingAppletName(workflow.getApplicationName(), workflow.getName());
+            final long workflowVersionNo = workflow.getVersionNo();
+            final ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(loadinAppletName);
+            final String loadingAppletDesc = resolveApplicationMessage(
+                    "$m{workflowmyworkitems.loadingapplet.description}", workflow.getDescription());
+            final String loadingAppletLabel = resolveApplicationMessage("$m{workflowmyworkitems.loadingapplet.label}",
+                    workflow.getLabel());
+            AppApplet loadingApplet = environment()
+                    .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
+            if (loadingApplet == null) {
+                final Long applicationId = appletUtil.application().getApplicationId(anp.getApplicationName());
+                loadingApplet = new AppApplet();
+                loadingApplet.setApplicationId(applicationId);
+                loadingApplet.setWorkflowVersionNo(workflowVersionNo);
+                loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
+                loadingApplet.setName(anp.getEntityName());
+                loadingApplet.setDescription(loadingAppletDesc);
+                loadingApplet.setLabel(loadingAppletLabel);
+                loadingApplet.setEntity(workflow.getEntity());
+                loadingApplet.setMenuAccess(false);
+                final List<AppAppletProp> propList = WorkflowDesignUtils
+                        .generateLoadingAppletProperties(workflow.getLoadingTable(), workflow.getLoadingSearchInput());
+                loadingApplet.setPropList(propList);
+                environment().create(loadingApplet);
+            } else {
+                if (forceUpdate || loadingApplet.getWorkflowVersionNo() < workflowVersionNo) {
+                    loadingApplet.setWorkflowVersionNo(workflowVersionNo);
+                    loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
+                    final List<AppAppletProp> propList = WorkflowDesignUtils.generateLoadingAppletProperties(
+                            workflow.getLoadingTable(), workflow.getLoadingSearchInput());
+                    loadingApplet.setPropList(propList);
+                    environment().updateByIdVersion(loadingApplet);
+                }
+            }
+
         }
     }
 

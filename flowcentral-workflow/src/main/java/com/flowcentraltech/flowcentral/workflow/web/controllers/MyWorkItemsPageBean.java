@@ -28,7 +28,7 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class MyWorkItemsPageBean extends AbstractEntityFormAppletPageBean<MyWorkItemsApplet> {
 
-    private String selStepName;
+    private String selWorkflowName;
 
     private WorkItemsSlate workItemsSlate;
     
@@ -43,12 +43,12 @@ public class MyWorkItemsPageBean extends AbstractEntityFormAppletPageBean<MyWork
     }
 
     
-    public String getSelStepName() {
-        return selStepName;
+    public String getSelWorkflowName() {
+        return selWorkflowName;
     }
 
-    public void setSelStepName(String selStepName) {
-        this.selStepName = selStepName;
+    public void setSelWorkflowName(String selWorkflowName) {
+        this.selWorkflowName = selWorkflowName;
     }
 
     public WorkItemsSlate getWorkItemsSlate() {

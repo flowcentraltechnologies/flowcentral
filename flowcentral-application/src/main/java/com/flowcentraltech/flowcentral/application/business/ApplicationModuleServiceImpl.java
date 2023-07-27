@@ -1483,7 +1483,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 .addEquals("applicationName", parts.getApplicationName())
                                 .addEquals("suggestionTypeName", parts.getEntityName())
                                 .addIEquals("suggestion", suggestion);
-                        if (parts.isWithFieldName()) {
+                        if (parts.isWithMinorName()) {
                             query.addEquals("fieldName", entityFieldDef.getFieldName());
                         }
 
@@ -1666,8 +1666,14 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final String updateApprovalSetValuesName = environment().value(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
+        final String appletSearchTable = environment().value(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.SEARCH_TABLE));
+        final String appletSearchInput = environment().value(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.SEARCH_TABLE_SEARCHINPUT));
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
-                appletVersionNo);
+                appletSearchTable, appletSearchInput, appletVersionNo);
     }
 
     @Override
@@ -1703,6 +1709,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<? extends Listable> findAppAppletSearchInputsListable(Long appAppletId) throws UnifyException {
         String entity = environment().value(String.class, "entity", new AppAppletQuery().id(appAppletId));
+        return findAppEntitySearchInputs(entity);
+    }
+
+    @Override
+    public List<? extends Listable> findAppEntitySearchInputs(String entity) throws UnifyException {
         ApplicationEntityNameParts nameParts = ApplicationNameUtils.getApplicationEntityNameParts(entity);
         Long appEntityId = environment().value(Long.class, "id",
                 new AppEntityQuery().applicationName(nameParts.getApplicationName()).name(nameParts.getEntityName()));

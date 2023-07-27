@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.workflow.web.controllers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
@@ -73,12 +75,16 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
     public String loadWorkItemsSlate() throws UnifyException {
         MyWorkItemsPageBean pageBean = getPageBean();
         pageBean.setWorkItemsSlate(null);
-        if (!StringUtils.isBlank(pageBean.getSelStepName())) {
+        if (!StringUtils.isBlank(pageBean.getSelWorkflowName())) {
             WorkItemsSlate workItemsSlate = null;
             // TODO
             pageBean.setWorkItemsSlate(workItemsSlate);
 
-            MyWorkItemsApplet applet = new MyWorkItemsApplet(au(), getPathVariable(), appletWidgetReferences,
+            final ApplicationEntityNameParts np = ApplicationNameUtils
+                    .getApplicationEntityNameParts(pageBean.getSelWorkflowName());
+            final String loadinAppletName = ApplicationNameUtils.getWorkflowLoadingAppletName(np.getApplicationName(),
+                    np.getEntityName());
+            MyWorkItemsApplet applet = new MyWorkItemsApplet(au(), loadinAppletName, appletWidgetReferences,
                     formEventHandlers);
             pageBean.setApplet(applet);
         } else {
@@ -100,10 +106,10 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
         getPageRequestContextUtil().considerDefaultFocusOnWidget();
         MyWorkItemsPageBean pageBean = getPageBean();
 
-        if (StringUtils.isBlank(pageBean.getSelStepName())) {
+        if (StringUtils.isBlank(pageBean.getSelWorkflowName())) {
             UserToken userToken = getUserToken();
             List<WorkItemStep> stepList = workflowModuleService.findWorkItemStepsByRole(userToken.getRoleCode());
-            pageBean.setSelStepName(!stepList.isEmpty() ? stepList.get(0).getLongName() : null);
+            pageBean.setSelWorkflowName(!stepList.isEmpty() ? stepList.get(0).getLongName() : null);
         }
 
         if (appletWidgetReferences == null) {

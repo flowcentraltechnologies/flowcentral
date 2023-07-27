@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
@@ -71,6 +72,13 @@ public final class WorkflowDesignUtils {
 
     }
 
+    public static List<AppAppletProp> generateLoadingAppletProperties(final String loadingTable,
+            final String loadingSearchInput) {
+        List<AppAppletProp> propList = new ArrayList<AppAppletProp>();
+
+        return propList;
+    }
+    
     public static List<WfStep> generateWorkflowSteps(final DesignType type, final String stepLabel,
             final AppletWorkflowCopyInfo appletWorkflowCopyInfo) {
         List<WfStep> stepList = new ArrayList<WfStep>();

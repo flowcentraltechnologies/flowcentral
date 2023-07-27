@@ -145,6 +145,10 @@
 				type="string" maxLen="64" />
 			<field name="entity" label="$m{workflow.workflow.entity}"
 				type="string" maxLen="128" />
+			<field name="loadingTable" label="$m{workflow.workflow.loadingtable}"
+				type="string" maxLen="128" nullable = "true"/>
+			<field name="loadingSearchInput" label="$m{workflow.workflow.loadingsearchinput}"
+				type="string" maxLen="64" nullable = "true"/>
 			<field name="appletVersionNo"
 				label="$m{workflow.workflow.appletversionno}" type="long" />
 			<field name="descFormat"

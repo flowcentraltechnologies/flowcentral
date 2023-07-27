@@ -29,7 +29,7 @@
 	layout:$d{!ui-horizontal style:$s{float:right;} showCaption:true inlineCaption:true captionSuffix:$s{:} cellType:middle}
 	components:$c{stepSelect refreshBtn}
 
-!ui-select:stepSelect style:$s{width:264px;} list:myworkitemsstepslist binding:selStepName
+!ui-select:stepSelect style:$s{width:264px;} list:myworkitemsworkflowlist binding:selWorkflowName
     eventHandler:$d{!ui-event event:onchange action:$c{switchWorkItemsAct}}
 !ui-button:refreshBtn styleClass:$e{fc-bluebutton}
 	caption:$m{button.refresh}
