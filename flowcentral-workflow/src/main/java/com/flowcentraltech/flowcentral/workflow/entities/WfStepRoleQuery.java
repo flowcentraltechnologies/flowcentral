@@ -55,4 +55,8 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
     public WfStepRoleQuery wfStepTypeIn(List<WorkflowStepType> wfStepTypes) {
         return (WfStepRoleQuery) addAmongst("wfStepType", wfStepTypes);
     }
+    
+    public WfStepRoleQuery isWithLoadingTable() {
+        return (WfStepRoleQuery) addIsNotNull("workflowLoadingTable");
+    }
 }

@@ -99,7 +99,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntitySingleFormItem;
-import com.flowcentraltech.flowcentral.workflow.data.WorkItemStep;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowInfo;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
@@ -519,8 +519,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Override
     public void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException {
-        final List<Workflow> workflowList = environment().listAll(new WorkflowQuery().isWithLoadingTable().addSelect(
-                "applicationName", "name", "description", "versionNo", "entity", "loadingTable", "loadingSearchInput"));
+        final List<Workflow> workflowList = environment()
+                .listAll(new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "description",
+                        "label", "versionNo", "entity", "loadingTable", "loadingSearchInput"));
         for (Workflow workflow : workflowList) {
             final String loadinAppletName = ApplicationNameUtils
                     .getWorkflowLoadingAppletName(workflow.getApplicationName(), workflow.getName());
@@ -538,6 +539,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 loadingApplet.setApplicationId(applicationId);
                 loadingApplet.setWorkflowVersionNo(workflowVersionNo);
                 loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
+                loadingApplet.setType(AppletType.MANAGE_LOADINGLIST);
                 loadingApplet.setName(anp.getEntityName());
                 loadingApplet.setDescription(loadingAppletDesc);
                 loadingApplet.setLabel(loadingAppletLabel);
@@ -703,39 +705,35 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<WorkItemStep> findWorkItemStepsByRole(String roleCode) throws UnifyException {
+    public List<WorkflowInfo> findWorkflowInfoByRole(String roleCode) throws UnifyException {
         if (roleCode == null) {
-            List<WfStep> wfStepList = environment().listAll(new WfStepQuery().typeIn(USER_INTERACTIVE_STEP_TYPES)
-                    .addSelect("applicationName", "workflowName", "name", "description"));
-            if (!DataUtils.isBlank(wfStepList)) {
-                List<WorkItemStep> stepList = new ArrayList<WorkItemStep>();
-                for (WfStep wfStep : wfStepList) {
-                    final String longName = ApplicationNameUtils.getApplicationEntityLongName(
-                            wfStep.getApplicationName(), wfStep.getWorkflowName(), wfStep.getName());
-                    final String description = resolveSessionMessage("$m{workflowmyworkitems.step.description}",
-                            wfStep.getDescription());
-                    stepList.add(new WorkItemStep(longName, description));
+            List<Workflow> workflowList = environment().listAll(
+                    new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "description"));
+            if (!DataUtils.isBlank(workflowList)) {
+                List<WorkflowInfo> workflowInfoList = new ArrayList<WorkflowInfo>();
+                for (Workflow workflow : workflowList) {
+                    final String longName = ApplicationNameUtils
+                            .getApplicationEntityLongName(workflow.getApplicationName(), workflow.getName());
+                    workflowInfoList.add(new WorkflowInfo(longName, workflow.getDescription()));
                 }
 
-                DataUtils.sortAscending(stepList, WorkItemStep.class, "description");
-                return stepList;
+                DataUtils.sortAscending(workflowInfoList, WorkflowInfo.class, "description");
+                return workflowInfoList;
             }
         } else {
             List<WfStepRole> wfStepRoleList = environment()
-                    .listAll(new WfStepRoleQuery().wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES)
-                            .addSelect("applicationName", "workflowName", "wfStepName", "wfStepDesc"));
+                    .listAll(new WfStepRoleQuery().wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES).isWithLoadingTable()
+                            .addSelect("applicationName", "workflowName", "workflowDesc").setDistinct(true));
             if (!DataUtils.isBlank(wfStepRoleList)) {
-                List<WorkItemStep> stepList = new ArrayList<WorkItemStep>();
+                List<WorkflowInfo> workflowInfoList = new ArrayList<WorkflowInfo>();
                 for (WfStepRole wfStepRole : wfStepRoleList) {
                     final String longName = ApplicationNameUtils.getApplicationEntityLongName(
-                            wfStepRole.getApplicationName(), wfStepRole.getWorkflowName(), wfStepRole.getWfStepName());
-                    final String description = resolveSessionMessage("$m{workflowmyworkitems.step.description}",
-                            wfStepRole.getWfStepDesc());
-                    stepList.add(new WorkItemStep(longName, description));
+                            wfStepRole.getApplicationName(), wfStepRole.getWorkflowName());
+                    workflowInfoList.add(new WorkflowInfo(longName, wfStepRole.getWorkflowDesc()));
                 }
 
-                DataUtils.sortAscending(stepList, WorkItemStep.class, "description");
-                return stepList;
+                DataUtils.sortAscending(workflowInfoList, WorkflowInfo.class, "description");
+                return workflowInfoList;
             }
         }
 

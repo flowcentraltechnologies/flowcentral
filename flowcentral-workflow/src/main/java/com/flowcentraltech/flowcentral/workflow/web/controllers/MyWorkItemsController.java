@@ -23,7 +23,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
-import com.flowcentraltech.flowcentral.workflow.data.WorkItemStep;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowInfo;
 import com.flowcentraltech.flowcentral.workflow.data.WorkItemsSlate;
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
@@ -108,8 +108,8 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
 
         if (StringUtils.isBlank(pageBean.getSelWorkflowName())) {
             UserToken userToken = getUserToken();
-            List<WorkItemStep> stepList = workflowModuleService.findWorkItemStepsByRole(userToken.getRoleCode());
-            pageBean.setSelWorkflowName(!stepList.isEmpty() ? stepList.get(0).getLongName() : null);
+            List<WorkflowInfo> workflowList = workflowModuleService.findWorkflowInfoByRole(userToken.getRoleCode());
+            pageBean.setSelWorkflowName(!workflowList.isEmpty() ? workflowList.get(0).getLongName() : null);
         }
 
         if (appletWidgetReferences == null) {

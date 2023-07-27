@@ -41,7 +41,7 @@ public class MyWorkItemsStepsListCommand extends AbstractWorkflowListCommand<Zer
     @Override
     public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
         UserToken userToken = getUserToken();
-        return  workflow().findWorkItemStepsByRole(userToken.getRoleCode());
+        return  workflow().findWorkflowInfoByRole(userToken.getRoleCode());
     }
 
 }

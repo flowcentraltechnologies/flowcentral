@@ -18,18 +18,18 @@ package com.flowcentraltech.flowcentral.workflow.data;
 import com.tcdng.unify.core.data.Listable;
 
 /**
- * Work item step.
+ * Workflow information.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class WorkItemStep implements Listable {
+public class WorkflowInfo implements Listable {
 
     private String longName;
     
     private String description;
 
-    public WorkItemStep(String longName, String description) {
+    public WorkflowInfo(String longName, String description) {
         this.longName = longName;
         this.description = description;
     }
