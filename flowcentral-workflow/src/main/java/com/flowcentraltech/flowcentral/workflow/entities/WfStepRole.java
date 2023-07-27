@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.workflow.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.organization.entities.Role;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -37,6 +38,9 @@ public class WfStepRole extends BaseAuditEntity {
 
     @ForeignKey(Role.class)
     private Long roleId;
+    
+    @ListOnly(key = "wfStepId", property = "type")
+    private WorkflowStepType wfStepType;
 
     @ListOnly(key = "wfStepId", property = "name")
     private String wfStepName;
@@ -44,11 +48,23 @@ public class WfStepRole extends BaseAuditEntity {
     @ListOnly(key = "wfStepId", property = "description")
     private String wfStepDesc;
 
+    @ListOnly(key = "wfStepId", property = "label")
+    private String wfStepLabel;
+
     @ListOnly(key = "wfStepId", property = "workflowName")
     private String workflowName;
 
     @ListOnly(key = "wfStepId", property = "workflowDesc")
     private String workflowDesc;
+
+    @ListOnly(key = "wfStepId", property = "entityName")
+    private String entityName;
+
+    @ListOnly(key = "wfStepId", property = "workflowLabel")
+    private String workflowLabel;
+
+    @ListOnly(key = "wfStepId", property = "workflowLoadingTable")
+    private String workflowLoadingTable;
 
     @ListOnly(key = "wfStepId", property = "applicationName")
     private String applicationName;
@@ -83,6 +99,14 @@ public class WfStepRole extends BaseAuditEntity {
         this.roleId = roleId;
     }
 
+    public WorkflowStepType getWfStepType() {
+        return wfStepType;
+    }
+
+    public void setWfStepType(WorkflowStepType wfStepType) {
+        this.wfStepType = wfStepType;
+    }
+
     public String getWfStepName() {
         return wfStepName;
     }
@@ -99,6 +123,14 @@ public class WfStepRole extends BaseAuditEntity {
         this.wfStepDesc = wfStepDesc;
     }
 
+    public String getWfStepLabel() {
+        return wfStepLabel;
+    }
+
+    public void setWfStepLabel(String wfStepLabel) {
+        this.wfStepLabel = wfStepLabel;
+    }
+
     public String getWorkflowName() {
         return workflowName;
     }
@@ -113,6 +145,30 @@ public class WfStepRole extends BaseAuditEntity {
 
     public void setWorkflowDesc(String workflowDesc) {
         this.workflowDesc = workflowDesc;
+    }
+
+    public String getWorkflowLabel() {
+        return workflowLabel;
+    }
+
+    public void setWorkflowLabel(String workflowLabel) {
+        this.workflowLabel = workflowLabel;
+    }
+
+    public String getWorkflowLoadingTable() {
+        return workflowLoadingTable;
+    }
+
+    public void setWorkflowLoadingTable(String workflowLoadingTable) {
+        this.workflowLoadingTable = workflowLoadingTable;
+    }
+
+    public String getEntityName() {
+        return entityName;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
     }
 
     public String getApplicationName() {

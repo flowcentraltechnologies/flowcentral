@@ -19,8 +19,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
@@ -71,7 +73,16 @@ public final class WorkflowDesignUtils {
 
     }
 
-    public static List<WfStep> generateWorkflowSteps(final DesignType type, final String workflowLabel,
+    public static List<AppAppletProp> generateLoadingAppletProperties(final String loadingTable,
+            final String loadingSearchInput) {
+        List<AppAppletProp> propList = new ArrayList<AppAppletProp>();
+        propList.add(new AppAppletProp(AppletPropertyConstants.LOADING_TABLE, loadingTable));
+        propList.add(new AppAppletProp(AppletPropertyConstants.LOADING_TABLE_ACTIONFOOTER, "false"));
+        propList.add(new AppAppletProp(AppletPropertyConstants.SEARCH_TABLE_SEARCHINPUT, loadingSearchInput));
+        return propList;
+    }
+
+    public static List<WfStep> generateWorkflowSteps(final DesignType type, final String stepLabel,
             final AppletWorkflowCopyInfo appletWorkflowCopyInfo) {
         List<WfStep> stepList = new ArrayList<WfStep>();
 
@@ -99,8 +110,8 @@ public final class WorkflowDesignUtils {
         wfStep.setType(WorkflowStepType.ERROR);
         wfStep.setPriority(WorkflowStepPriority.NORMAL);
         wfStep.setName("error");
-        wfStep.setDescription(workflowLabel + " Error");
-        wfStep.setLabel(workflowLabel + " Error");
+        wfStep.setDescription(stepLabel + " Error");
+        wfStep.setLabel(stepLabel + " Error");
         WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(null);
         wfStep.setUserActionList(Arrays.asList(recoverUserAction));
         stepList.add(wfStep);
@@ -131,8 +142,8 @@ public final class WorkflowDesignUtils {
             wfStep.setType(WorkflowStepType.USER_ACTION);
             wfStep.setPriority(WorkflowStepPriority.NORMAL);
             wfStep.setName("draftApproval");
-            wfStep.setDescription(workflowLabel + " Approval");
-            wfStep.setLabel(workflowLabel + " Approval");
+            wfStep.setDescription(stepLabel + " Approval");
+            wfStep.setLabel(stepLabel + " Approval");
             wfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
             wfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
 

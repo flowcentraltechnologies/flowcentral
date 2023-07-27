@@ -37,4 +37,8 @@ public class WorkflowQuery extends BaseApplicationEntityQuery<Workflow> {
         return (WorkflowQuery) addBeginsWith("entity", entity);
     }
 
+    public WorkflowQuery isWithLoadingTable() {
+        return (WorkflowQuery) addIsNotNull("loadingTable");
+    }
+
 }

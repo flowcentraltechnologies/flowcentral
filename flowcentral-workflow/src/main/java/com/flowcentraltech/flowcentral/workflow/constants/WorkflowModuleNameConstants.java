@@ -40,4 +40,6 @@ public interface WorkflowModuleNameConstants {
     String WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopycreateapproval-emailsender";
 
     String WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER = "workflowcopyupdateapproval-emailsender";
+    
+    String WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER = "workflowmyworkitems-loadingtableprovider";
 }

@@ -582,6 +582,16 @@ public interface AppletUtilities extends UnifyComponent {
     void ensureWorkflowCopyWorkflows(String appletName, boolean forceUpdate) throws UnifyException;
 
     /**
+     * Ensures workflow user interaction loading applets.
+     * 
+     * @param forceUpdate
+     *                    force loading applets update
+     * @throws UnifyException
+     *                        if an error occurs.
+     */
+    void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException;
+
+    /**
      * Checks if an applet is with workflow copy.
      * 
      * @param appletName

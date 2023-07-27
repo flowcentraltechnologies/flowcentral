@@ -71,7 +71,8 @@
 // Content
 !ui-contentpanel:content styleClassBinding:$s{contentStyleClass} path:$s{/application/dashboard/openPage}
 	tabbedBinding:enableMultipleTabs documentPath:$s{/application}
-
+	titleUppercase:true
+	
 // TODO
 // Put all popups in a single dynamic panel so that they are created as needed
 //Select user role popup

@@ -32,7 +32,7 @@ public class ApplicationEntityNameParts {
 
     private String entityName;
 
-    private String fieldName;
+    private String minorName;
 
     public ApplicationEntityNameParts(String longName, String applicationName, String entityName) {
         this.longName = longName;
@@ -40,11 +40,11 @@ public class ApplicationEntityNameParts {
         this.entityName = entityName;
     }
 
-    public ApplicationEntityNameParts(String longName, String applicationName, String entityName, String fieldName) {
+    public ApplicationEntityNameParts(String longName, String applicationName, String entityName, String minorName) {
         this.longName = longName;
         this.applicationName = applicationName;
         this.entityName = entityName;
-        this.fieldName = fieldName;
+        this.minorName = minorName;
     }
 
     public String getLongName() {
@@ -59,11 +59,11 @@ public class ApplicationEntityNameParts {
         return entityName;
     }
 
-    public String getFieldName() {
-        return fieldName;
+    public String getMinorName() {
+        return minorName;
     }
 
-    public boolean isWithFieldName() {
-        return !StringUtils.isBlank(fieldName);
+    public boolean isWithMinorName() {
+        return !StringUtils.isBlank(minorName);
     }
 }

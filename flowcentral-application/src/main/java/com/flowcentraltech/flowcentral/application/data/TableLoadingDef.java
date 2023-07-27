@@ -33,6 +33,8 @@ public class TableLoadingDef implements Listable {
 
     private String provider;
 
+    private Object parameter;
+
     private int orderIndex;
     
     public TableLoadingDef(String name, String description, String label, String provider, int orderIndex) {
@@ -40,6 +42,16 @@ public class TableLoadingDef implements Listable {
         this.description = description;
         this.label = label;
         this.provider = provider;
+        this.orderIndex = orderIndex;
+    }
+
+    public TableLoadingDef(String name, String description, String label, String provider, Object parameter,
+            int orderIndex) {
+         this.name = name;
+        this.description = description;
+        this.label = label;
+        this.provider = provider;
+        this.parameter = parameter;
         this.orderIndex = orderIndex;
     }
 
@@ -55,6 +67,10 @@ public class TableLoadingDef implements Listable {
 
     public String getName() {
         return name;
+    }
+
+    public Object getParameter() {
+        return parameter;
     }
 
     public String getDescription() {

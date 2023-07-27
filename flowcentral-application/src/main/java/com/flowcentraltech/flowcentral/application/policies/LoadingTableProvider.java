@@ -35,6 +35,16 @@ import com.tcdng.unify.core.database.Entity;
 public interface LoadingTableProvider extends UnifyComponent {
 
     /**
+     * Sets loading table provider working parameter.
+     * 
+     * @param parameter
+     *                  the parameter to set
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void setWorkingParameter(Object parameter) throws UnifyException;
+    
+    /**
      * Gets the loading label
      * 
      * @return the loading label

@@ -69,7 +69,7 @@ public abstract class BaseApplicationEntityDef implements Listable {
     }
 
     public String getFieldName() {
-        return nameParts.getFieldName();
+        return nameParts.getMinorName();
     }
 
     public String getDescription() {

@@ -15,7 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.workflow.entities;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.common.entities.BaseEntityQuery;
+import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 
 /**
  * Workflow role query.
@@ -40,8 +43,20 @@ public class WfStepRoleQuery extends BaseEntityQuery<WfStepRole> {
     public WfStepRoleQuery workflowName(String workflowName) {
         return (WfStepRoleQuery) addEquals("workflowName", workflowName);
     }
-
+    
     public WfStepRoleQuery applicationName(String applicationName) {
         return (WfStepRoleQuery) addEquals("applicationName", applicationName);
+    }
+    
+    public WfStepRoleQuery wfStepType(WorkflowStepType wfStepType) {
+        return (WfStepRoleQuery) addEquals("wfStepType", wfStepType);
+    }
+    
+    public WfStepRoleQuery wfStepTypeIn(List<WorkflowStepType> wfStepTypes) {
+        return (WfStepRoleQuery) addAmongst("wfStepType", wfStepTypes);
+    }
+    
+    public WfStepRoleQuery isWithLoadingTable() {
+        return (WfStepRoleQuery) addIsNotNull("workflowLoadingTable");
     }
 }

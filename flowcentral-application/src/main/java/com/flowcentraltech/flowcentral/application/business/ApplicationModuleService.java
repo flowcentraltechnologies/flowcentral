@@ -649,6 +649,17 @@ public interface ApplicationModuleService extends FlowCentralService {
     AppEntityField findAppEntityField(AppEntityFieldQuery query) throws UnifyException;
 
     /**
+     * Finds entity search inputs.
+     * 
+     * @param entity
+     *               the entity name
+     * @return list of entity search inputs
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> findAppEntitySearchInputs(String entity) throws UnifyException;
+
+    /**
      * Finds a table by ID.
      * 
      * @param tableId

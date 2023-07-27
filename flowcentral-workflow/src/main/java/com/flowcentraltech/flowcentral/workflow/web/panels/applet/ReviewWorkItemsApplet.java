@@ -174,7 +174,7 @@ public class ReviewWorkItemsApplet extends AbstractReviewWorkItemsApplet {
     protected EntityItem getEntitySearchItem(EntitySearch entitySearch, int index) throws UnifyException {
         if (isNoForm()) {
             currWfItem = (WfItem) entitySearch.getEntityTable().getDispItemList().get(mIndex);
-            WorkEntityItem _workEntityItem = wms.getWfItemWorkEntity(currWfItem.getId(), WfReviewMode.NORMAL);
+            WorkEntityItem _workEntityItem = wms.getWfItemWorkEntityFromWorkItemId(currWfItem.getId(), WfReviewMode.NORMAL);
             currEntityInst = _workEntityItem.getWorkEntity();
 
             final String currentUser = au.getSessionUserLoginId();

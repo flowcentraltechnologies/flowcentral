@@ -90,7 +90,7 @@ public abstract class AbstractWfStepLoadingTableProvider extends AbstractApplica
 
     @Override
     public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
-        return workflowModuleService.getWfItemWorkEntity(sourceItemId, wfReviewMode);
+        return workflowModuleService.getWfItemWorkEntityFromWorkItemId(sourceItemId, wfReviewMode);
     }
 
     @Override

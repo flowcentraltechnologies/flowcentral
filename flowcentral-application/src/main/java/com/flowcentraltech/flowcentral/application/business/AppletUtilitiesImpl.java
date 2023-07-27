@@ -671,6 +671,11 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException {
+        applicationWorkItemUtilies.ensureWorkflowUserInteractionLoadingApplets(forceUpdate);
+    }
+
+    @Override
     public boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException {
         return applicationModuleService.isAppletWithWorkflowCopy(appletName);
     }
@@ -1691,7 +1696,7 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
         LoadingSearch loadingSearch = new LoadingSearch(ctx, sectorIcon, _tableDef, _rootAppletDef.getId(),
                 searchConfigName, searchColumns, loadingSearchMode, showConditions);
 
-        loadingSearch.setEntitySubTitle(_rootAppletDef.getDescription());
+        loadingSearch.setEntitySubTitle(_rootAppletDef.getLabel());
         return loadingSearch;
     }
 

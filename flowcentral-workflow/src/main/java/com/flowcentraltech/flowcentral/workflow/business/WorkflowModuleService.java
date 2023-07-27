@@ -26,6 +26,8 @@ import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowInfo;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
@@ -278,6 +280,31 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
     List<WfStep> findWorkflowSteps(WfStepQuery query) throws UnifyException;
 
     /**
+     * Finds loading workflows by role.
+     * 
+     * @param roleCode
+     *             the role code
+     * @return list of workflows
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkflowInfo> findLoadingWorkflowInfoByRole(String roleCode) throws UnifyException;
+    
+    /**
+     * Finds loading workflow steps by role.
+     * 
+     * @param workflowName
+     *                     the workflow name
+     * @param roleCode
+     *                     the role code
+     * @return list of workflow steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkflowStepInfo> findLoadingWorkflowStepInfoByRole(String workflowName, String roleCode)
+            throws UnifyException;
+    
+    /**
      * Gets an application workflow definition.
      * 
      * @param workflowName
@@ -299,7 +326,7 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * @throws UnifyException
      *                        if an error occurs
      */
-    WorkEntityItem getWfItemWorkEntity(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
+    WorkEntityItem getWfItemWorkEntityFromWorkItemId(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException;
 
     /**
      * Applies user action on workflow item.

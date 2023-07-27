@@ -28,6 +28,7 @@ import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
+import com.tcdng.unify.core.util.DataUtils;
 
 /**
  * Convenient abstract base class for application table loading providers..
@@ -41,10 +42,16 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
     @Configurable
     private AppletUtilities au;
 
-    private final String sourceEntity;
+    private String sourceEntity;
+
+    private Object parameter;
     
     public AbstractApplicationLoadingTableProvider(String sourceEntity) {
         this.sourceEntity = sourceEntity;
+    }
+
+    public AbstractApplicationLoadingTableProvider() {
+
     }
 
     public final void setAu(AppletUtilities au) {
@@ -61,6 +68,11 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
         return new LoadingWorkItemInfo();
     }
     
+    @Override
+    public void setWorkingParameter(Object parameter) throws UnifyException {
+        this.parameter = parameter;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public EntityItem getSourceItem(Long sourceItemId, int options) throws UnifyException {
@@ -86,6 +98,14 @@ public abstract class AbstractApplicationLoadingTableProvider extends AbstractFl
 
     protected String getSourceEntity() {
         return sourceEntity;
+    }
+
+    protected void setSourceEntity(String sourceEntity) {
+        this.sourceEntity = sourceEntity;
+    }
+
+    protected <T> T getParameter(Class<T> targetClass) throws UnifyException {
+        return DataUtils.convert(targetClass, parameter);
     }
 
     @Override
