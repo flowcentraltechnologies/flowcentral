@@ -22,20 +22,20 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EntityActionPolicy {
+public interface EntityActionPolicy<T> {
 
     /**
-     * Executes a pre-action operation.
+     * Executes a pre-create action operation.
      * 
      * @param entityBean
      *            the entity bean
      * @throws Exception
      *                        if an error occurs
      */
-    void executePreAction(Object entityBean) throws Exception;
+    void executePreCreateAction(T entityBean) throws Exception;
 
     /**
-     * Executes a post-action operation.
+     * Executes a post-create action operation.
      * 
      * @param entityBean
      *            the entity bean
@@ -43,5 +43,47 @@ public interface EntityActionPolicy {
      * @throws Exception
      *                        if an error occurs
      */
-    void executePostAction(Object entityBean) throws Exception;
+    void executePostCreateAction(T entityBean) throws Exception;
+
+    /**
+     * Executes a pre-update action operation.
+     * 
+     * @param entityBean
+     *            the entity bean
+     * @throws Exception
+     *                        if an error occurs
+     */
+    void executePreUpdateAction(T entityBean) throws Exception;
+
+    /**
+     * Executes a post-update action operation.
+     * 
+     * @param entityBean
+     *            the entity bean
+     * @return the result object
+     * @throws Exception
+     *                        if an error occurs
+     */
+    void executePostUpdateAction(T entityBean) throws Exception;
+
+    /**
+     * Executes a pre-delete action operation.
+     * 
+     * @param entityBean
+     *            the entity bean
+     * @throws Exception
+     *                        if an error occurs
+     */
+    void executePreDeleteAction(T entityBean) throws Exception;
+
+    /**
+     * Executes a post-delete action operation.
+     * 
+     * @param entityBean
+     *            the entity bean
+     * @return the result object
+     * @throws Exception
+     *                        if an error occurs
+     */
+    void executePostDeleteAction(T entityBean) throws Exception;
 }
