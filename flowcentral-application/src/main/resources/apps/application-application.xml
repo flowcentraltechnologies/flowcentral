@@ -708,12 +708,12 @@
 				label="$m{application.appapplet.setvalues}" type="child_list"
 				references="appAppletSetValuesRef" />
 			<uniqueConstraint name="nameUc"
-				description="$m{application.appapplet.uc.name}" fieldList="name">
+				description="$m{application.appapplet.uc.name}" fieldList="applicationId,name">
 				<condition field="devVersionType" value="CRN"/>
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appapplet.uc.description}"
-				fieldList="description">
+				fieldList="applicationId,description">
 				<condition field="devVersionType" value="CRN"/>
 			</uniqueConstraint>
 		</entity>
