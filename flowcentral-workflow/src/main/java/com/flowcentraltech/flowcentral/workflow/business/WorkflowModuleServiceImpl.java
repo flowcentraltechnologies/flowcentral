@@ -347,6 +347,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         wdb.addWfStepDef(wsdb.build());
                     }
 
+                    if (workflow.getLoadingTable() != null) {
+                        ensureWorkflowUserInteractionLoadingApplet(workflow, false);
+                    }
+
                     return wdb.build();
                 }
 
@@ -527,45 +531,49 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 .listAll(new WorkflowQuery().isWithLoadingTable().addSelect("applicationName", "name", "description",
                         "label", "versionNo", "entity", "loadingTable", "loadingSearchInput"));
         for (Workflow workflow : workflowList) {
-            final String loadinAppletName = ApplicationNameUtils
-                    .getWorkflowLoadingAppletName(workflow.getApplicationName(), workflow.getName());
-            final long workflowVersionNo = workflow.getVersionNo();
-            final ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(loadinAppletName);
-            final String loadingAppletDesc = resolveApplicationMessage(
-                    "$m{workflowmyworkitems.loadingapplet.description}", workflow.getDescription());
-            final String loadingAppletLabel = resolveApplicationMessage("$m{workflowmyworkitems.loadingapplet.label}",
-                    workflow.getLabel());
-            AppApplet loadingApplet = environment()
-                    .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
-            if (loadingApplet == null) {
-                final Long applicationId = appletUtil.application().getApplicationId(anp.getApplicationName());
-                loadingApplet = new AppApplet();
-                loadingApplet.setApplicationId(applicationId);
+            ensureWorkflowUserInteractionLoadingApplet(workflow, forceUpdate);
+        }
+    }
+
+    private void ensureWorkflowUserInteractionLoadingApplet(final Workflow workflow, boolean forceUpdate)
+            throws UnifyException {
+        final String loadinAppletName = ApplicationNameUtils.getWorkflowLoadingAppletName(workflow.getApplicationName(),
+                workflow.getName());
+        final long workflowVersionNo = workflow.getVersionNo();
+        final ApplicationEntityNameParts anp = ApplicationNameUtils.getApplicationEntityNameParts(loadinAppletName);
+        final String loadingAppletDesc = resolveApplicationMessage("$m{workflowmyworkitems.loadingapplet.description}",
+                workflow.getDescription());
+        final String loadingAppletLabel = resolveApplicationMessage("$m{workflowmyworkitems.loadingapplet.label}",
+                workflow.getLabel());
+        AppApplet loadingApplet = environment()
+                .findLean(new AppAppletQuery().applicationName(anp.getApplicationName()).name(anp.getEntityName()));
+        if (loadingApplet == null) {
+            final Long applicationId = appletUtil.application().getApplicationId(anp.getApplicationName());
+            loadingApplet = new AppApplet();
+            loadingApplet.setApplicationId(applicationId);
+            loadingApplet.setWorkflowVersionNo(workflowVersionNo);
+            loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
+            loadingApplet.setType(AppletType.MANAGE_LOADINGLIST);
+            loadingApplet.setName(anp.getEntityName());
+            loadingApplet.setDescription(loadingAppletDesc);
+            loadingApplet.setLabel(loadingAppletLabel);
+            loadingApplet.setEntity(workflow.getEntity());
+            loadingApplet.setMenuAccess(false);
+            final List<AppAppletProp> propList = WorkflowDesignUtils
+                    .generateLoadingAppletProperties(workflow.getLoadingTable(), workflow.getLoadingSearchInput());
+            loadingApplet.setPropList(propList);
+            environment().create(loadingApplet);
+        } else {
+            if (forceUpdate || loadingApplet.getWorkflowVersionNo() < workflowVersionNo) {
                 loadingApplet.setWorkflowVersionNo(workflowVersionNo);
                 loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
-                loadingApplet.setType(AppletType.MANAGE_LOADINGLIST);
-                loadingApplet.setName(anp.getEntityName());
                 loadingApplet.setDescription(loadingAppletDesc);
                 loadingApplet.setLabel(loadingAppletLabel);
-                loadingApplet.setEntity(workflow.getEntity());
-                loadingApplet.setMenuAccess(false);
                 final List<AppAppletProp> propList = WorkflowDesignUtils
                         .generateLoadingAppletProperties(workflow.getLoadingTable(), workflow.getLoadingSearchInput());
                 loadingApplet.setPropList(propList);
-                environment().create(loadingApplet);
-            } else {
-                if (forceUpdate || loadingApplet.getWorkflowVersionNo() < workflowVersionNo) {
-                    loadingApplet.setWorkflowVersionNo(workflowVersionNo);
-                    loadingApplet.setConfigType(ConfigType.STATIC_INSTALL);
-                    loadingApplet.setDescription(loadingAppletDesc);
-                    loadingApplet.setLabel(loadingAppletLabel);
-                    final List<AppAppletProp> propList = WorkflowDesignUtils.generateLoadingAppletProperties(
-                            workflow.getLoadingTable(), workflow.getLoadingSearchInput());
-                    loadingApplet.setPropList(propList);
-                    environment().updateByIdVersion(loadingApplet);
-                }
+                environment().updateByIdVersion(loadingApplet);
             }
-
         }
     }
 
@@ -793,7 +801,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @SuppressWarnings("unchecked")
     @Override
-    public WorkEntityItem getWfItemWorkEntityFromWorkItemId(Long wfItemId, WfReviewMode wfReviewMode) throws UnifyException {
+    public WorkEntityItem getWfItemWorkEntityFromWorkItemId(Long wfItemId, WfReviewMode wfReviewMode)
+            throws UnifyException {
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
         final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());

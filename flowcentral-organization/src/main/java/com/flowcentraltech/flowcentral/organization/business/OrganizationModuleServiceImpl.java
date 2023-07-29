@@ -267,7 +267,7 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             // Ensure developer role
-            Role role = environment().find(new RoleQuery().code(DEVOPS_DEVELOPER_CODE));
+            Role role = environment().findLean(new RoleQuery().code(DEVOPS_DEVELOPER_CODE));
             if (role == null) {
                 role = new Role();
                 role.setDepartmentId(department.getId());
@@ -284,10 +284,22 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                     rolePrivilege.setPrivilegeId(privilegeId);
                     environment().create(rolePrivilege);
                 }
+            } else { // TODO Remove
+                if (environment().countAll(new RolePrivilegeQuery().roleId(role.getId())) == 0) {
+                    List<String> privilegeCodeList = ConfigurationUtils.readStringList(
+                            "data/organization-privileges-developer.dat", getUnifyComponentContext().getWorkingPath());
+                    RolePrivilege rolePrivilege = new RolePrivilege();
+                    rolePrivilege.setRoleId(role.getId());
+                    for (Long privilegeId : environment().valueList(Long.class, "id",
+                            new PrivilegeQuery().codeIn(privilegeCodeList))) {
+                        rolePrivilege.setPrivilegeId(privilegeId);
+                        environment().create(rolePrivilege);
+                    }
+                }
             }
 
             // Ensure junior developer role
-            role = environment().find(new RoleQuery().code(DEVOPS_JUNIOR_DEVELOPER_CODE));
+            role = environment().findLean(new RoleQuery().code(DEVOPS_JUNIOR_DEVELOPER_CODE));
             if (role == null) {
                 role = new Role();
                 role.setDepartmentId(department.getId());

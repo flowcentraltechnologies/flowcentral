@@ -332,8 +332,9 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
                 setVisible("submitCloseBtn",
-                        (enableUpdate && isWorkflowCopyForm && isUpdateDraft) || (enableUpdateSubmit && formAppletDef
-                                .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
+                        (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
+                                || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
+                                        AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
                 setVisible("submitNextBtn", !isWorkflowCopyForm && enableUpdateSubmit && formAppletDef
                         .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setDisabled("prevBtn", viewMode.isScroll() && !applet.isPrevNav());
@@ -392,8 +393,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveBtn", false);
                 setVisible("saveNextBtn", false);
                 setVisible("saveCloseBtn", false);
-                setVisible("submitCloseBtn", (enableUpdate && isWorkflowCopyForm && isUpdateDraft) || (enableUpdateSubmit && formAppletDef
-                        .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
+                setVisible("submitCloseBtn",
+                        (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow)
+                                || (enableUpdateSubmit && formAppletDef.getPropValue(boolean.class,
+                                        AppletPropertyConstants.MAINTAIN_FORM_SUBMIT, false)));
                 setVisible("submitNextBtn", !isWorkflowCopyForm && enableUpdateSubmit && formAppletDef
                         .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setVisible("prevBtn", false);

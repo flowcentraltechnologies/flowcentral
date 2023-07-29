@@ -74,6 +74,7 @@
 			<property name="searchTable.report" value="true" />
 			<property name="searchTable.quickFilter" value="true" />
 			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="searchTable.searchInput" />
 			<property name="createForm" value="roleForm" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.next" value="true" />
@@ -81,6 +82,11 @@
 			<property name="maintainForm" value="roleForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
+			<property name="workflowCopy" value="true" />
+			<property name="workflowCopy.create.setvalues"/>
+			<property name="workflowCopy.update.setvalues" />
+			<property name="workflowCopy.create.approval.setvalues"/>
+			<property name="workflowCopy.update.approval.setvalues"/>
 		</applet>
 		<applet name="manageRolePrivilege"
 			description="$m{organization.roleprivilege.manage}"
@@ -381,10 +387,10 @@
 				label="$m{organization.role.privileges}" type="child_list"
 				references="rolePrivilegeRef" />
 			<uniqueConstraint name="codeUc"
-				description="$m{organization.role.uc.code}" fieldList="code" />
+				description="$m{organization.role.uc.code}" fieldList="originalCopyId,code" />
 			<uniqueConstraint name="descUc"
 				description="$m{organization.role.uc.description}"
-				fieldList="description" />
+				fieldList="originalCopyId,description" />
 		</entity>
 		<entity name="rolePrivilege"
 			description="$m{organization.roleprivilege}"

@@ -112,6 +112,8 @@ public final class WorkflowDesignUtils {
         wfStep.setName("error");
         wfStep.setDescription(stepLabel + " Error");
         wfStep.setLabel(stepLabel + " Error");
+        wfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
+        wfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
         WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(null);
         wfStep.setUserActionList(Arrays.asList(recoverUserAction));
         stepList.add(wfStep);
