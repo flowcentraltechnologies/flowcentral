@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.workflow.data.WfChannelDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
-import com.flowcentraltech.flowcentral.workflow.data.WorkflowInfo;
+import com.flowcentraltech.flowcentral.workflow.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.workflow.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
@@ -53,11 +53,11 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * Submit work entity instance to workflow by name.
      * 
      * @param workflowName
-     *                            the workflow name
+     *                     the workflow name
      * @param entity
-     *                            the entity long name
+     *                     the entity long name
      * @param id
-     *                            the entity ID
+     *                     the entity ID
      * @throws UnifyException
      *                        if workflow channel is unknown. If instance type does
      *                        not match workflow entity definition. If an error
@@ -283,27 +283,27 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
      * Finds loading workflows by role.
      * 
      * @param roleCode
-     *             the role code
+     *                 the role code
      * @return list of workflows
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<WorkflowInfo> findLoadingWorkflowInfoByRole(String roleCode) throws UnifyException;
-    
+    List<WorkflowLoadingTableInfo> findWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException;
+
     /**
      * Finds loading workflow steps by role.
      * 
-     * @param workflowName
-     *                     the workflow name
+     * @param loadingTableName
+     *                         the loading table name
      * @param roleCode
-     *                     the role code
+     *                         the role code
      * @return list of workflow steps
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<WorkflowStepInfo> findLoadingWorkflowStepInfoByRole(String workflowName, String roleCode)
+    List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(String loadingTableName, String roleCode)
             throws UnifyException;
-    
+
     /**
      * Gets an application workflow definition.
      * 

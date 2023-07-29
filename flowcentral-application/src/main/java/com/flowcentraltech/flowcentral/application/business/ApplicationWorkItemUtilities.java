@@ -88,4 +88,17 @@ public interface ApplicationWorkItemUtilities extends UnifyComponent {
      *                        if an error occurs.
      */
     void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException;
+
+    /**
+     * Ensures workflow user interaction loading applet.
+     * 
+     * @param loadingTableName
+     *                         the loading table name
+     * @param forceUpdate
+     *                         force loading applet update
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void ensureWorkflowUserInteractionLoadingApplet(final String loadingTableName, boolean forceUpdate)
+            throws UnifyException;
 }

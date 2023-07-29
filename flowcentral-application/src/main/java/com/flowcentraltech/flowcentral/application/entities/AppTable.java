@@ -39,6 +39,9 @@ public class AppTable extends BaseApplicationEntity {
     @Column(name = "DETAILS_PANEL_NM", length = 64, nullable = true)
     private String detailsPanelName;
 
+    @Column(length = 64, nullable = true)
+    private String loadingSearchInput;
+
     @Column
     private int sortHistory;
 
@@ -118,6 +121,14 @@ public class AppTable extends BaseApplicationEntity {
 
     public void setDetailsPanelName(String detailsPanelName) {
         this.detailsPanelName = detailsPanelName;
+    }
+
+    public String getLoadingSearchInput() {
+        return loadingSearchInput;
+    }
+
+    public void setLoadingSearchInput(String loadingSearchInput) {
+        this.loadingSearchInput = loadingSearchInput;
     }
 
     public int getSortHistory() {

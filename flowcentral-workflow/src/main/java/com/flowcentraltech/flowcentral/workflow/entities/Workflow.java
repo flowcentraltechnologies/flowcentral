@@ -41,9 +41,6 @@ public class Workflow extends BaseApplicationEntity {
     @Column(length = 128, nullable = true)
     private String loadingTable;
 
-    @Column(length = 64, nullable = true)
-    private String loadingSearchInput;
-
     @Column(length = 128, nullable = true)
     private String descFormat;
     
@@ -81,14 +78,6 @@ public class Workflow extends BaseApplicationEntity {
 
     public void setLoadingTable(String loadingTable) {
         this.loadingTable = loadingTable;
-    }
-
-    public String getLoadingSearchInput() {
-        return loadingSearchInput;
-    }
-
-    public void setLoadingSearchInput(String loadingSearchInput) {
-        this.loadingSearchInput = loadingSearchInput;
     }
 
     public String getDescFormat() {

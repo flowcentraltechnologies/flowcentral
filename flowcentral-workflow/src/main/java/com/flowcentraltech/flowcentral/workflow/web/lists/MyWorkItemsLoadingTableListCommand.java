@@ -14,38 +14,34 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.studio.web.lists;
+package com.flowcentraltech.flowcentral.workflow.web.lists;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.StringParam;
+import com.tcdng.unify.core.list.ZeroParams;
 
 /**
- * Studio workflow search input list command
+ * My workitems loading table list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studioworkflowsearchinputlist")
-public class StudioWorkflowSearchInputListCommand extends AbstractApplicationListCommand<StringParam> {
+@Component("myworkitemsloadingtablelist")
+public class MyWorkItemsLoadingTableListCommand extends AbstractWorkflowListCommand<ZeroParams> {
 
-    public StudioWorkflowSearchInputListCommand() {
-        super(StringParam.class);
+    public MyWorkItemsLoadingTableListCommand() {
+        super(ZeroParams.class);
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, StringParam stringParam) throws UnifyException {
-        if (stringParam.isPresent()) {
-            return application().findAppEntitySearchInputs(stringParam.getValue());
-        }
-
-        return Collections.emptyList();
+    public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
+        UserToken userToken = getUserToken();
+        return  workflow().findWorkflowLoadingTableInfoByRole(userToken.getRoleCode());
     }
 
 }

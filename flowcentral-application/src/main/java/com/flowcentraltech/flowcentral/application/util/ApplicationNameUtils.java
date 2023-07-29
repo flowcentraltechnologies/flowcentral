@@ -157,9 +157,8 @@ public final class ApplicationNameUtils {
         return appletName + WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX;
     }
 
-    public static String getWorkflowLoadingAppletName(String applicationName, String workflowName) {
-        return getApplicationEntityLongName(applicationName,
-                workflowName + WORKFLOW_LOADING_APPLET_NAME_SUFFIX);
+    public static String getWorkflowLoadingAppletName(String applicationName, String loadingTableName) {
+        return getApplicationEntityLongName(applicationName, loadingTableName + WORKFLOW_LOADING_APPLET_NAME_SUFFIX);
     }
 
     public static String getWorkflowCopyUpdateWorkflowName(String appletName) {
