@@ -31,18 +31,14 @@ public class AppletWorkflowCopyInfo {
 
     private String appletSearchTable;
 
-    private String appletSearchInput;
-
     private long appletVersionNo;
 
     public AppletWorkflowCopyInfo(String appletName, String createApprovalSetValuesName,
-            String updateApprovalSetValuesName, String appletSearchTable, String appletSearchInput,
-            long appletVersionNo) {
+            String updateApprovalSetValuesName, String appletSearchTable, long appletVersionNo) {
         this.appletName = appletName;
         this.createApprovalSetValuesName = createApprovalSetValuesName;
         this.updateApprovalSetValuesName = updateApprovalSetValuesName;
         this.appletSearchTable = appletSearchTable;
-        this.appletSearchInput = appletSearchInput;
         this.appletVersionNo = appletVersionNo;
     }
 
@@ -64,10 +60,6 @@ public class AppletWorkflowCopyInfo {
 
     public String getAppletSearchTable() {
         return appletSearchTable;
-    }
-
-    public String getAppletSearchInput() {
-        return appletSearchInput;
     }
 
     public long getAppletVersionNo() {

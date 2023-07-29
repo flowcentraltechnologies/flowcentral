@@ -37,13 +37,13 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class MyWorkItemsApplet extends ManageLoadingListApplet {
 
-    public MyWorkItemsApplet(WorkflowModuleService workflowModuleService, String workflowName, String roleCode,
+    public MyWorkItemsApplet(WorkflowModuleService workflowModuleService, String loadingTableName, String roleCode,
             AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
         List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
-        List<WorkflowStepInfo> workflowStepList = workflowModuleService.findLoadingWorkflowStepInfoByRole(workflowName,
-                roleCode);
+        List<WorkflowStepInfo> workflowStepList = workflowModuleService
+                .findWorkflowLoadingStepInfoByRole(loadingTableName, roleCode);
         int orderIndex = 0;
         for (WorkflowStepInfo workflowStepInfo : workflowStepList) {
             altTableLoadingDefs.add(new TableLoadingDef(workflowStepInfo.getStepName(), workflowStepInfo.getStepDesc(),

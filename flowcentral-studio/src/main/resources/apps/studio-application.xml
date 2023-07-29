@@ -435,10 +435,10 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioworkflowtablelist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="workflowsearchinputlist"
-			description="$m{studio.widgettype.workflowsearchinputlist}"
+		<widgetType name="tablesearchinputlist"
+			description="$m{studio.widgettype.tablesearchinputlist}"
 			dataType="string" inputType="string"
-			editor="!ui-select list:studioworkflowsearchinputlist listParams:$l{entity} blankOption:$m{blank.none}"
+			editor="!ui-select list:studiotablesearchinputlist listParams:$l{entity} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="reportconfigfieldlist"
 			description="$m{studio.widgettype.reportconfigfieldlist}"
@@ -3596,6 +3596,8 @@
 						column="1" disabled="true" required="true" />
 					<field name="entity" inputWidget="studio.entitybynamelist"
 						column="1" required="true" switchOnChange="true" />
+					<field name="loadingSearchInput"
+						inputWidget="studio.tablesearchinputlist" column="1" />
 					<field name="detailsPanelName"
 						inputWidget="studio.detailspanellist" column="1" />
 					<field name="itemsPerPage" inputWidget="application.integer"
@@ -4425,8 +4427,6 @@
 						required="true" saveAs="true" switchOnChange="true" />
 					<field name="loadingTable"
 						inputWidget="studio.workflowtablelist" column="1" />
-					<field name="loadingSearchInput"
-						inputWidget="studio.workflowsearchinputlist" column="1" />
 					<field name="descFormat"
 						inputWidget="application.texttemplate" column="1" />
 					<field name="filterGenerator"

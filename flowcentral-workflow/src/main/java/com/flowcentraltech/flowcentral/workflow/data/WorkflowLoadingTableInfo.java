@@ -13,35 +13,42 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package com.flowcentraltech.flowcentral.workflow.data;
 
-package com.flowcentraltech.flowcentral.workflow.web.lists;
-
-import java.util.List;
-import java.util.Locale;
-
-import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.UserToken;
-import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.Listable;
-import com.tcdng.unify.core.list.ZeroParams;
 
 /**
- * My workitems steps list command.
+ * Workflow loading table information.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("myworkitemsworkflowlist")
-public class MyWorkItemsStepsListCommand extends AbstractWorkflowListCommand<ZeroParams> {
+public class WorkflowLoadingTableInfo implements Listable {
 
-    public MyWorkItemsStepsListCommand() {
-        super(ZeroParams.class);
+    private String longName;
+
+    private String description;
+
+    public WorkflowLoadingTableInfo(String longName, String description) {
+        this.longName = longName;
+        this.description = description;
     }
 
     @Override
-    public List<? extends Listable> execute(Locale locale, ZeroParams params) throws UnifyException {
-        UserToken userToken = getUserToken();
-        return  workflow().findLoadingWorkflowInfoByRole(userToken.getRoleCode());
+    public String getListKey() {
+        return longName;
     }
 
+    @Override
+    public String getListDescription() {
+        return description;
+    }
+
+    public String getLongName() {
+        return longName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }

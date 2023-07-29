@@ -680,6 +680,13 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public void ensureWorkflowUserInteractionLoadingApplet(String loadingTableName, boolean forceUpdate) throws UnifyException {
+        if (applicationWorkItemUtilies != null) {
+            applicationWorkItemUtilies.ensureWorkflowUserInteractionLoadingApplet(loadingTableName, forceUpdate);
+        }
+    }
+
+    @Override
     public boolean isAppletWithWorkflowCopy(String appletName) throws UnifyException {
         return applicationModuleService.isAppletWithWorkflowCopy(appletName);
     }

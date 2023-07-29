@@ -974,6 +974,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     tdb.nonConforming(appTable.isNonConforming());
                     tdb.fixedRows(appTable.isFixedRows());
                     tdb.limitSelectToColumns(appTable.isLimitSelectToColumns());
+                    
+                    appletUtilities.ensureWorkflowUserInteractionLoadingApplet(longName, false);
                     return tdb.build();
                 }
 
@@ -1669,11 +1671,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final String appletSearchTable = environment().value(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.SEARCH_TABLE));
-        final String appletSearchInput = environment().value(String.class, "value",
-                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
-                        .name(AppletPropertyConstants.SEARCH_TABLE_SEARCHINPUT));
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
-                appletSearchTable, appletSearchInput, appletVersionNo);
+                appletSearchTable,  appletVersionNo);
     }
 
     @Override
