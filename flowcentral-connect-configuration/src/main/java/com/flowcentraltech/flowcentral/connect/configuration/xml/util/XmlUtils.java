@@ -55,7 +55,8 @@ public final class XmlUtils {
 //        LOGGER.log(Level.INFO, "Reading interconnect configuration...");
         InterconnectConfig interconnectConfig = XmlUtils.readConfig(InterconnectConfig.class, resourceName);
         if (interconnectConfig.getInterconnectAppConfigs() != null) {
-            List<InterconnectAppConfig> appConfigList = interconnectConfig.getInterconnectAppConfigs()
+            final String applicationName = interconnectConfig.getInterconnectAppConfigs().getApplication();
+            final List<InterconnectAppConfig> appConfigList = interconnectConfig.getInterconnectAppConfigs()
                     .getAppConfigList();
             if (appConfigList != null && !appConfigList.isEmpty()) {
                 List<ApplicationConfig> resultList = new ArrayList<ApplicationConfig>();
@@ -63,6 +64,10 @@ public final class XmlUtils {
                     ApplicationConfig applicationConfig = XmlUtils.readConfig(ApplicationConfig.class,
                             interconnectAppConfig.getConfigFile());
                     applicationConfig.setRedirect(interconnectConfig.getRedirect());
+                    if (applicationName != null && !applicationName.isEmpty()) {
+                        applicationConfig.setName(applicationName);
+                    }
+                    
                     resultList.add(applicationConfig);
                 }
 
