@@ -149,6 +149,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         return interconnect.createProcedureResponse(result, req);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) throws Exception {
         logInfo("Processing datasource request [{0}]...", interconnect.prettyJSON(req));
@@ -183,14 +184,14 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                     case CREATE: {
                         Object reqBean = interconnect.getBeanFromJsonPayload(req);
                         if (entityActionPolicy != null) {
-                            entityActionPolicy.executePreAction(reqBean);
+                            entityActionPolicy.executePreCreateAction(reqBean);
                         }
 
                         // em.merge(reqBean);
                         em.persist(reqBean);
                         em.flush();
                         if (entityActionPolicy != null) {
-                            entityActionPolicy.executePostAction(reqBean);
+                            entityActionPolicy.executePostCreateAction(reqBean);
                         }
 
                         Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
@@ -214,7 +215,17 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                                         req.getVersionNo());
                             }
 
+
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePreDeleteAction(reqBean);
+                            }
+
                             em.remove(reqBean);
+
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePreDeleteAction(reqBean);
+                            }
+
                         }
                     }
                         break;
@@ -280,12 +291,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                             }
 
                             if (entityActionPolicy != null) {
-                                entityActionPolicy.executePreAction(saveBean);
+                                entityActionPolicy.executePreUpdateAction(saveBean);
                             }
 
                             em.merge(saveBean);
+                            
                             if (entityActionPolicy != null) {
-                                entityActionPolicy.executePostAction(saveBean);
+                                entityActionPolicy.executePostUpdateAction(saveBean);
                             }
 
                             result = new Object[] { 1L };
@@ -296,7 +308,16 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
                                 PropertyUtils.setProperty(saveBean, fieldName, updateDef.getUpdate(fieldName));
                             }
 
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePreUpdateAction(saveBean);
+                            }
+
                             em.merge(saveBean);
+                            
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePostUpdateAction(saveBean);
+                            }
+                            
                             result = new Object[] { 1L };
                         }
                     }

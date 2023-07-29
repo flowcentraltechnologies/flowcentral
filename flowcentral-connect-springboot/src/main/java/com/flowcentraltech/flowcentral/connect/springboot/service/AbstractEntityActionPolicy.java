@@ -21,6 +21,6 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractEntityActionPolicy implements EntityActionPolicy {
+public abstract class AbstractEntityActionPolicy<T> implements EntityActionPolicy<T> {
 
 }
