@@ -63,7 +63,7 @@
 
 // Content
 !ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed} path:$s{/applicationstudio/dashboard/openPage} tabbed:true
-	documentPath:$s{/applicationstudio} titleUppercase:true  
+	documentPath:$s{/applicationstudio} titleUppercase:false  
 	 
 // Show user details popup
 !fc-userdetailspanel:userDetailsPopup dialogCaption:$m{application.user.details}

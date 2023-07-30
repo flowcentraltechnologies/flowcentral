@@ -18,4 +18,4 @@
 
 !ui-contentpanel:content styleClass:$e{fc-login-contentpanel}
 	path:$s{/security/loginpage/openPage} documentPath:$s{/application/home}
-	titleUppercase:true
+	titleUppercase:false
