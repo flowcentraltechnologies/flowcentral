@@ -975,6 +975,21 @@ public interface EnvironmentService extends BusinessService {
     <T> T value(Class<T> valueType, String valueFieldName, Query<? extends Entity> query) throws UnifyException;
 
     /**
+     * Gets an entity value (optional).
+     * 
+     * @param valueType
+     *                       the value type
+     * @param valueFieldName
+     *                       the value field name
+     * @param query
+     *                       the query
+     * @return the value
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    <T> T valueOptional(Class<T> valueType, String valueFieldName, Query<? extends Entity> query) throws UnifyException;
+
+    /**
      * Gets an entity value list.
      * 
      * @param valueType

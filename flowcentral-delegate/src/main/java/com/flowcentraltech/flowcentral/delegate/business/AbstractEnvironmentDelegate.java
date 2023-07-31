@@ -320,6 +320,14 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
+    public <T, U extends Entity> T valueOptional(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+        DataSourceRequest req = new DataSourceRequest(DataSourceOperation.VALUE);
+        setQueryDetails(req, query);
+        req.setFieldName(fieldName);
+        return singleValueResultOperation(fieldClass, query.getEntityClass(), req);
+    }
+
+    @Override
     public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
         throw new UnsupportedOperationException();

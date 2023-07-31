@@ -633,6 +633,12 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
     }
 
     @Override
+    public <T> T valueOptional(Class<T> valueType, String valueFieldName, Query<? extends Entity> query)
+            throws UnifyException {
+        return db(query.getEntityClass()).valueOptional(valueType, valueFieldName, query);
+    }
+
+    @Override
     public <T> List<T> valueList(Class<T> valueType, String valueFieldName, Query<? extends Entity> query)
             throws UnifyException {
         return db(query.getEntityClass()).valueList(valueType, valueFieldName, query);
