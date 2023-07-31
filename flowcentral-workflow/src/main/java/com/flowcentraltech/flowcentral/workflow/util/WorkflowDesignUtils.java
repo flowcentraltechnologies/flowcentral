@@ -155,7 +155,7 @@ public final class WorkflowDesignUtils {
             approveUserAction.setLabel("Approve");
             approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             approveUserAction.setHighlightType(HighlightType.GREEN);
-            approveUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "deleteOriginal" : "updateOriginal");
+            approveUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "end" : "updateOriginal");
             approveUserAction.setAppletSetValuesName(
                     type.isWorkflowCopyCreate() ? appletWorkflowCopyInfo.getCreateApprovalSetValuesName()
                             : appletWorkflowCopyInfo.getUpdateApprovalSetValuesName());
@@ -166,7 +166,7 @@ public final class WorkflowDesignUtils {
             rejectUserAction.setLabel("Reject");
             rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             rejectUserAction.setHighlightType(HighlightType.RED);
-            rejectUserAction.setNextStepName("end");
+            rejectUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "deleteDraft" : "end");
 
             wfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
             stepList.add(wfStep);
@@ -177,9 +177,9 @@ public final class WorkflowDesignUtils {
                 wfStep.setType(WorkflowStepType.RECORD_ACTION);
                 wfStep.setRecordActionType(RecordActionType.DELETE);
                 wfStep.setPriority(WorkflowStepPriority.NORMAL);
-                wfStep.setName("deleteOriginal");
-                wfStep.setDescription("Delete Original");
-                wfStep.setLabel("Delete Original");
+                wfStep.setName("deleteDraft");
+                wfStep.setDescription("Delete Draft");
+                wfStep.setLabel("Delete Draft");
                 wfStep.setNextStepName("end");
                 stepList.add(wfStep);
             } else {
