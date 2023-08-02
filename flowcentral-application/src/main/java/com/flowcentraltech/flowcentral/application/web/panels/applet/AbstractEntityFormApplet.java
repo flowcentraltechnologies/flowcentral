@@ -710,6 +710,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         updateForm(HeaderWithTabsForm.UpdateType.UPDATE_INST, form, reloadEntity(entityActionResult.getInst(), false));
     }
 
+    public EntityActionResult submitDeleteToWorkflow() throws UnifyException {
+        return submitCurrentInst(ActionMode.DELETE_AND_CLOSE);
+    }
+
     private void maintainChildInst(Entity _inst, int tabIndex) throws UnifyException {
         FormTabDef _currFormTabDef = form.getFormDef().getFormTabDef(tabIndex);
         AppletDef childAppletDef = getAppletDef(_currFormTabDef.getApplet());
@@ -796,13 +800,17 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         if (isWorkflowCopy()) {
             final String workflowName = viewMode.isCreateForm()
                     ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(_currFormAppletDef.getLongName())
-                    : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(_currFormAppletDef.getLongName());
-            final String policy = viewMode.isCreateForm()
-                    ? _currFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY)
-                    : _currFormAppletDef.getPropValue(String.class,
-                            AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY);
-            entityActionResult = au().workItemUtilities().submitToWorkflow(_entityDef, workflowName,
-                    (WorkEntity) inst, policy);
+                    : (actionMode.isDelete()
+                            ? ApplicationNameUtils.getWorkflowCopyDeleteWorkflowName(_currFormAppletDef.getLongName())
+                            : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(_currFormAppletDef.getLongName()));
+            final String policy = actionMode.isDelete() ? null
+                    : (viewMode.isCreateForm()
+                            ? _currFormAppletDef.getPropValue(String.class,
+                                    AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY)
+                            : _currFormAppletDef.getPropValue(String.class,
+                                    AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY));
+            entityActionResult = au().workItemUtilities().submitToWorkflow(_entityDef, workflowName, (WorkEntity) inst,
+                    policy);
         } else {
             String channel = _currFormAppletDef.getPropValue(String.class,
                     AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_WORKFLOW_CHANNEL);

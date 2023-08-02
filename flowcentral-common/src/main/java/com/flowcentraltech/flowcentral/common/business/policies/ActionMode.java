@@ -25,13 +25,18 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 public enum ActionMode {
     ACTION_ONLY,
     ACTION_AND_NEXT,
-    ACTION_AND_CLOSE;
+    ACTION_AND_CLOSE,
+    DELETE_AND_CLOSE;
 
     public boolean isWithNext() {
         return ACTION_AND_NEXT.equals(this);
     }
 
     public boolean isWithClose() {
-        return ACTION_AND_CLOSE.equals(this);
+        return ACTION_AND_CLOSE.equals(this) || DELETE_AND_CLOSE.equals(this);
+    }
+
+    public boolean isDelete() {
+        return DELETE_AND_CLOSE.equals(this);
     }
 }

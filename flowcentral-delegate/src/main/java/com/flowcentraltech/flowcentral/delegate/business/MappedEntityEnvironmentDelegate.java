@@ -221,6 +221,12 @@ public class MappedEntityEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
+    public <T, U extends Entity> T valueOptional(Class<T> fieldClass, String fieldName, Query<U> query) throws UnifyException {
+        return au().isMappingProviderPresent(query) ? (T) au().getProvider(query).value(fieldClass, fieldName, query)
+                : DataUtils.convert(fieldClass, null);
+    }
+
+    @Override
     public <T extends Number, U extends Entity> T min(Class<T> fieldClass, String fieldName, Query<U> query)
             throws UnifyException {
         throw new UnsupportedOperationException();

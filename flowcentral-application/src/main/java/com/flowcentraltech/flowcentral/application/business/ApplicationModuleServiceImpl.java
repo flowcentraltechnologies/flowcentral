@@ -974,7 +974,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     tdb.nonConforming(appTable.isNonConforming());
                     tdb.fixedRows(appTable.isFixedRows());
                     tdb.limitSelectToColumns(appTable.isLimitSelectToColumns());
-                    
+
                     appletUtilities.ensureWorkflowUserInteractionLoadingApplet(longName, false);
                     return tdb.build();
                 }
@@ -1662,17 +1662,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
         final long appletVersionNo = environment().value(long.class, "versionNo",
                 new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
-        final String createApprovalSetValuesName = environment().value(String.class, "value",
+        final String createApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES));
-        final String updateApprovalSetValuesName = environment().value(String.class, "value",
+        final String updateApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
-        final String appletSearchTable = environment().value(String.class, "value",
+        final String appletSearchTable = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.SEARCH_TABLE));
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
-                appletSearchTable,  appletVersionNo);
+                appletSearchTable, appletVersionNo);
     }
 
     @Override
@@ -3564,7 +3564,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         for (String appletName : updateDraftApplets) {
             appletUtilities.ensureWorkflowCopyWorkflows(appletName, isInstallationPerformed);
         }
-        
+
         appletUtilities.ensureWorkflowUserInteractionLoadingApplets(isInstallationPerformed);
     }
 

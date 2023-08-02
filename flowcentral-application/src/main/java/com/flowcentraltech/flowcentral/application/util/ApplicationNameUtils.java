@@ -44,6 +44,8 @@ public final class ApplicationNameUtils {
 
     private static final String WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX = "wcuw";
 
+    private static final String WORKFLOW_COPY_DELETE_WORKFLOW_NAME_SUFFIX = "wcdw";
+
     private static final String WORKFLOW_LOADING_APPLET_NAME_SUFFIX = "wla";
 
     private static final FactoryMap<String, ApplicationEntityNameParts> applicationNameParts;
@@ -153,16 +155,20 @@ public final class ApplicationNameUtils {
         return Collections.emptyList();
     }
 
-    public static String getWorkflowCopyCreateWorkflowName(String appletName) {
-        return appletName + WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX;
-    }
-
     public static String getWorkflowLoadingAppletName(String applicationName, String loadingTableName) {
         return getApplicationEntityLongName(applicationName, loadingTableName + WORKFLOW_LOADING_APPLET_NAME_SUFFIX);
     }
 
+    public static String getWorkflowCopyCreateWorkflowName(String appletName) {
+        return appletName + WORKFLOW_COPY_CREATE_WORKFLOW_NAME_SUFFIX;
+    }
+
     public static String getWorkflowCopyUpdateWorkflowName(String appletName) {
         return appletName + WORKFLOW_COPY_UPDATE_WORKFLOW_NAME_SUFFIX;
+    }
+
+    public static String getWorkflowCopyDeleteWorkflowName(String appletName) {
+        return appletName + WORKFLOW_COPY_DELETE_WORKFLOW_NAME_SUFFIX;
     }
 
     public static String addVestigialNamePart(String longName, String vestigial) {
