@@ -33,7 +33,8 @@ public enum WorkflowDraftType {
     QUICK_FORM_EDIT,
     MAINTAIN,
     UPDATE,
-    UPDATE_CLOSE;
+    UPDATE_CLOSE,
+    DELETE;
     
     public boolean isNew() {
         return NEW_CHILD_ITEM.equals(this) || NEW_CHILDLIST_ITEM.equals(this);
@@ -41,5 +42,9 @@ public enum WorkflowDraftType {
     
     public boolean isUpdate() {
         return UPDATE.equals(this) || UPDATE_CLOSE.equals(this);
+    }
+    
+    public boolean isDelete() {
+        return DELETE.equals(this);
     }
 }

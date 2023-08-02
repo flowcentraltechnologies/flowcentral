@@ -44,20 +44,44 @@ public final class WorkflowDesignUtils {
 
     public enum DesignType {
         DEFAULT_WORKFLOW(
-                "end"),
+                "end",
+                "",
+                ""),
         WORKFLOW_COPY_CREATE(
-                "notifyRoleOnDraft"),
+                "notifyRoleOnDraft",
+                " Create (Workflow Copy)",
+                " Create"),
         WORKFLOW_COPY_UPDATE(
-                "notifyRoleOnDraft");
+                "notifyRoleOnDraft",
+                " Update (Workflow Copy)",
+                " Update"),
+        WORKFLOW_COPY_DELETE(
+                "notifyRoleOnDraft",
+                " Delete (Workflow Copy)",
+                " Delete");
 
         private final String startNext;
 
-        private DesignType(String startNext) {
+        private final String descSuffix;
+
+        private final String labelSuffix;
+
+        private DesignType(String startNext, String descSuffix, String labelSuffix) {
             this.startNext = startNext;
+            this.descSuffix = descSuffix;
+            this.labelSuffix = labelSuffix;
         }
 
         public String startNext() {
             return startNext;
+        }
+
+        public String descSuffix() {
+            return descSuffix;
+        }
+
+        public String labelSuffix() {
+            return labelSuffix;
         }
 
         public boolean isWorkflowCopyCreate() {
@@ -66,6 +90,10 @@ public final class WorkflowDesignUtils {
 
         public boolean isWorkflowCopyUpdate() {
             return WORKFLOW_COPY_UPDATE.equals(this);
+        }
+
+        public boolean isWorkflowCopyDelete() {
+            return WORKFLOW_COPY_DELETE.equals(this);
         }
     }
 
@@ -118,7 +146,7 @@ public final class WorkflowDesignUtils {
         wfStep.setUserActionList(Arrays.asList(recoverUserAction));
         stepList.add(wfStep);
 
-        if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate()) {
+        if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate() || type.isWorkflowCopyDelete()) {
             // Add draft notification step
             wfStep = new WfStep();
             wfStep.setType(WorkflowStepType.NOTIFICATION);
@@ -155,10 +183,11 @@ public final class WorkflowDesignUtils {
             approveUserAction.setLabel("Approve");
             approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             approveUserAction.setHighlightType(HighlightType.GREEN);
-            approveUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "end" : "updateOriginal");
-            approveUserAction.setAppletSetValuesName(
-                    type.isWorkflowCopyCreate() ? appletWorkflowCopyInfo.getCreateApprovalSetValuesName()
-                            : appletWorkflowCopyInfo.getUpdateApprovalSetValuesName());
+            approveUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "end"
+                    : (type.isWorkflowCopyUpdate() ? "updateOriginal" : "deleteOriginal"));
+            approveUserAction.setAppletSetValuesName(type.isWorkflowCopyCreate()
+                    ? appletWorkflowCopyInfo.getCreateApprovalSetValuesName()
+                    : (type.isWorkflowCopyUpdate() ? appletWorkflowCopyInfo.getUpdateApprovalSetValuesName() : null));
 
             WfStepUserAction rejectUserAction = new WfStepUserAction();
             rejectUserAction.setName("reject");
@@ -166,13 +195,14 @@ public final class WorkflowDesignUtils {
             rejectUserAction.setLabel("Reject");
             rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             rejectUserAction.setHighlightType(HighlightType.RED);
-            rejectUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "deleteDraft" : "end");
+            rejectUserAction.setNextStepName(
+                    type.isWorkflowCopyCreate() ? "deleteDraft" : (type.isWorkflowCopyUpdate() ? "end" : "end"));
 
             wfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
             stepList.add(wfStep);
 
             if (type.isWorkflowCopyCreate()) {
-                // Add delete original step
+                // Add delete draft step
                 wfStep = new WfStep();
                 wfStep.setType(WorkflowStepType.RECORD_ACTION);
                 wfStep.setRecordActionType(RecordActionType.DELETE);
@@ -180,6 +210,18 @@ public final class WorkflowDesignUtils {
                 wfStep.setName("deleteDraft");
                 wfStep.setDescription("Delete Draft");
                 wfStep.setLabel("Delete Draft");
+                wfStep.setNextStepName("end");
+                stepList.add(wfStep);
+            }
+            if (type.isWorkflowCopyDelete()) {
+                // Add delete original step
+                wfStep = new WfStep();
+                wfStep.setType(WorkflowStepType.RECORD_ACTION);
+                wfStep.setRecordActionType(RecordActionType.DELETE);
+                wfStep.setPriority(WorkflowStepPriority.NORMAL);
+                wfStep.setName("deleteOriginal");
+                wfStep.setDescription("Delete Original");
+                wfStep.setLabel("Delete Original");
                 wfStep.setNextStepName("end");
                 stepList.add(wfStep);
             } else {

@@ -472,6 +472,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (appletUtil.isAppletWithWorkflowCopy(appletName)) {
             updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_CREATE, appletName, forceUpdate);
             updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_UPDATE, appletName, forceUpdate);
+            updateWorkflowCopyWorkflow(WorkflowDesignUtils.DesignType.WORKFLOW_COPY_DELETE, appletName, forceUpdate);
         }
     }
 
@@ -479,15 +480,16 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             boolean forceUpdate) throws UnifyException {
         final String workflowName = designType.isWorkflowCopyCreate()
                 ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(appletName)
-                : ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(appletName);
+                : (designType.isWorkflowCopyUpdate()
+                        ? ApplicationNameUtils.getWorkflowCopyUpdateWorkflowName(appletName)
+                        : ApplicationNameUtils.getWorkflowCopyDeleteWorkflowName(appletName));
         final ApplicationEntityNameParts wnp = ApplicationNameUtils.getApplicationEntityNameParts(workflowName);
         final EntityDef entityDef = appletUtil.getAppletEntityDef(appletName);
         final AppletWorkflowCopyInfo appletWorkflowCopyInfo = appletUtil.application()
                 .getAppletWorkflowCopyInfo(appletName);
-        final String workflowDesc = entityDef.getLabel()
-                + (designType.isWorkflowCopyCreate() ? " Create (Workflow Copy)" : " Update (Workflow Copy)");
-        final String workflowLabel = entityDef.getLabel() + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
-        final String stepLabel = entityDef.getLabel() + (designType.isWorkflowCopyCreate() ? " Create" : " Update");
+        final String workflowDesc = entityDef.getLabel() + designType.descSuffix();
+        final String workflowLabel = entityDef.getLabel() + designType.labelSuffix();
+        final String stepLabel = entityDef.getLabel() + designType.labelSuffix();
         Workflow workflow = environment()
                 .findLean(new WorkflowQuery().applicationName(wnp.getApplicationName()).name(wnp.getEntityName()));
         if (workflow == null) {

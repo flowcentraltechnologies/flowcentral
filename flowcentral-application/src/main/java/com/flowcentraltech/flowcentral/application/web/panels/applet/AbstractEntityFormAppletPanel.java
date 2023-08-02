@@ -744,12 +744,17 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     public void delete() throws UnifyException {
         FormContext ctx = evaluateCurrentFormContext(EvaluationMode.DELETE);
         if (!ctx.isWithFormErrors()) {
-            EntityActionResult entityActionResult = getEntityFormApplet().deleteInst();
-            if (!entityActionResult.isWithReviewResult()) {
-                entityActionResult.setSuccessHint("$m{entityformapplet.delete.success.hint}");
-            }
+            final AbstractEntityFormApplet applet = getEntityFormApplet();
+            if (applet.isPromptEnterWorkflowDraft()) {
+                showPromptWorkflowDraft(WorkflowDraftType.DELETE, IndexedTarget.BLANK);
+            } else {
+                EntityActionResult entityActionResult = getEntityFormApplet().deleteInst();
+                if (!entityActionResult.isWithReviewResult()) {
+                    entityActionResult.setSuccessHint("$m{entityformapplet.delete.success.hint}");
+                }
 
-            handleEntityActionResult(entityActionResult, ctx);
+                handleEntityActionResult(entityActionResult, ctx);
+            }
         }
     }
 
@@ -856,6 +861,24 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
 
+    @Action
+    public void deletionToWorkflow() throws UnifyException {
+        MessageResult result = getMessageResult();
+        switch (result) {
+            case OK:
+            case YES:
+                performSubmitDeleteToWorkflow();
+                return;
+            case NO:
+            case CANCEL:
+            case RETRY:
+            default:
+                break;
+        }
+
+        setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
+    }
+    
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
         // Set recovery path on error to prevent possible manual duplication of record
@@ -934,6 +957,12 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
     }
 
+    private void performSubmitDeleteToWorkflow() throws UnifyException {
+        AbstractEntityFormApplet applet = getEntityFormApplet();
+        EntityActionResult entityActionResult = applet.submitDeleteToWorkflow();
+        setCommandResultMapping(entityActionResult, true);
+    }
+    
     private void performEditModeWorkflowDraft() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();
@@ -1022,20 +1051,23 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
     private void showPromptWorkflowDraft(WorkflowDraftType type, IndexedTarget target) throws UnifyException {
         getEntityFormApplet().setWorkflowDraftInfo(new WorkflowDraftInfo(type, target));
         final String caption = resolveSessionMessage("$m{formapplet.workflowdraft.caption}");
-        final String prompt = resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
+        final String prompt = type.isDelete() ? resolveSessionMessage("$m{formapplet.workflowdraft.submitdeleteprompt}")
+                : resolveSessionMessage("$m{formapplet.workflowdraft.prompt}");
         final String viewMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enterview}");
-        final String editMessage = resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
+        final String okMessage = type.isDelete() ? resolveSessionMessage("$m{formapplet.workflowdraft.submitdelete}")
+                : resolveSessionMessage("$m{formapplet.workflowdraft.enteredit}");
         final String cancelMessage = resolveSessionMessage("$m{formapplet.workflowdraft.cancel}");
-        final String commandPath = getCommandFullPath("openWorkflowDraft");
+        final String commandPath = type.isDelete() ? getCommandFullPath("deletionToWorkflow")
+                : getCommandFullPath("openWorkflowDraft");
         MessageBoxCaptions captions = new MessageBoxCaptions(caption);
-        if (type.isNew() || type.isUpdate()) {
-            captions.setOkCaption(editMessage);
+        if (type.isNew() || type.isUpdate() || type.isDelete()) {
+            captions.setOkCaption(okMessage);
             captions.setCancelCaption(cancelMessage);
             showMessageBox(MessageIcon.QUESTION, MessageMode.OK_CANCEL, captions, prompt, commandPath);
             return;
         }
 
-        captions.setYesCaption(editMessage);
+        captions.setYesCaption(okMessage);
         captions.setNoCaption(viewMessage);
         showMessageBox(MessageIcon.QUESTION, MessageMode.YES_NO_CANCEL, captions, prompt, commandPath);
     }
