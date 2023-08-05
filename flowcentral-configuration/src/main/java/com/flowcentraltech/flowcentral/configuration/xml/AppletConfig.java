@@ -61,7 +61,7 @@ public class AppletConfig extends BaseNameConfig {
 
     private List<AppletFilterConfig> filterList;
 
-    private List<AppletSetValuesConfig> setValuesList;
+    private List<AppletSetValuesConfig> valuesList;
     
     public AppletConfig() {
         this.menuAccess = Boolean.FALSE;
@@ -197,13 +197,13 @@ public class AppletConfig extends BaseNameConfig {
         this.filterList = filterList;
     }
 
-    public List<AppletSetValuesConfig> getSetValuesList() {
-        return setValuesList;
+    public List<AppletSetValuesConfig> getValuesList() {
+        return valuesList;
     }
 
-    @XmlElement(name = "setValues")
-    public void setSetValuesList(List<AppletSetValuesConfig> setValuesList) {
-        this.setValuesList = setValuesList;
+    @XmlElement(name = "values")
+    public void setValuesList(List<AppletSetValuesConfig> valuesList) {
+        this.valuesList = valuesList;
     }
 
 }

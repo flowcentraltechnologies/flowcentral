@@ -2,7 +2,7 @@
 <!-- Security application -->
 <application name="security"
 	description="$m{security.short.description}" label="$m{security.label}"
-	module="security" >
+	module="security">
 	<!-- Notification Templates -->
 	<notifTemplates>
 		<notifTemplate
@@ -12,17 +12,6 @@
 		<notifTemplate
 			configFile="apps/notification/template/user-creation-approval.xml" />
 	</notifTemplates>
-	<!-- Workflows -->
-	<workflows>
-		<workflow configFile="apps/workflow/user-creation.xml" />
-	</workflows>
-	<!-- Workflow Channels -->
-	<workflow-channels>
-		<workflow-channel name="userCreation"
-			description="$m{security.workflow.channel.usercreation}"
-			label="$m{security.workflow.channel.usercreation.label}"
-			entity="user" destination="userCreation" direction="inward" />
-	</workflow-channels>
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="userphoto"
@@ -76,6 +65,7 @@
 			label="$m{security.user.manage.label}" icon="user"
 			type="manage_entitylist" entity="user" menuAccess="true"
 			allowSecondaryTenants="true">
+			<property name="baseRestriction" value="nonSystemRecords" />
 			<property name="searchTable" value="userTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -86,40 +76,28 @@
 				value="onCreateFormStatePolicy" />
 			<property name="createForm.new.policy"
 				value="user-newactionpolicy" />
-			<property name="createForm.submit.caption"
-				value="Submit for Approval" />
-			<property name="createForm.submit.buttonhighlight"
-				value="true" />
-			<property name="createForm.submit" value="true" />
-			<property name="createForm.submit.validate" value="true" />
-			<property name="createForm.submit.workflow.channel"
-				value="userCreation" />
-			<property name="createForm.submit.condition" value="newUser" />
 			<property name="createForm.save" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="userForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 			<property name="maintainForm.attachments" value="true" />
-			<property name="maintainForm.submit" value="true" />
-			<property name="maintainForm.submit.validate" value="true" />
-			<property name="maintainForm.submit.workflow.channel"
-				value="userCreation" />
-			<property name="maintainForm.submit.condition"
-				value="newUser" />
-			<property name="baseRestriction" value="nonSystemRecords" />
+			<property name="workflowCopy" value="true" />
+			<property name="workflowCopy.create.setvalues" />
+			<property name="workflowCopy.update.setvalues" />
+			<property name="workflowCopy.create.approval.setvalues"
+				value="createApprovedSetValues" />
+			<property name="workflowCopy.update.approval.setvalues" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />
 			</filter>
-			<filter name="newUser"
-				description="$m{security.filter.newusers}">
-				<restriction type="or">
-					<restriction type="is_null" field="workflowStatus" />
-					<restriction type="equals" field="workflowStatus"
-						paramA="NEW" />
-				</restriction>
-			</filter>
+			<values name="createApprovedSetValues"
+				description="$m{security.user.setvalues.createapproved}">
+				<setValues>
+					<setValue field="workflowStatus" value="APR" />
+				</setValues>
+			</values>
 		</applet>
 		<applet name="manageUserRole"
 			description="$m{security.userrole.manage}"

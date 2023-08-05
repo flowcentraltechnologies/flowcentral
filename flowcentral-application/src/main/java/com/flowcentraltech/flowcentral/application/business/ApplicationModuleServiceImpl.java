@@ -4437,13 +4437,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
         appApplet.setPropList(propList);
 
-        List<AppAppletSetValues> setValuesList = null;
-        if (!DataUtils.isBlank(appletConfig.getSetValuesList())) {
-            setValuesList = new ArrayList<AppAppletSetValues>();
+        List<AppAppletSetValues> valuesList = null;
+        if (!DataUtils.isBlank(appletConfig.getValuesList())) {
+            valuesList = new ArrayList<AppAppletSetValues>();
             Map<String, AppAppletSetValues> map = appApplet.isIdBlank() ? Collections.emptyMap()
                     : environment().findAllMap(String.class, "name",
                             new AppAppletSetValuesQuery().appAppletId(appApplet.getId()));
-            for (AppletSetValuesConfig appletSetValuesConfig : appletConfig.getSetValuesList()) {
+            for (AppletSetValuesConfig appletSetValuesConfig : appletConfig.getValuesList()) {
                 AppAppletSetValues oldAppAppletSetValues = map.get(appletSetValuesConfig.getName());
                 if (oldAppAppletSetValues == null) {
                     AppAppletSetValues appAppletSetValues = new AppAppletSetValues();
@@ -4452,7 +4452,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
                     appAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
                     appAppletSetValues.setConfigType(ConfigType.MUTABLE_INSTALL);
-                    setValuesList.add(appAppletSetValues);
+                    valuesList.add(appAppletSetValues);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletSetValues)) {
                         oldAppAppletSetValues
@@ -4463,13 +4463,13 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         environment().findChildren(oldAppAppletSetValues);
                     }
 
-                    setValuesList.add(oldAppAppletSetValues);
+                    valuesList.add(oldAppAppletSetValues);
                 }
 
             }
         }
 
-        appApplet.setSetValuesList(setValuesList);
+        appApplet.setSetValuesList(valuesList);
 
         List<AppAppletFilter> filterList = null;
         if (!DataUtils.isBlank(appletConfig.getFilterList())) {
