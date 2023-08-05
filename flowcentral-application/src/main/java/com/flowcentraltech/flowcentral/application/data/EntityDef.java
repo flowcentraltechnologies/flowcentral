@@ -1186,6 +1186,13 @@ public class EntityDef extends BaseApplicationEntityDef {
                 uniqueConstraintList = new ArrayList<UniqueConstraintDef>();
             }
 
+            if (baseType.isWorkEntityType()) {
+                List<String> _fieldList = new ArrayList<String>();
+                _fieldList.add("originalCopyId");
+                _fieldList.addAll(fieldList);
+                fieldList = _fieldList;
+            }
+            
             uniqueConstraintList
                     .add(new UniqueConstraintDef(name, description, fieldList, conditionList, caseInsensitive));
             return this;

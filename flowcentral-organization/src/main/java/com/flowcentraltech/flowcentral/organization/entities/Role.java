@@ -33,8 +33,8 @@ import com.tcdng.unify.core.annotation.UniqueConstraint;
  * @since 1.0
  */
 @Table(name = "FC_ROLE", uniqueConstraints = {
-        @UniqueConstraint({ "originalCopyId", "code" }),
-        @UniqueConstraint({ "originalCopyId", "description" }) })
+        @UniqueConstraint({ "code" }),
+        @UniqueConstraint({ "description" }) })
 public class Role extends BaseStatusWorkTenantEntity {
 
     @Mapped("organization.mappedDepartment")
