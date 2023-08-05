@@ -62,7 +62,8 @@
 !fc-studiomenu:studioMenuPanel
 
 // Content
-!ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed} path:$s{/applicationstudio/dashboard/openPage} tabbed:true
+!ui-contentpanel:content styleClassBinding:$e{fc-content-tabbed}
+	paths:$s{/applicationstudio/dashboard/openPage} tabbed:true
 	documentPath:$s{/applicationstudio} titleUppercase:false  
 	 
 // Show user details popup
