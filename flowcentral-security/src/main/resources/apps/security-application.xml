@@ -83,15 +83,24 @@
 			<property name="maintainForm.delete" value="true" />
 			<property name="maintainForm.attachments" value="true" />
 			<property name="workflowCopy" value="true" />
-			<property name="workflowCopy.create.setvalues" />
-			<property name="workflowCopy.update.setvalues" />
+			<property name="workflowCopy.create.setvalues"
+				value="createSetValues" />
 			<property name="workflowCopy.create.approval.setvalues"
 				value="createApprovedSetValues" />
-			<property name="workflowCopy.update.approval.setvalues" />
+			<property name="workflowCopy.update.setvalues"
+				value="createSetValues" />
+			<property name="workflowCopy.update.approval.setvalues"
+				value="createApprovedSetValues" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />
 			</filter>
+			<values name="createSetValues"
+				description="$m{security.user.setvalues.create}">
+				<setValues>
+					<setValue field="workflowStatus" value="AWA" />
+				</setValues>
+			</values>
 			<values name="createApprovedSetValues"
 				description="$m{security.user.setvalues.createapproved}">
 				<setValues>

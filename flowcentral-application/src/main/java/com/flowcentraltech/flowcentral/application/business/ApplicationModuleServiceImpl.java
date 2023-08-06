@@ -4445,10 +4445,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                             new AppAppletSetValuesQuery().appAppletId(appApplet.getId()));
             for (AppletSetValuesConfig appletSetValuesConfig : appletConfig.getValuesList()) {
                 AppAppletSetValues oldAppAppletSetValues = map.get(appletSetValuesConfig.getName());
+                String description = resolveApplicationMessage(appletSetValuesConfig.getDescription());
                 if (oldAppAppletSetValues == null) {
                     AppAppletSetValues appAppletSetValues = new AppAppletSetValues();
                     appAppletSetValues.setName(appletSetValuesConfig.getName());
-                    appAppletSetValues.setDescription(appletSetValuesConfig.getDescription());
+                    appAppletSetValues.setDescription(description);
                     appAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
                     appAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
                     appAppletSetValues.setConfigType(ConfigType.MUTABLE_INSTALL);
@@ -4456,7 +4457,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletSetValues)) {
                         oldAppAppletSetValues
-                                .setDescription(resolveApplicationMessage(appletSetValuesConfig.getDescription()));
+                                .setDescription(resolveApplicationMessage(description));
                         oldAppAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
                         oldAppAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
                     } else {
