@@ -425,6 +425,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletsetvalueslist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletalertlist"
+			description="$m{studio.widgettype.propertyappletalertlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletalertlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyentityactionpolicylist"
 			description="$m{studio.widgettype.propertyentityactionpolicylist}"
 			dataType="string" inputType="string"
@@ -5187,7 +5192,25 @@
 					inputWidget="studio.propertyappletsetvalueslist" />
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.updateapprovalsetvalues}"
-					inputWidget="studio.propertyappletsetvalueslist" />
+					inputWidget="studio.propertyappletsetvalueslist" />				
+				<property name="workflowCopy.create.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.update.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updatealert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.create.approval.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createapprovalalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.update.approval.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updateapprovalalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.create.rejection.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createrejectionalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.update.rejection.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updaterejectionalert}"
+					inputWidget="studio.propertyappletalertlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.workflowproperties}">
@@ -5346,6 +5369,24 @@
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.updateapprovalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.create.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.update.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updatealert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.create.approval.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createapprovalalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.update.approval.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updateapprovalalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.create.rejection.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createrejectionalert}"
+					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.update.rejection.alert"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updaterejectionalert}"
+					inputWidget="studio.propertyappletalertlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentitysingleform.workflowproperties}">

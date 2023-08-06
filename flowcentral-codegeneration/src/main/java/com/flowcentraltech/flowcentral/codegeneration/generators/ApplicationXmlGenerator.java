@@ -275,7 +275,7 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         appletAlertConfig.setSender(appAppletAlert.getSender());
                         appletAlertConfig.setAlertHeldBy(appAppletAlert.isAlertHeldBy());
                         appletAlertConfig.setAlertWorkflowRoles(appAppletAlert.isAlertWorkflowRoles());
-                         alertList.add(appletAlertConfig);
+                        alertList.add(appletAlertConfig);
                     }
 
                     appletConfig.setAlertList(alertList);
@@ -468,7 +468,8 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         entityUniqueConstraintConfig.setFieldList(appEntityUniqueConstraint.getFieldList());
                         if (!DataUtils.isBlank(appEntityUniqueConstraint.getConditionList())) {
                             List<EntityUniqueConditionConfig> conditionConfigList = new ArrayList<EntityUniqueConditionConfig>();
-                            for (AppEntityUniqueCondition entityUniqueCondition: appEntityUniqueConstraint.getConditionList()) {
+                            for (AppEntityUniqueCondition entityUniqueCondition : appEntityUniqueConstraint
+                                    .getConditionList()) {
                                 EntityUniqueConditionConfig entityUniqueConditionConfig = new EntityUniqueConditionConfig();
                                 entityUniqueConditionConfig.setField(entityUniqueCondition.getField());
                                 entityUniqueConditionConfig.setValue(entityUniqueCondition.getValue());
