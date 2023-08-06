@@ -240,6 +240,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletentitysetvaluesgenlist listParams:$l{appAppletd} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="appletentitynotifsenderlist"
+			description="$m{studio.widgettype.appletentitynotifsenderlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:studioappletentitynotifsenderlist listParams:$l{appAppletd} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="wfentitysetvaluesgenlist"
 			description="$m{studio.widgettype.wfentitysetvaluesgenlist}"
 			dataType="string" inputType="string"
@@ -769,6 +774,23 @@
 			<property name="createForm.save.next" value="true" />
 			<property name="createForm.save.close" value="true" />
 			<property name="maintainForm" value="appAppletSetValuesForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageAppAppletAlert"
+			description="$m{studio.appappletalert.manage}"
+			label="$m{studio.appappletalert.manage.label}"
+			type="manage_entitylist" entity="application.appAppletAlert"
+			menuAccess="false">
+			<property name="searchTable" value="appAppletAlertTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.report" value="false" />
+			<property name="createForm" value="appAppletAlertForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="appAppletAlertForm" />
 			<property name="maintainForm.update" value="true" />
 			<property name="maintainForm.delete" value="true" />
 		</applet>
@@ -1950,6 +1972,9 @@
 			<tab name="setValues" label="$m{studio.appapplet.form.setvalues}"
 				contentType="child_list" applet="manageAppAppletSetValues"
 				reference="setValuesList" />
+			<tab name="alerts" label="$m{studio.appapplet.form.alerts}"
+				contentType="child_list" applet="manageAppAppletAlert"
+				reference="alertList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 			<formValidationPolicy
@@ -2142,6 +2167,29 @@
 			<tab name="setValues"
 				label="$m{studio.appappletsetvalues.form.setvalues}"
 				reference="app_applet" contentType="set_values" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+		<form name="appAppletAlertForm"
+			description="$m{studio.appappletalert.form}"
+			entity="application.appAppletAlert">
+			<tab name="basicDetails"
+				label="$m{studio.appappletalert.form.basicdetails}"
+				contentType="miniform">
+				<section name="setVaalertDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="type" required="true" column="1" />
+					<field name="sender"
+						inputWidget="studio.appletentitynotifsenderlist" required="true" column="1" />
+					<field name="alertHeldBy"
+						inputWidget="application.checkbox" column="1" />
+					<field name="alertWorkflowRoles"
+						inputWidget="application.checkbox" column="1" />
+				</section>
+			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
 		</form>

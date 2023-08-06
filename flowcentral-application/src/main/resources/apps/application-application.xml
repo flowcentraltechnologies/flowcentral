@@ -501,6 +501,9 @@
 		<reference name="appAppletSetValuesRef"
 			description="$m{application.appappletsetvalues.reference}"
 			entity="appAppletSetValues" searchField="description" />
+		<reference name="appAppletAlertRef"
+			description="$m{application.appappletalert.reference}"
+			entity="appAppletAlert" searchField="description" />
 		<reference name="appAppletFilterRef"
 			description="$m{application.appappletfilter.reference}"
 			entity="appAppletFilter" searchField="description" />
@@ -707,6 +710,9 @@
 			<field name="setValuesList"
 				label="$m{application.appapplet.setvalues}" type="child_list"
 				references="appAppletSetValuesRef" />
+			<field name="alertList"
+				label="$m{application.appapplet.alerts}" type="child_list"
+				references="appAppletAlertRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appapplet.uc.name}" fieldList="applicationId,name">
 				<condition field="devVersionType" value="CRN"/>
@@ -807,6 +813,34 @@
 				fieldList="appAppletId,name" />
 			<uniqueConstraint name="descUc"
 				description="$m{application.appappletsetvalues.uc.description}"
+				fieldList="appAppletId,description" />
+		</entity>
+		<entity name="appAppletAlert"
+			description="$m{application.appappletalert}"
+			label="$m{application.appappletalert.label}"
+			type="com.flowcentraltech.flowcentral.application.entities.AppAppletAlert">
+			<field name="appAppletId"
+				label="$m{application.appappletalert.appappletid}" type="ref"
+				references="appAppletRef" inputWidget="application.entitylist" />
+			<field name="type" label="$m{application.appappletalert.type}"
+				type="enum_ref" references="wfalerttypelist"
+				inputWidget="application.enumlist" />
+			<field name="sender"
+				label="$m{application.appappletalert.sender}"
+				type="string"/>
+			<field name="alertHeldBy"
+				label="$m{application.appappletalert.alertheldby}"
+				type="boolean"/>
+			<field name="alertWorkflowRoles"
+				label="$m{application.appappletalert.alertworkflowroles}"
+				type="boolean"/>
+			<field name="typeDesc" label="$m{application.appappletalert.typedesc}"
+				type="list_only" key="type" property="description" />
+			<uniqueConstraint name="nameUc"
+				description="$m{application.appappletalert.uc.name}"
+				fieldList="appAppletId,name" />
+			<uniqueConstraint name="descUc"
+				description="$m{application.appappletalert.uc.description}"
 				fieldList="appAppletId,description" />
 		</entity>
 		<entity name="appEntity"

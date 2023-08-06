@@ -22,6 +22,7 @@ import java.util.zip.ZipOutputStream;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletSetValues;
@@ -75,6 +76,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppFormConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppFormsConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTableConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTablesConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
@@ -260,6 +262,23 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                     }
 
                     appletConfig.setValuesList(valuesList);
+                }
+
+                // Alerts
+                if (!DataUtils.isBlank(appApplet.getAlertList())) {
+                    List<AppletAlertConfig> alertList = new ArrayList<AppletAlertConfig>();
+                    for (AppAppletAlert appAppletAlert : appApplet.getAlertList()) {
+                        AppletAlertConfig appletAlertConfig = new AppletAlertConfig();
+                        appletAlertConfig.setType(appAppletAlert.getType());
+                        appletAlertConfig.setName(appAppletAlert.getName());
+                        appletAlertConfig.setDescription(appAppletAlert.getDescription());
+                        appletAlertConfig.setSender(appAppletAlert.getSender());
+                        appletAlertConfig.setAlertHeldBy(appAppletAlert.isAlertHeldBy());
+                        appletAlertConfig.setAlertWorkflowRoles(appAppletAlert.isAlertWorkflowRoles());
+                         alertList.add(appletAlertConfig);
+                    }
+
+                    appletConfig.setAlertList(alertList);
                 }
 
                 appletList.add(appletConfig);

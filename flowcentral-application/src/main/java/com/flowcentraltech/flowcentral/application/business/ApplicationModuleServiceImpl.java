@@ -85,6 +85,8 @@ import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletAlertQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
@@ -227,6 +229,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppFormConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTableConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
@@ -4472,6 +4475,41 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
         appApplet.setSetValuesList(valuesList);
 
+        List<AppAppletAlert> alertList = null;
+        if (!DataUtils.isBlank(appletConfig.getAlertList())) {
+            alertList = new ArrayList<AppAppletAlert>();
+            Map<String, AppAppletAlert> map = appApplet.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppAppletAlertQuery().appAppletId(appApplet.getId()));
+            for (AppletAlertConfig alertConfig : appletConfig.getAlertList()) {
+                AppAppletAlert oldAppAppletAlert = map.get(alertConfig.getName());
+                if (oldAppAppletAlert == null) {
+                    AppAppletAlert appAppletAlert = new AppAppletAlert();
+                    appAppletAlert.setType(alertConfig.getType());
+                    appAppletAlert.setName(alertConfig.getName());
+                    appAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
+                    appAppletAlert.setSender(alertConfig.getSender());
+                    appAppletAlert.setAlertHeldBy(alertConfig.getAlertHeldBy());
+                    appAppletAlert.setAlertWorkflowRoles(alertConfig.getAlertWorkflowRoles());
+                     appAppletAlert.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    alertList.add(appAppletAlert);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldAppAppletAlert)) {
+                        oldAppAppletAlert.setType(alertConfig.getType());
+                        oldAppAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
+                        oldAppAppletAlert.setSender(alertConfig.getSender());
+                        oldAppAppletAlert.setAlertHeldBy(alertConfig.getAlertHeldBy());
+                        oldAppAppletAlert.setAlertWorkflowRoles(alertConfig.getAlertWorkflowRoles());
+                    } 
+                    
+                    alertList.add(oldAppAppletAlert);
+                }
+
+            }
+       }
+        
+        appApplet.setAlertList(alertList);
+        
         List<AppAppletFilter> filterList = null;
         if (!DataUtils.isBlank(appletConfig.getFilterList())) {
             filterList = new ArrayList<AppAppletFilter>();
