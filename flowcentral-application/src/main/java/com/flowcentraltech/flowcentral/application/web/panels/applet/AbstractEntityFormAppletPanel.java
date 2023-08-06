@@ -267,32 +267,34 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     parentDisabled = true;
                 }
             }
+        }
 
-            if (!isRootForm && appCtx.isInWorkflowPromptViewMode()) {
-                enableUpdate = false;
-                enableDelete = false;
-                parentDisabled = true;
-            }
+        boolean enableNonFormEdit = isContextEditable;
+        if (!isRootForm && appCtx.isInWorkflowPromptViewMode()) {
+            enableNonFormEdit = false;
+            enableUpdate = false;
+            enableDelete = false;
+            parentDisabled = true;
         }
 
         switch (viewMode) {
             case ENTITY_CRUD_PAGE:
                 switchContent("entityCrudPanel");
-                setEditable("entityCrudPanel", isContextEditable);
+                setEditable("entityCrudPanel", enableNonFormEdit);
                 applet.getEntityCrudPage().setDisabled(parentDisabled);
                 break;
             case ENTRY_TABLE_PAGE:
                 switchContent("entryTablePanel");
-                setEditable("entryTablePanel", isContextEditable);
-                setVisible("entryTablePanel.saveBtn", isContextEditable);
-                setVisible("saveEntryCloseBtn", isContextEditable);
+                setEditable("entryTablePanel", enableNonFormEdit);
+                setVisible("entryTablePanel.saveBtn", enableNonFormEdit);
+                setVisible("saveEntryCloseBtn", enableNonFormEdit);
                 applet.getEntryTablePage().setDisabled(parentDisabled);
                 break;
             case ASSIGNMENT_PAGE:
                 switchContent("assignmentPanel");
-                setEditable("assignmentPanel", isContextEditable);
-                setVisible("assignmentPanel.saveBtn", isContextEditable);
-                setVisible("saveAssignCloseBtn", isContextEditable);
+                setEditable("assignmentPanel", enableNonFormEdit);
+                setVisible("assignmentPanel.saveBtn", enableNonFormEdit);
+                setVisible("saveAssignCloseBtn", enableNonFormEdit);
                 final boolean isEntryMode = applet.getAssignmentPage().isEntryTableMode();
                 setVisible("assignmentPanel.assignmentPage", !isEntryMode);
                 setVisible("assignmentPanel.assignmentEntryTbl", isEntryMode);
@@ -425,8 +427,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             case NEW_HEADLESSLIST_FORM:
                 switchContent("formPanel");
                 setVisible("cancelBtn", true);
-                final boolean allowSaveAndNext = viewMode != AbstractEntityFormApplet.ViewMode.NEW_CHILD_FORM
-                /* && !form.getFormDef().isChildOrChildListTabs() */;
+                final boolean allowSaveAndNext = viewMode != AbstractEntityFormApplet.ViewMode.NEW_CHILD_FORM;
                 if (enableCreate && !isWorkflowCopyForm && formAppletDef != null) {
                     setVisible("saveBtn",
                             formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.CREATE_FORM_SAVE, false));

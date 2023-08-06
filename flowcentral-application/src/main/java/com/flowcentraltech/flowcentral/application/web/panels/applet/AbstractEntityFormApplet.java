@@ -138,23 +138,23 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         PROPERTYLIST_PAGE,
         CUSTOM_PAGE;
 
-        private static final Set<ViewMode> newEntityModes = EnumSet.of(NEW_FORM, NEW_PRIMARY_FORM, NEW_CHILD_FORM,
+        private static final Set<ViewMode> NEW_ENTITY_MODES = EnumSet.of(NEW_FORM, NEW_PRIMARY_FORM, NEW_CHILD_FORM,
                 NEW_CHILDLIST_FORM, NEW_RELATEDLIST_FORM, NEW_HEADLESSLIST_FORM);
 
-        private static final Set<ViewMode> maintainEntityModes = EnumSet.of(MAINTAIN_FORM, MAINTAIN_FORM_SCROLL,
+        private static final Set<ViewMode> MAINTAIN_ENTITY_MODES = EnumSet.of(MAINTAIN_FORM, MAINTAIN_FORM_SCROLL,
                 MAINTAIN_PRIMARY_FORM_NO_SCROLL, MAINTAIN_CHILDLIST_FORM, MAINTAIN_CHILDLIST_FORM_NO_SCROLL,
                 MAINTAIN_RELATEDLIST_FORM, MAINTAIN_RELATEDLIST_FORM_NO_SCROLL, MAINTAIN_HEADLESSLIST_FORM,
                 MAINTAIN_HEADLESSLIST_FORM_NO_SCROLL, SINGLE_FORM);
 
-        private static final Set<ViewMode> rootEntityModes = EnumSet.of(NEW_FORM, NEW_PRIMARY_FORM, MAINTAIN_FORM,
+        private static final Set<ViewMode> ROOT_ENTITY_MODES = EnumSet.of(NEW_FORM, NEW_PRIMARY_FORM, MAINTAIN_FORM,
                 MAINTAIN_FORM_SCROLL, MAINTAIN_PRIMARY_FORM_NO_SCROLL, SINGLE_FORM);
 
         public boolean isCreateForm() {
-            return newEntityModes.contains(this);
+            return NEW_ENTITY_MODES.contains(this);
         }
 
         public boolean isMaintainForm() {
-            return maintainEntityModes.contains(this);
+            return MAINTAIN_ENTITY_MODES.contains(this);
         }
 
         public boolean isListingForm() {
@@ -162,7 +162,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         }
 
         public boolean isRootForm() {
-            return rootEntityModes.contains(this);
+            return ROOT_ENTITY_MODES.contains(this);
         }
 
         public boolean isScroll() {

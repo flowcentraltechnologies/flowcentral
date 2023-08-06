@@ -37,8 +37,8 @@ import com.tcdng.unify.core.annotation.UniqueConstraints;
  */
 @Policy("basework-entitypolicy")
 @DefaultQueryRestrictions({ @QueryRestriction(field = "wfItemVersionType", value = "ORN") })
-@UniqueConstraints({
-        @UniqueConstraint(value = { "originalCopyId", "wfItemVersionType" })})
+@UniqueConstraints(baseFields = { "originalCopyId" },
+    value = { @UniqueConstraint(value = { "wfItemVersionType" }) })
 public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEntity {
 
     @ForeignKey(name = "PROCESSING_STATUS", nullable = true)
@@ -46,7 +46,7 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
 
     @Column
     private WfItemVersionType wfItemVersionType;
-    
+
     @Column(name = "WORK_BRANCH_CD", length = 32, nullable = true)
     private String workBranchCode;
 
@@ -55,13 +55,13 @@ public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEnti
 
     @Column(nullable = true)
     private Long originalCopyId;
-    
+
     @Column
     private boolean inWorkflow;
 
-    @ListOnly(key = "processingStatus" , property = "description")
+    @ListOnly(key = "processingStatus", property = "description")
     private String processingStatusDesc;
-    
+
     @ChildList(category = "work")
     private List<FileAttachment> attachmentList;
 

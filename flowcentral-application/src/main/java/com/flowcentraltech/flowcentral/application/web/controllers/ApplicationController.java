@@ -119,25 +119,21 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     @Action
     public String resolveUserNotification() throws UnifyException {
-        // TODO
         return "resolveusernotification";
     }
 
     @Action
     public String dismissUserNotification() throws UnifyException {
-        // TODO
         return hidePopup();
     }
 
     @Action
     public String dismissUserNotifications() throws UnifyException {
-        // TODO
         return cancelUserNotifications();
     }
 
     @Action
     public String cancelUserNotifications() throws UnifyException {
-        // TODO
         return hidePopup();
     }
 
@@ -150,7 +146,6 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
 
     @Action
     public String showUserNotifications() throws UnifyException {
-        // TODO
         return noResult();
     }
 
@@ -197,11 +192,17 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
                 ApplicationModuleSysParamConstants.ENABLE_MULTIPLE_TABS);
         final boolean indicateHighLatency = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_HIGH_LATENCY_INDICATION);
+        final boolean showWorkItemsOnLogin = system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.SHOW_WORK_ITEMS_ON_LOGIN);
         final String contentStyleClass = enableMultipleTabs ? "fc-content-tabbed" : "fc-content";
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
         pageBean.setIndicateHighLatency(indicateHighLatency);
         pageBean.setContentStyleClass(contentStyleClass);
 
+        String[] applicationPaths = showWorkItemsOnLogin
+                ? new String[] { "/application/dashboard/openPage", "/workflow/myworkitems/openPage" }
+                : new String[] { "/application/dashboard/openPage" };
+        pageBean.setApplicationPaths(applicationPaths);
         setPageWidgetVisible("businessUnitLabel", isTenancyEnabled());
     }
 

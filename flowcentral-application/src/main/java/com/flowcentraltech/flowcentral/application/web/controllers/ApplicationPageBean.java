@@ -28,6 +28,8 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     private LoginUserPhotoGenerator userPhotoGenerator;
 
+    private String[] applicationPaths;
+    
     private String workspaceCode;
     
     private String headerTitle;
@@ -44,6 +46,14 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setUserPhotoGenerator(LoginUserPhotoGenerator userPhotoGenerator) {
         this.userPhotoGenerator = userPhotoGenerator;
+    }
+
+    public String[] getApplicationPaths() {
+        return applicationPaths;
+    }
+
+    public void setApplicationPaths(String[] applicationPaths) {
+        this.applicationPaths = applicationPaths;
     }
 
     public String getWorkspaceCode() {

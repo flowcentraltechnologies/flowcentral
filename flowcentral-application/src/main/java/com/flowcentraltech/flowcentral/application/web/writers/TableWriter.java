@@ -636,9 +636,11 @@ public class TableWriter extends AbstractControlWriter {
                                 writer.write("</span></td></tr>");
                             }
 
-                            writer.write("<tr><td class=\"sheader\" colspan=\"100%\"><span>");
-                            writer.writeWithHtmlEscape(currentSection.getLabel());
-                            writer.write("</span></td></tr>");
+                            if (!currentSection.isEmpty()) {
+                                writer.write("<tr><td class=\"sheader\" colspan=\"100%\"><span>");
+                                writer.writeWithHtmlEscape(currentSection.getLabel());
+                                writer.write("</span></td></tr>");
+                            }
                         }
                     }
 

@@ -762,6 +762,7 @@ public class SystemModuleServiceImpl extends AbstractFlowCentralService
                 moduleId = moduleIdList.get(0);
             } else {
                 logDebug("No principal module definition found for [{0}]. One will be created.", moduleDescription);
+                moduleConfig.setPrincipal(true); // Upgrade to principal
             }
         }
 

@@ -387,10 +387,10 @@
 				label="$m{organization.role.privileges}" type="child_list"
 				references="rolePrivilegeRef" />
 			<uniqueConstraint name="codeUc"
-				description="$m{organization.role.uc.code}" fieldList="originalCopyId,code" />
+				description="$m{organization.role.uc.code}" fieldList="code" />
 			<uniqueConstraint name="descUc"
 				description="$m{organization.role.uc.description}"
-				fieldList="originalCopyId,description" />
+				fieldList="description" />
 		</entity>
 		<entity name="rolePrivilege"
 			description="$m{organization.roleprivilege}"

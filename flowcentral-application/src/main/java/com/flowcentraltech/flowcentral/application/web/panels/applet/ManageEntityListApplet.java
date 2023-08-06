@@ -47,6 +47,9 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
             .add(new Equals("wfItemVersionType", WfItemVersionType.DRAFT))
             .add(new Or().add(new IsNull("inWorkflow")).add(new Equals("inWorkflow", Boolean.FALSE)));
 
+    private static final Restriction ORIGINAL_BASE_RESTRICTION = new And()
+            .add(new Equals("wfItemVersionType", WfItemVersionType.ORIGINAL));
+
     public ManageEntityListApplet(AppletUtilities au, String pathVariable,
             AppletWidgetReferences appletWidgetReferences, EntityFormEventHandlers formEventHandlers)
             throws UnifyException {
@@ -70,8 +73,8 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);
             entitySearch.setBaseFilter(InputWidgetUtils.getFilterDef(au, _rootAppletDef, appletFilterDef.getFilterDef(),
-                    isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : null, au.specialParamProvider(), au.getNow()),
-                    au.specialParamProvider());
+                    isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION,
+                    au.specialParamProvider(), au.getNow()), au.specialParamProvider());
         } else {
             if (isUpdateDraft) {
                 entitySearch.setBaseFilter(InputWidgetUtils.getFilterDef(au, UPDATE_DRAFT_BASE_RESTRICTION),
