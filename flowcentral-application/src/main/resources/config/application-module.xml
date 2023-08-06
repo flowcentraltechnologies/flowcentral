@@ -104,5 +104,8 @@
 		<sysParameter code="APP-001F" defaultVal="false"
 			description="$m{application.sysparam.enableviewentityinseparatetab}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="APP-0020" defaultVal="false"
+			description="$m{application.sysparam.showworkitemsonlogin}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

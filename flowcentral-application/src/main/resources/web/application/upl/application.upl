@@ -69,9 +69,7 @@
 !fc-appletmenu:menuColPanel searchable:true
 
 // Content
-!ui-contentpanel:content styleClassBinding:$s{contentStyleClass}
-	paths:$s{/application/dashboard/openPage}
-	paths:$s{/workflow/myworkitems/openPage}
+!ui-contentpanel:content styleClassBinding:$s{contentStyleClass} pathsBinding:applicationPaths
 	tabbedBinding:enableMultipleTabs documentPath:$s{/application}
 	titleUppercase:false
 	

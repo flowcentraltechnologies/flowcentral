@@ -1012,14 +1012,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         if (WORKFLOW_APPLICATION.equals(applicationName)) {
             List<AppletDef> appletDefList = new ArrayList<AppletDef>();
             if (roleCode == null && getUserToken().isReservedUser()) {
-                // Workflow interactive steps
-                for (Workflow workflow : environment()
-                        .listAll(new WorkflowQuery().ignoreEmptyCriteria(true).addSelect("applicationName", "name"))) {
-                    WfDef wfDef = getWfDef(ApplicationNameUtils.ensureLongNameReference(workflow.getApplicationName(),
-                            workflow.getName()));
-                    appletDefList.addAll(wfDef.getAppletDefs());
-                }
-
                 // Workflow for wizard applets
                 for (WfWizard wizard : environment()
                         .listAll(new WfWizardQuery().ignoreEmptyCriteria(true).addSelect("applicationName", "name"))) {
@@ -1028,19 +1020,6 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             .getAppletDef());
                 }
             } else {
-                // Workflow interactive steps
-                List<WfStepRole> wfRoleList = environment().listAll(new WfStepRoleQuery().roleCode(roleCode));
-                if (!DataUtils.isBlank(wfRoleList)) {
-                    for (WfStepRole wfRole : wfRoleList) {
-                        WfDef wfDef = getWfDef(ApplicationNameUtils.ensureLongNameReference(wfRole.getApplicationName(),
-                                wfRole.getWorkflowName()));
-                        AppletDef _appletDef = wfDef.getAppletDef(wfRole.getWfStepName());
-                        if (_appletDef != null) {
-                            appletDefList.add(_appletDef);
-                        }
-                    }
-                }
-
                 // Workflow for wizard applets
                 List<String> wfWizardPrivList = appletUtil.applicationPrivilegeManager().findRolePrivileges(
                         ApplicationPrivilegeConstants.APPLICATION_WORKFLOW_WIZARD_CATEGORY_CODE, roleCode);

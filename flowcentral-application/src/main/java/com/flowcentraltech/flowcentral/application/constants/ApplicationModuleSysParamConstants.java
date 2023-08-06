@@ -85,4 +85,5 @@ public interface ApplicationModuleSysParamConstants {
 
     String ENABLE_VIEW_ENTITY_IN_SEPARATE_TAB = "APP-001F";
 
+    String SHOW_WORK_ITEMS_ON_LOGIN = "APP-0020";
 }
