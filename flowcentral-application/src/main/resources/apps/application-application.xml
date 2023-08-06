@@ -6,8 +6,8 @@
 	<!-- Widget Types -->
 	<widgetTypes>
 		<widgetType name="fontlist" listOption="true"
-			description="$m{application.widgettype.fontlist}"
-			dataType="string" inputType="string"
+			description="$m{application.widgettype.fontlist}" dataType="string"
+			inputType="string"
 			editor="!ui-select list:fontfamilylist blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="emailproducerconsumerlist"
@@ -51,10 +51,8 @@
 			editor="!ui-select list:pastyearlist listParams:$l{1970}  listParamType:$s{immediate} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
 		<widgetType name="colorspan" listOption="true"
-			description="$m{application.widgettype.colorspan}"
-			dataType="string" inputType="string"
-			editor="!ui-colorspan"
-			renderer="!ui-colorspan" />
+			description="$m{application.widgettype.colorspan}" dataType="string"
+			inputType="string" editor="!ui-colorspan" renderer="!ui-colorspan" />
 		<widgetType name="decimal" listOption="true"
 			description="$m{application.widgettype.decimal}" dataType="double"
 			inputType="double"
@@ -71,8 +69,8 @@
 			editor="!ui-decimal precision:%s useGrouping:true strictFormat:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!decimalformat precision:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="amountaccounting" listOption="true"
-			description="$m{application.widgettype.amountaccounting}" dataType="decimal"
-			inputType="decimal"
+			description="$m{application.widgettype.amountaccounting}"
+			dataType="decimal" inputType="decimal"
 			editor="!ui-decimal-accounting precision:%s scale:%s useGrouping:true strictFormat:true acceptNegative:%s"
 			renderer="!ui-label formatter:$d{!decimalaccountingformat precision:%s scale:%s useGrouping:true} style:$s{text-align:right;}" />
 		<widgetType name="amountaccountingwhole" listOption="true"
@@ -352,7 +350,8 @@
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd}}" />
 		<widgetType name="datetime" listOption="true"
 			description="$m{application.widgettype.datetime}"
-			dataType="timestamp" inputType="datetime" editor="!ui-datetime clearable:true"
+			dataType="timestamp" inputType="datetime"
+			editor="!ui-datetime clearable:true"
 			renderer="!ui-label formatter:$d{!fixeddatetimeformat pattern:$s{yyyy-MM-dd HH:mm:ss}}" />
 		<widgetType name="datetimetext"
 			description="$m{application.widgettype.datetimetext}"
@@ -413,37 +412,34 @@
 			description="$m{application.widgettype.fileupload}" dataType="string"
 			inputType="string"
 			editor="!ui-fileuploadview handler:$s{refblob-fileuploadviewhandler} category:$s{%s} parentCategory:$s{%s} parentFieldName:$s{%s}"
-			renderer="!ui-label"
-			stretch="false" />
+			renderer="!ui-label" stretch="false" />
 		<widgetType name="fileuploadwildcard"
 			description="$m{application.widgettype.fileupload.wildcard}"
-			dataType="blob" inputType="file" editor="!ui-fileuploadview type:wildcard"
-			renderer="!ui-label"
+			dataType="blob" inputType="file"
+			editor="!ui-fileuploadview type:wildcard" renderer="!ui-label"
 			stretch="false" />
 		<widgetType name="fileuploadimage"
 			description="$m{application.widgettype.fileupload.image}"
-			dataType="blob" inputType="file" editor="!ui-fileuploadview type:image"
-			renderer="!ui-label"
+			dataType="blob" inputType="file"
+			editor="!ui-fileuploadview type:image" renderer="!ui-label"
 			stretch="false" />
 		<widgetType name="fileuploadcsv"
 			description="$m{application.widgettype.fileupload.csv}"
 			dataType="blob" inputType="file" editor="!ui-fileuploadview type:csv"
-			renderer="!ui-label"
-			stretch="false" />
+			renderer="!ui-label" stretch="false" />
 		<widgetType name="fileuploadexcel"
 			description="$m{application.widgettype.fileupload.excel}"
-			dataType="blob" inputType="file" editor="!ui-fileuploadview type:excel"
-			renderer="!ui-label"
+			dataType="blob" inputType="file"
+			editor="!ui-fileuploadview type:excel" renderer="!ui-label"
 			stretch="false" />
 		<widgetType name="fileuploadpdf"
 			description="$m{application.widgettype.fileupload.pdf}"
 			dataType="blob" inputType="file" editor="!ui-fileuploadview type:pdf"
-			renderer="!ui-label"
-			stretch="false" />
+			renderer="!ui-label" stretch="false" />
 		<widgetType name="fileuploadtext"
 			description="$m{application.widgettype.fileupload.text}"
-			dataType="blob" inputType="file" editor="!ui-fileuploadview type:text"
-			renderer="!ui-label"
+			dataType="blob" inputType="file"
+			editor="!ui-fileuploadview type:text" renderer="!ui-label"
 			stretch="false" />
 		<widgetType name="picture"
 			description="$m{application.widgettype.picture}" dataType="blob"
@@ -511,8 +507,9 @@
 			description="$m{application.appentity.reference}" entity="appEntity"
 			searchField="description" />
 		<reference name="appEntityLoadingRef"
-			description="$m{application.appentity.loading.reference}" entity="appEntity"
-			searchField="description" filterGenerator="entityloading-filtergenerator"/>
+			description="$m{application.appentity.loading.reference}"
+			entity="appEntity" searchField="description"
+			filterGenerator="entityloading-filtergenerator" />
 		<reference name="appEntityFieldRef"
 			description="$m{application.appentityfield.reference}"
 			entity="appEntityField" searchField="description" />
@@ -541,8 +538,8 @@
 			description="$m{application.appfilter.reference}" entity="appFilter"
 			searchField="description" />
 		<reference name="appSearchInputRef"
-			description="$m{application.appsearchinput.reference}" entity="appSearchInput"
-			searchField="description" />
+			description="$m{application.appsearchinput.reference}"
+			entity="appSearchInput" searchField="description" />
 		<reference name="appFieldSequenceRef"
 			description="$m{application.appfieldsequence.reference}"
 			entity="appFieldSequence" searchField="description" />
@@ -631,7 +628,8 @@
 			<field name="menuAccess"
 				label="$m{application.appapplet.menuaccess}" type="boolean" />
 			<field name="allowSecondaryTenants"
-				label="$m{application.application.allowsecondarytenants}" type="boolean" />
+				label="$m{application.application.allowsecondarytenants}"
+				type="boolean" />
 			<field name="moduleName"
 				label="$m{application.application.modulename}" type="list_only"
 				key="moduleId" property="name" />
@@ -693,7 +691,8 @@
 			<field name="menuAccess"
 				label="$m{application.appapplet.menuaccess}" type="boolean" />
 			<field name="allowSecondaryTenants"
-				label="$m{application.appapplet.allowsecondarytenants}" type="boolean" />
+				label="$m{application.appapplet.allowsecondarytenants}"
+				type="boolean" />
 			<field name="displayIndex"
 				label="$m{application.appapplet.displayindex}" type="integer" />
 			<field name="workflowVersionNo"
@@ -714,13 +713,14 @@
 				label="$m{application.appapplet.alerts}" type="child_list"
 				references="appAppletAlertRef" />
 			<uniqueConstraint name="nameUc"
-				description="$m{application.appapplet.uc.name}" fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				description="$m{application.appapplet.uc.name}"
+				fieldList="applicationId,name">
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appapplet.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="appAppletProp"
@@ -738,11 +738,11 @@
 				label="$m{application.appappletprop.appletname}" type="list_only"
 				key="appAppletId" property="name" />
 			<field name="applicationName"
-				label="$m{application.appappletprop.applicationname}" type="list_only"
-				key="appAppletId" property="applicationName" />
+				label="$m{application.appappletprop.applicationname}"
+				type="list_only" key="appAppletId" property="applicationName" />
 			<field name="applicationDesc"
-				label="$m{application.appappletprop.applicationdesc}" type="list_only"
-				key="appAppletId" property="applicationDesc" />
+				label="$m{application.appappletprop.applicationdesc}"
+				type="list_only" key="appAppletId" property="applicationDesc" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appappletprop.uc.name}"
 				fieldList="appAppletId,name" />
@@ -774,11 +774,11 @@
 			<field name="quickFilter"
 				label="$m{application.appappletfilter.quickfilter}" type="boolean" />
 			<field name="filterGenerator"
-				label="$m{application.appappletfilter.filtergenerator}" type="string"
-				nullable="true" />
+				label="$m{application.appappletfilter.filtergenerator}"
+				type="string" nullable="true" />
 			<field name="filterGeneratorRule"
-				label="$m{application.appappletfilter.filtergeneratorrule}" type="string"
-				nullable="true" />
+				label="$m{application.appappletfilter.filtergeneratorrule}"
+				type="string" nullable="true" />
 			<field name="ownershipTypeDesc"
 				label="$m{application.appappletfilter.ownershiptypedesc}"
 				type="list_only" key="ownershipType" property="description" />
@@ -804,7 +804,7 @@
 				references="appAppletRef" inputWidget="application.entitylist" />
 			<field name="valueGenerator"
 				label="$m{application.appappletsetvalues.valuegenerator}"
-				type="string" nullable = "true" />
+				type="string" nullable="true" />
 			<field name="setValues"
 				label="$m{application.appappletsetvalues.setvalue}" type="child"
 				category="applet" references="appSetValuesRef" />
@@ -826,16 +826,21 @@
 				type="enum_ref" references="wfalerttypelist"
 				inputWidget="application.enumlist" />
 			<field name="sender"
-				label="$m{application.appappletalert.sender}"
-				type="string"/>
+				label="$m{application.appappletalert.sender}" type="string" />
 			<field name="alertHeldBy"
-				label="$m{application.appappletalert.alertheldby}"
-				type="boolean"/>
+				label="$m{application.appappletalert.alertheldby}" type="boolean" />
 			<field name="alertWorkflowRoles"
 				label="$m{application.appappletalert.alertworkflowroles}"
-				type="boolean"/>
-			<field name="typeDesc" label="$m{application.appappletalert.typedesc}"
-				type="list_only" key="type" property="description" />
+				type="boolean" />
+			<field name="typeDesc"
+				label="$m{application.appappletalert.typedesc}" type="list_only"
+				key="type" property="description" />
+			<field name="applicationName"
+				label="$m{application.appappletalert.applicationname}"
+				type="list_only" key="appAppletId" property="applicationName" />
+			<field name="appletName"
+				label="$m{application.appappletalert.appletname}" type="list_only"
+				key="appAppletId" property="name" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appappletalert.uc.name}"
 				fieldList="appAppletId,name" />
@@ -850,16 +855,16 @@
 			<field name="baseType"
 				label="$m{application.appentity.basetype}" type="enum_ref"
 				references="entitybasetypelist" inputWidget="application.enumlist" />
-			<field name="label"  maxLen="128" 
+			<field name="label" maxLen="128"
 				label="$m{application.appentity.labelfield}" type="string" />
 			<field name="entityClass"
 				label="$m{application.appentity.entityclass}" type="string" />
-			<field name="tableName"  maxLen="64" 
+			<field name="tableName" maxLen="64"
 				label="$m{application.appentity.tablename}" type="string" />
-			<field name="emailProducerConsumer"  maxLen="64" 
+			<field name="emailProducerConsumer" maxLen="64"
 				label="$m{application.appentity.emailproducerconsumer}"
 				type="string" nullable="true" />
-			<field name="delegate"  maxLen="64" 
+			<field name="delegate" maxLen="64"
 				label="$m{application.appentity.delegate}" type="string"
 				nullable="true" />
 			<field name="auditable"
@@ -896,12 +901,12 @@
 			<uniqueConstraint name="descUc"
 				description="$m{application.appentity.uc.description}"
 				fieldList="description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="tableNameUc"
 				description="$m{application.appentity.uc.tablename}"
 				fieldList="tableName">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="appEntityField"
@@ -934,7 +939,8 @@
 				label="$m{application.appentityfield.property}" type="string"
 				nullable="true" />
 			<field name="inputLabel"
-				label="$m{application.appentityfield.inputlabel}" type="string" nullable="true"/>
+				label="$m{application.appentityfield.inputlabel}" type="string"
+				nullable="true" />
 			<field name="inputWidget"
 				label="$m{application.appentityfield.inputwidget}" type="string"
 				nullable="true" />
@@ -1070,8 +1076,8 @@
 				label="$m{application.appentitysearchinput.appentityid}" type="ref"
 				references="appEntityRef" inputWidget="application.entitylist" />
 			<field name="searchInput"
-				label="$m{application.appentitysearchinput.searchinput}" type="child"
-				category="table" references="appSearchInputRef" />
+				label="$m{application.appentitysearchinput.searchinput}"
+				type="child" category="table" references="appSearchInputRef" />
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appentitysearchinput.uc.name}"
 				fieldList="appEntityId,name" />
@@ -1107,12 +1113,12 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appref.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appref.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="appFilter"
@@ -1136,10 +1142,12 @@
 			<field name="entityInstId"
 				label="$m{application.appsearchinput.entityinstid}"
 				type="foster_parent_id" />
-			<field name="entity" label="$m{application.appsearchinput.entity}"
+			<field name="entity"
+				label="$m{application.appsearchinput.entity}"
 				type="foster_parent_type" />
 			<field name="category"
-				label="$m{application.appsearchinput.category}" type="category_column" />
+				label="$m{application.appsearchinput.category}"
+				type="category_column" />
 			<field name="definition"
 				label="$m{application.appsearchinput.definition}" type="string" />
 		</entity>
@@ -1197,10 +1205,12 @@
 				type="string" />
 			<field name="label" label="$m{application.apptable.label}"
 				type="string" />
-			<field name="detailsPanelName" label="$m{application.apptable.detailspanelname}"
-				type="string" nullable="true" />
-			<field name="loadingSearchInput" label="$m{application.apptable.loadingsearchinput}"
-				type="string" maxLen="64" nullable = "true"/>
+			<field name="detailsPanelName"
+				label="$m{application.apptable.detailspanelname}" type="string"
+				nullable="true" />
+			<field name="loadingSearchInput"
+				label="$m{application.apptable.loadingsearchinput}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="sortable"
 				label="$m{application.apptable.sortable}" type="boolean" />
 			<field name="serialNo"
@@ -1228,7 +1238,8 @@
 			<field name="itemsPerPage"
 				label="$m{application.apptable.itemsperpage}" type="integer" />
 			<field name="summaryTitleColumns"
-				label="$m{application.apptable.summarytitlecolumns}" type="integer" precision="2" />
+				label="$m{application.apptable.summarytitlecolumns}" type="integer"
+				precision="2" />
 			<field name="columnList"
 				label="$m{application.apptable.columns}" type="child_list"
 				references="appTableColumnRef" />
@@ -1244,12 +1255,12 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{application.apptable.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.apptable.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="appTableColumn"
@@ -1338,8 +1349,8 @@
 				label="$m{application.apptablefilter.filtergenerator}" type="string"
 				nullable="true" />
 			<field name="filterGeneratorRule"
-				label="$m{application.apptablefilter.filtergeneratorrule}" type="string"
-				nullable="true" />
+				label="$m{application.apptablefilter.filtergeneratorrule}"
+				type="string" nullable="true" />
 			<field name="filter"
 				label="$m{application.apptablefilter.filter}" type="child"
 				category="table" references="appFilterRef" />
@@ -1411,12 +1422,12 @@
 			<uniqueConstraint name="nameUc"
 				description="$m{application.appform.uc.name}"
 				fieldList="applicationId,name">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 			<uniqueConstraint name="descUc"
 				description="$m{application.appform.uc.description}"
 				fieldList="applicationId,description">
-				<condition field="devVersionType" value="CRN"/>
+				<condition field="devVersionType" value="CRN" />
 			</uniqueConstraint>
 		</entity>
 		<entity name="appFormFilter"
@@ -1430,8 +1441,8 @@
 				label="$m{application.appformfilter.filtergenerator}" type="string"
 				nullable="true" />
 			<field name="filterGeneratorRule"
-				label="$m{application.appformfilter.filtergeneratorrule}" type="string"
-				nullable="true" />
+				label="$m{application.appformfilter.filtergeneratorrule}"
+				type="string" nullable="true" />
 			<field name="filter"
 				label="$m{application.appformfilter.filter}" type="child"
 				category="form" references="appFilterRef" />
@@ -1622,7 +1633,7 @@
 				inputWidget="application.enumlist" />
 			<field name="valueGenerator"
 				label="$m{application.appformstatepolicy.valuegenerator}"
-				type="string" nullable = "true" />
+				type="string" nullable="true" />
 			<field name="trigger"
 				label="$m{application.appformstatepolicy.trigger}" type="string" />
 			<field name="onCondition"

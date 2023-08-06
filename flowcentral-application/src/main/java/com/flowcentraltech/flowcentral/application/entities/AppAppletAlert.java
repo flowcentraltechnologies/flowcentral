@@ -16,7 +16,6 @@
 package com.flowcentraltech.flowcentral.application.entities;
 
 import com.flowcentraltech.flowcentral.common.entities.BaseConfigNamedEntity;
-import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.tcdng.unify.core.annotation.Column;
 import com.tcdng.unify.core.annotation.ForeignKey;
 import com.tcdng.unify.core.annotation.ListOnly;
@@ -36,20 +35,14 @@ public class AppAppletAlert extends BaseConfigNamedEntity {
     @ForeignKey(AppApplet.class)
     private Long appAppletId;
 
-    @ForeignKey(name = "ALERT_TY")
-    private WorkflowAlertType type;
-
     @Column(length = 64)
     private String sender;
 
-    @Column
-    private boolean alertHeldBy;
+    @ListOnly(key = "appAppletId", property = "applicationName")
+    private String applicationName;
 
-    @Column
-    private boolean alertWorkflowRoles;
-
-    @ListOnly(key = "type", property = "description")
-    private String typeDesc;
+    @ListOnly(key = "appAppletId", property = "name")
+    private String appletName;
 
     public Long getAppAppletId() {
         return appAppletId;
@@ -57,14 +50,6 @@ public class AppAppletAlert extends BaseConfigNamedEntity {
 
     public void setAppAppletId(Long appAppletId) {
         this.appAppletId = appAppletId;
-    }
-
-    public WorkflowAlertType getType() {
-        return type;
-    }
-
-    public void setType(WorkflowAlertType type) {
-        this.type = type;
     }
 
     public String getSender() {
@@ -75,28 +60,20 @@ public class AppAppletAlert extends BaseConfigNamedEntity {
         this.sender = sender;
     }
 
-    public boolean isAlertHeldBy() {
-        return alertHeldBy;
+    public String getApplicationName() {
+        return applicationName;
     }
 
-    public void setAlertHeldBy(boolean alertHeldBy) {
-        this.alertHeldBy = alertHeldBy;
+    public void setApplicationName(String applicationName) {
+        this.applicationName = applicationName;
     }
 
-    public boolean isAlertWorkflowRoles() {
-        return alertWorkflowRoles;
+    public String getAppletName() {
+        return appletName;
     }
 
-    public void setAlertWorkflowRoles(boolean alertWorkflowRoles) {
-        this.alertWorkflowRoles = alertWorkflowRoles;
-    }
-
-    public String getTypeDesc() {
-        return typeDesc;
-    }
-
-    public void setTypeDesc(String typeDesc) {
-        this.typeDesc = typeDesc;
+    public void setAppletName(String appletName) {
+        this.appletName = appletName;
     }
 
 }

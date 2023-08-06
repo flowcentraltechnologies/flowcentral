@@ -22,13 +22,13 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.configuration.constants.HighlightType;
 import com.flowcentraltech.flowcentral.configuration.constants.RecordActionType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepPriority;
 import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
-import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStep;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepAlert;
 import com.flowcentraltech.flowcentral.workflow.entities.WfStepUserAction;
@@ -48,15 +48,15 @@ public final class WorkflowDesignUtils {
                 "",
                 ""),
         WORKFLOW_COPY_CREATE(
-                "notifyRoleOnDraft",
+                "draftApproval",
                 " Create (Workflow Copy)",
                 " Create"),
         WORKFLOW_COPY_UPDATE(
-                "notifyRoleOnDraft",
+                "draftApproval",
                 " Update (Workflow Copy)",
                 " Update"),
         WORKFLOW_COPY_DELETE(
-                "notifyRoleOnDraft",
+                "draftApproval",
                 " Delete (Workflow Copy)",
                 " Delete");
 
@@ -82,6 +82,10 @@ public final class WorkflowDesignUtils {
 
         public String labelSuffix() {
             return labelSuffix;
+        }
+
+        public boolean isWorkflowCopy() {
+            return isWorkflowCopyCreate() || isWorkflowCopyUpdate() || isWorkflowCopyDelete();
         }
 
         public boolean isWorkflowCopyCreate() {
@@ -112,6 +116,7 @@ public final class WorkflowDesignUtils {
 
     public static List<WfStep> generateWorkflowSteps(final DesignType type, final String stepLabel,
             final AppletWorkflowCopyInfo appletWorkflowCopyInfo) {
+        final boolean isWorkflowCopy = type.isWorkflowCopy();
         List<WfStep> stepList = new ArrayList<WfStep>();
 
         // Add start step
@@ -146,27 +151,7 @@ public final class WorkflowDesignUtils {
         wfStep.setUserActionList(Arrays.asList(recoverUserAction));
         stepList.add(wfStep);
 
-        if (type.isWorkflowCopyCreate() || type.isWorkflowCopyUpdate() || type.isWorkflowCopyDelete()) {
-            // Add draft notification step
-            wfStep = new WfStep();
-            wfStep.setType(WorkflowStepType.NOTIFICATION);
-            wfStep.setPriority(WorkflowStepPriority.NORMAL);
-            wfStep.setName("notifyRoleOnDraft");
-            wfStep.setDescription("Notify Role on Draft");
-            wfStep.setLabel("Notify Role on Draft");
-            wfStep.setNextStepName("draftApproval");
-
-            WfStepAlert wfStepAlert = new WfStepAlert();
-            wfStepAlert.setType(WorkflowAlertType.PASS_THROUGH);
-            wfStepAlert.setName("draftAlert");
-            wfStepAlert.setDescription("Draft Alert");
-            wfStepAlert.setGenerator(type.isWorkflowCopyCreate()
-                    ? WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER
-                    : WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER);
-            wfStepAlert.setAlertWorkflowRoles(true);
-            wfStep.setAlertList(Arrays.asList(wfStepAlert));
-            stepList.add(wfStep);
-
+        if (isWorkflowCopy) {
             // Add draft approval step in read-only mode
             wfStep = new WfStep();
             wfStep.setType(WorkflowStepType.USER_ACTION);
@@ -177,17 +162,39 @@ public final class WorkflowDesignUtils {
             wfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
             wfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
 
+            final String onStartAlert = type.isWorkflowCopyCreate() ? appletWorkflowCopyInfo.getOnCreateAlertName()
+                    : (type.isWorkflowCopyUpdate() ? appletWorkflowCopyInfo.getOnUpdateAlertName() : null);
+            final String onApprovalAlert = type.isWorkflowCopyCreate()
+                    ? appletWorkflowCopyInfo.getOnCreateApprovalAlertName()
+                    : (type.isWorkflowCopyUpdate() ? appletWorkflowCopyInfo.getOnUpdateApprovalAlertName() : null);
+            final String onRejectionAlert = type.isWorkflowCopyCreate()
+                    ? appletWorkflowCopyInfo.getOnCreateRejectionAlertName()
+                    : (type.isWorkflowCopyUpdate() ? appletWorkflowCopyInfo.getOnUpdateRejectionAlertName() : null);
+            if (appletWorkflowCopyInfo.isWithAlert(onStartAlert)) {
+                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.USER_INTERACT,
+                        appletWorkflowCopyInfo.getAppAppletAlert(onStartAlert));
+                wfStep.setAlertList(Arrays.asList(wfStepAlert));
+            }
+
+            final boolean isApprovalAlert = appletWorkflowCopyInfo.isWithAlert(onApprovalAlert);
+            final boolean isRejectAlert = appletWorkflowCopyInfo.isWithAlert(onRejectionAlert);
+
             WfStepUserAction approveUserAction = new WfStepUserAction();
             approveUserAction.setName("approve");
             approveUserAction.setDescription("Approve Draft");
             approveUserAction.setLabel("Approve");
             approveUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             approveUserAction.setHighlightType(HighlightType.GREEN);
-            approveUserAction.setNextStepName(type.isWorkflowCopyCreate() ? "end"
-                    : (type.isWorkflowCopyUpdate() ? "updateOriginal" : "deleteOriginal"));
-            approveUserAction.setAppletSetValuesName(type.isWorkflowCopyCreate()
-                    ? appletWorkflowCopyInfo.getCreateApprovalSetValuesName()
-                    : (type.isWorkflowCopyUpdate() ? appletWorkflowCopyInfo.getUpdateApprovalSetValuesName() : null));
+            if (type.isWorkflowCopyCreate()) {
+                approveUserAction.setNextStepName(isApprovalAlert ? "approvalNotif" : "end");
+                approveUserAction.setAppletSetValuesName(appletWorkflowCopyInfo.getCreateApprovalSetValuesName());
+            } else if (type.isWorkflowCopyUpdate()) {
+                approveUserAction.setNextStepName(isApprovalAlert ? "approvalNotif" : "updateOriginal");
+                approveUserAction.setAppletSetValuesName(appletWorkflowCopyInfo.getUpdateApprovalSetValuesName());
+            } else {
+                approveUserAction.setNextStepName(isApprovalAlert ? "approvalNotif" : "deleteOriginal");
+                approveUserAction.setAppletSetValuesName(null); // TODO
+            }
 
             WfStepUserAction rejectUserAction = new WfStepUserAction();
             rejectUserAction.setName("reject");
@@ -195,12 +202,62 @@ public final class WorkflowDesignUtils {
             rejectUserAction.setLabel("Reject");
             rejectUserAction.setCommentRequirement(RequirementType.OPTIONAL);
             rejectUserAction.setHighlightType(HighlightType.RED);
-            rejectUserAction.setNextStepName(
-                    type.isWorkflowCopyCreate() ? "deleteDraft" : (type.isWorkflowCopyUpdate() ? "end" : "end"));
+            if (type.isWorkflowCopyCreate()) {
+                approveUserAction.setNextStepName(isRejectAlert ? "rejectNotif" : "deleteDraft");
+            } else if (type.isWorkflowCopyUpdate()) {
+                approveUserAction.setNextStepName(isRejectAlert ? "rejectNotif" : "end");
+            } else {
+                approveUserAction.setNextStepName(isRejectAlert ? "rejectNotif" : "end");
+            }
 
             wfStep.setUserActionList(Arrays.asList(approveUserAction, rejectUserAction));
             stepList.add(wfStep);
 
+            // Add approval notification step
+            if (isApprovalAlert) {
+                wfStep = new WfStep();
+                wfStep.setType(WorkflowStepType.NOTIFICATION);
+                wfStep.setPriority(WorkflowStepPriority.NORMAL);
+                wfStep.setName("approvalNotif");
+                wfStep.setDescription("Approval Notification");
+                wfStep.setLabel("Approval Notification");
+                if (type.isWorkflowCopyCreate()) {
+                    wfStep.setNextStepName("end");
+                } else if (type.isWorkflowCopyUpdate()) {
+                    wfStep.setNextStepName("updateOriginal");
+                } else {
+                    wfStep.setNextStepName("deleteOriginal");
+                }
+
+                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.PASS_THROUGH,
+                        appletWorkflowCopyInfo.getAppAppletAlert(onApprovalAlert));
+                wfStep.setAlertList(Arrays.asList(wfStepAlert));
+                stepList.add(wfStep);
+            }
+
+            // Add rejection notification step
+            if (isRejectAlert) {
+                wfStep = new WfStep();
+                wfStep.setType(WorkflowStepType.NOTIFICATION);
+                wfStep.setPriority(WorkflowStepPriority.NORMAL);
+                wfStep.setName("rejectNotif");
+                wfStep.setDescription("Rejection Notification");
+                wfStep.setLabel("Rejection Notification");
+                if (type.isWorkflowCopyCreate()) {
+                    wfStep.setNextStepName("deleteDraft");
+                } else if (type.isWorkflowCopyUpdate()) {
+                    wfStep.setNextStepName("end");
+                } else {
+                    wfStep.setNextStepName("end");
+                }
+
+                WfStepAlert wfStepAlert = createWfStepAlert(WorkflowAlertType.PASS_THROUGH,
+                        appletWorkflowCopyInfo.getAppAppletAlert(onRejectionAlert));
+                wfStep.setAlertList(Arrays.asList(wfStepAlert));
+                stepList.add(wfStep);
+            }
+
+            // Add actual action step
             if (type.isWorkflowCopyCreate()) {
                 // Add delete draft step
                 wfStep = new WfStep();
@@ -212,19 +269,7 @@ public final class WorkflowDesignUtils {
                 wfStep.setLabel("Delete Draft");
                 wfStep.setNextStepName("end");
                 stepList.add(wfStep);
-            }
-            if (type.isWorkflowCopyDelete()) {
-                // Add delete original step
-                wfStep = new WfStep();
-                wfStep.setType(WorkflowStepType.RECORD_ACTION);
-                wfStep.setRecordActionType(RecordActionType.DELETE);
-                wfStep.setPriority(WorkflowStepPriority.NORMAL);
-                wfStep.setName("deleteOriginal");
-                wfStep.setDescription("Delete Original");
-                wfStep.setLabel("Delete Original");
-                wfStep.setNextStepName("end");
-                stepList.add(wfStep);
-            } else {
+            } else if (type.isWorkflowCopyUpdate()) {
                 // Add update original step
                 wfStep = new WfStep();
                 wfStep.setType(WorkflowStepType.RECORD_ACTION);
@@ -233,6 +278,17 @@ public final class WorkflowDesignUtils {
                 wfStep.setName("updateOriginal");
                 wfStep.setDescription("Update Original");
                 wfStep.setLabel("Update Original");
+                wfStep.setNextStepName("end");
+                stepList.add(wfStep);
+            } else {
+                // Add delete original step
+                wfStep = new WfStep();
+                wfStep.setType(WorkflowStepType.RECORD_ACTION);
+                wfStep.setRecordActionType(RecordActionType.DELETE);
+                wfStep.setPriority(WorkflowStepPriority.NORMAL);
+                wfStep.setName("deleteOriginal");
+                wfStep.setDescription("Delete Original");
+                wfStep.setLabel("Delete Original");
                 wfStep.setNextStepName("end");
                 stepList.add(wfStep);
             }
@@ -250,6 +306,16 @@ public final class WorkflowDesignUtils {
         recoverUserAction.setCommentRequirement(RequirementType.NONE);
         recoverUserAction.setHighlightType(HighlightType.ORANGE);
         return recoverUserAction;
+    }
+
+    private static WfStepAlert createWfStepAlert(WorkflowAlertType type, AppAppletAlert appAppletAlert) {
+        WfStepAlert wfStepAlert = new WfStepAlert();
+        wfStepAlert.setType(type);
+        wfStepAlert.setName("draftAlert");
+        wfStepAlert.setDescription("Draft Alert");
+        wfStepAlert.setGenerator(appAppletAlert.getSender());
+        wfStepAlert.setAlertWorkflowRoles(true);
+        return wfStepAlert;
     }
 
 }

@@ -269,12 +269,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                     List<AppletAlertConfig> alertList = new ArrayList<AppletAlertConfig>();
                     for (AppAppletAlert appAppletAlert : appApplet.getAlertList()) {
                         AppletAlertConfig appletAlertConfig = new AppletAlertConfig();
-                        appletAlertConfig.setType(appAppletAlert.getType());
                         appletAlertConfig.setName(appAppletAlert.getName());
                         appletAlertConfig.setDescription(appAppletAlert.getDescription());
                         appletAlertConfig.setSender(appAppletAlert.getSender());
-                        appletAlertConfig.setAlertHeldBy(appAppletAlert.isAlertHeldBy());
-                        appletAlertConfig.setAlertWorkflowRoles(appAppletAlert.isAlertWorkflowRoles());
                         alertList.add(appletAlertConfig);
                     }
 

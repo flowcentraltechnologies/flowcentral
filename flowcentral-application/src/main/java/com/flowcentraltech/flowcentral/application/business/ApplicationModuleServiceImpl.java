@@ -1665,17 +1665,49 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
         final long appletVersionNo = environment().value(long.class, "versionNo",
                 new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
+
         final String createApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES));
+
         final String updateApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
+
         final String appletSearchTable = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.SEARCH_TABLE));
+
+        final String onCreateAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_ALERT));
+
+        final String onUpdateAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ALERT));
+
+        final String onCreateApprovalAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_ALERT));
+
+        final String onUpdateApprovalAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_ALERT));
+
+        final String onCreateRejectionAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_REJECTION_ALERT));
+
+        final String onUpdateRejectionAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_REJECTION_ALERT));
+        
+        final Map<String, AppAppletAlert> map = environment().findAllMap(String.class, "name",
+                        new AppAppletAlertQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName()));
+
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
-                appletSearchTable, appletVersionNo);
+                appletSearchTable, onCreateAlertName, onUpdateAlertName, onCreateApprovalAlertName,
+                onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName, appletVersionNo, map);
     }
 
     @Override
@@ -4464,8 +4496,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     valuesList.add(appAppletSetValues);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletSetValues)) {
-                        oldAppAppletSetValues
-                                .setDescription(resolveApplicationMessage(description));
+                        oldAppAppletSetValues.setDescription(resolveApplicationMessage(description));
                         oldAppAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
                         oldAppAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
                     } else {
@@ -4490,31 +4521,25 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 AppAppletAlert oldAppAppletAlert = map.get(alertConfig.getName());
                 if (oldAppAppletAlert == null) {
                     AppAppletAlert appAppletAlert = new AppAppletAlert();
-                    appAppletAlert.setType(alertConfig.getType());
                     appAppletAlert.setName(alertConfig.getName());
                     appAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
                     appAppletAlert.setSender(alertConfig.getSender());
-                    appAppletAlert.setAlertHeldBy(alertConfig.getAlertHeldBy());
-                    appAppletAlert.setAlertWorkflowRoles(alertConfig.getAlertWorkflowRoles());
-                     appAppletAlert.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    appAppletAlert.setConfigType(ConfigType.MUTABLE_INSTALL);
                     alertList.add(appAppletAlert);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletAlert)) {
-                        oldAppAppletAlert.setType(alertConfig.getType());
                         oldAppAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
                         oldAppAppletAlert.setSender(alertConfig.getSender());
-                        oldAppAppletAlert.setAlertHeldBy(alertConfig.getAlertHeldBy());
-                        oldAppAppletAlert.setAlertWorkflowRoles(alertConfig.getAlertWorkflowRoles());
-                    } 
-                    
+                    }
+
                     alertList.add(oldAppAppletAlert);
                 }
 
             }
-       }
-        
+        }
+
         appApplet.setAlertList(alertList);
-        
+
         List<AppAppletFilter> filterList = null;
         if (!DataUtils.isBlank(appletConfig.getFilterList())) {
             filterList = new ArrayList<AppAppletFilter>();

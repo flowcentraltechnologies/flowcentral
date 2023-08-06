@@ -16,10 +16,6 @@
 package com.flowcentraltech.flowcentral.configuration.xml;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-import com.flowcentraltech.flowcentral.configuration.constants.WorkflowAlertType;
-import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowStepTypeXmlAdapter;
 
 /**
  * Applet alert configuration.
@@ -29,23 +25,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.adapter.WorkflowStepTyp
  */
 public class AppletAlertConfig extends BaseNameConfig {
 
-    private WorkflowAlertType type;
-
     private String sender;
-
-    private boolean alertHeldBy;
-
-    private boolean alertWorkflowRoles;
-
-    public WorkflowAlertType getType() {
-        return type;
-    }
-
-    @XmlJavaTypeAdapter(WorkflowStepTypeXmlAdapter.class)
-    @XmlAttribute(required = true)
-    public void setType(WorkflowAlertType type) {
-        this.type = type;
-    }
 
     public String getSender() {
         return sender;
@@ -54,24 +34,6 @@ public class AppletAlertConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setSender(String sender) {
         this.sender = sender;
-    }
-
-    public boolean getAlertHeldBy() {
-        return alertHeldBy;
-    }
-
-    @XmlAttribute
-    public void setAlertHeldBy(boolean alertHeldBy) {
-        this.alertHeldBy = alertHeldBy;
-    }
-
-    public boolean getAlertWorkflowRoles() {
-        return alertWorkflowRoles;
-    }
-
-    @XmlAttribute
-    public void setAlertWorkflowRoles(boolean alertWorkflowRoles) {
-        this.alertWorkflowRoles = alertWorkflowRoles;
     }
 
 }
