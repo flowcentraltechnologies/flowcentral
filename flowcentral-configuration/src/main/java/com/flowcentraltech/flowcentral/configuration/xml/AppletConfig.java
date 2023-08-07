@@ -63,6 +63,8 @@ public class AppletConfig extends BaseNameConfig {
 
     private List<AppletSetValuesConfig> valuesList;
     
+    private List<AppletAlertConfig> alertList;
+    
     public AppletConfig() {
         this.menuAccess = Boolean.FALSE;
         this.allowSecondaryTenants = Boolean.FALSE;;
@@ -204,6 +206,15 @@ public class AppletConfig extends BaseNameConfig {
     @XmlElement(name = "values")
     public void setValuesList(List<AppletSetValuesConfig> valuesList) {
         this.valuesList = valuesList;
+    }
+
+    public List<AppletAlertConfig> getAlertList() {
+        return alertList;
+    }
+
+    @XmlElement(name = "alerts")
+    public void setAlertList(List<AppletAlertConfig> alertList) {
+        this.alertList = alertList;
     }
 
 }

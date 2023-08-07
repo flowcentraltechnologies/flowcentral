@@ -85,6 +85,8 @@ import com.flowcentraltech.flowcentral.application.data.WidgetRuleEntryDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetRulesDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
+import com.flowcentraltech.flowcentral.application.entities.AppAppletAlertQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilter;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletFilterQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
@@ -227,6 +229,7 @@ import com.flowcentraltech.flowcentral.configuration.xml.AppConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppEntityConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppFormConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppTableConfig;
+import com.flowcentraltech.flowcentral.configuration.xml.AppletAlertConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletFilterConfig;
 import com.flowcentraltech.flowcentral.configuration.xml.AppletPropConfig;
@@ -1662,17 +1665,49 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(appletName);
         final long appletVersionNo = environment().value(long.class, "versionNo",
                 new AppAppletQuery().applicationName(np.getApplicationName()).name(np.getEntityName()));
+
         final String createApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_SETVALUES));
+
         final String updateApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
+
         final String appletSearchTable = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.SEARCH_TABLE));
+
+        final String onCreateAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_ALERT));
+
+        final String onUpdateAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ALERT));
+
+        final String onCreateApprovalAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_APPROVAL_ALERT));
+
+        final String onUpdateApprovalAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_ALERT));
+
+        final String onCreateRejectionAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_REJECTION_ALERT));
+
+        final String onUpdateRejectionAlertName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_REJECTION_ALERT));
+        
+        final Map<String, AppAppletAlert> map = environment().findAllMap(String.class, "name",
+                        new AppAppletAlertQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName()));
+
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
-                appletSearchTable, appletVersionNo);
+                appletSearchTable, onCreateAlertName, onUpdateAlertName, onCreateApprovalAlertName,
+                onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName, appletVersionNo, map);
     }
 
     @Override
@@ -1703,6 +1738,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<AppAppletSetValues> findAppAppletSetValues(Long appAppletId) throws UnifyException {
         return environment().findAll(new AppAppletSetValuesQuery().appAppletId(appAppletId));
+    }
+
+    @Override
+    public List<AppAppletAlert> findAppAppletAlerts(Long appAppletId) throws UnifyException {
+        return environment().findAll(new AppAppletAlertQuery().appAppletId(appAppletId));
     }
 
     @Override
@@ -4456,8 +4496,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     valuesList.add(appAppletSetValues);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletSetValues)) {
-                        oldAppAppletSetValues
-                                .setDescription(resolveApplicationMessage(description));
+                        oldAppAppletSetValues.setDescription(resolveApplicationMessage(description));
                         oldAppAppletSetValues.setValueGenerator(appletSetValuesConfig.getValueGenerator());
                         oldAppAppletSetValues.setSetValues(newAppSetValues(appletSetValuesConfig.getSetValues()));
                     } else {
@@ -4471,6 +4510,35 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         appApplet.setSetValuesList(valuesList);
+
+        List<AppAppletAlert> alertList = null;
+        if (!DataUtils.isBlank(appletConfig.getAlertList())) {
+            alertList = new ArrayList<AppAppletAlert>();
+            Map<String, AppAppletAlert> map = appApplet.isIdBlank() ? Collections.emptyMap()
+                    : environment().findAllMap(String.class, "name",
+                            new AppAppletAlertQuery().appAppletId(appApplet.getId()));
+            for (AppletAlertConfig alertConfig : appletConfig.getAlertList()) {
+                AppAppletAlert oldAppAppletAlert = map.get(alertConfig.getName());
+                if (oldAppAppletAlert == null) {
+                    AppAppletAlert appAppletAlert = new AppAppletAlert();
+                    appAppletAlert.setName(alertConfig.getName());
+                    appAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
+                    appAppletAlert.setSender(alertConfig.getSender());
+                    appAppletAlert.setConfigType(ConfigType.MUTABLE_INSTALL);
+                    alertList.add(appAppletAlert);
+                } else {
+                    if (ConfigUtils.isSetInstall(oldAppAppletAlert)) {
+                        oldAppAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
+                        oldAppAppletAlert.setSender(alertConfig.getSender());
+                    }
+
+                    alertList.add(oldAppAppletAlert);
+                }
+
+            }
+        }
+
+        appApplet.setAlertList(alertList);
 
         List<AppAppletFilter> filterList = null;
         if (!DataUtils.isBlank(appletConfig.getFilterList())) {

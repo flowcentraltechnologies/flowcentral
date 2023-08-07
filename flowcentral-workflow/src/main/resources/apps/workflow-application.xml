@@ -67,7 +67,7 @@
 			description="$m{workflow.workflowchannel.manage}"
 			label="$m{workflow.workflowchannel.manage.label}"
 			icon="project-diagram" type="manage_entitylist"
-			entity="workflowChannel" menuAccess="true">
+			entity="workflowChannel" menuAccess="false">
 			<property name="searchTable" value="workflowChannelTable" />
 			<property name="searchTable.new" value="true" />
 			<property name="searchTable.report" value="true" />
@@ -89,7 +89,7 @@
 		<applet name="workflowItem"
 			description="$m{workflow.wfitem.manage}"
 			label="$m{workflow.wfitem.manage.label}" icon="list"
-			type="manage_entitylist" entity="wfItem" menuAccess="true">
+			type="manage_entitylist" entity="wfItem" menuAccess="false">
 			<property name="searchTable" value="wfItemTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="true" />
@@ -658,15 +658,15 @@
 			description="$m{workflow.workflow.table}"
 			label="$m{workflow.workflow.table.label}" entity="workflow"
 			itemsPerPage="20" serialNo="true">
+			<column field="description" renderWidget="application.text"
+				widthRatio="2" linkAct="maintainAct" />
+			<column field="name" renderWidget="application.text"
+				widthRatio="2"/>
+			<column field="entity" renderWidget="application.text"
+				widthRatio="2" />
 			<column field="applicationDesc"
 				renderWidget="application.text"
 				label="$m{workflow.workflow.application}" widthRatio="2" />
-			<column field="name" renderWidget="application.text"
-				widthRatio="2" linkAct="maintainAct" />
-			<column field="description" renderWidget="application.text"
-				widthRatio="2" linkAct="maintainAct" />
-			<column field="entity" renderWidget="application.text"
-				widthRatio="2" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"

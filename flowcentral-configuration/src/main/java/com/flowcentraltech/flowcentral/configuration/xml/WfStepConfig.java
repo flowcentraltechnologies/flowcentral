@@ -317,14 +317,4 @@ public class WfStepConfig extends BaseNameConfig {
         this.wfAlertsConfig = wfAlertsConfig;
     }
 
-    @Override
-    public String toString() {
-        return "WfStepConfig [type=" + type + ", priority=" + priority + ", actionType=" + actionType + ", label="
-                + getLabel() + ", appletName=" + appletName + ", nextStepName=" + nextStepName + ", policy=" + policy
-                + ", rule=" + rule + ", criticalMinutes=" + criticalMinutes + ", expiryMinutes=" + expiryMinutes
-                + ", audit=" + audit + ", branchOnly=" + branchOnly + ", includeForwarder=" + includeForwarder
-                + ", setValuesConfig=" + setValuesConfig + ", wfRoutingsConfig=" + wfRoutingsConfig
-                + ", wfUserActionsConfig=" + wfUserActionsConfig + ", wfAlertsConfig=" + wfAlertsConfig + "]";
-    }
-
 }

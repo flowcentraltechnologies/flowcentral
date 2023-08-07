@@ -15,6 +15,11 @@
  */
 package com.flowcentraltech.flowcentral.application.data;
 
+import java.util.Map;
+
+import com.flowcentraltech.flowcentral.application.entities.AppAppletAlert;
+import com.tcdng.unify.core.util.DataUtils;
+
 /**
  * Applet workflow copy information.
  * 
@@ -31,15 +36,39 @@ public class AppletWorkflowCopyInfo {
 
     private String appletSearchTable;
 
+    private String onCreateAlertName;
+
+    private String onUpdateAlertName;
+
+    private String onCreateApprovalAlertName;
+
+    private String onUpdateApprovalAlertName;
+
+    private String onCreateRejectionAlertName;
+
+    private String onUpdateRejectionAlertName;
+
     private long appletVersionNo;
 
+    private Map<String, AppAppletAlert> alerts;
+    
     public AppletWorkflowCopyInfo(String appletName, String createApprovalSetValuesName,
-            String updateApprovalSetValuesName, String appletSearchTable, long appletVersionNo) {
+            String updateApprovalSetValuesName, String appletSearchTable, String onCreateAlertName,
+            String onUpdateAlertName, String onCreateApprovalAlertName, String onUpdateApprovalAlertName,
+            String onCreateRejectionAlertName, String onUpdateRejectionAlertName, long appletVersionNo,
+            Map<String, AppAppletAlert> alerts) {
         this.appletName = appletName;
         this.createApprovalSetValuesName = createApprovalSetValuesName;
         this.updateApprovalSetValuesName = updateApprovalSetValuesName;
         this.appletSearchTable = appletSearchTable;
+        this.onCreateAlertName = onCreateAlertName;
+        this.onUpdateAlertName = onUpdateAlertName;
+        this.onCreateApprovalAlertName = onCreateApprovalAlertName;
+        this.onUpdateApprovalAlertName = onUpdateApprovalAlertName;
+        this.onCreateRejectionAlertName = onCreateRejectionAlertName;
+        this.onUpdateRejectionAlertName = onUpdateRejectionAlertName;
         this.appletVersionNo = appletVersionNo;
+        this.alerts = DataUtils.unmodifiableMap(alerts);
     }
 
     public AppletWorkflowCopyInfo() {
@@ -62,7 +91,39 @@ public class AppletWorkflowCopyInfo {
         return appletSearchTable;
     }
 
+    public String getOnCreateAlertName() {
+        return onCreateAlertName;
+    }
+
+    public String getOnUpdateAlertName() {
+        return onUpdateAlertName;
+    }
+
+    public String getOnCreateApprovalAlertName() {
+        return onCreateApprovalAlertName;
+    }
+
+    public String getOnUpdateApprovalAlertName() {
+        return onUpdateApprovalAlertName;
+    }
+
+    public String getOnCreateRejectionAlertName() {
+        return onCreateRejectionAlertName;
+    }
+
+    public String getOnUpdateRejectionAlertName() {
+        return onUpdateRejectionAlertName;
+    }
+
     public long getAppletVersionNo() {
         return appletVersionNo;
+    }
+    
+    public AppAppletAlert getAppAppletAlert(String name) {
+        return alerts.get(name);
+    }
+    
+    public boolean isWithAlert(String name) {
+        return name != null && alerts.containsKey(name);
     }
 }

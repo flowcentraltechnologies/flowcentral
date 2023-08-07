@@ -87,6 +87,9 @@ public class AppApplet extends BaseApplicationEntity {
     @ChildList
     private List<AppAppletSetValues> setValuesList;
     
+    @ChildList
+    private List<AppAppletAlert> alertList;
+    
     public AppletType getType() {
         return type;
     }
@@ -229,6 +232,14 @@ public class AppApplet extends BaseApplicationEntity {
 
     public void setSetValuesList(List<AppAppletSetValues> setValuesList) {
         this.setValuesList = setValuesList;
+    }
+
+    public List<AppAppletAlert> getAlertList() {
+        return alertList;
+    }
+
+    public void setAlertList(List<AppAppletAlert> alertList) {
+        this.alertList = alertList;
     }
 
 }
