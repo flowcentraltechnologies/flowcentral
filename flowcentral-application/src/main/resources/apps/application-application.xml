@@ -822,19 +822,8 @@
 			<field name="appAppletId"
 				label="$m{application.appappletalert.appappletid}" type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
-			<field name="type" label="$m{application.appappletalert.type}"
-				type="enum_ref" references="wfalerttypelist"
-				inputWidget="application.enumlist" />
 			<field name="sender"
 				label="$m{application.appappletalert.sender}" type="string" />
-			<field name="alertHeldBy"
-				label="$m{application.appappletalert.alertheldby}" type="boolean" />
-			<field name="alertWorkflowRoles"
-				label="$m{application.appappletalert.alertworkflowroles}"
-				type="boolean" />
-			<field name="typeDesc"
-				label="$m{application.appappletalert.typedesc}" type="list_only"
-				key="type" property="description" />
 			<field name="applicationName"
 				label="$m{application.appappletalert.applicationname}"
 				type="list_only" key="appAppletId" property="applicationName" />

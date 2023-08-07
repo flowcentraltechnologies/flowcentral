@@ -1357,7 +1357,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1369,7 +1369,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 		</table>
 		<table name="appEntityUniqueConstraintTable"
 			description="$m{studio.appentityuniqueconstraint.table}"
@@ -1379,7 +1379,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 			<column field="fieldList" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1390,7 +1390,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 			<column field="fieldList" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1402,7 +1402,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"  />
 			<column field="constraintActionDesc"
 				renderWidget="application.text"
 				label="$m{application.appentityupload.constraintaction}"
@@ -1415,7 +1415,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1428,7 +1428,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 			<column field="quickFilter" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="ownershipTypeDesc"
@@ -1446,7 +1446,20 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
+				widthRatio="1"/>
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="appAppletAlertTable"
+			description="$m{studio.appappletalert.table}"
+			label="$m{studio.appappletalert.table.label}"
+			entity="application.appAppletAlert">
+			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1494,7 +1507,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="rowColor" renderWidget="application.colorspan"
 				label="$m{application.apptablefilter.rowcolor}" widthRatio="1" />
 			<column field="legendLabel" renderWidget="application.text"
@@ -1533,7 +1546,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="html" renderWidget="application.checkbox"
 				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
@@ -1546,7 +1559,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1559,7 +1572,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="policy" renderWidget="application.text"
@@ -1578,7 +1591,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="applet" renderWidget="application.text"
@@ -1591,7 +1604,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1602,7 +1615,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 		</table>
 		<table name="appFormSetStateTable"
 			description="$m{studio.appformsetstate.table}"
@@ -1628,7 +1641,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1"/>
 			<column field="fieldName" renderWidget="application.name"
 				widthRatio="1" />
 			<column field="validation" renderWidget="application.text"
@@ -1643,7 +1656,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="message" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1654,7 +1667,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="messageTypeDesc"
 				renderWidget="application.text" widthRatio="1" />
 			<column field="message" renderWidget="application.text"
@@ -1667,7 +1680,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1680,7 +1693,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
@@ -1695,7 +1708,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{workflow.step.type}" widthRatio="1" />
 			<column field="priorityDesc" renderWidget="application.text"
@@ -1710,7 +1723,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="nextStepName" renderWidget="application.text"
 				widthRatio="1" />
 		</table>
@@ -1723,7 +1736,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="nextStepName" renderWidget="application.text"
@@ -1745,7 +1758,7 @@
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{workflow.stepalert.type}" widthRatio="1" />
 			<column field="notificationTypeDesc"
@@ -1759,7 +1772,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				label="$m{dashboard.dashboardtile.type}" widthRatio="1" />
 			<column field="section" renderWidget="application.integer"
@@ -1796,7 +1809,7 @@
 			<column field="fieldName" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="type" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="columnOrderDesc"
@@ -1816,7 +1829,7 @@
 			<column field="fieldName" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="text" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
 				widthRatio="1" label="$m{report.reportplacement.type}" />
 			<column field="horizAlignTypeDesc"
@@ -1833,7 +1846,7 @@
 			<column field="name" renderWidget="application.name"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
-				widthRatio="1" linkAct="maintainAct" />
+				widthRatio="1" />
 			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="typeDesc" renderWidget="application.text"
@@ -2186,13 +2199,8 @@
 						required="true" />
 					<field name="description" inputWidget="application.text"
 						column="0" required="true" />
-					<field name="type" required="true" column="1" />
 					<field name="sender"
 						inputWidget="studio.appletentitynotifsenderlist" required="true" column="1" />
-					<field name="alertHeldBy"
-						inputWidget="application.checkbox" column="1" />
-					<field name="alertWorkflowRoles"
-						inputWidget="application.checkbox" column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"
