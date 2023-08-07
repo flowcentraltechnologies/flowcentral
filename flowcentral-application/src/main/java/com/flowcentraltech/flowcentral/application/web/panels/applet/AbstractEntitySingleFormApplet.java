@@ -297,7 +297,7 @@ public abstract class AbstractEntitySingleFormApplet extends AbstractApplet {
         final String createNewCaption = getRootAppletProp(String.class,
                 AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
         final String beanTitle = !StringUtils.isBlank(createNewCaption) ? createNewCaption
-                : au.resolveSessionMessage("$m{form.newrecord}");
+                : au.resolveSessionMessage("$m{form.newentity}", entityClassDef.getEntityDef().getDescription());
         return constructSingleForm((Entity) inst, formMode, beanTitle);
     }
 

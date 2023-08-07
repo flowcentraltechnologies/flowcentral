@@ -287,11 +287,12 @@ public abstract class AbstractApplet {
     }
 
     protected EntitySingleForm constructSingleForm(Entity inst, FormMode formMode) throws UnifyException {
+        final EntityDef entityDef = au.getEntityDef(getRootAppletDef().getEntity());
         final String createNewCaption = getRootAppletProp(String.class,
                 AppletPropertyConstants.CREATE_FORM_NEW_CAPTION);
         final String beanTitle = inst.getDescription() != null ? inst.getDescription()
                 : !StringUtils.isBlank(createNewCaption) ? createNewCaption
-                        : au.resolveSessionMessage("$m{form.newrecord}");
+                        : au.resolveSessionMessage("$m{form.newentity}", entityDef.getDescription());
         return constructSingleForm(inst, formMode, beanTitle);
     }
 
