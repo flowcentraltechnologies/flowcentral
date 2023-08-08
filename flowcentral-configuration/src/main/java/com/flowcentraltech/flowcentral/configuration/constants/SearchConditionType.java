@@ -35,49 +35,59 @@ public enum SearchConditionType implements EnumConst {
             FilterConditionType.EQUALS.code(),
             true,
             true,
+            true,
             true),
     LESS_THAN(
             FilterConditionType.LESS_THAN.code(),
             false,
             true,
+            false,
             false),
     LESS_OR_EQUAL(
             FilterConditionType.LESS_OR_EQUAL.code(),
             false,
             true,
+            false,
             false),
     GREATER_THAN(
             FilterConditionType.GREATER_THAN.code(),
             false,
             true,
+            false,
             false),
     GREATER_OR_EQUAL(
             FilterConditionType.GREATER_OR_EQUAL.code(),
             false,
             true,
+            false,
             false),
     BEGINS_WITH(
             FilterConditionType.BEGINS_WITH.code(),
             false,
             false,
-            true),
+            true,
+            false),
     ENDS_WITH(
             FilterConditionType.ENDS_WITH.code(),
             false,
             false,
-            true),
+            true,
+            false),
     LIKE(
             FilterConditionType.LIKE.code(),
             false,
             false,
-            true),
+            true,
+            false),
     ILIKE(
             FilterConditionType.ILIKE.code(),
             false,
             false,
-            true),
+            true,
+            false),
     NOT_EQUALS(
             FilterConditionType.NOT_EQUALS.code(),
+            true,
             true,
             true,
             true),
@@ -85,17 +95,20 @@ public enum SearchConditionType implements EnumConst {
             FilterConditionType.NOT_LIKE.code(),
             false,
             false,
-            true),
+            true,
+            false),
     NOT_BEGIN_WITH(
             FilterConditionType.NOT_BEGIN_WITH.code(),
             false,
             false,
-            true),
+            true,
+            false),
     NOT_END_WITH(
             FilterConditionType.NOT_END_WITH.code(),
             false,
             false,
-            true);
+            true,
+            false);
 
     private final String code;
 
@@ -105,11 +118,15 @@ public enum SearchConditionType implements EnumConst {
 
     private final boolean supportsString;
 
-    private SearchConditionType(String code, boolean supportsBoolean, boolean supportsNumber, boolean supportsString) {
+    private final boolean supportsEnum;
+
+    private SearchConditionType(String code, boolean supportsBoolean, boolean supportsNumber, boolean supportsString,
+            boolean supportsEnum) {
         this.code = code;
         this.supportsBoolean = supportsBoolean;
         this.supportsNumber = supportsNumber;
         this.supportsString = supportsString;
+        this.supportsEnum = supportsEnum;
     }
 
     @Override
@@ -136,6 +153,10 @@ public enum SearchConditionType implements EnumConst {
 
     public boolean supportsString() {
         return supportsString;
+    }
+
+    public boolean supportsEnum() {
+        return supportsEnum;
     }
 
     public static SearchConditionType fromCode(String code) {
