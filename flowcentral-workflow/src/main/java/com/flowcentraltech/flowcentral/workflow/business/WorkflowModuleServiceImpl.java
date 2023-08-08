@@ -1204,8 +1204,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                             workInst.getClass(), wfDef.getName(), wfDef.getApplicationName());
                 } else {
                     workInst.setInWorkflow(true);
-                    environment().findChildren(workInst);
-                    environment().updateByIdVersion(workInst);
+//                    environment().findChildren(workInst);
+//                    environment().updateByIdVersion(workInst);
+                    environment().updateLean(workInst);
                 }
             }
 
