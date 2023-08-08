@@ -76,10 +76,10 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
                     isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION,
                     au.specialParamProvider(), au.getNow()), au.specialParamProvider());
         } else {
-            if (isUpdateDraft) {
-                entitySearch.setBaseFilter(InputWidgetUtils.getFilterDef(au, UPDATE_DRAFT_BASE_RESTRICTION),
-                        au.specialParamProvider());
-            }
+            entitySearch.setBaseFilter(
+                    InputWidgetUtils.getFilterDef(au,
+                            isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION),
+                    au.specialParamProvider());
         }
 
         navBackToSearch();
