@@ -360,7 +360,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                                 ? entityFieldDef.getResolvedTypeFieldDef().getDataType()
                                 : entityFieldDef.getDataType();
                         if (dataType.isBoolean() || dataType.isNumber() || dataType.isDate() || dataType.isTimestamp()
-                                || dataType.isString()) {
+                                || dataType.isString() || dataType.isEnumDataType() || dataType.isForeignKey()) {
                             searchInputFields.add(new ListData("f:" + entityFieldDef.getListKey(),
                                     "[F] " + entityFieldDef.getListDescription()));
                         }
@@ -1192,7 +1192,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                 _fieldList.addAll(fieldList);
                 fieldList = _fieldList;
             }
-            
+
             uniqueConstraintList
                     .add(new UniqueConstraintDef(name, description, fieldList, conditionList, caseInsensitive));
             return this;

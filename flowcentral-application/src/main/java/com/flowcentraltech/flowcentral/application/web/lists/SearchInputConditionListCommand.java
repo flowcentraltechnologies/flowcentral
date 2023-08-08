@@ -57,14 +57,18 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
                 if (type.isBoolean()) {
                     return _dataTypeConditions.getBooleanConditions();
                 }
-                
+
                 if (type.isNumber() || type.isDate() || type.isTimestamp()) {
                     return _dataTypeConditions.getNumberConditions();
                 }
-                
+
+                if (type.isEnumDataType()) {
+                    return _dataTypeConditions.getEnumConditions();
+                }
+
                 if (type.isString()) {
                     return _dataTypeConditions.getStringConditions();
-                }                               
+                }
             }
         }
 
@@ -79,6 +83,7 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
                     List<Listable> booleanConditions = new ArrayList<>();
                     List<Listable> numberConditions = new ArrayList<>();
                     List<Listable> stringConditions = new ArrayList<>();
+                    List<Listable> enumConditions = new ArrayList<>();
                     List<? extends Listable> srclist = listManager.getList(getApplicationLocale(),
                             "searchconditiontypelist");
                     for (Listable listable : srclist) {
@@ -94,9 +99,14 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
                         if (condition.supportsString()) {
                             stringConditions.add(listable);
                         }
+
+                        if (condition.supportsEnum()) {
+                            enumConditions.add(listable);
+                        }
                     }
 
-                    dataTypeConditions = new DataTypeConditions(booleanConditions, numberConditions, stringConditions);
+                    dataTypeConditions = new DataTypeConditions(booleanConditions, numberConditions, stringConditions,
+                            enumConditions);
                 }
             }
         }
@@ -112,11 +122,14 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
 
         private final List<? extends Listable> stringConditions;
 
+        private final List<? extends Listable> enumConditions;
+
         public DataTypeConditions(List<? extends Listable> booleanConditions, List<? extends Listable> numberConditions,
-                List<? extends Listable> stringConditions) {
+                List<? extends Listable> stringConditions, List<? extends Listable> enumConditions) {
             this.booleanConditions = Collections.unmodifiableList(booleanConditions);
             this.numberConditions = Collections.unmodifiableList(numberConditions);
             this.stringConditions = Collections.unmodifiableList(stringConditions);
+            this.enumConditions = Collections.unmodifiableList(enumConditions);
         }
 
         public List<? extends Listable> getBooleanConditions() {
@@ -129,6 +142,10 @@ public class SearchInputConditionListCommand extends AbstractApplicationListComm
 
         public List<? extends Listable> getStringConditions() {
             return stringConditions;
+        }
+
+        public List<? extends Listable> getEnumConditions() {
+            return enumConditions;
         }
     }
 
