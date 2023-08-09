@@ -409,6 +409,9 @@
 			<field name="roleDesc"
 				label="$m{organization.roleprivilege.roledesc}" type="list_only"
 				key="roleId" property="description" />
+			<field name="roleWfItemVersionType"
+				label="$m{organization.roleprivilege.rolewfitemversiontype}"
+				type="list_only" key="roleId" property="wfItemVersionType" />
 			<field name="privilegeCode"
 				label="$m{organization.roleprivilege.privilegecode}"
 				type="list_only" key="privilegeId" property="code" />
