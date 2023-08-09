@@ -23,6 +23,7 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.PostBootSetup;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.configuration.constants.DefaultApplicationConstants;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.configuration.xml.util.ConfigurationUtils;
@@ -209,7 +210,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return environment().valueList(String.class, "privilegeCode",
-                new RolePrivilegeQuery().privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
+                new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
+                        .privilegeCatCode(privilegeCategoryCode).roleCode(roleCode));
     }
 
     @Synchronized("org:assignprivtorole")
@@ -387,7 +389,8 @@ public class OrganizationModuleServiceImpl extends AbstractFlowCentralService
                     @Override
                     protected RolePrivileges create(String roleCode, Object... arg2) throws Exception {
                         Set<String> privileges = environment().valueSet(String.class, "privilegeCode",
-                                new RolePrivilegeQuery().roleCode(roleCode).tenantId(tenantId));
+                                new RolePrivilegeQuery().roleWfItemVersionType(WfItemVersionType.ORIGINAL)
+                                        .roleCode(roleCode).tenantId(tenantId));
                         long version = environment().value(Long.class, "versionNo",
                                 new RoleQuery().code(roleCode).tenantId(tenantId));
                         return new RolePrivileges(privileges, version);
