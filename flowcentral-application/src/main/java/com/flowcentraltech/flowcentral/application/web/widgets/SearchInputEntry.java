@@ -110,9 +110,13 @@ public class SearchInputEntry {
         return fieldName != null && label != null && widget != null && (!isFieldInput() || condition != null);
     }
 
-    public void normalize() throws UnifyException {
+    public void normalize(EntityDef entityDef) throws UnifyException {
         if (fieldName == null) {
             label = null;
+        } else {
+            if (label == null && fieldName.startsWith("f:")) {
+                entityDef.getFieldDef(fieldName.substring("f:".length())).getFieldLabel();
+            }
         }
 
         if (label == null) {

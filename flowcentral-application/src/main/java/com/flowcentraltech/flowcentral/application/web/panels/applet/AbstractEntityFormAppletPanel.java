@@ -345,7 +345,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveAsBtn", enableSaveAs && !isWorkflowCopyForm);
                 setVisible("updateBtn", enableUpdate);
                 setVisible("updateCloseBtn", enableUpdate);
-                setVisible("deleteBtn", enableDelete);
+                setVisible("deleteBtn",
+                        enableDelete || (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow));
 
                 if (viewMode.isScroll()) {
                     setVisible("displayCounterLabel", true);
@@ -408,7 +409,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 setVisible("saveAsBtn", enableSaveAs && !isWorkflowCopyForm);
                 setVisible("updateBtn", enableUpdate);
                 setVisible("updateCloseBtn", enableUpdate);
-                setVisible("deleteBtn", enableDelete);
+                setVisible("deleteBtn",
+                        enableDelete || (enableUpdate && isWorkflowCopyForm && isUpdateDraft && !isInWorkflow));
 
                 if (isWorkflowCopyForm) {
                     form.setSubmitCaption(resolveSessionMessage("$m{button.submitforapproval}"));
@@ -879,7 +881,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
 
         setCommandResultMapping(ApplicationResultMappingConstants.REFRESH_CONTENT);
     }
-    
+
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
         // Set recovery path on error to prevent possible manual duplication of record
@@ -963,7 +965,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         EntityActionResult entityActionResult = applet.submitDeleteToWorkflow();
         setCommandResultMapping(entityActionResult, true);
     }
-    
+
     private void performEditModeWorkflowDraft() throws UnifyException {
         AbstractEntityFormApplet applet = getEntityFormApplet();
         WorkflowDraftInfo workflowDraftInfo = applet.getWorkflowDraftInfo();

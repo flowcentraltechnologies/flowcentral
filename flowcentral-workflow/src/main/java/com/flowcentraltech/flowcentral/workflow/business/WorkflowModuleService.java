@@ -305,6 +305,20 @@ public interface WorkflowModuleService extends FlowCentralService, ApplicationWo
             throws UnifyException;
 
     /**
+     * Finds loading workflow exception steps by role.
+     * 
+     * @param loadingTableName
+     *                         the loading table name
+     * @param roleCode
+     *                         the role code
+     * @return list of workflow steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkflowStepInfo> findWorkflowLoadingExceptionStepInfoByRole(String loadingTableName, String roleCode)
+            throws UnifyException;
+
+    /**
      * Gets an application workflow definition.
      * 
      * @param workflowName
