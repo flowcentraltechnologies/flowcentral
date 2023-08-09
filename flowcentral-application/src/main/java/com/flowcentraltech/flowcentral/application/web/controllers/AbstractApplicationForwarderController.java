@@ -17,6 +17,7 @@
 package com.flowcentraltech.flowcentral.application.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
@@ -77,6 +78,10 @@ public abstract class AbstractApplicationForwarderController<T extends AbstractF
 
     protected SystemModuleService system() {
         return appletUtilities.system();
+    }
+
+    protected ApplicationModuleService application() {
+        return appletUtilities.application();
     }
     
     protected final void setReloadOnSwitch() throws UnifyException {

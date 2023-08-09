@@ -18,12 +18,12 @@ package com.flowcentraltech.flowcentral.workflow.web.controllers;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
+import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletController;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
-import com.flowcentraltech.flowcentral.workflow.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.workflow.web.panels.applet.MyWorkItemsApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
@@ -82,8 +82,10 @@ public class MyWorkItemsController extends AbstractEntityFormAppletController<My
             MyWorkItemsApplet applet = new MyWorkItemsApplet(workflowModuleService, pageBean.getSelLoadingTableName(),
                     userToken.getRoleCode(), au(), loadinAppletName, appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);
+            setPageWidgetVisible("appletPanel", true);
         } else {
             pageBean.setApplet(null);
+            setPageWidgetVisible("appletPanel", false);
         }
 
         return refreshSlate();

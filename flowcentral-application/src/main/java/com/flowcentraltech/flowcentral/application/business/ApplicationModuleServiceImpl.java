@@ -1711,6 +1711,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public int getWorkitemCategoryParticipationCount(String role) throws UnifyException {
+        return appletUtilities.workItemUtilities().countWorkflowLoadingTableInfoByRole(role);
+    }
+
+    @Override
     public String getAppAppletEntity(Long appAppletId) throws UnifyException {
         return environment().value(String.class, "entity", new AppAppletQuery().id(appAppletId));
     }
