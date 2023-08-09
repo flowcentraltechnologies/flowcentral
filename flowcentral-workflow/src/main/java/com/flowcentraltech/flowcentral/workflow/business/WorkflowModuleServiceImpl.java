@@ -44,6 +44,8 @@ import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
+import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
+import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.entities.AppApplet;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletProp;
 import com.flowcentraltech.flowcentral.application.entities.AppAppletQuery;
@@ -101,8 +103,6 @@ import com.flowcentraltech.flowcentral.workflow.data.WfUserActionDef;
 import com.flowcentraltech.flowcentral.workflow.data.WfWizardDef;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntityItem;
 import com.flowcentraltech.flowcentral.workflow.data.WorkEntitySingleFormItem;
-import com.flowcentraltech.flowcentral.workflow.data.WorkflowLoadingTableInfo;
-import com.flowcentraltech.flowcentral.workflow.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannel;
 import com.flowcentraltech.flowcentral.workflow.entities.WfChannelQuery;
 import com.flowcentraltech.flowcentral.workflow.entities.WfItem;
@@ -717,6 +717,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public List<WfStep> findWorkflowSteps(WfStepQuery query) throws UnifyException {
         return environment().listAll(query);
+    }
+
+    @Override
+    public int countWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException {
+        return StringUtils.isBlank(roleCode) ? environment().countAll(new WorkflowQuery().isWithLoadingTable())
+                : environment().countAll(new WfStepRoleQuery().wfStepTypeIn(USER_INTERACTIVE_STEP_TYPES)
+                        .roleCode(roleCode).isWithLoadingTable());
     }
 
     @Override

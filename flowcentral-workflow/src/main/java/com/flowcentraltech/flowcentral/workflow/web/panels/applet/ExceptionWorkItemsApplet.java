@@ -16,17 +16,18 @@
 package com.flowcentraltech.flowcentral.workflow.web.panels.applet;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.TableLoadingDef;
+import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.panels.LoadingSearch;
 import com.flowcentraltech.flowcentral.application.web.panels.applet.ManageLoadingListApplet;
 import com.flowcentraltech.flowcentral.workflow.business.WorkflowModuleService;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
-import com.flowcentraltech.flowcentral.workflow.data.WorkflowStepInfo;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -37,13 +38,14 @@ import com.tcdng.unify.core.UnifyException;
  */
 public class ExceptionWorkItemsApplet extends ManageLoadingListApplet {
 
-    public ExceptionWorkItemsApplet(WorkflowModuleService workflowModuleService, String loadingTableName, String roleCode,
-            AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
+    public ExceptionWorkItemsApplet(WorkflowModuleService workflowModuleService, String loadingTableName,
+            String roleCode, AppletUtilities au, String pathVariable, AppletWidgetReferences appletWidgetReferences,
             EntityFormEventHandlers formEventHandlers) throws UnifyException {
         super(au, pathVariable, appletWidgetReferences, formEventHandlers);
         List<TableLoadingDef> altTableLoadingDefs = new ArrayList<TableLoadingDef>();
-        List<WorkflowStepInfo> workflowStepList = workflowModuleService
-                .findWorkflowLoadingExceptionStepInfoByRole(loadingTableName, roleCode);
+        List<WorkflowStepInfo> workflowStepList = loadingTableName != null
+                ? workflowModuleService.findWorkflowLoadingExceptionStepInfoByRole(loadingTableName, roleCode)
+                : Collections.emptyList();
         int orderIndex = 0;
         for (WorkflowStepInfo workflowStepInfo : workflowStepList) {
             altTableLoadingDefs.add(new TableLoadingDef(workflowStepInfo.getStepName(), workflowStepInfo.getStepDesc(),

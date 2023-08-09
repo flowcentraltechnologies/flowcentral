@@ -1700,4 +1700,15 @@ public interface ApplicationModuleService extends FlowCentralService {
      *                        if an error occurs
      */
     boolean isReloadOnSwitch() throws UnifyException;
+    
+    /**
+     * Gets work item category participation count by role.
+     * 
+     * @param role
+     *             the role to get by
+     * @return the participation count
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int getWorkitemCategoryParticipationCount(String role) throws UnifyException;
 }

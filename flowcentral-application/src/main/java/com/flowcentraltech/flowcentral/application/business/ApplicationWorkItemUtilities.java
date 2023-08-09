@@ -16,7 +16,11 @@
 
 package com.flowcentraltech.flowcentral.application.business;
 
+import java.util.List;
+
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
+import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.tcdng.unify.core.UnifyComponent;
@@ -64,6 +68,56 @@ public interface ApplicationWorkItemUtilities extends UnifyComponent {
      *                        match workflow entity definition. If an error occurs
      */
     EntityActionResult submitToWorkflow(EntityDef entityDef, String workflowName, WorkEntity inst, String policyName)
+            throws UnifyException;
+
+    /**
+     * Counts workflow loading tables by role.
+     * 
+     * @param roleCode
+     *                 the role code
+     * @return number of
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    int countWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException;
+
+    /**
+     * Finds workflow loading tables by role.
+     * 
+     * @param roleCode
+     *                 the role code
+     * @return list of workflows
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkflowLoadingTableInfo> findWorkflowLoadingTableInfoByRole(String roleCode) throws UnifyException;
+
+    /**
+     * Finds loading workflow steps by role.
+     * 
+     * @param loadingTableName
+     *                         the loading table name
+     * @param roleCode
+     *                         the role code
+     * @return list of workflow steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(String loadingTableName, String roleCode)
+            throws UnifyException;
+
+    /**
+     * Finds loading workflow exception steps by role.
+     * 
+     * @param loadingTableName
+     *                         the loading table name
+     * @param roleCode
+     *                         the role code
+     * @return list of workflow steps
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<WorkflowStepInfo> findWorkflowLoadingExceptionStepInfoByRole(String loadingTableName, String roleCode)
             throws UnifyException;
 
     /**

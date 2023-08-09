@@ -199,7 +199,10 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         pageBean.setIndicateHighLatency(indicateHighLatency);
         pageBean.setContentStyleClass(contentStyleClass);
 
-        String[] applicationPaths = showWorkItemsOnLogin
+        UserToken userToken = getUserToken();
+        final int workitemCategoryParticipationCount = application()
+                .getWorkitemCategoryParticipationCount(userToken.getRoleCode());
+        String[] applicationPaths = showWorkItemsOnLogin && workitemCategoryParticipationCount > 0
                 ? new String[] { "/application/dashboard/openPage", "/workflow/myworkitems/openPage" }
                 : new String[] { "/application/dashboard/openPage" };
         pageBean.setApplicationPaths(applicationPaths);

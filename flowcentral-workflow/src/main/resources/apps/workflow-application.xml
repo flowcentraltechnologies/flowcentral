@@ -681,8 +681,6 @@
 		<table name="wfStepTable" description="$m{workflow.step.table}"
 			label="$m{workflow.step.table.label}" entity="wfStep"
 			itemsPerPage="20" serialNo="true">
-			<column field="workflowDesc" renderWidget="application.text"
-				label="$m{workflow.step.workflow}" widthRatio="1" />
 			<column field="name" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
