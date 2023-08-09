@@ -188,6 +188,8 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
                 ApplicationModuleNameConstants.LOGIN_USER_PHOTO_GENERATOR);
         pageBean.setUserPhotoGenerator(userPhotoGenerator);
 
+        final boolean enableStickyPaths = system().getSysParameterValue(boolean.class,
+                ApplicationModuleSysParamConstants.ENABLE_STICKY_WORK_ITEMS_PAGE);
         final boolean enableMultipleTabs = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.ENABLE_MULTIPLE_TABS);
         final boolean indicateHighLatency = system().getSysParameterValue(boolean.class,
@@ -195,6 +197,7 @@ public class ApplicationController extends AbstractApplicationForwarderControlle
         final boolean showWorkItemsOnLogin = system().getSysParameterValue(boolean.class,
                 ApplicationModuleSysParamConstants.SHOW_WORK_ITEMS_ON_LOGIN);
         final String contentStyleClass = enableMultipleTabs ? "fc-content-tabbed" : "fc-content";
+        pageBean.setEnableStickyPaths(enableStickyPaths);
         pageBean.setEnableMultipleTabs(enableMultipleTabs);
         pageBean.setIndicateHighLatency(indicateHighLatency);
         pageBean.setContentStyleClass(contentStyleClass);

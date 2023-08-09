@@ -36,6 +36,8 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
     
     private String contentStyleClass;
     
+    private boolean enableStickyPaths;
+    
     private boolean enableMultipleTabs;
     
     private boolean indicateHighLatency;
@@ -78,6 +80,14 @@ public class ApplicationPageBean extends AbstractForwarderPageBean {
 
     public void setContentStyleClass(String contentStyleClass) {
         this.contentStyleClass = contentStyleClass;
+    }
+
+    public boolean isEnableStickyPaths() {
+        return enableStickyPaths;
+    }
+
+    public void setEnableStickyPaths(boolean enableStickyPaths) {
+        this.enableStickyPaths = enableStickyPaths;
     }
 
     public boolean isEnableMultipleTabs() {
