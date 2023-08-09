@@ -69,7 +69,8 @@
 !fc-appletmenu:menuColPanel searchable:true
 
 // Content
-!ui-contentpanel:content styleClassBinding:$s{contentStyleClass} pathsBinding:applicationPaths
+!ui-contentpanel:content styleClassBinding:$s{contentStyleClass}
+	pathsBinding:applicationPaths stickyPathsBinding:enableStickyPaths
 	tabbedBinding:enableMultipleTabs documentPath:$s{/application}
 	titleUppercase:false
 	
