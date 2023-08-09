@@ -373,6 +373,7 @@ public class EntityDef extends BaseApplicationEntityDef {
                                 new ListData("g:" + listable.getListKey(), "[G] " + listable.getListDescription()));
                     }
 
+                    DataUtils.sortAscending(searchInputFields, Listable.class, "listDescription");
                     searchInputFields = DataUtils.unmodifiableList(searchInputFields);
                 }
             }

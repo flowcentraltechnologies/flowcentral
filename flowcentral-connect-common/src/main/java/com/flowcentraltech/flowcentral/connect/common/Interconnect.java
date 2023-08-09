@@ -639,17 +639,31 @@ public class Interconnect {
                 destList = new ArrayList<>();
                 PropertyUtils.setProperty(destBean, entityFieldInfo.getName(), destList);
             } else {
-                destList.clear();
+                for (Object destChildBean : new ArrayList<>(destList)) {
+                    destList.remove(destChildBean);
+                }
             }
-            
+
             if (srcChildListBean != null) {
                 List<Object> srcList = (List<Object>) srcChildListBean;
-                for (Object childBean: srcList) {
-                    setParentBean(destBean, childBean, parentEntity, entityFieldInfo);
-                    destList.add(childBean);
+                for (Object srcChildBean : srcList) {
+                    Object destChildBean = copyChild(destBean, parentEntity, entityFieldInfo, srcChildBean);
+                    destList.add(destChildBean);
                 }
             }
         }
+    }
+
+    private Object copyChild(final Object destBean, final String parentEntity, final EntityFieldInfo entityFieldInfo,
+            final Object srcChildBean) throws Exception {
+        final EntityInfo entityInfo = getEntityInfo(entityFieldInfo.getReferences());
+        final Object destChildBean = entityInfo.getImplClass().newInstance();
+        copy(entityInfo.getRefFieldList(), destChildBean, srcChildBean);
+        copy(entityInfo.getFieldList(), destChildBean, srcChildBean);
+        copyChild(entityInfo.getChildFieldList(), entityInfo.getName(), destChildBean, srcChildBean);
+        copyChildList(entityInfo.getChildListFieldList(), entityInfo.getName(), destChildBean, srcChildBean);
+        setParentBean(destBean, destChildBean, parentEntity, entityFieldInfo);
+        return destChildBean;
     }
 
     private void checkInitialized() throws Exception {

@@ -104,7 +104,7 @@ public class SearchInputs {
         int lim = entryList.size() - 1;
         while (it.hasNext()) {
             SearchInputEntry sie = it.next();
-            sie.normalize();
+            sie.normalize(entityDef);
             if (!sie.isWithLabel()) {
                 if (i < lim) {
                     it.remove();
@@ -154,6 +154,6 @@ public class SearchInputs {
         sie.setFieldName(fieldName);
         sie.setLabel(label);
         sie.setWidget(widget);
-        sie.normalize();
+        sie.normalize(entityDef);
     }
 }

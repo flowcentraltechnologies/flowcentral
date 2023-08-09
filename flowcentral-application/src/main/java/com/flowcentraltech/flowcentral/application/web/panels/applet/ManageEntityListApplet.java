@@ -73,14 +73,17 @@ public class ManageEntityListApplet extends AbstractEntityFormApplet {
         if (isRootAppletPropWithValue(AppletPropertyConstants.BASE_RESTRICTION)) {
             AppletFilterDef appletFilterDef = getRootAppletFilterDef(AppletPropertyConstants.BASE_RESTRICTION);
             entitySearch.setBaseFilter(InputWidgetUtils.getFilterDef(au, _rootAppletDef, appletFilterDef.getFilterDef(),
-                    isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION,
+                    isWorkflowCopy() ? (isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION)
+                            : null,
                     au.specialParamProvider(), au.getNow()), au.specialParamProvider());
         } else {
-            if (isUpdateDraft) {
-                entitySearch.setBaseFilter(InputWidgetUtils.getFilterDef(au, UPDATE_DRAFT_BASE_RESTRICTION),
+            if (isWorkflowCopy()) {
+                entitySearch.setBaseFilter(
+                        InputWidgetUtils.getFilterDef(au,
+                                isUpdateDraft ? UPDATE_DRAFT_BASE_RESTRICTION : ORIGINAL_BASE_RESTRICTION),
                         au.specialParamProvider());
             }
-        }
+         }
 
         navBackToSearch();
     }

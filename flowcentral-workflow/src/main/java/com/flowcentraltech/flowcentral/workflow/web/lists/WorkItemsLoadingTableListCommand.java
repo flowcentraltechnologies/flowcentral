@@ -26,15 +26,15 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.ZeroParams;
 
 /**
- * My workitems loading table list command.
+ * Workitems loading table list command.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("myworkitemsloadingtablelist")
-public class MyWorkItemsLoadingTableListCommand extends AbstractWorkflowListCommand<ZeroParams> {
+@Component("workitemsloadingtablelist")
+public class WorkItemsLoadingTableListCommand extends AbstractWorkflowListCommand<ZeroParams> {
 
-    public MyWorkItemsLoadingTableListCommand() {
+    public WorkItemsLoadingTableListCommand() {
         super(ZeroParams.class);
     }
 
