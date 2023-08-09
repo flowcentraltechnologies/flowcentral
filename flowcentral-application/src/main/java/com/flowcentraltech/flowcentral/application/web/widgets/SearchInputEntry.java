@@ -115,7 +115,7 @@ public class SearchInputEntry {
             label = null;
         } else {
             if (label == null && fieldName.startsWith("f:")) {
-                entityDef.getFieldDef(fieldName.substring("f:".length())).getFieldLabel();
+                label = entityDef.getFieldDef(fieldName.substring("f:".length())).getFieldLabel();
             }
         }
 
