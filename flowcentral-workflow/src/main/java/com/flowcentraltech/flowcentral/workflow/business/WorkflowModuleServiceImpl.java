@@ -29,6 +29,7 @@ import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
 import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
@@ -305,6 +306,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                         for (WfStepRouting wfStepRouting : wfStep.getRoutingList()) {
                             if (!StringUtils.isBlank(wfStepRouting.getConditionName())
+                                    && !ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME
+                                            .equals(wfStepRouting.getConditionName())
                                     && !filterNames.contains(wfStepRouting.getConditionName())) {
                                 throw new RuntimeException("Workflow with name [" + workflow.getName()
                                         + "] does not contain filter with name [" + wfStepRouting.getConditionName()
@@ -328,6 +331,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
                         for (WfStepAlert wfStepAlert : wfStep.getAlertList()) {
                             if (!StringUtils.isBlank(wfStepAlert.getFireOnConditionName())
+                                    && !ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME
+                                            .equals(wfStepAlert.getFireOnConditionName())
                                     && !filterNames.contains(wfStepAlert.getFireOnConditionName())) {
                                 throw new RuntimeException("Workflow with name [" + workflow.getName()
                                         + "] does not contain filter with name [" + wfStepAlert.getFireOnConditionName()
