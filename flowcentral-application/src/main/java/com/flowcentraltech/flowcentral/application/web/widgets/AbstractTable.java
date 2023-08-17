@@ -113,6 +113,8 @@ public abstract class AbstractTable<T, U> {
 
     private boolean fixedAssignment;
 
+    private boolean disableLinks;
+
     private ValueStoreReader parentReader;
 
     private TableStateOverride tableStateOverride;
@@ -397,6 +399,14 @@ public abstract class AbstractTable<T, U> {
 
     public void setFixedAssignment(boolean fixedAssignment) {
         this.fixedAssignment = fixedAssignment;
+    }
+
+    public boolean isDisableLinks() {
+        return disableLinks;
+    }
+
+    public void setDisableLinks(boolean disableLinks) {
+        this.disableLinks = disableLinks;
     }
 
     public TableTotalSummary getTableTotalSummary() {

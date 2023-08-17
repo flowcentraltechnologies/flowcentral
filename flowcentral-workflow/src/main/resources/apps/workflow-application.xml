@@ -665,9 +665,7 @@
 			label="$m{workflow.workflow.table.label}" entity="workflow"
 			itemsPerPage="20" serialNo="true">
 			<column field="description" renderWidget="application.text"
-				widthRatio="2" linkAct="maintainAct" />
-			<column field="name" renderWidget="application.text"
-				widthRatio="2"/>
+				widthRatio="2" linkAct="maintainAct" order="ASC" />
 			<column field="entity" renderWidget="application.text"
 				widthRatio="2" />
 			<column field="applicationDesc"

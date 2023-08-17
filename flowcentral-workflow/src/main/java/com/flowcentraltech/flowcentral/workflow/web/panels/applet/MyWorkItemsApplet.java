@@ -54,6 +54,7 @@ public class MyWorkItemsApplet extends ManageLoadingListApplet {
 
         final LoadingSearch loadingSearch = getLoadingSearch();
         loadingSearch.getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefs);
+        loadingSearch.getLoadingTable().setDisableLinks(true);
         loadingSearch.applySearchEntriesToSearch();
     }
 
