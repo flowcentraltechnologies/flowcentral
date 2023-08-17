@@ -56,6 +56,7 @@ public class ExceptionWorkItemsApplet extends ManageLoadingListApplet {
 
         final LoadingSearch loadingSearch = getLoadingSearch();
         loadingSearch.getLoadingTable().setAltTableLoadingDefs(altTableLoadingDefs);
+        loadingSearch.getLoadingTable().setDisableLinks(true);
         loadingSearch.applySearchEntriesToSearch();
     }
 

@@ -81,13 +81,13 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         extends AbstractFlowCentralValueListMultiControl<ValueStore, U> implements TableSelect<U> {
 
     public static final int ATTACH_SELECTED_INDEX = 0;
-    
+
     public static final int REMOVE_SELECTED_INDEX = 1;
 
     public static final int ATTACH_ALL_INDEX = 2;
-    
+
     public static final int REMOVE_ALL_INDEX = 3;
-    
+
     private Class<T> tableClass;
 
     private Class<U> itemClass;
@@ -506,7 +506,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                         final boolean useCellEditor = tableColumnDef.isWithCellEditor() && tableColumnDef.isEditable();
                         final boolean _entry = entryMode && useCellEditor;
                         final String columnWidgetUpl = _entry ? tableColumnDef.getCellEditor()
-                                : tableColumnDef.getCellRenderer();
+                                : (table.isDisableLinks() && tableColumnDef.isWithLinkAct()
+                                        ? "!ui-label binding:" + tableColumnDef.getFieldName()
+                                        : tableColumnDef.getCellRenderer());
                         Widget widget = addExternalChildWidget(columnWidgetUpl);
                         if (!_entry) {
                             EntityFieldDef entityFieldDef = tableDef.getFieldDef(tableColumnDef.getFieldName());
@@ -560,7 +562,9 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
                                 : entityFieldDef.getDataType().dataType();
                         if (dataType != null) {
                             if (entityFieldDef.isNumber()) {
-                                Widget renderer = getRenderer(tableColumnDef.getCellRenderer());
+                                Widget renderer = getRenderer(table.isDisableLinks() && tableColumnDef.isWithLinkAct()
+                                        ? "!ui-label binding:" + tableColumnDef.getFieldName()
+                                        : tableColumnDef.getCellRenderer());
                                 EntityFieldTotalSummary entityFieldTotalSummary = new EntityFieldTotalSummary(
                                         entityFieldDef, renderer);
                                 if (!tableDef.isWithSummaryFields()
@@ -783,7 +787,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
         int target = getRequestTarget(int.class);
         T table = getTable();
         if (table != null) {
-            table.applyFixedAction(getValueList().get(target), target, fixedActionType);            
+            table.applyFixedAction(getValueList().get(target), target, fixedActionType);
             table.reset();
         }
     }
@@ -794,7 +798,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             for (int i : table.getSelectedRows()) {
                 table.applyFixedAction(getValueList().get(i), i, fixedActionType);
             }
-            
+
             table.reset();
         }
     }
@@ -806,7 +810,7 @@ public abstract class AbstractTableWidget<T extends AbstractTable<V, U>, U, V>
             for (int i = 0; i < len; i++) {
                 table.applyFixedAction(getValueList().get(i), i, fixedActionType);
             }
-            
+
             table.reset();
         }
     }
