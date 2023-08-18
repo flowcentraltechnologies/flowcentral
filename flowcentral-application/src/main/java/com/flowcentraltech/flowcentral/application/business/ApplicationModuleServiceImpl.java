@@ -1673,6 +1673,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final String updateApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
+        
+        final String abortSetValuesName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_ABORT_SETVALUES));
 
         final String appletSearchTable = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
@@ -1706,7 +1710,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         new AppAppletAlertQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName()));
 
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
-                appletSearchTable, onCreateAlertName, onUpdateAlertName, onCreateApprovalAlertName,
+                abortSetValuesName, appletSearchTable, onCreateAlertName, onUpdateAlertName, onCreateApprovalAlertName,
                 onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName, appletVersionNo, map);
     }
 

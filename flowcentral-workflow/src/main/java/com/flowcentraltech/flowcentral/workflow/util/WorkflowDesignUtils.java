@@ -147,8 +147,15 @@ public final class WorkflowDesignUtils {
         errorWfStep.setLabel(stepLabel + " Error");
         errorWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
         errorWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
-        WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(null);
-        errorWfStep.setUserActionList(Arrays.asList(recoverUserAction));
+        List<WfStepUserAction> errorActionList = new ArrayList<WfStepUserAction>();
+        errorActionList.add(WorkflowDesignUtils.createErrorRecoveryUserAction(null));
+        if (isWorkflowCopy) {
+            WfStepUserAction errorAbortUserAction = WorkflowDesignUtils.createErrorAbortUserAction(null);
+            errorAbortUserAction.setAppletSetValuesName(appletWorkflowCopyInfo.getAbortSetValuesName());
+            errorActionList.add(errorAbortUserAction);
+        }
+
+        errorWfStep.setUserActionList(errorActionList);
         stepList.add(errorWfStep);
 
         if (isWorkflowCopy) {
@@ -306,6 +313,18 @@ public final class WorkflowDesignUtils {
         recoverUserAction.setCommentRequirement(RequirementType.NONE);
         recoverUserAction.setHighlightType(HighlightType.ORANGE);
         return recoverUserAction;
+    }
+
+    public static WfStepUserAction createErrorAbortUserAction(Long wfStepId) {
+        WfStepUserAction abortUserAction = new WfStepUserAction();
+        abortUserAction.setWfStepId(wfStepId);
+        abortUserAction.setName("abort");
+        abortUserAction.setDescription("Abort");
+        abortUserAction.setLabel("Abort");
+        abortUserAction.setCommentRequirement(RequirementType.NONE);
+        abortUserAction.setHighlightType(HighlightType.RED);
+        abortUserAction.setNextStepName("end");
+        return abortUserAction;
     }
 
     private static WfStepAlert createWfStepAlert(WorkflowAlertType type, AppAppletAlert appAppletAlert) {

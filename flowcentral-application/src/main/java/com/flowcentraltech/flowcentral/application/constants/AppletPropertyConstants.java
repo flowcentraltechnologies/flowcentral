@@ -194,6 +194,8 @@ public interface AppletPropertyConstants {
 
     String WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES = "workflowCopy.update.approval.setvalues";
 
+    String WORKFLOWCOPY_ABORT_SETVALUES = "workflowCopy.abort.setvalues";
+
     String WORKFLOWCOPY_CREATE_ALERT = "workflowCopy.create.alert";
 
     String WORKFLOWCOPY_UPDATE_ALERT= "workflowCopy.update.alert";

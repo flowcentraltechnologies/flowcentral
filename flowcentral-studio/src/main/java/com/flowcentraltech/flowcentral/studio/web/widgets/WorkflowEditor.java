@@ -516,7 +516,7 @@ public class WorkflowEditor {
 
         public Builder addStep(WfStep step) throws UnifyException {
             if (step.getType().isError() && DataUtils.isBlank(step.getUserActionList())) {
-                WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(step.getId());
+                final WfStepUserAction recoverUserAction = WorkflowDesignUtils.createErrorRecoveryUserAction(step.getId());
                 step.setUserActionList(Arrays.asList(recoverUserAction));
             }
             
