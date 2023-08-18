@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Loading workitem information..
+ * Loading work item information..
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
@@ -27,6 +27,8 @@ import java.util.List;
 public class LoadingWorkItemInfo {
 
     private List<FormActionDef> formActionDefList;
+
+    private String stepLabel;
 
     private boolean readOnly;
 
@@ -36,9 +38,10 @@ public class LoadingWorkItemInfo {
 
     private boolean error;
 
-    public LoadingWorkItemInfo(List<FormActionDef> formActionDefList, boolean readOnly, boolean comments,
-            boolean emails, boolean error) {
+    public LoadingWorkItemInfo(List<FormActionDef> formActionDefList, String stepLabel, boolean readOnly,
+            boolean comments, boolean emails, boolean error) {
         this.formActionDefList = formActionDefList;
+        this.stepLabel = stepLabel;
         this.readOnly = readOnly;
         this.comments = comments;
         this.emails = emails;
@@ -55,6 +58,14 @@ public class LoadingWorkItemInfo {
 
     public List<FormActionDef> getFormActionDefList() {
         return formActionDefList;
+    }
+
+    public String getStepLabel() {
+        return stepLabel;
+    }
+
+    public boolean isWithStepLabel() {
+        return stepLabel != null;
     }
 
     public boolean isReadOnly() {

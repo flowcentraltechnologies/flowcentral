@@ -686,7 +686,8 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 	padding:4px 8px; margin-top:4px;}
 .fc-dispcounterfrozen {display:inline-block; background-color:#a5c5d9; color:#404040; font-weight:bold; font-size:7pt;
 	padding:4px 8px; margin-top:4px;}
-
+.fc-dispcounterlarge {padding:0px; font-size:9pt;}
+	 
 /*** MENUS ***/
 .fc-appletmenu {height: 100%; max-height: calc(100vh - 40px) !important; background-color: #24303f; color:#ffffff;font-size: 11px;}
 .fc-appletmenu .mheader {min-width:200px !important; height: 24px;}

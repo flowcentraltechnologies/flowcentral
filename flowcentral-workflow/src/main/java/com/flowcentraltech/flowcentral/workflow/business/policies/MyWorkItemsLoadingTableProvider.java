@@ -49,7 +49,7 @@ import com.tcdng.unify.core.util.DataUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER)
+@Component(WorkflowModuleNameConstants.WORKFLOW_MY_WORKITEMS_LOADING_TABLE_PROVIDER) 
 public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingTableProvider {
 
     @Configurable
@@ -89,8 +89,8 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
                 wfStepDef.getEmails());
         final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
                 wfStepDef.getReadOnlyConditionName());
-        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), readOnly, comments, emails,
-                wfStepDef.isError());
+        return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), wfStepDef.getLabel(), readOnly, comments,
+                emails, wfStepDef.isError());
     }
 
     @Override
