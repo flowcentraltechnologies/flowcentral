@@ -34,6 +34,8 @@ public class AppletWorkflowCopyInfo {
 
     private String updateApprovalSetValuesName;
 
+    private String abortSetValuesName;
+
     private String appletSearchTable;
 
     private String onCreateAlertName;
@@ -53,13 +55,14 @@ public class AppletWorkflowCopyInfo {
     private Map<String, AppAppletAlert> alerts;
     
     public AppletWorkflowCopyInfo(String appletName, String createApprovalSetValuesName,
-            String updateApprovalSetValuesName, String appletSearchTable, String onCreateAlertName,
+            String updateApprovalSetValuesName, String abortSetValuesName, String appletSearchTable, String onCreateAlertName,
             String onUpdateAlertName, String onCreateApprovalAlertName, String onUpdateApprovalAlertName,
             String onCreateRejectionAlertName, String onUpdateRejectionAlertName, long appletVersionNo,
             Map<String, AppAppletAlert> alerts) {
         this.appletName = appletName;
         this.createApprovalSetValuesName = createApprovalSetValuesName;
         this.updateApprovalSetValuesName = updateApprovalSetValuesName;
+        this.abortSetValuesName = abortSetValuesName;
         this.appletSearchTable = appletSearchTable;
         this.onCreateAlertName = onCreateAlertName;
         this.onUpdateAlertName = onUpdateAlertName;
@@ -85,6 +88,10 @@ public class AppletWorkflowCopyInfo {
 
     public String getUpdateApprovalSetValuesName() {
         return updateApprovalSetValuesName;
+    }
+
+    public String getAbortSetValuesName() {
+        return abortSetValuesName;
     }
 
     public String getAppletSearchTable() {

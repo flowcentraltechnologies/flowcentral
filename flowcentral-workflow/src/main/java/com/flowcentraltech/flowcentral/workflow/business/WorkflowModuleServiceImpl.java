@@ -1014,7 +1014,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean providesApplet(String appletName) {
         return appletName.startsWith(WorkflowNameUtils.RESERVED_WORKFLOW_APPLET_PREFIX)
-                || appletName.startsWith(WorkflowNameUtils.RESERVED_WORKFLOW_WIZARD_PREFIX);
+                || appletName.startsWith(WorkflowNameUtils.RESERVED_WORKFLOW_WIZARD_PREFIX); 
     }
 
     @Override

@@ -159,7 +159,7 @@ public class LoadingTable extends AbstractTable<LoadingParams, Entity> {
             restriction.restore();
             TableLoadingDef tableLoadingDef = getTableLoadingDef(i);
             LoadingTableProvider loadingTableProvider = getLoadingTableProvider(tableLoadingDef);
-            String label = loadingTableProvider.getLoadingLabel();
+            final String label = loadingTableProvider.getLoadingLabel();
             List<? extends Entity> _items = loadingTableProvider.getLoadingItems(restriction);
             Order order = getOrder();
             if (order == null) {

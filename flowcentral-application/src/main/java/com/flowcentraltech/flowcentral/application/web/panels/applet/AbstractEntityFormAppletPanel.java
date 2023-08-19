@@ -238,8 +238,10 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         }
 
         boolean parentDisabled = false;
+        boolean showReviewFormCaption = false;
         if (form != null) {
             form.getCtx().setUpdateEnabled(enableUpdate);
+            final String displayCounter = form.getDisplayItemCounter();
             form.clearDisplayItem();
 
             if (isCollaboration) {
@@ -257,14 +259,23 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                 form.setDisplayItemCounterClass("fc-dispcounterfrozen");
                 form.setDisplayItemCounter(
                         resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
-            } else if (appCtx.isInWorkflow() && !appCtx.isReview()) {
-                form.setDisplayItemCounterClass("fc-dispcounterorange");
-                if (isRootForm) {
-                    form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
+            } else if (appCtx.isInWorkflow()) {
+                if (appCtx.isReview()) {
+                    if (isRootForm) {
+                        showReviewFormCaption = true;
+                        form.setDisplayItemCounterClass("fc-dispcounterfrozen fc-dispcounterlarge");
+                        form.setDisplayItemCounter(displayCounter);
+                    }
                 } else {
-                    form.setDisplayItemCounter(
-                            resolveSessionMessage("$m{entityformapplet.form.parentinworkflow.viewonly}"));
-                    parentDisabled = true;
+                    form.setDisplayItemCounterClass("fc-dispcounterorange");
+                    if (isRootForm) {
+                        form.setDisplayItemCounter(
+                                resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
+                    } else {
+                        form.setDisplayItemCounter(
+                                resolveSessionMessage("$m{entityformapplet.form.parentinworkflow.viewonly}"));
+                        parentDisabled = true;
+                    }
                 }
             }
         }
@@ -404,7 +415,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                         .getPropValue(boolean.class, AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_NEXT, false));
                 setVisible("prevBtn", false);
                 setVisible("nextBtn", false);
-                setVisible("displayCounterLabel", isCollaboration);
+                setVisible("displayCounterLabel", showReviewFormCaption || isCollaboration);
                 setVisible("formAttachmentBtn", enableAttachment);
                 setVisible("saveAsBtn", enableSaveAs && !isWorkflowCopyForm);
                 setVisible("updateBtn", enableUpdate);

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- Workflow draft application -->
+<application name="workflowDraft"
+	description="$m{workflow.draft.short.description}"
+	label="$m{workflow.draft.label}" module="workflow">
+</application>

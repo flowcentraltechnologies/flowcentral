@@ -5201,6 +5201,9 @@
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.updateapprovalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />				
+				<property name="workflowCopy.abort.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.abortsetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />				
 				<property name="workflowCopy.create.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.createalert}"
 					inputWidget="studio.propertyappletalertlist" />
@@ -5377,6 +5380,9 @@
 				<property name="workflowCopy.update.approval.setvalues"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.updateapprovalsetvalues}"
 					inputWidget="studio.propertyappletsetvalueslist" />
+				<property name="workflowCopy.abort.setvalues"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.abortsetvalues}"
+					inputWidget="studio.propertyappletsetvalueslist" />				
 				<property name="workflowCopy.create.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.createalert}"
 					inputWidget="studio.propertyappletalertlist" />
