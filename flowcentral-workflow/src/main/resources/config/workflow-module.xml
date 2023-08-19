@@ -8,6 +8,10 @@
 			shortDescription="$m{workflow.short.description}"
 			longDescription="$m{workflow.long.description}" autoInstall="true"
 			configFile="apps/workflow-application.xml" />
+		<application name="workflowDraft"
+			shortDescription="$m{workflow.draft.short.description}"
+			longDescription="$m{workflow.draft.long.description}" autoInstall="true"
+			configFile="apps/workflow-draft-application.xml" />
 	</applications>
 
 	<!-- System Parameters -->

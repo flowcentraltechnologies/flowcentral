@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.web.writers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -53,6 +54,8 @@ import com.tcdng.unify.web.ui.widget.WriteWork;
 @Writes(AppletMenuWidget.class)
 @Component("fc-appletmenu-writer")
 public class AppletMenuWriter extends AbstractMenuWriter {
+
+    private static final String WORKFLOW_DRAFT_APPLICATION = "workflowDraft";
 
     @Configurable
     private AppletUtilities au;
@@ -178,11 +181,22 @@ public class AppletMenuWriter extends AbstractMenuWriter {
             boolean appendISym = false;
             final String searchInput = appletMenuWidget.isSearchable() ? appletMenuWidget.getSearchInput() : null;
             List<ApplicationMenuDef> applicationDefList = au.application().getApplicationMenuDefs(searchInput);
+            List<AppletDef> draftAppletList = new ArrayList<AppletDef>();
+            for (ApplicationMenuDef applicationMenuDef : applicationDefList) {
+                for (AppletDef appletDef : applicationMenuDef.getAppletDefList()) {
+                    if (appletDef.isWithOpenDraftPath()) {
+                        draftAppletList.add(appletDef);
+                    }
+                }
+            }
+
             for (ApplicationMenuDef applicationMenuDef : applicationDefList) {
                 final String appPrivilegeCode = applicationMenuDef.getPrivilege();
                 if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appPrivilegeCode) && (wkspPrivilegeManager == null
                         || wkspPrivilegeManager.isWorkspaceWithPrivilege(workspaceCode, appPrivilegeCode))) {
-                    if (sectionWithItemsOnly && DataUtils.isBlank(applicationMenuDef.getAppletDefList())) {
+                    final boolean isWorkflowDraft = WORKFLOW_DRAFT_APPLICATION.equals(applicationMenuDef.getName());
+                    if (sectionWithItemsOnly && ((isWorkflowDraft && DataUtils.isBlank(draftAppletList))
+                            || (!isWorkflowDraft && DataUtils.isBlank(applicationMenuDef.getAppletDefList())))) {
                         continue;
                     }
 
@@ -224,31 +238,45 @@ public class AppletMenuWriter extends AbstractMenuWriter {
                                 .write("\" class=\"submenu\" style=\"display:").write(submenuStyle).write("\">");
                         writer.write("<ul>");
 
-                        for (AppletDef appletDef : applicationMenuDef.getAppletDefList()) {
-                            if (!enterprise && STANDARD_EXCLUSION.contains(appletDef.getName())) {
-                                continue;
+                        if (isWorkflowDraft) {
+                            for (AppletDef appletDef : draftAppletList) {
+                                final String appletPrivilegeCode = appletDef.getPrivilege();
+                                if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
+                                        && (wkspPrivilegeManager == null || wkspPrivilegeManager
+                                                .isWorkspaceWithPrivilege(workspaceCode, appletPrivilegeCode))) {
+                                    writeOpenDraftSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
+                                    isWithSubMenus = true;
+                                    appendISym = true;
+                                }
                             }
+                        } else {
+                            for (AppletDef appletDef : applicationMenuDef.getAppletDefList()) {
+                                if (!enterprise && STANDARD_EXCLUSION.contains(appletDef.getName())) {
+                                    continue;
+                                }
 
-                            final String appletPrivilegeCode = appletDef.getPrivilege();
-                            if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
-                                    && (wkspPrivilegeManager == null || wkspPrivilegeManager
-                                            .isWorkspaceWithPrivilege(workspaceCode, appletPrivilegeCode))) {
-                                writeSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
-                                isWithSubMenus = true;
-                                appendISym = true;
-                            }
-                        }
-
-                        for (ApplicationAppletDefProvider appletDefProvider : applicationAppletDefProviderList) {
-                            for (AppletDef appletDef : appletDefProvider
-                                    .getAppletDefsByRole(applicationMenuDef.getName(), roleCode, searchInput)) {
-                                if (appletDef.isMenuAccess()) {
+                                final String appletPrivilegeCode = appletDef.getPrivilege();
+                                if (appPrivilegeManager.isRoleWithPrivilege(roleCode, appletPrivilegeCode)
+                                        && (wkspPrivilegeManager == null || wkspPrivilegeManager
+                                                .isWorkspaceWithPrivilege(workspaceCode, appletPrivilegeCode))) {
                                     writeSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
                                     isWithSubMenus = true;
                                     appendISym = true;
                                 }
                             }
+
+                            for (ApplicationAppletDefProvider appletDefProvider : applicationAppletDefProviderList) {
+                                for (AppletDef appletDef : appletDefProvider
+                                        .getAppletDefsByRole(applicationMenuDef.getName(), roleCode, searchInput)) {
+                                    if (appletDef.isMenuAccess()) {
+                                        writeSubMenuAppletDef(writer, misb, appletDef, appendISym, multiPage);
+                                        isWithSubMenus = true;
+                                        appendISym = true;
+                                    }
+                                }
+                            }
                         }
+
                         writer.write("</ul></div>");
                     } finally {
                         if (isWithSubMenus) {

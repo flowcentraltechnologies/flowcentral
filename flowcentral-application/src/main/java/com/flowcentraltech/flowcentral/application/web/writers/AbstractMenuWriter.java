@@ -63,7 +63,10 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         writeLabelWithIcon(writer, appletDef, false);
         writer.write("</li>");
         writeAppletDefJs(writer, misb, appletDef, appendISym, multiPage, false);
+    }
 
+    protected void writeOpenDraftSubMenuAppletDef(ResponseWriter writer, StringBuilder misb, AppletDef appletDef,
+            boolean appendISym, boolean multiPage) throws UnifyException {
         if (appletDef.isWithOpenDraftPath()) {
             writer.write("<li id=\"item_").write(appletDef.getDraftViewId()).write("\">");
             writeLabelWithIcon(writer, appletDef, true);
@@ -78,9 +81,7 @@ public abstract class AbstractMenuWriter extends AbstractPanelWriter {
         writer.write(resolveSymbolHtmlHexCode(icon));
         writer.write("</span>");
         writer.write("<span class=\"acl\">")
-                .writeWithHtmlEscape(draft
-                        ? resolveSessionMessage("$m{menu.applet.updatedraft.label}", appletDef.getLabel())
-                        : appletDef.getLabel())
+                .writeWithHtmlEscape(appletDef.getLabel())
                 .write("</span>");
     }
 
