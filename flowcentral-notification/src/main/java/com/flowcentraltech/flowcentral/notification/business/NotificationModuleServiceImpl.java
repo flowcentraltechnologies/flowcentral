@@ -150,10 +150,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
                         paramList.add(new NotifTemplateParamDef(templateParam.getName(), templateParam.getLabel()));
                     }
 
+                    final String subject = resolveApplicationMessage(notificationTemplate.getSubject());
+                    final String template = resolveApplicationMessage(notificationTemplate.getTemplate());
                     return new NotifTemplateDef(notificationTemplate.getNotificationType(),
-                            notificationTemplate.getEntity(), notificationTemplate.getSubject(),
-                            notificationTemplate.getTemplate(), notificationTemplate.getMessageFormat(), paramList,
-                            longName, notificationTemplate.getDescription(), notificationTemplate.getId(),
+                            notificationTemplate.getEntity(), subject, template,
+                            notificationTemplate.getMessageFormat(), paramList, longName,
+                            notificationTemplate.getDescription(), notificationTemplate.getId(),
                             notificationTemplate.getVersionNo());
                 }
 
