@@ -37,8 +37,8 @@ import com.tcdng.unify.core.annotation.UniqueConstraints;
  */
 @Policy("basework-entitypolicy")
 @DefaultQueryRestrictions({ @QueryRestriction(field = "wfItemVersionType", value = "ORN") })
-@UniqueConstraints(baseFields = { "originalCopyId" },
-    value = { @UniqueConstraint(value = { "wfItemVersionType" }) })
+//@UniqueConstraints(baseFields = { "originalCopyId" },
+//    value = { @UniqueConstraint(value = { "wfItemVersionType" }) })
 public abstract class BaseWorkEntity extends BaseAuditEntity implements WorkEntity {
 
     @ForeignKey(name = "PROCESSING_STATUS", nullable = true)
