@@ -108,6 +108,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                 workflowConfig.setName(workflow.getName());
                 workflowConfig.setDescription("$m{" + descKey + "}");
                 workflowConfig.setLabel("$m{" + labelKey + "}");
+                workflowConfig.setLoadingTable(workflow.getLoadingTable());
                 workflowConfig.setDescFormat(workflow.getDescFormat());
                 workflowConfig.setEntity(workflow.getEntity());
 

@@ -35,6 +35,8 @@ public class WfConfig extends BaseNameConfig {
 
     private String entity;
 
+    private String loadingTable;
+    
     private String descFormat;
 
     private List<WfFilterConfig> filterList;
@@ -57,6 +59,15 @@ public class WfConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setEntity(String entity) {
         this.entity = entity;
+    }
+
+    public String getLoadingTable() {
+        return loadingTable;
+    }
+
+    @XmlAttribute
+    public void setLoadingTable(String loadingTable) {
+        this.loadingTable = loadingTable;
     }
 
     public String getDescFormat() {
