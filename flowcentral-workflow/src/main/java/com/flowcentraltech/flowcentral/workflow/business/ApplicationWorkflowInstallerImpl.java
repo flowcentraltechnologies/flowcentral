@@ -121,6 +121,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                         workflow.setDescription(description);
                         workflow.setDescFormat(wfConfig.getDescFormat());
                         workflow.setLabel(label);
+                        workflow.setLoadingTable(wfConfig.getLoadingTable());
                         workflow.setEntity(
                                 ApplicationNameUtils.ensureLongNameReference(applicationName, wfConfig.getEntity()));
                         workflow.setConfigType(ConfigType.MUTABLE_INSTALL);
@@ -131,6 +132,7 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
                             oldWorkflow.setDescription(description);
                             oldWorkflow.setDescFormat(wfConfig.getDescFormat());
                             oldWorkflow.setLabel(label);
+                            oldWorkflow.setLoadingTable(wfConfig.getLoadingTable());
                             oldWorkflow.setEntity(ApplicationNameUtils.ensureLongNameReference(applicationName,
                                     wfConfig.getEntity()));
                         }
@@ -261,17 +263,15 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
             // Filters
             for (WorkflowFilter workflowFilter : srcWorkflow.getFilterList()) {
                 workflowFilter.setFilterGenerator(ctx.componentSwap(workflowFilter.getFilterGenerator()));
-                ApplicationReplicationUtils.applyReplicationRules(ctx,
-                        workflowFilter.getFilter());
+                ApplicationReplicationUtils.applyReplicationRules(ctx, workflowFilter.getFilter());
             }
 
             // Set Values
             for (WorkflowSetValues workflowSetValues : srcWorkflow.getSetValuesList()) {
-                ApplicationReplicationUtils.applyReplicationRules(ctx,
-                        workflowSetValues.getOnCondition());
+                ApplicationReplicationUtils.applyReplicationRules(ctx, workflowSetValues.getOnCondition());
                 workflowSetValues.setValueGenerator(ctx.componentSwap(workflowSetValues.getValueGenerator()));
-                ApplicationReplicationUtils.applyReplicationRules(ctx,
-                        workflowSetValues.getValueGenerator(), workflowSetValues.getSetValues());
+                ApplicationReplicationUtils.applyReplicationRules(ctx, workflowSetValues.getValueGenerator(),
+                        workflowSetValues.getSetValues());
             }
 
             // Steps
@@ -283,8 +283,8 @@ public class ApplicationWorkflowInstallerImpl extends AbstractApplicationArtifac
 
                 // Set values
                 if (wfStep.getSetValues() != null) {
-                    ApplicationReplicationUtils.applyReplicationRules(ctx,
-                            wfStep.getValueGenerator(), wfStep.getSetValues().getSetValues());
+                    ApplicationReplicationUtils.applyReplicationRules(ctx, wfStep.getValueGenerator(),
+                            wfStep.getSetValues().getSetValues());
                 }
 
                 // Alerts
