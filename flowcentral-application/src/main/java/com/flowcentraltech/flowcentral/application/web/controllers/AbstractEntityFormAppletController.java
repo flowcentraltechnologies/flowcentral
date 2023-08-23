@@ -278,7 +278,7 @@ public abstract class AbstractEntityFormAppletController<T extends AbstractEntit
     @Action
     public String openWorkflowDraft() throws UnifyException {
         MessageResult result = getMessageResult();
-        switch (result) {
+        switch (result == null ? MessageResult.CANCEL: result) {
             case NO:
                 performNormalViewMode();
                 break;
