@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceErrorCodeConstants;
+import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -41,7 +42,7 @@ import com.flowcentraltech.flowcentral.connect.springboot.service.SpringBootInte
  * @since 1.0
  */
 @RestController
-@RequestMapping("/flowcentral/interconnect")
+@RequestMapping(FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER)
 public class SpringBootInterconnectController {
 
     private static final Logger LOGGER = Logger.getLogger(SpringBootInterconnectController.class.getName());
