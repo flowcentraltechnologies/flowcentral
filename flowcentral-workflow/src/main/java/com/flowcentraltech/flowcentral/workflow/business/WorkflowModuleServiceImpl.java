@@ -1014,7 +1014,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Override
     public boolean providesApplet(String appletName) {
         return appletName.startsWith(WorkflowNameUtils.RESERVED_WORKFLOW_APPLET_PREFIX)
-                || appletName.startsWith(WorkflowNameUtils.RESERVED_WORKFLOW_WIZARD_PREFIX); 
+                || appletName.startsWith(WorkflowNameUtils.RESERVED_WORKFLOW_WIZARD_PREFIX);
     }
 
     @Override
@@ -1543,8 +1543,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Date now = getNow();
         if (wfAlertDef.isWithFireAlertOnCondition()) {
             final EntityClassDef entityClassDef = appletUtil.getEntityClassDef(wfDef.getEntity());
-            if (!wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
-                    .getObjectFilter(entityClassDef.getEntityDef(), reader, now).matchReader(reader)) {
+            if (!(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME.equals(wfAlertDef.getFireOnCondition())
+                    || wfDef.getFilterDef(wfAlertDef.getFireOnCondition()).getFilterDef()
+                            .getObjectFilter(entityClassDef.getEntityDef(), reader, now).matchReader(reader))) {
                 return;
             }
         }
