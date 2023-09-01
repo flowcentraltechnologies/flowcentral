@@ -81,9 +81,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
@@ -1019,7 +1021,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
         return isRootForm() && isWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
-                && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null
+                && WfItemVersionType.ORIGINAL.equals(((WorkEntity) form.getFormBean()).getWfItemVersionType())
                 && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
 
@@ -1157,6 +1159,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currentFormAppletDef = getFormAppletDef();
         final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
         final Object inst = ReflectUtils.newInstance(entityClassDef.getEntityClass());
+        if (isWorkflowCopy() && (isNoForm() || isRootForm())) {
+            ((BaseWorkEntity) inst).setWfItemVersionType(WfItemVersionType.DRAFT);
+        }
+
         String createNewCaption = _currentFormAppletDef != null
                 ? _currentFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_CAPTION)
                 : null;

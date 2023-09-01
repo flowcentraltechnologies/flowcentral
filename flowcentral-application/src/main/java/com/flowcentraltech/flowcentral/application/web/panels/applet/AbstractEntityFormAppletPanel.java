@@ -52,6 +52,7 @@ import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralRequestAttributeConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralSessionAttributeConstants;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.TabContentType;
 import com.tcdng.unify.core.UnifyException;
@@ -127,7 +128,8 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
         final boolean isWorkflowCopyForm = isRootForm && formAppletDef != null
                 && formAppletDef.getPropValue(boolean.class, AppletPropertyConstants.WORKFLOWCOPY);
         final boolean isInWorkflow = inst instanceof WorkEntity && ((WorkEntity) inst).isInWorkflow();
-        final boolean isUpdateDraft = inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null;
+        final boolean isUpdateDraft = inst instanceof WorkEntity
+                && WfItemVersionType.DRAFT.equals(((WorkEntity) inst).getWfItemVersionType());
         if (isRootForm) {
             appCtx.setInWorkflow(isInWorkflow);
         }
@@ -453,7 +455,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
                     setVisible("submitNextBtn", enableCreateSubmit && formAppletDef.getPropValue(boolean.class,
                             AppletPropertyConstants.CREATE_FORM_SUBMIT_NEXT, false));
                 } else {
-                    setVisible("saveBtn", enableCreate && formAppletDef == null);
+                    setVisible("saveBtn", enableCreate && (isWorkflowCopyForm || formAppletDef == null));
                     setVisible("saveNextBtn", false);
                     setVisible("saveCloseBtn", false);
                     setVisible("submitCloseBtn", enableCreate && isWorkflowCopyForm);

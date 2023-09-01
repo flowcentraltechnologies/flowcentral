@@ -73,6 +73,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolic
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.common.data.WfEntityInst;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
@@ -1353,7 +1354,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 break;
                             case UPDATE_ORIGINAL: {
                                 transitionItem.setUpdated();
-                                final Long originalCopyId = wfEntityInst.getOriginalCopyId();
+                                final Long originalCopyId = wfEntityInst.getOriginalCopyId(); 
                                 if (originalCopyId != null) {
                                     WorkEntity originalInst = (WorkEntity) environment().findLean(
                                             (Class<? extends Entity>) entityClassDef.getEntityClass(), originalCopyId);
@@ -1405,6 +1406,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                         environment().deleteByIdVersion(wfEntityInst);
                         transitionItem.setDeleted();
                     } else {
+                        wfEntityInst.setWfItemVersionType(WfItemVersionType.ORIGINAL);
                         wfEntityInst.setInWorkflow(false);
                         wfEntityInst.setProcessingStatus(null);
                         transitionItem.setUpdated();

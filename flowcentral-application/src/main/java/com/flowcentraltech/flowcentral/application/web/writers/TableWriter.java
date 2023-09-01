@@ -585,6 +585,7 @@ public class TableWriter extends AbstractControlWriter {
             final boolean entryMode = table.isEntryMode();
             final boolean supportSelect = !table.isFixedAssignment();
             final int pageIndex = table.getDispStartIndex() + 1;
+            final boolean isDisableLinks = table.isDisableLinks();
             final TableDef tableDef = table.getTableDef();
             final boolean isSerialNo = tableDef.isSerialNo();
             final boolean isFixedRows = tableWidget.isContainerEditable() && tableWidget.isFixedRows();
@@ -606,8 +607,8 @@ public class TableWriter extends AbstractControlWriter {
                 final boolean rowColors = tableDef.isRowColorFilters();
                 final boolean isCrudMode = tableWidget.isCrudMode();
                 final Date now = table.au().getNow();
-                final String even = isRowAction ? "even pnt" : "even";
-                final String odd = isRowAction ? "odd pnt" : "odd";
+                final String even = isRowAction && !isDisableLinks ? "even pnt" : "even";
+                final String odd = isRowAction && !isDisableLinks ? "odd pnt" : "odd";
                 final int highlightRow = table.getHighlightedRow();
                 final EntryTableMessage entryMessage = table.getEntryMessage();
                 TableStateOverride[] tableStateOverride = entryMode ? new TableStateOverride[len] : null;
@@ -662,7 +663,7 @@ public class TableWriter extends AbstractControlWriter {
                             summaryClass = odd;
                             writeTagStyleClass(writer, odd);
                         }
-                    } else if (isRowAction) {
+                    } else if (isRowAction && !isDisableLinks) {
                         writeTagStyleClass(writer, "pnt");
                     }
 
