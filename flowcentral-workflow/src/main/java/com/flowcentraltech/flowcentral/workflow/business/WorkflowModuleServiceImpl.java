@@ -84,6 +84,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.WorkflowStepType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.flowcentraltech.flowcentral.organization.business.OrganizationModuleService;
+import com.flowcentraltech.flowcentral.security.business.SecurityModuleService;
 import com.flowcentraltech.flowcentral.system.constants.SystemModuleSysParamConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfAppletPropertyConstants;
 import com.flowcentraltech.flowcentral.workflow.constants.WfChannelErrorConstants;
@@ -200,6 +201,9 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private NotificationRecipientProvider notifRecipientProvider;
 
+    @Configurable
+    private SecurityModuleService securityModuleService;
+    
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
@@ -886,12 +890,13 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final WfItem wfItem = environment().list(WfItem.class, wfItemId);
         if (wfItem.getWfStepName().equals(stepName)) {
             final WfDef wfDef = getWfDef(wfItem.getWorkflowName());
+            final String userLoginId = getUserToken().getUserLoginId();
             WfStepDef currentWfStepDef = wfDef.getWfStepDef(stepName);
             WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
-                    new Update().add("actor", getUserToken().getUserLoginId()).add("actionDt", getNow())
-                            .add("comment", comment).add("wfAction", userActionDef.getLabel()));
+                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment).add("wfAction",
+                            userActionDef.getLabel()));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step
@@ -903,10 +908,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     null, null);
 
             final String forwardTo = userActionDef.isForwarderPreferred() ? wfItem.getForwardedBy() : null;
+            final String forwardedByName = securityModuleService.getUserFullName(userLoginId);
             wfItem.setWfItemEventId(wfItemEventId);
-            wfItem.setForwardedBy(getUserToken().getUserLoginId());
+            wfItem.setForwardedBy(userLoginId);
+            wfItem.setForwardedByName(forwardedByName);
             wfItem.setForwardTo(forwardTo);
-            wfItem.setHeldBy(getUserToken().getUserLoginId());
+            wfItem.setHeldBy(userLoginId);
             environment().updateByIdVersion(wfItem);
 
             final ValueStore wfEntityInstValueStore = new BeanValueStore(wfEntityInst);
@@ -1255,10 +1262,12 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             Long wfItemHistId = (Long) environment().create(wfItemHist);
             Long wfItemEventId = createWfItemEvent(startStepDef, wfItemHistId);
 
+            final String userFullName = securityModuleService.getUserFullName(userLoginId);
             WfItem wfItem = new WfItem();
             wfItem.setTenantId(workInst.getTenantId());
             wfItem.setWfItemEventId(wfItemEventId);
             wfItem.setForwardedBy(userLoginId);
+            wfItem.setForwardedByName(userFullName);
             wfItem.setWorkRecId(workRecId);
             Long wfItemId = (Long) environment().create(wfItem);
 
@@ -1290,8 +1299,18 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Date now = getNow();
 
         transitionItem.setVariable(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
+        transitionItem.setVariable(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
         transitionItem.setVariable(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
         transitionItem.setVariable(ProcessVariable.HELD_BY.variableKey(), wfItem.getHeldBy());
+        transitionItem.setVariable(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
+        transitionItem.setVariable(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
+
+        wfInstReader.setTempValue(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
+        wfInstReader.setTempValue(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
+        wfInstReader.setTempValue(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
+        wfInstReader.setTempValue(ProcessVariable.HELD_BY.variableKey(), wfItem.getHeldBy());
+        wfInstReader.setTempValue(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
+        wfInstReader.setTempValue(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
 
         setSavePoint();
         wfItem.setHeldBy(null);
@@ -1354,7 +1373,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 break;
                             case UPDATE_ORIGINAL: {
                                 transitionItem.setUpdated();
-                                final Long originalCopyId = wfEntityInst.getOriginalCopyId(); 
+                                final Long originalCopyId = wfEntityInst.getOriginalCopyId();
                                 if (originalCopyId != null) {
                                     WorkEntity originalInst = (WorkEntity) environment().findLean(
                                             (Class<? extends Entity>) entityClassDef.getEntityClass(), originalCopyId);

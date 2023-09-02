@@ -439,6 +439,13 @@ public class SecurityModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
+    public String getUserFullName(String userLoginId) throws UnifyException {
+        List<String> fullNameList = environment().valueList(String.class, "fullName",
+                new UserQuery().loginId(userLoginId));
+        return !DataUtils.isBlank(fullNameList) ? fullNameList.get(0) : null;
+    }
+
+    @Override
     public byte[] findUserPhotograph(String userLoginId) throws UnifyException {
         Long userId = environment().value(Long.class, "id", new UserQuery().loginId(userLoginId));
         Attachment attachment = fileAttachmentProvider.retrieveFileAttachment("work",

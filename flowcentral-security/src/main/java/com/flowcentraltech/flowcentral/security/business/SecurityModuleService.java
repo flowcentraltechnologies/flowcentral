@@ -134,6 +134,17 @@ public interface SecurityModuleService extends FlowCentralService, UserLoginActi
     User findUser(String userLoginId) throws UnifyException;
 
     /**
+     * Gets a user full name by login ID.
+     * 
+     * @param userLoginId
+     *                    the user login ID
+     * @return the user full name otherwise null
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    String getUserFullName(String userLoginId) throws UnifyException;
+
+    /**
      * Finds a user photograph.
      * 
      * @param userLoginId

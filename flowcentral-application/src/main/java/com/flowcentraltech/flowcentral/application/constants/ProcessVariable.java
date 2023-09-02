@@ -32,11 +32,17 @@ import com.tcdng.unify.core.util.EnumUtils;
 public enum ProcessVariable implements EnumConst {
 
     FORWARDED_BY(
-            "FWB", "forwardedBy"),
+            "FWB", "prcForwardedBy"),
+    FORWARDED_BY_NAME(
+            "FWN", "prcForwardedByName"),
     FORWARD_TO(
-            "FWT", "forwardTo"),
+            "FWT", "prcForwardTo"),
     HELD_BY(
-            "HDB", "heldBy");
+            "HDB", "prcHeldBy"),
+    ENTITY_NAME(
+            "ENM", "prcEntityName"),
+    ENTITY_DESC(
+            "END", "prcEntityDesc");
 
     private final String code;
 
