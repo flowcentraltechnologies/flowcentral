@@ -42,7 +42,11 @@ public enum ProcessVariable implements EnumConst {
     ENTITY_NAME(
             "ENM", "prcEntityName"),
     ENTITY_DESC(
-            "END", "prcEntityDesc");
+            "END", "prcEntityDesc"),
+    APP_TITLE(
+            "APT", "prcAppTitle"),
+    APP_CORRESPONDER(
+            "APC", "prcAppCorresponder");
 
     private final String code;
 

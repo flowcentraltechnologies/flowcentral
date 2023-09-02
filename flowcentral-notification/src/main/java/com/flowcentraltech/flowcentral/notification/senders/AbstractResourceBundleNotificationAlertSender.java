@@ -39,6 +39,10 @@ public abstract class AbstractResourceBundleNotificationAlertSender extends Abst
 
     private final NotifType notifType;
 
+    private final String subjectMessageKey;
+
+    private final String bodyMessageKey;
+
     private List<StringToken> subjectTokenList;
 
     private List<StringToken> templateTokenList;
@@ -46,16 +50,12 @@ public abstract class AbstractResourceBundleNotificationAlertSender extends Abst
     public AbstractResourceBundleNotificationAlertSender(NotifType notifType, String subjectMessageKey,
             String bodyMessageKey) {
         this.notifType = notifType;
-        try {
-            this.subjectTokenList = StringUtils.breakdownParameterizedString(getApplicationMessage(subjectMessageKey));
-            this.templateTokenList = StringUtils.breakdownParameterizedString(getApplicationMessage(bodyMessageKey));
-        } catch (UnifyException e) {
-            throw new IllegalArgumentException(e);
-        }
+        this.subjectMessageKey = subjectMessageKey;
+        this.bodyMessageKey = bodyMessageKey;
     }
 
     @Override
-    public NotifType getNotifType() throws UnifyException {
+    public final NotifType getNotifType() throws UnifyException {
         return notifType;
     }
 
@@ -70,6 +70,8 @@ public abstract class AbstractResourceBundleNotificationAlertSender extends Abst
         }
 
         if (!DataUtils.isBlank(allRecipientList)) {
+            ensureTokenList();
+            
             NotifMessage.Builder nb = NotifMessage.newBuilder(subjectTokenList, templateTokenList);
             // Set recipients
             for (Recipient recipient : allRecipientList) {
@@ -116,5 +118,16 @@ public abstract class AbstractResourceBundleNotificationAlertSender extends Abst
      *                        if an error occurs
      */
     protected abstract List<Recipient> getAdditionalRecipients(ValueStoreReader reader) throws UnifyException;
+
+    private void ensureTokenList() throws UnifyException {
+        if (subjectTokenList == null) {
+            synchronized (this) {
+                if (subjectTokenList == null) {
+                    subjectTokenList = StringUtils.breakdownParameterizedString(getApplicationMessage(subjectMessageKey));
+                    templateTokenList = StringUtils.breakdownParameterizedString(getApplicationMessage(bodyMessageKey));
+                }
+            }
+        }
+    }
 
 }

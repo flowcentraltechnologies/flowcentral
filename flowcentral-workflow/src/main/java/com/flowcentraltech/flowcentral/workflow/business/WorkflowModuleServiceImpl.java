@@ -72,6 +72,7 @@ import com.flowcentraltech.flowcentral.common.business.policies.WfProcessPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.WfRecipientPolicy;
 import com.flowcentraltech.flowcentral.common.constants.CommonTempValueNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
 import com.flowcentraltech.flowcentral.common.constants.ProcessErrorConstants;
 import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
@@ -203,7 +204,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     @Configurable
     private SecurityModuleService securityModuleService;
-    
+
     @Configurable
     private FileAttachmentProvider fileAttachmentProvider;
 
@@ -452,6 +453,10 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     public final void setFileAttachmentProvider(FileAttachmentProvider fileAttachmentProvider) {
         this.fileAttachmentProvider = fileAttachmentProvider;
+    }
+
+    public final void setSecurityModuleService(SecurityModuleService securityModuleService) {
+        this.securityModuleService = securityModuleService;
     }
 
     @Override
@@ -895,8 +900,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             WfUserActionDef userActionDef = currentWfStepDef.getUserActionDef(userAction);
             // Update current event
             environment().updateAll(new WfItemEventQuery().id(wfItem.getWfItemEventId()),
-                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment).add("wfAction",
-                            userActionDef.getLabel()));
+                    new Update().add("actor", userLoginId).add("actionDt", getNow()).add("comment", comment)
+                            .add("wfAction", userActionDef.getLabel()));
 
             // Prepare event for next step. If error step and next step is not specified
             // jump to the work item previous step
@@ -1298,12 +1303,19 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         final Long wfItemId = wfItem.getId();
         final Date now = getNow();
 
+        final String appTitle = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
+        final String appCorresponder = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
+
         transitionItem.setVariable(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         transitionItem.setVariable(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
         transitionItem.setVariable(ProcessVariable.FORWARD_TO.variableKey(), wfItem.getForwardTo());
         transitionItem.setVariable(ProcessVariable.HELD_BY.variableKey(), wfItem.getHeldBy());
         transitionItem.setVariable(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
         transitionItem.setVariable(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
+        transitionItem.setVariable(ProcessVariable.APP_TITLE.variableKey(), appTitle);
+        transitionItem.setVariable(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
 
         wfInstReader.setTempValue(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         wfInstReader.setTempValue(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
@@ -1311,6 +1323,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         wfInstReader.setTempValue(ProcessVariable.HELD_BY.variableKey(), wfItem.getHeldBy());
         wfInstReader.setTempValue(ProcessVariable.ENTITY_NAME.variableKey(), entityDef.getName());
         wfInstReader.setTempValue(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
+        wfInstReader.setTempValue(ProcessVariable.APP_TITLE.variableKey(), appTitle);
+        wfInstReader.setTempValue(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
 
         setSavePoint();
         wfItem.setHeldBy(null);

@@ -21,31 +21,30 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
-import com.flowcentraltech.flowcentral.notification.senders.AbstractNotificationAlertSender;
+import com.flowcentraltech.flowcentral.notification.senders.AbstractResourceBundleNotificationAlertSender;
 import com.flowcentraltech.flowcentral.workflow.constants.WorkflowModuleNameConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
- * Workflow copy update approval pending alert sender.
+ * Workflow copy create approval pending email sender.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component(name = WorkflowModuleNameConstants.WORKFLOW_COPY_UPDATE_APPROVAL_PENDING_EMAIL_SENDER,
-        description = "Workflow Copy Update Approval Pending Email Sender.")
-public class WorkflowCopyUpdatePendingApprovalAlertSender extends AbstractNotificationAlertSender {
+@Component(name = WorkflowModuleNameConstants.WORKFLOW_COPY_CREATE_APPROVAL_PENDING_EMAIL_SENDER,
+        description = "Workflow Copy Create Approval Pending Email Sender.")
+public class WorkflowCopyCreatePendingApprovalEmailSender extends AbstractResourceBundleNotificationAlertSender {
 
-    @Override
-    public NotifType getNotifType() throws UnifyException {
-        return NotifType.EMAIL;
+    public WorkflowCopyCreatePendingApprovalEmailSender() {
+        super(NotifType.EMAIL, "workflow.notification.creation.approval.required.subject",
+                "workflow.notification.creation.approval.required.body");
     }
 
     @Override
-    public void composeAndSend(ValueStoreReader reader, List<Recipient> recipientList) throws UnifyException {
-        // TODO Auto-generated method stub
-
+    protected List<Recipient> getAdditionalRecipients(ValueStoreReader reader) throws UnifyException {
+        return Collections.emptyList();
     }
 
     @Override
