@@ -23,7 +23,10 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.ImportanceType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifRecipientType;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
+import com.tcdng.unify.common.util.StringToken;
 import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -37,9 +40,17 @@ public class NotifMessage {
 
     private ImportanceType importance;
 
+    private NotifType notifType;
+
+    private NotifMessageFormat format;
+
     private String template;
 
     private String from;
+
+    private List<StringToken> subjectTokenList;
+
+    private List<StringToken> templateTokenList;
 
     private Map<String, Object> params;
 
@@ -47,11 +58,16 @@ public class NotifMessage {
 
     private List<Attachment> attachments;
 
-    private NotifMessage(ImportanceType importance, String from, String template, Map<String, Object> params,
-            List<Recipient> recipients, List<Attachment> attachments) {
+    private NotifMessage(ImportanceType importance, NotifType notifType, NotifMessageFormat format, String from,
+            String template, List<StringToken> subjectTokenList, List<StringToken> templateTokenList,
+            Map<String, Object> params, List<Recipient> recipients, List<Attachment> attachments) {
         this.importance = importance;
+        this.notifType = notifType;
+        this.format = format;
         this.from = from;
         this.template = template;
+        this.subjectTokenList = subjectTokenList;
+        this.templateTokenList = templateTokenList;
         this.params = params;
         this.recipients = recipients;
         this.attachments = attachments;
@@ -65,8 +81,24 @@ public class NotifMessage {
         return importance;
     }
 
+    public NotifType getNotifType() {
+        return notifType;
+    }
+
+    public NotifMessageFormat getFormat() {
+        return format;
+    }
+
     public String getFrom() {
         return from;
+    }
+
+    public List<StringToken> getSubjectTokenList() {
+        return subjectTokenList;
+    }
+
+    public List<StringToken> getTemplateTokenList() {
+        return templateTokenList;
     }
 
     public Map<String, Object> getParams() {
@@ -81,17 +113,33 @@ public class NotifMessage {
         return attachments;
     }
 
+    public boolean isUseTemplate() {
+        return template != null;
+    }
+
     public static Builder newBuilder(String template) {
         return new Builder(template);
+    }
+
+    public static Builder newBuilder(List<StringToken> subjectTokenList, List<StringToken> templateTokenList) {
+        return new Builder(subjectTokenList, templateTokenList);
     }
 
     public static class Builder {
 
         private ImportanceType importance;
 
+        private NotifType notifType;
+
+        private NotifMessageFormat format;
+
         private String template;
 
         private String from;
+
+        private List<StringToken> subjectTokenList;
+
+        private List<StringToken> templateTokenList;
 
         private Map<String, Object> params;
 
@@ -101,7 +149,24 @@ public class NotifMessage {
 
         private Builder(String template) {
             this.importance = ImportanceType.LOW;
+            this.notifType = NotifType.EMAIL;
+            this.format = NotifMessageFormat.HTML;
             this.template = template;
+            this.params = new HashMap<String, Object>();
+            this.recipients = new ArrayList<Recipient>();
+            this.attachments = new ArrayList<Attachment>();
+        }
+
+        public Builder(List<StringToken> subjectTokenList, List<StringToken> templateTokenList) {
+            if (DataUtils.isBlank(subjectTokenList) || DataUtils.isBlank(templateTokenList)) {
+                throw new IllegalArgumentException("Token lists can not be empty.");
+            }
+
+            this.importance = ImportanceType.LOW;
+            this.notifType = NotifType.EMAIL;
+            this.format = NotifMessageFormat.HTML;
+            this.subjectTokenList = subjectTokenList;
+            this.templateTokenList = templateTokenList;
             this.params = new HashMap<String, Object>();
             this.recipients = new ArrayList<Recipient>();
             this.attachments = new ArrayList<Attachment>();
@@ -132,6 +197,16 @@ public class NotifMessage {
             return this;
         }
 
+        public Builder notifType(NotifType notifType) {
+            this.notifType = notifType;
+            return this;
+        }
+
+        public Builder format(NotifMessageFormat format) {
+            this.format = format;
+            return this;
+        }
+
         public Builder importance(ImportanceType importance) {
             this.importance = importance != null ? importance : ImportanceType.LOW;
             return this;
@@ -139,6 +214,11 @@ public class NotifMessage {
 
         public Builder addParam(String name, Object val) {
             params.put(name, val);
+            return this;
+        }
+
+        public Builder addParams(Map<String, Object> params) {
+            params.putAll(params);
             return this;
         }
 
@@ -160,14 +240,15 @@ public class NotifMessage {
         public boolean isWithRecipients() {
             return !DataUtils.isBlank(recipients);
         }
-        
+
         public NotifMessage build() {
             if (DataUtils.isBlank(recipients)) {
                 throw new IllegalArgumentException("At least one recipient is required.");
             }
 
-            return new NotifMessage(importance, from, template, DataUtils.unmodifiableMap(params),
-                    DataUtils.unmodifiableList(recipients), DataUtils.unmodifiableList(attachments));
+            return new NotifMessage(importance, notifType, format, from, template, subjectTokenList, templateTokenList,
+                    DataUtils.unmodifiableMap(params), DataUtils.unmodifiableList(recipients),
+                    DataUtils.unmodifiableList(attachments));
         }
 
     }

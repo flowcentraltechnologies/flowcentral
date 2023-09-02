@@ -34,7 +34,7 @@ public class BaseWorkEntityPolicy extends BaseAuditEntityPolicy {
     
     @Override
     public Object preCreate(Entity record, Date now) throws UnifyException {
-        if (((BaseWorkEntity) record).getWfItemVersionType() == null) {
+        if (((BaseWorkEntity) record).getWfItemVersionType() == null) { 
             ((BaseWorkEntity) record).setWfItemVersionType(WfItemVersionType.ORIGINAL);
         }
         

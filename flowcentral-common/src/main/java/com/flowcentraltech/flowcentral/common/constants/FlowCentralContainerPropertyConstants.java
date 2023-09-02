@@ -30,4 +30,8 @@ public interface FlowCentralContainerPropertyConstants {
 
     String FLOWCENTRAL_REPORTING_TABLE_RECORDS_MAXIMUM = "flowcentral.reporting.table.records.maximum";
 
+    String FLOWCENTRAL_APPLICATION_TITLE = "flowcentral.application.title";
+
+    String FLOWCENTRAL_APPLICATION_CORRESPONDER= "flowcentral.application.corresponder";
+
 }

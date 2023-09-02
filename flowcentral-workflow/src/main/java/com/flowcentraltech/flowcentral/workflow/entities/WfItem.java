@@ -43,6 +43,9 @@ public class WfItem extends BaseTenantEntity {
     @Column(length = 64, nullable = true)
     private String forwardedBy;
 
+    @Column(length = 96, nullable = true)
+    private String forwardedByName;
+
     @Column(length = 64, nullable = true)
     private String forwardTo;
 
@@ -139,6 +142,14 @@ public class WfItem extends BaseTenantEntity {
 
     public void setForwardedBy(String forwardedBy) {
         this.forwardedBy = forwardedBy;
+    }
+
+    public String getForwardedByName() {
+        return forwardedByName;
+    }
+
+    public void setForwardedByName(String forwardedByName) {
+        this.forwardedByName = forwardedByName;
     }
 
     public String getForwardTo() {

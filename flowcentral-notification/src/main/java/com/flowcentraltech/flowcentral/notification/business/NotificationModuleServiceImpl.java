@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
 import com.flowcentraltech.flowcentral.common.constants.RecordStatus;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
+import com.flowcentraltech.flowcentral.configuration.constants.NotifMessageFormat;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
 import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.notification.constants.NotificationChannelPropertyConstants;
@@ -360,8 +361,15 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
     @Override
     public void sendNotification(NotifMessage notifMessage) throws UnifyException {
-        final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(notifMessage.getTemplate());
-        if (NotifType.SYSTEM.equals(notifTemplateDef.getNotifType())) {
+        NotifType notifType = notifMessage.getNotifType();
+        NotifMessageFormat format = notifMessage.getFormat();
+        if (notifMessage.isUseTemplate()) {
+            NotifTemplateDef notifTemplateDef = getNotifTemplateDef(notifMessage.getTemplate());
+            notifType = notifTemplateDef.getNotifType();
+            format = notifTemplateDef.getFormat();
+        }
+
+        if (NotifType.SYSTEM.equals(notifType)) {
             dispatchSystemNotification(notifMessage);
         } else {
             MessageParts messageParts = getMessageParts(notifMessage);
@@ -369,12 +377,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
             notification.setTenantId(getUserTenantId());
             notification.setImportance(notifMessage.getImportance());
             notification.setFrom(notifMessage.getFrom());
-            notification.setType(notifTemplateDef.getNotifType());
+            notification.setType(notifType);
             notification.setExpiryDt(null);
             notification.setNextAttemptDt(getNow());
             notification.setSubject(messageParts.getSubject());
             notification.setStatus(NotificationOutboxStatus.NOT_SENT);
-            notification.setFormat(notifTemplateDef.getFormat());
+            notification.setFormat(format);
             notification.setMessage(messageParts.getBody());
 
             // Recipients
@@ -553,10 +561,12 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     private void dispatchSystemNotification(NotifMessage notifMessage) throws UnifyException {
-        final NotifTemplateDef notifTemplateDef = getNotifTemplateDef(notifMessage.getTemplate());
-        if (!NotifType.SYSTEM.equals(notifTemplateDef.getNotifType())) {
+        final NotifType notifType = notifMessage.isUseTemplate()
+                ? getNotifTemplateDef(notifMessage.getTemplate()).getNotifType()
+                : notifMessage.getNotifType();
+        if (!notifType.isSystem()) {
             throw new UnifyException(NotificationModuleErrorConstants.CANNOT_SEND_NOTIFICATION_TYPE_THROUGH_CHANNEL,
-                    notifTemplateDef.getNotifType(), NotifType.SYSTEM);
+                    notifType, NotifType.SYSTEM);
         }
 
         MessageParts messageParts = getMessageParts(notifMessage);
@@ -573,12 +583,20 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
     }
 
     private MessageParts getMessageParts(NotifMessage notifMessage) throws UnifyException {
-        NotifTemplateDef notifTemplateDef = templates.get(notifMessage.getTemplate());
         ValueStoreReader valueStoreReader = new MapValueStore(notifMessage.getParams()).getReader();
-        ParameterizedStringGenerator sgenerator = au.getStringGenerator(valueStoreReader,
-                notifTemplateDef.getSubjectTokenList());
-        ParameterizedStringGenerator bgenerator = au.getStringGenerator(valueStoreReader,
-                notifTemplateDef.getTemplateTokenList());
+        List<StringToken> subjectTokenList = null;
+        List<StringToken> templateTokenList = null;
+        if (notifMessage.isUseTemplate()) {
+            NotifTemplateDef notifTemplateDef = templates.get(notifMessage.getTemplate());
+            subjectTokenList = notifTemplateDef.getSubjectTokenList();
+            templateTokenList = notifTemplateDef.getTemplateTokenList();
+        } else {
+            subjectTokenList = notifMessage.getSubjectTokenList();
+            templateTokenList = notifMessage.getTemplateTokenList();
+        }
+
+        ParameterizedStringGenerator sgenerator = au.getStringGenerator(valueStoreReader, subjectTokenList);
+        ParameterizedStringGenerator bgenerator = au.getStringGenerator(valueStoreReader, templateTokenList);
         String subject = sgenerator.generate();
         String body = bgenerator.generate();
         return new MessageParts(subject, body);

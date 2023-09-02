@@ -81,9 +81,11 @@ import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.business.policies.SweepingCommitPolicy;
 import com.flowcentraltech.flowcentral.common.business.policies.TableActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
 import com.flowcentraltech.flowcentral.common.data.RowChangeInfo;
 import com.flowcentraltech.flowcentral.common.entities.BaseEntity;
+import com.flowcentraltech.flowcentral.common.entities.BaseWorkEntity;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.configuration.constants.AppletType;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
@@ -798,7 +800,8 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final EntityDef _entityDef = form.getFormDef().getEntityDef();
         EntityActionResult entityActionResult = null;
         if (isWorkflowCopy()) {
-            final String workflowName = viewMode.isCreateForm()
+            final WorkEntity workEntity = (WorkEntity) inst;
+            final String workflowName = viewMode.isCreateForm() || workEntity.getOriginalCopyId() == null
                     ? ApplicationNameUtils.getWorkflowCopyCreateWorkflowName(_currFormAppletDef.getLongName())
                     : (actionMode.isDelete()
                             ? ApplicationNameUtils.getWorkflowCopyDeleteWorkflowName(_currFormAppletDef.getLongName())
@@ -809,7 +812,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
                                     AppletPropertyConstants.CREATE_FORM_SUBMIT_POLICY)
                             : _currFormAppletDef.getPropValue(String.class,
                                     AppletPropertyConstants.MAINTAIN_FORM_SUBMIT_POLICY));
-            entityActionResult = au().workItemUtilities().submitToWorkflow(_entityDef, workflowName, (WorkEntity) inst,
+            entityActionResult = au().workItemUtilities().submitToWorkflow(_entityDef, workflowName, workEntity,
                     policy);
         } else {
             String channel = _currFormAppletDef.getPropValue(String.class,
@@ -1019,7 +1022,7 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
 
     public boolean isPromptEnterWorkflowDraft() throws UnifyException {
         return isRootForm() && isWorkflowCopy() && !getCtx().isInWorkflowPromptViewMode()
-                && ((WorkEntity) form.getFormBean()).getOriginalCopyId() == null
+                && WfItemVersionType.ORIGINAL.equals(((WorkEntity) form.getFormBean()).getWfItemVersionType())
                 && !((WorkEntity) form.getFormBean()).isInWorkflow();
     }
 
@@ -1157,6 +1160,10 @@ public abstract class AbstractEntityFormApplet extends AbstractApplet implements
         final AppletDef _currentFormAppletDef = getFormAppletDef();
         final EntityClassDef entityClassDef = au().getEntityClassDef(_currentFormAppletDef.getEntity());
         final Object inst = ReflectUtils.newInstance(entityClassDef.getEntityClass());
+        if (isWorkflowCopy() && (isNoForm() || isRootForm())) {
+            ((BaseWorkEntity) inst).setWfItemVersionType(WfItemVersionType.DRAFT);
+        }
+
         String createNewCaption = _currentFormAppletDef != null
                 ? _currentFormAppletDef.getPropValue(String.class, AppletPropertyConstants.CREATE_FORM_NEW_CAPTION)
                 : null;

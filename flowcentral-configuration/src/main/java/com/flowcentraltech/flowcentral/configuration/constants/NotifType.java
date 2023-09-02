@@ -53,6 +53,18 @@ public enum NotifType implements EnumConst {
         return SYSTEM.code;
     }
 
+    public boolean isSystem() {
+        return SYSTEM.equals(this);
+    }
+
+    public boolean isEmail() {
+        return EMAIL.equals(this);
+    }
+
+    public boolean isSMS() {
+        return SMS.equals(this);
+    }
+
     public static NotifType fromCode(String code) {
         return EnumUtils.fromCode(NotifType.class, code);
     }

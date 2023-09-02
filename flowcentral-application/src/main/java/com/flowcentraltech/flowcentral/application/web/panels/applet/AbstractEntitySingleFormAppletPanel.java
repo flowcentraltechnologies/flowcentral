@@ -27,6 +27,7 @@ import com.flowcentraltech.flowcentral.application.web.panels.FormPanel;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
+import com.flowcentraltech.flowcentral.common.constants.WfItemVersionType;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
@@ -79,7 +80,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
         final EntitySingleForm form = applet.getForm();
         final Entity inst = form != null ? (Entity) form.getFormBean() : null;
         final boolean isInWorkflow = inst instanceof WorkEntity && ((WorkEntity) inst).isInWorkflow();
-        final boolean isUpdateCopy = inst instanceof WorkEntity && ((WorkEntity) inst).getOriginalCopyId() != null;
+        final boolean isUpdateCopy = inst instanceof WorkEntity
+                && WfItemVersionType.DRAFT.equals(((WorkEntity) inst).getWfItemVersionType());
         appCtx.setInWorkflow(isInWorkflow);
 
         final boolean isContextEditable = appCtx.isContextEditable();
@@ -126,7 +128,8 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
             form.clearDisplayItem();
             if (isUpdateCopy) {
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
-                form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
+                form.setDisplayItemCounter(
+                        resolveSessionMessage("$m{entityformapplet.form.workflowupdatecopy.viewonly}"));
             } else if (appCtx.isInWorkflow() && !appCtx.isReview()) {
                 form.setDisplayItemCounterClass("fc-dispcounterorange");
                 form.setDisplayItemCounter(resolveSessionMessage("$m{entityformapplet.form.inworkflow.viewonly}"));
@@ -380,7 +383,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
 
     @Override
     protected void onReviewErrors(EntityActionResult entityActionResult) throws UnifyException {
-        
+
     }
 
     private void handleEntityActionResult(EntityActionResult entityActionResult, String entityName)
