@@ -1901,6 +1901,8 @@
 						column="1" required="true" />
 					<field name="label" inputWidget="application.text" column="1"
 						required="true" />
+					<field name="menuAccess" editable="false"
+						inputWidget="application.checkbox" column="1" />
 					<field name="allowSecondaryTenants"
 						inputWidget="application.checkbox" column="1" />
 				</section>
@@ -1916,6 +1918,15 @@
 				</onCondition>
 				<setStates>
 					<setState type="field" target="name" editable="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch" name="onDevelopable"
+				description="Developable">
+				<onCondition>
+					<restriction type="equals" field="developable" paramA="true" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="menuAccess" editable="true" />
 				</setStates>
 			</formStatePolicy>
 		</form>
