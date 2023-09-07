@@ -532,12 +532,22 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 workflow.setLoadingTable(appletWorkflowCopyInfo.getAppletSearchTable());
                 final List<WfStep> stepList = WorkflowDesignUtils.generateWorkflowSteps(designType, stepLabel,
                         appletWorkflowCopyInfo);
+                keepAlreadyAssignedRoles(wnp.getApplicationName(), wnp.getEntityName(), stepList);
                 workflow.setStepList(stepList);
                 environment().updateByIdVersion(workflow);
             }
         }
     }
 
+    private void keepAlreadyAssignedRoles(String applicationName, String workflowName, List<WfStep> stepList)
+            throws UnifyException {
+        for (WfStep wfStep : stepList) {
+            List<WfStepRole> participatingRoleList = environment().findAll(new WfStepRoleQuery()
+                    .applicationName(applicationName).workflowName(workflowName).wfStepName(wfStep.getName()));
+            wfStep.setRoleList(participatingRoleList);
+        }
+    }
+    
     @Override
     public void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException {
         final Set<String> loadingTableNameList = environment().valueSet(String.class, "loadingTable",

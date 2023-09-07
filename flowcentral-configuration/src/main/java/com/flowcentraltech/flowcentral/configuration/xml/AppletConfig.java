@@ -212,7 +212,7 @@ public class AppletConfig extends BaseNameConfig {
         return alertList;
     }
 
-    @XmlElement(name = "alerts")
+    @XmlElement(name = "alert")
     public void setAlertList(List<AppletAlertConfig> alertList) {
         this.alertList = alertList;
     }
