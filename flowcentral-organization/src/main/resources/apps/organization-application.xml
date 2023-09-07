@@ -87,6 +87,16 @@
 			<property name="workflowCopy.update.setvalues" />
 			<property name="workflowCopy.create.approval.setvalues"/>
 			<property name="workflowCopy.update.approval.setvalues"/>
+			<property name="workflowCopy.create.alert"
+				value="roleCreationApproval" />
+			<property name="workflowCopy.update.alert"
+				value="roleUpdateApproval" />
+			<alert name="roleCreationApproval"
+				description="Role Creation Approval Pending"
+				sender="rolecreation-approvalpending" />
+			<alert name="roleUpdateApproval"
+				description="Role Update Approval Pending"
+				sender="roleupdate-approvalpending" />
 		</applet>
 		<applet name="manageRolePrivilege"
 			description="$m{organization.roleprivilege.manage}"

@@ -83,6 +83,10 @@
 			<property name="maintainForm.delete" value="true" />
 			<property name="maintainForm.attachments" value="true" />
 			<property name="workflowCopy" value="true" />
+			<property name="workflowCopy.create.alert"
+				value="userCreationApproval" />
+			<property name="workflowCopy.update.alert"
+				value="userUpdateApproval" />
 			<property name="workflowCopy.create.setvalues"
 				value="createSetValues" />
 			<property name="workflowCopy.create.approval.setvalues"
@@ -91,6 +95,12 @@
 				value="createSetValues" />
 			<property name="workflowCopy.update.approval.setvalues"
 				value="createApprovedSetValues" />
+			<alert name="userCreationApproval"
+				description="User Creation Approval Pending"
+				sender="usercreation-approvalpending" />
+			<alert name="userUpdateApproval"
+				description="User Update Approval Pending"
+				sender="userupdate-approvalpending" />
 			<filter name="nonSystemRecords"
 				description="$m{common.filter.nonsystemrecords}">
 				<restriction type="greater_than" field="id" paramA="0" />

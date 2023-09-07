@@ -27,6 +27,11 @@
         </dependency>
         <dependency>
             <groupId>com.flowcentraltech.flowcentral</groupId>
+            <artifactId>flowcentral-notification</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.flowcentraltech.flowcentral</groupId>
             <artifactId>flowcentral-system</artifactId>
             <version>${project.version}</version>
         </dependency>
