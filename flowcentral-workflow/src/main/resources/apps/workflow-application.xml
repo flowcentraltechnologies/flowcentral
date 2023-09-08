@@ -42,6 +42,7 @@
 			<property name="searchTable" value="workflowTable" />
 			<property name="searchTable.new" value="false" />
 			<property name="searchTable.report" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
 			<property name="maintainForm" value="workflowForm" />
 		</applet>
 		<applet name="manageInteractiveSteps"
