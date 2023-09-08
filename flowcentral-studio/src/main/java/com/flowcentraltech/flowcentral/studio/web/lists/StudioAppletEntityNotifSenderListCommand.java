@@ -16,11 +16,13 @@
 
 package com.flowcentraltech.flowcentral.studio.web.lists;
 
+import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.common.web.lists.AbstractEntityTypeListCommand;
 import com.flowcentraltech.flowcentral.notification.senders.NotificationAlertSender;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
-import com.tcdng.unify.core.list.StringParam;
+import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.list.LongParam;
 
 /**
  * Studio applet entity notification sender list command
@@ -29,16 +31,24 @@ import com.tcdng.unify.core.list.StringParam;
  * @since 1.0
  */
 @Component("studioappletentitynotifsenderlist")
-public class StudioAppletEntityNotifSenderListCommand extends AbstractEntityTypeListCommand<NotificationAlertSender, StringParam> {
+public class StudioAppletEntityNotifSenderListCommand
+        extends AbstractEntityTypeListCommand<NotificationAlertSender, LongParam> {
+
+    @Configurable
+    private ApplicationModuleService applicationModuleService;
 
     public StudioAppletEntityNotifSenderListCommand() {
-        super(NotificationAlertSender.class, StringParam.class);
+        super(NotificationAlertSender.class, LongParam.class); 
+    }
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+        this.applicationModuleService = applicationModuleService;
     }
 
     @Override
-    protected String getEntityName(StringParam param) throws UnifyException {
+    protected String getEntityName(LongParam param) throws UnifyException {
         if (param.isPresent()) {
-            return param.getValue();
+            return applicationModuleService.getAppAppletEntity(param.getValue());
         }
 
         return null;
