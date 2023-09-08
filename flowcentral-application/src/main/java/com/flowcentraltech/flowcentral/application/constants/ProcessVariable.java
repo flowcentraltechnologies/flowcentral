@@ -46,7 +46,9 @@ public enum ProcessVariable implements EnumConst {
     APP_TITLE(
             "APT", "prcAppTitle"),
     APP_CORRESPONDER(
-            "APC", "prcAppCorresponder");
+            "APC", "prcAppCorresponder"),
+    APP_URL(
+            "APU", "prcAppURL");
 
     private final String code;
 

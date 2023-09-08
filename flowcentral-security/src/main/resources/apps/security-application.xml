@@ -85,6 +85,8 @@
 			<property name="workflowCopy" value="true" />
 			<property name="workflowCopy.create.alert"
 				value="userCreationApproval" />
+			<property name="workflowCopy.create.approval.alert"
+				value="userCreationApproved" />
 			<property name="workflowCopy.update.alert"
 				value="userUpdateApproval" />
 			<property name="workflowCopy.create.setvalues"
@@ -98,6 +100,11 @@
 			<alert name="userCreationApproval"
 				description="User Creation Approval Pending"
 				sender="usercreation-approvalpending" />
+			<alert name="userCreationApproved"
+				description="User Creation Approved"
+				sender="usercreation-approved"
+				recipientPolicy="entity-wfrecipientpolicy"
+				recipientNameRule="fullName" recipientContactRule="email" />
 			<alert name="userUpdateApproval"
 				description="User Update Approval Pending"
 				sender="userupdate-approvalpending" />

@@ -272,6 +272,9 @@ public class ApplicationXmlGenerator extends AbstractStaticArtifactGenerator {
                         appletAlertConfig.setName(appAppletAlert.getName());
                         appletAlertConfig.setDescription(appAppletAlert.getDescription());
                         appletAlertConfig.setSender(appAppletAlert.getSender());
+                        appletAlertConfig.setRecipientContactRule(appAppletAlert.getRecipientContactRule());
+                        appletAlertConfig.setRecipientNameRule(appAppletAlert.getRecipientNameRule());
+                        appletAlertConfig.setRecipientPolicy(appAppletAlert.getRecipientPolicy());
                         alertList.add(appletAlertConfig);
                     }
 
