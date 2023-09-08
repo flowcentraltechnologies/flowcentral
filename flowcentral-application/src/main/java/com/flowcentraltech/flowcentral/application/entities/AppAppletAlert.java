@@ -35,6 +35,15 @@ public class AppAppletAlert extends BaseConfigNamedEntity {
     @ForeignKey(AppApplet.class)
     private Long appAppletId;
 
+    @Column(length = 64, nullable = true)
+    private String recipientPolicy;
+
+    @Column(length = 64, nullable = true)
+    private String recipientNameRule;
+
+    @Column(length = 64, nullable = true)
+    private String recipientContactRule;
+
     @Column(length = 64)
     private String sender;
 
@@ -50,6 +59,30 @@ public class AppAppletAlert extends BaseConfigNamedEntity {
 
     public void setAppAppletId(Long appAppletId) {
         this.appAppletId = appAppletId;
+    }
+
+    public String getRecipientPolicy() {
+        return recipientPolicy;
+    }
+
+    public void setRecipientPolicy(String recipientPolicy) {
+        this.recipientPolicy = recipientPolicy;
+    }
+
+    public String getRecipientNameRule() {
+        return recipientNameRule;
+    }
+
+    public void setRecipientNameRule(String recipientNameRule) {
+        this.recipientNameRule = recipientNameRule;
+    }
+
+    public String getRecipientContactRule() {
+        return recipientContactRule;
+    }
+
+    public void setRecipientContactRule(String recipientContactRule) {
+        this.recipientContactRule = recipientContactRule;
     }
 
     public String getSender() {

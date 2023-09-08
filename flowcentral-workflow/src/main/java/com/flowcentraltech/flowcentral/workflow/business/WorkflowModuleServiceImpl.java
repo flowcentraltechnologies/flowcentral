@@ -1317,6 +1317,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_TITLE);
         final String appCorresponder = getContainerSetting(String.class,
                 FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_CORRESPONDER);
+        final String appUrl = getContainerSetting(String.class,
+                FlowCentralContainerPropertyConstants.FLOWCENTRAL_APPLICATION_URL);
 
         transitionItem.setVariable(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         transitionItem.setVariable(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
@@ -1326,6 +1328,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         transitionItem.setVariable(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
         transitionItem.setVariable(ProcessVariable.APP_TITLE.variableKey(), appTitle);
         transitionItem.setVariable(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
+        transitionItem.setVariable(ProcessVariable.APP_URL.variableKey(), appUrl);
 
         wfInstReader.setTempValue(ProcessVariable.FORWARDED_BY.variableKey(), wfItem.getForwardedBy());
         wfInstReader.setTempValue(ProcessVariable.FORWARDED_BY_NAME.variableKey(), wfItem.getForwardedByName());
@@ -1335,6 +1338,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
         wfInstReader.setTempValue(ProcessVariable.ENTITY_DESC.variableKey(), entityDef.getDescription());
         wfInstReader.setTempValue(ProcessVariable.APP_TITLE.variableKey(), appTitle);
         wfInstReader.setTempValue(ProcessVariable.APP_CORRESPONDER.variableKey(), appCorresponder);
+        wfInstReader.setTempValue(ProcessVariable.APP_URL.variableKey(), appUrl);
 
         setSavePoint();
         wfItem.setHeldBy(null);

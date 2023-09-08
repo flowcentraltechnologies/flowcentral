@@ -337,7 +337,13 @@ public final class WorkflowDesignUtils {
     }
 
     private static WfStepAlert createWfStepAlert(WorkflowAlertType type, AppAppletAlert appAppletAlert) {
-        return createWfStepAlert(type, appAppletAlert.getSender());
+        WfStepAlert wfStepAlert = createWfStepAlert(type, appAppletAlert.getSender());
+        wfStepAlert.setName(appAppletAlert.getName());
+        wfStepAlert.setDescription(appAppletAlert.getDescription());
+        wfStepAlert.setRecipientContactRule(appAppletAlert.getRecipientContactRule()); 
+        wfStepAlert.setRecipientNameRule(appAppletAlert.getRecipientNameRule());
+        wfStepAlert.setRecipientPolicy(appAppletAlert.getRecipientPolicy());
+        return wfStepAlert;
     }
 
     private static WfStepAlert createWfStepAlert(WorkflowAlertType type, String sender) {

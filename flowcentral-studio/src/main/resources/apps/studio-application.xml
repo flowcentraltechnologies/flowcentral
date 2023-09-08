@@ -2212,6 +2212,13 @@
 						column="0" required="true" />
 					<field name="sender"
 						inputWidget="studio.appletentitynotifsenderlist" required="true" column="1" />
+					<field name="recipientPolicy"
+						inputWidget="studio.wfrecipientpolicylist" column="1"
+						switchOnChange="true" />
+					<field name="recipientNameRule"
+						inputWidget="studio.wfrecipientnamerulelist" column="1" />
+					<field name="recipientContactRule"
+						inputWidget="studio.wfrecipientcontactrulelist" column="1" />
 				</section>
 			</tab>
 			<tab name="changeLog" label="$m{application.form.audit}"

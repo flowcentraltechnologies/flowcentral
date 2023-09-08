@@ -27,6 +27,12 @@ public class AppletAlertConfig extends BaseNameConfig {
 
     private String sender;
 
+    private String recipientPolicy;
+
+    private String recipientNameRule;
+
+    private String recipientContactRule;
+
     public String getSender() {
         return sender;
     }
@@ -34,6 +40,33 @@ public class AppletAlertConfig extends BaseNameConfig {
     @XmlAttribute(required = true)
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getRecipientPolicy() {
+        return recipientPolicy;
+    }
+
+    @XmlAttribute
+    public void setRecipientPolicy(String recipientPolicy) {
+        this.recipientPolicy = recipientPolicy;
+    }
+
+    public String getRecipientNameRule() {
+        return recipientNameRule;
+    }
+
+    @XmlAttribute
+    public void setRecipientNameRule(String recipientNameRule) {
+        this.recipientNameRule = recipientNameRule;
+    }
+
+    public String getRecipientContactRule() {
+        return recipientContactRule;
+    }
+
+    @XmlAttribute
+    public void setRecipientContactRule(String recipientContactRule) {
+        this.recipientContactRule = recipientContactRule;
     }
 
 }

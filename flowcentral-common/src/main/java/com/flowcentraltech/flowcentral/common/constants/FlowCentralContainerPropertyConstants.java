@@ -34,4 +34,6 @@ public interface FlowCentralContainerPropertyConstants {
 
     String FLOWCENTRAL_APPLICATION_CORRESPONDER= "flowcentral.application.corresponder";
 
+    String FLOWCENTRAL_APPLICATION_URL = "flowcentral.application.url";
+
 }

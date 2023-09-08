@@ -822,6 +822,15 @@
 			<field name="appAppletId"
 				label="$m{application.appappletalert.appappletid}" type="ref"
 				references="appAppletRef" inputWidget="application.entitylist" />
+			<field name="recipientPolicy"
+				label="$m{application.appappletalert.recipientpolicy}" type="string"
+				maxLen="64" nullable="true" />
+			<field name="recipientNameRule"
+				label="$m{application.appappletalert.recipientnamerule}" type="string"
+				maxLen="64" nullable="true" />
+			<field name="recipientContactRule"
+				label="$m{application.appappletalert.recipientcontactrule}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="sender"
 				label="$m{application.appappletalert.sender}" type="string" />
 			<field name="applicationName"

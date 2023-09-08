@@ -4533,12 +4533,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appAppletAlert.setName(alertConfig.getName());
                     appAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
                     appAppletAlert.setSender(alertConfig.getSender());
+                    appAppletAlert.setRecipientContactRule(alertConfig.getRecipientContactRule());
+                    appAppletAlert.setRecipientNameRule(alertConfig.getRecipientNameRule());
+                    appAppletAlert.setRecipientPolicy(alertConfig.getRecipientPolicy());
                     appAppletAlert.setConfigType(ConfigType.MUTABLE_INSTALL);
                     alertList.add(appAppletAlert);
                 } else {
                     if (ConfigUtils.isSetInstall(oldAppAppletAlert)) {
                         oldAppAppletAlert.setDescription(resolveApplicationMessage(alertConfig.getDescription()));
                         oldAppAppletAlert.setSender(alertConfig.getSender());
+                        oldAppAppletAlert.setRecipientContactRule(alertConfig.getRecipientContactRule());
+                        oldAppAppletAlert.setRecipientNameRule(alertConfig.getRecipientNameRule());
+                        oldAppAppletAlert.setRecipientPolicy(alertConfig.getRecipientPolicy());
                     }
 
                     alertList.add(oldAppAppletAlert);
