@@ -29,4 +29,6 @@ public interface WorkflowModuleSysParamConstants {
 
     String WF_ENABLE_UPDATES_ON_REVIEW= "WF-0003";
 
+    String WF_ENABLE_AUTOLOADING = "WF-0004";
+
 }
