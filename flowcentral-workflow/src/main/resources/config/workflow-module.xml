@@ -25,5 +25,8 @@
 		<sysParameter code="WF-0003" defaultVal="true"
 			description="$m{workflow.sysparam.enableupdateonreview}"
 			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
+		<sysParameter code="WF-0004" defaultVal="false"
+			description="$m{workflow.sysparam.enableautoloading}"
+			editor="!ui-select list:booleanlist" type="boolean" editable="true" />
 	</sysParameters>
 </module>

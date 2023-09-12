@@ -1139,40 +1139,42 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
     @SuppressWarnings("unchecked")
     @Periodic(PeriodicType.SLOW)
     public void processAutoloadingItems(TaskMonitor taskMonitor) throws UnifyException {
-        logDebug("Processing workflow auto-loading...");
-        if (grabClusterLock(WFAUTOLOADING_LOCK)) {
-            try {
-                logDebug("Lock acquired for workflow auto loading...");
-                final Date now = getNow();
-                int batchSize = appletUtil.system().getSysParameterValue(int.class,
-                        WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
-                List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().supportsAutoload()
-                        .addSelect("applicationName", "workflowName", "autoLoadConditionName"));
-                logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
-                for (WfStep wfStep : autoLoadStepList) {
-                    String workflowName = ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
-                            wfStep.getWorkflowName());
-                    logDebug("Performing workflow auto loading for [{0}]...", workflowName);
-                    WfDef wfDef = getWfDef(workflowName);
-                    EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
-                    Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName()).getFilterDef()
-                            .getRestriction(entityClassDef.getEntityDef(), null, now);
-                    List<? extends WorkEntity> entityList = environment().listAll(Query
-                            .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
-                            .addRestriction(restriction)
-                            .addRestriction(
-                                    new Or().add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
-                            .addOrder("id").setLimit(batchSize));
-                    logDebug("Loading [{0}] items for workflow [{1}]...", entityList.size(), workflowName);
-                    for (WorkEntity inst : entityList) {
-                        submitToWorkflowByName(workflowName, inst);
-                    }
+        if (appletUtil.system().getSysParameterValue(boolean.class,
+                WorkflowModuleSysParamConstants.WF_ENABLE_AUTOLOADING)) {
+            logDebug("Processing workflow auto-loading...");
+            if (grabClusterLock(WFAUTOLOADING_LOCK)) {
+                try {
+                    logDebug("Lock acquired for workflow auto loading...");
+                    final Date now = getNow();
+                    int batchSize = appletUtil.system().getSysParameterValue(int.class,
+                            WorkflowModuleSysParamConstants.WF_AUTOLOADING_BATCH_SIZE);
+                    List<WfStep> autoLoadStepList = environment().listAll(new WfStepQuery().supportsAutoload()
+                            .addSelect("applicationName", "workflowName", "autoLoadConditionName"));
+                    logDebug("[{0}] steps detected with auto loading...", autoLoadStepList.size());
+                    for (WfStep wfStep : autoLoadStepList) {
+                        String workflowName = ApplicationNameUtils
+                                .getApplicationEntityLongName(wfStep.getApplicationName(), wfStep.getWorkflowName());
+                        logDebug("Performing workflow auto loading for [{0}]...", workflowName);
+                        WfDef wfDef = getWfDef(workflowName);
+                        EntityClassDef entityClassDef = appletUtil.application().getEntityClassDef(wfDef.getEntity());
+                        Restriction restriction = wfDef.getFilterDef(wfStep.getAutoLoadConditionName()).getFilterDef()
+                                .getRestriction(entityClassDef.getEntityDef(), null, now);
+                        List<? extends WorkEntity> entityList = environment().listAll(Query
+                                .of((Class<? extends WorkEntity>) entityClassDef.getEntityClass())
+                                .addRestriction(restriction).addRestriction(new Or()
+                                        .add(new Equals("inWorkflow", Boolean.FALSE)).add(new IsNull("inWorkflow")))
+                                .addOrder("id").setLimit(batchSize));
+                        logDebug("Loading [{0}] items for workflow [{1}]...", entityList.size(), workflowName);
+                        for (WorkEntity inst : entityList) {
+                            submitToWorkflowByName(workflowName, inst);
+                        }
 
-                    logDebug("Workflow auto loading completed for [{0}].", workflowName);
+                        logDebug("Workflow auto loading completed for [{0}].", workflowName);
+                    }
+                } finally {
+                    logDebug("Releasing workflow auto-loading lock...");
+                    releaseClusterLock(WFAUTOLOADING_LOCK);
                 }
-            } finally {
-                logDebug("Releasing workflow auto-loading lock...");
-                releaseClusterLock(WFAUTOLOADING_LOCK);
             }
         }
     }
