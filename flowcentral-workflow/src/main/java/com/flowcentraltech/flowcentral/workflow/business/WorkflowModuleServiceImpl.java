@@ -297,8 +297,8 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                 wfStep.getRecordActionType(), wfStep.getAppletName(), wfStep.getNextStepName(),
                                 wfStep.getAltNextStepName(), wfStep.getBinaryConditionName(),
                                 wfStep.getReadOnlyConditionName(), wfStep.getAutoLoadConditionName(),
-                                wfStep.getNewCommentCaption(), wfStep.getPolicy(), wfStep.getRule(), wfStep.getName(),
-                                wfStep.getDescription(), wfStep.getLabel(),
+                                wfStep.getAttachmentProviderName(), wfStep.getNewCommentCaption(), wfStep.getPolicy(),
+                                wfStep.getRule(), wfStep.getName(), wfStep.getDescription(), wfStep.getLabel(),
                                 DataUtils.convert(int.class, wfStep.getCriticalMinutes()),
                                 DataUtils.convert(int.class, wfStep.getExpiryMinutes()), wfStep.isAudit(),
                                 wfStep.isBranchOnly(), wfStep.isIncludeForwarder(), wfStep.isForwarderPreffered(),
@@ -547,7 +547,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             wfStep.setRoleList(participatingRoleList);
         }
     }
-    
+
     @Override
     public void ensureWorkflowUserInteractionLoadingApplets(boolean forceUpdate) throws UnifyException {
         final Set<String> loadingTableNameList = environment().valueSet(String.class, "loadingTable",

@@ -90,7 +90,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
         final boolean readOnly = WorkflowEntityUtils.isWorkflowConditionMatched(appletUtilities, reader, wfDef,
                 wfStepDef.getReadOnlyConditionName());
         return new LoadingWorkItemInfo(wfStepDef.getFormActionDefList(), wfStepDef.getLabel(), readOnly, comments,
-                emails, wfStepDef.isError());
+                emails, wfStepDef.isError(), wfStepDef.isWithAttachmentProviderName());
     }
 
     @Override

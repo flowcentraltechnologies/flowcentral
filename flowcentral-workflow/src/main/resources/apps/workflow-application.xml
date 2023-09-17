@@ -253,6 +253,14 @@
 				type="string" maxLen="64" />
 			<field name="nextStepName"
 				label="$m{workflow.step.nextstepname}" type="string" nullable="true" />
+			<field name="binaryConditionName"
+				label="$m{workflow.step.binarycondition}" type="string" nullable="true" />
+			<field name="readOnlyConditionName"
+				label="$m{workflow.step.readonlycondition}" type="string" nullable="true" />
+			<field name="autoLoadConditionName"
+				label="$m{workflow.step.autoloadingcondition}" type="string" nullable="true" />
+			<field name="attachmentProviderName"
+				label="$m{workflow.step.attachmentprovidername}" type="string" nullable="true" />
 			<field name="policy" label="$m{workflow.step.policy}"
 				type="string" maxLen="64" nullable="true"
 				inputWidget="wfsteppolicylist" />

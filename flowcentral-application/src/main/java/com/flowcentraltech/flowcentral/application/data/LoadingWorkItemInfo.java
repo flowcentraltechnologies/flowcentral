@@ -38,14 +38,17 @@ public class LoadingWorkItemInfo {
 
     private boolean error;
 
+    private boolean attachments;
+
     public LoadingWorkItemInfo(List<FormActionDef> formActionDefList, String stepLabel, boolean readOnly,
-            boolean comments, boolean emails, boolean error) {
+            boolean comments, boolean emails, boolean error, boolean attachments) {
         this.formActionDefList = formActionDefList;
         this.stepLabel = stepLabel;
         this.readOnly = readOnly;
         this.comments = comments;
         this.emails = emails;
         this.error = error;
+        this.attachments = attachments;
     }
 
     public LoadingWorkItemInfo() {
@@ -54,6 +57,7 @@ public class LoadingWorkItemInfo {
         this.comments = false;
         this.emails = false;
         this.error = false;
+        this.attachments = false;
     }
 
     public List<FormActionDef> getFormActionDefList() {
@@ -82,5 +86,9 @@ public class LoadingWorkItemInfo {
 
     public boolean isError() {
         return error;
+    }
+
+    public boolean isAttachments() {
+        return attachments;
     }
 }

@@ -162,6 +162,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             LoadingWorkItemInfo loadingWorkItemInfo = loadingSearch.getLoadingWorkItemInfo(currEntityInst, mIndex);
             getCtx().setRecovery(loadingWorkItemInfo.isError());
             getCtx().setComments(loadingWorkItemInfo.isComments());
+            getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
             getCtx().setReview(true);
             if (formDef.isInputForm()) {
                 if (form == null) {
@@ -201,6 +202,7 @@ public class ManageLoadingListApplet extends AbstractEntityFormApplet {
             getCtx().setRecovery(loadingWorkItemInfo.isError());
             getCtx().setEmails(loadingWorkItemInfo.isEmails());
             getCtx().setComments(loadingWorkItemInfo.isComments());
+            getCtx().setAttachments(loadingWorkItemInfo.isAttachments());
             getCtx().setReview(true);
             if (singleForm == null) {
                 singleForm = constructSingleForm(currEntityInst, FormMode.MAINTAIN);

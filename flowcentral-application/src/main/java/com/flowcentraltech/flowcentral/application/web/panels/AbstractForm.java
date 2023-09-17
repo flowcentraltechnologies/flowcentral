@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
+import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.Errors;
@@ -213,6 +214,10 @@ public abstract class AbstractForm {
 
     public InputArrayEntries getEmails() {
         return appendables != null ? appendables.getEmails() : null;
+    }
+
+    public Attachments getAttachments() {
+        return appendables != null ? appendables.getAttachments() : null;
     }
 
     public Comments getComments() {
