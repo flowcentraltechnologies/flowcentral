@@ -207,4 +207,8 @@ public interface AppletPropertyConstants {
     String WORKFLOWCOPY_CREATE_REJECTION_ALERT = "workflowCopy.create.rejection.alert";
 
     String WORKFLOWCOPY_UPDATE_REJECTION_ALERT = "workflowCopy.update.rejection.alert";
+
+    String WORKFLOWCOPY_CREATE_ATTACHMENT_PROVIDER = "workflowCopy.create.attachmentprovider";
+
+    String WORKFLOWCOPY_UPDATE_ATTACHMENT_PROVIDER = "workflowCopy.update.attachmentprovider";
 }

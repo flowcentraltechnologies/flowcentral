@@ -1756,13 +1756,21 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_REJECTION_ALERT));
 
+        final String createAttachmentProviderName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_ATTACHMENT_PROVIDER));
+
+        final String updateAttachmentProviderName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ATTACHMENT_PROVIDER));
+
         final Map<String, AppAppletAlert> map = environment().findAllMap(String.class, "name",
                 new AppAppletAlertQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName()));
 
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
                 abortSetValuesName, appletSearchTable, onCreateAlertName, onUpdateAlertName, onCreateApprovalAlertName,
-                onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName, appletVersionNo,
-                map);
+                onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName,
+                createAttachmentProviderName, updateAttachmentProviderName, appletVersionNo, map);
     }
 
     @Override

@@ -430,6 +430,11 @@
 			dataType="string" inputType="string"
 			editor="!ui-select list:studioappletalertlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
 			renderer="!ui-label" />
+		<widgetType name="propertyappletattachmentproviderlist"
+			description="$m{studio.widgettype.propertyappletattachmentproviderlist}"
+			dataType="string" inputType="string"
+			editor="!ui-select list:appletattachmentproviderlist listParams:$l{propertyOwnerId} blankOption:$m{blank.none}"
+			renderer="!ui-label" />
 		<widgetType name="propertyentityactionpolicylist"
 			description="$m{studio.widgettype.propertyentityactionpolicylist}"
 			dataType="string" inputType="string"
@@ -5240,6 +5245,12 @@
 				<property name="workflowCopy.update.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.updaterejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.create.attachmentprovider"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createattachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
+				<property name="workflowCopy.update.attachmentprovider"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updateattachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentity.workflowproperties}">
@@ -5419,6 +5430,12 @@
 				<property name="workflowCopy.update.rejection.alert"
 					description="$m{studio.appappletprop.manageentity.workflowcopy.updaterejectionalert}"
 					inputWidget="studio.propertyappletalertlist" />
+				<property name="workflowCopy.create.attachmentprovider"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.createattachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
+				<property name="workflowCopy.update.attachmentprovider"
+					description="$m{studio.appappletprop.manageentity.workflowcopy.updateattachmentprovider}"
+					inputWidget="studio.propertyappletattachmentproviderlist" />
 			</propertySet>
 			<propertySet
 				label="$m{studio.appappletprop.manageentitysingleform.workflowproperties}">

@@ -169,7 +169,12 @@ public final class WorkflowDesignUtils {
             approvalWfStep.setLabel(stepLabel + " Approval");
             approvalWfStep.setAppletName(appletWorkflowCopyInfo.getAppletName());
             approvalWfStep.setReadOnlyConditionName(ApplicationFilterConstants.RESERVED_ALWAYS_FILTERNAME);
-
+            if (type.isWorkflowCopyCreate()) {
+                approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getCreateAttachmentProviderName());
+            } else if (type.isWorkflowCopyUpdate()) {
+                approvalWfStep.setAttachmentProviderName(appletWorkflowCopyInfo.getUpdateAttachmentProviderName());
+            }
+            
             final String onStartAlert = type.isWorkflowCopyCreate() ? appletWorkflowCopyInfo.getOnCreateAlertName()
                     : (type.isWorkflowCopyUpdate() ? appletWorkflowCopyInfo.getOnUpdateAlertName() : null);
             final String onApprovalAlert = type.isWorkflowCopyCreate()
