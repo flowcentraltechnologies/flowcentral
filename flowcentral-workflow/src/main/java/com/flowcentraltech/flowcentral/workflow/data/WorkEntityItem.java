@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.workflow.data;
 
+import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.Errors;
@@ -32,8 +33,9 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class WorkEntityItem extends EntityItem {
 
-    public WorkEntityItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
-        super(MaintainType.WORK_ITEM, entity, emails, comments, errors, null, null);
+    public WorkEntityItem(Entity entity, InputArrayEntries emails, Comments comments, Attachments attachments,
+            Errors errors) {
+        super(MaintainType.WORK_ITEM, entity, emails, comments, attachments, errors, null, null);
     }
 
     public WorkEntityItem(Entity entity) {
@@ -41,8 +43,8 @@ public class WorkEntityItem extends EntityItem {
     }
 
     protected WorkEntityItem(MaintainType type, Entity entity, InputArrayEntries emails, Comments comments,
-            Errors errors) {
-        super(type, entity, emails, comments, errors, null, null);
+            Attachments attachments, Errors errors) {
+        super(type, entity, emails, comments, attachments, errors, null, null);
     }
 
     protected WorkEntityItem(MaintainType type, Entity entity) {

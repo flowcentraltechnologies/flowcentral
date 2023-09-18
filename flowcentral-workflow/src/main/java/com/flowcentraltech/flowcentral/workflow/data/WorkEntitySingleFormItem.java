@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.workflow.data;
 
+import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.Errors;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
@@ -30,8 +31,9 @@ import com.tcdng.unify.core.database.Entity;
  */
 public class WorkEntitySingleFormItem extends WorkEntityItem {
 
-    public WorkEntitySingleFormItem(Entity entity, InputArrayEntries emails, Comments comments, Errors errors) {
-        super(MaintainType.WORK_ITEM_SINGLEFORM, entity, emails, comments, errors);
+    public WorkEntitySingleFormItem(Entity entity, InputArrayEntries emails, Comments comments, Attachments attachments,
+            Errors errors) {
+        super(MaintainType.WORK_ITEM_SINGLEFORM, entity, emails, comments, attachments, errors);
     }
 
     public WorkEntitySingleFormItem(Entity entity) {

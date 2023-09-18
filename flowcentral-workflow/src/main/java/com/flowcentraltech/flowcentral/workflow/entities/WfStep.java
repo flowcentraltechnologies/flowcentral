@@ -73,6 +73,9 @@ public class WfStep extends BaseConfigNamedEntity {
     @Column(name = "AUTOLOAN_CONDITION_NM", length = 64, nullable = true)
     private String autoLoadConditionName;
 
+    @Column(name = "ATTACHMENT_PROVIDER_NM", length = 64, nullable = true)
+    private String attachmentProviderName;
+
     @Column(name = "NEW_COMMENT_CAPTION", length = 64, nullable = true)
     private String newCommentCaption;
 
@@ -249,6 +252,14 @@ public class WfStep extends BaseConfigNamedEntity {
 
     public void setAutoLoadConditionName(String autoLoadConditionName) {
         this.autoLoadConditionName = autoLoadConditionName;
+    }
+
+    public String getAttachmentProviderName() {
+        return attachmentProviderName;
+    }
+
+    public void setAttachmentProviderName(String attachmentProviderName) {
+        this.attachmentProviderName = attachmentProviderName;
     }
 
     public String getNewCommentCaption() {

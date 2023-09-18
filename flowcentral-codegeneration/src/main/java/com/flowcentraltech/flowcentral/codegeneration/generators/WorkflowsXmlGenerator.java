@@ -180,6 +180,7 @@ public class WorkflowsXmlGenerator extends AbstractStaticArtifactGenerator {
                         wfStepConfig.setBinaryCondition(wfStep.getBinaryConditionName());
                         wfStepConfig.setReadOnlyCondition(wfStep.getReadOnlyConditionName());
                         wfStepConfig.setAutoLoadCondition(wfStep.getAutoLoadConditionName());
+                        wfStepConfig.setAttachmentProvider(wfStep.getAttachmentProviderName());
                         wfStepConfig.setNewCommentCaption(wfStep.getNewCommentCaption());
                         wfStepConfig.setPolicy(wfStep.getPolicy());
                         wfStepConfig.setRule(wfStep.getRule());

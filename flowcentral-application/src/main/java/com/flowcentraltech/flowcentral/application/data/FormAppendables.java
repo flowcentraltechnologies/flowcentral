@@ -30,6 +30,8 @@ public interface FormAppendables {
 
     Comments getComments();
 
+    Attachments getAttachments();
+    
     Errors getErrors();
 
 }

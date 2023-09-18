@@ -115,6 +115,7 @@ public abstract class AbstractEntitySingleFormAppletPanel extends AbstractApplet
                     ApplicationModuleSysParamConstants.SHOW_FORM_ALTERNATE_ACTIONS);
             setVisible("formPanel.altActionPanel", showAlternateFormActions);
             setVisible("formPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
+            setVisible("formPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
             setVisible("formPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
             setVisible("formPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
             setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));

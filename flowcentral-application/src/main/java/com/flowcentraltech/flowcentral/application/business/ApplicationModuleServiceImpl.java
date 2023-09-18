@@ -44,6 +44,8 @@ import com.flowcentraltech.flowcentral.application.constants.ApplicationImportDa
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleErrorConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefinedEntityConstants;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefinedTableConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationReplicationTaskConstants;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
@@ -341,11 +343,15 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     AppletPropertyConstants.IMPORTDATA_ROUTETO_APPLETNAME, AppletPropertyConstants.QUICK_EDIT_TABLE,
                     AppletPropertyConstants.QUICK_EDIT_FORM)));
 
-    private final Set<String> RESERVED_TABLES = Collections.unmodifiableSet(
-            new HashSet<String>(Arrays.asList("application.propertyItemTable", "application.usageTable")));
+    private final Set<String> RESERVED_TABLES = Collections
+            .unmodifiableSet(new HashSet<String>(Arrays.asList(ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE,
+                    ApplicationPredefinedTableConstants.USAGE_TABLE,
+                    ApplicationPredefinedTableConstants.ATTACHMENT_TABLE)));
 
     private final Set<String> RESERVED_ENTITIES = Collections
-            .unmodifiableSet(new HashSet<String>(Arrays.asList("application.propertyItem", "application.usage")));
+            .unmodifiableSet(new HashSet<String>(Arrays.asList(ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
+                    ApplicationPredefinedEntityConstants.USAGE_ENTITY,
+                    ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY)));
 
     private static final int MAX_LIST_DEPTH = 8;
 
@@ -572,12 +578,17 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected EntityClassDef create(String longName, Object... arg1) throws Exception {
                     final EntityDef entityDef = getEntityDef(longName);
-                    if ("application.propertyItem".equals(longName)) {
+                    if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         return new EntityClassDef(entityDef, PropertyListItem.class);
                     }
 
-                    if ("application.usage".equals(longName)) {
+                    if (ApplicationPredefinedEntityConstants.USAGE_ENTITY.equals(longName)) {
                         return new EntityClassDef(entityDef, Usage.class);
+                    }
+
+                    if (ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY.equals(longName)) {
+                        return new EntityClassDef(entityDef,
+                                com.flowcentraltech.flowcentral.application.data.Attachment.class);
                     }
 
                     logDebug("Building dynamic entity information...");
@@ -671,12 +682,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 @Override
                 protected EntityDef create(String longName, Object... arg1) throws Exception {
                     final WidgetTypeDef textWidgetTypeDef = widgetDefFactoryMap.get("application.text");
-                    if ("application.propertyItem".equals(longName)) {
+                    if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
                                 getApplicationMessage("application.propertyitem.label"), null, null, false, false,
-                                false, "application.propertyItem", getApplicationMessage("application.propertyitem"),
-                                0L, 1L);
+                                false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
+                                getApplicationMessage("application.propertyitem"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.propertyitem.name"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
@@ -691,10 +702,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         return edb.build();
                     }
 
-                    if ("application.usage".equals(longName)) {
+                    if (ApplicationPredefinedEntityConstants.USAGE_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, Usage.class.getName(),
                                 getApplicationMessage("application.usage.label"), null, null, false, false, false,
-                                "application.usage", getApplicationMessage("application.usage"), 0L, 1L);
+                                ApplicationPredefinedEntityConstants.USAGE_ENTITY,
+                                getApplicationMessage("application.usage"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "type", getApplicationMessage("application.usage.type"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
@@ -706,6 +718,26 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                                 EntityFieldType.STATIC, "usedFor", getApplicationMessage("application.usage.usedfor"));
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "usage", getApplicationMessage("application.usage.usage"));
+                        return edb.build();
+                    }
+
+                    if (ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY.equals(longName)) {
+                        EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
+                                com.flowcentraltech.flowcentral.application.data.Attachment.class.getName(),
+                                getApplicationMessage("application.attachment.label"), null, null, false, false, false,
+                                ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
+                                getApplicationMessage("application.attachment"), 0L, 1L);
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "name", getApplicationMessage("application.attachment.name"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "description",
+                                getApplicationMessage("application.attachment.description"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
+                                EntityFieldType.STATIC, "format",
+                                getApplicationMessage("application.attachment.format"));
+                        edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.TIMESTAMP,
+                                EntityFieldType.STATIC, "createdOn",
+                                getApplicationMessage("application.attachment.createdon"));
                         return edb.build();
                     }
 
@@ -890,10 +922,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                 @Override
                 protected TableDef create(String longName, Object... arg1) throws Exception {
-                    if ("application.propertyItemTable".equals(longName)) {
-                        TableDef.Builder tdb = TableDef.newBuilder(getEntityDef("application.propertyItem"),
+                    if (ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE.equals(longName)) {
+                        TableDef.Builder tdb = TableDef.newBuilder(
+                                getEntityDef(ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY),
                                 getApplicationMessage("application.propertyitem.table.label"), false, false,
-                                "application.propertyItemTable",
+                                ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE,
                                 getApplicationMessage("application.propertyitem.table.description"), 0L, 1L);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
@@ -905,11 +938,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         return tdb.build();
                     }
 
-                    if ("application.usageTable".equals(longName)) {
-                        TableDef.Builder tdb = TableDef.newBuilder(getEntityDef("application.usage"),
+                    if (ApplicationPredefinedTableConstants.USAGE_TABLE.equals(longName)) {
+                        TableDef.Builder tdb = TableDef.newBuilder(
+                                getEntityDef(ApplicationPredefinedEntityConstants.USAGE_ENTITY),
                                 getApplicationMessage("application.usage.table.label"), true, true,
-                                "application.usageTable", getApplicationMessage("application.usage.table.description"),
-                                0L, 1L);
+                                ApplicationPredefinedTableConstants.USAGE_TABLE,
+                                getApplicationMessage("application.usage.table.description"), 0L, 1L);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
                         tdb.addColumnDef("type", renderer, 2, false);
@@ -918,6 +952,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         tdb.addColumnDef("usedFor", renderer, 3, true);
                         tdb.addColumnDef("usage", renderer, 3, true);
                         tdb.itemsPerPage(25); // TODO
+                        return tdb.build();
+                    }
+
+                    if (ApplicationPredefinedTableConstants.ATTACHMENT_TABLE.equals(longName)) {
+                        TableDef.Builder tdb = TableDef
+                                .newBuilder(getEntityDef(ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY),
+                                        getApplicationMessage("application.attachment.table.label"), false, false,
+                                        ApplicationPredefinedTableConstants.ATTACHMENT_TABLE,
+                                        getApplicationMessage("application.attachment.table.description"), 0L, 1L)
+                                .serialNo(true);
+                        WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
+                        String renderer = widgetTypeDef.getRenderer();
+                        tdb.addColumnDef("name", renderer, 2, false);
+                        tdb.addColumnDef("description", renderer, 3, false);
+                        tdb.addColumnDef("format", renderer, 2, false);
+                        tdb.addColumnDef("createdOn", renderer, 2, false);
+                        tdb.itemsPerPage(-1);
                         return tdb.build();
                     }
 
@@ -1673,7 +1724,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final String updateApprovalSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_APPROVAL_SETVALUES));
-        
+
         final String abortSetValuesName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_ABORT_SETVALUES));
@@ -1705,13 +1756,22 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         final String onUpdateRejectionAlertName = environment().valueOptional(String.class, "value",
                 new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
                         .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_REJECTION_ALERT));
-        
+
+        final String createAttachmentProviderName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_CREATE_ATTACHMENT_PROVIDER));
+
+        final String updateAttachmentProviderName = environment().valueOptional(String.class, "value",
+                new AppAppletPropQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName())
+                        .name(AppletPropertyConstants.WORKFLOWCOPY_UPDATE_ATTACHMENT_PROVIDER));
+
         final Map<String, AppAppletAlert> map = environment().findAllMap(String.class, "name",
-                        new AppAppletAlertQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName()));
+                new AppAppletAlertQuery().applicationName(np.getApplicationName()).appletName(np.getEntityName()));
 
         return new AppletWorkflowCopyInfo(appletName, createApprovalSetValuesName, updateApprovalSetValuesName,
                 abortSetValuesName, appletSearchTable, onCreateAlertName, onUpdateAlertName, onCreateApprovalAlertName,
-                onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName, appletVersionNo, map);
+                onUpdateApprovalAlertName, onCreateRejectionAlertName, onUpdateRejectionAlertName,
+                createAttachmentProviderName, updateAttachmentProviderName, appletVersionNo, map);
     }
 
     @Override

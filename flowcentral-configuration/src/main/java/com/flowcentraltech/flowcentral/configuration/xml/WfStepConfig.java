@@ -52,6 +52,8 @@ public class WfStepConfig extends BaseNameConfig {
     private String readOnlyCondition;
 
     private String autoLoadCondition;
+    
+    private String attachmentProvider;
 
     private String newCommentCaption;
 
@@ -171,6 +173,15 @@ public class WfStepConfig extends BaseNameConfig {
     @XmlAttribute
     public void setAutoLoadCondition(String autoLoadCondition) {
         this.autoLoadCondition = autoLoadCondition;
+    }
+
+    public String getAttachmentProvider() {
+        return attachmentProvider;
+    }
+
+    @XmlAttribute
+    public void setAttachmentProvider(String attachmentProvider) {
+        this.attachmentProvider = attachmentProvider;
     }
 
     public String getNewCommentCaption() {

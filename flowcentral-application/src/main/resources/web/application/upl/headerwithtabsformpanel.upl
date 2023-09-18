@@ -16,7 +16,7 @@
 !fc-headerwithtabsformpanel mainForm:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{headerMiniForm emailsPanel commentsPanel errorsPanel altActionPanel formTabSheetPanel relatedListPanel} 
+	components:$c{headerMiniForm emailsPanel attachmentsPanel commentsPanel errorsPanel altActionPanel formTabSheetPanel relatedListPanel} 
  
 // Header
 !fc-miniform:headerMiniForm binding:headerForm
@@ -33,6 +33,9 @@
 
 // Emails panel
 !fc-emailspanel:emailsPanel ignoreParentState:true binding:emails
+
+// Attachments panel
+!fc-attachmentspanel:attachmentsPanel ignoreParentState:true binding:attachments
 
 // Comments panel
 !fc-commentspanel:commentsPanel ignoreParentState:true binding:comments

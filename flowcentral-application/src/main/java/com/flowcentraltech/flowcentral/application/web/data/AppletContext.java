@@ -66,6 +66,8 @@ public class AppletContext extends AbstractContext {
 
     private boolean comments;
 
+    private boolean attachments;
+
     public AppletContext(AbstractApplet applet, AppletUtilities au) {
         this.applet = applet;
         this.au = au;
@@ -188,6 +190,14 @@ public class AppletContext extends AbstractContext {
 
     public void setComments(boolean comments) {
         this.comments = comments;
+    }
+
+    public boolean isAttachments() {
+        return attachments;
+    }
+
+    public void setAttachments(boolean attachments) {
+        this.attachments = attachments;
     }
 
     public boolean isInWorkflow() {

@@ -38,6 +38,8 @@ public class EntityItem implements FormAppendables {
 
     private Comments comments;
 
+    private Attachments attachments;
+
     private Errors errors;
 
     private FormListingOptions listingOptions;
@@ -45,11 +47,12 @@ public class EntityItem implements FormAppendables {
     private String listingGenerator;
 
     protected EntityItem(MaintainType maintainType, Entity entity, InputArrayEntries emails, Comments comments,
-            Errors errors, FormListingOptions listingOptions, String listingGenerator) {
+            Attachments attachments, Errors errors, FormListingOptions listingOptions, String listingGenerator) {
         this.maintainType = maintainType;
         this.entity = entity;
         this.emails = emails;
         this.comments = comments;
+        this.attachments = attachments;
         this.errors = errors;
         this.listingOptions = listingOptions;
         this.listingGenerator = listingGenerator;
@@ -106,6 +109,11 @@ public class EntityItem implements FormAppendables {
     @Override
     public Comments getComments() {
         return comments;
+    }
+
+    @Override
+    public Attachments getAttachments() {
+        return attachments;
     }
 
     @Override

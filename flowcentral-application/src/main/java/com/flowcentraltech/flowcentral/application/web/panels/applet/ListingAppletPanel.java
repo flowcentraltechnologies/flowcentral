@@ -48,6 +48,7 @@ public class ListingAppletPanel extends AbstractAppletPanel {
 
         final AppletContext appCtx = applet.getCtx();
         setVisible("listingPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
+        setVisible("listingPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
         setVisible("listingPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
         setVisible("listingPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
         setEditable("listingPanel.errorsPanel", false);

@@ -219,6 +219,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             if (viewMode.isSingleForm()) {
                 setVisible("singleFormPanel.altActionPanel", showAlternateFormActions);
                 setVisible("singleFormPanel.emailsPanel", appCtx.isReview() && appCtx.isEmails());
+                setVisible("singleFormPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
                 setVisible("singleFormPanel.commentsPanel", appCtx.isReview() && appCtx.isComments());
                 setVisible("singleFormPanel.errorsPanel", appCtx.isReview() && appCtx.isRecovery());
                 setVisible("sfrmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));
@@ -228,6 +229,7 @@ public abstract class AbstractEntityFormAppletPanel extends AbstractAppletPanel 
             } else {
                 setVisible("formPanel.altActionPanel", showAlternateFormActions);
                 setVisible("formPanel.emailsPanel", isRootForm && appCtx.isReview() && appCtx.isEmails());
+                setVisible("formPanel.attachmentsPanel", appCtx.isReview() && appCtx.isAttachments());
                 setVisible("formPanel.commentsPanel", isRootForm && appCtx.isReview() && appCtx.isComments());
                 setVisible("formPanel.errorsPanel", isRootForm && appCtx.isReview() && appCtx.isRecovery());
                 setVisible("frmActionBtns", !DataUtils.isBlank(form.getFormActionDefList()));

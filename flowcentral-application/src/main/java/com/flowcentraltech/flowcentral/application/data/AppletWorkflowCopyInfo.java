@@ -50,6 +50,10 @@ public class AppletWorkflowCopyInfo {
 
     private String onUpdateRejectionAlertName;
 
+    private String createAttachmentProviderName;
+
+    private String updateAttachmentProviderName;
+    
     private long appletVersionNo;
 
     private Map<String, AppAppletAlert> alerts;
@@ -57,7 +61,8 @@ public class AppletWorkflowCopyInfo {
     public AppletWorkflowCopyInfo(String appletName, String createApprovalSetValuesName,
             String updateApprovalSetValuesName, String abortSetValuesName, String appletSearchTable, String onCreateAlertName,
             String onUpdateAlertName, String onCreateApprovalAlertName, String onUpdateApprovalAlertName,
-            String onCreateRejectionAlertName, String onUpdateRejectionAlertName, long appletVersionNo,
+            String onCreateRejectionAlertName, String onUpdateRejectionAlertName, String createAttachmentProviderName, 
+            String updateAttachmentProviderName, long appletVersionNo,
             Map<String, AppAppletAlert> alerts) {
         this.appletName = appletName;
         this.createApprovalSetValuesName = createApprovalSetValuesName;
@@ -70,6 +75,8 @@ public class AppletWorkflowCopyInfo {
         this.onUpdateApprovalAlertName = onUpdateApprovalAlertName;
         this.onCreateRejectionAlertName = onCreateRejectionAlertName;
         this.onUpdateRejectionAlertName = onUpdateRejectionAlertName;
+        this.createAttachmentProviderName = createAttachmentProviderName;
+        this.updateAttachmentProviderName = updateAttachmentProviderName;
         this.appletVersionNo = appletVersionNo;
         this.alerts = DataUtils.unmodifiableMap(alerts);
     }
@@ -120,6 +127,14 @@ public class AppletWorkflowCopyInfo {
 
     public String getOnUpdateRejectionAlertName() {
         return onUpdateRejectionAlertName;
+    }
+
+    public final String getCreateAttachmentProviderName() {
+        return createAttachmentProviderName;
+    }
+
+    public final String getUpdateAttachmentProviderName() {
+        return updateAttachmentProviderName;
     }
 
     public long getAppletVersionNo() {
