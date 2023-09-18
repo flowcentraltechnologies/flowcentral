@@ -291,10 +291,12 @@ public class TableWriter extends AbstractControlWriter {
                                     ? tableWidget.getViewCtrl()
                                     : tableWidget.getEditCtrl();
                     _crudCtrl.setValueStore(valueStore);
-                    for (EventHandler eventHandler : crudActionHandlers) {
-                        writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
+                    if (crudActionHandlers != null) {
+                        for (EventHandler eventHandler : crudActionHandlers) {
+                            writer.writeBehavior(eventHandler, _crudCtrl.getId(), null);
+                        }
                     }
-                }
+                 }
 
                 // Details
                 if (details && detailsIndex == i) {

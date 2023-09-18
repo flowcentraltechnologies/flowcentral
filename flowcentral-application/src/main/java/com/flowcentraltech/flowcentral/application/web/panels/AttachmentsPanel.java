@@ -42,11 +42,10 @@ import com.tcdng.unify.core.annotation.UplBinding;
 public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPanel {
 
     private static final String ATTACHMENTS_TABLE_PAGE_ATTRIBUTE = "page.attachments.viewer.table";
-    
+
     @Configurable
     private AppletUtilities appletUtilities;
-    
-    
+
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
     }
@@ -54,18 +53,18 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
     @Override
     public void switchState() throws UnifyException {
         super.switchState();
-        Attachments attachments = getValue(Attachments.class); 
+        Attachments attachments = getValue(Attachments.class);
         if (attachments != null) {
             BeanListTable attachmentsTable = getAttachmentsTable();
             attachmentsTable.setSourceObjectClearSelected(attachments.getAttachments());
         }
-     }
+    }
 
     @Override
     public List<FormValidationErrors> validate(EvaluationMode evaluationMode) throws UnifyException {
         return Collections.emptyList();
     }
-    
+
     private BeanListTable getAttachmentsTable() throws UnifyException {
         BeanListTable attachmentsTable = getPageAttribute(BeanListTable.class, ATTACHMENTS_TABLE_PAGE_ATTRIBUTE);
         if (attachmentsTable == null) {
@@ -73,9 +72,10 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
                     appletUtilities.getTableDef(ApplicationPredefinedTableConstants.ATTACHMENT_TABLE), null);
             attachmentsTable.setCrudMode(true);
             attachmentsTable.setViewOnly(true);
-           setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);
+            attachmentsTable.setCrudActionHandlers(null); // TODO
+            setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);
         }
-        
+
         return attachmentsTable;
     }
 
