@@ -71,7 +71,9 @@ public class AttachmentsPanel extends AbstractFlowCentralPanel implements FormPa
         if (attachmentsTable == null) {
             attachmentsTable = new BeanListTable(appletUtilities,
                     appletUtilities.getTableDef(ApplicationPredefinedTableConstants.ATTACHMENT_TABLE), null);
-            setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);
+            attachmentsTable.setCrudMode(true);
+            attachmentsTable.setViewOnly(true);
+           setPageAttribute(ATTACHMENTS_TABLE_PAGE_ATTRIBUTE, attachmentsTable);
         }
         
         return attachmentsTable;

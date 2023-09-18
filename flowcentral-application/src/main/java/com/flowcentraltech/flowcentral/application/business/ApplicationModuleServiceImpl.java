@@ -956,11 +956,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     if (ApplicationPredefinedTableConstants.ATTACHMENT_TABLE.equals(longName)) {
-                        TableDef.Builder tdb = TableDef.newBuilder(
-                                getEntityDef(ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY),
-                                getApplicationMessage("application.attachment.table.label"), false, false,
-                                ApplicationPredefinedTableConstants.ATTACHMENT_TABLE,
-                                getApplicationMessage("application.attachment.table.description"), 0L, 1L);
+                        TableDef.Builder tdb = TableDef
+                                .newBuilder(getEntityDef(ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY),
+                                        getApplicationMessage("application.attachment.table.label"), false, false,
+                                        ApplicationPredefinedTableConstants.ATTACHMENT_TABLE,
+                                        getApplicationMessage("application.attachment.table.description"), 0L, 1L)
+                                .serialNo(true);
                         WidgetTypeDef widgetTypeDef = getWidgetTypeDef("application.text");
                         String renderer = widgetTypeDef.getRenderer();
                         tdb.addColumnDef("name", renderer, 2, false);

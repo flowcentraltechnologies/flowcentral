@@ -16,7 +16,7 @@
 !fc-headerwithtabsformpanel mainForm:$c{mainFormPanel}
 
 !ui-panel:mainFormPanel styleClass:$e{formbase} layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{headerMiniForm emailsPanel commentsPanel errorsPanel altActionPanel formTabSheetPanel relatedListPanel} 
+	components:$c{headerMiniForm emailsPanel attachmentsPanel commentsPanel errorsPanel altActionPanel formTabSheetPanel relatedListPanel} 
  
 // Header
 !fc-miniform:headerMiniForm binding:headerForm

@@ -17,7 +17,7 @@
 
 !ui-panel:mainFormPanel styleClass:$e{formbase} style:$s{max-width:1240px;}
 	layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{listingForm emailsPanel commentsPanel errorsPanel altActionPanel} 
+	components:$c{listingForm emailsPanel attachmentsPanel commentsPanel errorsPanel altActionPanel} 
  
 // Header
 !fc-formlisting:listingForm binding:formListing
