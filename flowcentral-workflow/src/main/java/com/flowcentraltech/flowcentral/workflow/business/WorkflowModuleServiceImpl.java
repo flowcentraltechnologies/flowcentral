@@ -27,6 +27,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationAppletDefProvider;
+import com.flowcentraltech.flowcentral.application.business.AttachmentsProvider;
 import com.flowcentraltech.flowcentral.application.business.EmailListProducerConsumer;
 import com.flowcentraltech.flowcentral.application.constants.AppletPropertyConstants;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationFilterConstants;
@@ -36,6 +37,7 @@ import com.flowcentraltech.flowcentral.application.constants.ProcessVariable;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.AppletWorkflowCopyInfo;
+import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.application.data.Comments;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
@@ -888,14 +890,21 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
             comments = cmb.build();
         }
 
+        Attachments attachments = null;
+        if (wfStepDef.isWithAttachmentProviderName()) {
+            AttachmentsProvider attachmentsProvider = getComponent(AttachmentsProvider.class,
+                    wfStepDef.getAttachmentProviderName());
+            attachments = attachmentsProvider.provide(reader);
+        }
+        
         Errors errors = null;
         if (wfStepDef.isError()) {
             errors = new Errors(wfItem.getErrorMsg(), wfItem.getErrorTrace(), wfItem.getErrorDoc());
         }
 
         return WfReviewMode.SINGLEFORM.equals(wfReviewMode)
-                ? new WorkEntitySingleFormItem(workEntity, emails, comments, errors)
-                : new WorkEntityItem(workEntity, emails, comments, errors);
+                ? new WorkEntitySingleFormItem(workEntity, emails, comments, attachments, errors)
+                : new WorkEntityItem(workEntity, emails, comments, attachments, errors);
     }
 
     @Override
