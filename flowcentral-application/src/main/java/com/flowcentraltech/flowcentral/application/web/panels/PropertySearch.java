@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.application.web.panels;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefinedTableConstants;
 import com.flowcentraltech.flowcentral.application.data.PropertyListItem;
 import com.flowcentraltech.flowcentral.application.data.PropertyRuleDef;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -51,7 +52,8 @@ public class PropertySearch extends AbstractPanelFormBinding {
     public PropertySearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName,
             PropertyRuleDef propertyRuleDef, int mode, boolean ignoreConditionalDisabled) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
-        this.beanListTable = new BeanListTable(ctx.au(), ctx.au().getTableDef("application.propertyItemTable"), null);
+        this.beanListTable = new BeanListTable(ctx.au(),
+                ctx.au().getTableDef(ApplicationPredefinedTableConstants.PROPERTYITEM_TABLE), null);
         this.propertyRuleDef = propertyRuleDef;
         this.mode = mode;
     }

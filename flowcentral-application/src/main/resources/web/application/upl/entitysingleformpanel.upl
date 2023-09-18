@@ -24,6 +24,9 @@
 // Emails panel
 !fc-emailspanel:emailsPanel ignoreParentState:true binding:emails
 
+// Attachments panel
+!fc-attachmentspanel:attachmentsPanel ignoreParentState:true binding:attachments
+
 // Comments panel
 !fc-commentspanel:commentsPanel ignoreParentState:true binding:comments
 

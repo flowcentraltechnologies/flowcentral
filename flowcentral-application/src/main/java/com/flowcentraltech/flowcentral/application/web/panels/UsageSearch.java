@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.UsageListProvider;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationPredefinedTableConstants;
 import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.UsageType;
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
@@ -56,7 +57,8 @@ public class UsageSearch extends AbstractPanelFormBinding {
     public UsageSearch(FormContext ctx, SweepingCommitPolicy sweepingCommitPolicy, String tabName, String provider,
             int mode, boolean ignoreConditionalDisabled) throws UnifyException {
         super(ctx, sweepingCommitPolicy, tabName, ignoreConditionalDisabled);
-        this.beanListTable = new BeanListTable(ctx.au(), ctx.au().getTableDef("application.usageTable"), null);
+        this.beanListTable = new BeanListTable(ctx.au(),
+                ctx.au().getTableDef(ApplicationPredefinedTableConstants.USAGE_TABLE), null);
         this.provider = provider;
         this.mode = mode;
     }
@@ -90,7 +92,8 @@ public class UsageSearch extends AbstractPanelFormBinding {
     }
 
     public String getPaginationLabel() {
-        return MessageFormat.format(paginationLabel, beanListTable.getDispEndIndex(), beanListTable.getTotalItemCount());
+        return MessageFormat.format(paginationLabel, beanListTable.getDispEndIndex(),
+                beanListTable.getTotalItemCount());
     }
 
     public void setPaginationLabel(String paginationLabel) {
@@ -127,8 +130,8 @@ public class UsageSearch extends AbstractPanelFormBinding {
     }
 
     public void applyEntityToSearch() throws UnifyException {
-        List<Usage> usageList = beanListTable.au().getComponent(UsageListProvider.class, provider).findUsages(instReader,
-                searchUsageType);
+        List<Usage> usageList = beanListTable.au().getComponent(UsageListProvider.class, provider)
+                .findUsages(instReader, searchUsageType);
         beanListTable.setSourceObjectKeepSelected(usageList);
     }
 }
