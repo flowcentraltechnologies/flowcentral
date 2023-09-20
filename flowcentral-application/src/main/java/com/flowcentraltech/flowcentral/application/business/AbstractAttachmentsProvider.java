@@ -16,11 +16,16 @@
 
 package com.flowcentraltech.flowcentral.application.business;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.data.Attachment;
+import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.data.ValueStoreReader;
 
 /**
  * Convenient abstract base class for attachments provider.
@@ -35,6 +40,14 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
 
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
+    }
+
+    @Override
+    public final Attachments provide(ValueStoreReader reader) throws UnifyException {
+        Attachments.Builder ab = Attachments.newBuilder(getName());
+        ab.caption(getCaption());
+        ab.addAttachments(getAttachments());
+        return ab.build();
     }
 
     @Override
@@ -59,4 +72,7 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
         return appletUtilities.system();
     }
 
+    protected abstract String getCaption() throws UnifyException;
+
+    protected abstract List<Attachment> getAttachments() throws UnifyException;
 }
