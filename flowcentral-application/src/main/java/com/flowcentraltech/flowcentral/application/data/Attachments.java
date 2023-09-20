@@ -30,13 +30,20 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public class Attachments {
 
+    private String provider;
+
     private String caption;
 
     private List<Attachment> attachments;
-    
-    public Attachments(String caption, List<Attachment> attachments) {
+
+    public Attachments(String provider, String caption, List<Attachment> attachments) {
+        this.provider = provider;
         this.caption = caption;
         this.attachments = attachments;
+    }
+
+    public String getProvider() {
+        return provider;
     }
 
     public String getCaption() {
@@ -47,32 +54,44 @@ public class Attachments {
         return attachments;
     }
 
-    public static Builder newBuilder() {
-        return new Builder();
+    public Attachment getAttachment(int index) {
+        return attachments.get(index);
     }
     
+    public static Builder newBuilder(String provider) {
+        return new Builder(provider);
+    }
+
     public static class Builder {
 
+        private String provider;
+
         private String caption;
-        
+
         private List<Attachment> attachments;
-        
-        public Builder() {
+
+        public Builder(String provider) {
+            this.provider = provider;
             this.attachments = new ArrayList<Attachment>();
         }
-        
+
         public Builder caption(String caption) {
             this.caption = caption;
             return this;
         }
-        
+
+        public Builder addAttachments(List<Attachment> attachments) {
+            this.attachments.addAll(attachments);
+            return this;
+        }
+
         public Builder addAttachment(Long id, String name, String description, String format, Date createdOn) {
             attachments.add(new Attachment(id, name, description, format, createdOn));
             return this;
         }
-        
+
         public Attachments build() {
-            return new Attachments(caption, DataUtils.unmodifiableList(attachments));
+            return new Attachments(provider, caption, DataUtils.unmodifiableList(attachments));
         }
     }
 }

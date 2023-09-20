@@ -21,4 +21,8 @@
 !ui-panel:attachmentsPanel style:$s{width:75%;} components:$c{attachmentsViewerTable}
 !fc-beanlisttable:attachmentsViewerTable binding:$s{page.attachments.viewer.table}
 	viewButtonClass:$s{mbtn mblue}
+
+!ui-hidden:viewActHolder eventHandler:$d{!ui-event event:onclick action:$c{viewAct}}
+
+!ui-postcommand:viewAct command:view debounce:true
 	

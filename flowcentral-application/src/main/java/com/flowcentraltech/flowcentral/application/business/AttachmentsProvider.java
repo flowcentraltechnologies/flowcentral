@@ -16,10 +16,12 @@
 
 package com.flowcentraltech.flowcentral.application.business;
 
+import com.flowcentraltech.flowcentral.application.data.Attachment;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
 import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
 /**
  * Attachments provider.
@@ -39,4 +41,15 @@ public interface AttachmentsProvider extends UnifyComponent {
      *                        if an error occurs
      */
     Attachments provide(ValueStoreReader reader) throws UnifyException;
+
+    /**
+     * Gets file attachment information.
+     * 
+     * @param attachment
+     *                   the attachment source
+     * @return the file attachment info
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    FileAttachmentInfo getFileAttachmentInfo(Attachment attachment) throws UnifyException;
 }
