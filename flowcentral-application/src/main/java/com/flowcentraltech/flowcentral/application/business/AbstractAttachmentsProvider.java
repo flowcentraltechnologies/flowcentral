@@ -45,8 +45,8 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
     @Override
     public final Attachments provide(ValueStoreReader reader) throws UnifyException {
         Attachments.Builder ab = Attachments.newBuilder(getName());
-        ab.caption(getCaption());
-        ab.addAttachments(getAttachments());
+        ab.caption(getCaption(reader));
+        ab.addAttachments(getAttachments(reader));
         return ab.build();
     }
 
@@ -72,7 +72,7 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
         return appletUtilities.system();
     }
 
-    protected abstract String getCaption() throws UnifyException;
+    protected abstract String getCaption(ValueStoreReader reader) throws UnifyException;
 
-    protected abstract List<Attachment> getAttachments() throws UnifyException;
+    protected abstract List<Attachment> getAttachments(ValueStoreReader reader) throws UnifyException;
 }
