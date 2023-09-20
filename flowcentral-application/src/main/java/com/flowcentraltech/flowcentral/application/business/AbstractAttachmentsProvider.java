@@ -25,7 +25,9 @@ import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.system.business.SystemModuleService;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.constant.FileAttachmentType;
 import com.tcdng.unify.core.data.ValueStoreReader;
+import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
 
 /**
  * Convenient abstract base class for attachments provider.
@@ -48,6 +50,15 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
         ab.caption(getCaption(reader));
         ab.addAttachments(getAttachments(reader));
         return ab.build();
+    }
+
+    @Override
+    public final FileAttachmentInfo getFileAttachmentInfo(Attachment attachment) throws UnifyException {
+        final FileAttachmentType type = FileAttachmentType.fromName(attachment.getFormat());
+        FileAttachmentInfo fileAttachmentInfo = new FileAttachmentInfo(type);
+        fileAttachmentInfo.setFilename(type.appendDefaultExtension(attachment.getName()));
+        fileAttachmentInfo.setAttachment(getData(type, attachment));
+        return fileAttachmentInfo;
     }
 
     @Override
@@ -75,4 +86,6 @@ public abstract class AbstractAttachmentsProvider extends AbstractFlowCentralCom
     protected abstract String getCaption(ValueStoreReader reader) throws UnifyException;
 
     protected abstract List<Attachment> getAttachments(ValueStoreReader reader) throws UnifyException;
+
+    protected abstract byte[] getData(FileAttachmentType resolvedType, Attachment attachment) throws UnifyException;
 }
