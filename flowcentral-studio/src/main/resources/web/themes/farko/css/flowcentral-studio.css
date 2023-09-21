@@ -166,6 +166,48 @@
 .fc-switchapplicationdialogpanel .createtitle {display: block;font-weight:bold; padding: 4px 4px; color: #24303f;
 	background-color: #f2f2f2; margin-bottom: 8px; font-size: 16px; font-weight: normal;}
 
+/** Report Editor */
+.fc-reporteditor {height:100%;}
+.fc-reporteditor .fields {height:100%;}
+.fc-reporteditor .fields .hdr {position:-webkit-sticky; position:sticky; top:0px; left:0px; padding:4px;background-color:#505965;
+	text-align:center;color:#ffffff;font-weight:bold;}
+.fc-reporteditor .fields .bdy {background-color:#f0f0f0;border: solid 1px #c8c8c8;height:100%;overflow-y:scroll;max-height:calc(100vh - 172px);}
+.fc-reporteditor .fields .fld {border: solid 1px #909090;box-sizing: border-box; background-color:#ffffff; margin:4px 4px; padding:4px;cursor:grab;}
+.fc-reporteditor .fields .fld span {font-weight:bold; color:#404040;pointer-events:none;}
+.fc-reporteditor .design {height:100%;}
+.fc-reporteditor .designbase {display:flex;flex-wrap:nowrap;padding:16px;height: 428px; width: 100%; box-sizing: border-box; overflow-x: auto;}
+.fc-reporteditor .drag {position:fixed;zIndex:400;opacity:0.7;}
+.fc-reporteditor .slot {display:inline-block;height:386px;padding:2px;margin:0px 2px;box-sizing: border-box;border: solid 1px #909090; background-color:#f3f3f3;}
+.fc-reporteditor .slothdr {border-bottom: solid 1px #909090;background-color:#505965;
+	 font-weight:bold; color:#ffffff; font-size:7pt;}
+.fc-reporteditor .slotcap {display:inline-block; width: 84px; cursor:grab;}
+.fc-reporteditor .slotcap span {display:block; text-align:center;margin:2px 4px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.fc-reporteditor .slotact {display:inline-block; width:30px;text-align: right;white-space: nowrap; overflow: hidden;text-overflow: ellipsis; margin: 2px 0px;}
+.fc-reporteditor .actbtn {padding:2px 2px; min-height:14px; min-width:14px; color:#ffffff; font-size:8px;cursor: pointer;}
+.fc-reporteditor .itm {width:110px; margin:2px; padding: 2px 1px;font-size:6pt;}
+.fc-reporteditor .itmlabel {display:block; font-weight:bold; color:#000000;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.fc-reporteditor .itmval {display:block; color:#404040;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+
+.fc-reporteditor .placeslot {display:inline-block; box-sizing: border-box; width:122px; min-width:122px; height:184px;
+	margin:0px 2px;border: dashed 2px #8090f0;background-color:#b7c1f6;color:#8090f0;}
+.fc-reporteditor .placeslot .plus {display:block; margin-top:20px; font-weight:bold; font-size:20pt; text-align:center;}
+.fc-reporteditor .placeslot .label {display:block; margin:4px 8px; font-weight:bold; text-align:center;}
+
+/*.tabletabsheet {height: calc(100% - 32px);}
+.tabletabsheet .tbody {height:100%;}
+*/
+
+/** Report preview panel */
+.rc-reportpreviewpanel {}
+.rc-reportpreviewpanel .hdbar {background-color: #e3e7ea;}
+
+/** Report editor page panel */
+.fc-reporteditorpagepanel {height:100%;}
+.fc-reporteditorpagepanel .hdbar {background-color: #e3e7ea;}
+.fc-reporteditorpagepanel .hdtitle {display: block;font-weight:bold;}
+.fc-reporteditorpagepanel .hdsubtitle {display: block;font-size:8pt;}
+.fc-reporteditorpagepanel .editcollabel {width: 100px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}				
+
 /** Workflow Editor */
 .fc-workfloweditor {height:100%;}
 .fc-workfloweditor .tools .hdr {position:-webkit-sticky; position:sticky; top:0px; left:0px; padding:4px;background-color:#6f6f6f;

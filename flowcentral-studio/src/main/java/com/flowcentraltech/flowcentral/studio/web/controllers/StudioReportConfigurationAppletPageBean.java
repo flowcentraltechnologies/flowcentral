@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.web.controllers;
 
 import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntityFormAppletPageBean;
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppTableApplet;
+import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConfigurationApplet;
 
 /**
  * Studio report configuration component applet page bean.
@@ -24,7 +24,8 @@ import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppTableAp
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class StudioReportConfigurationAppletPageBean extends AbstractEntityFormAppletPageBean<StudioAppTableApplet> {
+public class StudioReportConfigurationAppletPageBean
+        extends AbstractEntityFormAppletPageBean<StudioReportConfigurationApplet> {
 
     public String getInstTitle() {
         return getApplet().getInstTitle();

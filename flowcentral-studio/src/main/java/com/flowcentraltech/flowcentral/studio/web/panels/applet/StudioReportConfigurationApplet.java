@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
-import com.flowcentraltech.flowcentral.application.entities.AppTable;
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
+import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.web.panels.ReportEditorPage;
 import com.tcdng.unify.core.UnifyException;
@@ -47,11 +47,11 @@ public class StudioReportConfigurationApplet extends StudioAppComponentApplet {
     }
 
     public void designChildItem(int childTabIndex) throws UnifyException {
-        AppTable appTable = (AppTable) form.getFormBean();
-        Object id = appTable.getId();
-        String subTitle = appTable.getDescription();
+        ReportConfiguration reportConfiguration = (ReportConfiguration) form.getFormBean();
+        Object id = reportConfiguration.getId();
+        String subTitle = reportConfiguration.getDescription();
         setTabDefAndSaveCurrentForm(childTabIndex);
-        reportEditorPage = constructNewReportEditorPage(appTable.getEntity(), id, subTitle);
+        reportEditorPage = constructNewReportEditorPage(reportConfiguration.getReportable(), id, subTitle);
         reportEditorPage.newEditor();
         viewMode = ViewMode.CUSTOM_PAGE;
     }

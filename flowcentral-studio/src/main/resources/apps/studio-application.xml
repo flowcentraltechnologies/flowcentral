@@ -1207,7 +1207,7 @@
 			entity="report.reportColumn" menuAccess="false">
 			<property name="searchTable" value="reportColumnTable" />
 			<property name="searchTable.new" value="false" />
-			<property name="searchTable.edit" value="false" />
+			<property name="searchTable.edit" value="true" />
 			<property name="searchTable.report" value="false" />
 			<property name="createForm" value="reportColumnForm" />
 			<property name="createForm.save" value="false" />
@@ -3411,10 +3411,10 @@
 			<tab name="design" label="$m{studio.reportconfiguration.form.design}"
 				contentType="child_list" applet="manageReportColumn"
 				reference="columnList" editAction="/designChildItem" />
-			<tab name="columns"
+			<!-- tab name="columns"
 				label="$m{studio.reportconfiguration.form.columns}"
 				contentType="child_list" applet="manageReportColumn"
-				reference="columnList" />
+				reference="columnList" /-->
 			<tab name="placements"
 				label="$m{studio.reportconfiguration.form.placements}"
 				contentType="child_list" applet="manageReportPlacement"

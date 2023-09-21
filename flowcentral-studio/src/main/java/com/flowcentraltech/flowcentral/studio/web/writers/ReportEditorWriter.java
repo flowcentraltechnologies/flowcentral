@@ -59,7 +59,7 @@ public class ReportEditorWriter extends AbstractControlWriter {
         jsonWriter.write("cross", resolveSymbolHtmlHexCode("cross"));
         jsonWriter.write("none", getSessionMessage("reporteditor.none"));
         jsonWriter.write("placecolumn", getSessionMessage("reporteditor.placeherecolumn"));
-        jsonWriter.write("addcolumn", getSessionMessage("reporteditor.addtablecolumn"));
+        jsonWriter.write("addcolumn", getSessionMessage("reporteditor.addreportcolumn"));
         jsonWriter.write("editable", !reportEditor.isReadOnly());
 
         // Column property labels

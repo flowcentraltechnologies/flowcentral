@@ -20,7 +20,7 @@ import com.flowcentraltech.flowcentral.application.web.controllers.AbstractEntit
 import com.flowcentraltech.flowcentral.application.web.controllers.AppletWidgetReferences;
 import com.flowcentraltech.flowcentral.studio.business.StudioModuleService;
 import com.flowcentraltech.flowcentral.studio.constants.StudioSessionAttributeConstants;
-import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioAppTableApplet;
+import com.flowcentraltech.flowcentral.studio.web.panels.applet.StudioReportConfigurationApplet;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -38,14 +38,14 @@ import com.tcdng.unify.web.constant.Secured;
  */
 @Component("/studioreportconfigurationapplet")
 @UplBinding("web/studio/upl/studioreportconfigurationappletpage.upl")
-public class StudioReportConfigurationAppletController
-        extends AbstractEntityFormAppletController<StudioAppTableApplet, StudioAppTableAppletPageBean> {
+public class StudioReportConfigurationAppletController extends
+        AbstractEntityFormAppletController<StudioReportConfigurationApplet, StudioReportConfigurationAppletPageBean> {
 
     @Configurable
     private StudioModuleService studioModuleService;
 
     public StudioReportConfigurationAppletController() {
-        super(StudioAppTableAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+        super(StudioReportConfigurationAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
     public void setStudioModuleService(StudioModuleService studioModuleService) {
@@ -54,8 +54,8 @@ public class StudioReportConfigurationAppletController
 
     @Action
     public String designChildItem() throws UnifyException {
-        StudioAppTableAppletPageBean pageBean = getPageBean();
-        StudioAppTableApplet applet = pageBean.getApplet();
+        StudioReportConfigurationAppletPageBean pageBean = getPageBean();
+        StudioReportConfigurationApplet applet = pageBean.getApplet();
         int childTabIndex = getRequestTarget(int.class);
         applet.designChildItem(childTabIndex);
         return "refreshapplet";
@@ -65,11 +65,12 @@ public class StudioReportConfigurationAppletController
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
 
-        StudioAppTableAppletPageBean pageBean = getPageBean();
+        StudioReportConfigurationAppletPageBean pageBean = getPageBean();
         if (pageBean.getApplet() == null) {
             AppletWidgetReferences appletWidgetReferences = getAppletWidgetReferences();
             EntityFormEventHandlers formEventHandlers = getEntityFormEventHandlers();
-            StudioAppTableApplet applet = new StudioAppTableApplet(studioModuleService, au(), getPathVariable(),
+            StudioReportConfigurationApplet applet = new StudioReportConfigurationApplet(studioModuleService, au(),
+                    getPathVariable(),
                     (String) getSessionAttribute(StudioSessionAttributeConstants.CURRENT_APPLICATION_NAME),
                     appletWidgetReferences, formEventHandlers);
             pageBean.setApplet(applet);

@@ -1061,7 +1061,7 @@ fuxstudio.tblSlotDel = function(uEv) {
 /** Report column editor */
 fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 	const id = rgp.pId;
-	const tce = _id(id);
+	const rce = _id(id);
 	rce._field = _id(rgp.pFieldId);
 	rce._label = _id(rgp.pLabelId);
 	rce._order = _id(rgp.pOrderId);
@@ -1112,7 +1112,7 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 			column.group = rce._group.getValue();
 			column.groupnew = rce._groupnew.getValue();
 			column.sum = rce._sum.getValue();
-			rce._evp.reditor.changeState();
+			rce._evp.editor.changeState();
 		}
 	};
 	
@@ -1126,7 +1126,7 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 }
 
 fuxstudio.rceApplyHandler = function(uEv) {
-	const tce = _id(uEv.evp.uId);
+	const rce = _id(uEv.evp.uId);
 	if (rce._evp) {
 		rce.apply();
 		rce.hide();
@@ -1135,7 +1135,7 @@ fuxstudio.rceApplyHandler = function(uEv) {
 }
 
 fuxstudio.rceCancelHandler = function(uEv) {
-	const tce = _id(uEv.evp.uId);
+	const rce = _id(uEv.evp.uId);
 	rce.hide();
 }
 
@@ -1144,28 +1144,28 @@ fuxstudio.rigReportEditor = function(rgp) {
 	const id = rgp.pId;
 	const content = rgp.pContent;
 
-	const reditor = {};
-	reditor.fieldsId = rgp.pFieldBaseId;
-	reditor.designId = rgp.pDsnBaseId;
-	reditor.editColId = rgp.pEditColId;
-	reditor.stateId = rgp.pStateId;
-	reditor.placeId = "place_" + id;
-	reditor.slotId = "slot_" + id;
-	reditor.editBtnId = "edit_" + reditor.slotId;
-	reditor.delBtnId = "del_" + reditor.slotId;
-	reditor.dragId = "drag_" + reditor.slotId;
-	reditor.len = content.design.columns.length;
-	reditor.labels = content.propLabels;
-	reditor.downarrow = content.downarrow;
-	reditor.plus = content.plus;
-	reditor.cog = content.cog;
-	reditor.cross = content.cross;
-	reditor.editable = content.editable;
-	reditor.none = content.none;
-	reditor.placeitem = content.placecolumn;
-	reditor.additem = content.addcolumn;
+	const editor = {};
+	editor.fieldsId = rgp.pFieldBaseId;
+	editor.designId = rgp.pDsnBaseId;
+	editor.editColId = rgp.pEditColId;
+	editor.stateId = rgp.pStateId;
+	editor.placeId = "place_" + id;
+	editor.slotId = "slot_" + id;
+	editor.editBtnId = "edit_" + editor.slotId;
+	editor.delBtnId = "del_" + editor.slotId;
+	editor.dragId = "drag_" + editor.slotId;
+	editor.len = content.design.columns.length;
+	editor.labels = content.propLabels;
+	editor.downarrow = content.downarrow;
+	editor.plus = content.plus;
+	editor.cog = content.cog;
+	editor.cross = content.cross;
+	editor.editable = content.editable;
+	editor.none = content.none;
+	editor.placeitem = content.placecolumn;
+	editor.additem = content.addcolumn;
 	
-	reditor.changeState = function() {
+	editor.changeState = function() {
 		const columns = [];
 		const _design = _id(this.designId);
 		for(var i = 0; i < _design.children.length; i++) {
@@ -1179,27 +1179,27 @@ fuxstudio.rigReportEditor = function(rgp) {
 		}
 	};
 
-	reditor.editSlotFieldHtml = function(label, val) {
+	editor.editSlotFieldHtml = function(label, val) {
 		val = val ? val: this.none;
 		return "<div class=\"itm\"><span class=\"itmlabel\">"
 			+ label + "</span><span class=\"itmval\">" + val + "</span></div>";
 	};
 	
-	if (reditor.editable) {
+	if (editor.editable) {
 		const choiceId = rgp.pChoiceId;
 		for(var i = 0; i < content.fields.length; i++) {
 			const evp = {};
-			evp.reditor = reditor;
+			evp.editor = editor;
 			evp.fieldId = choiceId + i;
 			evp.fieldInfo = content.fields[i];
 			ux.addHdl(_id(evp.fieldId), "mousedown", fuxstudio.rptFieldDragStart, evp);
 		}
 	}
 	
-	if (reditor.len > 0) {
-		const design = _id(reditor.designId);
-		for (var i = 0; i < reditor.len; i++) {			
-			const evp = fuxstudio.rptNewSlotParam(reditor, i);
+	if (editor.len > 0) {
+		const design = _id(editor.designId);
+		for (var i = 0; i < editor.len; i++) {			
+			const evp = fuxstudio.rptNewSlotParam(editor, i);
 			evp.column = content.design.columns[i];
 			const slot = fuxstudio.rptCreateSlot(evp);
 			design.appendChild(slot);
@@ -1207,23 +1207,23 @@ fuxstudio.rigReportEditor = function(rgp) {
 		}
 	}
 
-	reditor.changeState();
+	editor.changeState();
 }
 
-fuxstudio.rptNewSlotParam = function(reditor, i) {
+fuxstudio.rptNewSlotParam = function(editor, i) {
 	const evp = {};
-	evp.reditor = reditor;
+	evp.editor = editor;
 	evp.index = i;
-	evp.slotId = reditor.slotId + i;
-	evp.editBtnId = reditor.editBtnId + i;
-	evp.delBtnId = reditor.delBtnId + i;
-	evp.dragId = reditor.dragId + i;
+	evp.slotId = editor.slotId + i;
+	evp.editBtnId = editor.editBtnId + i;
+	evp.delBtnId = editor.delBtnId + i;
+	evp.dragId = editor.dragId + i;
 	return evp;
 }
 
 fuxstudio.rptWireSlot = function(evp) {
-	const reditor = evp.reditor;
-	if (reditor.editable) {
+	const editor = evp.editor;
+	if (editor.editable) {
 		ux.addHdl(_id(evp.dragId), "mousedown", fuxstudio.rptSlotDragStart, evp);
 		ux.addHdl(_id(evp.delBtnId), "click", fuxstudio.rptSlotDel, evp);
 	}
@@ -1232,33 +1232,33 @@ fuxstudio.rptWireSlot = function(evp) {
 }
 
 fuxstudio.rptCreateSlot = function(evp) {
-	const reditor = evp.reditor;
+	const editor = evp.editor;
 	const column = evp.column;
 	const caption = column.label ? column.label: column.fldLabel;
-	const labels = reditor.labels;
+	const labels = editor.labels;
 	var html = "<div class=\"slothdr\">"
 			+ "<div class=\"slotcap\" id=\"" + evp.dragId + "\"><span>" + caption + "</span></div>"
 			+ "<div class=\"slotact\">"
-			+ fuxstudio.reditorSymButton(evp.editBtnId, reditor.cog, "actbtn");
-	if (reditor.editable) {
-		html += fuxstudio.reditorSymButton(evp.delBtnId, reditor.cross, "actbtn");
+			+ fuxstudio.editorSymButton(evp.editBtnId, editor.cog, "actbtn");
+	if (editor.editable) {
+		html += fuxstudio.editorSymButton(evp.delBtnId, editor.cross, "actbtn");
 	}
 	
 	html += "</div></div>";
-	html += reditor.editSlotFieldHtml(labels[0], column.fldNm);
-	html += reditor.editSlotFieldHtml(labels[1], column.label);
-	html += reditor.editSlotFieldHtml(labels[2], column.horiz);
-	html += reditor.editSlotFieldHtml(labels[3], column.vert);
-	html += reditor.editSlotFieldHtml(labels[4], column.order);
-	html += reditor.editSlotFieldHtml(labels[5], column.widget);
-	html += reditor.editSlotFieldHtml(labels[6], column.desc);
-	html += reditor.editSlotFieldHtml(labels[7], "" + column.type);
-	html += reditor.editSlotFieldHtml(labels[8], "" + column.formatter);
-	html += reditor.editSlotFieldHtml(labels[9], "" + column.width);
-	html += reditor.editSlotFieldHtml(labels[10], "" + column.group);
-	html += reditor.editSlotFieldHtml(labels[11], "" + column.bold);
-	html += reditor.editSlotFieldHtml(labels[12], "" + column.groupnew);
-	html += reditor.editSlotFieldHtml(labels[13], "" + column.sum);
+	html += editor.editSlotFieldHtml(labels[0], column.fldNm);
+	html += editor.editSlotFieldHtml(labels[1], column.label);
+	html += editor.editSlotFieldHtml(labels[2], column.order);
+	html += editor.editSlotFieldHtml(labels[3], column.widget);
+	html += editor.editSlotFieldHtml(labels[4], column.horiz);
+	html += editor.editSlotFieldHtml(labels[5], column.vert);
+	html += editor.editSlotFieldHtml(labels[6], column.desc);
+	html += editor.editSlotFieldHtml(labels[7], "" + column.type);
+	html += editor.editSlotFieldHtml(labels[8], "" + column.formatter);
+	html += editor.editSlotFieldHtml(labels[9], "" + column.width);
+	html += editor.editSlotFieldHtml(labels[10], "" + column.group);
+	html += editor.editSlotFieldHtml(labels[11], "" + column.bold);
+	html += editor.editSlotFieldHtml(labels[12], "" + column.groupnew);
+	html += editor.editSlotFieldHtml(labels[13], "" + column.sum);
 
 	const slot = document.createElement("div");
 	slot.className = "slot";
@@ -1270,7 +1270,7 @@ fuxstudio.rptCreateSlot = function(evp) {
 
 fuxstudio.rptReplaceSlot = function(evp) {
 	var nextslot = null;
-	const design = _id(evp.reditor.designId);
+	const design = _id(evp.editor.designId);
 	for(var i = 0; i < design.children.length; i++) {
 		const oldslot = design.children[i];
 		if (oldslot.id == evp.slotId) {
@@ -1295,28 +1295,28 @@ fuxstudio.rptReplaceSlot = function(evp) {
 
 fuxstudio.rptFieldDragStart = function(uEv) {
 	const evp = uEv.evp;
-	const reditor = evp.reditor;
-	fuxstudio.reditorChoiceDragStart(
-			evp, uEv.uTrg, reditor.designId, uEv.clientX,
+	const editor = evp.editor;
+	fuxstudio.editorChoiceDragStart(
+			evp, uEv.uTrg, editor.designId, uEv.clientX,
 			uEv.clientY, "placeslot", fuxstudio.rptSlotDrag,
 			fuxstudio.rptSlotDragEnd);
 }
 
 fuxstudio.rptSlotDragStart = function(uEv) {
 	const evp = uEv.evp;
-	fuxstudio.reditorDragStart(evp, "slot", evp.reditor.designId, evp.slotId,
+	fuxstudio.editorDragStart(evp, "slot", evp.editor.designId, evp.slotId,
 			uEv.clientX, uEv.clientY, "placeslot", fuxstudio.rptSlotDrag, fuxstudio.rptSlotDragEnd);
 }
 
 fuxstudio.rptSlotDrag = function(uEv) {
-	const _drag = fuxstudio.reditorChoiceDrag(uEv);
+	const _drag = fuxstudio.editorChoiceDrag(uEv);
 	const evp = fuxstudio.dragEvp;
-	const reditor = evp.reditor;
+	const editor = evp.editor;
 
-	const _design = _id(reditor.designId);
-	const _drop = fuxstudio.reditorDesignSlotAt(_design, _drag.id, uEv.clientX, uEv.clientY);
-	if (_drop && _drop.slot.id != reditor.placeId) {
-		const _placeslot = _id(reditor.placeId);
+	const _design = _id(editor.designId);
+	const _drop = fuxstudio.editorDesignSlotAt(_design, _drag.id, uEv.clientX, uEv.clientY);
+	if (_drop && _drop.slot.id != editor.placeId) {
+		const _placeslot = _id(editor.placeId);
 		const x1 = _drop.slot.getBoundingClientRect().left;
 		const x2 = _placeslot.getBoundingClientRect().left;
 		if (x2 > x1) {
@@ -1333,9 +1333,9 @@ fuxstudio.rptSlotDrag = function(uEv) {
 
 fuxstudio.rptSlotDragEnd = function(uEv) {
 	const evp = fuxstudio.dragEvp;
-	const _reditor = evp.reditor;
-	const _design = _id(_reditor.designId);
-	const _placeslot = _id(_reditor.placeId);
+	const _editor = evp.editor;
+	const _design = _id(_editor.designId);
+	const _placeslot = _id(_editor.placeId);
 
 	if (evp.dragType == "slot") {
 		const _slot = _id(evp.dragOriginId);
@@ -1343,8 +1343,8 @@ fuxstudio.rptSlotDragEnd = function(uEv) {
 		_design.removeChild(_placeslot);
 		_slot.classList.remove("drag");
 	} else {
-		const _drop = fuxstudio.reditorDesignSlotAt(_design, null, uEv.clientX, uEv.clientY);
-		if (_drop && (_drop.slot.id == _reditor.placeId)) {
+		const _drop = fuxstudio.editorDesignSlotAt(_design, null, uEv.clientX, uEv.clientY);
+		if (_drop && (_drop.slot.id == _editor.placeId)) {
 			const column = {};
 			column.fldLabel = evp.fieldInfo.fldLabel;
 			column.fldNm = evp.fieldInfo.fldNm;
@@ -1355,7 +1355,7 @@ fuxstudio.rptSlotDragEnd = function(uEv) {
 			column.desc = null;
 			column.groupnew = false;
 			
-			const nevp = fuxstudio.rptNewSlotParam(_reditor, ++_reditor.len);
+			const nevp = fuxstudio.rptNewSlotParam(_editor, ++_editor.len);
 			nevp.column = column;
 			const nslot = fuxstudio.rptCreateSlot(nevp);
 			_design.insertBefore(nslot, _drop.slot);
@@ -1363,7 +1363,7 @@ fuxstudio.rptSlotDragEnd = function(uEv) {
 		}
 		
 		_design.removeChild(_placeslot);
-		const _fields = _id(_reditor.fieldsId);
+		const _fields = _id(_editor.fieldsId);
 		const _field = _id(evp.dragOriginId);
 		_fields.removeChild(_field);
 	}
@@ -1372,12 +1372,12 @@ fuxstudio.rptSlotDragEnd = function(uEv) {
 	ux.remDirectHdl(document, "mouseup", fuxstudio.rptSlotDragEnd);
 	fuxstudio.dragEvp = null;
 	
-	_reditor.changeState();
+	_editor.changeState();
 }
 
 fuxstudio.rptSlotEdit = function(uEv) {
 	const evp = uEv.evp;
-	const slotedit = _id(evp.reditor.editColId);
+	const slotedit = _id(evp.editor.editColId);
 	slotedit.show(uEv.uTrg.id);
 	slotedit.attach(evp);
 	slotedit.setFocus();
@@ -1385,14 +1385,14 @@ fuxstudio.rptSlotEdit = function(uEv) {
 
 fuxstudio.rptSlotDel = function(uEv) {
 	const evp = uEv.evp;
-	const reditor = evp.reditor;
-	const slotedit = _id(reditor.editColId);
+	const editor = evp.editor;
+	const slotedit = _id(editor.editColId);
 	slotedit.hide();
 	
-	const _design = _id(reditor.designId);
+	const _design = _id(editor.designId);
 	const _slot = _id(evp.slotId);
 	_design.removeChild(_slot);
-	reditor.changeState();
+	editor.changeState();
 }
 
 
