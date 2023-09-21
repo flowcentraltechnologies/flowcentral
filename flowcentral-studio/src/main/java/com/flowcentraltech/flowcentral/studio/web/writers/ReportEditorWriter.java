@@ -38,7 +38,7 @@ import com.tcdng.unify.web.ui.widget.writer.AbstractControlWriter;
 @Component("fc-reporteditor-writer")
 public class ReportEditorWriter extends AbstractControlWriter {
 
-    private static final String[] COLUMN_PROPERTY_KEYS = { "reporteditor.field", "reporteditor.label",
+    private static final String[] COLUMN_PROPERTY_KEYS = { "reporteditor.field",
             "reporteditor.order", "reporteditor.widget", "reporteditor.horizalign", "reporteditor.vertalign",
             "reporteditor.description", "reporteditor.type", "reporteditor.formatter", "reporteditor.width",
             "reporteditor.bold", "reporteditor.group", "reporteditor.grouponnewpage", "reporteditor.sum" };

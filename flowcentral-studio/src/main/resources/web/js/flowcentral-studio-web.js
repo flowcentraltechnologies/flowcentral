@@ -1063,7 +1063,6 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 	const id = rgp.pId;
 	const rce = _id(id);
 	rce._field = _id(rgp.pFieldId);
-	rce._label = _id(rgp.pLabelId);
 	rce._order = _id(rgp.pOrderId);
 	rce._widget = _id(rgp.pWidgetId);
 	rce._horiz = _id(rgp.pHorizId);
@@ -1081,36 +1080,34 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 		rce._evp = evp;
 		const column = evp.column;
 		rce._field.setValue(column.fldNm);
-		rce._label.setValue(column.label);
-		rce._horiz.setValue(column.horiz);
-		rce._vert.setValue(column.vert);
+		rce._horiz.setValue(column.horizAlign);
+		rce._vert.setValue(column.vertAlign);
 		rce._order.setValue(column.order);
 		rce._widget.setValue(column.widget);
-		rce._desc.setValue(column.desc);
+		rce._desc.setValue(column.description);
 		rce._type.setValue(column.type);
 		rce._formatter.setValue(column.formatter);
 		rce._width.setValue(column.width);
 		rce._bold.setValue(column.bold);
 		rce._group.setValue(column.group);
-		rce._groupnew.setValue(column.groupnew);
+		rce._groupnew.setValue(column.groupOnNewPage);
 		rce._sum.setValue(column.sum);
 	};
 	
 	rce.apply = function() {
 		if (rce._evp) {
 			const column = rce._evp.column;
-			column.label = rce._label.getValue();
-			column.horiz = rce._horiz.getValue();
-			column.vert = rce._vert.getValue();
+			column.horizAlign = rce._horiz.getValue();
+			column.vertAlign = rce._vert.getValue();
 			column.order = rce._order.getValue();
 			column.widget = rce._widget.getValue();
-			column.desc = rce._desc.getValue();
+			column.description = rce._desc.getValue();
 			column.type = rce._type.getValue();
 			column.formatter = rce._formatter.getValue();
 			column.width = parseInt(rce._width.getValue());
 			column.bold = rce._bold.getValue();
 			column.group = rce._group.getValue();
-			column.groupnew = rce._groupnew.getValue();
+			column.groupOnNewPage = rce._groupnew.getValue();
 			column.sum = rce._sum.getValue();
 			rce._evp.editor.changeState();
 		}
@@ -1234,7 +1231,7 @@ fuxstudio.rptWireSlot = function(evp) {
 fuxstudio.rptCreateSlot = function(evp) {
 	const editor = evp.editor;
 	const column = evp.column;
-	const caption = column.label ? column.label: column.fldLabel;
+	const caption = column.fldLabel;
 	const labels = editor.labels;
 	var html = "<div class=\"slothdr\">"
 			+ "<div class=\"slotcap\" id=\"" + evp.dragId + "\"><span>" + caption + "</span></div>"
@@ -1246,19 +1243,18 @@ fuxstudio.rptCreateSlot = function(evp) {
 	
 	html += "</div></div>";
 	html += editor.editSlotFieldHtml(labels[0], column.fldNm);
-	html += editor.editSlotFieldHtml(labels[1], column.label);
-	html += editor.editSlotFieldHtml(labels[2], column.order);
-	html += editor.editSlotFieldHtml(labels[3], column.widget);
-	html += editor.editSlotFieldHtml(labels[4], column.horiz);
-	html += editor.editSlotFieldHtml(labels[5], column.vert);
-	html += editor.editSlotFieldHtml(labels[6], column.desc);
-	html += editor.editSlotFieldHtml(labels[7], column.type);
-	html += editor.editSlotFieldHtml(labels[8], column.formatter);
-	html += editor.editSlotFieldHtml(labels[9], column.width);
+	html += editor.editSlotFieldHtml(labels[1], column.order);
+	html += editor.editSlotFieldHtml(labels[2], column.widget);
+	html += editor.editSlotFieldHtml(labels[3], column.horizAlign);
+	html += editor.editSlotFieldHtml(labels[4], column.vertAlign);
+	html += editor.editSlotFieldHtml(labels[5], column.description);
+	html += editor.editSlotFieldHtml(labels[6], column.type);
+	html += editor.editSlotFieldHtml(labels[7], column.formatter);
+	html += editor.editSlotFieldHtml(labels[8], column.width);
+	html += editor.editSlotFieldHtml(labels[9], "" + column.bold);
 	html += editor.editSlotFieldHtml(labels[10], "" + column.group);
-	html += editor.editSlotFieldHtml(labels[11], "" + column.bold);
-	html += editor.editSlotFieldHtml(labels[12], "" + column.groupnew);
-	html += editor.editSlotFieldHtml(labels[13], "" + column.sum);
+	html += editor.editSlotFieldHtml(labels[11], "" + column.groupOnNewPage);
+	html += editor.editSlotFieldHtml(labels[12], "" + column.sum);
 
 	const slot = document.createElement("div");
 	slot.className = "slot";

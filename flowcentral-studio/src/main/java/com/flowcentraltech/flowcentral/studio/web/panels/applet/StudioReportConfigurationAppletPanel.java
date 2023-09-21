@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.studio.web.panels.applet;
 
 import com.flowcentraltech.flowcentral.application.web.panels.applet.AbstractEntityFormApplet;
-import com.flowcentraltech.flowcentral.studio.web.panels.TableEditorPage;
+import com.flowcentraltech.flowcentral.studio.web.panels.ReportEditorPage;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.UplBinding;
@@ -73,11 +73,11 @@ public class StudioReportConfigurationAppletPanel extends StudioAppComponentAppl
 
     @Action
     public void saveDesignAndClose() throws UnifyException {
-        StudioAppTableApplet applet = getValue(StudioAppTableApplet.class);
-        TableEditorPage tableEditorPage = applet.getTableEditorPage();
-        tableEditorPage.commitDesign();
+        StudioReportConfigurationApplet applet = getValue(StudioReportConfigurationApplet.class);
+        ReportEditorPage reportEditorPage = applet.getReportEditorPage();
+        reportEditorPage.commitDesign();
         applet.navBackToPrevious();
-        hintUser("$m{studioreportconfigurationapplet.reporteditor.success.hint}", tableEditorPage.getSubTitle());
+        hintUser("$m{studioreportconfigurationapplet.reporteditor.success.hint}", reportEditorPage.getSubTitle());
     }
 
 }

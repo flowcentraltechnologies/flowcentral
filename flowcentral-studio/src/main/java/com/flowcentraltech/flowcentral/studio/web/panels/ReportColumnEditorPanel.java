@@ -41,10 +41,6 @@ public class ReportColumnEditorPanel extends DetachedPanel {
         return getWidgetByShortName("editValField").getId();
     }
 
-    public String getLabelId() throws UnifyException {
-        return getWidgetByShortName("editValLabel").getId();
-    }
-
     public String getOrderId() throws UnifyException {
         return getWidgetByShortName("editValOrder").getId();
     }

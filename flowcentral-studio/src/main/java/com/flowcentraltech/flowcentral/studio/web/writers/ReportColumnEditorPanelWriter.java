@@ -43,7 +43,6 @@ public class ReportColumnEditorPanelWriter extends DetachedPanelWriter {
         writer.beginFunction("fuxstudio.rigReportColumnEditorPanel");
         writer.writeParam("pId", reportColumnEditorPanel.getId());
         writer.writeParam("pFieldId", reportColumnEditorPanel.getFieldId());
-        writer.writeParam("pLabelId", reportColumnEditorPanel.getLabelId());
         writer.writeParam("pWidgetId", reportColumnEditorPanel.getWidgetId());
         writer.writeParam("pOrderId", reportColumnEditorPanel.getOrderId());
         writer.writeParam("pHorizId", reportColumnEditorPanel.getHorizId());

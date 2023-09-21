@@ -18,10 +18,9 @@
 !ui-label:titleBar styleClass:$e{fc-editortitle} caption:$s{Edit Column}
 !ui-panel:editValuePanel
 	layout:$d{!ui-vertical showCaption:true inlineCaption:true inlineCaptionClass:$s{editcollabel} captionSuffix:$s{:}}
-	components:$c{editValField editValLabel editValOrder editValWidget editValHoriz editValVert editValDesc}
+	components:$c{editValField editValOrder editValWidget editValHoriz editValVert editValDesc}
 	components:$c{editValType editValFormatter editValWidth editValBold editValGroup editValGroupNew editValSum}
 !ui-text:editValField caption:$m{reporteditor.field} maxLen:64 style:$s{width:160px;}
-!ui-text:editValLabel caption:$m{reporteditor.label} maxLen:64 style:$s{width:160px;}
 !ui-select:editValOrder caption:$m{reporteditor.order} list:orderlist blankOption:$s{}
 !ui-select:editValWidget caption:$m{reporteditor.widget} list:studiowidgetslist
 !ui-select:editValHoriz caption:$m{reporteditor.horizalign} list:horizontalalignlist
