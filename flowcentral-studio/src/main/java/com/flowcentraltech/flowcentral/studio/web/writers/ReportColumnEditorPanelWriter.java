@@ -48,7 +48,6 @@ public class ReportColumnEditorPanelWriter extends DetachedPanelWriter {
         writer.writeParam("pHorizId", reportColumnEditorPanel.getHorizId());
         writer.writeParam("pVertId", reportColumnEditorPanel.getVertId());
         writer.writeParam("pDescId", reportColumnEditorPanel.getDescId());
-        writer.writeParam("pTypeId", reportColumnEditorPanel.getTypeId());
         writer.writeParam("pFormatterId", reportColumnEditorPanel.getFormatterId());
         writer.writeParam("pWidthId", reportColumnEditorPanel.getWidthId());
         writer.writeParam("pBoldId", reportColumnEditorPanel.getBoldId());

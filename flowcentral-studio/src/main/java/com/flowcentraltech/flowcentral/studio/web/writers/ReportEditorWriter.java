@@ -40,7 +40,7 @@ public class ReportEditorWriter extends AbstractControlWriter {
 
     private static final String[] COLUMN_PROPERTY_KEYS = { "reporteditor.field",
             "reporteditor.order", "reporteditor.widget", "reporteditor.horizalign", "reporteditor.vertalign",
-            "reporteditor.description", "reporteditor.type", "reporteditor.formatter", "reporteditor.width",
+            "reporteditor.description", "reporteditor.formatter", "reporteditor.width",
             "reporteditor.bold", "reporteditor.group", "reporteditor.grouponnewpage", "reporteditor.sum" };
 
     @Override

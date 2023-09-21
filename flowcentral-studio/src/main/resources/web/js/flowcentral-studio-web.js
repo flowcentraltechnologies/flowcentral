@@ -1068,7 +1068,6 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 	rce._horiz = _id(rgp.pHorizId);
 	rce._vert = _id(rgp.pVertId);
 	rce._desc = _id(rgp.pDescId);
-	rce._type = _id(rgp.pTypeId);
 	rce._formatter = _id(rgp.pFormatterId);
 	rce._width = _id(rgp.pWidthId);
 	rce._bold = _id(rgp.pBoldId);
@@ -1085,7 +1084,6 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 		rce._order.setValue(column.order);
 		rce._widget.setValue(column.widget);
 		rce._desc.setValue(column.description);
-		rce._type.setValue(column.type);
 		rce._formatter.setValue(column.formatter);
 		rce._width.setValue(column.width);
 		rce._bold.setValue(column.bold);
@@ -1102,7 +1100,6 @@ fuxstudio.rigReportColumnEditorPanel = function(rgp) {
 			column.order = rce._order.getValue();
 			column.widget = rce._widget.getValue();
 			column.description = rce._desc.getValue();
-			column.type = rce._type.getValue();
 			column.formatter = rce._formatter.getValue();
 			column.width = parseInt(rce._width.getValue());
 			column.bold = rce._bold.getValue();
@@ -1248,13 +1245,12 @@ fuxstudio.rptCreateSlot = function(evp) {
 	html += editor.editSlotFieldHtml(labels[3], column.horizAlign);
 	html += editor.editSlotFieldHtml(labels[4], column.vertAlign);
 	html += editor.editSlotFieldHtml(labels[5], column.description);
-	html += editor.editSlotFieldHtml(labels[6], column.type);
-	html += editor.editSlotFieldHtml(labels[7], column.formatter);
-	html += editor.editSlotFieldHtml(labels[8], column.width);
-	html += editor.editSlotFieldHtml(labels[9], "" + column.bold);
-	html += editor.editSlotFieldHtml(labels[10], "" + column.group);
-	html += editor.editSlotFieldHtml(labels[11], "" + column.groupOnNewPage);
-	html += editor.editSlotFieldHtml(labels[12], "" + column.sum);
+	html += editor.editSlotFieldHtml(labels[6], column.formatter);
+	html += editor.editSlotFieldHtml(labels[7], column.width);
+	html += editor.editSlotFieldHtml(labels[8], "" + column.bold);
+	html += editor.editSlotFieldHtml(labels[9], "" + column.group);
+	html += editor.editSlotFieldHtml(labels[10], "" + column.groupOnNewPage);
+	html += editor.editSlotFieldHtml(labels[11], "" + column.sum);
 
 	const slot = document.createElement("div");
 	slot.className = "slot";
@@ -1344,12 +1340,17 @@ fuxstudio.rptSlotDragEnd = function(uEv) {
 			const column = {};
 			column.fldLabel = evp.fieldInfo.fldLabel;
 			column.fldNm = evp.fieldInfo.fldNm;
-			column.label = null;
-			column.horiz = null;
-			column.vert = null;
+			column.order = null;
+			column.horizAlign = null;
+			column.vertAlign = null;
 			column.widget = evp.fieldInfo.fldWidget?  evp.fieldInfo.fldWidget:"application.text";
-			column.desc = null;
-			column.groupnew = false;
+			column.description = evp.fieldInfo.fldLabel;
+			column.formatter = null;
+			column.width = 0;
+			column.bold = false;
+			column.group = false;
+			column.groupOnNewPage = false;
+			column.sum = false;
 			
 			const nevp = fuxstudio.rptNewSlotParam(_editor, ++_editor.len);
 			nevp.column = column;

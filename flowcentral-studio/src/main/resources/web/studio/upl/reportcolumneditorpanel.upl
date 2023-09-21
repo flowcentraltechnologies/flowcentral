@@ -19,16 +19,15 @@
 !ui-panel:editValuePanel
 	layout:$d{!ui-vertical showCaption:true inlineCaption:true inlineCaptionClass:$s{editcollabel} captionSuffix:$s{:}}
 	components:$c{editValField editValOrder editValWidget editValHoriz editValVert editValDesc}
-	components:$c{editValType editValFormatter editValWidth editValBold editValGroup editValGroupNew editValSum}
-!ui-text:editValField caption:$m{reporteditor.field} maxLen:64 style:$s{width:160px;}
+	components:$c{editValFormatter editValWidth editValBold editValGroup editValGroupNew editValSum}
+!ui-text:editValField caption:$m{reporteditor.field} maxLen:64 style:$s{width:220px;}
 !ui-select:editValOrder caption:$m{reporteditor.order} list:orderlist blankOption:$s{}
 !ui-select:editValWidget caption:$m{reporteditor.widget} list:studiowidgetslist
 !ui-select:editValHoriz caption:$m{reporteditor.horizalign} list:horizontalalignlist
 !ui-select:editValVert caption:$m{reporteditor.vertalign} list:verticalalignlist
-!ui-text:editValDesc caption:$m{reporteditor.description} maxLen:64 style:$s{width:160px;}
-!ui-text:editValType caption:$m{reporteditor.type} maxLen:64 style:$s{width:160px;}
-!ui-text:editValFormatter caption:$m{reporteditor.formatter} maxLen:64 style:$s{width:160px;}
-!ui-integer:editValWidth caption:$m{reporteditor.width} precision:2 style:$s{width:160px;}
+!ui-text:editValDesc caption:$m{reporteditor.description} maxLen:64 style:$s{width:220px;}
+!ui-text:editValFormatter caption:$m{reporteditor.formatter} maxLen:64 style:$s{width:220px;}
+!ui-integer:editValWidth caption:$m{reporteditor.width} precision:2 style:$s{width:220px;}
 !ui-checkbox:editValBold caption:$m{reporteditor.bold} layoutCaption:true
 !ui-checkbox:editValGroup caption:$m{reporteditor.group} layoutCaption:true
 !ui-checkbox:editValGroupNew caption:$m{reporteditor.grouponnewpage} layoutCaption:true

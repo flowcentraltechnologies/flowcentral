@@ -86,11 +86,11 @@ public class ReportEditor {
         }
 
         public Builder addColumn(String fieldName, String widget, String order, String horizAlign, String vertAlign,
-                String description, String type, String formatter, int width, boolean bold, boolean group,
+                String description, String formatter, int width, boolean bold, boolean group,
                 boolean groupOnNewPage, boolean sum) {
             if (entityDef.isWithFieldDef(fieldName)) {
                 columnList.add(new ReportColumn(entityDef.getFieldDef(fieldName).getFieldLabel(), fieldName, widget,
-                        order, horizAlign, vertAlign, description, type, formatter, width, bold, group, groupOnNewPage,
+                        order, horizAlign, vertAlign, description, formatter, width, bold, group, groupOnNewPage,
                         sum));
             }
 
@@ -139,8 +139,6 @@ public class ReportEditor {
 
         private String description;
 
-        private String type;
-
         private String formatter;
 
         private int width;
@@ -154,7 +152,7 @@ public class ReportEditor {
         private boolean sum;
 
         public ReportColumn(String fldLabel, String fldNm, String widget, String order, String horizAlign,
-                String vertAlign, String description, String type, String formatter, int width, boolean bold,
+                String vertAlign, String description, String formatter, int width, boolean bold,
                 boolean group, boolean groupOnNewPage, boolean sum) {
             this.fldLabel = fldLabel;
             this.fldNm = fldNm;
@@ -163,7 +161,6 @@ public class ReportEditor {
             this.horizAlign = horizAlign;
             this.vertAlign = vertAlign;
             this.description = description;
-            this.type = type;
             this.formatter = formatter;
             this.width = width;
             this.bold = bold;
@@ -230,14 +227,6 @@ public class ReportEditor {
 
         public void setDescription(String description) {
             this.description = description;
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
         }
 
         public String getFormatter() {

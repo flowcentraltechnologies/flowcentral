@@ -112,7 +112,6 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
                 reportColumn.setHorizAlignType(HAlignType.fromCode(editReportColumn.getHorizAlign()));
                 reportColumn.setVertAlignType(VAlignType.fromCode(editReportColumn.getVertAlign()));
                 reportColumn.setDescription(editReportColumn.getDescription());
-                reportColumn.setType(editReportColumn.getType());
                 reportColumn.setFormatter(editReportColumn.getFormatter());
                 reportColumn.setWidth(editReportColumn.getWidth());
                 reportColumn.setBold(editReportColumn.isBold());
@@ -136,7 +135,7 @@ public class ReportEditorPage extends AbstractStudioEditorPage implements TabShe
                     reportColumn.getColumnOrder() != null ? reportColumn.getColumnOrder().code() : null,
                     reportColumn.getHorizAlignType() != null ? reportColumn.getHorizAlignType().code() : null,
                     reportColumn.getVertAlignType() != null ? reportColumn.getVertAlignType().code() : null,
-                    reportColumn.getDescription(), reportColumn.getType(), reportColumn.getFormatter(),
+                    reportColumn.getDescription(), reportColumn.getFormatter(),
                     reportColumn.getWidth(), reportColumn.isBold(), reportColumn.isGroup(),
                     reportColumn.isGroupOnNewPage(), reportColumn.isSum());
         }
