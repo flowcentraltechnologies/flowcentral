@@ -36,7 +36,7 @@ public class ReportColumn extends BaseEntity {
     @ForeignKey(ReportConfiguration.class)
     private Long reportConfigurationId;
 
-    @Column(length = 128)
+    @Column(length = 128, nullable = true)
     private String renderWidget;
 
     @ForeignKey(nullable = true)

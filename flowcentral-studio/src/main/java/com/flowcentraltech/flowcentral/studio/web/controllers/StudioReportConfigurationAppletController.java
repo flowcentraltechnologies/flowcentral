@@ -31,20 +31,20 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 
 /**
- * Studio application report applet controller.
+ * Studio application report configuration applet controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/studioapptableapplet")
-@UplBinding("web/studio/upl/studioapptableappletpage.upl")
-public class StudioReportAppletController
+@Component("/studioreportconfigurationapplet")
+@UplBinding("web/studio/upl/studioreportconfigurationappletpage.upl")
+public class StudioReportConfigurationAppletController
         extends AbstractEntityFormAppletController<StudioAppTableApplet, StudioAppTableAppletPageBean> {
 
     @Configurable
     private StudioModuleService studioModuleService;
 
-    public StudioReportAppletController() {
+    public StudioReportConfigurationAppletController() {
         super(StudioAppTableAppletPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 

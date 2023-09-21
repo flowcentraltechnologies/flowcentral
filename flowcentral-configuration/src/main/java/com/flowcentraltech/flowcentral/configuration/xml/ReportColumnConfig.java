@@ -40,6 +40,8 @@ public class ReportColumnConfig {
     private HAlignType horizAlignType;
 
     private VAlignType vertAlignType;
+    
+    private String renderWidget;
 
     private String description;
 
@@ -103,6 +105,15 @@ public class ReportColumnConfig {
     @XmlAttribute(name = "valign")
     public void setVertAlignType(VAlignType vertAlignType) {
         this.vertAlignType = vertAlignType;
+    }
+
+    public String getRenderWidget() {
+        return renderWidget;
+    }
+
+    @XmlAttribute
+    public void setRenderWidget(String renderWidget) {
+        this.renderWidget = renderWidget;
     }
 
     public String getFormatter() {

@@ -125,6 +125,7 @@ public class ReportsXmlGenerator extends AbstractStaticArtifactGenerator {
                         reportColumnConfig.setFormatter(reportColumn.getFormatter());
                         reportColumnConfig.setHorizAlignType(reportColumn.getHorizAlignType());
                         reportColumnConfig.setVertAlignType(reportColumn.getVertAlignType());
+                        reportColumnConfig.setRenderWidget(reportColumn.getRenderWidget());
                         reportColumnConfig.setWidth(reportColumn.getWidth());
                         reportColumnConfig.setGroup(reportColumn.isGroup());
                         reportColumnConfig.setGroupOnNewPage(reportColumn.isGroupOnNewPage());
