@@ -1206,16 +1206,16 @@
 			label="$m{studio.reportcolumn.manage.label}" type="manage_entitylist"
 			entity="report.reportColumn" menuAccess="false">
 			<property name="searchTable" value="reportColumnTable" />
-			<property name="searchTable.new" value="true" />
+			<property name="searchTable.new" value="false" />
 			<property name="searchTable.edit" value="false" />
 			<property name="searchTable.report" value="false" />
 			<property name="createForm" value="reportColumnForm" />
-			<property name="createForm.save" value="true" />
-			<property name="createForm.save.next" value="true" />
-			<property name="createForm.save.close" value="true" />
+			<property name="createForm.save" value="false" />
+			<property name="createForm.save.next" value="false" />
+			<property name="createForm.save.close" value="false" />
 			<property name="maintainForm" value="reportColumnForm" />
-			<property name="maintainForm.update" value="true" />
-			<property name="maintainForm.delete" value="true" />
+			<property name="maintainForm.update" value="false" />
+			<property name="maintainForm.delete" value="false" />
 		</applet>
 		<applet name="manageReportPlacement"
 			description="$m{studio.reportplacement.manage}"
@@ -3408,6 +3408,9 @@
 						column="1" required="true" visible="true" />
 				</section>
 			</tab>
+			<tab name="design" label="$m{studio.reportconfiguration.form.design}"
+				contentType="child_list" applet="manageReportColumn"
+				reference="columnList" editAction="/designChildItem" />
 			<tab name="columns"
 				label="$m{studio.reportconfiguration.form.columns}"
 				contentType="child_list" applet="manageReportColumn"

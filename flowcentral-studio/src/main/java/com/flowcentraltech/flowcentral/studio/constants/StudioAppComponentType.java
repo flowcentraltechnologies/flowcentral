@@ -242,7 +242,7 @@ public enum StudioAppComponentType implements EnumConst {
             "$m{studio.application.component.type.reportconfigurations}",
             "studio.menu.label.reportconfiguration",
             "file-invoice",
-            "/studioappcomponentapplet",
+            "/studioreportconfigurationapplet",
             "studiooncreatecomponent-policy",
             null,
             null,
