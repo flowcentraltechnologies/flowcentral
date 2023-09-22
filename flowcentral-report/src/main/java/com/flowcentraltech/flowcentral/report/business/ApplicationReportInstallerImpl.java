@@ -351,6 +351,7 @@ public class ApplicationReportInstallerImpl extends AbstractApplicationArtifactI
                 reportColumn.setColumnOrder(columnConfig.getColumnOrder());
                 reportColumn.setFieldName(columnConfig.getFieldName());
                 reportColumn.setDescription(columnConfig.getDescription());
+                reportColumn.setRenderWidget(columnConfig.getRenderWidget());
                 reportColumn.setType(columnConfig.getType());
                 reportColumn.setFormatter(columnConfig.getFormatter());
                 reportColumn.setHorizAlignType(columnConfig.getHorizAlignType());

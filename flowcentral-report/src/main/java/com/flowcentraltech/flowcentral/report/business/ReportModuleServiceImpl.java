@@ -618,37 +618,43 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                 String formatter = reportColumn.getFormatter();
                 HAlignType hAlignType = reportColumn.getHorizAlignType();
                 int width = reportColumn.getWidth();
-                if (!reportOptions.isBeanCollection()) {
+                if (reportOptions.isBeanCollection()) {
+                    reportColumnOptions.setColumnName(fieldName);
+                } else {
                     reportColumnOptions.setTableName(sqlEntityInfo.getPreferredViewName());
                     if (StringUtils.isNotBlank(fieldName)) {
                         final String columnName = sqlEntityInfo.getListFieldInfo(fieldName).getPreferredColumnName();
                         reportColumnOptions.setColumnName(columnName);
 
                         ReportableField reportableField = fieldMap.get(fieldName);
-                        if (type == null) {
-                            type = reportableField.getType();
-                        }
+                        if (reportableField != null) {
+                            if (type == null) {
+                                type = reportableField.getType();
+                            }
 
-                        if (formatter == null) {
-                            formatter = reportableField.getFormatter();
-                        }
+                            if (formatter == null) {
+                                formatter = reportableField.getFormatter();
+                            }
 
-                        if (width <= 0 && reportableField.getWidth() != null) {
-                            width = reportableField.getWidth();
-                        }
+                            if (width <= 0 && reportableField.getWidth() != null) {
+                                width = reportableField.getWidth();
+                            }
 
-                        if (hAlignType == null) {
-                            hAlignType = HAlignType.fromName(reportableField.getHorizontalAlign());
-                        }
+                            if (hAlignType == null) {
+                                hAlignType = HAlignType.fromName(reportableField.getHorizontalAlign());
+                            }
+                        }                        
                     }
-                } else {
-                    reportColumnOptions.setColumnName(fieldName);
                 }
 
-                if (type == null) {
+                if (StringUtils.isBlank(type)) {
                     GetterSetterInfo getterSetterInfo = ReflectUtils.getGetterInfo(entityClassDef.getEntityClass(),
                             reportColumn.getFieldName());
                     type = ConverterUtils.getWrapperClassName(getterSetterInfo.getType());
+                    
+                    if (StringUtils.isBlank(type)) {
+                        type = String.class.getName();
+                    }
                 }
 
                 reportColumnOptions.setType(type);

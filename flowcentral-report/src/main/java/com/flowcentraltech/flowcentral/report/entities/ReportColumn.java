@@ -36,6 +36,9 @@ public class ReportColumn extends BaseEntity {
     @ForeignKey(ReportConfiguration.class)
     private Long reportConfigurationId;
 
+    @Column(length = 128, nullable = true)
+    private String renderWidget;
+
     @ForeignKey(nullable = true)
     private OrderType columnOrder;
 
@@ -87,6 +90,14 @@ public class ReportColumn extends BaseEntity {
 
     public void setReportConfigurationId(Long reportConfigurationId) {
         this.reportConfigurationId = reportConfigurationId;
+    }
+
+    public String getRenderWidget() {
+        return renderWidget;
+    }
+
+    public void setRenderWidget(String renderWidget) {
+        this.renderWidget = renderWidget;
     }
 
     @Override

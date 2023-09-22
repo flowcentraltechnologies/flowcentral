@@ -1,0 +1,40 @@
+// UPL template for report column editor panel
+// Copyright 2021-2023 FlowCentral Technologies Limited.
+// 
+// Licensed under the Apache License, Version 2.0 (the "License"); you may not
+// use this file except in compliance with the License. You may obtain a copy of
+// the License at
+// 
+// http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+// WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+// License for the specific language governing permissions and limitations under
+// the License.
+
+!fc-reportcolumneditorpanel layout:$d{!ui-vertical}
+	components:$c{titleBar editValuePanel editActPanel}
+!ui-label:titleBar styleClass:$e{fc-editortitle} caption:$s{Edit Column}
+!ui-panel:editValuePanel
+	layout:$d{!ui-vertical showCaption:true inlineCaption:true inlineCaptionClass:$s{editcollabel} captionSuffix:$s{:}}
+	components:$c{editValField editValOrder editValWidget editValHoriz editValVert editValDesc}
+	components:$c{editValFormatter editValWidth editValBold editValGroup editValGroupNew editValSum}
+!ui-text:editValField caption:$m{reporteditor.field} maxLen:64 style:$s{width:220px;}
+!ui-select:editValOrder caption:$m{reporteditor.order} list:orderlist blankOption:$s{}
+!ui-select:editValWidget caption:$m{reporteditor.widget} list:studiowidgetslist
+!ui-select:editValHoriz caption:$m{reporteditor.horizalign} list:horizontalalignlist
+!ui-select:editValVert caption:$m{reporteditor.vertalign} list:verticalalignlist
+!ui-text:editValDesc caption:$m{reporteditor.description} maxLen:64 style:$s{width:220px;}
+!ui-text:editValFormatter caption:$m{reporteditor.formatter} maxLen:64 style:$s{width:220px;}
+!ui-integer:editValWidth caption:$m{reporteditor.width} precision:2 style:$s{width:220px;}
+!ui-checkbox:editValBold caption:$m{reporteditor.bold} layoutCaption:true
+!ui-checkbox:editValGroup caption:$m{reporteditor.group} layoutCaption:true
+!ui-checkbox:editValGroupNew caption:$m{reporteditor.grouponnewpage} layoutCaption:true
+!ui-checkbox:editValSum caption:$m{reporteditor.sum} layoutCaption:true
+
+!ui-panel:editActPanel layout:$d{!ui-horizontal}
+	components:$c{editApplyBtn editCancelBtn}
+!ui-button:editApplyBtn caption:$m{button.apply} styleClass:$e{fc-bluebutton}
+!ui-button:editCancelBtn caption:$m{button.cancel}
+

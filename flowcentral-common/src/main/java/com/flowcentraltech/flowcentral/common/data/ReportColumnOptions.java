@@ -198,12 +198,4 @@ public class ReportColumnOptions {
         this.included = included;
     }
 
-    @Override
-    public String toString() {
-        return "[tableName=" + tableName + ", columnName=" + columnName + ", description="
-                + description + ", type=" + type + ", formatter=" + formatter + ", hAlignType=" + hAlignType
-                + ", vAlignType=" + vAlignType + ", width=" + width + ", orderType=" + orderType + ", bold=" + bold
-                + ", group=" + group + ", groupOnNewPage=" + groupOnNewPage + ", sum=" + sum + ", included=" + included
-                + "]";
-    }
 }

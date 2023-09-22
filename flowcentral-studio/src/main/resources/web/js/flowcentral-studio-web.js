@@ -1055,6 +1055,345 @@ fuxstudio.tblSlotDel = function(uEv) {
 
 
 /********************************************************************************/
+/************************* REPORT EDITOR *****************************************/
+/********************************************************************************/
+
+/** Report column editor */
+fuxstudio.rigReportColumnEditorPanel = function(rgp) {
+	const id = rgp.pId;
+	const rce = _id(id);
+	rce._field = _id(rgp.pFieldId);
+	rce._order = _id(rgp.pOrderId);
+	rce._widget = _id(rgp.pWidgetId);
+	rce._horiz = _id(rgp.pHorizId);
+	rce._vert = _id(rgp.pVertId);
+	rce._desc = _id(rgp.pDescId);
+	rce._formatter = _id(rgp.pFormatterId);
+	rce._width = _id(rgp.pWidthId);
+	rce._bold = _id(rgp.pBoldId);
+	rce._group = _id(rgp.pGroupId);
+	rce._groupnew = _id(rgp.pGroupNewId);
+	rce._sum = _id(rgp.pSumId);
+	
+	rce.attach = function(evp) {
+		rce._evp = evp;
+		const column = evp.column;
+		rce._field.setValue(column.fldNm);
+		rce._horiz.setValue(column.horizAlign);
+		rce._vert.setValue(column.vertAlign);
+		rce._order.setValue(column.order);
+		rce._widget.setValue(column.widget);
+		rce._desc.setValue(column.description);
+		rce._formatter.setValue(column.formatter);
+		rce._width.setValue(column.width);
+		rce._bold.setValue(column.bold);
+		rce._group.setValue(column.group);
+		rce._groupnew.setValue(column.groupOnNewPage);
+		rce._sum.setValue(column.sum);
+	};
+	
+	rce.apply = function() {
+		if (rce._evp) {
+			const column = rce._evp.column;
+			column.horizAlign = rce._horiz.getValue();
+			column.vertAlign = rce._vert.getValue();
+			column.order = rce._order.getValue();
+			column.widget = rce._widget.getValue();
+			column.description = rce._desc.getValue();
+			column.formatter = rce._formatter.getValue();
+			column.width = parseInt(rce._width.getValue());
+			column.bold = rce._bold.getValue();
+			column.group = rce._group.getValue();
+			column.groupOnNewPage = rce._groupnew.getValue();
+			column.sum = rce._sum.getValue();
+			rce._evp.editor.changeState();
+		}
+	};
+	
+	rce.setFocus = function() {
+		rce._label.focus();
+	}
+	
+	const evp = {uId:id};
+	ux.addHdl(_id(rgp.pApplyId), "click", fuxstudio.rceApplyHandler, evp);
+	ux.addHdl(_id(rgp.pCancelId), "click", fuxstudio.rceCancelHandler, evp);
+}
+
+fuxstudio.rceApplyHandler = function(uEv) {
+	const rce = _id(uEv.evp.uId);
+	if (rce._evp) {
+		rce.apply();
+		rce.hide();
+		fuxstudio.rptReplaceSlot(rce._evp);
+	}
+}
+
+fuxstudio.rceCancelHandler = function(uEv) {
+	const rce = _id(uEv.evp.uId);
+	rce.hide();
+}
+
+/** Report editor */
+fuxstudio.rigReportEditor = function(rgp) {
+	const id = rgp.pId;
+	const content = rgp.pContent;
+
+	const editor = {};
+	editor.fieldsId = rgp.pFieldBaseId;
+	editor.designId = rgp.pDsnBaseId;
+	editor.editColId = rgp.pEditColId;
+	editor.stateId = rgp.pStateId;
+	editor.placeId = "place_" + id;
+	editor.slotId = "slot_" + id;
+	editor.editBtnId = "edit_" + editor.slotId;
+	editor.delBtnId = "del_" + editor.slotId;
+	editor.dragId = "drag_" + editor.slotId;
+	editor.len = content.design.columns.length;
+	editor.labels = content.propLabels;
+	editor.downarrow = content.downarrow;
+	editor.plus = content.plus;
+	editor.cog = content.cog;
+	editor.cross = content.cross;
+	editor.editable = content.editable;
+	editor.none = content.none;
+	editor.placeitem = content.placecolumn;
+	editor.additem = content.addcolumn;
+	
+	editor.changeState = function() {
+		const columns = [];
+		const _design = _id(this.designId);
+		for(var i = 0; i < _design.children.length; i++) {
+			columns.push(_design.children[i].column); 
+		}
+		
+		const oldcolumns = this.columns;
+		this.columns = columns;
+		if (oldcolumns) {
+			_id(this.stateId).value = JSON.stringify({columns:this.columns});
+		}
+	};
+
+	editor.editSlotFieldHtml = function(label, val) {
+		val = val ? val: this.none;
+		return "<div class=\"itm\"><span class=\"itmlabel\">"
+			+ label + "</span><span class=\"itmval\">" + val + "</span></div>";
+	};
+	
+	if (editor.editable) {
+		const choiceId = rgp.pChoiceId;
+		for(var i = 0; i < content.fields.length; i++) {
+			const evp = {};
+			evp.editor = editor;
+			evp.fieldId = choiceId + i;
+			evp.fieldInfo = content.fields[i];
+			ux.addHdl(_id(evp.fieldId), "mousedown", fuxstudio.rptFieldDragStart, evp);
+		}
+	}
+	
+	if (editor.len > 0) {
+		const design = _id(editor.designId);
+		for (var i = 0; i < editor.len; i++) {			
+			const evp = fuxstudio.rptNewSlotParam(editor, i);
+			evp.column = content.design.columns[i];
+			const slot = fuxstudio.rptCreateSlot(evp);
+			design.appendChild(slot);
+			fuxstudio.rptWireSlot(evp);
+		}
+	}
+
+	editor.changeState();
+}
+
+fuxstudio.rptNewSlotParam = function(editor, i) {
+	const evp = {};
+	evp.editor = editor;
+	evp.index = i;
+	evp.slotId = editor.slotId + i;
+	evp.editBtnId = editor.editBtnId + i;
+	evp.delBtnId = editor.delBtnId + i;
+	evp.dragId = editor.dragId + i;
+	return evp;
+}
+
+fuxstudio.rptWireSlot = function(evp) {
+	const editor = evp.editor;
+	if (editor.editable) {
+		ux.addHdl(_id(evp.dragId), "mousedown", fuxstudio.rptSlotDragStart, evp);
+		ux.addHdl(_id(evp.delBtnId), "click", fuxstudio.rptSlotDel, evp);
+	}
+
+	ux.addHdl(_id(evp.editBtnId), "click", fuxstudio.rptSlotEdit, evp);
+}
+
+fuxstudio.rptCreateSlot = function(evp) {
+	const editor = evp.editor;
+	const column = evp.column;
+	const caption = column.fldLabel;
+	const labels = editor.labels;
+	var html = "<div class=\"slothdr\">"
+			+ "<div class=\"slotcap\" id=\"" + evp.dragId + "\"><span>" + caption + "</span></div>"
+			+ "<div class=\"slotact\">"
+			+ fuxstudio.editorSymButton(evp.editBtnId, editor.cog, "actbtn");
+	if (editor.editable) {
+		html += fuxstudio.editorSymButton(evp.delBtnId, editor.cross, "actbtn");
+	}
+	
+	html += "</div></div>";
+	html += editor.editSlotFieldHtml(labels[0], column.fldNm);
+	html += editor.editSlotFieldHtml(labels[1], column.order);
+	html += editor.editSlotFieldHtml(labels[2], column.widget);
+	html += editor.editSlotFieldHtml(labels[3], column.horizAlign);
+	html += editor.editSlotFieldHtml(labels[4], column.vertAlign);
+	html += editor.editSlotFieldHtml(labels[5], column.description);
+	html += editor.editSlotFieldHtml(labels[6], column.formatter);
+	html += editor.editSlotFieldHtml(labels[7], column.width);
+	html += editor.editSlotFieldHtml(labels[8], "" + column.bold);
+	html += editor.editSlotFieldHtml(labels[9], "" + column.group);
+	html += editor.editSlotFieldHtml(labels[10], "" + column.groupOnNewPage);
+	html += editor.editSlotFieldHtml(labels[11], "" + column.sum);
+
+	const slot = document.createElement("div");
+	slot.className = "slot";
+	slot.id = evp.slotId;
+	slot.innerHTML = html;
+	slot.column = column;
+	return slot;
+}
+
+fuxstudio.rptReplaceSlot = function(evp) {
+	var nextslot = null;
+	const design = _id(evp.editor.designId);
+	for(var i = 0; i < design.children.length; i++) {
+		const oldslot = design.children[i];
+		if (oldslot.id == evp.slotId) {
+			if ((++i) < design.children.length) {
+				nextslot = design.children[i];
+			}
+			
+			design.removeChild(oldslot);
+			break;
+		}
+	}
+	
+	const slot = fuxstudio.rptCreateSlot(evp);
+	if (nextslot) {
+		design.insertBefore(slot, nextslot);
+	} else {
+		design.appendChild(slot);
+	}
+	fuxstudio.rptWireSlot(evp);
+}
+
+
+fuxstudio.rptFieldDragStart = function(uEv) {
+	const evp = uEv.evp;
+	const editor = evp.editor;
+	fuxstudio.editorChoiceDragStart(
+			evp, uEv.uTrg, editor.designId, uEv.clientX,
+			uEv.clientY, "placeslot", fuxstudio.rptSlotDrag,
+			fuxstudio.rptSlotDragEnd);
+}
+
+fuxstudio.rptSlotDragStart = function(uEv) {
+	const evp = uEv.evp;
+	fuxstudio.editorDragStart(evp, "slot", evp.editor.designId, evp.slotId,
+			uEv.clientX, uEv.clientY, "placeslot", fuxstudio.rptSlotDrag, fuxstudio.rptSlotDragEnd);
+}
+
+fuxstudio.rptSlotDrag = function(uEv) {
+	const _drag = fuxstudio.editorChoiceDrag(uEv);
+	const evp = fuxstudio.dragEvp;
+	const editor = evp.editor;
+
+	const _design = _id(editor.designId);
+	const _drop = fuxstudio.editorDesignSlotAt(_design, _drag.id, uEv.clientX, uEv.clientY);
+	if (_drop && _drop.slot.id != editor.placeId) {
+		const _placeslot = _id(editor.placeId);
+		const x1 = _drop.slot.getBoundingClientRect().left;
+		const x2 = _placeslot.getBoundingClientRect().left;
+		if (x2 > x1) {
+			_design.insertBefore(_placeslot, _drop.slot);
+		} else {
+			if (_drop.slot.nextSibling) {
+				_design.insertBefore(_placeslot, _drop.slot.nextSibling);
+			} else {
+				_design.appendChild(_placeslot);
+			}
+		}			
+	}
+}
+
+fuxstudio.rptSlotDragEnd = function(uEv) {
+	const evp = fuxstudio.dragEvp;
+	const _editor = evp.editor;
+	const _design = _id(_editor.designId);
+	const _placeslot = _id(_editor.placeId);
+
+	if (evp.dragType == "slot") {
+		const _slot = _id(evp.dragOriginId);
+		_design.insertBefore(_slot, _placeslot);
+		_design.removeChild(_placeslot);
+		_slot.classList.remove("drag");
+	} else {
+		const _drop = fuxstudio.editorDesignSlotAt(_design, null, uEv.clientX, uEv.clientY);
+		if (_drop && (_drop.slot.id == _editor.placeId)) {
+			const column = {};
+			column.fldLabel = evp.fieldInfo.fldLabel;
+			column.fldNm = evp.fieldInfo.fldNm;
+			column.order = null;
+			column.horizAlign = null;
+			column.vertAlign = null;
+			column.widget = evp.fieldInfo.fldWidget?  evp.fieldInfo.fldWidget:"application.text";
+			column.description = evp.fieldInfo.fldLabel;
+			column.formatter = null;
+			column.width = 0;
+			column.bold = false;
+			column.group = false;
+			column.groupOnNewPage = false;
+			column.sum = false;
+			
+			const nevp = fuxstudio.rptNewSlotParam(_editor, ++_editor.len);
+			nevp.column = column;
+			const nslot = fuxstudio.rptCreateSlot(nevp);
+			_design.insertBefore(nslot, _drop.slot);
+			fuxstudio.rptWireSlot(nevp);
+		}
+		
+		_design.removeChild(_placeslot);
+		const _fields = _id(_editor.fieldsId);
+		const _field = _id(evp.dragOriginId);
+		_fields.removeChild(_field);
+	}
+	
+	ux.remDirectHdl(document, "mousemove", fuxstudio.rptSlotDrag);
+	ux.remDirectHdl(document, "mouseup", fuxstudio.rptSlotDragEnd);
+	fuxstudio.dragEvp = null;
+	
+	_editor.changeState();
+}
+
+fuxstudio.rptSlotEdit = function(uEv) {
+	const evp = uEv.evp;
+	const slotedit = _id(evp.editor.editColId);
+	slotedit.show(uEv.uTrg.id);
+	slotedit.attach(evp);
+	slotedit.setFocus();
+}
+
+fuxstudio.rptSlotDel = function(uEv) {
+	const evp = uEv.evp;
+	const editor = evp.editor;
+	const slotedit = _id(editor.editColId);
+	slotedit.hide();
+	
+	const _design = _id(editor.designId);
+	const _slot = _id(evp.slotId);
+	_design.removeChild(_slot);
+	editor.changeState();
+}
+
+
+/********************************************************************************/
 /************************* WORKFLOW EDITOR **************************************/
 /********************************************************************************/
 /** Fabric extension */
@@ -2137,6 +2476,8 @@ fuxstudio.init = function() {
 	ux.setfn(fuxstudio.rigTableColumnEditorPanel, "fuxstudio03");  
 	ux.setfn(fuxstudio.rigTableEditor, "fuxstudio04");  
 	ux.setfn(fuxstudio.rigWorkflowEditor, "fuxstudio05"); 
+	ux.setfn(fuxstudio.rigReportColumnEditorPanel, "fuxstudio06");  
+	ux.setfn(fuxstudio.rigReportEditor, "fuxstudio07");  
 }
 
 fuxstudio.init();
