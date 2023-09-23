@@ -126,10 +126,10 @@ public class Interconnect {
 
                                 for (EntityConfig entityConfig : entityConfigList) {
                                     EntityInfo.Builder eib = EntityInfo.newBuilder(appEntityManagerFactory);
-                                    EntityBaseType type = entityConfig.getType() != null ? entityConfig.getType()
+                                    EntityBaseType base = entityConfig.getBase() != null ? entityConfig.getBase()
                                             : EntityBaseType.BASE_ENTITY;
                                     eib.dataSourceAlias(applicationConfig.getDataSourceAlias())
-                                            .type(type)
+                                            .baseType(base)
                                             .name(ensureLongName(applicationName, entityConfig.getName()))
                                             .tableName(entityConfig.getTableName())
                                             .description(entityConfig.getDescription())

@@ -36,7 +36,7 @@ public class EntityInfo {
 
     private String dataSourceAlias;
 
-    private EntityBaseType type;
+    private EntityBaseType baseType;
 
     private String name;
 
@@ -70,12 +70,12 @@ public class EntityInfo {
 
     private Map<String, String> fieldFromLocal;
 
-    public EntityInfo(String entityManagerFactory, String dataSourceAlias, EntityBaseType type, String name,
+    public EntityInfo(String entityManagerFactory, String dataSourceAlias, EntityBaseType baseType, String name,
             String description, String tableName, String idFieldName, String versionNoFieldName, String handler,
             String actionPolicy, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
         this.dataSourceAlias = dataSourceAlias;
-        this.type = type;
+        this.baseType = baseType;
         this.name = name;
         this.description = description;
         this.tableName = tableName;
@@ -130,8 +130,8 @@ public class EntityInfo {
         return dataSourceAlias;
     }
 
-    public EntityBaseType getType() {
-        return type;
+    public EntityBaseType getBaseType() {
+        return baseType;
     }
 
     public String getName() {
@@ -243,7 +243,7 @@ public class EntityInfo {
 
         private String dataSourceAlias;
 
-        private EntityBaseType type;
+        private EntityBaseType baseType;
 
         private String name;
 
@@ -273,8 +273,8 @@ public class EntityInfo {
             return this;
         }
 
-        public Builder type(EntityBaseType type) {
-            this.type = type;
+        public Builder baseType(EntityBaseType baseType) {
+            this.baseType = baseType;
             return this;
         }
 
@@ -343,8 +343,8 @@ public class EntityInfo {
         }
 
         public EntityInfo build() throws Exception {
-            if (type == null) {
-                throw new RuntimeException("Entity type is required. Entity name [" + name + "]");
+            if (baseType == null) {
+                throw new RuntimeException("Entity base type is required. Entity name [" + name + "]");
             }
 
             if (dataSourceAlias == null) {
@@ -356,7 +356,7 @@ public class EntityInfo {
             }
 
             Class<?> implClass = Class.forName(implementation);
-            return new EntityInfo(entityManagerFactory, dataSourceAlias, type, name, description, tableName,
+            return new EntityInfo(entityManagerFactory, dataSourceAlias, baseType, name, description, tableName,
                     idFieldName, versionNoFieldName, handler, actionPolicy, implClass, fieldsByName);
         }
     }

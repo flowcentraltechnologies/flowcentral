@@ -144,7 +144,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
                         final String endpoint = redirectUrl + "/detectEntity";
                         DetectEntityResponse resp = redirect(DetectEntityResponse.class, endpoint,
                                 new DetectEntityRequest(entity));
-                        if (resp != null && !resp.error()) {
+                        if (resp != null && !resp.error() && resp.isPresent()) {
                             redirect = new Redirect(redirectUrl);
                             entityRedirects.put(entity, redirect);
                             break;

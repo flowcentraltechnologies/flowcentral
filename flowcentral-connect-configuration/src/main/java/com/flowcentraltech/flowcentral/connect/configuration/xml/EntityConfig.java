@@ -32,7 +32,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.EntityB
  */
 public class EntityConfig {
 
-    private EntityBaseType type;
+    private EntityBaseType base;
     
     private String name;
 
@@ -52,14 +52,14 @@ public class EntityConfig {
 
     private List<EntityFieldConfig> entityFieldList;
 
-    public EntityBaseType getType() {
-        return type;
+    public EntityBaseType getBase() {
+        return base;
     }
 
     @XmlJavaTypeAdapter(EntityBaseTypeXmlAdapter.class)
     @XmlAttribute(required = true)
-    public void setType(EntityBaseType type) {
-        this.type = type;
+    public void setType(EntityBaseType base) {
+        this.base = base;
     }
 
     public String getName() {
