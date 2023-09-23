@@ -53,6 +53,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.FilterRestrictionDef;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
@@ -141,12 +143,21 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
 
     @Override
     public JsonProcedureResponse executeProcedureRequest(ProcedureRequest req) throws Exception {
+        logInfo("Execute procedure request [{0}]...", interconnect.prettyJSON(req));
         Object reqBean = req.isUseRawPayload() ? req.getPayload() : interconnect.getBeanFromJsonPayload(req);
         SpringBootInterconnectProcedure procedure = context.getBean(req.getOperation(),
                 SpringBootInterconnectProcedure.class);
         procedure.execute(reqBean, req.isReadOnly());
         Object[] result = req.isReadOnly() ? null : new Object[] { reqBean };
         return interconnect.createProcedureResponse(result, req);
+    }
+
+    @Override
+    public GetEntityDataSourceAliasResponse getEntityDataSourceAlias(GetEntityDataSourceAliasRequest req)
+            throws Exception {
+        logInfo("Get entity data source alias [{0}]...", interconnect.prettyJSON(req));
+        final EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
+        return new GetEntityDataSourceAliasResponse(entityInfo.getDataSourceAlias());
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -159,7 +170,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         String errorMsg = null;
 
         EntityManager em = null;
-        EntityTransaction tx = null;
+        EntityTransaction tx = null; 
         Object[] result = null;
         SpringBootInterconnectEntityDataSourceHandler handler = null;
         try {

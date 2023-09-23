@@ -192,7 +192,7 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateInfo;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
@@ -385,9 +385,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private EnvironmentDelegateUtilities environmentDelegateUtilities;
 
-    private Map<String, EnvironmentDelegateInfo> delegateInfoByEntityClass;
+    private Map<String, EnvironmentDelegateHolder> delegateHolderByEntityClass;
 
-    private Map<String, EnvironmentDelegateInfo> delegateInfoByLongName;
+    private Map<String, EnvironmentDelegateHolder> delegateHolderByLongName;
 
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
 
@@ -423,8 +423,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     public ApplicationModuleServiceImpl() {
         this.entitySearchTypes = new HashSet<String>();
-        this.delegateInfoByEntityClass = new ConcurrentHashMap<String, EnvironmentDelegateInfo>();
-        this.delegateInfoByLongName = new ConcurrentHashMap<String, EnvironmentDelegateInfo>();
+        this.delegateHolderByEntityClass = new ConcurrentHashMap<String, EnvironmentDelegateHolder>();
+        this.delegateHolderByLongName = new ConcurrentHashMap<String, EnvironmentDelegateHolder>();
         this.applicationDefFactoryMap = new FactoryMap<String, ApplicationDef>(true)
             {
                 @Override
@@ -1367,24 +1367,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public EnvironmentDelegateInfo getEnvironmentDelegateInfo(String entityLongName) throws UnifyException {
-        return delegateInfoByLongName.get(entityLongName);
+    public EnvironmentDelegateHolder getEnvironmentDelegateInfo(String entityLongName) throws UnifyException {
+        return delegateHolderByLongName.get(entityLongName);
     }
 
     @Override
-    public EnvironmentDelegateInfo getEnvironmentDelegateInfo(Class<? extends Entity> entityClass)
+    public EnvironmentDelegateHolder getEnvironmentDelegateInfo(Class<? extends Entity> entityClass)
             throws UnifyException {
-        return delegateInfoByEntityClass.get(entityClass.getName());
+        return delegateHolderByEntityClass.get(entityClass.getName());
     }
 
     @Override
     public String resolveLongName(Class<? extends Entity> entityClass) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = getEnvironmentDelegateInfo(entityClass);
-        if (delegateInfo == null) {
+        EnvironmentDelegateHolder delegateHolder = getEnvironmentDelegateInfo(entityClass);
+        if (delegateHolder == null) {
             // TODO Throw exception
         }
 
-        return delegateInfo.getEntityLongName();
+        return delegateHolder.getEntityLongName();
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
@@ -5700,10 +5700,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final String entityClassName = entityClass.getName();
                 unregisterDelegate(entityDef.getLongName());
                 EnvironmentDelegate environmentDelegate = (EnvironmentDelegate) getComponent(entityDef.getDelegate());
-                EnvironmentDelegateInfo delegateInfo = new EnvironmentDelegateInfo(entityDef.getLongName(),
+                EnvironmentDelegateHolder delegateInfo = new EnvironmentDelegateHolder(entityDef.getLongName(),
                         entityClassName, environmentDelegate);
-                delegateInfoByEntityClass.put(entityClassName, delegateInfo);
-                delegateInfoByLongName.put(entityDef.getLongName(), delegateInfo);
+                delegateHolderByEntityClass.put(entityClassName, delegateInfo);
+                delegateHolderByLongName.put(entityDef.getLongName(), delegateInfo);
             }
         } else {
             unregisterDelegate(entityDef.getLongName());
@@ -5711,9 +5711,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private void unregisterDelegate(String entityLongName) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = delegateInfoByLongName.remove(entityLongName);
+        EnvironmentDelegateHolder delegateInfo = delegateHolderByLongName.remove(entityLongName);
         if (delegateInfo != null) {
-            delegateInfoByEntityClass.remove(delegateInfo.getEntityClassName());
+            delegateHolderByEntityClass.remove(delegateInfo.getEntityClassName());
         }
     }
 

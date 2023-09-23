@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
 
 /**
@@ -32,6 +33,10 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldData
 public class EntityInfo {
 
     private String entityManagerFactory;
+
+    private String dataSourceAlias;
+
+    private EntityBaseType type;
 
     private String name;
 
@@ -60,12 +65,15 @@ public class EntityInfo {
     private List<EntityFieldInfo> childListFieldList;
 
     private Map<String, String> fieldToLocal;
-    
+
     private Map<String, String> fieldFromLocal;
-    
-    public EntityInfo(String entityManagerFactory, String name, String description, String idFieldName,
-            String versionNoFieldName, String handler, String actionPolicy, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
+
+    public EntityInfo(String entityManagerFactory, String dataSourceAlias, EntityBaseType type, String name,
+            String description, String idFieldName, String versionNoFieldName, String handler, String actionPolicy,
+            Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
+        this.dataSourceAlias = dataSourceAlias;
+        this.type = type;
         this.name = name;
         this.description = description;
         this.idFieldName = idFieldName;
@@ -104,15 +112,23 @@ public class EntityInfo {
             this.fieldToLocal.put("id", idFieldName);
             this.fieldFromLocal.put(idFieldName, "id");
         }
-        
+
         if (versionNoFieldName != null) {
             this.fieldToLocal.put("versionNo", versionNoFieldName);
             this.fieldFromLocal.put(versionNoFieldName, "versionNo");
-        }        
+        }
     }
-    
+
     public String getEntityManagerFactory() {
         return entityManagerFactory;
+    }
+
+    public String getDataSourceAlias() {
+        return dataSourceAlias;
+    }
+
+    public EntityBaseType getType() {
+        return type;
     }
 
     public String getName() {
@@ -134,7 +150,7 @@ public class EntityInfo {
     public boolean isWithVersionNo() {
         return versionNoFieldName != null;
     }
-    
+
     public String getHandler() {
         return handler;
     }
@@ -157,15 +173,15 @@ public class EntityInfo {
 
     public EntityFieldInfo findRefToParent(String parentEntity) {
         // TODO Use map
-        for (EntityFieldInfo entityFieldInfo: refFieldList) {
+        for (EntityFieldInfo entityFieldInfo : refFieldList) {
             if (entityFieldInfo.getReferences().equals(parentEntity)) {
                 return entityFieldInfo;
             }
         }
-        
+
         return null;
     }
-    
+
     public Map<String, EntityFieldInfo> getFieldsByName() {
         return fieldsByName;
     }
@@ -192,14 +208,14 @@ public class EntityInfo {
 
     public String getLocalFieldName(String fieldName) {
         String local = fieldToLocal.get(fieldName);
-        return local != null ? local: fieldName;
+        return local != null ? local : fieldName;
     }
 
     public String getFieldNameFromLocal(String fieldName) {
         String local = fieldFromLocal.get(fieldName);
-        return local != null ? local: fieldName;
+        return local != null ? local : fieldName;
     }
-    
+
     public EntityFieldInfo getEntityFieldInfo(String fieldName) throws Exception {
         String local = getLocalFieldName(fieldName);
         EntityFieldInfo entityFieldInfo = fieldsByName.get(local);
@@ -218,6 +234,10 @@ public class EntityInfo {
 
         private String entityManagerFactory;
 
+        private String dataSourceAlias;
+
+        private EntityBaseType type;
+
         private String name;
 
         private String description;
@@ -229,7 +249,7 @@ public class EntityInfo {
         private String handler;
 
         private String actionPolicy;
-        
+
         private String implementation;
 
         private Map<String, EntityFieldInfo> fieldsByName;
@@ -237,6 +257,16 @@ public class EntityInfo {
         public Builder(String entityManagerFactory) {
             this.entityManagerFactory = entityManagerFactory;
             this.fieldsByName = new HashMap<String, EntityFieldInfo>();
+        }
+
+        public Builder dataSourceAlias(String dataSourceAlias) {
+            this.dataSourceAlias = dataSourceAlias;
+            return this;
+        }
+
+        public Builder type(EntityBaseType type) {
+            this.type = type;
+            return this;
         }
 
         public Builder name(String name) {
@@ -258,7 +288,7 @@ public class EntityInfo {
             this.versionNoFieldName = versionNoFieldName;
             return this;
         }
-        
+
         public Builder handler(String handler) {
             this.handler = handler;
             return this;
@@ -299,17 +329,21 @@ public class EntityInfo {
         }
 
         public EntityInfo build() throws Exception {
-            if (implementation == null) {
-                throw new RuntimeException("Entity information implementation is required");
+            if (type == null) {
+                throw new RuntimeException("Entity type is required. Entity name [" + name + "]");
+            }
+            
+            if (dataSourceAlias == null) {
+                throw new RuntimeException("Entity datasource alias is required. Entity name [" + name + "]");
             }
 
-//            if (idFieldName == null) {
-//                throw new RuntimeException("Entity information ID field name is required");
-//            }
+            if (implementation == null) {
+                throw new RuntimeException("Entity implementation class name is required. Entity name [" + name + "]");
+            }
 
             Class<?> implClass = Class.forName(implementation);
-            return new EntityInfo(entityManagerFactory, name, description, idFieldName, versionNoFieldName, handler,
-                    actionPolicy, implClass, fieldsByName);
+            return new EntityInfo(entityManagerFactory, dataSourceAlias, type, name, description, idFieldName,
+                    versionNoFieldName, handler, actionPolicy, implClass, fieldsByName);
         }
     }
 

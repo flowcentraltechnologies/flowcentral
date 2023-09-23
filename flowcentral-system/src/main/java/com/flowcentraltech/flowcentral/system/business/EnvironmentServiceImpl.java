@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateInfo;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.common.business.SuggestionProvider;
@@ -704,18 +704,18 @@ public class EnvironmentServiceImpl extends AbstractBusinessService implements E
 
     @Override
     public String getEntityDataSourceName(String entityLongName) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityLongName);
+        EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityLongName);
         return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
     }
 
     @Override
     public String getEntityDataSourceName(Class<? extends Entity> entityClass) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
+        EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? delegateInfo.getDataSourceName() : db().getDataSourceName();
     }
 
     private Database db(Class<? extends Entity> entityClass) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
+        EnvironmentDelegateHolder delegateInfo = environmentDelegateRegistrar.getEnvironmentDelegateInfo(entityClass);
         return delegateInfo != null ? (delegateInfo.isDirect() ? db(delegateInfo.getDataSourceName())
                 : delegateInfo.getEnvironmentDelegate()) : db();
     }

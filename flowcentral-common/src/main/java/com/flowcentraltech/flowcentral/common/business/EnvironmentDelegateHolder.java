@@ -20,12 +20,12 @@ import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.StringUtils;
 
 /**
- * Environment delegate information.
+ * Environment delegate holder.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EnvironmentDelegateInfo {
+public class EnvironmentDelegateHolder {
 
     private String entityLongName;
 
@@ -33,7 +33,7 @@ public class EnvironmentDelegateInfo {
 
     private EnvironmentDelegate environmentDelegate;
 
-    public EnvironmentDelegateInfo(String entityLongName, String entityClassName,
+    public EnvironmentDelegateHolder(String entityLongName, String entityClassName,
             EnvironmentDelegate environmentDelegate) {
         this.entityLongName = entityLongName;
         this.entityClassName = entityClassName;

@@ -122,9 +122,11 @@ public class Interconnect {
                                 final String applicationName = applicationConfig.getName();
                                 LOGGER.log(Level.INFO, "Loading interconnect entity information for [{0}]...",
                                         applicationName);
+                                
                                 for (EntityConfig entityConfig : entityConfigList) {
                                     EntityInfo.Builder eib = EntityInfo.newBuilder(appEntityManagerFactory);
                                     eib.name(ensureLongName(applicationName, entityConfig.getName()))
+                                            .dataSourceAlias(applicationConfig.getDataSourceAlias())
                                             .description(entityConfig.getDescription())
                                             .implementation(entityConfig.getImplementation())
                                             .idFieldName(entityConfig.getIdFieldName())

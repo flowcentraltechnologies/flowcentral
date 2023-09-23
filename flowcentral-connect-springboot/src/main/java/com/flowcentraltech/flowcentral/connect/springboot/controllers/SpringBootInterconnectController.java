@@ -30,9 +30,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceErrorCodeConstants;
 import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
-import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.springboot.service.SpringBootInterconnectService;
 
 /**
@@ -62,7 +64,7 @@ public class SpringBootInterconnectController {
 
     @PostConstruct
     public void init() throws Exception {
-        String redirect = springBootInterconnectService.getRedirect();
+        String redirect = springBootInterconnectService.getRedirect(); 
         if (redirect != null) {
             springBootInterconnectRedirect = context.getBean(redirect, SpringBootInterconnectRedirect.class);
         }
@@ -80,6 +82,27 @@ public class SpringBootInterconnectController {
                 String errorMessage = e.getMessage();
                 LOGGER.log(Level.SEVERE, errorMessage, e);
                 resp = new JsonDataSourceResponse();
+                resp.setErrorCode(DataSourceErrorCodeConstants.PROVIDER_SERVICE_EXCEPTION);
+                resp.setErrorMsg(errorMessage);
+            }
+        }
+
+        return resp;
+    }
+
+    @PostMapping(path = "/datasourceAlias")
+    public GetEntityDataSourceAliasResponse getEntityDataSourceAlias(@RequestBody GetEntityDataSourceAliasRequest req)
+            throws Exception {
+        GetEntityDataSourceAliasResponse resp = springBootInterconnectRedirect != null
+                ? springBootInterconnectRedirect.getEntityDataSourceAlias(req)
+                : null;
+        if (resp == null) {
+            try {
+                return springBootInterconnectService.getEntityDataSourceAlias(req);
+            } catch (Exception e) {
+                String errorMessage = e.getMessage();
+                LOGGER.log(Level.SEVERE, errorMessage, e);
+                resp = new GetEntityDataSourceAliasResponse();
                 resp.setErrorCode(DataSourceErrorCodeConstants.PROVIDER_SERVICE_EXCEPTION);
                 resp.setErrorMsg(errorMessage);
             }

@@ -26,16 +26,21 @@ import com.tcdng.unify.core.util.IOUtils;
  * @since 1.0
  */
 public abstract class AbstractHttpPostEnvironmentDelegate extends AbstractJsonEnvironmentDelegate {
-
+    
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-       return IOUtils.postJsonToEndpoint( getEndpoint() + "/procedure", jsonReq);
+       return IOUtils.postJsonToEndpoint(getEndpoint() + "/procedure", jsonReq);
     }
 
     @Override
     protected String sendToDelegateDatasourceService(String jsonReq) throws UnifyException {
          return IOUtils.postJsonToEndpoint(getEndpoint() + "/datasource", jsonReq);
     }
- 
+
+    @Override
+    protected String sendToDelegateDatasourceAliasService(String jsonReq) throws UnifyException {
+        return IOUtils.postJsonToEndpoint(getEndpoint() + "/datasourceAlias", jsonReq);
+    }
+
     protected abstract String getEndpoint() throws UnifyException;
 }

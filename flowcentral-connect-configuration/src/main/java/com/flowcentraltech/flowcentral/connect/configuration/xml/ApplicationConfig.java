@@ -32,6 +32,8 @@ public class ApplicationConfig {
 
     private String description;
 
+    private String dataSourceAlias;
+
     private String redirect;
 
     private String entityManagerFactory;
@@ -54,6 +56,15 @@ public class ApplicationConfig {
     @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getDataSourceAlias() {
+        return dataSourceAlias;
+    }
+
+    @XmlAttribute(required = true)
+    public void setDataSourceAlias(String dataSourceAlias) {
+        this.dataSourceAlias = dataSourceAlias;
     }
 
     public String getRedirect() {

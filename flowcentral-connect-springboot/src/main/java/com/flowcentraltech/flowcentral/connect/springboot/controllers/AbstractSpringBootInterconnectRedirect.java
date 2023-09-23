@@ -21,7 +21,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,8 +31,12 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -45,26 +51,47 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
 
     private final Logger LOGGER = Logger.getLogger(getClass().getName());
 
-    private Map<String, String> dataSourceRequestRedirects;
+    private final List<String> redirectUrls;
 
-    private Map<String, String> procedureRequestRedirects;
+    private final Map<String, Redirect> entityRedirects;
+
+    private final Map<String, String> procedureRequestRedirects;
 
     public AbstractSpringBootInterconnectRedirect() {
-        this.dataSourceRequestRedirects = new HashMap<String, String>();
+        this.redirectUrls = new ArrayList<String>();
+        this.entityRedirects = new HashMap<String, Redirect>();
         this.procedureRequestRedirects = new HashMap<String, String>();
     }
 
     @Override
     public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) {
-        String redirectUrl = dataSourceRequestRedirects.get(req.getEntity());
-        if (redirectUrl != null) {
-            String endpoint = redirectUrl + "/datasource";
+        final Redirect redirect = getEntityRedirect(req.getEntity());
+        if (redirect != null) {
+            final String endpoint = redirect.getRedirectUrl() + "/datasource";
             JsonDataSourceResponse resp = redirect(JsonDataSourceResponse.class, endpoint, req);
             if (resp == null) {
                 resp = new JsonDataSourceResponse();
                 resp.setErrorMsg("Redirection error");
             }
-            
+
+            return resp;
+        }
+
+        return null;
+    }
+
+    @Override
+    public GetEntityDataSourceAliasResponse getEntityDataSourceAlias(GetEntityDataSourceAliasRequest req)
+            throws Exception {
+        final Redirect redirect = getEntityRedirect(req.getEntity());
+        if (redirect != null) {
+            final String endpoint = redirect.getRedirectUrl() + "/datasourceAlias";
+            GetEntityDataSourceAliasResponse resp = redirect(GetEntityDataSourceAliasResponse.class, endpoint, req);
+            if (resp == null) {
+                resp = new GetEntityDataSourceAliasResponse();
+                resp.setErrorMsg("Redirection error");
+            }
+
             return resp;
         }
 
@@ -81,7 +108,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
                 resp = new JsonProcedureResponse();
                 resp.setErrorMsg("Redirection error");
             }
-            
+
             return resp;
         }
 
@@ -90,24 +117,62 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
 
     @PostConstruct
     public void init() throws Exception {
-        setupRedirects();
-    }
-
-    protected abstract void setupRedirects();
-    
-    protected void addDataSourceRequestRedirect(String redirectUrl, String... entities) {
-        for (String entity : entities) {
-            dataSourceRequestRedirects.put(entity, redirectUrl);
+        List<String> _redirectUrls = setupRedirects();
+        if (_redirectUrls != null && !_redirectUrls.isEmpty()) {
+            for (String redirectUrl : _redirectUrls) {
+                redirectUrls.add(redirectUrl + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
+            }
         }
     }
+
+    protected abstract List<String> setupRedirects();
 
     protected void addProcedureRequestRedirect(String redirectUrl, String... operations) {
         for (String operation : operations) {
-            procedureRequestRedirects.put(operation, redirectUrl);
+            procedureRequestRedirects.put(operation,
+                    redirectUrl + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
         }
     }
 
-    private <T extends JsonDataSourceResponse> T redirect(Class<T> responseClass, String endpoint, BaseRequest req) {
+    private Redirect getEntityRedirect(String entity) {
+        Redirect redirect = entityRedirects.get(entity);
+        if (redirect == null) {
+            synchronized (this) {
+                redirect = entityRedirects.get(entity);
+                if (redirect == null) {
+                    // Scan
+                    for (String redirectUrl : redirectUrls) {
+                        final String endpoint = redirectUrl + "/datasourceAlias";
+                        GetEntityDataSourceAliasResponse resp = redirect(GetEntityDataSourceAliasResponse.class,
+                                endpoint, new GetEntityDataSourceAliasRequest(entity));
+                        if (resp != null && !resp.error()) {
+                            redirect = new Redirect(redirectUrl);
+                            entityRedirects.put(entity, redirect);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return redirect;
+    }
+
+    private class Redirect {
+
+        private final String redirectUrl;
+
+        public Redirect(String redirectUrl) {
+            this.redirectUrl = redirectUrl;
+        }
+
+        public String getRedirectUrl() {
+            return redirectUrl;
+        }
+
+    }
+
+    private <T extends BaseResponse> T redirect(Class<T> responseClass, String endpoint, BaseRequest req) {
         T resp = null;
         StringBuilder response = new StringBuilder();
         try {
