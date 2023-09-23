@@ -29,17 +29,34 @@ public class EntityFieldInfo {
 
     private String name;
 
+    private String description;
+
+    private String column;
+
     private String references;
 
     private Class<? extends Enum<?>> enumImplClass;
 
-    public EntityFieldInfo(FieldDataType type, String name, String references, Class<? extends Enum<?>> enumImplClass) {
+    private int scale;
+
+    private int precision;
+
+    private int length;
+
+    public EntityFieldInfo(FieldDataType type, String name, String description, String column, String references,
+            Class<? extends Enum<?>> enumImplClass, int scale, int precision, int length) {
+        super();
         this.type = type;
         this.name = name;
+        this.description = description;
+        this.column = column;
         this.references = references;
         this.enumImplClass = enumImplClass;
+        this.scale = scale;
+        this.precision = precision;
+        this.length = length;
     }
-    
+
     public FieldDataType getType() {
         return type;
     }
@@ -58,6 +75,26 @@ public class EntityFieldInfo {
 
     public Class<? extends Enum<?>> getEnumImplClass() {
         return enumImplClass;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getColumn() {
+        return column;
+    }
+
+    public int getScale() {
+        return scale;
+    }
+
+    public int getPrecision() {
+        return precision;
+    }
+
+    public int getLength() {
+        return length;
     }
 
     public boolean references() {

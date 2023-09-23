@@ -2277,7 +2277,9 @@
 					<field name="emailProducerConsumer"
 						inputWidget="application.emailproducerconsumerlist" column="1" />
 					<field name="delegate" inputWidget="environmentdelegatelist"
-						column="1" />
+						column="1" switchOnChange="true" />
+					<field name="dataSourceName" inputWidget="application.text"
+						column="1" required="true" visible="false" />
 					<field name="auditable" inputWidget="application.checkbox"
 						column="1" />
 					<field name="reportable" inputWidget="application.checkbox"
@@ -2403,6 +2405,16 @@
 				</onCondition>
 				<setStates>
 					<setState type="field" target="tableName" disabled="true" />
+				</setStates>
+			</formStatePolicy>
+			<formStatePolicy type="on_switch"
+				name="dataSourceVisiblePolicy"
+				description="$m{studio.common.form.formstatepolicy.datasourcevisible}">
+				<onCondition>
+					<restriction type="is_not_null" field="delegate" />
+				</onCondition>
+				<setStates>
+					<setState type="field" target="dataSourceName" visible="true" />
 				</setStates>
 			</formStatePolicy>
 			<formStatePolicy type="on_switch"

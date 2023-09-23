@@ -317,15 +317,21 @@ public class EntityInfo {
             this.implementation = implementation;
             return this;
         }
-
+        
+        public Builder addField(FieldDataType type, String fieldName, String description, String column)
+                throws Exception {
+            return addField(type, fieldName, description, column, null, null, 0, 0, 0);
+        }
+        
         @SuppressWarnings("unchecked")
-        public Builder addField(FieldDataType type, String fieldName, String references, String enumImpl)
+        public Builder addField(FieldDataType type, String fieldName, String description, String column, String references,
+                String enumImpl, int scale, int precision, int length)
                 throws Exception {
             if (type == null) {
                 throw new RuntimeException("Entity information field type is required");
             }
 
-            if (fieldsByName.containsKey(name)) {
+            if (fieldsByName.containsKey(fieldName)) {
                 throw new RuntimeException("Entity information for entity [" + name
                         + "] already contains information for field [" + fieldName + "]");
             }
@@ -338,7 +344,8 @@ public class EntityInfo {
             Class<? extends Enum<?>> enumImplClass = enumImpl != null
                     ? (Class<? extends Enum<?>>) Class.forName(enumImpl)
                     : null;
-            fieldsByName.put(fieldName, new EntityFieldInfo(type, fieldName, references, enumImplClass));
+            fieldsByName.put(fieldName, new EntityFieldInfo(type, fieldName, description, column, references,
+                     enumImplClass, scale, precision, length));
             return this;
         }
 

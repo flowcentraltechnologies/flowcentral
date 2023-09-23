@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -37,9 +38,22 @@ public class ApplicationDelegateDataSourceEntityListProviderImpl extends Abstrac
 
     @Configurable
     private ApplicationModuleService applicationModuleService;
-    
-	public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
+
+    public final void setApplicationModuleService(ApplicationModuleService applicationModuleService) {
         this.applicationModuleService = applicationModuleService;
+    }
+
+    @Override
+    public String getDataSourceByEntityAlias(String entityName) throws UnifyException {
+        DelegateEntityInfo delegateEntityInfo = applicationModuleService.getDelegateEntity(entityName);
+        return delegateEntityInfo.getDataSourceName();
+    }
+
+    @Override
+    public List<String> getEntityAliasesByDataSource(String datasourceName) throws UnifyException {
+        List<DelegateEntityInfo> delegateEntityInfos = applicationModuleService
+                .getDelegateEntitiesByDataSource(datasourceName);
+        return DelegateEntityInfo.getEntityAliases(delegateEntityInfos);
     }
 
     @Override

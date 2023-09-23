@@ -25,16 +25,13 @@ public enum EntityBaseType {
     BASE_ENTITY,
     BASE_VERSION_ENTITY,
     BASE_AUDIT_ENTITY,
-    BASE_STATUS_ENTITY,
-    BASE_WORK_ENTITY,
-    BASE_STATUS_WORK_ENTITY;
+    BASE_WORK_ENTITY;
 
     public boolean isAuditType() {
-        return BASE_AUDIT_ENTITY.equals(this) || BASE_STATUS_ENTITY.equals(this) || BASE_WORK_ENTITY.equals(this)
-                || BASE_STATUS_WORK_ENTITY.equals(this);
+        return BASE_AUDIT_ENTITY.equals(this) || BASE_WORK_ENTITY.equals(this);
     }
 
     public boolean isWorkEntityType() {
-        return BASE_WORK_ENTITY.equals(this) || BASE_STATUS_WORK_ENTITY.equals(this);
+        return BASE_WORK_ENTITY.equals(this);
     }
 }

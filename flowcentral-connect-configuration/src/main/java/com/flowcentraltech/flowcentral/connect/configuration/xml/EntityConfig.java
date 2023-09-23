@@ -58,7 +58,7 @@ public class EntityConfig {
 
     @XmlJavaTypeAdapter(EntityBaseTypeXmlAdapter.class)
     @XmlAttribute(required = true)
-    public void setType(EntityBaseType base) {
+    public void setBase(EntityBaseType base) {
         this.base = base;
     }
 

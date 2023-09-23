@@ -28,6 +28,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -73,7 +74,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Configurable
     private AppletUtilities au;
 
-    @Configurable
+    @Configurable(ApplicationModuleNameConstants.DELEGATE_ENTITYLIST_PROVIDER)
     private DataSourceEntityListProvider dataSourceEntityListProvider;
     
     @Override

@@ -49,6 +49,9 @@ public class AppEntity extends BaseApplicationEntity {
     @Column(length = 128)
     private String entityClass;
 
+    @Column(name = "DATASOURCE_NM", length = 64, nullable = true)
+    private String dataSourceName;
+
     @Column(name = "TABLE_NM", length = 64)
     private String tableName;
 
@@ -123,6 +126,14 @@ public class AppEntity extends BaseApplicationEntity {
 
     public void setEntityClass(String entityClass) {
         this.entityClass = entityClass;
+    }
+
+    public String getDataSourceName() {
+        return dataSourceName;
+    }
+
+    public void setDataSourceName(String dataSourceName) {
+        this.dataSourceName = dataSourceName;
     }
 
     public String getTableName() {
