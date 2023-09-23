@@ -2307,16 +2307,18 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         return list;
     }
 
+
     @Override
-    public List<Class<?>> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException {
+    public List<Class<?>> getDelegateEntities(List<String> entityLongNames) throws UnifyException {
         List<AppEntity> entityList = environment()
                 .listAll(new AppEntityQuery().isDelegated().addSelect("applicationName", "name", "delegate"));
         if (!entityList.isEmpty()) {
+            logDebug("Resolving delegate entities...");
+            Set<String> entityAliases = new HashSet<String>(entityLongNames);
             List<Class<?>> delegateList = new ArrayList<Class<?>>();
             for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
-                logDebug("Resolving delegate entities for [{0}]...", entityLongName);
-                EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
-                if (dataSourceName.equals(environment().getEntityDataSourceName(entityLongName))) {
+                if (entityAliases.contains(entityLongName)) {
+                    EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
                     delegateList.add(entityClassDef.getEntityClass());
                 }
             }

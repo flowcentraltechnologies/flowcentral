@@ -1118,15 +1118,15 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<? extends Listable> getRelatedWidgetTypes(String applicationName) throws UnifyException;
 
     /**
-     * Gets delegate entities by datasource name
+     * Gets delegate entities by entity name
      * 
-     * @param dataSourceName
-     *                       the datasource name
+     * @param entityLongNames
+     *                       the entity long name
      * @return the entity list
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Class<?>> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException;
+    List<Class<?>> getDelegateEntities(List<String> entityLongNames) throws UnifyException;
 
     /**
      * Gets a application entity class definition.

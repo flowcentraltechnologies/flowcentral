@@ -105,7 +105,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     }
 
     @Override
-    public List<String> getEntityAliasesByDataSource(String dataSourceName) throws UnifyException {
+    public final List<String> getEntityAliasesByDataSource(String dataSourceName) throws UnifyException {
         return dataSourceEntityListProvider.getEntityAliasesByDataSource(dataSourceName);
     }
 
