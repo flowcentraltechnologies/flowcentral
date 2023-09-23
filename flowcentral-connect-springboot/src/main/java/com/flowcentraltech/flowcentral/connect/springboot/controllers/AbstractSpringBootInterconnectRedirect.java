@@ -117,9 +117,9 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
 
     @PostConstruct
     public void init() throws Exception {
-        List<String> _redirectUrls = setupRedirects();
-        if (_redirectUrls != null && !_redirectUrls.isEmpty()) {
-            for (String redirectUrl : _redirectUrls) {
+        List<String> _redirectNodes = setupRedirects();
+        if (_redirectNodes != null && !_redirectNodes.isEmpty()) {
+            for (String redirectUrl : _redirectNodes) {
                 redirectUrls.add(redirectUrl + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
             }
         }
@@ -127,10 +127,10 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
 
     protected abstract List<String> setupRedirects();
 
-    protected void addProcedureRequestRedirect(String redirectUrl, String... operations) {
+    protected void addProcedureRequestRedirect(String redirectNode, String... operations) {
         for (String operation : operations) {
             procedureRequestRedirects.put(operation,
-                    redirectUrl + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
+                    redirectNode + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
         }
     }
 
