@@ -53,7 +53,7 @@ public class EnvironmentDelegateHolder {
     }
 
     public String getDataSourceName() throws UnifyException {
-        return environmentDelegate.getDataSourceName(entityLongName);
+        return environmentDelegate.getDataSourceByEntityAlias(entityLongName);
     }
 
     public boolean isDirect() {

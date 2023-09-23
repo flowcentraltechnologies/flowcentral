@@ -44,7 +44,7 @@ public abstract class AbstractDirectEnvironmentDelegate extends AbstractEnvironm
     }
 
     @Override
-    public String getDataSourceName(String entityLongName) throws UnifyException {
+    public String getDataSourceByEntityAlias(String entityLongName) throws UnifyException {
         return dataSourceName;
     }
 
