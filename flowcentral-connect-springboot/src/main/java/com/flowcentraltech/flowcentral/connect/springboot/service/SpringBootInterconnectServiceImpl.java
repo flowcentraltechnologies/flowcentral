@@ -50,11 +50,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.flowcentraltech.flowcentral.connect.common.EntityInstFinder;
 import com.flowcentraltech.flowcentral.connect.common.constants.RestrictionType;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.FilterRestrictionDef;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
@@ -153,11 +153,11 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     }
 
     @Override
-    public GetEntityDataSourceAliasResponse getEntityDataSourceAlias(GetEntityDataSourceAliasRequest req)
+    public DetectEntityResponse detectEntity(DetectEntityRequest req)
             throws Exception {
-        logInfo("Get entity data source alias [{0}]...", interconnect.prettyJSON(req));
-        final EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
-        return new GetEntityDataSourceAliasResponse(entityInfo.getDataSourceAlias());
+        logInfo("Detect entity  [{0}]...", interconnect.prettyJSON(req));
+        final boolean present = interconnect.isPresent(req.getEntity());
+        return new DetectEntityResponse(present);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

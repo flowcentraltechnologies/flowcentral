@@ -16,33 +16,18 @@
 package com.flowcentraltech.flowcentral.connect.common.data;
 
 /**
- * JSON datasource response.
+ * Find entity request.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class GetEntityDataSourceAliasResponse extends BaseResponse {
-    
-    private String dataSourceAlias;
+public class DetectEntityRequest extends BaseRequest {
 
-    public GetEntityDataSourceAliasResponse(String errorCode, String errorMsg) {
-        super(errorCode, errorMsg);
+    public DetectEntityRequest(String entity) {
+        setEntity(entity);
     }
 
-    public GetEntityDataSourceAliasResponse(String dataSourceAlias) {
-        this.dataSourceAlias = dataSourceAlias;
+    public DetectEntityRequest() {
+        
     }
-
-    public GetEntityDataSourceAliasResponse() {
-
-    }
-
-    public String getDataSourceAlias() {
-        return dataSourceAlias;
-    }
-
-    public void setDataSourceAlias(String dataSourceAlias) {
-        this.dataSourceAlias = dataSourceAlias;
-    }
-
 }

@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.connect.springboot.controllers;
 
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -32,7 +32,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 public interface SpringBootInterconnectRedirect {
 
     /**
-     * Gets an entity data source alias.
+     * Finds entity.
      * 
      * @param req
      *            the request object
@@ -40,7 +40,7 @@ public interface SpringBootInterconnectRedirect {
      * @throws Exception
      *                   if an error occurs
      */
-    GetEntityDataSourceAliasResponse getEntityDataSourceAlias(GetEntityDataSourceAliasRequest req) throws Exception;
+    DetectEntityResponse detectEntity(DetectEntityRequest req) throws Exception;
 
     /**
      * Performs a redirect process datasource datasource request

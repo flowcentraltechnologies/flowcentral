@@ -16,13 +16,8 @@
 
 package com.flowcentraltech.flowcentral.delegate.business;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -39,12 +34,6 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmentDelegate {
 
-    private Map<String, GetEntityDataSourceAliasResponse> entityDataSourceAliases;
-
-    public AbstractJsonEnvironmentDelegate() {
-        this.entityDataSourceAliases = new HashMap<String, GetEntityDataSourceAliasResponse>();
-    }
-
     @Override
     public String[] executeProcedure(String operation, String... payload) throws UnifyException {
         ProcedureRequest req = new ProcedureRequest(operation);
@@ -54,28 +43,6 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmen
         return resp.getPayload();
     }
 
-    @Override
-    public final String getDataSourceName(String entityLongName) throws UnifyException {
-        GetEntityDataSourceAliasResponse resp = entityDataSourceAliases.get(entityLongName);
-        if (resp == null) {
-            synchronized(this) {
-                resp = entityDataSourceAliases.get(entityLongName);
-                if (resp == null) {
-                    String reqJSON = DataUtils.asJsonString(new GetEntityDataSourceAliasRequest(entityLongName),
-                            PrintFormat.NONE);
-                    String respJSON = sendToDelegateDatasourceAliasService(reqJSON);
-                    resp = DataUtils.fromJsonString(GetEntityDataSourceAliasResponse.class, respJSON);
-                    if (resp.error()) {
-                        throw new UnifyException(DelegateErrorCodeConstants.DELEGATION_ERROR, resp.getErrorMsg());
-                    } else {
-                        entityDataSourceAliases.put(entityLongName, resp);
-                    }
-                }
-            }
-        }
-
-        return resp != null ? resp.getDataSourceAlias() : null;
-    }
 
     protected BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException {
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
@@ -102,7 +69,5 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmen
     protected abstract String sendToDelegateProcedureService(String jsonReq) throws UnifyException;
 
     protected abstract String sendToDelegateDatasourceService(String jsonReq) throws UnifyException;
-
-    protected abstract String sendToDelegateDatasourceAliasService(String jsonReq) throws UnifyException;
 
 }

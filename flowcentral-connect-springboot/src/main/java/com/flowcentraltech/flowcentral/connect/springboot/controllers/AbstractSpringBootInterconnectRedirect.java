@@ -35,8 +35,8 @@ import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInter
 import com.flowcentraltech.flowcentral.connect.common.data.BaseRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasRequest;
-import com.flowcentraltech.flowcentral.connect.common.data.GetEntityDataSourceAliasResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -81,14 +81,13 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
     }
 
     @Override
-    public GetEntityDataSourceAliasResponse getEntityDataSourceAlias(GetEntityDataSourceAliasRequest req)
-            throws Exception {
+    public DetectEntityResponse detectEntity(DetectEntityRequest req) throws Exception {
         final Redirect redirect = getEntityRedirect(req.getEntity());
         if (redirect != null) {
-            final String endpoint = redirect.getRedirectUrl() + "/datasourceAlias";
-            GetEntityDataSourceAliasResponse resp = redirect(GetEntityDataSourceAliasResponse.class, endpoint, req);
+            final String endpoint = redirect.getRedirectUrl() + "/detectEntity";
+            DetectEntityResponse resp = redirect(DetectEntityResponse.class, endpoint, req);
             if (resp == null) {
-                resp = new GetEntityDataSourceAliasResponse();
+                resp = new DetectEntityResponse();
                 resp.setErrorMsg("Redirection error");
             }
 
@@ -142,9 +141,9 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
                 if (redirect == null) {
                     // Scan
                     for (String redirectUrl : redirectUrls) {
-                        final String endpoint = redirectUrl + "/datasourceAlias";
-                        GetEntityDataSourceAliasResponse resp = redirect(GetEntityDataSourceAliasResponse.class,
-                                endpoint, new GetEntityDataSourceAliasRequest(entity));
+                        final String endpoint = redirectUrl + "/detectEntity";
+                        DetectEntityResponse resp = redirect(DetectEntityResponse.class, endpoint,
+                                new DetectEntityRequest(entity));
                         if (resp != null && !resp.error()) {
                             redirect = new Redirect(redirectUrl);
                             entityRedirects.put(entity, redirect);

@@ -615,6 +615,11 @@ public class Interconnect {
         return entityInfo;
     }
 
+    public boolean isPresent(String entity) throws Exception {
+        checkInitialized();
+        return entities.containsKey(entity);
+    }
+
     public void copy(List<EntityFieldInfo> fieldInfoList, final Object destBean, final Object srcBean)
             throws Exception {
         checkInitialized();
