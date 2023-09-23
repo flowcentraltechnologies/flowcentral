@@ -95,7 +95,7 @@ public class SpringBootInterconnectController {
         DetectEntityResponse resp = springBootInterconnectRedirect != null
                 ? springBootInterconnectRedirect.detectEntity(req)
                 : null;
-        if (resp == null) {
+        if (resp == null || resp.error() || !resp.isPresent()) {
             try {
                 return springBootInterconnectService.detectEntity(req);
             } catch (Exception e) {

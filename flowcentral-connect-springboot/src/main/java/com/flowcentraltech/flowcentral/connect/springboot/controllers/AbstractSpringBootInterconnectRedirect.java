@@ -118,8 +118,8 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
     public void init() throws Exception {
         List<String> _redirectNodes = setupRedirects();
         if (_redirectNodes != null && !_redirectNodes.isEmpty()) {
-            for (String redirectUrl : _redirectNodes) {
-                redirectUrls.add(redirectUrl + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
+            for (String redirectNode : _redirectNodes) {
+                redirectUrls.add(redirectNode + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
             }
         }
     }
@@ -173,7 +173,6 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
 
     private <T extends BaseResponse> T redirect(Class<T> responseClass, String endpoint, BaseRequest req) {
         T resp = null;
-        StringBuilder response = new StringBuilder();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonReq = objectMapper.writeValueAsString(req);
@@ -190,6 +189,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
                 out.flush();
             }
 
+            StringBuilder response = new StringBuilder();
             try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"))) {
                 String responseLine = null;
                 while ((responseLine = br.readLine()) != null) {
