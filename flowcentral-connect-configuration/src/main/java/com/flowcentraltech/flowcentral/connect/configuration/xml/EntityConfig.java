@@ -38,6 +38,8 @@ public class EntityConfig {
 
     private String description;
 
+    private String tableName;
+
     private String implementation;
 
     private String idFieldName;
@@ -76,6 +78,15 @@ public class EntityConfig {
     @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    @XmlAttribute
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     public String getImplementation() {

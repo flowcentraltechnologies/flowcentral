@@ -50,6 +50,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.ApplicationConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
@@ -122,11 +123,15 @@ public class Interconnect {
                                 final String applicationName = applicationConfig.getName();
                                 LOGGER.log(Level.INFO, "Loading interconnect entity information for [{0}]...",
                                         applicationName);
-                                
+
                                 for (EntityConfig entityConfig : entityConfigList) {
                                     EntityInfo.Builder eib = EntityInfo.newBuilder(appEntityManagerFactory);
-                                    eib.name(ensureLongName(applicationName, entityConfig.getName()))
-                                            .dataSourceAlias(applicationConfig.getDataSourceAlias())
+                                    EntityBaseType type = entityConfig.getType() != null ? entityConfig.getType()
+                                            : EntityBaseType.BASE_ENTITY;
+                                    eib.dataSourceAlias(applicationConfig.getDataSourceAlias())
+                                            .type(type)
+                                            .name(ensureLongName(applicationName, entityConfig.getName()))
+                                            .tableName(entityConfig.getTableName())
                                             .description(entityConfig.getDescription())
                                             .implementation(entityConfig.getImplementation())
                                             .idFieldName(entityConfig.getIdFieldName())
