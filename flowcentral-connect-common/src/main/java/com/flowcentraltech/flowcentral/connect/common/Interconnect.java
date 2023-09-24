@@ -131,7 +131,7 @@ public class Interconnect {
                                             : EntityBaseType.BASE_ENTITY;
                                     eib.dataSourceAlias(applicationConfig.getDataSourceAlias()).baseType(base)
                                             .name(ensureLongName(applicationName, entityConfig.getName()))
-                                            .tableName(entityConfig.getTableName())
+                                            .tableName(entityConfig.getTable())
                                             .description(entityConfig.getDescription())
                                             .implementation(entityConfig.getImplementation())
                                             .idFieldName(entityConfig.getIdFieldName())

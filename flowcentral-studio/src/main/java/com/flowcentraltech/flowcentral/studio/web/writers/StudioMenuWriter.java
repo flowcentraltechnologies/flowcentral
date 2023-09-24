@@ -61,25 +61,28 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     @Configurable
     private CodeGenerationProvider codeGenerationProvider;
 
-    private static final List<String> applicationAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.stuManageModule", "studio.manageApplication",
-                    "studio.applicationReplication", "studio.delegateSynchronization"));
+    private static final List<String> applicationAppletList = Collections.unmodifiableList(
+            Arrays.asList("studio.stuManageModule", "studio.manageApplication", "studio.applicationReplication"));
 
-    private static final List<StudioAppComponentType> menuCategoryList = Collections
-            .unmodifiableList(Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.APPLICATION,
-                    StudioAppComponentType.WIDGET, StudioAppComponentType.ENTITY, StudioAppComponentType.APPLET,
-                    StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD,
-                    StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
-                    StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.TABLE,
-                    StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
+    private static final List<String> synchronizationAppletList = Collections
+            .unmodifiableList(Arrays.asList("studio.delegateSynchronization"));
 
-    private static final List<StudioAppComponentType> collaborationMenuCategoryList = Collections
-            .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
+    private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(
+            Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,
                     StudioAppComponentType.APPLICATION, StudioAppComponentType.WIDGET, StudioAppComponentType.ENTITY,
                     StudioAppComponentType.APPLET, StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART,
                     StudioAppComponentType.DASHBOARD, StudioAppComponentType.NOTIFICATION_TEMPLATE,
                     StudioAppComponentType.NOTIFICATION_LARGETEXT, StudioAppComponentType.REPORT_CONFIGURATION,
                     StudioAppComponentType.TABLE, StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
+
+    private static final List<StudioAppComponentType> collaborationMenuCategoryList = Collections
+            .unmodifiableList(Arrays.asList(StudioAppComponentType.COLLABORATION, StudioAppComponentType.CODEGENERATION,
+                    StudioAppComponentType.SYNCHRONIZATION, StudioAppComponentType.APPLICATION,
+                    StudioAppComponentType.WIDGET, StudioAppComponentType.ENTITY, StudioAppComponentType.APPLET,
+                    StudioAppComponentType.REFERENCE, StudioAppComponentType.CHART, StudioAppComponentType.DASHBOARD,
+                    StudioAppComponentType.NOTIFICATION_TEMPLATE, StudioAppComponentType.NOTIFICATION_LARGETEXT,
+                    StudioAppComponentType.REPORT_CONFIGURATION, StudioAppComponentType.TABLE,
+                    StudioAppComponentType.FORM, StudioAppComponentType.WORKFLOW));
 
     public final void setStudioModuleService(StudioModuleService studioModuleService) {
         this.studioModuleService = studioModuleService;
@@ -146,10 +149,12 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         final boolean isCollaboration = StudioAppComponentType.COLLABORATION.equals(currCategory);
         final boolean isCodeGeneration = codeGenerationProvider != null
                 && StudioAppComponentType.CODEGENERATION.equals(currCategory);
+        final boolean isSynchronization = StudioAppComponentType.SYNCHRONIZATION.equals(currCategory);
         final List<AppletDef> appletDefList = isApplications ? getApplicationAppletDefs(applicationName)
                 : (isCollaboration ? getCollaborationAppletDefs(applicationName)
                         : (isCodeGeneration ? getCodeGenerationAppletDefs(applicationName)
-                                : studioModuleService.findAppletDefs(applicationName, currCategory)));
+                                : (isSynchronization ? getSychronizationAppletDefs(applicationName)
+                                        : studioModuleService.findAppletDefs(applicationName, currCategory))));
 
         writer.write("<div style=\"display:table;width:100%;height:100%;\"><div style=\"display:table-row;\">");
         // Category
@@ -196,7 +201,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
         mjw.beginArray();
         if (application) {
             for (AppletDef appletDef : appletDefList) {
-                if (isApplications || isCollaboration || isCodeGeneration || appletDef.isMenuAccess()) {
+                if (isApplications || isCollaboration || isCodeGeneration || isSynchronization
+                        || appletDef.isMenuAccess()) {
                     writer.write("<li id=\"item_").write(appletDef.getViewId()).write("\">");
                     writer.write("<span>").writeWithHtmlEscape(appletDef.getLabel()).write("</span>");
                     writer.write("</li>");
@@ -231,6 +237,10 @@ public class StudioMenuWriter extends AbstractPanelWriter {
 
     private List<AppletDef> getCodeGenerationAppletDefs(String applicationName) throws UnifyException {
         return getRoleAppletDefs(applicationName, codeGenerationProvider.getCodeGenerationApplets());
+    }
+
+    private List<AppletDef> getSychronizationAppletDefs(String applicationName) throws UnifyException {
+        return getRoleAppletDefs(applicationName, synchronizationAppletList);
     }
 
     private List<AppletDef> getRoleAppletDefs(String applicationName, List<String> applets) throws UnifyException {
