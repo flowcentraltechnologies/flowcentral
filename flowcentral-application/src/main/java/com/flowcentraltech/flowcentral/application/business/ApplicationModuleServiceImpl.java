@@ -1412,7 +1412,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             // Update entity
             if (entitySchema.getTableName() != null) {
-                appEntity.setTableName(getApplicationCode());
+                appEntity.setTableName(entitySchema.getTableName());
             }
 
             if (entitySchema.getDataSourceAlias() != null) {
