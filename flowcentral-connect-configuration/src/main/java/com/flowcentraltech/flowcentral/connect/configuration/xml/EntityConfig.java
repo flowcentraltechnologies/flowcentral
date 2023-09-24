@@ -19,6 +19,10 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.EntityBaseTypeXmlAdapter;
 
 /**
  * Entity configuration.
@@ -28,9 +32,13 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class EntityConfig {
 
+    private EntityBaseType base;
+    
     private String name;
 
     private String description;
+
+    private String tableName;
 
     private String implementation;
 
@@ -43,6 +51,16 @@ public class EntityConfig {
     private String actionPolicy;
 
     private List<EntityFieldConfig> entityFieldList;
+
+    public EntityBaseType getBase() {
+        return base;
+    }
+
+    @XmlJavaTypeAdapter(EntityBaseTypeXmlAdapter.class)
+    @XmlAttribute(required = true)
+    public void setBase(EntityBaseType base) {
+        this.base = base;
+    }
 
     public String getName() {
         return name;
@@ -60,6 +78,15 @@ public class EntityConfig {
     @XmlAttribute(required = true)
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    @XmlAttribute
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
     public String getImplementation() {

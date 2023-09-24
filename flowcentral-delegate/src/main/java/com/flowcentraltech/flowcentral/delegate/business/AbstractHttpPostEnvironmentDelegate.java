@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.delegate.business;
 
+import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
 
@@ -29,13 +30,15 @@ public abstract class AbstractHttpPostEnvironmentDelegate extends AbstractJsonEn
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-       return IOUtils.postJsonToEndpoint( getEndpoint() + "/procedure", jsonReq);
+        return IOUtils.postJsonToEndpoint(
+                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq);
     }
 
     @Override
     protected String sendToDelegateDatasourceService(String jsonReq) throws UnifyException {
-         return IOUtils.postJsonToEndpoint(getEndpoint() + "/datasource", jsonReq);
+        return IOUtils.postJsonToEndpoint(
+                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/datasource", jsonReq);
     }
- 
-    protected abstract String getEndpoint() throws UnifyException;
+
+    protected abstract String getEndpointNode() throws UnifyException;
 }

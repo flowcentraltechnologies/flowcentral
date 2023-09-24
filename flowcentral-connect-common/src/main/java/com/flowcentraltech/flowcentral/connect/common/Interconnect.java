@@ -50,6 +50,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.ApplicationConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
@@ -122,19 +124,27 @@ public class Interconnect {
                                 final String applicationName = applicationConfig.getName();
                                 LOGGER.log(Level.INFO, "Loading interconnect entity information for [{0}]...",
                                         applicationName);
+
                                 for (EntityConfig entityConfig : entityConfigList) {
                                     EntityInfo.Builder eib = EntityInfo.newBuilder(appEntityManagerFactory);
-                                    eib.name(ensureLongName(applicationName, entityConfig.getName()))
+                                    EntityBaseType base = entityConfig.getBase() != null ? entityConfig.getBase()
+                                            : EntityBaseType.BASE_ENTITY;
+                                    eib.dataSourceAlias(applicationConfig.getDataSourceAlias()).baseType(base)
+                                            .name(ensureLongName(applicationName, entityConfig.getName()))
+                                            .tableName(entityConfig.getTableName())
                                             .description(entityConfig.getDescription())
                                             .implementation(entityConfig.getImplementation())
                                             .idFieldName(entityConfig.getIdFieldName())
                                             .versionNoFieldName(entityConfig.getVersionNoFieldName())
                                             .handler(entityConfig.getHandler())
                                             .actionPolicy(entityConfig.getActionPolicy());
+                                    populateBaseFields(eib, base);
                                     for (EntityFieldConfig entityFieldConfig : entityConfig.getEntityFieldList()) {
                                         eib.addField(entityFieldConfig.getType(), entityFieldConfig.getName(),
+                                                entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
                                                 ensureLongName(applicationName, entityFieldConfig.getReferences()),
-                                                entityFieldConfig.getEnumImplClass());
+                                                entityFieldConfig.getEnumImplClass(), entityFieldConfig.getScale(),
+                                                entityFieldConfig.getPrecision(), entityFieldConfig.getLength());
                                     }
 
                                     EntityInfo entityInfo = eib.build();
@@ -159,6 +169,32 @@ public class Interconnect {
         }
 
         return false;
+    }
+
+    private void populateBaseFields(EntityInfo.Builder eib, EntityBaseType base) throws Exception {
+        switch (base) {
+            case BASE_WORK_ENTITY:
+                eib.addField(FieldDataType.STRING, "workBranchCode", "Work Branch Code", "work_branch_cd");
+                eib.addField(FieldDataType.BOOLEAN, "inWorkflow", "In Workflow", "in_workflow_fg");
+                eib.addField(FieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
+                eib.addField(FieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
+                        "wf_item_version_type");
+                break;
+            case BASE_AUDIT_ENTITY:
+                eib.addField(FieldDataType.STRING, "createdBy", "Created By", "created_by");
+                eib.addField(FieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
+                eib.addField(FieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
+                eib.addField(FieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
+                break;
+            case BASE_VERSION_ENTITY:
+                eib.addField(FieldDataType.LONG, "versionNo", "Version No.", "version_no");
+                break;
+            case BASE_ENTITY:
+                eib.addField(FieldDataType.LONG, "id", "ID", "id");
+                break;
+            default:
+                break;
+        }
     }
 
     public String getRedirect() {
@@ -606,6 +642,11 @@ public class Interconnect {
         }
 
         return entityInfo;
+    }
+
+    public boolean isPresent(String entity) throws Exception {
+        checkInitialized();
+        return entities.containsKey(entity);
     }
 
     public void copy(List<EntityFieldInfo> fieldInfoList, final Object destBean, final Object srcBean)

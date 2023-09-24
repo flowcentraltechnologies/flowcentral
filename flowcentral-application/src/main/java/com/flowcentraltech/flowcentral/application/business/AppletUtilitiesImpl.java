@@ -34,6 +34,7 @@ import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -2063,18 +2064,23 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
-    public String getEntityDelegate(String entityName) throws UnifyException {
-        return applicationModuleService.getEntityDelegate(entityName);
+    public DelegateEntityInfo getEntityDelegate(String entityName) throws UnifyException {
+        return applicationModuleService.getDelegateEntity(entityName);
     }
 
     @Override
-    public List<String> getEntitiesByDelegate(String delegate) throws UnifyException {
-        return applicationModuleService.getEntitiesByDelegate(delegate);
+    public List<DelegateEntityInfo> getDelegateEntitiesByDelegate(String delegate) throws UnifyException {
+        return applicationModuleService.getDelegateEntitiesByDelegate(delegate);
     }
 
     @Override
-    public List<String> getEntitiesWithDelegate() throws UnifyException {
-        return applicationModuleService.getEntitiesWithDelegate();
+    public List<DelegateEntityInfo> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException {
+        return applicationModuleService.getDelegateEntitiesByDataSource(dataSourceName);
+    }
+
+    @Override
+    public List<DelegateEntityInfo> getDelegateEntities() throws UnifyException {
+        return applicationModuleService.getDelegateEntities();
     }
 
     @Override

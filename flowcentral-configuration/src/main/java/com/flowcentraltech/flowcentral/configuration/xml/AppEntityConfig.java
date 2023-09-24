@@ -39,6 +39,8 @@ public class AppEntityConfig extends BaseNameConfig {
 
     private String table;
     
+    private String dataSourceName;
+    
     private Boolean mapped;
     
     private Boolean auditable;
@@ -99,6 +101,15 @@ public class AppEntityConfig extends BaseNameConfig {
     @XmlAttribute
     public void setTable(String table) {
         this.table = table;
+    }
+
+    public String getDataSourceName() {
+        return dataSourceName;
+    }
+
+    @XmlAttribute
+    public void setDataSourceName(String dataSourceName) {
+        this.dataSourceName = dataSourceName;
     }
 
     public Boolean getMapped() {

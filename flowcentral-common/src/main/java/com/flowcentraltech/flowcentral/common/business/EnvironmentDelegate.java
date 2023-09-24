@@ -16,6 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
+import java.util.List;
+
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Database;
 
@@ -31,7 +33,7 @@ public interface EnvironmentDelegate extends Database {
      * Returns true if delegate is direct.
      */
     boolean isDirect();
-    
+
     /**
      * Executes a procedure.
      * 
@@ -44,7 +46,17 @@ public interface EnvironmentDelegate extends Database {
      *                        if an error occurs
      */
     String[] executeProcedure(String operation, String... payload) throws UnifyException;
-    
+
+    /**
+     * Gets entity aliases by data source.
+     * 
+     * @param dataSourceName
+     *                       the data source name
+     * @return
+     * @throws UnifyException
+     */
+    List<String> getEntityAliasesByDataSource(String dataSourceName) throws UnifyException;
+
     /**
      * Gets the datasource name for entity
      * 
@@ -54,5 +66,5 @@ public interface EnvironmentDelegate extends Database {
      * @throws UnifyException
      *                        if an error occurs
      */
-    String getDataSourceName(String entityLongName) throws UnifyException;
+    String getDataSourceByEntityAlias(String entityLongName) throws UnifyException;
 }

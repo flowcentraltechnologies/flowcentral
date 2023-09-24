@@ -302,7 +302,7 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
     }
 
     @Override
-    public String getDataSourceName(String entityLongName) throws UnifyException {
+    public String getDataSourceByEntityAlias(String entityLongName) throws UnifyException {
         return "application-datasource";
     }
 

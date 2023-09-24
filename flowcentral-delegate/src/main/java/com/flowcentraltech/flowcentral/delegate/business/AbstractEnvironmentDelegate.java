@@ -28,6 +28,7 @@ import java.util.Set;
 
 import com.flowcentraltech.flowcentral.application.business.AppletUtilities;
 import com.flowcentraltech.flowcentral.application.business.ApplicationModuleService;
+import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
@@ -56,6 +57,7 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.CallableProc;
 import com.tcdng.unify.core.database.DataSource;
+import com.tcdng.unify.core.database.DataSourceEntityListProvider;
 import com.tcdng.unify.core.database.DatabaseSession;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -72,6 +74,9 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Configurable
     private AppletUtilities au;
 
+    @Configurable(ApplicationModuleNameConstants.DELEGATE_ENTITYLIST_PROVIDER)
+    private DataSourceEntityListProvider dataSourceEntityListProvider;
+    
     @Override
     public boolean isDirect() {
         return false;
@@ -79,6 +84,10 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
     public final void setAu(AppletUtilities au) {
         this.au = au;
+    }
+
+    public final void setDataSourceEntityListProvider(DataSourceEntityListProvider dataSourceEntityListProvider) {
+        this.dataSourceEntityListProvider = dataSourceEntityListProvider;
     }
 
     @Override
@@ -94,6 +103,16 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
     @Override
     public String getDataSourceName() throws UnifyException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public final List<String> getEntityAliasesByDataSource(String dataSourceName) throws UnifyException {
+        return dataSourceEntityListProvider.getEntityAliasesByDataSource(dataSourceName);
+    }
+
+    @Override
+    public String getDataSourceByEntityAlias(String entityLongName) throws UnifyException {
+        return dataSourceEntityListProvider.getDataSourceByEntityAlias(entityLongName);
     }
 
     @Override

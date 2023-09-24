@@ -140,6 +140,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     private String delegate;
 
+    private String dataSourceName;
+
     private String addPrivilege;
 
     private String editPrivilege;
@@ -178,7 +180,8 @@ public class EntityDef extends BaseApplicationEntityDef {
             List<IndexDef> indexList, List<EntityUploadDef> uploadList,
             Map<String, EntitySearchInputDef> searchInputDefs, ApplicationEntityNameParts nameParts,
             String originClassName, String tableName, String label, String emailProducerConsumer, String delegate,
-            boolean mapped, boolean auditable, boolean reportable, String description, Long id, long version) {
+            String dataSourceName, boolean mapped, boolean auditable, boolean reportable, String description, Long id,
+            long version) {
         super(nameParts, description, id, version);
         this.baseType = baseType;
         this.type = type;
@@ -188,6 +191,7 @@ public class EntityDef extends BaseApplicationEntityDef {
         this.emailProducerConsumer = emailProducerConsumer;
         this.mapped = mapped;
         this.delegate = delegate;
+        this.dataSourceName = dataSourceName;
         this.auditable = auditable;
         this.reportable = reportable;
         this.fieldDefList = fieldDefList;
@@ -313,6 +317,10 @@ public class EntityDef extends BaseApplicationEntityDef {
 
     public String getDelegate() {
         return delegate;
+    }
+
+    public String getDataSourceName() {
+        return dataSourceName;
     }
 
     public boolean isStatic() {
@@ -970,17 +978,17 @@ public class EntityDef extends BaseApplicationEntityDef {
     }
 
     public static Builder newBuilder(ConfigType type, String originClassName, String label,
-            String emailProducerConsumer, String delegate, boolean mapped, boolean auditable, boolean reportable,
-            String longName, String description, Long id, long version) {
-        return new Builder(null, type, originClassName, null, label, emailProducerConsumer, delegate, mapped, auditable,
-                reportable, longName, description, id, version);
+            String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped, boolean auditable,
+            boolean reportable, String longName, String description, Long id, long version) {
+        return new Builder(null, type, originClassName, null, label, emailProducerConsumer, delegate, dataSourceName,
+                mapped, auditable, reportable, longName, description, id, version);
     }
 
     public static Builder newBuilder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName,
-            String label, String emailProducerConsumer, String delegate, boolean mapped, boolean auditable,
-            boolean reportable, String longName, String description, Long id, long version) {
-        return new Builder(baseType, type, originClassName, tableName, label, emailProducerConsumer, delegate, mapped,
-                auditable, reportable, longName, description, id, version);
+            String label, String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped,
+            boolean auditable, boolean reportable, String longName, String description, Long id, long version) {
+        return new Builder(baseType, type, originClassName, tableName, label, emailProducerConsumer, delegate,
+                dataSourceName, mapped, auditable, reportable, longName, description, id, version);
     }
 
     public static class Builder {
@@ -1013,6 +1021,8 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         private String delegate;
 
+        private String dataSourceName;
+
         private boolean mapped;
 
         private boolean auditable;
@@ -1035,8 +1045,8 @@ public class EntityDef extends BaseApplicationEntityDef {
         }
 
         public Builder(EntityBaseType baseType, ConfigType type, String originClassName, String tableName, String label,
-                String emailProducerConsumer, String delegate, boolean mapped, boolean auditable, boolean reportable,
-                String longName, String description, Long id, long version) {
+                String emailProducerConsumer, String delegate, String dataSourceName, boolean mapped, boolean auditable,
+                boolean reportable, String longName, String description, Long id, long version) {
             this.baseType = baseType;
             this.type = type;
             this.fieldDefMap = new LinkedHashMap<String, EntityFieldDef>();
@@ -1046,6 +1056,7 @@ public class EntityDef extends BaseApplicationEntityDef {
             this.label = label;
             this.emailProducerConsumer = emailProducerConsumer;
             this.delegate = delegate;
+            this.dataSourceName = dataSourceName;
             this.mapped = mapped;
             this.auditable = auditable;
             this.reportable = reportable;
@@ -1076,6 +1087,11 @@ public class EntityDef extends BaseApplicationEntityDef {
 
         public Builder delegate(String delegate) {
             this.delegate = delegate;
+            return this;
+        }
+
+        public Builder dataSourceName(String dataSourceName) {
+            this.dataSourceName = dataSourceName;
             return this;
         }
 
@@ -1240,7 +1256,8 @@ public class EntityDef extends BaseApplicationEntityDef {
                     DataUtils.unmodifiableMap(expressionDefMap), DataUtils.unmodifiableList(uniqueConstraintList),
                     DataUtils.unmodifiableList(indexList), DataUtils.unmodifiableList(uploadList),
                     DataUtils.unmodifiableMap(searchInputDefs), nameParts, originClassName, tableName, label,
-                    emailProducerConsumer, delegate, mapped, auditable, reportable, description, id, version);
+                    emailProducerConsumer, delegate, dataSourceName, mapped, auditable, reportable, description, id,
+                    version);
         }
     }
 

@@ -25,6 +25,7 @@ import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
@@ -1118,15 +1119,15 @@ public interface ApplicationModuleService extends FlowCentralService {
     List<? extends Listable> getRelatedWidgetTypes(String applicationName) throws UnifyException;
 
     /**
-     * Gets delegate entities by datasource name
+     * Gets delegate entities by entity name
      * 
-     * @param dataSourceName
-     *                       the datasource name
+     * @param entityLongNames
+     *                       the entity long name
      * @return the entity list
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<Class<?>> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException;
+    List<Class<?>> getDelegateEntities(List<String> entityLongNames) throws UnifyException;
 
     /**
      * Gets a application entity class definition.
@@ -1598,7 +1599,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    String getEntityDelegate(String entityName) throws UnifyException;
+    DelegateEntityInfo getDelegateEntity(String entityName) throws UnifyException;
 
     /**
      * Gets all entities by delegate.
@@ -1609,7 +1610,18 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<String> getEntitiesByDelegate(String delegate) throws UnifyException;
+    List<DelegateEntityInfo> getDelegateEntitiesByDelegate(String delegate) throws UnifyException;
+
+    /**
+     * Gets all entities by data source name.
+     * 
+     * @param dataSourceName
+     *                 the data source name
+     * @return the entity long names
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<DelegateEntityInfo> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException;
 
     /**
      * Gets all entities that have a delegate.
@@ -1618,7 +1630,7 @@ public interface ApplicationModuleService extends FlowCentralService {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<String> getEntitiesWithDelegate() throws UnifyException;
+    List<DelegateEntityInfo> getDelegateEntities() throws UnifyException;
 
     /**
      * Find foreign entity string fields including list-only strings.

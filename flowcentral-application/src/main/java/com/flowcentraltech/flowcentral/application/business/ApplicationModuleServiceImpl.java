@@ -56,6 +56,7 @@ import com.flowcentraltech.flowcentral.application.data.ApplicationMenuDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
@@ -192,7 +193,7 @@ import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralServic
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.EntityAuditInfoProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
-import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateInfo;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateHolder;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.business.FileAttachmentProvider;
@@ -385,9 +386,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Configurable
     private EnvironmentDelegateUtilities environmentDelegateUtilities;
 
-    private Map<String, EnvironmentDelegateInfo> delegateInfoByEntityClass;
+    private Map<String, EnvironmentDelegateHolder> delegateHolderByEntityClass;
 
-    private Map<String, EnvironmentDelegateInfo> delegateInfoByLongName;
+    private Map<String, EnvironmentDelegateHolder> delegateHolderByLongName;
 
     private List<ApplicationArtifactInstaller> applicationArtifactInstallerList;
 
@@ -423,8 +424,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
     public ApplicationModuleServiceImpl() {
         this.entitySearchTypes = new HashSet<String>();
-        this.delegateInfoByEntityClass = new ConcurrentHashMap<String, EnvironmentDelegateInfo>();
-        this.delegateInfoByLongName = new ConcurrentHashMap<String, EnvironmentDelegateInfo>();
+        this.delegateHolderByEntityClass = new ConcurrentHashMap<String, EnvironmentDelegateHolder>();
+        this.delegateHolderByLongName = new ConcurrentHashMap<String, EnvironmentDelegateHolder>();
         this.applicationDefFactoryMap = new FactoryMap<String, ApplicationDef>(true)
             {
                 @Override
@@ -685,7 +686,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 PropertyListItem.class.getName(),
-                                getApplicationMessage("application.propertyitem.label"), null, null, false, false,
+                                getApplicationMessage("application.propertyitem.label"), null, null, null, false, false,
                                 false, ApplicationPredefinedEntityConstants.PROPERTYITEM_ENTITY,
                                 getApplicationMessage("application.propertyitem"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
@@ -704,7 +705,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
                     if (ApplicationPredefinedEntityConstants.USAGE_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC, Usage.class.getName(),
-                                getApplicationMessage("application.usage.label"), null, null, false, false, false,
+                                getApplicationMessage("application.usage.label"), null, null, null, false, false, false,
                                 ApplicationPredefinedEntityConstants.USAGE_ENTITY,
                                 getApplicationMessage("application.usage"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
@@ -724,8 +725,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     if (ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY.equals(longName)) {
                         EntityDef.Builder edb = EntityDef.newBuilder(ConfigType.STATIC,
                                 com.flowcentraltech.flowcentral.application.data.Attachment.class.getName(),
-                                getApplicationMessage("application.attachment.label"), null, null, false, false, false,
-                                ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
+                                getApplicationMessage("application.attachment.label"), null, null, null, false, false,
+                                false, ApplicationPredefinedEntityConstants.ATTACHMENT_ENTITY,
                                 getApplicationMessage("application.attachment"), 0L, 1L);
                         edb.addFieldDef(textWidgetTypeDef, textWidgetTypeDef, EntityFieldDataType.STRING,
                                 EntityFieldType.STATIC, "name", getApplicationMessage("application.attachment.name"));
@@ -744,9 +745,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     AppEntity appEntity = getApplicationEntity(AppEntity.class, longName);
                     EntityDef.Builder edb = EntityDef.newBuilder(appEntity.getBaseType(), appEntity.getConfigType(),
                             appEntity.getEntityClass(), appEntity.getTableName(), appEntity.getLabel(),
-                            appEntity.getEmailProducerConsumer(), appEntity.getDelegate(), appEntity.isMapped(),
-                            appEntity.isAuditable(), appEntity.isReportable(), longName, appEntity.getDescription(),
-                            appEntity.getId(), appEntity.getVersionNo());
+                            appEntity.getEmailProducerConsumer(), appEntity.getDelegate(),
+                            appEntity.getDataSourceName(), appEntity.isMapped(), appEntity.isAuditable(),
+                            appEntity.isReportable(), longName, appEntity.getDescription(), appEntity.getId(),
+                            appEntity.getVersionNo());
 
                     for (AppEntityField appEntityField : appEntity.getFieldList()) {
                         WidgetTypeDef inputWidgetTypeDef = null;
@@ -1367,24 +1369,24 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public EnvironmentDelegateInfo getEnvironmentDelegateInfo(String entityLongName) throws UnifyException {
-        return delegateInfoByLongName.get(entityLongName);
+    public EnvironmentDelegateHolder getEnvironmentDelegateInfo(String entityLongName) throws UnifyException {
+        return delegateHolderByLongName.get(entityLongName);
     }
 
     @Override
-    public EnvironmentDelegateInfo getEnvironmentDelegateInfo(Class<? extends Entity> entityClass)
+    public EnvironmentDelegateHolder getEnvironmentDelegateInfo(Class<? extends Entity> entityClass)
             throws UnifyException {
-        return delegateInfoByEntityClass.get(entityClass.getName());
+        return delegateHolderByEntityClass.get(entityClass.getName());
     }
 
     @Override
     public String resolveLongName(Class<? extends Entity> entityClass) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = getEnvironmentDelegateInfo(entityClass);
-        if (delegateInfo == null) {
+        EnvironmentDelegateHolder delegateHolder = getEnvironmentDelegateInfo(entityClass);
+        if (delegateHolder == null) {
             // TODO Throw exception
         }
 
-        return delegateInfo.getEntityLongName();
+        return delegateHolder.getEntityLongName();
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };
@@ -2308,15 +2310,16 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public List<Class<?>> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException {
+    public List<Class<?>> getDelegateEntities(List<String> entityLongNames) throws UnifyException {
         List<AppEntity> entityList = environment()
                 .listAll(new AppEntityQuery().isDelegated().addSelect("applicationName", "name", "delegate"));
         if (!entityList.isEmpty()) {
+            logDebug("Resolving delegate entities...");
+            Set<String> entityAliases = new HashSet<String>(entityLongNames);
             List<Class<?>> delegateList = new ArrayList<Class<?>>();
             for (String entityLongName : ApplicationNameUtils.getApplicationEntityLongNames(entityList)) {
-                logDebug("Resolving delegate entities for [{0}]...", entityLongName);
-                EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
-                if (dataSourceName.equals(environment().getEntityDataSourceName(entityLongName))) {
+                if (entityAliases.contains(entityLongName)) {
+                    EntityClassDef entityClassDef = getEntityClassDef(entityLongName);
                     delegateList.add(entityClassDef.getEntityClass());
                 }
             }
@@ -2839,24 +2842,72 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    public String getEntityDelegate(String entityName) throws UnifyException {
+    public DelegateEntityInfo getDelegateEntity(String entityName) throws UnifyException {
         ApplicationEntityNameParts parts = ApplicationNameUtils.getApplicationEntityNameParts(entityName);
-        return environment().value(String.class, "delegate",
-                new AppEntityQuery().applicationName(parts.getApplicationName()).name(parts.getEntityName()));
+        AppEntity appEntity = environment().find(new AppEntityQuery().applicationName(parts.getApplicationName())
+                .name(parts.getEntityName()).addSelect("delegate", "dataSourceName"));
+        return appEntity != null
+                ? new DelegateEntityInfo(appEntity.getDelegate(), entityName, appEntity.getDataSourceName())
+                : new DelegateEntityInfo(entityName);
     }
 
     @Override
-    public List<String> getEntitiesByDelegate(String delegate) throws UnifyException {
-        List<AppEntity> entityList = environment()
-                .listAll(new AppEntityQuery().addEquals("delegate", delegate).addSelect("applicationName", "name"));
-        return ApplicationNameUtils.getApplicationEntityLongNames(entityList);
+    public List<DelegateEntityInfo> getDelegateEntitiesByDelegate(String delegate) throws UnifyException {
+        List<AppEntity> entityList = environment().listAll(new AppEntityQuery().addEquals("delegate", delegate)
+                .addSelect("applicationName", "name", "dataSourceName"));
+        if (!DataUtils.isBlank(entityList)) {
+            List<DelegateEntityInfo> resultList = new ArrayList<DelegateEntityInfo>(entityList.size());
+            for (AppEntity appEntity : entityList) {
+                final String entityName = ApplicationNameUtils
+                        .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName());
+                resultList.add(new DelegateEntityInfo(delegate, entityName, appEntity.getDataSourceName()));
+            }
+
+            return resultList;
+
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
-    public List<String> getEntitiesWithDelegate() throws UnifyException {
-        List<AppEntity> entityList = environment()
-                .listAll(new AppEntityQuery().addIsNotNull("delegate").addSelect("applicationName", "name"));
-        return ApplicationNameUtils.getApplicationEntityLongNames(entityList);
+    public List<DelegateEntityInfo> getDelegateEntitiesByDataSource(String dataSourceName) throws UnifyException {
+        List<AppEntity> entityList = environment().listAll(new AppEntityQuery()
+                .addEquals("dataSourceName", dataSourceName).addSelect("applicationName", "name", "delegate"));
+        if (!DataUtils.isBlank(entityList)) {
+            List<DelegateEntityInfo> resultList = new ArrayList<DelegateEntityInfo>(entityList.size());
+            for (AppEntity appEntity : entityList) {
+                final String entityName = ApplicationNameUtils
+                        .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName());
+                resultList.add(
+                        new DelegateEntityInfo(appEntity.getDelegate(), entityName, appEntity.getDataSourceName()));
+            }
+
+            return resultList;
+
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<DelegateEntityInfo> getDelegateEntities() throws UnifyException {
+        List<AppEntity> entityList = environment().listAll(
+                new AppEntityQuery().addIsNotNull("delegate").addSelect("applicationName", "name", "dataSourceName"));
+        if (!DataUtils.isBlank(entityList)) {
+            List<DelegateEntityInfo> resultList = new ArrayList<DelegateEntityInfo>(entityList.size());
+            for (AppEntity appEntity : entityList) {
+                final String entityName = ApplicationNameUtils
+                        .getApplicationEntityLongName(appEntity.getApplicationName(), appEntity.getName());
+                resultList.add(
+                        new DelegateEntityInfo(appEntity.getDelegate(), entityName, appEntity.getDataSourceName()));
+            }
+
+            return resultList;
+
+        }
+
+        return Collections.emptyList();
     }
 
     private String buildEntityDescription(EntityDef entityDef, Entity inst) throws UnifyException {
@@ -4116,6 +4167,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appEntity.setDelegate(appEntityConfig.getDelegate());
                     appEntity.setEntityClass(appEntityConfig.getType());
                     appEntity.setTableName(tableName);
+                    appEntity.setDataSourceName(appEntityConfig.getDataSourceName());
                     appEntity.setMapped(appEntityConfig.getMapped());
                     appEntity.setAuditable(appEntityConfig.getAuditable());
                     appEntity.setReportable(appEntityConfig.getReportable());
@@ -4136,6 +4188,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppEntity.setDelegate(appEntityConfig.getDelegate());
                         oldAppEntity.setEntityClass(appEntityConfig.getType());
                         oldAppEntity.setTableName(tableName);
+                        oldAppEntity.setDataSourceName(appEntityConfig.getDataSourceName());
                         oldAppEntity.setMapped(appEntityConfig.getMapped());
                         oldAppEntity.setAuditable(appEntityConfig.getAuditable());
                         oldAppEntity.setReportable(appEntityConfig.getReportable());
@@ -5700,10 +5753,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                 final String entityClassName = entityClass.getName();
                 unregisterDelegate(entityDef.getLongName());
                 EnvironmentDelegate environmentDelegate = (EnvironmentDelegate) getComponent(entityDef.getDelegate());
-                EnvironmentDelegateInfo delegateInfo = new EnvironmentDelegateInfo(entityDef.getLongName(),
+                EnvironmentDelegateHolder delegateInfo = new EnvironmentDelegateHolder(entityDef.getLongName(),
                         entityClassName, environmentDelegate);
-                delegateInfoByEntityClass.put(entityClassName, delegateInfo);
-                delegateInfoByLongName.put(entityDef.getLongName(), delegateInfo);
+                delegateHolderByEntityClass.put(entityClassName, delegateInfo);
+                delegateHolderByLongName.put(entityDef.getLongName(), delegateInfo);
             }
         } else {
             unregisterDelegate(entityDef.getLongName());
@@ -5711,9 +5764,9 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     private void unregisterDelegate(String entityLongName) throws UnifyException {
-        EnvironmentDelegateInfo delegateInfo = delegateInfoByLongName.remove(entityLongName);
+        EnvironmentDelegateHolder delegateInfo = delegateHolderByLongName.remove(entityLongName);
         if (delegateInfo != null) {
-            delegateInfoByEntityClass.remove(delegateInfo.getEntityClassName());
+            delegateHolderByEntityClass.remove(delegateInfo.getEntityClassName());
         }
     }
 

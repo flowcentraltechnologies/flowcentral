@@ -43,6 +43,7 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmen
         return resp.getPayload();
     }
 
+
     protected BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException {
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
         String respJSON = sendToDelegateDatasourceService(reqJSON);

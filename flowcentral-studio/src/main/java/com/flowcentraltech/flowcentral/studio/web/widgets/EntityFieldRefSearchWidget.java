@@ -20,8 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.web.widgets.EntitySearchWidget;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
@@ -139,10 +138,12 @@ public class EntityFieldRefSearchWidget extends EntitySearchWidget {
                     String entityName = ApplicationNameUtils.getApplicationEntityLongName(
                             getValue(String.class, getUplAttribute(String.class, "appName")),
                             getValue(String.class, getUplAttribute(String.class, "entityName")));
-                    String delegate = au().getEntityDelegate(entityName);
-                    Restriction restriction = !StringUtils.isBlank(delegate)
-                            ? new Amongst("entity", au().getEntitiesByDelegate(delegate))
-                            : new NotAmongst("entity", au().getEntitiesWithDelegate());
+                    DelegateEntityInfo delegateEntityInfo = au().getEntityDelegate(entityName);
+                    Restriction restriction = delegateEntityInfo.isWithDelegate()
+                            ? new Amongst("entity",
+                                    DelegateEntityInfo.getEntityAliases(
+                                            au().getDelegateEntitiesByDelegate(delegateEntityInfo.getDelegate())))
+                            : new NotAmongst("entity", DelegateEntityInfo.getEntityAliases(au().getDelegateEntities()));
                     getWriteWork().set("ref.restriction", restriction);
                     return getResultByRef(input, limit);
                 }

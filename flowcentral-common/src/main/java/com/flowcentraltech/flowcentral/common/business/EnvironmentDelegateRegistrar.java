@@ -37,7 +37,7 @@ public interface EnvironmentDelegateRegistrar extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EnvironmentDelegateInfo getEnvironmentDelegateInfo(String entityLongName) throws UnifyException;
+    EnvironmentDelegateHolder getEnvironmentDelegateInfo(String entityLongName) throws UnifyException;
 
     /**
      * Gets environment delegate information by entity class.
@@ -48,7 +48,7 @@ public interface EnvironmentDelegateRegistrar extends UnifyComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    EnvironmentDelegateInfo getEnvironmentDelegateInfo(Class<? extends Entity> entityClass) throws UnifyException;
+    EnvironmentDelegateHolder getEnvironmentDelegateInfo(Class<? extends Entity> entityClass) throws UnifyException;
 
     /**
      * Resolves long name for supplied entity class.

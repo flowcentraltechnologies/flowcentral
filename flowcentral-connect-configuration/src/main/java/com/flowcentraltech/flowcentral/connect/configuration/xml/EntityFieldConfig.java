@@ -33,9 +33,19 @@ public class EntityFieldConfig {
 
     private String name;
 
+    private String description;
+
+    private String column;
+
     private String references;
 
     private String enumImplClass;
+
+    private int scale;
+
+    private int precision;
+
+    private int length;
 
     public FieldDataType getType() {
         return type;
@@ -56,6 +66,24 @@ public class EntityFieldConfig {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    @XmlAttribute
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getColumn() {
+        return column;
+    }
+
+    @XmlAttribute
+    public void setColumn(String column) {
+        this.column = column;
+    }
+
     public String getReferences() {
         return references;
     }
@@ -72,6 +100,33 @@ public class EntityFieldConfig {
     @XmlAttribute(name = "enum-impl")
     public void setEnumImplClass(String enumImplClass) {
         this.enumImplClass = enumImplClass;
+    }
+
+    public int getScale() {
+        return scale;
+    }
+
+    @XmlAttribute
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
+
+    public int getPrecision() {
+        return precision;
+    }
+
+    @XmlAttribute
+    public void setPrecision(int precision) {
+        this.precision = precision;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    @XmlAttribute
+    public void setLength(int length) {
+        this.length = length;
     }
 
 }
