@@ -15,19 +15,37 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
+import java.util.List;
+
 /**
- * Detect entity request.
+ * Flow central interconnect base broadcast response class.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DetectEntityRequest extends BaseRequest {
+public abstract class BaseBroadcastResponse extends BaseResponse {
 
-    public DetectEntityRequest(String entity) {
-        setEntity(entity);
+    private List<RedirectErrorDTO> redirectErrors;
+
+    public BaseBroadcastResponse(String errorCode, String errorMsg, List<RedirectErrorDTO> redirectErrors) {
+        super(errorCode, errorMsg);
+        this.redirectErrors = redirectErrors;
     }
 
-    public DetectEntityRequest() {
-        
+    public BaseBroadcastResponse(String errorCode, String errorMsg) {
+        super(errorCode, errorMsg);
     }
+
+    public BaseBroadcastResponse() {
+
+    }
+
+    public List<RedirectErrorDTO> getRedirectErrors() {
+        return redirectErrors;
+    }
+
+    public void setRedirectErrors(List<RedirectErrorDTO> redirectErrors) {
+        this.redirectErrors = redirectErrors;
+    }
+
 }

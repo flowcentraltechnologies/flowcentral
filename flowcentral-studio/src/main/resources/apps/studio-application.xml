@@ -486,6 +486,11 @@
 			label="$m{studio.application.launch.label}" icon="rocket"
 			type="path_window" path="/applicationstudio" menuAccess="true">
 		</applet>
+		<applet name="delegateSynchronization"
+			description="$m{studio.delegatesynchronization.manage}"
+			label="$m{studio.delegatesynchronization.manage.label}" icon="lock" type="path_page"
+			path="/studio/delegatesynchronization/openPage" menuAccess="false">
+		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
 			label="$m{studio.module.manage.label}" icon="cubes"

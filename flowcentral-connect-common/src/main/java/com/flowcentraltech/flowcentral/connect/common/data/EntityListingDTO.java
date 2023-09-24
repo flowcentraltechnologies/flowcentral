@@ -16,18 +16,39 @@
 package com.flowcentraltech.flowcentral.connect.common.data;
 
 /**
- * Detect entity request.
+ * Entity listing DTO.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DetectEntityRequest extends BaseRequest {
+public class EntityListingDTO {
 
-    public DetectEntityRequest(String entity) {
-        setEntity(entity);
+    private String entity;
+
+    private String redirect;
+
+    public EntityListingDTO(String entity) {
+        this.entity = entity;
     }
 
-    public DetectEntityRequest() {
-        
+    public EntityListingDTO() {
+
     }
+
+    public String getEntity() {
+        return entity;
+    }
+
+    public void setEntity(String entity) {
+        this.entity = entity;
+    }
+
+    public String getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
+    }
+
 }

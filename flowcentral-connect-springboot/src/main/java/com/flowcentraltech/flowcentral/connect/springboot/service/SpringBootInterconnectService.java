@@ -18,6 +18,10 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
@@ -38,6 +42,17 @@ public interface SpringBootInterconnectService {
     String getRedirect();
 
     /**
+     * Lists all entities.
+     * 
+     * @param req
+     *            the listing request
+     * @return the listing response
+     * @throws Exception
+     *                   if an error occurs
+     */
+    EntityListingResponse listEntities(EntityListingRequest req) throws Exception;
+    
+    /**
      * Detects an entity.
      * 
      * @param req
@@ -47,6 +62,17 @@ public interface SpringBootInterconnectService {
      *                   if an error occurs
      */
     DetectEntityResponse detectEntity(DetectEntityRequest req) throws Exception;
+
+    /**
+     * Gets an entity.
+     * 
+     * @param req
+     *            the request object
+     * @return the response object
+     * @throws Exception
+     *                   if an error occurs
+     */
+    GetEntityResponse getEntity(GetEntityRequest req) throws Exception;
 
     /**
      * Processes a data source request.

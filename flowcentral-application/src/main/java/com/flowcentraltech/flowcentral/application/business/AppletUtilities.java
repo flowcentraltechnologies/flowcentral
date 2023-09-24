@@ -23,6 +23,7 @@ import java.util.Map;
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
+import com.flowcentraltech.flowcentral.application.data.EntitySchema;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
@@ -112,6 +113,16 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  */
 public interface AppletUtilities extends UnifyComponent {
 
+    /**
+     * Update entity schema.
+     * 
+     * @param entitySchema
+     *                     the entity schema
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException;
+    
     /**
      * Gets application entities based on supplied query.
      * 

@@ -17,6 +17,8 @@ package com.flowcentraltech.flowcentral.delegate.business;
 
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
+import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -51,6 +53,16 @@ public abstract class AbstractDirectEnvironmentDelegate extends AbstractEnvironm
     @Override
     public String[] executeProcedure(String operation, String... payload) throws UnifyException {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
+        return null;
+    }
+
+    @Override
+    protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
+        return null;
     }
 
     @Override

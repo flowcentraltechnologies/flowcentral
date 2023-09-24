@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.connect.common.data;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -191,6 +192,10 @@ public class EntityInfo {
 
     public Map<String, EntityFieldInfo> getFieldsByName() {
         return fieldsByName;
+    }
+
+    public Collection<EntityFieldInfo> getAllFields() {
+        return fieldsByName.values();
     }
 
     public List<EntityFieldInfo> getRefFieldList() {

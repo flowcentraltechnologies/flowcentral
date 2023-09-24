@@ -131,7 +131,7 @@ public class Interconnect {
                                             : EntityBaseType.BASE_ENTITY;
                                     eib.dataSourceAlias(applicationConfig.getDataSourceAlias()).baseType(base)
                                             .name(ensureLongName(applicationName, entityConfig.getName()))
-                                            .tableName(entityConfig.getTableName())
+                                            .tableName(entityConfig.getTable())
                                             .description(entityConfig.getDescription())
                                             .implementation(entityConfig.getImplementation())
                                             .idFieldName(entityConfig.getIdFieldName())
@@ -630,6 +630,10 @@ public class Interconnect {
         return Collections.emptyList();
     }
 
+    public List<String> getAllEntityNames() {
+        return new ArrayList<String>(entities.keySet());
+    }
+    
     public EntityInfo getEntityInfo(String entity) throws Exception {
         checkInitialized();
         EntityInfo entityInfo = entities.get(entity);

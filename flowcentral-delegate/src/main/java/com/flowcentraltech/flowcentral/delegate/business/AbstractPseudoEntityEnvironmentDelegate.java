@@ -21,7 +21,9 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentService;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.PseudoDataSourceResponse;
+import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.database.Entity;
@@ -57,6 +59,16 @@ public abstract class AbstractPseudoEntityEnvironmentDelegate<T extends Entity> 
 
     protected final EnvironmentService environment() {
         return environmentService;
+    }
+
+    @Override
+    protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
+        return null;
+    }
+
+    @Override
+    protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
+        return null;
     }
 
     @Override

@@ -13,21 +13,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.connect.common.data;
+
+package com.flowcentraltech.flowcentral.studio.business.data;
 
 /**
- * Detect entity request.
+ * Delegate synchronization item.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DetectEntityRequest extends BaseRequest {
+public class DelegateSynchronizationItem {
 
-    public DetectEntityRequest(String entity) {
-        setEntity(entity);
+    private String delegate;
+
+    public String getDelegate() {
+        return delegate;
     }
 
-    public DetectEntityRequest() {
-        
-    }
+    public void setDelegate(String delegate) {
+        this.delegate = delegate;
+    }   
 }

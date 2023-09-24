@@ -16,18 +16,36 @@
 package com.flowcentraltech.flowcentral.connect.common.data;
 
 /**
- * Detect entity request.
+ * Get entity datasource response.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DetectEntityRequest extends BaseRequest {
+public class GetEntityResponse extends BaseResponse {
+    
+    private EntityDTO entity;
 
-    public DetectEntityRequest(String entity) {
-        setEntity(entity);
+    public GetEntityResponse(String errorCode, String errorMsg) {
+        super(errorCode, errorMsg);
     }
 
-    public DetectEntityRequest() {
-        
+    public GetEntityResponse(EntityDTO entity) {
+        this.entity = entity;
+    }
+
+    public GetEntityResponse() {
+
+    }
+
+    public EntityDTO getEntity() {
+        return entity;
+    }
+
+    public void setEntity(EntityDTO entity) {
+        this.entity = entity;
+    }
+
+    public boolean isPresent() {
+        return entity != null;
     }
 }

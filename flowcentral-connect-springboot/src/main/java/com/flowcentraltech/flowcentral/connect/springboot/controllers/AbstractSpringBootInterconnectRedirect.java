@@ -37,9 +37,15 @@ import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
 
 /**
  * Convenient abstract base class for interconnect redirects
@@ -64,37 +70,49 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
     }
 
     @Override
-    public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) {
-        final Redirect redirect = getEntityRedirect(req.getEntity());
-        if (redirect != null) {
-            final String endpoint = redirect.getRedirectUrl() + "/datasource";
-            JsonDataSourceResponse resp = redirect(JsonDataSourceResponse.class, endpoint, req);
+    public EntityListingResponse listEntities(EntityListingRequest req) {
+        List<EntityListingDTO> listings = new ArrayList<EntityListingDTO>();
+        List<RedirectErrorDTO> redirectErrors = new ArrayList<RedirectErrorDTO>();
+        for (String redirectUrl : redirectUrls) {
+            String endpoint = redirectUrl + "/listEntities";
+            EntityListingResponse resp = redirect(EntityListingResponse.class, endpoint, req);
             if (resp == null) {
-                resp = new JsonDataSourceResponse();
-                resp.setErrorMsg("Redirection error");
-            }
+                redirectErrors.add(new RedirectErrorDTO(redirectUrl, null, "Redirection error"));
+            } else if (resp.error()) {
+                redirectErrors.add(new RedirectErrorDTO(redirectUrl, resp.getErrorCode(), resp.getErrorMsg()));
+            } else {
+                if (resp.getListings() != null) {
+                    for (EntityListingDTO entityListingDTO : resp.getListings()) {
+                        if (entityListingDTO.getRedirect() != null) {
+                            entityListingDTO.setRedirect(redirectUrl);
+                        }
 
-            return resp;
+                        listings.add(entityListingDTO);
+                    }
+                }
+
+                if (resp.getRedirectErrors() != null) {
+                    redirectErrors.addAll(resp.getRedirectErrors());
+                }
+            }
         }
 
-        return null;
+        return new EntityListingResponse(redirectErrors, listings);
     }
 
     @Override
-    public DetectEntityResponse detectEntity(DetectEntityRequest req) throws Exception {
-        final Redirect redirect = getEntityRedirect(req.getEntity());
-        if (redirect != null) {
-            final String endpoint = redirect.getRedirectUrl() + "/detectEntity";
-            DetectEntityResponse resp = redirect(DetectEntityResponse.class, endpoint, req);
-            if (resp == null) {
-                resp = new DetectEntityResponse();
-                resp.setErrorMsg("Redirection error");
-            }
+    public DetectEntityResponse detectEntity(DetectEntityRequest req) {
+        return processEntityRequest(DetectEntityResponse.class, req, "/detectEntity");
+    }
 
-            return resp;
-        }
+    @Override
+    public GetEntityResponse getEntity(GetEntityRequest req) {
+        return processEntityRequest(GetEntityResponse.class, req, "/getEntity");
+    }
 
-        return null;
+    @Override
+    public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) {
+        return processEntityRequest(JsonDataSourceResponse.class, req, "/dataSource");
     }
 
     @Override
@@ -131,6 +149,30 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
             procedureRequestRedirects.put(operation,
                     redirectNode + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
         }
+    }
+
+    private <T extends BaseResponse, U extends BaseRequest> T processEntityRequest(Class<T> respClass, U req,
+            String actionPath) {
+        final Redirect redirect = getEntityRedirect(req.getEntity());
+        if (redirect != null) {
+            final String endpoint = redirect.getRedirectUrl() + actionPath;
+            T resp = redirect(respClass, endpoint, req);
+            if (resp == null) {
+                try {
+                    resp = respClass.newInstance();
+                    resp.setErrorMsg("Redirection error");
+                } catch (Exception e) {
+                }
+            }
+
+            if (resp != null && resp.getRedirect() == null) {
+                resp.setRedirect(redirect.getRedirectUrl());
+            }
+
+            return resp;
+        }
+
+        return null;
     }
 
     private Redirect getEntityRedirect(String entity) {

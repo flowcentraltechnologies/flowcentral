@@ -27,6 +27,8 @@ public abstract class BaseResponse {
 
     private String errorMsg;
 
+    private String redirect;
+
     public BaseResponse(String errorCode, String errorMsg) {
         this.errorCode = errorCode;
         this.errorMsg = errorMsg;
@@ -51,7 +53,15 @@ public abstract class BaseResponse {
     public void setErrorMsg(String errorMsg) {
         this.errorMsg = errorMsg;
     }
-    
+
+    public String getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
+    }
+
     public boolean error() {
         return errorCode != null || errorMsg != null;
     }

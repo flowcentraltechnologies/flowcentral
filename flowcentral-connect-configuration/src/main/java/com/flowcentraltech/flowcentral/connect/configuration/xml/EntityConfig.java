@@ -38,7 +38,7 @@ public class EntityConfig {
 
     private String description;
 
-    private String tableName;
+    private String table;
 
     private String implementation;
 
@@ -80,13 +80,13 @@ public class EntityConfig {
         this.description = description;
     }
 
-    public String getTableName() {
-        return tableName;
+    public String getTable() {
+        return table;
     }
 
     @XmlAttribute
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setTable(String table) {
+        this.table = table;
     }
 
     public String getImplementation() {

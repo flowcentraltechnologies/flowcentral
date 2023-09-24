@@ -13,21 +13,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.connect.common.data;
+package com.flowcentraltech.flowcentral.studio.constants;
 
 /**
- * Detect entity request.
+ * Delegate synchronization task constants.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DetectEntityRequest extends BaseRequest {
+public interface StudioDelegateSynchronizationTaskConstants {
 
-    public DetectEntityRequest(String entity) {
-        setEntity(entity);
-    }
+    String DELEGATE_SYNCHRONIZATION_TASK_NAME = "studio.delegatesynchronization.task";
 
-    public DetectEntityRequest() {
-        
-    }
+    String DELEGATE_SYNCHRONIZATION_ITEM = "delegateSyncItem";
+
 }

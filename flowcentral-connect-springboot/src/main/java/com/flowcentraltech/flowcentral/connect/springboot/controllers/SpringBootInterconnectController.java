@@ -32,6 +32,10 @@ import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInter
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -70,24 +74,17 @@ public class SpringBootInterconnectController {
         }
     }
 
-    @PostMapping(path = "/datasource")
-    public JsonDataSourceResponse processDataSourceRequest(@RequestBody DataSourceRequest req) {
-        JsonDataSourceResponse resp = springBootInterconnectRedirect != null
-                ? springBootInterconnectRedirect.processDataSourceRequest(req)
+    @PostMapping(path = "/listEntities")
+    public EntityListingResponse listEntities(@RequestBody EntityListingRequest req) throws Exception {
+        EntityListingResponse result = new EntityListingResponse();
+        EntityListingResponse resp = springBootInterconnectRedirect != null
+                ? springBootInterconnectRedirect.listEntities(req)
                 : null;
-        if (resp == null) {
-            try {
-                return springBootInterconnectService.processDataSourceRequest(req);
-            } catch (Exception e) {
-                String errorMessage = e.getMessage();
-                LOGGER.log(Level.SEVERE, errorMessage, e);
-                resp = new JsonDataSourceResponse();
-                resp.setErrorCode(DataSourceErrorCodeConstants.PROVIDER_SERVICE_EXCEPTION);
-                resp.setErrorMsg(errorMessage);
-            }
-        }
-
-        return resp;
+        result.merge(resp);
+        
+        resp = springBootInterconnectService.listEntities(req);
+        result.merge(resp);
+        return result;
     }
 
     @PostMapping(path = "/detectEntity")
@@ -102,6 +99,46 @@ public class SpringBootInterconnectController {
                 String errorMessage = e.getMessage();
                 LOGGER.log(Level.SEVERE, errorMessage, e);
                 resp = new DetectEntityResponse();
+                resp.setErrorCode(DataSourceErrorCodeConstants.PROVIDER_SERVICE_EXCEPTION);
+                resp.setErrorMsg(errorMessage);
+            }
+        }
+
+        return resp;
+    }
+
+    @PostMapping(path = "/getEntity")
+    public GetEntityResponse getEntity(@RequestBody GetEntityRequest req) throws Exception {
+        GetEntityResponse resp = springBootInterconnectRedirect != null
+                ? springBootInterconnectRedirect.getEntity(req)
+                : null;
+        if (resp == null || resp.error() || !resp.isPresent()) {
+            try {
+                return springBootInterconnectService.getEntity(req);
+            } catch (Exception e) {
+                String errorMessage = e.getMessage();
+                LOGGER.log(Level.SEVERE, errorMessage, e);
+                resp = new GetEntityResponse();
+                resp.setErrorCode(DataSourceErrorCodeConstants.PROVIDER_SERVICE_EXCEPTION);
+                resp.setErrorMsg(errorMessage);
+            }
+        }
+
+        return resp;
+    }
+
+    @PostMapping(path = "/dataSource")
+    public JsonDataSourceResponse processDataSourceRequest(@RequestBody DataSourceRequest req) {
+        JsonDataSourceResponse resp = springBootInterconnectRedirect != null
+                ? springBootInterconnectRedirect.processDataSourceRequest(req)
+                : null;
+        if (resp == null) {
+            try {
+                return springBootInterconnectService.processDataSourceRequest(req);
+            } catch (Exception e) {
+                String errorMessage = e.getMessage();
+                LOGGER.log(Level.SEVERE, errorMessage, e);
+                resp = new JsonDataSourceResponse();
                 resp.setErrorCode(DataSourceErrorCodeConstants.PROVIDER_SERVICE_EXCEPTION);
                 resp.setErrorMsg(errorMessage);
             }
