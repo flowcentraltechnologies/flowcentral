@@ -28,10 +28,11 @@
 
 // Synchronization panel
 !ui-panel:syncPanel styleClass:$e{fc-licenseoptions} components:$c{syncCaption syncBodyPanel}
-!ui-label:syncCaption styleClass:$e{label} caption:$m{delegatesynchronizationpage.generationdetails.caption}
+!ui-label:syncCaption styleClass:$e{label} caption:$m{delegatesynchronizationpage.synchronizationdetails.caption}
 !ui-panel:syncBodyPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
 	components:$c{frmDelegate generateBtn}	
-!ui-select:frmDelegate caption:$m{delegatesynchronizationpage.form.delegate} binding:delegate required:true size:48
+!ui-select:frmDelegate caption:$m{delegatesynchronizationpage.form.delegate} list:studioenvironmentdelegatelist
+	blankOption:$m{blank.none} binding:delegate required:true
 !ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.sync}
 	eventHandler:$d{!ui-event event:onclick action:$c{syncAct}}
 	

@@ -112,12 +112,13 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
 
             if (!DataUtils.isBlank(delegateEntityListingDTO.getListings())) {
                 final String delegate = getName();
+                logInfo(taskMonitor, "[{0}] entities detected...", delegateEntityListingDTO.getListings().size());
                 for (EntityListingDTO entityListingDTO : delegateEntityListingDTO.getListings()) {
                     final String entity = entityListingDTO.getEntity();
                     logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
                     EntityDTO entityDTO = getDelegatedEntitySchema(entity);
                     if (entityDTO != null) {
-                        logInfo(taskMonitor, "Updating entity properties...");
+                        logInfo(taskMonitor, "Updating entity schema...");
                         List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
                         for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
                             fields.add(new EntityFieldSchema(entityFieldDTO.getName(), entityFieldDTO.getDescription(),
@@ -129,6 +130,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                         EntitySchema entitySchema = new EntitySchema(delegate, entityDTO.getDataSourceAlias(), entity,
                                 entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(), fields);
                         au.updateEntitySchema(entitySchema);
+                        logInfo(taskMonitor, "Entity schema for [{0}] completed...");
                     } else {
                         logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
                     }
@@ -136,6 +138,8 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
             } else {
                 logInfo(taskMonitor, "No entity listings found for this delegate.");
             }
+            
+            logInfo(taskMonitor, "Delegate synchronization completed.");
         } else {
             logInfo(taskMonitor, "Could not retrieve synchronization information.");
         }
