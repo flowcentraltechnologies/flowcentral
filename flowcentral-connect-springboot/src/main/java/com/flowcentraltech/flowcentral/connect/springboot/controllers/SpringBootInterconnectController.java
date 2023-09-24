@@ -112,7 +112,7 @@ public class SpringBootInterconnectController {
         GetEntityResponse resp = springBootInterconnectRedirect != null
                 ? springBootInterconnectRedirect.getEntity(req)
                 : null;
-        if (resp == null || resp.error() || !resp.isPresent()) {
+        if (resp == null || resp.error() || !resp.present()) {
             try {
                 return springBootInterconnectService.getEntity(req);
             } catch (Exception e) {
