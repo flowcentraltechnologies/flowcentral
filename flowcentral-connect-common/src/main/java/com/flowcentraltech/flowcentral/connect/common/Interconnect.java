@@ -179,19 +179,15 @@ public class Interconnect {
                 eib.addField(FieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
                 eib.addField(FieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
                         "wf_item_version_type");
-                break;
             case BASE_AUDIT_ENTITY:
                 eib.addField(FieldDataType.STRING, "createdBy", "Created By", "created_by");
                 eib.addField(FieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
                 eib.addField(FieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
                 eib.addField(FieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
-                break;
             case BASE_VERSION_ENTITY:
                 eib.addField(FieldDataType.LONG, "versionNo", "Version No.", "version_no");
-                break;
             case BASE_ENTITY:
                 eib.addField(FieldDataType.LONG, "id", "ID", "id");
-                break;
             default:
                 break;
         }
