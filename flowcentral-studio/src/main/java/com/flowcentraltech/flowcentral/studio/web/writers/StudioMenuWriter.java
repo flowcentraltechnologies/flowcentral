@@ -61,8 +61,9 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     @Configurable
     private CodeGenerationProvider codeGenerationProvider;
 
-    private static final List<String> applicationAppletList = Collections.unmodifiableList(
-            Arrays.asList("studio.stuManageModule", "studio.manageApplication", "studio.applicationReplication"));
+    private static final List<String> applicationAppletList = Collections
+            .unmodifiableList(Arrays.asList("studio.stuManageModule", "studio.manageApplication",
+                    "studio.applicationReplication", "studio.delegateSynchronization"));
 
     private static final List<StudioAppComponentType> menuCategoryList = Collections
             .unmodifiableList(Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.APPLICATION,
@@ -93,7 +94,8 @@ public class StudioMenuWriter extends AbstractPanelWriter {
     }
 
     @Override
-    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers) throws UnifyException {
+    protected void doWriteBehavior(ResponseWriter writer, Widget widget, EventHandler[] handlers)
+            throws UnifyException {
         StudioMenuWidget studioMenuWidget = (StudioMenuWidget) widget;
         WriteWork work = studioMenuWidget.getWriteWork();
         writer.beginFunction("fuxstudio.rigStudioMenu");
