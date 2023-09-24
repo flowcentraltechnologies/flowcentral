@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationPageUtils;
 import com.flowcentraltech.flowcentral.application.util.InputWidgetUtils;
 import com.flowcentraltech.flowcentral.chart.entities.Chart;
 import com.flowcentraltech.flowcentral.common.business.AbstractFlowCentralService;
+import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.StudioProvider;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
@@ -39,8 +40,10 @@ import com.flowcentraltech.flowcentral.configuration.data.ModuleInstall;
 import com.flowcentraltech.flowcentral.dashboard.entities.Dashboard;
 import com.flowcentraltech.flowcentral.notification.entities.NotificationTemplate;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
+import com.flowcentraltech.flowcentral.studio.business.data.DelegateSynchronizationItem;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppComponentType;
 import com.flowcentraltech.flowcentral.studio.constants.StudioAppletPropertyConstants;
+import com.flowcentraltech.flowcentral.studio.constants.StudioDelegateSynchronizationTaskConstants;
 import com.flowcentraltech.flowcentral.studio.constants.StudioModuleNameConstants;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils;
 import com.flowcentraltech.flowcentral.studio.util.StudioNameUtils.StudioAppletNameParts;
@@ -50,8 +53,12 @@ import com.flowcentraltech.flowcentral.workflow.entities.Workflow;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
+import com.tcdng.unify.core.annotation.Parameter;
+import com.tcdng.unify.core.annotation.Taskable;
 import com.tcdng.unify.core.annotation.Transactional;
 import com.tcdng.unify.core.data.FactoryMap;
+import com.tcdng.unify.core.task.TaskExecLimit;
+import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
@@ -135,9 +142,9 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
                                     .getLongName();
                             final String assignDescField = null;
                             final String pseudoDeleteField = null;
-                            StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type.appletType(), entity, label, type.icon(),
-                                    assignDescField, pseudoDeleteField, 0, true, false, descriptiveButtons, appletName,
-                                    description, np.getInstId(), 0L);
+                            StandardAppletDef.Builder adb = StandardAppletDef.newBuilder(type.appletType(), entity,
+                                    label, type.icon(), assignDescField, pseudoDeleteField, 0, true, false,
+                                    descriptiveButtons, appletName, description, np.getInstId(), 0L);
                             adb.addPropDef(AppletPropertyConstants.MAINTAIN_FORM, form);
                             adb.addPropDef(StudioAppletPropertyConstants.ENTITY_FORM, form);
                             adb.addPropDef(StudioAppletPropertyConstants.ENTITY_TYPE, type.code());
@@ -206,7 +213,8 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public List<AppletDef> findAppletDefs(String applicationName, StudioAppComponentType type) throws UnifyException {
         List<AppletDef> appletDefList = null;
-        List<Long> instIdList = appletUtilities.application().findAppComponentIdList(applicationName, type.componentType());
+        List<Long> instIdList = appletUtilities.application().findAppComponentIdList(applicationName,
+                type.componentType());
         if (!instIdList.isEmpty()) {
             appletDefList = new ArrayList<AppletDef>();
             for (Long instId : instIdList) {
@@ -226,6 +234,19 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         }
 
         return appletDefList != null ? appletDefList : Collections.emptyList();
+    }
+
+    @Taskable(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_TASK_NAME,
+            description = "Generate Extension Module Files Task",
+            parameters = { @Parameter(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_ITEM,
+                    description = "Delegate Synchronization Item", type = DelegateSynchronizationItem.class,
+                    mandatory = true) },
+            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
+    public int generateExtensionModuleFilesTask(TaskMonitor taskMonitor, DelegateSynchronizationItem delegateSyncItem)
+            throws UnifyException {
+        EnvironmentDelegate environmentDelegate = getComponent(EnvironmentDelegate.class, delegateSyncItem.getDelegate());
+        environmentDelegate.syncDelegateEntities(taskMonitor);
+        return 0;
     }
 
     @Override
