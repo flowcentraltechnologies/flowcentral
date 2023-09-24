@@ -37,6 +37,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -64,37 +66,18 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
     }
 
     @Override
-    public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) {
-        final Redirect redirect = getEntityRedirect(req.getEntity());
-        if (redirect != null) {
-            final String endpoint = redirect.getRedirectUrl() + "/datasource";
-            JsonDataSourceResponse resp = redirect(JsonDataSourceResponse.class, endpoint, req);
-            if (resp == null) {
-                resp = new JsonDataSourceResponse();
-                resp.setErrorMsg("Redirection error");
-            }
-
-            return resp;
-        }
-
-        return null;
+    public DetectEntityResponse detectEntity(DetectEntityRequest req) {
+        return processEntityRequest(DetectEntityResponse.class, req, "/detectEntity");
     }
 
     @Override
-    public DetectEntityResponse detectEntity(DetectEntityRequest req) throws Exception {
-        final Redirect redirect = getEntityRedirect(req.getEntity());
-        if (redirect != null) {
-            final String endpoint = redirect.getRedirectUrl() + "/detectEntity";
-            DetectEntityResponse resp = redirect(DetectEntityResponse.class, endpoint, req);
-            if (resp == null) {
-                resp = new DetectEntityResponse();
-                resp.setErrorMsg("Redirection error");
-            }
+    public GetEntityResponse getEntity(GetEntityRequest req) {
+        return processEntityRequest(GetEntityResponse.class, req, "/getEntity");
+    }
 
-            return resp;
-        }
-
-        return null;
+    @Override
+    public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) {
+        return processEntityRequest(JsonDataSourceResponse.class, req, "/dataSource");
     }
 
     @Override
@@ -131,6 +114,26 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
             procedureRequestRedirects.put(operation,
                     redirectNode + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER);
         }
+    }
+
+    private <T extends BaseResponse, U extends BaseRequest> T processEntityRequest(Class<T> respClass, U req,
+            String actionPath) {
+        final Redirect redirect = getEntityRedirect(req.getEntity());
+        if (redirect != null) {
+            final String endpoint = redirect.getRedirectUrl() + actionPath;
+            T resp = redirect(respClass, endpoint, req);
+            if (resp == null) {
+                try {
+                    resp = respClass.newInstance();
+                    resp.setErrorMsg("Redirection error");
+                } catch (Exception e) {
+                }
+            }
+
+            return resp;
+        }
+
+        return null;
     }
 
     private Redirect getEntityRedirect(String entity) {

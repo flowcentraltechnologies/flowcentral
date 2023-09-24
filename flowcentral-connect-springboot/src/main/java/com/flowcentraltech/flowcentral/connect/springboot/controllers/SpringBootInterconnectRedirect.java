@@ -19,6 +19,8 @@ package com.flowcentraltech.flowcentral.connect.springboot.controllers;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
@@ -37,16 +39,25 @@ public interface SpringBootInterconnectRedirect {
      * @param req
      *            the request object
      * @return the response object
-     * @throws Exception
-     *                   if an error occurs
      */
-    DetectEntityResponse detectEntity(DetectEntityRequest req) throws Exception;
+    DetectEntityResponse detectEntity(DetectEntityRequest req);
+
+    /**
+     * Gets an entity.
+     * 
+     * @param req
+     *            the request object
+     * @return the response object
+     */
+    GetEntityResponse getEntity(GetEntityRequest req);
 
     /**
      * Performs a redirect process datasource datasource request
      * 
      * @param req
      *            the datasource request
+     * @throws Exception
+     *                   if an error occurs
      * @return the response if successfully redirected otherwise null
      */
     JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req);

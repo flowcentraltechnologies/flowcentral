@@ -52,9 +52,12 @@ import com.flowcentraltech.flowcentral.connect.common.constants.RestrictionType;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.FilterRestrictionDef;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.OrderDef;
@@ -158,6 +161,13 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         logInfo("Detect entity  [{0}]...", interconnect.prettyJSON(req));
         final boolean present = interconnect.isPresent(req.getEntity());
         return new DetectEntityResponse(present);
+    }
+
+    @Override
+    public GetEntityResponse getEntity(GetEntityRequest req) throws Exception {
+        logInfo("Get entity  [{0}]...", interconnect.prettyJSON(req));
+        EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
+        return entityInfo != null ? new GetEntityResponse(new EntityDTO(entityInfo)) : new GetEntityResponse();
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
