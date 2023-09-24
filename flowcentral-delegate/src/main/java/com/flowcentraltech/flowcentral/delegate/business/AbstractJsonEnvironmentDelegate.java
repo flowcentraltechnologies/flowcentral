@@ -18,10 +18,16 @@ package com.flowcentraltech.flowcentral.delegate.business;
 
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.delegate.constants.DelegateErrorCodeConstants;
+import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.PrintFormat;
 import com.tcdng.unify.core.util.DataUtils;
@@ -43,6 +49,23 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmen
         return resp.getPayload();
     }
 
+    @Override
+    protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
+        String reqJSON = DataUtils.asJsonString(new EntityListingRequest(), PrintFormat.NONE);
+        String respJSON = listEntities(reqJSON);
+        EntityListingResponse resp = DataUtils.fromJsonString(EntityListingResponse.class, respJSON);
+        return resp != null && !resp.error()
+                ? new DelegateEntityListingDTO(resp.getListings(), resp.getRedirectErrors())
+                : null;
+    }
+
+    @Override
+    protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
+        String reqJSON = DataUtils.asJsonString(new GetEntityRequest(entity), PrintFormat.NONE);
+        String respJSON = getEntity(reqJSON);
+        GetEntityResponse resp = DataUtils.fromJsonString(GetEntityResponse.class, respJSON);
+        return resp != null && !resp.error() ? resp.getEntity() : null;
+    }
 
     protected BaseResponse sendToDelegateDatasourceService(DataSourceRequest req) throws UnifyException {
         String reqJSON = DataUtils.asJsonString(req, PrintFormat.NONE);
@@ -65,6 +88,10 @@ public abstract class AbstractJsonEnvironmentDelegate extends AbstractEnvironmen
 
         return resp;
     }
+
+    protected abstract String listEntities(String jsonReq) throws UnifyException;
+
+    protected abstract String getEntity(String jsonReq) throws UnifyException;
 
     protected abstract String sendToDelegateProcedureService(String jsonReq) throws UnifyException;
 

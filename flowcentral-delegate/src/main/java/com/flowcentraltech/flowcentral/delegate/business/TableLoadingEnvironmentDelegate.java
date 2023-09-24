@@ -22,6 +22,8 @@ import java.util.Set;
 import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleNameConstants;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
+import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.criterion.Update;
@@ -304,6 +306,16 @@ public class TableLoadingEnvironmentDelegate extends AbstractEnvironmentDelegate
     @Override
     public String getDataSourceByEntityAlias(String entityLongName) throws UnifyException {
         return "application-datasource";
+    }
+
+    @Override
+    protected DelegateEntityListingDTO getDelegatedEntityList() throws UnifyException {
+        return null;
+    }
+
+    @Override
+    protected EntityDTO getDelegatedEntitySchema(String entity) throws UnifyException {
+        return null;
     }
 
     @Override

@@ -29,6 +29,18 @@ import com.tcdng.unify.core.util.IOUtils;
 public abstract class AbstractHttpPostEnvironmentDelegate extends AbstractJsonEnvironmentDelegate {
 
     @Override
+    protected String listEntities(String jsonReq) throws UnifyException {
+        return IOUtils.postJsonToEndpoint(
+                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/listEntities", jsonReq);
+    }
+
+    @Override
+    protected String getEntity(String jsonReq) throws UnifyException {
+        return IOUtils.postJsonToEndpoint(
+                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/getEntity", jsonReq);
+    }
+
+    @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
         return IOUtils.postJsonToEndpoint(
                 getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq);
