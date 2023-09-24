@@ -58,6 +58,8 @@ import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
+import com.flowcentraltech.flowcentral.application.data.EntityFieldSchema;
+import com.flowcentraltech.flowcentral.application.data.EntitySchema;
 import com.flowcentraltech.flowcentral.application.data.EntitySearchInputDef;
 import com.flowcentraltech.flowcentral.application.data.EntityUploadDef;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
@@ -296,6 +298,7 @@ import com.tcdng.unify.core.constant.OrderType;
 import com.tcdng.unify.core.criterion.And;
 import com.tcdng.unify.core.criterion.Equals;
 import com.tcdng.unify.core.criterion.Restriction;
+import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.data.BeanValueStore;
 import com.tcdng.unify.core.data.FactoryMap;
 import com.tcdng.unify.core.data.ListData;
@@ -1387,6 +1390,40 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         return delegateHolder.getEntityLongName();
+    }
+
+    @Override
+    @Synchronized("app:updateentityschema")
+    public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
+        AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
+                .applicationName(np.getApplicationName()).name(np.getEntityName()));
+        if (appEntity != null) {
+            final Long appEntityId = appEntity.getId();
+
+            // Update fields
+            for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
+                if (entityFieldSchema.getColumn() != null) {
+                    environment().updateAll(
+                            new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
+                            new Update().add("columnName", entityFieldSchema.getColumn()));
+                }
+            }
+
+            // Update entity
+            if (entitySchema.getTableName() != null) {
+                appEntity.setTableName(getApplicationCode());
+            }
+
+            if (entitySchema.getDataSourceAlias() != null) {
+                appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
+            }
+
+            environment().updateLeanByIdVersion(appEntity);
+            return true;
+        }
+
+        return false;
     }
 
     private static final Class<?>[] WRAPPER_PARAMS_0 = { EntityClassDef.class };

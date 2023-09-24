@@ -118,8 +118,10 @@ public interface AppletUtilities extends UnifyComponent {
      * 
      * @param entitySchema
      *                     the entity schema
+     * @throws UnifyException
+     *                        if an error occurs
      */
-    boolean updateEntitySchema(EntitySchema entitySchema);
+    boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException;
     
     /**
      * Gets application entities based on supplied query.

@@ -111,6 +111,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
             }
 
             if (!DataUtils.isBlank(delegateEntityListingDTO.getListings())) {
+                final String delegate = getName();
                 for (EntityListingDTO entityListingDTO : delegateEntityListingDTO.getListings()) {
                     final String entity = entityListingDTO.getEntity();
                     logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
@@ -125,7 +126,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                                     entityFieldDTO.getLength()));
                         }
 
-                        EntitySchema entitySchema = new EntitySchema(entityDTO.getDataSourceAlias(), entity,
+                        EntitySchema entitySchema = new EntitySchema(delegate, entityDTO.getDataSourceAlias(), entity,
                                 entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(), fields);
                         au.updateEntitySchema(entitySchema);
                     } else {

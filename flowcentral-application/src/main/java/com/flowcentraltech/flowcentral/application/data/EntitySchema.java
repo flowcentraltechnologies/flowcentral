@@ -17,7 +17,6 @@ package com.flowcentraltech.flowcentral.application.data;
 
 import java.util.List;
 
-
 /**
  * Entity schema.
  * 
@@ -26,10 +25,12 @@ import java.util.List;
  */
 public class EntitySchema {
 
+    private String delegate;
+
     private String dataSourceAlias;
 
     private String entity;
-    
+
     private String name;
 
     private String description;
@@ -38,14 +39,19 @@ public class EntitySchema {
 
     private List<EntityFieldSchema> fields;
 
-    public EntitySchema(String dataSourceAlias, String entity, String name, String description, String tableName,
-            List<EntityFieldSchema> fields) {
+    public EntitySchema(String delegate, String dataSourceAlias, String entity, String name, String description,
+            String tableName, List<EntityFieldSchema> fields) {
+        this.delegate = delegate;
         this.dataSourceAlias = dataSourceAlias;
         this.entity = entity;
         this.name = name;
         this.description = description;
         this.tableName = tableName;
         this.fields = fields;
+    }
+
+    public String getDelegate() {
+        return delegate;
     }
 
     public String getDataSourceAlias() {
