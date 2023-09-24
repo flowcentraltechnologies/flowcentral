@@ -49,7 +49,7 @@ public abstract class AbstractHttpPostEnvironmentDelegate extends AbstractJsonEn
     @Override
     protected String sendToDelegateDatasourceService(String jsonReq) throws UnifyException {
         return IOUtils.postJsonToEndpoint(
-                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/datasource", jsonReq);
+                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/dataSource", jsonReq);
     }
 
     protected abstract String getEndpointNode() throws UnifyException;

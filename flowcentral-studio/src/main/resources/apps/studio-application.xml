@@ -488,7 +488,7 @@
 		</applet>
 		<applet name="delegateSynchronization"
 			description="$m{studio.delegatesynchronization.manage}"
-			label="$m{codegeneration.delegatesynchronization.manage.label}" icon="lock" type="path_page"
+			label="$m{studio.delegatesynchronization.manage.label}" icon="lock" type="path_page"
 			path="/studio/delegatesynchronization/openPage" menuAccess="false">
 		</applet>
 		<applet name="stuManageModule"
