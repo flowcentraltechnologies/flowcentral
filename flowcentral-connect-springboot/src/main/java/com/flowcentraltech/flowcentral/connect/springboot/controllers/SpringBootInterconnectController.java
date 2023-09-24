@@ -32,6 +32,8 @@ import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInter
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
@@ -70,6 +72,19 @@ public class SpringBootInterconnectController {
         if (redirect != null) {
             springBootInterconnectRedirect = context.getBean(redirect, SpringBootInterconnectRedirect.class);
         }
+    }
+
+    @PostMapping(path = "/listEntities")
+    public EntityListingResponse listEntities(@RequestBody EntityListingRequest req) throws Exception {
+        EntityListingResponse result = new EntityListingResponse();
+        EntityListingResponse resp = springBootInterconnectRedirect != null
+                ? springBootInterconnectRedirect.listEntities(req)
+                : null;
+        result.merge(resp);
+        
+        resp = springBootInterconnectService.listEntities(req);
+        result.merge(resp);
+        return result;
     }
 
     @PostMapping(path = "/detectEntity")

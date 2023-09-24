@@ -37,11 +37,15 @@ import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonProcedureResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
 
 /**
  * Convenient abstract base class for interconnect redirects
@@ -63,6 +67,37 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
         this.redirectUrls = new ArrayList<String>();
         this.entityRedirects = new HashMap<String, Redirect>();
         this.procedureRequestRedirects = new HashMap<String, String>();
+    }
+
+    @Override
+    public EntityListingResponse listEntities(EntityListingRequest req) {
+        List<EntityListingDTO> listings = new ArrayList<EntityListingDTO>();
+        List<RedirectErrorDTO> redirectErrors = new ArrayList<RedirectErrorDTO>();
+        for (String redirectUrl : redirectUrls) {
+            String endpoint = redirectUrl + "/listEntities";
+            EntityListingResponse resp = redirect(EntityListingResponse.class, endpoint, req);
+            if (resp == null) {
+                redirectErrors.add(new RedirectErrorDTO(redirectUrl, null, "Redirection error"));
+            } else if (resp.error()) {
+                redirectErrors.add(new RedirectErrorDTO(redirectUrl, resp.getErrorCode(), resp.getErrorMsg()));
+            } else {
+                if (resp.getListings() != null) {
+                    for (EntityListingDTO entityListingDTO : resp.getListings()) {
+                        if (entityListingDTO.getRedirect() != null) {
+                            entityListingDTO.setRedirect(redirectUrl);
+                        }
+
+                        listings.add(entityListingDTO);
+                    }
+                }
+
+                if (resp.getRedirectErrors() != null) {
+                    redirectErrors.addAll(resp.getRedirectErrors());
+                }
+            }
+        }
+
+        return new EntityListingResponse(redirectErrors, listings);
     }
 
     @Override
@@ -128,6 +163,10 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
                     resp.setErrorMsg("Redirection error");
                 } catch (Exception e) {
                 }
+            }
+
+            if (resp != null && resp.getRedirect() == null) {
+                resp.setRedirect(redirect.getRedirectUrl());
             }
 
             return resp;

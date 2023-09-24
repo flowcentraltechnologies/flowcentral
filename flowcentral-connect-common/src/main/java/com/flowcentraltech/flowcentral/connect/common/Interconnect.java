@@ -630,6 +630,10 @@ public class Interconnect {
         return Collections.emptyList();
     }
 
+    public List<String> getAllEntityNames() {
+        return new ArrayList<String>(entities.keySet());
+    }
+    
     public EntityInfo getEntityInfo(String entity) throws Exception {
         checkInitialized();
         EntityInfo entityInfo = entities.get(entity);

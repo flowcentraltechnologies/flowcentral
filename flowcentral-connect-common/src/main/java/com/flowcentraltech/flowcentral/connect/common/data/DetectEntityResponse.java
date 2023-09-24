@@ -16,7 +16,7 @@
 package com.flowcentraltech.flowcentral.connect.common.data;
 
 /**
- * Find entity datasource response.
+ * Detect entity datasource response.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0

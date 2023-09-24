@@ -16,18 +16,11 @@
 package com.flowcentraltech.flowcentral.connect.common.data;
 
 /**
- * Detect entity request.
+ * Entity listing request.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DetectEntityRequest extends BaseRequest {
+public class EntityListingRequest extends BaseRequest {
 
-    public DetectEntityRequest(String entity) {
-        setEntity(entity);
-    }
-
-    public DetectEntityRequest() {
-        
-    }
 }

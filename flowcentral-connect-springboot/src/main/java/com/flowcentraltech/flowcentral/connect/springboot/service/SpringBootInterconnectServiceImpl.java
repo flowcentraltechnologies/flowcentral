@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,9 @@ import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.FilterRestrictionDef;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
@@ -145,17 +149,6 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     }
 
     @Override
-    public JsonProcedureResponse executeProcedureRequest(ProcedureRequest req) throws Exception {
-        logInfo("Execute procedure request [{0}]...", interconnect.prettyJSON(req));
-        Object reqBean = req.isUseRawPayload() ? req.getPayload() : interconnect.getBeanFromJsonPayload(req);
-        SpringBootInterconnectProcedure procedure = context.getBean(req.getOperation(),
-                SpringBootInterconnectProcedure.class);
-        procedure.execute(reqBean, req.isReadOnly());
-        Object[] result = req.isReadOnly() ? null : new Object[] { reqBean };
-        return interconnect.createProcedureResponse(result, req);
-    }
-
-    @Override
     public DetectEntityResponse detectEntity(DetectEntityRequest req)
             throws Exception {
         logInfo("Detect entity  [{0}]...", interconnect.prettyJSON(req));
@@ -168,6 +161,28 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         logInfo("Get entity  [{0}]...", interconnect.prettyJSON(req));
         EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
         return entityInfo != null ? new GetEntityResponse(new EntityDTO(entityInfo)) : new GetEntityResponse();
+    }
+
+    @Override
+    public EntityListingResponse listEntities(EntityListingRequest req) throws Exception {
+        logInfo("List entities [{0}]...", interconnect.prettyJSON(req));
+        List<EntityListingDTO> listings = new ArrayList<EntityListingDTO>();
+        for (String entity : interconnect.getAllEntityNames()) {
+            listings.add(new EntityListingDTO(entity));
+        }
+        
+        return new EntityListingResponse(Collections.emptyList(), listings);
+    }
+
+    @Override
+    public JsonProcedureResponse executeProcedureRequest(ProcedureRequest req) throws Exception {
+        logInfo("Execute procedure request [{0}]...", interconnect.prettyJSON(req));
+        Object reqBean = req.isUseRawPayload() ? req.getPayload() : interconnect.getBeanFromJsonPayload(req);
+        SpringBootInterconnectProcedure procedure = context.getBean(req.getOperation(),
+                SpringBootInterconnectProcedure.class);
+        procedure.execute(reqBean, req.isReadOnly());
+        Object[] result = req.isReadOnly() ? null : new Object[] { reqBean };
+        return interconnect.createProcedureResponse(result, req);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

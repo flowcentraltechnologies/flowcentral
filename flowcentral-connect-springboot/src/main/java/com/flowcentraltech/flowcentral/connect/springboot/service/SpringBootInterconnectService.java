@@ -18,6 +18,8 @@ package com.flowcentraltech.flowcentral.connect.springboot.service;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.DetectEntityResponse;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingRequest;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityListingResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.GetEntityResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.JsonDataSourceResponse;
@@ -39,6 +41,17 @@ public interface SpringBootInterconnectService {
      */
     String getRedirect();
 
+    /**
+     * Lists all entities.
+     * 
+     * @param req
+     *            the listing request
+     * @return the listing response
+     * @throws Exception
+     *                   if an error occurs
+     */
+    EntityListingResponse listEntities(EntityListingRequest req) throws Exception;
+    
     /**
      * Detects an entity.
      * 
