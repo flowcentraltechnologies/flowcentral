@@ -38,4 +38,6 @@ public interface NotificationModuleSysParamConstants {
     String NOTIFICATION_TEST_MODE_CC_EMAILS = "NOT-0007";
     
     String NOTIFICATION_TEST_MODE_BCC_EMAILS = "NOT-0008";
+    
+    String NOTIFICATION_HTML_EMAILS_ENABLED = "NOT-0009";
 }
