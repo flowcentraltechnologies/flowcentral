@@ -80,5 +80,5 @@ public interface SpringBootInterconnectRedirect {
      *            the datasource request
      * @return the response if successfully redirected otherwise null
      */
-    JsonProcedureResponse processDataSourceRequest(ProcedureRequest req);
+    JsonProcedureResponse executeProcedureRequest(ProcedureRequest req);
 }

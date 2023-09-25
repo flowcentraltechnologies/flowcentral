@@ -149,8 +149,7 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     }
 
     @Override
-    public DetectEntityResponse detectEntity(DetectEntityRequest req)
-            throws Exception {
+    public DetectEntityResponse detectEntity(DetectEntityRequest req) throws Exception {
         logInfo("Detect entity  [{0}]...", interconnect.prettyJSON(req));
         final boolean present = interconnect.isPresent(req.getEntity());
         return new DetectEntityResponse(present);
@@ -170,246 +169,255 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
         for (String entity : interconnect.getAllEntityNames()) {
             listings.add(new EntityListingDTO(entity));
         }
-        
+
         return new EntityListingResponse(Collections.emptyList(), listings);
     }
 
     @Override
     public JsonProcedureResponse executeProcedureRequest(ProcedureRequest req) throws Exception {
-        logInfo("Execute procedure request [{0}]...", interconnect.prettyJSON(req));
-        Object reqBean = req.isUseRawPayload() ? req.getPayload() : interconnect.getBeanFromJsonPayload(req);
-        SpringBootInterconnectProcedure procedure = context.getBean(req.getOperation(),
-                SpringBootInterconnectProcedure.class);
-        procedure.execute(reqBean, req.isReadOnly());
-        Object[] result = req.isReadOnly() ? null : new Object[] { reqBean };
-        return interconnect.createProcedureResponse(result, req);
+        if (context.containsBean(req.getOperation())) {
+            logInfo("Execute procedure request [{0}]...", interconnect.prettyJSON(req));
+            Object reqBean = req.isUseRawPayload() ? req.getPayload() : interconnect.getBeanFromJsonPayload(req);
+            SpringBootInterconnectProcedure procedure = context.getBean(req.getOperation(),
+                    SpringBootInterconnectProcedure.class);
+            procedure.execute(reqBean, req.isReadOnly());
+            Object[] result = req.isReadOnly() ? null : new Object[] { reqBean };
+            return interconnect.createProcedureResponse(result, req);
+        }
+
+        return null;
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public JsonDataSourceResponse processDataSourceRequest(DataSourceRequest req) throws Exception {
-        logInfo("Processing datasource request [{0}]...", interconnect.prettyJSON(req));
-        final EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
-        PlatformInfo platform = getPlatform(entityInfo);
-        String errorCode = null;
-        String errorMsg = null;
+        if (interconnect.isPresent(req.getEntity())) {
+            logInfo("Processing datasource request [{0}]...", interconnect.prettyJSON(req));
+            final EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
+            PlatformInfo platform = getPlatform(entityInfo);
+            String errorCode = null;
+            String errorMsg = null;
 
-        EntityManager em = null;
-        EntityTransaction tx = null; 
-        Object[] result = null;
-        SpringBootInterconnectEntityDataSourceHandler handler = null;
-        try {
-            em = platform.emf.createEntityManager();
-            tx = em.getTransaction();
-            tx.begin();
+            EntityManager em = null;
+            EntityTransaction tx = null;
+            Object[] result = null;
+            SpringBootInterconnectEntityDataSourceHandler handler = null;
+            try {
+                em = platform.emf.createEntityManager();
+                tx = em.getTransaction();
+                tx.begin();
 
-            if (entityInfo.isWithHandler() && (handler = context.getBean(entityInfo.getHandler(),
-                    SpringBootInterconnectEntityDataSourceHandler.class)).supports(req)) {
-                result = handler.process(entityInfo.getImplClass(), req);
-            } else {
-                EntityActionPolicy entityActionPolicy = entityInfo.isWithActionPolicy()
-                        ? context.getBean(entityInfo.getActionPolicy(), EntityActionPolicy.class)
-                        : null;
-                switch (req.getOperation()) {
-                    case COUNT_ALL: {
-                        CriteriaQuery<Long> cq = createLongQuery(entityInfo.getImplClass(), em, req);
-                        Long count = em.createQuery(cq).getSingleResult();
-                        result = new Object[] { count };
-                    }
-                        break;
-                    case CREATE: {
-                        Object reqBean = interconnect.getBeanFromJsonPayload(req);
-                        if (entityActionPolicy != null) {
-                            entityActionPolicy.executePreCreateAction(reqBean);
+                if (entityInfo.isWithHandler() && (handler = context.getBean(entityInfo.getHandler(),
+                        SpringBootInterconnectEntityDataSourceHandler.class)).supports(req)) {
+                    result = handler.process(entityInfo.getImplClass(), req);
+                } else {
+                    EntityActionPolicy entityActionPolicy = entityInfo.isWithActionPolicy()
+                            ? context.getBean(entityInfo.getActionPolicy(), EntityActionPolicy.class)
+                            : null;
+                    switch (req.getOperation()) {
+                        case COUNT_ALL: {
+                            CriteriaQuery<Long> cq = createLongQuery(entityInfo.getImplClass(), em, req);
+                            Long count = em.createQuery(cq).getSingleResult();
+                            result = new Object[] { count };
                         }
+                            break;
+                        case CREATE: {
+                            Object reqBean = interconnect.getBeanFromJsonPayload(req);
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePreCreateAction(reqBean);
+                            }
 
-                        // em.merge(reqBean);
-                        em.persist(reqBean);
-                        em.flush();
-                        if (entityActionPolicy != null) {
-                            entityActionPolicy.executePostCreateAction(reqBean);
+                            // em.merge(reqBean);
+                            em.persist(reqBean);
+                            em.flush();
+                            if (entityActionPolicy != null) {
+                                entityActionPolicy.executePostCreateAction(reqBean);
+                            }
+
+                            Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
+                            result = new Object[] { id };
                         }
+                            break;
+                        case DELETE: {
+                            Object reqBean = interconnect.getBeanFromJsonPayload(req);
+                            if (reqBean == null) {
+                                CriteriaQuery<?> cq = createQuery(entityInfo.getImplClass(), em, req);
+                                TypedQuery<?> query = em.createQuery(cq);
+                                List<?> results = query.getResultList();
+                                reqBean = results != null && results.size() == 1 ? results.get(0) : null;
+                            }
 
-                        Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
-                        result = new Object[] { id };
-                    }
-                        break;
-                    case DELETE: {
-                        Object reqBean = interconnect.getBeanFromJsonPayload(req);
-                        if (reqBean == null) {
+                            if (reqBean == null) {
+                                errorMsg = "Could not find entity to delete.";
+                            } else {
+                                if (req.version() && entityInfo.isWithVersionNo()) {
+                                    PropertyUtils.setProperty(reqBean, entityInfo.getVersionNoFieldName(),
+                                            req.getVersionNo());
+                                }
+
+                                if (entityActionPolicy != null) {
+                                    entityActionPolicy.executePreDeleteAction(reqBean);
+                                }
+
+                                em.remove(reqBean);
+
+                                if (entityActionPolicy != null) {
+                                    entityActionPolicy.executePreDeleteAction(reqBean);
+                                }
+
+                            }
+                        }
+                            break;
+                        case DELETE_ALL: {
+                            CriteriaDelete<?> cd = createDeleteQuery(entityInfo.getImplClass(), em, req);
+                            int count = em.createQuery(cd).executeUpdate();
+                            result = new Object[] { count };
+                        }
+                            break;
+                        case FIND:
+                        case FIND_ALL:
+                        case FIND_LEAN:
+                        case LIST:
+                        case LIST_ALL:
+                        case LIST_LEAN: {
                             CriteriaQuery<?> cq = createQuery(entityInfo.getImplClass(), em, req);
                             TypedQuery<?> query = em.createQuery(cq);
+                            if (req.getOffset() >= 0) {
+                                query.setFirstResult(req.getOffset());
+                            }
+
+                            if (req.getLimit() > 0) {
+                                query.setMaxResults(req.getLimit());
+                            }
+
                             List<?> results = query.getResultList();
-                            reqBean = results != null && results.size() == 1 ? results.get(0) : null;
+                            if (!req.getOperation().isMultipleResult()) {
+                                if (results.size() > 1) {
+                                    throw new RuntimeException(
+                                            "Mutiple records found on single item operation on entity ["
+                                                    + req.getEntity() + "].");
+                                }
+                            }
+
+                            result = results.toArray(new Object[results.size()]);
                         }
+                            break;
+                        case UPDATE:
+                        case UPDATE_EDITABLE_CHILD:
+                        case UPDATE_LEAN: {
+                            Object reqBean = interconnect.getBeanFromJsonPayload(req);
+                            if (reqBean != null) {
+                                Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
+                                Object saveBean = em.find(entityInfo.getImplClass(), id);
+                                Object versionNo = req.version()
+                                        ? PropertyUtils.getProperty(saveBean, entityInfo.getVersionNoFieldName())
+                                        : null;
+                                // References
+                                interconnect.copy(entityInfo.getRefFieldList(), saveBean, reqBean);
+                                // Fields
+                                interconnect.copy(entityInfo.getFieldList(), saveBean, reqBean);
 
-                        if (reqBean == null) {
-                            errorMsg = "Could not find entity to delete.";
-                        } else {
-                            if (req.version() && entityInfo.isWithVersionNo()) {
-                                PropertyUtils.setProperty(reqBean, entityInfo.getVersionNoFieldName(),
-                                        req.getVersionNo());
+                                if (!req.getOperation().isLean()) {
+                                    // Child
+                                    interconnect.copyChild(entityInfo.getChildFieldList(), req.getEntity(), saveBean,
+                                            reqBean);
+                                    // Child list
+                                    interconnect.copyChildList(entityInfo.getChildListFieldList(), req.getEntity(),
+                                            saveBean, reqBean);
+                                }
+
+                                if (req.version()) {
+                                    PropertyUtils.setProperty(saveBean, entityInfo.getVersionNoFieldName(), versionNo);
+                                }
+
+                                if (entityActionPolicy != null) {
+                                    entityActionPolicy.executePreUpdateAction(saveBean);
+                                }
+
+                                em.merge(saveBean);
+
+                                if (entityActionPolicy != null) {
+                                    entityActionPolicy.executePostUpdateAction(saveBean);
+                                }
+
+                                result = new Object[] { 1L };
+                            } else if (req.getId() != null && req.getUpdate() != null) {
+                                Object saveBean = em.find(entityInfo.getImplClass(), req.getId());
+                                UpdateDef updateDef = interconnect.getUpdates(req);
+                                for (String fieldName : updateDef.getFieldNames()) {
+                                    PropertyUtils.setProperty(saveBean, fieldName, updateDef.getUpdate(fieldName));
+                                }
+
+                                if (entityActionPolicy != null) {
+                                    entityActionPolicy.executePreUpdateAction(saveBean);
+                                }
+
+                                em.merge(saveBean);
+
+                                if (entityActionPolicy != null) {
+                                    entityActionPolicy.executePostUpdateAction(saveBean);
+                                }
+
+                                result = new Object[] { 1L };
                             }
-
-
-                            if (entityActionPolicy != null) {
-                                entityActionPolicy.executePreDeleteAction(reqBean);
-                            }
-
-                            em.remove(reqBean);
-
-                            if (entityActionPolicy != null) {
-                                entityActionPolicy.executePreDeleteAction(reqBean);
-                            }
-
                         }
+                            break;
+                        case UPDATE_ALL:
+                            break;
+                        case VALUE:
+                        case VALUE_LIST:
+                        case VALUE_SET: {
+                            CriteriaQuery<Tuple> cq = createTupleQuery(entityInfo.getImplClass(), em, req);
+                            cq.distinct(req.getOperation().isDistinct());
+                            List<Tuple> tupleResult = em.createQuery(cq).getResultList();
+                            if (!req.getOperation().isMultipleResult()) {
+                                if (tupleResult.size() > 1) {
+                                    throw new RuntimeException(
+                                            "Mutiple records found on single item operation on entity ["
+                                                    + req.getEntity() + "].");
+                                }
+                            }
+
+                            result = new Object[tupleResult.size()];
+                            for (int i = 0; i < result.length; i++) {
+                                result[i] = tupleResult.get(i).get(0);
+                            }
+                        }
+                            break;
+                        default:
+                            break;
+
                     }
-                        break;
-                    case DELETE_ALL: {
-                        CriteriaDelete<?> cd = createDeleteQuery(entityInfo.getImplClass(), em, req);
-                        int count = em.createQuery(cd).executeUpdate();
-                        result = new Object[] { count };
-                    }
-                        break;
-                    case FIND:
-                    case FIND_ALL:
-                    case FIND_LEAN:
-                    case LIST:
-                    case LIST_ALL:
-                    case LIST_LEAN: {
-                        CriteriaQuery<?> cq = createQuery(entityInfo.getImplClass(), em, req);
-                        TypedQuery<?> query = em.createQuery(cq);
-                        if (req.getOffset() >= 0) {
-                            query.setFirstResult(req.getOffset());
-                        }
-
-                        if (req.getLimit() > 0) {
-                            query.setMaxResults(req.getLimit());
-                        }
-
-                        List<?> results = query.getResultList();
-                        if (!req.getOperation().isMultipleResult()) {
-                            if (results.size() > 1) {
-                                throw new RuntimeException("Mutiple records found on single item operation on entity ["
-                                        + req.getEntity() + "].");
-                            }
-                        }
-
-                        result = results.toArray(new Object[results.size()]);
-                    }
-                        break;
-                    case UPDATE:
-                    case UPDATE_EDITABLE_CHILD:
-                    case UPDATE_LEAN: {
-                        Object reqBean = interconnect.getBeanFromJsonPayload(req);
-                        if (reqBean != null) {
-                            Object id = PropertyUtils.getProperty(reqBean, entityInfo.getIdFieldName());
-                            Object saveBean = em.find(entityInfo.getImplClass(), id);
-                            Object versionNo = req.version()
-                                    ? PropertyUtils.getProperty(saveBean, entityInfo.getVersionNoFieldName())
-                                    : null;
-                            // References
-                            interconnect.copy(entityInfo.getRefFieldList(), saveBean, reqBean);
-                            // Fields
-                            interconnect.copy(entityInfo.getFieldList(), saveBean, reqBean);
-
-                            if (!req.getOperation().isLean()) {
-                                // Child
-                                interconnect.copyChild(entityInfo.getChildFieldList(), req.getEntity(), saveBean,
-                                        reqBean);
-                                // Child list
-                                interconnect.copyChildList(entityInfo.getChildListFieldList(), req.getEntity(),
-                                        saveBean, reqBean);
-                            }
-
-                            if (req.version()) {
-                                PropertyUtils.setProperty(saveBean, entityInfo.getVersionNoFieldName(), versionNo);
-                            }
-
-                            if (entityActionPolicy != null) {
-                                entityActionPolicy.executePreUpdateAction(saveBean);
-                            }
-
-                            em.merge(saveBean);
-                            
-                            if (entityActionPolicy != null) {
-                                entityActionPolicy.executePostUpdateAction(saveBean);
-                            }
-
-                            result = new Object[] { 1L };
-                        } else if (req.getId() != null && req.getUpdate() != null) {
-                            Object saveBean = em.find(entityInfo.getImplClass(), req.getId());
-                            UpdateDef updateDef = interconnect.getUpdates(req);
-                            for (String fieldName : updateDef.getFieldNames()) {
-                                PropertyUtils.setProperty(saveBean, fieldName, updateDef.getUpdate(fieldName));
-                            }
-
-                            if (entityActionPolicy != null) {
-                                entityActionPolicy.executePreUpdateAction(saveBean);
-                            }
-
-                            em.merge(saveBean);
-                            
-                            if (entityActionPolicy != null) {
-                                entityActionPolicy.executePostUpdateAction(saveBean);
-                            }
-                            
-                            result = new Object[] { 1L };
-                        }
-                    }
-                        break;
-                    case UPDATE_ALL:
-                        break;
-                    case VALUE:
-                    case VALUE_LIST:
-                    case VALUE_SET: {
-                        CriteriaQuery<Tuple> cq = createTupleQuery(entityInfo.getImplClass(), em, req);
-                        cq.distinct(req.getOperation().isDistinct());
-                        List<Tuple> tupleResult = em.createQuery(cq).getResultList();
-                        if (!req.getOperation().isMultipleResult()) {
-                            if (tupleResult.size() > 1) {
-                                throw new RuntimeException("Mutiple records found on single item operation on entity ["
-                                        + req.getEntity() + "].");
-                            }
-                        }
-
-                        result = new Object[tupleResult.size()];
-                        for (int i = 0; i < result.length; i++) {
-                            result[i] = tupleResult.get(i).get(0);
-                        }
-                    }
-                        break;
-                    default:
-                        break;
 
                 }
 
+                JsonDataSourceResponse resp = interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
+                logInfo("Returning response [{0}]...", interconnect.prettyJSON(resp));
+                return resp;
+            } catch (Exception e) {
+                logSevere("Datasource request processing failure.", e);
+                errorMsg = e.getMessage();
+                if (tx != null) {
+                    tx.rollback();
+                    tx = null;
+                }
+            } finally {
+                if (tx != null) {
+                    tx.commit();
+                }
+
+                if (em != null) {
+                    em.close();
+                }
             }
 
+            result = null;
             JsonDataSourceResponse resp = interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
             logInfo("Returning response [{0}]...", interconnect.prettyJSON(resp));
             return resp;
-        } catch (Exception e) {
-            logSevere("Datasource request processing failure.", e);
-            errorMsg = e.getMessage();
-            if (tx != null) {
-                tx.rollback();
-                tx = null;
-            }
-        } finally {
-            if (tx != null) {
-                tx.commit();
-            }
-
-            if (em != null) {
-                em.close();
-            }
         }
 
-        result = null;
-        JsonDataSourceResponse resp = interconnect.createDataSourceResponse(result, req, errorCode, errorMsg);
-        logInfo("Returning response [{0}]...", interconnect.prettyJSON(resp));
-        return resp;
+        return null;
     }
 
     private <T> CriteriaQuery<T> createQuery(Class<T> entityClass, EntityManager em, DataSourceRequest req)

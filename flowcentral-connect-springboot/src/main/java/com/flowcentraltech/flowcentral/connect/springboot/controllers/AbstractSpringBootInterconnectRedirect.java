@@ -116,7 +116,7 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
     }
 
     @Override
-    public JsonProcedureResponse processDataSourceRequest(ProcedureRequest req) {
+    public JsonProcedureResponse executeProcedureRequest(ProcedureRequest req) {
         String redirectUrl = procedureRequestRedirects.get(req.getOperation());
         if (redirectUrl != null) {
             String endpoint = redirectUrl + "/procedure";
