@@ -1403,7 +1403,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
 
             // Update fields
             for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
-                if (entityFieldSchema.getColumn() != null) {
+                if (!StringUtils.isBlank(entityFieldSchema.getColumn())) {
                     environment().updateAll(
                             new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
                             new Update().add("columnName", entityFieldSchema.getColumn()));
@@ -1411,11 +1411,11 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             // Update entity
-            if (entitySchema.getTableName() != null) {
+            if (!StringUtils.isBlank(entitySchema.getTableName())) {
                 appEntity.setTableName(entitySchema.getTableName());
             }
 
-            if (entitySchema.getDataSourceAlias() != null) {
+            if (!StringUtils.isBlank(entitySchema.getDataSourceAlias())) {
                 appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             }
 

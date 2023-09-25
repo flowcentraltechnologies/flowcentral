@@ -130,7 +130,7 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                         EntitySchema entitySchema = new EntitySchema(delegate, entityDTO.getDataSourceAlias(), entity,
                                 entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(), fields);
                         au.updateEntitySchema(entitySchema);
-                        logInfo(taskMonitor, "Entity schema for [{0}] completed...");
+                        logInfo(taskMonitor, "Entity schema for [{0}] completed...", entity);
                     } else {
                         logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
                     }

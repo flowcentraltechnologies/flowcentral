@@ -15,6 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.studio.web.writers;
 
+import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditor;
 import com.flowcentraltech.flowcentral.studio.web.widgets.ReportEditorWidget;
@@ -75,9 +76,10 @@ public class ReportEditorWriter extends AbstractControlWriter {
         writer.write("<div class=\"bdy\" id=\"").write(reportEditorWidget.getFieldBaseId()).write("\">");
         writer.write("<div class=\"hdr\">").write(getSessionMessage("reporteditor.availablefields")).write("</div>");
         jsonWriter.beginArray("fields");
+        final EntityDef entityDef = reportEditor.getEntityDef();
         int i = 0;
-        for (EntityFieldDef entityFieldDef : reportEditor.getEntityDef().getSortedFieldDefList()) {
-            if (entityFieldDef.isTableViewable()) {
+        for (EntityFieldDef entityFieldDef : entityDef.getSortedFieldDefList()) {
+            if (entityFieldDef.isTableViewable() && entityDef.isNotDelegateListOnly(entityFieldDef.getFieldName())) {
                 writer.write("<div class=\"fld\" id=\"").write(reportEditorWidget.getChoiceId()).write(i)
                         .write("\"><span>");
                 writer.writeWithHtmlEscape(entityFieldDef.getFieldLabel());

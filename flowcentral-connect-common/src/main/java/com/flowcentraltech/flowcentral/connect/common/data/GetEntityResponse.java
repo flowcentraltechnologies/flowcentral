@@ -45,7 +45,7 @@ public class GetEntityResponse extends BaseResponse {
         this.entity = entity;
     }
 
-    public boolean isPresent() {
+    public boolean present() {
         return entity != null;
     }
 }
