@@ -893,6 +893,10 @@ public class EntityDef extends BaseApplicationEntityDef {
         return entityFieldDef;
     }
 
+    public boolean isNotDelegateListOnly(String fieldName) {
+        return !(delegated() && getFieldDef(fieldName).isListOnly());
+    }
+    
     public Map<String, Object> extractValues(Entity inst) throws UnifyException {
         Map<String, Object> map = new HashMap<String, Object>();
         for (EntityFieldDef entityFieldDef : fieldDefList) {

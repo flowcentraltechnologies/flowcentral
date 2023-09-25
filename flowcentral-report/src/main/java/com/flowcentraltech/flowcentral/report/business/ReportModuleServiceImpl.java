@@ -227,6 +227,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     public ReportOptions getReportableEntityDynamicReportOptions(String entityName,
             List<DefaultReportColumn> defaultReportColumnList) throws UnifyException {
         final EntityClassDef entityClassDef = appletUtilities.application().getEntityClassDef(entityName);
+        final EntityDef entityDef = entityClassDef.getEntityDef();
         ReportableDefinition reportableDefinition = environment()
                 .listLean(new ReportableDefinitionQuery().entity(entityName));
         ReportOptions reportOptions = new ReportOptions(ReportConfigType.TABULAR);
@@ -246,21 +247,26 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
             for (DefaultReportColumn defaultColumn : defaultReportColumnList) {
                 ReportableField reportableField = fieldMap.remove(defaultColumn.getFieldName());
                 if (reportableField != null) {
-                    ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                            defaultColumn.getCaption(), reportableField.getType(), reportableField.getFormatter(),
-                            HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
-                            true);
-                    reportOptions.addColumnOptions(remoteColumnOptions);
+                    if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
+                        ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
+                                defaultColumn.getCaption(), reportableField.getType(), reportableField.getFormatter(),
+                                HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
+                                true);
+                        reportOptions.addColumnOptions(remoteColumnOptions);
+                    }
                 }
             }
         }
 
         // Add what's left
         for (ReportableField reportableField : fieldMap.values()) {
-            ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
-                    reportableField.getDescription(), reportableField.getType(), reportableField.getFormatter(),
-                    HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(), isSelectAll);
-            reportOptions.addColumnOptions(remoteColumnOptions);
+            if (entityDef.isNotDelegateListOnly(reportableField.getName())) {
+                ReportColumnOptions remoteColumnOptions = new ReportColumnOptions(reportableField.getName(),
+                        reportableField.getDescription(), reportableField.getType(), reportableField.getFormatter(),
+                        HAlignType.fromName(reportableField.getHorizontalAlign()), reportableField.getWidth(),
+                        isSelectAll);
+                reportOptions.addColumnOptions(remoteColumnOptions);
+            }
         }
 
         return reportOptions;
@@ -643,7 +649,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                             if (hAlignType == null) {
                                 hAlignType = HAlignType.fromName(reportableField.getHorizontalAlign());
                             }
-                        }                        
+                        }
                     }
                 }
 
@@ -651,7 +657,7 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
                     GetterSetterInfo getterSetterInfo = ReflectUtils.getGetterInfo(entityClassDef.getEntityClass(),
                             reportColumn.getFieldName());
                     type = ConverterUtils.getWrapperClassName(getterSetterInfo.getType());
-                    
+
                     if (StringUtils.isBlank(type)) {
                         type = String.class.getName();
                     }
