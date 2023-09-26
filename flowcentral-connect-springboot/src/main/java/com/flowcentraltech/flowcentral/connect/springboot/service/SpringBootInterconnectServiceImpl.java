@@ -158,8 +158,12 @@ public class SpringBootInterconnectServiceImpl implements SpringBootInterconnect
     @Override
     public GetEntityResponse getEntity(GetEntityRequest req) throws Exception {
         logInfo("Get entity  [{0}]...", interconnect.prettyJSON(req));
-        EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
-        return entityInfo != null ? new GetEntityResponse(new EntityDTO(entityInfo)) : new GetEntityResponse();
+        if (interconnect.isPresent(req.getEntity())) {
+            EntityInfo entityInfo = interconnect.getEntityInfo(req.getEntity());
+            return new GetEntityResponse(new EntityDTO(entityInfo));
+        }
+
+        return new GetEntityResponse();
     }
 
     @Override
