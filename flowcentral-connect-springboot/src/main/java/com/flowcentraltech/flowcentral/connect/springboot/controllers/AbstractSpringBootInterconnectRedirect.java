@@ -239,7 +239,9 @@ public abstract class AbstractSpringBootInterconnectRedirect implements SpringBo
                 }
             }
 
-            resp = objectMapper.readValue(response.toString(), responseClass);
+            if (response.length() > 0) {
+                resp = objectMapper.readValue(response.toString(), responseClass);
+            }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Redirection error", e);
         }
