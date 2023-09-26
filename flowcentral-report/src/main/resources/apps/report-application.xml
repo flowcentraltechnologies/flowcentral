@@ -292,9 +292,9 @@
 				label="$m{report.reportparameter.mandatory}" type="boolean" />
 			<field name="defaultVal"
 				label="$m{report.reportparameter.defaultval}" type="string"
-				maxLen="64" nullable="true" />
+				maxLen="128" nullable="true" />
 			<field name="editor" label="$m{report.reportparameter.editor}"
-				type="string" maxLen="64" nullable="true" />
+				type="string" maxLen="128" nullable="true" />
 			<field name="typeDesc"
 				label="$m{report.reportparameter.typedesc}" type="list_only"
 				key="type" property="description" />
