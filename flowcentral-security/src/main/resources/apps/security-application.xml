@@ -472,8 +472,6 @@
 				widthRatio="1" />
 			<column field="userEmail" renderWidget="application.text"
 				widthRatio="1" />
-			<column field="userBranchDesc" renderWidget="application.text"
-				label="$m{security.usergroupmember.branch}" widthRatio="1" />
 			<column field="updatedBy" renderWidget="application.text"
 				label="$m{security.usergroupmember.grantedby}" widthRatio="1" />
 			<column field="updateDt" renderWidget="application.datetime"
