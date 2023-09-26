@@ -535,10 +535,14 @@ public class NotificationModuleServiceImpl extends AbstractFlowCentralService im
 
     private ChannelMessage[] getChannelMessages(Long tenantId, List<Long> pendingNotificationIdList)
             throws UnifyException {
+        final boolean htmlFormatSupported = au.system().getSysParameterValue(boolean.class,
+                NotificationModuleSysParamConstants.NOTIFICATION_HTML_EMAILS_ENABLED);
         List<ChannelMessage> messages = new ArrayList<ChannelMessage>();
         for (Long notificationId : pendingNotificationIdList) {
             NotificationOutbox notification = environment().find(NotificationOutbox.class, notificationId);
-            ChannelMessage.Builder cmb = ChannelMessage.newBuilder(notification.getFormat(), notification.getId())
+            final NotifMessageFormat format = htmlFormatSupported ? notification.getFormat()
+                    : NotifMessageFormat.PLAIN_TEXT;
+            ChannelMessage.Builder cmb = ChannelMessage.newBuilder(format, notification.getId())
                     .subject(notification.getSubject()).message(notification.getMessage())
                     .attempts(notification.getAttempts());
 
