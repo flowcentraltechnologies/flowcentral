@@ -14,7 +14,7 @@
  * the License.
  */
 
-package com.flowcentraltech.flowcentral.studio.web.lists;
+package com.flowcentraltech.flowcentral.application.web.lists;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
-import com.flowcentraltech.flowcentral.studio.business.AdditionalDataTypeEditorProvider;
+import com.flowcentraltech.flowcentral.application.business.AdditionalDataTypeEditorProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
@@ -34,20 +33,20 @@ import com.tcdng.unify.core.data.Listable;
 import com.tcdng.unify.core.list.StringParam;
 
 /**
- * Studio data type editor list.
+ * Data type editor list.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("studiodatatypeeditorlist")
-public class StudioDataTypeEditorListCommand extends AbstractApplicationListCommand<StringParam> {
+@Component("datatypeeditorlist")
+public class DataTypeEditorListCommand extends AbstractApplicationListCommand<StringParam> {
 
     private final Map<DataType, List<Listable>> editors;
 
     @Configurable
     private AdditionalDataTypeEditorProvider additionalProvider;
     
-    public StudioDataTypeEditorListCommand() {
+    public DataTypeEditorListCommand() {
         super(StringParam.class);
         this.editors = new HashMap<DataType, List<Listable>>();
     }

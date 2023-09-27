@@ -71,11 +71,6 @@
 			dataType="string" inputType="string"
 			editor="!fc-entityfieldwidgetlist typeField:$s{dataType}  blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="datatypeeditorlist"
-			description="$m{studio.widgettype.datatypeeditorlist}"
-			dataType="string" inputType="string"
-			editor="!ui-select blankOption:$s{} list:studiodatatypeeditorlist listParams:$s{type}"
-			renderer="!ui-label" />
 		<widgetType name="suggestiontypelist"
 			description="$m{studio.widgettype.suggestiontypelist}"
 			dataType="string" inputType="string"
@@ -3672,7 +3667,7 @@
 						required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange = "true"/>
-					<field name="editor" inputWidget="datatypeeditorlist"
+					<field name="editor" inputWidget="application.datatypeeditorlist"
 						column="1" />
 					<field name="mandatory" inputWidget="application.checkbox"
 						column="1" />
