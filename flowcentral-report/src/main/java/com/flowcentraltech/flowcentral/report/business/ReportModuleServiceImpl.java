@@ -137,9 +137,12 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     @Override
     public List<ReportGroup> findReportGroupsByRole(String roleCode) throws UnifyException {
+        if (StringUtils.isBlank(roleCode)) {
+            return environment().findAll(new ReportGroupQuery().ignoreEmptyCriteria(true).addOrder("label"));
+        }
+
         List<Long> reportGroupIdList = environment().valueList(Long.class, "reportGroupId",
-                !StringUtils.isBlank(roleCode) ? new ReportGroupRoleQuery().roleCode(roleCode)
-                        : new ReportGroupRoleQuery().ignoreEmptyCriteria(true));
+                new ReportGroupRoleQuery().roleCode(roleCode));
         if (!DataUtils.isBlank(reportGroupIdList)) {
             return environment().findAll(new ReportGroupQuery().idIn(reportGroupIdList).addOrder("label"));
         }
@@ -150,11 +153,12 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     @Override
     public List<ReportConfiguration> findReportConfigurationsByGroup(Long reportGroupId) throws UnifyException {
         List<Long> reportConfigurationIdList = environment().valueList(Long.class, "reportConfigurationId",
-               new ReportGroupMemberQuery().reportGroupId(reportGroupId));
+                new ReportGroupMemberQuery().reportGroupId(reportGroupId));
         if (!DataUtils.isBlank(reportConfigurationIdList)) {
-            return environment().findAll(new ReportConfigurationQuery().idIn(reportConfigurationIdList).addOrder("description"));
+            return environment()
+                    .listAll(new ReportConfigurationQuery().idIn(reportConfigurationIdList).addOrder("description"));
         }
-        
+
         return Collections.emptyList();
     }
 
