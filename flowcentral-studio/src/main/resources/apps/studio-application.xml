@@ -486,10 +486,15 @@
 			label="$m{studio.application.launch.label}" icon="rocket"
 			type="path_window" path="/applicationstudio" menuAccess="true">
 		</applet>
+		<applet name="delegateCreateSynchronization"
+			description="$m{studio.delegatecreatesynchronization.manage}"
+			label="$m{studio.delegatecreatesynchronization.manage.label}" icon="lock" type="path_page"
+			path="/studio/delegatecreatesynchronization/openPage" menuAccess="false">
+		</applet>
 		<applet name="delegateSynchronization"
-			description="$m{studio.delegatesynchronization.manage}"
-			label="$m{studio.delegatesynchronization.manage.label}" icon="lock" type="path_page"
-			path="/studio/delegatesynchronization/openPage" menuAccess="false">
+			description="$m{studio.delegateupdatesynchronization.manage}"
+			label="$m{studio.delegateupdatesynchronization.manage.label}" icon="lock" type="path_page"
+			path="/studio/delegateupdatesynchronization/openPage" menuAccess="false">
 		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"

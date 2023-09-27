@@ -70,12 +70,22 @@ public interface EnvironmentDelegate extends Database {
     String getDataSourceByEntityAlias(String entityLongName) throws UnifyException;
 
     /**
-     * Synchronized delegate entities.
+     * Perform delegate create synchronization.
      * 
      * @param taskMonitor
      *                    the task monitor
      * @throws UnifyException
      *                        if an error occurs
      */
-    void syncDelegateEntities(TaskMonitor taskMonitor) throws UnifyException;
+    void delegateCreateSynchronization(TaskMonitor taskMonitor) throws UnifyException;
+
+    /**
+     * Perform delegate update synchronization.
+     * 
+     * @param taskMonitor
+     *                    the task monitor
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    void delegateUpdateSynchronization(TaskMonitor taskMonitor) throws UnifyException;
 }

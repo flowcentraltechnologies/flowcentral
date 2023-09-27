@@ -13,20 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.studio.constants;
+
+package com.flowcentraltech.flowcentral.studio.web.controllers;
+
+import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Delegate synchronization task constants.
+ * Delegate update synchronization page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface StudioDelegateSynchronizationTaskConstants {
+public class DelegateUpdateSynchronizationPageBean extends AbstractPageBean {
+    
+    private String delegate;
 
-    String DELEGATE_CREATE_SYNCHRONIZATION_TASK_NAME = "studio.delegatecreatesynchronization.task";
+    public String getDelegate() {
+        return delegate;
+    }
 
-    String DELEGATE_UPDATE_SYNCHRONIZATION_TASK_NAME = "studio.delegateupdatesynchronization.task";
-
-    String DELEGATE_SYNCHRONIZATION_ITEM = "delegateSyncItem";
-
+    public void setDelegate(String delegate) {
+        this.delegate = delegate;
+    }
+    
 }

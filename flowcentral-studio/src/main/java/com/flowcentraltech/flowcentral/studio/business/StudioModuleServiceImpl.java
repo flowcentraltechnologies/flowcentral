@@ -236,16 +236,29 @@ public class StudioModuleServiceImpl extends AbstractFlowCentralService implemen
         return appletDefList != null ? appletDefList : Collections.emptyList();
     }
 
-    @Taskable(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_TASK_NAME,
-            description = "Generate Extension Module Files Task",
+    @Taskable(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_CREATE_SYNCHRONIZATION_TASK_NAME,
+            description = "Delegate Create Synchronization Task",
             parameters = { @Parameter(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_ITEM,
                     description = "Delegate Synchronization Item", type = DelegateSynchronizationItem.class,
                     mandatory = true) },
-            limit = TaskExecLimit.ALLOW_MULTIPLE, schedulable = false)
-    public int generateExtensionModuleFilesTask(TaskMonitor taskMonitor, DelegateSynchronizationItem delegateSyncItem)
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
+    public int delegateCreateSynchronizationTask(TaskMonitor taskMonitor, DelegateSynchronizationItem delegateSyncItem)
             throws UnifyException {
         EnvironmentDelegate environmentDelegate = getComponent(EnvironmentDelegate.class, delegateSyncItem.getDelegate());
-        environmentDelegate.syncDelegateEntities(taskMonitor);
+        environmentDelegate.delegateCreateSynchronization(taskMonitor);
+        return 0;
+    }
+
+    @Taskable(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_UPDATE_SYNCHRONIZATION_TASK_NAME,
+            description = "Delegate Update Synchronization Task",
+            parameters = { @Parameter(name = StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_ITEM,
+                    description = "Delegate Synchronization Item", type = DelegateSynchronizationItem.class,
+                    mandatory = true) },
+            limit = TaskExecLimit.ALLOW_SINGLE, schedulable = false)
+    public int delegateUpdateSynchronizationTask(TaskMonitor taskMonitor, DelegateSynchronizationItem delegateSyncItem)
+            throws UnifyException {
+        EnvironmentDelegate environmentDelegate = getComponent(EnvironmentDelegate.class, delegateSyncItem.getDelegate());
+        environmentDelegate.delegateUpdateSynchronization(taskMonitor);
         return 0;
     }
 
