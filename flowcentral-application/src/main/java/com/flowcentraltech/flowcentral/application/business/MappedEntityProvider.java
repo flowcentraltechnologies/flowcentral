@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 import com.tcdng.unify.core.database.Query;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext> extends UnifyComponent {
+public interface MappedEntityProvider<T extends BaseMappedEntityProviderContext> extends FlowCentralComponent {
 
     String destEntity();
 

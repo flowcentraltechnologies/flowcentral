@@ -17,9 +17,9 @@ package com.flowcentraltech.flowcentral.notification.senders;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface NotificationAlertSender extends UnifyComponent {
+public interface NotificationAlertSender extends FlowCentralComponent {
 
     /**
      * Gets the notification type for this sender.

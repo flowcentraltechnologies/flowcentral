@@ -29,37 +29,37 @@ import com.tcdng.unify.web.constant.ResetOnWrite;
 import com.tcdng.unify.web.constant.Secured;
 
 /**
- * Delegate synchronization page controller.
+ * Delegate update synchronization page controller.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-@Component("/studio/delegatesynchronization")
-@UplBinding("web/studio/upl/delegatesynchronizationpage.upl")
-public class DelegateSynchronizationPageController
-        extends AbstractFlowCentralPageController<DelegateSynchronizationPageBean> {
+@Component("/studio/delegateupdatesynchronization")
+@UplBinding("web/studio/upl/delegateupdatesynchronizationpage.upl")
+public class DelegateUpdateSynchronizationPageController
+        extends AbstractFlowCentralPageController<DelegateUpdateSynchronizationPageBean> {
 
-    public DelegateSynchronizationPageController() {
-        super(DelegateSynchronizationPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
+    public DelegateUpdateSynchronizationPageController() {
+        super(DelegateUpdateSynchronizationPageBean.class, Secured.TRUE, ReadOnly.FALSE, ResetOnWrite.FALSE);
     }
 
     @Action
     public String syncDelegate() throws UnifyException {
-        DelegateSynchronizationPageBean pageBean = getPageBean();
+        DelegateUpdateSynchronizationPageBean pageBean = getPageBean();
         DelegateSynchronizationItem delegateSynchronizationItem = new DelegateSynchronizationItem();
         delegateSynchronizationItem.setDelegate(pageBean.getDelegate());
         TaskSetup taskSetup = TaskSetup.newBuilder()
-                .addTask(StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_TASK_NAME)
+                .addTask(StudioDelegateSynchronizationTaskConstants.DELEGATE_UPDATE_SYNCHRONIZATION_TASK_NAME)
                 .setParam(StudioDelegateSynchronizationTaskConstants.DELEGATE_SYNCHRONIZATION_ITEM,
                         delegateSynchronizationItem)
                 .logMessages().build();
-        return launchTaskWithMonitorBox(taskSetup, "Delegate Synchronization", null, null);
+        return launchTaskWithMonitorBox(taskSetup, "Delegate Update Synchronization", null, null);
     }
 
     @Override
     protected void onOpenPage() throws UnifyException {
         super.onOpenPage();
-        DelegateSynchronizationPageBean pageBean = getPageBean();
+        DelegateUpdateSynchronizationPageBean pageBean = getPageBean();
         pageBean.setDelegate(null);
     }
 

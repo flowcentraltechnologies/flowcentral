@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.criterion.Restriction;
 import com.tcdng.unify.core.criterion.Update;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.database.Query;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface QueryEncoder extends UnifyComponent {
+public interface QueryEncoder extends FlowCentralComponent {
 
     /**
      * Encodes a query filter.

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.application.policies;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -24,7 +24,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ListingRedirectionPolicy extends UnifyComponent {
+public interface ListingRedirectionPolicy extends FlowCentralComponent {
 
     /**
      * Evaluate redirection.

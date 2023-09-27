@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.common.business;
 import java.util.List;
 import java.util.Locale;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.Listable;
 
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.Listable;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface RuleListComponent extends UnifyComponent {
+public interface RuleListComponent extends FlowCentralComponent {
 
     /**
      * Gets rule list.

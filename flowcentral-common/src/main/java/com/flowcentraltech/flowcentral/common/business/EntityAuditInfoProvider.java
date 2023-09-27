@@ -16,8 +16,8 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.EntityAuditInfo;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EntityAuditInfoProvider extends UnifyComponent {
+public interface EntityAuditInfoProvider extends FlowCentralComponent {
 
     /**
      * Gets entity audit information for supplied entity definition.

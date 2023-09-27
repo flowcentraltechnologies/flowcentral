@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.gateway.business;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayRequest;
 import com.flowcentraltech.flowcentral.gateway.data.BaseGatewayResponse;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface GatewayProcessor<T extends BaseGatewayResponse, U extends BaseGatewayRequest> extends UnifyComponent {
+public interface GatewayProcessor<T extends BaseGatewayResponse, U extends BaseGatewayRequest> extends FlowCentralComponent {
      
     /**
      * Gets the processor request class.

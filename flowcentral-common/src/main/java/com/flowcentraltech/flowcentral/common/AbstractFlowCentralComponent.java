@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponent {
+public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponent implements FlowCentralComponent {
 
     protected final boolean isEnterprise() throws UnifyException {
         return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,

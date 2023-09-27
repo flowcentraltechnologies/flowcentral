@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint.writer;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.integration.data.WriteConfigDef;
 import com.flowcentraltech.flowcentral.integration.endpoint.data.WriteEventInst;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EndpointWriter extends UnifyComponent {
+public interface EndpointWriter extends FlowCentralComponent {
 
     /**
      * Sets up this end-point writer.

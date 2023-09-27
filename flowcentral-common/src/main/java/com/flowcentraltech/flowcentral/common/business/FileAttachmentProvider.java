@@ -19,8 +19,8 @@ package com.flowcentraltech.flowcentral.common.business;
 import java.util.List;
 import java.util.Map;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Attachment;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FileAttachmentProvider extends UnifyComponent {
+public interface FileAttachmentProvider extends FlowCentralComponent {
 
     /**
      * Count number of file attachments for an entity instance.

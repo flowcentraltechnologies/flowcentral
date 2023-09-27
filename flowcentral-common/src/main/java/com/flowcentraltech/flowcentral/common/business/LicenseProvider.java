@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.LicenseStatus;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface LicenseProvider extends UnifyComponent {
+public interface LicenseProvider extends FlowCentralComponent {
 
     /**
      * Generates a license request.

@@ -13,20 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.studio.constants;
+package com.flowcentraltech.flowcentral.common;
+
+import com.tcdng.unify.core.UnifyComponent;
 
 /**
- * Delegate synchronization task constants.
+ * FlowCentral component.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface StudioDelegateSynchronizationTaskConstants {
-
-    String DELEGATE_CREATE_SYNCHRONIZATION_TASK_NAME = "studio.delegatecreatesynchronization.task";
-
-    String DELEGATE_UPDATE_SYNCHRONIZATION_TASK_NAME = "studio.delegateupdatesynchronization.task";
-
-    String DELEGATE_SYNCHRONIZATION_ITEM = "delegateSyncItem";
+public interface FlowCentralComponent extends UnifyComponent {
 
 }

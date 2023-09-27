@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.common.util.StringToken;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ParameterizedStringGenerator;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SpecialParamProvider extends UnifyComponent {
+public interface SpecialParamProvider extends FlowCentralComponent {
 
     /**
      * Gets a generator instance.

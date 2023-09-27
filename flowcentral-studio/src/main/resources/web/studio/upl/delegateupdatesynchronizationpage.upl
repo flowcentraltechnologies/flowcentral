@@ -1,4 +1,4 @@
-// UPL template for delegate synchronization page.
+// UPL template for delegate update synchronization page.
 // Copyright 2021-2023 FlowCentral Technologies Limited.
 // 
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -13,7 +13,7 @@
 // License for the specific language governing permissions and limitations under
 // the License.
 
-!ui-page caption:$m{delegatesynchronizationpage.title} components:$c{basePanel}
+!ui-page caption:$m{delegateupdatesynchronizationpage.title} components:$c{basePanel}
 
 // Base panel
 !ui-panel:basePanel layout:$d{!ui-vertical style:$s{width:100%;}}
@@ -24,14 +24,14 @@
 	components:$c{syncLabel} 
 	
 !ui-label:syncLabel styleClass:$e{fc-largelabel}
-	caption:$m{delegatesynchronizationpage.header.title}
+	caption:$m{delegateupdatesynchronizationpage.header.title}
 
 // Synchronization panel
 !ui-panel:syncPanel styleClass:$e{fc-licenseoptions} components:$c{syncCaption syncBodyPanel}
-!ui-label:syncCaption styleClass:$e{label} caption:$m{delegatesynchronizationpage.synchronizationdetails.caption}
+!ui-label:syncCaption styleClass:$e{label} caption:$m{delegateupdatesynchronizationpage.synchronizationdetails.caption}
 !ui-panel:syncBodyPanel layout:$d{!ui-vertical style:$s{width:100%;} showCaption:true cellStyle:$s{padding:5px 2px;}}
 	components:$c{frmDelegate generateBtn}	
-!ui-select:frmDelegate caption:$m{delegatesynchronizationpage.form.delegate} list:studioenvironmentdelegatelist
+!ui-select:frmDelegate caption:$m{delegateupdatesynchronizationpage.form.delegate} list:studioenvironmentdelegatelist style:$s{width:320px;}
 	blankOption:$m{blank.none} binding:delegate required:true
 !ui-button:generateBtn styleClass:$e{fc-bluebutton} caption:$m{button.sync}
 	eventHandler:$d{!ui-event event:onclick action:$c{syncAct}}

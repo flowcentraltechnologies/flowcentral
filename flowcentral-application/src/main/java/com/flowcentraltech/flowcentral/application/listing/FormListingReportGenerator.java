@@ -16,8 +16,8 @@
 
 package com.flowcentraltech.flowcentral.application.listing;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.FormListingOptions;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.core.report.Report;
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.report.Report;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FormListingReportGenerator extends UnifyComponent {
+public interface FormListingReportGenerator extends FlowCentralComponent {
 
     /**
      * Generates form HTML report.

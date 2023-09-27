@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.UserRoleInfo;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface UserLoginActivityProvider extends UnifyComponent {
+public interface UserLoginActivityProvider extends FlowCentralComponent {
 
     /**
      * Gets available user roles excluding supplied role that are active now.

@@ -18,10 +18,10 @@ package com.flowcentraltech.flowcentral.common.business;
 import java.io.OutputStream;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.DefaultReportColumn;
 import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.report.Report;
 import com.tcdng.unify.core.report.ReportColumn;
@@ -32,7 +32,7 @@ import com.tcdng.unify.core.report.ReportColumn;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ReportProvider extends UnifyComponent {
+public interface ReportProvider extends FlowCentralComponent {
 
     /**
      * Creates a new report options for dynamic reportable associated with supplied

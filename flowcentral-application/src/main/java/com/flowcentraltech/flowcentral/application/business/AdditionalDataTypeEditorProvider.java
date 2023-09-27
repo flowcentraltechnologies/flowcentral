@@ -13,43 +13,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package com.flowcentraltech.flowcentral.application.business;
 
-import com.flowcentraltech.flowcentral.application.data.Attachment;
-import com.flowcentraltech.flowcentral.application.data.Attachments;
+import java.util.List;
+import java.util.Locale;
+
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.data.ValueStoreReader;
-import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
+import com.tcdng.unify.core.constant.DataType;
+import com.tcdng.unify.core.data.Listable;
 
 /**
- * Attachments provider.
+ * Additional data type editor provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AttachmentsProvider extends FlowCentralComponent {
+public interface AdditionalDataTypeEditorProvider extends FlowCentralComponent {
 
     /**
-     * Provides attachment based on supplied reader.
+     * Provides additional data type editors.
      * 
-     * @param reader
-     *               the reader to use
-     * @return the attachments
+     * @param locale
+     *                 the locale
+     * @param dataType
+     *                 the data type
+     * @return list of editors
      * @throws UnifyException
      *                        if an error occurs
      */
-    Attachments provide(ValueStoreReader reader) throws UnifyException;
+    List<? extends Listable> provide(Locale locale, DataType dataType) throws UnifyException;
 
-    /**
-     * Gets file attachment information.
-     * 
-     * @param attachment
-     *                   the attachment source
-     * @return the file attachment info
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    FileAttachmentInfo getFileAttachmentInfo(Attachment attachment) throws UnifyException;
 }

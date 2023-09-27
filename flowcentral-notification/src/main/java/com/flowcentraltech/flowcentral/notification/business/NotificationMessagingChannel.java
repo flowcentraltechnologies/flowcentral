@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.notification.business;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.notification.data.ChannelMessage;
 import com.flowcentraltech.flowcentral.notification.data.NotifChannelDef;
-import com.tcdng.unify.core.UnifyComponent;
 
 /**
  * Notification messaging channel.
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyComponent;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface NotificationMessagingChannel extends UnifyComponent {
+public interface NotificationMessagingChannel extends FlowCentralComponent {
 
     /**
      * Sends a message through a notification channel.

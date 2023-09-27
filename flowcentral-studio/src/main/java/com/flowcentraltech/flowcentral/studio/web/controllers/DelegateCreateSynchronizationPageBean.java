@@ -19,12 +19,12 @@ package com.flowcentraltech.flowcentral.studio.web.controllers;
 import com.tcdng.unify.web.ui.AbstractPageBean;
 
 /**
- * Delegate synchronization page bean.
+ * Delegate create synchronization page bean.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class DelegateSynchronizationPageBean extends AbstractPageBean {
+public class DelegateCreateSynchronizationPageBean extends AbstractPageBean {
     
     private String delegate;
 

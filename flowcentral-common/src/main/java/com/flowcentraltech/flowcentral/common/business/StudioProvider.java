@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface StudioProvider extends UnifyComponent {
+public interface StudioProvider extends FlowCentralComponent {
 
     /**
      * Indicates if default developer roles should be installed

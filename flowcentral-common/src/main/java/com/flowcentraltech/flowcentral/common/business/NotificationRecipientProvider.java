@@ -19,9 +19,9 @@ package com.flowcentraltech.flowcentral.common.business;
 import java.util.Collection;
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
 import com.flowcentraltech.flowcentral.configuration.constants.NotifType;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface NotificationRecipientProvider extends UnifyComponent {
+public interface NotificationRecipientProvider extends FlowCentralComponent {
 
     /**
      * Gets recipient by user login ID.

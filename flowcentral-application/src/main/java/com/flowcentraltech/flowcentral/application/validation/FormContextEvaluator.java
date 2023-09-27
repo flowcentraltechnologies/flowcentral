@@ -17,10 +17,10 @@
 package com.flowcentraltech.flowcentral.application.validation;
 
 import com.flowcentraltech.flowcentral.application.web.data.FormContext;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.policies.ReviewResult;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface FormContextEvaluator extends UnifyComponent {
+public interface FormContextEvaluator extends FlowCentralComponent {
 
     /**
      * Evaluates a form context.

@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import java.util.List;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ParamConfig;
 import com.tcdng.unify.core.database.Entity;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ParamConfigListProvider extends UnifyComponent {
+public interface ParamConfigListProvider extends FlowCentralComponent {
 
     /**
      * Gets the parameter configuration list category based on supplied entity

@@ -71,11 +71,6 @@
 			dataType="string" inputType="string"
 			editor="!fc-entityfieldwidgetlist typeField:$s{dataType}  blankOption:$m{blank.none}"
 			renderer="!ui-label" />
-		<widgetType name="datatypeeditorlist"
-			description="$m{studio.widgettype.datatypeeditorlist}"
-			dataType="string" inputType="string"
-			editor="!ui-select blankOption:$s{} list:studiodatatypeeditorlist listParams:$s{type}"
-			renderer="!ui-label" />
 		<widgetType name="suggestiontypelist"
 			description="$m{studio.widgettype.suggestiontypelist}"
 			dataType="string" inputType="string"
@@ -486,10 +481,15 @@
 			label="$m{studio.application.launch.label}" icon="rocket"
 			type="path_window" path="/applicationstudio" menuAccess="true">
 		</applet>
+		<applet name="delegateCreateSynchronization"
+			description="$m{studio.delegatecreatesynchronization.manage}"
+			label="$m{studio.delegatecreatesynchronization.manage.label}" icon="lock" type="path_page"
+			path="/studio/delegatecreatesynchronization/openPage" menuAccess="false">
+		</applet>
 		<applet name="delegateSynchronization"
-			description="$m{studio.delegatesynchronization.manage}"
-			label="$m{studio.delegatesynchronization.manage.label}" icon="lock" type="path_page"
-			path="/studio/delegatesynchronization/openPage" menuAccess="false">
+			description="$m{studio.delegateupdatesynchronization.manage}"
+			label="$m{studio.delegateupdatesynchronization.manage.label}" icon="lock" type="path_page"
+			path="/studio/delegateupdatesynchronization/openPage" menuAccess="false">
 		</applet>
 		<applet name="stuManageModule"
 			description="$m{studio.module.manage}"
@@ -3667,7 +3667,7 @@
 						required="true" />
 					<field name="type" inputWidget="application.enumlist"
 						column="1" required="true" switchOnChange = "true"/>
-					<field name="editor" inputWidget="datatypeeditorlist"
+					<field name="editor" inputWidget="application.datatypeeditorlist"
 						column="1" />
 					<field name="mandatory" inputWidget="application.checkbox"
 						column="1" />
