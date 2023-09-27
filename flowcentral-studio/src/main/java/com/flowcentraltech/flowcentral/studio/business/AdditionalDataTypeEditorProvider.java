@@ -13,29 +13,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.flowcentraltech.flowcentral.application.policies;
+package com.flowcentraltech.flowcentral.studio.business;
 
 import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
-import com.tcdng.unify.core.UnifyException;
 
 /**
- * Redirection policies for listings.
+ * Additional data type editor provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ListingRedirectionPolicy extends FlowCentralComponent {
+public interface AdditionalDataTypeEditorProvider extends FlowCentralComponent {
 
-    /**
-     * Evaluate redirection.
-     * 
-     * @param sourceAppletName
-     *                         the source applet name
-     * @param sourceInstId
-     *                         the source instance ID
-     * @return the listing redirect
-     * @throws UnifyException
-     *                        if an error occurs
-     */
-    ListingRedirect evaluateRedirection(String sourceAppletName, Long sourceInstId) throws UnifyException;
 }

@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -27,7 +27,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface CodeGenerationProvider extends UnifyComponent {
+public interface CodeGenerationProvider extends FlowCentralComponent {
 
     /**
      * Gets code generation applets.

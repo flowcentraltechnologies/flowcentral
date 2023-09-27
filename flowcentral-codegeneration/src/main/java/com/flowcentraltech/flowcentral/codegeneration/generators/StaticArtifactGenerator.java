@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.codegeneration.generators;
 
 import java.util.zip.ZipOutputStream;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -27,7 +27,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface StaticArtifactGenerator extends UnifyComponent {
+public interface StaticArtifactGenerator extends FlowCentralComponent {
 
     void generate(ExtensionModuleStaticFileBuilderContext ctx, String entityName, ZipOutputStream zos) throws UnifyException;
 }

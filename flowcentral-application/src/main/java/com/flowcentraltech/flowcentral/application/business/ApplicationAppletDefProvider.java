@@ -19,7 +19,7 @@ package com.flowcentraltech.flowcentral.application.business;
 import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.AppletDef;
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationAppletDefProvider extends UnifyComponent {
+public interface ApplicationAppletDefProvider extends FlowCentralComponent {
 
     /**
      * Checks if this provider provides applet.

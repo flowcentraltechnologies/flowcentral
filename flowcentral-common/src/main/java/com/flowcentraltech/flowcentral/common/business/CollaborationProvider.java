@@ -18,9 +18,9 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.CollaborationType;
 import com.flowcentraltech.flowcentral.common.data.CollaborationLockInfo;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface CollaborationProvider extends UnifyComponent {
+public interface CollaborationProvider extends FlowCentralComponent {
 
     /**
      * Gets collaboration applets.

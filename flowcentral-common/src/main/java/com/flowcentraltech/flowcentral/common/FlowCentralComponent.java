@@ -15,22 +15,14 @@
  */
 package com.flowcentraltech.flowcentral.common;
 
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralContainerPropertyConstants;
-import com.flowcentraltech.flowcentral.common.constants.FlowCentralEditionConstants;
-import com.tcdng.unify.core.AbstractUnifyComponent;
-import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.UnifyComponent;
 
 /**
- * Base class for flowCentral components.
+ * FlowCentral component.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public abstract class AbstractFlowCentralComponent extends AbstractUnifyComponent implements FlowCentralComponent {
+public interface FlowCentralComponent extends UnifyComponent {
 
-    protected final boolean isEnterprise() throws UnifyException {
-        return FlowCentralEditionConstants.ENTERPRISE.equalsIgnoreCase(getContainerSetting(String.class,
-                FlowCentralContainerPropertyConstants.FLOWCENTRAL_INSTALLATION_TYPE));
-    }
-    
 }

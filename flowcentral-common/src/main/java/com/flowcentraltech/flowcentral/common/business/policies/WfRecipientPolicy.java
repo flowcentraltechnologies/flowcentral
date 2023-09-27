@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.Recipient;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface WfRecipientPolicy extends UnifyComponent {
+public interface WfRecipientPolicy extends FlowCentralComponent {
 
     /**
      * Gets a list of recipient based on workflow entity instance.

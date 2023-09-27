@@ -18,8 +18,8 @@ package com.flowcentraltech.flowcentral.common.business;
 
 import java.util.Date;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.SequenceDef;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SequenceCodeGenerator extends UnifyComponent {
+public interface SequenceCodeGenerator extends FlowCentralComponent {
 
     /**
      * Gets the skeleton string for the supplied the sequence definition;

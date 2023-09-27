@@ -15,8 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.integration.data.EndpointDef;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface Endpoint extends UnifyComponent {
+public interface Endpoint extends FlowCentralComponent {
 
     /**
      * Sets up end-point.

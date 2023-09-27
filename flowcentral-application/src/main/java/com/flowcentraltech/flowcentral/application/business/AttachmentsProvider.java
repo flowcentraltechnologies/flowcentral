@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.application.data.Attachment;
 import com.flowcentraltech.flowcentral.application.data.Attachments;
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
@@ -29,7 +29,7 @@ import com.tcdng.unify.web.ui.widget.data.FileAttachmentInfo;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AttachmentsProvider extends UnifyComponent {
+public interface AttachmentsProvider extends FlowCentralComponent {
 
     /**
      * Provides attachment based on supplied reader.

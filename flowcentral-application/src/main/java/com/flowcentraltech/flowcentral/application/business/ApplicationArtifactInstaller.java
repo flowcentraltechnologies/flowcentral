@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.application.util.ApplicationReplicationContext;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.configuration.data.ApplicationInstall;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.task.TaskMonitor;
 
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.task.TaskMonitor;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationArtifactInstaller extends UnifyComponent {
+public interface ApplicationArtifactInstaller extends FlowCentralComponent {
 
     /**
      * Install application artifact.

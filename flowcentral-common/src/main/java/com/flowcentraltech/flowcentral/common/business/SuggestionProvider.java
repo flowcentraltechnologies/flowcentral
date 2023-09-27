@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface SuggestionProvider extends UnifyComponent {
+public interface SuggestionProvider extends FlowCentralComponent {
 
     /**
      * Save suggestions.

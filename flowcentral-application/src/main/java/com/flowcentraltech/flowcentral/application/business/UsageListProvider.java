@@ -19,7 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.application.data.Usage;
 import com.flowcentraltech.flowcentral.application.data.UsageType;
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface UsageListProvider extends UnifyComponent {
+public interface UsageListProvider extends FlowCentralComponent {
 
     /**
      * Finds usages.

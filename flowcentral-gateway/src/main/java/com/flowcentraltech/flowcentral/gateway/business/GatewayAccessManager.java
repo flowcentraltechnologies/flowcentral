@@ -15,9 +15,9 @@
  */
 package com.flowcentraltech.flowcentral.gateway.business;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.gateway.data.GatewayAccess;
 import com.flowcentraltech.flowcentral.gateway.data.GatewayError;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface GatewayAccessManager extends UnifyComponent {
+public interface GatewayAccessManager extends FlowCentralComponent {
 
     /**
      * Checks if application has gateway access.

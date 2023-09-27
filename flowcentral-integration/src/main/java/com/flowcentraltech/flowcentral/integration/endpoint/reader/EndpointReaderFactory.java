@@ -15,8 +15,8 @@
  */
 package com.flowcentraltech.flowcentral.integration.endpoint.reader;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.integration.data.ReadConfigDef;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -25,7 +25,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EndpointReaderFactory extends UnifyComponent {
+public interface EndpointReaderFactory extends FlowCentralComponent {
 
     /**
      * Returns a new instance of a end-point reader.

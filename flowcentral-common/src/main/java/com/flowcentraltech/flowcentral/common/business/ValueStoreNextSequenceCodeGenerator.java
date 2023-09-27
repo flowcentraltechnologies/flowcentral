@@ -17,7 +17,7 @@
 
 package com.flowcentraltech.flowcentral.common.business;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStoreReader;
 
@@ -27,7 +27,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ValueStoreNextSequenceCodeGenerator extends UnifyComponent {
+public interface ValueStoreNextSequenceCodeGenerator extends FlowCentralComponent {
 
     /**
      * Gets next sequence code based on supplied value store reader.

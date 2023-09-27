@@ -69,6 +69,7 @@ import com.flowcentraltech.flowcentral.application.web.widgets.BeanListTable;
 import com.flowcentraltech.flowcentral.application.web.widgets.BreadCrumbs;
 import com.flowcentraltech.flowcentral.application.web.widgets.MiniForm;
 import com.flowcentraltech.flowcentral.application.web.widgets.SectorIcon;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.ApplicationPrivilegeManager;
 import com.flowcentraltech.flowcentral.common.business.CollaborationProvider;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateRegistrar;
@@ -111,7 +112,7 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AppletUtilities extends UnifyComponent {
+public interface AppletUtilities extends FlowCentralComponent {
 
     /**
      * Update entity schema.

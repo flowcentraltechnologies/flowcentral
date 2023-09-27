@@ -16,9 +16,9 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.TargetFormTabStates;
 import com.flowcentraltech.flowcentral.common.data.TargetFormWidgetStates;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.data.ValueStoreReader;
@@ -29,7 +29,7 @@ import com.tcdng.unify.core.data.ValueStoreReader;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ConsolidatedFormStatePolicy extends UnifyComponent {
+public interface ConsolidatedFormStatePolicy extends FlowCentralComponent {
 
     /**
      * Performs auto updates.

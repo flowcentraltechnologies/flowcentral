@@ -18,9 +18,9 @@ package com.flowcentraltech.flowcentral.common.business.policies;
 
 import java.util.List;
 
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.data.TargetFormMessage;
 import com.flowcentraltech.flowcentral.configuration.constants.FormReviewType;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 
@@ -30,7 +30,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ConsolidatedFormReviewPolicy extends UnifyComponent {
+public interface ConsolidatedFormReviewPolicy extends FlowCentralComponent {
 
     /**
      * Perform the review of a form's entity object.

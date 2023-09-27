@@ -21,9 +21,9 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 
 /**
@@ -32,7 +32,7 @@ import com.tcdng.unify.core.UnifyException;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface ApplicationWorkItemUtilities extends UnifyComponent {
+public interface ApplicationWorkItemUtilities extends FlowCentralComponent {
 
     /**
      * Submit entity instance to workflow channel.

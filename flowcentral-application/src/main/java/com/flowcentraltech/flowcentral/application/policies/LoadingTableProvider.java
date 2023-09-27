@@ -20,8 +20,8 @@ import java.util.List;
 import com.flowcentraltech.flowcentral.application.data.EntityItem;
 import com.flowcentraltech.flowcentral.application.data.LoadingWorkItemInfo;
 import com.flowcentraltech.flowcentral.application.web.widgets.InputArrayEntries;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.entities.WorkEntity;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 import com.tcdng.unify.core.database.Entity;
@@ -32,7 +32,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface LoadingTableProvider extends UnifyComponent {
+public interface LoadingTableProvider extends FlowCentralComponent {
 
     /**
      * Sets loading table provider working parameter.

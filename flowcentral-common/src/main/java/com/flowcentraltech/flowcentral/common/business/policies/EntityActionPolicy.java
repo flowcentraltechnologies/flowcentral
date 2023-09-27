@@ -16,7 +16,7 @@
 
 package com.flowcentraltech.flowcentral.common.business.policies;
 
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.database.Entity;
 
@@ -26,7 +26,7 @@ import com.tcdng.unify.core.database.Entity;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EntityActionPolicy extends UnifyComponent {
+public interface EntityActionPolicy extends FlowCentralComponent {
 
     /**
      * Checks if entity action applies to instance.

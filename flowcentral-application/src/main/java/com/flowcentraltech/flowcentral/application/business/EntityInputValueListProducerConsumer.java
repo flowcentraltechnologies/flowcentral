@@ -21,7 +21,7 @@ import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.InputValue;
-import com.tcdng.unify.core.UnifyComponent;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 
@@ -31,7 +31,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EntityInputValueListProducerConsumer extends UnifyComponent {
+public interface EntityInputValueListProducerConsumer extends FlowCentralComponent {
 
     /**
      * Produces an input value list.

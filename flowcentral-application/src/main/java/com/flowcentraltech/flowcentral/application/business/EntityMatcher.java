@@ -17,8 +17,8 @@
 package com.flowcentraltech.flowcentral.application.business;
 
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
+import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.constants.EvaluationMode;
-import com.tcdng.unify.core.UnifyComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.data.ValueStore;
 
@@ -28,7 +28,7 @@ import com.tcdng.unify.core.data.ValueStore;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface EntityMatcher extends UnifyComponent {
+public interface EntityMatcher extends FlowCentralComponent {
 
     /**
      * Matches an entity.
