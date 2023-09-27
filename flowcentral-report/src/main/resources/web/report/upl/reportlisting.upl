@@ -14,7 +14,7 @@
 // the License.
 
 !ui-page caption:$m{report.reportlisting}  layout:$d{!ui-vertical style:$s{width:100%;}}
-	components:$c{headerBar listingPanel}
+	components:$c{headerBar repeatListingPanel}
 
 // Header Bar
 !ui-panel:headerBar styleClass:$s{hdbar} layout:$d{!ui-horizontal style:$s{width:100%;}}
@@ -26,6 +26,11 @@
 !ui-label:title styleClass:$s{hdtitle} caption:$m{report.reportlisting.title}
 !ui-label:subTitle styleClass:$s{hdsubtitle} caption:$m{report.reportlisting.subtitle}
 
-!ui-panel:listingPanel components:$c{listGrid}
-!ui-linkgrid:listGrid styleClass:$e{fc-reportlist} columns:4 binding:linkGridInfo
+// Report group panel
+!ui-repeatpanel:repeatListingPanel
+    layout:$d{!ui-vertical style:$s{width:340px;}}
+    components:$c{groupListingPanel} binding:groupList
+!ui-collapsiblepanel:groupListingPanel panelCaptionBinding:reportGroupLabel
+    contentLayout:$d{!ui-vertical showCaption:true} content:$c{listGrid}
+!ui-linkgrid:listGrid styleClass:$e{fc-reportlist} columns:1 binding:linkGridInfo
 	

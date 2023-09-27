@@ -49,6 +49,10 @@ import com.flowcentraltech.flowcentral.report.constants.ReportModuleSysParamCons
 import com.flowcentraltech.flowcentral.report.constants.ReportParameterConstants;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfigurationQuery;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroup;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroupMemberQuery;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroupQuery;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroupRoleQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameterQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
@@ -129,6 +133,29 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
 
     public final void setAppletUtilities(AppletUtilities appletUtilities) {
         this.appletUtilities = appletUtilities;
+    }
+
+    @Override
+    public List<ReportGroup> findReportGroupsByRole(String roleCode) throws UnifyException {
+        List<Long> reportGroupIdList = environment().valueList(Long.class, "reportGroupId",
+                !StringUtils.isBlank(roleCode) ? new ReportGroupRoleQuery().roleCode(roleCode)
+                        : new ReportGroupRoleQuery().ignoreEmptyCriteria(true));
+        if (!DataUtils.isBlank(reportGroupIdList)) {
+            return environment().findAll(new ReportGroupQuery().idIn(reportGroupIdList).addOrder("label"));
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ReportConfiguration> findReportConfigurationsByGroup(Long reportGroupId) throws UnifyException {
+        List<Long> reportConfigurationIdList = environment().valueList(Long.class, "reportConfigurationId",
+               new ReportGroupMemberQuery().reportGroupId(reportGroupId));
+        if (!DataUtils.isBlank(reportConfigurationIdList)) {
+            return environment().findAll(new ReportConfigurationQuery().idIn(reportConfigurationIdList).addOrder("description"));
+        }
+        
+        return Collections.emptyList();
     }
 
     @Override

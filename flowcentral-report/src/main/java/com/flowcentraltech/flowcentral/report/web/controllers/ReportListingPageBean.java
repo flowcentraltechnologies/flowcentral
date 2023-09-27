@@ -15,8 +15,10 @@
  */
 package com.flowcentraltech.flowcentral.report.web.controllers;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.report.data.ReportGroupInfo;
 import com.tcdng.unify.web.ui.AbstractPageBean;
-import com.tcdng.unify.web.ui.widget.data.LinkGridInfo;
 
 /**
  * Report listing page bean.
@@ -26,13 +28,14 @@ import com.tcdng.unify.web.ui.widget.data.LinkGridInfo;
  */
 public class ReportListingPageBean extends AbstractPageBean {
 
-    private LinkGridInfo linkGridInfo;
+    private List<ReportGroupInfo> groupList;
 
-    public LinkGridInfo getLinkGridInfo() {
-        return linkGridInfo;
+    public List<ReportGroupInfo> getGroupList() {
+        return groupList;
     }
 
-    public void setLinkGridInfo(LinkGridInfo linkGridInfo) {
-        this.linkGridInfo = linkGridInfo;
+    public void setGroupList(List<ReportGroupInfo> groupList) {
+        this.groupList = groupList;
     }
+
 }

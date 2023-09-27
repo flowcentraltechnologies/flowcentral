@@ -21,6 +21,7 @@ import com.flowcentraltech.flowcentral.common.business.FlowCentralService;
 import com.flowcentraltech.flowcentral.common.business.ReportProvider;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
 import com.flowcentraltech.flowcentral.report.entities.ReportConfigurationQuery;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroup;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameter;
 import com.flowcentraltech.flowcentral.report.entities.ReportParameterQuery;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
@@ -37,6 +38,28 @@ import com.tcdng.unify.core.UnifyException;
  */
 public interface ReportModuleService extends FlowCentralService, ReportProvider {
 
+    /**
+     * Finds report groups with role option.
+     * 
+     * @param role
+     *             the role
+     * @return list of report groups.
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<ReportGroup> findReportGroupsByRole(String role) throws UnifyException;
+    
+    /**
+     * Finds report configurations by report group ID.
+     * 
+     * @param reportGroupId
+     *                the report group ID
+     * @return list of report configurations
+     * @throws UnifyException
+     *                        If an error occurs
+     */
+    List<ReportConfiguration> findReportConfigurationsByGroup(Long reportGroupId) throws UnifyException;
+    
     /**
      * Finds report configurations.
      * 
