@@ -15,24 +15,32 @@
  */
 package com.flowcentraltech.flowcentral.studio.business;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import com.flowcentraltech.flowcentral.common.FlowCentralComponent;
+import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.Listable;
 
 /**
- * Additional data type editor provider.
+ * Convenient abstract base class for additional data type editor provider.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public interface AdditionalDataTypeEditorProvider extends FlowCentralComponent {
+public abstract class AbstractAdditionalDataTypeEditorProvider extends AbstractFlowCentralComponent
+        implements AdditionalDataTypeEditorProvider {
+
+    @Override
+    public final List<? extends Listable> provide(Locale locale, DataType dataType) throws UnifyException {
+        List<? extends Listable> list = doProvide(locale, dataType);
+        return list != null ? list : Collections.emptyList();
+    }
 
     /**
-     * Provides additional data type editors.
+     * Do provide additional data type editors.
      * 
      * @param locale
      *                 the locale
@@ -42,6 +50,16 @@ public interface AdditionalDataTypeEditorProvider extends FlowCentralComponent {
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> provide(Locale locale, DataType dataType) throws UnifyException;
+    protected abstract List<? extends Listable> doProvide(Locale locale, DataType dataType) throws UnifyException;
+
+    @Override
+    protected void onInitialize() throws UnifyException {
+
+    }
+
+    @Override
+    protected void onTerminate() throws UnifyException {
+
+    }
 
 }

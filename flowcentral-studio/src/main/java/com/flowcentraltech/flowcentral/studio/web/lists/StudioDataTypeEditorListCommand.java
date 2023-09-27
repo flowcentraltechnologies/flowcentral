@@ -24,8 +24,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.flowcentraltech.flowcentral.application.web.lists.AbstractApplicationListCommand;
+import com.flowcentraltech.flowcentral.studio.business.AdditionalDataTypeEditorProvider;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.annotation.Component;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.constant.DataType;
 import com.tcdng.unify.core.data.ListData;
 import com.tcdng.unify.core.data.Listable;
@@ -40,11 +42,18 @@ import com.tcdng.unify.core.list.StringParam;
 @Component("studiodatatypeeditorlist")
 public class StudioDataTypeEditorListCommand extends AbstractApplicationListCommand<StringParam> {
 
-    private final Map<DataType, List<ListData>> editors;
+    private final Map<DataType, List<Listable>> editors;
 
+    @Configurable
+    private AdditionalDataTypeEditorProvider additionalProvider;
+    
     public StudioDataTypeEditorListCommand() {
         super(StringParam.class);
-        this.editors = new HashMap<DataType, List<ListData>>();
+        this.editors = new HashMap<DataType, List<Listable>>();
+    }
+
+    public final void setAdditionalProvider(AdditionalDataTypeEditorProvider additionalProvider) {
+        this.additionalProvider = additionalProvider;
     }
 
     @Override
@@ -52,7 +61,7 @@ public class StudioDataTypeEditorListCommand extends AbstractApplicationListComm
         if (stringParam.isPresent()) {
             DataType dataType = DataType.fromCode(stringParam.getValue());
             if (dataType != null) {
-                List<ListData> list = editors.get(dataType);
+                List<Listable> list = editors.get(dataType);
                 if (list == null) {
                     synchronized (this) {
                         if (list == null) {
@@ -99,11 +108,15 @@ public class StudioDataTypeEditorListCommand extends AbstractApplicationListComm
                                     break;
                             }
 
+                            if (additionalProvider != null) {
+                                list.addAll(additionalProvider.provide(locale, dataType));
+                             }
+                            
                             editors.put(dataType, Collections.unmodifiableList(list));
                         }
                     }
                 }
-
+                
                 return list;
             }
         }
