@@ -48,7 +48,7 @@ public class ReportGroupRole extends BaseAuditTenantEntity implements Describabl
     @ListOnly(key = "reportGroupId", property = "description")
     private String reportGroupDesc;
 
-    @ListOnly(key = "reportGroupId", property = "email")
+    @ListOnly(key = "reportGroupId", property = "label")
     private String reportGroupLabel;
 
     @ListOnly(key = "roleId", property = "code")

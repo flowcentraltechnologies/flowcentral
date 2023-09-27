@@ -132,6 +132,11 @@ public class ReportModuleServiceImpl extends AbstractFlowCentralService implemen
     }
 
     @Override
+    public List<ReportConfiguration> findReportConfigurations(ReportConfigurationQuery query) throws UnifyException {
+        return environment().listAll(query);
+    }
+
+    @Override
     public ReportConfiguration findReportConfiguration(Long reportConfigurationId) throws UnifyException {
         return environment().find(ReportConfiguration.class, reportConfigurationId);
     }

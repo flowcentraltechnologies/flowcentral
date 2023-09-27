@@ -423,7 +423,7 @@
 				inputWidget="application.entitysearch" basicSearch="true" />
 			<field name="reportConfigurationId"
 				label="$m{report.reportgroupmember.reportconfigurationid}" type="ref"
-				references="userRef" inputLabel="$m{report.reportgroupmember.reportconfiguration}"
+				references="reportConfigRef" inputLabel="$m{report.reportgroupmember.reportconfiguration}"
 				inputWidget="application.entitysearch" />
 			<field name="reportGroupName"
 				label="$m{report.reportgroupmember.reportgroupname}" type="list_only"
@@ -455,7 +455,7 @@
 				widthRatio="1" linkAct="maintainAct" />
 			<column field="description" renderWidget="application.text"
 				widthRatio="1" linkAct="maintainAct" />
-			<column field="email" renderWidget="application.text"
+			<column field="label" renderWidget="application.text"
 				widthRatio="1" />
 			<column field="createDt" renderWidget="application.datetime"
 				widthRatio="1" />
@@ -519,9 +519,6 @@
 				reference="reportGroupRoleList" />
 			<tab name="changeLog" label="$m{application.form.audit}"
 				contentType="miniform_changelog" />
-			<fieldValidationPolicy name="emailValidation"
-				description="$m{report.reportgroup.form.fieldvalidationpolicy.email}"
-				fieldName="email" validator="fc-emailvalidator" />
 		</form>
 	</forms>
 	<!-- Assignment Pages -->
