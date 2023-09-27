@@ -50,10 +50,10 @@ public class ReportParameter extends BaseEntity {
     @Column(name = "MANDATORY_FG")
     private Boolean mandatory;
 
-    @Column(name = "DEFAULT_VAL", nullable = true, length = 64)
+    @Column(name = "DEFAULT_VAL", nullable = true, length = 128)
     private String defaultVal;
 
-    @Column(name = "EDITOR", length = 64, nullable = true)
+    @Column(name = "EDITOR", length = 128, nullable = true)
     private String editor;
 
     @ListOnly(key = "type", property = "description")

@@ -12,7 +12,6 @@
 // WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 // License for the specific language governing permissions and limitations under
 // the License.
-
 !ui-page caption:$m{report.reportlisting}  layout:$d{!ui-vertical style:$s{width:100%;}}
 	components:$c{headerBar listingPanel}
 
@@ -26,6 +25,5 @@
 !ui-label:title styleClass:$s{hdtitle} caption:$m{report.reportlisting.title}
 !ui-label:subTitle styleClass:$s{hdsubtitle} caption:$m{report.reportlisting.subtitle}
 
-!ui-panel:listingPanel components:$c{listGrid}
-!ui-linkgrid:listGrid styleClass:$e{fc-reportlist} columns:4 binding:linkGridInfo
-	
+!ui-panel:listingPanel style:$s{width:480px;} components:$c{listGrid}
+!ui-linkgrid:listGrid styleClass:$e{fc-reportlist} columns:1 binding:linkGridInfo	

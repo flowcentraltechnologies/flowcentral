@@ -136,7 +136,10 @@ textarea:focus {outline: none !important;box-shadow: 0 0 6px #5194f3;}
 .fc-tiny {font-size:8pt;width:152px;}
 .fc-tiny .tread {font-size:8pt;}
 
-.fc-reportlist td {padding:16px 4px;}
+.fc-reportlist td {padding:8px 2px;}
+.fc-reportlist .lgcatcap {margin-bottom:0px;}
+.fc-reportlist .lglink {display: list-item;list-style-type: square; list-style-position: inside; text-decoration: none; font-size:12px;}
+.fc-reportlist .lgcatsec {padding-left: 4px; padding-bottom: 12px;}
 
 .fc-formfield {width:196px;}
 

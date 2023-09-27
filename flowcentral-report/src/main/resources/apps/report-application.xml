@@ -5,6 +5,44 @@
 	module="report">
 	<!-- Applets -->
 	<applets>
+		<applet name="manageReportGroup"
+			description="$m{report.reportgroup.manage}"
+			label="$m{report.reportgroup.manage.label}" icon="users"
+			type="manage_entitylist" entity="reportGroup" menuAccess="true"
+			allowSecondaryTenants="true">
+			<property name="searchTable" value="reportGroupTable" />
+			<property name="searchTable.new" value="true" />
+			<property name="searchTable.report" value="true" />
+			<property name="searchTable.quickFilter" value="true" />
+			<property name="searchTable.basicSearchOnly" value="true" />
+			<property name="createForm" value="reportGroupForm" />
+			<property name="createForm.save" value="true" />
+			<property name="createForm.save.next" value="true" />
+			<property name="createForm.save.close" value="true" />
+			<property name="maintainForm" value="reportGroupForm" />
+			<property name="maintainForm.update" value="true" />
+			<property name="maintainForm.delete" value="true" />
+		</applet>
+		<applet name="manageReportGroupRole"
+			description="$m{report.reportgrouprole.manage}"
+			label="$m{report.reportgrouprole.manage.label}"
+			type="manage_entitylist_assign" entity="reportGroupRole"
+			baseField="reportGroupId" assignField="roleId">
+			<property name="searchTable" value="reportGroupRoleTable" />
+			<property name="searchTable.edit" value="true" />
+			<property name="assignmentPage"
+				value="reportGroupRoleAssignment" />
+		</applet>
+		<applet name="manageReportGroupMember"
+			description="$m{report.reportgroupmember.manage}"
+			label="$m{report.reportgroupmember.manage.label}"
+			type="manage_entitylist_assign" entity="reportGroupMember"
+			baseField="reportGroupId" assignField="reportConfigurationId">
+			<property name="searchTable" value="reportGroupMemberTable" />
+			<property name="searchTable.edit" value="true" />
+			<property name="assignmentPage"
+				value="reportGroupMemberAssignment" />
+		</applet>
 		<applet name="appReportListing"
 			description="$m{report.application.appreportlisting}"
 			label="$m{report.application.appreportlisting.label}" icon="copy"
@@ -32,6 +70,15 @@
 		<reference name="reportParameterRef"
 			description="$m{report.reportparameter.reference}"
 			entity="reportParameter" searchField="description" />
+		<reference name="reportGroupRef"
+			description="$m{report.reportgroup.reference}" entity="reportGroup"
+			searchField="description" />
+		<reference name="reportGroupRoleRef"
+			description="$m{report.reportgrouprole.reference}"
+			entity="reportGroupRole" searchField="roleDesc" />
+		<reference name="reportGroupMemberRef"
+			description="$m{report.reportgroupmember.reference}"
+			entity="reportGroupMember" searchField="reportConfigurationDesc" />
 	</references>
 	<!-- Entities -->
 	<entities>
@@ -292,12 +339,203 @@
 				label="$m{report.reportparameter.mandatory}" type="boolean" />
 			<field name="defaultVal"
 				label="$m{report.reportparameter.defaultval}" type="string"
-				maxLen="64" nullable="true" />
+				maxLen="128" nullable="true" />
 			<field name="editor" label="$m{report.reportparameter.editor}"
-				type="string" maxLen="64" nullable="true" />
+				type="string" maxLen="128" nullable="true" />
 			<field name="typeDesc"
 				label="$m{report.reportparameter.typedesc}" type="list_only"
 				key="type" property="description" />
 		</entity>
+		<entity name="reportGroup" description="$m{report.reportgroup}"
+			label="$m{report.reportgroup.label}"
+			type="com.flowcentraltech.flowcentral.report.entities.ReportGroup"
+			reportable="true" auditable="true">
+			<field name="name" label="$m{report.reportgroup.name}"
+				type="string" inputWidget="application.name" maxLen="64"
+				basicSearch="true" />
+			<field name="description"
+				label="$m{report.reportgroup.description}" type="string"
+				inputWidget="application.text" maxLen="96" basicSearch="true" />
+			<field name="label" label="$m{report.reportgroup.fieldlabel}"
+				type="string" inputWidget="application.text" maxLen="64"
+				nullable="true" />
+			<field name="reportGroupRoleList"
+				label="$m{report.reportgroup.reportgrouprolelist}" type="child_list"
+				references="reportGroupRoleRef" />
+			<field name="reportGroupMemberList"
+				label="$m{report.reportgroup.reportgroupmemberlist}" type="child_list"
+				references="reportGroupMemberRef" />
+			<uniqueConstraint name="nameUc"
+				description="$m{report.reportgroup.uc.name}" fieldList="name" />
+			<uniqueConstraint name="descUc"
+				description="$m{report.reportgroup.uc.description}"
+				fieldList="description" />
+		</entity>
+		<entity name="reportGroupRole"
+			description="$m{report.reportgrouprole}"
+			label="$m{report.reportgrouprole.label}"
+			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupRole">
+			<field name="reportGroupId"
+				label="$m{report.reportgrouprole.reportgroupid}" type="ref"
+				references="reportGroupRef"
+				inputLabel="$m{report.reportgrouprole.reportgroup}"
+				inputWidget="application.entitysearch" />
+			<field name="roleId" label="$m{report.reportgrouprole.roleid}"
+				type="ref" references="organization.roleRef"
+				inputLabel="$m{report.reportgrouprole.role}"
+				inputWidget="application.entitysearch" />
+			<field name="reportGroupName"
+				label="$m{report.reportgrouprole.reportgroupname}" type="list_only"
+				key="reportGroupId" property="name" />
+			<field name="reportGroupDesc"
+				label="$m{report.reportgrouprole.reportgroupdesc}" type="list_only"
+				key="reportGroupId" property="description" />
+			<field name="reportGroupLabel"
+				label="$m{report.reportgrouprole.reportgrouplabel}" type="list_only"
+				key="reportGroupId" property="label" />
+			<field name="roleCode"
+				label="$m{report.reportgrouprole.rolecode}" type="list_only"
+				key="roleId" property="code" />
+			<field name="roleDesc"
+				label="$m{report.reportgrouprole.roledesc}" type="list_only"
+				key="roleId" property="description" />
+			<field name="activeBefore"
+				label="$m{report.reportgrouprole.roleactivebefore}" type="list_only"
+				key="roleId" property="activeBefore" />
+			<field name="activeAfter"
+				label="$m{report.reportgrouprole.roleactiveafter}" type="list_only"
+				key="roleId" property="activeAfter" />
+			<field name="departmentId"
+				label="$m{report.reportgrouprole.departmentid}" type="list_only"
+				key="roleId" property="departmentId" />
+			<uniqueConstraint name="roleUc"
+				description="$m{report.reportgrouprole.uc.role}"
+				fieldList="reportGroupId,roleId" />
+		</entity>
+		<entity name="reportGroupMember"
+			description="$m{report.reportgroupmember}"
+			label="$m{report.reportgroupmember.label}"
+			type="com.flowcentraltech.flowcentral.report.entities.ReportGroupMember">
+			<field name="reportGroupId"
+				label="$m{report.reportgroupmember.reportgroupid}" type="ref"
+				references="reportGroupRef"
+				inputLabel="$m{report.reportgroupmember.reportgroup}"
+				inputWidget="application.entitysearch" basicSearch="true" />
+			<field name="reportConfigurationId"
+				label="$m{report.reportgroupmember.reportconfigurationid}" type="ref"
+				references="reportConfigRef" inputLabel="$m{report.reportgroupmember.reportconfiguration}"
+				inputWidget="application.entitysearch" />
+			<field name="reportGroupName"
+				label="$m{report.reportgroupmember.reportgroupname}" type="list_only"
+				key="reportGroupId" property="name" />
+			<field name="reportGroupDesc"
+				label="$m{report.reportgroupmember.reportgroupdesc}" type="list_only"
+				key="reportGroupId" property="description" />
+			<field name="reportGroupLabel"
+				label="$m{report.reportgroupmember.reportgrouplabel}" type="list_only"
+				key="reportGroupId" property="label" />
+			<field name="reportConfigurationName"
+				label="$m{report.reportgroupmember.reportconfigurationname}" type="list_only"
+				key="reportConfigurationId" property="name" />
+			<field name="reportConfigurationDesc"
+				label="$m{report.reportgroupmember.reportconfigurationdesc}" type="list_only"
+				key="reportConfigurationId" property="description" />
+			<uniqueConstraint name="reportConfigurationUc"
+				description="$m{report.reportgroupmember.uc.reportconfiguration}"
+				fieldList="reportGroupId,reportConfigurationId" />
+		</entity>
 	</entities>
+	<!-- Tables -->
+	<tables>
+		<table name="reportGroupTable"
+			description="$m{report.reportgroup.table}"
+			label="$m{report.reportgroup.table.label}" entity="reportGroup"
+			itemsPerPage="20" serialNo="true" basicSearch="true">
+			<column field="name" renderWidget="application.name"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="description" renderWidget="application.text"
+				widthRatio="1" linkAct="maintainAct" />
+			<column field="label" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="createDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+			<column field="statusDesc" renderWidget="application.text"
+				label="$m{basestatusentity.field.label.status}" widthRatio="1" />
+		</table>
+		<table name="reportGroupRoleTable"
+			description="$m{report.reportgrouprole.table}"
+			label="$m{report.reportgrouprole.table.label}" entity="reportGroupRole"
+			itemsPerPage="20" serialNo="true">
+			<column field="roleDesc" renderWidget="application.text"
+				label="$m{report.reportgrouprole.role}" widthRatio="1" />
+			<column field="activeBefore" renderWidget="application.time"
+				widthRatio="1" />
+			<column field="activeAfter" renderWidget="application.time"
+				widthRatio="1" />
+			<column field="updatedBy" renderWidget="application.text"
+				label="$m{report.reportgrouprole.grantedby}" widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+		<table name="reportGroupMemberTable"
+			description="$m{report.reportgroupmember.table}"
+			label="$m{report.reportgroupmember.table.label}"
+			entity="reportGroupMember" itemsPerPage="20" serialNo="true">
+			<column field="reportConfigurationName" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="reportConfigurationDesc" renderWidget="application.text"
+				widthRatio="1" />
+			<column field="updatedBy" renderWidget="application.text"
+				label="$m{report.reportgroupmember.grantedby}" widthRatio="1" />
+			<column field="updateDt" renderWidget="application.datetime"
+				widthRatio="1" />
+		</table>
+	</tables>
+	<!-- Forms -->
+	<forms>
+		<form name="reportGroupForm"
+			description="$m{report.reportgroup.form}" entity="reportGroup">
+			<tab name="basicDetails"
+				label="$m{report.reportgroup.form.basicdetails}"
+				contentType="miniform">
+				<section name="reportGroupDetails" columns="type_2">
+					<field name="name" inputWidget="application.name" column="0"
+						required="true" />
+					<field name="description" inputWidget="application.text"
+						column="0" required="true" />
+					<field name="label" inputWidget="application.text" column="1"
+						required="true" />
+					<field name="status" inputWidget="application.enumlist"
+						column="1" required="true" />
+				</section>
+			</tab>
+			<tab name="members" label="$m{report.reportgroup.form.members}"
+				contentType="child_list" applet="manageReportGroupMember"
+				reference="reportGroupMemberList" />
+			<tab name="roles" label="$m{report.reportgroup.form.roles}"
+				contentType="child_list" applet="manageReportGroupRole"
+				reference="reportGroupRoleList" />
+			<tab name="changeLog" label="$m{application.form.audit}"
+				contentType="miniform_changelog" />
+		</form>
+	</forms>
+	<!-- Assignment Pages -->
+	<assignmentPages>
+		<assignmentPage name="reportGroupRoleAssignment"
+			description="$m{report.reportgroup.role.assignment}"
+			label="$m{report.reportgroup.role.assignment}" entity="reportGroupRole"
+			baseField="reportGroupId" assignField="roleId"
+			assignCaption="$m{report.reportgroup.role.assigned}"
+			unassignCaption="$m{report.reportgroup.role.available}"
+			assignList="roleinlist" unassignList="rolenotinlist" />
+		<assignmentPage name="reportGroupMemberAssignment"
+			description="$m{report.reportgroup.member.assignment}"
+			label="$m{report.reportgroup.member.assignment}"
+			entity="reportGroupMember" baseField="reportGroupId" assignField="reportConfigurationId"
+			assignCaption="$m{report.reportgroup.member.assigned}"
+			unassignCaption="$m{report.reportgroup.member.available}"
+			assignList="reportconfigurationinlist" unassignList="reportconfigurationnotinlist" />
+	</assignmentPages>
 </application>

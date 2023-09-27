@@ -15,16 +15,21 @@
  */
 package com.flowcentraltech.flowcentral.report.web.controllers;
 
+import java.util.List;
+
+import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.CommonModuleNameConstants;
 import com.flowcentraltech.flowcentral.common.constants.FlowCentralResultMappingConstants;
-import com.flowcentraltech.flowcentral.common.data.ReportListing;
 import com.flowcentraltech.flowcentral.common.data.ReportOptions;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
+import com.flowcentraltech.flowcentral.report.entities.ReportConfiguration;
+import com.flowcentraltech.flowcentral.report.entities.ReportGroup;
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.UplBinding;
+import com.tcdng.unify.core.util.DataUtils;
 import com.tcdng.unify.web.annotation.Action;
 import com.tcdng.unify.web.constant.ReadOnly;
 import com.tcdng.unify.web.constant.ResetOnWrite;
@@ -77,27 +82,25 @@ public class ReportListingController extends AbstractPageController<ReportListin
 
     @Override
     protected void onOpenPage() throws UnifyException {
-        // Load link grid information
-        LinkGridInfo.Builder lb = LinkGridInfo.newBuilder();
+        ReportListingPageBean pageBean = getPageBean();
         final UserToken userToken = getUserToken();
         final String roleCode = !userToken.isReservedUser() ? userToken.getRoleCode() : null;
-        final boolean isPrimaryTenant = userToken.isPrimaryTenant();
-        String applicationName = null;
-        for (ReportListing listing : reportModuleService.getRoleReportListing(roleCode)) {
-            if (isPrimaryTenant || listing.isAllowSecondaryTenants()) {
-                if (!listing.getApplicationName().equals(applicationName)) {
-                    applicationName = listing.getApplicationName();
-                    lb.addCategory(applicationName, listing.getApplicationDesc(),
-                            "/report/reportlisting/prepareGenerateReport");
+        LinkGridInfo.Builder lb = LinkGridInfo.newBuilder();
+        for (ReportGroup reportGroup : reportModuleService.findReportGroupsByRole(roleCode)) {
+            List<ReportConfiguration> configurationList = reportModuleService
+                    .findReportConfigurationsByGroup(reportGroup.getId());
+            if (!DataUtils.isBlank(configurationList)) {
+                lb.addCategory(reportGroup.getName(), reportGroup.getLabel().toUpperCase(),
+                        "/report/reportlisting/prepareGenerateReport");
+                for (ReportConfiguration reportConfiguration : configurationList) {
+                    final String reportConfigName = ApplicationNameUtils.getApplicationEntityLongName(
+                            reportConfiguration.getApplicationName(), reportConfiguration.getName());
+                    lb.addLink(reportGroup.getName(), reportConfigName, reportConfiguration.getDescription());
                 }
-
-                lb.addLink(applicationName, listing.getLongName(), listing.getDescription());
             }
         }
 
-        ReportListingPageBean pageBean = getPageBean();
-        LinkGridInfo linkGridInfo = lb.build();
-        pageBean.setLinkGridInfo(linkGridInfo);
+        pageBean.setLinkGridInfo(lb.build());
     }
 
 }
