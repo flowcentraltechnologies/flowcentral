@@ -433,12 +433,30 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     }
 
     @Override
+    public boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException {
+        return applicationModuleService.createEntitySchema(entitySchema);
+    }
+
+    @Override
     public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
         return applicationModuleService.updateEntitySchema(entitySchema);
     }
 
     @Override
-    public List<? extends Listable> getApplicationEntities(final Query<? extends BaseApplicationEntity> query)
+    public List<String> getApplicationEntitiesLongNames(Query<? extends BaseApplicationEntity> query)
+            throws UnifyException {
+        if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
+            final Query<? extends BaseApplicationEntity> _query = query.copy();
+            _query.addSelect("applicationName", "name", "description");
+            List<? extends BaseApplicationEntity> list = environment().listAll(_query);
+            return ApplicationNameUtils.getApplicationEntityLongNames(list);
+        }
+
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<? extends Listable> getApplicationEntitiesListables(final Query<? extends BaseApplicationEntity> query)
             throws UnifyException {
         if (!query.isEmptyCriteria() || query.isIgnoreEmptyCriteria()) {
             final Query<? extends BaseApplicationEntity> _query = query.copy();

@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +35,14 @@ import com.flowcentraltech.flowcentral.application.data.EntityDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldSchema;
 import com.flowcentraltech.flowcentral.application.data.EntitySchema;
+import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.common.AbstractFlowCentralComponent;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegate;
 import com.flowcentraltech.flowcentral.common.business.EnvironmentDelegateUtilities;
 import com.flowcentraltech.flowcentral.common.entities.BaseAuditEntity;
 import com.flowcentraltech.flowcentral.common.entities.BaseVersionEntity;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataType;
 import com.flowcentraltech.flowcentral.connect.common.constants.DataSourceOperation;
 import com.flowcentraltech.flowcentral.connect.common.data.BaseResponse;
 import com.flowcentraltech.flowcentral.connect.common.data.DataSourceRequest;
@@ -113,33 +117,39 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
             if (!DataUtils.isBlank(delegateEntityListingDTO.getListings())) {
                 final String delegate = getName();
                 logInfo(taskMonitor, "[{0}] entities detected...", delegateEntityListingDTO.getListings().size());
+                final Set<String> existing = new HashSet<String>(
+                        au.getApplicationEntitiesLongNames(new AppEntityQuery().ignoreEmptyCriteria(true)));
                 for (EntityListingDTO entityListingDTO : delegateEntityListingDTO.getListings()) {
                     final String entity = entityListingDTO.getEntity();
-                    // TODO Get existing set for restriction
-                    logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
-                    EntityDTO entityDTO = getDelegatedEntitySchema(entity);
-                    if (entityDTO != null) {
-                        logInfo(taskMonitor, "Creating entity schema...");
-                        List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
-                        for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                            fields.add(new EntityFieldSchema(entityFieldDTO.getName(), entityFieldDTO.getDescription(),
-                                    entityFieldDTO.getColumn(), entityFieldDTO.getReferences(),
-                                    entityFieldDTO.getScale(), entityFieldDTO.getPrecision(),
-                                    entityFieldDTO.getLength()));
-                        }
+                    if (!existing.contains(entity)) {
+                        logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
+                        EntityDTO entityDTO = getDelegatedEntitySchema(entity);
+                        if (entityDTO != null) {
+                            logInfo(taskMonitor, "Creating entity schema...");
+                            List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
+                            for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
+                                EntityFieldDataType dataType = null; // TODO
+                                fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
+                                        entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
+                                        entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
+                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength()));
+                            }
 
-                        EntitySchema entitySchema = new EntitySchema(delegate, entityDTO.getDataSourceAlias(), entity,
-                                entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                        //au.updateEntitySchema(entitySchema); TODO
-                        logInfo(taskMonitor, "Entity schema create for [{0}] completed...", entity);
-                    } else {
-                        logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
+                            EntityBaseType baseType = null; // TODO 
+                            EntitySchema entitySchema = new EntitySchema(baseType, delegate, entityDTO.getDataSourceAlias(),
+                                    entity, entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(),
+                                    fields);
+                            au.createEntitySchema(entitySchema);
+                            logInfo(taskMonitor, "Entity schema create for [{0}] completed...", entity);
+                        } else {
+                            logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
+                        }
                     }
                 }
             } else {
                 logInfo(taskMonitor, "No entity listings found for this delegate.");
             }
-            
+
             logInfo(taskMonitor, "Delegate synchronization completed.");
         } else {
             logInfo(taskMonitor, "Could not retrieve synchronization information.");
@@ -161,33 +171,39 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
             if (!DataUtils.isBlank(delegateEntityListingDTO.getListings())) {
                 final String delegate = getName();
                 logInfo(taskMonitor, "[{0}] entities detected...", delegateEntityListingDTO.getListings().size());
+                final Set<String> existing = new HashSet<String>(
+                        au.getApplicationEntitiesLongNames(new AppEntityQuery().ignoreEmptyCriteria(true)));
                 for (EntityListingDTO entityListingDTO : delegateEntityListingDTO.getListings()) {
                     final String entity = entityListingDTO.getEntity();
-                    // TODO Get existing set for restriction
-                    logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
-                    EntityDTO entityDTO = getDelegatedEntitySchema(entity);
-                    if (entityDTO != null) {
-                        logInfo(taskMonitor, "Updating entity schema...");
-                        List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
-                        for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                            fields.add(new EntityFieldSchema(entityFieldDTO.getName(), entityFieldDTO.getDescription(),
-                                    entityFieldDTO.getColumn(), entityFieldDTO.getReferences(),
-                                    entityFieldDTO.getScale(), entityFieldDTO.getPrecision(),
-                                    entityFieldDTO.getLength()));
-                        }
+                    if (!existing.contains(entity)) {
+                        logInfo(taskMonitor, "Fetching schema information for [{0}]...", entity);
+                        EntityDTO entityDTO = getDelegatedEntitySchema(entity);
+                        if (entityDTO != null) {
+                            logInfo(taskMonitor, "Updating entity schema...");
+                            List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
+                            for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
+                                EntityFieldDataType dataType = null; // TODO
+                                fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
+                                        entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
+                                        entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
+                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength()));
+                            }
 
-                        EntitySchema entitySchema = new EntitySchema(delegate, entityDTO.getDataSourceAlias(), entity,
-                                entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                        au.updateEntitySchema(entitySchema);
-                        logInfo(taskMonitor, "Entity schema update for [{0}] completed...", entity);
-                    } else {
-                        logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
+                            EntityBaseType baseType = null; // TODO 
+                            EntitySchema entitySchema = new EntitySchema(baseType, delegate, entityDTO.getDataSourceAlias(),
+                                    entity, entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(),
+                                    fields);
+                            au.updateEntitySchema(entitySchema);
+                            logInfo(taskMonitor, "Entity schema update for [{0}] completed...", entity);
+                        } else {
+                            logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
+                        }
                     }
                 }
             } else {
                 logInfo(taskMonitor, "No entity listings found for this delegate.");
             }
-            
+
             logInfo(taskMonitor, "Delegate synchronization completed.");
         } else {
             logInfo(taskMonitor, "Could not retrieve synchronization information.");

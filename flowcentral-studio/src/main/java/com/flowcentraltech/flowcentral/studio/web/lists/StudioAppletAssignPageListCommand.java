@@ -46,7 +46,7 @@ public class StudioAppletAssignPageListCommand extends AbstractApplicationListCo
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return au().getApplicationEntities(new AppAssignmentPageQuery().entity(entity));
+                return au().getApplicationEntitiesListables(new AppAssignmentPageQuery().entity(entity));
             }
         }
 

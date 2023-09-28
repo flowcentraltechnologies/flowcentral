@@ -106,7 +106,17 @@ import com.tcdng.unify.core.database.dynamic.DynamicEntityInfo;
 public interface ApplicationModuleService extends FlowCentralService {
 
     /**
-     * Update entity schema.
+     * Creates entity schema.
+     * 
+     * @param entitySchema
+     *                     the entity schema
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException;
+
+    /**
+     * Updates entity schema.
      * 
      * @param entitySchema
      *                     the entity schema

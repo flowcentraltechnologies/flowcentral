@@ -1393,7 +1393,37 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    @Synchronized("app:updateentityschema")
+    @Synchronized("app:entityschemaoperation")
+    public boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException {
+        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
+        AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
+                .applicationName(np.getApplicationName()).name(np.getEntityName()));
+        if (appEntity == null) {
+            Long applicationId = getApplicationId(np.getApplicationName());
+            appEntity = new AppEntity();
+            appEntity.setApplicationId(applicationId);
+            appEntity.setConfigType(ConfigType.CUSTOM);
+            appEntity.setBaseType(null);
+            appEntity.setName(null);
+            appEntity.setDescription(null);
+            appEntity.setTableName(null);
+            appEntity.setEntityClass(null);
+            appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
+            appEntity.setDelegate(entitySchema.getDelegate());
+            appEntity.setAuditable(false);
+            appEntity.setReportable(false);
+            
+            List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
+            appEntity.setFieldList(fieldList);
+            environment().create(appEntity); 
+            return true;
+        }
+        
+        return false;
+    }
+
+    @Override
+    @Synchronized("app:entityschemaoperation")
     public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
         AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
@@ -1402,14 +1432,20 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             final Long appEntityId = appEntity.getId();
 
             // Update fields
+            Map<String, EntityFieldSchema> nonexisting = new LinkedHashMap<String, EntityFieldSchema>();
             for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
                 if (!StringUtils.isBlank(entityFieldSchema.getColumn())) {
-                    environment().updateAll(
+                    final int updated = environment().updateAll(
                             new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
                             new Update().add("columnName", entityFieldSchema.getColumn()));
+                    if (updated == 0) {
+                        nonexisting.put(entityFieldSchema.getName(), entityFieldSchema);
+                    }
                 }
             }
 
+            // Create new fields
+            
             // Update entity
             if (!StringUtils.isBlank(entitySchema.getTableName())) {
                 appEntity.setTableName(entitySchema.getTableName());

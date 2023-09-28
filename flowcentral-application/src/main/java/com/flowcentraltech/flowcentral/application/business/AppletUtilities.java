@@ -115,6 +115,16 @@ import com.tcdng.unify.web.ui.widget.data.Hint.MODE;
 public interface AppletUtilities extends FlowCentralComponent {
 
     /**
+     * Create entity schema.
+     * 
+     * @param entitySchema
+     *                     the entity schema
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException;
+
+    /**
      * Update entity schema.
      * 
      * @param entitySchema
@@ -129,11 +139,22 @@ public interface AppletUtilities extends FlowCentralComponent {
      * 
      * @param query
      *              the query to search with
-     * @return list of application entities
+     * @return list of application entities long names
      * @throws UnifyException
      *                        if an error occurs
      */
-    List<? extends Listable> getApplicationEntities(Query<? extends BaseApplicationEntity> query) throws UnifyException;
+    List<String> getApplicationEntitiesLongNames(Query<? extends BaseApplicationEntity> query) throws UnifyException;
+    
+    /**
+     * Gets application entities based on supplied query.
+     * 
+     * @param query
+     *              the query to search with
+     * @return list of application listables
+     * @throws UnifyException
+     *                        if an error occurs
+     */
+    List<? extends Listable> getApplicationEntitiesListables(Query<? extends BaseApplicationEntity> query) throws UnifyException;
 
     /**
      * Gets entity components list

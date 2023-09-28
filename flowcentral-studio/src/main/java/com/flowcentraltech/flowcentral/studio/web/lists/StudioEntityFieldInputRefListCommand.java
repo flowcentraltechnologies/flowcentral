@@ -58,7 +58,7 @@ public class StudioEntityFieldInputRefListCommand extends AbstractApplicationLis
                 RefDef _refDef = application().getRefDef(appEntityField.getReferences());
                 AppRefQuery query = new AppRefQuery();
                 query.entity(_refDef.getEntity());
-                return au().getApplicationEntities(query);
+                return au().getApplicationEntitiesListables(query);
             }
         }
 

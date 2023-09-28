@@ -55,7 +55,7 @@ public class StudioAppletWorkflowListCommand extends AbstractApplicationListComm
         if (longParam.isPresent()) {
             String entity = application().getAppAppletEntity(longParam.getValue());
             if (!StringUtils.isBlank(entity)) {
-                return au().getApplicationEntities((WorkflowQuery) new WorkflowQuery().entity(entity));
+                return au().getApplicationEntitiesListables((WorkflowQuery) new WorkflowQuery().entity(entity));
             }
         }
 
