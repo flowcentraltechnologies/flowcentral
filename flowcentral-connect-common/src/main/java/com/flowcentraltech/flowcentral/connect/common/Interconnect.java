@@ -50,8 +50,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.ApplicationConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
@@ -127,8 +127,8 @@ public class Interconnect {
 
                                 for (EntityConfig entityConfig : entityConfigList) {
                                     EntityInfo.Builder eib = EntityInfo.newBuilder(appEntityManagerFactory);
-                                    EntityBaseType base = entityConfig.getBase() != null ? entityConfig.getBase()
-                                            : EntityBaseType.BASE_ENTITY;
+                                    XConnectEntityBaseType base = entityConfig.getBase() != null ? entityConfig.getBase()
+                                            : XConnectEntityBaseType.BASE_ENTITY;
                                     eib.dataSourceAlias(applicationConfig.getDataSourceAlias()).baseType(base)
                                             .name(ensureLongName(applicationName, entityConfig.getName()))
                                             .tableName(entityConfig.getTable())
@@ -171,23 +171,23 @@ public class Interconnect {
         return false;
     }
 
-    private void populateBaseFields(EntityInfo.Builder eib, EntityBaseType base) throws Exception {
+    private void populateBaseFields(EntityInfo.Builder eib, XConnectEntityBaseType base) throws Exception {
         switch (base) {
             case BASE_WORK_ENTITY:
-                eib.addField(FieldDataType.STRING, "workBranchCode", "Work Branch Code", "work_branch_cd");
-                eib.addField(FieldDataType.BOOLEAN, "inWorkflow", "In Workflow", "in_workflow_fg");
-                eib.addField(FieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
-                eib.addField(FieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
+                eib.addField(XConnectFieldDataType.STRING, "workBranchCode", "Work Branch Code", "work_branch_cd");
+                eib.addField(XConnectFieldDataType.BOOLEAN, "inWorkflow", "In Workflow", "in_workflow_fg");
+                eib.addField(XConnectFieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
+                eib.addField(XConnectFieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
                         "wf_item_version_type");
             case BASE_AUDIT_ENTITY:
-                eib.addField(FieldDataType.STRING, "createdBy", "Created By", "created_by");
-                eib.addField(FieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
-                eib.addField(FieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
-                eib.addField(FieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
+                eib.addField(XConnectFieldDataType.STRING, "createdBy", "Created By", "created_by");
+                eib.addField(XConnectFieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
+                eib.addField(XConnectFieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
+                eib.addField(XConnectFieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
             case BASE_VERSION_ENTITY:
-                eib.addField(FieldDataType.LONG, "versionNo", "Version No.", "version_no");
+                eib.addField(XConnectFieldDataType.LONG, "versionNo", "Version No.", "version_no");
             case BASE_ENTITY:
-                eib.addField(FieldDataType.LONG, "id", "ID", "id");
+                eib.addField(XConnectFieldDataType.LONG, "id", "ID", "id");
             default:
                 break;
         }

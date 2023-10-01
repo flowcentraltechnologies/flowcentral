@@ -16,6 +16,7 @@
 
 package com.flowcentraltech.flowcentral.configuration.constants;
 
+import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectEntityBaseType;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
@@ -155,5 +156,9 @@ public enum EntityBaseType implements EnumConst {
 
     public static EntityBaseType fromName(String name) {
         return EnumUtils.fromName(EntityBaseType.class, name);
+    }
+
+    public static EntityBaseType fromInterconnect(XConnectEntityBaseType baseType) {
+        return baseType != null ? fromName(baseType.name()) : null;
     }
 }

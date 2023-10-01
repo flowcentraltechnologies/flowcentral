@@ -16,12 +16,12 @@
 package com.flowcentraltech.flowcentral.connect.configuration.constants;
 
 /**
- * Entity base type.
+ * Interconnect entity base type.
  * 
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum EntityBaseType {
+public enum XConnectEntityBaseType {
     BASE_ENTITY,
     BASE_VERSION_ENTITY,
     BASE_AUDIT_ENTITY,

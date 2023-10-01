@@ -128,17 +128,17 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                             logInfo(taskMonitor, "Creating entity schema...");
                             List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
                             for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                                EntityFieldDataType dataType = null; // TODO
+                                EntityFieldDataType dataType = EntityFieldDataType.fromInterconnect(entityFieldDTO.getType());
                                 fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
                                         entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
                                         entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
                                         entityFieldDTO.getPrecision(), entityFieldDTO.getLength()));
                             }
 
-                            EntityBaseType baseType = null; // TODO 
-                            EntitySchema entitySchema = new EntitySchema(baseType, delegate, entityDTO.getDataSourceAlias(),
-                                    entity, entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(),
-                                    fields);
+                            EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
+                            EntitySchema entitySchema = new EntitySchema(baseType, delegate,
+                                    entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
+                                    entityDTO.getDescription(), entityDTO.getTableName(), fields);
                             au.createEntitySchema(entitySchema);
                             logInfo(taskMonitor, "Entity schema create for [{0}] completed...", entity);
                         } else {
@@ -182,17 +182,17 @@ public abstract class AbstractEnvironmentDelegate extends AbstractFlowCentralCom
                             logInfo(taskMonitor, "Updating entity schema...");
                             List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
                             for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
-                                EntityFieldDataType dataType = null; // TODO
+                                EntityFieldDataType dataType = EntityFieldDataType.fromInterconnect(entityFieldDTO.getType());
                                 fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
                                         entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
                                         entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
                                         entityFieldDTO.getPrecision(), entityFieldDTO.getLength()));
                             }
 
-                            EntityBaseType baseType = null; // TODO 
-                            EntitySchema entitySchema = new EntitySchema(baseType, delegate, entityDTO.getDataSourceAlias(),
-                                    entity, entityDTO.getName(), entityDTO.getDescription(), entityDTO.getTableName(),
-                                    fields);
+                            EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
+                            EntitySchema entitySchema = new EntitySchema(baseType, delegate,
+                                    entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
+                                    entityDTO.getDescription(), entityDTO.getTableName(), fields);
                             au.updateEntitySchema(entitySchema);
                             logInfo(taskMonitor, "Entity schema update for [{0}] completed...", entity);
                         } else {

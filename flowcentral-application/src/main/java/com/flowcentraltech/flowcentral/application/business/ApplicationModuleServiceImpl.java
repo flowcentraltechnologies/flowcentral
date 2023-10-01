@@ -338,6 +338,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         implements ApplicationModuleService, FileAttachmentProvider, EntityAuditInfoProvider, SuggestionProvider,
         PostBootSetup, EnvironmentDelegateRegistrar {
 
+    private static final String ENTITY_SCHEMA_OPERATION = "app:entityschemaoperation";
+
     private final Set<String> refProperties = Collections
             .unmodifiableSet(new HashSet<String>(Arrays.asList(AppletPropertyConstants.SEARCH_TABLE,
                     AppletPropertyConstants.CREATE_FORM, AppletPropertyConstants.LOADING_TABLE,
@@ -1393,37 +1395,44 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     }
 
     @Override
-    @Synchronized("app:entityschemaoperation")
+    @Synchronized(ENTITY_SCHEMA_OPERATION)
     public boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException {
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
         AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
                 .applicationName(np.getApplicationName()).name(np.getEntityName()));
         if (appEntity == null) {
-            Long applicationId = getApplicationId(np.getApplicationName());
+            final Long applicationId = getApplicationId(np.getApplicationName());
             appEntity = new AppEntity();
             appEntity.setApplicationId(applicationId);
             appEntity.setConfigType(ConfigType.CUSTOM);
-            appEntity.setBaseType(null);
-            appEntity.setName(null);
-            appEntity.setDescription(null);
-            appEntity.setTableName(null);
-            appEntity.setEntityClass(null);
+            appEntity.setBaseType(entitySchema.getBaseType());
+            appEntity.setName(entitySchema.getName());
+            appEntity.setDescription(entitySchema.getDescription());
+            appEntity.setTableName(entitySchema.getTableName());
+            final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
+                    np.getApplicationName(), entitySchema.getName());
+            appEntity.setEntityClass(entityClass);
             appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             appEntity.setDelegate(entitySchema.getDelegate());
-            appEntity.setAuditable(false);
-            appEntity.setReportable(false);
-            
+            appEntity.setAuditable(true);
+            appEntity.setReportable(true);
+
             List<AppEntityField> fieldList = new ArrayList<AppEntityField>();
+            for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
+                AppEntityField appEntityField = newAppEntityField(null, entityFieldSchema);
+                fieldList.add(appEntityField);
+            }
             appEntity.setFieldList(fieldList);
-            environment().create(appEntity); 
+
+            environment().create(appEntity);
             return true;
         }
-        
+
         return false;
     }
 
     @Override
-    @Synchronized("app:entityschemaoperation")
+    @Synchronized(ENTITY_SCHEMA_OPERATION)
     public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
         AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
@@ -1431,21 +1440,41 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         if (appEntity != null) {
             final Long appEntityId = appEntity.getId();
 
-            // Update fields
-            Map<String, EntityFieldSchema> nonexisting = new LinkedHashMap<String, EntityFieldSchema>();
+            // Update entity fields
+            Set<String> existing = environment().valueSet(String.class, "name",
+                    new AppEntityFieldQuery().appEntityId(appEntityId));
             for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
-                if (!StringUtils.isBlank(entityFieldSchema.getColumn())) {
-                    final int updated = environment().updateAll(
-                            new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
-                            new Update().add("columnName", entityFieldSchema.getColumn()));
-                    if (updated == 0) {
-                        nonexisting.put(entityFieldSchema.getName(), entityFieldSchema);
+                if (existing.remove(entityFieldSchema.getName())) {
+                    Update update = new Update();
+                    if (entityFieldSchema.getLength() > 0) {
+                        update.add("maxLen", entityFieldSchema.getLength());
                     }
+
+                    if (entityFieldSchema.getPrecision() > 0) {
+                        update.add("precision", entityFieldSchema.getPrecision());
+                    }
+
+                    if (entityFieldSchema.getScale() > 0) {
+                        update.add("scale", entityFieldSchema.getScale());
+                    }
+
+                    if (!StringUtils.isBlank(entityFieldSchema.getColumn())) {
+                        update.add("columnName", entityFieldSchema.getColumn());
+                    }
+
+                    if (!update.isEmpty()) {
+                        environment().updateAll(
+                                new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
+                                update);
+                    }
+                } else {
+                    AppEntityField appEntityField = newAppEntityField(appEntityId, entityFieldSchema);
+                    environment().create(appEntityField);
                 }
             }
 
-            // Create new fields
-            
+            // TODO Delete old fields?
+
             // Update entity
             if (!StringUtils.isBlank(entitySchema.getTableName())) {
                 appEntity.setTableName(entitySchema.getTableName());
@@ -4784,6 +4813,23 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
         }
         appApplet.setFilterList(filterList);
+    }
+
+    private AppEntityField newAppEntityField(Long appEntityId, EntityFieldSchema entityFieldSchema) {
+        AppEntityField appEntityField = new AppEntityField();
+        appEntityField.setAppEntityId(appEntityId);
+        appEntityField.setConfigType(ConfigType.CUSTOM);
+        appEntityField.setDataType(entityFieldSchema.getDataType());
+        appEntityField.setName(entityFieldSchema.getName());
+        appEntityField.setColumnName(entityFieldSchema.getColumn());
+        appEntityField.setReferences(entityFieldSchema.getReferences());
+        appEntityField.setLabel(entityFieldSchema.getDescription());
+        appEntityField.setMaxLen(entityFieldSchema.getLength());
+        appEntityField.setPrecision(entityFieldSchema.getPrecision());
+        appEntityField.setScale(entityFieldSchema.getScale());
+        appEntityField.setAuditable(true);
+        appEntityField.setReportable(true);
+        return appEntityField;
     }
 
     private AppFieldSequence newAppFieldSequence(FieldSequenceConfig fieldSequenceConfig) throws UnifyException {

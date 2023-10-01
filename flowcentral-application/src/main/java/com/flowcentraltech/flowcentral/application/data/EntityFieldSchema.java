@@ -26,7 +26,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldDataTy
 public class EntityFieldSchema {
 
     private EntityFieldDataType dataType;
-    
+
     private String name;
 
     private String description;
@@ -41,8 +41,8 @@ public class EntityFieldSchema {
 
     private int length;
 
-    public EntityFieldSchema(EntityFieldDataType dataType, String name, String description, String column, String references, int scale,
-            int precision, int length) {
+    public EntityFieldSchema(EntityFieldDataType dataType, String name, String description, String column,
+            String references, int scale, int precision, int length) {
         this.name = name;
         this.description = description;
         this.column = column;

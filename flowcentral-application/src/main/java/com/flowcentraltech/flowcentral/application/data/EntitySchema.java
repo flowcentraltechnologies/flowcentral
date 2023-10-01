@@ -28,7 +28,7 @@ import com.flowcentraltech.flowcentral.configuration.constants.EntityBaseType;
 public class EntitySchema {
 
     private EntityBaseType baseType;
-    
+
     private String delegate;
 
     private String dataSourceAlias;
@@ -43,8 +43,8 @@ public class EntitySchema {
 
     private List<EntityFieldSchema> fields;
 
-    public EntitySchema(EntityBaseType baseType, String delegate, String dataSourceAlias, String entity, String name, String description,
-            String tableName, List<EntityFieldSchema> fields) {
+    public EntitySchema(EntityBaseType baseType, String delegate, String dataSourceAlias, String entity, String name,
+            String description, String tableName, List<EntityFieldSchema> fields) {
         this.delegate = delegate;
         this.dataSourceAlias = dataSourceAlias;
         this.entity = entity;

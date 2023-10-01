@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.connect.configuration.xml;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.FieldDataTypeXmlAdapter;
 
 /**
@@ -29,7 +29,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.FieldDa
  */
 public class EntityFieldConfig {
 
-    private FieldDataType type;
+    private XConnectFieldDataType type;
 
     private String name;
 
@@ -47,13 +47,13 @@ public class EntityFieldConfig {
 
     private int length;
 
-    public FieldDataType getType() {
+    public XConnectFieldDataType getType() {
         return type;
     }
 
     @XmlJavaTypeAdapter(FieldDataTypeXmlAdapter.class)
     @XmlAttribute(required = true)
-    public void setType(FieldDataType type) {
+    public void setType(XConnectFieldDataType type) {
         this.type = type;
     }
 

@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
 
 /**
  * Entity field DTO.
@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldData
  */
 public class EntityFieldDTO {
 
-    private FieldDataType type;
+    private XConnectFieldDataType type;
 
     private String name;
 
@@ -56,11 +56,11 @@ public class EntityFieldDTO {
 
     }
 
-    public FieldDataType getType() {
+    public XConnectFieldDataType getType() {
         return type;
     }
 
-    public void setType(FieldDataType type) {
+    public void setType(XConnectFieldDataType type) {
         this.type = type;
     }
 

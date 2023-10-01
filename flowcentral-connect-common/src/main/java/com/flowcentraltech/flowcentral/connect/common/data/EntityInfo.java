@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.EntityBaseType;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.FieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
 
 /**
  * Entity information.
@@ -37,7 +37,7 @@ public class EntityInfo {
 
     private String dataSourceAlias;
 
-    private EntityBaseType baseType;
+    private XConnectEntityBaseType baseType;
 
     private String name;
 
@@ -71,7 +71,7 @@ public class EntityInfo {
 
     private Map<String, String> fieldFromLocal;
 
-    public EntityInfo(String entityManagerFactory, String dataSourceAlias, EntityBaseType baseType, String name,
+    public EntityInfo(String entityManagerFactory, String dataSourceAlias, XConnectEntityBaseType baseType, String name,
             String description, String tableName, String idFieldName, String versionNoFieldName, String handler,
             String actionPolicy, Class<?> implClass, Map<String, EntityFieldInfo> fieldsByName) {
         this.entityManagerFactory = entityManagerFactory;
@@ -131,7 +131,7 @@ public class EntityInfo {
         return dataSourceAlias;
     }
 
-    public EntityBaseType getBaseType() {
+    public XConnectEntityBaseType getBaseType() {
         return baseType;
     }
 
@@ -248,7 +248,7 @@ public class EntityInfo {
 
         private String dataSourceAlias;
 
-        private EntityBaseType baseType;
+        private XConnectEntityBaseType baseType;
 
         private String name;
 
@@ -278,7 +278,7 @@ public class EntityInfo {
             return this;
         }
 
-        public Builder baseType(EntityBaseType baseType) {
+        public Builder baseType(XConnectEntityBaseType baseType) {
             this.baseType = baseType;
             return this;
         }
@@ -323,13 +323,13 @@ public class EntityInfo {
             return this;
         }
         
-        public Builder addField(FieldDataType type, String fieldName, String description, String column)
+        public Builder addField(XConnectFieldDataType type, String fieldName, String description, String column)
                 throws Exception {
             return addField(type, fieldName, description, column, null, null, 0, 0, 0);
         }
         
         @SuppressWarnings("unchecked")
-        public Builder addField(FieldDataType type, String fieldName, String description, String column, String references,
+        public Builder addField(XConnectFieldDataType type, String fieldName, String description, String column, String references,
                 String enumImpl, int scale, int precision, int length)
                 throws Exception {
             if (type == null) {
