@@ -16,7 +16,11 @@
 
 package com.flowcentraltech.flowcentral.delegate.business;
 
-import com.flowcentraltech.flowcentral.connect.common.constants.FlowCentralInterconnectConstants;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.tcdng.unify.core.UnifyException;
 import com.tcdng.unify.core.util.IOUtils;
 
@@ -28,29 +32,63 @@ import com.tcdng.unify.core.util.IOUtils;
  */
 public abstract class AbstractHttpPostEnvironmentDelegate extends AbstractJsonEnvironmentDelegate {
 
+    protected enum ActionType {
+        LIST_ENTITIES,
+        GET_ENTITY,
+        PROCEDURE,
+        DATASOURCE
+    }
+
+    private final Map<ActionType, ActionPath> paths;
+
+    public AbstractHttpPostEnvironmentDelegate(List<ActionPath> paths) {
+        Map<ActionType, ActionPath> _paths = new HashMap<ActionType, ActionPath>();
+        for (ActionPath path : paths) {
+            _paths.put(path.getType(), path);
+        }
+
+        this.paths = Collections.unmodifiableMap(_paths);
+    }
+
     @Override
     protected String listEntities(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(
-                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/listEntities", jsonReq);
+        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.LIST_ENTITIES).getPath(), jsonReq);
     }
 
     @Override
     protected String getEntity(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(
-                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/getEntity", jsonReq);
+        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.GET_ENTITY).getPath(), jsonReq);
     }
 
     @Override
     protected String sendToDelegateProcedureService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(
-                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/procedure", jsonReq);
+        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.PROCEDURE).getPath(), jsonReq);
     }
 
     @Override
     protected String sendToDelegateDatasourceService(String jsonReq) throws UnifyException {
-        return IOUtils.postJsonToEndpoint(
-                getEndpointNode() + FlowCentralInterconnectConstants.INTERCONNECT_CONTROLLER + "/dataSource", jsonReq);
+        return IOUtils.postJsonToEndpoint(getEndpointNode() + paths.get(ActionType.DATASOURCE).getPath(), jsonReq);
     }
 
     protected abstract String getEndpointNode() throws UnifyException;
+
+    protected static class ActionPath {
+
+        private final ActionType type;
+
+        private final String path;
+
+        public ActionPath(ActionType type, String path) {
+            this.type = type;
+            this.path = path;
+        }
+
+        public ActionType getType() {
+            return type;
+        }
+
+        public String getPath() {
+            return path;
+        }
+    }
 }
