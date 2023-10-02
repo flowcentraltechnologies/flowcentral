@@ -41,8 +41,10 @@ public class EntityFieldSchema {
 
     private int length;
 
+    private boolean nullable;
+
     public EntityFieldSchema(EntityFieldDataType dataType, String name, String description, String column,
-            String references, int scale, int precision, int length) {
+            String references, int scale, int precision, int length, boolean nullable) {
         this.name = name;
         this.description = description;
         this.column = column;
@@ -50,6 +52,7 @@ public class EntityFieldSchema {
         this.scale = scale;
         this.precision = precision;
         this.length = length;
+        this.nullable = nullable;
     }
 
     public EntityFieldDataType getDataType() {
@@ -82,5 +85,9 @@ public class EntityFieldSchema {
 
     public int getLength() {
         return length;
+    }
+
+    public boolean isNullable() {
+        return nullable;
     }
 }

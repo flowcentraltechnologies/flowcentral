@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldSchema;
 import com.flowcentraltech.flowcentral.application.data.EntitySchema;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
@@ -33,6 +34,7 @@ import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
 import com.flowcentraltech.flowcentral.delegate.data.DelegateEntityListingDTO;
 import com.tcdng.unify.core.UnifyException;
+import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.task.TaskMonitor;
 import com.tcdng.unify.core.util.DataUtils;
 
@@ -44,6 +46,13 @@ import com.tcdng.unify.core.util.DataUtils;
  */
 public abstract class AbstractSynchronizableEnvironmentDelegate extends AbstractEnvironmentDelegate
         implements SynchronizableEnvironmentDelegate {
+
+    @Configurable
+    private EntitySchemaManager entitySchemaManager;
+    
+    public final void setEntitySchemaManager(EntitySchemaManager entitySchemaManager) {
+        this.entitySchemaManager = entitySchemaManager;
+    }
 
     @Override
     public void delegateCreateSynchronization(TaskMonitor taskMonitor) throws UnifyException {
@@ -76,18 +85,21 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                                 fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
                                         entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
                                         entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
-                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength()));
+                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength(),
+                                        entityFieldDTO.isNullable()));
                             }
 
                             EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
                             EntitySchema entitySchema = new EntitySchema(baseType, delegate,
                                     entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
                                     entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                            au.createEntitySchema(entitySchema);
+                            entitySchemaManager.createEntitySchema(entitySchema);
                             logInfo(taskMonitor, "Entity schema create for [{0}] completed...", entity);
                         } else {
                             logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
                         }
+                    } else {
+                        logInfo(taskMonitor, "Skipping entity schema create for [{0}]. Already exists.", entity);
                     }
                 }
             } else {
@@ -131,18 +143,21 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                                 fields.add(new EntityFieldSchema(dataType, entityFieldDTO.getName(),
                                         entityFieldDTO.getDescription(), entityFieldDTO.getColumn(),
                                         entityFieldDTO.getReferences(), entityFieldDTO.getScale(),
-                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength()));
+                                        entityFieldDTO.getPrecision(), entityFieldDTO.getLength(),
+                                        entityFieldDTO.isNullable()));
                             }
 
                             EntityBaseType baseType = EntityBaseType.fromInterconnect(entityDTO.getBaseType());
                             EntitySchema entitySchema = new EntitySchema(baseType, delegate,
                                     entityDTO.getDataSourceAlias(), entity, entityDTO.getName(),
                                     entityDTO.getDescription(), entityDTO.getTableName(), fields);
-                            au.updateEntitySchema(entitySchema);
+                            entitySchemaManager.updateEntitySchema(entitySchema);
                             logInfo(taskMonitor, "Entity schema update for [{0}] completed...", entity);
                         } else {
                             logWarn(taskMonitor, "Could no retreive schema information for entity [{0}]...", entity);
                         }
+                    } else {
+                        logInfo(taskMonitor, "Skipping entity schema update for [{0}]. Does not exist.", entity);
                     }
                 }
             } else {

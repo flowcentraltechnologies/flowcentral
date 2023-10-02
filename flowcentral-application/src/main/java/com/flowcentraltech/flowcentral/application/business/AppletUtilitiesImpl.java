@@ -32,12 +32,11 @@ import com.flowcentraltech.flowcentral.application.data.AppletFilterDef;
 import com.flowcentraltech.flowcentral.application.data.AppletSetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.ApplicationDef;
 import com.flowcentraltech.flowcentral.application.data.AssignmentPageDef;
+import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityClassDef;
 import com.flowcentraltech.flowcentral.application.data.EntityDef;
-import com.flowcentraltech.flowcentral.application.data.DelegateEntityInfo;
 import com.flowcentraltech.flowcentral.application.data.EntityFieldDef;
 import com.flowcentraltech.flowcentral.application.data.EntityFormEventHandlers;
-import com.flowcentraltech.flowcentral.application.data.EntitySchema;
 import com.flowcentraltech.flowcentral.application.data.FieldSequenceDef;
 import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.FilterGroupDef;
@@ -430,16 +429,6 @@ public class AppletUtilitiesImpl extends AbstractFlowCentralComponent implements
     @Override
     public void hintUser(MODE mode, String messageKey, Object... params) throws UnifyException {
         pageRequestContextUtil.hintUser(mode, messageKey, params);
-    }
-
-    @Override
-    public boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException {
-        return applicationModuleService.createEntitySchema(entitySchema);
-    }
-
-    @Override
-    public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
-        return applicationModuleService.updateEntitySchema(entitySchema);
     }
 
     @Override

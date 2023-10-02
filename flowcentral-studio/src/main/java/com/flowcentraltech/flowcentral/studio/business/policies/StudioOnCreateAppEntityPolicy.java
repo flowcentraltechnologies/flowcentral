@@ -16,28 +16,17 @@
 
 package com.flowcentraltech.flowcentral.studio.business.policies;
 
-import java.util.List;
-
-import com.flowcentraltech.flowcentral.application.constants.ApplicationModuleSysParamConstants;
-import com.flowcentraltech.flowcentral.application.constants.ApplicationPrivilegeConstants;
+import com.flowcentraltech.flowcentral.application.business.EntitySchemaManager;
 import com.flowcentraltech.flowcentral.application.entities.AppEntity;
 import com.flowcentraltech.flowcentral.application.entities.AppEntityField;
-import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
-import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionContext;
 import com.flowcentraltech.flowcentral.common.business.policies.EntityActionResult;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
 import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
-import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
-import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
-import com.flowcentraltech.flowcentral.report.entities.ReportableField;
-import com.flowcentraltech.flowcentral.report.util.ReportEntityUtils;
 import com.tcdng.unify.core.UnifyException;
-import com.tcdng.unify.core.UserToken;
 import com.tcdng.unify.core.annotation.Component;
 import com.tcdng.unify.core.annotation.Configurable;
-import com.tcdng.unify.core.message.MessageResolver;
 import com.tcdng.unify.core.util.DataUtils;
 
 /**
@@ -50,17 +39,10 @@ import com.tcdng.unify.core.util.DataUtils;
 public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy {
 
     @Configurable
-    private ReportModuleService reportModuleService;
+    private EntitySchemaManager entitySchemaManager;
 
-    @Configurable
-    private MessageResolver messageResolver;
-
-    public final void setReportModuleService(ReportModuleService reportModuleService) {
-        this.reportModuleService = reportModuleService;
-    }
-
-    public final void setMessageResolver(MessageResolver messageResolver) {
-        this.messageResolver = messageResolver;
+    public final void setEntitySchemaManager(EntitySchemaManager entitySchemaManager) {
+        this.entitySchemaManager = entitySchemaManager;
     }
 
     @Override
@@ -84,46 +66,9 @@ public class StudioOnCreateAppEntityPolicy extends StudioOnCreateComponentPolicy
     protected EntityActionResult doExecutePostAction(EntityActionContext ctx) throws UnifyException {
         EntityActionResult result = super.doExecutePostAction(ctx);
         final AppEntity appEntity = (AppEntity) ctx.getInst();
-        final Long applicationId = appEntity.getApplicationId();
-        final String applicationName = application().getApplicationName(applicationId);
+        final String applicationName = application().getApplicationName(appEntity.getApplicationId());
         final String entity = ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName());
-        final String nameDesc = appEntity.getDescription();
-
-        // Create application reference
-        AppRef appRef = new AppRef();
-        appRef.setApplicationId(applicationId);
-        appRef.setName(appEntity.getName() + "Ref");
-        appRef.setDescription(resolveSessionMessage("$m{studio.appref.reference.template}", nameDesc));
-        appRef.setEntity(entity);
-        application().createAppRef(appRef);
-
-        // Create reportable if necessary
-        if (appEntity.isReportable()) {
-            String description = resolveApplicationMessage("$m{report.managedreport.description}",
-                    nameDesc);
-            ReportableDefinition reportableDefinition = new ReportableDefinition();
-            reportableDefinition.setApplicationId(applicationId);
-            reportableDefinition.setEntity(entity);
-            reportableDefinition.setTitle(description);
-            reportableDefinition.setName(appEntity.getName());
-            reportableDefinition.setDescription(description);
-            List<ReportableField> baseReportableFieldList = ReportEntityUtils
-                    .getEntityBaseTypeReportableFieldList(messageResolver, appEntity.getBaseType());
-            reportableDefinition.setFieldList(baseReportableFieldList);
-            reportModuleService.createReportableDefinition(reportableDefinition);
-
-            final String privilegeCode = PrivilegeNameUtils.getReportablePrivilegeName(
-                    ApplicationNameUtils.ensureLongNameReference(applicationName, appEntity.getName()));
-            registerPrivilege(applicationId, ApplicationPrivilegeConstants.APPLICATION_REPORTABLE_CATEGORY_CODE,
-                    privilegeCode, description);
-
-            UserToken userToken = getUserToken();
-            if (!userToken.isReservedUser() && system().getSysParameterValue(boolean.class,
-                    ApplicationModuleSysParamConstants.ASSIGN_APPLICATIONENTITY_ONCREATE)) {
-                assignPrivilegeToRole(userToken.getRoleCode(), privilegeCode);
-            }
-        }
-
+        entitySchemaManager.createDefaultComponents(entity, appEntity);;
         return result;
     }
 

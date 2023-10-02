@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.Lob;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -66,7 +67,12 @@ public class SpringBootInterconnect extends AbstractInterconnect {
             nullable = ca.nullable();
         }
 
-        if (type.isDate()) {
+        if (type.isString()) {
+            Lob la = field.getAnnotation(Lob.class);
+            if (la != null) {
+                type = ConnectFieldDataType.CLOB;
+            }
+        } else if (type.isDate()) {
             Temporal ta = field.getAnnotation(Temporal.class);
             if (ta != null && (TemporalType.TIMESTAMP.equals(ta.value()) || TemporalType.TIME.equals(ta.value()))) {
                 type = ConnectFieldDataType.TIMESTAMP;

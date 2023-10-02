@@ -41,6 +41,8 @@ public class EntityFieldDTO {
 
     private int length;
 
+    private boolean nullable;
+
     public EntityFieldDTO(EntityFieldInfo entityFieldInfo) {
         this.type = entityFieldInfo.getType();
         this.name = entityFieldInfo.getName();
@@ -50,6 +52,7 @@ public class EntityFieldDTO {
         this.scale = entityFieldInfo.getScale();
         this.precision = entityFieldInfo.getPrecision();
         this.length = entityFieldInfo.getLength();
+        this.nullable = entityFieldInfo.isNullable();
     }
 
     public EntityFieldDTO() {
@@ -118,6 +121,14 @@ public class EntityFieldDTO {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
     }
 
 }
