@@ -234,8 +234,8 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
         appEntityField.setConfigType(ConfigType.CUSTOM);
         appEntityField.setDataType(entityFieldSchema.getDataType());
         appEntityField.setName(entityFieldSchema.getName());
-        appEntityField.setColumnName(entityFieldSchema.getColumn());
-        appEntityField.setReferences(entityFieldSchema.getReferences());
+        appEntityField.setColumnName(!StringUtils.isBlank(entityFieldSchema.getColumn()) ? entityFieldSchema.getColumn() : null);
+        appEntityField.setReferences(entityFieldSchema.getReferences() != null ? entityFieldSchema.getReferences() + "Ref" : null);
         appEntityField.setLabel(entityFieldSchema.getDescription());
         appEntityField.setMaxLen(entityFieldSchema.getLength());
         appEntityField.setPrecision(entityFieldSchema.getPrecision());

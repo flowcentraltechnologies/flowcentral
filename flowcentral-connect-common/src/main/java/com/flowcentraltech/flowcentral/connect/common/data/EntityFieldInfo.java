@@ -47,7 +47,6 @@ public class EntityFieldInfo {
 
     public EntityFieldInfo(ConnectFieldDataType type, String name, String description, String column, String references,
             Class<? extends Enum<?>> enumImplClass, int precision, int scale, int length, boolean nullable) {
-        super();
         this.type = type;
         this.name = name;
         this.description = description;
