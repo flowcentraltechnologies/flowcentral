@@ -131,4 +131,11 @@ public class EntityFieldDTO {
         this.nullable = nullable;
     }
 
+    @Override
+    public String toString() {
+        return "[type=" + type + ", name=" + name + ", description=" + description + ", column=" + column
+                + ", references=" + references + ", scale=" + scale + ", precision=" + precision + ", length=" + length
+                + ", nullable=" + nullable + "]";
+    }
+
 }

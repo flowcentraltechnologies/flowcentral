@@ -46,6 +46,7 @@ import com.tcdng.unify.core.annotation.Configurable;
 import com.tcdng.unify.core.annotation.Synchronized;
 import com.tcdng.unify.core.criterion.Update;
 import com.tcdng.unify.core.message.MessageResolver;
+import com.tcdng.unify.core.util.NameUtils;
 import com.tcdng.unify.core.util.StringUtils;
 
 @Component("studio-entityschemamanger")
@@ -234,12 +235,16 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
         appEntityField.setConfigType(ConfigType.CUSTOM);
         appEntityField.setDataType(entityFieldSchema.getDataType());
         appEntityField.setName(entityFieldSchema.getName());
-        appEntityField.setColumnName(!StringUtils.isBlank(entityFieldSchema.getColumn()) ? entityFieldSchema.getColumn() : null);
-        appEntityField.setReferences(entityFieldSchema.getReferences() != null ? entityFieldSchema.getReferences() + "Ref" : null);
-        appEntityField.setLabel(entityFieldSchema.getDescription());
-        appEntityField.setMaxLen(entityFieldSchema.getLength());
-        appEntityField.setPrecision(entityFieldSchema.getPrecision());
-        appEntityField.setScale(entityFieldSchema.getScale());
+        appEntityField.setColumnName(
+                !StringUtils.isBlank(entityFieldSchema.getColumn()) ? entityFieldSchema.getColumn() : null);
+        appEntityField.setReferences(
+                entityFieldSchema.getReferences() != null ? entityFieldSchema.getReferences() + "Ref" : null);
+        appEntityField
+                .setLabel(!StringUtils.isBlank(entityFieldSchema.getDescription()) ? entityFieldSchema.getDescription()
+                        : NameUtils.describeName(entityFieldSchema.getName()));
+        appEntityField.setMaxLen(entityFieldSchema.getLength() > 0 ? entityFieldSchema.getLength() : null);
+        appEntityField.setPrecision(entityFieldSchema.getPrecision() > 0 ? entityFieldSchema.getPrecision() : null);
+        appEntityField.setScale(entityFieldSchema.getScale() > 0 ? entityFieldSchema.getScale() : null);
         appEntityField.setAuditable(true);
         appEntityField.setReportable(true);
         appEntityField.setNullable(entityFieldSchema.isNullable());

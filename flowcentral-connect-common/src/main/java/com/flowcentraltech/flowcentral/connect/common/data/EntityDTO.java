@@ -104,4 +104,10 @@ public class EntityDTO {
     public void setFields(List<EntityFieldDTO> fields) {
         this.fields = fields;
     }
+
+    @Override
+    public String toString() {
+        return "[baseType=" + baseType + ", dataSourceAlias=" + dataSourceAlias + ", name=" + name
+                + ", description=" + description + ", tableName=" + tableName + ", fields=" + fields + "]";
+    }
 }

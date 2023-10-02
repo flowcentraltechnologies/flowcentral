@@ -45,6 +45,7 @@ public class EntityFieldSchema {
 
     public EntityFieldSchema(EntityFieldDataType dataType, String name, String description, String column,
             String references, int scale, int precision, int length, boolean nullable) {
+        this.dataType =dataType;
         this.name = name;
         this.description = description;
         this.column = column;

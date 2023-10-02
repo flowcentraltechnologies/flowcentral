@@ -49,7 +49,7 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
 
     @Configurable
     private EntitySchemaManager entitySchemaManager;
-    
+
     public final void setEntitySchemaManager(EntitySchemaManager entitySchemaManager) {
         this.entitySchemaManager = entitySchemaManager;
     }
@@ -78,6 +78,7 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                         EntityDTO entityDTO = getDelegatedEntitySchema(entity);
                         if (entityDTO != null) {
                             logInfo(taskMonitor, "Creating entity schema...");
+                            logDebug("Entity schema [{0}]...", entityDTO);
                             List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
                             for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
                                 EntityFieldDataType dataType = EntityFieldDataType
@@ -136,6 +137,7 @@ public abstract class AbstractSynchronizableEnvironmentDelegate extends Abstract
                         EntityDTO entityDTO = getDelegatedEntitySchema(entity);
                         if (entityDTO != null) {
                             logInfo(taskMonitor, "Updating entity schema...");
+                            logDebug("Entity schema [{0}]...", entityDTO);
                             List<EntityFieldSchema> fields = new ArrayList<EntityFieldSchema>();
                             for (EntityFieldDTO entityFieldDTO : entityDTO.getFields()) {
                                 EntityFieldDataType dataType = EntityFieldDataType
