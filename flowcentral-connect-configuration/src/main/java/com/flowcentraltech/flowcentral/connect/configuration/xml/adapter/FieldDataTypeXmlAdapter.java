@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.connect.configuration.xml.adapter;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 
 /**
  * Interconnect field data type XML adapter.
@@ -25,15 +25,15 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectF
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class FieldDataTypeXmlAdapter extends XmlAdapter<String, XConnectFieldDataType> {
+public class FieldDataTypeXmlAdapter extends XmlAdapter<String, ConnectFieldDataType> {
 
     @Override
-    public XConnectFieldDataType unmarshal(String str) throws Exception {
-        return str != null ? XConnectFieldDataType.valueOf(str.toUpperCase()) : null;
+    public ConnectFieldDataType unmarshal(String str) throws Exception {
+        return str != null ? ConnectFieldDataType.valueOf(str.toUpperCase()) : null;
     }
 
     @Override
-    public String marshal(XConnectFieldDataType type) throws Exception {
+    public String marshal(ConnectFieldDataType type) throws Exception {
         return type != null ? type.name() : null;
     }
 

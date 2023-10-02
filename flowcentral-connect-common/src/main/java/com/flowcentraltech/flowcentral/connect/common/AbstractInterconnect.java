@@ -17,6 +17,7 @@ package com.flowcentraltech.flowcentral.connect.common;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,8 +52,8 @@ import com.flowcentraltech.flowcentral.connect.common.data.ProcedureRequest;
 import com.flowcentraltech.flowcentral.connect.common.data.QueryDef;
 import com.flowcentraltech.flowcentral.connect.common.data.ResolvedCondition;
 import com.flowcentraltech.flowcentral.connect.common.data.UpdateDef;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectEntityBaseType;
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.ApplicationConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
@@ -67,9 +69,9 @@ import com.tcdng.unify.convert.util.ConverterUtils;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class Interconnect {
+public abstract class AbstractInterconnect {
 
-    private static final Logger LOGGER = Logger.getLogger(Interconnect.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AbstractInterconnect.class.getName());
 
     private final Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().setDateFormat(DateFormat.LONG)
             .setPrettyPrinting().setVersion(1.0).create();
@@ -97,7 +99,7 @@ public class Interconnect {
 
     private boolean initialized;
 
-    public Interconnect(RefType refType) {
+    public AbstractInterconnect(RefType refType) {
         this.refType = refType;
         this.entities = Collections.emptyMap();
     }
@@ -108,11 +110,11 @@ public class Interconnect {
 
     public boolean init(String configurationFile, EntityInstFinder entityInstFinder) throws Exception {
         if (!initialized) {
-            synchronized (Interconnect.class) {
+            synchronized (AbstractInterconnect.class) {
                 if (!initialized) {
                     LOGGER.log(Level.INFO, "Initializing flowCentral interconnect using configuration [{0}]...",
                             configurationFile);
-                    entities = new HashMap<String, EntityInfo>();
+                    Map<String, EntityInfo> _entities = new HashMap<String, EntityInfo>();
                     List<ApplicationConfig> applicationConfigList = XmlUtils.readInterconnectConfig(configurationFile);
                     for (ApplicationConfig applicationConfig : applicationConfigList) {
                         final String appEntityManagerFactory = applicationConfig.getEntityManagerFactory();
@@ -126,9 +128,14 @@ public class Interconnect {
                                         applicationName);
 
                                 for (EntityConfig entityConfig : entityConfigList) {
+                                    if (entityConfig.getBase() == null) {
+                                        throw new IllegalArgumentException(
+                                                "Entity configuration for [" + applicationName + "."
+                                                        + entityConfig.getName() + "] requires a base type.");
+                                    }
+
+                                    final ConnectEntityBaseType base = entityConfig.getBase();
                                     EntityInfo.Builder eib = EntityInfo.newBuilder(appEntityManagerFactory);
-                                    XConnectEntityBaseType base = entityConfig.getBase() != null ? entityConfig.getBase()
-                                            : XConnectEntityBaseType.BASE_ENTITY;
                                     eib.dataSourceAlias(applicationConfig.getDataSourceAlias()).baseType(base)
                                             .name(ensureLongName(applicationName, entityConfig.getName()))
                                             .tableName(entityConfig.getTable())
@@ -143,12 +150,12 @@ public class Interconnect {
                                         eib.addField(entityFieldConfig.getType(), entityFieldConfig.getName(),
                                                 entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
                                                 ensureLongName(applicationName, entityFieldConfig.getReferences()),
-                                                entityFieldConfig.getEnumImplClass(), entityFieldConfig.getScale(),
-                                                entityFieldConfig.getPrecision(), entityFieldConfig.getLength());
+                                                entityFieldConfig.getEnumImplClass(), entityFieldConfig.getPrecision(),
+                                                entityFieldConfig.getScale(), entityFieldConfig.getLength());
                                     }
 
                                     EntityInfo entityInfo = eib.build();
-                                    entities.put(entityInfo.getName(), entityInfo);
+                                    _entities.put(entityInfo.getName(), entityInfo);
                                 }
 
                                 LOGGER.log(Level.INFO,
@@ -158,9 +165,10 @@ public class Interconnect {
                         }
                     }
 
+                    entities = detectAndApplyImplicitFields(_entities);
                     this.entityInstFinder = entityInstFinder;
                     initialized = true;
-                    LOGGER.log(Level.INFO, "Total of [{0}] entity information loaded.", entities.size());
+                    LOGGER.log(Level.INFO, "Total of [{0}] entity information loaded.", _entities.size());
                     LOGGER.log(Level.INFO, "Interconnect successfully initialized.");
                 }
             }
@@ -171,23 +179,70 @@ public class Interconnect {
         return false;
     }
 
-    private void populateBaseFields(EntityInfo.Builder eib, XConnectEntityBaseType base) throws Exception {
+    private Map<String, EntityInfo> detectAndApplyImplicitFields(Map<String, EntityInfo> _entities) throws Exception {
+        Map<String, EntityInfo> entities = new HashMap<String, EntityInfo>();
+        for (EntityInfo _entityInfo : _entities.values()) {
+            EntityInfo.Builder eib = EntityInfo.newBuilder(_entityInfo.getEntityManagerFactory());
+            eib.dataSourceAlias(_entityInfo.getDataSourceAlias()).baseType(_entityInfo.getBaseType())
+                    .name(_entityInfo.getName()).tableName(_entityInfo.getTableName())
+                    .description(_entityInfo.getDescription()).implementation(_entityInfo.getImplClass().getName())
+                    .idFieldName(_entityInfo.getIdFieldName()).versionNoFieldName(_entityInfo.getVersionNoFieldName())
+                    .handler(_entityInfo.getHandler()).actionPolicy(_entityInfo.getActionPolicy());
+            for (EntityFieldInfo _entityFieldInfo : _entityInfo.getAllFields()) {
+                eib.addField(_entityFieldInfo.getType(), _entityFieldInfo.getName(), _entityFieldInfo.getDescription(),
+                        _entityFieldInfo.getColumn(), _entityFieldInfo.getReferences(),
+                        _entityFieldInfo.getEnumImplClass() != null ? _entityFieldInfo.getEnumImplClass().getName()
+                                : null,
+                        _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(), _entityFieldInfo.getLength());
+            }
+
+            // Implicit fields
+            Set<String> existing = _entityInfo.getFieldNames();
+            Class<?> clazz = _entityInfo.getImplClass();
+            do {
+                for (Field field : clazz.getDeclaredFields()) {
+                    if (existing.contains(field.getName())) {
+                        EntityFieldInfo _entityFieldInfo = createEntityFieldInfo(field);
+                        if (_entityFieldInfo != null) {
+                            eib.addField(_entityFieldInfo.getType(), _entityFieldInfo.getName(),
+                                    _entityFieldInfo.getDescription(), _entityFieldInfo.getColumn(),
+                                    _entityFieldInfo.getReferences(),
+                                    _entityFieldInfo.getEnumImplClass() != null
+                                            ? _entityFieldInfo.getEnumImplClass().getName()
+                                            : null,
+                                    _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(),
+                                    _entityFieldInfo.getLength());
+                        }
+                    }
+                }
+            } while ((clazz = clazz.getSuperclass()) != null);
+
+            EntityInfo entityInfo = eib.build();
+            entities.put(entityInfo.getName(), entityInfo);
+        }
+
+        return entities;
+    }
+
+    protected abstract EntityFieldInfo createEntityFieldInfo(Field field) throws Exception;
+
+    private void populateBaseFields(EntityInfo.Builder eib, ConnectEntityBaseType base) throws Exception {
         switch (base) {
             case BASE_WORK_ENTITY:
-                eib.addField(XConnectFieldDataType.STRING, "workBranchCode", "Work Branch Code", "work_branch_cd");
-                eib.addField(XConnectFieldDataType.BOOLEAN, "inWorkflow", "In Workflow", "in_workflow_fg");
-                eib.addField(XConnectFieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
-                eib.addField(XConnectFieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
+                eib.addField(ConnectFieldDataType.STRING, "workBranchCode", "Work Branch Code", "work_branch_cd");
+                eib.addField(ConnectFieldDataType.BOOLEAN, "inWorkflow", "In Workflow", "in_workflow_fg");
+                eib.addField(ConnectFieldDataType.LONG, "originalCopyId", "Original Copy ID", "original_copy_id");
+                eib.addField(ConnectFieldDataType.STRING, "wfItemVersionType", "Work Item Version Type",
                         "wf_item_version_type");
             case BASE_AUDIT_ENTITY:
-                eib.addField(XConnectFieldDataType.STRING, "createdBy", "Created By", "created_by");
-                eib.addField(XConnectFieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
-                eib.addField(XConnectFieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
-                eib.addField(XConnectFieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
+                eib.addField(ConnectFieldDataType.STRING, "createdBy", "Created By", "created_by");
+                eib.addField(ConnectFieldDataType.STRING, "updatedBy", "Updated By", "updated_by");
+                eib.addField(ConnectFieldDataType.TIMESTAMP, "createDt", "Created On", "created_on");
+                eib.addField(ConnectFieldDataType.TIMESTAMP, "updateDt", "Updated On", "updated_on");
             case BASE_VERSION_ENTITY:
-                eib.addField(XConnectFieldDataType.LONG, "versionNo", "Version No.", "version_no");
+                eib.addField(ConnectFieldDataType.LONG, "versionNo", "Version No.", "version_no");
             case BASE_ENTITY:
-                eib.addField(XConnectFieldDataType.LONG, "id", "ID", "id");
+                eib.addField(ConnectFieldDataType.LONG, "id", "ID", "id");
             default:
                 break;
         }
@@ -633,7 +688,7 @@ public class Interconnect {
     public List<String> getAllEntityNames() {
         return new ArrayList<String>(entities.keySet());
     }
-    
+
     public EntityInfo getEntityInfo(String entity) throws Exception {
         checkInitialized();
         EntityInfo entityInfo = entities.get(entity);

@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.EntityBaseTypeXmlAdapter;
 
 /**
@@ -32,7 +32,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.xml.adapter.EntityB
  */
 public class EntityConfig {
 
-    private XConnectEntityBaseType base;
+    private ConnectEntityBaseType base;
     
     private String name;
 
@@ -52,13 +52,13 @@ public class EntityConfig {
 
     private List<EntityFieldConfig> entityFieldList;
 
-    public XConnectEntityBaseType getBase() {
+    public ConnectEntityBaseType getBase() {
         return base;
     }
 
     @XmlJavaTypeAdapter(EntityBaseTypeXmlAdapter.class)
     @XmlAttribute(required = true)
-    public void setBase(XConnectEntityBaseType base) {
+    public void setBase(ConnectEntityBaseType base) {
         this.base = base;
     }
 

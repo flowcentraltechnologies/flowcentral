@@ -15,10 +15,13 @@
  */
 package com.flowcentraltech.flowcentral.connect.springboot;
 
+import java.lang.reflect.Field;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.flowcentraltech.flowcentral.connect.common.Interconnect;
+import com.flowcentraltech.flowcentral.connect.common.AbstractInterconnect;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
 
 /**
  * Flowcentral spring boot interconnect.
@@ -27,10 +30,16 @@ import com.flowcentraltech.flowcentral.connect.common.Interconnect;
  * @since 1.0
  */
 @Component
-public class SpringBootInterconnect extends Interconnect {
+public class SpringBootInterconnect extends AbstractInterconnect {
 
     @Autowired
     public SpringBootInterconnect() {
         super(RefType.OBJECT);
+    }
+
+    @Override
+    protected EntityFieldInfo createEntityFieldInfo(Field field) throws Exception {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

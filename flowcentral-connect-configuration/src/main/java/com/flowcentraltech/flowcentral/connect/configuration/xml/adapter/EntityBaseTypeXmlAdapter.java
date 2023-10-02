@@ -17,7 +17,7 @@ package com.flowcentraltech.flowcentral.connect.configuration.xml.adapter;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
 
 /**
  * Interconnect entity base type XML adapter.
@@ -25,15 +25,15 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectE
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public class EntityBaseTypeXmlAdapter extends XmlAdapter<String, XConnectEntityBaseType> {
+public class EntityBaseTypeXmlAdapter extends XmlAdapter<String, ConnectEntityBaseType> {
 
     @Override
-    public XConnectEntityBaseType unmarshal(String str) throws Exception {
-        return str != null ? XConnectEntityBaseType.valueOf(str.toUpperCase()) : null;
+    public ConnectEntityBaseType unmarshal(String str) throws Exception {
+        return str != null ? ConnectEntityBaseType.valueOf(str.toUpperCase()) : null;
     }
 
     @Override
-    public String marshal(XConnectEntityBaseType type) throws Exception {
+    public String marshal(ConnectEntityBaseType type) throws Exception {
         return type != null ? type.name() : null;
     }
 

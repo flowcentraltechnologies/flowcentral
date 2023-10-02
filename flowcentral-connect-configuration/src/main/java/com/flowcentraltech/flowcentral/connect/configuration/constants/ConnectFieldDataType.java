@@ -25,7 +25,7 @@ import java.util.Date;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum XConnectFieldDataType {
+public enum ConnectFieldDataType {
 
     CHAR(
             Character.class),
@@ -70,7 +70,7 @@ public enum XConnectFieldDataType {
 
     private final Class<?> javaClass;
 
-    private XConnectFieldDataType(Class<?> javaClass) {
+    private ConnectFieldDataType(Class<?> javaClass) {
         this.javaClass = javaClass;
     }
 

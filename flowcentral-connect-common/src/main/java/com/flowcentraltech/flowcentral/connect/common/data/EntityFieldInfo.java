@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.connect.common.data;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 
 /**
  * Field information.
@@ -25,7 +25,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectF
  */
 public class EntityFieldInfo {
 
-    private XConnectFieldDataType type;
+    private ConnectFieldDataType type;
 
     private String name;
 
@@ -37,14 +37,14 @@ public class EntityFieldInfo {
 
     private Class<? extends Enum<?>> enumImplClass;
 
-    private int scale;
-
     private int precision;
+
+    private int scale;
 
     private int length;
 
-    public EntityFieldInfo(XConnectFieldDataType type, String name, String description, String column, String references,
-            Class<? extends Enum<?>> enumImplClass, int scale, int precision, int length) {
+    public EntityFieldInfo(ConnectFieldDataType type, String name, String description, String column, String references,
+            Class<? extends Enum<?>> enumImplClass, int precision, int scale, int length) {
         super();
         this.type = type;
         this.name = name;
@@ -52,12 +52,12 @@ public class EntityFieldInfo {
         this.column = column;
         this.references = references;
         this.enumImplClass = enumImplClass;
-        this.scale = scale;
         this.precision = precision;
+        this.scale = scale;
         this.length = length;
     }
 
-    public XConnectFieldDataType getType() {
+    public ConnectFieldDataType getType() {
         return type;
     }
     

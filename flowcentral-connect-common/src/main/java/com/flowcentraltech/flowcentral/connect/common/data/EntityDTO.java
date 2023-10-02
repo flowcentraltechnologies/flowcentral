@@ -18,7 +18,7 @@ package com.flowcentraltech.flowcentral.connect.common.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectEntityBaseType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectEntityBaseType;
 
 /**
  * Entity DTO.
@@ -28,7 +28,7 @@ import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectE
  */
 public class EntityDTO {
 
-    private XConnectEntityBaseType baseType;
+    private ConnectEntityBaseType baseType;
 
     private String dataSourceAlias;
 
@@ -57,11 +57,11 @@ public class EntityDTO {
 
     }
 
-    public XConnectEntityBaseType getBaseType() {
+    public ConnectEntityBaseType getBaseType() {
         return baseType;
     }
 
-    public void setBaseType(XConnectEntityBaseType baseType) {
+    public void setBaseType(ConnectEntityBaseType baseType) {
         this.baseType = baseType;
     }
 

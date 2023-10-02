@@ -21,7 +21,7 @@ package com.flowcentraltech.flowcentral.connect.configuration.constants;
  * @author FlowCentral Technologies Limited
  * @since 1.0
  */
-public enum XConnectEntityBaseType {
+public enum ConnectEntityBaseType {
     BASE_ENTITY,
     BASE_VERSION_ENTITY,
     BASE_AUDIT_ENTITY,

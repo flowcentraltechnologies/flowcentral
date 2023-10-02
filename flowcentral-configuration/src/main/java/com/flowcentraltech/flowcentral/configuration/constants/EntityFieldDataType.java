@@ -15,7 +15,7 @@
  */
 package com.flowcentraltech.flowcentral.configuration.constants;
 
-import com.flowcentraltech.flowcentral.connect.configuration.constants.XConnectFieldDataType;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 import com.tcdng.unify.common.annotation.StaticList;
 import com.tcdng.unify.common.constants.EnumConst;
 import com.tcdng.unify.core.annotation.Table;
@@ -406,7 +406,7 @@ public enum EntityFieldDataType implements EnumConst {
         return EnumUtils.fromName(EntityFieldDataType.class, name);
     }
 
-    public static EntityFieldDataType fromInterconnect(XConnectFieldDataType dataType) {
+    public static EntityFieldDataType fromInterconnect(ConnectFieldDataType dataType) {
         return dataType != null ? fromName(dataType.name()) : null;
     }
 
