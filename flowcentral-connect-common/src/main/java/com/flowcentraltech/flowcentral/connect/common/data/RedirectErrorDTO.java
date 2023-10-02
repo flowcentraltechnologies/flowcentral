@@ -63,4 +63,9 @@ public class RedirectErrorDTO {
         this.errorMsg = errorMsg;
     }
 
+    @Override
+    public String toString() {
+        return "[redirect=" + redirect + ", errorCode=" + errorCode + ", errorMsg=" + errorMsg + "]";
+    }
+
 }

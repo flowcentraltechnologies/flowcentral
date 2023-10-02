@@ -65,7 +65,7 @@ public class StudioMenuWriter extends AbstractPanelWriter {
             Arrays.asList("studio.stuManageModule", "studio.manageApplication", "studio.applicationReplication"));
 
     private static final List<String> synchronizationAppletList = Collections
-            .unmodifiableList(Arrays.asList("studio.delegateSynchronization"));
+            .unmodifiableList(Arrays.asList("studio.delegateCreateSynchronization", "studio.delegateSynchronization"));
 
     private static final List<StudioAppComponentType> menuCategoryList = Collections.unmodifiableList(
             Arrays.asList(StudioAppComponentType.CODEGENERATION, StudioAppComponentType.SYNCHRONIZATION,

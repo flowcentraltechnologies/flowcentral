@@ -1397,7 +1397,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     @Synchronized(ENTITY_SCHEMA_OPERATION)
     public boolean createEntitySchema(EntitySchema entitySchema) throws UnifyException {
-        ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
+        logDebug("Creating entity schema. Entity [{0}]...", entitySchema.getEntity());
+       ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
         AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
                 .applicationName(np.getApplicationName()).name(np.getEntityName()));
         if (appEntity == null) {
@@ -1425,7 +1426,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             appEntity.setFieldList(fieldList);
 
             environment().create(appEntity);
+            logDebug("Entity schema for [{0}] successfully created.", entitySchema.getEntity());
             return true;
+        } else {
+            logDebug("Entity schema for [{0}] already exists.", entitySchema.getEntity());
         }
 
         return false;
@@ -1434,6 +1438,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
     @Override
     @Synchronized(ENTITY_SCHEMA_OPERATION)
     public boolean updateEntitySchema(EntitySchema entitySchema) throws UnifyException {
+        logDebug("Updating entity schema. Entity [{0}]...", entitySchema.getEntity());
         ApplicationEntityNameParts np = ApplicationNameUtils.getApplicationEntityNameParts(entitySchema.getEntity());
         AppEntity appEntity = environment().findLean(new AppEntityQuery().delegate(entitySchema.getDelegate())
                 .applicationName(np.getApplicationName()).name(np.getEntityName()));
@@ -1445,6 +1450,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     new AppEntityFieldQuery().appEntityId(appEntityId));
             for (EntityFieldSchema entityFieldSchema : entitySchema.getFields()) {
                 if (existing.remove(entityFieldSchema.getName())) {
+                    logDebug("Checking if field [{0}] is updateable...", entityFieldSchema.getName());
                     Update update = new Update();
                     if (entityFieldSchema.getLength() > 0) {
                         update.add("maxLen", entityFieldSchema.getLength());
@@ -1463,6 +1469,7 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     if (!update.isEmpty()) {
+                        logDebug("Updating field [{0}]...", entityFieldSchema.getName());
                         environment().updateAll(
                                 new AppEntityFieldQuery().appEntityId(appEntityId).name(entityFieldSchema.getName()),
                                 update);
@@ -1485,7 +1492,10 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             }
 
             environment().updateLeanByIdVersion(appEntity);
+            logDebug("Entity schema for [{0}] successfully updated.", entitySchema.getEntity());
             return true;
+        } else {
+            logDebug("Entity schema for [{0}] does not exists.", entitySchema.getEntity());
         }
 
         return false;

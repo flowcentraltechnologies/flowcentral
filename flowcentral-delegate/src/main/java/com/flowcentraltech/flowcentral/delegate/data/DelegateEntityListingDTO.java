@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.flowcentraltech.flowcentral.connect.common.data.EntityListingDTO;
 import com.flowcentraltech.flowcentral.connect.common.data.RedirectErrorDTO;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Delegate listing DTO
@@ -43,5 +44,10 @@ public class DelegateEntityListingDTO {
 
     public List<RedirectErrorDTO> getRedirectErrors() {
         return redirectErrors;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.toXmlString(this);
     }
 }
