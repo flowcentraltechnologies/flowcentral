@@ -16,12 +16,19 @@
 package com.flowcentraltech.flowcentral.connect.springboot;
 
 import java.lang.reflect.Field;
+import java.util.Map;
+
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.flowcentraltech.flowcentral.connect.common.AbstractInterconnect;
 import com.flowcentraltech.flowcentral.connect.common.data.EntityFieldInfo;
+import com.flowcentraltech.flowcentral.connect.common.data.EntityInfo;
+import com.flowcentraltech.flowcentral.connect.configuration.constants.ConnectFieldDataType;
 
 /**
  * Flowcentral spring boot interconnect.
@@ -38,8 +45,35 @@ public class SpringBootInterconnect extends AbstractInterconnect {
     }
 
     @Override
-    protected EntityFieldInfo createEntityFieldInfo(Field field) throws Exception {
-        // TODO Auto-generated method stub
-        return null;
+    protected EntityFieldInfo createEntityFieldInfo(Map<String, EntityInfo> _entitiesbyclassname, Field field)
+            throws Exception {
+        FieldTypeInfo fieldTypeInfo = getFieldTypeInfo(_entitiesbyclassname, field);
+        final String name = field.getName();
+        ConnectFieldDataType type = fieldTypeInfo.getType();
+        String description = null;
+        String column = null;
+        int length = 0;
+        int precision = 0;
+        int scale = 0;
+        boolean nullable = false;
+
+        Column ca = field.getAnnotation(Column.class);
+        if (ca != null) {
+            column = ca.name();
+            length = ca.length();
+            precision = ca.precision();
+            scale = ca.scale();
+            nullable = ca.nullable();
+        }
+
+        if (type.isDate()) {
+            Temporal ta = field.getAnnotation(Temporal.class);
+            if (ta != null && (TemporalType.TIMESTAMP.equals(ta.value()) || TemporalType.TIME.equals(ta.value()))) {
+                type = ConnectFieldDataType.TIMESTAMP;
+            }
+        }
+
+        return new EntityFieldInfo(type, name, description, column, fieldTypeInfo.getReferences(),
+                fieldTypeInfo.getEnumImplClass(), precision, scale, length, nullable);
     }
 }

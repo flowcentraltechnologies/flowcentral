@@ -42,9 +42,11 @@ public class EntityFieldInfo {
     private int scale;
 
     private int length;
+    
+    private boolean nullable;
 
     public EntityFieldInfo(ConnectFieldDataType type, String name, String description, String column, String references,
-            Class<? extends Enum<?>> enumImplClass, int precision, int scale, int length) {
+            Class<? extends Enum<?>> enumImplClass, int precision, int scale, int length, boolean nullable) {
         super();
         this.type = type;
         this.name = name;
@@ -55,6 +57,7 @@ public class EntityFieldInfo {
         this.precision = precision;
         this.scale = scale;
         this.length = length;
+        this.nullable = nullable;
     }
 
     public ConnectFieldDataType getType() {
@@ -95,6 +98,10 @@ public class EntityFieldInfo {
 
     public int getLength() {
         return length;
+    }
+
+    public boolean isNullable() {
+        return nullable;
     }
 
     public boolean references() {

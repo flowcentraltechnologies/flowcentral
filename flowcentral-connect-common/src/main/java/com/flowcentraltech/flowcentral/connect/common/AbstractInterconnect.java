@@ -18,6 +18,9 @@ package com.flowcentraltech.flowcentral.connect.common;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -76,6 +79,34 @@ public abstract class AbstractInterconnect {
     private final Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().setDateFormat(DateFormat.LONG)
             .setPrettyPrinting().setVersion(1.0).create();
 
+    private static final Map<Class<?>, ConnectFieldDataType> classToConnectDataTypeMap;
+
+    static {
+        Map<Class<?>, ConnectFieldDataType> map = new HashMap<Class<?>, ConnectFieldDataType>();
+        map.put(boolean.class, ConnectFieldDataType.BOOLEAN);
+        map.put(Boolean.class, ConnectFieldDataType.BOOLEAN);
+        map.put(byte.class, ConnectFieldDataType.INTEGER);
+        map.put(Byte.class, ConnectFieldDataType.INTEGER);
+        map.put(byte[].class, ConnectFieldDataType.BLOB);
+        map.put(char.class, ConnectFieldDataType.CHAR);
+        map.put(Character.class, ConnectFieldDataType.CHAR);
+        map.put(short.class, ConnectFieldDataType.SHORT);
+        map.put(Short.class, ConnectFieldDataType.SHORT);
+        map.put(int.class, ConnectFieldDataType.INTEGER);
+        map.put(Integer.class, ConnectFieldDataType.INTEGER);
+        map.put(long.class, ConnectFieldDataType.LONG);
+        map.put(Long.class, ConnectFieldDataType.LONG);
+        map.put(float.class, ConnectFieldDataType.FLOAT);
+        map.put(Float.class, ConnectFieldDataType.FLOAT);
+        map.put(double.class, ConnectFieldDataType.DOUBLE);
+        map.put(Double.class, ConnectFieldDataType.DOUBLE);
+        map.put(BigDecimal.class, ConnectFieldDataType.DECIMAL);
+        map.put(Date.class, ConnectFieldDataType.DATE);
+        map.put(String.class, ConnectFieldDataType.STRING);
+        map.put(List.class, ConnectFieldDataType.CHILD_LIST);
+        classToConnectDataTypeMap = Collections.unmodifiableMap(map);
+    }
+
     protected enum RefType {
         PRIMITIVE,
         OBJECT;
@@ -114,7 +145,7 @@ public abstract class AbstractInterconnect {
                 if (!initialized) {
                     LOGGER.log(Level.INFO, "Initializing flowCentral interconnect using configuration [{0}]...",
                             configurationFile);
-                    Map<String, EntityInfo> _entities = new HashMap<String, EntityInfo>();
+                    Map<String, EntityInfo> _entitiesbyclassname = new HashMap<String, EntityInfo>();
                     List<ApplicationConfig> applicationConfigList = XmlUtils.readInterconnectConfig(configurationFile);
                     for (ApplicationConfig applicationConfig : applicationConfigList) {
                         final String appEntityManagerFactory = applicationConfig.getEntityManagerFactory();
@@ -151,11 +182,12 @@ public abstract class AbstractInterconnect {
                                                 entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
                                                 ensureLongName(applicationName, entityFieldConfig.getReferences()),
                                                 entityFieldConfig.getEnumImplClass(), entityFieldConfig.getPrecision(),
-                                                entityFieldConfig.getScale(), entityFieldConfig.getLength());
+                                                entityFieldConfig.getScale(), entityFieldConfig.getLength(),
+                                                entityFieldConfig.isNullable());
                                     }
 
                                     EntityInfo entityInfo = eib.build();
-                                    _entities.put(entityInfo.getName(), entityInfo);
+                                    _entitiesbyclassname.put(entityConfig.getImplementation(), entityInfo);
                                 }
 
                                 LOGGER.log(Level.INFO,
@@ -165,10 +197,10 @@ public abstract class AbstractInterconnect {
                         }
                     }
 
-                    entities = detectAndApplyImplicitFields(_entities);
+                    entities = detectAndApplyImplicitFields(_entitiesbyclassname);
                     this.entityInstFinder = entityInstFinder;
                     initialized = true;
-                    LOGGER.log(Level.INFO, "Total of [{0}] entity information loaded.", _entities.size());
+                    LOGGER.log(Level.INFO, "Total of [{0}] entity information loaded.", entities.size());
                     LOGGER.log(Level.INFO, "Interconnect successfully initialized.");
                 }
             }
@@ -179,9 +211,10 @@ public abstract class AbstractInterconnect {
         return false;
     }
 
-    private Map<String, EntityInfo> detectAndApplyImplicitFields(Map<String, EntityInfo> _entities) throws Exception {
+    private Map<String, EntityInfo> detectAndApplyImplicitFields(Map<String, EntityInfo> _entitiesbyclassname)
+            throws Exception {
         Map<String, EntityInfo> entities = new HashMap<String, EntityInfo>();
-        for (EntityInfo _entityInfo : _entities.values()) {
+        for (EntityInfo _entityInfo : _entitiesbyclassname.values()) {
             EntityInfo.Builder eib = EntityInfo.newBuilder(_entityInfo.getEntityManagerFactory());
             eib.dataSourceAlias(_entityInfo.getDataSourceAlias()).baseType(_entityInfo.getBaseType())
                     .name(_entityInfo.getName()).tableName(_entityInfo.getTableName())
@@ -193,7 +226,8 @@ public abstract class AbstractInterconnect {
                         _entityFieldInfo.getColumn(), _entityFieldInfo.getReferences(),
                         _entityFieldInfo.getEnumImplClass() != null ? _entityFieldInfo.getEnumImplClass().getName()
                                 : null,
-                        _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(), _entityFieldInfo.getLength());
+                        _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(), _entityFieldInfo.getLength(),
+                        _entityFieldInfo.isNullable());
             }
 
             // Implicit fields
@@ -201,8 +235,8 @@ public abstract class AbstractInterconnect {
             Class<?> clazz = _entityInfo.getImplClass();
             do {
                 for (Field field : clazz.getDeclaredFields()) {
-                    if (existing.contains(field.getName())) {
-                        EntityFieldInfo _entityFieldInfo = createEntityFieldInfo(field);
+                    if (!existing.contains(field.getName())) {
+                        EntityFieldInfo _entityFieldInfo = createEntityFieldInfo(_entitiesbyclassname, field);
                         if (_entityFieldInfo != null) {
                             eib.addField(_entityFieldInfo.getType(), _entityFieldInfo.getName(),
                                     _entityFieldInfo.getDescription(), _entityFieldInfo.getColumn(),
@@ -211,7 +245,7 @@ public abstract class AbstractInterconnect {
                                             ? _entityFieldInfo.getEnumImplClass().getName()
                                             : null,
                                     _entityFieldInfo.getPrecision(), _entityFieldInfo.getScale(),
-                                    _entityFieldInfo.getLength());
+                                    _entityFieldInfo.getLength(), _entityFieldInfo.isNullable());
                         }
                     }
                 }
@@ -224,7 +258,92 @@ public abstract class AbstractInterconnect {
         return entities;
     }
 
-    protected abstract EntityFieldInfo createEntityFieldInfo(Field field) throws Exception;
+    @SuppressWarnings("unchecked")
+    protected FieldTypeInfo getFieldTypeInfo(Map<String, EntityInfo> _entitiesbyclassname, Field field)
+            throws Exception {
+        ConnectFieldDataType type = classToConnectDataTypeMap.get(field.getType());
+        if (type == null) {
+            if (Enum.class.equals(field.getType())) {
+                type = ConnectFieldDataType.STRING;
+                return new FieldTypeInfo(ConnectFieldDataType.STRING, (Class<? extends Enum<?>>) field.getType());
+            }
+
+            EntityInfo _refEntityInfo = _entitiesbyclassname.get(field.getType().getName());
+            if (_refEntityInfo == null) {
+                throw new IllegalArgumentException("Can not to refer to an interconnect undefined type ["
+                        + field.getType().getName() + "], field = [" + field.getName() + "]");
+            }
+
+            return new FieldTypeInfo(ConnectFieldDataType.REF, _refEntityInfo.getName());
+        } else if (ConnectFieldDataType.CHILD_LIST.equals(type)) {
+            if (field.getGenericType() instanceof ParameterizedType) {
+                Type[] argTypes = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();
+                if (argTypes.length == 1) {
+                    if (argTypes[0] instanceof Class) {
+                        EntityInfo _refEntityInfo = _entitiesbyclassname.get(((Class<?>) argTypes[0]).getName());
+                        if (_refEntityInfo == null) {
+                            throw new IllegalArgumentException("Can not to refer to an interconnect undefined type ["
+                                    + ((Class<?>) argTypes[0]).getName() + "], field = [" + field.getName() + "]");
+                        }
+
+                        return new FieldTypeInfo(type, _refEntityInfo.getName());
+                    }
+                }
+            }
+        }
+
+        return new FieldTypeInfo(type);
+    }
+
+    protected abstract EntityFieldInfo createEntityFieldInfo(Map<String, EntityInfo> _entitiesbyclassname, Field field)
+            throws Exception;
+
+    protected class FieldTypeInfo {
+
+        private final ConnectFieldDataType type;
+
+        private final Class<? extends Enum<?>> enumImplClass;
+
+        private final String references;
+
+        public FieldTypeInfo(ConnectFieldDataType type, Class<? extends Enum<?>> enumImplClass) {
+            this.type = type;
+            this.enumImplClass = enumImplClass;
+            this.references = null;
+        }
+
+        public FieldTypeInfo(ConnectFieldDataType type, String references) {
+            this.type = type;
+            this.enumImplClass = null;
+            this.references = references;
+        }
+
+        public FieldTypeInfo(ConnectFieldDataType type) {
+            this.type = type;
+            this.enumImplClass = null;
+            this.references = null;
+        }
+
+        public ConnectFieldDataType getType() {
+            return type;
+        }
+
+        public Class<? extends Enum<?>> getEnumImplClass() {
+            return enumImplClass;
+        }
+
+        public boolean isWithEnumImplClass() {
+            return enumImplClass != null;
+        }
+
+        public String getReferences() {
+            return references;
+        }
+
+        public boolean isWithReferences() {
+            return references != null;
+        }
+    }
 
     private void populateBaseFields(EntityInfo.Builder eib, ConnectEntityBaseType base) throws Exception {
         switch (base) {

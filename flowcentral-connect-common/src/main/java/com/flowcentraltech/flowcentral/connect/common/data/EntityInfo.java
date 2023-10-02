@@ -335,12 +335,12 @@ public class EntityInfo {
         
         public Builder addField(ConnectFieldDataType type, String fieldName, String description, String column)
                 throws Exception {
-            return addField(type, fieldName, description, column, null, null, 0, 0, 0);
+            return addField(type, fieldName, description, column, null, null, 0, 0, 0, true);
         }
         
         @SuppressWarnings("unchecked")
         public Builder addField(ConnectFieldDataType type, String fieldName, String description, String column, String references,
-                String enumImpl, int precision, int scale, int length)
+                String enumImpl, int precision, int scale, int length, boolean nullable)
                 throws Exception {
             if (type == null) {
                 throw new RuntimeException("Entity information field type is required");
@@ -360,7 +360,7 @@ public class EntityInfo {
                     ? (Class<? extends Enum<?>>) Class.forName(enumImpl)
                     : null;
             fieldsByName.put(fieldName, new EntityFieldInfo(type, fieldName, description, column, references,
-                     enumImplClass, precision, scale, length));
+                     enumImplClass, precision, scale, length, nullable));
             return this;
         }
         

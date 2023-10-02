@@ -47,6 +47,12 @@ public class EntityFieldConfig {
 
     private int length;
 
+    private boolean nullable;
+
+    public EntityFieldConfig() {
+        this.nullable = true;
+    }
+    
     public ConnectFieldDataType getType() {
         return type;
     }
@@ -127,6 +133,15 @@ public class EntityFieldConfig {
     @XmlAttribute
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    @XmlAttribute
+    public void setNullable(boolean nullable) {
+        this.nullable = nullable;
     }
 
 }
