@@ -91,12 +91,12 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             appEntity.setApplicationId(applicationId);
             appEntity.setConfigType(ConfigType.CUSTOM);
             appEntity.setBaseType(entitySchema.getBaseType());
-            appEntity.setName(entitySchema.getName());
+            appEntity.setName(np.getEntityName());
             appEntity.setDescription(entitySchema.getDescription());
             appEntity.setLabel(entitySchema.getDescription());
             appEntity.setTableName(entitySchema.getTableName());
             final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
-                    np.getApplicationName(), entitySchema.getName());
+                    np.getApplicationName(), np.getEntityName());
             appEntity.setEntityClass(entityClass);
             appEntity.setDataSourceName(entitySchema.getDataSourceAlias());
             appEntity.setDelegate(entitySchema.getDelegate());
@@ -141,7 +141,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
                 if (existing.remove(entityFieldSchema.getName())) {
                     logDebug("Updating field [{0}]...", entityFieldSchema.getName());
                     Update update = new Update();
-                    if (entityFieldSchema.getLength() > 0) {
+                    if (entityFieldSchema.getLength() > 0 && entityFieldSchema.getDataType().isString()) {
                         update.add("maxLen", entityFieldSchema.getLength());
                     }
 
@@ -248,7 +248,9 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
         appEntityField
                 .setLabel(!StringUtils.isBlank(entityFieldSchema.getDescription()) ? entityFieldSchema.getDescription()
                         : NameUtils.describeName(entityFieldSchema.getName()));
-        appEntityField.setMaxLen(entityFieldSchema.getLength() > 0 ? entityFieldSchema.getLength() : null);
+        appEntityField.setMaxLen(entityFieldSchema.getLength() > 0 && entityFieldSchema.getDataType().isString()
+                ? entityFieldSchema.getLength()
+                : null);
         appEntityField.setPrecision(entityFieldSchema.getPrecision() > 0 ? entityFieldSchema.getPrecision() : null);
         appEntityField.setScale(entityFieldSchema.getScale() > 0 ? entityFieldSchema.getScale() : null);
         appEntityField.setAuditable(true);

@@ -21,7 +21,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,8 +61,6 @@ import com.flowcentraltech.flowcentral.connect.configuration.xml.EntitiesConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.EntityFieldConfig;
 import com.flowcentraltech.flowcentral.connect.configuration.xml.util.XmlUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.tcdng.unify.convert.util.ConverterUtils;
 
 /**
@@ -75,9 +72,6 @@ import com.tcdng.unify.convert.util.ConverterUtils;
 public abstract class AbstractInterconnect {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractInterconnect.class.getName());
-
-    private final Gson gson = new GsonBuilder().disableHtmlEscaping().serializeNulls().setDateFormat(DateFormat.LONG)
-            .setPrettyPrinting().setVersion(1.0).create();
 
     private static final Map<Class<?>, ConnectFieldDataType> classToConnectDataTypeMap;
 
@@ -135,8 +129,13 @@ public abstract class AbstractInterconnect {
         this.entities = Collections.emptyMap();
     }
 
-    public String prettyJSON(Object src) {
-        return gson.toJson(src, src.getClass());
+    public String prettyJSON(Object src) throws Exception {
+        if (src != null) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(src);
+        }
+
+        return null;
     }
 
     public boolean init(String configurationFile, EntityInstFinder entityInstFinder) throws Exception {

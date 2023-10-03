@@ -2819,8 +2819,12 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
         }
 
         fieldName = entityDef.isWithDescriptionField() ? "description" : fieldName;
-        return environment().value(String.class, fieldName,
-                Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", entityId));
+        if (fieldName != null) {
+            return environment().value(String.class, fieldName,
+                    Query.of((Class<? extends Entity>) entityClassDef.getEntityClass()).addEquals("id", entityId));
+        }
+
+        return null;
     }
 
     @SuppressWarnings("unchecked")
