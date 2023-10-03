@@ -177,13 +177,15 @@ public abstract class AbstractInterconnect {
                                             .handler(entityConfig.getHandler())
                                             .actionPolicy(entityConfig.getActionPolicy());
                                     populateBaseFields(eib, base);
-                                    for (EntityFieldConfig entityFieldConfig : entityConfig.getEntityFieldList()) {
-                                        eib.addField(entityFieldConfig.getType(), entityFieldConfig.getName(),
-                                                entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
-                                                ensureLongName(applicationName, entityFieldConfig.getReferences()),
-                                                entityFieldConfig.getEnumImplClass(), entityFieldConfig.getPrecision(),
-                                                entityFieldConfig.getScale(), entityFieldConfig.getLength(),
-                                                entityFieldConfig.isNullable());
+                                    if (entityConfig.getEntityFieldList() != null) {
+                                        for (EntityFieldConfig entityFieldConfig : entityConfig.getEntityFieldList()) {
+                                            eib.addField(entityFieldConfig.getType(), entityFieldConfig.getName(),
+                                                    entityFieldConfig.getDescription(), entityFieldConfig.getColumn(),
+                                                    ensureLongName(applicationName, entityFieldConfig.getReferences()),
+                                                    entityFieldConfig.getEnumImplClass(),
+                                                    entityFieldConfig.getPrecision(), entityFieldConfig.getScale(),
+                                                    entityFieldConfig.getLength(), entityFieldConfig.isNullable());
+                                        }
                                     }
 
                                     EntityInfo entityInfo = eib.build();

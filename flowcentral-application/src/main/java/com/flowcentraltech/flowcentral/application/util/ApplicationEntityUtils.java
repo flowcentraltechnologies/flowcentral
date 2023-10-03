@@ -130,6 +130,10 @@ public final class ApplicationEntityUtils {
 
     }
 
+    public static boolean isReservedFieldName(String fieldName) {
+        return RESERVED_BASE_FIELDS.contains(fieldName);
+    }
+    
     public static String getBaseFieldColumnName(String fieldName) {
         return baseFieldColumns.get(fieldName);
     }

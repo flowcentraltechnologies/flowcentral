@@ -32,6 +32,7 @@ import com.flowcentraltech.flowcentral.application.entities.AppEntityQuery;
 import com.flowcentraltech.flowcentral.application.entities.AppRef;
 import com.flowcentraltech.flowcentral.application.util.ApplicationCodeGenUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationEntityNameParts;
+import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
@@ -91,6 +92,7 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
             appEntity.setBaseType(entitySchema.getBaseType());
             appEntity.setName(entitySchema.getName());
             appEntity.setDescription(entitySchema.getDescription());
+            appEntity.setLabel(entitySchema.getDescription());
             appEntity.setTableName(entitySchema.getTableName());
             final String entityClass = ApplicationCodeGenUtils.generateCustomEntityClassName(ConfigType.CUSTOM,
                     np.getApplicationName(), entitySchema.getName());
@@ -232,7 +234,9 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
     private AppEntityField newAppEntityField(Long appEntityId, EntityFieldSchema entityFieldSchema) {
         AppEntityField appEntityField = new AppEntityField();
         appEntityField.setAppEntityId(appEntityId);
-        appEntityField.setConfigType(ConfigType.CUSTOM);
+        appEntityField.setConfigType(
+                ApplicationEntityUtils.isReservedFieldName(entityFieldSchema.getName()) ? ConfigType.STATIC
+                        : ConfigType.CUSTOM);
         appEntityField.setDataType(entityFieldSchema.getDataType());
         appEntityField.setName(entityFieldSchema.getName());
         appEntityField.setColumnName(

@@ -45,6 +45,7 @@ public class EntitySchema {
 
     public EntitySchema(EntityBaseType baseType, String delegate, String dataSourceAlias, String entity, String name,
             String description, String tableName, List<EntityFieldSchema> fields) {
+        this.baseType = baseType;
         this.delegate = delegate;
         this.dataSourceAlias = dataSourceAlias;
         this.entity = entity;
