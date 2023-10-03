@@ -20,6 +20,7 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Lob;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -43,6 +44,12 @@ public class SpringBootInterconnect extends AbstractInterconnect {
     @Autowired
     public SpringBootInterconnect() {
         super(RefType.OBJECT);
+    }
+
+    @Override
+    protected String getTableName(Class<?> entityClass) throws Exception {
+        Table ta = entityClass.getAnnotation(Table.class);
+        return  ta != null ? ta.name() : null;
     }
 
     @Override

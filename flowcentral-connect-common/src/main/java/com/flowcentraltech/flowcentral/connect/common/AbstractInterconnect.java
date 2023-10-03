@@ -216,11 +216,14 @@ public abstract class AbstractInterconnect {
         Map<String, EntityInfo> entities = new HashMap<String, EntityInfo>();
         for (EntityInfo _entityInfo : _entitiesbyclassname.values()) {
             EntityInfo.Builder eib = EntityInfo.newBuilder(_entityInfo.getEntityManagerFactory());
+            final String tableName = _entityInfo.getTableName() != null && !_entityInfo.getTableName().isEmpty()
+                    ? _entityInfo.getTableName()
+                    : getTableName(_entityInfo.getImplClass());
             eib.dataSourceAlias(_entityInfo.getDataSourceAlias()).baseType(_entityInfo.getBaseType())
-                    .name(_entityInfo.getName()).tableName(_entityInfo.getTableName())
-                    .description(_entityInfo.getDescription()).implementation(_entityInfo.getImplClass().getName())
-                    .idFieldName(_entityInfo.getIdFieldName()).versionNoFieldName(_entityInfo.getVersionNoFieldName())
-                    .handler(_entityInfo.getHandler()).actionPolicy(_entityInfo.getActionPolicy());
+                    .name(_entityInfo.getName()).tableName(tableName).description(_entityInfo.getDescription())
+                    .implementation(_entityInfo.getImplClass().getName()).idFieldName(_entityInfo.getIdFieldName())
+                    .versionNoFieldName(_entityInfo.getVersionNoFieldName()).handler(_entityInfo.getHandler())
+                    .actionPolicy(_entityInfo.getActionPolicy());
             for (EntityFieldInfo _entityFieldInfo : _entityInfo.getAllFields()) {
                 eib.addField(_entityFieldInfo.getType(), _entityFieldInfo.getName(), _entityFieldInfo.getDescription(),
                         _entityFieldInfo.getColumn(), _entityFieldInfo.getReferences(),
@@ -294,6 +297,8 @@ public abstract class AbstractInterconnect {
 
         return new FieldTypeInfo(type);
     }
+
+    protected abstract String getTableName(Class<?> entityClass) throws Exception;
 
     protected abstract EntityFieldInfo createEntityFieldInfo(Map<String, EntityInfo> _entitiesbyclassname, Field field)
             throws Exception;
