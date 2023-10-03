@@ -36,6 +36,7 @@ import com.flowcentraltech.flowcentral.application.util.ApplicationEntityUtils;
 import com.flowcentraltech.flowcentral.application.util.ApplicationNameUtils;
 import com.flowcentraltech.flowcentral.application.util.PrivilegeNameUtils;
 import com.flowcentraltech.flowcentral.common.constants.ConfigType;
+import com.flowcentraltech.flowcentral.configuration.constants.EntityFieldType;
 import com.flowcentraltech.flowcentral.report.business.ReportModuleService;
 import com.flowcentraltech.flowcentral.report.entities.ReportableDefinition;
 import com.flowcentraltech.flowcentral.report.entities.ReportableField;
@@ -234,9 +235,10 @@ public class StudioEntitySchemaManagerImpl extends AbstractEntitySchemaManager {
     private AppEntityField newAppEntityField(Long appEntityId, EntityFieldSchema entityFieldSchema) {
         AppEntityField appEntityField = new AppEntityField();
         appEntityField.setAppEntityId(appEntityId);
-        appEntityField.setConfigType(
-                ApplicationEntityUtils.isReservedFieldName(entityFieldSchema.getName()) ? ConfigType.STATIC
-                        : ConfigType.CUSTOM);
+        appEntityField.setConfigType(ConfigType.CUSTOM);
+        appEntityField
+                .setType(ApplicationEntityUtils.isReservedFieldName(entityFieldSchema.getName()) ? EntityFieldType.BASE
+                        : EntityFieldType.CUSTOM);
         appEntityField.setDataType(entityFieldSchema.getDataType());
         appEntityField.setName(entityFieldSchema.getName());
         appEntityField.setColumnName(
