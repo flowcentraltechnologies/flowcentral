@@ -46,6 +46,7 @@ import com.flowcentraltech.flowcentral.application.data.FilterDef;
 import com.flowcentraltech.flowcentral.application.data.InputValue;
 import com.flowcentraltech.flowcentral.application.data.SetValuesDef;
 import com.flowcentraltech.flowcentral.application.data.StandardAppletDef;
+import com.flowcentraltech.flowcentral.application.data.TableDef;
 import com.flowcentraltech.flowcentral.application.data.WidgetTypeDef;
 import com.flowcentraltech.flowcentral.application.data.WorkflowLoadingTableInfo;
 import com.flowcentraltech.flowcentral.application.data.WorkflowStepInfo;
@@ -800,7 +801,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     workflowStepInfoList.add(new WorkflowStepInfo(
                             ApplicationNameUtils.getApplicationEntityLongName(wfStep.getApplicationName(),
                                     wfStep.getWorkflowName()),
-                            wfStep.getApplicationName(), wfStep.getWorkflowName(), wfStep.getEntityName(),
+                            wfStep.getApplicationName(), wfStep.getWorkflowName(), null, wfStep.getEntityName(),
                             wfStep.getName(), wfStep.getDescription(), wfStep.getLabel()));
                 }
 
@@ -814,12 +815,14 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                                     "entityName", "applicationName", "workflowName"));
             if (!DataUtils.isBlank(wfStepRoleList)) {
                 List<WorkflowStepInfo> workflowStepInfoList = new ArrayList<WorkflowStepInfo>();
+                TableDef tableDef = appletUtil.getTableDef(loadingTableName);
                 for (WfStepRole wfStepRole : wfStepRoleList) {
                     workflowStepInfoList.add(new WorkflowStepInfo(
                             ApplicationNameUtils.getApplicationEntityLongName(wfStepRole.getApplicationName(),
                                     wfStepRole.getWorkflowName()),
-                            wfStepRole.getApplicationName(), wfStepRole.getWorkflowName(), wfStepRole.getEntityName(),
-                            wfStepRole.getWfStepName(), wfStepRole.getWfStepDesc(), wfStepRole.getWfStepLabel()));
+                            wfStepRole.getApplicationName(), wfStepRole.getWorkflowName(),
+                            tableDef.getLoadingFilterGen(), wfStepRole.getEntityName(), wfStepRole.getWfStepName(),
+                            wfStepRole.getWfStepDesc(), wfStepRole.getWfStepLabel()));
                 }
 
                 DataUtils.sortAscending(workflowStepInfoList, WorkflowStepInfo.class, "stepLabel");
@@ -896,7 +899,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
                     wfStepDef.getAttachmentProviderName());
             attachments = attachmentsProvider.provide(reader);
         }
-        
+
         Errors errors = null;
         if (wfStepDef.isError()) {
             errors = new Errors(wfItem.getErrorMsg(), wfItem.getErrorTrace(), wfItem.getErrorDoc());

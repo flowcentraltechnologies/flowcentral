@@ -3267,6 +3267,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
             srcAppTable.setLabel(ctx.messageSwap(srcAppTable.getLabel()));
             srcAppTable.setEntity(ctx.entitySwap(srcAppTable.getEntity()));
             srcAppTable.setDetailsPanelName(ctx.componentSwap(srcAppTable.getDetailsPanelName()));
+            srcAppTable.setLoadingFilterGen(ctx.componentSwap(srcAppTable.getLoadingFilterGen()));
+            srcAppTable.setLoadingSearchInput(ctx.componentSwap(srcAppTable.getLoadingSearchInput()));
 
             // Columns
             for (AppTableColumn appTableColumn : srcAppTable.getColumnList()) {
@@ -4252,6 +4254,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     appTable.setDescription(description);
                     appTable.setLabel(label);
                     appTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
+                    appTable.setLoadingFilterGen(appTableConfig.getLoadingFilterGen());
+                    appTable.setLoadingSearchInput(appTableConfig.getLoadingSearchInput());
                     appTable.setSortHistory(appTableConfig.getSortHistory());
                     appTable.setItemsPerPage(appTableConfig.getItemsPerPage());
                     appTable.setSummaryTitleColumns(appTableConfig.getSummaryTitleColumns());
@@ -4278,6 +4282,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                         oldAppTable.setDescription(description);
                         oldAppTable.setLabel(label);
                         oldAppTable.setDetailsPanelName(appTableConfig.getDetailsPanelName());
+                        oldAppTable.setLoadingFilterGen(appTableConfig.getLoadingFilterGen());
+                        oldAppTable.setLoadingSearchInput(appTableConfig.getLoadingSearchInput());
                         oldAppTable.setSortHistory(appTableConfig.getSortHistory());
                         oldAppTable.setItemsPerPage(appTableConfig.getItemsPerPage());
                         oldAppTable.setSummaryTitleColumns(appTableConfig.getSummaryTitleColumns());

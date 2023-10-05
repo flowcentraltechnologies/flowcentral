@@ -16,6 +16,7 @@
 package com.flowcentraltech.flowcentral.application.data;
 
 import com.tcdng.unify.core.data.Listable;
+import com.tcdng.unify.core.util.StringUtils;
 
 /**
  * Workflow information.
@@ -31,6 +32,8 @@ public class WorkflowStepInfo implements Listable {
 
     private String workflowName;
 
+    private String workItemFilterGenName;
+
     private String entity;
 
     private String stepName;
@@ -39,11 +42,12 @@ public class WorkflowStepInfo implements Listable {
 
     private String stepLabel;
 
-    public WorkflowStepInfo(String workflowLongName, String applicationName, String workflowName, String entity,
-            String stepName, String stepDesc, String stepLabel) {
+    public WorkflowStepInfo(String workflowLongName, String applicationName, String workflowName,
+            String workItemFilterGenName, String entity, String stepName, String stepDesc, String stepLabel) {
         this.workflowLongName = workflowLongName;
         this.applicationName = applicationName;
         this.workflowName = workflowName;
+        this.workItemFilterGenName = workItemFilterGenName;
         this.entity = entity;
         this.stepName = stepName;
         this.stepDesc = stepDesc;
@@ -70,6 +74,14 @@ public class WorkflowStepInfo implements Listable {
 
     public String getWorkflowName() {
         return workflowName;
+    }
+
+    public String getWorkItemFilterGenName() {
+        return workItemFilterGenName;
+    }
+
+    public boolean isWithWorkItemFilterGen() {
+        return !StringUtils.isBlank(workItemFilterGenName);
     }
 
     public String getEntity() {

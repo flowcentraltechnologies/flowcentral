@@ -36,6 +36,10 @@ public class AppTableConfig extends BaseNameConfig {
 
     private String detailsPanelName;
 
+    private String loadingSearchInput;
+
+    private String loadingFilterGen;
+
     private int sortHistory;
 
     private int itemsPerPage;
@@ -108,6 +112,24 @@ public class AppTableConfig extends BaseNameConfig {
     @XmlAttribute(required = true, name = "detailsPanel")
     public void setDetailsPanelName(String detailsPanelName) {
         this.detailsPanelName = detailsPanelName;
+    }
+
+    public String getLoadingSearchInput() {
+        return loadingSearchInput;
+    }
+
+    @XmlAttribute
+    public void setLoadingSearchInput(String loadingSearchInput) {
+        this.loadingSearchInput = loadingSearchInput;
+    }
+
+    public String getLoadingFilterGen() {
+        return loadingFilterGen;
+    }
+
+    @XmlAttribute
+    public void setLoadingFilterGen(String loadingFilterGen) {
+        this.loadingFilterGen = loadingFilterGen;
     }
 
     public int getSortHistory() {

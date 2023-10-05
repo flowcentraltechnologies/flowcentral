@@ -1216,6 +1216,9 @@
 			<field name="loadingSearchInput"
 				label="$m{application.apptable.loadingsearchinput}" type="string"
 				maxLen="64" nullable="true" />
+			<field name="loadingFilterGen"
+				label="$m{application.apptable.loadingfiltergen}" type="string"
+				maxLen="64" nullable="true" />
 			<field name="sortable"
 				label="$m{application.apptable.sortable}" type="boolean" />
 			<field name="serialNo"
