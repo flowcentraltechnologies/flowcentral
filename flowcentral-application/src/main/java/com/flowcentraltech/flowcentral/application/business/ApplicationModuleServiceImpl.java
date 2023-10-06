@@ -1017,6 +1017,8 @@ public class ApplicationModuleServiceImpl extends AbstractFlowCentralService
                     }
 
                     tdb.detailsPanelName(appTable.getDetailsPanelName());
+                    tdb.loadingSearchInput(appTable.getLoadingSearchInput());
+                    tdb.loadingFilterGen(appTable.getLoadingFilterGen());
                     tdb.sortHistory(appTable.getSortHistory());
                     tdb.itemsPerPage(appTable.getItemsPerPage());
                     tdb.summaryTitleColumns(appTable.getSummaryTitleColumns());

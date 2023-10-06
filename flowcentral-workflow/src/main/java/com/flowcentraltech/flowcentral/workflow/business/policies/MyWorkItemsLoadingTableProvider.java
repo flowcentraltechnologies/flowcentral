@@ -105,7 +105,7 @@ public class MyWorkItemsLoadingTableProvider extends AbstractApplicationLoadingT
             if (params.isWithRestriction()) {
                 query.addRestriction(params.getRestriction());
             }
-
+            
             if (workflowStepInfo.isWithWorkItemFilterGen()) {
                 WorkItemLoadingFilterGenerator loadingFilterGenerator = getComponent(
                         WorkItemLoadingFilterGenerator.class, workflowStepInfo.getWorkItemFilterGenName());

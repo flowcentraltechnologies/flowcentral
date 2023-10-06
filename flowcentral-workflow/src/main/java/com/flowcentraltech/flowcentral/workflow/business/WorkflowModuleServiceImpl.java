@@ -791,7 +791,7 @@ public class WorkflowModuleServiceImpl extends AbstractFlowCentralService
 
     private List<WorkflowStepInfo> findWorkflowLoadingStepInfoByRole(WorkflowStepType type, String loadingTableName,
             String roleCode) throws UnifyException {
-        if (StringUtils.isBlank(roleCode)) {
+       if (StringUtils.isBlank(roleCode)) {
             List<WfStep> wfStepList = environment()
                     .listAll(new WfStepQuery().workflowLoadingTable(loadingTableName).type(type).addSelect("name",
                             "description", "label", "entityName", "applicationName", "workflowName"));
