@@ -100,7 +100,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
             // Pull fields in scope and check required fields and lengths
             for (FormWidgetState formWidgetState : ctx.getFormWidgetStateList()) {
                 if (formWidgetState.isVisible() && !formWidgetState.isDisabled()
-                       && ctx.isVisibleMainSection(formWidgetState.getSectionName())) {
+                        && ctx.isVisibleMainSection(formWidgetState.getSectionName())) {
                     String fieldName = formWidgetState.getFieldName();
                     Object val = DataUtils.getBeanProperty(Object.class, inst, fieldName);
                     fieldsInScope.put(fieldName, val);
@@ -167,12 +167,19 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                     boolean isUpdate = evaluationMode.update();
                     if (isUpdate || evaluationMode.create()) {
                         final EntityClassDef entityClassDef = au.getEntityClassDef(entityDef.getLongName());
+                        final Long originalCopyId = entityClassDef.isWorkType()
+                                ? DataUtils.getBeanProperty(Long.class, inst, "originalCopyId")
+                                : null;
                         for (UniqueConstraintDef constDef : entityDef.getUniqueConstraintList()) {
                             List<String> fieldList = constDef.getFieldList();
                             if (!ctx.isWithFieldError(fieldList)) {
                                 Query query = Query.of((Class<? extends Entity>) entityClassDef.getEntityClass());
                                 if (isUpdate) {
                                     query.addNotEquals("id", id);
+                                }
+
+                                if (originalCopyId != null) {
+                                    query.addNotEquals("id", originalCopyId);
                                 }
 
                                 for (String fieldName : fieldList) {
@@ -192,7 +199,7 @@ public class FormContextEvaluatorImpl extends AbstractFlowCentralComponent imple
                                 }
 
                                 if (constDef.isWithConditionList()) {
-                                    for (UniqueConditionDef ucd: constDef.getConditionList()) {
+                                    for (UniqueConditionDef ucd : constDef.getConditionList()) {
                                         query.addRestriction(ucd.getRestriction());
                                     }
                                 }

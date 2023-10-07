@@ -93,6 +93,10 @@ public class EntityClassDef {
         return entityDef.isWithTenantId();
     }
 
+    public boolean isWorkType() {
+        return entityDef.isWorkType();
+    }
+
     public boolean isCompatible(WorkEntity inst) {
         if (inst != null) {
             return entityClass.getName().equals(inst.getClass().getName());
